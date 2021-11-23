@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:">
+      location = "self:/Users/mick/code/parra/parra-feedback-ios-sdk/Parra Feedback SDK Demo.xcodeproj">
    </FileRef>
 </Workspace>

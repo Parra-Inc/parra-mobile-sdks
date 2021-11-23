@@ -16,7 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		00DECFF5274C69F800DAF301 /* Parra Feedback SDK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Parra Feedback SDK.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Parra Feedback SDK Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00DECFF8274C69F800DAF301 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00DECFFA274C69F800DAF301 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		00DECFFC274C69F800DAF301 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -40,7 +40,7 @@
 		00DECFEC274C69F800DAF301 = {
 			isa = PBXGroup;
 			children = (
-				00DECFF7274C69F800DAF301 /* Parra Feedback SDK */,
+				00DECFF7274C69F800DAF301 /* Parra Feedback SDK Demo */,
 				00DECFF6274C69F800DAF301 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,12 +48,12 @@
 		00DECFF6274C69F800DAF301 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00DECFF5274C69F800DAF301 /* Parra Feedback SDK.app */,
+				00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00DECFF7274C69F800DAF301 /* Parra Feedback SDK */ = {
+		00DECFF7274C69F800DAF301 /* Parra Feedback SDK Demo */ = {
 			isa = PBXGroup;
 			children = (
 				00DECFF8274C69F800DAF301 /* AppDelegate.swift */,
@@ -64,15 +64,15 @@
 				00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */,
 				00DED006274C69FA00DAF301 /* Info.plist */,
 			);
-			path = "Parra Feedback SDK";
+			path = "Parra Feedback SDK Demo";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00DECFF4274C69F800DAF301 /* Parra Feedback SDK */ = {
+		00DECFF4274C69F800DAF301 /* Parra Feedback SDK Demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Parra Feedback SDK" */;
+			buildConfigurationList = 00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Parra Feedback SDK Demo" */;
 			buildPhases = (
 				00DECFF1274C69F800DAF301 /* Sources */,
 				00DECFF2274C69F800DAF301 /* Frameworks */,
@@ -82,9 +82,9 @@
 			);
 			dependencies = (
 			);
-			name = "Parra Feedback SDK";
+			name = "Parra Feedback SDK Demo";
 			productName = "Parra Feedback SDK";
-			productReference = 00DECFF5274C69F800DAF301 /* Parra Feedback SDK.app */;
+			productReference = 00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -102,7 +102,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra Feedback SDK" */;
+			buildConfigurationList = 00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra Feedback SDK Demo" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -115,7 +115,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				00DECFF4274C69F800DAF301 /* Parra Feedback SDK */,
+				00DECFF4274C69F800DAF301 /* Parra Feedback SDK Demo */,
 			);
 		};
 /* End PBXProject section */
@@ -301,7 +301,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-feedback-sdk";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-feedback-sdk-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -328,7 +328,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-feedback-sdk";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-feedback-sdk-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -339,7 +339,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra Feedback SDK" */ = {
+		00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra Feedback SDK Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00DED007274C69FA00DAF301 /* Debug */,
@@ -348,7 +348,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Parra Feedback SDK" */ = {
+		00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Parra Feedback SDK Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00DED00A274C69FA00DAF301 /* Debug */,
