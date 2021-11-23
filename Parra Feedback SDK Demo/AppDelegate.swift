@@ -6,11 +6,24 @@
 //
 
 import UIKit
+import ParraFeedback
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        ParraFeedback.setAuthenticationProvider {
+            return try await withCheckedThrowingContinuation { continuation in
+                let credential = ParraFeedbackUserCredential(
+                    name: "Demo App User",
+                    token: UIDevice.current.identifierForVendor!.uuidString
+                )
+
+                continuation.resume(returning: credential)
+            }
+        }
+        
         return true
     }
 
