@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ParraFeedback
 
 class ViewController: UIViewController {
     override func viewDidLoad() {
