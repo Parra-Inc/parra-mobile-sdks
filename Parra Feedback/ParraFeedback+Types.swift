@@ -39,10 +39,14 @@ public struct ParraFeedbackUserCredential {
 //      }
 //}
 
-public struct ParraFeedbackChoiceOption {
+public struct ParraFeedbackChoiceOption: CustomStringConvertible {
     public let id: String
     public let title: String
     public let value: String
+    
+    public var description: String {
+        return "ParraFeedbackChoiceOption:{id: \(id), title: \(title), value:\(value)}"
+    }
 }
 
 extension ParraFeedbackChoiceOption: Equatable {
@@ -125,8 +129,6 @@ extension ParraFeedbackCardItem: Equatable {
         switch (lhs, rhs) {
         case (.question(let q1), .question(let q2)):
             return q1 == q2
-        default:
-            return false
         }
     }
 }

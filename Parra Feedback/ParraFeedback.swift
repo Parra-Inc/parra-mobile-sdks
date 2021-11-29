@@ -42,13 +42,14 @@ public class ParraFeedback {
                             ParraFeedbackQuestionTypeChoice(
                                 optionType: .radio,
                                 options: [
-                                    .init(id: "opt1", title: "Option 1", value: ""),
-                                    .init(id: "opt2", title: "Option 2", value: "")
+                                    .init(id: "opt1", title: "App Update Checker", value: ""),
+                                    .init(id: "opt1", title: "Analytics", value: ""),
+                                    .init(id: "opt2", title: "Auth Services", value: "")
                                 ]
                             )
                         ),
-                        title: "Title of question",
-                        subtitle: "some subtitle"
+                        title: "What do you want us to build next?",
+                        subtitle: "Your feedback matters to us."
                     )
                 )
             ]
