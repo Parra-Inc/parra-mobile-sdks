@@ -8,11 +8,11 @@
 import UIKit
 
 class ParraQuestionCardView: ParraCardView {
-    let question: ParraFeedbackQuestion
+    let question: Question
 
     private let contentContainer = UIStackView(frame: .zero)
     
-    required init(question: ParraFeedbackQuestion) {
+    required init(question: Question) {
         self.question = question
         
         super.init(frame: .zero)
@@ -71,12 +71,9 @@ class ParraQuestionCardView: ParraCardView {
             ])
         }
 
-        
-        switch question.type {
-        case .choice(let choice):
+        switch question.data {
+        case .choiceQuestionBody(let choice):
             generateOptionsForChoice(choice)
-        case .form(let form):
-            fatalError("form not handled yet. form was: \(form)")
         }
     }
     
@@ -84,11 +81,11 @@ class ParraQuestionCardView: ParraCardView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func generateOptionsForChoice(_ choice: ParraFeedbackQuestionTypeChoice) {
+    private func generateOptionsForChoice(_ choice: ChoiceQuestionBody) {
         for option in choice.options {
             let optionView = ParraChoiceOptionView(
                 option: option,
-                type: choice.optionType
+                kind: question.kind
             )
             
             contentContainer.addArrangedSubview(optionView)

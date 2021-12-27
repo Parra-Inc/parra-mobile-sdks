@@ -20,7 +20,7 @@ public struct ParraFeedbackViewConfig {
 
 struct CurrentCardInfo {
     let cardView: ParraCardView
-    let cardItem: ParraFeedbackCardItem?
+    let cardItem: CardItem?
 }
 
 public let ParraFeedbackViewDefaultConfig = ParraFeedbackViewConfig(
@@ -35,7 +35,7 @@ public let ParraFeedbackViewDefaultConfig = ParraFeedbackViewConfig(
 )
 
 public class ParraFeedbackView: UIView {
-    public var cardItems: [ParraFeedbackCardItem] {
+    public var cardItems: [CardItem] {
         didSet {
             cardItemsDidChange()
         }
@@ -66,7 +66,7 @@ public class ParraFeedbackView: UIView {
     })()
 
     public required init(
-        cardItems: [ParraFeedbackCardItem] = [],
+        cardItems: [CardItem] = [],
         config: ParraFeedbackViewConfig = ParraFeedbackViewDefaultConfig
     ) {
         self.cardItems = cardItems
@@ -138,7 +138,7 @@ public class ParraFeedbackView: UIView {
         }
     }
         
-    private func transitionToCardItem(_ cardItem: ParraFeedbackCardItem?, animated: Bool = false) {
+    private func transitionToCardItem(_ cardItem: CardItem?, animated: Bool = false) {
         let nextCard = cardViewFromCardItem(cardItem)
                         
         contentView.addSubview(nextCard)
@@ -177,7 +177,7 @@ public class ParraFeedbackView: UIView {
         }
     }
     
-    private func cardViewFromCardItem(_ cardItem: ParraFeedbackCardItem?) -> ParraCardView {
+    private func cardViewFromCardItem(_ cardItem: CardItem?) -> ParraCardView {
         guard let cardItem = cardItem else {
             return ParraActionCardView(
                 title: "You're all caught up for now!",
@@ -187,7 +187,7 @@ public class ParraFeedbackView: UIView {
             )
         }
         
-        switch (cardItem) {
+        switch (cardItem.data) {
         case .question(let question):
             return ParraQuestionCardView(question: question)
         }

@@ -24,9 +24,9 @@ class ViewController: UIViewController {
         
             view.addConstraint(feedbackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100))
 
-            feedbackView.cardItems = response.cards
+            feedbackView.cardItems = response.items
             
-            print(response.cards)
+            print(response.items)
         }
     }
 }

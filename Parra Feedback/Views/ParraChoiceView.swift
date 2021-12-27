@@ -8,14 +8,14 @@
 import UIKit
 
 class ParraChoiceOptionView: UIView {
-    let option: ParraFeedbackChoiceOption
-    let type: ParraFeedbackChoiceOptionType
+    let option: ChoiceQuestionOption
+    let kind: QuestionKind
     
     private let typeContainerView = UIView(frame: .zero)
     
-    required init(option: ParraFeedbackChoiceOption, type: ParraFeedbackChoiceOptionType) {
+    required init(option: ChoiceQuestionOption, kind: QuestionKind) {
         self.option = option
-        self.type = type
+        self.kind = kind
         
         super.init(frame: .zero)
         
