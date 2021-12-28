@@ -1,0 +1,16 @@
+PODS:
+  - MBRadioCheckboxButton (2.0)
+
+DEPENDENCIES:
+  - MBRadioCheckboxButton
+
+SPEC REPOS:
+  trunk:
+    - MBRadioCheckboxButton
+
+SPEC CHECKSUMS:
+  MBRadioCheckboxButton: 6e2a2cdc441e292e45b64c4e65eb8fc1fc05eef2
+
+PODFILE CHECKSUM: 078ece8862e7000d778a2cf399711ec2fd1de27c
+
+COCOAPODS: 1.11.2

@@ -87,8 +87,19 @@ class ParraQuestionCardView: ParraCardView {
                 option: option,
                 kind: question.kind
             )
+            optionView.delegate = self
             
             contentContainer.addArrangedSubview(optionView)
         }
+    }
+}
+
+extension ParraQuestionCardView: ParraChoiceOptionViewDelegate {
+    func onSelect(option: ChoiceQuestionOption, view: ParraChoiceOptionView) {
+        print("selected: \(option)")
+    }
+    
+    func onDeselect(option: ChoiceQuestionOption, view: ParraChoiceOptionView) {
+        print("deselected: \(option)")
     }
 }

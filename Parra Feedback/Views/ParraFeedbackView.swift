@@ -234,7 +234,7 @@ public class ParraFeedbackView: UIView {
             contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0),
             contentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
             contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 140)
+            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 120)
         ])
     }
     
