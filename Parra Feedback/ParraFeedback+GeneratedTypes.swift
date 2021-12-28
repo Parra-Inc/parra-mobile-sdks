@@ -294,6 +294,15 @@ public struct CardItem: Codable, Equatable, Hashable {
         self.version = version
         self.data = data
     }
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.type = try container.decode(CardItemType.self, forKey: .type)
+        self.version = try container.decode(String.self, forKey: .version)
+        switch type {
+        case .question:
+            self.data = .question(try container.decode(Question.self, forKey: .data))
+        }
+    }
 }
 
 public struct CardsResponse: Codable, Equatable, Hashable {
@@ -431,6 +440,20 @@ public struct CreateQuestionRequestBody: Codable, Equatable, Hashable {
         case expiresAt = "expires_at"
         case answerQuota = "answer_quota"
     }
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.subtitle = try container.decode(String.self, forKey: .subtitle)
+        self.type = try container.decode(QuestionType.self, forKey: .type)
+        self.kind = try container.decode(QuestionKind.self, forKey: .kind)
+        self.active = try container.decode(Bool.self, forKey: .active)
+        self.expiresAt = try container.decode(String.self, forKey: .expiresAt)
+        self.answerQuota = try container.decode(Int.self, forKey: .answerQuota)
+        switch type {
+        case .choice:
+            self.data = .createChoiceQuestionBody(try container.decode(CreateChoiceQuestionBody.self, forKey: .data))
+        }
+    }
 }
 
 public struct Question: Codable, Equatable, Hashable, Identifiable {
@@ -496,6 +519,26 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
         case expiresAt = "expires_at"
         case answerQuota = "answer_quota"
         case answer
+    }
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.createdAt = try container.decode(String.self, forKey: .createdAt)
+        self.updatedAt = try container.decode(String.self, forKey: .updatedAt)
+        self.deletedAt = try container.decode(String.self, forKey: .deletedAt)
+        self.tenantId = try container.decode(String.self, forKey: .tenantId)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.subtitle = try container.decode(String.self, forKey: .subtitle)
+        self.type = try container.decode(QuestionType.self, forKey: .type)
+        self.kind = try container.decode(QuestionKind.self, forKey: .kind)
+        self.active = try container.decode(Bool.self, forKey: .active)
+        self.expiresAt = try container.decode(String.self, forKey: .expiresAt)
+        self.answerQuota = try container.decode(Int.self, forKey: .answerQuota)
+        self.answer = try container.decode(Answer.self, forKey: .answer)
+        switch type {
+        case .choice:
+            self.data = .choiceQuestionBody(try container.decode(ChoiceQuestionBody.self, forKey: .data))
+        }
     }
 }
 
@@ -1017,76 +1060,3 @@ public struct ListUsersQuery: Codable, Equatable, Hashable {
         case search = "$search"
     }
 }
-            
-//public extension ParraAPI {
-//
-//    func createUser(body: CreateUserRequestBody) -> Observable<UserResponse> {
-//        let urlComponents = URLComponents(string: "\(baseUrl)/v1/users")!
-//        let url = try! urlComponents.asURL()
-//        var request = try! URLRequest(url: url, method: .post)
-//        request.httpBody = try! jsonEncoder.encode(body)
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        return http.executeAndDecode(request)
-//      }
-//
-//    func listUsers(query: ListUsersQuery? = nil) -> Observable<UserCollectionResponse> {
-//        var urlComponents = URLComponents(string: "\(baseUrl)/v1/users")!
-//        urlComponents.queryItems = try! queryItemEncoder.encode(query)
-//        let url = try! urlComponents.asURL()
-//        let request = try! URLRequest(url: url, method: .get)
-//        return http.executeAndDecode(request)
-//      }
-//
-//    func getUserById(user_id: String) -> Observable<UserResponse> {
-//        let urlComponents = URLComponents(string: "\(baseUrl)/v1/users/\(user_id)")!
-//        let url = try! urlComponents.asURL()
-//        let request = try! URLRequest(url: url, method: .get)
-//        return http.executeAndDecode(request)
-//      }
-//
-//    func updateUserById(user_id: String, body: UpdateUserRequestBody) -> Observable<UserResponse> {
-//        let urlComponents = URLComponents(string: "\(baseUrl)/v1/users/\(user_id)")!
-//        let url = try! urlComponents.asURL()
-//        var request = try! URLRequest(url: url, method: .put)
-//        request.httpBody = try! jsonEncoder.encode(body)
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        return http.executeAndDecode(request)
-//      }
-//
-//    func deleteUserById(user_id: String) -> Observable<Response> {
-//        let urlComponents = URLComponents(string: "\(baseUrl)/v1/users/\(user_id)")!
-//        let url = try! urlComponents.asURL()
-//        let request = try! URLRequest(url: url, method: .delete)
-//        return http.execute(request)
-//      }
-//
-//    func createIdentityForUserById(user_id: String, body: CreateIdentityRequestBody) -> Observable<IdentityResponse> {
-//        let urlComponents = URLComponents(string: "\(baseUrl)/v1/users/\(user_id)/identities")!
-//        let url = try! urlComponents.asURL()
-//        var request = try! URLRequest(url: url, method: .post)
-//        request.httpBody = try! jsonEncoder.encode(body)
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        return http.executeAndDecode(request)
-//      }
-//
-//    func listIdentitiesForUserById(user_id: String) -> Observable<Array<IdentityResponse>> {
-//        let urlComponents = URLComponents(string: "\(baseUrl)/v1/users/\(user_id)/identities")!
-//        let url = try! urlComponents.asURL()
-//        let request = try! URLRequest(url: url, method: .get)
-//        return http.executeAndDecode(request)
-//      }
-//
-//    func getUserByProviderAndProviderUserId(provider: String, provider_user_id: String) -> Observable<UserResponse> {
-//        let urlComponents = URLComponents(string: "\(baseUrl)/v1/providers/\(provider)/identities/\(provider_user_id)/user")!
-//        let url = try! urlComponents.asURL()
-//        let request = try! URLRequest(url: url, method: .get)
-//        return http.executeAndDecode(request)
-//      }
-//
-//    func getUserInfo() -> Observable<UserInfoResponse> {
-//        let urlComponents = URLComponents(string: "\(baseUrl)/v1/user-info")!
-//        let url = try! urlComponents.asURL()
-//        let request = try! URLRequest(url: url, method: .get)
-//        return http.executeAndDecode(request)
-//      }
-//}
