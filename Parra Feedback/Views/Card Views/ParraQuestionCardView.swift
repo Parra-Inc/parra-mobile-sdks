@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MBRadioCheckboxButton
 
 class ParraQuestionCardView: ParraCardView {
     let question: Question
@@ -82,24 +83,33 @@ class ParraQuestionCardView: ParraCardView {
     }
     
     private func generateOptionsForChoice(_ choice: ChoiceQuestionBody) {
-        for option in choice.options {
-            let optionView = ParraChoiceOptionView(
-                option: option,
-                kind: question.kind
-            )
-            optionView.delegate = self
+        switch question.kind {
+        case .checkbox:
+            let container = CheckboxButtonContainer()
+        case .radio:
+            let container = RadioButtonContainer()
             
-            contentContainer.addArrangedSubview(optionView)
+            for option in choice.options {
+                let optionView = ParraChoiceOptionView(
+                    option: option,
+                    kind: question.kind
+                )
+                optionView.delegate = self
+                                
+//                container.addButtons([optionView.accessoryButton as! RadioButton])
+                
+                contentContainer.addArrangedSubview(optionView)
+            }
         }
     }
 }
 
 extension ParraQuestionCardView: ParraChoiceOptionViewDelegate {
-    func onSelect(option: ChoiceQuestionOption, view: ParraChoiceOptionView) {
+    func onSelect(option: ChoiceQuestionOption, view: ParraChoiceOptionView, button: SelectableButton) {
         print("selected: \(option)")
     }
     
-    func onDeselect(option: ChoiceQuestionOption, view: ParraChoiceOptionView) {
+    func onDeselect(option: ChoiceQuestionOption, view: ParraChoiceOptionView, button: SelectableButton) {
         print("deselected: \(option)")
     }
 }

@@ -6,18 +6,17 @@
 //
 
 import UIKit
-import MBRadioCheckboxButton
 
 protocol ParraChoiceOptionViewDelegate: NSObjectProtocol {
-    func onSelect(option: ChoiceQuestionOption, view: ParraChoiceOptionView)
-    func onDeselect(option: ChoiceQuestionOption, view: ParraChoiceOptionView)
+    func onSelect(option: ChoiceQuestionOption, view: ParraChoiceOptionView, button: SelectableButton)
+    func onDeselect(option: ChoiceQuestionOption, view: ParraChoiceOptionView, button: SelectableButton)
 }
 
 class ParraChoiceOptionView: UIView {
     let option: ChoiceQuestionOption
     let kind: QuestionKind
     weak var delegate: ParraChoiceOptionViewDelegate?
-    
+        
     private let typeContainerView = UIView(frame: .zero)
     
     required init(option: ChoiceQuestionOption, kind: QuestionKind) {
@@ -41,39 +40,37 @@ class ParraChoiceOptionView: UIView {
         let optionLabel = UILabel(frame: .zero)
         optionLabel.translatesAutoresizingMaskIntoConstraints = false
         optionLabel.text = option.title
+
+        let accessoryButton: UIView & SelectableButton
         
-        let accessoryButton: RadioCheckboxBaseButton?
-        switch kind {
-        case .radio:
-            let radio = RadioButton(frame: .zero)
-            radio.delegate = self
-            accessoryButton = radio
-        case .checkbox:
-            let checkbox = CheckboxButton(frame: .zero)
-            checkbox.delegate = self
-            accessoryButton = checkbox
-        }
+        accessoryButton = ParraRadioButton()
+        accessoryButton.delegate = self
         
-        var arrangedSubviews: [UIView] = [optionLabel]
-        
-        if let accessoryButton = accessoryButton {
-            arrangedSubviews.insert(accessoryButton, at: 0)
-            accessoryButton.translatesAutoresizingMaskIntoConstraints = false
-        }
-                
-        let stack = UIStackView(arrangedSubviews: arrangedSubviews)
+//        switch kind {
+//        case .radio:
+//            let radio = RadioButton(frame: .zero)
+//            radio.radioCircle = RadioButtonCircleStyle(outerCircle: <#T##CGFloat#>, innerCircle: <#T##CGFloat#>, outerCircleBorder: <#T##CGFloat#>, contentPadding: <#T##CGFloat#>)
+//            radio.delegate = self
+//            self.accessoryButton = radio
+//        case .checkbox:
+//            let checkbox = CheckboxButton(frame: .zero)
+//            checkbox.delegate = self
+//            self.accessoryButton = checkbox
+//        }
+
+        let stack = UIStackView(arrangedSubviews: [accessoryButton, optionLabel])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
         stack.distribution = .fill
-        stack.alignment = .center
+        stack.alignment = .fill
 
         typeContainerView.addSubview(stack)
         
         NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: typeContainerView.topAnchor, constant: 0),
-            stack.bottomAnchor.constraint(equalTo: typeContainerView.bottomAnchor, constant: 0),
-            stack.leadingAnchor.constraint(equalTo: typeContainerView.leadingAnchor, constant: 0),
-            stack.trailingAnchor.constraint(equalTo: typeContainerView.trailingAnchor, constant: 0)
+            stack.topAnchor.constraint(equalTo: typeContainerView.topAnchor),
+            stack.bottomAnchor.constraint(equalTo: typeContainerView.bottomAnchor),
+            stack.leadingAnchor.constraint(equalTo: typeContainerView.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: typeContainerView.trailingAnchor)
         ])
     }
     
@@ -82,22 +79,12 @@ class ParraChoiceOptionView: UIView {
     }
 }
 
-extension ParraChoiceOptionView: CheckboxButtonDelegate {
-    func chechboxButtonDidSelect(_ button: CheckboxButton) {
-        delegate?.onSelect(option: option, view: self)
+extension ParraChoiceOptionView: SelectableButtonDelegate {
+    func buttonDidSelect(button: SelectableButton) {
+        delegate?.onSelect(option: option, view: self, button: button)
     }
     
-    func chechboxButtonDidDeselect(_ button: CheckboxButton) {
-        delegate?.onDeselect(option: option, view: self)
-    }
-}
-
-extension ParraChoiceOptionView: RadioButtonDelegate {
-    func radioButtonDidSelect(_ button: RadioButton) {
-        delegate?.onSelect(option: option, view: self)
-    }
-    
-    func radioButtonDidDeselect(_ button: RadioButton) {
-        delegate?.onDeselect(option: option, view: self)
+    func buttonDidDeselect(button: SelectableButton) {
+        delegate?.onDeselect(option: option, view: self, button: button)
     }
 }
