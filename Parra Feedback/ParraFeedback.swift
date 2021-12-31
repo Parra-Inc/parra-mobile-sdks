@@ -11,7 +11,7 @@ public class ParraFeedback {
     private static let shared = ParraFeedback()
     private var cachedUserCredential: ParraFeedbackUserCredential?
     
-    public class func setAuthenticationProvider(provider: @escaping () async throws -> ParraFeedbackUserCredential) {
+    public class func initialize(authenticationProvider provider: @escaping () async throws -> ParraFeedbackUserCredential) {
         Task {
             do {
                 setUserCredential(try await provider())

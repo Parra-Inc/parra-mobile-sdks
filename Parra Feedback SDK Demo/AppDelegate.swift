@@ -13,15 +13,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        ParraFeedback.setAuthenticationProvider {
-            return try await withCheckedThrowingContinuation { continuation in
-                let credential = ParraFeedbackUserCredential(
-                    name: "Demo App User",
-                    token: UIDevice.current.identifierForVendor!.uuidString
-                )
-
-                continuation.resume(returning: credential)
-            }
+        ParraFeedback.initialize {
+            return ParraFeedbackUserCredential.defaultCredential
+//            return try await withCheckedThrowingContinuation { continuation in
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                    continuation.resume(
+//                        returning: ParraFeedbackUserCredential(
+//                            token: "Unique ID from your web service"
+//                        )
+//                    )
+//                }
+//            }
         }
         
         return true
