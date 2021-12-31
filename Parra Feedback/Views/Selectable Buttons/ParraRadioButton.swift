@@ -7,24 +7,8 @@
 
 import UIKit
 
-protocol SelectableButtonDelegate: NSObjectProtocol {
-    func buttonDidSelect(button: SelectableButton)
-    func buttonDidDeselect(button: SelectableButton)
-}
-
-protocol SelectableButton: NSObjectProtocol {
-    var delegate: SelectableButtonDelegate? { get set }
-
-    var buttonIsSelected: Bool { get set }
-
-    var allowsDeselection: Bool { get set }
-}
-
-class RadioLayer: CAShapeLayer {
-    /// Path for active layer
+fileprivate class RadioLayer: CAShapeLayer {
     var activePath: CGPath?
-    
-    /// Path for inactive layer
     var inactivePath: CGPath?
 }
 
@@ -214,21 +198,5 @@ private extension UIBezierPath {
         )
         
         return UIBezierPath(rect: frame)
-    }
-}
-
-extension CAShapeLayer {
-    func animateStrokeEnd(from: CGFloat, to: CGFloat) {
-        self.strokeEnd = from
-        self.strokeEnd = to
-    }
-    
-    func animatePath(start: CGPath, end: CGPath) {
-        removeAllAnimations()
-        let animation = CABasicAnimation(keyPath: "path")
-        animation.fromValue = start
-        animation.toValue = end
-        animation.isRemovedOnCompletion = true
-        add(animation, forKey: "pathAnimation")
     }
 }

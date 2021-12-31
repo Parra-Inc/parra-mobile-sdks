@@ -43,7 +43,8 @@ class ParraChoiceOptionView: UIView {
 
         let accessoryButton: UIView & SelectableButton
         
-        accessoryButton = ParraRadioButton()
+//        accessoryButton = ParraRadioButton()
+        accessoryButton = ParraCheckboxButton()
         accessoryButton.delegate = self
         
 //        switch kind {
