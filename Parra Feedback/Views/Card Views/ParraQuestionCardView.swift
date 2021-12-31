@@ -87,19 +87,19 @@ class ParraQuestionCardView: ParraCardView {
 //            let container = CheckboxButtonContainer()
 //        case .radio:
 //            let container = RadioButtonContainer()
-//            
-//            for option in choice.options {
-//                let optionView = ParraChoiceOptionView(
-//                    option: option,
-//                    kind: question.kind
-//                )
-//                optionView.delegate = self
-//                                
-////                container.addButtons([optionView.accessoryButton as! RadioButton])
-//                
-//                contentContainer.addArrangedSubview(optionView)
-//            }
 //        }
+        
+        for option in choice.options {
+            let optionView = ParraChoiceOptionView(
+                option: option,
+                kind: question.kind
+            )
+            optionView.delegate = self
+                            
+//                container.addButtons([optionView.accessoryButton as! RadioButton])
+            
+            contentContainer.addArrangedSubview(optionView)
+        }
     }
 }
 

@@ -17,6 +17,8 @@
 		001286F1277D4BB20090CDB5 /* ParraCheckboxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F0277D4BB20090CDB5 /* ParraCheckboxButton.swift */; };
 		001286F4277D53AE0090CDB5 /* SelectableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F3277D53AE0090CDB5 /* SelectableButton.swift */; };
 		001286F6277D54480090CDB5 /* CAShapeLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F5277D54480090CDB5 /* CAShapeLayer+Extensions.swift */; };
+		001286F9277F50B30090CDB5 /* ParraChoiceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F8277F50B30090CDB5 /* ParraChoiceData.swift */; };
+		001286FB277F51120090CDB5 /* ParraQuestionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286FA277F51120090CDB5 /* ParraQuestionData.swift */; };
 		003D2A6B274C7798001E067E /* ParraFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 003D2A6A274C7798001E067E /* ParraFeedback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		003D2A6E274C7798001E067E /* ParraFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; };
 		003D2A6F274C7798001E067E /* ParraFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -69,6 +71,8 @@
 		001286F0277D4BB20090CDB5 /* ParraCheckboxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCheckboxButton.swift; sourceTree = "<group>"; };
 		001286F3277D53AE0090CDB5 /* SelectableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableButton.swift; sourceTree = "<group>"; };
 		001286F5277D54480090CDB5 /* CAShapeLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAShapeLayer+Extensions.swift"; sourceTree = "<group>"; };
+		001286F8277F50B30090CDB5 /* ParraChoiceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraChoiceData.swift; sourceTree = "<group>"; };
+		001286FA277F51120090CDB5 /* ParraQuestionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionData.swift; sourceTree = "<group>"; };
 		003D2A68274C7798001E067E /* ParraFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParraFeedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		003D2A6A274C7798001E067E /* ParraFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParraFeedback.h; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* ParraFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedback.swift; sourceTree = "<group>"; };
@@ -143,6 +147,15 @@
 			path = "Selectable Buttons";
 			sourceTree = "<group>";
 		};
+		001286F7277F50A20090CDB5 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				001286F8277F50B30090CDB5 /* ParraChoiceData.swift */,
+				001286FA277F51120090CDB5 /* ParraQuestionData.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		003D2A69274C7798001E067E /* Parra Feedback */ = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +164,7 @@
 				003D2A74274C77BD001E067E /* ParraFeedback.swift */,
 				00120F002753E9A400CA3247 /* ParraFeedback+Types.swift */,
 				007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */,
+				001286F7277F50A20090CDB5 /* Managers */,
 				003D2A7A274C84EE001E067E /* Views */,
 			);
 			path = "Parra Feedback";
@@ -159,9 +173,9 @@
 		003D2A7A274C84EE001E067E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				001286F2277D53890090CDB5 /* Selectable Buttons */,
 				00120EF8274D9CFC00CA3247 /* ParraFeedbackView.swift */,
 				00120EFC27514BE000CA3247 /* Card Views */,
+				001286F2277D53890090CDB5 /* Selectable Buttons */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -396,7 +410,9 @@
 				003D2A75274C77BD001E067E /* ParraFeedback.swift in Sources */,
 				001286F4277D53AE0090CDB5 /* SelectableButton.swift in Sources */,
 				001286F1277D4BB20090CDB5 /* ParraCheckboxButton.swift in Sources */,
+				001286FB277F51120090CDB5 /* ParraQuestionData.swift in Sources */,
 				007FBEF4277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift in Sources */,
+				001286F9277F50B30090CDB5 /* ParraChoiceData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
