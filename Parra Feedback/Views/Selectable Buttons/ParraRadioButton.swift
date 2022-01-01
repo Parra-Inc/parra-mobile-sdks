@@ -15,7 +15,7 @@ fileprivate class RadioLayer: CAShapeLayer {
 class ParraRadioButton: UIButton, SelectableButton {
     enum Style {
         static let outer: CGFloat = 18
-        static let inner: CGFloat = 7
+        static let inner: CGFloat = 9
         static let lineWidth: CGFloat = 2.5
         static let padding: CGFloat = 6
     }
@@ -28,7 +28,7 @@ class ParraRadioButton: UIButton, SelectableButton {
                 return
             }
 
-            updateSelectionState()
+            updateSelectionState(animated: true)
             
             if buttonIsSelected {
                 delegate?.buttonDidSelect(button: self)
@@ -61,7 +61,7 @@ class ParraRadioButton: UIButton, SelectableButton {
         super.layoutSubviews()
         
         setupLayer()
-        updateSelectionState()
+        updateSelectionState(animated: false)
     }
     
     func setup() {
@@ -117,25 +117,39 @@ class ParraRadioButton: UIButton, SelectableButton {
         }
     }
     
-    func updateSelectionState() {
+    func updateSelectionState(animated: Bool) {
         if buttonIsSelected {
-            updateActiveLayer()
+            updateActiveLayer(animated: animated)
         } else {
-            updateInactiveLayer()
+            updateInactiveLayer(animated: animated)
         }
     }
 
-    func updateActiveLayer() {
+    func updateActiveLayer(animated: Bool) {
         outerLayer.strokeColor = tintColor.cgColor
-        guard let start = innerLayer.path, let end = innerLayer.activePath else { return }
-        innerLayer.animatePath(start: start, end: end)
+        
+        guard let start = innerLayer.path, let end = innerLayer.activePath else {
+            return
+        }
+        
+        if animated {
+            innerLayer.animatePath(start: start, end: end)
+        }
+
         innerLayer.path = end
     }
     
-    func updateInactiveLayer() {
+    func updateInactiveLayer(animated: Bool) {
         outerLayer.strokeColor = inactiveColor.cgColor
-        guard let start = innerLayer.path, let end = innerLayer.inactivePath else { return }
-        innerLayer.animatePath(start: start, end: end)
+        
+        guard let start = innerLayer.path, let end = innerLayer.inactivePath else {
+            return
+        }
+        
+        if animated {
+            innerLayer.animatePath(start: start, end: end)
+        }
+
         innerLayer.path = end
     }
 }
