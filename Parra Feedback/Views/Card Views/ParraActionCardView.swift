@@ -10,7 +10,7 @@ import UIKit
 class ParraActionCardView: ParraCardView {
     private let titleLabel = UILabel(frame: .zero)
     private let subtitleLabel = UILabel(frame: .zero)
-    private var cta = UIButton(type: .custom)
+    private var cta = UIButton(type: .system)
     private let stackView = UIStackView(arrangedSubviews: [])
     private var actionHandler: (() -> Void)?
     
@@ -31,15 +31,16 @@ class ParraActionCardView: ParraCardView {
         if let subtitle = subtitle {
             subtitleLabel.text = subtitle
             subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+            subtitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
 
             stackView.addArrangedSubview(subtitleLabel)
         }
         stackView.addArrangedSubview(cta)
         
-        stackView.distribution = .fillEqually
+        stackView.distribution = .equalSpacing
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.spacing = 16
+        stackView.spacing = 12
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(stackView)
@@ -54,11 +55,16 @@ class ParraActionCardView: ParraCardView {
                 
         titleLabel.text = title
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .callout)
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
-        cta.setTitle(actionTitle, for: .normal)
+        
+        let attributedTitle = NSAttributedString(
+            string: actionTitle,
+            attributes: [.font: UIFont.boldSystemFont(ofSize: 14)]
+        )
+        cta.setAttributedTitle(attributedTitle, for: .normal)
         cta.translatesAutoresizingMaskIntoConstraints = false
         cta.setTitleColor(UIColor(hex: 0xBDBDBD), for: .normal)
     }

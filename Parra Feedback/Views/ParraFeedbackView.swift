@@ -187,10 +187,11 @@ public class ParraFeedbackView: UIView {
         guard let cardItem = cardItem else {
             return ParraActionCardView(
                 title: "You're all caught up for now!",
-                subtitle: nil,
-                actionTitle: "Have other feedback?",
-                actionHandler: nil
-            )
+                subtitle: "a subtitle",
+                actionTitle: "Have other feedback?"
+            ) {
+                print("tapped cta")
+            }
         }
         
         switch (cardItem.data) {
@@ -234,6 +235,7 @@ public class ParraFeedbackView: UIView {
     
     private func configureContentView() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.setContentCompressionResistancePriority(.required, for: .vertical)
         contentView.clipsToBounds = true
                 
         NSLayoutConstraint.activate([
