@@ -162,14 +162,20 @@ public class ParraFeedbackView: UIView {
                 cardItem: cardItem
             )
         }
-        
+                
         if animated {
-            UIView.transition(
-                with: contentView,
-                duration: 0.375,
-                options: [.transitionCrossDissolve, .curveEaseInOut]) {
-                    
-                } completion: { success in
+            self.currentCardInfo?.cardView.transform = .identity
+            nextCard.transform = .identity.translatedBy(x: self.frame.width, y: 0.0)
+
+            contentView.invalidateIntrinsicContentSize()
+            
+            UIView.animate(
+                withDuration: 0.375,
+                delay: 0.0,
+                options: [.curveEaseInOut, .beginFromCurrentState]) {
+                    self.currentCardInfo?.cardView.transform = .identity.translatedBy(x: -self.frame.width, y: 0.0)
+                    nextCard.transform = .identity
+                } completion: { _ in
                     applyNextView()
                 }
         } else {
@@ -228,13 +234,14 @@ public class ParraFeedbackView: UIView {
     
     private func configureContentView() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        
+        contentView.clipsToBounds = true
+                
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: 10),
             contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0),
             contentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
             contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 120)
+            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 170)
         ])
     }
     
