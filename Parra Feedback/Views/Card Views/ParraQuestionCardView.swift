@@ -26,9 +26,9 @@ class ParraQuestionCardView: ParraCardView {
         addSubview(contentContainer)
         
         NSLayoutConstraint.activate([
-            contentContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentContainer.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
+            contentContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            contentContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            contentContainer.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -12)
         ])
         
         let titleLabel = UILabel(frame: .zero)
@@ -63,11 +63,11 @@ class ParraQuestionCardView: ParraCardView {
             ])
             
             NSLayoutConstraint.activate([
-                contentContainer.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor)
+                contentContainer.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 12)
             ])
         } else {
             NSLayoutConstraint.activate([
-                contentContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor)
+                contentContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12)
             ])
         }
 
