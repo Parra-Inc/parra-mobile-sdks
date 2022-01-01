@@ -6,12 +6,15 @@
 //
 
 import Foundation
+import UIKit
 
 public class ParraFeedback {
     private static let shared = ParraFeedback()
     private var cachedUserCredential: ParraFeedbackUserCredential?
     
     public class func initialize(authenticationProvider provider: @escaping () async throws -> ParraFeedbackUserCredential) {
+        UIFont.registerFontsIfNeeded()
+
         Task {
             do {
                 setUserCredential(try await provider())

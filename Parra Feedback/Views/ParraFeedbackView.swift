@@ -244,13 +244,19 @@ public class ParraFeedbackView: UIView {
         navigationStack.axis = .horizontal
         navigationStack.distribution = .equalSpacing
          
-        poweredByLabel.font = UIFont.preferredFont(forTextStyle: .caption2)
+        poweredByLabel.font = UIFont.boldSystemFont(ofSize: 12.0)
         poweredByLabel.textColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
         poweredByLabel.textAlignment = .center
-        poweredByLabel.attributedText = NSMutableAttributedString(
-            string: "Powered by Parra",
-            attributes: [NSAttributedString.Key.kern: 0.24]
-        )
+        
+        let defaultAttributes = [NSAttributedString.Key.kern: 0.24]
+        let poweredBy = NSMutableAttributedString(string: "Powered by ", attributes: defaultAttributes)
+
+        let pacifico = UIFont(name: "Pacifico-Regular", size: 16)!
+        let parra = NSMutableAttributedString(string: "Parra", attributes: [.font: pacifico])
+        parra.addAttributes(defaultAttributes, range: NSMakeRange(0, parra.length))
+        poweredBy.append(parra)
+
+        poweredByLabel.attributedText = poweredBy
         
         NSLayoutConstraint.activate([
             navigationStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
