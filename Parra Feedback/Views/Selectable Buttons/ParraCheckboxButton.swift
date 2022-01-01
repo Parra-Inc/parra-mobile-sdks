@@ -9,10 +9,10 @@ import UIKit
 
 class ParraCheckboxButton: UIButton, SelectableButton {
     enum Style {
-        static let height: CGFloat = 18
-        static let lineWidth: CGFloat = -1
-        static let padding: CGFloat = 6
-        static let cornerRadius: CGFloat = 2
+        static let height: CGFloat = 18.0
+        static let lineWidth: CGFloat = 2.0
+        static let padding: CGFloat = 6.0
+        static let cornerRadius: CGFloat = 2.0
     }
     
     weak var delegate: SelectableButtonDelegate?
@@ -62,7 +62,6 @@ class ParraCheckboxButton: UIButton, SelectableButton {
     }
     
     func setup() {
-        // Add action here
         addTarget(self, action: #selector(selectionAction), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
         setupLayer()
@@ -81,7 +80,7 @@ class ParraCheckboxButton: UIButton, SelectableButton {
         )
         
         let origin = CGPoint(
-            x: 1,
+            x: Style.padding + 2,
             y: bounds.midY - Style.height / 2.0
         )
         
@@ -99,26 +98,29 @@ class ParraCheckboxButton: UIButton, SelectableButton {
             roundedRect: rect,
             cornerRadius: Style.cornerRadius
         ).cgPath
-        outerLayer.lineWidth = 2
+        outerLayer.lineWidth = Style.lineWidth
         outerLayer.removeFromSuperlayer()
 
         layer.insertSublayer(outerLayer, at: 0)
         
         let path = UIBezierPath()
-        var xPos = rect.width * 0.15 + origin.x
+        var xPos = origin.x + Style.lineWidth
         var yPos = rect.midY
+        
         path.move(to: CGPoint(x: xPos, y: yPos))
         
-        var checkMarkLength = (rect.width/2 - xPos)
+        var checkMarkLength = rect.width - xPos - Style.lineWidth
         
         [45.0, -45.0].forEach {
-            xPos = xPos + checkMarkLength * CGFloat(cos($0 * .pi/180))
-            yPos = yPos + checkMarkLength * CGFloat(sin($0 * .pi/180))
+            xPos = xPos + checkMarkLength * cos($0 * .pi / 180.0)
+            yPos = yPos + checkMarkLength * sin($0 * .pi / 180.0)
+            
             path.addLine(to: CGPoint(x: xPos, y: yPos))
+            
             checkMarkLength *= 2
         }
         
-        checkMarkLayer.lineWidth = max(Style.lineWidth * 0.1, 2.0)
+        checkMarkLayer.lineWidth = Style.lineWidth
         checkMarkLayer.strokeColor = checkMarkColor.cgColor
         checkMarkLayer.path = path.cgPath
         checkMarkLayer.fillColor = UIColor.clear.cgColor
