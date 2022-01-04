@@ -8,14 +8,26 @@
 import Foundation
 import UIKit
 
+let kParraLogPrefix = "[PARRA FEEDBACK]"
+
 public class ParraFeedback {
     private static let shared = ParraFeedback()
+    private let dataManager = ParraFeedbackDataManager()
     private var cachedUserCredential: ParraFeedbackUserCredential?
+    
+    private init() {}
     
     public class func initialize(authenticationProvider provider: @escaping () async throws -> ParraFeedbackUserCredential) {
         UIFont.registerFontsIfNeeded()
 
         Task {
+            do {
+                try await shared.dataManager.loadData()
+            } catch let error {
+                let dataError = ParraFeedbackError.dataLoadingError(error)
+                print("\(kParraLogPrefix) Error loading data: \(dataError)")
+            }
+            
             do {
                 setUserCredential(try await provider())
             } catch let error {

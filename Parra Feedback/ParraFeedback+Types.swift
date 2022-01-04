@@ -11,6 +11,7 @@ import UIKit
 public enum ParraFeedbackError: Error {
     case missingAuthentication
     case authenticationFailed(Error)
+    case dataLoadingError(Error)
 }
 
 public struct ParraFeedbackUserCredential {

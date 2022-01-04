@@ -60,7 +60,7 @@ public struct Tenant: Codable, Equatable, Hashable, Identifiable {
     }
 }
 
-public struct TenantColectionResponse: Codable, Equatable, Hashable {
+public struct TenantCollectionResponse: Codable, Equatable, Hashable {
     public let page: Int
     public let pageCount: Int
     public let pageSize: Int
@@ -183,7 +183,7 @@ public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable, Identifiab
     }
 }
 
-public struct ApiKeyColectionResponse: Codable, Equatable, Hashable {
+public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
     public let page: Int
     public let pageCount: Int
     public let pageSize: Int
@@ -317,20 +317,22 @@ public struct CardsResponse: Codable, Equatable, Hashable {
 
 public enum QuestionType: String, Codable {
     case choice = "choice"
+    case rating = "rating"
 }
 
 public enum QuestionKind: String, Codable {
     case radio = "radio"
     case checkbox = "checkbox"
+    case star = "star"
 }
 
 public struct CreateChoiceQuestionOption: Codable, Equatable, Hashable {
-    public let title: String?
+    public let title: String
     public let value: String
     public let isOther: Bool?
     
     public init(
-        title: String?,
+        title: String,
         value: String,
         isOther: Bool?
     ) {
@@ -347,13 +349,13 @@ public struct CreateChoiceQuestionOption: Codable, Equatable, Hashable {
 }
 
 public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    public let title: String?
+    public let title: String
     public let value: String
     public let isOther: Bool?
     public let id: String
     
     public init(
-        title: String?,
+        title: String,
         value: String,
         isOther: Bool?,
         id: String
@@ -452,6 +454,8 @@ public struct CreateQuestionRequestBody: Codable, Equatable, Hashable {
         switch type {
         case .choice:
             self.data = .createChoiceQuestionBody(try container.decode(CreateChoiceQuestionBody.self, forKey: .data))
+        case .rating:
+            fatalError()
         }
     }
 }
@@ -538,11 +542,13 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
         switch type {
         case .choice:
             self.data = .choiceQuestionBody(try container.decode(ChoiceQuestionBody.self, forKey: .data))
+        case .rating:
+            fatalError()
         }
     }
 }
 
-public struct QuestionColectionResponse: Codable, Equatable, Hashable {
+public struct QuestionCollectionResponse: Codable, Equatable, Hashable {
     public let page: Int
     public let pageCount: Int
     public let pageSize: Int
@@ -742,7 +748,7 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
     }
 }
 
-public struct NotificationColectionResponse: Codable, Equatable, Hashable {
+public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
     public let page: Int
     public let pageCount: Int
     public let pageSize: Int
