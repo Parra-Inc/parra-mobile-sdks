@@ -38,6 +38,8 @@ class ParraChoiceOptionView: UIView {
             accessoryButton = ParraRadioButton()
         case .checkbox:
             accessoryButton = ParraCheckboxButton()
+        case .star:
+            accessoryButton = ParraStarButton()
         }
 
         accessoryButton.delegate = self
