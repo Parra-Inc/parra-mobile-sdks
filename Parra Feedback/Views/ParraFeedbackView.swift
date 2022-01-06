@@ -35,6 +35,8 @@ public let ParraFeedbackViewDefaultConfig = ParraFeedbackViewConfig(
 )
 
 public class ParraFeedbackView: UIView {
+    private let questionHandler = ParraQuestionHandler()
+    
     public var cardItems: [CardItem] {
         didSet {
             cardItemsDidChange()
@@ -60,6 +62,11 @@ public class ParraFeedbackView: UIView {
     )
     private let poweredByLabel = UILabel(frame: .zero)
     private lazy var navigationStack: UIStackView = ({
+        // Temporary work around so we don't have to change the stack view until
+        // we add this button later.
+        backButton.alpha = 0.0
+        backButton.isEnabled = false
+        
         return UIStackView(arrangedSubviews: [
             backButton, poweredByLabel, forwardButton
         ])
@@ -196,7 +203,10 @@ public class ParraFeedbackView: UIView {
         
         switch (cardItem.data) {
         case .question(let question):
-            return ParraQuestionCardView(question: question)
+            return ParraQuestionCardView(
+                question: question,
+                questionHandler: questionHandler
+            )
         }
     }
     

@@ -89,6 +89,47 @@ public class ParraFeedback {
                             answer: nil
                         )
                     )
+                ),
+                CardItem(
+                    type: .question,
+                    version: "1",
+                    data: .question(
+                        Question(
+                            id: "2",
+                            createdAt: "",
+                            updatedAt: "",
+                            deletedAt: nil,
+                            tenantId: "4",
+                            title: "Which features of this app do you use every day?",
+                            subtitle: "If none are applicable, that's okay!",
+                            type: .choice,
+                            kind: .checkbox,
+                            data: .choiceQuestionBody(ChoiceQuestionBody(options: [
+                                ChoiceQuestionOption(
+                                    title: "Login screen",
+                                    value: "",
+                                    isOther: nil,
+                                    id: "opt1"
+                                ),
+                                ChoiceQuestionOption(
+                                    title: "Search function",
+                                    value: "",
+                                    isOther: nil,
+                                    id: "opt2"
+                                ),
+                                ChoiceQuestionOption(
+                                    title: "Browse screen",
+                                    value: "",
+                                    isOther: nil,
+                                    id: "opt3"
+                                )
+                            ])),
+                            active: true,
+                            expiresAt: nil,
+                            answerQuota: nil,
+                            answer: nil
+                        )
+                    )
                 )
             ]
         )

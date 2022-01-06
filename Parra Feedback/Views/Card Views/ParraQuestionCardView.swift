@@ -7,13 +7,20 @@
 
 import UIKit
 
+protocol ParraQuestionViewDelegate {
+    func onSelect(option: ChoiceQuestionOption, forQuestion question: Question, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
+    func onDeselect(option: ChoiceQuestionOption, forQuestion question: Question, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
+}
+
 class ParraQuestionCardView: ParraCardView {
     let question: Question
+    let questionHandler: ParraQuestionHandler
 
     private let contentContainer = UIStackView(frame: .zero)
     
-    required init(question: Question) {
+    required init(question: Question, questionHandler: ParraQuestionHandler) {
         self.question = question
+        self.questionHandler = questionHandler
         
         super.init(frame: .zero)
         
@@ -82,33 +89,38 @@ class ParraQuestionCardView: ParraCardView {
     }
     
     private func generateOptionsForChoice(_ choice: ChoiceQuestionBody) {
-//        switch question.kind {
-//        case .checkbox:
-//            let container = CheckboxButtonContainer()
-//        case .radio:
-//            let container = RadioButtonContainer()
-//        }
-        
         for option in choice.options {
             let optionView = ParraChoiceOptionView(
                 option: option,
                 kind: question.kind
             )
             optionView.delegate = self
-                            
-//                container.addButtons([optionView.accessoryButton as! RadioButton])
-            
+
             contentContainer.addArrangedSubview(optionView)
         }
     }
 }
 
 extension ParraQuestionCardView: ParraChoiceOptionViewDelegate {
-    func onSelect(option: ChoiceQuestionOption, view: ParraChoiceOptionView, button: SelectableButton) {
-        print("selected: \(option)")
+    func onSelect(option: ChoiceQuestionOption,
+                  inView view: ParraChoiceOptionView,
+                  fromButton button: SelectableButton) {
+        questionHandler.onSelect(
+            option: option,
+            forQuestion: question,
+            inView: view,
+            fromButton: button
+        )
     }
     
-    func onDeselect(option: ChoiceQuestionOption, view: ParraChoiceOptionView, button: SelectableButton) {
-        print("deselected: \(option)")
+    func onDeselect(option: ChoiceQuestionOption,
+                    inView view: ParraChoiceOptionView,
+                    fromButton button: SelectableButton) {
+        questionHandler.onDeselect(
+            option: option,
+            forQuestion: question,
+            inView: view,
+            fromButton: button
+        )
     }
 }

@@ -39,6 +39,8 @@
 		00DED000274C69F800DAF301 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DECFFE274C69F800DAF301 /* Main.storyboard */; };
 		00DED002274C69FA00DAF301 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00DED001274C69FA00DAF301 /* Assets.xcassets */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
+		00E8B32C278730D500FC3FFD /* ParraQuestionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */; };
+		00E8B32E27878C3400FC3FFD /* GeneratedTypes+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32D27878C3400FC3FFD /* GeneratedTypes+Extensions.swift */; };
 		4B34D69CE5731844A714F716 /* Pods_Parra_Feedback_SDK_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8F1193CC884F0B2F36CA9ED /* Pods_Parra_Feedback_SDK_Demo.framework */; };
 		665BCCAD95CCAA071E66E0A3 /* Pods_Parra_Feedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */; };
 /* End PBXBuildFile section */
@@ -108,6 +110,8 @@
 		00DED001274C69FA00DAF301 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00DED004274C69FA00DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		00DED006274C69FA00DAF301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionHandler.swift; sourceTree = "<group>"; };
+		00E8B32D27878C3400FC3FFD /* GeneratedTypes+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeneratedTypes+Extensions.swift"; sourceTree = "<group>"; };
 		1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parra_Feedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A217E270D66BD247EA12161 /* Pods-Parra Feedback.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback.debug.xcconfig"; path = "Target Support Files/Pods-Parra Feedback/Pods-Parra Feedback.debug.xcconfig"; sourceTree = "<group>"; };
 		819BB918A1E17EB6B804A30F /* Pods-Parra Feedback SDK Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback SDK Demo.release.xcconfig"; path = "Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo.release.xcconfig"; sourceTree = "<group>"; };
@@ -152,6 +156,7 @@
 				00120EF2274D1EEE00CA3247 /* UIColor+Extensions.swift */,
 				001286F5277D54480090CDB5 /* CAShapeLayer+Extensions.swift */,
 				001286FE277FE3180090CDB5 /* UIFont+Extensions.swift */,
+				00E8B32D27878C3400FC3FFD /* GeneratedTypes+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -183,6 +188,7 @@
 			children = (
 				001286F8277F50B30090CDB5 /* ParraChoiceData.swift */,
 				001286FA277F51120090CDB5 /* ParraQuestionData.swift */,
+				00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -489,6 +495,8 @@
 				001286EF277D27BC0090CDB5 /* ParraRadioButton.swift in Sources */,
 				00120F0527543CB800CA3247 /* ParraChoiceOptionView.swift in Sources */,
 				00120EF3274D1EEE00CA3247 /* UIColor+Extensions.swift in Sources */,
+				00E8B32C278730D500FC3FFD /* ParraQuestionHandler.swift in Sources */,
+				00E8B32E27878C3400FC3FFD /* GeneratedTypes+Extensions.swift in Sources */,
 				001286F6277D54480090CDB5 /* CAShapeLayer+Extensions.swift in Sources */,
 				00120EFE2753E8BF00CA3247 /* ParraCardView.swift in Sources */,
 				003D2A75274C77BD001E067E /* ParraFeedback.swift in Sources */,

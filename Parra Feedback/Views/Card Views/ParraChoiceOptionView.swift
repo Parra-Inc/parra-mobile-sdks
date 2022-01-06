@@ -8,8 +8,8 @@
 import UIKit
 
 protocol ParraChoiceOptionViewDelegate: NSObjectProtocol {
-    func onSelect(option: ChoiceQuestionOption, view: ParraChoiceOptionView, button: SelectableButton)
-    func onDeselect(option: ChoiceQuestionOption, view: ParraChoiceOptionView, button: SelectableButton)
+    func onSelect(option: ChoiceQuestionOption, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
+    func onDeselect(option: ChoiceQuestionOption, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
 }
 
 class ParraChoiceOptionView: UIView {
@@ -67,10 +67,18 @@ class ParraChoiceOptionView: UIView {
 
 extension ParraChoiceOptionView: SelectableButtonDelegate {
     func buttonDidSelect(button: SelectableButton) {
-        delegate?.onSelect(option: option, view: self, button: button)
+        delegate?.onSelect(
+            option: option,
+            inView: self,
+            fromButton: button
+        )
     }
     
     func buttonDidDeselect(button: SelectableButton) {
-        delegate?.onDeselect(option: option, view: self, button: button)
+        delegate?.onDeselect(
+            option: option,
+            inView: self,
+            fromButton: button
+        )
     }
 }
