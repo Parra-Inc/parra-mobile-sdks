@@ -9,28 +9,44 @@ import XCTest
 @testable import ParraFeedback
 
 class ParraFeedbackDataManagerTests: XCTestCase {
+    var dataManager: ParraFeedbackDataManager!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        dataManager = ParraFeedbackDataManager()
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        dataManager = nil
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
+    
+    func testCardDataMapFromList() {
+        let cardData = [kSampleRadioQuestionItem.data, kSampleCheckboxQuestionItem.data]
+        
+        let result = dataManager.cardDataMapFromList(cardDataList: cardData)
+        
+        XCTAssert(result.count == cardData.count)
+        for (index, data) in cardData.enumerated() {
+            let loadedData = result[cardData[index].id]
+            XCTAssertNotNil(loadedData)
+            XCTAssert(loadedData?.index == index)
+            XCTAssert(loadedData?.element == data)
         }
     }
+    
+    func testCardDataListFromMap() {
+        let dataMap = [
+            kSampleRadioQuestionItem.data.id: (0, kSampleRadioQuestionItem.data),
+            kSampleCheckboxQuestionItem.data.id: (1, kSampleCheckboxQuestionItem.data),
+        ]
+        
+        let result = dataManager.cardDataListFromMap(cardDataMap: dataMap)
+        
+        XCTAssert(result.count == dataMap.count)
 
+        for (index, data) in result.enumerated() {
+            XCTAssertNotNil(dataMap[data.id])
+            XCTAssert(dataMap[data.id]?.1 == data)
+            XCTAssert(dataMap[data.id]?.0 == index)
+        }
+    }
 }

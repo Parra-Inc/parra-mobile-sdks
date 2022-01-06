@@ -108,12 +108,12 @@ class ParraFeedbackDataManager {
         
         let data = try Data(contentsOf: url)
         
-        return answersDataFromAnswersList(
+        return answersMapFromList(
             answers: try jsonDecoder.decode([Answer].self, from: data)
         )
     }
     
-    private func cardDataMapFromList(cardDataList: [CardItemData]) -> FastAccessListMap<CardItemData> {
+    func cardDataMapFromList(cardDataList: [CardItemData]) -> FastAccessListMap<CardItemData> {
         return cardDataList.lazy.enumerated().reduce([:]) { partialResult, obj in
             var result = partialResult
 
@@ -123,15 +123,15 @@ class ParraFeedbackDataManager {
         }
     }
     
-    private func questionsListFromQuestionData(questionData: FastAccessListMap<Question>) -> [Question] {
-        return questionData.values.sorted {
-            $0.index > $1.index
+    func cardDataListFromMap(cardDataMap: FastAccessListMap<CardItemData>) -> [CardItemData] {
+        return cardDataMap.values.sorted {
+            $0.index < $1.index
         }.map {
             $0.element
         }
     }
     
-    private func answersDataFromAnswersList(answers: [Answer]) -> [String: Answer] {
+    func answersMapFromList(answers: [Answer]) -> [String: Answer] {
         return answers.reduce([:]) { partialResult, element in
             var result = partialResult
 
@@ -141,8 +141,8 @@ class ParraFeedbackDataManager {
         }
     }
     
-    private func answersListFromAnswerData(answerData: [String: Answer]) -> [Answer] {
-        return Array(answerData.values)
+    func answersListFromMap(answerDataMap: [String: Answer]) -> [Answer] {
+        return Array(answerDataMap.values)
     }
     
     private func writeCardData() {

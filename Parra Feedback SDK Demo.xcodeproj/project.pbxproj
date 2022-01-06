@@ -25,6 +25,7 @@
 		001287032784CD0D0090CDB5 /* ParraStarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287022784CD0D0090CDB5 /* ParraStarButton.swift */; };
 		001287192784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */; };
 		0012871A2784CDC20090CDB5 /* ParraFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; platformFilter = ios; };
+		001287212784CF6C0090CDB5 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287202784CF6C0090CDB5 /* SampleData.swift */; };
 		003D2A6B274C7798001E067E /* ParraFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 003D2A6A274C7798001E067E /* ParraFeedback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		003D2A6E274C7798001E067E /* ParraFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; };
 		003D2A6F274C7798001E067E /* ParraFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -92,6 +93,7 @@
 		001287022784CD0D0090CDB5 /* ParraStarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStarButton.swift; sourceTree = "<group>"; };
 		001287162784CDC20090CDB5 /* Parra Feedback Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Parra Feedback Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManagerTests.swift; sourceTree = "<group>"; };
+		001287202784CF6C0090CDB5 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		003D2A68274C7798001E067E /* ParraFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParraFeedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		003D2A6A274C7798001E067E /* ParraFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParraFeedback.h; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* ParraFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedback.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */,
+				001287202784CF6C0090CDB5 /* SampleData.swift */,
 			);
 			path = "Parra Feedback Tests";
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				001287192784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift in Sources */,
+				001287212784CF6C0090CDB5 /* SampleData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
