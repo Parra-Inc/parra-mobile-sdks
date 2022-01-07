@@ -171,6 +171,8 @@ public class ParraFeedbackView: UIView {
         }
                 
         if animated {
+            forwardButton.isEnabled = false
+
             self.currentCardInfo?.cardView.transform = .identity
             nextCard.transform = .identity.translatedBy(x: self.frame.width, y: 0.0)
 
@@ -179,11 +181,13 @@ public class ParraFeedbackView: UIView {
             UIView.animate(
                 withDuration: 0.375,
                 delay: 0.0,
-                options: [.curveEaseInOut, .beginFromCurrentState]) {
+                options: [.curveEaseInOut]) {
                     self.currentCardInfo?.cardView.transform = .identity.translatedBy(x: -self.frame.width, y: 0.0)
                     nextCard.transform = .identity
                 } completion: { _ in
                     applyNextView()
+
+                    self.forwardButton.isEnabled = true
                 }
         } else {
             applyNextView()
