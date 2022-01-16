@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIFont {
-    private static var fontsRegistered = false
+    static var fontsRegistered = false
 
     static func registerFontsIfNeeded() {
         if fontsRegistered {

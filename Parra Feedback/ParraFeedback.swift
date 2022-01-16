@@ -11,29 +11,38 @@ import UIKit
 let kParraLogPrefix = "[PARRA FEEDBACK]"
 
 public class ParraFeedback {
-    private static let shared = ParraFeedback()
-    private let dataManager = ParraFeedbackDataManager()
-    private var cachedUserCredential: ParraFeedbackUserCredential?
+    static let shared = ParraFeedback()
+    let dataManager = ParraFeedbackDataManager()
+    var cachedUserCredential: ParraFeedbackUserCredential?
     
     private init() {}
     
-    public class func initialize(authenticationProvider provider: @escaping () async throws -> ParraFeedbackUserCredential) {
+    public class func initialize(
+        authenticationProvider provider: @escaping () async throws -> ParraFeedbackUserCredential,
+        onAuthenticated: ((Result<ParraFeedbackUserCredential, ParraFeedbackError>) -> Void)? = nil) {
         UIFont.registerFontsIfNeeded()
 
         Task {
             do {
                 try await shared.dataManager.loadData()
             } catch let error {
+                // TODO: Should there be a fall back here to tell the data manager to fall back on default data?
+
                 let dataError = ParraFeedbackError.dataLoadingError(error)
                 print("\(kParraLogPrefix) Error loading data: \(dataError)")
             }
             
             do {
-                setUserCredential(try await provider())
+                let credential = try await provider()
+                setUserCredential(credential)
+                
+                onAuthenticated?(.success(credential))
             } catch let error {
                 let authError = ParraFeedbackError.authenticationFailed(error)
-                print("[PARRA FEEDBACK] Error authenticating user: \(authError)")
+                print("\(kParraLogPrefix) Error authenticating user: \(authError)")
                 setUserCredential(nil)
+                
+                onAuthenticated?(.failure(authError))
             }
         }
     }
@@ -135,11 +144,11 @@ public class ParraFeedback {
         )
     }
     
-    private class func checkAuthenticationProvider() -> Bool {
+    class func checkAuthenticationProvider() -> Bool {
         return ParraFeedback.shared.cachedUserCredential != nil
     }
     
-    private class func setUserCredential(_ credential: ParraFeedbackUserCredential?) {
+    class func setUserCredential(_ credential: ParraFeedbackUserCredential?) {
         ParraFeedback.shared.cachedUserCredential = credential
     }
 }

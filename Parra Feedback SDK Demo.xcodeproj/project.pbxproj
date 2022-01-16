@@ -31,6 +31,7 @@
 		003D2A6F274C7798001E067E /* ParraFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		003D2A75274C77BD001E067E /* ParraFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003D2A74274C77BD001E067E /* ParraFeedback.swift */; };
 		003D2A78274C84A3001E067E /* ParraQuestionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */; };
+		006148B42793A43C00829486 /* ParraFeedbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006148B32793A43C00829486 /* ParraFeedbackTests.swift */; };
 		007FBEF4277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */; };
 		007FBEF6277A700200BD9E37 /* libswift_Concurrency.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */; settings = {ATTRIBUTES = (Weak, ); }; };
 		00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFF8274C69F800DAF301 /* AppDelegate.swift */; };
@@ -100,6 +101,7 @@
 		003D2A6A274C7798001E067E /* ParraFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParraFeedback.h; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* ParraFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedback.swift; sourceTree = "<group>"; };
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
+		006148B32793A43C00829486 /* ParraFeedbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackTests.swift; sourceTree = "<group>"; };
 		007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+GeneratedTypes.swift"; sourceTree = "<group>"; };
 		007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Parra Feedback SDK Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -198,6 +200,7 @@
 			children = (
 				001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */,
 				001287202784CF6C0090CDB5 /* SampleData.swift */,
+				006148B32793A43C00829486 /* ParraFeedbackTests.swift */,
 			);
 			path = "Parra Feedback Tests";
 			sourceTree = "<group>";
@@ -478,6 +481,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006148B42793A43C00829486 /* ParraFeedbackTests.swift in Sources */,
 				001287192784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift in Sources */,
 				001287212784CF6C0090CDB5 /* SampleData.swift in Sources */,
 			);
