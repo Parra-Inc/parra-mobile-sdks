@@ -14,7 +14,7 @@ public enum ParraFeedbackError: Error {
     case dataLoadingError(Error)
 }
 
-public struct ParraFeedbackUserCredential {
+public struct ParraFeedbackUserCredential: Equatable {
     public let token: String
     public let name: String?
 
