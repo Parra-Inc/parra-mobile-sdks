@@ -20,13 +20,17 @@ class ViewController: UIViewController {
                 
         Task {
             print("fetching...")
-            let response = try await ParraFeedback.fetchFeedbackCards()
-        
-            view.addConstraint(feedbackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100))
-
-            feedbackView.cardItems = response.items
-            
-            print(response.items)
+            do {
+                let response = try await ParraFeedback.fetchFeedbackCards()
+                
+                view.addConstraint(feedbackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100))
+                
+                feedbackView.cardItems = response.items
+                
+                print(response.items)
+            } catch let error {
+                print(error)
+            }
         }
     }
 }

@@ -8,25 +8,41 @@
 import UIKit
 import ParraFeedback
 
+struct AuthResponse: Codable {
+    let accessToken: String
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
-        ParraFeedback.initialize {
-            return ParraFeedbackUserCredential.defaultCredential
-//            return try await withCheckedThrowingContinuation { continuation in
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                    continuation.resume(
-//                        returning: ParraFeedbackUserCredential(
-//                            token: "Unique ID from your web service"
-//                        )
-//                    )
-//                }
-//            }
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        ParraFeedback.setAuthenticationProvider { (completion: @escaping (Result<ParraFeedbackCredential, Error>) -> Void) in
+            var request = URLRequest(
+                url: URL(string: "http://localhost:8080/v1/parra/auth/token")!,
+                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+                timeoutInterval: 10
+            )
+            request.httpMethod = "POST"
+            
+            URLSession.shared.dataTask(with: request) { data, _, error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    do {
+                        let response = try jsonDecoder.decode(AuthResponse.self, from: data!)
+                        
+                        completion(.success(ParraFeedbackCredential(token: response.accessToken)))
+                    } catch let error {
+                        completion(.failure(error))
+                    }
+                }
+            }.resume()
         }
-        
+                
         return true
     }
 

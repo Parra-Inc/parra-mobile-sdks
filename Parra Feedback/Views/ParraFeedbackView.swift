@@ -274,8 +274,8 @@ public class ParraFeedbackView: UIView {
         let defaultAttributes = [NSAttributedString.Key.kern: 0.24]
         let poweredBy = NSMutableAttributedString(string: "Powered by ", attributes: defaultAttributes)
 
-        let pacifico = UIFont(name: "Pacifico-Regular", size: 16)!
-        let parra = NSMutableAttributedString(string: "Parra", attributes: [.font: pacifico])
+        let font = UIFont(name: "Pacifico-Regular", size: 16) ?? UIFont.boldSystemFont(ofSize: 16)
+        let parra = NSMutableAttributedString(string: "Parra", attributes: [.font: font])
         parra.addAttributes(defaultAttributes, range: NSMakeRange(0, parra.length))
         poweredBy.append(parra)
 

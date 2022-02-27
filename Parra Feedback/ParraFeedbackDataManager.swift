@@ -15,15 +15,16 @@ typealias ReadWriteable = Identifiable & Codable
 typealias FastAccessListMap<T> = [String: (index: Int, element: T)]
 
 let kTempDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
-let kParraCardDataPath =  kTempDirectory.appendingPathComponent("Parra/Feedback/cards.data")
-let kParraAnswerDataPath =  kTempDirectory.appendingPathComponent("Parra/Feedback/answers.data")
+let kParraCardDataPath = kTempDirectory.appendingPathComponent("Parra/Feedback/cards.data")
+let kParraAnswerDataPath = kTempDirectory.appendingPathComponent("Parra/Feedback/answers.data")
+let kUserCredentialKey = "com.parrafeedback.usercredential"
 
 class ParraFeedbackDataManager {
     private var cardDataMap = FastAccessListMap<CardItemData>()
     private var answers = [String: Answer]()
+    private var userCredential: ParraFeedbackCredential?
     
-    private let jsonDecoder = JSONDecoder()
-    
+
     let queue = DispatchQueue(
         label: "com.parra.feedback.dataQueue",
         qos: .utility,
@@ -33,6 +34,22 @@ class ParraFeedbackDataManager {
     )
     
     init() {}
+    
+    func updateCredential(credential: ParraFeedbackCredential?) throws {
+        if let credential = credential {
+            let data = try JSONEncoder.parraEncoder.encode(credential)
+            
+            UserDefaults.standard.set(data, forKey: kUserCredentialKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: kUserCredentialKey)
+        }
+        
+        userCredential = credential
+    }
+    
+    func currentCredential() -> ParraFeedbackCredential? {
+        return userCredential
+    }
     
     // TODO: Should this be updateAnswerToQuestion and key off the question id?
     func updateAnswer(answer: Answer) {
@@ -79,8 +96,17 @@ class ParraFeedbackDataManager {
     }
     
     func loadData() async throws {
+        userCredential = try await loadCredential()
         cardDataMap = try await loadCardData()
         answers = try await loadAnswers()
+    }
+    
+    private func loadCredential() async throws -> ParraFeedbackCredential? {
+        guard let data = UserDefaults.standard.value(forKey: kUserCredentialKey) as? Data else {
+            return nil
+        }
+        
+        return try JSONDecoder.parraDecoder.decode(ParraFeedbackCredential.self, from: data)
     }
     
     private func loadCardData() async throws -> FastAccessListMap<CardItemData> {
@@ -94,7 +120,7 @@ class ParraFeedbackDataManager {
         let data = try Data(contentsOf: url)
                 
         return cardDataMapFromList(
-            cardDataList: try jsonDecoder.decode([CardItemData].self, from: data)
+            cardDataList: try JSONDecoder.parraDecoder.decode([CardItemData].self, from: data)
         )
     }
 
@@ -109,7 +135,7 @@ class ParraFeedbackDataManager {
         let data = try Data(contentsOf: url)
         
         return answersMapFromList(
-            answers: try jsonDecoder.decode([Answer].self, from: data)
+            answers: try JSONDecoder.parraDecoder.decode([Answer].self, from: data)
         )
     }
     

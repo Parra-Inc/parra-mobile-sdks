@@ -9,146 +9,106 @@ import Foundation
 import UIKit
 
 let kParraLogPrefix = "[PARRA FEEDBACK]"
+let kParraApiUrl = URL(string: "https://api.parra.io/v1/")!
+
+public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraFeedbackCredential
 
 public class ParraFeedback {
-    static let shared = ParraFeedback()
-    let dataManager = ParraFeedbackDataManager()
-    var cachedUserCredential: ParraFeedbackUserCredential?
+    private static let shared = ParraFeedback()
+    private let dataManager = ParraFeedbackDataManager()
+    private var authenticationProvider: ParraFeedbackAuthenticationProvider?
     
-    private init() {}
+    internal lazy var urlSession: URLSession = {
+        return URLSession(configuration: .default)
+    }()
     
-    public class func initialize(
-        authenticationProvider provider: @escaping () async throws -> ParraFeedbackUserCredential,
-        onAuthenticated: ((Result<ParraFeedbackUserCredential, ParraFeedbackError>) -> Void)? = nil) {
-        UIFont.registerFontsIfNeeded()
+    private init() {
+        initialize()
+    }
 
-        Task {
-            do {
-                try await shared.dataManager.loadData()
-            } catch let error {
-                // TODO: Should there be a fall back here to tell the data manager to fall back on default data?
-
-                let dataError = ParraFeedbackError.dataLoadingError(error)
-                print("\(kParraLogPrefix) Error loading data: \(dataError)")
-            }
-            
-            do {
-                let credential = try await provider()
-                setUserCredential(credential)
-                
-                onAuthenticated?(.success(credential))
-            } catch let error {
-                let authError = ParraFeedbackError.authenticationFailed(error)
-                print("\(kParraLogPrefix) Error authenticating user: \(authError)")
-                setUserCredential(nil)
-                
-                onAuthenticated?(.failure(authError))
-            }
-        }
+    public class func setAuthenticationProvider(_ provider: @escaping ParraFeedbackAuthenticationProvider) {
+        shared.authenticationProvider = provider
+    }
+        
+    public class func setAuthenticationProvider(_ provider: @escaping (@escaping (ParraFeedbackCredential) -> Void) throws -> Void) {
+        shared.authenticationProvider = shared.asyncAuthenticationFromValueCallback(provider)
+    }
+    
+    public class func setAuthenticationProvider(_ provider: @escaping (@escaping (Result<ParraFeedbackCredential, Error>) -> Void) -> Void) {
+        shared.authenticationProvider = shared.asyncAuthenticationFromResultCallback(provider)
     }
     
     public class func logout() {
-        setUserCredential(nil)
+        try? shared.dataManager.updateCredential(credential: nil)
+        // TODO: data manager clear all data.
     }
-    
-    public class func fetchFeedbackCards() async throws -> CardsResponse {
-        guard checkAuthenticationProvider() else {
-            throw ParraFeedbackError.missingAuthentication
-        }
         
-        return CardsResponse(
-            items: [
-                CardItem(
-                    type: .question,
-                    version: "1",
-                    data: .question(
-                        Question(
-                            id: "1",
-                            createdAt: "",
-                            updatedAt: "",
-                            deletedAt: nil,
-                            tenantId: "1",
-                            title: "What do you want us to build next?",
-                            subtitle: "Your feedback matters to us.",
-                            type: .choice,
-                            kind: .radio,
-                            data: .choiceQuestionBody(ChoiceQuestionBody(options: [
-                                ChoiceQuestionOption(
-                                    title: "App Update Checker",
-                                    value: "",
-                                    isOther: nil,
-                                    id: "opt1"
-                                ),
-                                ChoiceQuestionOption(
-                                    title: "Analytics",
-                                    value: "",
-                                    isOther: nil,
-                                    id: "opt2"
-                                ),
-                                ChoiceQuestionOption(
-                                    title: "Auth Services",
-                                    value: "",
-                                    isOther: nil,
-                                    id: "opt3"
-                                )
-                            ])),
-                            active: true,
-                            expiresAt: nil,
-                            answerQuota: nil,
-                            answer: nil
-                        )
-                    )
-                ),
-                CardItem(
-                    type: .question,
-                    version: "1",
-                    data: .question(
-                        Question(
-                            id: "2",
-                            createdAt: "",
-                            updatedAt: "",
-                            deletedAt: nil,
-                            tenantId: "4",
-                            title: "Which features of this app do you use every day?",
-                            subtitle: "If none are applicable, that's okay!",
-                            type: .choice,
-                            kind: .checkbox,
-                            data: .choiceQuestionBody(ChoiceQuestionBody(options: [
-                                ChoiceQuestionOption(
-                                    title: "Login screen",
-                                    value: "",
-                                    isOther: nil,
-                                    id: "opt1"
-                                ),
-                                ChoiceQuestionOption(
-                                    title: "Search function",
-                                    value: "",
-                                    isOther: nil,
-                                    id: "opt2"
-                                ),
-                                ChoiceQuestionOption(
-                                    title: "Browse screen",
-                                    value: "",
-                                    isOther: nil,
-                                    id: "opt3"
-                                )
-                            ])),
-                            active: true,
-                            expiresAt: nil,
-                            answerQuota: nil,
-                            answer: nil
-                        )
-                    )
-                )
-            ]
+    public class func fetchFeedbackCards() async throws -> CardsResponse {        
+        let url = kParraApiUrl.appendingPathComponent("cards")
+
+        return try await shared.performAuthenticatedRequest(
+            url: url,
+            method: .get,
+            credential: shared.dataManager.currentCredential(),
+            authenticationProvider: shared.refreshAuthentication
         )
     }
     
-    class func checkAuthenticationProvider() -> Bool {
-        return ParraFeedback.shared.cachedUserCredential != nil
+    private func initialize() {
+        UIFont.registerFontsIfNeeded()
+        
+        Task {
+            do {
+                try await dataManager.loadData()
+            } catch let error {
+                let dataError = ParraFeedbackError.dataLoadingError(error)
+                print("\(kParraLogPrefix) Error loading data: \(dataError)")
+            }
+        }
     }
     
-    class func setUserCredential(_ credential: ParraFeedbackUserCredential?) {
-        ParraFeedback.shared.cachedUserCredential = credential
+    private func refreshAuthentication() async throws -> ParraFeedbackCredential {
+        guard let authenticationProvider = authenticationProvider else {
+            throw ParraFeedbackError.missingAuthentication
+        }
+        
+        do {
+            let credential = try await authenticationProvider()
+            
+            try dataManager.updateCredential(credential: credential)
+            
+            return credential
+        } catch let error {
+            throw ParraFeedbackError.authenticationFailed(error)
+        }
+    }
+    
+    private func asyncAuthenticationFromValueCallback(_ provider: @escaping (@escaping (ParraFeedbackCredential) -> Void) throws -> Void) -> (() async throws -> ParraFeedbackCredential) {
+        return {
+            return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ParraFeedbackCredential, Error>) in
+                do {
+                    try provider { credential in
+                        continuation.resume(returning: credential)
+                    }
+                } catch let error {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
+    private func asyncAuthenticationFromResultCallback(_ provider: @escaping (@escaping (Result<ParraFeedbackCredential, Error>) -> Void) -> Void) -> (() async throws -> ParraFeedbackCredential) {
+        return {
+            return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ParraFeedbackCredential, Error>) in
+                provider { result in
+                    switch result {
+                    case .success(let credential):
+                        continuation.resume(returning: credential)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        }
     }
 }

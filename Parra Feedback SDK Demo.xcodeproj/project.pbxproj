@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00120EF3274D1EEE00CA3247 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00120EF2274D1EEE00CA3247 /* UIColor+Extensions.swift */; };
+		00120EF3274D1EEE00CA3247 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00120EF2274D1EEE00CA3247 /* UIColor.swift */; };
 		00120EF9274D9CFC00CA3247 /* ParraFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00120EF8274D9CFC00CA3247 /* ParraFeedbackView.swift */; };
 		00120EFB274DC98400CA3247 /* ParraActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00120EFA274DC98400CA3247 /* ParraActionCardView.swift */; };
 		00120EFE2753E8BF00CA3247 /* ParraCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00120EFD2753E8BF00CA3247 /* ParraCardView.swift */; };
@@ -16,16 +16,20 @@
 		001286EF277D27BC0090CDB5 /* ParraRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286EE277D27BC0090CDB5 /* ParraRadioButton.swift */; };
 		001286F1277D4BB20090CDB5 /* ParraCheckboxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F0277D4BB20090CDB5 /* ParraCheckboxButton.swift */; };
 		001286F4277D53AE0090CDB5 /* SelectableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F3277D53AE0090CDB5 /* SelectableButton.swift */; };
-		001286F6277D54480090CDB5 /* CAShapeLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F5277D54480090CDB5 /* CAShapeLayer+Extensions.swift */; };
+		001286F6277D54480090CDB5 /* CAShapeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F5277D54480090CDB5 /* CAShapeLayer.swift */; };
 		001286F9277F50B30090CDB5 /* ParraChoiceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F8277F50B30090CDB5 /* ParraChoiceData.swift */; };
 		001286FB277F51120090CDB5 /* ParraQuestionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286FA277F51120090CDB5 /* ParraQuestionData.swift */; };
 		001286FD277FE2320090CDB5 /* Pacifico-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 001286FC277FE2320090CDB5 /* Pacifico-Regular.ttf */; };
-		001286FF277FE3180090CDB5 /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286FE277FE3180090CDB5 /* UIFont+Extensions.swift */; };
+		001286FF277FE3180090CDB5 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286FE277FE3180090CDB5 /* UIFont.swift */; };
 		001287012780C0C70090CDB5 /* ParraFeedbackDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */; };
 		001287032784CD0D0090CDB5 /* ParraStarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287022784CD0D0090CDB5 /* ParraStarButton.swift */; };
 		001287192784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */; };
 		0012871A2784CDC20090CDB5 /* ParraFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; platformFilter = ios; };
 		001287212784CF6C0090CDB5 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287202784CF6C0090CDB5 /* SampleData.swift */; };
+		0036D5E027CAC5460016DE97 /* ParraFeedback+Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D5DF27CAC5460016DE97 /* ParraFeedback+Networking.swift */; };
+		0036D5E227CACA100016DE97 /* ParraFeedbackError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D5E127CACA100016DE97 /* ParraFeedbackError.swift */; };
+		0036D5E427CB0EEA0016DE97 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */; };
+		0036D5E627CB0FBD0016DE97 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D5E527CB0FBD0016DE97 /* JSONDecoder.swift */; };
 		003D2A6B274C7798001E067E /* ParraFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 003D2A6A274C7798001E067E /* ParraFeedback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		003D2A6E274C7798001E067E /* ParraFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; };
 		003D2A6F274C7798001E067E /* ParraFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -41,7 +45,7 @@
 		00DED002274C69FA00DAF301 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00DED001274C69FA00DAF301 /* Assets.xcassets */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
 		00E8B32C278730D500FC3FFD /* ParraQuestionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */; };
-		00E8B32E27878C3400FC3FFD /* GeneratedTypes+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32D27878C3400FC3FFD /* GeneratedTypes+Extensions.swift */; };
+		00E8B32E27878C3400FC3FFD /* GeneratedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32D27878C3400FC3FFD /* GeneratedTypes.swift */; };
 		4B34D69CE5731844A714F716 /* Pods_Parra_Feedback_SDK_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8F1193CC884F0B2F36CA9ED /* Pods_Parra_Feedback_SDK_Demo.framework */; };
 		665BCCAD95CCAA071E66E0A3 /* Pods_Parra_Feedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */; };
 /* End PBXBuildFile section */
@@ -78,7 +82,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		00120EF2274D1EEE00CA3247 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
+		00120EF2274D1EEE00CA3247 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		00120EF8274D9CFC00CA3247 /* ParraFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackView.swift; sourceTree = "<group>"; };
 		00120EFA274DC98400CA3247 /* ParraActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraActionCardView.swift; sourceTree = "<group>"; };
 		00120EFD2753E8BF00CA3247 /* ParraCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardView.swift; sourceTree = "<group>"; };
@@ -87,22 +91,26 @@
 		001286EE277D27BC0090CDB5 /* ParraRadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraRadioButton.swift; sourceTree = "<group>"; };
 		001286F0277D4BB20090CDB5 /* ParraCheckboxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCheckboxButton.swift; sourceTree = "<group>"; };
 		001286F3277D53AE0090CDB5 /* SelectableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableButton.swift; sourceTree = "<group>"; };
-		001286F5277D54480090CDB5 /* CAShapeLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAShapeLayer+Extensions.swift"; sourceTree = "<group>"; };
+		001286F5277D54480090CDB5 /* CAShapeLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAShapeLayer.swift; sourceTree = "<group>"; };
 		001286F8277F50B30090CDB5 /* ParraChoiceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraChoiceData.swift; sourceTree = "<group>"; };
 		001286FA277F51120090CDB5 /* ParraQuestionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionData.swift; sourceTree = "<group>"; };
 		001286FC277FE2320090CDB5 /* Pacifico-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pacifico-Regular.ttf"; sourceTree = "<group>"; };
-		001286FE277FE3180090CDB5 /* UIFont+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
+		001286FE277FE3180090CDB5 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManager.swift; sourceTree = "<group>"; };
 		001287022784CD0D0090CDB5 /* ParraStarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStarButton.swift; sourceTree = "<group>"; };
 		001287162784CDC20090CDB5 /* Parra Feedback Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Parra Feedback Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManagerTests.swift; sourceTree = "<group>"; };
 		001287202784CF6C0090CDB5 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		0036D5DF27CAC5460016DE97 /* ParraFeedback+Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Networking.swift"; sourceTree = "<group>"; };
+		0036D5E127CACA100016DE97 /* ParraFeedbackError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackError.swift; sourceTree = "<group>"; };
+		0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONEncoder.swift; sourceTree = "<group>"; };
+		0036D5E527CB0FBD0016DE97 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		003D2A68274C7798001E067E /* ParraFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParraFeedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		003D2A6A274C7798001E067E /* ParraFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParraFeedback.h; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* ParraFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedback.swift; sourceTree = "<group>"; };
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
 		006148B32793A43C00829486 /* ParraFeedbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackTests.swift; sourceTree = "<group>"; };
-		006148B52793C23400829486 /* Parra Feedback.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Parra Feedback.xctestplan"; sourceTree = SOURCE_ROOT; };
+		006148B52793C23400829486 /* Parra Feedback.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Parra Feedback.xctestplan"; sourceTree = SOURCE_ROOT; };
 		007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+GeneratedTypes.swift"; sourceTree = "<group>"; };
 		007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Parra Feedback SDK Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,7 +122,7 @@
 		00DED004274C69FA00DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		00DED006274C69FA00DAF301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionHandler.swift; sourceTree = "<group>"; };
-		00E8B32D27878C3400FC3FFD /* GeneratedTypes+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeneratedTypes+Extensions.swift"; sourceTree = "<group>"; };
+		00E8B32D27878C3400FC3FFD /* GeneratedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedTypes.swift; sourceTree = "<group>"; };
 		1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parra_Feedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A217E270D66BD247EA12161 /* Pods-Parra Feedback.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback.debug.xcconfig"; path = "Target Support Files/Pods-Parra Feedback/Pods-Parra Feedback.debug.xcconfig"; sourceTree = "<group>"; };
 		819BB918A1E17EB6B804A30F /* Pods-Parra Feedback SDK Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback SDK Demo.release.xcconfig"; path = "Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo.release.xcconfig"; sourceTree = "<group>"; };
@@ -156,10 +164,12 @@
 		00120EF1274D1ECA00CA3247 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				00120EF2274D1EEE00CA3247 /* UIColor+Extensions.swift */,
-				001286F5277D54480090CDB5 /* CAShapeLayer+Extensions.swift */,
-				001286FE277FE3180090CDB5 /* UIFont+Extensions.swift */,
-				00E8B32D27878C3400FC3FFD /* GeneratedTypes+Extensions.swift */,
+				00120EF2274D1EEE00CA3247 /* UIColor.swift */,
+				001286F5277D54480090CDB5 /* CAShapeLayer.swift */,
+				001286FE277FE3180090CDB5 /* UIFont.swift */,
+				00E8B32D27878C3400FC3FFD /* GeneratedTypes.swift */,
+				0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */,
+				0036D5E527CB0FBD0016DE97 /* JSONDecoder.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -214,9 +224,11 @@
 				00120EF1274D1ECA00CA3247 /* Extensions */,
 				003D2A6A274C7798001E067E /* ParraFeedback.h */,
 				003D2A74274C77BD001E067E /* ParraFeedback.swift */,
-				001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */,
+				0036D5DF27CAC5460016DE97 /* ParraFeedback+Networking.swift */,
 				00120F002753E9A400CA3247 /* ParraFeedback+Types.swift */,
 				007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */,
+				001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */,
+				0036D5E127CACA100016DE97 /* ParraFeedbackError.swift */,
 				001286F7277F50A20090CDB5 /* Managers */,
 				003D2A7A274C84EE001E067E /* Views */,
 			);
@@ -495,15 +507,19 @@
 			files = (
 				003D2A78274C84A3001E067E /* ParraQuestionCardView.swift in Sources */,
 				00120EFB274DC98400CA3247 /* ParraActionCardView.swift in Sources */,
-				001286FF277FE3180090CDB5 /* UIFont+Extensions.swift in Sources */,
+				0036D5E227CACA100016DE97 /* ParraFeedbackError.swift in Sources */,
+				0036D5E427CB0EEA0016DE97 /* JSONEncoder.swift in Sources */,
+				001286FF277FE3180090CDB5 /* UIFont.swift in Sources */,
 				00120EF9274D9CFC00CA3247 /* ParraFeedbackView.swift in Sources */,
 				00120F012753E9A400CA3247 /* ParraFeedback+Types.swift in Sources */,
 				001286EF277D27BC0090CDB5 /* ParraRadioButton.swift in Sources */,
 				00120F0527543CB800CA3247 /* ParraChoiceOptionView.swift in Sources */,
-				00120EF3274D1EEE00CA3247 /* UIColor+Extensions.swift in Sources */,
+				00120EF3274D1EEE00CA3247 /* UIColor.swift in Sources */,
 				00E8B32C278730D500FC3FFD /* ParraQuestionHandler.swift in Sources */,
-				00E8B32E27878C3400FC3FFD /* GeneratedTypes+Extensions.swift in Sources */,
-				001286F6277D54480090CDB5 /* CAShapeLayer+Extensions.swift in Sources */,
+				00E8B32E27878C3400FC3FFD /* GeneratedTypes.swift in Sources */,
+				0036D5E627CB0FBD0016DE97 /* JSONDecoder.swift in Sources */,
+				001286F6277D54480090CDB5 /* CAShapeLayer.swift in Sources */,
+				0036D5E027CAC5460016DE97 /* ParraFeedback+Networking.swift in Sources */,
 				00120EFE2753E8BF00CA3247 /* ParraCardView.swift in Sources */,
 				003D2A75274C77BD001E067E /* ParraFeedback.swift in Sources */,
 				001286F4277D53AE0090CDB5 /* SelectableButton.swift in Sources */,
