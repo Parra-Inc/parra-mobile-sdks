@@ -22,6 +22,13 @@ enum Direction {
     case left, right
 }
 
+struct VisibleButtonOptions: OptionSet {
+    static let back = VisibleButtonOptions(rawValue: 1)
+    static let forward = VisibleButtonOptions(rawValue: 1 << 1)
+    
+    let rawValue: Int8
+}
+
 struct CurrentCardInfo {
     let cardView: ParraCardView
     let cardItem: CardItem?
@@ -160,9 +167,14 @@ public class ParraFeedbackView: UIView {
         }
     }
         
-    private func transitionToCardItem(_ cardItem: CardItem?, direction: Direction, animated: Bool = false) {
+    private func transitionToCardItem(_ cardItem: CardItem?,
+                                      direction: Direction,
+//                                      visibleButtons: VisibleButtonOptions,
+                                      animated: Bool = false) {
+
         let nextCard = cardViewFromCardItem(cardItem)
-                        
+        let visibleButtons = visibleNavigationButtonsForCardItem(cardItem)
+        
         contentView.addSubview(nextCard)
 
         NSLayoutConstraint.activate([
@@ -186,6 +198,7 @@ public class ParraFeedbackView: UIView {
         }
                 
         if animated {
+            backButton.isEnabled = false
             forwardButton.isEnabled = false
 
             self.currentCardInfo?.cardView.transform = .identity
@@ -205,14 +218,41 @@ public class ParraFeedbackView: UIView {
                         y: 0.0
                     )
                     nextCard.transform = .identity
+                    
+                    self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
                 } completion: { _ in
                     applyNextView()
 
+                    self.backButton.isEnabled = true
                     self.forwardButton.isEnabled = true
                 }
         } else {
+            updateVisibleNavigationButtons(visibleButtons: visibleButtons)
+
             applyNextView()
         }
+    }
+    
+    private func visibleNavigationButtonsForCardItem(_ cardItem: CardItem?) -> VisibleButtonOptions {
+        guard let cardItem = cardItem else {
+            return []
+        }
+        
+        guard let index = cardItems.firstIndex(of: cardItem) else {
+            return []
+        }
+        
+        var visibleButtons: VisibleButtonOptions = []
+        let hasPrevious = index > 0
+        if hasPrevious {
+            visibleButtons.update(with: .back)
+        }
+        let hasNext = index < cardItems.count - 1
+        if hasNext {
+            visibleButtons.update(with: .forward)
+        }
+
+        return visibleButtons
     }
     
     private func cardViewFromCardItem(_ cardItem: CardItem?) -> ParraCardView {
@@ -307,6 +347,18 @@ public class ParraFeedbackView: UIView {
             navigationStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
             navigationStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12)
         ])
+    }
+    
+    private func updateVisibleNavigationButtons(visibleButtons: VisibleButtonOptions) {
+        let showBack = visibleButtons.contains(.back)
+        
+        backButton.alpha = showBack ? 1.0 : 0.0
+        backButton.isEnabled = showBack
+
+        let showForward = visibleButtons.contains(.forward)
+        
+        forwardButton.alpha = showForward ? 1.0 : 0.0
+        forwardButton.isEnabled = showForward
     }
     
     @objc private func backButtonPressed(button: UIButton) {
