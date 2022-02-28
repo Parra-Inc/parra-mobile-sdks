@@ -128,32 +128,35 @@ public class ParraFeedbackView: UIView {
     }
     
     private func transitionToNextCard(direction: Direction = .right, animated: Bool = false) {
-        if let currentCardInfo = currentCardInfo {
-            if let currentIndex = cardItems.firstIndex(where: { $0 == currentCardInfo.cardItem }) {
-                switch direction {
-                case .left:
-                    if currentIndex == 0 {
-                        transitionToCardItem(cardItems.last, direction: .left, animated: animated)
-                    } else {
-                        transitionToCardItem(cardItems[currentIndex - 1], direction: .left, animated: animated)
-                    }
-                case .right:
-                    if currentIndex == cardItems.count - 1 {
-                        transitionToCardItem(nil, direction: .right, animated: animated)
-                    } else {
-                        transitionToCardItem(cardItems[currentIndex + 1], direction: .right, animated: animated)
-                    }
-                }
-            } else {
-                switch direction {
-                case .left:
+        guard let currentCardInfo = currentCardInfo else {
+            transitionToCardItem(cardItems.first, direction: direction, animated: animated)
+
+            return
+        }
+
+        if let currentIndex = cardItems.firstIndex(where: { $0 == currentCardInfo.cardItem }) {
+            switch direction {
+            case .left:
+                if currentIndex == 0 {
                     transitionToCardItem(cardItems.last, direction: .left, animated: animated)
-                case .right:
-                    transitionToCardItem(cardItems.first, direction: .right, animated: animated)
+                } else {
+                    transitionToCardItem(cardItems[currentIndex - 1], direction: .left, animated: animated)
+                }
+            case .right:
+                if currentIndex == cardItems.count - 1 {
+                    transitionToCardItem(nil, direction: .right, animated: animated)
+                } else {
+                    transitionToCardItem(cardItems[currentIndex + 1], direction: .right, animated: animated)
                 }
             }
         } else {
-            transitionToCardItem(cardItems.first, direction: direction, animated: animated)
+            // You're all caught up for now condition
+            switch direction {
+            case .left:
+                transitionToCardItem(cardItems.last, direction: .left, animated: animated)
+            case .right:
+                transitionToCardItem(cardItems.first, direction: .right, animated: animated)
+            }
         }
     }
         
