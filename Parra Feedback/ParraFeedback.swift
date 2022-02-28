@@ -15,6 +15,7 @@ public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraF
 
 public class ParraFeedback {
     private static let shared = ParraFeedback()
+    private var isInitialized = false
     private let dataManager = ParraFeedbackDataManager()
     private var authenticationProvider: ParraFeedbackAuthenticationProvider?
     
@@ -23,7 +24,7 @@ public class ParraFeedback {
     }()
     
     private init() {
-        initialize()
+        UIFont.registerFontsIfNeeded()
     }
 
     public class func setAuthenticationProvider(_ provider: @escaping ParraFeedbackAuthenticationProvider) {
@@ -54,20 +55,26 @@ public class ParraFeedback {
         )
     }
     
-    private func initialize() {
-        UIFont.registerFontsIfNeeded()
-        
-        Task {
-            do {
-                try await dataManager.loadData()
-            } catch let error {
-                let dataError = ParraFeedbackError.dataLoadingError(error)
-                print("\(kParraLogPrefix) Error loading data: \(dataError)")
-            }
+    // TODO: Need to either await this in all public methods, or figure out a way to call this
+    // TODO: on init, but still guarentee that it has happened before public methods can be called.
+    private func ensureInitialized() async {
+        if isInitialized {
+            return
+        }
+                
+        do {
+            try await dataManager.loadData()
+            
+            isInitialized = true
+        } catch let error {
+            let dataError = ParraFeedbackError.dataLoadingError(error)
+            print("\(kParraLogPrefix) Error loading data: \(dataError)")
         }
     }
     
     private func refreshAuthentication() async throws -> ParraFeedbackCredential {
+        await ensureInitialized()
+
         guard let authenticationProvider = authenticationProvider else {
             throw ParraFeedbackError.missingAuthentication
         }
