@@ -18,6 +18,10 @@ public struct ParraFeedbackViewConfig {
     var shadowSize: CGSize
 }
 
+enum Direction {
+    case left, right
+}
+
 struct CurrentCardInfo {
     let cardView: ParraCardView
     let cardItem: CardItem?
@@ -62,11 +66,6 @@ public class ParraFeedbackView: UIView {
     )
     private let poweredByLabel = UILabel(frame: .zero)
     private lazy var navigationStack: UIStackView = ({
-        // Temporary work around so we don't have to change the stack view until
-        // we add this button later.
-        backButton.alpha = 0.0
-        backButton.isEnabled = false
-        
         return UIStackView(arrangedSubviews: [
             backButton, poweredByLabel, forwardButton
         ])
@@ -128,24 +127,37 @@ public class ParraFeedbackView: UIView {
         transitionToNextCard()
     }
     
-    private func transitionToNextCard(animated: Bool = false) {
+    private func transitionToNextCard(direction: Direction = .right, animated: Bool = false) {
         if let currentCardInfo = currentCardInfo {
             if let currentIndex = cardItems.firstIndex(where: { $0 == currentCardInfo.cardItem }) {
-                
-                if currentIndex == cardItems.count - 1 {
-                    transitionToCardItem(nil, animated: animated)
-                } else {
-                    transitionToCardItem(cardItems[currentIndex + 1], animated: animated)
+                switch direction {
+                case .left:
+                    if currentIndex == 0 {
+                        transitionToCardItem(cardItems.last, direction: .left, animated: animated)
+                    } else {
+                        transitionToCardItem(cardItems[currentIndex - 1], direction: .left, animated: animated)
+                    }
+                case .right:
+                    if currentIndex == cardItems.count - 1 {
+                        transitionToCardItem(nil, direction: .right, animated: animated)
+                    } else {
+                        transitionToCardItem(cardItems[currentIndex + 1], direction: .right, animated: animated)
+                    }
                 }
             } else {
-                transitionToCardItem(cardItems.first, animated: animated)
+                switch direction {
+                case .left:
+                    transitionToCardItem(cardItems.last, direction: .left, animated: animated)
+                case .right:
+                    transitionToCardItem(cardItems.first, direction: .right, animated: animated)
+                }
             }
         } else {
-            transitionToCardItem(cardItems.first, animated: animated)
+            transitionToCardItem(cardItems.first, direction: direction, animated: animated)
         }
     }
         
-    private func transitionToCardItem(_ cardItem: CardItem?, animated: Bool = false) {
+    private func transitionToCardItem(_ cardItem: CardItem?, direction: Direction, animated: Bool = false) {
         let nextCard = cardViewFromCardItem(cardItem)
                         
         contentView.addSubview(nextCard)
@@ -174,7 +186,10 @@ public class ParraFeedbackView: UIView {
             forwardButton.isEnabled = false
 
             self.currentCardInfo?.cardView.transform = .identity
-            nextCard.transform = .identity.translatedBy(x: self.frame.width, y: 0.0)
+            nextCard.transform = .identity.translatedBy(
+                x: direction == .right ? self.frame.width : -self.frame.width,
+                y: 0.0
+            )
 
             contentView.invalidateIntrinsicContentSize()
             
@@ -182,7 +197,10 @@ public class ParraFeedbackView: UIView {
                 withDuration: 0.375,
                 delay: 0.0,
                 options: [.curveEaseInOut]) {
-                    self.currentCardInfo?.cardView.transform = .identity.translatedBy(x: -self.frame.width, y: 0.0)
+                    self.currentCardInfo?.cardView.transform = .identity.translatedBy(
+                        x: direction == .right ? -self.frame.width : self.frame.width,
+                        y: 0.0
+                    )
                     nextCard.transform = .identity
                 } completion: { _ in
                     applyNextView()
@@ -289,10 +307,10 @@ public class ParraFeedbackView: UIView {
     }
     
     @objc private func backButtonPressed(button: UIButton) {
-        
+        transitionToNextCard(direction: .left, animated: true)
     }
     
     @objc private func forwardButtonPressed(button: UIButton) {
-        transitionToNextCard(animated: true)
+        transitionToNextCard(direction: .right, animated: true)
     }
 }
