@@ -15,24 +15,13 @@ protocol ParraChoiceOptionViewDelegate: NSObjectProtocol {
 class ParraChoiceOptionView: UIView {
     let option: ChoiceQuestionOption
     let kind: QuestionKind
+    let accessoryButton: UIView & SelectableButton
+
     weak var delegate: ParraChoiceOptionViewDelegate?
             
     required init(option: ChoiceQuestionOption, kind: QuestionKind) {
         self.option = option
         self.kind = kind
-        
-        super.init(frame: .zero)
-        
-        translatesAutoresizingMaskIntoConstraints = false
-                
-        let optionLabel = UILabel(frame: .zero)
-        optionLabel.translatesAutoresizingMaskIntoConstraints = false
-        optionLabel.text = option.title
-        optionLabel.numberOfLines = 3
-        optionLabel.lineBreakMode = .byTruncatingTail
-
-        let accessoryButton: UIView & SelectableButton
-        
         switch kind {
         case .radio:
             accessoryButton = ParraRadioButton()
@@ -41,6 +30,22 @@ class ParraChoiceOptionView: UIView {
         case .star:
             accessoryButton = ParraStarButton()
         }
+        
+        super.init(frame: .zero)
+                
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        let optionLabel = UILabel(frame: .zero)
+        optionLabel.translatesAutoresizingMaskIntoConstraints = false
+        optionLabel.text = option.title
+        optionLabel.numberOfLines = 3
+        optionLabel.lineBreakMode = .byTruncatingTail
+        optionLabel.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(tapGestureDidPress(gesture:))
+        )
+        optionLabel.addGestureRecognizer(tapGesture)
 
         accessoryButton.delegate = self
 
@@ -62,6 +67,16 @@ class ParraChoiceOptionView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func tapGestureDidPress(gesture: UITapGestureRecognizer) {
+        accessoryButton.buttonIsSelected = true
+
+        delegate?.onSelect(
+            option: option,
+            inView: self,
+            fromButton: accessoryButton
+        )
     }
 }
 
