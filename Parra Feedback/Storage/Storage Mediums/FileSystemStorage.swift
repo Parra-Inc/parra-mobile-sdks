@@ -17,14 +17,9 @@ actor FileSystemStorage: DataStorageMedium {
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
         self.baseUrl = baseUrl
-        
-        var isDir: ObjCBool = false
-        let exists = fileManager.fileExists(
-            atPath: baseUrl.path,
-            isDirectory: &isDir
-        )
-        
-        assert(exists && isDir.boolValue)
+
+        // TODO: Think about this more later, but I think this is a fatalError()
+        try? fileManager.safeCreateDirectory(at: baseUrl)
     }
     
     func read<T>(name: String) async throws -> T? where T : Decodable, T : Encodable {

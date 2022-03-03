@@ -13,6 +13,8 @@ protocol SelectableButtonDelegate: NSObjectProtocol {
 }
 
 protocol SelectableButton: NSObjectProtocol {
+    init(initiallySelected: Bool)
+    
     var delegate: SelectableButtonDelegate? { get set }
 
     var buttonIsSelected: Bool { get set }

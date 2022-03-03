@@ -6,3 +6,5 @@
 //
 
 import Foundation
+
+// This needs to be some sort of stream based solution.

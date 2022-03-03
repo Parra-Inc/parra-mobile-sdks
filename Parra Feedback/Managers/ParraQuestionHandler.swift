@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias ChoiceSelectionMap = [String: [(option: ChoiceQuestionOption, button: SelectableButton)]]
+typealias ChoiceSelectionMap = [String: [ChoiceQuestionOption]]
 
 protocol ParraQuestionHandlerDelegate: NSObjectProtocol {
     // should probably post updates to data storage when data changes. This might
@@ -32,29 +32,33 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
 
     }
     
+    func initialSelection(forQuestion question: Question) -> [ChoiceQuestionOption] {
+        return selectionMap[question.id] ?? []
+    }
+    
     func onSelect(option: ChoiceQuestionOption,
                   forQuestion question: Question,
                   inView view: ParraChoiceOptionView,
-                  fromButton button: SelectableButton) {
+                  fromButton button: SelectableButton) -> [ChoiceQuestionOption] {
         var existingSelection = selectionMap[question.id] ?? []
         let hasAlreadySelected = !existingSelection.isEmpty &&
-            existingSelection.contains { $0.option == option }
+            existingSelection.contains(option)
         
         if hasAlreadySelected {
-            return
+            return []
         }
         
         if existingSelection.isEmpty || question.kind.allowsMultipleSelection {
             
-            existingSelection.append((option, button))
+            existingSelection.append(option)
             
             selectionMap[question.id] = existingSelection
-        } else {
-            for selectedOption in existingSelection {
-                selectedOption.button.buttonIsSelected = false
-            }
             
-            selectionMap[question.id] = [(option, button)]
+            return []
+        } else {
+            selectionMap[question.id] = [option]
+
+            return existingSelection
         }
     }
     
@@ -63,7 +67,7 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
                     inView view: ParraChoiceOptionView,
                     fromButton button: SelectableButton) {
         var existingSelection = selectionMap[question.id] ?? []
-        let existingIndex = existingSelection.firstIndex { $0.option == option }
+        let existingIndex = existingSelection.firstIndex { $0 == option }
         let hasAlreadyDeselected = existingSelection.isEmpty || existingIndex == nil
         
         if hasAlreadyDeselected {

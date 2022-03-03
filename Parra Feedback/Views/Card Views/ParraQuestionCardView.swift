@@ -8,13 +8,26 @@
 import UIKit
 
 protocol ParraQuestionViewDelegate {
-    func onSelect(option: ChoiceQuestionOption, forQuestion question: Question, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
-    func onDeselect(option: ChoiceQuestionOption, forQuestion question: Question, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
+    func initialSelection(forQuestion question: Question) -> [ChoiceQuestionOption]
+    
+    // Returns a list of options which are no longer selected.
+    func onSelect(option: ChoiceQuestionOption,
+                  forQuestion question: Question,
+                  inView view: ParraChoiceOptionView,
+                  fromButton button: SelectableButton
+    ) -> [ChoiceQuestionOption]
+    
+    func onDeselect(option: ChoiceQuestionOption,
+                    forQuestion question: Question,
+                    inView view: ParraChoiceOptionView,
+                    fromButton button: SelectableButton
+    )
 }
 
 class ParraQuestionCardView: ParraCardView {
     let question: Question
     let questionHandler: ParraQuestionHandler
+    private var optionViewMap = [ChoiceQuestionOption: ParraChoiceOptionView]()
 
     private let contentContainer = UIStackView(frame: .zero)
     
@@ -89,28 +102,44 @@ class ParraQuestionCardView: ParraCardView {
     }
     
     private func generateOptionsForChoice(_ choice: ChoiceQuestionBody) {
+        optionViewMap.removeAll()
+        
+        let currentSelections = questionHandler.initialSelection(forQuestion: question)
+
         for option in choice.options {
+            let isSelected = currentSelections.contains(option)
             let optionView = ParraChoiceOptionView(
                 option: option,
-                kind: question.kind
+                kind: question.kind,
+                isSelected: isSelected
             )
             optionView.delegate = self
-
+            optionViewMap[option] = optionView
             contentContainer.addArrangedSubview(optionView)
+        }
+    }
+    
+    private func deselectOptions(_ options: [ChoiceQuestionOption]) {
+        for option in options {
+            if let optionView = optionViewMap[option] {
+                optionView.accessoryButton.buttonIsSelected = false
+            }
         }
     }
 }
 
-extension ParraQuestionCardView: ParraChoiceOptionViewDelegate {
+extension ParraQuestionCardView: ParraChoiceOptionViewDelegate {    
     func onSelect(option: ChoiceQuestionOption,
                   inView view: ParraChoiceOptionView,
                   fromButton button: SelectableButton) {
-        questionHandler.onSelect(
+        let deselectedOptions = questionHandler.onSelect(
             option: option,
             forQuestion: question,
             inView: view,
             fromButton: button
         )
+        
+        deselectOptions(deselectedOptions)
     }
     
     func onDeselect(option: ChoiceQuestionOption,

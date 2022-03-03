@@ -22,19 +22,11 @@ class ParraRadioButton: UIButton, SelectableButton {
     
     weak var delegate: SelectableButtonDelegate?
     var allowsDeselection: Bool = false
-    var buttonIsSelected: Bool = false {
+    var buttonIsSelected: Bool {
         didSet {
-            if buttonIsSelected == oldValue {
-                return
-            }
-
             updateSelectionState(animated: true)
-            
-            if buttonIsSelected {
-                delegate?.buttonDidSelect(button: self)
-            } else {
-                delegate?.buttonDidDeselect(button: self)
-            }
+
+            layoutIfNeeded()
         }
     }
 
@@ -43,18 +35,15 @@ class ParraRadioButton: UIButton, SelectableButton {
     private var outerLayer = CAShapeLayer()
     private var innerLayer = RadioLayer()
 
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init(initiallySelected: Bool) {
+        buttonIsSelected = initiallySelected
+        
+        super.init(frame: .zero)
         setup()
     }
     
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        setup()
-    }
-    
-    public convenience init?(type buttonType: UIButton.ButtonType) {
-        return nil
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSubviews() {
@@ -114,6 +103,12 @@ class ParraRadioButton: UIButton, SelectableButton {
             buttonIsSelected = !buttonIsSelected
         } else if !buttonIsSelected {
             buttonIsSelected = true
+        }
+                
+        if buttonIsSelected {
+            delegate?.buttonDidSelect(button: self)
+        } else {
+            delegate?.buttonDidDeselect(button: self)
         }
     }
     

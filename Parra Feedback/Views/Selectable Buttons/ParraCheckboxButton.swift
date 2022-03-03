@@ -17,7 +17,7 @@ class ParraCheckboxButton: UIButton, SelectableButton {
     
     weak var delegate: SelectableButtonDelegate?
     var allowsDeselection: Bool = true
-    var buttonIsSelected: Bool = false {
+    var buttonIsSelected: Bool {
         didSet {
             if buttonIsSelected == oldValue {
                 return
@@ -40,18 +40,14 @@ class ParraCheckboxButton: UIButton, SelectableButton {
     private var outerLayer = CAShapeLayer()
     private var checkMarkLayer = CAShapeLayer()
 
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init(initiallySelected: Bool) {
+        buttonIsSelected = initiallySelected
+        super.init(frame: .zero)
         setup()
     }
     
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        setup()
-    }
-    
-    public convenience init?(type buttonType: UIButton.ButtonType) {
-        return nil
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSubviews() {

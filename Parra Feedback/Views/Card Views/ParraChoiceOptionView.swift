@@ -19,16 +19,19 @@ class ParraChoiceOptionView: UIView {
 
     weak var delegate: ParraChoiceOptionViewDelegate?
             
-    required init(option: ChoiceQuestionOption, kind: QuestionKind) {
+    required init(option: ChoiceQuestionOption,
+                  kind: QuestionKind,
+                  isSelected: Bool) {
+
         self.option = option
         self.kind = kind
         switch kind {
         case .radio:
-            accessoryButton = ParraRadioButton()
+            accessoryButton = ParraRadioButton(initiallySelected: isSelected)
         case .checkbox:
-            accessoryButton = ParraCheckboxButton()
+            accessoryButton = ParraCheckboxButton(initiallySelected: isSelected)
         case .star:
-            accessoryButton = ParraStarButton()
+            accessoryButton = ParraStarButton(initiallySelected: isSelected)
         }
         
         super.init(frame: .zero)
