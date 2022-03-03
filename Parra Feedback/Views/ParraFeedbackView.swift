@@ -46,7 +46,7 @@ public let ParraFeedbackViewDefaultConfig = ParraFeedbackViewConfig(
 )
 
 public class ParraFeedbackView: UIView {
-    private let questionHandler = ParraQuestionHandler()
+    let questionHandler = ParraQuestionHandler()
     
     public var cardItems: [CardItem] {
         didSet {
@@ -54,25 +54,25 @@ public class ParraFeedbackView: UIView {
         }
     }
     
-    private var currentCardInfo: CurrentCardInfo?
+    var currentCardInfo: CurrentCardInfo?
 
-    private var constraintsOnSuperView = [NSLayoutConstraint]()
-    private var constraintsOncontainerView = [NSLayoutConstraint]()
+    var constraintsOnSuperView = [NSLayoutConstraint]()
+    var constraintsOncontainerView = [NSLayoutConstraint]()
 
-    private let containerView = UIView(frame: .zero)
-    private let contentView = UIView(frame: .zero)
-    private let backButton = UIButton.systemButton(
+    let containerView = UIView(frame: .zero)
+    let contentView = UIView(frame: .zero)
+    let backButton = UIButton.systemButton(
         with: UIImage(named: "ArrowLeft")!,
         target: self,
         action: #selector(backButtonPressed(button:))
     )
-    private let forwardButton = UIButton.systemButton(
+    let forwardButton = UIButton.systemButton(
         with: UIImage(named: "ArrowRight")!,
         target: self,
         action: #selector(forwardButtonPressed(button:))
     )
-    private let poweredByLabel = UILabel(frame: .zero)
-    private lazy var navigationStack: UIStackView = ({
+    let poweredByLabel = UILabel(frame: .zero)
+    lazy var navigationStack: UIStackView = ({
         return UIStackView(arrangedSubviews: [
             backButton, poweredByLabel, forwardButton
         ])
@@ -86,286 +86,10 @@ public class ParraFeedbackView: UIView {
         
         super.init(frame: .zero)
         
-        translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .clear
-        layer.masksToBounds = false
-        
-        addSubview(containerView)
-        containerView.addSubview(navigationStack)
-        addSubview(contentView)
-                
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.layer.masksToBounds = true
-
-        configureContentView()
-        configureNavigationStack()
-        
-        applyConfig(config)
-        
-        transitionToNextCard(animated: false)
+        configureSubviews(config: config)
     }
-    
-    public override func willMove(toSuperview newSuperview: UIView?) {
-        super.willMove(toSuperview: newSuperview)
         
-        removeConstraints(constraintsOnSuperView)
-    }
-    
-    public override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        
-        guard let superview = superview else {
-            return
-        }
-        
-        constraintsOnSuperView = [
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor)
-        ]
-
-        NSLayoutConstraint.activate(constraintsOnSuperView)
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func cardItemsDidChange() {
-        transitionToNextCard()
-    }
-    
-    private func transitionToNextCard(direction: Direction = .right, animated: Bool = false) {
-        guard let currentCardInfo = currentCardInfo else {
-            transitionToCardItem(cardItems.first, direction: direction, animated: animated)
-
-            return
-        }
-
-        if let currentIndex = cardItems.firstIndex(where: { $0 == currentCardInfo.cardItem }) {
-            switch direction {
-            case .left:
-                if currentIndex == 0 {
-                    transitionToCardItem(cardItems.last, direction: .left, animated: animated)
-                } else {
-                    transitionToCardItem(cardItems[currentIndex - 1], direction: .left, animated: animated)
-                }
-            case .right:
-                if currentIndex == cardItems.count - 1 {
-                    transitionToCardItem(nil, direction: .right, animated: animated)
-                } else {
-                    transitionToCardItem(cardItems[currentIndex + 1], direction: .right, animated: animated)
-                }
-            }
-        } else {
-            // You're all caught up for now condition
-            switch direction {
-            case .left:
-                transitionToCardItem(cardItems.last, direction: .left, animated: animated)
-            case .right:
-                transitionToCardItem(cardItems.first, direction: .right, animated: animated)
-            }
-        }
-    }
-        
-    private func transitionToCardItem(_ cardItem: CardItem?,
-                                      direction: Direction,
-//                                      visibleButtons: VisibleButtonOptions,
-                                      animated: Bool = false) {
-
-        let nextCard = cardViewFromCardItem(cardItem)
-        let visibleButtons = visibleNavigationButtonsForCardItem(cardItem)
-        
-        contentView.addSubview(nextCard)
-
-        NSLayoutConstraint.activate([
-            nextCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            nextCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            nextCard.topAnchor.constraint(equalTo: contentView.topAnchor),
-            nextCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-        ])
-        
-        let applyNextView = {
-            if let currentCardInfo = self.currentCardInfo {
-                NSLayoutConstraint.deactivate(currentCardInfo.cardView.constraints)
-                currentCardInfo.cardView.removeFromSuperview()
-                self.currentCardInfo = nil
-            }
-            
-            self.currentCardInfo = CurrentCardInfo(
-                cardView: nextCard,
-                cardItem: cardItem
-            )
-        }
-                
-        if animated {
-            backButton.isEnabled = false
-            forwardButton.isEnabled = false
-
-            self.currentCardInfo?.cardView.transform = .identity
-            nextCard.transform = .identity.translatedBy(
-                x: direction == .right ? self.frame.width : -self.frame.width,
-                y: 0.0
-            )
-
-            contentView.invalidateIntrinsicContentSize()
-            
-            UIView.animate(
-                withDuration: 0.375,
-                delay: 0.0,
-                options: [.curveEaseInOut]) {
-                    self.currentCardInfo?.cardView.transform = .identity.translatedBy(
-                        x: direction == .right ? -self.frame.width : self.frame.width,
-                        y: 0.0
-                    )
-                    nextCard.transform = .identity
-                    
-                    self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
-                } completion: { _ in
-                    applyNextView()
-
-                    self.backButton.isEnabled = true
-                    self.forwardButton.isEnabled = true
-                }
-        } else {
-            updateVisibleNavigationButtons(visibleButtons: visibleButtons)
-
-            applyNextView()
-        }
-    }
-    
-    private func visibleNavigationButtonsForCardItem(_ cardItem: CardItem?) -> VisibleButtonOptions {
-        guard let cardItem = cardItem else {
-            return []
-        }
-        
-        guard let index = cardItems.firstIndex(of: cardItem) else {
-            return []
-        }
-        
-        var visibleButtons: VisibleButtonOptions = []
-        let hasPrevious = index > 0
-        if hasPrevious {
-            visibleButtons.update(with: .back)
-        }
-        let hasNext = index < cardItems.count - 1
-        if hasNext {
-            visibleButtons.update(with: .forward)
-        }
-
-        return visibleButtons
-    }
-    
-    private func cardViewFromCardItem(_ cardItem: CardItem?) -> ParraCardView {
-        guard let cardItem = cardItem else {
-            return ParraActionCardView(
-                title: "You're all caught up for now!",
-                subtitle: "a subtitle",
-                actionTitle: "Have other feedback?"
-            ) {
-                print("tapped cta")
-            }
-        }
-        
-        switch (cardItem.data) {
-        case .question(let question):
-            return ParraQuestionCardView(
-                question: question,
-                questionHandler: questionHandler
-            )
-        }
-    }
-    
-    private func applyConfig(_ config: ParraFeedbackViewConfig) {
-        
-        containerView.removeConstraints(constraintsOncontainerView)
-        constraintsOncontainerView = [
-            containerView.topAnchor.constraint(
-                equalTo: topAnchor, constant: config.contentInsets.top
-            ),
-            containerView.leadingAnchor.constraint(
-                equalTo: leadingAnchor, constant: config.contentInsets.left
-            ),
-            containerView.bottomAnchor.constraint(
-                equalTo: bottomAnchor, constant: -config.contentInsets.bottom
-            ),
-            containerView.trailingAnchor.constraint(
-                equalTo: trailingAnchor, constant: -config.contentInsets.right
-            )
-        ]
-        NSLayoutConstraint.activate(constraintsOncontainerView)
-        
-        containerView.backgroundColor = config.backgroundColor
-        containerView.layer.cornerRadius = config.cornerRadius
-        
-        backButton.tintColor = config.tintColor
-        forwardButton.tintColor = config.tintColor
-                
-        layer.shadowColor = config.shadowColor.cgColor
-        layer.shadowOpacity = Float(config.shadowOpacity)
-        layer.shadowRadius = config.shadowRadius
-        layer.shadowOffset = config.shadowSize
-        layer.bounds = bounds
-        layer.position = center
-    }
-    
-    private func configureContentView() {
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.setContentCompressionResistancePriority(.required, for: .vertical)
-        contentView.clipsToBounds = true
-                
-        NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: 10),
-            contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0),
-            contentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
-            contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 170)
-        ])
-    }
-    
-    private func configureNavigationStack() {
-        navigationStack.translatesAutoresizingMaskIntoConstraints = false
-        navigationStack.alignment = .center
-        navigationStack.axis = .horizontal
-        navigationStack.distribution = .equalSpacing
-         
-        poweredByLabel.font = UIFont.boldSystemFont(ofSize: 12.0)
-        poweredByLabel.textColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
-        poweredByLabel.textAlignment = .center
-        
-        let defaultAttributes = [NSAttributedString.Key.kern: 0.24]
-        let poweredBy = NSMutableAttributedString(string: "Powered by ", attributes: defaultAttributes)
-
-        let font = UIFont(name: "Pacifico-Regular", size: 16) ?? UIFont.boldSystemFont(ofSize: 16)
-        let parra = NSMutableAttributedString(string: "Parra", attributes: [.font: font])
-        parra.addAttributes(defaultAttributes, range: NSMakeRange(0, parra.length))
-        poweredBy.append(parra)
-
-        poweredByLabel.attributedText = poweredBy
-        
-        NSLayoutConstraint.activate([
-            navigationStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            navigationStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
-            navigationStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12)
-        ])
-    }
-    
-    private func updateVisibleNavigationButtons(visibleButtons: VisibleButtonOptions) {
-        let showBack = visibleButtons.contains(.back)
-        
-        backButton.alpha = showBack ? 1.0 : 0.0
-        backButton.isEnabled = showBack
-
-        let showForward = visibleButtons.contains(.forward)
-        
-        forwardButton.alpha = showForward ? 1.0 : 0.0
-        forwardButton.isEnabled = showForward
-    }
-    
-    @objc private func backButtonPressed(button: UIButton) {
-        transitionToNextCard(direction: .left, animated: true)
-    }
-    
-    @objc private func forwardButtonPressed(button: UIButton) {
-        transitionToNextCard(direction: .right, animated: true)
-    }
+    }    
 }

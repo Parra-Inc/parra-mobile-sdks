@@ -41,6 +41,8 @@
 		0036D60227CF0EA20016DE97 /* ParraFeedback+Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60127CF0EA20016DE97 /* ParraFeedback+Authentication.swift */; };
 		0036D60427D0477C0016DE97 /* AnswerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60327D0477C0016DE97 /* AnswerStorage.swift */; };
 		0036D60627D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60527D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift */; };
+		0036D60827D051060016DE97 /* ParraFeedbackView+Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60727D051060016DE97 /* ParraFeedbackView+Transitions.swift */; };
+		0036D60A27D051B20016DE97 /* ParraFeedbackView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60927D051B20016DE97 /* ParraFeedbackView+Layout.swift */; };
 		003D2A6B274C7798001E067E /* ParraFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 003D2A6A274C7798001E067E /* ParraFeedback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		003D2A6E274C7798001E067E /* ParraFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; };
 		003D2A6F274C7798001E067E /* ParraFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 003D2A68274C7798001E067E /* ParraFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -127,6 +129,8 @@
 		0036D60127CF0EA20016DE97 /* ParraFeedback+Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Authentication.swift"; sourceTree = "<group>"; };
 		0036D60327D0477C0016DE97 /* AnswerStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerStorage.swift; sourceTree = "<group>"; };
 		0036D60527D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedbackDataManager+Keys.swift"; sourceTree = "<group>"; };
+		0036D60727D051060016DE97 /* ParraFeedbackView+Transitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedbackView+Transitions.swift"; sourceTree = "<group>"; };
+		0036D60927D051B20016DE97 /* ParraFeedbackView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedbackView+Layout.swift"; sourceTree = "<group>"; };
 		003D2A68274C7798001E067E /* ParraFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParraFeedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		003D2A6A274C7798001E067E /* ParraFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParraFeedback.h; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* ParraFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedback.swift; sourceTree = "<group>"; };
@@ -288,6 +292,8 @@
 			isa = PBXGroup;
 			children = (
 				00120EF8274D9CFC00CA3247 /* ParraFeedbackView.swift */,
+				0036D60927D051B20016DE97 /* ParraFeedbackView+Layout.swift */,
+				0036D60727D051060016DE97 /* ParraFeedbackView+Transitions.swift */,
 				00120EFC27514BE000CA3247 /* Card Views */,
 				001286F2277D53890090CDB5 /* Selectable Buttons */,
 			);
@@ -563,6 +569,7 @@
 				001286FF277FE3180090CDB5 /* UIFont.swift in Sources */,
 				00120EF9274D9CFC00CA3247 /* ParraFeedbackView.swift in Sources */,
 				00120F012753E9A400CA3247 /* ParraFeedback+Types.swift in Sources */,
+				0036D60827D051060016DE97 /* ParraFeedbackView+Transitions.swift in Sources */,
 				001286EF277D27BC0090CDB5 /* ParraRadioButton.swift in Sources */,
 				00120F0527543CB800CA3247 /* ParraChoiceOptionView.swift in Sources */,
 				0036D60627D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift in Sources */,
@@ -576,6 +583,7 @@
 				0036D5E627CB0FBD0016DE97 /* JSONDecoder.swift in Sources */,
 				001286F6277D54480090CDB5 /* CAShapeLayer.swift in Sources */,
 				0036D5E027CAC5460016DE97 /* ParraFeedback+Networking.swift in Sources */,
+				0036D60A27D051B20016DE97 /* ParraFeedbackView+Layout.swift in Sources */,
 				00120EFE2753E8BF00CA3247 /* ParraCardView.swift in Sources */,
 				003D2A75274C77BD001E067E /* ParraFeedback.swift in Sources */,
 				0036D60227CF0EA20016DE97 /* ParraFeedback+Authentication.swift in Sources */,
