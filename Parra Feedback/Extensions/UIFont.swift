@@ -20,7 +20,10 @@ extension UIFont {
             return
         }
         
-        fontUrls.forEach({ CTFontManagerRegisterFontsForURL($0 as CFURL, .process, nil) })
+        fontUrls.forEach {
+            CTFontManagerRegisterFontsForURL($0 as CFURL, .process, nil)
+        }
+        
         fontsRegistered = true
     }
 }
