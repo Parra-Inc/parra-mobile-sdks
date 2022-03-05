@@ -151,7 +151,7 @@ extension ParraFeedbackView {
                 subtitle: "a subtitle",
                 actionTitle: "Have other feedback?"
             ) {
-                print("tapped cta")
+                parraLog("tapped cta")
             }
         }
         

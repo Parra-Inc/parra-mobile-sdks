@@ -52,7 +52,7 @@ public class ParraFeedback {
             isInitialized = true
         } catch let error {
             let dataError = ParraFeedbackError.dataLoadingError(error)
-            print("\(ParraFeedback.Constants.parraLogPrefix) Error loading data: \(dataError)")
+            parraLog("Error loading data: \(dataError)", level: .error)
         }
     }
     

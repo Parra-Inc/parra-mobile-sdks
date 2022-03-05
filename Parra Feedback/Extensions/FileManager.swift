@@ -10,7 +10,7 @@ import UIKit
 
 extension FileManager {
     func safeCreateDirectory(at url: URL) throws {
-        print("Checking if directory exists at: \(url.path)")
+        parraLogV("Checking if directory exists at: \(url.path)")
         var isDirectory: ObjCBool = false
         let exists = fileExists(
             atPath: url.path,
@@ -18,7 +18,7 @@ extension FileManager {
         )
         
         if exists && !isDirectory.boolValue {
-            print("Error: File existed at directory path.")
+            parraLogV("Error: File existed at directory path.")
             throw NSError(
                 domain: "Parra",
                 code: 2139,
@@ -30,10 +30,10 @@ extension FileManager {
         }
         
         if !exists {
-            print("Directory didn't exist. Creating...")
+            parraLogV("Directory didn't exist. Creating...")
             try createDirectory(at: url, withIntermediateDirectories: true)
         } else {
-            print("Directory already exists")
+            parraLogV("Directory already exists")
         }
     }
 }

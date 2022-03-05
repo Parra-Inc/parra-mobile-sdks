@@ -38,7 +38,7 @@ actor AnswerStorage: ItemStorage {
             try await writeAnswers()
         } catch let error {
             let dataError = ParraFeedbackError.dataLoadingError(error)
-            print("\(ParraFeedback.Constants.parraLogPrefix) Error writing answer data: \(dataError)")
+            parraLogE("Error writing answer data: \(dataError)")
         }
     }
     

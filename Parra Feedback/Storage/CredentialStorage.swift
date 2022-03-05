@@ -22,7 +22,7 @@ actor CredentialStorage: ItemStorage {
             )
         } catch let error {
             let dataError = ParraFeedbackError.dataLoadingError(error)
-            print("\(ParraFeedback.Constants.parraLogPrefix) Error loading credentials: \(dataError)")
+            parraLog("Error loading credentials: \(dataError)", level: .error)
         }
     }
         
