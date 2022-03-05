@@ -7,6 +7,10 @@ target 'Parra Feedback' do
 
   # Pods for Parra Feedback
   pod 'AnyCodable-FlightSchool', '~> 0.6.0'
+  
+  target 'Parra Feedback Tests' do
+    inherit! :complete
+  end
 end
 
 target 'Parra Feedback SDK Demo' do
