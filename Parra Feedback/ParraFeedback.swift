@@ -8,21 +8,26 @@
 import Foundation
 import UIKit
 
-let kParraLogPrefix = "[PARRA FEEDBACK]"
-
 public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraFeedbackCredential
 
 public class ParraFeedback {
-    static let shared = ParraFeedback()
-    private var isInitialized = false
-    let dataManager = ParraFeedbackDataManager()
+    internal static var shared: ParraFeedback = {
+        let dataManager = ParraFeedbackDataManager()
+        return ParraFeedback(
+            dataManager: dataManager
+        )
+    }()
+    internal private(set) var isInitialized = false
+    internal let dataManager: ParraFeedbackDataManager
     var authenticationProvider: ParraFeedbackAuthenticationProvider?
     
     internal lazy var urlSession: URLSession = {
         return URLSession(configuration: .default)
     }()
     
-    private init() {
+    internal init(dataManager: ParraFeedbackDataManager) {
+        self.dataManager = dataManager
+        
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
         
         addEventObservers()
@@ -47,7 +52,7 @@ public class ParraFeedback {
             isInitialized = true
         } catch let error {
             let dataError = ParraFeedbackError.dataLoadingError(error)
-            print("\(kParraLogPrefix) Error loading data: \(dataError)")
+            print("\(ParraFeedback.Constants.parraLogPrefix) Error loading data: \(dataError)")
         }
     }
     

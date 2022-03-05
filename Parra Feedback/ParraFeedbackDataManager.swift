@@ -23,10 +23,10 @@ typealias ReadWriteable = Identifiable & Codable
 typealias FastAccessListMap<T> = [String: (index: Int, element: T)]
 
 class ParraFeedbackDataManager {
-//    private var cardDataMap = FastAccessListMap<CardItemData>()
     private let credentialStorage: CredentialStorage
     private let answerStorage: AnswerStorage
     private let cardStorage: CardStorage
+    internal private(set) var isLoaded = false
     
     let queue = DispatchQueue(
         label: "com.parra.feedback.dataQueue",
@@ -132,6 +132,8 @@ class ParraFeedbackDataManager {
             credentialStorage.loadData(),
             answerStorage.loadData()
         ]
+        
+        isLoaded = true
     }
     
     func logEvent() {
