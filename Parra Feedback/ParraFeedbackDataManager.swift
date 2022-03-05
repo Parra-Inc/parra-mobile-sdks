@@ -22,10 +22,11 @@ import Foundation
 typealias ReadWriteable = Identifiable & Codable
 typealias FastAccessListMap<T> = [String: (index: Int, element: T)]
 
-actor ParraFeedbackDataManager {
-    private var cardDataMap = FastAccessListMap<CardItemData>()
+class ParraFeedbackDataManager {
+//    private var cardDataMap = FastAccessListMap<CardItemData>()
     private let credentialStorage: CredentialStorage
     private let answerStorage: AnswerStorage
+    private let cardStorage: CardStorage
     
     let queue = DispatchQueue(
         label: "com.parra.feedback.dataQueue",
@@ -39,6 +40,8 @@ actor ParraFeedbackDataManager {
         let userDefaults = UserDefaults.standard
         let jsonEncoder = JSONEncoder()
         let jsonDecoder = JSONDecoder()
+        
+        let memoryStorage = MemoryStorage()
         
         let userDefaultsStorage = UserDefaultsStorage(
             userDefaults: userDefaults,
@@ -54,6 +57,7 @@ actor ParraFeedbackDataManager {
         
         self.credentialStorage = CredentialStorage(storageMedium: userDefaultsStorage)
         self.answerStorage = AnswerStorage(storageMedium: fileSystemStorage)
+        self.cardStorage = CardStorage(storageMedium: memoryStorage)
     }
     
     // MARK: - User Credentials
@@ -65,8 +69,24 @@ actor ParraFeedbackDataManager {
         await credentialStorage.updateCredential(credential: credential)
     }
         
-    func updateAnswer(answer: Answer) async {
-        await answerStorage.updateAnswer(answer: answer)
+    func answerData(forQuestion question: Question) async -> QuestionAnswer? {
+        return await answerStorage.answerData(forQuestion: question)
+    }
+
+    func currentAnswerData() async -> [String: QuestionAnswer] {
+        return await answerStorage.currentAnswerData()
+    }
+    
+    func updateAnswerData(answerData: QuestionAnswerData) async {
+        await answerStorage.updateAnswerData(answerData: answerData)
+    }
+    
+    func currentCards() -> [CardItem] {
+        return cardStorage.currentCards()
+    }
+    
+    func updateCards(cards: [CardItem]) {
+        cardStorage.updateCards(cardItems: cards)
     }
     
     /// Depending on the value of the replace arguement, either replaces the existing cards with the supplied ones

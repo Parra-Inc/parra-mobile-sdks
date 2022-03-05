@@ -1,3 +1,16 @@
-PODFILE CHECKSUM: 66c8ca91bf1a22ea8b07a45b232268517c794940
+PODS:
+  - AnyCodable-FlightSchool (0.6.2)
+
+DEPENDENCIES:
+  - AnyCodable-FlightSchool (~> 0.6.0)
+
+SPEC REPOS:
+  trunk:
+    - AnyCodable-FlightSchool
+
+SPEC CHECKSUMS:
+  AnyCodable-FlightSchool: ac75ed9bae659e16a41ebfa6c71a663d6f2c111c
+
+PODFILE CHECKSUM: 6d56b83e38eb5958ba49985883b388ef84c9b04c
 
 COCOAPODS: 1.11.2

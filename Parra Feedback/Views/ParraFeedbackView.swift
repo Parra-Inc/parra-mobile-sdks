@@ -48,7 +48,7 @@ public let ParraFeedbackViewDefaultConfig = ParraFeedbackViewConfig(
 public class ParraFeedbackView: UIView {
     let questionHandler = ParraQuestionHandler()
     
-    public var cardItems: [CardItem] {
+    var cardItems: [CardItem] {
         didSet {
             cardItemsDidChange()
         }
@@ -91,5 +91,11 @@ public class ParraFeedbackView: UIView {
         
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }    
+    }
+    
+    public override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+        
+        cardItems = ParraFeedback.shared.dataManager.currentCards()
+    }
 }

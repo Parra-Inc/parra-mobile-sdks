@@ -14,33 +14,26 @@ protocol ParraQuestionHandlerDelegate: NSObjectProtocol {
     // be better if ParraQuestionHandler was a superclass or if we provide default
     // implementations of whatever methods are declared here.
     
-    func updateAnswer(forQuestion question: Question, answer: Answer)
+    func updateAnswer<T: Codable>(forQuestion question: Question, answerData: T)
 }
 
 class ParraQuestionHandler: ParraQuestionViewDelegate {
-    var questionDelegate: ParraQuestionHandlerDelegate?
+    weak var questionDelegate: ParraQuestionHandlerDelegate?
     
-    // TODO: Does this need to be built up before being modified?
-    // TODO: This also needs to provide a way to get the stored data out to determine initial selection state of buttons.
-    private var selectionMap: ChoiceSelectionMap  = [:] {
-        didSet {
-            print("selection map: \(selectionMap)")
-        }
-    }
+    private var choiceQuestionSelectionMap: ChoiceSelectionMap = [:]
     
-    required init() {
-
-    }
+    required init() {}
     
+    // TODO: How will this work for other question types?
     func initialSelection(forQuestion question: Question) -> [ChoiceQuestionOption] {
-        return selectionMap[question.id] ?? []
+        return choiceQuestionSelectionMap[question.id] ?? []
     }
     
     func onSelect(option: ChoiceQuestionOption,
                   forQuestion question: Question,
                   inView view: ParraChoiceOptionView,
                   fromButton button: SelectableButton) -> [ChoiceQuestionOption] {
-        var existingSelection = selectionMap[question.id] ?? []
+        var existingSelection = choiceQuestionSelectionMap[question.id] ?? []
         let hasAlreadySelected = !existingSelection.isEmpty &&
             existingSelection.contains(option)
         
@@ -48,15 +41,19 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
             return []
         }
         
+        defer {
+            answerUpdateForQuestion(question: question)
+        }
+        
         if existingSelection.isEmpty || question.kind.allowsMultipleSelection {
             
             existingSelection.append(option)
             
-            selectionMap[question.id] = existingSelection
+            choiceQuestionSelectionMap[question.id] = existingSelection
             
             return []
         } else {
-            selectionMap[question.id] = [option]
+            choiceQuestionSelectionMap[question.id] = [option]
 
             return existingSelection
         }
@@ -66,18 +63,50 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
                     forQuestion question: Question,
                     inView view: ParraChoiceOptionView,
                     fromButton button: SelectableButton) {
-        var existingSelection = selectionMap[question.id] ?? []
+        var existingSelection = choiceQuestionSelectionMap[question.id] ?? []
         let existingIndex = existingSelection.firstIndex { $0 == option }
         let hasAlreadyDeselected = existingSelection.isEmpty || existingIndex == nil
         
         if hasAlreadyDeselected {
             return
         }
-        
+                
         if question.kind.allowsDeselection {
             existingSelection.remove(at: existingIndex!)
             
-            selectionMap[question.id] = existingSelection
+            choiceQuestionSelectionMap[question.id] = existingSelection
+            
+            answerUpdateForQuestion(question: question)
+        }
+    }
+    
+    private func answerUpdateForQuestion(question: Question) {
+        var answerData: QuestionAnswer?
+        switch question.data {
+        case .choiceQuestionBody(_):
+            let selections = choiceQuestionSelectionMap[question.id]
+            
+            switch question.kind {
+            case .radio, .star:
+                answerData = selections?.first?.getAnswerData()
+            case .checkbox:
+                answerData = selections?.getAnswerData()
+            
+            }
+        }
+        
+        guard let answerData = answerData else {
+            // TODO: Error?
+            return
+        }
+        
+        Task {
+            await ParraFeedback.shared.dataManager.updateAnswerData(
+                answerData: QuestionAnswerData(
+                    questionId: question.id,
+                    data: answerData
+                )
+            )            
         }
     }
 }

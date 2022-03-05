@@ -6,6 +6,7 @@ target 'Parra Feedback' do
   use_frameworks!
 
   # Pods for Parra Feedback
+  pod 'AnyCodable-FlightSchool', '~> 0.6.0'
 end
 
 target 'Parra Feedback SDK Demo' do

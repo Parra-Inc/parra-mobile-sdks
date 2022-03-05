@@ -7,18 +7,25 @@
 
 import Foundation
 
-actor CardStorage: PersistentStorage {
+private let kCardsKey = "com.parrafeedback.cards.data"
+
+class CardStorage: ItemStorage {
     let storageMedium: DataStorageMedium
+    private var underlyingStorage = [CardItem]()
     
-    init(storageMedium: DataStorageMedium) {
+    required init(storageMedium: DataStorageMedium) {
         self.storageMedium = storageMedium
     }
     
     func loadData() async {
-        // no op
+        // No op if storage medium is memory
     }
     
-//    func getCards() -> [CardItem] {
-//        
-//    }
+    func updateCards(cardItems: [CardItem]) {
+        underlyingStorage = cardItems
+    }
+    
+    func currentCards() -> [CardItem] {
+        return underlyingStorage
+    }
 }

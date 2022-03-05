@@ -9,24 +9,32 @@ import Foundation
 
 private let kAnswersKey = "com.parrafeedback.answers.data"
 
-actor AnswerStorage: PersistentStorage {
+actor AnswerStorage: ItemStorage {
     let storageMedium: DataStorageMedium
-    private var underlyingStorage = [String: Answer]()
+    private var underlyingStorage = [String: QuestionAnswer]()
     
     init(storageMedium: DataStorageMedium) {
         self.storageMedium = storageMedium
     }
     
     func loadData() async {
-        guard let existing: [String: Answer] = try? await storageMedium.read(name: kAnswersKey) else {
+        guard let existing: [String: QuestionAnswer] = try? await storageMedium.read(name: kAnswersKey) else {
             return
         }
         
         underlyingStorage = existing
     }
     
-    func updateAnswer(answer: Answer) {
-        underlyingStorage[answer.questionId] = answer
+    func answerData(forQuestion question: Question) -> QuestionAnswer? {
+        return underlyingStorage[question.id]
+    }
+    
+    func currentAnswerData() -> [String: QuestionAnswer] {
+        return underlyingStorage
+    }
+    
+    func updateAnswerData(answerData: QuestionAnswerData) async {
+        underlyingStorage[answerData.questionId] = answerData.data
         
         Task {
             do {

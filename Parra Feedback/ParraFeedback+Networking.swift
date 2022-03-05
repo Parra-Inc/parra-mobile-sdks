@@ -13,13 +13,16 @@ enum HttpMethod: String {
     case post = "POST"
 }
 
+private let kParraApiUrl = URL(string: "https://api.parra.io/v1/")!
+
 public typealias NetworkCompletionHandler<T> = (Result<T, ParraFeedbackError>) -> Void
 
 extension ParraFeedback {
-    func performAuthenticatedRequest<T: Codable>(url: URL,
+    func performAuthenticatedRequest<T: Codable>(route: String,
                                      method: HttpMethod,
-                                     credential: ParraFeedbackCredential?,
                                      authenticationProvider: ParraFeedbackAuthenticationProvider) async throws -> T {
+        let url = kParraApiUrl.appendingPathComponent(route)
+        let credential = await dataManager.getCurrentCredential()
 
         let nextCredential: ParraFeedbackCredential
         if let credential = credential {
@@ -62,6 +65,7 @@ extension ParraFeedback {
         if #available(iOS 15.0, *) {
             let (data, response) = try await urlSession.data(for: request)
             
+            // It is documented that for data tasks, response is always actually HTTPURLResponse
             return (data, response as! HTTPURLResponse)
         } else {
             return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data, HTTPURLResponse), Error>) in
@@ -69,6 +73,7 @@ extension ParraFeedback {
                     if let error = error {
                         continuation.resume(throwing: error)
                     } else {
+                        // It is documented that for data tasks, response is always actually HTTPURLResponse
                         continuation.resume(returning: (data!, response as! HTTPURLResponse))
                     }
                 }.resume()

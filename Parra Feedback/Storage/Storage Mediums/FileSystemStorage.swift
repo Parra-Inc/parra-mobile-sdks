@@ -22,14 +22,14 @@ actor FileSystemStorage: DataStorageMedium {
         try? fileManager.safeCreateDirectory(at: baseUrl)
     }
     
-    func read<T>(name: String) async throws -> T? where T : Decodable, T : Encodable {
+    func read<T>(name: String) async throws -> T? where T: Codable {
         let file = baseUrl.appendingPathComponent(name)
         let data = try Data(contentsOf: file)
         
         return try jsonDecoder.decode(T.self, from: data)
     }
     
-    func write<T>(name: String, value: T?) async throws where T : Decodable, T : Encodable {
+    func write<T>(name: String, value: T?) async throws where T: Codable {
         let file = baseUrl.appendingPathComponent(name)
         let data = try jsonEncoder.encode(value)
         

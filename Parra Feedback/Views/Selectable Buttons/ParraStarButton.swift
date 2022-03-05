@@ -8,7 +8,7 @@
 import UIKit
 
 class ParraStarButton: UIButton, SelectableButton {
-    var delegate: SelectableButtonDelegate?
+    weak var delegate: SelectableButtonDelegate?
     var buttonIsSelected: Bool
     var allowsDeselection: Bool = false
 

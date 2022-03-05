@@ -9,7 +9,7 @@ import Foundation
 
 private let kUserCredentialKey = "com.parrafeedback.usercredential"
 
-actor CredentialStorage: PersistentStorage {
+actor CredentialStorage: ItemStorage {
     private let storageMedium: DataStorageMedium
     private var userCredential: ParraFeedbackCredential?
 

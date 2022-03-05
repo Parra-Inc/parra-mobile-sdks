@@ -10,7 +10,8 @@ import UIKit
 class ParraActionCardView: ParraCardView {
     private let titleLabel = UILabel(frame: .zero)
     private let subtitleLabel = UILabel(frame: .zero)
-    private var cta = UIButton(type: .system)
+    // TODO: De-scoped for now.
+//    private var cta = UIButton(type: .system)
     private let stackView = UIStackView(arrangedSubviews: [])
     private var actionHandler: (() -> Void)?
     
@@ -35,7 +36,7 @@ class ParraActionCardView: ParraCardView {
 
             stackView.addArrangedSubview(subtitleLabel)
         }
-        stackView.addArrangedSubview(cta)
+//        stackView.addArrangedSubview(cta)
         
         stackView.distribution = .equalSpacing
         stackView.axis = .vertical
@@ -58,15 +59,15 @@ class ParraActionCardView: ParraCardView {
         titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
-        
-        let attributedTitle = NSAttributedString(
-            string: actionTitle,
-            attributes: [.font: UIFont.boldSystemFont(ofSize: 14)]
-        )
-        cta.setAttributedTitle(attributedTitle, for: .normal)
-        cta.translatesAutoresizingMaskIntoConstraints = false
-        cta.setTitleColor(UIColor(hex: 0xBDBDBD), for: .normal)
+//        cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
+//
+//        let attributedTitle = NSAttributedString(
+//            string: actionTitle,
+//            attributes: [.font: UIFont.boldSystemFont(ofSize: 14)]
+//        )
+//        cta.setAttributedTitle(attributedTitle, for: .normal)
+//        cta.translatesAutoresizingMaskIntoConstraints = false
+//        cta.setTitleColor(UIColor(hex: 0xBDBDBD), for: .normal)
     }
     
     required init?(coder: NSCoder) {
