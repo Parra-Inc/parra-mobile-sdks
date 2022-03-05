@@ -242,6 +242,8 @@
 		001286F7277F50A20090CDB5 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */,
+				0036D60527D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift */,
 				001286F8277F50B30090CDB5 /* ParraChoiceData.swift */,
 				001286FA277F51120090CDB5 /* ParraQuestionData.swift */,
 				00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */,
@@ -298,8 +300,6 @@
 				0036D5DF27CAC5460016DE97 /* ParraFeedback+Networking.swift */,
 				0036D61127D30CA40016DE97 /* ParraFeedback+SyncEvents.swift */,
 				00120F002753E9A400CA3247 /* ParraFeedback+Types.swift */,
-				001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */,
-				0036D60527D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift */,
 				0036D5E127CACA100016DE97 /* ParraFeedbackError.swift */,
 				001286F7277F50A20090CDB5 /* Managers */,
 				0036D5EF27CD9BC90016DE97 /* Storage */,
