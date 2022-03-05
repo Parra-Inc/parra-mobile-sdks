@@ -7,8 +7,6 @@
 
 import Foundation
 
-private let kCardsKey = "com.parrafeedback.cards.data"
-
 class CardStorage: ItemStorage {
     let storageMedium: DataStorageMedium
     private var underlyingStorage = [CardItem]()

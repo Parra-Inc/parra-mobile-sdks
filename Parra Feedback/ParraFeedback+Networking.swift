@@ -13,15 +13,13 @@ enum HttpMethod: String {
     case post = "POST"
 }
 
-private let kParraApiUrl = URL(string: "https://api.parra.io/v1/")!
-
 public typealias NetworkCompletionHandler<T> = (Result<T, ParraFeedbackError>) -> Void
 
 extension ParraFeedback {
     func performAuthenticatedRequest<T: Codable>(route: String,
                                      method: HttpMethod,
                                      authenticationProvider: ParraFeedbackAuthenticationProvider) async throws -> T {
-        let url = kParraApiUrl.appendingPathComponent(route)
+        let url = Constants.parraApiRoot.appendingPathComponent(route)
         let credential = await dataManager.getCurrentCredential()
 
         let nextCredential: ParraFeedbackCredential

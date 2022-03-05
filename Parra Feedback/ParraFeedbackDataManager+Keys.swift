@@ -18,4 +18,10 @@ extension ParraFeedbackDataManager {
         static let parraDirectory = applicationSupportDirectory.appendingPathComponent("parra", isDirectory: true)
         static let parraFeedbackDirectory = parraDirectory.appendingPathComponent("feedback", isDirectory: true)
     }
+    
+    enum Key {
+        static let userCredentialsKey = "com.parrafeedback.usercredential"
+        static let cardsKey = "com.parrafeedback.cards.data"
+        static let answersKey = "com.parrafeedback.answers.data"
+    }
 }

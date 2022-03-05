@@ -7,8 +7,6 @@
 
 import Foundation
 
-private let kUserCredentialKey = "com.parrafeedback.usercredential"
-
 actor CredentialStorage: ItemStorage {
     private let storageMedium: DataStorageMedium
     private var userCredential: ParraFeedbackCredential?
@@ -19,10 +17,12 @@ actor CredentialStorage: ItemStorage {
     
     func loadData() async {
         do {
-            userCredential = try await storageMedium.read(name: kUserCredentialKey)
+            userCredential = try await storageMedium.read(
+                name: ParraFeedbackDataManager.Key.userCredentialsKey
+            )
         } catch let error {
             let dataError = ParraFeedbackError.dataLoadingError(error)
-            print("\(kParraLogPrefix) Error loading credentials: \(dataError)")
+            print("\(ParraFeedback.Constants.parraLogPrefix) Error loading credentials: \(dataError)")
         }
     }
         
@@ -30,7 +30,10 @@ actor CredentialStorage: ItemStorage {
         userCredential = credential
         
         Task {
-            try await storageMedium.write(name: kUserCredentialKey, value: credential)
+            try await storageMedium.write(
+                name: ParraFeedbackDataManager.Key.userCredentialsKey,
+                value: credential
+            )
         }
     }
     
@@ -39,7 +42,9 @@ actor CredentialStorage: ItemStorage {
     }
     
     private func loadCredential() async throws -> ParraFeedbackCredential? {
-        guard let data = UserDefaults.standard.value(forKey: kUserCredentialKey) as? Data else {
+        guard let data = UserDefaults.standard.value(
+            forKey: ParraFeedbackDataManager.Key.userCredentialsKey
+        ) as? Data else {
             return nil
         }
         

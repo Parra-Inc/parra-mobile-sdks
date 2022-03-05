@@ -7,8 +7,6 @@
 
 import Foundation
 
-private let kAnswersKey = "com.parrafeedback.answers.data"
-
 actor AnswerStorage: ItemStorage {
     let storageMedium: DataStorageMedium
     private var underlyingStorage = [String: QuestionAnswer]()
@@ -18,7 +16,7 @@ actor AnswerStorage: ItemStorage {
     }
     
     func loadData() async {
-        guard let existing: [String: QuestionAnswer] = try? await storageMedium.read(name: kAnswersKey) else {
+        guard let existing: [String: QuestionAnswer] = try? await storageMedium.read(name: ParraFeedbackDataManager.Key.answersKey) else {
             return
         }
         
@@ -36,17 +34,18 @@ actor AnswerStorage: ItemStorage {
     func updateAnswerData(answerData: QuestionAnswerData) async {
         underlyingStorage[answerData.questionId] = answerData.data
         
-        Task {
-            do {
-                try await writeAnswers()
-            } catch let error {
-                let dataError = ParraFeedbackError.dataLoadingError(error)
-                print("\(kParraLogPrefix) Error writing answer data: \(dataError)")
-            }
+        do {
+            try await writeAnswers()
+        } catch let error {
+            let dataError = ParraFeedbackError.dataLoadingError(error)
+            print("\(ParraFeedback.Constants.parraLogPrefix) Error writing answer data: \(dataError)")
         }
     }
     
     func writeAnswers() async throws {
-        try await storageMedium.write(name: kAnswersKey, value: underlyingStorage)
+        try await storageMedium.write(
+            name: ParraFeedbackDataManager.Key.answersKey,
+            value: underlyingStorage
+        )
     }
 }

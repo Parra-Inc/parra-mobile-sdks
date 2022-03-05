@@ -54,16 +54,19 @@
 		006148B42793A43C00829486 /* ParraFeedbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006148B32793A43C00829486 /* ParraFeedbackTests.swift */; };
 		007FBEF4277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */; };
 		007FBEF6277A700200BD9E37 /* libswift_Concurrency.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */; settings = {ATTRIBUTES = (Weak, ); }; };
+		00D5155C27D4219900C4F2CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00D5155B27D4219900C4F2CC /* Assets.xcassets */; };
+		00D5155E27D4223D00C4F2CC /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */; };
+		00D5156027D4238E00C4F2CC /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5155F27D4238E00C4F2CC /* UIImage.swift */; };
 		00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFF8274C69F800DAF301 /* AppDelegate.swift */; };
 		00DECFFB274C69F800DAF301 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFFA274C69F800DAF301 /* SceneDelegate.swift */; };
 		00DECFFD274C69F800DAF301 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFFC274C69F800DAF301 /* ViewController.swift */; };
 		00DED000274C69F800DAF301 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DECFFE274C69F800DAF301 /* Main.storyboard */; };
-		00DED002274C69FA00DAF301 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00DED001274C69FA00DAF301 /* Assets.xcassets */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
 		00E8B32C278730D500FC3FFD /* ParraQuestionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */; };
 		00E8B32E27878C3400FC3FFD /* GeneratedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32D27878C3400FC3FFD /* GeneratedTypes.swift */; };
 		4B34D69CE5731844A714F716 /* Pods_Parra_Feedback_SDK_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8F1193CC884F0B2F36CA9ED /* Pods_Parra_Feedback_SDK_Demo.framework */; };
 		665BCCAD95CCAA071E66E0A3 /* Pods_Parra_Feedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */; };
+		BE36274FDB1E53F160ECA858 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D771D93334F34C5A26E5402 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,20 +148,25 @@
 		006148B52793C23400829486 /* Parra Feedback.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Parra Feedback.xctestplan"; sourceTree = SOURCE_ROOT; };
 		007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+GeneratedTypes.swift"; sourceTree = "<group>"; };
 		007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
+		00D5155B27D4219900C4F2CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Constants.swift"; sourceTree = "<group>"; };
+		00D5155F27D4238E00C4F2CC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Parra Feedback SDK Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00DECFF8274C69F800DAF301 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00DECFFA274C69F800DAF301 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		00DECFFC274C69F800DAF301 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		00DECFFF274C69F800DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		00DED001274C69FA00DAF301 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00DED004274C69FA00DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		00DED006274C69FA00DAF301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionHandler.swift; sourceTree = "<group>"; };
 		00E8B32D27878C3400FC3FFD /* GeneratedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedTypes.swift; sourceTree = "<group>"; };
 		1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parra_Feedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A217E270D66BD247EA12161 /* Pods-Parra Feedback.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback.debug.xcconfig"; path = "Target Support Files/Pods-Parra Feedback/Pods-Parra Feedback.debug.xcconfig"; sourceTree = "<group>"; };
+		4D771D93334F34C5A26E5402 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parra_Feedback_Parra_Feedback_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B5E19B94F9C37D2C8D83727 /* Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig"; path = "Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig"; sourceTree = "<group>"; };
 		819BB918A1E17EB6B804A30F /* Pods-Parra Feedback SDK Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback SDK Demo.release.xcconfig"; path = "Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo.release.xcconfig"; sourceTree = "<group>"; };
 		8432A365EACB1E66B116F9B7 /* Pods-Parra Feedback.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback.release.xcconfig"; path = "Target Support Files/Pods-Parra Feedback/Pods-Parra Feedback.release.xcconfig"; sourceTree = "<group>"; };
+		9FE2456D43319BCFAB98D2EE /* Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig"; path = "Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A8F1193CC884F0B2F36CA9ED /* Pods_Parra_Feedback_SDK_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parra_Feedback_SDK_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E9A3C6C190B71277480124 /* Pods-Parra Feedback SDK Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback SDK Demo.debug.xcconfig"; path = "Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -169,6 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0012871A2784CDC20090CDB5 /* ParraFeedback.framework in Frameworks */,
+				BE36274FDB1E53F160ECA858 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +212,7 @@
 				0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */,
 				00120EF2274D1EEE00CA3247 /* UIColor.swift */,
 				001286FE277FE3180090CDB5 /* UIFont.swift */,
+				00D5155F27D4238E00C4F2CC /* UIImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -244,9 +254,9 @@
 			isa = PBXGroup;
 			children = (
 				006148B52793C23400829486 /* Parra Feedback.xctestplan */,
+				006148B32793A43C00829486 /* ParraFeedbackTests.swift */,
 				001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */,
 				001287202784CF6C0090CDB5 /* SampleData.swift */,
-				006148B32793A43C00829486 /* ParraFeedbackTests.swift */,
 			);
 			path = "Parra Feedback Tests";
 			sourceTree = "<group>";
@@ -282,6 +292,7 @@
 				00120EF1274D1ECA00CA3247 /* Extensions */,
 				003D2A6A274C7798001E067E /* ParraFeedback.h */,
 				003D2A74274C77BD001E067E /* ParraFeedback.swift */,
+				00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */,
 				0036D60127CF0EA20016DE97 /* ParraFeedback+Authentication.swift */,
 				007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */,
 				0036D5DF27CAC5460016DE97 /* ParraFeedback+Networking.swift */,
@@ -293,6 +304,7 @@
 				001286F7277F50A20090CDB5 /* Managers */,
 				0036D5EF27CD9BC90016DE97 /* Storage */,
 				003D2A7A274C84EE001E067E /* Views */,
+				00D5155B27D4219900C4F2CC /* Assets.xcassets */,
 			);
 			path = "Parra Feedback";
 			sourceTree = "<group>";
@@ -338,7 +350,6 @@
 				00DECFFA274C69F800DAF301 /* SceneDelegate.swift */,
 				00DECFFC274C69F800DAF301 /* ViewController.swift */,
 				00DECFFE274C69F800DAF301 /* Main.storyboard */,
-				00DED001274C69FA00DAF301 /* Assets.xcassets */,
 				00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */,
 				00DED006274C69FA00DAF301 /* Info.plist */,
 			);
@@ -352,6 +363,8 @@
 				8432A365EACB1E66B116F9B7 /* Pods-Parra Feedback.release.xcconfig */,
 				E4E9A3C6C190B71277480124 /* Pods-Parra Feedback SDK Demo.debug.xcconfig */,
 				819BB918A1E17EB6B804A30F /* Pods-Parra Feedback SDK Demo.release.xcconfig */,
+				9FE2456D43319BCFAB98D2EE /* Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig */,
+				6B5E19B94F9C37D2C8D83727 /* Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -362,6 +375,7 @@
 				007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */,
 				1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */,
 				A8F1193CC884F0B2F36CA9ED /* Pods_Parra_Feedback_SDK_Demo.framework */,
+				4D771D93334F34C5A26E5402 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -384,9 +398,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0012871F2784CDC20090CDB5 /* Build configuration list for PBXNativeTarget "Parra Feedback Tests" */;
 			buildPhases = (
+				436324C61C3E8DC1278F8CD5 /* [CP] Check Pods Manifest.lock */,
 				001287122784CDC20090CDB5 /* Sources */,
 				001287132784CDC20090CDB5 /* Frameworks */,
 				001287142784CDC20090CDB5 /* Resources */,
+				14FB6855CC729358AB1B2757 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -492,6 +508,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00D5155C27D4219900C4F2CC /* Assets.xcassets in Resources */,
 				001286FD277FE2320090CDB5 /* Pacifico-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -501,7 +518,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */,
-				00DED002274C69FA00DAF301 /* Assets.xcassets in Resources */,
 				00DED000274C69F800DAF301 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -546,6 +562,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		14FB6855CC729358AB1B2757 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		436324C61C3E8DC1278F8CD5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Parra Feedback-Parra Feedback Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		918AC5BA8FB850DEFD3FE7F0 /* [CP] Check Pods Manifest.lock */ = {
@@ -614,6 +669,7 @@
 				001286F6277D54480090CDB5 /* CAShapeLayer.swift in Sources */,
 				0036D5E027CAC5460016DE97 /* ParraFeedback+Networking.swift in Sources */,
 				0036D60A27D051B20016DE97 /* ParraFeedbackView+Layout.swift in Sources */,
+				00D5156027D4238E00C4F2CC /* UIImage.swift in Sources */,
 				00120EFE2753E8BF00CA3247 /* ParraCardView.swift in Sources */,
 				003D2A75274C77BD001E067E /* ParraFeedback.swift in Sources */,
 				0036D60227CF0EA20016DE97 /* ParraFeedback+Authentication.swift in Sources */,
@@ -624,6 +680,7 @@
 				001287032784CD0D0090CDB5 /* ParraStarButton.swift in Sources */,
 				0036D60027CEFB3A0016DE97 /* MemoryStorage.swift in Sources */,
 				001287012780C0C70090CDB5 /* ParraFeedbackDataManager.swift in Sources */,
+				00D5155E27D4223D00C4F2CC /* ParraFeedback+Constants.swift in Sources */,
 				0036D60427D0477C0016DE97 /* AnswerStorage.swift in Sources */,
 				007FBEF4277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift in Sources */,
 				001286F9277F50B30090CDB5 /* ParraChoiceData.swift in Sources */,
@@ -678,6 +735,7 @@
 /* Begin XCBuildConfiguration section */
 		0012871D2784CDC20090CDB5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9FE2456D43319BCFAB98D2EE /* Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -694,6 +752,7 @@
 		};
 		0012871E2784CDC20090CDB5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B5E19B94F9C37D2C8D83727 /* Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

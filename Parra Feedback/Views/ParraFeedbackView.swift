@@ -62,12 +62,12 @@ public class ParraFeedbackView: UIView {
     let containerView = UIView(frame: .zero)
     let contentView = UIView(frame: .zero)
     let backButton = UIButton.systemButton(
-        with: UIImage(named: "ArrowLeft")!,
+        with: UIImage.parraImageNamed("ArrowLeft")!,
         target: self,
         action: #selector(backButtonPressed(button:))
     )
     let forwardButton = UIButton.systemButton(
-        with: UIImage(named: "ArrowRight")!,
+        with: UIImage.parraImageNamed("ArrowRight")!,
         target: self,
         action: #selector(forwardButtonPressed(button:))
     )
