@@ -9,6 +9,7 @@ import UIKit
 import ParraFeedback
 
 class ViewController: UIViewController {
+    private let activityIndicator = UIActivityIndicatorView(frame: .zero)
     private let feedbackView = ParraFeedbackView()
     
     override func viewDidLoad() {
@@ -16,21 +17,27 @@ class ViewController: UIViewController {
 
         view.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(feedbackView)
-                
-        Task {
-            print("fetching...")
-            do {
-                let response = try await ParraFeedback.fetchFeedbackCards()
-                
-                view.addConstraint(feedbackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100))
-                
-                feedbackView.cardItems = response.items
-                
-                print(response.items)
-            } catch let error {
+        activityIndicator.style = .large
+        activityIndicator.tintColor = .black
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        view.addConstraint(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        view.addConstraint(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+
+                        
+        print("Fetching Parra Cards...")
+        ParraFeedback.fetchFeedbackCards { error in
+            if let error = error {
                 print(error)
+                return
             }
+             
+            self.activityIndicator.removeFromSuperview()
+            self.view.addSubview(self.feedbackView)
+            self.view.addConstraint(self.feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 200))
         }
     }
 }
