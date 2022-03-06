@@ -1,21 +1,19 @@
 //
-//  ViewController.swift
+//  ParraFeedbackInView.swift
 //  Parra Feedback SDK Demo
 //
-//  Created by Michael MacCallum on 11/22/21.
+//  Created by Mick MacCallum on 3/6/22.
 //
 
 import UIKit
 import ParraFeedback
 
-class ViewController: UIViewController {
+class ParraFeedbackInView: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
     private let feedbackView = ParraFeedbackView()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.translatesAutoresizingMaskIntoConstraints = false
         
         activityIndicator.style = .large
         activityIndicator.tintColor = .black
@@ -46,4 +44,3 @@ class ViewController: UIViewController {
         }
     }
 }
-

@@ -52,6 +52,8 @@
 		006148B42793A43C00829486 /* ParraFeedbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006148B32793A43C00829486 /* ParraFeedbackTests.swift */; };
 		007FBEF4277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */; };
 		007FBEF6277A700200BD9E37 /* libswift_Concurrency.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0084014827D560B900E2B0ED /* ParraDemoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */; };
+		0084014A27D5613A00E2B0ED /* ParraFeedbackInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */; };
 		00D5155C27D4219900C4F2CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00D5155B27D4219900C4F2CC /* Assets.xcassets */; };
 		00D5155E27D4223D00C4F2CC /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */; };
 		00D5156027D4238E00C4F2CC /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5155F27D4238E00C4F2CC /* UIImage.swift */; };
@@ -62,7 +64,6 @@
 		00D5156B27D4798400C4F2CC /* ParraFeedback+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5156A27D4798400C4F2CC /* ParraFeedback+Notifications.swift */; };
 		00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFF8274C69F800DAF301 /* AppDelegate.swift */; };
 		00DECFFB274C69F800DAF301 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFFA274C69F800DAF301 /* SceneDelegate.swift */; };
-		00DECFFD274C69F800DAF301 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFFC274C69F800DAF301 /* ViewController.swift */; };
 		00DED000274C69F800DAF301 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DECFFE274C69F800DAF301 /* Main.storyboard */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
 		00E8B32C278730D500FC3FFD /* ParraQuestionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */; };
@@ -149,6 +150,8 @@
 		006148B52793C23400829486 /* Parra Feedback.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Parra Feedback.xctestplan"; sourceTree = SOURCE_ROOT; };
 		007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+GeneratedTypes.swift"; sourceTree = "<group>"; };
 		007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
+		0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraDemoTableViewController.swift; sourceTree = "<group>"; };
+		0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackInView.swift; sourceTree = "<group>"; };
 		00D5155B27D4219900C4F2CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Constants.swift"; sourceTree = "<group>"; };
 		00D5155F27D4238E00C4F2CC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -160,7 +163,6 @@
 		00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Parra Feedback SDK Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00DECFF8274C69F800DAF301 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00DECFFA274C69F800DAF301 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		00DECFFC274C69F800DAF301 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		00DECFFF274C69F800DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		00DED004274C69FA00DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		00DED006274C69FA00DAF301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -365,7 +367,8 @@
 			children = (
 				00DECFF8274C69F800DAF301 /* AppDelegate.swift */,
 				00DECFFA274C69F800DAF301 /* SceneDelegate.swift */,
-				00DECFFC274C69F800DAF301 /* ViewController.swift */,
+				0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */,
+				0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */,
 				00DECFFE274C69F800DAF301 /* Main.storyboard */,
 				00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */,
 				00DED006274C69FA00DAF301 /* Info.plist */,
@@ -711,9 +714,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00DECFFD274C69F800DAF301 /* ViewController.swift in Sources */,
 				00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */,
+				0084014A27D5613A00E2B0ED /* ParraFeedbackInView.swift in Sources */,
 				00DECFFB274C69F800DAF301 /* SceneDelegate.swift in Sources */,
+				0084014827D560B900E2B0ED /* ParraDemoTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
