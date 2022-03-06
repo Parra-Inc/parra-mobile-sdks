@@ -27,15 +27,7 @@ class ParraFeedbackDataManager {
     private let answerStorage: AnswerStorage
     private let cardStorage: CardStorage
     internal private(set) var isLoaded = false
-    
-    let queue = DispatchQueue(
-        label: "com.parra.feedback.dataQueue",
-        qos: .utility,
-        // serial by default
-        attributes: [],
-        autoreleaseFrequency: .workItem
-    )
-    
+        
     init() {
         let userDefaults = UserDefaults.standard
         let jsonEncoder = JSONEncoder()

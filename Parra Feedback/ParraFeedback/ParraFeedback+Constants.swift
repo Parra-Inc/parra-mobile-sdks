@@ -13,4 +13,11 @@ extension ParraFeedback {
         static let parraLogPrefix = "[PARRA FEEDBACK]"
         static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
     }
+    
+    enum Queue {
+        static let sync = DispatchQueue(
+            label: "com.parra.feedback.dataQueue",
+            qos: .utility
+        )
+    }
 }
