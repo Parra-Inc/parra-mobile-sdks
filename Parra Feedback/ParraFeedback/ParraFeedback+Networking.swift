@@ -24,7 +24,7 @@ extension ParraFeedback {
     func performAuthenticatedRequest<T: Codable>(route: String,
                                      method: HttpMethod,
                                      authenticationProvider: ParraFeedbackAuthenticationProvider) async throws -> T {
-        let url = Constants.parraApiRoot.appendingPathComponent(route)
+        let url = Constant.parraApiRoot.appendingPathComponent(route)
         let credential = await dataManager.getCurrentCredential()
 
         let nextCredential: ParraFeedbackCredential

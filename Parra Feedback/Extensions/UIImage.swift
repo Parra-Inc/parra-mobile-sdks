@@ -12,7 +12,7 @@ extension UIImage {
     static func parraImageNamed(_ name: String) -> UIImage? {
         return UIImage(
             named: name,
-            in: ParraFeedback.Constants.parraBundle,
+            in: ParraFeedback.Constant.parraBundle,
             with: nil
         )
     }

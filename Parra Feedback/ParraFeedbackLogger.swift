@@ -45,7 +45,7 @@ fileprivate func _parraLog(_ message: String,
         return
     }
     
-    print("\(ParraFeedback.Constants.parraLogPrefix)\(level.outputName) \(message)")
+    print("\(ParraFeedback.Constant.parraLogPrefix)\(level.outputName) \(message)")
 }
 
 internal func parraLog(_ message: @autoclosure () -> String,

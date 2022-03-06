@@ -8,7 +8,7 @@
 import Foundation
 
 extension ParraFeedback {
-    enum Constants {
+    enum Constant {
         static let parraBundle = Bundle(for: ParraFeedback.self)
         static let parraLogPrefix = "[PARRA FEEDBACK]"
         static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
