@@ -59,6 +59,7 @@
 		00D5156527D4376500C4F2CC /* ParraFeedbackSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5156427D4376500C4F2CC /* ParraFeedbackSyncManager.swift */; };
 		00D5156727D4506B00C4F2CC /* ParraFeedback+SyncEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5156627D4506B00C4F2CC /* ParraFeedback+SyncEvents.swift */; };
 		00D5156927D45C8F00C4F2CC /* ParraFeedbackNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5156827D45C8F00C4F2CC /* ParraFeedbackNetworkManager.swift */; };
+		00D5156B27D4798400C4F2CC /* ParraFeedback+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5156A27D4798400C4F2CC /* ParraFeedback+Notifications.swift */; };
 		00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFF8274C69F800DAF301 /* AppDelegate.swift */; };
 		00DECFFB274C69F800DAF301 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFFA274C69F800DAF301 /* SceneDelegate.swift */; };
 		00DECFFD274C69F800DAF301 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFFC274C69F800DAF301 /* ViewController.swift */; };
@@ -155,6 +156,7 @@
 		00D5156427D4376500C4F2CC /* ParraFeedbackSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackSyncManager.swift; sourceTree = "<group>"; };
 		00D5156627D4506B00C4F2CC /* ParraFeedback+SyncEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+SyncEvents.swift"; sourceTree = "<group>"; };
 		00D5156827D45C8F00C4F2CC /* ParraFeedbackNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackNetworkManager.swift; sourceTree = "<group>"; };
+		00D5156A27D4798400C4F2CC /* ParraFeedback+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Notifications.swift"; sourceTree = "<group>"; };
 		00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Parra Feedback SDK Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00DECFF8274C69F800DAF301 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00DECFFA274C69F800DAF301 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 				00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */,
 				0036D60127CF0EA20016DE97 /* ParraFeedback+Authentication.swift */,
 				007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */,
+				00D5156A27D4798400C4F2CC /* ParraFeedback+Notifications.swift */,
 				00D5156627D4506B00C4F2CC /* ParraFeedback+SyncEvents.swift */,
 				00120F002753E9A400CA3247 /* ParraFeedback+Types.swift */,
 			);
@@ -683,6 +686,7 @@
 				0036D5FC27CEFA6E0016DE97 /* EventStorage.swift in Sources */,
 				0036D5E627CB0FBD0016DE97 /* JSONDecoder.swift in Sources */,
 				001286F6277D54480090CDB5 /* CAShapeLayer.swift in Sources */,
+				00D5156B27D4798400C4F2CC /* ParraFeedback+Notifications.swift in Sources */,
 				0036D60A27D051B20016DE97 /* ParraFeedbackView+Layout.swift in Sources */,
 				00D5156027D4238E00C4F2CC /* UIImage.swift in Sources */,
 				00D5156927D45C8F00C4F2CC /* ParraFeedbackNetworkManager.swift in Sources */,

@@ -9,17 +9,7 @@ import Foundation
 
 typealias ChoiceSelectionMap = [String: [ChoiceQuestionOption]]
 
-protocol ParraQuestionHandlerDelegate: NSObjectProtocol {
-    // should probably post updates to data storage when data changes. This might
-    // be better if ParraQuestionHandler was a superclass or if we provide default
-    // implementations of whatever methods are declared here.
-    
-    func updateAnswer<T: Codable>(forQuestion question: Question, answerData: T)
-}
-
 class ParraQuestionHandler: ParraQuestionViewDelegate {
-    weak var questionDelegate: ParraQuestionHandlerDelegate?
-    
     private var choiceQuestionSelectionMap: ChoiceSelectionMap = [:]
     
     required init() {}
@@ -91,7 +81,6 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
                 answerData = selections?.first?.getAnswerData()
             case .checkbox:
                 answerData = selections?.getAnswerData()
-            
             }
         }
         

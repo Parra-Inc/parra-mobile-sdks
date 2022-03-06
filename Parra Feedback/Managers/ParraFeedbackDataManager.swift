@@ -71,6 +71,25 @@ class ParraFeedbackDataManager {
     
     func updateAnswerData(answerData: QuestionAnswerData) async {
         await answerStorage.updateAnswerData(answerData: answerData)
+        
+        // Check if all the cards have been fullfilled. If they have, trigger a sync event.
+        var allCardsAreFullfilled = true
+        for card in currentCards() {
+            let isFullfilled: Bool
+            switch card.data {
+            case .question(let question):
+                isFullfilled = await answerStorage.answerData(forQuestion: question) != nil
+            }
+            
+            if !isFullfilled {
+                allCardsAreFullfilled = false
+                break
+            }
+        }
+        
+        if allCardsAreFullfilled {
+            ParraFeedback.triggerSync()
+        }
     }
     
     func currentCards() -> [CardItem] {
@@ -79,6 +98,10 @@ class ParraFeedbackDataManager {
     
     func updateCards(cards: [CardItem]) {
         cardStorage.updateCards(cardItems: cards)
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: ParraFeedback.cardsDidChangeNotification, object: nil)
+        }
     }
     
     func loadData() async throws {
@@ -92,7 +115,11 @@ class ParraFeedbackDataManager {
     
     // Remove data after a sync
     func clearData() async throws {
+        updateCards(cards: [])
+        
         try await answerStorage.clearAnswers()
+        // TODO: Need to make sure the cards that coorespond to the provided answers are removed to.
+        // TODO: Need to broadcast an event when the cards change to make sure that the UI updates.
     }
     
     func logEvent() {

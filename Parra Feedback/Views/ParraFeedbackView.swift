@@ -50,7 +50,10 @@ public class ParraFeedbackView: UIView {
     
     var cardItems: [CardItem] {
         didSet {
-            cardItemsDidChange()
+            let existedPreviously = !oldValue.isEmpty
+            
+            transitionToNextCard(direction: .right, animated: existedPreviously)
+
         }
     }
     
@@ -95,7 +98,22 @@ public class ParraFeedbackView: UIView {
     
     public override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
-        
+
+        if newWindow == nil {
+            NotificationCenter.default.removeObserver(self, name: ParraFeedback.cardsDidChangeNotification,
+                                                      object: nil)
+            
+            ParraFeedback.triggerSync()
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(didReceiveCardChangeNotification(notification:)),
+                                                   name: ParraFeedback.cardsDidChangeNotification,
+                                                   object: nil)
+            
+            cardItems = ParraFeedback.shared.dataManager.currentCards()
+        }
+    }
+    
+    @objc private func didReceiveCardChangeNotification(notification: Notification) {
         cardItems = ParraFeedback.shared.dataManager.currentCards()
     }
 }

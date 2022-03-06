@@ -8,10 +8,6 @@
 import UIKit
 
 extension ParraFeedbackView {
-    func cardItemsDidChange() {
-        transitionToNextCard()
-    }
-
     func transitionToNextCard(direction: Direction = .right, animated: Bool = false) {
         guard let currentCardInfo = currentCardInfo else {
             transitionToCardItem(cardItems.first, direction: direction, animated: animated)
