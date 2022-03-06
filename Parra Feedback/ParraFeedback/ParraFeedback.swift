@@ -92,9 +92,6 @@ public class ParraFeedback {
     public class func fetchFeedbackCards(completion: @escaping (ParraFeedbackError?) -> Void) {
         Task {
             do {
-#if DEBUG
-                try await Task.sleep(nanoseconds: 1_500_000_000)
-#endif
                 try await fetchFeedbackCards()
                 
                 DispatchQueue.main.async {

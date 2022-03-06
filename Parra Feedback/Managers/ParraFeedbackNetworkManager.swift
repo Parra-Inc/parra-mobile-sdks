@@ -114,6 +114,10 @@ actor ParraFeedbackNetworkManager {
     }
     
     private func performAsyncDataDask(request: URLRequest) async throws -> (Data, HTTPURLResponse) {
+#if DEBUG
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+#endif
+
         if #available(iOS 15.0, *) {
             let (data, response) = try await urlSession.data(for: request)
             
