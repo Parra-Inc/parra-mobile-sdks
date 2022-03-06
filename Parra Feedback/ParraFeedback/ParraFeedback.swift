@@ -13,24 +13,43 @@ public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraF
 public class ParraFeedback {
     internal static var shared: ParraFeedback = {
         let dataManager = ParraFeedbackDataManager()
-        return ParraFeedback(
+        
+        let networkManager = ParraFeedbackNetworkManager(
             dataManager: dataManager
         )
+        
+        let syncManager = ParraFeedbackSyncManager(
+            dataManager: dataManager,
+            networkManager: networkManager
+        )
+        
+        return ParraFeedback(
+            dataManager: dataManager,
+            syncManager: syncManager,
+            networkManager: networkManager
+        )
     }()
+    
     internal private(set) var isInitialized = false
     internal let dataManager: ParraFeedbackDataManager
-    var authenticationProvider: ParraFeedbackAuthenticationProvider?
-    
-    internal lazy var urlSession: URLSession = {
-        return URLSession(configuration: .default)
-    }()
-    
-    internal init(dataManager: ParraFeedbackDataManager) {
+    internal let syncManager: ParraFeedbackSyncManager
+    internal let networkManager: ParraFeedbackNetworkManager
+        
+    internal init(dataManager: ParraFeedbackDataManager,
+                  syncManager: ParraFeedbackSyncManager,
+                  networkManager: ParraFeedbackNetworkManager) {
+        
         self.dataManager = dataManager
+        self.syncManager = syncManager
+        self.networkManager = networkManager
         
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
         
         addEventObservers()
+        
+        Task {
+            await ensureInitialized()
+        }
     }
     
     deinit {
@@ -38,7 +57,7 @@ public class ParraFeedback {
         // app is being killed anyway.
         removeEventObservers()
     }
-    
+
     // TODO: Need to either await this in all public methods, or figure out a way to call this
     // TODO: on init, but still guarentee that it has happened before public methods can be called.
     func ensureInitialized() async {
@@ -58,8 +77,16 @@ public class ParraFeedback {
     
     // TODO: Do we really even need this???
     public class func logout() {
-//        shared.dataManager.credentialStorage.updateCredential(credential: nil)
-        // TODO: data manager clear all data.
+        Task {
+            await shared.dataManager.updateCredential(credential: nil)
+        }
+    }
+    
+    /// Uploads any cached Parra data. This includes data like answers to questions.
+    public class func triggerSync() {
+        Task {
+            await shared.syncManager.enqueueSync()
+        }
     }
     
     public class func fetchFeedbackCards(completion: @escaping (ParraFeedbackError?) -> Void) {
@@ -82,13 +109,11 @@ public class ParraFeedback {
     }
     
     public class func fetchFeedbackCards() async throws {
-        let cardsResponse: CardsResponse = try await shared.performAuthenticatedRequest(
+        let cardsResponse: CardsResponse = try await shared.networkManager.performAuthenticatedRequest(
             route: "cards",
-            method: .get,
-            authenticationProvider: shared.refreshAuthentication
+            method: .get
         )
         
-
         // Only keep cards that we don't already have an answer cached for. This isn't something that
         // should ever even happen, but in event that new cards are retreived that include cards we
         // already have an answer for, we'll keep the answered cards hidden and they'll be flushed

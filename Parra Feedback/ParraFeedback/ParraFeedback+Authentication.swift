@@ -9,32 +9,20 @@ import Foundation
 
 extension ParraFeedback {
     public class func setAuthenticationProvider(_ provider: @escaping ParraFeedbackAuthenticationProvider) {
-        shared.authenticationProvider = provider
+        Task {
+            await shared.networkManager.updateAuthenticationProvider(provider)
+        }
     }
     
     public class func setAuthenticationProvider(_ provider: @escaping (@escaping (ParraFeedbackCredential) -> Void) throws -> Void) {
-        shared.authenticationProvider = shared.asyncAuthenticationFromValueCallback(provider)
+        Task {
+            await shared.networkManager.updateAuthenticationProvider(shared.asyncAuthenticationFromValueCallback(provider))
+        }
     }
     
     public class func setAuthenticationProvider(_ provider: @escaping (@escaping (Result<ParraFeedbackCredential, Error>) -> Void) -> Void) {
-        shared.authenticationProvider = shared.asyncAuthenticationFromResultCallback(provider)
-    }
-    
-    func refreshAuthentication() async throws -> ParraFeedbackCredential {
-        await ensureInitialized()
-        
-        guard let authenticationProvider = authenticationProvider else {
-            throw ParraFeedbackError.missingAuthentication
-        }
-        
-        do {
-            let credential = try await authenticationProvider()
-            
-            await dataManager.updateCredential(credential: credential)
-            
-            return credential
-        } catch let error {
-            throw ParraFeedbackError.authenticationFailed(error)
+        Task {
+            await shared.networkManager.updateAuthenticationProvider(shared.asyncAuthenticationFromResultCallback(provider))
         }
     }
     

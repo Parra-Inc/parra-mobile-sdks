@@ -42,6 +42,15 @@ actor AnswerStorage: ItemStorage {
         }
     }
     
+    func clearAnswers() async throws {
+        underlyingStorage.removeAll()
+        
+        try await storageMedium.write(
+            name: ParraFeedbackDataManager.Key.answersKey,
+            value: underlyingStorage
+        )
+    }
+    
     func writeAnswers() async throws {
         try await storageMedium.write(
             name: ParraFeedbackDataManager.Key.answersKey,

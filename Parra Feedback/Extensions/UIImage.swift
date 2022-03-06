@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 extension UIImage {
+    @MainActor
     static func parraImageNamed(_ name: String) -> UIImage? {
         return UIImage(
             named: name,

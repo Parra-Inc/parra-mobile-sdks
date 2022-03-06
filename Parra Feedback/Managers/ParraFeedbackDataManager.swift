@@ -90,6 +90,11 @@ class ParraFeedbackDataManager {
         isLoaded = true
     }
     
+    // Remove data after a sync
+    func clearData() async throws {
+        try await answerStorage.clearAnswers()
+    }
+    
     func logEvent() {
         // TODO: should log an event to the current session.
         // TODO: Should be called in addition to updating answers.
