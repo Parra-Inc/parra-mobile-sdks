@@ -89,23 +89,23 @@ public class ParraFeedback {
         }
     }
     
-    public class func fetchFeedbackCards(completion: @escaping (ParraFeedbackError?) -> Void) {
+    public class func fetchFeedbackCards(completion: @escaping ([CardItem], ParraFeedbackError?) -> Void) {
         Task {
             do {
-                try await fetchFeedbackCards()
+                let cards = try await fetchFeedbackCards()
                 
                 DispatchQueue.main.async {
-                    completion(nil)
+                    completion(cards, nil)
                 }
             } catch let error {
                 DispatchQueue.main.async {
-                    completion(ParraFeedbackError.dataLoadingError(error))
+                    completion([], ParraFeedbackError.dataLoadingError(error))
                 }
             }
         }
     }
     
-    public class func fetchFeedbackCards() async throws {
+    public class func fetchFeedbackCards() async throws -> [CardItem] {
         let cardsResponse: CardsResponse = try await shared.networkManager.performAuthenticatedRequest(
             route: "cards",
             method: .get
@@ -129,5 +129,7 @@ public class ParraFeedback {
         }
                 
         shared.dataManager.updateCards(cards: cardsToKeep)
+        
+        return cardsToKeep
     }    
 }

@@ -29,15 +29,20 @@ class ViewController: UIViewController {
 
                         
         print("Fetching Parra Cards...")
-        ParraFeedback.fetchFeedbackCards { error in
+        ParraFeedback.fetchFeedbackCards { cards, error in
             if let error = error {
-                print(error)
+                print("Error fetching Parra cards: \(error)")
                 return
             }
-             
+            
             self.activityIndicator.removeFromSuperview()
-            self.view.addSubview(self.feedbackView)
-            self.view.addConstraint(self.feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 200))
+
+            if cards.isEmpty {
+                print("No Parra cards currently available.")
+            } else {
+                self.view.addSubview(self.feedbackView)
+                self.view.addConstraint(self.feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 200))
+            }
         }
     }
 }
