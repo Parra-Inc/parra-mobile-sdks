@@ -126,34 +126,6 @@ class ParraFeedbackDataManager {
         // TODO: should log an event to the current session.
         // TODO: Should be called in addition to updating answers.
     }
-
-    func cardDataMapFromList(cardDataList: [CardItemData]) -> FastAccessListMap<CardItemData> {
-        return cardDataList.lazy.enumerated().reduce([:]) { partialResult, obj in
-            var result = partialResult
-
-            result[obj.element.id] = (obj.offset, obj.element)
-
-            return result
-        }
-    }
-    
-    func cardDataListFromMap(cardDataMap: FastAccessListMap<CardItemData>) -> [CardItemData] {
-        return cardDataMap.values.sorted {
-            $0.index < $1.index
-        }.map {
-            $0.element
-        }
-    }
-    
-    func answersMapFromList(answers: [Answer]) -> [String: Answer] {
-        return answers.reduce([:]) { partialResult, element in
-            var result = partialResult
-
-            result[element.id] = element
-
-            return result
-        }
-    }
 }
 
 extension CardItemData: Identifiable {
