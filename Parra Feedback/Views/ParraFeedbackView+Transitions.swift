@@ -8,7 +8,17 @@
 import UIKit
 
 extension ParraFeedbackView {
-    func transitionToNextCard(direction: Direction = .right, animated: Bool = false) {
+    func suggestTransitionInDirection(_ direction: Direction, animated: Bool) {
+        guard canTransitionInDirection(direction) else {
+            return
+        }
+        
+        transitionToNextCard(direction: direction, animated: animated)
+    }
+    
+    func transitionToNextCard(direction: Direction = .right,
+                              animated: Bool = false) {
+
         guard let currentCardInfo = currentCardInfo else {
             transitionToCardItem(cardItems.first, direction: direction, animated: animated)
             
@@ -127,6 +137,23 @@ extension ParraFeedbackView {
         
         return visibleButtons
     }
+    
+    private func canTransitionInDirection(_ direction: Direction) -> Bool {
+        guard let currentCardInfo = currentCardInfo else {
+            return false
+        }
+        
+        guard let currentIndex = cardItems.firstIndex(where: { $0 == currentCardInfo.cardItem }) else {
+            return false
+        }
+        
+        switch direction {
+        case .left:
+            return currentIndex > 0
+        case .right:
+            return currentIndex < cardItems.count - 1
+        }
+    }
 
     private func updateVisibleNavigationButtons(visibleButtons: VisibleButtonOptions) {
         let showBack = visibleButtons.contains(.back)
@@ -140,7 +167,7 @@ extension ParraFeedbackView {
         forwardButton.isEnabled = showForward
     }
     
-    func cardViewFromCardItem(_ cardItem: CardItem?) -> ParraCardView {
+    private func cardViewFromCardItem(_ cardItem: CardItem?) -> ParraCardView {
         guard let cardItem = cardItem else {
             return ParraActionCardView(
                 title: "You're all caught up for now!",
@@ -151,12 +178,17 @@ extension ParraFeedbackView {
             }
         }
         
+        let card: ParraCardView
         switch (cardItem.data) {
         case .question(let question):
-            return ParraQuestionCardView(
+            card = ParraQuestionCardView(
                 question: question,
                 questionHandler: questionHandler
             )
         }
+        
+        card.isUserInteractionEnabled = true
+        
+        return card
     }
 }

@@ -40,10 +40,22 @@ extension ParraFeedbackView {
         
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.layer.masksToBounds = true
+        containerView.isUserInteractionEnabled = true
         
         configureContentView()
         configureNavigationStack()
+
+        let swipePrevious = UISwipeGestureRecognizer(target: self, action: #selector(navigateToPreviousCard))
+        swipePrevious.direction = .right
+        swipePrevious.delegate = self
+
+        let swipeNext = UISwipeGestureRecognizer(target: self, action: #selector(navigateToNextCard))
+        swipeNext.direction = .left
+        swipeNext.delegate = self
         
+        containerView.addGestureRecognizer(swipePrevious)
+        containerView.addGestureRecognizer(swipeNext)
+
         applyConfig(config)
         
         transitionToNextCard(animated: false)
@@ -86,6 +98,7 @@ extension ParraFeedbackView {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.setContentCompressionResistancePriority(.required, for: .vertical)
         contentView.clipsToBounds = true
+        contentView.isUserInteractionEnabled = false
         
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: 10),
@@ -101,10 +114,12 @@ extension ParraFeedbackView {
         navigationStack.alignment = .center
         navigationStack.axis = .horizontal
         navigationStack.distribution = .equalSpacing
+        navigationStack.isUserInteractionEnabled = true
         
         poweredByLabel.font = UIFont.boldSystemFont(ofSize: 12.0)
         poweredByLabel.textColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
         poweredByLabel.textAlignment = .center
+        poweredByLabel.isUserInteractionEnabled = true
         
         let defaultAttributes = [NSAttributedString.Key.kern: 0.24]
         let poweredBy = NSMutableAttributedString(string: "Powered by ", attributes: defaultAttributes)
@@ -123,11 +138,33 @@ extension ParraFeedbackView {
         ])
     }
     
-    @objc func backButtonPressed(button: UIButton) {
-        transitionToNextCard(direction: .left, animated: true)
+    @objc func navigateToPreviousCard() {
+        suggestTransitionInDirection(.left, animated: true)
     }
     
-    @objc func forwardButtonPressed(button: UIButton) {
-        transitionToNextCard(direction: .right, animated: true)
+    @objc func navigateToNextCard() {
+        suggestTransitionInDirection(.right, animated: true)
+    }
+}
+
+extension ParraFeedbackView: UIGestureRecognizerDelegate {
+    public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive event: UIEvent) -> Bool {
+        return true
+    }
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }

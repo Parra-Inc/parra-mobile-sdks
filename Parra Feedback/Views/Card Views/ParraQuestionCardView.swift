@@ -37,7 +37,9 @@ class ParraQuestionCardView: ParraCardView {
         
         super.init(frame: .zero)
         
+        
         translatesAutoresizingMaskIntoConstraints = false
+        contentContainer.isUserInteractionEnabled = true
         contentContainer.translatesAutoresizingMaskIntoConstraints = false
         contentContainer.axis = .vertical
         contentContainer.alignment = .fill
@@ -57,6 +59,7 @@ class ParraQuestionCardView: ParraCardView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        titleLabel.isUserInteractionEnabled = true
         
         addSubview(titleLabel)
         
@@ -73,6 +76,7 @@ class ParraQuestionCardView: ParraCardView {
             subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
             subtitleLabel.numberOfLines = 0
             subtitleLabel.font = UIFont.preferredFont(forTextStyle: .caption2)
+            subtitleLabel.isUserInteractionEnabled = true
 
             addSubview(subtitleLabel)
             
@@ -114,6 +118,7 @@ class ParraQuestionCardView: ParraCardView {
                 isSelected: isSelected
             )
             optionView.delegate = self
+            optionView.isUserInteractionEnabled = true
             optionViewMap[option] = optionView
             contentContainer.addArrangedSubview(optionView)
         }

@@ -67,12 +67,12 @@ public class ParraFeedbackView: UIView {
     let backButton = UIButton.systemButton(
         with: UIImage.parraImageNamed("ArrowLeft")!,
         target: self,
-        action: #selector(backButtonPressed(button:))
+        action: #selector(navigateToPreviousCard)
     )
     let forwardButton = UIButton.systemButton(
         with: UIImage.parraImageNamed("ArrowRight")!,
         target: self,
-        action: #selector(forwardButtonPressed(button:))
+        action: #selector(navigateToNextCard)
     )
     let poweredByLabel = UILabel(frame: .zero)
     lazy var navigationStack: UIStackView = ({
