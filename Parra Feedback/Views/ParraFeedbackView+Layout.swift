@@ -45,16 +45,15 @@ extension ParraFeedbackView {
         configureContentView()
         configureNavigationStack()
 
-        let swipePrevious = UISwipeGestureRecognizer(target: self, action: #selector(navigateToPreviousCard))
-        swipePrevious.direction = .right
-        swipePrevious.delegate = self
-
-        let swipeNext = UISwipeGestureRecognizer(target: self, action: #selector(navigateToNextCard))
-        swipeNext.direction = .left
-        swipeNext.delegate = self
         
-        containerView.addGestureRecognizer(swipePrevious)
-        containerView.addGestureRecognizer(swipeNext)
+        contentView.addGestureRecognizer(createSwipeGesture(inDirection: .right,
+                                                            selector: #selector(navigateToPreviousCard)))
+        contentView.addGestureRecognizer(createSwipeGesture(inDirection: .left,
+                                                            selector: #selector(navigateToNextCard)))
+        containerView.addGestureRecognizer(createSwipeGesture(inDirection: .right,
+                                                              selector: #selector(navigateToPreviousCard)))
+        containerView.addGestureRecognizer(createSwipeGesture(inDirection: .left,
+                                                              selector: #selector(navigateToNextCard)))
 
         applyConfig(config)
         
@@ -98,7 +97,7 @@ extension ParraFeedbackView {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.setContentCompressionResistancePriority(.required, for: .vertical)
         contentView.clipsToBounds = true
-        contentView.isUserInteractionEnabled = false
+        contentView.isUserInteractionEnabled = true
         
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: 10),
@@ -138,33 +137,20 @@ extension ParraFeedbackView {
         ])
     }
     
+    private func createSwipeGesture(inDirection direction: UISwipeGestureRecognizer.Direction,
+                                    selector: Selector) -> UISwipeGestureRecognizer {
+
+        let swipe = UISwipeGestureRecognizer(target: self, action: selector)
+        swipe.direction = direction
+        
+        return swipe
+    }
+    
     @objc func navigateToPreviousCard() {
         suggestTransitionInDirection(.left, animated: true)
     }
     
     @objc func navigateToNextCard() {
         suggestTransitionInDirection(.right, animated: true)
-    }
-}
-
-extension ParraFeedbackView: UIGestureRecognizerDelegate {
-    public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive event: UIEvent) -> Bool {
-        return true
-    }
-    
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
     }
 }
