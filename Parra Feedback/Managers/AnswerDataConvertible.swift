@@ -6,33 +6,29 @@
 //
 
 import Foundation
-import AnyCodable
 
-typealias QuestionAnswer = AnyCodable
-
-struct QuestionAnswerData {
-    let questionId: String
-    let data: QuestionAnswer
+struct QuestionSingleChoiceCompletedData: Codable {
+    let optionId: String
 }
 
-protocol AnswerDataConvertible {
-    func getAnswerData() -> QuestionAnswer
+struct QuestionMultipleChoiceCompletedData: Codable {
+    let optionIds: [String]
 }
 
-extension ChoiceQuestionOption: AnswerDataConvertible {
-    func getAnswerData() -> QuestionAnswer {
-        return [
-            "option_id": id
-        ]
-    }
+enum QuestionChoiceCompletedData: Codable {
+    case single(QuestionSingleChoiceCompletedData)
+    case multiple(QuestionMultipleChoiceCompletedData)
 }
 
-extension Array: AnswerDataConvertible where Element == ChoiceQuestionOption {
-    func getAnswerData() -> QuestionAnswer {
-        return [
-            "option_ids": map { $0.id }
-        ]
-    }
+enum QuestionCompletedData: Codable {
+    case choice(QuestionChoiceCompletedData)
 }
 
+enum CompletedCardData: Codable {
+    case question(QuestionCompletedData)
+}
 
+struct CompletedCard: Codable {
+    let id: String
+    let data: CompletedCardData
+}

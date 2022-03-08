@@ -6,7 +6,6 @@ target 'Parra Feedback' do
   use_frameworks!
 
   # Pods for Parra Feedback
-  pod 'AnyCodable-FlightSchool', '~> 0.6.0'
   
   target 'Parra Feedback Tests' do
     inherit! :complete

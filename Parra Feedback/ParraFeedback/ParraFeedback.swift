@@ -120,9 +120,9 @@ public class ParraFeedback {
         for card in cardsResponse.items {
             switch card.data {
             case .question(let question):
-                let answer = await shared.dataManager.answerData(forQuestion: question)
+                let cardData = await shared.dataManager.completedCardData(forId: question.id)
             
-                if answer == nil {
+                if cardData == nil {
                     cardsToKeep.append(card)
                 }
             }

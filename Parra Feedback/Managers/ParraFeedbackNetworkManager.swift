@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import AnyCodable
 
 enum HttpMethod: String {
     case get = "GET"
@@ -28,6 +27,7 @@ public typealias NetworkCompletionHandler<T> = (Result<T, ParraFeedbackError>) -
 
 private let kEmptyJsonObjectData = "{}".data(using: .utf8)!
 
+struct EmptyRequestObject: Codable {}
 struct EmptyResponseObject: Codable {}
 
 actor ParraFeedbackNetworkManager {
@@ -64,8 +64,17 @@ actor ParraFeedbackNetworkManager {
     }
     
     func performAuthenticatedRequest<T: Codable>(route: String,
-                                                 method: HttpMethod,
-                                                 body: AnyCodable? = nil) async throws -> T {
+                                                 method: HttpMethod) async throws -> T {
+        return try await performAuthenticatedRequest(
+            route: route,
+            method: method,
+            body: EmptyRequestObject()
+        )
+    }
+    
+    func performAuthenticatedRequest<T: Codable, U: Codable>(route: String,
+                                                             method: HttpMethod,
+                                                             body: U) async throws -> T {
 
         let url = ParraFeedback.Constant.parraApiRoot.appendingPathComponent(route)
         let credential = await dataManager.getCurrentCredential()
@@ -81,7 +90,7 @@ actor ParraFeedbackNetworkManager {
         request.httpMethod = method.rawValue
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
-        if let body = body, method.allowsBody {
+        if method.allowsBody {
             request.httpBody = try JSONEncoder.parraEncoder.encode(body)
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         }

@@ -81,10 +81,9 @@ actor ParraFeedbackSyncManager {
     }
     
     private func sendData() async throws {
-        let answers = await dataManager.currentAnswerData()
-        
+        let allCompletedCardData = await dataManager.currentCompletedCardData()
         // TODO: Temporary until we have a bulk answer endpoint
-        for (questionId, answer) in answers {
+        for (questionId, cardData) in allCompletedCardData {
             parraLogV("Sending answer to question: \(questionId)")
 
             let route = "questions/\(questionId)/answer"
@@ -92,15 +91,13 @@ actor ParraFeedbackSyncManager {
             let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
                 route: route,
                 method: .put,
-                body: [
-                    "data": answer
-                ]
+                body: cardData
             )
         }
     }
     
     private func hasDataToSync() async -> Bool {
-        let answers = await dataManager.currentAnswerData()
+        let answers = await dataManager.currentCompletedCardData()
         
         return !answers.isEmpty
     }

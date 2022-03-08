@@ -71,31 +71,53 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
     }
     
     private func answerUpdateForQuestion(question: Question) {
-        var answerData: QuestionAnswer?
+        var completedCard: CompletedCard?
+
         switch question.data {
         case .choiceQuestionBody(_):
             let selections = choiceQuestionSelectionMap[question.id]
             
             switch question.kind {
             case .radio, .star:
-                answerData = selections?.first?.getAnswerData()
+                if let firstSelectedOptionId = selections?.first?.id {
+                    completedCard = CompletedCard(
+                        id: question.id,
+                        data: .question(
+                            .choice(
+                                .single(
+                                    QuestionSingleChoiceCompletedData(
+                                        optionId: firstSelectedOptionId
+                                    )
+                                )
+                            )
+                        )
+                    )
+                }
             case .checkbox:
-                answerData = selections?.getAnswerData()
+                if let selections = selections {
+                    completedCard = CompletedCard(
+                        id: question.id,
+                        data: .question(
+                            .choice(
+                                .multiple(
+                                    QuestionMultipleChoiceCompletedData(
+                                        optionIds: selections.map { $0.id }
+                                    )
+                                )
+                            )
+                        )
+                    )
+                }
             }
         }
         
-        guard let answerData = answerData else {
+        guard let completedCard = completedCard else {
             // TODO: Error?
             return
         }
         
         Task {
-            await ParraFeedback.shared.dataManager.updateAnswerData(
-                answerData: QuestionAnswerData(
-                    questionId: question.id,
-                    data: answerData
-                )
-            )            
+            await ParraFeedback.shared.dataManager.completeCard(completedCard)
         }
     }
 }

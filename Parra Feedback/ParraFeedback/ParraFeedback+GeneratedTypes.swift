@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import AnyCodable
+
+public typealias AnyCodable = [String: String]
 
 public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
     public let name: String

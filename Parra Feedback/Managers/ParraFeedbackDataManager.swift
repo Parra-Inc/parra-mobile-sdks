@@ -24,7 +24,7 @@ typealias FastAccessListMap<T> = [String: (index: Int, element: T)]
 
 class ParraFeedbackDataManager {
     private let credentialStorage: CredentialStorage
-    private let answerStorage: AnswerStorage
+    private let completedCardDataStorage: CompletedCardDataStorage
     private let cardStorage: CardStorage
     internal private(set) var isLoaded = false
         
@@ -48,7 +48,7 @@ class ParraFeedbackDataManager {
         )
         
         self.credentialStorage = CredentialStorage(storageMedium: userDefaultsStorage)
-        self.answerStorage = AnswerStorage(storageMedium: fileSystemStorage)
+        self.completedCardDataStorage = CompletedCardDataStorage(storageMedium: fileSystemStorage)
         self.cardStorage = CardStorage(storageMedium: memoryStorage)
     }
     
@@ -60,17 +60,17 @@ class ParraFeedbackDataManager {
     func updateCredential(credential: ParraFeedbackCredential?) async {
         await credentialStorage.updateCredential(credential: credential)
     }
-        
-    func answerData(forQuestion question: Question) async -> QuestionAnswer? {
-        return await answerStorage.answerData(forQuestion: question)
-    }
-
-    func currentAnswerData() async -> [String: QuestionAnswer] {
-        return await answerStorage.currentAnswerData()
+    
+    func completedCardData(forId id: String) async -> CompletedCardData? {
+        return await completedCardDataStorage.completedCardData(
+            forId: id
+        )
     }
     
-    func updateAnswerData(answerData: QuestionAnswerData) async {
-        await answerStorage.updateAnswerData(answerData: answerData)
+    func completeCard(_ completedCard: CompletedCard) async {
+        await completedCardDataStorage.completeCard(
+            completedCard: completedCard
+        )
         
         // Check if all the cards have been fullfilled. If they have, trigger a sync event.
         var allCardsAreFullfilled = true
@@ -78,7 +78,7 @@ class ParraFeedbackDataManager {
             let isFullfilled: Bool
             switch card.data {
             case .question(let question):
-                isFullfilled = await answerStorage.answerData(forQuestion: question) != nil
+                isFullfilled = await completedCardDataStorage.completedCardData(forId: question.id) != nil
             }
             
             if !isFullfilled {
@@ -90,6 +90,10 @@ class ParraFeedbackDataManager {
         if allCardsAreFullfilled {
             ParraFeedback.triggerSync()
         }
+    }
+
+    func currentCompletedCardData() async -> [String: CompletedCardData] {
+        return await completedCardDataStorage.currentCompletedCardData()
     }
     
     func currentCards() -> [CardItem] {
@@ -107,7 +111,7 @@ class ParraFeedbackDataManager {
     func loadData() async throws {
         let _ = await [
             credentialStorage.loadData(),
-            answerStorage.loadData()
+            completedCardDataStorage.loadData()
         ]
         
         isLoaded = true
@@ -117,7 +121,7 @@ class ParraFeedbackDataManager {
     func clearData() async throws {
         updateCards(cards: [])
         
-        try await answerStorage.clearAnswers()
+        try await completedCardDataStorage.clearCompletedCardData()
         // TODO: Need to make sure the cards that coorespond to the provided answers are removed to.
         // TODO: Need to broadcast an event when the cards change to make sure that the UI updates.
     }

@@ -1,38 +1,39 @@
 //
-//  AnswerStorage.swift
+//  CardDataStorage.swift
 //  Parra Feedback
 //
-//  Created by Michael MacCallum on 3/2/22.
+//  Created by Mick MacCallum on 3/6/22.
 //
 
 import Foundation
 
-actor AnswerStorage: ItemStorage {
+actor CompletedCardDataStorage: ItemStorage {
     let storageMedium: DataStorageMedium
-    private var underlyingStorage = [String: QuestionAnswer]()
+    
+    private var underlyingStorage = [String: CompletedCardData]()
     
     init(storageMedium: DataStorageMedium) {
         self.storageMedium = storageMedium
     }
     
     func loadData() async {
-        guard let existing: [String: QuestionAnswer] = try? await storageMedium.read(name: ParraFeedbackDataManager.Key.answersKey) else {
+        guard let existing: [String: CompletedCardData] = try? await storageMedium.read(name: ParraFeedbackDataManager.Key.answersKey) else {
             return
         }
         
         underlyingStorage = existing
     }
     
-    func answerData(forQuestion question: Question) -> QuestionAnswer? {
-        return underlyingStorage[question.id]
+    func completedCardData(forId id: String) -> CompletedCardData? {
+        return underlyingStorage[id]
     }
     
-    func currentAnswerData() -> [String: QuestionAnswer] {
+    func currentCompletedCardData() -> [String: CompletedCardData] {
         return underlyingStorage
     }
     
-    func updateAnswerData(answerData: QuestionAnswerData) async {
-        underlyingStorage[answerData.questionId] = answerData.data
+    func completeCard(completedCard: CompletedCard) async {
+        underlyingStorage[completedCard.id] = completedCard.data
         
         do {
             try await writeAnswers()
@@ -42,7 +43,7 @@ actor AnswerStorage: ItemStorage {
         }
     }
     
-    func clearAnswers() async throws {
+    func clearCompletedCardData() async throws {
         underlyingStorage.removeAll()
         
         try await storageMedium.write(
@@ -57,4 +58,5 @@ actor AnswerStorage: ItemStorage {
             value: underlyingStorage
         )
     }
+
 }

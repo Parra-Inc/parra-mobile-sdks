@@ -38,7 +38,6 @@
 		0036D5FE27CEFA840016DE97 /* CardStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D5FD27CEFA840016DE97 /* CardStorage.swift */; };
 		0036D60027CEFB3A0016DE97 /* MemoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D5FF27CEFB3A0016DE97 /* MemoryStorage.swift */; };
 		0036D60227CF0EA20016DE97 /* ParraFeedback+Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60127CF0EA20016DE97 /* ParraFeedback+Authentication.swift */; };
-		0036D60427D0477C0016DE97 /* AnswerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60327D0477C0016DE97 /* AnswerStorage.swift */; };
 		0036D60627D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60527D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift */; };
 		0036D60827D051060016DE97 /* ParraFeedbackView+Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60727D051060016DE97 /* ParraFeedbackView+Transitions.swift */; };
 		0036D60A27D051B20016DE97 /* ParraFeedbackView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60927D051B20016DE97 /* ParraFeedbackView+Layout.swift */; };
@@ -54,6 +53,7 @@
 		007FBEF6277A700200BD9E37 /* libswift_Concurrency.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0084014827D560B900E2B0ED /* ParraDemoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */; };
 		0084014A27D5613A00E2B0ED /* ParraFeedbackInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */; };
+		0084014D27D5A1B700E2B0ED /* CompletedCardDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014C27D5A1B700E2B0ED /* CompletedCardDataStorage.swift */; };
 		00D5155C27D4219900C4F2CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00D5155B27D4219900C4F2CC /* Assets.xcassets */; };
 		00D5155E27D4223D00C4F2CC /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */; };
 		00D5156027D4238E00C4F2CC /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5155F27D4238E00C4F2CC /* UIImage.swift */; };
@@ -136,7 +136,6 @@
 		0036D5FD27CEFA840016DE97 /* CardStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStorage.swift; sourceTree = "<group>"; };
 		0036D5FF27CEFB3A0016DE97 /* MemoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryStorage.swift; sourceTree = "<group>"; };
 		0036D60127CF0EA20016DE97 /* ParraFeedback+Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Authentication.swift"; sourceTree = "<group>"; };
-		0036D60327D0477C0016DE97 /* AnswerStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerStorage.swift; sourceTree = "<group>"; };
 		0036D60527D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedbackDataManager+Keys.swift"; sourceTree = "<group>"; };
 		0036D60727D051060016DE97 /* ParraFeedbackView+Transitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedbackView+Transitions.swift"; sourceTree = "<group>"; };
 		0036D60927D051B20016DE97 /* ParraFeedbackView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedbackView+Layout.swift"; sourceTree = "<group>"; };
@@ -152,6 +151,7 @@
 		007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraDemoTableViewController.swift; sourceTree = "<group>"; };
 		0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackInView.swift; sourceTree = "<group>"; };
+		0084014C27D5A1B700E2B0ED /* CompletedCardDataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedCardDataStorage.swift; sourceTree = "<group>"; };
 		00D5155B27D4219900C4F2CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Constants.swift"; sourceTree = "<group>"; };
 		00D5155F27D4238E00C4F2CC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -279,7 +279,7 @@
 				0036D5F227CD9C2A0016DE97 /* PersistentStorage.swift */,
 				0036D5F027CD9BDA0016DE97 /* CredentialStorage.swift */,
 				0036D5FD27CEFA840016DE97 /* CardStorage.swift */,
-				0036D60327D0477C0016DE97 /* AnswerStorage.swift */,
+				0084014C27D5A1B700E2B0ED /* CompletedCardDataStorage.swift */,
 				0036D5FB27CEFA6E0016DE97 /* EventStorage.swift */,
 				0036D5FA27CEFA540016DE97 /* Storage Mediums */,
 			);
@@ -422,7 +422,6 @@
 				001287122784CDC20090CDB5 /* Sources */,
 				001287132784CDC20090CDB5 /* Frameworks */,
 				001287142784CDC20090CDB5 /* Resources */,
-				14FB6855CC729358AB1B2757 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -462,7 +461,6 @@
 				00DECFF2274C69F800DAF301 /* Frameworks */,
 				00DECFF3274C69F800DAF301 /* Resources */,
 				003D2A73274C7798001E067E /* Embed Frameworks */,
-				14847F499370F32B6704ABC8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -567,40 +565,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		14847F499370F32B6704ABC8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		14FB6855CC729358AB1B2757 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		436324C61C3E8DC1278F8CD5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -675,6 +639,7 @@
 				00120F012753E9A400CA3247 /* ParraFeedback+Types.swift in Sources */,
 				0036D60C27D053160016DE97 /* FileManager.swift in Sources */,
 				0036D61027D2FA6A0016DE97 /* AnswerDataConvertible.swift in Sources */,
+				0084014D27D5A1B700E2B0ED /* CompletedCardDataStorage.swift in Sources */,
 				00D5156727D4506B00C4F2CC /* ParraFeedback+SyncEvents.swift in Sources */,
 				0036D60827D051060016DE97 /* ParraFeedbackView+Transitions.swift in Sources */,
 				001286EF277D27BC0090CDB5 /* ParraRadioButton.swift in Sources */,
@@ -704,7 +669,6 @@
 				0036D60027CEFB3A0016DE97 /* MemoryStorage.swift in Sources */,
 				001287012780C0C70090CDB5 /* ParraFeedbackDataManager.swift in Sources */,
 				00D5155E27D4223D00C4F2CC /* ParraFeedback+Constants.swift in Sources */,
-				0036D60427D0477C0016DE97 /* AnswerStorage.swift in Sources */,
 				007FBEF4277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift in Sources */,
 				001286F9277F50B30090CDB5 /* ParraChoiceData.swift in Sources */,
 			);
