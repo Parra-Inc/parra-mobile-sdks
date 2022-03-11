@@ -19,7 +19,7 @@ class CardStorage: ItemStorage {
         // No op if storage medium is memory
     }
     
-    func updateCards(cardItems: [CardItem]) {
+    func setCards(cardItems: [CardItem]) {
         underlyingStorage = cardItems
     }
     

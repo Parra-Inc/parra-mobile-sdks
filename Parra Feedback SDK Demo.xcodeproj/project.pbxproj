@@ -54,6 +54,7 @@
 		0084014827D560B900E2B0ED /* ParraDemoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */; };
 		0084014A27D5613A00E2B0ED /* ParraFeedbackInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */; };
 		0084014D27D5A1B700E2B0ED /* CompletedCardDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014C27D5A1B700E2B0ED /* CompletedCardDataStorage.swift */; };
+		0084014F27D7030D00E2B0ED /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014E27D7030D00E2B0ED /* Array.swift */; };
 		00D5155C27D4219900C4F2CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00D5155B27D4219900C4F2CC /* Assets.xcassets */; };
 		00D5155E27D4223D00C4F2CC /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */; };
 		00D5156027D4238E00C4F2CC /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5155F27D4238E00C4F2CC /* UIImage.swift */; };
@@ -152,6 +153,7 @@
 		0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraDemoTableViewController.swift; sourceTree = "<group>"; };
 		0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackInView.swift; sourceTree = "<group>"; };
 		0084014C27D5A1B700E2B0ED /* CompletedCardDataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedCardDataStorage.swift; sourceTree = "<group>"; };
+		0084014E27D7030D00E2B0ED /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		00D5155B27D4219900C4F2CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Constants.swift"; sourceTree = "<group>"; };
 		00D5155F27D4238E00C4F2CC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				00120EF2274D1EEE00CA3247 /* UIColor.swift */,
 				001286FE277FE3180090CDB5 /* UIFont.swift */,
 				00D5155F27D4238E00C4F2CC /* UIImage.swift */,
+				0084014E27D7030D00E2B0ED /* Array.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -655,6 +658,7 @@
 				0036D5E627CB0FBD0016DE97 /* JSONDecoder.swift in Sources */,
 				001286F6277D54480090CDB5 /* CAShapeLayer.swift in Sources */,
 				00D5156B27D4798400C4F2CC /* ParraFeedback+Notifications.swift in Sources */,
+				0084014F27D7030D00E2B0ED /* Array.swift in Sources */,
 				0036D60A27D051B20016DE97 /* ParraFeedbackView+Layout.swift in Sources */,
 				00D5156027D4238E00C4F2CC /* UIImage.swift in Sources */,
 				00D5156927D45C8F00C4F2CC /* ParraFeedbackNetworkManager.swift in Sources */,

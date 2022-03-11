@@ -28,13 +28,13 @@ class ParraFeedbackInView: UIViewController {
                         
         print("Fetching Parra Cards...")
         ParraFeedback.fetchFeedbackCards { cards, error in
+            self.activityIndicator.removeFromSuperview()
+
             if let error = error {
                 print("Error fetching Parra cards: \(error)")
                 return
             }
             
-            self.activityIndicator.removeFromSuperview()
-
             if cards.isEmpty {
                 print("No Parra cards currently available.")
             } else {

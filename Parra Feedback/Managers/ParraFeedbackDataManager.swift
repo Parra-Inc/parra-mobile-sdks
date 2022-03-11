@@ -19,9 +19,6 @@ import Foundation
  * 2.
  */
 
-typealias ReadWriteable = Identifiable & Codable
-typealias FastAccessListMap<T> = [String: (index: Int, element: T)]
-
 class ParraFeedbackDataManager {
     private let credentialStorage: CredentialStorage
     private let completedCardDataStorage: CompletedCardDataStorage
@@ -61,7 +58,7 @@ class ParraFeedbackDataManager {
         await credentialStorage.updateCredential(credential: credential)
     }
     
-    func completedCardData(forId id: String) async -> CompletedCardData? {
+    func completedCardData(forId id: String) async -> CompletedCard? {
         return await completedCardDataStorage.completedCardData(
             forId: id
         )
@@ -75,12 +72,8 @@ class ParraFeedbackDataManager {
         // Check if all the cards have been fullfilled. If they have, trigger a sync event.
         var allCardsAreFullfilled = true
         for card in currentCards() {
-            let isFullfilled: Bool
-            switch card.data {
-            case .question(let question):
-                isFullfilled = await completedCardDataStorage.completedCardData(forId: question.id) != nil
-            }
-            
+            let isFullfilled = await completedCardDataStorage.completedCardData(forId: card.id) != nil
+
             if !isFullfilled {
                 allCardsAreFullfilled = false
                 break
@@ -92,38 +85,53 @@ class ParraFeedbackDataManager {
         }
     }
 
-    func currentCompletedCardData() async -> [String: CompletedCardData] {
+    func currentCompletedCardData() async -> [String: CompletedCard] {
         return await completedCardDataStorage.currentCompletedCardData()
+    }
+    
+    func clearCompletedCardData(completedCards: [CompletedCard] = []) async throws {
+        try await completedCardDataStorage.clearCompletedCardData(
+            completedCards: completedCards
+        )
     }
     
     func currentCards() -> [CardItem] {
         return cardStorage.currentCards()
     }
     
-    func updateCards(cards: [CardItem]) {
-        cardStorage.updateCards(cardItems: cards)
+    func removeCardsForCompletedCards(completedCards: [CompletedCard]) {
+        let cardIds = completedCards.map { $0.id }
+        
+        let currentCards = cardStorage.currentCards()
+        let remainingCards = currentCards.filter { !cardIds.contains($0.id) }
+        
+        setCards(cards: remainingCards)
+    }
+    
+    func hasClearedCompletedCardWithId(card: CardItem) async -> Bool {
+        return await completedCardDataStorage.hasClearedCompletedCardWithId(
+            cardId: card.id
+        )
+    }
+    
+    func setCards(cards: [CardItem]) {
+        cardStorage.setCards(cardItems: cards)
         
         DispatchQueue.main.async {
-            NotificationCenter.default.post(name: ParraFeedback.cardsDidChangeNotification, object: nil)
+            NotificationCenter.default.post(
+                name: ParraFeedback.cardsDidChangeNotification,
+                object: nil
+            )
         }
     }
     
     func loadData() async throws {
         let _ = await [
             credentialStorage.loadData(),
-            completedCardDataStorage.loadData()
+            completedCardDataStorage.loadData(),
         ]
         
         isLoaded = true
-    }
-    
-    // Remove data after a sync
-    func clearData() async throws {
-        updateCards(cards: [])
-        
-        try await completedCardDataStorage.clearCompletedCardData()
-        // TODO: Need to make sure the cards that coorespond to the provided answers are removed to.
-        // TODO: Need to broadcast an event when the cards change to make sure that the UI updates.
     }
     
     func logEvent() {
@@ -132,11 +140,11 @@ class ParraFeedbackDataManager {
     }
 }
 
-extension CardItemData: Identifiable {
+extension CardItem: Identifiable {
     public var id: String {
-        switch self {
+        switch data {
         case .question(let question):
-            return "question_\(question.id)"
+            return question.id
         }
     }
 }

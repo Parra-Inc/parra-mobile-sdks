@@ -17,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        let currentUserId = "9B5CDA6B-7538-4A2A-9611-7308D56DFFA1"
+        
         let jsonDecoder = JSONDecoder()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
@@ -27,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 timeoutInterval: 10
             )
             request.httpMethod = "POST"
+            request.httpBody = try! JSONEncoder().encode(["user": ["id": currentUserId]])
             
             URLSession.shared.dataTask(with: request) { data, _, error in
                 if let error = error {

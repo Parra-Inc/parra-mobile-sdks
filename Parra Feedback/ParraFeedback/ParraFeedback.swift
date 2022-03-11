@@ -71,7 +71,7 @@ public class ParraFeedback {
             isInitialized = true
         } catch let error {
             let dataError = ParraFeedbackError.dataLoadingError(error)
-            parraLog("Error loading data: \(dataError)", level: .error)
+            parraLogE("Error loading data: \(dataError)")
         }
     }
     
@@ -120,15 +120,16 @@ public class ParraFeedback {
         for card in cardsResponse.items {
             switch card.data {
             case .question(let question):
+                let previouslyCleared = await shared.dataManager.hasClearedCompletedCardWithId(card: card)
                 let cardData = await shared.dataManager.completedCardData(forId: question.id)
             
-                if cardData == nil {
+                if !previouslyCleared && cardData == nil {
                     cardsToKeep.append(card)
                 }
             }
         }
                 
-        shared.dataManager.updateCards(cards: cardsToKeep)
+        shared.dataManager.setCards(cards: cardsToKeep)
         
         return cardsToKeep
     }    

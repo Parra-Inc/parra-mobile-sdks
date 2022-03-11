@@ -71,9 +71,6 @@ actor ParraFeedbackSyncManager {
             parraLogV("Sending data...")
             try await sendData()
             parraLogV("Data sent")
-            
-            parraLogV("Clearing cached data post sync")
-            try await dataManager.clearData()
         } catch let error {
             parraLogE("Error syncing data: \(ParraFeedbackError.networkError(error))")
         }
@@ -81,19 +78,45 @@ actor ParraFeedbackSyncManager {
     }
     
     private func sendData() async throws {
-        let allCompletedCardData = await dataManager.currentCompletedCardData()
-        // TODO: Temporary until we have a bulk answer endpoint
-        for (questionId, cardData) in allCompletedCardData {
-            parraLogV("Sending answer to question: \(questionId)")
+        await sendCardData()
+    }
+    
+    private func sendCardData() async {
+        let completedCardData = await dataManager.currentCompletedCardData()
+        let completedCards = Array(completedCardData.values)
+        
+        let completedChunks = completedCards.chunked(into: ParraFeedback.Constant.maxBulkAnswers)
 
-            let route = "questions/\(questionId)/answer"
-            
-            let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
-                route: route,
-                method: .put,
-                body: cardData
-            )
+        await withTaskGroup(of: Void.self) { group in
+            for chunk in completedChunks {
+                group.addTask {
+                    do {
+                        try await self.uploadCompletedCards(chunk)
+                        try await self.dataManager.clearCompletedCardData(completedCards: chunk)
+                        self.dataManager.removeCardsForCompletedCards(completedCards: chunk)
+                    } catch let error {
+                        parraLogE("Error uploading card data: \(ParraFeedbackError.networkError(error))")
+                    }
+                }
+            }
         }
+    }
+    
+    private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {        
+        if cards.isEmpty {
+            return
+        }
+        
+        let serializableCards = cards.map { $0.serializedForRequestBody() }
+
+        let route = "bulk/questions/answer"
+
+        let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
+            route: route,
+            method: .put,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+            body: serializableCards
+        )
     }
     
     private func hasDataToSync() async -> Bool {

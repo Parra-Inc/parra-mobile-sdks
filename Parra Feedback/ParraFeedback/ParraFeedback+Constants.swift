@@ -12,6 +12,8 @@ extension ParraFeedback {
         static let parraBundle = Bundle(for: ParraFeedback.self)
         static let parraLogPrefix = "[PARRA FEEDBACK]"
         static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
+        
+        static let maxBulkAnswers = 25
     }
     
     enum Queue {

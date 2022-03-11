@@ -27,8 +27,8 @@ public typealias NetworkCompletionHandler<T> = (Result<T, ParraFeedbackError>) -
 
 private let kEmptyJsonObjectData = "{}".data(using: .utf8)!
 
-struct EmptyRequestObject: Codable {}
-struct EmptyResponseObject: Codable {}
+struct EmptyRequestObject: Encodable {}
+struct EmptyResponseObject: Decodable {}
 
 actor ParraFeedbackNetworkManager {
     private let dataManager: ParraFeedbackDataManager
@@ -63,18 +63,21 @@ actor ParraFeedbackNetworkManager {
         }
     }
     
-    func performAuthenticatedRequest<T: Codable>(route: String,
-                                                 method: HttpMethod) async throws -> T {
+    func performAuthenticatedRequest<T: Decodable>(route: String,
+                                                   method: HttpMethod,
+                                                   cachePolicy: URLRequest.CachePolicy? = nil) async throws -> T {
         return try await performAuthenticatedRequest(
             route: route,
             method: method,
+            cachePolicy: cachePolicy,
             body: EmptyRequestObject()
         )
     }
     
-    func performAuthenticatedRequest<T: Codable, U: Codable>(route: String,
-                                                             method: HttpMethod,
-                                                             body: U) async throws -> T {
+    func performAuthenticatedRequest<T: Decodable, U: Encodable>(route: String,
+                                                                 method: HttpMethod,
+                                                                 cachePolicy: URLRequest.CachePolicy? = nil,
+                                                                 body: U) async throws -> T {
 
         let url = ParraFeedback.Constant.parraApiRoot.appendingPathComponent(route)
         let credential = await dataManager.getCurrentCredential()
@@ -86,7 +89,7 @@ actor ParraFeedbackNetworkManager {
             nextCredential = try await refreshAuthentication()
         }
         
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url, cachePolicy: cachePolicy ?? .useProtocolCachePolicy)
         request.httpMethod = method.rawValue
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         

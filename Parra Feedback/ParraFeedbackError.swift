@@ -20,6 +20,8 @@ public enum ParraFeedbackError: Error, Equatable {
             return e1.localizedDescription == e2.localizedDescription
         case (.dataLoadingError(let e1), .dataLoadingError(let e2)):
             return e1.localizedDescription == e2.localizedDescription
+        case (.messageError(let m1), .messageError(let m2)):
+            return m1 == m2
         default:
             return false
         }
@@ -30,5 +32,6 @@ public enum ParraFeedbackError: Error, Equatable {
     case networkError(Error)
     case jsonError(Error)
     case dataLoadingError(Error)
+    case messageError(String)
     case unknown
 }
