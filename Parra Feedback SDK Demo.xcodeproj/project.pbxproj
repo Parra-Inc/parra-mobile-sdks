@@ -17,8 +17,6 @@
 		001286F1277D4BB20090CDB5 /* ParraCheckboxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F0277D4BB20090CDB5 /* ParraCheckboxButton.swift */; };
 		001286F4277D53AE0090CDB5 /* SelectableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F3277D53AE0090CDB5 /* SelectableButton.swift */; };
 		001286F6277D54480090CDB5 /* CAShapeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F5277D54480090CDB5 /* CAShapeLayer.swift */; };
-		001286F9277F50B30090CDB5 /* ParraChoiceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F8277F50B30090CDB5 /* ParraChoiceData.swift */; };
-		001286FB277F51120090CDB5 /* ParraQuestionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286FA277F51120090CDB5 /* ParraQuestionData.swift */; };
 		001286FD277FE2320090CDB5 /* Pacifico-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 001286FC277FE2320090CDB5 /* Pacifico-Regular.ttf */; };
 		001286FF277FE3180090CDB5 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286FE277FE3180090CDB5 /* UIFont.swift */; };
 		001287012780C0C70090CDB5 /* ParraFeedbackDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */; };
@@ -116,8 +114,6 @@
 		001286F0277D4BB20090CDB5 /* ParraCheckboxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCheckboxButton.swift; sourceTree = "<group>"; };
 		001286F3277D53AE0090CDB5 /* SelectableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableButton.swift; sourceTree = "<group>"; };
 		001286F5277D54480090CDB5 /* CAShapeLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAShapeLayer.swift; sourceTree = "<group>"; };
-		001286F8277F50B30090CDB5 /* ParraChoiceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraChoiceData.swift; sourceTree = "<group>"; };
-		001286FA277F51120090CDB5 /* ParraQuestionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionData.swift; sourceTree = "<group>"; };
 		001286FC277FE2320090CDB5 /* Pacifico-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pacifico-Regular.ttf"; sourceTree = "<group>"; };
 		001286FE277FE3180090CDB5 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManager.swift; sourceTree = "<group>"; };
@@ -257,8 +253,6 @@
 				0036D60527D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift */,
 				00D5156827D45C8F00C4F2CC /* ParraFeedbackNetworkManager.swift */,
 				00D5156427D4376500C4F2CC /* ParraFeedbackSyncManager.swift */,
-				001286F8277F50B30090CDB5 /* ParraChoiceData.swift */,
-				001286FA277F51120090CDB5 /* ParraQuestionData.swift */,
 				00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */,
 				0036D60F27D2FA6A0016DE97 /* AnswerDataConvertible.swift */,
 			);
@@ -668,13 +662,11 @@
 				001286F4277D53AE0090CDB5 /* SelectableButton.swift in Sources */,
 				001286F1277D4BB20090CDB5 /* ParraCheckboxButton.swift in Sources */,
 				0036D5F927CDB0170016DE97 /* UserDefaultsStorage.swift in Sources */,
-				001286FB277F51120090CDB5 /* ParraQuestionData.swift in Sources */,
 				001287032784CD0D0090CDB5 /* ParraStarButton.swift in Sources */,
 				0036D60027CEFB3A0016DE97 /* MemoryStorage.swift in Sources */,
 				001287012780C0C70090CDB5 /* ParraFeedbackDataManager.swift in Sources */,
 				00D5155E27D4223D00C4F2CC /* ParraFeedback+Constants.swift in Sources */,
 				007FBEF4277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift in Sources */,
-				001286F9277F50B30090CDB5 /* ParraChoiceData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
