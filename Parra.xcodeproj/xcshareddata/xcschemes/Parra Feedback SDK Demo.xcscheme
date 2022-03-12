@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-               BuildableName = "Parra SDK.app"
+               BuildableName = "Parra.app"
                BlueprintName = "Parra"
                ReferencedContainer = "container:Parra.xcodeproj">
             </BuildableReference>
@@ -28,6 +28,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "00C7BBB827DC4169009CA852"
+               BuildableName = "Parra CoreTests.xctest"
+               BlueprintName = "Parra CoreTests"
+               ReferencedContainer = "container:Parra.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -45,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-            BuildableName = "Parra SDK.app"
+            BuildableName = "Parra.app"
             BlueprintName = "Parra"
             ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
@@ -62,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-            BuildableName = "Parra SDK.app"
+            BuildableName = "Parra.app"
             BlueprintName = "Parra"
             ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>

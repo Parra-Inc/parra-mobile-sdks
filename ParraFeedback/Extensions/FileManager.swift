@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 extension FileManager {
     func safeCreateDirectory(at url: URL) throws {
