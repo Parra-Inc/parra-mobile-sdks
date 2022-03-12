@@ -1,14 +1,14 @@
 //
-//  Parra_CoreTests.swift
-//  Parra CoreTests
+//  ParraTests.swift
+//  ParraTests
 //
-//  Created by Mick MacCallum on 3/11/22.
+//  Created by Mick MacCallum on 3/12/22.
 //
 
 import XCTest
-@testable import Parra_Core
+@testable import Parra
 
-class Parra_CoreTests: XCTestCase {
+class ParraTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

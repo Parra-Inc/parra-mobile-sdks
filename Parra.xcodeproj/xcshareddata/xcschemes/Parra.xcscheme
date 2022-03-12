@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1320"
-   version = "1.3">
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-               BuildableName = "Parra.app"
+               BlueprintIdentifier = "001B79B627DD231600DEEECD"
+               BuildableName = "Parra.framework"
                BlueprintName = "Parra"
                ReferencedContainer = "container:Parra.xcodeproj">
             </BuildableReference>
@@ -27,18 +27,12 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00C7BBB827DC4169009CA852"
-               BuildableName = "Parra CoreTests.xctest"
-               BlueprintName = "Parra CoreTests"
-               ReferencedContainer = "container:Parra.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:ParraTests/Parra.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+      </TestPlans>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -55,8 +49,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-            BuildableName = "Parra.app"
-            BlueprintName = "Parra"
+            BuildableName = "Demo.app"
+            BlueprintName = "Demo"
             ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -67,16 +61,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-            BuildableName = "Parra.app"
+            BlueprintIdentifier = "001B79B627DD231600DEEECD"
+            BuildableName = "Parra.framework"
             BlueprintName = "Parra"
             ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
