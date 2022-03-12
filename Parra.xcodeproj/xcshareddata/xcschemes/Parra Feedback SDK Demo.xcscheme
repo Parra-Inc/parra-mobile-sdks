@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-               BuildableName = "Parra Feedback SDK Demo.app"
-               BlueprintName = "Parra Feedback SDK Demo"
-               ReferencedContainer = "container:Parra Feedback SDK Demo.xcodeproj">
+               BuildableName = "Parra SDK.app"
+               BlueprintName = "Parra"
+               ReferencedContainer = "container:Parra.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-            BuildableName = "Parra Feedback SDK Demo.app"
-            BlueprintName = "Parra Feedback SDK Demo"
-            ReferencedContainer = "container:Parra Feedback SDK Demo.xcodeproj">
+            BuildableName = "Parra SDK.app"
+            BlueprintName = "Parra"
+            ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-            BuildableName = "Parra Feedback SDK Demo.app"
-            BlueprintName = "Parra Feedback SDK Demo"
-            ReferencedContainer = "container:Parra Feedback SDK Demo.xcodeproj">
+            BuildableName = "Parra SDK.app"
+            BlueprintName = "Parra"
+            ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

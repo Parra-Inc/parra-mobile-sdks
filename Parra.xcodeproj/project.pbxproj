@@ -67,9 +67,6 @@
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
 		00E8B32C278730D500FC3FFD /* ParraQuestionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */; };
 		00E8B32E27878C3400FC3FFD /* GeneratedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32D27878C3400FC3FFD /* GeneratedTypes.swift */; };
-		4B34D69CE5731844A714F716 /* Pods_Parra_Feedback_SDK_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8F1193CC884F0B2F36CA9ED /* Pods_Parra_Feedback_SDK_Demo.framework */; };
-		665BCCAD95CCAA071E66E0A3 /* Pods_Parra_Feedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */; };
-		BE36274FDB1E53F160ECA858 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D771D93334F34C5A26E5402 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,7 +155,7 @@
 		00D5156627D4506B00C4F2CC /* ParraFeedback+SyncEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+SyncEvents.swift"; sourceTree = "<group>"; };
 		00D5156827D45C8F00C4F2CC /* ParraFeedbackNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackNetworkManager.swift; sourceTree = "<group>"; };
 		00D5156A27D4798400C4F2CC /* ParraFeedback+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Notifications.swift"; sourceTree = "<group>"; };
-		00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Parra Feedback SDK Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		00DECFF5274C69F800DAF301 /* Parra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Parra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00DECFF8274C69F800DAF301 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00DECFFA274C69F800DAF301 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		00DECFFF274C69F800DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -166,15 +163,6 @@
 		00DED006274C69FA00DAF301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionHandler.swift; sourceTree = "<group>"; };
 		00E8B32D27878C3400FC3FFD /* GeneratedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedTypes.swift; sourceTree = "<group>"; };
-		1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parra_Feedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A217E270D66BD247EA12161 /* Pods-Parra Feedback.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback.debug.xcconfig"; path = "Target Support Files/Pods-Parra Feedback/Pods-Parra Feedback.debug.xcconfig"; sourceTree = "<group>"; };
-		4D771D93334F34C5A26E5402 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parra_Feedback_Parra_Feedback_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6B5E19B94F9C37D2C8D83727 /* Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig"; path = "Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig"; sourceTree = "<group>"; };
-		819BB918A1E17EB6B804A30F /* Pods-Parra Feedback SDK Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback SDK Demo.release.xcconfig"; path = "Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo.release.xcconfig"; sourceTree = "<group>"; };
-		8432A365EACB1E66B116F9B7 /* Pods-Parra Feedback.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback.release.xcconfig"; path = "Target Support Files/Pods-Parra Feedback/Pods-Parra Feedback.release.xcconfig"; sourceTree = "<group>"; };
-		9FE2456D43319BCFAB98D2EE /* Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig"; path = "Target Support Files/Pods-Parra Feedback-Parra Feedback Tests/Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		A8F1193CC884F0B2F36CA9ED /* Pods_Parra_Feedback_SDK_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parra_Feedback_SDK_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4E9A3C6C190B71277480124 /* Pods-Parra Feedback SDK Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parra Feedback SDK Demo.debug.xcconfig"; path = "Target Support Files/Pods-Parra Feedback SDK Demo/Pods-Parra Feedback SDK Demo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,7 +171,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0012871A2784CDC20090CDB5 /* ParraFeedback.framework in Frameworks */,
-				BE36274FDB1E53F160ECA858 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,7 +179,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				007FBEF6277A700200BD9E37 /* libswift_Concurrency.tbd in Frameworks */,
-				665BCCAD95CCAA071E66E0A3 /* Pods_Parra_Feedback.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,7 +187,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				003D2A6E274C7798001E067E /* ParraFeedback.framework in Frameworks */,
-				4B34D69CE5731844A714F716 /* Pods_Parra_Feedback_SDK_Demo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,7 +325,7 @@
 		00DECFEC274C69F800DAF301 = {
 			isa = PBXGroup;
 			children = (
-				00DECFF7274C69F800DAF301 /* Parra Feedback SDK Demo */,
+				00DECFF7274C69F800DAF301 /* Parra Demo */,
 				003D2A69274C7798001E067E /* Parra Feedback */,
 				001287172784CDC20090CDB5 /* Parra Feedback Tests */,
 				00DECFF6274C69F800DAF301 /* Products */,
@@ -352,14 +337,14 @@
 		00DECFF6274C69F800DAF301 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */,
+				00DECFF5274C69F800DAF301 /* Parra.app */,
 				003D2A68274C7798001E067E /* ParraFeedback.framework */,
 				001287162784CDC20090CDB5 /* Parra Feedback Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00DECFF7274C69F800DAF301 /* Parra Feedback SDK Demo */ = {
+		00DECFF7274C69F800DAF301 /* Parra Demo */ = {
 			isa = PBXGroup;
 			children = (
 				00DECFF8274C69F800DAF301 /* AppDelegate.swift */,
@@ -370,18 +355,12 @@
 				00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */,
 				00DED006274C69FA00DAF301 /* Info.plist */,
 			);
-			path = "Parra Feedback SDK Demo";
+			path = "Parra Demo";
 			sourceTree = "<group>";
 		};
 		02A060188E5CD1963038AE8C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				2A217E270D66BD247EA12161 /* Pods-Parra Feedback.debug.xcconfig */,
-				8432A365EACB1E66B116F9B7 /* Pods-Parra Feedback.release.xcconfig */,
-				E4E9A3C6C190B71277480124 /* Pods-Parra Feedback SDK Demo.debug.xcconfig */,
-				819BB918A1E17EB6B804A30F /* Pods-Parra Feedback SDK Demo.release.xcconfig */,
-				9FE2456D43319BCFAB98D2EE /* Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig */,
-				6B5E19B94F9C37D2C8D83727 /* Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -390,9 +369,6 @@
 			isa = PBXGroup;
 			children = (
 				007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */,
-				1F0F661D369EAB60ADC0D623 /* Pods_Parra_Feedback.framework */,
-				A8F1193CC884F0B2F36CA9ED /* Pods_Parra_Feedback_SDK_Demo.framework */,
-				4D771D93334F34C5A26E5402 /* Pods_Parra_Feedback_Parra_Feedback_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -415,7 +391,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0012871F2784CDC20090CDB5 /* Build configuration list for PBXNativeTarget "Parra Feedback Tests" */;
 			buildPhases = (
-				436324C61C3E8DC1278F8CD5 /* [CP] Check Pods Manifest.lock */,
 				001287122784CDC20090CDB5 /* Sources */,
 				001287132784CDC20090CDB5 /* Frameworks */,
 				001287142784CDC20090CDB5 /* Resources */,
@@ -434,7 +409,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 003D2A70274C7798001E067E /* Build configuration list for PBXNativeTarget "Parra Feedback" */;
 			buildPhases = (
-				0E2313A427A49B3C440F8131 /* [CP] Check Pods Manifest.lock */,
 				003D2A63274C7798001E067E /* Headers */,
 				003D2A64274C7798001E067E /* Sources */,
 				003D2A65274C7798001E067E /* Frameworks */,
@@ -449,11 +423,10 @@
 			productReference = 003D2A68274C7798001E067E /* ParraFeedback.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		00DECFF4274C69F800DAF301 /* Parra Feedback SDK Demo */ = {
+		00DECFF4274C69F800DAF301 /* Parra */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Parra Feedback SDK Demo" */;
+			buildConfigurationList = 00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Parra" */;
 			buildPhases = (
-				918AC5BA8FB850DEFD3FE7F0 /* [CP] Check Pods Manifest.lock */,
 				00DECFF1274C69F800DAF301 /* Sources */,
 				00DECFF2274C69F800DAF301 /* Frameworks */,
 				00DECFF3274C69F800DAF301 /* Resources */,
@@ -464,9 +437,9 @@
 			dependencies = (
 				003D2A6D274C7798001E067E /* PBXTargetDependency */,
 			);
-			name = "Parra Feedback SDK Demo";
+			name = Parra;
 			productName = "Parra Feedback SDK";
-			productReference = 00DECFF5274C69F800DAF301 /* Parra Feedback SDK Demo.app */;
+			productReference = 00DECFF5274C69F800DAF301 /* Parra.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -491,7 +464,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra Feedback SDK Demo" */;
+			buildConfigurationList = 00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -504,7 +477,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				00DECFF4274C69F800DAF301 /* Parra Feedback SDK Demo */,
+				00DECFF4274C69F800DAF301 /* Parra */,
 				003D2A67274C7798001E067E /* Parra Feedback */,
 				001287152784CDC20090CDB5 /* Parra Feedback Tests */,
 			);
@@ -538,75 +511,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		0E2313A427A49B3C440F8131 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Parra Feedback-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		436324C61C3E8DC1278F8CD5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Parra Feedback-Parra Feedback Tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		918AC5BA8FB850DEFD3FE7F0 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Parra Feedback SDK Demo-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		001287122784CDC20090CDB5 /* Sources */ = {
@@ -719,7 +623,6 @@
 /* Begin XCBuildConfiguration section */
 		0012871D2784CDC20090CDB5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9FE2456D43319BCFAB98D2EE /* Pods-Parra Feedback-Parra Feedback Tests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -736,7 +639,6 @@
 		};
 		0012871E2784CDC20090CDB5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6B5E19B94F9C37D2C8D83727 /* Pods-Parra Feedback-Parra Feedback Tests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -753,7 +655,6 @@
 		};
 		003D2A71274C7798001E067E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2A217E270D66BD247EA12161 /* Pods-Parra Feedback.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -792,7 +693,6 @@
 		};
 		003D2A72274C7798001E067E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8432A365EACB1E66B116F9B7 /* Pods-Parra Feedback.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -948,7 +848,6 @@
 		};
 		00DED00A274C69FA00DAF301 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4E9A3C6C190B71277480124 /* Pods-Parra Feedback SDK Demo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -956,7 +855,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Parra Feedback SDK Demo/Info.plist";
+				INFOPLIST_FILE = "Parra Demo/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -968,7 +867,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-feedback-sdk-demo";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-sdk-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -978,7 +877,6 @@
 		};
 		00DED00B274C69FA00DAF301 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 819BB918A1E17EB6B804A30F /* Pods-Parra Feedback SDK Demo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -986,7 +884,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Parra Feedback SDK Demo/Info.plist";
+				INFOPLIST_FILE = "Parra Demo/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -998,7 +896,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-feedback-sdk-demo";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-sdk-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1027,7 +925,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra Feedback SDK Demo" */ = {
+		00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00DED007274C69FA00DAF301 /* Debug */,
@@ -1036,7 +934,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Parra Feedback SDK Demo" */ = {
+		00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Parra" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00DED00A274C69FA00DAF301 /* Debug */,
