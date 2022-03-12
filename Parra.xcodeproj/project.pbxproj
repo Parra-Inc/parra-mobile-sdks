@@ -183,6 +183,8 @@
 		00C7BBC027DC4169009CA852 /* Parra_CoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parra_CoreTests.swift; sourceTree = "<group>"; };
 		00C7BBCD27DC419F009CA852 /* ParraCore.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = ParraCore.podspec; sourceTree = "<group>"; };
 		00C7BBCF27DCE95B009CA852 /* ParraFeedback.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraFeedback.podspec; sourceTree = "<group>"; };
+		00C7BBD027DCEA82009CA852 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		00C7BBD127DCEA8F009CA852 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		00D5155B27D4219900C4F2CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* ParraFeedback+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Constants.swift"; sourceTree = "<group>"; };
 		00D5155F27D4238E00C4F2CC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -335,6 +337,7 @@
 			isa = PBXGroup;
 			children = (
 				00C7BBCF27DCE95B009CA852 /* ParraFeedback.podspec */,
+				00C7BBD027DCEA82009CA852 /* README.md */,
 				001286FC277FE2320090CDB5 /* Pacifico-Regular.ttf */,
 				00120EF1274D1ECA00CA3247 /* Extensions */,
 				003D2A6A274C7798001E067E /* ParraFeedback.h */,
@@ -365,6 +368,7 @@
 			isa = PBXGroup;
 			children = (
 				00C7BBCD27DC419F009CA852 /* ParraCore.podspec */,
+				00C7BBD127DCEA8F009CA852 /* README.md */,
 				00C7BBB227DC4169009CA852 /* Parra_Core.h */,
 				00C7BBB327DC4169009CA852 /* Parra_Core.docc */,
 			);
