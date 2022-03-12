@@ -91,12 +91,18 @@ extension ParraFeedbackView {
             )
             
             contentView.invalidateIntrinsicContentSize()
+                        
+            let oldCardInfo = currentCardInfo
+            currentCardInfo = CurrentCardInfo(
+                cardView: nextCard,
+                cardItem: cardItem
+            )
             
             UIView.animate(
                 withDuration: 0.375,
                 delay: 0.0,
-                options: [.curveEaseInOut]) {
-                    self.currentCardInfo?.cardView.transform = .identity.translatedBy(
+                options: [.curveEaseInOut, .beginFromCurrentState]) {
+                    oldCardInfo?.cardView.transform = .identity.translatedBy(
                         x: direction == .right ? -self.frame.width : self.frame.width,
                         y: 0.0
                     )
@@ -104,10 +110,13 @@ extension ParraFeedbackView {
                     
                     self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
                 } completion: { _ in
-                    applyNextView()
-                    
                     self.backButton.isEnabled = true
                     self.forwardButton.isEnabled = true
+                    
+                    if let oldCardInfo = oldCardInfo {
+                        NSLayoutConstraint.deactivate(oldCardInfo.cardView.constraints)
+                        oldCardInfo.cardView.removeFromSuperview()
+                    }
                 }
         } else {
             updateVisibleNavigationButtons(visibleButtons: visibleButtons)
@@ -149,9 +158,9 @@ extension ParraFeedbackView {
         
         switch direction {
         case .left:
-            return currentIndex > 0
+            return currentIndex > 0 && backButton.isEnabled
         case .right:
-            return currentIndex < cardItems.count - 1
+            return currentIndex < cardItems.count - 1 && forwardButton.isEnabled
         }
     }
 
