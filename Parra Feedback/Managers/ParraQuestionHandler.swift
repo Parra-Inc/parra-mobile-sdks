@@ -9,8 +9,15 @@ import Foundation
 
 typealias ChoiceSelectionMap = [String: [ChoiceQuestionOption]]
 
+protocol ParraQuestionHandlerDelegate: NSObjectProtocol {
+    /// Not meant to be triggered during every selection event. Just when a new selection occurs that may be
+    /// required to cause a transition or other side effects.
+    func questionHandlerDidMakeNewSelection(forQuestion question: Question)
+}
+
 class ParraQuestionHandler: ParraQuestionViewDelegate {
     private var choiceQuestionSelectionMap: ChoiceSelectionMap = [:]
+    weak var questionHandlerDelegate: ParraQuestionHandlerDelegate?
     
     required init() {}
     
@@ -24,23 +31,33 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
                   inView view: ParraChoiceOptionView,
                   fromButton button: SelectableButton) -> [ChoiceQuestionOption] {
         var existingSelection = choiceQuestionSelectionMap[question.id] ?? []
-        let hasAlreadySelected = !existingSelection.isEmpty &&
-            existingSelection.contains(option)
-        
-        if hasAlreadySelected {
+        if existingSelection.contains(option) {
             return []
         }
         
+        var shouldInvokeNewSelectionHandler = false
         defer {
             answerUpdateForQuestion(question: question)
+            
+            if shouldInvokeNewSelectionHandler {
+                // This should only be invoked when a new selection is made, not when it changes
+                questionHandlerDelegate?.questionHandlerDidMakeNewSelection(
+                    forQuestion: question
+                )
+            }
         }
         
         if existingSelection.isEmpty || question.kind.allowsMultipleSelection {
-            
+            if existingSelection.isEmpty && !question.kind.allowsMultipleSelection {
+                // Only invoke new selection handlers for new selection that isn't multi selection.
+                // We don't want to navigate was from a multi selector on the first selection.
+                shouldInvokeNewSelectionHandler = true
+            }
+
             existingSelection.append(option)
             
             choiceQuestionSelectionMap[question.id] = existingSelection
-            
+                        
             return []
         } else {
             choiceQuestionSelectionMap[question.id] = [option]

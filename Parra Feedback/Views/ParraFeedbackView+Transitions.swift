@@ -7,6 +7,12 @@
 
 import UIKit
 
+extension ParraFeedbackView: ParraQuestionHandlerDelegate {
+    func questionHandlerDidMakeNewSelection(forQuestion question: Question) {
+        suggestTransitionInDirection(.right, animated: true)
+    }
+}
+
 extension ParraFeedbackView {
     func suggestTransitionInDirection(_ direction: Direction, animated: Bool) {
         guard canTransitionInDirection(direction) else {

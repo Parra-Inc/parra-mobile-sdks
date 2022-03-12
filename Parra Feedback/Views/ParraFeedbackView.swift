@@ -53,7 +53,6 @@ public class ParraFeedbackView: UIView {
             let existedPreviously = !oldValue.isEmpty
             
             transitionToNextCard(direction: .right, animated: existedPreviously)
-
         }
     }
     
@@ -88,6 +87,8 @@ public class ParraFeedbackView: UIView {
         self.cardItems = cardItems
         
         super.init(frame: .zero)
+        
+        questionHandler.questionHandlerDelegate = self
         
         configureSubviews(config: config)
     }
