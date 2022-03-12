@@ -14,19 +14,26 @@ extension ParraFeedback {
         }
     }
     
-    public class func setAuthenticationProvider(_ provider: @escaping (@escaping (ParraFeedbackCredential) -> Void) throws -> Void) {
+    public class func setAuthenticationProvider(_ providerWithCompletion:
+                                                @escaping (@escaping (ParraFeedbackCredential) -> Void) throws -> Void) {
         Task {
-            await shared.networkManager.updateAuthenticationProvider(shared.asyncAuthenticationFromValueCallback(provider))
+            await shared.networkManager.updateAuthenticationProvider(
+                shared.asyncAuthenticationFromValueCallback(providerWithCompletion)
+            )
         }
     }
     
-    public class func setAuthenticationProvider(_ provider: @escaping (@escaping (Result<ParraFeedbackCredential, Error>) -> Void) -> Void) {
+    public class func setAuthenticationProvider(_ providerWithResult:
+                                                @escaping (@escaping (Result<ParraFeedbackCredential, Error>) -> Void) -> Void) {
         Task {
-            await shared.networkManager.updateAuthenticationProvider(shared.asyncAuthenticationFromResultCallback(provider))
+            await shared.networkManager.updateAuthenticationProvider(
+                shared.asyncAuthenticationFromResultCallback(providerWithResult)
+            )
         }
     }
     
-    private func asyncAuthenticationFromValueCallback(_ provider: @escaping (@escaping (ParraFeedbackCredential) -> Void) throws -> Void) -> (() async throws -> ParraFeedbackCredential) {
+    private func asyncAuthenticationFromValueCallback(_ provider:
+                                                      @escaping (@escaping (ParraFeedbackCredential) -> Void) throws -> Void) -> (() async throws -> ParraFeedbackCredential) {
         return {
             return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ParraFeedbackCredential, Error>) in
                 do {
@@ -40,7 +47,8 @@ extension ParraFeedback {
         }
     }
     
-    private func asyncAuthenticationFromResultCallback(_ provider: @escaping (@escaping (Result<ParraFeedbackCredential, Error>) -> Void) -> Void) -> (() async throws -> ParraFeedbackCredential) {
+    private func asyncAuthenticationFromResultCallback(_ provider:
+                                                       @escaping (@escaping (Result<ParraFeedbackCredential, Error>) -> Void) -> Void) -> (() async throws -> ParraFeedbackCredential) {
         return {
             return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ParraFeedbackCredential, Error>) in
                 provider { result in
