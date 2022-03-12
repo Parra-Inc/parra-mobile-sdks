@@ -147,6 +147,8 @@
 		001287162784CDC20090CDB5 /* Parra Feedback Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Parra Feedback Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManagerTests.swift; sourceTree = "<group>"; };
 		001287202784CF6C0090CDB5 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		001B798227DCEC2B00DEEECD /* Parra Feedback.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Parra Feedback.xctestplan"; sourceTree = "<group>"; };
+		001B798427DCEC9200DEEECD /* Parra Core.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Parra Core.xctestplan"; sourceTree = "<group>"; };
 		0036D5E127CACA100016DE97 /* ParraFeedbackError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackError.swift; sourceTree = "<group>"; };
 		0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONEncoder.swift; sourceTree = "<group>"; };
 		0036D5E527CB0FBD0016DE97 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
@@ -169,7 +171,6 @@
 		003D2A74274C77BD001E067E /* ParraFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedback.swift; sourceTree = "<group>"; };
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
 		006148B32793A43C00829486 /* ParraFeedbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackTests.swift; sourceTree = "<group>"; };
-		006148B52793C23400829486 /* Parra Feedback.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Parra Feedback.xctestplan"; sourceTree = SOURCE_ROOT; };
 		007FBEF3277A34C700BD9E37 /* ParraFeedback+GeneratedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+GeneratedTypes.swift"; sourceTree = "<group>"; };
 		007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraDemoTableViewController.swift; sourceTree = "<group>"; };
@@ -301,7 +302,7 @@
 		001287172784CDC20090CDB5 /* ParraFeedbackTests */ = {
 			isa = PBXGroup;
 			children = (
-				006148B52793C23400829486 /* Parra Feedback.xctestplan */,
+				001B798227DCEC2B00DEEECD /* Parra Feedback.xctestplan */,
 				006148B32793A43C00829486 /* ParraFeedbackTests.swift */,
 				001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */,
 				001287202784CF6C0090CDB5 /* SampleData.swift */,
@@ -379,6 +380,7 @@
 			isa = PBXGroup;
 			children = (
 				00C7BBC027DC4169009CA852 /* Parra_CoreTests.swift */,
+				001B798427DCEC9200DEEECD /* Parra Core.xctestplan */,
 			);
 			path = ParraCoreTests;
 			sourceTree = "<group>";

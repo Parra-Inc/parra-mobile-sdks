@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "003D2A67274C7798001E067E"
-               BuildableName = "ParraFeedback.framework"
-               BlueprintName = "Parra Feedback"
+               BlueprintIdentifier = "00C7BBAF27DC4169009CA852"
+               BuildableName = "Parra_Core.framework"
+               BlueprintName = "Parra Core"
                ReferencedContainer = "container:Parra.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,24 +29,10 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:ParraFeedback/Parra Feedback.xctestplan"
+            reference = "container:ParraCoreTests/Parra Core.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
-      <Testables>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "001287152784CDC20090CDB5"
-               BuildableName = "Parra Feedback Tests.xctest"
-               BlueprintName = "Parra Feedback Tests"
-               ReferencedContainer = "container:Parra.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -78,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "003D2A67274C7798001E067E"
-            BuildableName = "ParraFeedback.framework"
-            BlueprintName = "Parra Feedback"
+            BlueprintIdentifier = "00C7BBAF27DC4169009CA852"
+            BuildableName = "Parra_Core.framework"
+            BlueprintName = "Parra Core"
             ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "8AA50894-F8A6-49EF-A541-CFFC0EED1827",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Parra.xcodeproj",
+      "identifier" : "00DECFF4274C69F800DAF301",
+      "name" : "Parra"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Parra.xcodeproj",
+        "identifier" : "001287152784CDC20090CDB5",
+        "name" : "Parra Feedback Tests"
+      }
+    }
+  ],
+  "version" : 1
+}
