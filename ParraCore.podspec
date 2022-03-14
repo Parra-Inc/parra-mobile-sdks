@@ -13,6 +13,6 @@ Pod::Spec.new do |spec|
 
   spec.ios.deployment_target    = '13.0'
 
-  spec.source_files             = 'ParraCore/*.swift'
+  spec.source_files             = 'Core/*.swift'
   spec.frameworks               = 'Foundation'
 end

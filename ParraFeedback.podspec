@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
 
   spec.ios.deployment_target    = '13.0'
 
-  spec.source_files             = 'ParraCore/*.swift' # TODO should this just be .h?
+  spec.source_files             = 'Feedback/*.swift' # TODO should this just be .h?
   spec.frameworks               = 'Foundation', 'UIKit'
 
   spec.dependency 'ParraCore', '~> #{spec.version}'

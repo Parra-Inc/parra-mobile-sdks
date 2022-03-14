@@ -1,0 +1,20 @@
+//
+//  UIImage.swift
+//  Parra Feedback
+//
+//  Created by Michael MacCallum on 3/5/22.
+//
+
+import Foundation
+import UIKit
+
+extension UIImage {
+    @MainActor
+    static func parraImageNamed(_ name: String) -> UIImage? {
+        return UIImage(
+            named: name,
+            in: ParraFeedback.bundle(),
+            with: nil
+        )
+    }
+}
