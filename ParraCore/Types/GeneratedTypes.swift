@@ -281,7 +281,11 @@ public enum CardItemType: String, Codable {
     case question = "question"
 }
 
-public struct CardItem: Codable, Equatable, Hashable {
+public class CardItem: NSObject, Codable {
+    public static func == (lhs: CardItem, rhs: CardItem) -> Bool {
+        return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+    }
+
     public let type: CardItemType
     public let version: String
     public let data: CardItemData
@@ -295,7 +299,8 @@ public struct CardItem: Codable, Equatable, Hashable {
         self.version = version
         self.data = data
     }
-    public init(from decoder: Decoder) throws {
+    
+    required public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.type = try container.decode(CardItemType.self, forKey: .type)
         self.version = try container.decode(String.self, forKey: .version)
@@ -303,6 +308,17 @@ public struct CardItem: Codable, Equatable, Hashable {
         case .question:
             self.data = .question(try container.decode(Question.self, forKey: .data))
         }
+    }
+    
+    public override var hash: Int {
+        var hasher = Hasher()
+
+        hasher.combine(id)
+        hasher.combine(type)
+        hasher.combine(version)
+        hasher.combine(data)
+
+        return hasher.finalize()
     }
 }
 
