@@ -48,18 +48,32 @@ class ParraFeedbackDataManager {
             completedCard: completedCard
         )
         
+        var completedCards = [CompletedCard]()
+        
         // Check if all the cards have been fullfilled. If they have, trigger a sync event.
         var allCardsAreFullfilled = true
         for card in await currentCards() {
-            let isFullfilled = await completedCardDataStorage.completedCardData(forId: card.id) != nil
-
-            if !isFullfilled {
+            let completedCard = await completedCardDataStorage.completedCardData(
+                forId: card.id
+            )
+            
+            guard let completedCard = completedCard else {
                 allCardsAreFullfilled = false
                 break
             }
+
+            completedCards.append(completedCard)
         }
         
         if allCardsAreFullfilled {
+            // The cards will still be cleaned up later after syncing answers just as a precaution,
+            // but we remove them in advance of the sync to trigger a transition to the empty state
+            // without having to wait for the sync requests.
+            // TODO: Can the cards be restored if the sync fails?
+            await removeCardsForCompletedCards(
+                completedCards: completedCards
+            )
+
             Parra.triggerSync()
         }
     }

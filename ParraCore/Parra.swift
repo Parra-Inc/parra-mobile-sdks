@@ -81,6 +81,8 @@ public class Parra: ParraModule {
         }
     }
     
+    // MARK: - ParraModule Conformance
+    
     public func hasDataToSync() async -> Bool {
         return false // TODO:
     }
