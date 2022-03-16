@@ -28,6 +28,30 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "001B7AF827DE3A7600DEEECD"
+               BuildableName = "ParraCoreTests.xctest"
+               BlueprintName = "ParraCoreTests"
+               ReferencedContainer = "container:Parra.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "001B7B3827DE3AEC00DEEECD"
+               BuildableName = "ParraFeedbackTests.xctest"
+               BlueprintName = "ParraFeedbackTests"
+               ReferencedContainer = "container:Parra.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
