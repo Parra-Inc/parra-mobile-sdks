@@ -29,7 +29,6 @@ public class ParraFeedbackView: UIView {
             if cardItems != oldValue {
                 transitionToNextCard(direction: .right, animated: existedPreviously)
             }
-//            transitionToCardItem(cardItems.first, direction: .right, animated: false)
         }
     }
     
