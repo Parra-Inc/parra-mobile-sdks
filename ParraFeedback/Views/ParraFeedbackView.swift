@@ -8,16 +8,6 @@
 import UIKit
 import ParraCore
 
-public let ParraFeedbackViewDefaultConfig = ParraFeedbackViewConfig(
-    backgroundColor: UIColor(hex: 0xFAFAFA),
-    tintColor: UIColor(hex: 0x200E32),
-    cornerRadius: 12,
-    contentInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
-    shadowColor: UIColor(red: 0, green: 0, blue: 0, alpha: 0.1),
-    shadowOpacity: 1.0,
-    shadowRadius: 2.0,
-    shadowSize: .init(width: 0.0, height: 2.0)
-)
 
 public class ParraFeedbackView: UIView {
     let questionHandler = ParraQuestionHandler()
@@ -62,7 +52,7 @@ public class ParraFeedbackView: UIView {
 
     public required init(
         cardItems: [CardItem] = [],
-        config: ParraFeedbackViewConfig = ParraFeedbackViewDefaultConfig
+        config: ParraFeedbackViewConfig = .default
     ) {
         self.cardItems = cardItems
         
