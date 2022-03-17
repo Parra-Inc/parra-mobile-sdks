@@ -40,16 +40,31 @@ public class ParraFeedbackView: UIView {
 
     internal let containerView = UIView(frame: .zero)
     internal let contentView = UIView(frame: .zero)
+    
+    /// The image used for the back button used to transition to the previous card. By default, a left facing arrow.
+    public var backButtonImage = UIImage.parraImageNamed("ArrowLeft")! {
+        didSet {
+            backButton.setImage(backButtonImage, for: .normal)
+        }
+    }
+    
+    /// The image used for the forward button used to transition to the next card. By default, a right facing arrow.
+    public var forwardButtonImage = UIImage.parraImageNamed("ArrowRight")! {
+        didSet {
+            forwardButton.setImage(forwardButtonImage, for: .normal)
+        }
+    }
+    
     internal lazy var backButton: UIButton = {
         return UIButton.systemButton(
-            with: UIImage.parraImageNamed("ArrowLeft")!,
+            with: self.backButtonImage,
             target: self,
             action: #selector(navigateToPreviousCard)
         )
     }()
     internal lazy var forwardButton: UIButton = {
         return UIButton.systemButton(
-            with: UIImage.parraImageNamed("ArrowRight")!,
+            with: self.forwardButtonImage,
             target: self,
             action: #selector(navigateToNextCard)
         )
