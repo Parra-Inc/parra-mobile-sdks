@@ -44,16 +44,11 @@ extension ParraFeedbackView {
         
         configureContentView()
         configureNavigationStack()
-
         
-        contentView.addGestureRecognizer(createSwipeGesture(inDirection: .right,
-                                                            selector: #selector(navigateToPreviousCard)))
-        contentView.addGestureRecognizer(createSwipeGesture(inDirection: .left,
-                                                            selector: #selector(navigateToNextCard)))
-        containerView.addGestureRecognizer(createSwipeGesture(inDirection: .right,
-                                                              selector: #selector(navigateToPreviousCard)))
-        containerView.addGestureRecognizer(createSwipeGesture(inDirection: .left,
-                                                              selector: #selector(navigateToNextCard)))
+        addCardSwipeGesture(toView: contentView, direction: .right)
+        addCardSwipeGesture(toView: contentView, direction: .left)
+        addCardSwipeGesture(toView: containerView, direction: .right)
+        addCardSwipeGesture(toView: containerView, direction: .left)
 
         applyConfig(config)
         
@@ -136,7 +131,19 @@ extension ParraFeedbackView {
             navigationStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12)
         ])
     }
-    
+
+    private func addCardSwipeGesture(toView view: UIView, direction: Direction) {
+        let gesture = createSwipeGesture(
+            inDirection: direction.swipeDirection,
+            selector: direction == .left
+                ? #selector(navigateToNextCard)
+                : #selector(navigateToPreviousCard)
+        )
+        
+        view.addGestureRecognizer(gesture)
+        cardSwipeGestureRecognizers.append(gesture)
+    }
+
     private func createSwipeGesture(inDirection direction: UISwipeGestureRecognizer.Direction,
                                     selector: Selector) -> UISwipeGestureRecognizer {
 

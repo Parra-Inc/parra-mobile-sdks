@@ -11,6 +11,16 @@ import ParraCore
 
 public class ParraFeedbackView: UIView {
     
+    /// <#Description#>
+    public var areSwipeGesturesEnabled = true {
+        didSet {
+            for swipe in cardSwipeGestureRecognizers {
+                swipe.isEnabled = areSwipeGesturesEnabled
+            }
+        }
+    }
+    internal var cardSwipeGestureRecognizers = [UISwipeGestureRecognizer]()
+    
     internal let questionHandler = ParraQuestionHandler()
     
     internal var cardItems: [CardItem] {
