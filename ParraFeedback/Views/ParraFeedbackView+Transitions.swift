@@ -15,19 +15,26 @@ extension ParraFeedbackView: ParraQuestionHandlerDelegate {
 }
 
 extension ParraFeedbackView {
-    func suggestTransitionInDirection(_ direction: Direction, animated: Bool) {
+    func suggestTransitionInDirection(_ direction: Direction,
+                                      animated: Bool) {
+
         guard canTransitionInDirection(direction) else {
             return
         }
         
-        transitionToNextCard(direction: direction, animated: animated)
+        transitionToNextCard(
+            direction: direction,
+            animated: animated
+        )
     }
     
     func transitionToNextCard(direction: Direction = .right,
                               animated: Bool = false) {
 
         guard let currentCardInfo = currentCardInfo else {
-            transitionToCardItem(cardItems.first, direction: direction, animated: animated)
+            transitionToCardItem(cardItems.first,
+                                 direction: direction,
+                                 animated: animated)
             
             return
         }
@@ -36,24 +43,36 @@ extension ParraFeedbackView {
             switch direction {
             case .left:
                 if currentIndex == 0 {
-                    transitionToCardItem(cardItems.last, direction: .left, animated: animated)
+                    transitionToCardItem(cardItems.last,
+                                         direction: .left,
+                                         animated: animated)
                 } else {
-                    transitionToCardItem(cardItems[currentIndex - 1], direction: .left, animated: animated)
+                    transitionToCardItem(cardItems[currentIndex - 1],
+                                         direction: .left,
+                                         animated: animated)
                 }
             case .right:
                 if currentIndex == cardItems.count - 1 {
-                    transitionToCardItem(nil, direction: .right, animated: animated)
+                    transitionToCardItem(nil,
+                                         direction: .right,
+                                         animated: animated)
                 } else {
-                    transitionToCardItem(cardItems[currentIndex + 1], direction: .right, animated: animated)
+                    transitionToCardItem(cardItems[currentIndex + 1],
+                                         direction: .right,
+                                         animated: animated)
                 }
             }
         } else {
             // You're all caught up for now condition
             switch direction {
             case .left:
-                transitionToCardItem(cardItems.last, direction: .left, animated: animated)
+                transitionToCardItem(cardItems.last,
+                                     direction: .left,
+                                     animated: animated)
             case .right:
-                transitionToCardItem(cardItems.first, direction: .right, animated: animated)
+                transitionToCardItem(cardItems.first,
+                                     direction: .right,
+                                     animated: animated)
             }
         }
     }
