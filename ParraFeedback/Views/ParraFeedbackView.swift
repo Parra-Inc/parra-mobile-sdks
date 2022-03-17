@@ -10,9 +10,10 @@ import ParraCore
 
 
 public class ParraFeedbackView: UIView {
-    let questionHandler = ParraQuestionHandler()
     
-    var cardItems: [CardItem] {
+    internal let questionHandler = ParraQuestionHandler()
+    
+    internal var cardItems: [CardItem] {
         didSet {
             let existedPreviously = !oldValue.isEmpty
             
@@ -22,29 +23,29 @@ public class ParraFeedbackView: UIView {
         }
     }
     
-    var currentCardInfo: CurrentCardInfo?
+    internal var currentCardInfo: CurrentCardInfo?
 
-    var constraintsOnSuperView = [NSLayoutConstraint]()
-    var constraintsOncontainerView = [NSLayoutConstraint]()
+    internal var constraintsOnSuperView = [NSLayoutConstraint]()
+    internal var constraintsOncontainerView = [NSLayoutConstraint]()
 
-    let containerView = UIView(frame: .zero)
-    let contentView = UIView(frame: .zero)
-    lazy var backButton: UIButton = {
+    internal let containerView = UIView(frame: .zero)
+    internal let contentView = UIView(frame: .zero)
+    internal lazy var backButton: UIButton = {
         return UIButton.systemButton(
             with: UIImage.parraImageNamed("ArrowLeft")!,
             target: self,
             action: #selector(navigateToPreviousCard)
         )
     }()
-    lazy var forwardButton: UIButton = {
+    internal lazy var forwardButton: UIButton = {
         return UIButton.systemButton(
             with: UIImage.parraImageNamed("ArrowRight")!,
             target: self,
             action: #selector(navigateToNextCard)
         )
     }()
-    let poweredByLabel = UILabel(frame: .zero)
-    lazy var navigationStack: UIStackView = ({
+    internal let poweredByLabel = UILabel(frame: .zero)
+    internal lazy var navigationStack: UIStackView = ({
         return UIStackView(arrangedSubviews: [
             backButton, poweredByLabel, forwardButton
         ])
