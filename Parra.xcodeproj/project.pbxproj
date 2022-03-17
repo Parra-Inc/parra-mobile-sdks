@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0015599727E2BEBF006450BE /* ParraEmptyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0015599627E2BEBF006450BE /* ParraEmptyCardView.swift */; };
 		001B7AFA27DE3A7600DEEECD /* ParraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* ParraCore.framework */; };
 		001B7B0127DE3A7600DEEECD /* ParraCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B0027DE3A7600DEEECD /* ParraCoreTests.swift */; };
 		001B7B0227DE3A7600DEEECD /* ParraCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 001B7AF427DE3A7600DEEECD /* ParraCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -175,6 +176,7 @@
 		001287022784CD0D0090CDB5 /* ParraStarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStarButton.swift; sourceTree = "<group>"; };
 		001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManagerTests.swift; sourceTree = "<group>"; };
 		001287202784CF6C0090CDB5 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		0015599627E2BEBF006450BE /* ParraEmptyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraEmptyCardView.swift; sourceTree = "<group>"; };
 		001B7A0A27DD266500DEEECD /* ParraCore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraCore.podspec; sourceTree = "<group>"; };
 		001B7A0B27DD266500DEEECD /* ParraFeedback.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraFeedback.podspec; sourceTree = "<group>"; };
 		001B7A8B27DD883500DEEECD /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				00120EFD2753E8BF00CA3247 /* ParraCardView.swift */,
+				0015599627E2BEBF006450BE /* ParraEmptyCardView.swift */,
 				003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */,
 				00120F0427543CB800CA3247 /* ParraChoiceOptionView.swift */,
 				00120EFA274DC98400CA3247 /* ParraActionCardView.swift */,
@@ -839,6 +842,7 @@
 				001B7B5D27DE3B3800DEEECD /* ParraChoiceOptionView.swift in Sources */,
 				001B7B5727DE3B3800DEEECD /* SelectableButton.swift in Sources */,
 				001B7B6827DE3C1200DEEECD /* VisibleButtonOptions.swift in Sources */,
+				0015599727E2BEBF006450BE /* ParraEmptyCardView.swift in Sources */,
 				001B7B8427DE6E2400DEEECD /* ParraFeedback+Constants.swift in Sources */,
 				001B7B8527DE70FF00DEEECD /* CompletedCardDataStorage.swift in Sources */,
 			);
