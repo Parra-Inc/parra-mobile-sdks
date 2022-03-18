@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		0015599727E2BEBF006450BE /* ParraEmptyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0015599627E2BEBF006450BE /* ParraEmptyCardView.swift */; };
+		0015599C27E40B13006450BE /* FileSystemStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0015599B27E40B13006450BE /* FileSystemStorageTests.swift */; };
+		0015599F27E40B71006450BE /* FileManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0015599E27E40B71006450BE /* FileManagerTests.swift */; };
+		001559A227E40D56006450BE /* FileSystemHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559A127E40D56006450BE /* FileSystemHelpers.swift */; };
+		001559A427E412FD006450BE /* UserDefaultsStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559A327E412FD006450BE /* UserDefaultsStorageTests.swift */; };
+		001559A827E417D4006450BE /* ParraLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559A727E417D4006450BE /* ParraLoggerTests.swift */; };
+		001559AA27E41A8A006450BE /* ParraStorageModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559A927E41A8A006450BE /* ParraStorageModule.swift */; };
 		001B7AFA27DE3A7600DEEECD /* ParraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* ParraCore.framework */; };
 		001B7B0127DE3A7600DEEECD /* ParraCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B0027DE3A7600DEEECD /* ParraCoreTests.swift */; };
 		001B7B0227DE3A7600DEEECD /* ParraCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 001B7AF427DE3A7600DEEECD /* ParraCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -177,6 +183,13 @@
 		001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManagerTests.swift; sourceTree = "<group>"; };
 		001287202784CF6C0090CDB5 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		0015599627E2BEBF006450BE /* ParraEmptyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraEmptyCardView.swift; sourceTree = "<group>"; };
+		0015599B27E40B13006450BE /* FileSystemStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemStorageTests.swift; sourceTree = "<group>"; };
+		0015599E27E40B71006450BE /* FileManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerTests.swift; sourceTree = "<group>"; };
+		001559A127E40D56006450BE /* FileSystemHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemHelpers.swift; sourceTree = "<group>"; };
+		001559A327E412FD006450BE /* UserDefaultsStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStorageTests.swift; sourceTree = "<group>"; };
+		001559A627E41603006450BE /* ParraTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraTests.xctestplan; sourceTree = "<group>"; };
+		001559A727E417D4006450BE /* ParraLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLoggerTests.swift; sourceTree = "<group>"; };
+		001559A927E41A8A006450BE /* ParraStorageModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStorageModule.swift; sourceTree = "<group>"; };
 		001B7A0A27DD266500DEEECD /* ParraCore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraCore.podspec; sourceTree = "<group>"; };
 		001B7A0B27DD266500DEEECD /* ParraFeedback.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraFeedback.podspec; sourceTree = "<group>"; };
 		001B7A8B27DD883500DEEECD /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
@@ -338,6 +351,47 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		0015599827E40AC7006450BE /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		0015599927E40ADD006450BE /* PersistentStorage */ = {
+			isa = PBXGroup;
+			children = (
+				001559A927E41A8A006450BE /* ParraStorageModule.swift */,
+				0015599A27E40AFC006450BE /* PersistentStorageMedium */,
+			);
+			path = PersistentStorage;
+			sourceTree = "<group>";
+		};
+		0015599A27E40AFC006450BE /* PersistentStorageMedium */ = {
+			isa = PBXGroup;
+			children = (
+				0015599B27E40B13006450BE /* FileSystemStorageTests.swift */,
+				001559A327E412FD006450BE /* UserDefaultsStorageTests.swift */,
+			);
+			path = PersistentStorageMedium;
+			sourceTree = "<group>";
+		};
+		0015599D27E40B64006450BE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0015599E27E40B71006450BE /* FileManagerTests.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		001559A027E40D49006450BE /* TestHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				001559A127E40D56006450BE /* FileSystemHelpers.swift */,
+			);
+			path = TestHelpers;
+			sourceTree = "<group>";
+		};
 		001B7A8A27DD881300DEEECD /* Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -393,6 +447,11 @@
 			isa = PBXGroup;
 			children = (
 				001B7B0027DE3A7600DEEECD /* ParraCoreTests.swift */,
+				001559A727E417D4006450BE /* ParraLoggerTests.swift */,
+				0015599D27E40B64006450BE /* Extensions */,
+				0015599827E40AC7006450BE /* Managers */,
+				0015599927E40ADD006450BE /* PersistentStorage */,
+				001559A027E40D49006450BE /* TestHelpers */,
 			);
 			path = ParraCoreTests;
 			sourceTree = "<group>";
@@ -497,6 +556,7 @@
 		00DECFEC274C69F800DAF301 = {
 			isa = PBXGroup;
 			children = (
+				001559A627E41603006450BE /* ParraTests.xctestplan */,
 				001B7A0A27DD266500DEEECD /* ParraCore.podspec */,
 				001B7A0B27DD266500DEEECD /* ParraFeedback.podspec */,
 				00DECFF7274C69F800DAF301 /* Demo */,
@@ -809,7 +869,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				001559AA27E41A8A006450BE /* ParraStorageModule.swift in Sources */,
+				0015599C27E40B13006450BE /* FileSystemStorageTests.swift in Sources */,
+				001559A427E412FD006450BE /* UserDefaultsStorageTests.swift in Sources */,
+				001559A827E417D4006450BE /* ParraLoggerTests.swift in Sources */,
 				001B7B0127DE3A7600DEEECD /* ParraCoreTests.swift in Sources */,
+				001559A227E40D56006450BE /* FileSystemHelpers.swift in Sources */,
+				0015599F27E40B71006450BE /* FileManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

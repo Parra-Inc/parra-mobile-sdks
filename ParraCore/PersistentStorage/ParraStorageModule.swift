@@ -9,11 +9,14 @@ import Foundation
 
 public actor ParraStorageModule<DataType: Codable> {
     // Whether or not data has previously been loaded from disk.
-    private var isLoaded = false
-    private let persistentStorage: (medium: PersistentStorageMedium, key: String)?
+    internal private(set) var isLoaded = false
+    internal let dataStorageMedium: DataStorageMedium
+    internal let persistentStorage: (medium: PersistentStorageMedium, key: String)?
     private var storageCache: [String: DataType] = [:]
     
     public init(dataStorageMedium: DataStorageMedium) {
+        self.dataStorageMedium = dataStorageMedium
+        
         switch dataStorageMedium {
         case .memory:
             self.persistentStorage = nil
@@ -38,7 +41,7 @@ public actor ParraStorageModule<DataType: Codable> {
         }
     }
     
-    private func loadData() async {
+    internal func loadData() async {
         defer {
             isLoaded = true
         }
