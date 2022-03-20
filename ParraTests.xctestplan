@@ -1,0 +1,33 @@
+{
+  "configurations" : [
+    {
+      "id" : "FE80F440-B3CA-47D9-87F2-0DB5B8E3FC4D",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testExecutionOrdering" : "random",
+    "testRepetitionMode" : "retryOnFailure",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Parra.xcodeproj",
+        "identifier" : "001B7AF827DE3A7600DEEECD",
+        "name" : "ParraCoreTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Parra.xcodeproj",
+        "identifier" : "001B7B3827DE3AEC00DEEECD",
+        "name" : "ParraFeedbackTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -15,11 +15,17 @@ class FileSystemStorageTests: XCTestCase {
     private let baseUrl = applicationSupportDirectory.appendingPathComponent("files", isDirectory: true)
     
     override func setUpWithError() throws {
+        try deleteDirectoriesInApplicationSupport()
+
         fileSystemStorage = FileSystemStorage(
             baseUrl: baseUrl,
             jsonEncoder: JSONEncoder(),
             jsonDecoder: JSONDecoder()
         )
+    }
+    
+    override func tearDownWithError() throws {
+        try deleteDirectoriesInApplicationSupport()
     }
 
     func testReadDoesNotExist() async throws {

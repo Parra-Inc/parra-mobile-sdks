@@ -189,6 +189,7 @@
 		001559A327E412FD006450BE /* UserDefaultsStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStorageTests.swift; sourceTree = "<group>"; };
 		001559A727E417D4006450BE /* ParraLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLoggerTests.swift; sourceTree = "<group>"; };
 		001559A927E41A8A006450BE /* ParraStorageModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStorageModule.swift; sourceTree = "<group>"; };
+		001559AC27E6B3BB006450BE /* ParraTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraTests.xctestplan; sourceTree = "<group>"; };
 		001B7A0A27DD266500DEEECD /* ParraCore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraCore.podspec; sourceTree = "<group>"; };
 		001B7A0B27DD266500DEEECD /* ParraFeedback.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraFeedback.podspec; sourceTree = "<group>"; };
 		001B7A8B27DD883500DEEECD /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
@@ -555,6 +556,7 @@
 		00DECFEC274C69F800DAF301 = {
 			isa = PBXGroup;
 			children = (
+				001559AC27E6B3BB006450BE /* ParraTests.xctestplan */,
 				001B7A0A27DD266500DEEECD /* ParraCore.podspec */,
 				001B7A0B27DD266500DEEECD /* ParraFeedback.podspec */,
 				00DECFF7274C69F800DAF301 /* Demo */,
