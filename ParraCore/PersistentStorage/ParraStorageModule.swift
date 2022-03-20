@@ -12,8 +12,21 @@ public actor ParraStorageModule<DataType: Codable> {
     internal private(set) var isLoaded = false
     internal let dataStorageMedium: DataStorageMedium
     internal let persistentStorage: (medium: PersistentStorageMedium, key: String)?
-    private var storageCache: [String: DataType] = [:]
+    internal private(set) var storageCache: [String: DataType] = [:]
     
+    internal var description: String {
+        return """
+        ParraStorageModule{
+            dataType: \(DataType.self),
+            dataStorageMedium: \(dataStorageMedium),
+            persistentStorageMedium: \(String(describing: persistentStorage?.medium)),
+            persistentStorageKey: \(String(describing: persistentStorage?.medium)),
+            isLoaded: \(isLoaded),
+            storageCache: \(storageCache),
+        }
+        """
+    }
+
     public init(dataStorageMedium: DataStorageMedium) {
         self.dataStorageMedium = dataStorageMedium
         
@@ -46,6 +59,7 @@ public actor ParraStorageModule<DataType: Codable> {
             isLoaded = true
         }
 
+        // Persistent storage is missing when the underlying store is a memory store.
         guard let persistentStorage = persistentStorage else {
             return
         }
