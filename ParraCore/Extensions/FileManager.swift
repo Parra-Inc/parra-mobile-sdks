@@ -9,7 +9,9 @@ import Foundation
 
 extension FileManager {
     func safeCreateDirectory(at url: URL) throws {
-        parraLogV("Checking if directory exists at: \(url.path)")
+        let logName = url.pathComponents.suffix(3).joined(separator: "/")
+        
+        parraLogV("Checking if directory exists at: \(logName)")
         var isDirectory: ObjCBool = false
         let exists = fileExists(
             atPath: url.path,
@@ -17,7 +19,7 @@ extension FileManager {
         )
         
         if exists && !isDirectory.boolValue {
-            parraLogV("Error: File existed at directory path.")
+            parraLogV("Error: File existed at directory path \(logName)")
             throw NSError(
                 domain: "Parra",
                 code: 2139,
@@ -29,10 +31,10 @@ extension FileManager {
         }
         
         if !exists {
-            parraLogV("Directory didn't exist. Creating...")
+            parraLogV("Directory didn't exist at \(logName). Creating...")
             try createDirectory(at: url, withIntermediateDirectories: true)
         } else {
-            parraLogV("Directory already exists")
+            parraLogV("Directory already exists at \(logName)")
         }
     }
 }
