@@ -8,6 +8,10 @@
 import UIKit
 
 extension ParraFeedbackView {
+    enum LayoutConstants {
+        static let navigationPadding: CGFloat = 10
+    }
+    
     public override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         
@@ -95,7 +99,7 @@ extension ParraFeedbackView {
         contentView.isUserInteractionEnabled = true
         
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: 10),
+            contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: LayoutConstants.navigationPadding),
             contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0),
             contentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
             contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
