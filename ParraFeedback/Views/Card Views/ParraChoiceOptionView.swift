@@ -45,6 +45,7 @@ class ParraChoiceOptionView: UIView {
         optionLabel.numberOfLines = 3
         optionLabel.lineBreakMode = .byTruncatingTail
         optionLabel.isUserInteractionEnabled = true
+        optionLabel.font = .preferredFont(forTextStyle: .title3)
         let tapGesture = UITapGestureRecognizer(
             target: self,
             action: #selector(tapGestureDidPress(gesture:))
