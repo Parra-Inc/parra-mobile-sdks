@@ -32,7 +32,7 @@ class ParraActionCardView: ParraCardView {
         if let subtitle = subtitle {
             subtitleLabel.text = subtitle
             subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-            subtitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            subtitleLabel.font = .preferredFont(forTextStyle: .callout)
 
             stackView.addArrangedSubview(subtitleLabel)
         }
@@ -41,7 +41,7 @@ class ParraActionCardView: ParraCardView {
         stackView.distribution = .equalSpacing
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.spacing = 12
+        stackView.spacing = 10
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(stackView)
@@ -49,14 +49,15 @@ class ParraActionCardView: ParraCardView {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            // visually centered
+            stackView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -ParraFeedbackView.LayoutConstants.navigationPadding),
             stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: 0),
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: 0),
         ])
                 
         titleLabel.text = title
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
 //        cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
