@@ -33,6 +33,8 @@ class ParraActionCardView: ParraCardView {
             subtitleLabel.text = subtitle
             subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
             subtitleLabel.font = .preferredFont(forTextStyle: .callout)
+            subtitleLabel.numberOfLines = 3
+            subtitleLabel.lineBreakMode = .byTruncatingTail
 
             stackView.addArrangedSubview(subtitleLabel)
         }
@@ -47,19 +49,36 @@ class ParraActionCardView: ParraCardView {
         addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stackView.leadingAnchor.constraint(
+                equalTo: leadingAnchor,
+                constant: ParraFeedbackView.LayoutConstants.contentPadding
+            ),
+            stackView.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
+                constant: -ParraFeedbackView.LayoutConstants.contentPadding
+            ),
             // visually centered
-            stackView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -ParraFeedbackView.LayoutConstants.navigationPadding),
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: 0),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: 0),
+            stackView.centerYAnchor.constraint(
+                equalTo: centerYAnchor,
+                constant: -ParraFeedbackView.LayoutConstants.navigationPadding
+            ),
+            stackView.topAnchor.constraint(
+                greaterThanOrEqualTo: topAnchor,
+                constant: 0
+            ),
+            stackView.bottomAnchor.constraint(
+                lessThanOrEqualTo: bottomAnchor,
+                constant: 0
+            ),
         ])
                 
         titleLabel.text = title
         titleLabel.textAlignment = .center
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        titleLabel.numberOfLines = 3
+        titleLabel.lineBreakMode = .byTruncatingTail
+
 //        cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
 //
 //        let attributedTitle = NSAttributedString(

@@ -10,6 +10,7 @@ import UIKit
 extension ParraFeedbackView {
     enum LayoutConstants {
         static let navigationPadding: CGFloat = 10
+        static let contentPadding: CGFloat = 12
     }
     
     public override func willMove(toSuperview newSuperview: UIView?) {
