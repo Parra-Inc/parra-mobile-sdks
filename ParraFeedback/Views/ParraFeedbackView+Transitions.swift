@@ -11,6 +11,8 @@ import ParraCore
 extension ParraFeedbackView: ParraQuestionHandlerDelegate {
     func questionHandlerDidMakeNewSelection(forQuestion question: Question) {
         Task {
+            try await Task.sleep(nanoseconds: 333_000_000)
+
             let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
             
             guard let nextCardItem = nextCardItem, nextCardItemDiection == .right else {
