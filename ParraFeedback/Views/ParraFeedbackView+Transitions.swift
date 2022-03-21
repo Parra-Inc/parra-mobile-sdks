@@ -231,7 +231,7 @@ extension ParraFeedbackView {
             } else {
                 return ParraActionCardView(
                     title: "You're all caught up for now!",
-                    subtitle: "a subtitle",
+                    subtitle: "We appreciate you taking the time to provide us with your feedback.",
                     actionTitle: "Have other feedback?"
                 ) {
                     parraLog("tapped cta")
