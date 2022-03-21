@@ -13,9 +13,10 @@ typealias TestDataType = [String: String]
 class ParraStorageModuleTests: XCTestCase {
     var storageModules = [ParraStorageModule<String>]()
     
-    override func setUpWithError() throws {
+    override func setUpWithError() throws {        
         try deleteDirectoriesInApplicationSupport()
-
+        clearParraUserDefaultsSuite()
+        
         let folder = "storage_modules"
         let file = "storage_data"
         
@@ -28,11 +29,12 @@ class ParraStorageModuleTests: XCTestCase {
     
     override func tearDownWithError() throws {
         try deleteDirectoriesInApplicationSupport()
+        clearParraUserDefaultsSuite()
     }
 
     func testLoadsDataWhenPresent() async throws {
         var data: TestDataType = [:]
-        let testKey = "keyyyy"
+        let testKey = "keyyyyFromLoadsData"
         let testValue = "hello"
         
         data[testKey] = testValue
@@ -77,7 +79,7 @@ class ParraStorageModuleTests: XCTestCase {
     
     func testLoadsDataOnDemandDuringReads() async throws {
         var testData: TestDataType = [:]
-        let testKey = "keyyyy"
+        let testKey = "keyyyyFromReadsTest"
         let testValue = "hello"
         
         testData[testKey] = testValue
@@ -108,13 +110,62 @@ class ParraStorageModuleTests: XCTestCase {
     }
     
     func testLoadsDataOnDemandDuringWrites() async throws {
-        let testKey = "keyyyy"
+        let testKey = "keyyyyFromWritesTest"
         let testValue = "hello"
 
         for storageModule in storageModules {
             await checkLoadedState(storageModule: storageModule, isLoaded: false)
             try await storageModule.write(name: testKey, value: testValue)
             await checkLoadedState(storageModule: storageModule, isLoaded: true)
+        }
+    }
+    
+    func testFetchCurrentData() async throws {
+        let testKey = "fetchKey"
+        let testValue = "hello2"
+
+        for storageModule in storageModules {
+            let current1 = await storageModule.currentData()
+            let d = await storageModule.description
+            XCTAssertEqual(current1, [:], d)
+            
+            try await storageModule.write(name: testKey, value: testValue)
+
+            let current2 = await storageModule.currentData()
+
+            XCTAssertEqual(current2, [testKey: testValue])
+        }
+    }
+    
+    func testDeleteNonExistingKey() async throws {
+        for storageModule in storageModules {
+            await storageModule.delete(name: UUID().uuidString)
+        }
+    }
+    
+    func testDeleteExistingKey() async throws {
+        let key = "keyToDelete"
+        let value = "valueToDelete"
+        
+        for storageModule in storageModules {
+            try await storageModule.write(name: key, value: value)
+            
+            await storageModule.delete(name: key)
+            
+            let readValue = await storageModule.read(name: key)
+            XCTAssertNil(readValue)
+        }
+    }
+    
+    func testClearAllData() async throws {
+        for storageModule in storageModules {
+            try await storageModule.write(name: "clearKey1", value: "value")
+            try await storageModule.write(name: "clearKey2", value: "value")
+            
+            await storageModule.clear()
+
+            let current = await storageModule.currentData()
+            XCTAssertTrue(current.isEmpty)
         }
     }
     

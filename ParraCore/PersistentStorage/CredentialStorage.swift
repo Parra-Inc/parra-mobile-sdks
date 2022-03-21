@@ -7,9 +7,11 @@
 
 import Foundation
 
-private let kCurrentUserKey = "current_user_credential"
-
 actor CredentialStorage: ItemStorage {
+    internal enum Key {
+        static let currentUser = "current_user_credential"
+    }
+    
     typealias DataType = ParraCredential
     
     let storageModule: ParraStorageModule<ParraCredential>
@@ -18,13 +20,11 @@ actor CredentialStorage: ItemStorage {
         self.storageModule = storageModule
     }
 
-    func updateCredential(credential: ParraCredential?) {
-        Task {
-            try await storageModule.write(name: kCurrentUserKey, value: credential)
-        }
+    func updateCredential(credential: ParraCredential?) async {
+        try? await storageModule.write(name: Key.currentUser, value: credential)
     }
     
     func currentCredential() async -> ParraCredential? {
-        return await storageModule.read(name: kCurrentUserKey)
+        return await storageModule.read(name: Key.currentUser)
     }
 }

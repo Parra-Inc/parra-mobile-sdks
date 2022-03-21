@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 actor ParraFeedbackSyncManager {
-    private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager
     
     /// Whether or not a sync operation is in progress.
@@ -20,10 +19,7 @@ actor ParraFeedbackSyncManager {
     /// is completed.
     private var hasEnqueuedSyncJobs = false
     
-    init(dataManager: ParraDataManager,
-         networkManager: ParraNetworkManager) {
-
-        self.dataManager = dataManager
+    init(networkManager: ParraNetworkManager) {
         self.networkManager = networkManager
     }
     

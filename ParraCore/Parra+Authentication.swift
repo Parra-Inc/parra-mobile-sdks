@@ -14,20 +14,20 @@ public extension Parra {
         }
     }
     
-    class func setAuthenticationProvider(_ providerWithCompletion:
+    class func setAuthenticationProvider(withCompletion provider:
                                          @escaping (@escaping (ParraCredential) -> Void) throws -> Void) {
         Task {
             await shared.networkManager.updateAuthenticationProvider(
-                shared.asyncAuthenticationFromValueCallback(providerWithCompletion)
+                shared.asyncAuthenticationFromValueCallback(provider)
             )
         }
     }
     
-    class func setAuthenticationProvider(_ providerWithResult:
+    class func setAuthenticationProvider(withResult provider:
                                          @escaping (@escaping (Result<ParraCredential, Error>) -> Void) -> Void) {
         Task {
             await shared.networkManager.updateAuthenticationProvider(
-                shared.asyncAuthenticationFromResultCallback(providerWithResult)
+                shared.asyncAuthenticationFromResultCallback(provider)
             )
         }
     }

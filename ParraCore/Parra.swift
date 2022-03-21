@@ -13,7 +13,7 @@ public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraC
 public class Parra: ParraModule {
     public static private(set) var name = "core"
         
-    internal static var shared: Parra = {
+    internal static var shared: Parra! = {
         let dataManager = ParraDataManager()
         
         let networkManager = ParraNetworkManager(
@@ -21,7 +21,6 @@ public class Parra: ParraModule {
         )
         
         let syncManager = ParraFeedbackSyncManager(
-            dataManager: dataManager,
             networkManager: networkManager
         )
         

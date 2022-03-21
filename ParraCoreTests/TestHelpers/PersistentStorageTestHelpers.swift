@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ParraCore
 
 let applicationSupportDirectory = FileManager.default.urls(
     for: .applicationSupportDirectory,
@@ -21,5 +22,14 @@ func deleteDirectoriesInApplicationSupport() throws {
 
     for directoryPath in directoryPaths {
         try FileManager.default.removeItem(at: directoryPath)
+    }
+}
+
+func clearParraUserDefaultsSuite() {
+    if let bundleIdentifier = Parra.bundle().bundleIdentifier {
+        UserDefaults.standard.removePersistentDomain(
+            forName: bundleIdentifier
+        )
+        UserDefaults.standard.synchronize()
     }
 }
