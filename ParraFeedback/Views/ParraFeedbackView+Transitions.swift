@@ -10,11 +10,18 @@ import ParraCore
 
 extension ParraFeedbackView: ParraQuestionHandlerDelegate {
     func questionHandlerDidMakeNewSelection(forQuestion question: Question) {
-        let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
-
-        if let nextCardItem = nextCardItem, nextCardItemDiection == .right {
-            // If there is a next card, we ask the delegate if we should transition.
+        Task {
+            let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
             
+            guard let nextCardItem = nextCardItem, nextCardItemDiection == .right else {
+                return
+            }
+            
+            guard !(await ParraFeedback.hasCardBeenCompleted(nextCardItem)) else {
+                return
+            }
+            
+            // If there is a next card, we ask the delegate if we should transition.
             let shouldTransition = delegate?.parraFeedbackView?(self, shouldAutoNavigateTo: nextCardItem) ?? true
             
             if shouldTransition {

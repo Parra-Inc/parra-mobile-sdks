@@ -64,6 +64,12 @@ public class ParraFeedback: ParraModule {
         await sendCardData()
     }
     
+    public class func hasCardBeenCompleted(_ cardItem: CardItem) async -> Bool {
+        let completed = await shared.dataManager.completedCardData(forId: cardItem.id)
+        
+        return completed != nil
+    }
+    
     private func sendCardData() async {
         let completedCardData = await dataManager.currentCompletedCardData()
         let completedCards = Array(completedCardData.values)
