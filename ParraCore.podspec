@@ -31,12 +31,13 @@ Pod::Spec.new do |spec|
   spec.summary                  = 'A suite of customer feedback tools that allow companies to aggregate user feedback and seamlessly integrate with their mobile apps.'
   spec.source                   = { :git => 'https://github.com/Parra-Inc/parra-ios-sdk.git', :tag => "#{spec.version}" }
   spec.module_name              = 'ParraCore'
-  spec.swift_version            = '5.5'
+  spec.swift_version            = '5.6'
   spec.static_framework         = true
 
   spec.ios.deployment_target    = '13.0'
 
   spec.source_files             = 'ParraCore/**/*.{h,swift,md}'
+  spec.resources                = 'ParraCore/**/*.{png,jpeg,jpg,ttf,storyboard,xib,xcassets}'
   spec.frameworks               = 'Foundation', 'UIKit'
   spec.pod_target_xcconfig      = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   spec.user_target_xcconfig     = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
