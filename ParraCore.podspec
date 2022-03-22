@@ -1,4 +1,7 @@
 
+
+PARRA_VERSION = '0.0.1'
+
 PARRA_LICENSE = <<-LICENSE
 Copyright (c) 2022 Parra, LLC.
 
@@ -24,12 +27,12 @@ LICENSE
 
 Pod::Spec.new do |spec|
   spec.name                     = 'ParraCore'
-  spec.version                  = '0.0.1'
+  spec.version                  = "#{PARRA_VERSION}"
   spec.license                  = { :type => 'MIT', :text => PARRA_LICENSE }
   spec.homepage                 = 'https://github.com/Parra-Inc/parra-ios-sdk'
   spec.authors                  = 'Parra, LLC.'
   spec.summary                  = 'A suite of customer feedback tools that allow companies to aggregate user feedback and seamlessly integrate with their mobile apps.'
-  spec.source                   = { :git => 'https://github.com/Parra-Inc/parra-ios-sdk.git', :tag => "#{spec.version}" }
+  spec.source                   = { :git => 'https://github.com/Parra-Inc/parra-ios-sdk.git', :tag => "#{PARRA_VERSION}" }
   spec.module_name              = 'ParraCore'
   spec.swift_version            = '5.6'
   spec.static_framework         = true
