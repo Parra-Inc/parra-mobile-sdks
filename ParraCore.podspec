@@ -1,6 +1,6 @@
 
 
-PARRA_VERSION = '0.0.1'
+PARRA_VERSION = "#{ ENV['PARRA_VERSION'] }"
 
 PARRA_LICENSE = <<-LICENSE
 Copyright (c) 2022 Parra, LLC.
