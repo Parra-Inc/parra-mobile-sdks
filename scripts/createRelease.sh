@@ -24,6 +24,8 @@ if [[ -n $(git status -s) ]]; then
     git add -A && git commit -m "Release v${version}"
 fi
 
+export PARRA_VERSION="$version" # Used to pass the version to the Podspec.
+
 # TODO: Transform $library to Podspec name
 pod spec lint ParraCore.podspec
 git tag "${version}"
