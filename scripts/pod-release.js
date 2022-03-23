@@ -43,7 +43,7 @@ console.log(`[PARRA CLI] Preparing to release version: ${tag} of ${podSpec}`);
 
         const status = await (await exec('git status -s')).stdout;
         if (status.length > 0) {
-            console.log((await exec(`git add -A && git commit -m "Release v${version}"`)).stdout);
+            console.log((await exec(`git add -A && git commit -m "Release v${tag}"`)).stdout);
         }
 
         console.log(await exec(`git tag "${gitTag}"`));
