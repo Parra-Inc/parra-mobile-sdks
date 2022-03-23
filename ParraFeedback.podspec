@@ -19,8 +19,6 @@ Pod::Spec.new do |spec|
   spec.source_files             = 'ParraFeedback/**/*.{h,swift,md}'
   spec.resources                = 'ParraFeedback/**/*.{png,jpeg,jpg,ttf,storyboard,xib,xcassets}'
   spec.frameworks               = 'Foundation', 'UIKit'
-  spec.pod_target_xcconfig      = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-  spec.user_target_xcconfig     = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
   spec.dependency 'ParraCore', '~>0.0.4'
 end
