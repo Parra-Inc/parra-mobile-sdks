@@ -1,20 +1,26 @@
 
+VERSION = "#{ ENV['PARRA_FEEDBACK_VERSION'] }"
+TAG = "#{ ENV['PARRA_FEEDBACK_TAG'] }"
+
 Pod::Spec.new do |spec|
   spec.name                     = 'ParraFeedback'
-  spec.version                  = '0.1.0'
-  spec.license                  = { :type => 'MIT' } # TODO: Link to license
+  spec.version                  = "#{VERSION}"
+  spec.license                  = { :type => 'MIT', :file => 'LICENSE.md' }
   spec.homepage                 = 'https://github.com/Parra-Inc/parra-ios-sdk'
-  spec.authors                  = { 'Mick MacCallum' => 'mick@parra.io', 'Ian MacCallum' => 'ian@parra.io' }
-  spec.summary                  = 'Suite of mobile analytics tools'
-  spec.source                   = { :git => 'https://github.com/Parra-Inc/parra-ios-sdk.git', :tag => "#{spec.version}" }
-  spec.module_name              = 'Parra'
-  spec.swift_version            = '5.5'
+  spec.authors                  = 'Parra, LLC.'
+  spec.summary                  = 'A suite of customer feedback tools that allow companies to aggregate user feedback and seamlessly integrate with their mobile apps.'
+  spec.source                   = { :git => 'https://github.com/Parra-Inc/parra-ios-sdk.git', :tag => "#{TAG}" }
+  spec.module_name              = 'ParraFeedback'
+  spec.swift_version            = '5.6'
   spec.static_framework         = true
 
   spec.ios.deployment_target    = '13.0'
 
-  spec.source_files             = 'Feedback/*.swift' # TODO should this just be .h?
+  spec.source_files             = 'ParraFeedback/**/*.{h,swift,md}'
+  spec.resources                = 'ParraFeedback/**/*.{png,jpeg,jpg,ttf,storyboard,xib,xcassets}'
   spec.frameworks               = 'Foundation', 'UIKit'
+  spec.pod_target_xcconfig      = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  spec.user_target_xcconfig     = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
-  spec.dependency 'ParraCore', "~> #{spec.version}"
+  spec.dependency 'ParraCore', '~>0.0.2'
 end
