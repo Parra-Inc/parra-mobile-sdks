@@ -173,11 +173,16 @@ public class ParraFeedbackView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        Parra.triggerSync()
+    }
+    
     public override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
 
         if newWindow == nil {
-            NotificationCenter.default.removeObserver(self, name: ParraFeedback.cardsDidChangeNotification,
+            NotificationCenter.default.removeObserver(self,
+                                                      name: ParraFeedback.cardsDidChangeNotification,
                                                       object: nil)
             
             Parra.triggerSync()
@@ -189,7 +194,8 @@ public class ParraFeedbackView: UIView {
     public override func didMoveToWindow() {
         super.didMoveToWindow()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveCardChangeNotification(notification:)),
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didReceiveCardChangeNotification(notification:)),
                                                name: ParraFeedback.cardsDidChangeNotification,
                                                object: nil)
     }
