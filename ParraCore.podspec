@@ -19,6 +19,6 @@ Pod::Spec.new do |spec|
 
   spec.source_files             = 'ParraCore/**/*.{h,swift,md}'
   spec.resources                = 'ParraCore/**/*.{png,jpeg,jpg,ttf,storyboard,xib,xcassets}'
-  spec.resource_bundles         = { 'ParraCoreAssets' => ['ParraFeedback/**/*.{ttf}'] }
+  spec.resource_bundles         = { 'ParraCoreAssets' => ['ParraCore/**/*.{ttf}'] }
   spec.frameworks               = 'Foundation', 'UIKit'
 end
