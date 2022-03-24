@@ -10,9 +10,11 @@ import UIKit
 
 extension UIImage {
     static func parraImageNamed(_ name: String) -> UIImage? {
+        print(ParraFeedback.bundle())
+        
         return UIImage(
             named: name,
-            in: ParraFeedback.bundle(),
+            in: nil,
             with: nil
         )
     }
