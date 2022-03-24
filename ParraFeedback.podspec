@@ -20,5 +20,5 @@ Pod::Spec.new do |spec|
   spec.resource_bundles         = { 'ParraFeedback' => ['ParraFeedback/**/*.{png,jpeg,jpg,ttf,storyboard,xib,xcassets}'] }
   spec.frameworks               = 'Foundation', 'UIKit'
 
-  spec.dependency 'ParraCore', '~>0.0.11'
+  spec.dependency 'ParraCore', '~>0.0.12'
 end
