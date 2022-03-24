@@ -50,7 +50,12 @@ console.log(`[PARRA CLI] Preparing to release version: ${tag} of ${podSpec}`);
         console.log((await exec('git push')).stdout);
         console.log((await exec('git push --tags')).stdout);
         
-        console.log(await exec(`${libraryEnvTag}="${gitTag}" ${libraryEnvVersion}="${tag}" pod trunk push ${podSpec}`));
+        const { stdout, stderr} = await exec(`${libraryEnvTag}="${gitTag}" ${libraryEnvVersion}="${tag}" pod trunk push ${podSpec}`);
+        if (stderr && stderr.length > 0) {
+            throw stderr;
+        }
+
+        console.log(stdout);
 
 
         console.log(`[PARRA CLI] successfully published release version: ${tag} of ${podSpec}`);
