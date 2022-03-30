@@ -56,7 +56,6 @@
 		001B7B4F27DE3B2500DEEECD /* ParraFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7A8F27DD8D6700DEEECD /* ParraFeedback.swift */; };
 		001B7B5027DE3B2500DEEECD /* ParraQuestionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */; };
 		001B7B5327DE3B3800DEEECD /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00120EF2274D1EEE00CA3247 /* UIColor.swift */; };
-		001B7B5427DE3B3800DEEECD /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5155F27D4238E00C4F2CC /* UIImage.swift */; };
 		001B7B5527DE3B3800DEEECD /* ParraCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00120EFD2753E8BF00CA3247 /* ParraCardView.swift */; };
 		001B7B5627DE3B3800DEEECD /* ParraFeedbackView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D60927D051B20016DE97 /* ParraFeedbackView+Layout.swift */; };
 		001B7B5727DE3B3800DEEECD /* SelectableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001286F3277D53AE0090CDB5 /* SelectableButton.swift */; };
@@ -254,7 +253,6 @@
 		0084014E27D7030D00E2B0ED /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		00D5155B27D4219900C4F2CC /* ParraFeedbackAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ParraFeedbackAssets.xcassets; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Constants.swift"; sourceTree = "<group>"; };
-		00D5155F27D4238E00C4F2CC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		00D5156227D424C800C4F2CC /* ParraLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogger.swift; sourceTree = "<group>"; };
 		00D5156427D4376500C4F2CC /* ParraSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManager.swift; sourceTree = "<group>"; };
 		00D5156627D4506B00C4F2CC /* Parra+SyncEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+SyncEvents.swift"; sourceTree = "<group>"; };
@@ -421,7 +419,6 @@
 				0084014E27D7030D00E2B0ED /* Array.swift */,
 				001286F5277D54480090CDB5 /* CAShapeLayer.swift */,
 				00120EF2274D1EEE00CA3247 /* UIColor.swift */,
-				00D5155F27D4238E00C4F2CC /* UIImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -904,7 +901,6 @@
 				001B7B5527DE3B3800DEEECD /* ParraCardView.swift in Sources */,
 				001B7B4F27DE3B2500DEEECD /* ParraFeedback.swift in Sources */,
 				001B7B5B27DE3B3800DEEECD /* ParraActionCardView.swift in Sources */,
-				001B7B5427DE3B3800DEEECD /* UIImage.swift in Sources */,
 				001B7B5327DE3B3800DEEECD /* UIColor.swift in Sources */,
 				001B7B6427DE3BE700DEEECD /* Direction.swift in Sources */,
 				001B7B5A27DE3B3800DEEECD /* ParraFeedbackView+Transitions.swift in Sources */,
