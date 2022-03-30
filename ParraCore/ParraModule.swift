@@ -15,8 +15,12 @@ public protocol ParraModule {
 }
 
 public extension ParraModule {
-    static func bundle() -> Bundle {
+    dynamic static func bundle() -> Bundle {
         return Bundle(for: self as! AnyClass)
+    }
+    
+    dynamic static func libraryVersion() -> String {
+        return bundle().infoDictionary!["CFBundleShortVersionString"] as! String
     }
     
     static func persistentStorageFolder() -> String {

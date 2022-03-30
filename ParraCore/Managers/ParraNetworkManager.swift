@@ -77,8 +77,10 @@ actor ParraNetworkManager {
         var request = URLRequest(url: url, cachePolicy: cachePolicy ?? .useProtocolCachePolicy)
         request.httpMethod = method.rawValue
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        // TODO: Add header for current library versions. Can we detect which Parra libs we have, not just core?
-        // https://stackoverflow.com/a/59714965/716216
+        
+        for (header, value) in libraryVersionHeaders() {
+            request.addValue(value, forHTTPHeaderField: header)
+        }
         
         if method.allowsBody {
             request.httpBody = try JSONEncoder.parraEncoder.encode(body)
@@ -155,4 +157,13 @@ actor ParraNetworkManager {
         }
     }
 
+    private func libraryVersionHeaders() -> [String: String] {
+        var headers = [String: String]()
+        
+        for (moduleName, module) in Parra.registeredModules {
+            headers["parra-\(moduleName.lowercased())-version"] = type(of: module).libraryVersion()
+        }
+        
+        return headers
+    }
 }

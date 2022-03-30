@@ -6,8 +6,8 @@ const { hideBin } = require('yargs/helpers')
 const exec = util.promisify(require('child_process').exec);
 
 const libraryMap = new Map([
-    ['core', 'ParraCore.podspec'],
-    ['feedback', 'ParraFeedback.podspec'],
+    ['core', 'ParraCore'],
+    ['feedback', 'ParraFeedback'],
 ]);
 const libraries = Array.from(libraryMap.keys());
 
@@ -30,16 +30,21 @@ const argv = yargs(hideBin(process.argv))
     .argv
 
 const { library, tag } = argv;
-const podSpec = libraryMap.get(library);
+const targetName = libraryMap.get(library);
+const podSpec = `${targetName}.podspec`;
 const libraryEnvVersion = `PARRA_${String(library).toUpperCase()}_VERSION`;
 const libraryEnvTag = `PARRA_${String(library).toUpperCase()}_TAG`;
 const gitTag = `parra-${library}-${tag}`;
 
-console.log(`[PARRA CLI] Preparing to release version: ${tag} of ${podSpec}`);
-
 (async () => {
-    try {        
+    try {
+        console.log((await exec('bundle install')).stdout);
+        
+        console.log((await exec(`ruby ./scripts/set-framework-version.rb ${targetName} ${tag}`)).stdout);
+
         console.log((await exec('pod repo update')).stdout);
+
+        console.log(`[PARRA CLI] Preparing to release version: ${tag} of ${podSpec}`);
 
         const status = await (await exec('git status -s')).stdout;
         if (status.length > 0) {
