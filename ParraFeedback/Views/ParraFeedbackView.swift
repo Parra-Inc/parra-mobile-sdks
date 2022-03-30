@@ -116,6 +116,8 @@ public class ParraFeedbackView: UIView {
     internal let containerView = UIView(frame: .zero)
     internal let contentView = UIView(frame: .zero)
     
+    internal let config: ParraFeedbackViewConfig
+    
     /// The image used for the back button used to transition to the previous card. By default, a left facing arrow.
     public var backButtonImage: UIImage = UIImage(systemName: "arrow.left")! {
         didSet {
@@ -161,6 +163,7 @@ public class ParraFeedbackView: UIView {
         config: ParraFeedbackViewConfig = .default
     ) {
         self.cardItems = cardItems
+        self.config = config
         
         super.init(frame: .zero)
         

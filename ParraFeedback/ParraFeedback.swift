@@ -8,6 +8,7 @@
 import Foundation
 import ParraCore
 
+/// <#Description#>
 public class ParraFeedback: ParraModule {
     internal static let shared = ParraFeedback()
     internal let dataManager = ParraFeedbackDataManager()
@@ -18,6 +19,8 @@ public class ParraFeedback: ParraModule {
     
     public static var name: String = "Feedback"
         
+    /// <#Description#>
+    /// - Parameter completion: <#completion description#>
     public class func fetchFeedbackCards(completion: @escaping ([CardItem], ParraError?) -> Void) {
         Task {
             do {
@@ -34,6 +37,8 @@ public class ParraFeedback: ParraModule {
         }
     }
     
+    /// <#Description#>
+    /// - Returns: <#description#>
     public class func fetchFeedbackCards() async throws -> [CardItem] {
         let cards = try await Parra.API.getCards()
         
@@ -59,15 +64,27 @@ public class ParraFeedback: ParraModule {
         
         return cardsToKeep
     }
-
+    
+    /// <#Description#>
     public func triggerSync() async {
         await sendCardData()
     }
     
+    /// <#Description#>
+    /// - Parameter cardItem: <#cardItem description#>
+    /// - Returns: <#description#>
     public class func hasCardBeenCompleted(_ cardItem: CardItem) async -> Bool {
         let completed = await shared.dataManager.completedCardData(forId: cardItem.id)
         
         return completed != nil
+    }
+    
+    /// <#Description#>
+    /// - Returns: <#description#>
+    public func hasDataToSync() async -> Bool {
+        let answers = await dataManager.currentCompletedCardData()
+        
+        return !answers.isEmpty
     }
     
     private func sendCardData() async {
@@ -93,11 +110,5 @@ public class ParraFeedback: ParraModule {
 
     private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {
         try await Parra.API.bulkAnswerQuestions(cards: cards)
-    }
-    
-    public func hasDataToSync() async -> Bool {
-        let answers = await dataManager.currentCompletedCardData()
-        
-        return !answers.isEmpty
     }
 }

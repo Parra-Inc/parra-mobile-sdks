@@ -34,7 +34,7 @@ extension ParraFeedbackView {
         NSLayoutConstraint.activate(constraintsOnSuperView)
     }
     
-    func configureSubviews(config: ParraFeedbackViewConfig) {
+    internal func configureSubviews(config: ParraFeedbackViewConfig) {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
         layer.masksToBounds = false
@@ -85,10 +85,10 @@ extension ParraFeedbackView {
         backButton.tintColor = config.tintColor
         forwardButton.tintColor = config.tintColor
         
-        layer.shadowColor = config.shadowColor.cgColor
-        layer.shadowOpacity = Float(config.shadowOpacity)
-        layer.shadowRadius = config.shadowRadius
-        layer.shadowOffset = config.shadowSize
+        layer.shadowColor = config.shadow.color.cgColor
+        layer.shadowOpacity = Float(config.shadow.opacity)
+        layer.shadowRadius = config.shadow.radius
+        layer.shadowOffset = config.shadow.offset
         layer.bounds = bounds
         layer.position = center
     }
