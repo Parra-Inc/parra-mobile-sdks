@@ -26,7 +26,8 @@ class ParraCoreTests: XCTestCase {
         let dataManager = ParraDataManager()
         
         let networkManager = ParraNetworkManager(
-            dataManager: dataManager
+            dataManager: dataManager,
+            urlSession: URLSession.shared
         )
         
         let syncManager = ParraFeedbackSyncManager(

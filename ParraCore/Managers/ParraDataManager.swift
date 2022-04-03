@@ -7,8 +7,8 @@
 
 import Foundation
 
-public actor ParraDataManager {
-    private let credentialStorage: CredentialStorage
+public class ParraDataManager {
+    internal fileprivate(set) var credentialStorage: CredentialStorage
         
     init() {
         let folder = Parra.persistentStorageFolder()
@@ -30,5 +30,17 @@ public actor ParraDataManager {
     
     func updateCredential(credential: ParraCredential?) async {
         await credentialStorage.updateCredential(credential: credential)
+    }
+}
+
+internal class MockDataManager: ParraDataManager {
+    override init() {
+        super.init()
+        
+        let credentialStorageModule = ParraStorageModule<ParraCredential>(
+            dataStorageMedium: .memory
+        )
+        
+        self.credentialStorage = CredentialStorage(storageModule: credentialStorageModule)
     }
 }

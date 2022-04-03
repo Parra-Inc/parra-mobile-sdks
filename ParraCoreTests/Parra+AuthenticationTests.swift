@@ -14,7 +14,8 @@ class ParraAuthenticationTests: XCTestCase {
         let dataManager = ParraDataManager()
         
         let networkManager = ParraNetworkManager(
-            dataManager: dataManager
+            dataManager: dataManager,
+            urlSession: URLSession.shared
         )
         
         let syncManager = ParraFeedbackSyncManager(
@@ -31,12 +32,13 @@ class ParraAuthenticationTests: XCTestCase {
 //    func testSetAuthenticationProvider() async throws {
 //        let providerBefore = await Parra.shared.networkManager.authenticationProvider
 //        
-//        XCTAssertNotNil(providerBefore)
+//        XCTAssertNil(providerBefore)
 //
 //        Parra.setAuthenticationProvider { () async throws -> ParraCredential in
 //            return .init(token: UUID().uuidString)
 //        }
 //        
+//        // Need to mock network manager
 //        XCTWaiter.wait(for: [], timeout: 1.0)
 //        
 //        let providerAfter = await Parra.shared.networkManager.authenticationProvider

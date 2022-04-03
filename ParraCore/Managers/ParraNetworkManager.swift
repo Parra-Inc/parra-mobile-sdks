@@ -10,22 +10,46 @@ import Foundation
 
 public typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
-private let kEmptyJsonObjectData = "{}".data(using: .utf8)!
+internal let kEmptyJsonObjectData = "{}".data(using: .utf8)!
 
-struct EmptyRequestObject: Encodable {}
-struct EmptyResponseObject: Decodable {}
+struct EmptyRequestObject: Codable {}
+struct EmptyResponseObject: Codable {}
 
-actor ParraNetworkManager {
+protocol URLSessionType {
+    func dataForRequest(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
+    
+    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
+}
+
+protocol NetworkManagerType {
+    init(dataManager: ParraDataManager,
+         urlSession: URLSessionType,
+         jsonEncoder: JSONEncoder,
+         jsonDecoder: JSONDecoder)
+    
+    var authenticationProvider: ParraFeedbackAuthenticationProvider? { get }
+
+    func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) async
+    func refreshAuthentication() async throws -> ParraCredential
+}
+
+class ParraNetworkManager: NetworkManagerType {
     private let dataManager: ParraDataManager
     
     internal private(set) var authenticationProvider: ParraFeedbackAuthenticationProvider?
 
-    internal lazy var urlSession: URLSession = {
-        return URLSession(configuration: .default)
-    }()
+    let urlSession: URLSessionType
+    let jsonEncoder: JSONEncoder
+    let jsonDecoder: JSONDecoder
     
-    init(dataManager: ParraDataManager) {
+    required init(dataManager: ParraDataManager,
+                  urlSession: URLSessionType,
+                  jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
+                  jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder) {
         self.dataManager = dataManager
+        self.urlSession = urlSession
+        self.jsonEncoder = jsonEncoder
+        self.jsonDecoder = jsonDecoder
     }
     
     func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) async {
@@ -40,7 +64,9 @@ actor ParraNetworkManager {
         do {
             let credential = try await authenticationProvider()
             
-            await dataManager.updateCredential(credential: credential)
+            await dataManager.updateCredential(
+                credential: credential
+            )
             
             return credential
         } catch let error {
@@ -83,7 +109,7 @@ actor ParraNetworkManager {
         }
         
         if method.allowsBody {
-            request.httpBody = try JSONEncoder.parraEncoder.encode(body)
+            request.httpBody = try jsonEncoder.encode(body)
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         }
         
@@ -92,7 +118,7 @@ actor ParraNetworkManager {
             credential: nextCredential
         )
         
-        return try JSONDecoder.parraDecoder.decode(T.self, from: data)
+        return try jsonDecoder.decode(T.self, from: data)
     }
     
     private func performRequest(request: URLRequest,
@@ -103,28 +129,24 @@ actor ParraNetworkManager {
         request.setValue("Bearer \(credential.token)", forHTTPHeaderField: "Authorization")
         
         let (data, response) = try await performAsyncDataDask(request: request)
-        switch response.statusCode {
-        case 204:
+        switch (response.statusCode, shouldReauthenticate) {
+        case (204, _):
             return kEmptyJsonObjectData
-        case 401:
-            if shouldReauthenticate {
-                let newCredential = try await refreshAuthentication()
+        case (401, true):
+            let newCredential = try await refreshAuthentication()
 
-                request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: "Authorization")
 
-                return try await performRequest(
-                    request: request,
-                    credential: newCredential,
-                    shouldReauthenticate: false
-                )
-            } else {
-                return data
-            }
-        case 400...499:
+            return try await performRequest(
+                request: request,
+                credential: newCredential,
+                shouldReauthenticate: false
+            )
+        case (400...499, _):
             throw ParraError.networkError(
                 "Client error \(response.statusCode): \(response.debugDescription)"
             )
-        case 500...599:
+        case (500...599, _):
             throw ParraError.networkError(
                 "Server error \(response.statusCode): \(response.debugDescription)"
             )
@@ -138,23 +160,10 @@ actor ParraNetworkManager {
         try await Task.sleep(nanoseconds: 1_000_000_000)
 #endif
 
-        if #available(iOS 15.0, *) {
-            let (data, response) = try await urlSession.data(for: request)
-            
-            // It is documented that for data tasks, response is always actually HTTPURLResponse
-            return (data, response as! HTTPURLResponse)
-        } else {
-            return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data, HTTPURLResponse), Error>) in
-                urlSession.dataTask(with: request) { data, response, error in
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                    } else {
-                        // It is documented that for data tasks, response is always actually HTTPURLResponse
-                        continuation.resume(returning: (data!, response as! HTTPURLResponse))
-                    }
-                }.resume()
-            }
-        }
+        let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
+        
+        // It is documented that for data tasks, response is always actually HTTPURLResponse
+        return (data, response as! HTTPURLResponse)
     }
 
     private func libraryVersionHeaders() -> [String: String] {

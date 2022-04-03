@@ -14,10 +14,12 @@ public class Parra: ParraModule {
     public static private(set) var name = "core"
         
     internal static var shared: Parra! = {
+        let urlSession = URLSession(configuration: .default)
         let dataManager = ParraDataManager()
         
         let networkManager = ParraNetworkManager(
-            dataManager: dataManager
+            dataManager: dataManager,
+            urlSession: urlSession
         )
         
         let syncManager = ParraFeedbackSyncManager(

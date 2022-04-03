@@ -26,11 +26,4 @@ public extension ParraModule {
     static func persistentStorageFolder() -> String {
         return name.lowercased()
     }
-    
-    static func persistentStorageDirectory() -> URL {
-        return ParraDataManager.Path.parraDirectory.appendingPathComponent(
-            persistentStorageFolder(),
-            isDirectory: true
-        )
-    }
 }
