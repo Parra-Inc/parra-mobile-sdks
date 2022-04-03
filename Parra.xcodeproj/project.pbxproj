@@ -94,6 +94,8 @@
 		003C214827DE96EA001CAE03 /* ParraFeedback+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5156A27D4798400C4F2CC /* ParraFeedback+Notifications.swift */; };
 		003C214927DE98F0001CAE03 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014E27D7030D00E2B0ED /* Array.swift */; };
 		003C216C27DED58C001CAE03 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003C216B27DED58C001CAE03 /* SceneDelegate.swift */; };
+		005E38A527FA1E0200F32F96 /* NetworkTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E38A427FA1E0200F32F96 /* NetworkTestHelpers.swift */; };
+		005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */; };
 		00707D1727F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00707D1627F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift */; };
 		00707D1927F88B2A004E9567 /* ParraDataManagerTests+Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00707D1827F88B2A004E9567 /* ParraDataManagerTests+Mocks.swift */; };
 		00707D1B27FA0A07004E9567 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00707D1A27FA0A07004E9567 /* URLSession.swift */; };
@@ -250,6 +252,8 @@
 		003C216D27DEE77D001CAE03 /* Demo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Demo-Bridging-Header.h"; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* Parra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parra.swift; sourceTree = "<group>"; };
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
+		005E38A427FA1E0200F32F96 /* NetworkTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTestHelpers.swift; sourceTree = "<group>"; };
+		005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Notifications.swift"; sourceTree = "<group>"; };
 		00707D1627F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraNetworkManagerTests+Mocks.swift"; sourceTree = "<group>"; };
 		00707D1827F88B2A004E9567 /* ParraDataManagerTests+Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraDataManagerTests+Mocks.swift"; sourceTree = "<group>"; };
 		00707D1A27FA0A07004E9567 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
@@ -409,6 +413,7 @@
 			isa = PBXGroup;
 			children = (
 				001559A127E40D56006450BE /* PersistentStorageTestHelpers.swift */,
+				005E38A427FA1E0200F32F96 /* NetworkTestHelpers.swift */,
 			);
 			path = TestHelpers;
 			sourceTree = "<group>";
@@ -452,6 +457,7 @@
 				00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */,
 				0036D60127CF0EA20016DE97 /* Parra+Authentication.swift */,
 				001B7A9127DD8DCE00DEEECD /* Parra+Endpoints.swift */,
+				005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */,
 				00D5156627D4506B00C4F2CC /* Parra+SyncEvents.swift */,
 				0036D5E127CACA100016DE97 /* ParraError.swift */,
 				00D5156227D424C800C4F2CC /* ParraLogger.swift */,
@@ -883,6 +889,7 @@
 				001B7B1827DE3AA900DEEECD /* GeneratedTypes.swift in Sources */,
 				001B7B7027DE3CBB00DEEECD /* QuestionSingleChoiceCompletedData.swift in Sources */,
 				001B7B1A27DE3ABC00DEEECD /* FileSystemStorage.swift in Sources */,
+				005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -903,6 +910,7 @@
 				001559A227E40D56006450BE /* PersistentStorageTestHelpers.swift in Sources */,
 				0015599F27E40B71006450BE /* FileManagerTests.swift in Sources */,
 				00707D1727F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift in Sources */,
+				005E38A527FA1E0200F32F96 /* NetworkTestHelpers.swift in Sources */,
 				001559B327E7EACC006450BE /* ParraSyncManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

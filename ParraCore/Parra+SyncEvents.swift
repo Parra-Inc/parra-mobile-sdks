@@ -43,6 +43,10 @@ extension Parra {
     
     @MainActor
     @objc private func triggerSyncFromNotification(notification: Notification) {
+        guard NSClassFromString("XCTestCase") == nil else {
+            return
+        }
+        
         Task {
             await syncManager.enqueueSync()
         }

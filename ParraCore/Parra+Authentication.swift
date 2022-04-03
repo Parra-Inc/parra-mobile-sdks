@@ -9,27 +9,21 @@ import Foundation
 
 public extension Parra {
     class func setAuthenticationProvider(_ provider: @escaping ParraFeedbackAuthenticationProvider) {
-        Task {
-            await shared.networkManager.updateAuthenticationProvider(provider)
-        }
+        shared.networkManager.updateAuthenticationProvider(provider)
     }
     
     class func setAuthenticationProvider(withCompletion provider:
                                          @escaping (@escaping (ParraCredential) -> Void) throws -> Void) {
-        Task {
-            await shared.networkManager.updateAuthenticationProvider(
-                shared.asyncAuthenticationFromValueCallback(provider)
-            )
-        }
+        shared.networkManager.updateAuthenticationProvider(
+            shared.asyncAuthenticationFromValueCallback(provider)
+        )
     }
     
     class func setAuthenticationProvider(withResult provider:
                                          @escaping (@escaping (Result<ParraCredential, Error>) -> Void) -> Void) {
-        Task {
-            await shared.networkManager.updateAuthenticationProvider(
-                shared.asyncAuthenticationFromResultCallback(provider)
-            )
-        }
+        shared.networkManager.updateAuthenticationProvider(
+            shared.asyncAuthenticationFromResultCallback(provider)
+        )
     }
     
     private func asyncAuthenticationFromValueCallback(_ provider:

@@ -69,17 +69,30 @@ public class Parra: ParraModule {
     }
     
     // TODO: Do we really even need this???
-    public static func logout() {
+    @objc public static func logout(completion: (() -> Void)? = nil) {
         Task {
-            await shared.dataManager.updateCredential(credential: nil)
+            await logout()
+            
+            completion?()
+        }
+    }
+
+    @nonobjc public static func logout() async {
+        await shared.dataManager.updateCredential(credential: nil)
+    }
+
+    /// Uploads any cached Parra data. This includes data like answers to questions.
+    @objc public static func triggerSync(completion: (() -> Void)? = nil) {
+        Task {
+            await triggerSync()
+            
+            completion?()
         }
     }
     
     /// Uploads any cached Parra data. This includes data like answers to questions.
-    public static func triggerSync() {
-        Task {
-            await shared.triggerSync()
-        }
+    @nonobjc public static func triggerSync() async {
+        await shared.triggerSync()
     }
     
     // MARK: - ParraModule Conformance

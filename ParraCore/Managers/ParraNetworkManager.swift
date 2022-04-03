@@ -52,7 +52,7 @@ class ParraNetworkManager: NetworkManagerType {
         self.jsonDecoder = jsonDecoder
     }
     
-    func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) async {
+    func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) {
         authenticationProvider = provider
     }
     

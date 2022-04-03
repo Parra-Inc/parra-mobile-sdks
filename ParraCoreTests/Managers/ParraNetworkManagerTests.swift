@@ -8,20 +8,6 @@
 import XCTest
 @testable import ParraCore
 
-func createTestResponse(route: String,
-                        statusCode: Int = 200,
-                        additionalHeaders: [String: String] = [:]) -> HTTPURLResponse {
-
-    let url = Parra.Constant.parraApiRoot.appendingPathComponent(route)
-
-    return HTTPURLResponse(
-        url: url,
-        statusCode: statusCode,
-        httpVersion: "HTTP/1.1",
-        headerFields: [:].merging(additionalHeaders) { (_, new) in new }
-    )!
-}
-
 class ParraNetworkManagerTests: XCTestCase {
     func testAuthenticatedRequestFailsWithoutAuthProvider() async throws {
         let networkManager = ParraNetworkManager(
@@ -51,7 +37,7 @@ class ParraNetworkManagerTests: XCTestCase {
         )
         
         let authProviderExpectation = XCTestExpectation()
-        await networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
             authProviderExpectation.fulfill()
             
             return credential
@@ -77,7 +63,7 @@ class ParraNetworkManagerTests: XCTestCase {
             }
         )
         
-        await networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
             throw URLError(.cannotLoadFromNetwork)
         }
         
@@ -108,7 +94,7 @@ class ParraNetworkManagerTests: XCTestCase {
         
         let authProviderExpectation = XCTestExpectation()
         authProviderExpectation.isInverted = true
-        await networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
             authProviderExpectation.fulfill()
             
             return credential
@@ -288,7 +274,7 @@ class ParraNetworkManagerTests: XCTestCase {
         )
         
         let authProviderExpectation = XCTestExpectation()
-        await networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
             authProviderExpectation.fulfill()
             
             return credential
@@ -322,7 +308,7 @@ class ParraNetworkManagerTests: XCTestCase {
         )
         
         let authProviderExpectation = XCTestExpectation()
-        await networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
             authProviderExpectation.fulfill()
             
             return credential

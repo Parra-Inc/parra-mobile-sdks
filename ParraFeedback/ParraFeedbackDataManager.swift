@@ -74,7 +74,7 @@ class ParraFeedbackDataManager {
                 completedCards: completedCards
             )
 
-            Parra.triggerSync()
+            await Parra.triggerSync()
         }
     }
 
