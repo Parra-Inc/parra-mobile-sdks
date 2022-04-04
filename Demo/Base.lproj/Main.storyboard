@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ghW-sZ-Ihi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ghW-sZ-Ihi">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Parra Feedback-->
+        <!--Parra-->
         <scene sceneID="c7V-Eu-Chq">
             <objects>
-                <tableViewController id="iGL-el-btr" customClass="ParraDemoTableViewController" customModule="Parra_Feedback_SDK_Demo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="iGL-el-btr" customClass="ParraDemoTableViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="dUs-FG-pQx">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="separatorColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <sections>
-                            <tableViewSection headerTitle="Parra Feedback View" id="evb-Nj-BfW">
+                            <tableViewSection headerTitle="Parra Feedback" id="evb-Nj-BfW">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Fcz-A7-S4o">
-                                        <rect key="frame" x="20" y="49.5" width="374" height="59.5"/>
+                                        <rect key="frame" x="20" y="49.5" width="374" height="59"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Fcz-A7-S4o" id="Y3Y-rI-clq">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Embedded in UIView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Ka-Zj-RqA">
-                                                    <rect key="frame" x="28" y="19" width="318" height="21.5"/>
+                                                    <rect key="frame" x="28" y="19" width="318" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -46,6 +46,32 @@
                                             <segue destination="H1L-E2-qM9" kind="show" id="7zH-oQ-llx"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Qgc-bd-CIU">
+                                        <rect key="frame" x="20" y="108.5" width="374" height="59"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Qgc-bd-CIU" id="Ao5-EE-Tgs">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m6N-yw-0T9">
+                                                    <rect key="frame" x="28" y="19" width="318" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="m6N-yw-0T9" firstAttribute="top" secondItem="Ao5-EE-Tgs" secondAttribute="topMargin" constant="8" id="R1i-bb-NFw"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="m6N-yw-0T9" secondAttribute="trailing" constant="8" id="TwZ-Yf-M5V"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="m6N-yw-0T9" secondAttribute="bottom" constant="8" id="gep-gw-jNY"/>
+                                                <constraint firstItem="m6N-yw-0T9" firstAttribute="leading" secondItem="Ao5-EE-Tgs" secondAttribute="leadingMargin" constant="8" id="hF1-o7-LXU"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <segue destination="bom-SU-wLe" kind="show" id="d2i-F3-4nn"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -54,16 +80,26 @@
                             <outlet property="delegate" destination="iGL-el-btr" id="BDX-FW-U6c"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Parra Feedback" prompt="(demo)" id="wtj-2h-Hli"/>
+                    <navigationItem key="navigationItem" title="Parra" prompt="(demo)" id="wtj-2h-Hli"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FFW-go-CY4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1246.376811594203" y="274.55357142857139"/>
         </scene>
+        <!--SwiftUI Parra Feedback In View Hosting Controller-->
+        <scene sceneID="UVD-K5-wzb">
+            <objects>
+                <hostingController id="bom-SU-wLe" customClass="SwiftUIParraFeedbackInViewHostingController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="8jQ-xC-aHk"/>
+                </hostingController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y9T-6c-fT3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-475" y="275"/>
+        </scene>
         <!--Parra Feedback In View-->
         <scene sceneID="tx0-xD-6rH">
             <objects>
-                <viewController id="H1L-E2-qM9" customClass="ParraFeedbackInView" customModule="Parra_Feedback_SDK_Demo" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="H1L-E2-qM9" customClass="ParraFeedbackInView" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DKe-u5-1xF">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -74,7 +110,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5UR-1U-y7H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-475" y="275"/>
+            <point key="canvasLocation" x="-475" y="-400"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="vHt-u0-B6N">
