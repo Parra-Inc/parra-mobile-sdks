@@ -30,17 +30,27 @@ class ParraFeedbackInView: UIViewController {
         ParraFeedback.fetchFeedbackCards { cards, error in
             self.activityIndicator.removeFromSuperview()
 
-            if let error = error {
-                print("Error fetching Parra cards: \(error)")
+            if error != nil || cards.isEmpty {
+                let text = error != nil ? "Error fetching Parra cards: \(error!)" : "No Parra cards currently available."
+                
+                let label = UILabel(frame: .zero)
+                label.text = text
+                label.numberOfLines = 0
+                label.translatesAutoresizingMaskIntoConstraints = false
+                
+                self.view.addSubview(label)
+                self.view.addConstraints([
+                    label.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                    label.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+                    label.widthAnchor.constraint(lessThanOrEqualTo: self.view.widthAnchor, constant: -24)
+                ])
+                
                 return
             }
+
             
-            if cards.isEmpty {
-                print("No Parra cards currently available.")
-            } else {
-                self.view.addSubview(self.feedbackView)
-                self.view.addConstraint(self.feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 200))
-            }
+            self.view.addSubview(self.feedbackView)
+            self.view.addConstraint(self.feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 200))
         }
     }
 }
