@@ -71,6 +71,7 @@ actor ParraFeedbackSyncManager {
         
         guard await hasDataToSync() else {
             parraLogV("No data available to sync")
+            isSyncing = false
 
             return
         }
