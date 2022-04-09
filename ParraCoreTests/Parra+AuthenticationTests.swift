@@ -38,6 +38,18 @@ class ParraAuthenticationTests: XCTestCase {
         XCTAssertNotNil(Parra.shared.networkManager.authenticationProvider)
     }
     
+    
+    func testSetAuthenticationProviderCompletionHandlerNonThrowingFunc() async throws {
+        let credential = ParraCredential(token: UUID().uuidString)
+        XCTAssertNil(Parra.shared.networkManager.authenticationProvider)
+
+        Parra.setAuthenticationProvider { (completion: (ParraCredential?, Error?) -> Void) in
+            completion(credential, nil)
+        }
+        
+        XCTAssertNotNil(Parra.shared.networkManager.authenticationProvider)
+    }
+    
     func testSetAuthenticationProviderResultFunc() async throws {
         let credential = ParraCredential(token: UUID().uuidString)
         XCTAssertNil(Parra.shared.networkManager.authenticationProvider)

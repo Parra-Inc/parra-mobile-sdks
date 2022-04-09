@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-public struct ParraCredential: Equatable, Codable {
+@objc(PARParraCredential)
+public class ParraCredential: NSObject, Codable {
     public var token: String
     
     public init(token: String) {

@@ -12,26 +12,33 @@ public extension Parra {
         return shared.networkManager.authenticationProvider != nil
     }
     
-    class func setAuthenticationProvider(_ provider: @escaping ParraFeedbackAuthenticationProvider) {
+    @nonobjc class func setAuthenticationProvider(_ provider: @escaping ParraFeedbackAuthenticationProvider) {
         shared.networkManager.updateAuthenticationProvider(provider)
     }
     
-    class func setAuthenticationProvider(withCompletion provider:
-                                         @escaping (@escaping (ParraCredential) -> Void) throws -> Void) {
-        shared.networkManager.updateAuthenticationProvider(
-            shared.asyncAuthenticationFromValueCallback(provider)
-        )
-    }
-    
-    class func setAuthenticationProvider(withResult provider:
-                                         @escaping (@escaping (Result<ParraCredential, Error>) -> Void) -> Void) {
+    @nonobjc class func setAuthenticationProvider(withResult provider:
+                                                  @escaping (@escaping (Result<ParraCredential, Error>) -> Void) -> Void) {
         shared.networkManager.updateAuthenticationProvider(
             shared.asyncAuthenticationFromResultCallback(provider)
         )
     }
     
-    private func asyncAuthenticationFromValueCallback(_ provider:
-                                                      @escaping (@escaping (ParraCredential) -> Void) throws -> Void) -> (() async throws -> ParraCredential) {
+    @nonobjc class func setAuthenticationProvider(withCompletion provider:
+                                                  @escaping (@escaping (ParraCredential) -> Void) throws -> Void) {
+        shared.networkManager.updateAuthenticationProvider(
+            shared.asyncAuthenticationFromThrowingValueCallback(provider)
+        )
+    }
+    
+    @objc class func setAuthenticationProvider(withCompletion provider:
+                                               @escaping (@escaping (ParraCredential?, Error?) -> Void) -> Void) {
+        shared.networkManager.updateAuthenticationProvider(
+            shared.asyncAuthenticationFromValueCallback(provider)
+        )
+    }
+    
+    private func asyncAuthenticationFromThrowingValueCallback(_ provider:
+                                                              @escaping (@escaping (ParraCredential) -> Void) throws -> Void) -> (() async throws -> ParraCredential) {
         return {
             return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ParraCredential, Error>) in
                 do {
@@ -40,6 +47,25 @@ public extension Parra {
                     }
                 } catch let error {
                     continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
+    
+    private func asyncAuthenticationFromValueCallback(_ provider:
+                                                      @escaping (@escaping (ParraCredential?, Error?) -> Void) -> Void) -> (() async throws -> ParraCredential) {
+        return {
+            return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ParraCredential, Error>) in
+                provider { credential, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let credential = credential {
+                        continuation.resume(returning: credential)
+                    } else {
+                        let message = "Authentication provider must complete with either a ParraCredential instance or an Error"
+                        continuation.resume(throwing: ParraError.authenticationFailed(message))
+                    }
                 }
             }
         }
