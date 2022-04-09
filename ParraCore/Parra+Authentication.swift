@@ -8,6 +8,10 @@
 import Foundation
 
 public extension Parra {
+    class func hasAuthenticationProvider() -> Bool {
+        return shared.networkManager.authenticationProvider != nil
+    }
+    
     class func setAuthenticationProvider(_ provider: @escaping ParraFeedbackAuthenticationProvider) {
         shared.networkManager.updateAuthenticationProvider(provider)
     }
