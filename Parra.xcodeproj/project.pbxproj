@@ -763,8 +763,10 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				CLASSPREFIX = PAR;
 				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1310;
+				ORGANIZATIONNAME = "Parra, Inc.";
 				TargetAttributes = {
 					001B7AF127DE3A7600DEEECD = {
 						CreatedOnToolsVersion = 13.2.1;
