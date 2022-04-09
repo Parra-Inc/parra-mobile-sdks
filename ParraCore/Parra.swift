@@ -64,8 +64,8 @@ public class Parra: ParraModule {
         registeredModules[type(of: module).name] = module
     }
     
-    public static func hasRegisteredModule(module: ParraModule) -> Bool {
-        return registeredModules[type(of: module).name] != nil
+    public static func hasRegisteredModule(module: ParraModule.Type) -> Bool {
+        return registeredModules[module.name] != nil
     }
     
     // TODO: Do we really even need this???
