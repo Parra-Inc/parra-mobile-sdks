@@ -102,6 +102,7 @@ public class Parra: ParraModule {
     }
     
     public func triggerSync() async {
-        await syncManager.enqueueSync()
+        // Don't expose sync mode publically.
+        await syncManager.enqueueSync(with: .eventual)
     }
 }

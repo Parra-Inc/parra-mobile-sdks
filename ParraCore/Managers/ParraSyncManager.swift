@@ -8,6 +8,11 @@
 import Foundation
 import UIKit
 
+enum ParraFeedbackSyncMode {
+    case immediate
+    case eventual
+}
+
 actor ParraFeedbackSyncManager {
     enum Constant {
         static let syncTokenKey = "syncToken"
@@ -28,7 +33,7 @@ actor ParraFeedbackSyncManager {
     }
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
-    internal func enqueueSync() async {
+    internal func enqueueSync(with mode: ParraFeedbackSyncMode) async {
         parraLogV("Enqueuing sync")
 
         if isSyncing {

@@ -8,18 +8,11 @@
 import Foundation
 import UIKit
 
-// When should this happen?
-// If there is unsent data and:
-// 1. The user answers all of the available questions
-// 2. When a ParraFeedbackView is removed from its superview.
-// 3. On app did become active
-// 4. ...?
-
 extension Parra {
     func addEventObservers() {
         let notificationCenter = NotificationCenter.default
         
-        notificationCenter.addObserver(self, selector: #selector(self.triggerSyncFromNotification),
+        notificationCenter.addObserver(self, selector: #selector(self.triggerEventualSyncFromNotification),
                                        name: UIApplication.didBecomeActiveNotification,
                                        object: nil)
 
@@ -27,7 +20,7 @@ extension Parra {
                                        name: UIApplication.willResignActiveNotification,
                                        object: nil)
         
-        notificationCenter.addObserver(self, selector: #selector(self.triggerSyncFromNotification),
+        notificationCenter.addObserver(self, selector: #selector(self.triggerEventualSyncFromNotification),
                                        name: UIApplication.significantTimeChangeNotification,
                                        object: nil)
     }
@@ -48,7 +41,18 @@ extension Parra {
         }
         
         Task {
-            await syncManager.enqueueSync()
+            await syncManager.enqueueSync(with: .immediate)
+        }
+    }
+    
+    @MainActor
+    @objc private func triggerEventualSyncFromNotification(notification: Notification) {
+        guard NSClassFromString("XCTestCase") == nil else {
+            return
+        }
+        
+        Task {
+            await syncManager.enqueueSync(with: .eventual)
         }
     }
 }
