@@ -77,6 +77,7 @@ import ParraCore
 
 
 /// <#Description#>
+@objc(PARParraFeedbackView)
 public class ParraFeedbackView: UIView {
     
     /// The object that acts as the delegate of the `ParraFeedbackView`. The delegate is not retained.
@@ -158,7 +159,7 @@ public class ParraFeedbackView: UIView {
     /// - Parameters:
     ///   - cardItems: <#cardItems description#>
     ///   - config: <#config description#>
-    public required init(
+    @objc public required init(
         cardItems: [CardItem] = [],
         config: ParraFeedbackViewConfig = .default
     ) {

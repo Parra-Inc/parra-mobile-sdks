@@ -7,30 +7,77 @@
 
 import UIKit
 
-public struct ParraShadowConfig {
+@objc(PARParraShadowConfig)
+public class ParraShadowConfig: NSObject {
     var color: UIColor
     var opacity: CGFloat
     var radius: CGFloat
     var offset: CGSize
+    
+    public required init(color: UIColor,
+                         opacity: CGFloat,
+                         radius: CGFloat,
+                         offset: CGSize) {
+        
+        self.color = color
+        self.opacity = opacity
+        self.radius = radius
+        self.offset = offset
+
+        super.init()
+    }
 }
 
-public struct ParraTextConfig {
+@objc(PARParraTextConfig)
+public class ParraTextConfig: NSObject {
     let color: UIColor
     let font: UIFont
     let shadow: ParraShadowConfig?
+
+    public required init(color: UIColor,
+                         font: UIFont,
+                         shadow: ParraShadowConfig?) {
+            
+        self.color = color
+        self.font = font
+        self.shadow = shadow
+        
+        super.init()
+    }
 }
 
 /// <#Description#>
-public struct ParraFeedbackViewConfig {
+@objc(PARParraFeedbackViewConfig)
+public class ParraFeedbackViewConfig: NSObject {
     var backgroundColor: UIColor
     var tintColor: UIColor
-    var cornerRadius: CGFloat
+    var cornerRadius: CGFloat = 0.0
     var contentInsets: UIEdgeInsets
     var shadow: ParraShadowConfig
     var title: ParraTextConfig
     var subtitle: ParraTextConfig
+    
+    public required init(backgroundColor: UIColor,
+                         tintColor: UIColor,
+                         cornerRadius: CGFloat,
+                         contentInsets: UIEdgeInsets,
+                         shadow: ParraShadowConfig,
+                         title: ParraTextConfig,
+                         subtitle: ParraTextConfig) {
+        
+        self.backgroundColor = backgroundColor
+        self.tintColor = tintColor
+        self.cornerRadius = cornerRadius
+        self.contentInsets = contentInsets
+        self.shadow = shadow
+        self.title = title
+        self.subtitle = subtitle
+        
+        super.init()
+    }
 
     /// <#Description#>
+    @objc(defaultConfiguration)
     public static let `default` = ParraFeedbackViewConfig(
         backgroundColor: UIColor(hex: 0xFAFAFA),
         tintColor: UIColor(hex: 0x200E32),

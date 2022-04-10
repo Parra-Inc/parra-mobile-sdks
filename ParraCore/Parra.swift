@@ -10,7 +10,8 @@ import UIKit
 
 public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraCredential
 
-public class Parra: ParraModule {
+@objc(PARParraCore)
+public class Parra: NSObject, ParraModule {
     public static private(set) var name = "core"
         
     internal static var shared: Parra! = {
@@ -51,7 +52,9 @@ public class Parra: ParraModule {
         
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
 
-        addEventObservers()
+        super.init()
+
+        self.addEventObservers()
     }
     
     deinit {

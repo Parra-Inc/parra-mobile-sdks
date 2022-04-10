@@ -12,7 +12,11 @@ import UIKit
 public class ParraCredential: NSObject, Codable {
     public var token: String
     
-    public init(token: String) {
+    @objc public init(token: String) {
         self.token = token
+    }
+    
+    @objc public class func credential(withToken token: String) -> ParraCredential {
+        return ParraCredential(token: token)
     }
 }

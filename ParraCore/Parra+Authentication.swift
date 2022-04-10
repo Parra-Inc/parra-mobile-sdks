@@ -31,7 +31,7 @@ public extension Parra {
     }
     
     @objc class func setAuthenticationProvider(withCompletion provider:
-                                               @escaping (@escaping (ParraCredential?, Error?) -> Void) -> Void) {
+                                               @escaping (_ completion: (@escaping (ParraCredential?, Error?) -> Void)) -> Void) {
         shared.networkManager.updateAuthenticationProvider(
             shared.asyncAuthenticationFromValueCallback(provider)
         )

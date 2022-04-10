@@ -19,6 +19,10 @@ public extension ParraModule {
         return Bundle(for: self as! AnyClass)
     }
     
+    dynamic static func errorDomain() -> String {
+        return "com.parra.\(name.lowercased()).error"
+    }
+    
     dynamic static func libraryVersion() -> String {
         return bundle().infoDictionary!["CFBundleShortVersionString"] as! String
     }

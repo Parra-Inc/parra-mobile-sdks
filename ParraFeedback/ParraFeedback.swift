@@ -9,11 +9,14 @@ import Foundation
 import ParraCore
 
 /// <#Description#>
-public class ParraFeedback: ParraModule {
+@objc(PARParraFeedback)
+public class ParraFeedback: NSObject, ParraModule {
     internal static let shared = ParraFeedback()
     internal let dataManager = ParraFeedbackDataManager()
     
-    private init() {
+    private override init() {
+        super.init()
+
         Parra.registerModule(module: self)
     }
     
@@ -21,7 +24,7 @@ public class ParraFeedback: ParraModule {
         
     /// <#Description#>
     /// - Parameter completion: <#completion description#>
-    public class func fetchFeedbackCards(completion: @escaping ([CardItem], ParraError?) -> Void) {
+    @nonobjc public class func fetchFeedbackCards(completion: @escaping ([CardItem], ParraError?) -> Void) {
         Task {
             do {
                 let cards = try await fetchFeedbackCards()
@@ -33,6 +36,26 @@ public class ParraFeedback: ParraModule {
                 DispatchQueue.main.async {
                     completion([], ParraError.dataLoadingError(error.localizedDescription))
                 }
+            }
+        }
+    }
+    
+    /// <#Description#>
+    /// - Parameter completion: <#completion description#>
+    @objc public class func fetchFeedbackCards(withCompletion completion: @escaping ([CardItem], Error?) -> Void) {
+        fetchFeedbackCards { cards, parraError in
+            if let parraError = parraError {
+                let error = NSError(
+                    domain: ParraFeedback.errorDomain(),
+                    code: 20,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: parraError.localizedDescription
+                    ]
+                )
+                
+                completion(cards, error)
+            } else {
+                completion(cards, nil)
             }
         }
     }
