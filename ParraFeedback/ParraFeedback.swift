@@ -24,17 +24,17 @@ public class ParraFeedback: NSObject, ParraModule {
         
     /// <#Description#>
     /// - Parameter completion: <#completion description#>
-    @nonobjc public class func fetchFeedbackCards(completion: @escaping ([CardItem], ParraError?) -> Void) {
+    @nonobjc public class func fetchFeedbackCards(withCompletion completion: @escaping (Result<[CardItem], ParraError>) -> Void) {
         Task {
             do {
                 let cards = try await fetchFeedbackCards()
                 
                 DispatchQueue.main.async {
-                    completion(cards, nil)
+                    completion(.success(cards))
                 }
             } catch let error {
                 DispatchQueue.main.async {
-                    completion([], ParraError.dataLoadingError(error.localizedDescription))
+                    completion(.failure(ParraError.dataLoadingError(error.localizedDescription)))
                 }
             }
         }
