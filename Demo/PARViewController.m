@@ -21,7 +21,7 @@
 
     NSString *myAppAccessToken = @"9B5CDA6B-7538-4A2A-9611-7308D56DFFA1";
 
-    [PARParraCore setAuthenticationProviderWithCompletion:^(void (^ _Nonnull completion)(PARParraCredential * _Nullable, NSError * _Nullable)) {
+    [PARParraCore setAuthenticationProvider:^(void (^ _Nonnull completion)(PARParraCredential * _Nullable, NSError * _Nullable)) {
         // Replace this with your Parra access token generation endpoint
         NSURL *authenticationUrl = [NSURL URLWithString:@"http://localhost:8080/v1/parra/auth/token"];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:authenticationUrl];
