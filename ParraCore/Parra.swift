@@ -63,15 +63,19 @@ public class Parra: NSObject, ParraModule {
         removeEventObservers()
     }
     
+    /// Registers the provided ParraModule with the ParraCore module. This exists for usage by other Parra modules only. It is used
+    /// to allow the Core module to identify which other Parra modules have been installed.
     public static func registerModule(module: ParraModule) {
         registeredModules[type(of: module).name] = module
     }
     
+    /// Checks whether the provided module has already been registered with ParraCore
     public static func hasRegisteredModule(module: ParraModule.Type) -> Bool {
         return registeredModules[module.name] != nil
     }
-    
-    // TODO: Do we really even need this???
+
+    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
+    /// will be invoked the very next time the Parra API is accessed.
     @objc public static func logout(completion: (() -> Void)? = nil) {
         Task {
             await logout()
@@ -80,6 +84,8 @@ public class Parra: NSObject, ParraModule {
         }
     }
 
+    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
+    /// will be invoked the very next time the Parra API is accessed.
     @nonobjc public static func logout() async {
         await shared.dataManager.updateCredential(credential: nil)
     }
@@ -104,6 +110,9 @@ public class Parra: NSObject, ParraModule {
         return false // TODO:
     }
     
+    /// Parra data is syncrhonized automatically. Use this method if you wish to trigger a synchronization event manually.
+    /// This may be something you want to do in response to a significant event in your app, or in response to a low memory
+    /// warning, for example.
     public func triggerSync() async {
         // Don't expose sync mode publically.
         await syncManager.enqueueSync(with: .eventual)
