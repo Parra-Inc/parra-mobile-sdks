@@ -43,8 +43,11 @@ public class ParraFeedback: NSObject, ParraModule {
     /// <#Description#>
     /// - Parameter completion: <#completion description#>
     @objc public class func fetchFeedbackCards(withCompletion completion: @escaping ([CardItem], Error?) -> Void) {
-        fetchFeedbackCards { cards, parraError in
-            if let parraError = parraError {
+        fetchFeedbackCards { result in
+            switch result {
+            case .success(let cards):
+                completion(cards, nil)
+            case .failure(let parraError):
                 let error = NSError(
                     domain: ParraFeedback.errorDomain(),
                     code: 20,
@@ -53,9 +56,7 @@ public class ParraFeedback: NSObject, ParraModule {
                     ]
                 )
                 
-                completion(cards, error)
-            } else {
-                completion(cards, nil)
+                completion([], error)
             }
         }
     }
