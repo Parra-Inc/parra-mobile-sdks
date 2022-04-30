@@ -85,6 +85,30 @@ class ParraAuthenticationTests: XCTestCase {
         } catch {}
     }
     
+    func testAsyncConversionFromObjcCompletionHandlerSuccess() async throws {
+        let credential = ParraCredential(token: UUID().uuidString)
+        
+        Parra.setAuthenticationProvider { (completion: (ParraCredential?, Error?) -> Void) in
+            completion(credential, nil)
+        }
+        
+        let result = try await Parra.shared.networkManager.authenticationProvider!()
+        
+        XCTAssertEqual(result, credential)
+    }
+    
+    func testAsyncConversionFromObjcCompletionHandlerFailure() async throws {
+        Parra.setAuthenticationProvider { (completion: (ParraCredential?, Error?) -> Void) in
+            completion(nil, URLError(.badServerResponse))
+        }
+        
+        do {
+            let _ = try await Parra.shared.networkManager.authenticationProvider!()
+            
+            XCTFail()
+        } catch {}
+    }
+    
     func testAsyncConversionFromResultSuccess() async throws {
         let credential = ParraCredential(token: UUID().uuidString)
 
