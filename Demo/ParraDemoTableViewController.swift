@@ -6,6 +6,15 @@
 //
 
 import UIKit
+import ParraCore
+import ParraFeedback
 
 class ParraDemoTableViewController: UITableViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if !Parra.hasAuthenticationProvider() {
+            navigationItem.prompt = "ParraFeedback not configured!"
+        }
+    }
 }
