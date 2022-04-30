@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraCredential
-
 @objc(PARParraCore)
 public class Parra: NSObject, ParraModule {
     public static private(set) var name = "core"

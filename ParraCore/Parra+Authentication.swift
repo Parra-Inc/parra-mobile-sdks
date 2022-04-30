@@ -7,6 +7,8 @@
 
 import Foundation
 
+public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraCredential
+
 public extension Parra {
     class func hasAuthenticationProvider() -> Bool {
         return shared.networkManager.authenticationProvider != nil
