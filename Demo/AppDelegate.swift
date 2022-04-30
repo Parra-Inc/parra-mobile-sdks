@@ -7,38 +7,31 @@
 
 import UIKit
 import ParraCore
-import ParraFeedback
-
-struct AuthResponse: Codable {
-    let accessToken: String
-}
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let currentUserId = "9B5CDA6B-7538-4A2A-9611-7308D56DFFA1"
-        
-        let jsonDecoder = JSONDecoder()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-        
+        let myAppAccessToken = "9B5CDA6B-7538-4A2A-9611-7308D56DFFA1"
+                
         Parra.setAuthenticationProvider { (completion: @escaping (Result<ParraCredential, Error>) -> Void) in
             var request = URLRequest(
-                url: URL(string: "http://localhost:8080/v1/parra/auth/token")!,
-                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                timeoutInterval: 10
+                // Replace this with your Parra access token generation endpoint
+                url: URL(string: "http://localhost:8080/v1/parra/auth/token")!
             )
+
             request.httpMethod = "POST"
-            request.httpBody = try! JSONEncoder().encode(["user": ["id": currentUserId]])
-            
+            // Replace this with your app's way of authenticating users
+            request.setValue("Bearer \(myAppAccessToken)", forHTTPHeaderField: "Authorization")
+
             URLSession.shared.dataTask(with: request) { data, _, error in
                 if let error = error {
                     completion(.failure(error))
                 } else {
                     do {
-                        let response = try jsonDecoder.decode(AuthResponse.self, from: data!)
+                        let response = try JSONDecoder().decode([String: String].self, from: data!)
                         
-                        completion(.success(ParraCredential(token: response.accessToken)))
+                        completion(.success(ParraCredential(token: response["access_token"]!)))
                     } catch let error {
                         completion(.failure(error))
                     }
