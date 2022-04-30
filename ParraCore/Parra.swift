@@ -36,7 +36,7 @@ public class Parra: NSObject, ParraModule {
     
     internal private(set) static var registeredModules: [String: ParraModule] = [:]
     
-    public let dataManager: ParraDataManager
+    internal let dataManager: ParraDataManager
     internal let syncManager: ParraFeedbackSyncManager
     internal let networkManager: ParraNetworkManager
         
