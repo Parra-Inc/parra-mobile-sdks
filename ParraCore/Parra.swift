@@ -85,6 +85,7 @@ public class Parra: NSObject, ParraModule {
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
     @nonobjc public static func logout() async {
+        await shared.syncManager.enqueueSync(with: .immediate)
         await shared.dataManager.updateCredential(credential: nil)
     }
 
