@@ -112,12 +112,27 @@ public class ParraFeedbackView: UIView {
     internal var currentCardInfo: CurrentCardInfo?
 
     internal var constraintsOnSuperView = [NSLayoutConstraint]()
-    internal var constraintsOncontainerView = [NSLayoutConstraint]()
+    
+    internal var containerLeadingConstraint: NSLayoutConstraint!
+    internal var containerTrailingConstraint: NSLayoutConstraint!
+    internal var containerTopConstraint: NSLayoutConstraint!
+    internal var containerBottomConstraint: NSLayoutConstraint!
+
+    internal var constraintsOncontainerView: [NSLayoutConstraint] {
+        return [
+            containerLeadingConstraint, containerTrailingConstraint, containerTopConstraint, containerBottomConstraint
+        ]
+    }
 
     internal let containerView = UIView(frame: .zero)
     internal let contentView = UIView(frame: .zero)
     
-    internal let config: ParraFeedbackViewConfig
+    /// <#Description#>
+    public var config: ParraFeedbackViewConfig {
+        didSet {
+            applyConfig(config)
+        }
+    }
     
     /// The image used for the back button used to transition to the previous card. By default, a left facing arrow.
     public var backButtonImage: UIImage = UIImage(systemName: "arrow.left")! {
@@ -169,6 +184,20 @@ public class ParraFeedbackView: UIView {
         super.init(frame: .zero)
         
         questionHandler.questionHandlerDelegate = self
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = .clear
+        layer.masksToBounds = false
+        setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        setContentHuggingPriority(.defaultHigh, for: .vertical)
+        
+        addSubview(containerView)
+        containerView.addSubview(navigationStack)
+        addSubview(contentView)
+        
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.layer.masksToBounds = true
+        containerView.isUserInteractionEnabled = true
         
         configureSubviews(config: config)
     }

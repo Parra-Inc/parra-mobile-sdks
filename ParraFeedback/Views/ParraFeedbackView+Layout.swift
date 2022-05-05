@@ -22,31 +22,19 @@ extension ParraFeedbackView {
     public override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
-        guard let superview = superview else {
+        if superview == nil {
             return
         }
-        
+        removeConstraints(constraintsOnSuperView)
+
         constraintsOnSuperView = [
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor)
+            widthAnchor.constraint(greaterThanOrEqualToConstant: 320)
         ]
         
         NSLayoutConstraint.activate(constraintsOnSuperView)
     }
     
-    internal func configureSubviews(config: ParraFeedbackViewConfig) {
-        translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .clear
-        layer.masksToBounds = false
-        
-        addSubview(containerView)
-        containerView.addSubview(navigationStack)
-        addSubview(contentView)
-        
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.layer.masksToBounds = true
-        containerView.isUserInteractionEnabled = true
-        
+    internal func configureSubviews(config: ParraFeedbackViewConfig) {        
         configureContentView()
         configureNavigationStack()
         
@@ -55,30 +43,27 @@ extension ParraFeedbackView {
         addCardSwipeGesture(toView: containerView, direction: .right)
         addCardSwipeGesture(toView: containerView, direction: .left)
 
+        containerLeadingConstraint = containerView.leadingAnchor.constraint(
+            equalTo: leadingAnchor, constant: config.contentInsets.left
+        )
+        containerTrailingConstraint = containerView.trailingAnchor.constraint(
+            equalTo: trailingAnchor, constant: -config.contentInsets.right
+        )
+        containerTopConstraint = containerView.topAnchor.constraint(
+            equalTo: topAnchor, constant: config.contentInsets.top
+        )
+        containerBottomConstraint = containerView.bottomAnchor.constraint(
+            equalTo: bottomAnchor, constant: -config.contentInsets.bottom
+        )
+        
+        NSLayoutConstraint.activate(constraintsOncontainerView)
+
         applyConfig(config)
         
         transitionToNextCard(animated: false)
     }
 
-    private func applyConfig(_ config: ParraFeedbackViewConfig) {
-        
-        containerView.removeConstraints(constraintsOncontainerView)
-        constraintsOncontainerView = [
-            containerView.topAnchor.constraint(
-                equalTo: topAnchor, constant: config.contentInsets.top
-            ),
-            containerView.leadingAnchor.constraint(
-                equalTo: leadingAnchor, constant: config.contentInsets.left
-            ),
-            containerView.bottomAnchor.constraint(
-                equalTo: bottomAnchor, constant: -config.contentInsets.bottom
-            ),
-            containerView.trailingAnchor.constraint(
-                equalTo: trailingAnchor, constant: -config.contentInsets.right
-            )
-        ]
-        NSLayoutConstraint.activate(constraintsOncontainerView)
-        
+    internal func applyConfig(_ config: ParraFeedbackViewConfig) {
         containerView.backgroundColor = config.backgroundColor
         containerView.layer.cornerRadius = config.cornerRadius
         
@@ -91,6 +76,32 @@ extension ParraFeedbackView {
         layer.shadowOffset = config.shadow.offset
         layer.bounds = bounds
         layer.position = center
+        
+        var needsLayout = false
+
+        if config.contentInsets.left != containerLeadingConstraint.constant {
+            containerLeadingConstraint.constant = config.contentInsets.left
+            needsLayout = true
+        }
+
+        if -config.contentInsets.right != containerTrailingConstraint.constant {
+            containerTrailingConstraint.constant = -config.contentInsets.right
+            needsLayout = true
+        }
+
+        if config.contentInsets.top != containerTopConstraint.constant {
+            containerTopConstraint.constant = config.contentInsets.top
+            needsLayout = true
+        }
+
+        if -config.contentInsets.bottom != containerBottomConstraint.constant {
+            containerBottomConstraint.constant = -config.contentInsets.bottom
+            needsLayout = true
+        }
+
+        if needsLayout {
+            layoutIfNeeded()
+        }
     }
     
     private func configureContentView() {

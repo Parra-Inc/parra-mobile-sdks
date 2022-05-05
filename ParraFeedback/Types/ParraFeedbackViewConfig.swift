@@ -26,6 +26,13 @@ public class ParraShadowConfig: NSObject {
 
         super.init()
     }
+    
+    public static let `default` = ParraShadowConfig(
+        color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.1),
+        opacity: 1.0,
+        radius: 2.0,
+        offset: CGSize(width: 0.0, height: 2.0)
+    )
 }
 
 @objc(PARParraTextConfig)
@@ -44,7 +51,20 @@ public class ParraTextConfig: NSObject {
         
         super.init()
     }
+    
+    public static let titleDefault = ParraTextConfig(
+        color: .black,
+        font: .preferredFont(forTextStyle: .headline),
+        shadow: nil
+    )
+    
+    public static let subtitleDefault = ParraTextConfig(
+        color: .black,
+        font: .preferredFont(forTextStyle: .caption2),
+        shadow: nil
+    )
 }
+
 
 /// <#Description#>
 @objc(PARParraFeedbackViewConfig)
@@ -83,21 +103,8 @@ public class ParraFeedbackViewConfig: NSObject {
         tintColor: UIColor(hex: 0x200E32),
         cornerRadius: 12,
         contentInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
-        shadow: ParraShadowConfig(
-            color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.1),
-            opacity: 1.0,
-            radius: 2.0,
-            offset: CGSize(width: 0.0, height: 2.0)
-        ),
-        title: ParraTextConfig(
-            color: .black,
-            font: .preferredFont(forTextStyle: .headline),
-            shadow: nil
-        ),
-        subtitle: ParraTextConfig(
-            color: .black,
-            font: .preferredFont(forTextStyle: .caption2),
-            shadow: nil
-        )
+        shadow: .default,
+        title: .titleDefault,
+        subtitle: .subtitleDefault
     )
 }
