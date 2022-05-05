@@ -47,9 +47,13 @@ class ParraFeedbackInView: UIViewController {
                 return
             }
 
-            
             self.view.addSubview(self.feedbackView)
-            self.view.addConstraint(self.feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 200))
+            
+            NSLayoutConstraint.activate([
+                self.feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 200),
+                self.feedbackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                self.feedbackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            ])
         }
     }
 }
