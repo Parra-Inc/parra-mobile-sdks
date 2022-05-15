@@ -27,15 +27,14 @@ class ParraFeedbackInTableView: UITableViewController {
         tableView.register(ParraFeedbackTableViewCell.self, forCellReuseIdentifier: ParraFeedbackTableViewCell.defaultCellId)
         
         ParraFeedback.fetchFeedbackCards { cards, error in
-            if error != nil || cards.isEmpty {
-                let text = error != nil ? "Error fetching Parra cards: \(error!)" : "No Parra cards currently available."
-                
-                self.navigationItem.prompt = text
-                
-                return
+            if let error = error {
+                self.navigationItem.prompt = "Error fetching Parra cards"
+                print("Error fetching Parra cards: \(error)")
+            } else if cards.isEmpty {
+                self.navigationItem.prompt = "No Parra cards currently available."
+            } else {
+                self.shouldShowFeedback = true
             }
-
-            self.shouldShowFeedback = true
         }
     }
 
