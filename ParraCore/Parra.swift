@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public class Parra: NSObject, ParraModule {
+public class Parra: ParraModule {
     public static private(set) var name = "core"
         
     internal static var shared: Parra! = {
@@ -48,8 +48,6 @@ public class Parra: NSObject, ParraModule {
         self.networkManager = networkManager
         
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
-
-        super.init()
 
         self.addEventObservers()
     }

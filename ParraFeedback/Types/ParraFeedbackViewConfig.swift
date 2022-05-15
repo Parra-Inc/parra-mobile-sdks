@@ -61,7 +61,7 @@ public struct ParraTextConfig {
 
 
 /// <#Description#>
-public class ParraFeedbackViewConfig: NSObject {
+public struct ParraFeedbackViewConfig {
     var backgroundColor: UIColor
     var tintColor: UIColor
     var cornerRadius: CGFloat = 0.0

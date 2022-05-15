@@ -9,13 +9,11 @@ import Foundation
 import ParraCore
 
 /// <#Description#>
-public class ParraFeedback: NSObject, ParraModule {
+public class ParraFeedback: ParraModule {
     internal static let shared = ParraFeedback()
     internal let dataManager = ParraFeedbackDataManager()
     
-    private override init() {
-        super.init()
-
+    private init() {
         Parra.registerModule(module: self)
     }
     

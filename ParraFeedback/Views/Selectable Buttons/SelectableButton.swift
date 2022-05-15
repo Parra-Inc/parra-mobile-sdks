@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol SelectableButtonDelegate: NSObjectProtocol {
+protocol SelectableButtonDelegate: AnyObject {
     func buttonDidSelect(button: SelectableButton)
     func buttonDidDeselect(button: SelectableButton)
 }
 
-protocol SelectableButton: NSObjectProtocol {
+protocol SelectableButton: AnyObject {
     init(initiallySelected: Bool)
     
     var delegate: SelectableButtonDelegate? { get set }

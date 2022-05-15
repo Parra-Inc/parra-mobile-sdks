@@ -8,7 +8,7 @@
 import UIKit
 import ParraCore
 
-protocol ParraChoiceOptionViewDelegate: NSObjectProtocol {
+protocol ParraChoiceOptionViewDelegate: AnyObject {
     func onSelect(option: ChoiceQuestionOption, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
     func onDeselect(option: ChoiceQuestionOption, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
 }
