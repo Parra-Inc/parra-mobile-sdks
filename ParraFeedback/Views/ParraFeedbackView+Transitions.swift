@@ -24,7 +24,7 @@ extension ParraFeedbackView: ParraQuestionHandlerDelegate {
             }
             
             // If there is a next card, we ask the delegate if we should transition.
-            let shouldTransition = delegate?.parraFeedbackView?(self, shouldAutoNavigateTo: nextCardItem) ?? true
+            let shouldTransition = delegate?.parraFeedbackView(self, shouldAutoNavigateTo: nextCardItem) ?? true
             
             if shouldTransition {
                 suggestTransitionInDirection(.right, animated: true)
@@ -104,7 +104,7 @@ extension ParraFeedbackView {
             nextCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
 
-        delegate?.parraFeedbackView?(self, willDisplay: cardItem)
+        delegate?.parraFeedbackView(self, willDisplay: cardItem)
         
         if animated {
             backButton.isEnabled = false
@@ -124,7 +124,7 @@ extension ParraFeedbackView {
                 cardItem: cardItem
             )
             if let oldCardInfo = oldCardInfo {
-                delegate?.parraFeedbackView?(self, willEndDisplaying: oldCardInfo.cardItem)
+                delegate?.parraFeedbackView(self, willEndDisplaying: oldCardInfo.cardItem)
             }
 
             UIView.animate(
@@ -146,22 +146,22 @@ extension ParraFeedbackView {
                         NSLayoutConstraint.deactivate(oldCardInfo.cardView.constraints)
                         oldCardInfo.cardView.removeFromSuperview()
                         
-                        self.delegate?.parraFeedbackView?(self, didEndDisplaying: oldCardInfo.cardItem)
+                        self.delegate?.parraFeedbackView(self, didEndDisplaying: oldCardInfo.cardItem)
                     }
                     
-                    self.delegate?.parraFeedbackView?(self, didDisplay: cardItem)
+                    self.delegate?.parraFeedbackView(self, didDisplay: cardItem)
                 }
         } else {
             updateVisibleNavigationButtons(visibleButtons: visibleButtons)
 
             if let currentCardInfo = self.currentCardInfo {
-                delegate?.parraFeedbackView?(self, willEndDisplaying: currentCardInfo.cardItem)
+                delegate?.parraFeedbackView(self, willEndDisplaying: currentCardInfo.cardItem)
 
                 NSLayoutConstraint.deactivate(currentCardInfo.cardView.constraints)
                 currentCardInfo.cardView.removeFromSuperview()
                 self.currentCardInfo = nil
                 
-                delegate?.parraFeedbackView?(self, didEndDisplaying: currentCardInfo.cardItem)
+                delegate?.parraFeedbackView(self, didEndDisplaying: currentCardInfo.cardItem)
             }
             
             self.currentCardInfo = CurrentCardInfo(
@@ -169,7 +169,7 @@ extension ParraFeedbackView {
                 cardItem: cardItem
             )
             
-            self.delegate?.parraFeedbackView?(self, didDisplay: cardItem)
+            self.delegate?.parraFeedbackView(self, didDisplay: cardItem)
         }
     }
     
@@ -226,7 +226,7 @@ extension ParraFeedbackView {
     
     private func cardViewFromCardItem(_ cardItem: CardItem?) -> ParraCardView {
         guard let cardItem = cardItem else {
-            if let userProvidedEmptyState = delegate?.completeStateViewForParraFeedbackView?(self) {
+            if let userProvidedEmptyState = delegate?.completeStateViewForParraFeedbackView(self) {
                 return ParraEmptyCardView(innerView: userProvidedEmptyState)
             } else {
                 return ParraActionCardView(

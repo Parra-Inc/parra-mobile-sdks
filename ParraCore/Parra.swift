@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-@objc(PARParraCore)
 public class Parra: NSObject, ParraModule {
     public static private(set) var name = "core"
         
@@ -74,7 +73,7 @@ public class Parra: NSObject, ParraModule {
 
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
-    @objc public static func logout(completion: (() -> Void)? = nil) {
+    public static func logout(completion: (() -> Void)? = nil) {
         Task {
             await logout()
             
@@ -84,13 +83,13 @@ public class Parra: NSObject, ParraModule {
 
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
-    @nonobjc public static func logout() async {
+    public static func logout() async {
         await shared.syncManager.enqueueSync(with: .immediate)
         await shared.dataManager.updateCredential(credential: nil)
     }
 
     /// Uploads any cached Parra data. This includes data like answers to questions.
-    @objc public static func triggerSync(completion: (() -> Void)? = nil) {
+    public static func triggerSync(completion: (() -> Void)? = nil) {
         Task {
             await triggerSync()
             
@@ -99,7 +98,7 @@ public class Parra: NSObject, ParraModule {
     }
     
     /// Uploads any cached Parra data. This includes data like answers to questions.
-    @nonobjc public static func triggerSync() async {
+    public static func triggerSync() async {
         await shared.triggerSync()
     }
     

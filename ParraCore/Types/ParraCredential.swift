@@ -8,15 +8,10 @@
 import Foundation
 import UIKit
 
-@objc(PARParraCredential)
-public class ParraCredential: NSObject, Codable {
-    public var token: String
+public struct ParraCredential: Codable, Equatable {
+    public let token: String
     
-    @objc public init(token: String) {
+    public init(token: String) {
         self.token = token
-    }
-    
-    @objc public class func credential(withToken token: String) -> ParraCredential {
-        return ParraCredential(token: token)
     }
 }

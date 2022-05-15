@@ -9,7 +9,6 @@ import Foundation
 import ParraCore
 
 /// <#Description#>
-@objc(PARParraFeedback)
 public class ParraFeedback: NSObject, ParraModule {
     internal static let shared = ParraFeedback()
     internal let dataManager = ParraFeedbackDataManager()
@@ -24,7 +23,7 @@ public class ParraFeedback: NSObject, ParraModule {
         
     /// <#Description#>
     /// - Parameter completion: <#completion description#>
-    @nonobjc public class func fetchFeedbackCards(withCompletion completion: @escaping (Result<[CardItem], ParraError>) -> Void) {
+    public class func fetchFeedbackCards(withCompletion completion: @escaping (Result<[CardItem], ParraError>) -> Void) {
         Task {
             do {
                 let cards = try await fetchFeedbackCards()
@@ -42,7 +41,7 @@ public class ParraFeedback: NSObject, ParraModule {
     
     /// <#Description#>
     /// - Parameter completion: <#completion description#>
-    @objc public class func fetchFeedbackCards(withCompletion completion: @escaping ([CardItem], Error?) -> Void) {
+    public class func fetchFeedbackCards(withCompletion completion: @escaping ([CardItem], Error?) -> Void) {
         fetchFeedbackCards { result in
             switch result {
             case .success(let cards):

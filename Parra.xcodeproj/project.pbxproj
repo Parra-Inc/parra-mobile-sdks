@@ -106,7 +106,7 @@
 		00DED000274C69F800DAF301 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DECFFE274C69F800DAF301 /* Main.storyboard */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
 		00F5AAF127FA819200A94C85 /* ParraFeedbackInTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF027FA819200A94C85 /* ParraFeedbackInTableView.swift */; };
-		00F5AAFA2806577300A94C85 /* PARViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF92806577300A94C85 /* PARViewController.m */; };
+		00F5AAF428023EF300A94C85 /* GeneratedTypes+Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -618,8 +618,6 @@
 			isa = PBXGroup;
 			children = (
 				00DECFF8274C69F800DAF301 /* AppDelegate.swift */,
-				00F5AAF82806577300A94C85 /* PARViewController.h */,
-				00F5AAF92806577300A94C85 /* PARViewController.m */,
 				003C216B27DED58C001CAE03 /* SceneDelegate.swift */,
 				0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */,
 				0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */,
@@ -978,7 +976,6 @@
 				0084014A27D5613A00E2B0ED /* ParraFeedbackInView.swift in Sources */,
 				0084014827D560B900E2B0ED /* ParraDemoTableViewController.swift in Sources */,
 				003C216C27DED58C001CAE03 /* SceneDelegate.swift in Sources */,
-				00F5AAFA2806577300A94C85 /* PARViewController.m in Sources */,
 				00F5AAF127FA819200A94C85 /* ParraFeedbackInTableView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
