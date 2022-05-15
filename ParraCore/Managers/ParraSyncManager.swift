@@ -8,25 +8,28 @@
 import Foundation
 import UIKit
 
-enum ParraFeedbackSyncMode {
+enum ParraFeedbackSyncMode: String {
     case immediate
     case eventual
 }
 
-actor ParraFeedbackSyncManager {
+class ParraFeedbackSyncManager {
     enum Constant {
         static let syncTokenKey = "syncToken"
+        static let eventualSyncDelay: TimeInterval = 30.0
     }
-    
-    private let networkManager: ParraNetworkManager
-    
+        
     /// Whether or not a sync operation is in progress.
     internal private(set) var isSyncing = false
     
     /// Whether or not new attempts to sync occured while a sync was in progress. Many sync events could be received while a sync
     /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
     /// is completed.
-    internal private(set) var hasEnqueuedSyncJobs = false
+    internal private(set) var enqueuedSyncMode: ParraFeedbackSyncMode? = nil
+    
+    private let networkManager: ParraNetworkManager
+
+    private var syncTimer: Timer?
     
     init(networkManager: ParraNetworkManager) {
         self.networkManager = networkManager
@@ -34,12 +37,21 @@ actor ParraFeedbackSyncManager {
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
     internal func enqueueSync(with mode: ParraFeedbackSyncMode) async {
-        parraLogV("Enqueuing sync")
+        parraLogV("Enqueuing sync: \(mode)")
 
         if isSyncing {
-            parraLogV("Sync already in progress. Marking enqued sync.")
+            if mode == .immediate {
+                parraLogV("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
 
-            hasEnqueuedSyncJobs = true
+                enqueuedSyncMode = .immediate
+            } else {
+                parraLogV("Sync already in progress. Marking enqued sync.")
+                
+                if enqueuedSyncMode != .immediate {
+                    // An enqueued eventual sync shouldn't override an enqueued immediate sync.
+                    enqueuedSyncMode = .eventual
+                }
+            }
             
             return
         }
@@ -93,11 +105,17 @@ actor ParraFeedbackSyncManager {
         let duration = CFAbsoluteTimeGetCurrent() - start
         parraLogV("Sync data sent. Took \(duration)(s)")
         
-        if hasEnqueuedSyncJobs {
+        if let enqueuedSyncMode = enqueuedSyncMode {
             parraLogV("More sync jobs were enqueued. Repeating sync.")
-            hasEnqueuedSyncJobs = false
             
-            await sync()
+            self.enqueuedSyncMode = nil
+            
+            switch enqueuedSyncMode {
+            case .immediate:
+                await sync()
+            case .eventual:
+                startSyncTimer()
+            }
         } else {
             parraLogV("No more jobs found. Completing sync.")
 
@@ -116,5 +134,32 @@ actor ParraFeedbackSyncManager {
         }
         
         return shouldSync
+    }
+    
+    private func startSyncTimer() {
+        stopSyncTimer()
+    
+        syncTimer = Timer.scheduledTimer(
+            timeInterval: Constant.eventualSyncDelay,
+            target: self,
+            selector: #selector(syncTimerDidTick),
+            userInfo: nil,
+            repeats: false
+        )
+    }
+        
+    private func stopSyncTimer() {
+        guard let syncTimer = syncTimer else {
+            return
+        }
+
+        syncTimer.invalidate()
+        self.syncTimer = nil
+    }
+    
+    @objc private func syncTimerDidTick() {
+        Task {
+            await self.enqueueSync(with: .immediate)
+        }
     }
 }
