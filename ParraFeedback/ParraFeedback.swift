@@ -88,7 +88,14 @@ public class ParraFeedback: NSObject, ParraModule {
         return cardsToKeep
     }
     
-    /// <#Description#>
+    /// Triggers an immediate sync of any stored ParraFeedback data with the Parra API. Instead of using this method, you should prefer to call `Parra.triggerSync()`
+    /// on the ParraCore module, which can better handle enqueuing multiple sync requests. Sync calls will automatically happen when:
+    /// 1. Calling `Parra.logout()`
+    /// 2. The application transitions to or from the active state.
+    /// 3. There is a significant time change on the system clock.
+    /// 4. All cards for a `ParraFeedbackView` are completed.
+    /// 5. A `ParraFeedbackView` is deinitialized or removed from the view hierarchy.
+    ///
     public func triggerSync() async {
         await sendCardData()
     }

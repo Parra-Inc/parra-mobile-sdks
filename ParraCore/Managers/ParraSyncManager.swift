@@ -13,6 +13,7 @@ enum ParraFeedbackSyncMode: String {
     case eventual
 }
 
+/// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
 class ParraFeedbackSyncManager {
     enum Constant {
         static let syncTokenKey = "syncToken"
