@@ -29,7 +29,7 @@ extension ParraFeedbackView {
 
         constraintsOnSuperView = [
             widthAnchor.constraint(greaterThanOrEqualToConstant: 240),
-            heightAnchor.constraint(greaterThanOrEqualToConstant: 140),
+            heightAnchor.constraint(greaterThanOrEqualToConstant: 274),
         ]
         
         NSLayoutConstraint.activate(constraintsOnSuperView)
@@ -67,10 +67,12 @@ extension ParraFeedbackView {
     internal func applyConfig(_ config: ParraFeedbackViewConfig) {
         containerView.backgroundColor = config.backgroundColor
         containerView.layer.cornerRadius = config.cornerRadius
-        
+
         backButton.tintColor = config.tintColor
+        backButton.accessibilityIdentifier = "ParraFeedbackNavigationBackButton"
         forwardButton.tintColor = config.tintColor
-        
+        forwardButton.accessibilityIdentifier = "ParraFeedbackNavigationForwardButton"
+
         layer.shadowColor = config.shadow.color.cgColor
         layer.shadowOpacity = Float(config.shadow.opacity)
         layer.shadowRadius = config.shadow.radius
@@ -110,7 +112,8 @@ extension ParraFeedbackView {
         contentView.setContentCompressionResistancePriority(.required, for: .vertical)
         contentView.clipsToBounds = true
         contentView.isUserInteractionEnabled = true
-        
+        contentView.accessibilityIdentifier = "ParraFeedbackContentView"
+
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: LayoutConstants.navigationPadding),
             contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0),
@@ -125,12 +128,14 @@ extension ParraFeedbackView {
         navigationStack.axis = .horizontal
         navigationStack.distribution = .equalSpacing
         navigationStack.isUserInteractionEnabled = true
-        
+        navigationStack.accessibilityIdentifier = "ParraFeedbackNavigation"
+
         poweredByLabel.font = UIFont.boldSystemFont(ofSize: 12.0)
         poweredByLabel.textColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
         poweredByLabel.textAlignment = .center
         poweredByLabel.isUserInteractionEnabled = true
-        
+        poweredByLabel.accessibilityIdentifier = "ParraFeedbackPoweredBy"
+
         let defaultAttributes = [NSAttributedString.Key.kern: 0.24]
         let poweredBy = NSMutableAttributedString(string: "Powered by ", attributes: defaultAttributes)
         
