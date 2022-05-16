@@ -9,7 +9,7 @@ import Foundation
 
 public extension Parra {
     enum API {
-        public static func getCards() async throws -> [CardItem] {
+        public static func getCards() async throws -> [ParraCardItem] {
             let cardsResponse: CardsResponse = try await Parra.shared.networkManager.performAuthenticatedRequest(
                 route: "cards",
                 method: .get,

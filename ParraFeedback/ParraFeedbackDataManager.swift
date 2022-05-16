@@ -27,7 +27,7 @@ class ParraFeedbackDataManager {
             storageModule: completedCardDataStorageModule
         )
         
-        let cardStorageModule = ParraStorageModule<[CardItem]>(
+        let cardStorageModule = ParraStorageModule<[ParraCardItem]>(
             dataStorageMedium: .memory
         )
         
@@ -88,7 +88,7 @@ class ParraFeedbackDataManager {
         )
     }
     
-    func currentCards() async -> [CardItem] {
+    func currentCards() async -> [ParraCardItem] {
         return await cardStorage.currentCards()
     }
     
@@ -101,13 +101,13 @@ class ParraFeedbackDataManager {
         setCards(cards: remainingCards)
     }
     
-    func hasClearedCompletedCardWithId(card: CardItem) async -> Bool {
+    func hasClearedCompletedCardWithId(card: ParraCardItem) async -> Bool {
         return await completedCardDataStorage.hasClearedCompletedCardWithId(
             cardId: card.id
         )
     }
     
-    func setCards(cards: [CardItem]) {
+    func setCards(cards: [ParraCardItem]) {
         Task {
             await cardStorage.setCards(cardItems: cards)
             

@@ -281,7 +281,7 @@ public enum CardItemType: String, Codable {
     case question = "question"
 }
 
-public struct CardItem: Codable, Equatable, Hashable {
+public struct ParraCardItem: Codable, Equatable, Hashable {
     public let type: CardItemType
     public let version: String
     public let data: CardItemData
@@ -319,10 +319,10 @@ public struct CardItem: Codable, Equatable, Hashable {
 }
 
 public struct CardsResponse: Codable, Equatable, Hashable {
-    public let items: Array<CardItem>
+    public let items: Array<ParraCardItem>
     
     public init(
-        items: Array<CardItem>
+        items: Array<ParraCardItem>
     ) {
         self.items = items
     }

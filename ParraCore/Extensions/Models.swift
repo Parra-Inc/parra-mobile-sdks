@@ -27,7 +27,7 @@ public extension QuestionKind {
     }
 }
 
-extension CardItem: Identifiable {
+extension ParraCardItem: Identifiable {
     public var id: String {
         switch data {
         case .question(let question):

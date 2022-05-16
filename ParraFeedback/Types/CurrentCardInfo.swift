@@ -10,5 +10,5 @@ import ParraCore
 
 struct CurrentCardInfo {
     let cardView: ParraCardView
-    let cardItem: CardItem?
+    let cardItem: ParraCardItem?
 }

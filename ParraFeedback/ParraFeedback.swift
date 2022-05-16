@@ -21,7 +21,7 @@ public class ParraFeedback: ParraModule {
         
     /// <#Description#>
     /// - Parameter completion: <#completion description#>
-    public class func fetchFeedbackCards(withCompletion completion: @escaping (Result<[CardItem], ParraError>) -> Void) {
+    public class func fetchFeedbackCards(withCompletion completion: @escaping (Result<[ParraCardItem], ParraError>) -> Void) {
         Task {
             do {
                 let cards = try await fetchFeedbackCards()
@@ -39,7 +39,7 @@ public class ParraFeedback: ParraModule {
     
     /// <#Description#>
     /// - Parameter completion: <#completion description#>
-    public class func fetchFeedbackCards(withCompletion completion: @escaping ([CardItem], Error?) -> Void) {
+    public class func fetchFeedbackCards(withCompletion completion: @escaping ([ParraCardItem], Error?) -> Void) {
         fetchFeedbackCards { result in
             switch result {
             case .success(let cards):
@@ -60,14 +60,14 @@ public class ParraFeedback: ParraModule {
     
     /// <#Description#>
     /// - Returns: <#description#>
-    public class func fetchFeedbackCards() async throws -> [CardItem] {
+    public class func fetchFeedbackCards() async throws -> [ParraCardItem] {
         let cards = try await Parra.API.getCards()
         
         // Only keep cards that we don't already have an answer cached for. This isn't something that
         // should ever even happen, but in event that new cards are retreived that include cards we
         // already have an answer for, we'll keep the answered cards hidden and they'll be flushed
         // the next time a sync is triggered.
-        var cardsToKeep = [CardItem]()
+        var cardsToKeep = [ParraCardItem]()
 
         for card in cards {
             switch card.data {
@@ -101,7 +101,7 @@ public class ParraFeedback: ParraModule {
     /// <#Description#>
     /// - Parameter cardItem: <#cardItem description#>
     /// - Returns: <#description#>
-    public class func hasCardBeenCompleted(_ cardItem: CardItem) async -> Bool {
+    public class func hasCardBeenCompleted(_ cardItem: ParraCardItem) async -> Bool {
         let completed = await shared.dataManager.completedCardData(forId: cardItem.id)
         
         return completed != nil

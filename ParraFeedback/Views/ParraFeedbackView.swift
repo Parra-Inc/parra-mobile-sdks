@@ -15,7 +15,7 @@ public protocol ParraFeedbackViewDelegate: AnyObject {
     ///
     /// - Parameter parraFeedbackView: A `ParraFeedbackView` asking the delegate for a complete state view.
     /// - Returns: A `UIView` shown within the `ParraFeedbackView` when it is in its complete state.
-    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView?
+    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView
     
     
     /// Tells the delegate that every card on the `ParraFeedbackView` has been completed.
@@ -32,7 +32,7 @@ public protocol ParraFeedbackViewDelegate: AnyObject {
     ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate about the card transition.
     ///   - cardItem: The `CardItem` displayed on the card that is about to be displayed.
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           willDisplay cardItem: CardItem?)
+                           willDisplay cardItem: ParraCardItem?)
     
     
     /// Tells the delegate that the `ParraFeedbackView` is displaying the provided `CardItem`.
@@ -41,7 +41,7 @@ public protocol ParraFeedbackViewDelegate: AnyObject {
     ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate about the card transition.
     ///   - cardItem: The `CardItem` displayed on the card that is now being displayed.
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           didDisplay cardItem: CardItem?)
+                           didDisplay cardItem: ParraCardItem?)
     
     
     /// Tells the delegate that the `ParraFeedbackView` is about to stop displaying the provided `CardItem`.
@@ -50,7 +50,7 @@ public protocol ParraFeedbackViewDelegate: AnyObject {
     ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate about the card transition.
     ///   - cardItem: The `CardItem` displayed on the card that will no longer be displayed.
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           willEndDisplaying cardItem: CardItem?)
+                           willEndDisplaying cardItem: ParraCardItem?)
     
     
     /// Tells the delegate that the `ParraFeedbackView` has stopped displaying the provided `CardItem`.
@@ -59,7 +59,7 @@ public protocol ParraFeedbackViewDelegate: AnyObject {
     ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate about the card transition.
     ///   - cardItem: The `CardItem` displayed on the card that is no longer displayed.
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           didEndDisplaying cardItem: CardItem?)
+                           didEndDisplaying cardItem: ParraCardItem?)
     
     
     /// Asks the delegate whether or not it should automatically navigate to the provided `CardItem`. This occurs
@@ -72,31 +72,31 @@ public protocol ParraFeedbackViewDelegate: AnyObject {
     ///   - cardItem: The `CardItem` that will be displayed on the next card.
     /// - Returns: A `Bool` indicating whether or not the automatic navigation should occur.
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           shouldAutoNavigateTo cardItem: CardItem) -> Bool
+                           shouldAutoNavigateTo cardItem: ParraCardItem) -> Bool
 }
 
-extension ParraFeedbackViewDelegate {
-    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView? {
-        return nil
-    }
-    
+public extension ParraFeedbackViewDelegate {
     func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView) {}
     
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           willDisplay cardItem: CardItem?) {}
+                           willDisplay cardItem: ParraCardItem?) {}
     
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           didDisplay cardItem: CardItem?) {}
+                           didDisplay cardItem: ParraCardItem?) {}
     
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           willEndDisplaying cardItem: CardItem?) {}
+                           willEndDisplaying cardItem: ParraCardItem?) {}
 
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           didEndDisplaying cardItem: CardItem?) {}
+                           didEndDisplaying cardItem: ParraCardItem?) {}
     
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
-                           shouldAutoNavigateTo cardItem: CardItem) -> Bool {
+                           shouldAutoNavigateTo cardItem: ParraCardItem) -> Bool {
         return true
+    }
+    
+    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView {
+        return ParraFeedbackView.defaultActionCardView()
     }
 }
 
@@ -119,7 +119,7 @@ public class ParraFeedbackView: UIView {
     
     internal let questionHandler = ParraQuestionHandler()
     
-    internal var cardItems: [CardItem] {
+    internal var cardItems: [ParraCardItem] {
         didSet {
             let existedPreviously = !oldValue.isEmpty
             
@@ -147,6 +147,8 @@ public class ParraFeedbackView: UIView {
             containerLeadingConstraint, containerTrailingConstraint, containerTopConstraint, containerBottomConstraint
         ]
     }
+    
+    internal var currentCardConstraint: NSLayoutConstraint?
     
     internal let containerView = UIView(frame: .zero)
     internal let contentView = UIView(frame: .zero)
@@ -199,7 +201,7 @@ public class ParraFeedbackView: UIView {
     ///   - cardItems: <#cardItems description#>
     ///   - config: <#config description#>
     public required init(
-        cardItems: [CardItem] = [],
+        cardItems: [ParraCardItem] = [],
         config: ParraFeedbackViewConfig = .default
     ) {
         self.cardItems = cardItems
@@ -214,6 +216,7 @@ public class ParraFeedbackView: UIView {
         layer.masksToBounds = false
         setContentHuggingPriority(.defaultHigh, for: .horizontal)
         setContentHuggingPriority(.defaultHigh, for: .vertical)
+        accessibilityIdentifier = "ParraFeedbackView"
         
         addSubview(containerView)
         containerView.addSubview(navigationStack)
@@ -222,7 +225,8 @@ public class ParraFeedbackView: UIView {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.layer.masksToBounds = true
         containerView.isUserInteractionEnabled = true
-        
+        containerView.accessibilityIdentifier = "ParraFeedbackContainerView"
+
         configureSubviews(config: config)
     }
     
