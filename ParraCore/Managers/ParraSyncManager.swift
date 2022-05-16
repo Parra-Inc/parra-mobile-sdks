@@ -159,6 +159,8 @@ class ParraFeedbackSyncManager {
     }
     
     @objc private func syncTimerDidTick() {
+        stopSyncTimer()
+
         Task {
             await self.enqueueSync(with: .immediate)
         }
