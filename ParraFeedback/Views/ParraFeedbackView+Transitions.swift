@@ -195,7 +195,7 @@ extension ParraFeedbackView {
         }
     }
     
-    private func visibleNavigationButtonsForCardItem(_ cardItem: ParraCardItem?) -> VisibleButtonOptions {
+    internal func visibleNavigationButtonsForCardItem(_ cardItem: ParraCardItem?) -> VisibleButtonOptions {
         guard let cardItem = cardItem else {
             return []
         }
@@ -234,7 +234,7 @@ extension ParraFeedbackView {
         }
     }
     
-    private func updateVisibleNavigationButtons(visibleButtons: VisibleButtonOptions) {
+    internal func updateVisibleNavigationButtons(visibleButtons: VisibleButtonOptions) {
         let showBack = visibleButtons.contains(.back)
         
         backButton.alpha = showBack ? 1.0 : 0.0

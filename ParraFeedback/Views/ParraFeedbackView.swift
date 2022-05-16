@@ -124,7 +124,24 @@ public class ParraFeedbackView: UIView {
             let existedPreviously = !oldValue.isEmpty
             
             if cardItems != oldValue {
-                transitionToNextCard(direction: .right, animated: existedPreviously)
+                // If there is already a card item and that item exists in the updated cards list,
+                // we want to make sure that item stays visible.
+                if let currentCardInfo = currentCardInfo, let currentCardItem = currentCardInfo.cardItem, cardItems.contains(where: { $0.id == currentCardItem.id }) {
+
+                    let visibleButtons = visibleNavigationButtonsForCardItem(currentCardItem)
+
+                    UIView.animate(
+                        withDuration: 0.375,
+                        delay: 0.0,
+                        options: [.curveEaseInOut, .beginFromCurrentState],
+                        animations: {
+                            self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
+                        },
+                        completion: nil
+                    )
+                } else {
+                    transitionToNextCard(direction: .right, animated: existedPreviously)
+                }
                 
                 if existedPreviously && cardItems.isEmpty {
                     delegate?.parraFeedbackViewDidCompleteCollection(self)
