@@ -28,7 +28,8 @@ extension ParraFeedbackView {
         removeConstraints(constraintsOnSuperView)
 
         constraintsOnSuperView = [
-            widthAnchor.constraint(greaterThanOrEqualToConstant: 320)
+            widthAnchor.constraint(greaterThanOrEqualToConstant: 240),
+            heightAnchor.constraint(greaterThanOrEqualToConstant: 140),
         ]
         
         NSLayoutConstraint.activate(constraintsOnSuperView)
@@ -114,8 +115,7 @@ extension ParraFeedbackView {
             contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: LayoutConstants.navigationPadding),
             contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0),
             contentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
-            contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 170)
+            contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0)
         ])
     }
     
