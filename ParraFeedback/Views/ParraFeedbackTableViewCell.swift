@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ParraCore
 
 /// <#Description#>
 public class ParraFeedbackTableViewCell: UITableViewCell {
@@ -45,10 +46,10 @@ public class ParraFeedbackTableViewCell: UITableViewCell {
         }
     }
     
-    public override func prepareForReuse() {
-        super.prepareForReuse()
+    public func endDisplaying() {
+        Parra.triggerSync()
     }
-    
+        
     private func commonInit() {
         selectionStyle = .none
         
@@ -61,5 +62,4 @@ public class ParraFeedbackTableViewCell: UITableViewCell {
             parraFeedbackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
-
 }
