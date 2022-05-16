@@ -12,6 +12,9 @@ import ParraCore
 public class ParraFeedbackTableViewCell: UITableViewCell {
 
     /// <#Description#>
+    public weak var delegate: ParraFeedbackViewDelegate?
+
+    /// <#Description#>
     public static let defaultCellId = "ParraFeedbackTableViewCell"
     
     /// <#Description#>

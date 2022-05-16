@@ -32,6 +32,7 @@ class ParraFeedbackInTableView: UITableViewController {
                 print("Error fetching Parra cards: \(error)")
             } else if cards.isEmpty {
                 self.navigationItem.prompt = "No Parra cards currently available."
+                print("No Parra cards currently available.")
             } else {
                 self.shouldShowFeedback = true
             }
@@ -41,7 +42,10 @@ class ParraFeedbackInTableView: UITableViewController {
     override func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == Constant.feedbackRow && shouldShowFeedback {
-            let parraCell = tableView.dequeueReusableCell(withIdentifier: ParraFeedbackTableViewCell.defaultCellId, for: indexPath)
+            let parraCell = tableView.dequeueReusableCell(withIdentifier: ParraFeedbackTableViewCell.defaultCellId, for: indexPath) as! ParraFeedbackTableViewCell
+            
+            parraCell.config = .default
+            parraCell.delegate = self
             
             return parraCell
         }
@@ -84,5 +88,11 @@ class ParraFeedbackInTableView: UITableViewController {
     override func tableView(_ tableView: UITableView,
                             didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension ParraFeedbackInTableView: ParraFeedbackViewDelegate {    
+    func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView) {
+        shouldShowFeedback = false
     }
 }
