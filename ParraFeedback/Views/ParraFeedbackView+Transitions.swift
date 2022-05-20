@@ -9,7 +9,7 @@ import UIKit
 import ParraCore
 
 extension ParraFeedbackView: ParraQuestionHandlerDelegate {
-    func questionHandlerDidMakeNewSelection(forQuestion question: Question) {
+    internal func questionHandlerDidMakeNewSelection(forQuestion question: Question) {
         Task {
             try await Task.sleep(nanoseconds: 333_000_000)
 
@@ -34,8 +34,8 @@ extension ParraFeedbackView: ParraQuestionHandlerDelegate {
 }
 
 extension ParraFeedbackView {
-    func suggestTransitionInDirection(_ direction: Direction,
-                                      animated: Bool) {
+    internal func suggestTransitionInDirection(_ direction: Direction,
+                                               animated: Bool) {
         
         guard canTransitionInDirection(direction) else {
             return
@@ -47,8 +47,8 @@ extension ParraFeedbackView {
         )
     }
     
-    func transitionToNextCard(direction: Direction = .right,
-                              animated: Bool = false) {
+    internal func transitionToNextCard(direction: Direction = .right,
+                                       animated: Bool = false) {
         
         let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: direction)
         
@@ -57,7 +57,7 @@ extension ParraFeedbackView {
                              animated: animated)
     }
     
-    func nextCardItem(inDirection direction: Direction) -> (nextCardItem: ParraCardItem?, nextCardItemDirection: Direction) {
+    internal func nextCardItem(inDirection direction: Direction) -> (nextCardItem: ParraCardItem?, nextCardItemDirection: Direction) {
         guard let currentCardInfo = currentCardInfo else {
             return (cardItems.first, direction)
         }
@@ -88,9 +88,9 @@ extension ParraFeedbackView {
         }
     }
     
-    func transitionToCardItem(_ cardItem: ParraCardItem?,
-                              direction: Direction,
-                              animated: Bool = false) {
+    internal func transitionToCardItem(_ cardItem: ParraCardItem?,
+                                       direction: Direction,
+                                       animated: Bool = false) {
         
         let nextCard = cardViewFromCardItem(cardItem)
         nextCard.accessibilityIdentifier = "Next Card"

@@ -8,6 +8,8 @@
 import UIKit
 import ParraCore
 
+/// A delegate for `ParraFeedbackView`s that allows for additional customization, and to be informed of actions
+/// such as when particular cards are displayed or when all questions are answered.
 public protocol ParraFeedbackViewDelegate: AnyObject {
     
     /// Asks the delegate to provide a view that the provided `ParraFeedbackView` can display when all cards
@@ -101,7 +103,10 @@ public extension ParraFeedbackViewDelegate {
 }
 
 
-/// <#Description#>
+/// `ParraFeedbackView`s are used to display cards fetched via the `ParraFeedback` module. Fetching and displaying
+/// cards are decoupled to allow you the flexibility to fetch cards asynchronously and only display them in your UI when you're
+/// ready. Any cards that have been fetched in the `ParraFeedback` module will automatically be displayed by
+/// `ParraFeedbackView`s when they are added to your view hierarchy.
 public class ParraFeedbackView: UIView {
     
     /// The object that acts as the delegate of the `ParraFeedbackView`. The delegate is not retained.
@@ -115,11 +120,12 @@ public class ParraFeedbackView: UIView {
             }
         }
     }
+
     internal var cardSwipeGestureRecognizers = [UISwipeGestureRecognizer]()
     
     internal let questionHandler = ParraQuestionHandler()
     
-    internal var cardItems: [ParraCardItem] {
+    internal var cardItems: [ParraCardItem] = [] {
         didSet {
             let existedPreviously = !oldValue.isEmpty
             
@@ -170,7 +176,8 @@ public class ParraFeedbackView: UIView {
     internal let containerView = UIView(frame: .zero)
     internal let contentView = UIView(frame: .zero)
     
-    /// <#Description#>
+    /// A `ParraFeedbackViewConfig` used to configure how `ParraFeedbackView`s look. Use this to make `ParraFeedbackView`s
+    /// blend in with the UI in the rest of your app.
     public var config: ParraFeedbackViewConfig {
         didSet {
             applyConfig(config)
@@ -213,15 +220,11 @@ public class ParraFeedbackView: UIView {
     })()
     
     
-    /// <#Description#>
-    /// - Parameters:
-    ///   - cardItems: <#cardItems description#>
-    ///   - config: <#config description#>
+    /// Creates a `ParraFeedbackView`. If there are any `ParraCardItem`s available in hte `ParraFeedback` module,
+    /// they will be displayed automatically when adding this view to your view hierarchy.
     public required init(
-        cardItems: [ParraCardItem] = [],
         config: ParraFeedbackViewConfig = .default
     ) {
-        self.cardItems = cardItems
         self.config = config
         
         super.init(frame: .zero)

@@ -174,11 +174,11 @@ extension ParraFeedbackView {
         return swipe
     }
     
-    @objc func navigateToPreviousCard() {
+    @objc internal func navigateToPreviousCard() {
         suggestTransitionInDirection(.left, animated: true)
     }
     
-    @objc func navigateToNextCard() {
+    @objc internal func navigateToNextCard() {
         suggestTransitionInDirection(.right, animated: true)
     }
 }

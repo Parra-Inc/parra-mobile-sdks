@@ -10,7 +10,7 @@ import ParraFeedback
 
 class ParraFeedbackInView: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
-    private let feedbackView = ParraFeedbackView(cardItems: [], config: .default)
+    private let feedbackView = ParraFeedbackView(config: .default)
 
     override func viewDidLoad() {
         super.viewDidLoad()

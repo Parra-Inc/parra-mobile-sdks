@@ -25,7 +25,6 @@ public class ParraFeedbackTableViewCell: UITableViewCell {
     }
 
     private let parraFeedbackView = ParraFeedbackView(
-        cardItems: [],
         config: .default
     )
     

@@ -60,7 +60,8 @@ public struct ParraTextConfig {
 }
 
 
-/// <#Description#>
+/// A configuration object for how a `ParraFeedbackView` should look. Use this to customize `ParraFeedbackView`s
+/// so that they better blend in with your app's UI.
 public struct ParraFeedbackViewConfig {
     var backgroundColor: UIColor
     var tintColor: UIColor
@@ -87,7 +88,7 @@ public struct ParraFeedbackViewConfig {
         self.subtitle = subtitle
     }
 
-    /// <#Description#>
+    /// The default configuration used by `ParraFeedbackView`s when no other configuration is provided.
     public static let `default` = ParraFeedbackViewConfig(
         backgroundColor: UIColor(hex: 0xFAFAFA),
         tintColor: UIColor(hex: 0x200E32),
