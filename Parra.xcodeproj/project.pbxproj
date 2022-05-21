@@ -280,6 +280,7 @@
 		00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionHandler.swift; sourceTree = "<group>"; };
 		00E8B32D27878C3400FC3FFD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		00F5AAF027FA819200A94C85 /* ParraFeedbackInTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackInTableView.swift; sourceTree = "<group>"; };
+		00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeneratedTypes+Swift.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -483,6 +484,7 @@
 				0015599827E40AC7006450BE /* Managers */,
 				0015599927E40ADD006450BE /* PersistentStorage */,
 				001559A027E40D49006450BE /* TestHelpers */,
+				00F5AAF228023EDB00A94C85 /* Types */,
 			);
 			path = ParraCoreTests;
 			sourceTree = "<group>";
@@ -626,6 +628,14 @@
 				003C216D27DEE77D001CAE03 /* Demo-Bridging-Header.h */,
 			);
 			path = Demo;
+			sourceTree = "<group>";
+		};
+		00F5AAF228023EDB00A94C85 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */,
+			);
+			path = Types;
 			sourceTree = "<group>";
 		};
 		02A060188E5CD1963038AE8C /* Pods */ = {
@@ -904,6 +914,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00707D1927F88B2A004E9567 /* ParraDataManagerTests+Mocks.swift in Sources */,
+				00F5AAF428023EF300A94C85 /* GeneratedTypes+Swift.swift in Sources */,
 				001559AA27E41A8A006450BE /* ParraStorageModuleTests.swift in Sources */,
 				0015599C27E40B13006450BE /* FileSystemStorageTests.swift in Sources */,
 				001559AF27E7E76C006450BE /* CredentialStorageTests.swift in Sources */,

@@ -286,6 +286,12 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
     public let version: String
     public let data: CardItemData
     
+    public enum CodingKeys: String, CodingKey {
+        case type
+        case version
+        case data
+    }
+
     public init(
         type: CardItemType,
         version: String,
@@ -303,6 +309,18 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
         switch type {
         case .question:
             self.data = .question(try container.decode(Question.self, forKey: .data))
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(type, forKey: .type)
+        try container.encode(version, forKey: .version)
+        
+        switch data {
+        case .question(let question):
+            try container.encode(question, forKey: .data)
         }
     }
     
@@ -537,6 +555,7 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
         case answerQuota = "answer_quota"
         case answer
     }
+    
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
@@ -557,6 +576,29 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
             self.data = .choiceQuestionBody(try container.decode(ChoiceQuestionBody.self, forKey: .data))
         case .rating:
             fatalError()
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(id, forKey: .id)
+        try container.encode(createdAt, forKey: .createdAt)
+        try container.encode(updatedAt, forKey: .updatedAt)
+        try container.encode(deletedAt, forKey: .deletedAt)
+        try container.encode(tenantId, forKey: .tenantId)
+        try container.encode(title, forKey: .title)
+        try container.encode(subtitle, forKey: .subtitle)
+        try container.encode(type, forKey: .type)
+        try container.encode(kind, forKey: .kind)
+        try container.encode(active, forKey: .active)
+        try container.encode(expiresAt, forKey: .expiresAt)
+        try container.encode(answerQuota, forKey: .answerQuota)
+        try container.encode(answer, forKey: .answer)
+        
+        switch data {
+        case .choiceQuestionBody(let choiceQuestionBody):
+            try container.encode(choiceQuestionBody, forKey: .data)
         }
     }
 }
