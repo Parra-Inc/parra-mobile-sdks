@@ -9,9 +9,13 @@ import Foundation
 
 extension Parra {
     
-    /// <#Description#>
+    /// A notification that is fired with the Parra module is about to begin syncrhonizing data with the Parra API. Each sync
+    /// will include a unique token used to identify a given sync. This token is attached to the notification's `userInfo` with
+    /// the key `Parra.Constant.syncTokenKey`.
     static let syncDidBeginNotification = NSNotification.Name(rawValue: "ParraSyncDidBeginNotification")
     
-    /// <#Description#>
+    /// A notification that is fired with the Parra module is about has completed syncrhonizing data with the Parra API. Each sync
+    /// will include a unique token used to identify a given sync. This token is attached to the notification's `userInfo` with
+    /// the key `Parra.Constant.syncTokenKey`.
     static let syncDidEndNotification = NSNotification.Name(rawValue: "ParraSyncDidEndNotification")
 }

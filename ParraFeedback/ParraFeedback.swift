@@ -8,7 +8,9 @@
 import Foundation
 import ParraCore
 
-/// <#Description#>
+/// The `ParraFeedback` module is used to fetch Parra Feedback data from the Parra API. Once data is fetched,
+/// it will be displayed automatically in any `ParraFeedbackView`s that you add to your view hierarchy.
+/// To handle authentication, see the Parra Core module.
 public class ParraFeedback: ParraModule {
     internal static let shared = ParraFeedback()
     internal let dataManager = ParraFeedbackDataManager()
@@ -17,7 +19,7 @@ public class ParraFeedback: ParraModule {
         Parra.registerModule(module: self)
     }
     
-    public static var name: String = "Feedback"
+    public private(set) static var name: String = "Feedback"
         
     /// <#Description#>
     /// - Parameter completion: <#completion description#>
