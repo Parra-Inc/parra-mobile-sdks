@@ -16,7 +16,6 @@ enum ParraFeedbackSyncMode: String {
 /// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
 class ParraFeedbackSyncManager {
     enum Constant {
-        static let syncTokenKey = "syncToken"
         static let eventualSyncDelay: TimeInterval = 30.0
     }
         
@@ -73,7 +72,7 @@ class ParraFeedbackSyncManager {
             name: Parra.syncDidBeginNotification,
             object: self,
             userInfo: [
-                Constant.syncTokenKey: syncToken
+                Parra.Constant.syncTokenKey: syncToken
             ]
         )
         
@@ -82,7 +81,7 @@ class ParraFeedbackSyncManager {
                 name: Parra.syncDidEndNotification,
                 object: self,
                 userInfo: [
-                    Constant.syncTokenKey: syncToken
+                    Parra.Constant.syncTokenKey: syncToken
                 ]
             )
         }

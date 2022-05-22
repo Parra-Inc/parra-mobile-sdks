@@ -7,9 +7,13 @@
 
 import Foundation
 
-extension Parra {
+public extension Parra {
     enum Constant {
-        static let parraLogPrefix = "[PARRA]"
-        static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
+        /// A key that cooresponds to a unique sync token provided with sync begin/ending notifications.
+        public static let syncTokenKey = "syncToken"
+        
+        internal static let parraLogPrefix = "[PARRA]"
+        
+        internal static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
     }
 }
