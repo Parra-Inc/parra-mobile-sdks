@@ -21,14 +21,14 @@
                             <tableViewSection headerTitle="Parra Feedback" id="evb-Nj-BfW">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Fcz-A7-S4o">
-                                        <rect key="frame" x="20" y="49.5" width="374" height="59"/>
+                                        <rect key="frame" x="20" y="49.5" width="374" height="59.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Fcz-A7-S4o" id="Y3Y-rI-clq">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In a UIView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Ka-Zj-RqA">
-                                                    <rect key="frame" x="28" y="19" width="318" height="21"/>
+                                                    <rect key="frame" x="28" y="19" width="318" height="21.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -47,14 +47,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Qgc-bd-CIU">
-                                        <rect key="frame" x="20" y="108.5" width="374" height="59"/>
+                                        <rect key="frame" x="20" y="109" width="374" height="59.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Qgc-bd-CIU" id="Ao5-EE-Tgs">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In a UITableView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m6N-yw-0T9">
-                                                    <rect key="frame" x="28" y="19" width="318" height="21"/>
+                                                    <rect key="frame" x="28" y="19" width="318" height="21.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -70,6 +70,32 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="dla-ZH-xro" kind="show" id="ZiC-FV-YMv"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="J7E-vW-ILa">
+                                        <rect key="frame" x="20" y="168.5" width="374" height="59.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="J7E-vW-ILa" id="HhJ-ZL-OqB">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In a UICollectionView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mLw-dU-2w2">
+                                                    <rect key="frame" x="28" y="19" width="318" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="mLw-dU-2w2" firstAttribute="top" secondItem="HhJ-ZL-OqB" secondAttribute="topMargin" constant="8" id="Zy0-rG-gI5"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="mLw-dU-2w2" secondAttribute="bottom" constant="8" id="gES-on-zUi"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="mLw-dU-2w2" secondAttribute="trailing" constant="8" id="hFt-BJ-z25"/>
+                                                <constraint firstItem="mLw-dU-2w2" firstAttribute="leading" secondItem="HhJ-ZL-OqB" secondAttribute="leadingMargin" constant="8" id="yH4-9N-3JJ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <segue destination="1Si-ET-Htl" kind="show" id="K5S-7u-VCN"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -131,6 +157,32 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vTi-65-2dh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-475" y="275"/>
+        </scene>
+        <!--Parra Feedback In Collection View-->
+        <scene sceneID="giP-og-eQD">
+            <objects>
+                <collectionViewController id="1Si-ET-Htl" customClass="ParraFeedbackInCollectionView" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="0vb-XD-dVH">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="16" minimumInteritemSpacing="16" id="z5q-rC-Jmn">
+                            <size key="itemSize" width="128" height="128"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells/>
+                        <connections>
+                            <outlet property="dataSource" destination="1Si-ET-Htl" id="Jxf-iK-cFl"/>
+                            <outlet property="delegate" destination="1Si-ET-Htl" id="DDK-W9-wyr"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="Imr-l9-rh6"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e8F-rd-cFI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-475" y="946"/>
         </scene>
         <!--Parra Feedback In View-->
         <scene sceneID="tx0-xD-6rH">

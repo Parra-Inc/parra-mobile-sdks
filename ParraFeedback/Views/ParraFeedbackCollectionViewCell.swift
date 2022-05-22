@@ -1,21 +1,22 @@
 //
-//  ParraFeedbackTableViewCell.swift
+//  ParraFeedbackCollectionViewCell.swift
 //  ParraFeedback
 //
-//  Created by Mick MacCallum on 3/29/22.
+//  Created by Mick MacCallum on 5/16/22.
+//  Copyright © 2022 Parra, Inc. All rights reserved.
 //
 
 import UIKit
 import ParraCore
 
 /// <#Description#>
-public class ParraFeedbackTableViewCell: UITableViewCell {
+public class ParraFeedbackCollectionViewCell: UICollectionViewCell {
 
     /// <#Description#>
     public weak var delegate: ParraFeedbackViewDelegate?
 
     /// <#Description#>
-    public static let defaultCellId = "ParraFeedbackTableViewCell"
+    public static let defaultCellId = "ParraFeedbackCollectionViewCell"
     
     /// <#Description#>
     public var config: ParraFeedbackViewConfig = .default {
@@ -26,8 +27,8 @@ public class ParraFeedbackTableViewCell: UITableViewCell {
 
     private let parraFeedbackView = ParraFeedbackView(config: .default)
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
         
         commonInit()
     }
@@ -37,30 +38,20 @@ public class ParraFeedbackTableViewCell: UITableViewCell {
         
         commonInit()
     }
-            
-    public override var selectionStyle: UITableViewCell.SelectionStyle {
-        didSet {
-            if selectionStyle != .none {
-                selectionStyle = .none
-            }
-        }
-    }
-    
+
     /// <#Description#>
     public func endDisplaying() {
         Parra.triggerSync()
     }
         
     private func commonInit() {
-        selectionStyle = .none
-        
         contentView.addSubview(parraFeedbackView)
-        
+
         NSLayoutConstraint.activate([
-            parraFeedbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            parraFeedbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             parraFeedbackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             parraFeedbackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            parraFeedbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            parraFeedbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
 }

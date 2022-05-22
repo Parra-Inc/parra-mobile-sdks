@@ -27,10 +27,15 @@ extension ParraFeedbackView {
         }
         removeConstraints(constraintsOnSuperView)
 
-        constraintsOnSuperView = [
-            widthAnchor.constraint(greaterThanOrEqualToConstant: 240),
-            heightAnchor.constraint(greaterThanOrEqualToConstant: 274),
-        ]
+        let widthConstraint = widthAnchor.constraint(
+            greaterThanOrEqualToConstant: Dimensions.minWidth
+        )
+        
+        let heightConstraint = heightAnchor.constraint(
+            greaterThanOrEqualToConstant: Dimensions.minHeight
+        )
+
+        constraintsOnSuperView = [widthConstraint, heightConstraint]
         
         NSLayoutConstraint.activate(constraintsOnSuperView)
     }

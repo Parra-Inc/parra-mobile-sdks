@@ -108,6 +108,10 @@ public extension ParraFeedbackViewDelegate {
 /// ready. Any cards that have been fetched in the `ParraFeedback` module will automatically be displayed by
 /// `ParraFeedbackView`s when they are added to your view hierarchy.
 public class ParraFeedbackView: UIView {
+    public enum Dimensions {
+        public static let minWidth: CGFloat = 320
+        public static let minHeight: CGFloat = 274
+    }
     
     /// The object that acts as the delegate of the `ParraFeedbackView`. The delegate is not retained.
     public weak var delegate: ParraFeedbackViewDelegate?
@@ -234,7 +238,7 @@ public class ParraFeedbackView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
         layer.masksToBounds = false
-        setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        setContentHuggingPriority(.init(rawValue: 999), for: .horizontal)
         setContentHuggingPriority(.defaultHigh, for: .vertical)
         accessibilityIdentifier = "ParraFeedbackView"
         

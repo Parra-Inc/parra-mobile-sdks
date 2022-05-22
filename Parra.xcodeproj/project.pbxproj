@@ -107,6 +107,8 @@
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
 		00F5AAF127FA819200A94C85 /* ParraFeedbackInTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF027FA819200A94C85 /* ParraFeedbackInTableView.swift */; };
 		00F5AAF428023EF300A94C85 /* GeneratedTypes+Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */; };
+		00FD310B28329F5B0080689C /* ParraFeedbackCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD310A28329F5B0080689C /* ParraFeedbackCollectionViewCell.swift */; };
+		00FD310D28329FF00080689C /* ParraFeedbackInCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD310C28329FF00080689C /* ParraFeedbackInCollectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -281,6 +283,8 @@
 		00E8B32D27878C3400FC3FFD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		00F5AAF027FA819200A94C85 /* ParraFeedbackInTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackInTableView.swift; sourceTree = "<group>"; };
 		00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeneratedTypes+Swift.swift"; sourceTree = "<group>"; };
+		00FD310A28329F5B0080689C /* ParraFeedbackCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackCollectionViewCell.swift; sourceTree = "<group>"; };
+		00FD310C28329FF00080689C /* ParraFeedbackInCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackInCollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -580,6 +584,7 @@
 				0036D60927D051B20016DE97 /* ParraFeedbackView+Layout.swift */,
 				0036D60727D051060016DE97 /* ParraFeedbackView+Transitions.swift */,
 				00717C2C27F3E11100BE5608 /* ParraFeedbackTableViewCell.swift */,
+				00FD310A28329F5B0080689C /* ParraFeedbackCollectionViewCell.swift */,
 				00120EFC27514BE000CA3247 /* Card Views */,
 				001286F2277D53890090CDB5 /* Selectable Buttons */,
 			);
@@ -622,6 +627,7 @@
 				0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */,
 				0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */,
 				00F5AAF027FA819200A94C85 /* ParraFeedbackInTableView.swift */,
+				00FD310C28329FF00080689C /* ParraFeedbackInCollectionView.swift */,
 				00DECFFE274C69F800DAF301 /* Main.storyboard */,
 				00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */,
 				00DED006274C69FA00DAF301 /* Info.plist */,
@@ -940,6 +946,7 @@
 				001B7B5E27DE3B3800DEEECD /* ParraQuestionCardView.swift in Sources */,
 				001B7B5527DE3B3800DEEECD /* ParraCardView.swift in Sources */,
 				001B7B4F27DE3B2500DEEECD /* ParraFeedback.swift in Sources */,
+				00FD310B28329F5B0080689C /* ParraFeedbackCollectionViewCell.swift in Sources */,
 				001B7B5B27DE3B3800DEEECD /* ParraActionCardView.swift in Sources */,
 				001B7B5327DE3B3800DEEECD /* UIColor.swift in Sources */,
 				001B7B6427DE3BE700DEEECD /* Direction.swift in Sources */,
@@ -982,6 +989,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */,
+				00FD310D28329FF00080689C /* ParraFeedbackInCollectionView.swift in Sources */,
 				0084014A27D5613A00E2B0ED /* ParraFeedbackInView.swift in Sources */,
 				0084014827D560B900E2B0ED /* ParraDemoTableViewController.swift in Sources */,
 				003C216C27DED58C001CAE03 /* SceneDelegate.swift in Sources */,
