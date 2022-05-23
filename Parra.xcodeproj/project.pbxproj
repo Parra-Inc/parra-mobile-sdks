@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		000AF4C3283AE6E7008A17A3 /* ParraShadowConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000AF4C2283AE6E7008A17A3 /* ParraShadowConfig.swift */; };
+		000AF4C5283AE6FF008A17A3 /* ParraTextConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000AF4C4283AE6FF008A17A3 /* ParraTextConfig.swift */; };
 		0015599727E2BEBF006450BE /* ParraEmptyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0015599627E2BEBF006450BE /* ParraEmptyCardView.swift */; };
 		0015599C27E40B13006450BE /* FileSystemStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0015599B27E40B13006450BE /* FileSystemStorageTests.swift */; };
 		0015599F27E40B71006450BE /* FileManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0015599E27E40B71006450BE /* FileManagerTests.swift */; };
@@ -179,6 +181,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		000AF4C2283AE6E7008A17A3 /* ParraShadowConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraShadowConfig.swift; sourceTree = "<group>"; };
+		000AF4C4283AE6FF008A17A3 /* ParraTextConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTextConfig.swift; sourceTree = "<group>"; };
 		00120EF2274D1EEE00CA3247 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		00120EF8274D9CFC00CA3247 /* ParraFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackView.swift; sourceTree = "<group>"; };
 		00120EFA274DC98400CA3247 /* ParraActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraActionCardView.swift; sourceTree = "<group>"; };
@@ -331,6 +335,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		000AF4C1283AE6D8008A17A3 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				001B7B6527DE3BFB00DEEECD /* ParraFeedbackViewConfig.swift */,
+				000AF4C4283AE6FF008A17A3 /* ParraTextConfig.swift */,
+				000AF4C2283AE6E7008A17A3 /* ParraShadowConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		00120EF1274D1ECA00CA3247 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -525,9 +539,9 @@
 			isa = PBXGroup;
 			children = (
 				001B7B6327DE3BE700DEEECD /* Direction.swift */,
-				001B7B6527DE3BFB00DEEECD /* ParraFeedbackViewConfig.swift */,
 				001B7B6727DE3C1200DEEECD /* VisibleButtonOptions.swift */,
 				001B7B6927DE3C2400DEEECD /* CurrentCardInfo.swift */,
+				000AF4C1283AE6D8008A17A3 /* Config */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -948,6 +962,7 @@
 				001B7B4F27DE3B2500DEEECD /* ParraFeedback.swift in Sources */,
 				00FD310B28329F5B0080689C /* ParraFeedbackCollectionViewCell.swift in Sources */,
 				001B7B5B27DE3B3800DEEECD /* ParraActionCardView.swift in Sources */,
+				000AF4C5283AE6FF008A17A3 /* ParraTextConfig.swift in Sources */,
 				001B7B5327DE3B3800DEEECD /* UIColor.swift in Sources */,
 				001B7B6427DE3BE700DEEECD /* Direction.swift in Sources */,
 				001B7B5A27DE3B3800DEEECD /* ParraFeedbackView+Transitions.swift in Sources */,
@@ -970,6 +985,7 @@
 				001B7B6827DE3C1200DEEECD /* VisibleButtonOptions.swift in Sources */,
 				0015599727E2BEBF006450BE /* ParraEmptyCardView.swift in Sources */,
 				001B7B8427DE6E2400DEEECD /* ParraFeedback+Constants.swift in Sources */,
+				000AF4C3283AE6E7008A17A3 /* ParraShadowConfig.swift in Sources */,
 				001B7B8527DE70FF00DEEECD /* CompletedCardDataStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

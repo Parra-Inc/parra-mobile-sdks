@@ -10,9 +10,13 @@ import UIKit
 
 // TODO: Common ancestor. Might be able to just be a protocol.
 public class ParraCardView: UIView {
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    internal var config: ParraFeedbackViewConfig
+
+    required init(config: ParraFeedbackViewConfig) {
+        self.config = config
+
+        super.init(frame: .zero)
+
         isUserInteractionEnabled = true
     }
     

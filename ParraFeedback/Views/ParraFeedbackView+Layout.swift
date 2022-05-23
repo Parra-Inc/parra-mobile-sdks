@@ -110,6 +110,10 @@ extension ParraFeedbackView {
         if needsLayout {
             layoutIfNeeded()
         }
+        
+        if let currentCardInfo = currentCardInfo {
+            currentCardInfo.cardView.config = config
+        }
     }
     
     private func configureContentView() {

@@ -17,12 +17,13 @@ class ParraActionCardView: ParraCardView {
     
 
     required init(
+        config: ParraFeedbackViewConfig,
         title: String,
         subtitle: String?,
         actionTitle: String,
         actionHandler: (() -> Void)?
     ) {
-        super.init(frame: .zero)
+        super.init(config: config)
         
         translatesAutoresizingMaskIntoConstraints = false
 
@@ -93,7 +94,11 @@ class ParraActionCardView: ParraCardView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+    
+    required init(config: ParraFeedbackViewConfig) {
+        fatalError("init(config:) has not been implemented")
+    }
+    
     @objc private func ctaPressed(button: UIButton) {
         if let actionHandler = actionHandler {
             actionHandler()

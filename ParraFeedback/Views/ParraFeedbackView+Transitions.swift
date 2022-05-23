@@ -260,7 +260,8 @@ extension ParraFeedbackView {
         case .question(let question):
             card = ParraQuestionCardView(
                 question: question,
-                questionHandler: questionHandler
+                questionHandler: questionHandler,
+                config: config
             )
         }
         
@@ -269,6 +270,7 @@ extension ParraFeedbackView {
     
     internal static func defaultActionCardView() -> ParraActionCardView {
         return ParraActionCardView(
+            config: .default,
             title: "You're all caught up for now!",
             subtitle: "We appreciate you taking the time to provide us with your feedback.",
             actionTitle: "Have other feedback?"

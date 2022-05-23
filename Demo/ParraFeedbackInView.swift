@@ -10,7 +10,13 @@ import ParraFeedback
 
 class ParraFeedbackInView: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
-    private let feedbackView = ParraFeedbackView(config: .default)
+    private let feedbackView = ParraFeedbackView(
+        config: ParraFeedbackViewConfig(
+            shadow: .default,
+            title: .init(color: .red, font: .monospacedDigitSystemFont(ofSize: 16, weight: .bold), shadow: .default),
+            subtitle: .subtitleDefault
+        )
+    )
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +56,7 @@ class ParraFeedbackInView: UIViewController {
             self.view.addSubview(self.feedbackView)
             
             NSLayoutConstraint.activate([
-                self.feedbackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 200),
+                self.feedbackView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.centerYAnchor),
                 self.feedbackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                 self.feedbackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
             ])

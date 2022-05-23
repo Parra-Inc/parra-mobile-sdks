@@ -6,11 +6,19 @@
 //
 
 import Foundation
+import UIKit
 
 public extension Parra {
     enum Constant {
         /// A key that cooresponds to a unique sync token provided with sync begin/ending notifications.
         public static let syncTokenKey = "syncToken"
+        
+        public static let brandColor = UIColor(
+            red: 232.0 / 255.0,
+            green: 68.0 / 255.0,
+            blue: 71.0 / 255.0,
+            alpha: 1.0
+        )
         
         internal static let parraLogPrefix = "[PARRA]"
         

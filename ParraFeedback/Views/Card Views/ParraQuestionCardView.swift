@@ -26,18 +26,30 @@ protocol ParraQuestionViewDelegate {
 }
 
 class ParraQuestionCardView: ParraCardView {
-    let question: Question
-    let questionHandler: ParraQuestionHandler
+    internal override var config: ParraFeedbackViewConfig {
+        didSet {
+            applyConfig(config)
+        }
+    }
+
+    private let question: Question
+    private let questionHandler: ParraQuestionHandler
     private var optionViewMap = [ChoiceQuestionOption: ParraChoiceOptionView]()
 
     private let contentContainer = UIStackView(frame: .zero)
     
-    required init(question: Question, questionHandler: ParraQuestionHandler) {
+    private let titleLabel: UILabel
+    private var subtitleLabel: UILabel?
+    
+    required init(question: Question,
+                  questionHandler: ParraQuestionHandler,
+                  config: ParraFeedbackViewConfig) {
         self.question = question
         self.questionHandler = questionHandler
         
-        super.init(frame: .zero)
-        
+        titleLabel = UILabel(frame: .zero)
+
+        super.init(config: config)
         
         translatesAutoresizingMaskIntoConstraints = false
         contentContainer.isUserInteractionEnabled = true
@@ -53,13 +65,10 @@ class ParraQuestionCardView: ParraCardView {
             contentContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             contentContainer.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -12)
         ])
-        
-        let titleLabel = UILabel(frame: .zero)
-        
+                
         titleLabel.text = question.title
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         titleLabel.isUserInteractionEnabled = true
         
         addSubview(titleLabel)
@@ -79,6 +88,8 @@ class ParraQuestionCardView: ParraCardView {
             subtitleLabel.font = UIFont.preferredFont(forTextStyle: .caption2)
             subtitleLabel.isUserInteractionEnabled = true
 
+            self.subtitleLabel = subtitleLabel
+            
             addSubview(subtitleLabel)
             
             NSLayoutConstraint.activate([
@@ -100,10 +111,34 @@ class ParraQuestionCardView: ParraCardView {
         case .choiceQuestionBody(let choice):
             generateOptionsForChoice(choice)
         }
+        
+        applyConfig(config)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    required init(config: ParraFeedbackViewConfig) {
+        fatalError("init(config:) has not been implemented")
+    }
+    
+    private func applyConfig(_ confif: ParraFeedbackViewConfig) {
+        titleLabel.font = config.title.font
+        titleLabel.textColor = config.title.color
+        titleLabel.layer.shadowColor = config.title.shadow.color.cgColor
+        titleLabel.layer.shadowOffset = config.title.shadow.offset
+        titleLabel.layer.shadowRadius = config.title.shadow.radius
+        titleLabel.layer.shadowOpacity = config.title.shadow.opacity
+
+        if let subtitleLabel = subtitleLabel {
+            subtitleLabel.font = config.subtitle.font
+            subtitleLabel.textColor = config.subtitle.color
+            subtitleLabel.layer.shadowColor = config.subtitle.shadow.color.cgColor
+            subtitleLabel.layer.shadowOffset = config.subtitle.shadow.offset
+            subtitleLabel.layer.shadowRadius = config.subtitle.shadow.radius
+            subtitleLabel.layer.shadowOpacity = config.subtitle.shadow.opacity
+        }
     }
     
     private func generateOptionsForChoice(_ choice: ChoiceQuestionBody) {

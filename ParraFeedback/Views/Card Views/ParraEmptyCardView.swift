@@ -10,10 +10,14 @@ import UIKit
 
 class ParraEmptyCardView: ParraCardView {
     internal init(innerView: UIView) {
-        super.init(frame: .zero)
+        super.init(config: .default)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    required init(config: ParraFeedbackViewConfig) {
+        fatalError("init(config:) has not been implemented")
     }
 }
