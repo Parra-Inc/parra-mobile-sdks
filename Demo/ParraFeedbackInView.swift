@@ -51,8 +51,8 @@ class ParraFeedbackInView: UIViewController {
             
             NSLayoutConstraint.activate([
                 self.feedbackView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.centerYAnchor),
-                self.feedbackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                self.feedbackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+                self.feedbackView.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
+                self.feedbackView.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor)
             ])
         }
     }
