@@ -23,6 +23,7 @@ public struct ParraFeedbackViewConfig {
     var shadow: ParraShadowConfig
     var title: ParraTextConfig
     var subtitle: ParraTextConfig
+    var body: ParraTextConfig
     
     public init(backgroundColor: UIColor = Constant.defaultBackgroundColor,
                 tintColor: UIColor? = nil,
@@ -30,7 +31,8 @@ public struct ParraFeedbackViewConfig {
                 contentInsets: UIEdgeInsets = Constant.defaultContentInsets,
                 shadow: ParraShadowConfig = .default,
                 title: ParraTextConfig = .titleDefault,
-                subtitle: ParraTextConfig = .subtitleDefault) {
+                subtitle: ParraTextConfig = .subtitleDefault,
+                body: ParraTextConfig = .bodyDefault) {
         self.backgroundColor = backgroundColor
         self.tintColor = tintColor
         self.cornerRadius = cornerRadius
@@ -38,6 +40,7 @@ public struct ParraFeedbackViewConfig {
         self.shadow = shadow
         self.title = title
         self.subtitle = subtitle
+        self.body = body
     }
 
     /// The default configuration used by `ParraFeedbackView`s when no other configuration is provided.

@@ -33,4 +33,10 @@ public struct ParraTextConfig {
         font: .preferredFont(forTextStyle: .caption2),
         shadow: .default
     )
+    
+    public static let bodyDefault = ParraTextConfig(
+        color: .black,
+        font: .preferredFont(forTextStyle: .title3),
+        shadow: .default
+    )
 }

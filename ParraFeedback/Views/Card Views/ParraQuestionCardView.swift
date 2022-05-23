@@ -123,7 +123,7 @@ class ParraQuestionCardView: ParraCardView {
         fatalError("init(config:) has not been implemented")
     }
     
-    private func applyConfig(_ confif: ParraFeedbackViewConfig) {
+    private func applyConfig(_ config: ParraFeedbackViewConfig) {
         titleLabel.font = config.title.font
         titleLabel.textColor = config.title.color
         titleLabel.layer.shadowColor = config.title.shadow.color.cgColor
@@ -139,6 +139,10 @@ class ParraQuestionCardView: ParraCardView {
             subtitleLabel.layer.shadowRadius = config.subtitle.shadow.radius
             subtitleLabel.layer.shadowOpacity = config.subtitle.shadow.opacity
         }
+        
+        for optionView in optionViewMap.values {
+            optionView.config = config
+        }
     }
     
     private func generateOptionsForChoice(_ choice: ChoiceQuestionBody) {
@@ -151,6 +155,7 @@ class ParraQuestionCardView: ParraCardView {
             let optionView = ParraChoiceOptionView(
                 option: option,
                 kind: question.kind,
+                config: config,
                 isSelected: isSelected
             )
             optionView.delegate = self

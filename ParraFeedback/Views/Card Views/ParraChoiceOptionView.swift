@@ -14,18 +14,28 @@ protocol ParraChoiceOptionViewDelegate: AnyObject {
 }
 
 class ParraChoiceOptionView: UIView {
-    let option: ChoiceQuestionOption
-    let kind: QuestionKind
-    let accessoryButton: UIView & SelectableButton
+    internal var config: ParraFeedbackViewConfig {
+        didSet {
+            applyConfig(config)
+        }
+    }
+    
+    private let option: ChoiceQuestionOption
+    private let kind: QuestionKind
+    private let optionLabel = UILabel(frame: .zero)
 
-    weak var delegate: ParraChoiceOptionViewDelegate?
+    internal let accessoryButton: UIView & SelectableButton
+    internal weak var delegate: ParraChoiceOptionViewDelegate?
             
     required init(option: ChoiceQuestionOption,
                   kind: QuestionKind,
+                  config: ParraFeedbackViewConfig,
                   isSelected: Bool) {
 
         self.option = option
         self.kind = kind
+        self.config = config
+
         switch kind {
         case .radio:
             accessoryButton = ParraRadioButton(initiallySelected: isSelected)
@@ -39,13 +49,11 @@ class ParraChoiceOptionView: UIView {
                 
         translatesAutoresizingMaskIntoConstraints = false
         
-        let optionLabel = UILabel(frame: .zero)
         optionLabel.translatesAutoresizingMaskIntoConstraints = false
         optionLabel.text = option.title
         optionLabel.numberOfLines = 3
         optionLabel.lineBreakMode = .byTruncatingTail
         optionLabel.isUserInteractionEnabled = true
-        optionLabel.font = .preferredFont(forTextStyle: .title3)
         let tapGesture = UITapGestureRecognizer(
             target: self,
             action: #selector(tapGestureDidPress(gesture:))
@@ -68,10 +76,21 @@ class ParraChoiceOptionView: UIView {
             stack.leadingAnchor.constraint(equalTo: leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+        
+        applyConfig(config)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func applyConfig(_ config: ParraFeedbackViewConfig) {
+        optionLabel.font = config.body.font
+        optionLabel.textColor = config.body.color
+        optionLabel.layer.shadowColor = config.body.shadow.color.cgColor
+        optionLabel.layer.shadowOpacity = config.body.shadow.opacity
+        optionLabel.layer.shadowRadius = config.body.shadow.radius
+        optionLabel.layer.shadowOffset = config.body.shadow.offset
     }
     
     @objc private func tapGestureDidPress(gesture: UITapGestureRecognizer) {
