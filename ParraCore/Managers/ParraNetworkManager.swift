@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import UIKit
 
 public typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
@@ -14,6 +14,45 @@ internal let kEmptyJsonObjectData = "{}".data(using: .utf8)!
 
 struct EmptyRequestObject: Codable {}
 struct EmptyResponseObject: Codable {}
+
+enum ParraHeader {
+    static let parraHeaderPrefix = "parra"
+
+    case debug
+    case moduleVersion(module: String)
+    case os
+    case osVersion
+    case device
+    case appLocale
+    case deviceLocale
+    case timeZoneAbbreviation
+    case timeZoneOffset
+    
+    var headerName: String {
+        switch self {
+        case .debug:
+            return "debug"
+        case .moduleVersion(let module):
+            return "\(module.lowercased())-version"
+        case .os:
+            return "os"
+        case .osVersion:
+            return "os-version"
+        case .device:
+            return "device"
+        case .appLocale:
+            return "app-locale"
+        case .deviceLocale:
+            return "device-locale"
+        case .timeZoneAbbreviation:
+            return "timezone-abbreviation"
+        case .timeZoneOffset:
+            return "timezone-offset"
+        }
+    }
+    
+    var prefixedHeaderName: String { "\(ParraHeader.parraHeaderPrefix)-\(headerName)" }
+}
 
 protocol URLSessionType {
     func dataForRequest(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
@@ -108,6 +147,10 @@ class ParraNetworkManager: NetworkManagerType {
             request.addValue(value, forHTTPHeaderField: header)
         }
         
+        for (header, value) in additionalHeaders() {
+            request.addValue(value, forHTTPHeaderField: header)
+        }
+        
         if method.allowsBody {
             request.httpBody = try jsonEncoder.encode(body)
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -170,9 +213,37 @@ class ParraNetworkManager: NetworkManagerType {
         var headers = [String: String]()
         
         for (moduleName, module) in Parra.registeredModules {
-            headers["parra-\(moduleName.lowercased())-version"] = type(of: module).libraryVersion()
+            headers[ParraHeader.moduleVersion(module: moduleName).prefixedHeaderName] = type(of: module).libraryVersion()
         }
         
+        return headers
+    }
+    
+    private func additionalHeaders() -> [String: String] {
+        var headers = [String: String]()
+        
+#if DEBUG
+        headers[ParraHeader.debug.prefixedHeaderName] = "debug"
+#endif
+        
+        headers[ParraHeader.os.prefixedHeaderName] = UIDevice.current.systemName
+        headers[ParraHeader.osVersion.prefixedHeaderName] = UIDevice.current.systemVersion
+        headers[ParraHeader.device.prefixedHeaderName] = UIDevice.current.name
+        headers[ParraHeader.appLocale.prefixedHeaderName] = UIDevice.current.name
+        
+        if let deviceLanguageCode = NSLocale.current.languageCode {
+            headers[ParraHeader.deviceLocale.prefixedHeaderName] = deviceLanguageCode
+        }
+        
+        if let appLanguageCode = Locale.preferredLanguages.first {
+            headers[ParraHeader.appLocale.prefixedHeaderName] = appLanguageCode
+        }
+        
+        headers[ParraHeader.timeZoneOffset.prefixedHeaderName] = String(TimeZone.current.secondsFromGMT())
+        if let timeZoneAbbreviation = TimeZone.current.abbreviation() {
+            headers[ParraHeader.timeZoneAbbreviation.prefixedHeaderName] = timeZoneAbbreviation
+        }
+
         return headers
     }
 }
