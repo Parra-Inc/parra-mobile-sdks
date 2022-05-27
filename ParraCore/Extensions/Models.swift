@@ -16,7 +16,7 @@ public extension QuestionKind {
             return true
         }
     }
-
+    
     var allowsDeselection: Bool {
         switch self {
         case .radio, .star:

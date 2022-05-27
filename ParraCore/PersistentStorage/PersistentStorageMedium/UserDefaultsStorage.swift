@@ -7,18 +7,20 @@
 
 import Foundation
 
-actor UserDefaultsStorage: PersistentStorageMedium {
+internal actor UserDefaultsStorage: PersistentStorageMedium {
     private let userDefaults: UserDefaults
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
     
-    init(userDefaults: UserDefaults, jsonEncoder: JSONEncoder, jsonDecoder: JSONDecoder) {
+    internal init(userDefaults: UserDefaults,
+                  jsonEncoder: JSONEncoder,
+                  jsonDecoder: JSONDecoder) {
         self.userDefaults = userDefaults
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
     }
     
-    func read<T>(name: String) async throws -> T? where T: Codable {
+    internal func read<T>(name: String) async throws -> T? where T: Codable {
         guard let data = userDefaults.data(forKey: name) else {
             return nil
         }
@@ -26,13 +28,13 @@ actor UserDefaultsStorage: PersistentStorageMedium {
         return try jsonDecoder.decode(T.self, from: data)
     }
     
-    func write<T>(name: String, value: T) async throws where T: Codable {
+    internal func write<T>(name: String, value: T) async throws where T: Codable {
         let data = try jsonEncoder.encode(value)
         
         userDefaults.set(data, forKey: name)
     }
     
-    func delete(name: String) async throws {
+    internal func delete(name: String) async throws {
         userDefaults.removeObject(forKey: name)
     }
 }

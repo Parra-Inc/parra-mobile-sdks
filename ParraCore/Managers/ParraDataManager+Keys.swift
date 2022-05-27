@@ -9,17 +9,17 @@ import Foundation
 
 private let applicationSupportDirectory = FileManager.default.urls(
     for: .applicationSupportDirectory,
-       in: .userDomainMask
+    in: .userDomainMask
 ).first!
 
 // !!! Think really before changing anything here!
 public extension ParraDataManager {
     enum Path {
         public static let parraDirectory = applicationSupportDirectory.appendingPathComponent("parra",
-                                                                                       isDirectory: true)
+                                                                                              isDirectory: true)
     }
     
     enum Key {
-        static let userCredentialsKey = "com.parra.usercredential"
-    }    
+        internal static let userCredentialsKey = "com.parra.usercredential"
+    }
 }

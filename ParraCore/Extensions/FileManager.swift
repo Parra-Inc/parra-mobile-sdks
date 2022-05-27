@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension FileManager {
+internal extension FileManager {
     func safeCreateDirectory(at url: URL) throws {
         let logName = url.pathComponents.suffix(3).joined(separator: "/")
         

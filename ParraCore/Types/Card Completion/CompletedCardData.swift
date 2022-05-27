@@ -11,13 +11,13 @@ public enum CompletedCardData: Codable {
     enum CodingKeys: CodingKey {
         case question
     }
-
+    
     case question(QuestionCompletedData)
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let key = container.allKeys.first
-
+        
         switch key {
         case .question:
             self = .question(
@@ -35,7 +35,7 @@ public enum CompletedCardData: Codable {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-     
+        
         switch self {
         case .question(let questionCompletedData):
             try container.encode(questionCompletedData, forKey: .question)

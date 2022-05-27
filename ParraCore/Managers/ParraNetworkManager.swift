@@ -12,12 +12,12 @@ public typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
 internal let kEmptyJsonObjectData = "{}".data(using: .utf8)!
 
-struct EmptyRequestObject: Codable {}
-struct EmptyResponseObject: Codable {}
+internal struct EmptyRequestObject: Codable {}
+internal struct EmptyResponseObject: Codable {}
 
-enum ParraHeader {
+fileprivate enum ParraHeader {
     static let parraHeaderPrefix = "parra"
-
+    
     case debug
     case moduleVersion(module: String)
     case os
@@ -54,48 +54,48 @@ enum ParraHeader {
     var prefixedHeaderName: String { "\(ParraHeader.parraHeaderPrefix)-\(headerName)" }
 }
 
-protocol URLSessionType {
+internal protocol URLSessionType {
     func dataForRequest(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
     
     func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
 }
 
-protocol NetworkManagerType {
+internal protocol NetworkManagerType {
     init(dataManager: ParraDataManager,
          urlSession: URLSessionType,
          jsonEncoder: JSONEncoder,
          jsonDecoder: JSONDecoder)
     
     var authenticationProvider: ParraFeedbackAuthenticationProvider? { get }
-
+    
     func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) async
     func refreshAuthentication() async throws -> ParraCredential
 }
 
-class ParraNetworkManager: NetworkManagerType {
+internal class ParraNetworkManager: NetworkManagerType {
     private let dataManager: ParraDataManager
     
     internal private(set) var authenticationProvider: ParraFeedbackAuthenticationProvider?
-
-    let urlSession: URLSessionType
-    let jsonEncoder: JSONEncoder
-    let jsonDecoder: JSONDecoder
     
-    required init(dataManager: ParraDataManager,
-                  urlSession: URLSessionType,
-                  jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
-                  jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder) {
+    private let urlSession: URLSessionType
+    private let jsonEncoder: JSONEncoder
+    private let jsonDecoder: JSONDecoder
+    
+    internal required init(dataManager: ParraDataManager,
+                           urlSession: URLSessionType,
+                           jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
+                           jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder) {
         self.dataManager = dataManager
         self.urlSession = urlSession
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
     }
     
-    func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) {
+    internal func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) {
         authenticationProvider = provider
     }
     
-    func refreshAuthentication() async throws -> ParraCredential {
+    internal func refreshAuthentication() async throws -> ParraCredential {
         guard let authenticationProvider = authenticationProvider else {
             throw ParraError.missingAuthentication
         }
@@ -113,9 +113,9 @@ class ParraNetworkManager: NetworkManagerType {
         }
     }
     
-    func performAuthenticatedRequest<T: Decodable>(route: String,
-                                                   method: HttpMethod,
-                                                   cachePolicy: URLRequest.CachePolicy? = nil) async throws -> T {
+    internal func performAuthenticatedRequest<T: Decodable>(route: String,
+                                                            method: HttpMethod,
+                                                            cachePolicy: URLRequest.CachePolicy? = nil) async throws -> T {
         return try await performAuthenticatedRequest(
             route: route,
             method: method,
@@ -124,11 +124,11 @@ class ParraNetworkManager: NetworkManagerType {
         )
     }
     
-    func performAuthenticatedRequest<T: Decodable, U: Encodable>(route: String,
-                                                                 method: HttpMethod,
-                                                                 cachePolicy: URLRequest.CachePolicy? = nil,
-                                                                 body: U) async throws -> T {
-
+    internal func performAuthenticatedRequest<T: Decodable, U: Encodable>(route: String,
+                                                                          method: HttpMethod,
+                                                                          cachePolicy: URLRequest.CachePolicy? = nil,
+                                                                          body: U) async throws -> T {
+        
         let url = Parra.Constant.parraApiRoot.appendingPathComponent(route)
         let credential = await dataManager.getCurrentCredential()
         
@@ -177,9 +177,9 @@ class ParraNetworkManager: NetworkManagerType {
             return kEmptyJsonObjectData
         case (401, true):
             let newCredential = try await refreshAuthentication()
-
+            
             request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: "Authorization")
-
+            
             return try await performRequest(
                 request: request,
                 credential: newCredential,
@@ -202,13 +202,13 @@ class ParraNetworkManager: NetworkManagerType {
 #if DEBUG
         try await Task.sleep(nanoseconds: 1_000_000_000)
 #endif
-
+        
         let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
         
         // It is documented that for data tasks, response is always actually HTTPURLResponse
         return (data, response as! HTTPURLResponse)
     }
-
+    
     private func libraryVersionHeaders() -> [String: String] {
         var headers = [String: String]()
         
@@ -243,7 +243,7 @@ class ParraNetworkManager: NetworkManagerType {
         if let timeZoneAbbreviation = TimeZone.current.abbreviation() {
             headers[ParraHeader.timeZoneAbbreviation.prefixedHeaderName] = timeZoneAbbreviation
         }
-
+        
         return headers
     }
 }

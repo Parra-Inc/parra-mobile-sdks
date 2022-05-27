@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-extension Parra {
+internal extension Parra {
     func addEventObservers() {
         let notificationCenter = NotificationCenter.default
         

@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+/// The ParraCore module is primarily used for authenticating with the Parra API.  For usage beyond this, you'll need
+/// to install and use other Parra libraries.
 public class Parra: ParraModule {
     public static private(set) var name = "core"
         

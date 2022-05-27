@@ -14,7 +14,7 @@ private let parraJsonEncoder: JSONEncoder = {
 #if DEBUG
     encoder.outputFormatting = .prettyPrinted
 #endif
-
+    
     return encoder
 }()
 

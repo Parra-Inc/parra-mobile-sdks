@@ -26,7 +26,7 @@ public actor ParraStorageModule<DataType: Codable> {
         }
         """
     }
-
+    
     public init(dataStorageMedium: DataStorageMedium) {
         self.dataStorageMedium = dataStorageMedium
         
@@ -60,7 +60,7 @@ public actor ParraStorageModule<DataType: Codable> {
         defer {
             isLoaded = true
         }
-
+        
         // Persistent storage is missing when the underlying store is a memory store.
         guard let persistentStorage = persistentStorage else {
             return
@@ -79,7 +79,7 @@ public actor ParraStorageModule<DataType: Codable> {
         if !isLoaded {
             await loadData()
         }
-
+        
         return storageCache
     }
     
@@ -95,7 +95,7 @@ public actor ParraStorageModule<DataType: Codable> {
         if !isLoaded {
             await loadData()
         }
-
+        
         storageCache[name] = value
         
         if let persistentStorage = persistentStorage {
@@ -110,7 +110,7 @@ public actor ParraStorageModule<DataType: Codable> {
         if !isLoaded {
             await loadData()
         }
-
+        
         storageCache.removeValue(forKey: name)
         
         if let persistentStorage = persistentStorage {
@@ -120,7 +120,7 @@ public actor ParraStorageModule<DataType: Codable> {
             )
         }
     }
-
+    
     public func clear() async {
         storageCache.removeAll()
         

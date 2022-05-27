@@ -8,17 +8,17 @@
 import Foundation
 import UIKit
 
-enum ParraFeedbackSyncMode: String {
+internal enum ParraFeedbackSyncMode: String {
     case immediate
     case eventual
 }
 
 /// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
-class ParraFeedbackSyncManager {
-    enum Constant {
+internal class ParraFeedbackSyncManager {
+    internal enum Constant {
         static let eventualSyncDelay: TimeInterval = 30.0
     }
-        
+    
     /// Whether or not a sync operation is in progress.
     internal private(set) var isSyncing = false
     
@@ -28,21 +28,21 @@ class ParraFeedbackSyncManager {
     internal private(set) var enqueuedSyncMode: ParraFeedbackSyncMode? = nil
     
     private let networkManager: ParraNetworkManager
-
+    
     private var syncTimer: Timer?
     
-    init(networkManager: ParraNetworkManager) {
+    internal init(networkManager: ParraNetworkManager) {
         self.networkManager = networkManager
     }
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
     internal func enqueueSync(with mode: ParraFeedbackSyncMode) async {
         parraLogV("Enqueuing sync: \(mode)")
-
+        
         if isSyncing {
             if mode == .immediate {
                 parraLogV("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
-
+                
                 enqueuedSyncMode = .immediate
             } else {
                 parraLogV("Sync already in progress. Marking enqued sync.")
@@ -59,7 +59,7 @@ class ParraFeedbackSyncManager {
         Task {
             await self.sync()
         }
-
+        
         parraLogV("Sync enqued")
     }
     
@@ -89,19 +89,19 @@ class ParraFeedbackSyncManager {
         guard await hasDataToSync() else {
             parraLogV("No data available to sync")
             isSyncing = false
-
+            
             return
         }
         
         parraLogV("Starting sync")
-
+        
         let start = CFAbsoluteTimeGetCurrent()
         parraLogV("Sending sync data...")
         
         for (_, module) in Parra.registeredModules {
             await module.triggerSync()
         }
-
+        
         let duration = CFAbsoluteTimeGetCurrent() - start
         parraLogV("Sync data sent. Took \(duration)(s)")
         
@@ -118,7 +118,7 @@ class ParraFeedbackSyncManager {
             }
         } else {
             parraLogV("No more jobs found. Completing sync.")
-
+            
             isSyncing = false
         }
     }
@@ -138,7 +138,7 @@ class ParraFeedbackSyncManager {
     
     private func startSyncTimer() {
         stopSyncTimer()
-    
+        
         syncTimer = Timer.scheduledTimer(
             timeInterval: Constant.eventualSyncDelay,
             target: self,
@@ -147,19 +147,19 @@ class ParraFeedbackSyncManager {
             repeats: false
         )
     }
-        
+    
     private func stopSyncTimer() {
         guard let syncTimer = syncTimer else {
             return
         }
-
+        
         syncTimer.invalidate()
         self.syncTimer = nil
     }
     
     @objc private func syncTimerDidTick() {
         stopSyncTimer()
-
+        
         Task {
             await self.enqueueSync(with: .immediate)
         }

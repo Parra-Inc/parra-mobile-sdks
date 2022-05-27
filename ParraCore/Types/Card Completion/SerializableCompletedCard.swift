@@ -12,7 +12,7 @@ public struct SerializableCompletedCard: Encodable {
         case data
         case questionId
     }
-
+    
     public let completedCard: CompletedCard
     
     public init(completedCard: CompletedCard) {
@@ -21,7 +21,7 @@ public struct SerializableCompletedCard: Encodable {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-
+        
         switch completedCard.data {
         case .question(let questionCompletedData):
             try container.encode(completedCard.id, forKey: .questionId)

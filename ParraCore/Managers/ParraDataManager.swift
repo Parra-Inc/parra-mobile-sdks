@@ -9,8 +9,8 @@ import Foundation
 
 public class ParraDataManager {
     internal fileprivate(set) var credentialStorage: CredentialStorage
-        
-    init() {
+    
+    internal init() {
         let folder = Parra.persistentStorageFolder()
         let fileName = ParraDataManager.Key.userCredentialsKey
         
@@ -24,11 +24,11 @@ public class ParraDataManager {
         self.credentialStorage = CredentialStorage(storageModule: credentialStorageModule)
     }
     
-    func getCurrentCredential() async -> ParraCredential? {
+    internal func getCurrentCredential() async -> ParraCredential? {
         return await credentialStorage.currentCredential()
     }
     
-    func updateCredential(credential: ParraCredential?) async {
+    internal func updateCredential(credential: ParraCredential?) async {
         await credentialStorage.updateCredential(credential: credential)
     }
 }
