@@ -9,12 +9,12 @@ on:
 jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
-    runs-on: macos-latest
+    runs-on: macos-12
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Core tests
-        run: xcodebuild test -scheme ParraCoreTests -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.2' CODE_SIGNING_ALLOWED=NO
+        run: xcodebuild test -scheme ParraCoreTests -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.4' CODE_SIGNING_ALLOWED=NO
       - name: Run Feedback tests
-        run: xcodebuild test -scheme ParraFeedbackTests -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.2' CODE_SIGNING_ALLOWED=NO
+        run: xcodebuild test -scheme ParraFeedbackTests -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.4' CODE_SIGNING_ALLOWED=NO
