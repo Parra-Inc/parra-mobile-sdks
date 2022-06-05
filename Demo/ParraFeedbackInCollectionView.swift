@@ -106,6 +106,14 @@ class ParraFeedbackInCollectionView: UICollectionViewController, UICollectionVie
         let size = (availableWidth - flowLayout.minimumInteritemSpacing * (numberOfColumns - 1)) / numberOfColumns
         return CGSize(width: size, height: size)
     }
+    
+    override func collectionView(_ collectionView: UICollectionView,
+                                 didEndDisplaying cell: UICollectionViewCell,
+                                 forItemAt indexPath: IndexPath) {
+        if let parraCell = cell as? ParraFeedbackCollectionViewCell {
+            parraCell.endDisplaying()
+        }
+    }
 }
 
 extension ParraFeedbackInCollectionView: ParraFeedbackViewDelegate {

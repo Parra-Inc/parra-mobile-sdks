@@ -7,17 +7,17 @@
 
 import UIKit
 
-class ParraStarButton: UIButton, SelectableButton {
-    weak var delegate: SelectableButtonDelegate?
-    var buttonIsSelected: Bool
-    var allowsDeselection: Bool = false
-
-    required init(initiallySelected: Bool) {
+internal class ParraStarButton: UIButton, SelectableButton {
+    internal weak var delegate: SelectableButtonDelegate?
+    internal var buttonIsSelected: Bool
+    internal var allowsDeselection: Bool = false
+    
+    internal required init(initiallySelected: Bool) {
         buttonIsSelected = initiallySelected
         super.init(frame: .zero)
     }
     
-    required init?(coder: NSCoder) {
+    internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

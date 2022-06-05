@@ -121,9 +121,4 @@ class ParraFeedbackDataManager {
             }
         }
     }
-    
-    func logEvent() {
-        // TODO: should log an event to the current session.
-        // TODO: Should be called in addition to updating answers.
-    }
 }

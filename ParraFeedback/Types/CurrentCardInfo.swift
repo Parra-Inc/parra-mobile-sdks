@@ -8,7 +8,7 @@
 import Foundation
 import ParraCore
 
-struct CurrentCardInfo {
+internal struct CurrentCardInfo {
     let cardView: ParraCardView
     let cardItem: ParraCardItem?
 }

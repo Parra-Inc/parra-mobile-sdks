@@ -88,7 +88,7 @@ public extension ParraFeedbackViewDelegate {
     
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
                            willEndDisplaying cardItem: ParraCardItem?) {}
-
+    
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
                            didEndDisplaying cardItem: ParraCardItem?) {}
     
@@ -124,7 +124,7 @@ public class ParraFeedbackView: UIView {
             }
         }
     }
-
+    
     internal var cardSwipeGestureRecognizers = [UISwipeGestureRecognizer]()
     
     internal let questionHandler = ParraQuestionHandler()
@@ -137,9 +137,9 @@ public class ParraFeedbackView: UIView {
                 // If there is already a card item and that item exists in the updated cards list,
                 // we want to make sure that item stays visible.
                 if let currentCardInfo = currentCardInfo, let currentCardItem = currentCardInfo.cardItem, cardItems.contains(where: { $0.id == currentCardItem.id }) {
-
+                    
                     let visibleButtons = visibleNavigationButtonsForCardItem(currentCardItem)
-
+                    
                     UIView.animate(
                         withDuration: 0.375,
                         delay: 0.0,
@@ -250,7 +250,7 @@ public class ParraFeedbackView: UIView {
         containerView.layer.masksToBounds = true
         containerView.isUserInteractionEnabled = true
         containerView.accessibilityIdentifier = "ParraFeedbackContainerView"
-
+        
         configureSubviews(config: config)
     }
     

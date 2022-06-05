@@ -26,7 +26,7 @@ extension ParraFeedbackView {
             return
         }
         removeConstraints(constraintsOnSuperView)
-
+        
         let widthConstraint = widthAnchor.constraint(
             greaterThanOrEqualToConstant: Dimensions.minWidth
         )
@@ -34,7 +34,7 @@ extension ParraFeedbackView {
         let heightConstraint = heightAnchor.constraint(
             greaterThanOrEqualToConstant: Dimensions.minHeight
         )
-
+        
         constraintsOnSuperView = [widthConstraint, heightConstraint]
         
         NSLayoutConstraint.activate(constraintsOnSuperView)
@@ -48,7 +48,7 @@ extension ParraFeedbackView {
         addCardSwipeGesture(toView: contentView, direction: .left)
         addCardSwipeGesture(toView: containerView, direction: .right)
         addCardSwipeGesture(toView: containerView, direction: .left)
-
+        
         containerLeadingConstraint = containerView.leadingAnchor.constraint(
             equalTo: leadingAnchor, constant: config.contentInsets.left
         )
@@ -63,21 +63,21 @@ extension ParraFeedbackView {
         )
         
         NSLayoutConstraint.activate(constraintsOncontainerView)
-
+        
         applyConfig(config)
         
         transitionToNextCard(animated: false)
     }
-
+    
     internal func applyConfig(_ config: ParraFeedbackViewConfig) {
         containerView.backgroundColor = config.backgroundColor
         containerView.layer.cornerRadius = config.cornerRadius
-
+        
         backButton.tintColor = config.tintColor
         backButton.accessibilityIdentifier = "ParraFeedbackNavigationBackButton"
         forwardButton.tintColor = config.tintColor
         forwardButton.accessibilityIdentifier = "ParraFeedbackNavigationForwardButton"
-
+        
         layer.shadowColor = config.shadow.color.cgColor
         layer.shadowOpacity = Float(config.shadow.opacity)
         layer.shadowRadius = config.shadow.radius
@@ -86,27 +86,27 @@ extension ParraFeedbackView {
         layer.position = center
         
         var needsLayout = false
-
+        
         if config.contentInsets.left != containerLeadingConstraint.constant {
             containerLeadingConstraint.constant = config.contentInsets.left
             needsLayout = true
         }
-
+        
         if -config.contentInsets.right != containerTrailingConstraint.constant {
             containerTrailingConstraint.constant = -config.contentInsets.right
             needsLayout = true
         }
-
+        
         if config.contentInsets.top != containerTopConstraint.constant {
             containerTopConstraint.constant = config.contentInsets.top
             needsLayout = true
         }
-
+        
         if -config.contentInsets.bottom != containerBottomConstraint.constant {
             containerBottomConstraint.constant = -config.contentInsets.bottom
             needsLayout = true
         }
-
+        
         if needsLayout {
             layoutIfNeeded()
         }
@@ -122,7 +122,7 @@ extension ParraFeedbackView {
         contentView.clipsToBounds = true
         contentView.isUserInteractionEnabled = true
         contentView.accessibilityIdentifier = "ParraFeedbackContentView"
-
+        
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: LayoutConstants.navigationPadding),
             contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0),
@@ -138,13 +138,13 @@ extension ParraFeedbackView {
         navigationStack.distribution = .equalSpacing
         navigationStack.isUserInteractionEnabled = true
         navigationStack.accessibilityIdentifier = "ParraFeedbackNavigation"
-
+        
         poweredByLabel.font = UIFont.boldSystemFont(ofSize: 12.0)
         poweredByLabel.textColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
         poweredByLabel.textAlignment = .center
         poweredByLabel.isUserInteractionEnabled = true
         poweredByLabel.accessibilityIdentifier = "ParraFeedbackPoweredBy"
-
+        
         let defaultAttributes = [NSAttributedString.Key.kern: 0.24]
         let poweredBy = NSMutableAttributedString(string: "Powered by ", attributes: defaultAttributes)
         
@@ -161,22 +161,22 @@ extension ParraFeedbackView {
             navigationStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12)
         ])
     }
-
+    
     private func addCardSwipeGesture(toView view: UIView, direction: Direction) {
         let gesture = createSwipeGesture(
             inDirection: direction.swipeDirection,
             selector: direction == .left
-                ? #selector(navigateToNextCard)
-                : #selector(navigateToPreviousCard)
+            ? #selector(navigateToNextCard)
+            : #selector(navigateToPreviousCard)
         )
         
         view.addGestureRecognizer(gesture)
         cardSwipeGestureRecognizers.append(gesture)
     }
-
+    
     private func createSwipeGesture(inDirection direction: UISwipeGestureRecognizer.Direction,
                                     selector: Selector) -> UISwipeGestureRecognizer {
-
+        
         let swipe = UISwipeGestureRecognizer(target: self, action: selector)
         swipe.direction = direction
         

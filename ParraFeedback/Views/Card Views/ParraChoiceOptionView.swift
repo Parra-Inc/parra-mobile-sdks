@@ -8,12 +8,12 @@
 import UIKit
 import ParraCore
 
-protocol ParraChoiceOptionViewDelegate: AnyObject {
+internal protocol ParraChoiceOptionViewDelegate: AnyObject {
     func onSelect(option: ChoiceQuestionOption, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
     func onDeselect(option: ChoiceQuestionOption, inView view: ParraChoiceOptionView, fromButton button: SelectableButton)
 }
 
-class ParraChoiceOptionView: UIView {
+internal class ParraChoiceOptionView: UIView {
     internal var config: ParraFeedbackViewConfig {
         didSet {
             applyConfig(config)
@@ -23,19 +23,19 @@ class ParraChoiceOptionView: UIView {
     private let option: ChoiceQuestionOption
     private let kind: QuestionKind
     private let optionLabel = UILabel(frame: .zero)
-
+    
     internal let accessoryButton: UIView & SelectableButton
     internal weak var delegate: ParraChoiceOptionViewDelegate?
-            
-    required init(option: ChoiceQuestionOption,
-                  kind: QuestionKind,
-                  config: ParraFeedbackViewConfig,
-                  isSelected: Bool) {
-
+    
+    internal required init(option: ChoiceQuestionOption,
+                           kind: QuestionKind,
+                           config: ParraFeedbackViewConfig,
+                           isSelected: Bool) {
+        
         self.option = option
         self.kind = kind
         self.config = config
-
+        
         switch kind {
         case .radio:
             accessoryButton = ParraRadioButton(initiallySelected: isSelected)
@@ -46,7 +46,7 @@ class ParraChoiceOptionView: UIView {
         }
         
         super.init(frame: .zero)
-                
+        
         translatesAutoresizingMaskIntoConstraints = false
         
         optionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -59,15 +59,15 @@ class ParraChoiceOptionView: UIView {
             action: #selector(tapGestureDidPress(gesture:))
         )
         optionLabel.addGestureRecognizer(tapGesture)
-
+        
         accessoryButton.delegate = self
-
+        
         let stack = UIStackView(arrangedSubviews: [accessoryButton, optionLabel])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
         stack.distribution = .fill
         stack.alignment = .center
-
+        
         addSubview(stack)
         
         NSLayoutConstraint.activate([
@@ -80,7 +80,7 @@ class ParraChoiceOptionView: UIView {
         applyConfig(config)
     }
     
-    required init?(coder: NSCoder) {
+    internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -95,7 +95,7 @@ class ParraChoiceOptionView: UIView {
     
     @objc private func tapGestureDidPress(gesture: UITapGestureRecognizer) {
         accessoryButton.buttonIsSelected = true
-
+        
         delegate?.onSelect(
             option: option,
             inView: self,

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct VisibleButtonOptions: OptionSet {
+internal struct VisibleButtonOptions: OptionSet {
     static let back = VisibleButtonOptions(rawValue: 1)
     static let forward = VisibleButtonOptions(rawValue: 1 << 1)
     

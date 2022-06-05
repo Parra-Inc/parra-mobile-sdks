@@ -21,8 +21,10 @@ public class ParraFeedback: ParraModule {
     
     public private(set) static var name: String = "Feedback"
         
-    /// <#Description#>
-    /// - Parameter completion: <#completion description#>
+    /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
+    /// module and will be automatically displayed in `ParraFeedbackView`s when they are added to your view hierarchy. The completion handler
+    /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
+    /// view the `ParraFeedbackView` initializer if you'd like to only display certain cards.
     public class func fetchFeedbackCards(withCompletion completion: @escaping (Result<[ParraCardItem], ParraError>) -> Void) {
         Task {
             do {
@@ -39,8 +41,10 @@ public class ParraFeedback: ParraModule {
         }
     }
     
-    /// <#Description#>
-    /// - Parameter completion: <#completion description#>
+    /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
+    /// module and will be automatically displayed in `ParraFeedbackView`s when they are added to your view hierarchy. The completion handler
+    /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
+    /// view the `ParraFeedbackView` initializer if you'd like to only display certain cards.
     public class func fetchFeedbackCards(withCompletion completion: @escaping ([ParraCardItem], Error?) -> Void) {
         fetchFeedbackCards { result in
             switch result {
@@ -60,8 +64,10 @@ public class ParraFeedback: ParraModule {
         }
     }
     
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
+    /// module and will be automatically displayed in `ParraFeedbackView`s when they are added to your view hierarchy. The completion handler
+    /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
+    /// view the `ParraFeedbackView` initializer if you'd like to only display certain cards.
     public class func fetchFeedbackCards() async throws -> [ParraCardItem] {
         let cards = try await Parra.API.getCards()
         
@@ -100,17 +106,14 @@ public class ParraFeedback: ParraModule {
         await sendCardData()
     }
     
-    /// <#Description#>
-    /// - Parameter cardItem: <#cardItem description#>
-    /// - Returns: <#description#>
+    /// Checks whether the user has previously supplied input for the provided `ParraCardItem`.
     public class func hasCardBeenCompleted(_ cardItem: ParraCardItem) async -> Bool {
         let completed = await shared.dataManager.completedCardData(forId: cardItem.id)
         
         return completed != nil
     }
     
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Whether the `ParraFeedback` module has data that has yet to be synced with the Parra API.
     public func hasDataToSync() async -> Bool {
         let answers = await dataManager.currentCompletedCardData()
         

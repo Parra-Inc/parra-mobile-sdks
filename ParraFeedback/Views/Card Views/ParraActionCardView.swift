@@ -7,16 +7,16 @@
 
 import UIKit
 
-class ParraActionCardView: ParraCardView {
+internal class ParraActionCardView: ParraCardView {
     private let titleLabel = UILabel(frame: .zero)
     private let subtitleLabel = UILabel(frame: .zero)
     // TODO: De-scoped for now.
-//    private var cta = UIButton(type: .system)
+    //    private var cta = UIButton(type: .system)
     private let stackView = UIStackView(arrangedSubviews: [])
     private var actionHandler: (() -> Void)?
     
-
-    required init(
+    
+    internal required init(
         config: ParraFeedbackViewConfig,
         title: String,
         subtitle: String?,
@@ -26,7 +26,7 @@ class ParraActionCardView: ParraCardView {
         super.init(config: config)
         
         translatesAutoresizingMaskIntoConstraints = false
-
+        
         self.actionHandler = actionHandler
         
         stackView.addArrangedSubview(titleLabel)
@@ -36,10 +36,10 @@ class ParraActionCardView: ParraCardView {
             subtitleLabel.font = .preferredFont(forTextStyle: .callout)
             subtitleLabel.numberOfLines = 3
             subtitleLabel.lineBreakMode = .byTruncatingTail
-
+            
             stackView.addArrangedSubview(subtitleLabel)
         }
-//        stackView.addArrangedSubview(cta)
+        //        stackView.addArrangedSubview(cta)
         
         stackView.distribution = .equalSpacing
         stackView.axis = .vertical
@@ -48,7 +48,7 @@ class ParraActionCardView: ParraCardView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(stackView)
-
+        
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
@@ -72,30 +72,30 @@ class ParraActionCardView: ParraCardView {
                 constant: 0
             ),
         ])
-                
+        
         titleLabel.text = title
         titleLabel.textAlignment = .center
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 3
         titleLabel.lineBreakMode = .byTruncatingTail
-
-//        cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
-//
-//        let attributedTitle = NSAttributedString(
-//            string: actionTitle,
-//            attributes: [.font: UIFont.boldSystemFont(ofSize: 14)]
-//        )
-//        cta.setAttributedTitle(attributedTitle, for: .normal)
-//        cta.translatesAutoresizingMaskIntoConstraints = false
-//        cta.setTitleColor(UIColor(hex: 0xBDBDBD), for: .normal)
+        
+        //        cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
+        //
+        //        let attributedTitle = NSAttributedString(
+        //            string: actionTitle,
+        //            attributes: [.font: UIFont.boldSystemFont(ofSize: 14)]
+        //        )
+        //        cta.setAttributedTitle(attributedTitle, for: .normal)
+        //        cta.translatesAutoresizingMaskIntoConstraints = false
+        //        cta.setTitleColor(UIColor(hex: 0xBDBDBD), for: .normal)
     }
     
-    required init?(coder: NSCoder) {
+    internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    required init(config: ParraFeedbackViewConfig) {
+    internal required init(config: ParraFeedbackViewConfig) {
         fatalError("init(config:) has not been implemented")
     }
     

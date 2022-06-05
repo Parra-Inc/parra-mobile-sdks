@@ -8,10 +8,10 @@
 import Foundation
 import ParraCore
 
-actor CompletedCardDataStorage: ItemStorage {
-    typealias DataType = CompletedCard
+internal actor CompletedCardDataStorage: ItemStorage {
+    internal typealias DataType = CompletedCard
     
-    let storageModule: ParraStorageModule<CompletedCard>
+    internal let storageModule: ParraStorageModule<CompletedCard>
     
     /// In memory cache of card ids that have been seen recently. This will be reset
     /// when the app is re-launched, but no reset when the cards are changed or cleared.
@@ -19,30 +19,30 @@ actor CompletedCardDataStorage: ItemStorage {
     /// they are returned in a response from a card endpoint.
     private var successfullSubmittedCompletedCardIds = Set<String>()
     
-    init(storageModule: ParraStorageModule<CompletedCard>) {
+    internal init(storageModule: ParraStorageModule<CompletedCard>) {
         self.storageModule = storageModule
     }
     
-    func completedCardData(forId id: String) async -> CompletedCard? {
+    internal func completedCardData(forId id: String) async -> CompletedCard? {
         return await storageModule.read(name: id)
     }
     
-    func currentCompletedCardData() async -> [String: CompletedCard] {
+    internal func currentCompletedCardData() async -> [String: CompletedCard] {
         return await storageModule.currentData()
     }
     
-    func completeCard(completedCard: CompletedCard) async {
+    internal func completeCard(completedCard: CompletedCard) async {
         try! await storageModule.write(name: completedCard.id, value: completedCard)
     }
     
-    func clearCompletedCardData(completedCards: [CompletedCard] = []) async throws {
+    internal func clearCompletedCardData(completedCards: [CompletedCard] = []) async throws {
         let underlyingStorage = await storageModule.currentData()
-
+        
         if completedCards.isEmpty {
             for (_, card) in underlyingStorage {
                 successfullSubmittedCompletedCardIds.update(with: card.id)
             }
-
+            
             await storageModule.clear()
         } else {
             for completedCard in completedCards {
@@ -51,8 +51,8 @@ actor CompletedCardDataStorage: ItemStorage {
             }
         }
     }
-
-    func hasClearedCompletedCardWithId(cardId: String) -> Bool {
+    
+    internal func hasClearedCompletedCardWithId(cardId: String) -> Bool {
         return successfullSubmittedCompletedCardIds.contains(cardId)
     }
 }

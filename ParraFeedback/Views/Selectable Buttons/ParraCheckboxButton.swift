@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ParraCheckboxButton: UIButton, SelectableButton {
+internal class ParraCheckboxButton: UIButton, SelectableButton {
     enum Style {
         static let height: CGFloat = 18.0
         static let lineWidth: CGFloat = 2.0
@@ -15,14 +15,14 @@ class ParraCheckboxButton: UIButton, SelectableButton {
         static let cornerRadius: CGFloat = 2.0
     }
     
-    weak var delegate: SelectableButtonDelegate?
-    var allowsDeselection: Bool = true
-    var buttonIsSelected: Bool {
+    internal weak var delegate: SelectableButtonDelegate?
+    internal var allowsDeselection: Bool = true
+    internal var buttonIsSelected: Bool {
         didSet {
             if buttonIsSelected == oldValue {
                 return
             }
-
+            
             updateSelectionState()
             
             if buttonIsSelected {
@@ -32,32 +32,32 @@ class ParraCheckboxButton: UIButton, SelectableButton {
             }
         }
     }
-
-    var inactiveColor: UIColor = .clear
-    var inactiveBorderColor: UIColor = .lightGray
-    var checkMarkColor: UIColor = .white
+    
+    internal var inactiveColor: UIColor = .clear
+    internal var inactiveBorderColor: UIColor = .lightGray
+    internal var checkMarkColor: UIColor = .white
     
     private var outerLayer = CAShapeLayer()
     private var checkMarkLayer = CAShapeLayer()
-
-    required init(initiallySelected: Bool) {
+    
+    internal required init(initiallySelected: Bool) {
         buttonIsSelected = initiallySelected
         super.init(frame: .zero)
         setup()
     }
     
-    required init?(coder: NSCoder) {
+    internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    internal override func layoutSubviews() {
         super.layoutSubviews()
         
         setupLayer()
         updateSelectionState()
     }
     
-    func setup() {
+    internal func setup() {
         addTarget(self, action: #selector(selectionAction), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
         setupLayer()
@@ -67,7 +67,7 @@ class ParraCheckboxButton: UIButton, SelectableButton {
         ])
     }
     
-    func setupLayer() {
+    internal func setupLayer() {
         contentEdgeInsets = UIEdgeInsets(
             top: Style.padding,
             left: Style.height + Style.padding,
@@ -89,14 +89,14 @@ class ParraCheckboxButton: UIButton, SelectableButton {
             origin: origin,
             size: size
         )
-
+        
         outerLayer.path = UIBezierPath(
             roundedRect: rect,
             cornerRadius: Style.cornerRadius
         ).cgPath
         outerLayer.lineWidth = Style.lineWidth
         outerLayer.removeFromSuperlayer()
-
+        
         layer.insertSublayer(outerLayer, at: 0)
         
         let path = UIBezierPath()
@@ -124,7 +124,7 @@ class ParraCheckboxButton: UIButton, SelectableButton {
         outerLayer.insertSublayer(checkMarkLayer, at: 0)
     }
     
-    @objc func selectionAction(_ sender: ParraRadioButton) {
+    @objc internal  func selectionAction(_ sender: ParraRadioButton) {
         if allowsDeselection {
             buttonIsSelected = !buttonIsSelected
         } else if !buttonIsSelected {
@@ -132,21 +132,21 @@ class ParraCheckboxButton: UIButton, SelectableButton {
         }
     }
     
-    func updateSelectionState() {
+    internal func updateSelectionState() {
         if buttonIsSelected {
             updateActiveLayer()
         } else {
             updateInactiveLayer()
         }
     }
-
-    func updateActiveLayer() {
+    
+    internal func updateActiveLayer() {
         checkMarkLayer.animateStrokeEnd(from: 0, to: 1)
         outerLayer.fillColor = tintColor.cgColor
         outerLayer.strokeColor = tintColor.cgColor
     }
     
-    func updateInactiveLayer() {
+    internal func updateInactiveLayer() {
         checkMarkLayer.animateStrokeEnd(from: 1, to: 0)
         outerLayer.fillColor = inactiveColor.cgColor
         outerLayer.strokeColor = inactiveBorderColor.cgColor
@@ -169,7 +169,7 @@ private extension UIBezierPath {
             origin: origin,
             size: size
         )
-
+        
         return UIBezierPath(
             roundedRect: newRect,
             cornerRadius: size.height / 2.0
@@ -186,12 +186,12 @@ private extension UIBezierPath {
             x: rect.midX - size.width / 2.0,
             y: rect.midY - size.height / 2.0
         )
-
+        
         let newRect = CGRect(
             origin: origin,
             size: size
         )
-
+        
         return UIBezierPath(
             roundedRect: newRect,
             cornerRadius: size.height / 2.0

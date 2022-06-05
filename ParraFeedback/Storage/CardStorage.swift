@@ -10,21 +10,21 @@ import ParraCore
 
 private let kCurrentCardsKey = "current_cards"
 
-actor CardStorage: ItemStorage {
-    typealias DataType = [ParraCardItem]
-    let storageModule: ParraStorageModule<[ParraCardItem]>
+internal actor CardStorage: ItemStorage {
+    internal typealias DataType = [ParraCardItem]
+    internal let storageModule: ParraStorageModule<[ParraCardItem]>
     
-    init(storageModule: ParraStorageModule<[ParraCardItem]>) {
+    internal init(storageModule: ParraStorageModule<[ParraCardItem]>) {
         self.storageModule = storageModule
     }
     
-    func setCards(cardItems: [ParraCardItem]) {
+    internal func setCards(cardItems: [ParraCardItem]) {
         Task {
             try await storageModule.write(name: kCurrentCardsKey, value: cardItems)
         }
     }
     
-    func currentCards() async -> [ParraCardItem] {
+    internal func currentCards() async -> [ParraCardItem] {
         return await storageModule.read(name: kCurrentCardsKey) ?? []
     }
 }

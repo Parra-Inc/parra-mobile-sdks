@@ -12,7 +12,7 @@ fileprivate class RadioLayer: CAShapeLayer {
     var inactivePath: CGPath?
 }
 
-class ParraRadioButton: UIButton, SelectableButton {
+internal class ParraRadioButton: UIButton, SelectableButton {
     enum Style {
         static let outer: CGFloat = 18
         static let inner: CGFloat = 9
@@ -20,40 +20,40 @@ class ParraRadioButton: UIButton, SelectableButton {
         static let padding: CGFloat = 6
     }
     
-    weak var delegate: SelectableButtonDelegate?
-    var allowsDeselection: Bool = false
-    var buttonIsSelected: Bool {
+    internal weak var delegate: SelectableButtonDelegate?
+    internal var allowsDeselection: Bool = false
+    internal var buttonIsSelected: Bool {
         didSet {
             updateSelectionState(animated: true)
-
+            
             layoutIfNeeded()
         }
     }
-
-    var inactiveColor: UIColor = .lightGray
+    
+    internal var inactiveColor: UIColor = .lightGray
     
     private var outerLayer = CAShapeLayer()
     private var innerLayer = RadioLayer()
-
-    required init(initiallySelected: Bool) {
+    
+    internal required init(initiallySelected: Bool) {
         buttonIsSelected = initiallySelected
         
         super.init(frame: .zero)
         setup()
     }
     
-    required init?(coder: NSCoder) {
+    internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    internal override func layoutSubviews() {
         super.layoutSubviews()
         
         setupLayer()
         updateSelectionState(animated: false)
     }
     
-    func setup() {
+    internal func setup() {
         // Add action here
         addTarget(self, action: #selector(selectionAction), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +64,7 @@ class ParraRadioButton: UIButton, SelectableButton {
         ])
     }
     
-    func setupLayer() {
+    internal func setupLayer() {
         contentEdgeInsets = UIEdgeInsets(
             top: Style.padding,
             left: Style.outer + Style.padding,
@@ -98,13 +98,13 @@ class ParraRadioButton: UIButton, SelectableButton {
         addInnerLayer()
     }
     
-    @objc func selectionAction(_ sender: ParraRadioButton) {
+    @objc internal func selectionAction(_ sender: ParraRadioButton) {
         if allowsDeselection {
             buttonIsSelected = !buttonIsSelected
         } else if !buttonIsSelected {
             buttonIsSelected = true
         }
-                
+        
         if buttonIsSelected {
             delegate?.buttonDidSelect(button: self)
         } else {
@@ -112,15 +112,15 @@ class ParraRadioButton: UIButton, SelectableButton {
         }
     }
     
-    func updateSelectionState(animated: Bool) {
+    internal func updateSelectionState(animated: Bool) {
         if buttonIsSelected {
             updateActiveLayer(animated: animated)
         } else {
             updateInactiveLayer(animated: animated)
         }
     }
-
-    func updateActiveLayer(animated: Bool) {
+    
+    internal func updateActiveLayer(animated: Bool) {
         outerLayer.strokeColor = tintColor.cgColor
         
         guard let start = innerLayer.path, let end = innerLayer.activePath else {
@@ -130,7 +130,7 @@ class ParraRadioButton: UIButton, SelectableButton {
         if animated {
             innerLayer.animatePath(start: start, end: end)
         }
-
+        
         innerLayer.path = end
     }
     
@@ -144,7 +144,7 @@ class ParraRadioButton: UIButton, SelectableButton {
         if animated {
             innerLayer.animatePath(start: start, end: end)
         }
-
+        
         innerLayer.path = end
     }
 }
@@ -165,7 +165,7 @@ private extension UIBezierPath {
             origin: origin,
             size: size
         )
-
+        
         return UIBezierPath(
             roundedRect: newRect,
             cornerRadius: size.height / 2.0
@@ -182,12 +182,12 @@ private extension UIBezierPath {
             x: rect.midX - size.width / 2.0,
             y: rect.midY - size.height / 2.0
         )
-
+        
         let newRect = CGRect(
             origin: origin,
             size: size
         )
-
+        
         return UIBezierPath(
             roundedRect: newRect,
             cornerRadius: size.height / 2.0

@@ -15,7 +15,7 @@ public struct ParraFeedbackViewConfig {
         public static let defaultCornerRadius: CGFloat = 12.0
         public static let defaultContentInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
     }
-
+    
     var backgroundColor: UIColor
     var tintColor: UIColor?
     var cornerRadius: CGFloat = 0.0
@@ -42,7 +42,7 @@ public struct ParraFeedbackViewConfig {
         self.subtitle = subtitle
         self.body = body
     }
-
+    
     /// The default configuration used by `ParraFeedbackView`s when no other configuration is provided.
     public static let `default` = ParraFeedbackViewConfig()
 }

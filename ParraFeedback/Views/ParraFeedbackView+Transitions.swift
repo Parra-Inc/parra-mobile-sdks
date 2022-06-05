@@ -12,7 +12,7 @@ extension ParraFeedbackView: ParraQuestionHandlerDelegate {
     internal func questionHandlerDidMakeNewSelection(forQuestion question: Question) {
         Task {
             try await Task.sleep(nanoseconds: 333_000_000)
-
+            
             let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
             
             guard let nextCardItem = nextCardItem, nextCardItemDiection == .right else {
@@ -94,18 +94,18 @@ extension ParraFeedbackView {
         
         let nextCard = cardViewFromCardItem(cardItem)
         nextCard.accessibilityIdentifier = "Next Card"
-
+        
         let visibleButtons = visibleNavigationButtonsForCardItem(cardItem)
         
         contentView.addSubview(nextCard)
-                
+        
         if let currentCardConstraint = currentCardConstraint {
             NSLayoutConstraint.deactivate([currentCardConstraint])
         }
         currentCardConstraint = contentView.heightAnchor.constraint(
             greaterThanOrEqualTo: nextCard.heightAnchor
         )
-
+        
         // If these change, make sure that changing nextCard.frame below still makes sense.
         NSLayoutConstraint.activate([
             nextCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -114,7 +114,7 @@ extension ParraFeedbackView {
             nextCard.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
             currentCardConstraint!
         ])
-
+        
         delegate?.parraFeedbackView(self, willDisplay: cardItem)
         
         if animated {
@@ -146,7 +146,7 @@ extension ParraFeedbackView {
                 }
                 
                 self.layoutIfNeeded()
-
+                
                 UIView.animate(
                     withDuration: 0.375,
                     delay: 0.0,
@@ -157,7 +157,7 @@ extension ParraFeedbackView {
                         )
                         nextCard.transform = .identity
                         self.layoutIfNeeded()
-
+                        
                         self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
                     } completion: { _ in
                         self.backButton.isEnabled = true

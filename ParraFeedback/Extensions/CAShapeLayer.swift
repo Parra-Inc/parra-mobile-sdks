@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension CAShapeLayer {
+internal extension CAShapeLayer {
     func animateStrokeEnd(from: CGFloat, to: CGFloat) {
         self.strokeEnd = from
         self.strokeEnd = to

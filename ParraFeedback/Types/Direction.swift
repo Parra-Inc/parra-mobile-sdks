@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-enum Direction {
+internal enum Direction {
     case left, right
     
     var swipeDirection: UISwipeGestureRecognizer.Direction {

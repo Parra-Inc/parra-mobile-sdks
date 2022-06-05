@@ -7,17 +7,17 @@
 
 import Foundation
 
-protocol SelectableButtonDelegate: AnyObject {
+internal protocol SelectableButtonDelegate: AnyObject {
     func buttonDidSelect(button: SelectableButton)
     func buttonDidDeselect(button: SelectableButton)
 }
 
-protocol SelectableButton: AnyObject {
+internal protocol SelectableButton: AnyObject {
     init(initiallySelected: Bool)
     
     var delegate: SelectableButtonDelegate? { get set }
-
+    
     var buttonIsSelected: Bool { get set }
-
+    
     var allowsDeselection: Bool { get set }
 }

@@ -12,7 +12,7 @@ public struct ParraTextConfig {
     let color: UIColor
     let font: UIFont
     let shadow: ParraShadowConfig
-
+    
     public init(color: UIColor = .black,
                 font: UIFont = .preferredFont(forTextStyle: .headline),
                 shadow: ParraShadowConfig = .default) {

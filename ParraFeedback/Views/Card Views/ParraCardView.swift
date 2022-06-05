@@ -11,16 +11,16 @@ import UIKit
 // TODO: Common ancestor. Might be able to just be a protocol.
 public class ParraCardView: UIView {
     internal var config: ParraFeedbackViewConfig
-
-    required init(config: ParraFeedbackViewConfig) {
+    
+    internal required init(config: ParraFeedbackViewConfig) {
         self.config = config
-
+        
         super.init(frame: .zero)
-
+        
         isUserInteractionEnabled = true
     }
     
-    required init?(coder: NSCoder) {
+    internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

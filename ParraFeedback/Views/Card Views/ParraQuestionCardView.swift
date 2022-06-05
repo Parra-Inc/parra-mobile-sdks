@@ -8,7 +8,7 @@
 import UIKit
 import ParraCore
 
-protocol ParraQuestionViewDelegate {
+internal protocol ParraQuestionViewDelegate {
     func initialSelection(forQuestion question: Question) -> [ChoiceQuestionOption]
     
     // Returns a list of options which are no longer selected.
@@ -25,30 +25,30 @@ protocol ParraQuestionViewDelegate {
     )
 }
 
-class ParraQuestionCardView: ParraCardView {
+internal class ParraQuestionCardView: ParraCardView {
     internal override var config: ParraFeedbackViewConfig {
         didSet {
             applyConfig(config)
         }
     }
-
+    
     private let question: Question
     private let questionHandler: ParraQuestionHandler
     private var optionViewMap = [ChoiceQuestionOption: ParraChoiceOptionView]()
-
+    
     private let contentContainer = UIStackView(frame: .zero)
     
     private let titleLabel: UILabel
     private var subtitleLabel: UILabel?
     
-    required init(question: Question,
-                  questionHandler: ParraQuestionHandler,
-                  config: ParraFeedbackViewConfig) {
+    internal required init(question: Question,
+                           questionHandler: ParraQuestionHandler,
+                           config: ParraFeedbackViewConfig) {
         self.question = question
         self.questionHandler = questionHandler
         
         titleLabel = UILabel(frame: .zero)
-
+        
         super.init(config: config)
         
         translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +57,7 @@ class ParraQuestionCardView: ParraCardView {
         contentContainer.axis = .vertical
         contentContainer.alignment = .fill
         contentContainer.distribution = .equalSpacing
-
+        
         addSubview(contentContainer)
         
         NSLayoutConstraint.activate([
@@ -65,7 +65,7 @@ class ParraQuestionCardView: ParraCardView {
             contentContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             contentContainer.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -12)
         ])
-                
+        
         titleLabel.text = question.title
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0
@@ -78,7 +78,7 @@ class ParraQuestionCardView: ParraCardView {
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             titleLabel.topAnchor.constraint(equalTo: topAnchor)
         ])
-
+        
         if let subtitle = question.subtitle {
             let subtitleLabel = UILabel(frame: .zero)
             
@@ -87,7 +87,7 @@ class ParraQuestionCardView: ParraCardView {
             subtitleLabel.numberOfLines = 0
             subtitleLabel.font = UIFont.preferredFont(forTextStyle: .caption2)
             subtitleLabel.isUserInteractionEnabled = true
-
+            
             self.subtitleLabel = subtitleLabel
             
             addSubview(subtitleLabel)
@@ -106,7 +106,7 @@ class ParraQuestionCardView: ParraCardView {
                 contentContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12)
             ])
         }
-
+        
         switch question.data {
         case .choiceQuestionBody(let choice):
             generateOptionsForChoice(choice)
@@ -115,11 +115,11 @@ class ParraQuestionCardView: ParraCardView {
         applyConfig(config)
     }
     
-    required init?(coder: NSCoder) {
+    internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    required init(config: ParraFeedbackViewConfig) {
+    internal required init(config: ParraFeedbackViewConfig) {
         fatalError("init(config:) has not been implemented")
     }
     
@@ -130,7 +130,7 @@ class ParraQuestionCardView: ParraCardView {
         titleLabel.layer.shadowOffset = config.title.shadow.offset
         titleLabel.layer.shadowRadius = config.title.shadow.radius
         titleLabel.layer.shadowOpacity = config.title.shadow.opacity
-
+        
         if let subtitleLabel = subtitleLabel {
             subtitleLabel.font = config.subtitle.font
             subtitleLabel.textColor = config.subtitle.color
@@ -149,7 +149,7 @@ class ParraQuestionCardView: ParraCardView {
         optionViewMap.removeAll()
         
         let currentSelections = questionHandler.initialSelection(forQuestion: question)
-
+        
         for option in choice.options {
             let isSelected = currentSelections.contains(option)
             let optionView = ParraChoiceOptionView(
