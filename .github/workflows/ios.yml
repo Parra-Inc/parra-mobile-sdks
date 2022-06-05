@@ -15,4 +15,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run tests
-        run: xcodebuild test -scheme Demo -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.4'
+        run: xcodebuild test -scheme Demo -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.2'
