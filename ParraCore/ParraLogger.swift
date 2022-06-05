@@ -37,6 +37,7 @@ public enum ParraLogLevel: Int, Comparable {
 }
 
 fileprivate func _parraLog(_ message: String,
+                           extra: [String: AnyHashable] = [:],
                            level: ParraLogLevel,
                            file: String,
                            function: String,
@@ -45,41 +46,52 @@ fileprivate func _parraLog(_ message: String,
         return
     }
     
-    print("\(Parra.Constant.parraLogPrefix)\(level.outputName) \(message)")
+    var formattedMessage = "\(Parra.Constant.parraLogPrefix)\(level.outputName) \(message)"
+    
+    if !extra.isEmpty {
+        formattedMessage.append(contentsOf: " extra: \(extra.description)")
+    }
+    
+    print(formattedMessage)
 }
 
 public func parraLog(_ message: @autoclosure () -> String,
+                     extra: [String: AnyHashable] = [:],
                      level: ParraLogLevel = .info,
                      file: String = #file,
                      function: String = #function,
                      line: Int = #line) {
-    _parraLog(message(), level: level, file: file, function: function, line: line)
+    _parraLog(message(), extra: extra, level: level, file: file, function: function, line: line)
 }
 
 public func parraLogV(_ message: @autoclosure () -> String,
+                      _ extra: [String: AnyHashable] = [:],
                       file: String = #file,
                       function: String = #function,
                       line: Int = #line) {
-    _parraLog(message(), level: .verbose, file: file, function: function, line: line)
+    _parraLog(message(), extra: extra, level: .verbose, file: file, function: function, line: line)
 }
 
 public func parraLogI(_ message: @autoclosure () -> String,
+                      _ extra: [String: AnyHashable] = [:],
                       file: String = #file,
                       function: String = #function,
                       line: Int = #line) {
-    _parraLog(message(), level: .verbose, file: file, function: function, line: line)
+    _parraLog(message(), extra: extra, level: .verbose, file: file, function: function, line: line)
 }
 
 public func parraLogW(_ message: @autoclosure () -> String,
+                      _ extra: [String: AnyHashable] = [:],
                       file: String = #file,
                       function: String = #function,
                       line: Int = #line) {
-    _parraLog(message(), level: .warn, file: file, function: function, line: line)
+    _parraLog(message(), extra: extra, level: .warn, file: file, function: function, line: line)
 }
 
 public func parraLogE(_ message: @autoclosure () -> String,
+                      _ extra: [String: AnyHashable] = [:],
                       file: String = #file,
                       function: String = #function,
                       line: Int = #line) {
-    _parraLog(message(), level: .error, file: file, function: function, line: line)
+    _parraLog(message(), extra: extra, level: .error, file: file, function: function, line: line)
 }
