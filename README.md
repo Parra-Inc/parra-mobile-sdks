@@ -2,6 +2,10 @@
 
 [![Building and Test Status](https://github.com/Parra-Inc/parra-ios-sdk/actions/workflows/ios.yml/badge.svg?branch=main)](https://github.com/Parra-Inc/parra-ios-sdk/actions/workflows/ios.yml)
 
+| Parra Core                                                           | Parra Feedback                                                               |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ![core](https://cocoapod-badges.herokuapp.com/v/ParraCore/badge.png) | ![feedback](https://cocoapod-badges.herokuapp.com/v/ParraFeedback/badge.png) |
+
 The ParraFeedback iOS SDK allows you to quickly and easily collect valuable product feedback data from your users. We provide customizable UI elements that blend right in with your app's design allowing for a first party look and experience.
 
 ## Requirements
