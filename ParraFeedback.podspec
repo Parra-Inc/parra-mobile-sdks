@@ -16,9 +16,12 @@ Pod::Spec.new do |spec|
 
   spec.ios.deployment_target    = '13.0'
 
-  spec.source_files             = 'ParraFeedback/**/*.{h,swift,md}'
+  spec.source_files              = [
+    'ParraCore/ParraCore.h',
+    'ParraFeedback/**/*.{h,swift,md}'
+  ]
   spec.resource_bundles         = { 'ParraFeedback' => ['ParraFeedback/**/*.{png,jpeg,jpg,ttf,storyboard,xib,xcassets}'] }
   spec.frameworks               = 'Foundation', 'UIKit'
 
-  spec.dependency 'ParraCore', '~>0.0.12'
+  spec.dependency 'ParraCore', '~>1.0.1'
 end
