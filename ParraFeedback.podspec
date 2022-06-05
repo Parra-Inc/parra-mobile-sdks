@@ -20,7 +20,6 @@ Pod::Spec.new do |spec|
     'ParraCore/ParraCore.h',
     'ParraFeedback/**/*.{h,swift,md}'
   ]
-  spec.resource_bundles         = { 'ParraFeedback' => ['ParraFeedback/**/*.{png,jpeg,jpg,ttf,storyboard,xib,xcassets}'] }
   spec.frameworks               = 'Foundation', 'UIKit'
 
   spec.dependency 'ParraCore', '~>1.0.1'
