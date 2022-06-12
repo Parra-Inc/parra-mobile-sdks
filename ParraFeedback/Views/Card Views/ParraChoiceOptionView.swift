@@ -91,6 +91,8 @@ internal class ParraChoiceOptionView: UIView {
         optionLabel.layer.shadowOpacity = config.body.shadow.opacity
         optionLabel.layer.shadowRadius = config.body.shadow.radius
         optionLabel.layer.shadowOffset = config.body.shadow.offset
+        
+        accessoryButton.tintColor = config.tintColor
     }
     
     @objc private func tapGestureDidPress(gesture: UITapGestureRecognizer) {
