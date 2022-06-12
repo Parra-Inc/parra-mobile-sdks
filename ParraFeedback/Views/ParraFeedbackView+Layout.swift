@@ -73,6 +73,10 @@ extension ParraFeedbackView {
         containerView.backgroundColor = config.backgroundColor
         containerView.layer.cornerRadius = config.cornerRadius
         
+        poweredByLabel.textColor = config.backgroundColor.isLight()
+            ? UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
+            : UIColor(hue: 0.0, saturation: 0.0, brightness: 1.0, alpha: 0.2)
+        
         backButton.tintColor = config.tintColor
         backButton.accessibilityIdentifier = "ParraFeedbackNavigationBackButton"
         forwardButton.tintColor = config.tintColor
@@ -140,7 +144,6 @@ extension ParraFeedbackView {
         navigationStack.accessibilityIdentifier = "ParraFeedbackNavigation"
         
         poweredByLabel.font = UIFont.boldSystemFont(ofSize: 12.0)
-        poweredByLabel.textColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
         poweredByLabel.textAlignment = .center
         poweredByLabel.isUserInteractionEnabled = true
         poweredByLabel.accessibilityIdentifier = "ParraFeedbackPoweredBy"
