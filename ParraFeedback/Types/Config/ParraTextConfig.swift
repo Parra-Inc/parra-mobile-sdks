@@ -39,4 +39,22 @@ public struct ParraTextConfig {
         font: .preferredFont(forTextStyle: .title3),
         shadow: .default
     )
+    
+    public static let titleDefaultDark = ParraTextConfig(
+        color: .white,
+        font: .preferredFont(forTextStyle: .headline),
+        shadow: .default
+    )
+    
+    public static let subtitleDefaultDark = ParraTextConfig(
+        color: UIColor(hex: 0x9C9BA4),
+        font: .preferredFont(forTextStyle: .caption2),
+        shadow: .default
+    )
+    
+    public static let bodyDefaultDark = ParraTextConfig(
+        color: UIColor(hex: 0x9C9BA4),
+        font: .preferredFont(forTextStyle: .title3),
+        shadow: .default
+    )
 }

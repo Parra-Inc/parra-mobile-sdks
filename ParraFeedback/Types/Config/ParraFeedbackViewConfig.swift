@@ -12,6 +12,7 @@ import UIKit
 public struct ParraFeedbackViewConfig {
     public enum Constant {
         public static let defaultBackgroundColor = UIColor(hex: 0xFAFAFA)
+        public static let defaultBackgroundColorDark = UIColor(hex: 0x27252C)
         public static let defaultCornerRadius: CGFloat = 12.0
         public static let defaultContentInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
     }
@@ -45,4 +46,11 @@ public struct ParraFeedbackViewConfig {
     
     /// The default configuration used by `ParraFeedbackView`s when no other configuration is provided.
     public static let `default` = ParraFeedbackViewConfig()
+    
+    public static let defaultDark = ParraFeedbackViewConfig(
+        backgroundColor: Constant.defaultBackgroundColorDark,
+        title: .titleDefaultDark,
+        subtitle: .subtitleDefaultDark,
+        body: .bodyDefaultDark
+    )
 }
