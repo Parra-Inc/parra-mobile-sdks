@@ -133,7 +133,7 @@ class ParraNetworkManagerTests: XCTestCase {
 
         Parra.shared = Parra(
             dataManager: dataManager,
-            syncManager: ParraFeedbackSyncManager(networkManager: networkManager),
+            syncManager: ParraSyncManager(networkManager: networkManager),
             networkManager: networkManager
         )
         

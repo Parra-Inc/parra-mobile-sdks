@@ -8,13 +8,13 @@
 import Foundation
 import UIKit
 
-internal enum ParraFeedbackSyncMode: String {
+internal enum ParraSyncMode: String {
     case immediate
     case eventual
 }
 
 /// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
-internal class ParraFeedbackSyncManager {
+internal class ParraSyncManager {
     internal enum Constant {
         static let eventualSyncDelay: TimeInterval = 30.0
     }
@@ -25,7 +25,7 @@ internal class ParraFeedbackSyncManager {
     /// Whether or not new attempts to sync occured while a sync was in progress. Many sync events could be received while a sync
     /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
     /// is completed.
-    internal private(set) var enqueuedSyncMode: ParraFeedbackSyncMode? = nil
+    internal private(set) var enqueuedSyncMode: ParraSyncMode? = nil
     
     private let networkManager: ParraNetworkManager
     
@@ -36,7 +36,7 @@ internal class ParraFeedbackSyncManager {
     }
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
-    internal func enqueueSync(with mode: ParraFeedbackSyncMode) async {
+    internal func enqueueSync(with mode: ParraSyncMode) async {
         parraLogV("Enqueuing sync: \(mode)")
         
         if isSyncing {
