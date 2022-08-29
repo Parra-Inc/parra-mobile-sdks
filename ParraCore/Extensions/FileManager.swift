@@ -34,7 +34,7 @@ internal extension FileManager {
             parraLogV("Directory didn't exist at \(logName). Creating...")
             try createDirectory(at: url, withIntermediateDirectories: true)
         } else {
-            parraLogV("Directory already exists at \(logName)")
+            parraLogV("Directory already exists at \(url)")
         }
     }
 }
