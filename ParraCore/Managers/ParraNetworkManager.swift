@@ -191,7 +191,44 @@ internal class ParraNetworkManager: NetworkManagerType {
             return data
         }
     }
-    
+
+    func performPublicAuthenticationRequest(
+        forTentant tenantId: String,
+        apiKeyId: String,
+        userId: String
+    ) async throws -> ParraCredential {
+        let url = Parra.Constant.parraApiRoot.appendingPathComponent("tenants/\(tenantId)/issuers/public/auth/token")
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "POST"
+        request.httpBody = try jsonEncoder.encode(["user_id": userId])
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+
+        let authData = ("api_key:" + apiKeyId).data(using: .utf8)!.base64EncodedString()
+        
+        addStandardHeaders(toRequest: &request)
+        request.setValue("Basic \(authData)", forHTTPHeaderField: .authorization)
+
+        let (data, response) = try await performAsyncDataDask(request: request)
+
+        switch (response.statusCode) {
+        case 200:
+            return try jsonDecoder.decode(ParraCredential.self, from: data)
+        case 400...499:
+            throw ParraError.networkError(
+                "Client error \(response.statusCode): \(response.debugDescription)"
+            )
+        case 500...599:
+            throw ParraError.networkError(
+                "Server error \(response.statusCode): \(response.debugDescription)"
+            )
+        default:
+            throw ParraError.networkError(
+                "Unexpected error \(response.statusCode): \(response.debugDescription)"
+            )
+        }
+    }
+
     private func performAsyncDataDask(request: URLRequest) async throws -> (Data, HTTPURLResponse) {
 #if DEBUG
         try await Task.sleep(nanoseconds: 1_000_000_000)

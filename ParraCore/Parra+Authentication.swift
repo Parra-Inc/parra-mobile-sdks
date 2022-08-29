@@ -7,12 +7,31 @@
 
 import Foundation
 
+public typealias ParraFeedbackUserProvider = () async throws -> String
 public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraCredential
+
+// Cool, work thing? And alright, I think if we’re going to do that we ought to at least provide an implementation of that within the sdk. So you can be like .setAuthenticationProvider(Parra.tokenAuthProvider(TOKEN)) or some shit
 
 public extension Parra {
     /// Checks whether an authentication provider has already been set.
     class func hasAuthenticationProvider() -> Bool {
         return shared.networkManager.authenticationProvider != nil
+    }
+
+    class func setPublicApiKeyAuthProvider(
+        tenantId: String,
+        apiKeyId: String,
+        userProvider: @escaping ParraFeedbackUserProvider
+    ) {
+        setAuthenticationProvider {
+            let userId = try await userProvider()
+
+            return try await shared.networkManager.performPublicAuthenticationRequest(
+                forTentant: tenantId,
+                apiKeyId: apiKeyId,
+                userId: userId
+            )
+        }
     }
     
     /// Sets the provided function as the authentication provider that will be invoked when the Parra API needs to refresh the credential
