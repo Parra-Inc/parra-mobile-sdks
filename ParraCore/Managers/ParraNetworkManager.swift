@@ -141,16 +141,10 @@ internal class ParraNetworkManager: NetworkManagerType {
         
         var request = URLRequest(url: url, cachePolicy: cachePolicy ?? .useProtocolCachePolicy)
         request.httpMethod = method.rawValue
-        
-        for (header, value) in libraryVersionHeaders() {
-            request.addValue(value, forHTTPHeaderField: header)
-        }
-        
-        for (header, value) in additionalHeaders() {
-            request.addValue(value, forHTTPHeaderField: header)
-        }
         request.setValue("application/json", forHTTPHeaderField: .accept)
         
+        addStandardHeaders(toRequest: &request)
+
         if method.allowsBody {
             request.httpBody = try jsonEncoder.encode(body)
             request.setValue("application/json", forHTTPHeaderField: .contentType)
@@ -207,6 +201,16 @@ internal class ParraNetworkManager: NetworkManagerType {
         
         // It is documented that for data tasks, response is always actually HTTPURLResponse
         return (data, response as! HTTPURLResponse)
+    }
+
+    private func addStandardHeaders(toRequest request: inout URLRequest) {
+        for (header, value) in libraryVersionHeaders() {
+            request.addValue(value, forHTTPHeaderField: header)
+        }
+
+        for (header, value) in additionalHeaders() {
+            request.addValue(value, forHTTPHeaderField: header)
+        }
     }
     
     private func libraryVersionHeaders() -> [String: String] {
