@@ -141,7 +141,6 @@ internal class ParraNetworkManager: NetworkManagerType {
         
         var request = URLRequest(url: url, cachePolicy: cachePolicy ?? .useProtocolCachePolicy)
         request.httpMethod = method.rawValue
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
         
         for (header, value) in libraryVersionHeaders() {
             request.addValue(value, forHTTPHeaderField: header)
@@ -150,10 +149,11 @@ internal class ParraNetworkManager: NetworkManagerType {
         for (header, value) in additionalHeaders() {
             request.addValue(value, forHTTPHeaderField: header)
         }
+        request.setValue("application/json", forHTTPHeaderField: .accept)
         
         if method.allowsBody {
             request.httpBody = try jsonEncoder.encode(body)
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: .contentType)
         }
         
         let data = try await performRequest(
@@ -169,7 +169,7 @@ internal class ParraNetworkManager: NetworkManagerType {
                                 shouldReauthenticate: Bool = true) async throws -> Data {
         
         var request = request
-        request.setValue("Bearer \(credential.token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(credential.token)", forHTTPHeaderField: .authorization)
         
         let (data, response) = try await performAsyncDataDask(request: request)
         switch (response.statusCode, shouldReauthenticate) {
@@ -178,7 +178,7 @@ internal class ParraNetworkManager: NetworkManagerType {
         case (401, true):
             let newCredential = try await refreshAuthentication()
             
-            request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: .authorization)
             
             return try await performRequest(
                 request: request,

@@ -104,6 +104,7 @@
 		00717C2D27F3E11100BE5608 /* ParraFeedbackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00717C2C27F3E11100BE5608 /* ParraFeedbackTableViewCell.swift */; };
 		0084014827D560B900E2B0ED /* ParraDemoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014727D560B900E2B0ED /* ParraDemoTableViewController.swift */; };
 		0084014A27D5613A00E2B0ED /* ParraFeedbackInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */; };
+		00BDB2B128BD822700C16649 /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2B028BD822700C16649 /* URLRequest.swift */; };
 		00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFF8274C69F800DAF301 /* AppDelegate.swift */; };
 		00DED000274C69F800DAF301 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DECFFE274C69F800DAF301 /* Main.storyboard */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
@@ -272,6 +273,7 @@
 		0084014927D5613A00E2B0ED /* ParraFeedbackInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackInView.swift; sourceTree = "<group>"; };
 		0084014C27D5A1B700E2B0ED /* CompletedCardDataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedCardDataStorage.swift; sourceTree = "<group>"; };
 		0084014E27D7030D00E2B0ED /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		00BDB2B028BD822700C16649 /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Constants.swift"; sourceTree = "<group>"; };
 		00D5156227D424C800C4F2CC /* ParraLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogger.swift; sourceTree = "<group>"; };
 		00D5156427D4376500C4F2CC /* ParraSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManager.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */,
 				001286FE277FE3180090CDB5 /* UIFont.swift */,
 				00707D1A27FA0A07004E9567 /* URLSession.swift */,
+				00BDB2B028BD822700C16649 /* URLRequest.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -922,6 +925,7 @@
 				001B7B2927DE3AC800DEEECD /* ParraSyncManager.swift in Sources */,
 				001B7B7227DE3CC700DEEECD /* QuestionMultipleChoiceCompletedData.swift in Sources */,
 				001B7B8827DE712200DEEECD /* ParraStorageModule.swift in Sources */,
+				00BDB2B128BD822700C16649 /* URLRequest.swift in Sources */,
 				001B7B1827DE3AA900DEEECD /* GeneratedTypes.swift in Sources */,
 				001B7B7027DE3CBB00DEEECD /* QuestionSingleChoiceCompletedData.swift in Sources */,
 				001B7B1A27DE3ABC00DEEECD /* FileSystemStorage.swift in Sources */,
