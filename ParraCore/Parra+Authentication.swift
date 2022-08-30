@@ -75,25 +75,6 @@ public extension Parra {
         }
     }
     
-    
-    private func asyncAuthenticationFromValueCallback(_ provider:
-                                                      @escaping (@escaping (ParraCredential?, Error?) -> Void) -> Void) -> (() async throws -> ParraCredential) {
-        return {
-            return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ParraCredential, Error>) in
-                provider { credential, error in
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                    } else if let credential = credential {
-                        continuation.resume(returning: credential)
-                    } else {
-                        let message = "Authentication provider must complete with either a ParraCredential instance or an Error"
-                        continuation.resume(throwing: ParraError.authenticationFailed(message))
-                    }
-                }
-            }
-        }
-    }
-    
     private func asyncAuthenticationFromResultCallback(_ provider:
                                                        @escaping (@escaping (Result<ParraCredential, Error>) -> Void) -> Void) -> (() async throws -> ParraCredential) {
         return {
