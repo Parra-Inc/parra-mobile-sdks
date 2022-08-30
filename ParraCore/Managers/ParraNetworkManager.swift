@@ -192,7 +192,7 @@ internal class ParraNetworkManager: NetworkManagerType {
         }
     }
 
-    func performPublicAuthenticationRequest(
+    func performPublicApiKeyAuthenticationRequest(
         forTentant tenantId: String,
         apiKeyId: String,
         userId: String
@@ -242,11 +242,11 @@ internal class ParraNetworkManager: NetworkManagerType {
 
     private func addStandardHeaders(toRequest request: inout URLRequest) {
         for (header, value) in libraryVersionHeaders() {
-            request.addValue(value, forHTTPHeaderField: header)
+            request.setValue(value, forHTTPHeaderField: header)
         }
 
         for (header, value) in additionalHeaders() {
-            request.addValue(value, forHTTPHeaderField: header)
+            request.setValue(value, forHTTPHeaderField: header)
         }
     }
     

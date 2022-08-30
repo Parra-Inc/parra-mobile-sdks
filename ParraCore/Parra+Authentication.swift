@@ -18,6 +18,7 @@ public extension Parra {
         return shared.networkManager.authenticationProvider != nil
     }
 
+    ///
     class func setPublicApiKeyAuthProvider(
         tenantId: String,
         apiKeyId: String,
@@ -26,7 +27,7 @@ public extension Parra {
         setAuthenticationProvider {
             let userId = try await userProvider()
 
-            return try await shared.networkManager.performPublicAuthenticationRequest(
+            return try await shared.networkManager.performPublicApiKeyAuthenticationRequest(
                 forTentant: tenantId,
                 apiKeyId: apiKeyId,
                 userId: userId
