@@ -92,7 +92,9 @@ internal class ParraNetworkManager: NetworkManagerType {
     }
     
     internal func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) {
-        authenticationProvider = provider
+        Parra.logout { [weak self] in
+            self?.authenticationProvider = provider
+        }
     }
     
     internal func refreshAuthentication() async throws -> ParraCredential {
