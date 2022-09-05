@@ -18,9 +18,10 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  universal-darwin-22
 
 DEPENDENCIES
   xcodeproj (= 1.21.0)
 
 BUNDLED WITH
-   2.3.7
+   2.3.15
