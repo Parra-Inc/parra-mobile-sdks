@@ -22,7 +22,7 @@ public class Parra: ParraModule {
             urlSession: urlSession
         )
         
-        let syncManager = ParraFeedbackSyncManager(
+        let syncManager = ParraSyncManager(
             networkManager: networkManager
         )
         
@@ -38,11 +38,11 @@ public class Parra: ParraModule {
     internal private(set) static var registeredModules: [String: ParraModule] = [:]
     
     internal let dataManager: ParraDataManager
-    internal let syncManager: ParraFeedbackSyncManager
+    internal let syncManager: ParraSyncManager
     internal let networkManager: ParraNetworkManager
         
     internal init(dataManager: ParraDataManager,
-                  syncManager: ParraFeedbackSyncManager,
+                  syncManager: ParraSyncManager,
                   networkManager: ParraNetworkManager) {
         
         self.dataManager = dataManager

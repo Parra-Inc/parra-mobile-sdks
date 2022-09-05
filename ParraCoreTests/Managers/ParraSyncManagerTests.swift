@@ -53,7 +53,7 @@ class ParraSyncManagerTests: XCTestCase {
             urlSession: MockURLSession(dataTaskResolver: resolver)
         )
         
-        let syncManager = ParraFeedbackSyncManager(
+        let syncManager = ParraSyncManager(
             networkManager: networkManager
         )
         

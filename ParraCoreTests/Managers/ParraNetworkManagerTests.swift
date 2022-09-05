@@ -133,7 +133,7 @@ class ParraNetworkManagerTests: XCTestCase {
 
         Parra.shared = Parra(
             dataManager: dataManager,
-            syncManager: ParraFeedbackSyncManager(networkManager: networkManager),
+            syncManager: ParraSyncManager(networkManager: networkManager),
             networkManager: networkManager
         )
         
@@ -323,7 +323,48 @@ class ParraNetworkManagerTests: XCTestCase {
 
             XCTFail()
         } catch {}
+    }
 
+    func testPublicApiKeyAuthentication() async throws {
+        let tenantId = UUID().uuidString
+        let apiKeyId = UUID().uuidString
+        let userId = UUID().uuidString
+
+        let dataManager = MockDataManager()
+
+        let route = "whatever"
+        let requestHeadersExpectation = XCTestExpectation()
+        let networkManager = ParraNetworkManager(
+            dataManager: dataManager,
+            urlSession: MockURLSession { request in
+                let matches = request.allHTTPHeaderFields!.keys.contains { headerKey in
+                    return headerKey.lowercased().contains(FakeModule.name.lowercased())
+                }
+
+                if matches {
+                    requestHeadersExpectation.fulfill()
+                }
+
+                let data = try! JSONEncoder().encode(ParraCredential(token: UUID().uuidString))
+                return (data, createTestResponse(route: route), nil)
+            }
+        )
+
+        Parra.shared = Parra(
+            dataManager: dataManager,
+            syncManager: ParraSyncManager(networkManager: networkManager),
+            networkManager: networkManager
+        )
+
+        Parra.registerModule(module: FakeModule())
+
+        let _ = try await networkManager.performPublicApiKeyAuthenticationRequest(
+            forTentant: tenantId,
+            apiKeyId: apiKeyId,
+            userId: userId
+        )
+
+        wait(for: [requestHeadersExpectation], timeout: 0.1)
     }
 }
 

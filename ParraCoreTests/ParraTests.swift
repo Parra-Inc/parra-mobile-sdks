@@ -30,7 +30,7 @@ class ParraCoreTests: XCTestCase {
             urlSession: URLSession.shared
         )
         
-        let syncManager = ParraFeedbackSyncManager(
+        let syncManager = ParraSyncManager(
             networkManager: networkManager
         )
 

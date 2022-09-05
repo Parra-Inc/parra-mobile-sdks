@@ -141,19 +141,13 @@ internal class ParraNetworkManager: NetworkManagerType {
         
         var request = URLRequest(url: url, cachePolicy: cachePolicy ?? .useProtocolCachePolicy)
         request.httpMethod = method.rawValue
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: .accept)
         
-        for (header, value) in libraryVersionHeaders() {
-            request.addValue(value, forHTTPHeaderField: header)
-        }
-        
-        for (header, value) in additionalHeaders() {
-            request.addValue(value, forHTTPHeaderField: header)
-        }
-        
+        addStandardHeaders(toRequest: &request)
+
         if method.allowsBody {
             request.httpBody = try jsonEncoder.encode(body)
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: .contentType)
         }
         
         let data = try await performRequest(
@@ -169,7 +163,7 @@ internal class ParraNetworkManager: NetworkManagerType {
                                 shouldReauthenticate: Bool = true) async throws -> Data {
         
         var request = request
-        request.setValue("Bearer \(credential.token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(credential.token)", forHTTPHeaderField: .authorization)
         
         let (data, response) = try await performAsyncDataDask(request: request)
         switch (response.statusCode, shouldReauthenticate) {
@@ -178,7 +172,7 @@ internal class ParraNetworkManager: NetworkManagerType {
         case (401, true):
             let newCredential = try await refreshAuthentication()
             
-            request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: .authorization)
             
             return try await performRequest(
                 request: request,
@@ -197,7 +191,44 @@ internal class ParraNetworkManager: NetworkManagerType {
             return data
         }
     }
-    
+
+    func performPublicApiKeyAuthenticationRequest(
+        forTentant tenantId: String,
+        apiKeyId: String,
+        userId: String
+    ) async throws -> ParraCredential {
+        let url = Parra.Constant.parraApiRoot.appendingPathComponent("tenants/\(tenantId)/issuers/public/auth/token")
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "POST"
+        request.httpBody = try jsonEncoder.encode(["user_id": userId])
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+
+        let authData = ("api_key:" + apiKeyId).data(using: .utf8)!.base64EncodedString()
+        
+        addStandardHeaders(toRequest: &request)
+        request.setValue("Basic \(authData)", forHTTPHeaderField: .authorization)
+
+        let (data, response) = try await performAsyncDataDask(request: request)
+
+        switch (response.statusCode) {
+        case 200:
+            return try jsonDecoder.decode(ParraCredential.self, from: data)
+        case 400...499:
+            throw ParraError.networkError(
+                "Client error \(response.statusCode): \(response.debugDescription)"
+            )
+        case 500...599:
+            throw ParraError.networkError(
+                "Server error \(response.statusCode): \(response.debugDescription)"
+            )
+        default:
+            throw ParraError.networkError(
+                "Unexpected error \(response.statusCode): \(response.debugDescription)"
+            )
+        }
+    }
+
     private func performAsyncDataDask(request: URLRequest) async throws -> (Data, HTTPURLResponse) {
 #if DEBUG
         try await Task.sleep(nanoseconds: 1_000_000_000)
@@ -207,6 +238,16 @@ internal class ParraNetworkManager: NetworkManagerType {
         
         // It is documented that for data tasks, response is always actually HTTPURLResponse
         return (data, response as! HTTPURLResponse)
+    }
+
+    private func addStandardHeaders(toRequest request: inout URLRequest) {
+        for (header, value) in libraryVersionHeaders() {
+            request.setValue(value, forHTTPHeaderField: header)
+        }
+
+        for (header, value) in additionalHeaders() {
+            request.setValue(value, forHTTPHeaderField: header)
+        }
     }
     
     private func libraryVersionHeaders() -> [String: String] {
