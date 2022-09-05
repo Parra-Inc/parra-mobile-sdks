@@ -92,10 +92,6 @@ internal class ParraNetworkManager: NetworkManagerType {
     }
     
     internal func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) {
-        Task {
-            await Parra.logout()
-        }
-
         authenticationProvider = provider
     }
     

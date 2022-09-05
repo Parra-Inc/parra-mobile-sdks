@@ -39,6 +39,8 @@ public extension Parra {
     /// - Parameter provider: An async function that is expected to return a ParraCredential object containing a user's access token.
     class func setAuthenticationProvider(_ provider: @escaping ParraFeedbackAuthenticationProvider) {
         shared.networkManager.updateAuthenticationProvider(provider)
+
+        refreshAuthentication()
     }
     
     /// Sets the provided function as the authentication provider that will be invoked when the Parra API needs to refresh the credential
@@ -48,6 +50,8 @@ public extension Parra {
         shared.networkManager.updateAuthenticationProvider(
             shared.asyncAuthenticationFromResultCallback(provider)
         )
+
+        refreshAuthentication()
     }
     
     /// Sets the provided function as the authentication provider that will be invoked when the Parra API needs to refresh the credential
@@ -57,6 +61,8 @@ public extension Parra {
         shared.networkManager.updateAuthenticationProvider(
             shared.asyncAuthenticationFromThrowingValueCallback(provider)
         )
+
+        refreshAuthentication()
     }
     
     private func asyncAuthenticationFromThrowingValueCallback(_ provider:
@@ -86,6 +92,16 @@ public extension Parra {
                         continuation.resume(throwing: error)
                     }
                 }
+            }
+        }
+    }
+
+    private class func refreshAuthentication() {
+        Task {
+            do {
+                let _ = try await shared.networkManager.refreshAuthentication()
+            } catch let error {
+                parraLogE("Refresh authentication on user change: \(error)")
             }
         }
     }
