@@ -17,14 +17,14 @@ public struct ParraFeedbackViewConfig {
         public static let defaultContentInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
     }
     
-    var backgroundColor: UIColor
-    var tintColor: UIColor?
-    var cornerRadius: CGFloat = 0.0
-    var contentInsets: UIEdgeInsets
-    var shadow: ParraShadowConfig
-    var title: ParraTextConfig
-    var subtitle: ParraTextConfig
-    var body: ParraTextConfig
+    public private(set) var backgroundColor: UIColor
+    public private(set) var tintColor: UIColor?
+    public private(set) var cornerRadius: CGFloat = 0.0
+    public private(set) var contentInsets: UIEdgeInsets
+    public private(set) var shadow: ParraShadowConfig
+    public private(set) var title: ParraTextConfig
+    public private(set) var subtitle: ParraTextConfig
+    public private(set) var body: ParraTextConfig
     
     public init(backgroundColor: UIColor = Constant.defaultBackgroundColor,
                 tintColor: UIColor? = nil,

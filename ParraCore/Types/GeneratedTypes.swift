@@ -339,7 +339,7 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
 public struct CardsResponse: Codable, Equatable, Hashable {
     public let items: Array<ParraCardItem>
     
-    public init(
+    internal init(
         items: Array<ParraCardItem>
     ) {
         self.items = items

@@ -9,10 +9,10 @@
 import UIKit
 
 public struct ParraShadowConfig {
-    var color: UIColor
-    var opacity: Float
-    var radius: CGFloat
-    var offset: CGSize
+    public private(set) var color: UIColor
+    public private(set) var opacity: Float
+    public private(set) var radius: CGFloat
+    public private(set) var offset: CGSize
     
     public init(color: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1),
                 opacity: Float = 1.0,

@@ -9,9 +9,9 @@
 import UIKit
 
 public struct ParraTextConfig {
-    let color: UIColor
-    let font: UIFont
-    let shadow: ParraShadowConfig
+    public let color: UIColor
+    public let font: UIFont
+    public let shadow: ParraShadowConfig
     
     public init(color: UIColor = .black,
                 font: UIFont = .preferredFont(forTextStyle: .headline),
