@@ -380,13 +380,13 @@ public struct CreateChoiceQuestionOption: Codable, Equatable, Hashable {
 }
 
 public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    public let title: String
+    public let title: String?
     public let value: String
     public let isOther: Bool?
     public let id: String
     
     public init(
-        title: String,
+        title: String?,
         value: String,
         isOther: Bool?,
         id: String
