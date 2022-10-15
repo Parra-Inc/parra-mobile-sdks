@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ParraCore
 
 extension ParraFeedbackView {
     enum LayoutConstants {
@@ -73,10 +74,11 @@ extension ParraFeedbackView {
         containerView.backgroundColor = config.backgroundColor
         containerView.layer.cornerRadius = config.cornerRadius
         
-        poweredByLabel.textColor = config.backgroundColor.isLight()
-            ? UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
-            : UIColor(hue: 0.0, saturation: 0.0, brightness: 1.0, alpha: 0.2)
-        
+        poweredByButton.setTitleColor(config.backgroundColor.isLight()
+                                      ? UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
+                                      : UIColor(hue: 0.0, saturation: 0.0, brightness: 1.0, alpha: 0.2),
+                                      for: .normal)
+
         backButton.tintColor = config.tintColor
         backButton.accessibilityIdentifier = "ParraFeedbackNavigationBackButton"
         forwardButton.tintColor = config.tintColor
@@ -142,21 +144,22 @@ extension ParraFeedbackView {
         navigationStack.distribution = .equalSpacing
         navigationStack.isUserInteractionEnabled = true
         navigationStack.accessibilityIdentifier = "ParraFeedbackNavigation"
-        
-        poweredByLabel.font = UIFont.boldSystemFont(ofSize: 12.0)
-        poweredByLabel.textAlignment = .center
-        poweredByLabel.isUserInteractionEnabled = true
-        poweredByLabel.accessibilityIdentifier = "ParraFeedbackPoweredBy"
+
+        poweredByButton.isUserInteractionEnabled = true
+        poweredByButton.accessibilityIdentifier = "ParraFeedbackPoweredBy"
+
+        poweredByButton.addTarget(self, action: #selector(openParraLink), for: .touchUpInside)
         
         let defaultAttributes = [NSAttributedString.Key.kern: 0.24]
         let poweredBy = NSMutableAttributedString(string: "Powered by ", attributes: defaultAttributes)
+        poweredBy.addAttributes([.font: UIFont.boldSystemFont(ofSize: 12.0)], range: NSMakeRange(0, poweredBy.length))
         
         let font = UIFont(name: "Pacifico-Regular", size: 16) ?? UIFont.boldSystemFont(ofSize: 16)
         let parra = NSMutableAttributedString(string: "Parra", attributes: [.font: font])
         parra.addAttributes(defaultAttributes, range: NSMakeRange(0, parra.length))
         poweredBy.append(parra)
-        
-        poweredByLabel.attributedText = poweredBy
+
+        poweredByButton.setAttributedTitle(poweredBy, for: .normal)
         
         NSLayoutConstraint.activate([
             navigationStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
@@ -192,5 +195,9 @@ extension ParraFeedbackView {
     
     @objc internal func navigateToNextCard() {
         suggestTransitionInDirection(.right, animated: true)
+    }
+
+    @objc private func openParraLink() {
+        UIApplication.shared.open(Parra.Constant.parraWebRoot)
     }
 }

@@ -136,7 +136,8 @@ public class ParraFeedbackView: UIView {
             if cardItems != oldValue {
                 // If there is already a card item and that item exists in the updated cards list,
                 // we want to make sure that item stays visible.
-                if let currentCardInfo = currentCardInfo, let currentCardItem = currentCardInfo.cardItem, cardItems.contains(where: { $0.id == currentCardItem.id }) {
+                if let currentCardInfo = currentCardInfo,
+                    let currentCardItem = currentCardInfo.cardItem, cardItems.contains(where: { $0.id == currentCardItem.id }) {
                     
                     let visibleButtons = visibleNavigationButtonsForCardItem(currentCardItem)
                     
@@ -216,14 +217,13 @@ public class ParraFeedbackView: UIView {
             action: #selector(navigateToNextCard)
         )
     }()
-    internal let poweredByLabel = UILabel(frame: .zero)
+    internal let poweredByButton = UIButton(type: .system)
     internal lazy var navigationStack: UIStackView = ({
         return UIStackView(arrangedSubviews: [
-            backButton, poweredByLabel, forwardButton
+            backButton, poweredByButton, forwardButton
         ])
     })()
-    
-    
+
     /// Creates a `ParraFeedbackView`. If there are any `ParraCardItem`s available in hte `ParraFeedback` module,
     /// they will be displayed automatically when adding this view to your view hierarchy.
     public required init(
