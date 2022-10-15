@@ -344,6 +344,22 @@ public struct CardsResponse: Codable, Equatable, Hashable {
     ) {
         self.items = items
     }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let unfilteredItems = try container.decode([FailableDecodable<ParraCardItem>].self, forKey: .items)
+
+        self.items = unfilteredItems.compactMap { item in
+            switch item.result {
+            case .success(let base):
+                return base
+            case .failure(let error):
+                let debugError = (error as CustomDebugStringConvertible).debugDescription
+                parraLogW("CardsResponse error parsing card", [NSLocalizedDescriptionKey: debugError])
+                return nil
+            }
+        }
+    }
 }
 
 public enum QuestionType: String, Codable {

@@ -21,6 +21,7 @@
 		001559B327E7EACC006450BE /* ParraSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559B227E7EACC006450BE /* ParraSyncManagerTests.swift */; };
 		001559B527E7EAD9006450BE /* ParraNetworkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559B427E7EAD9006450BE /* ParraNetworkManagerTests.swift */; };
 		0018A60E28D77FF2008CC97E /* URLComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0018A60D28D77FF2008CC97E /* URLComponents.swift */; };
+		0019CBC528FAE0E80015E703 /* FailableDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC428FAE0E80015E703 /* FailableDecodable.swift */; };
 		001B7AFA27DE3A7600DEEECD /* ParraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* ParraCore.framework */; };
 		001B7B0127DE3A7600DEEECD /* ParraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B0027DE3A7600DEEECD /* ParraTests.swift */; };
 		001B7B0227DE3A7600DEEECD /* ParraCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 001B7AF427DE3A7600DEEECD /* ParraCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -215,6 +216,7 @@
 		001559B227E7EACC006450BE /* ParraSyncManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManagerTests.swift; sourceTree = "<group>"; };
 		001559B427E7EAD9006450BE /* ParraNetworkManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraNetworkManagerTests.swift; sourceTree = "<group>"; };
 		0018A60D28D77FF2008CC97E /* URLComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponents.swift; sourceTree = "<group>"; };
+		0019CBC428FAE0E80015E703 /* FailableDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableDecodable.swift; sourceTree = "<group>"; };
 		001B7A0A27DD266500DEEECD /* ParraCore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraCore.podspec; sourceTree = "<group>"; };
 		001B7A0B27DD266500DEEECD /* ParraFeedback.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraFeedback.podspec; sourceTree = "<group>"; };
 		001B7A8B27DD883500DEEECD /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
@@ -454,6 +456,7 @@
 				007FBEF3277A34C700BD9E37 /* GeneratedTypes.swift */,
 				00120F002753E9A400CA3247 /* ParraCredential.swift */,
 				001B7A8B27DD883500DEEECD /* HttpMethod.swift */,
+				0019CBC428FAE0E80015E703 /* FailableDecodable.swift */,
 				001B7B6E27DE3CAB00DEEECD /* Card Completion */,
 			);
 			path = Types;
@@ -927,6 +930,7 @@
 				001B7B2027DE3ABC00DEEECD /* UserDefaultsStorage.swift in Sources */,
 				001B7B2727DE3AC200DEEECD /* JSONEncoder.swift in Sources */,
 				0018A60E28D77FF2008CC97E /* URLComponents.swift in Sources */,
+				0019CBC528FAE0E80015E703 /* FailableDecodable.swift in Sources */,
 				001B7B1127DE3A9B00DEEECD /* ParraModule.swift in Sources */,
 				001B7B8E27DE806100DEEECD /* DataStorageMedium.swift in Sources */,
 				001B7B2927DE3AC800DEEECD /* ParraSyncManager.swift in Sources */,
