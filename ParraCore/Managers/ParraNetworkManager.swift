@@ -117,10 +117,12 @@ internal class ParraNetworkManager: NetworkManagerType {
     
     internal func performAuthenticatedRequest<T: Decodable>(route: String,
                                                             method: HttpMethod,
+                                                            queryItems: [String: String] = [:],
                                                             cachePolicy: URLRequest.CachePolicy? = nil) async throws -> T {
         return try await performAuthenticatedRequest(
             route: route,
             method: method,
+            queryItems: queryItems,
             cachePolicy: cachePolicy,
             body: EmptyRequestObject()
         )
@@ -128,10 +130,13 @@ internal class ParraNetworkManager: NetworkManagerType {
     
     internal func performAuthenticatedRequest<T: Decodable, U: Encodable>(route: String,
                                                                           method: HttpMethod,
+                                                                          queryItems: [String: String] = [:],
                                                                           cachePolicy: URLRequest.CachePolicy? = nil,
                                                                           body: U) async throws -> T {
         
         let url = Parra.Constant.parraApiRoot.appendingPathComponent(route)
+        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        urlComponents.setQueryItems(with: queryItems)
         let credential = await dataManager.getCurrentCredential()
         
         let nextCredential: ParraCredential
@@ -141,7 +146,11 @@ internal class ParraNetworkManager: NetworkManagerType {
             nextCredential = try await refreshAuthentication()
         }
         
-        var request = URLRequest(url: url, cachePolicy: cachePolicy ?? .useProtocolCachePolicy)
+        var request = URLRequest(
+            url: urlComponents.url!,
+            cachePolicy: cachePolicy ?? .useProtocolCachePolicy
+        )
+
         request.httpMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: .accept)
         
