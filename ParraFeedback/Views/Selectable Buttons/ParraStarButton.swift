@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import ParraCore
 
 internal class ParraStarButton: UIButton, SelectableButton {
     internal weak var delegate: SelectableButtonDelegate?
     internal var buttonIsSelected: Bool
     internal var allowsDeselection: Bool = false
     
-    internal required init(initiallySelected: Bool) {
+    internal required init(initiallySelected: Bool, asset: Asset?) {
         buttonIsSelected = initiallySelected
         super.init(frame: .zero)
     }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ParraCore
 
 internal class ParraCheckboxButton: UIButton, SelectableButton {
     enum Style {
@@ -40,7 +41,7 @@ internal class ParraCheckboxButton: UIButton, SelectableButton {
     private var outerLayer = CAShapeLayer()
     private var checkMarkLayer = CAShapeLayer()
     
-    internal required init(initiallySelected: Bool) {
+    internal required init(initiallySelected: Bool, asset: Asset?) {
         buttonIsSelected = initiallySelected
         super.init(frame: .zero)
         setup()

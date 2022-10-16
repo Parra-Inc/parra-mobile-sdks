@@ -38,11 +38,11 @@ internal class ParraChoiceOptionView: UIView {
         
         switch kind {
         case .radio:
-            accessoryButton = ParraRadioButton(initiallySelected: isSelected)
+            accessoryButton = ParraRadioButton(initiallySelected: isSelected, asset: option.asset)
         case .checkbox:
-            accessoryButton = ParraCheckboxButton(initiallySelected: isSelected)
+            accessoryButton = ParraCheckboxButton(initiallySelected: isSelected, asset: option.asset)
         case .star:
-            accessoryButton = ParraStarButton(initiallySelected: isSelected)
+            accessoryButton = ParraStarButton(initiallySelected: isSelected, asset: option.asset)
         }
         
         super.init(frame: .zero)

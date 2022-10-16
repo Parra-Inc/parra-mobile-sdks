@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ParraCore
 
 internal protocol SelectableButtonDelegate: AnyObject {
     func buttonDidSelect(button: SelectableButton)
@@ -13,7 +14,7 @@ internal protocol SelectableButtonDelegate: AnyObject {
 }
 
 internal protocol SelectableButton: AnyObject {
-    init(initiallySelected: Bool)
+    init(initiallySelected: Bool, asset: Asset?)
     
     var delegate: SelectableButtonDelegate? { get set }
     

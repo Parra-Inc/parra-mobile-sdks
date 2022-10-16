@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ParraCore
 
 fileprivate class RadioLayer: CAShapeLayer {
     var activePath: CGPath?
@@ -35,7 +36,7 @@ internal class ParraRadioButton: UIButton, SelectableButton {
     private var outerLayer = CAShapeLayer()
     private var innerLayer = RadioLayer()
     
-    internal required init(initiallySelected: Bool) {
+    internal required init(initiallySelected: Bool, asset: Asset?) {
         buttonIsSelected = initiallySelected
         
         super.init(frame: .zero)
