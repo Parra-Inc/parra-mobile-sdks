@@ -7,10 +7,14 @@
 
 import Foundation
 
+public enum QuestionChoiceDirection {
+    case vertical, horizontal
+}
+
 public extension QuestionKind {
     var allowsMultipleSelection: Bool {
         switch self {
-        case .radio, .star:
+        case .radio, .star, .image:
             return false
         case .checkbox:
             return true
@@ -19,10 +23,19 @@ public extension QuestionKind {
     
     var allowsDeselection: Bool {
         switch self {
-        case .radio, .star:
+        case .radio, .star, .image:
             return false
         case .checkbox:
             return true
+        }
+    }
+
+    var direction: QuestionChoiceDirection {
+        switch self {
+        case .radio, .checkbox:
+            return .vertical
+        case .star, .image:
+            return .horizontal
         }
     }
 }

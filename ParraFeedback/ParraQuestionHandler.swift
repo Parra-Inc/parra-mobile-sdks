@@ -94,24 +94,8 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
         switch question.data {
         case .choiceQuestionBody(_):
             let selections = choiceQuestionSelectionMap[question.id]
-            
-            switch question.kind {
-            case .radio, .star:
-                if let firstSelectedOptionId = selections?.first?.id {
-                    completedCard = CompletedCard(
-                        id: question.id,
-                        data: .question(
-                            .choice(
-                                .single(
-                                    QuestionSingleChoiceCompletedData(
-                                        optionId: firstSelectedOptionId
-                                    )
-                                )
-                            )
-                        )
-                    )
-                }
-            case .checkbox:
+
+            if question.kind.allowsMultipleSelection {
                 if let selections = selections {
                     completedCard = CompletedCard(
                         id: question.id,
@@ -120,6 +104,21 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
                                 .multiple(
                                     QuestionMultipleChoiceCompletedData(
                                         optionIds: selections.map { $0.id }
+                                    )
+                                )
+                            )
+                        )
+                    )
+                }
+            } else {
+                if let firstSelectedOptionId = selections?.first?.id {
+                    completedCard = CompletedCard(
+                        id: question.id,
+                        data: .question(
+                            .choice(
+                                .single(
+                                    QuestionSingleChoiceCompletedData(
+                                        optionId: firstSelectedOptionId
                                     )
                                 )
                             )

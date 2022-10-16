@@ -32,12 +32,14 @@ class GeneratedTypesTests: XCTestCase {
                                     options: [
                                         ChoiceQuestionOption(
                                             title: "option 1",
+                                            asset: nil,
                                             value: "",
                                             isOther: nil,
                                             id: "op1"
                                         ),
                                         ChoiceQuestionOption(
                                             title: "option 2",
+                                            asset: nil,
                                             value: "",
                                             isOther: nil,
                                             id: "op2"
@@ -71,12 +73,14 @@ class GeneratedTypesTests: XCTestCase {
                                     options: [
                                         ChoiceQuestionOption(
                                             title: "option 1",
+                                            asset: nil,
                                             value: "",
                                             isOther: nil,
                                             id: "op1"
                                         ),
                                         ChoiceQuestionOption(
                                             title: "option 2",
+                                            asset: nil,
                                             value: "",
                                             isOther: nil,
                                             id: "op2"

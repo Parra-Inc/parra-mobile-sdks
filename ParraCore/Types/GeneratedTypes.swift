@@ -371,6 +371,7 @@ public enum QuestionKind: String, Codable {
     case radio = "radio"
     case checkbox = "checkbox"
     case star = "star"
+    case image = "image"
 }
 
 public struct CreateChoiceQuestionOption: Codable, Equatable, Hashable {
@@ -395,19 +396,27 @@ public struct CreateChoiceQuestionOption: Codable, Equatable, Hashable {
     }
 }
 
+public struct Asset: Codable, Equatable, Hashable, Identifiable {
+    public let id: String
+    public let url: URL
+}
+
 public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
     public let title: String?
+    public let asset: Asset?
     public let value: String
     public let isOther: Bool?
     public let id: String
     
     public init(
         title: String?,
+        asset: Asset?,
         value: String,
         isOther: Bool?,
         id: String
     ) {
         self.title = title
+        self.asset = asset
         self.value = value
         self.isOther = isOther
         self.id = id
@@ -415,9 +424,43 @@ public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case title
+        case imageAssetId = "image_asset_id"
+        case imageAssetUrl = "image_asset_url"
         case value
         case isOther = "is_other"
         case id
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
+        self.value = try container.decode(String.self, forKey: .value)
+        self.isOther = try container.decodeIfPresent(Bool.self, forKey: .isOther)
+        self.id = try container.decode(String.self, forKey: .id)
+
+        let imageId = try container.decodeIfPresent(String.self, forKey: .imageAssetId)
+        let imageUrlString = try container.decodeIfPresent(String.self, forKey: .imageAssetUrl)
+
+        if let imageId = imageId,
+            let imageUrlString = imageUrlString,
+            let imageUrl = URL(string: imageUrlString) {
+
+            self.asset = Asset(id: imageId, url: imageUrl)
+        } else {
+            self.asset = nil
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(title, forKey: .title)
+        try container.encode(value, forKey: .value)
+        try container.encode(isOther, forKey: .isOther)
+        try container.encode(id, forKey: .id)
+        try container.encode(asset?.id, forKey: .imageAssetId)
+        try container.encode(asset?.url, forKey: .imageAssetUrl)
     }
 }
 
@@ -581,12 +624,13 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
         self.tenantId = try container.decode(String.self, forKey: .tenantId)
         self.title = try container.decode(String.self, forKey: .title)
         self.subtitle = try container.decodeIfPresent(String.self, forKey: .subtitle)
-        self.type = try container.decode(QuestionType.self, forKey: .type)
         self.kind = try container.decode(QuestionKind.self, forKey: .kind)
         self.active = try container.decodeIfPresent(Bool.self, forKey: .active)
         self.expiresAt = try container.decodeIfPresent(String.self, forKey: .expiresAt)
         self.answerQuota = try container.decodeIfPresent(Int.self, forKey: .answerQuota)
         self.answer = try container.decodeIfPresent(Answer.self, forKey: .answer)
+
+        self.type = try container.decode(QuestionType.self, forKey: .type)
         switch type {
         case .choice:
             self.data = .choiceQuestionBody(try container.decode(ChoiceQuestionBody.self, forKey: .data))
