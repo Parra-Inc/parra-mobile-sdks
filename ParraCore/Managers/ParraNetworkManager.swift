@@ -58,6 +58,8 @@ internal protocol URLSessionType {
     func dataForRequest(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
     
     func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
+
+    var configuration: URLSessionConfiguration { get }
 }
 
 internal protocol NetworkManagerType {
@@ -227,6 +229,48 @@ internal class ParraNetworkManager: NetworkManagerType {
                 "Unexpected error \(response.statusCode): \(response.debugDescription)"
             )
         }
+    }
+
+    internal func performBulkAssetCachingRequest(assets: [Asset]) async {
+        let _ = await assets.asyncMap { asset in
+            return try? await fetchAsset(asset: asset)
+        }
+    }
+
+    internal func fetchAsset(asset: Asset) async throws -> UIImage? {
+        let request = request(for: asset)
+
+        let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
+        let httpResponse = response as! HTTPURLResponse
+
+        if httpResponse.statusCode < 300 {
+            return UIImage(data: data)
+        }
+
+        return nil
+    }
+
+    internal func isAssetCached(asset: Asset) -> Bool {
+        guard let cache = urlSession.configuration.urlCache else {
+            return false
+        }
+
+        guard let cachedResponse = cache.cachedResponse(for: request(for: asset)) else {
+            return false
+        }
+
+        return cachedResponse.storagePolicy != .notAllowed
+    }
+
+    private func request(for asset: Asset) -> URLRequest {
+        var request = URLRequest(
+            url: asset.url,
+            cachePolicy: .returnCacheDataElseLoad,
+            timeoutInterval: 10.0
+        )
+        request.httpMethod = HttpMethod.get.rawValue
+
+        return request
     }
 
     private func performAsyncDataDask(request: URLRequest) async throws -> (Data, HTTPURLResponse) {

@@ -5,7 +5,7 @@
 //  Created by Mick MacCallum on 3/12/22.
 //
 
-import Foundation
+import UIKit
 
 public extension Parra {
     enum API {
@@ -33,6 +33,26 @@ public extension Parra {
                 method: .post,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                 body: serializableCards
+            )
+        }
+    }
+
+    enum Assets {
+        public static func performBulkAssetCachingRequest(assets: [Asset]) async {
+            await Parra.shared.networkManager.performBulkAssetCachingRequest(
+                assets: assets
+            )
+        }
+
+        public static func fetchAsset(asset: Asset) async throws -> UIImage? {
+            return try await Parra.shared.networkManager.fetchAsset(
+                asset: asset
+            )
+        }
+
+        public static func isAssetCached(asset: Asset) -> Bool {
+            return Parra.shared.networkManager.isAssetCached(
+                asset: asset
             )
         }
     }

@@ -14,9 +14,23 @@ public class Parra: ParraModule {
     public static private(set) var name = "core"
         
     internal static var shared: Parra! = {
-        let urlSession = URLSession(configuration: .default)
+        let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        let diskCacheURL = cachesURL.appendingPathComponent("ParraCache")
+        // Cache may reject image entries if they are greater than 10% of the cache's size
+        // so these need to reflect that.
+        let cache = URLCache(
+            memoryCapacity: 50 * 1024 * 1024,
+            diskCapacity: 300 * 1024 * 1024,
+            directory: diskCacheURL
+        )
+
+        let configuration = URLSessionConfiguration.default
+        configuration.urlCache = cache
+        configuration.requestCachePolicy = .reloadRevalidatingCacheData
+
+        let urlSession = URLSession(configuration: configuration)
         let dataManager = ParraDataManager()
-        
+
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: urlSession

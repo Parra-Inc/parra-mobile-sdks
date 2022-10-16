@@ -39,6 +39,8 @@ class MockURLSessionDataTask: URLSessionDataTask {
 }
 
 class MockURLSession: URLSessionType {
+    var configuration: URLSessionConfiguration = .default
+
     func dataForRequest(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
         return try await data(for: request, delegate: delegate)
     }
