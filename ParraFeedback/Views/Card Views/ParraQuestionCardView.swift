@@ -52,12 +52,21 @@ internal class ParraQuestionCardView: ParraCardView {
         super.init(config: config)
         
         translatesAutoresizingMaskIntoConstraints = false
+
         contentContainer.isUserInteractionEnabled = true
         contentContainer.translatesAutoresizingMaskIntoConstraints = false
-        contentContainer.axis = .vertical
-        contentContainer.alignment = .fill
-        contentContainer.distribution = .equalSpacing
-        
+
+        switch question.kind.direction {
+        case .horizontal:
+            contentContainer.axis = .horizontal
+            contentContainer.alignment = .top
+            contentContainer.distribution = .fillEqually
+        case .vertical:
+            contentContainer.axis = .vertical
+            contentContainer.alignment = .fill
+            contentContainer.distribution = .equalSpacing
+        }
+
         addSubview(contentContainer)
         
         NSLayoutConstraint.activate([
@@ -73,12 +82,12 @@ internal class ParraQuestionCardView: ParraCardView {
         
         addSubview(titleLabel)
         
-        NSLayoutConstraint.activate([
+        var constraints: [NSLayoutConstraint] = [
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             titleLabel.topAnchor.constraint(equalTo: topAnchor)
-        ])
-        
+        ]
+
         if let subtitle = question.subtitle {
             let subtitleLabel = UILabel(frame: .zero)
             
@@ -91,22 +100,21 @@ internal class ParraQuestionCardView: ParraCardView {
             self.subtitleLabel = subtitleLabel
             
             addSubview(subtitleLabel)
-            
-            NSLayoutConstraint.activate([
+
+            constraints.append(contentsOf: [
                 subtitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
                 subtitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-                subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6)
-            ])
-            
-            NSLayoutConstraint.activate([
+                subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
                 contentContainer.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 12)
             ])
         } else {
-            NSLayoutConstraint.activate([
+            constraints.append(
                 contentContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12)
-            ])
+            )
         }
-        
+
+        NSLayoutConstraint.activate(constraints)
+
         switch question.data {
         case .choiceQuestionBody(let choice):
             generateOptionsForChoice(choice)
@@ -149,7 +157,7 @@ internal class ParraQuestionCardView: ParraCardView {
         optionViewMap.removeAll()
         
         let currentSelections = questionHandler.initialSelection(forQuestion: question)
-        
+
         for option in choice.options {
             let isSelected = currentSelections.contains(option)
             let optionView = ParraChoiceOptionView(

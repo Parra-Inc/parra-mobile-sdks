@@ -41,7 +41,7 @@ internal class ParraCheckboxButton: UIButton, SelectableButton {
     private var outerLayer = CAShapeLayer()
     private var checkMarkLayer = CAShapeLayer()
     
-    internal required init(initiallySelected: Bool, asset: Asset?) {
+    internal required init(initiallySelected: Bool, config: ParraFeedbackViewConfig, asset: Asset?) {
         buttonIsSelected = initiallySelected
         super.init(frame: .zero)
         setup()

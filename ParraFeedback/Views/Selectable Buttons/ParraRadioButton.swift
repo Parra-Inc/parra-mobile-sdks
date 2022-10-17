@@ -36,7 +36,7 @@ internal class ParraRadioButton: UIButton, SelectableButton {
     private var outerLayer = CAShapeLayer()
     private var innerLayer = RadioLayer()
     
-    internal required init(initiallySelected: Bool, asset: Asset?) {
+    internal required init(initiallySelected: Bool, config: ParraFeedbackViewConfig, asset: Asset?) {
         buttonIsSelected = initiallySelected
         
         super.init(frame: .zero)

@@ -23,6 +23,7 @@
 		0018A60E28D77FF2008CC97E /* URLComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0018A60D28D77FF2008CC97E /* URLComponents.swift */; };
 		0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC228F639040015E703 /* ParraQuestionAppArea.swift */; };
 		0019CBC528FAE0E80015E703 /* FailableDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC428FAE0E80015E703 /* FailableDecodable.swift */; };
+		0019CBC728FB1B580015E703 /* ParraImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC628FB1B580015E703 /* ParraImageButton.swift */; };
 		0019CBC928FB37BC0015E703 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC828FB37BC0015E703 /* Sequence.swift */; };
 		001B7AFA27DE3A7600DEEECD /* ParraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* ParraCore.framework */; };
 		001B7B0127DE3A7600DEEECD /* ParraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B0027DE3A7600DEEECD /* ParraTests.swift */; };
@@ -220,6 +221,7 @@
 		0018A60D28D77FF2008CC97E /* URLComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponents.swift; sourceTree = "<group>"; };
 		0019CBC228F639040015E703 /* ParraQuestionAppArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionAppArea.swift; sourceTree = "<group>"; };
 		0019CBC428FAE0E80015E703 /* FailableDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableDecodable.swift; sourceTree = "<group>"; };
+		0019CBC628FB1B580015E703 /* ParraImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraImageButton.swift; sourceTree = "<group>"; };
 		0019CBC828FB37BC0015E703 /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
 		001B7A0A27DD266500DEEECD /* ParraCore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraCore.podspec; sourceTree = "<group>"; };
 		001B7A0B27DD266500DEEECD /* ParraFeedback.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ParraFeedback.podspec; sourceTree = "<group>"; };
@@ -392,6 +394,7 @@
 				001286EE277D27BC0090CDB5 /* ParraRadioButton.swift */,
 				001286F0277D4BB20090CDB5 /* ParraCheckboxButton.swift */,
 				001287022784CD0D0090CDB5 /* ParraStarButton.swift */,
+				0019CBC628FB1B580015E703 /* ParraImageButton.swift */,
 			);
 			path = "Selectable Buttons";
 			sourceTree = "<group>";
@@ -986,6 +989,7 @@
 				001B7B4F27DE3B2500DEEECD /* ParraFeedback.swift in Sources */,
 				00FD310B28329F5B0080689C /* ParraFeedbackCollectionViewCell.swift in Sources */,
 				001B7B5B27DE3B3800DEEECD /* ParraActionCardView.swift in Sources */,
+				0019CBC728FB1B580015E703 /* ParraImageButton.swift in Sources */,
 				000AF4C5283AE6FF008A17A3 /* ParraTextConfig.swift in Sources */,
 				001B7B5327DE3B3800DEEECD /* UIColor.swift in Sources */,
 				001B7B6427DE3BE700DEEECD /* Direction.swift in Sources */,

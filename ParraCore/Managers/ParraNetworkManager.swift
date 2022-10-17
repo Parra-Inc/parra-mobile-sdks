@@ -256,6 +256,14 @@ internal class ParraNetworkManager: NetworkManagerType {
             return UIImage(data: data)
         }
 
+        let cacheResponse = CachedURLResponse(
+            response: response,
+            data: data,
+            storagePolicy: .allowed
+        )
+
+        urlSession.configuration.urlCache?.storeCachedResponse(cacheResponse, for: request)
+
         return nil
     }
 
