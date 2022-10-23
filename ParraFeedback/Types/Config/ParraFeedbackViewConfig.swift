@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ParraCore
 
 /// A configuration object for how a `ParraFeedbackView` should look. Use this to customize `ParraFeedbackView`s
 /// so that they better blend in with your app's UI.
@@ -15,6 +16,7 @@ public struct ParraFeedbackViewConfig {
         public static let defaultBackgroundColorDark = UIColor(hex: 0x27252C)
         public static let defaultCornerRadius: CGFloat = 12.0
         public static let defaultContentInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        public static let defaultTintColor = Parra.Constant.brandColor
     }
     
     public private(set) var backgroundColor: UIColor
@@ -25,15 +27,17 @@ public struct ParraFeedbackViewConfig {
     public private(set) var title: ParraTextConfig
     public private(set) var subtitle: ParraTextConfig
     public private(set) var body: ParraTextConfig
-    
+    public private(set) var bodyBold: ParraTextConfig
+
     public init(backgroundColor: UIColor = Constant.defaultBackgroundColor,
-                tintColor: UIColor? = nil,
+                tintColor: UIColor? = Constant.defaultTintColor,
                 cornerRadius: CGFloat = Constant.defaultCornerRadius,
                 contentInsets: UIEdgeInsets = Constant.defaultContentInsets,
                 shadow: ParraShadowConfig = .default,
                 title: ParraTextConfig = .titleDefault,
                 subtitle: ParraTextConfig = .subtitleDefault,
-                body: ParraTextConfig = .bodyDefault) {
+                body: ParraTextConfig = .bodyDefault,
+                bodyBold: ParraTextConfig = .bodyBold) {
         self.backgroundColor = backgroundColor
         self.tintColor = tintColor
         self.cornerRadius = cornerRadius
@@ -42,6 +46,7 @@ public struct ParraFeedbackViewConfig {
         self.title = title
         self.subtitle = subtitle
         self.body = body
+        self.bodyBold = bodyBold
     }
     
     /// The default configuration used by `ParraFeedbackView`s when no other configuration is provided.
@@ -51,6 +56,7 @@ public struct ParraFeedbackViewConfig {
         backgroundColor: Constant.defaultBackgroundColorDark,
         title: .titleDefaultDark,
         subtitle: .subtitleDefaultDark,
-        body: .bodyDefaultDark
+        body: .bodyDefaultDark,
+        bodyBold: .bodyDefaultDark
     )
 }

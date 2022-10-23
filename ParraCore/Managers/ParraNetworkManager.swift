@@ -252,17 +252,19 @@ internal class ParraNetworkManager: NetworkManagerType {
         let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
         let httpResponse = response as! HTTPURLResponse
 
+        defer {
+            let cacheResponse = CachedURLResponse(
+                response: response,
+                data: data,
+                storagePolicy: .allowed
+            )
+
+            urlSession.configuration.urlCache?.storeCachedResponse(cacheResponse, for: request)
+        }
+
         if httpResponse.statusCode < 300 {
             return UIImage(data: data)
         }
-
-        let cacheResponse = CachedURLResponse(
-            response: response,
-            data: data,
-            storagePolicy: .allowed
-        )
-
-        urlSession.configuration.urlCache?.storeCachedResponse(cacheResponse, for: request)
 
         return nil
     }

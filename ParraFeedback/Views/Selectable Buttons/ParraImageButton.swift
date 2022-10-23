@@ -57,6 +57,7 @@ internal class ParraImageButton: UIButton, SelectableButton {
         buttonImageView.layer.cornerRadius = 8.0
         buttonImageView.layer.masksToBounds = true
         buttonImageView.contentMode = .scaleAspectFill
+        buttonImageView.layer.borderColor = config.tintColor?.cgColor
 
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
@@ -66,7 +67,7 @@ internal class ParraImageButton: UIButton, SelectableButton {
 
         NSLayoutConstraint.activate([
             buttonImageView.widthAnchor.constraint(equalTo: buttonImageView.heightAnchor),
-            buttonImageView.widthAnchor.constraint(equalToConstant: 70),
+            buttonImageView.widthAnchor.constraint(equalToConstant: 60),
             buttonImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             buttonImageView.topAnchor.constraint(equalTo: topAnchor),
             buttonImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -101,6 +102,8 @@ internal class ParraImageButton: UIButton, SelectableButton {
             buttonIsSelected = true
         }
 
+        updateSelectionState(animated: true)
+
         if buttonIsSelected {
             delegate?.buttonDidSelect(button: self)
         } else {
@@ -109,6 +112,22 @@ internal class ParraImageButton: UIButton, SelectableButton {
     }
 
     internal func updateSelectionState(animated: Bool) {
-        // TODO: Border color
+        let performBorderUpdates = { [self] in
+            buttonImageView.layer.borderWidth = buttonIsSelected ? 1.5 : 0
+        }
+
+        if animated {
+            UIView.animate(
+                withDuration: 0.2,
+                delay: 0.0,
+                options: [.beginFromCurrentState, .allowUserInteraction],
+                animations: {
+                    performBorderUpdates()
+                },
+                completion: nil
+            )
+        } else {
+            performBorderUpdates()
+        }
     }
 }

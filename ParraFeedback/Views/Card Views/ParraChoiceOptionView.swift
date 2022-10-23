@@ -38,36 +38,75 @@ internal class ParraChoiceOptionView: UIView {
         
         switch kind {
         case .radio:
-            accessoryButton = ParraRadioButton(initiallySelected: isSelected, asset: option.asset)
+            accessoryButton = ParraRadioButton(
+                initiallySelected: isSelected,
+                config: config,
+                asset: option.asset
+            )
         case .checkbox:
-            accessoryButton = ParraCheckboxButton(initiallySelected: isSelected, asset: option.asset)
+            accessoryButton = ParraCheckboxButton(
+                initiallySelected: isSelected,
+                config: config,
+                asset: option.asset
+            )
         case .star:
-            accessoryButton = ParraStarButton(initiallySelected: isSelected, asset: option.asset)
+            accessoryButton = ParraStarButton(
+                initiallySelected: isSelected,
+                config: config,
+                asset: option.asset
+            )
+        case .image:
+            accessoryButton = ParraImageButton(
+                initiallySelected: isSelected,
+                config: config,
+                asset: option.asset
+            )
         }
         
         super.init(frame: .zero)
         
         translatesAutoresizingMaskIntoConstraints = false
-        
-        optionLabel.translatesAutoresizingMaskIntoConstraints = false
-        optionLabel.text = option.title
-        optionLabel.numberOfLines = 3
-        optionLabel.lineBreakMode = .byTruncatingTail
-        optionLabel.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(tapGestureDidPress(gesture:))
-        )
-        optionLabel.addGestureRecognizer(tapGesture)
-        
-        accessoryButton.delegate = self
-        
-        let stack = UIStackView(arrangedSubviews: [accessoryButton, optionLabel])
+
+        let stack = UIStackView(arrangedSubviews: [accessoryButton])
         stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .horizontal
-        stack.distribution = .fill
-        stack.alignment = .center
-        
+
+        if let title = option.title {
+            optionLabel.translatesAutoresizingMaskIntoConstraints = false
+            optionLabel.text = title
+            optionLabel.lineBreakMode = .byTruncatingTail
+            optionLabel.isUserInteractionEnabled = true
+            optionLabel.setContentHuggingPriority(.defaultLow, for: .vertical)
+
+            if kind.direction == .vertical {
+                optionLabel.numberOfLines = 3
+                optionLabel.textAlignment = .left
+            } else {
+                optionLabel.numberOfLines = 2
+                optionLabel.textAlignment = .center
+            }
+
+            let tapGesture = UITapGestureRecognizer(
+                target: self,
+                action: #selector(tapGestureDidPress(gesture:))
+            )
+            optionLabel.addGestureRecognizer(tapGesture)
+
+            stack.addArrangedSubview(optionLabel)
+        }
+
+        accessoryButton.delegate = self
+
+        if kind.direction == .vertical {
+            stack.axis = .horizontal
+            stack.distribution = .fillEqually
+            stack.alignment = .top
+        } else {
+            stack.spacing = 8
+            stack.axis = .vertical
+            stack.distribution = .fill
+            stack.alignment = .fill
+        }
+
         addSubview(stack)
         
         NSLayoutConstraint.activate([
@@ -85,7 +124,12 @@ internal class ParraChoiceOptionView: UIView {
     }
     
     private func applyConfig(_ config: ParraFeedbackViewConfig) {
-        optionLabel.font = config.body.font
+        if kind.direction == .vertical {
+            optionLabel.font = config.body.font
+        } else {
+            optionLabel.font = config.bodyBold.font
+        }
+
         optionLabel.textColor = config.body.color
         optionLabel.layer.shadowColor = config.body.shadow.color.cgColor
         optionLabel.layer.shadowOpacity = config.body.shadow.opacity

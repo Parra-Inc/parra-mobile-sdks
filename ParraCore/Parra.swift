@@ -15,7 +15,7 @@ public class Parra: ParraModule {
         
     internal static var shared: Parra! = {
         let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-        let diskCacheURL = cachesURL.appendingPathComponent("ParraCache")
+        let diskCacheURL = cachesURL.appendingPathComponent("ParraNetworkCache")
         // Cache may reject image entries if they are greater than 10% of the cache's size
         // so these need to reflect that.
         let cache = URLCache(
@@ -26,7 +26,7 @@ public class Parra: ParraModule {
 
         let configuration = URLSessionConfiguration.default
         configuration.urlCache = cache
-        configuration.requestCachePolicy = .reloadRevalidatingCacheData
+        configuration.requestCachePolicy = .returnCacheDataElseLoad
 
         let urlSession = URLSession(configuration: configuration)
         let dataManager = ParraDataManager()
