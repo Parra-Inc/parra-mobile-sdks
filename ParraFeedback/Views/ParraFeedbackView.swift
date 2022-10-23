@@ -17,7 +17,7 @@ public protocol ParraFeedbackViewDelegate: AnyObject {
     ///
     /// - Parameter parraFeedbackView: A `ParraFeedbackView` asking the delegate for a complete state view.
     /// - Returns: A `UIView` shown within the `ParraFeedbackView` when it is in its complete state.
-    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView
+    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView?
     
     
     /// Tells the delegate that every card on the `ParraFeedbackView` has been completed.
@@ -75,6 +75,12 @@ public protocol ParraFeedbackViewDelegate: AnyObject {
     /// - Returns: A `Bool` indicating whether or not the automatic navigation should occur.
     func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
                            shouldAutoNavigateTo cardItem: ParraCardItem) -> Bool
+
+
+    /// The ParraFeedbackView has received answers for all of its cards and the user has selected the dismiss option.
+    /// Use this event to change any conditional rendering of the ParraFeedbackView to dismiss it from view.
+    ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate dismissal request.
+    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView)
 }
 
 public extension ParraFeedbackViewDelegate {
@@ -97,8 +103,8 @@ public extension ParraFeedbackViewDelegate {
         return true
     }
     
-    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView {
-        return ParraFeedbackView.defaultActionCardView()
+    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView? {
+        return nil
     }
 }
 

@@ -117,7 +117,14 @@ class ParraFeedbackInCollectionView: UICollectionViewController, UICollectionVie
 }
 
 extension ParraFeedbackInCollectionView: ParraFeedbackViewDelegate {
-    func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView) {
+    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView) {
+        // Allow the user to tap a dismiss button at the end of the Parra Cards.
         shouldShowFeedback = false
+    }
+
+    func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView) {
+        // Optionally automatically hide the Parra Feedback View as soon as there have been
+        // answers provided for each card.
+        // shouldShowFeedback = false
     }
 }

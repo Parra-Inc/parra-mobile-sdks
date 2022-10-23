@@ -25,7 +25,7 @@ class ParraFeedbackInTableView: UITableViewController {
         super.viewDidLoad()
         
         tableView.register(ParraFeedbackTableViewCell.self, forCellReuseIdentifier: ParraFeedbackTableViewCell.defaultCellId)
-        
+
         ParraFeedback.fetchFeedbackCards { cards, error in
             if let error = error {
                 self.navigationItem.prompt = "Error fetching Parra cards"
@@ -91,8 +91,15 @@ class ParraFeedbackInTableView: UITableViewController {
     }
 }
 
-extension ParraFeedbackInTableView: ParraFeedbackViewDelegate {    
-    func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView) {
+extension ParraFeedbackInTableView: ParraFeedbackViewDelegate {
+    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView) {
+        // Allow the user to tap a dismiss button at the end of the Parra Cards.
         shouldShowFeedback = false
+    }
+
+    func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView) {
+        // Optionally automatically hide the Parra Feedback View as soon as there have been
+        // answers provided for each card.
+        // shouldShowFeedback = false
     }
 }

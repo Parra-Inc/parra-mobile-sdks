@@ -10,8 +10,7 @@ import UIKit
 internal class ParraActionCardView: ParraCardView {
     private let titleLabel = UILabel(frame: .zero)
     private let subtitleLabel = UILabel(frame: .zero)
-    // TODO: De-scoped for now.
-    //    private var cta = UIButton(type: .system)
+    private var cta = UIButton(type: .system)
     private let stackView = UIStackView(arrangedSubviews: [])
     private var actionHandler: (() -> Void)?
     
@@ -39,9 +38,9 @@ internal class ParraActionCardView: ParraCardView {
             
             stackView.addArrangedSubview(subtitleLabel)
         }
-        //        stackView.addArrangedSubview(cta)
+        stackView.addArrangedSubview(cta)
         
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fill
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.spacing = 10
@@ -80,15 +79,15 @@ internal class ParraActionCardView: ParraCardView {
         titleLabel.numberOfLines = 3
         titleLabel.lineBreakMode = .byTruncatingTail
         
-        //        cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
-        //
-        //        let attributedTitle = NSAttributedString(
-        //            string: actionTitle,
-        //            attributes: [.font: UIFont.boldSystemFont(ofSize: 14)]
-        //        )
-        //        cta.setAttributedTitle(attributedTitle, for: .normal)
-        //        cta.translatesAutoresizingMaskIntoConstraints = false
-        //        cta.setTitleColor(UIColor(hex: 0xBDBDBD), for: .normal)
+        cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
+
+        let attributedTitle = NSAttributedString(
+            string: actionTitle,
+            attributes: [.font: UIFont.boldSystemFont(ofSize: 14)]
+        )
+        cta.setAttributedTitle(attributedTitle, for: .normal)
+        cta.translatesAutoresizingMaskIntoConstraints = false
+        cta.setTitleColor(UIColor(hex: 0xBDBDBD), for: .normal)
     }
     
     internal required init?(coder: NSCoder) {

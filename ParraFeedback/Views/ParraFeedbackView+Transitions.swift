@@ -251,7 +251,9 @@ extension ParraFeedbackView {
             if let userProvidedEmptyState = delegate?.completeStateViewForParraFeedbackView(self) {
                 return ParraEmptyCardView(innerView: userProvidedEmptyState)
             } else {
-                return ParraFeedbackView.defaultActionCardView()
+                return defaultActionCardView {
+                    self.delegate?.parraFeedbackViewDidRequestDismissal(self)
+                }
             }
         }
         
@@ -268,14 +270,15 @@ extension ParraFeedbackView {
         return card
     }
     
-    internal static func defaultActionCardView() -> ParraActionCardView {
+    internal func defaultActionCardView(
+        with actionHandler: (() -> Void)?) -> ParraActionCardView {
+
         return ParraActionCardView(
-            config: .default,
+            config: config,
             title: "You're all caught up for now!",
             subtitle: "We appreciate you taking the time to provide us with your feedback.",
-            actionTitle: "Have other feedback?"
-        ) {
-            parraLog("tapped cta")
-        }
+            actionTitle: "Dismiss",
+            actionHandler: actionHandler
+        )
     }
 }
