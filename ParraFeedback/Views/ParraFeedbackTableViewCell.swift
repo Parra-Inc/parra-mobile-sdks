@@ -15,7 +15,15 @@ import ParraCore
 public class ParraFeedbackTableViewCell: UITableViewCell {
     
     /// A delegate used to further customize the inner `ParraFeedbackView` and to be informed of actions like when cards change.
-    public weak var delegate: ParraFeedbackViewDelegate?
+    public weak var delegate: ParraFeedbackViewDelegate? {
+        get {
+            return parraFeedbackView.delegate
+        }
+
+        set {
+            parraFeedbackView.delegate = newValue
+        }
+    }
     
     /// A sample cell ID to use when registering this class with your `UITableView`. It is not required that you use this.
     public static let defaultCellId = "ParraFeedbackTableViewCell"
