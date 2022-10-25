@@ -14,7 +14,9 @@ class ParraFeedbackInView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        feedbackView.delegate = self
+
         activityIndicator.style = .large
         activityIndicator.tintColor = .black
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -26,7 +28,7 @@ class ParraFeedbackInView: UIViewController {
         view.addConstraint(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
 
         print("Fetching Parra Cards...")
-        ParraFeedback.fetchFeedbackCards { cards, error in
+        ParraFeedback.fetchFeedbackCards(appArea: .all) { cards, error in
             self.activityIndicator.removeFromSuperview()
 
             if error != nil || cards.isEmpty {
@@ -55,5 +57,11 @@ class ParraFeedbackInView: UIViewController {
                 self.feedbackView.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor)
             ])
         }
+    }
+}
+
+extension ParraFeedbackInView: ParraFeedbackViewDelegate {
+    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView) {
+        feedbackView.removeFromSuperview()
     }
 }

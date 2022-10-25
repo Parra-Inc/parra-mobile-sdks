@@ -9,16 +9,28 @@ import UIKit
 
 public extension Parra {
     enum API {
-        public static func getCards() async throws -> [ParraCardItem] {
+        /// <#Description#>
+        /// - Parameter appArea: <#appArea description#>
+        /// - Returns: <#description#>
+        public static func getCards(appArea: ParraQuestionAppArea) async throws -> [ParraCardItem] {
+            var queryItems: [String: String] = [:]
+            // It is important that an app area name is only provided if a specific one is meant to be returned.
+            // If the app area type is `all` then there should not be a `app_area` key present in the request.
+            if let appAreaName = appArea.parameterized {
+                queryItems["app_area_id"] = appAreaName
+            }
+
             let cardsResponse: CardsResponse = try await Parra.shared.networkManager.performAuthenticatedRequest(
                 route: "cards",
                 method: .get,
+                queryItems: queryItems,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
             )
-            
+
             return cardsResponse.items
         }
-        
+
+        /// Submits the provided list of CompleteCards as answers to the cards linked to them.
         public static func bulkAnswerQuestions(cards: [CompletedCard]) async throws {
             if cards.isEmpty {
                 return

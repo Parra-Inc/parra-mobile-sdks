@@ -26,7 +26,7 @@ class ParraFeedbackInTableView: UITableViewController {
         
         tableView.register(ParraFeedbackTableViewCell.self, forCellReuseIdentifier: ParraFeedbackTableViewCell.defaultCellId)
 
-        ParraFeedback.fetchFeedbackCards { cards, error in
+        ParraFeedback.fetchFeedbackCards(appArea: .id("07eb0d9a-4912-46b8-b77e-3741753960ac")) { cards, error in
             if let error = error {
                 self.navigationItem.prompt = "Error fetching Parra cards"
                 print("Error fetching Parra cards: \(error)")

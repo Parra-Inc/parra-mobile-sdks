@@ -106,6 +106,10 @@ public extension ParraFeedbackViewDelegate {
     func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView? {
         return nil
     }
+
+    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView) {
+        parraFeedbackViewDidCompleteCollection(parraFeedbackView)
+    }
 }
 
 

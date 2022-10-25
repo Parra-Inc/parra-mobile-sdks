@@ -11,7 +11,7 @@ import Foundation
 public enum ParraQuestionAppArea {
     case all
     case none
-    case named(String)
+    case id(String)
 
     public var parameterized: String? {
         switch self {
@@ -19,8 +19,8 @@ public enum ParraQuestionAppArea {
             return nil
         case .none:
             return "null"
-        case .named(let appArea):
-            return appArea
+        case .id(let appAreaId):
+            return appAreaId
         }
     }
 }

@@ -98,8 +98,8 @@ internal class ParraChoiceOptionView: UIView {
 
         if kind.direction == .vertical {
             stack.axis = .horizontal
-            stack.distribution = .fillEqually
-            stack.alignment = .top
+            stack.distribution = .fill
+            stack.alignment = .center
         } else {
             stack.spacing = 8
             stack.axis = .vertical
