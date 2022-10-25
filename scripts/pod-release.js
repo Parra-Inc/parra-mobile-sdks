@@ -55,7 +55,9 @@ const gitTag = `parra-${library}-${tag}`;
         console.log((await exec('git push')).stdout);
         console.log((await exec('git push --tags')).stdout);
         
-        const { stdout, stderr} = await exec(`${libraryEnvTag}="${gitTag}" ${libraryEnvVersion}="${tag}" pod trunk push ${podSpec}`);
+        const { stdout, stderr } = await exec(
+          `${libraryEnvTag}="${gitTag}" ${libraryEnvVersion}="${tag}" pod trunk push ${podSpec} --allow-warnings`
+        );
         console.error(stderr);
         console.log(stdout);
 
