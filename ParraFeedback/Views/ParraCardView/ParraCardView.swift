@@ -1,5 +1,5 @@
 //
-//  ParraFeedbackView.swift
+//  ParraCardView.swift
 //  Parra Feedback
 //
 //  Created by Michael MacCallum on 11/23/21.
@@ -8,59 +8,59 @@
 import UIKit
 import ParraCore
 
-/// A delegate for `ParraFeedbackView`s that allows for additional customization, and to be informed of actions
+/// A delegate for `ParraCardView`s that allows for additional customization, and to be informed of actions
 /// such as when particular cards are displayed or when all questions are answered.
-public protocol ParraFeedbackViewDelegate: AnyObject {
+public protocol ParraCardViewDelegate: AnyObject {
     
-    /// Asks the delegate to provide a view that the provided `ParraFeedbackView` can display when all cards
+    /// Asks the delegate to provide a view that the provided `ParraCardView` can display when all cards
     /// have been completed.
     ///
-    /// - Parameter parraFeedbackView: A `ParraFeedbackView` asking the delegate for a complete state view.
-    /// - Returns: A `UIView` shown within the `ParraFeedbackView` when it is in its complete state.
-    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView?
+    /// - Parameter parraCardView: A `ParraCardView` asking the delegate for a complete state view.
+    /// - Returns: A `UIView` shown within the `ParraCardView` when it is in its complete state.
+    func completeStateViewForParraCardView(_ parraCardView: ParraCardView) -> UIView?
     
     
-    /// Tells the delegate that every card on the `ParraFeedbackView` has been completed.
+    /// Tells the delegate that every card on the `ParraCardView` has been completed.
     ///
-    /// This delegate method can be useful for hiding the ParraFeedbackView, since all available cards have been completed.
+    /// This delegate method can be useful for hiding the ParraCardView, since all available cards have been completed.
     ///
-    /// - Parameter parraFeedbackView: A `ParraFeedbackView` informing the delegate about the collection completion
-    func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView)
+    /// - Parameter parraCardView: A `ParraCardView` informing the delegate about the collection completion
+    func parraCardViewDidCompleteCollection(_ parraCardView: ParraCardView)
     
     
-    /// Tells the delegate that the `ParraFeedbackView` is about to display the provided `CardItem`.
-    /// If no card item is provided, the `ParraFeedbackView` is transitioning to the complete state.
+    /// Tells the delegate that the `ParraCardView` is about to display the provided `CardItem`.
+    /// If no card item is provided, the `ParraCardView` is transitioning to the complete state.
     /// - Parameters:
-    ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate about the card transition.
+    ///   - parraCardView: A `ParraCardView` informing the delegate about the card transition.
     ///   - cardItem: The `CardItem` displayed on the card that is about to be displayed.
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            willDisplay cardItem: ParraCardItem?)
     
     
-    /// Tells the delegate that the `ParraFeedbackView` is displaying the provided `CardItem`.
-    /// If no card item is provided, the `ParraFeedbackView` is transitioning to the complete state.
+    /// Tells the delegate that the `ParraCardView` is displaying the provided `CardItem`.
+    /// If no card item is provided, the `ParraCardView` is transitioning to the complete state.
     /// - Parameters:
-    ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate about the card transition.
+    ///   - parraCardView: A `ParraCardView` informing the delegate about the card transition.
     ///   - cardItem: The `CardItem` displayed on the card that is now being displayed.
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            didDisplay cardItem: ParraCardItem?)
     
     
-    /// Tells the delegate that the `ParraFeedbackView` is about to stop displaying the provided `CardItem`.
-    /// If no card item is provided, the `ParraFeedbackView` is transitioning from the complete state.
+    /// Tells the delegate that the `ParraCardView` is about to stop displaying the provided `CardItem`.
+    /// If no card item is provided, the `ParraCardView` is transitioning from the complete state.
     /// - Parameters:
-    ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate about the card transition.
+    ///   - parraCardView: A `ParraCardView` informing the delegate about the card transition.
     ///   - cardItem: The `CardItem` displayed on the card that will no longer be displayed.
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            willEndDisplaying cardItem: ParraCardItem?)
     
     
-    /// Tells the delegate that the `ParraFeedbackView` has stopped displaying the provided `CardItem`.
-    /// If no card item is provided, the `ParraFeedbackView` is transitioning from the complete state.
+    /// Tells the delegate that the `ParraCardView` has stopped displaying the provided `CardItem`.
+    /// If no card item is provided, the `ParraCardView` is transitioning from the complete state.
     /// - Parameters:
-    ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate about the card transition.
+    ///   - parraCardView: A `ParraCardView` informing the delegate about the card transition.
     ///   - cardItem: The `CardItem` displayed on the card that is no longer displayed.
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            didEndDisplaying cardItem: ParraCardItem?)
     
     
@@ -69,62 +69,61 @@ public protocol ParraFeedbackViewDelegate: AnyObject {
     /// available to transition to.
     ///
     /// - Parameters:
-    ///   - parraFeedbackView: The `ParraFeedbackView` asking the delegate whether or not to navigate
+    ///   - parraCardView: The `ParraCardView` asking the delegate whether or not to navigate
     ///                        to the supplied `CardItem`.
     ///   - cardItem: The `CardItem` that will be displayed on the next card.
     /// - Returns: A `Bool` indicating whether or not the automatic navigation should occur.
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            shouldAutoNavigateTo cardItem: ParraCardItem) -> Bool
 
 
-    /// The ParraFeedbackView has received answers for all of its cards and the user has selected the dismiss option.
-    /// Use this event to change any conditional rendering of the ParraFeedbackView to dismiss it from view.
-    ///   - parraFeedbackView: A `ParraFeedbackView` informing the delegate dismissal request.
-    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView)
+    /// The ParraCardView has received answers for all of its cards and the user has selected the dismiss option.
+    /// Use this event to change any conditional rendering of the ParraCardView to dismiss it from view.
+    ///   - parraCardView: A `ParraCardView` informing the delegate dismissal request.
+    func parraCardViewDidRequestDismissal(_ parraCardView: ParraCardView)
 }
 
-public extension ParraFeedbackViewDelegate {
-    func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView) {}
+public extension ParraCardViewDelegate {
+    func parraCardViewDidCompleteCollection(_ parraCardView: ParraCardView) {}
     
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            willDisplay cardItem: ParraCardItem?) {}
     
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            didDisplay cardItem: ParraCardItem?) {}
     
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            willEndDisplaying cardItem: ParraCardItem?) {}
     
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            didEndDisplaying cardItem: ParraCardItem?) {}
     
-    func parraFeedbackView(_ parraFeedbackView: ParraFeedbackView,
+    func parraCardView(_ parraCardView: ParraCardView,
                            shouldAutoNavigateTo cardItem: ParraCardItem) -> Bool {
         return true
     }
     
-    func completeStateViewForParraFeedbackView(_ parraFeedbackView: ParraFeedbackView) -> UIView? {
+    func completeStateViewForParraCardView(_ parraCardView: ParraCardView) -> UIView? {
         return nil
     }
 
-    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView) {
-        parraFeedbackViewDidCompleteCollection(parraFeedbackView)
+    func parraCardViewDidRequestDismissal(_ parraCardView: ParraCardView) {
+        parraCardViewDidCompleteCollection(parraCardView)
     }
 }
 
-
-/// `ParraFeedbackView`s are used to display cards fetched via the `ParraFeedback` module. Fetching and displaying
+/// `ParraCardView`s are used to display cards fetched via the `ParraCardView` module. Fetching and displaying
 /// cards are decoupled to allow you the flexibility to fetch cards asynchronously and only display them in your UI when you're
 /// ready. Any cards that have been fetched in the `ParraFeedback` module will automatically be displayed by
-/// `ParraFeedbackView`s when they are added to your view hierarchy.
-public class ParraFeedbackView: UIView {
+/// `ParraCardView`s when they are added to your view hierarchy.
+public class ParraCardView: UIView {
     public enum Dimensions {
         public static let minWidth: CGFloat = 320
         public static let minHeight: CGFloat = 274
     }
     
-    /// The object that acts as the delegate of the `ParraFeedbackView`. The delegate is not retained.
-    public weak var delegate: ParraFeedbackViewDelegate?
+    /// The object that acts as the delegate of the `ParraCardView`. The delegate is not retained.
+    public weak var delegate: ParraCardViewDelegate?
     
     /// Whether or not swipe gestures can be used to transition between cards.
     public var areSwipeGesturesEnabled = true {
@@ -165,7 +164,7 @@ public class ParraFeedbackView: UIView {
                 }
                 
                 if existedPreviously && cardItems.isEmpty {
-                    delegate?.parraFeedbackViewDidCompleteCollection(self)
+                    delegate?.parraCardViewDidCompleteCollection(self)
                 }
             }
         }
@@ -191,9 +190,9 @@ public class ParraFeedbackView: UIView {
     internal let containerView = UIView(frame: .zero)
     internal let contentView = UIView(frame: .zero)
     
-    /// A `ParraFeedbackViewConfig` used to configure how `ParraFeedbackView`s look. Use this to make `ParraFeedbackView`s
+    /// A `ParraCardViewConfig` used to configure how `ParraCardView`s look. Use this to make `ParraCardView`s
     /// blend in with the UI in the rest of your app.
-    public var config: ParraFeedbackViewConfig {
+    public var config: ParraCardViewConfig {
         didSet {
             applyConfig(config)
         }
@@ -234,10 +233,10 @@ public class ParraFeedbackView: UIView {
         ])
     })()
 
-    /// Creates a `ParraFeedbackView`. If there are any `ParraCardItem`s available in hte `ParraFeedback` module,
+    /// Creates a `ParraCardView`. If there are any `ParraCardItem`s available in hte `ParraFeedback` module,
     /// they will be displayed automatically when adding this view to your view hierarchy.
     public required init(
-        config: ParraFeedbackViewConfig = .default
+        config: ParraCardViewConfig = .default
     ) {
         self.config = config
         
@@ -250,7 +249,7 @@ public class ParraFeedbackView: UIView {
         layer.masksToBounds = false
         setContentHuggingPriority(.init(rawValue: 999), for: .horizontal)
         setContentHuggingPriority(.defaultHigh, for: .vertical)
-        accessibilityIdentifier = "ParraFeedbackView"
+        accessibilityIdentifier = "ParraCardView"
         
         addSubview(containerView)
         containerView.addSubview(navigationStack)

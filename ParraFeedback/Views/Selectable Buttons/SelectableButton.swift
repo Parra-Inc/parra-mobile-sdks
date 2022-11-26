@@ -14,7 +14,7 @@ internal protocol SelectableButtonDelegate: AnyObject {
 }
 
 internal protocol SelectableButton: AnyObject {
-    init(initiallySelected: Bool, config: ParraFeedbackViewConfig, asset: Asset?)
+    init(initiallySelected: Bool, config: ParraCardViewConfig, asset: Asset?)
     
     var delegate: SelectableButtonDelegate? { get set }
     

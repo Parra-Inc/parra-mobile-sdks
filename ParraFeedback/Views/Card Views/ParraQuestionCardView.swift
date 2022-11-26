@@ -1,5 +1,5 @@
 //
-//  ParraCardView.swift
+//  ParraQuestionCardView.swift
 //  Parra Feedback
 //
 //  Created by Michael MacCallum on 11/22/21.
@@ -25,8 +25,8 @@ internal protocol ParraQuestionViewDelegate {
     )
 }
 
-internal class ParraQuestionCardView: ParraCardView {
-    internal override var config: ParraFeedbackViewConfig {
+internal class ParraQuestionCardView: ParraCardItemView {
+    internal override var config: ParraCardViewConfig {
         didSet {
             applyConfig(config)
         }
@@ -43,7 +43,7 @@ internal class ParraQuestionCardView: ParraCardView {
     
     internal required init(question: Question,
                            questionHandler: ParraQuestionHandler,
-                           config: ParraFeedbackViewConfig) {
+                           config: ParraCardViewConfig) {
         self.question = question
         self.questionHandler = questionHandler
         
@@ -127,11 +127,11 @@ internal class ParraQuestionCardView: ParraCardView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    internal required init(config: ParraFeedbackViewConfig) {
+    internal required init(config: ParraCardViewConfig) {
         fatalError("init(config:) has not been implemented")
     }
     
-    private func applyConfig(_ config: ParraFeedbackViewConfig) {
+    private func applyConfig(_ config: ParraCardViewConfig) {
         titleLabel.font = config.title.font
         titleLabel.textColor = config.title.color
         titleLabel.layer.shadowColor = config.title.shadow.color.cgColor

@@ -13,7 +13,7 @@ internal class ParraStarButton: UIButton, SelectableButton {
     internal var buttonIsSelected: Bool
     internal var allowsDeselection: Bool = false
     
-    internal required init(initiallySelected: Bool, config: ParraFeedbackViewConfig, asset: Asset?) {
+    internal required init(initiallySelected: Bool, config: ParraCardViewConfig, asset: Asset?) {
         buttonIsSelected = initiallySelected
         super.init(frame: .zero)
     }
