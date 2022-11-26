@@ -8,26 +8,39 @@
 
 import UIKit
 import ParraFeedback
+import ParraCore
 
 class ParraCardsInModal: UIViewController {
+    @IBOutlet weak var popupButton: UIButton!
+    @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var drawerButton: UIButton!
+
+    private var cards: [ParraCardItem] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-    }
-
-    @IBAction func presentPopupStyleFeedbackModal(_ sender: UIButton) {
+        popupButton.isEnabled = false
+        drawerButton.isEnabled = false
 
         ParraFeedback.fetchFeedbackCards(appArea: .all) { [self] response in
             switch response {
             case .success(let cards):
-                ParraFeedback.presentCardPopup(with: cards, fromViewController: self)
+                self.cards = cards
+
+                popupButton.isEnabled = true
+                drawerButton.isEnabled = true
             case .failure(let error):
-                print(error)
+                errorLabel.text = error.localizedDescription
             }
         }
     }
 
+    @IBAction func presentPopupStyleFeedbackModal(_ sender: UIButton) {
+        ParraFeedback.presentCardPopup(with: cards, fromViewController: self)
+    }
+
     @IBAction func presentDrawerStyleFeedbackModal(_ sender: UIButton) {
+        ParraFeedback.presentCardDrawer(with: cards, fromViewController: self)
     }
 }

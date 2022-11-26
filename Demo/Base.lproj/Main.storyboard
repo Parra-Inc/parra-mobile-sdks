@@ -208,22 +208,36 @@
                                     <action selector="presentDrawerStyleFeedbackModal:" destination="E5D-qf-g9A" eventType="touchUpInside" id="pcu-d3-zmS"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lRu-O1-9kH">
+                                <rect key="frame" x="20" y="292" width="374" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XJX-eO-IDF"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="XJX-eO-IDF" firstAttribute="bottom" secondItem="q6v-GQ-xRw" secondAttribute="bottom" constant="200" id="FS9-cn-6WP"/>
                             <constraint firstItem="XJX-eO-IDF" firstAttribute="bottom" secondItem="WGz-ZI-8QE" secondAttribute="bottom" constant="200" id="TJC-5W-eUe"/>
+                            <constraint firstItem="lRu-O1-9kH" firstAttribute="leading" secondItem="XJX-eO-IDF" secondAttribute="leading" constant="20" id="UAQ-lQ-cjs"/>
+                            <constraint firstItem="XJX-eO-IDF" firstAttribute="trailing" secondItem="lRu-O1-9kH" secondAttribute="trailing" constant="20" id="cdR-n9-6DL"/>
+                            <constraint firstItem="lRu-O1-9kH" firstAttribute="top" secondItem="XJX-eO-IDF" secondAttribute="top" constant="200" id="q16-9f-ujs"/>
                             <constraint firstItem="XJX-eO-IDF" firstAttribute="trailing" secondItem="q6v-GQ-xRw" secondAttribute="trailing" constant="55" id="vDG-td-Veh"/>
                             <constraint firstItem="WGz-ZI-8QE" firstAttribute="leading" secondItem="XJX-eO-IDF" secondAttribute="leading" constant="55" id="vcG-kD-y7l"/>
                             <constraint firstItem="q6v-GQ-xRw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="WGz-ZI-8QE" secondAttribute="trailing" constant="20" id="wge-qo-LxV"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="2wQ-n1-iPn"/>
+                    <connections>
+                        <outlet property="drawerButton" destination="q6v-GQ-xRw" id="5fC-7F-g86"/>
+                        <outlet property="errorLabel" destination="lRu-O1-9kH" id="1Q6-Ec-9su"/>
+                        <outlet property="popupButton" destination="WGz-ZI-8QE" id="aaM-ga-A4N"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7jn-yq-BFf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1246" y="946"/>
+            <point key="canvasLocation" x="-1246.376811594203" y="945.53571428571422"/>
         </scene>
         <!--Parra Cards In Collection View-->
         <scene sceneID="giP-og-eQD">
