@@ -1,5 +1,5 @@
 //
-//  ParraFeedbackCollectionViewCell.swift
+//  ParraCardCollectionViewCell.swift
 //  ParraFeedback
 //
 //  Created by Mick MacCallum on 5/16/22.
@@ -9,35 +9,35 @@
 import UIKit
 import ParraCore
 
-/// A `UICollectionViewCell` subclass used to embed a `ParraFeedbackView` in a `UICollectionView`. Use this as you would any other
+/// A `UICollectionViewCell` subclass used to embed a `ParraCardView` in a `UICollectionView`. Use this as you would any other
 /// `UICollectionViewCell` subclass. We also provide `ParraFeedbackCollectionViewCell.defaultCellId` as a sample cell ID to use
 /// to register the cell's class with your collection view. Note that using more than one instance of `ParraFeedbackCollectionViewCell` in a collection view
 /// is unsupported. Only one should ever be shown.
-public class ParraFeedbackCollectionViewCell: UICollectionViewCell {
+public class ParraCardCollectionViewCell: UICollectionViewCell {
     
-    /// A delegate used to further customize the inner `ParraFeedbackView` and to be informed of actions like when cards change.
-    public weak var delegate: ParraFeedbackViewDelegate? {
+    /// A delegate used to further customize the inner `ParraCardView` and to be informed of actions like when cards change.
+    public weak var delegate: ParraCardViewDelegate? {
         get {
-            return parraFeedbackView.delegate
+            return parraCardView.delegate
         }
 
         set {
-            parraFeedbackView.delegate = newValue
+            parraCardView.delegate = newValue
         }
     }
 
     /// A sample cell ID to use when registering this class with your `UICollectionView`. It is not required that you use this.
     public static let defaultCellId = "ParraFeedbackCollectionViewCell"
     
-    /// A `ParraFeedbackViewConfig` used to configure how the wrapper`ParraFeedbackView` looks. Use this to make `ParraFeedbackView`s
+    /// A `ParraCardViewConfig` used to configure how the wrapper`ParraCardView` looks. Use this to make `ParraCardView`s
     /// blend in with the UI in the rest of your app.
-    public var config: ParraFeedbackViewConfig = .default {
+    public var config: ParraCardViewConfig = .default {
         didSet {
-            parraFeedbackView.config = config
+            parraCardView.config = config
         }
     }
     
-    private let parraFeedbackView = ParraFeedbackView(config: .default)
+    private let parraCardView = ParraCardView(config: .default)
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,13 +66,13 @@ public class ParraFeedbackCollectionViewCell: UICollectionViewCell {
     }
     
     private func commonInit() {
-        contentView.addSubview(parraFeedbackView)
+        contentView.addSubview(parraCardView)
         
         NSLayoutConstraint.activate([
-            parraFeedbackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            parraFeedbackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            parraFeedbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            parraFeedbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            parraCardView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            parraCardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            parraCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            parraCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
 }

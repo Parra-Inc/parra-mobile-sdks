@@ -20,13 +20,13 @@ internal class ParraImageButton: UIButton, SelectableButton {
     internal weak var delegate: SelectableButtonDelegate?
     internal var buttonIsSelected: Bool
     internal var allowsDeselection: Bool = false
-    private let config: ParraFeedbackViewConfig
+    private let config: ParraCardViewConfig
     private var asset: Asset?
     private var buttonImageView = UIImageView(frame: .zero)
     private var activityIndicator = UIActivityIndicatorView(style: .medium)
 
     internal required init(initiallySelected: Bool,
-                           config: ParraFeedbackViewConfig,
+                           config: ParraCardViewConfig,
                            asset: Asset?) {
         self.asset = asset
         self.config = config

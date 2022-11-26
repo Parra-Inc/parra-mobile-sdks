@@ -1,5 +1,5 @@
 //
-//  ParraFeedbackInView.swift
+//  ParraCardsInView.swift
 //  Parra Feedback SDK Demo
 //
 //  Created by Mick MacCallum on 3/6/22.
@@ -8,14 +8,14 @@
 import UIKit
 import ParraFeedback
 
-class ParraFeedbackInView: UIViewController {
+class ParraCardsInView: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
-    private let feedbackView = ParraFeedbackView(config: .default)
+    private let cardView = ParraCardView(config: .default)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        feedbackView.delegate = self
+        cardView.delegate = self
 
         activityIndicator.style = .large
         activityIndicator.tintColor = .black
@@ -49,19 +49,19 @@ class ParraFeedbackInView: UIViewController {
                 return
             }
 
-            self.view.addSubview(self.feedbackView)
+            self.view.addSubview(self.cardView)
             
             NSLayoutConstraint.activate([
-                self.feedbackView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.centerYAnchor),
-                self.feedbackView.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
-                self.feedbackView.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor)
+                self.cardView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.centerYAnchor),
+                self.cardView.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
+                self.cardView.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor)
             ])
         }
     }
 }
 
-extension ParraFeedbackInView: ParraFeedbackViewDelegate {
-    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView) {
-        feedbackView.removeFromSuperview()
+extension ParraCardsInView: ParraCardViewDelegate {
+    func parraCardViewDidRequestDismissal(_ parraCardView: ParraCardView) {
+        cardView.removeFromSuperview()
     }
 }

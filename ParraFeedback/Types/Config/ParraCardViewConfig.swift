@@ -1,5 +1,5 @@
 //
-//  ParraFeedbackViewConfig.swift
+//  ParraCardViewConfig.swift
 //  ParraFeedback
 //
 //  Created by Mick MacCallum on 3/13/22.
@@ -8,9 +8,9 @@
 import UIKit
 import ParraCore
 
-/// A configuration object for how a `ParraFeedbackView` should look. Use this to customize `ParraFeedbackView`s
+/// A configuration object for how a `ParraCardView` should look. Use this to customize `ParraCardView`s
 /// so that they better blend in with your app's UI.
-public struct ParraFeedbackViewConfig {
+public struct ParraCardViewConfig {
     public enum Constant {
         public static let defaultBackgroundColor = UIColor(hex: 0xFAFAFA)
         public static let defaultBackgroundColorDark = UIColor(hex: 0x27252C)
@@ -49,10 +49,10 @@ public struct ParraFeedbackViewConfig {
         self.bodyBold = bodyBold
     }
     
-    /// The default configuration used by `ParraFeedbackView`s when no other configuration is provided.
-    public static let `default` = ParraFeedbackViewConfig()
+    /// The default configuration used by `ParraCardView`s when no other configuration is provided.
+    public static let `default` = ParraCardViewConfig()
     
-    public static let defaultDark = ParraFeedbackViewConfig(
+    public static let defaultDark = ParraCardViewConfig(
         backgroundColor: Constant.defaultBackgroundColorDark,
         title: .titleDefaultDark,
         subtitle: .subtitleDefaultDark,

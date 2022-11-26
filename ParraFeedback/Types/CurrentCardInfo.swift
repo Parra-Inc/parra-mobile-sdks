@@ -9,6 +9,6 @@ import Foundation
 import ParraCore
 
 internal struct CurrentCardInfo {
-    let cardView: ParraCardView
+    let cardItemView: ParraCardItemView
     let cardItem: ParraCardItem?
 }

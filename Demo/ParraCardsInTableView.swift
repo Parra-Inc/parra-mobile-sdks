@@ -1,5 +1,5 @@
 //
-//  ParraFeedbackInTableView.swift
+//  ParraCardsInTableView.swift
 //  Demo
 //
 //  Created by Mick MacCallum on 4/3/22.
@@ -8,7 +8,7 @@
 import UIKit
 import ParraFeedback
 
-class ParraFeedbackInTableView: UITableViewController {
+class ParraCardsInTableView: UITableViewController {
     struct Constant {
         static let feedbackRow = 5
     }
@@ -24,7 +24,7 @@ class ParraFeedbackInTableView: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(ParraFeedbackTableViewCell.self, forCellReuseIdentifier: ParraFeedbackTableViewCell.defaultCellId)
+        tableView.register(ParraCardTableViewCell.self, forCellReuseIdentifier: ParraCardTableViewCell.defaultCellId)
 
         ParraFeedback.fetchFeedbackCards(appArea: .id("07eb0d9a-4912-46b8-b77e-3741753960ac")) { cards, error in
             if let error = error {
@@ -42,7 +42,7 @@ class ParraFeedbackInTableView: UITableViewController {
     override func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == Constant.feedbackRow && shouldShowFeedback {
-            let parraCell = tableView.dequeueReusableCell(withIdentifier: ParraFeedbackTableViewCell.defaultCellId, for: indexPath) as! ParraFeedbackTableViewCell
+            let parraCell = tableView.dequeueReusableCell(withIdentifier: ParraCardTableViewCell.defaultCellId, for: indexPath) as! ParraCardTableViewCell
             
             parraCell.config = .default
             parraCell.delegate = self
@@ -80,7 +80,7 @@ class ParraFeedbackInTableView: UITableViewController {
     override func tableView(_ tableView: UITableView,
                             didEndDisplaying cell: UITableViewCell,
                             forRowAt indexPath: IndexPath) {
-        if let parraCell = cell as? ParraFeedbackTableViewCell {
+        if let parraCell = cell as? ParraCardTableViewCell {
             parraCell.endDisplaying()
         }
     }
@@ -91,13 +91,13 @@ class ParraFeedbackInTableView: UITableViewController {
     }
 }
 
-extension ParraFeedbackInTableView: ParraFeedbackViewDelegate {
-    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView) {
+extension ParraCardsInTableView: ParraCardViewDelegate {
+    func parraCardViewDidRequestDismissal(_ parraCardView: ParraCardView) {
         // Allow the user to tap a dismiss button at the end of the Parra Cards.
         shouldShowFeedback = false
     }
 
-    func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView) {
+    func parraCardViewDidCompleteCollection(_ parraCardView: ParraCardView) {
         // Optionally automatically hide the Parra Feedback View as soon as there have been
         // answers provided for each card.
         // shouldShowFeedback = false
