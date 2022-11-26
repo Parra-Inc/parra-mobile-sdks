@@ -11,7 +11,7 @@ import ParraCore
 
 internal class ParraCardPopupViewController: UIViewController, ParraCardModal {
     private let cardView: ParraCardView
-    private let transitionStyle: ParraCardModalTransitionStyle
+    internal let transitionStyle: ParraCardModalTransitionStyle
 
     required init(cards: [ParraCardItem],
                   config: ParraCardViewConfig,

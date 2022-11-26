@@ -16,6 +16,8 @@ public enum ParraCardModalTransitionStyle {
 }
 
 internal protocol ParraCardModal  {
+    var transitionStyle: ParraCardModalTransitionStyle { get }
+
     init(cards: [ParraCardItem],
          config: ParraCardViewConfig,
          transitionStyle: ParraCardModalTransitionStyle)

@@ -27,23 +27,21 @@ public extension ParraFeedback {
         presentModal(
             modal: cardViewController,
             fromViewController: fromViewController,
-            config: config,
-            transitionStyle: transitionStyle
+            config: config
         )
     }
 
     @available(iOS 15.0, *)
     static func presentCardDrawer(with cards: [ParraCardItem],
                                   fromViewController: UIViewController?,
-                                  config: ParraCardViewConfig = .default,
-                                  transitionStyle: ParraCardModalTransitionStyle = .slide) {
+                                  config: ParraCardViewConfig = .default) {
 
         parraLogV("Presenting drawer view controller with \(cards.count) card(s)")
 
         let cardViewController = ParraCardDrawerViewController(
             cards: cards,
             config: config,
-            transitionStyle: transitionStyle
+            transitionStyle: .slide
         )
 
         if let sheetPresentationController = cardViewController.sheetPresentationController {
@@ -54,20 +52,18 @@ public extension ParraFeedback {
         presentModal(
             modal: cardViewController,
             fromViewController: fromViewController,
-            config: config,
-            transitionStyle: transitionStyle
+            config: config
         )
     }
 
     private static func presentModal(modal: UIViewController & ParraCardModal,
                                      fromViewController: UIViewController?,
-                                     config: ParraCardViewConfig,
-                                     transitionStyle: ParraCardModalTransitionStyle) {
+                                     config: ParraCardViewConfig) {
         guard let vc = fromViewController ?? UIViewController.topMostViewController() else {
             parraLogW("Missing view controller to present popup from.")
             return
         }
 
-        vc.present(modal, animated: transitionStyle != .none)
+        vc.present(modal, animated: modal.transitionStyle != .none)
     }
 }
