@@ -20,7 +20,6 @@ public extension Parra {
             alpha: 1.0
         )
         
-        internal static let parraLogPrefix = "[PARRA]"
         public static let parraWebRoot = URL(string: "https://parra.io/")!
         internal static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
     }

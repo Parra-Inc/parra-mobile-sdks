@@ -1,5 +1,5 @@
 //
-//  ParraFeedbackInCollectionView.swift
+//  ParraCardsInCollectionView.swift
 //  Demo
 //
 //  Created by Mick MacCallum on 5/16/22.
@@ -9,7 +9,7 @@
 import UIKit
 import ParraFeedback
 
-class ParraFeedbackInCollectionView: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class ParraCardsInCollectionView: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     struct Constant {
         static let feedbackRow = 6
     }
@@ -32,8 +32,8 @@ class ParraFeedbackInCollectionView: UICollectionViewController, UICollectionVie
         super.viewDidLoad()
 
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "demoCell")
-        collectionView.register(ParraFeedbackCollectionViewCell.self,
-                                forCellWithReuseIdentifier: ParraFeedbackCollectionViewCell.defaultCellId)
+        collectionView.register(ParraCardCollectionViewCell.self,
+                                forCellWithReuseIdentifier: ParraCardCollectionViewCell.defaultCellId)
         
         if let flowLayout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.minimumLineSpacing = 16
@@ -58,9 +58,9 @@ class ParraFeedbackInCollectionView: UICollectionViewController, UICollectionVie
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row == Constant.feedbackRow && shouldShowFeedback {
             let parraCell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: ParraFeedbackCollectionViewCell.defaultCellId,
+                withReuseIdentifier: ParraCardCollectionViewCell.defaultCellId,
                 for: indexPath
-            ) as! ParraFeedbackCollectionViewCell
+            ) as! ParraCardCollectionViewCell
             
             parraCell.config = .default
             parraCell.delegate = self
@@ -100,7 +100,7 @@ class ParraFeedbackInCollectionView: UICollectionViewController, UICollectionVie
         let availableWidth = collectionView.bounds.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right
         
         if indexPath.row == Constant.feedbackRow && shouldShowFeedback {
-            return CGSize(width: availableWidth, height: ParraFeedbackView.Dimensions.minHeight)
+            return CGSize(width: availableWidth, height: ParraCardView.Dimensions.minHeight)
         }
         
         let size = (availableWidth - flowLayout.minimumInteritemSpacing * (numberOfColumns - 1)) / numberOfColumns
@@ -110,19 +110,19 @@ class ParraFeedbackInCollectionView: UICollectionViewController, UICollectionVie
     override func collectionView(_ collectionView: UICollectionView,
                                  didEndDisplaying cell: UICollectionViewCell,
                                  forItemAt indexPath: IndexPath) {
-        if let parraCell = cell as? ParraFeedbackCollectionViewCell {
+        if let parraCell = cell as? ParraCardCollectionViewCell {
             parraCell.endDisplaying()
         }
     }
 }
 
-extension ParraFeedbackInCollectionView: ParraFeedbackViewDelegate {
-    func parraFeedbackViewDidRequestDismissal(_ parraFeedbackView: ParraFeedbackView) {
+extension ParraCardsInCollectionView: ParraCardViewDelegate {
+    func parraCardViewDidRequestDismissal(_ parraCardView: ParraCardView) {
         // Allow the user to tap a dismiss button at the end of the Parra Cards.
         shouldShowFeedback = false
     }
 
-    func parraFeedbackViewDidCompleteCollection(_ parraFeedbackView: ParraFeedbackView) {
+    func parraCardViewDidCompleteCollection(_ parraCardView: ParraCardView) {
         // Optionally automatically hide the Parra Feedback View as soon as there have been
         // answers provided for each card.
         // shouldShowFeedback = false

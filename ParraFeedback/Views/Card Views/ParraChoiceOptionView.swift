@@ -14,7 +14,7 @@ internal protocol ParraChoiceOptionViewDelegate: AnyObject {
 }
 
 internal class ParraChoiceOptionView: UIView {
-    internal var config: ParraFeedbackViewConfig {
+    internal var config: ParraCardViewConfig {
         didSet {
             applyConfig(config)
         }
@@ -29,7 +29,7 @@ internal class ParraChoiceOptionView: UIView {
     
     internal required init(option: ChoiceQuestionOption,
                            kind: QuestionKind,
-                           config: ParraFeedbackViewConfig,
+                           config: ParraCardViewConfig,
                            isSelected: Bool) {
         
         self.option = option
@@ -123,7 +123,7 @@ internal class ParraChoiceOptionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func applyConfig(_ config: ParraFeedbackViewConfig) {
+    private func applyConfig(_ config: ParraCardViewConfig) {
         if kind.direction == .vertical {
             optionLabel.font = config.body.font
         } else {

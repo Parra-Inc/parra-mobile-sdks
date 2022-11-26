@@ -7,7 +7,7 @@
 
 import UIKit
 
-internal class ParraActionCardView: ParraCardView {
+internal class ParraActionCardView: ParraCardItemView {
     private let titleLabel = UILabel(frame: .zero)
     private let subtitleLabel = UILabel(frame: .zero)
     private var cta = UIButton(type: .system)
@@ -16,7 +16,7 @@ internal class ParraActionCardView: ParraCardView {
     
     
     internal required init(
-        config: ParraFeedbackViewConfig,
+        config: ParraCardViewConfig,
         title: String,
         subtitle: String?,
         actionTitle: String,
@@ -51,16 +51,16 @@ internal class ParraActionCardView: ParraCardView {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
-                constant: ParraFeedbackView.LayoutConstants.contentPadding
+                constant: ParraCardView.LayoutConstants.contentPadding
             ),
             stackView.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
-                constant: -ParraFeedbackView.LayoutConstants.contentPadding
+                constant: -ParraCardView.LayoutConstants.contentPadding
             ),
             // visually centered
             stackView.centerYAnchor.constraint(
                 equalTo: centerYAnchor,
-                constant: -ParraFeedbackView.LayoutConstants.navigationPadding
+                constant: -ParraCardView.LayoutConstants.navigationPadding
             ),
             stackView.topAnchor.constraint(
                 greaterThanOrEqualTo: topAnchor,
@@ -94,7 +94,7 @@ internal class ParraActionCardView: ParraCardView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    internal required init(config: ParraFeedbackViewConfig) {
+    internal required init(config: ParraCardViewConfig) {
         fatalError("init(config:) has not been implemented")
     }
     

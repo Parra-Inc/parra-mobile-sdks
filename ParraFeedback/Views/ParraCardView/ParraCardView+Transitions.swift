@@ -1,5 +1,5 @@
 //
-//  ParraFeedbackView+Transitions.swift
+//  ParraCardView+Transitions.swift
 //  Parra Feedback
 //
 //  Created by Michael MacCallum on 3/2/22.
@@ -8,7 +8,7 @@
 import UIKit
 import ParraCore
 
-extension ParraFeedbackView: ParraQuestionHandlerDelegate {
+extension ParraCardView: ParraQuestionHandlerDelegate {
     internal func questionHandlerDidMakeNewSelection(forQuestion question: Question) {
         Task {
             try await Task.sleep(nanoseconds: 333_000_000)
@@ -24,7 +24,7 @@ extension ParraFeedbackView: ParraQuestionHandlerDelegate {
             }
             
             // If there is a next card, we ask the delegate if we should transition.
-            let shouldTransition = delegate?.parraFeedbackView(self, shouldAutoNavigateTo: nextCardItem) ?? true
+            let shouldTransition = delegate?.parraCardView(self, shouldAutoNavigateTo: nextCardItem) ?? true
             
             if shouldTransition {
                 suggestTransitionInDirection(.right, animated: true)
@@ -33,7 +33,7 @@ extension ParraFeedbackView: ParraQuestionHandlerDelegate {
     }
 }
 
-extension ParraFeedbackView {
+extension ParraCardView {
     internal func suggestTransitionInDirection(_ direction: Direction,
                                                animated: Bool) {
         
@@ -115,7 +115,7 @@ extension ParraFeedbackView {
             currentCardConstraint!
         ])
         
-        delegate?.parraFeedbackView(self, willDisplay: cardItem)
+        delegate?.parraCardView(self, willDisplay: cardItem)
         
         if animated {
             let oldCardInfo = currentCardInfo
@@ -123,7 +123,7 @@ extension ParraFeedbackView {
             backButton.isEnabled = false
             forwardButton.isEnabled = false
             
-            self.currentCardInfo?.cardView.transform = .identity
+            self.currentCardInfo?.cardItemView.transform = .identity
             
             nextCard.frame = CGRect(origin: .zero, size: contentView.bounds.size)
             nextCard.setNeedsLayout()
@@ -138,11 +138,11 @@ extension ParraFeedbackView {
             // Not starting the animation until the view has a chance to re-render after setNeedsDisplay
             DispatchQueue.main.async {
                 self.currentCardInfo = CurrentCardInfo(
-                    cardView: nextCard,
+                    cardItemView: nextCard,
                     cardItem: cardItem
                 )
                 if let oldCardInfo = oldCardInfo {
-                    self.delegate?.parraFeedbackView(self, willEndDisplaying: oldCardInfo.cardItem)
+                    self.delegate?.parraCardView(self, willEndDisplaying: oldCardInfo.cardItem)
                 }
                 
                 self.layoutIfNeeded()
@@ -151,7 +151,7 @@ extension ParraFeedbackView {
                     withDuration: 0.375,
                     delay: 0.0,
                     options: [.curveEaseInOut, .beginFromCurrentState]) {
-                        oldCardInfo?.cardView.transform = .identity.translatedBy(
+                        oldCardInfo?.cardItemView.transform = .identity.translatedBy(
                             x: direction == .right ? -self.frame.width : self.frame.width,
                             y: 0.0
                         )
@@ -164,34 +164,34 @@ extension ParraFeedbackView {
                         self.forwardButton.isEnabled = true
                         
                         if let oldCardInfo = oldCardInfo {
-                            NSLayoutConstraint.deactivate(oldCardInfo.cardView.constraints)
-                            oldCardInfo.cardView.removeFromSuperview()
+                            NSLayoutConstraint.deactivate(oldCardInfo.cardItemView.constraints)
+                            oldCardInfo.cardItemView.removeFromSuperview()
                             
-                            self.delegate?.parraFeedbackView(self, didEndDisplaying: oldCardInfo.cardItem)
+                            self.delegate?.parraCardView(self, didEndDisplaying: oldCardInfo.cardItem)
                         }
                         
-                        self.delegate?.parraFeedbackView(self, didDisplay: cardItem)
+                        self.delegate?.parraCardView(self, didDisplay: cardItem)
                     }
             }
         } else {
             updateVisibleNavigationButtons(visibleButtons: visibleButtons)
             
             if let currentCardInfo = self.currentCardInfo {
-                delegate?.parraFeedbackView(self, willEndDisplaying: currentCardInfo.cardItem)
+                delegate?.parraCardView(self, willEndDisplaying: currentCardInfo.cardItem)
                 
-                NSLayoutConstraint.deactivate(currentCardInfo.cardView.constraints)
-                currentCardInfo.cardView.removeFromSuperview()
+                NSLayoutConstraint.deactivate(currentCardInfo.cardItemView.constraints)
+                currentCardInfo.cardItemView.removeFromSuperview()
                 self.currentCardInfo = nil
                 
-                delegate?.parraFeedbackView(self, didEndDisplaying: currentCardInfo.cardItem)
+                delegate?.parraCardView(self, didEndDisplaying: currentCardInfo.cardItem)
             }
             
             self.currentCardInfo = CurrentCardInfo(
-                cardView: nextCard,
+                cardItemView: nextCard,
                 cardItem: cardItem
             )
             
-            self.delegate?.parraFeedbackView(self, didDisplay: cardItem)
+            self.delegate?.parraCardView(self, didDisplay: cardItem)
         }
     }
     
@@ -246,18 +246,18 @@ extension ParraFeedbackView {
         forwardButton.isEnabled = showForward
     }
     
-    private func cardViewFromCardItem(_ cardItem: ParraCardItem?) -> ParraCardView {
+    private func cardViewFromCardItem(_ cardItem: ParraCardItem?) -> ParraCardItemView {
         guard let cardItem = cardItem else {
-            if let userProvidedEmptyState = delegate?.completeStateViewForParraFeedbackView(self) {
+            if let userProvidedEmptyState = delegate?.completeStateViewForParraCardView(self) {
                 return ParraEmptyCardView(innerView: userProvidedEmptyState)
             } else {
                 return defaultActionCardView {
-                    self.delegate?.parraFeedbackViewDidRequestDismissal(self)
+                    self.delegate?.parraCardViewDidRequestDismissal(self)
                 }
             }
         }
         
-        let card: ParraCardView
+        let card: ParraCardItemView
         switch (cardItem.data) {
         case .question(let question):
             card = ParraQuestionCardView(

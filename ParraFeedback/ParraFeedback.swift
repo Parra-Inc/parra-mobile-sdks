@@ -9,7 +9,7 @@ import Foundation
 import ParraCore
 
 /// The `ParraFeedback` module is used to fetch Parra Feedback data from the Parra API. Once data is fetched,
-/// it will be displayed automatically in any `ParraFeedbackView`s that you add to your view hierarchy.
+/// it will be displayed automatically in any `ParraCardView`s that you add to your view hierarchy.
 /// To handle authentication, see the Parra Core module.
 public class ParraFeedback: ParraModule {
     internal static let shared = ParraFeedback()
@@ -22,9 +22,9 @@ public class ParraFeedback: ParraModule {
     public private(set) static var name: String = "Feedback"
         
     /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
-    /// module and will be automatically displayed in `ParraFeedbackView`s when they are added to your view hierarchy. The completion handler
+    /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
-    /// view the `ParraFeedbackView` initializer if you'd like to only display certain cards.
+    /// view the `ParraCardView` initializer if you'd like to only display certain cards.
     public class func fetchFeedbackCards(appArea: ParraQuestionAppArea = .all,
                                          withCompletion completion: @escaping (Result<[ParraCardItem], ParraError>) -> Void) {
         Task {
@@ -43,9 +43,9 @@ public class ParraFeedback: ParraModule {
     }
     
     /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
-    /// module and will be automatically displayed in `ParraFeedbackView`s when they are added to your view hierarchy. The completion handler
+    /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
-    /// view the `ParraFeedbackView` initializer if you'd like to only display certain cards.
+    /// view the `ParraCardView` initializer if you'd like to only display certain cards.
     public class func fetchFeedbackCards(appArea: ParraQuestionAppArea = .all,
                                          withCompletion completion: @escaping ([ParraCardItem], Error?) -> Void) {
         fetchFeedbackCards(appArea: appArea) { result in
@@ -67,9 +67,9 @@ public class ParraFeedback: ParraModule {
     }
     
     /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
-    /// module and will be automatically displayed in `ParraFeedbackView`s when they are added to your view hierarchy. The completion handler
+    /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
-    /// view the `ParraFeedbackView` initializer if you'd like to only display certain cards.
+    /// view the `ParraCardView` initializer if you'd like to only display certain cards.
     public class func fetchFeedbackCards(appArea: ParraQuestionAppArea = .all) async throws -> [ParraCardItem] {
         let cards = try await Parra.API.getCards(appArea: appArea)
         
@@ -101,8 +101,8 @@ public class ParraFeedback: ParraModule {
     /// 1. Calling `Parra.logout()`
     /// 2. The application transitions to or from the active state.
     /// 3. There is a significant time change on the system clock.
-    /// 4. All cards for a `ParraFeedbackView` are completed.
-    /// 5. A `ParraFeedbackView` is deinitialized or removed from the view hierarchy.
+    /// 4. All cards for a `ParraCardView` are completed.
+    /// 5. A `ParraCardView` is deinitialized or removed from the view hierarchy.
     ///
     public func triggerSync() async {
         await sendCardData()

@@ -1,5 +1,5 @@
 //
-//  ParraFeedbackView+Layout.swift
+//  ParraCardView+Layout.swift
 //  Parra Feedback
 //
 //  Created by Michael MacCallum on 3/2/22.
@@ -8,7 +8,7 @@
 import UIKit
 import ParraCore
 
-extension ParraFeedbackView {
+extension ParraCardView {
     enum LayoutConstants {
         static let navigationPadding: CGFloat = 10
         static let contentPadding: CGFloat = 12
@@ -41,7 +41,7 @@ extension ParraFeedbackView {
         NSLayoutConstraint.activate(constraintsOnSuperView)
     }
     
-    internal func configureSubviews(config: ParraFeedbackViewConfig) {        
+    internal func configureSubviews(config: ParraCardViewConfig) {        
         configureContentView()
         configureNavigationStack()
         
@@ -70,7 +70,7 @@ extension ParraFeedbackView {
         transitionToNextCard(animated: false)
     }
     
-    internal func applyConfig(_ config: ParraFeedbackViewConfig) {
+    internal func applyConfig(_ config: ParraCardViewConfig) {
         containerView.backgroundColor = config.backgroundColor
         containerView.layer.cornerRadius = config.cornerRadius
         
@@ -118,7 +118,7 @@ extension ParraFeedbackView {
         }
         
         if let currentCardInfo = currentCardInfo {
-            currentCardInfo.cardView.config = config
+            currentCardInfo.cardItemView.config = config
         }
     }
     
