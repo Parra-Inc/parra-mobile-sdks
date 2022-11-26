@@ -9,7 +9,7 @@ import Foundation
 
 public class ParraDataManager {
     internal fileprivate(set) var credentialStorage: CredentialStorage
-    
+
     internal init() {
         let folder = Parra.persistentStorageFolder()
         let fileName = ParraDataManager.Key.userCredentialsKey
