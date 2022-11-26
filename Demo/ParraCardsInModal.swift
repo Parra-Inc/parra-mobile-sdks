@@ -7,24 +7,27 @@
 //
 
 import UIKit
+import ParraFeedback
 
 class ParraCardsInModal: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
-    
 
-    /*
-    // MARK: - Navigation
+    @IBAction func presentPopupStyleFeedbackModal(_ sender: UIButton) {
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        ParraFeedback.fetchFeedbackCards(appArea: .all) { [self] response in
+            switch response {
+            case .success(let cards):
+                ParraFeedback.presentCardPopup(with: cards, fromViewController: self)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
-    */
 
+    @IBAction func presentDrawerStyleFeedbackModal(_ sender: UIButton) {
+    }
 }

@@ -115,6 +115,10 @@
 		00DED000274C69F800DAF301 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DECFFE274C69F800DAF301 /* Main.storyboard */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
 		00E15A25293266470049C2C7 /* ParraCardsInModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A24293266470049C2C7 /* ParraCardsInModal.swift */; };
+		00E15A27293268600049C2C7 /* ParraFeedback+Modals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A26293268600049C2C7 /* ParraFeedback+Modals.swift */; };
+		00E15A29293269100049C2C7 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A28293269100049C2C7 /* UIViewController.swift */; };
+		00E15A2B29326FBE0049C2C7 /* UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A2A29326FBE0049C2C7 /* UIWindow.swift */; };
+		00E15A2D293276940049C2C7 /* Thread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A2C293276940049C2C7 /* Thread.swift */; };
 		00F5AAF127FA819200A94C85 /* ParraCardsInTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF027FA819200A94C85 /* ParraCardsInTableView.swift */; };
 		00F5AAF428023EF300A94C85 /* GeneratedTypes+Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */; };
 		00FD310B28329F5B0080689C /* ParraCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */; };
@@ -299,6 +303,10 @@
 		00DED004274C69FA00DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		00DED006274C69FA00DAF301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E15A24293266470049C2C7 /* ParraCardsInModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardsInModal.swift; sourceTree = "<group>"; };
+		00E15A26293268600049C2C7 /* ParraFeedback+Modals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Modals.swift"; sourceTree = "<group>"; };
+		00E15A28293269100049C2C7 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		00E15A2A29326FBE0049C2C7 /* UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindow.swift; sourceTree = "<group>"; };
+		00E15A2C293276940049C2C7 /* Thread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thread.swift; sourceTree = "<group>"; };
 		00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionHandler.swift; sourceTree = "<group>"; };
 		00E8B32D27878C3400FC3FFD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		00F5AAF027FA819200A94C85 /* ParraCardsInTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardsInTableView.swift; sourceTree = "<group>"; };
@@ -365,14 +373,17 @@
 			isa = PBXGroup;
 			children = (
 				0036D60B27D053160016DE97 /* FileManager.swift */,
-				00E8B32D27878C3400FC3FFD /* Models.swift */,
 				0036D5E527CB0FBD0016DE97 /* JSONDecoder.swift */,
 				0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */,
-				001286FE277FE3180090CDB5 /* UIFont.swift */,
-				00707D1A27FA0A07004E9567 /* URLSession.swift */,
-				00BDB2B028BD822700C16649 /* URLRequest.swift */,
-				0018A60D28D77FF2008CC97E /* URLComponents.swift */,
+				00E8B32D27878C3400FC3FFD /* Models.swift */,
 				0019CBC828FB37BC0015E703 /* Sequence.swift */,
+				00E15A2C293276940049C2C7 /* Thread.swift */,
+				001286FE277FE3180090CDB5 /* UIFont.swift */,
+				00E15A28293269100049C2C7 /* UIViewController.swift */,
+				00E15A2A29326FBE0049C2C7 /* UIWindow.swift */,
+				0018A60D28D77FF2008CC97E /* URLComponents.swift */,
+				00BDB2B028BD822700C16649 /* URLRequest.swift */,
+				00707D1A27FA0A07004E9567 /* URLSession.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -534,6 +545,7 @@
 			children = (
 				001B7B3427DE3AEC00DEEECD /* ParraFeedback.h */,
 				001B7A8F27DD8D6700DEEECD /* ParraFeedback.swift */,
+				00E15A26293268600049C2C7 /* ParraFeedback+Modals.swift */,
 				001B7B8327DE6E2400DEEECD /* ParraFeedback+Constants.swift */,
 				00D5156A27D4798400C4F2CC /* ParraFeedback+Notifications.swift */,
 				001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */,
@@ -928,6 +940,7 @@
 				001B7B7427DE3CD500DEEECD /* QuestionChoiceCompletedData.swift in Sources */,
 				001B7B1727DE3AA900DEEECD /* HttpMethod.swift in Sources */,
 				001B7B1427DE3A9B00DEEECD /* Parra+SyncEvents.swift in Sources */,
+				00E15A29293269100049C2C7 /* UIViewController.swift in Sources */,
 				001B7B8027DE60F600DEEECD /* ParraDataManager.swift in Sources */,
 				001B7B1027DE3A9B00DEEECD /* ParraLogger.swift in Sources */,
 				001B7B2527DE3AC200DEEECD /* JSONDecoder.swift in Sources */,
@@ -946,7 +959,9 @@
 				0018A60E28D77FF2008CC97E /* URLComponents.swift in Sources */,
 				0019CBC528FAE0E80015E703 /* FailableDecodable.swift in Sources */,
 				001B7B1127DE3A9B00DEEECD /* ParraModule.swift in Sources */,
+				00E15A2B29326FBE0049C2C7 /* UIWindow.swift in Sources */,
 				001B7B8E27DE806100DEEECD /* DataStorageMedium.swift in Sources */,
+				00E15A2D293276940049C2C7 /* Thread.swift in Sources */,
 				001B7B2927DE3AC800DEEECD /* ParraSyncManager.swift in Sources */,
 				001B7B7227DE3CC700DEEECD /* QuestionMultipleChoiceCompletedData.swift in Sources */,
 				001B7B8827DE712200DEEECD /* ParraStorageModule.swift in Sources */,
@@ -1010,6 +1025,7 @@
 				001B7B5C27DE3B3800DEEECD /* ParraStarButton.swift in Sources */,
 				001B7B5827DE3B3800DEEECD /* ParraCheckboxButton.swift in Sources */,
 				001B7B5027DE3B2500DEEECD /* ParraQuestionHandler.swift in Sources */,
+				00E15A27293268600049C2C7 /* ParraFeedback+Modals.swift in Sources */,
 				001B7B7D27DE60E000DEEECD /* ParraFeedbackDataManager.swift in Sources */,
 				001B7B5D27DE3B3800DEEECD /* ParraChoiceOptionView.swift in Sources */,
 				001B7B5727DE3B3800DEEECD /* SelectableButton.swift in Sources */,

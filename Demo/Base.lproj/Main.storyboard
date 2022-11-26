@@ -191,8 +191,33 @@
                     <view key="view" contentMode="scaleToFill" id="EqU-T0-h9U">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WGz-ZI-8QE">
+                                <rect key="frame" x="55" y="627" width="111" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="As a Popup"/>
+                                <connections>
+                                    <action selector="presentPopupStyleFeedbackModal:" destination="E5D-qf-g9A" eventType="touchUpInside" id="h8S-1o-fYc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6v-GQ-xRw">
+                                <rect key="frame" x="243" y="627" width="116" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="As a Drawer"/>
+                                <connections>
+                                    <action selector="presentDrawerStyleFeedbackModal:" destination="E5D-qf-g9A" eventType="touchUpInside" id="pcu-d3-zmS"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="XJX-eO-IDF"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="XJX-eO-IDF" firstAttribute="bottom" secondItem="q6v-GQ-xRw" secondAttribute="bottom" constant="200" id="FS9-cn-6WP"/>
+                            <constraint firstItem="XJX-eO-IDF" firstAttribute="bottom" secondItem="WGz-ZI-8QE" secondAttribute="bottom" constant="200" id="TJC-5W-eUe"/>
+                            <constraint firstItem="XJX-eO-IDF" firstAttribute="trailing" secondItem="q6v-GQ-xRw" secondAttribute="trailing" constant="55" id="vDG-td-Veh"/>
+                            <constraint firstItem="WGz-ZI-8QE" firstAttribute="leading" secondItem="XJX-eO-IDF" secondAttribute="leading" constant="55" id="vcG-kD-y7l"/>
+                            <constraint firstItem="q6v-GQ-xRw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="WGz-ZI-8QE" secondAttribute="trailing" constant="20" id="wge-qo-LxV"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="2wQ-n1-iPn"/>
                 </viewController>
