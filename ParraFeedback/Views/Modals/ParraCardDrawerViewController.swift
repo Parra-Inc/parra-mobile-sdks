@@ -35,7 +35,7 @@ internal class ParraCardDrawerViewController: UIViewController, ParraCardModal {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .white
+        view.backgroundColor = cardView.config.backgroundColor
         view.addSubview(cardView)
 
         NSLayoutConstraint.activate([

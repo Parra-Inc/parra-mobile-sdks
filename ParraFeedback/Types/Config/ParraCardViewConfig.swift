@@ -54,6 +54,7 @@ public struct ParraCardViewConfig {
     
     public static let defaultDark = ParraCardViewConfig(
         backgroundColor: Constant.defaultBackgroundColorDark,
+        shadow: .defaultDark,
         title: .titleDefaultDark,
         subtitle: .subtitleDefaultDark,
         body: .bodyDefaultDark,
