@@ -39,13 +39,13 @@ public enum ParraLogLevel: Int, Comparable {
     var outputName: String {
         switch self {
         case .verbose:
-            return "VERBOSE"
+            return "🔵 VERBOSE"
         case .info:
-            return "INFO"
+            return "⚪ INFO"
         case .warn:
-            return "WARN"
+            return "🟡 WARN"
         case .error:
-            return "ERROR"
+            return "🔴 ERROR"
         }
     }
 }
@@ -87,7 +87,7 @@ fileprivate func _parraLog(_ message: String,
         formattedMessage.append(contentsOf: " extra: \(extra.description)")
     }
     
-    print(formattedMessage, function)
+    print(formattedMessage)
 }
 
 public func parraLog(_ message: @autoclosure () -> String,

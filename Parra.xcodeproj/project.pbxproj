@@ -119,6 +119,8 @@
 		00E15A29293269100049C2C7 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A28293269100049C2C7 /* UIViewController.swift */; };
 		00E15A2B29326FBE0049C2C7 /* UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A2A29326FBE0049C2C7 /* UIWindow.swift */; };
 		00E15A2D293276940049C2C7 /* Thread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A2C293276940049C2C7 /* Thread.swift */; };
+		00E15A31293279A20049C2C7 /* ParraCardPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A30293279A20049C2C7 /* ParraCardPopupViewController.swift */; };
+		00E15A33293279B80049C2C7 /* ParraCardModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A32293279B80049C2C7 /* ParraCardModal.swift */; };
 		00F5AAF127FA819200A94C85 /* ParraCardsInTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF027FA819200A94C85 /* ParraCardsInTableView.swift */; };
 		00F5AAF428023EF300A94C85 /* GeneratedTypes+Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */; };
 		00FD310B28329F5B0080689C /* ParraCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */; };
@@ -307,6 +309,8 @@
 		00E15A28293269100049C2C7 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		00E15A2A29326FBE0049C2C7 /* UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindow.swift; sourceTree = "<group>"; };
 		00E15A2C293276940049C2C7 /* Thread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thread.swift; sourceTree = "<group>"; };
+		00E15A30293279A20049C2C7 /* ParraCardPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardPopupViewController.swift; sourceTree = "<group>"; };
+		00E15A32293279B80049C2C7 /* ParraCardModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardModal.swift; sourceTree = "<group>"; };
 		00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionHandler.swift; sourceTree = "<group>"; };
 		00E8B32D27878C3400FC3FFD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		00F5AAF027FA819200A94C85 /* ParraCardsInTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardsInTableView.swift; sourceTree = "<group>"; };
@@ -628,11 +632,8 @@
 		003D2A7A274C84EE001E067E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				00120EF8274D9CFC00CA3247 /* ParraCardView.swift */,
-				0036D60927D051B20016DE97 /* ParraCardView+Layout.swift */,
-				0036D60727D051060016DE97 /* ParraCardView+Transitions.swift */,
-				00717C2C27F3E11100BE5608 /* ParraCardTableViewCell.swift */,
-				00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */,
+				00E15A2F293279870049C2C7 /* Modals */,
+				00E15A2E293279770049C2C7 /* ParraCardView */,
 				00120EFC27514BE000CA3247 /* Card Views */,
 				001286F2277D53890090CDB5 /* Selectable Buttons */,
 			);
@@ -683,6 +684,27 @@
 				003C216D27DEE77D001CAE03 /* Demo-Bridging-Header.h */,
 			);
 			path = Demo;
+			sourceTree = "<group>";
+		};
+		00E15A2E293279770049C2C7 /* ParraCardView */ = {
+			isa = PBXGroup;
+			children = (
+				00120EF8274D9CFC00CA3247 /* ParraCardView.swift */,
+				0036D60927D051B20016DE97 /* ParraCardView+Layout.swift */,
+				0036D60727D051060016DE97 /* ParraCardView+Transitions.swift */,
+				00717C2C27F3E11100BE5608 /* ParraCardTableViewCell.swift */,
+				00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */,
+			);
+			path = ParraCardView;
+			sourceTree = "<group>";
+		};
+		00E15A2F293279870049C2C7 /* Modals */ = {
+			isa = PBXGroup;
+			children = (
+				00E15A32293279B80049C2C7 /* ParraCardModal.swift */,
+				00E15A30293279A20049C2C7 /* ParraCardPopupViewController.swift */,
+			);
+			path = Modals;
 			sourceTree = "<group>";
 		};
 		00F5AAF228023EDB00A94C85 /* Types */ = {
@@ -1015,6 +1037,7 @@
 				003C214927DE98F0001CAE03 /* Array.swift in Sources */,
 				001B7B7E27DE60E000DEEECD /* ParraFeedbackDataManager+Keys.swift in Sources */,
 				001B7B6027DE3B3800DEEECD /* ParraCardView.swift in Sources */,
+				00E15A31293279A20049C2C7 /* ParraCardPopupViewController.swift in Sources */,
 				001B7B6627DE3BFB00DEEECD /* ParraCardViewConfig.swift in Sources */,
 				001B7B5627DE3B3800DEEECD /* ParraCardView+Layout.swift in Sources */,
 				003C214827DE96EA001CAE03 /* ParraFeedback+Notifications.swift in Sources */,
@@ -1022,6 +1045,7 @@
 				001B7B5F27DE3B3800DEEECD /* ParraRadioButton.swift in Sources */,
 				001B7B8627DE70FF00DEEECD /* CardStorage.swift in Sources */,
 				001B7B6A27DE3C2400DEEECD /* CurrentCardInfo.swift in Sources */,
+				00E15A33293279B80049C2C7 /* ParraCardModal.swift in Sources */,
 				001B7B5C27DE3B3800DEEECD /* ParraStarButton.swift in Sources */,
 				001B7B5827DE3B3800DEEECD /* ParraCheckboxButton.swift in Sources */,
 				001B7B5027DE3B2500DEEECD /* ParraQuestionHandler.swift in Sources */,
@@ -1477,7 +1501,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1512,7 +1536,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

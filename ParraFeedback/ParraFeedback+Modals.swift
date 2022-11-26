@@ -13,15 +13,22 @@ import ParraCore
 public extension ParraFeedback {
     static func presentCardPopup(with cards: [ParraCardItem],
                                  fromViewController viewController: UIViewController?,
-                                 config: ParraCardViewConfig = .default) {
-
-        parraLogW("ParraFeedback.presentCardPopup ")
+                                 config: ParraCardViewConfig = .default,
+                                 transitionStyle: ParraCardModalTransitionStyle = .slide) {
 
         guard let vc = viewController ?? UIViewController.topMostViewController() else {
-            parraLogW("ParraFeedback.presentCardPopup ")
+            parraLogW("Missing view controller to present popup from.")
             return
         }
 
-//        guard let viewController = UIViewController.topMostViewController()
+        parraLogV("Presenting card popup view controller with \(cards.count) card(s)")
+
+        let cardViewController = ParraCardPopupViewController(
+            cards: cards,
+            config: config,
+            transitionStyle: transitionStyle
+        )
+
+        vc.present(cardViewController, animated: transitionStyle != .none)
     }
 }
