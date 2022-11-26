@@ -68,16 +68,16 @@ internal protocol NetworkManagerType {
          jsonEncoder: JSONEncoder,
          jsonDecoder: JSONDecoder)
     
-    var authenticationProvider: ParraFeedbackAuthenticationProvider? { get }
+    var authenticationProvider: ParraAuthenticationProviderFunction? { get }
     
-    func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) async
+    func updateAuthenticationProvider(_ provider: ParraAuthenticationProviderFunction?) async
     func refreshAuthentication() async throws -> ParraCredential
 }
 
 internal class ParraNetworkManager: NetworkManagerType {
     private let dataManager: ParraDataManager
     
-    internal private(set) var authenticationProvider: ParraFeedbackAuthenticationProvider?
+    internal private(set) var authenticationProvider: ParraAuthenticationProviderFunction?
     
     private let urlSession: URLSessionType
     private let jsonEncoder: JSONEncoder
@@ -93,7 +93,7 @@ internal class ParraNetworkManager: NetworkManagerType {
         self.jsonDecoder = jsonDecoder
     }
     
-    internal func updateAuthenticationProvider(_ provider: ParraFeedbackAuthenticationProvider?) {
+    internal func updateAuthenticationProvider(_ provider: ParraAuthenticationProviderFunction?) {
         authenticationProvider = provider
     }
     
@@ -103,7 +103,8 @@ internal class ParraNetworkManager: NetworkManagerType {
         }
         
         do {
-            let credential = try await authenticationProvider()
+            let token = try await authenticationProvider()
+            let credential = ParraCredential(token: token)
             
             await dataManager.updateCredential(
                 credential: credential
@@ -207,7 +208,7 @@ internal class ParraNetworkManager: NetworkManagerType {
         forTentant tenantId: String,
         apiKeyId: String,
         userId: String
-    ) async throws -> ParraCredential {
+    ) async throws -> String {
         let url = Parra.Constant.parraApiRoot.appendingPathComponent("tenants/\(tenantId)/issuers/public/auth/token")
         var request = URLRequest(url: url)
 
@@ -224,7 +225,9 @@ internal class ParraNetworkManager: NetworkManagerType {
 
         switch (response.statusCode) {
         case 200:
-            return try jsonDecoder.decode(ParraCredential.self, from: data)
+            let credential = try jsonDecoder.decode(ParraCredential.self, from: data)
+
+            return credential.token
         case 400...499:
             throw ParraError.networkError(
                 "Client error \(response.statusCode): \(response.debugDescription)"

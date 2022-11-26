@@ -23,22 +23,6 @@ internal struct ParraSessionDeviceState {
     let orientation: String
 }
 
-//@property(nonatomic,readonly,strong) NSString    *name;              // Synonym for model. Prior to iOS 16, user-assigned device name (e.g. @"My iPhone").
-//@property(nonatomic,readonly,strong) NSString    *model;             // e.g. @"iPhone", @"iPod touch"
-//@property(nonatomic,readonly,strong) NSString    *localizedModel;    // localized version of model
-//@property(nonatomic,readonly,strong) NSString    *systemName;        // e.g. @"iOS"
-//@property(nonatomic,readonly,strong) NSString    *systemVersion;     // e.g. @"4.0"
-//@property(nonatomic,readonly) UIDeviceOrientation orientation API_UNAVAILABLE(tvos);       // return current device orientation.  this will return UIDeviceOrientationUnknown unless device orientation notifications are being generated.
-//
-//@property(nullable, nonatomic,readonly,strong) NSUUID      *identifierForVendor API_AVAILABLE(ios(6.0));      // a UUID that may be used to uniquely identify the device, same across apps from a single vendor.
-//
-//@property(nonatomic,readonly,getter=isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications API_UNAVAILABLE(tvos);
-//- (void)beginGeneratingDeviceOrientationNotifications API_UNAVAILABLE(tvos);      // nestable
-//- (void)endGeneratingDeviceOrientationNotifications API_UNAVAILABLE(tvos);
-//
-//@property(nonatomic,getter=isBatteryMonitoringEnabled) BOOL batteryMonitoringEnabled API_AVAILABLE(ios(3.0)) API_UNAVAILABLE(tvos);  // default is NO
-//@property(nonatomic,readonly) UIDeviceBatteryState          batteryState API_AVAILABLE(ios(3.0)) API_UNAVAILABLE(tvos);  //
-
 // A session is a series of events
 
 internal struct ParraSession {
