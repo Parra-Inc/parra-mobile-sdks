@@ -44,12 +44,7 @@ extension ParraCardView {
     internal func configureSubviews(config: ParraCardViewConfig) {        
         configureContentView()
         configureNavigationStack()
-        
-        addCardSwipeGesture(toView: contentView, direction: .right)
-        addCardSwipeGesture(toView: contentView, direction: .left)
-        addCardSwipeGesture(toView: containerView, direction: .right)
-        addCardSwipeGesture(toView: containerView, direction: .left)
-        
+
         containerLeadingConstraint = containerView.leadingAnchor.constraint(
             equalTo: leadingAnchor, constant: config.contentInsets.left
         )
@@ -78,11 +73,6 @@ extension ParraCardView {
                                       ? UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
                                       : UIColor(hue: 0.0, saturation: 0.0, brightness: 1.0, alpha: 0.2),
                                       for: .normal)
-
-        backButton.tintColor = config.tintColor
-        backButton.accessibilityIdentifier = "ParraFeedbackNavigationBackButton"
-        forwardButton.tintColor = config.tintColor
-        forwardButton.accessibilityIdentifier = "ParraFeedbackNavigationForwardButton"
         
         layer.shadowColor = config.shadow.color.cgColor
         layer.shadowOpacity = Float(config.shadow.opacity)
@@ -166,35 +156,6 @@ extension ParraCardView {
             navigationStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
             navigationStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12)
         ])
-    }
-    
-    private func addCardSwipeGesture(toView view: UIView, direction: Direction) {
-        let gesture = createSwipeGesture(
-            inDirection: direction.swipeDirection,
-            selector: direction == .left
-            ? #selector(navigateToNextCard)
-            : #selector(navigateToPreviousCard)
-        )
-        
-        view.addGestureRecognizer(gesture)
-        cardSwipeGestureRecognizers.append(gesture)
-    }
-    
-    private func createSwipeGesture(inDirection direction: UISwipeGestureRecognizer.Direction,
-                                    selector: Selector) -> UISwipeGestureRecognizer {
-        
-        let swipe = UISwipeGestureRecognizer(target: self, action: selector)
-        swipe.direction = direction
-        
-        return swipe
-    }
-    
-    @objc internal func navigateToPreviousCard() {
-        suggestTransitionInDirection(.left, animated: true)
-    }
-    
-    @objc internal func navigateToNextCard() {
-        suggestTransitionInDirection(.right, animated: true)
     }
 
     @objc private func openParraLink() {
