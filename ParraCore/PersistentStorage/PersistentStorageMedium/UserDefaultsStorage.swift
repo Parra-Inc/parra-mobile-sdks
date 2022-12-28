@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal actor UserDefaultsStorage: PersistentStorageMedium {
+internal actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
     private let userDefaults: UserDefaults
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
