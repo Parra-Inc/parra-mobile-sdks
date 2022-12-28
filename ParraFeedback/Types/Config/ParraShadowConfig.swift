@@ -38,4 +38,11 @@ public struct ParraShadowConfig {
         radius: 2.5,
         offset: CGSize(width: 1.0, height: 1.0)
     )
+
+    public static let none = ParraShadowConfig(
+        color: .clear,
+        opacity: 0.0,
+        radius: 0.0,
+        offset: .zero
+    )
 }

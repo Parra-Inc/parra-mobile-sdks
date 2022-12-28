@@ -34,7 +34,7 @@ public extension ParraFeedback {
     @available(iOS 15.0, *)
     static func presentCardDrawer(with cards: [ParraCardItem],
                                   fromViewController: UIViewController?,
-                                  config: ParraCardViewConfig = .default) {
+                                  config: ParraCardViewConfig = .drawerDefault) {
 
         parraLogV("Presenting drawer view controller with \(cards.count) card(s)")
 
