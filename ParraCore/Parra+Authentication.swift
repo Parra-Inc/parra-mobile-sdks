@@ -20,9 +20,33 @@ public extension Parra {
     ///   This function will be invoked automatically whenever the user's credential is missing or expired and Parra needs to refresh
     ///   the authentication state for your user.
     class func initialize(config: ParraConfiguration = .default,
-                          authProvider: ParraAuthenticationProvider) {
+                          authProvider: ParraAuthenticationProviderType) {
+        if shared.isInitialized {
+            parraLogW("Parra.initialize called more than once. Subsequent calls are ignored")
+            return
+        }
 
-        shared.networkManager.updateAuthenticationProvider(authProvider.retreiveCredential)
+        shared.isInitialized = true
+
+        switch authProvider {
+        case .default(let provider):
+            shared.networkManager.updateAuthenticationProvider(provider)
+        case .publicKey(let tenantId, let apiKeyId, let userIdProvider):
+            shared.networkManager.updateAuthenticationProvider { [weak shared] in
+                guard let networkManager = shared?.networkManager else {
+                    throw ParraError.unknown
+                }
+
+                let userId = try await userIdProvider()
+
+                return try await networkManager.performPublicApiKeyAuthenticationRequest(
+                    forTentant: tenantId,
+                    apiKeyId: apiKeyId,
+                    userId: userId
+                )
+            }
+        }
+
 
         Task {
             do {

@@ -47,7 +47,7 @@ public class Parra: ParraModule {
         )
     }()
     
-    internal private(set) var isInitialized = false
+    internal var isInitialized = false
     
     internal private(set) static var registeredModules: [String: ParraModule] = [:]
     

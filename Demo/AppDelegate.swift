@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Parra.initialize(
             config: .default,
-            authProvider: ParraDefaultAuthenticationProvider {
+            authProvider: .default(provider: {
                 var request = URLRequest(
                     // Replace this with your Parra access token generation endpoint
                     url: URL(string: "http://localhost:8080/v1/parra/auth/token")!
@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let response = try JSONDecoder().decode([String: String].self, from: data)
 
                 return response["access_token"]!
-            }
+            })
         )
 
         return true
