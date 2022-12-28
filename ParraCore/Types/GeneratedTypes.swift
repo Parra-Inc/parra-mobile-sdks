@@ -7,8 +7,6 @@
 
 import Foundation
 
-public typealias AnyCodable = [String: String]
-
 public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
     public let name: String
     public let isTest: Bool

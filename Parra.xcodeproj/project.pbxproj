@@ -113,6 +113,9 @@
 		00A60B9B2932D37000B7168A /* ParraAuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B9A2932D37000B7168A /* ParraAuthenticationProvider.swift */; };
 		00BDB2AF28BC24E700C16649 /* ParraCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */; };
 		00BDB2B128BD822700C16649 /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2B028BD822700C16649 /* URLRequest.swift */; };
+		00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE7295CAB8F00109081 /* AnyCodable.swift */; };
+		00DA7FEA295CAB9700109081 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE9295CAB9700109081 /* AnyEncodable.swift */; };
+		00DA7FEC295CAB9E00109081 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FEB295CAB9E00109081 /* AnyDecodable.swift */; };
 		00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFF8274C69F800DAF301 /* AppDelegate.swift */; };
 		00DED000274C69F800DAF301 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DECFFE274C69F800DAF301 /* Main.storyboard */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
@@ -307,6 +310,9 @@
 		00D5156627D4506B00C4F2CC /* Parra+SyncEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+SyncEvents.swift"; sourceTree = "<group>"; };
 		00D5156827D45C8F00C4F2CC /* ParraNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraNetworkManager.swift; sourceTree = "<group>"; };
 		00D5156A27D4798400C4F2CC /* ParraFeedback+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Notifications.swift"; sourceTree = "<group>"; };
+		00DA7FE7295CAB8F00109081 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
+		00DA7FE9295CAB9700109081 /* AnyEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
+		00DA7FEB295CAB9E00109081 /* AnyDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
 		00DECFF5274C69F800DAF301 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00DECFF8274C69F800DAF301 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00DECFFF274C69F800DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -665,6 +671,16 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
+		00DA7FE6295CAB8400109081 /* AnyCodable */ = {
+			isa = PBXGroup;
+			children = (
+				00DA7FE7295CAB8F00109081 /* AnyCodable.swift */,
+				00DA7FE9295CAB9700109081 /* AnyEncodable.swift */,
+				00DA7FEB295CAB9E00109081 /* AnyDecodable.swift */,
+			);
+			path = AnyCodable;
+			sourceTree = "<group>";
+		};
 		00DECFEC274C69F800DAF301 = {
 			isa = PBXGroup;
 			children = (
@@ -1000,6 +1016,8 @@
 				001B7B1627DE3AA900DEEECD /* ParraCredential.swift in Sources */,
 				001B7B2C27DE3AC800DEEECD /* ParraNetworkManager.swift in Sources */,
 				001B7B1F27DE3ABC00DEEECD /* PersistentStorageMedium.swift in Sources */,
+				00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */,
+				00DA7FEA295CAB9700109081 /* AnyEncodable.swift in Sources */,
 				00A60B9B2932D37000B7168A /* ParraAuthenticationProvider.swift in Sources */,
 				0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */,
 				00707D1B27FA0A07004E9567 /* URLSession.swift in Sources */,
@@ -1023,6 +1041,7 @@
 				001B7B1A27DE3ABC00DEEECD /* FileSystemStorage.swift in Sources */,
 				005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */,
 				00E15A1F2929B7C10049C2C7 /* ParraSessionService.swift in Sources */,
+				00DA7FEC295CAB9E00109081 /* AnyDecodable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
