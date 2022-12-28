@@ -11,8 +11,6 @@ import UIKit
 extension UIDeviceOrientation: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .unknown:
-            return "unknown"
         case .portrait:
             return "portrait"
         case .portraitUpsideDown:
@@ -25,6 +23,10 @@ extension UIDeviceOrientation: CustomStringConvertible {
             return "faceUp"
         case .faceDown:
             return "faceDown"
+        case .unknown:
+            fallthrough
+        default:
+            return "unknown"
         }
     }
 }
