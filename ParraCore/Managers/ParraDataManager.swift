@@ -9,19 +9,28 @@ import Foundation
 
 public class ParraDataManager {
     internal fileprivate(set) var credentialStorage: CredentialStorage
+    internal fileprivate(set) var sessionStorage: SessionStorage
 
     internal init() {
         let folder = Parra.persistentStorageFolder()
-        let fileName = ParraDataManager.Key.userCredentialsKey
         
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
             dataStorageMedium: .fileSystem(
                 folder: folder,
-                fileName: fileName
+                fileName: ParraDataManager.Key.userCredentialsKey
             )
+        )
+
+        let sessionStorageModule = ParraStorageModule<ParraSession>(
+            dataStorageMedium: .fileSystem(
+                folder: folder,
+                fileName: ParraDataManager.Key.userSessionsKey
+            ),
+            storeItemsSeparately: true
         )
         
         self.credentialStorage = CredentialStorage(storageModule: credentialStorageModule)
+        self.sessionStorage = SessionStorage(storageModule: sessionStorageModule)
     }
     
     internal func getCurrentCredential() async -> ParraCredential? {

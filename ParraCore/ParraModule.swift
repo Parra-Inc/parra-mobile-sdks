@@ -7,11 +7,8 @@
 
 import Foundation
 
-public protocol ParraModule {
+public protocol ParraModule: Syncable {
     static var name: String { get }
-    
-    func hasDataToSync() async -> Bool
-    func triggerSync() async -> Void
 }
 
 public extension ParraModule {

@@ -8,34 +8,28 @@
 
 import Foundation
 
-// 1. Start session
-// 2. Write event to session
-// 3. End session
-// 4. Retreive all sessions
-
 internal actor SessionStorage: ItemStorage {
 //    internal enum Key {
 //        static let currentUser = "current_user_credential"
 //    }
 
-    typealias DataType = ParraCredential
+    typealias DataType = ParraSession
 
-    let storageModule: ParraStorageModule<ParraCredential>
+    let storageModule: ParraStorageModule<ParraSession>
 
-    init(storageModule: ParraStorageModule<ParraCredential>) {
+    init(storageModule: ParraStorageModule<ParraSession>) {
         self.storageModule = storageModule
     }
 
-//    func updateCredential(credential: ParraCredential?) async {
-//        try? await storageModule.write(name: Key.currentUser, value: credential)
-//    }
-//
-//    func currentCredential() async -> ParraCredential? {
-//        return await storageModule.read(name: Key.currentUser)
-//    }
+    func update(session: ParraSession) async {
+        try? await storageModule.write(
+            name: String(session.createdAt.timeIntervalSince1970),
+            value: session
+        )
+    }
 
     func start(session: ParraSession) {
-
+//        storageModule.write(name: <#T##String#>, value: <#T##ParraSession?#>)
     }
 
     func write(event: ParraSessionEvent, to session: ParraSession) {

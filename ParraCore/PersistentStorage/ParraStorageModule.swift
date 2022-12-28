@@ -11,6 +11,7 @@ public actor ParraStorageModule<DataType: Codable> {
     // Whether or not data has previously been loaded from disk.
     internal private(set) var isLoaded = false
     internal let dataStorageMedium: DataStorageMedium
+    internal let storeItemsSeparately: Bool
     internal let persistentStorage: (medium: PersistentStorageMedium, key: String)?
     internal private(set) var storageCache: [String: DataType] = [:]
     
@@ -27,8 +28,10 @@ public actor ParraStorageModule<DataType: Codable> {
         """
     }
     
-    public init(dataStorageMedium: DataStorageMedium) {
+    public init(dataStorageMedium: DataStorageMedium,
+                storeItemsSeparately: Bool = false) {
         self.dataStorageMedium = dataStorageMedium
+        self.storeItemsSeparately = storeItemsSeparately
         
         switch dataStorageMedium {
         case .memory:
@@ -91,7 +94,9 @@ public actor ParraStorageModule<DataType: Codable> {
         return storageCache[name]
     }
     
-    public func write(name: String, value: DataType?) async throws {
+    public func write(name: String,
+                      value: DataType?) async throws {
+
         if !isLoaded {
             await loadData()
         }
@@ -99,10 +104,17 @@ public actor ParraStorageModule<DataType: Codable> {
         storageCache[name] = value
         
         if let persistentStorage = persistentStorage {
-            try await persistentStorage.medium.write(
-                name: persistentStorage.key,
-                value: storageCache
-            )
+            if let value, storeItemsSeparately {
+                try await persistentStorage.medium.write(
+                    name: name,
+                    value: value
+                )
+            } else {
+                try await persistentStorage.medium.write(
+                    name: persistentStorage.key,
+                    value: storageCache
+                )
+            }
         }
     }
     

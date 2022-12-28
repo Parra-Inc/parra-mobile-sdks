@@ -28,11 +28,16 @@ internal class ParraSyncManager {
     internal private(set) var enqueuedSyncMode: ParraSyncMode? = nil
     
     private let networkManager: ParraNetworkManager
-    
+    private let sessionManager: ParraSessionManager
+
     private var syncTimer: Timer?
     
-    internal init(networkManager: ParraNetworkManager) {
+    internal init(networkManager: ParraNetworkManager,
+                  sessionManager: ParraSessionManager) {
         self.networkManager = networkManager
+        self.sessionManager = sessionManager
+
+        startSyncTimer()
     }
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
@@ -89,7 +94,7 @@ internal class ParraSyncManager {
         guard await hasDataToSync() else {
             parraLogV("No data available to sync")
             isSyncing = false
-            
+
             return
         }
         
@@ -97,11 +102,9 @@ internal class ParraSyncManager {
         
         let start = CFAbsoluteTimeGetCurrent()
         parraLogV("Sending sync data...")
-        
-        for (_, module) in Parra.registeredModules {
-            await module.triggerSync()
-        }
-        
+
+        await performSync()
+
         let duration = CFAbsoluteTimeGetCurrent() - start
         parraLogV("Sync data sent. Took \(duration)(s)")
         
@@ -113,8 +116,8 @@ internal class ParraSyncManager {
             switch enqueuedSyncMode {
             case .immediate:
                 await sync()
-            case .eventual:
-                startSyncTimer()
+            default:
+                break
             }
         } else {
             parraLogV("No more jobs found. Completing sync.")
@@ -122,10 +125,24 @@ internal class ParraSyncManager {
             isSyncing = false
         }
     }
+
+    private func performSync() async {
+        // Sync ParraCore internal services, then other Parra modules
+
+        await sessionManager.triggerSync()
+
+        for (_, module) in Parra.registeredModules {
+            await module.triggerSync()
+        }
+    }
     
     private func hasDataToSync() async -> Bool {
+        let hasSessionsToSync = await sessionManager.hasDataToSync()
+        if hasSessionsToSync {
+            return true
+        }
+
         var shouldSync = false
-        
         for (_, module) in Parra.registeredModules {
             if await module.hasDataToSync() {
                 shouldSync = true
@@ -144,7 +161,7 @@ internal class ParraSyncManager {
             target: self,
             selector: #selector(syncTimerDidTick),
             userInfo: nil,
-            repeats: false
+            repeats: true
         )
     }
     
@@ -158,8 +175,8 @@ internal class ParraSyncManager {
     }
     
     @objc private func syncTimerDidTick() {
-        stopSyncTimer()
-        
+        parraLogV("Sync timer fired")
+
         Task {
             await self.enqueueSync(with: .immediate)
         }

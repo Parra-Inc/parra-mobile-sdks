@@ -14,8 +14,7 @@ public class Parra: ParraModule {
     public static private(set) var name = "core"
         
     internal static var shared: Parra! = {
-        let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-        let diskCacheURL = cachesURL.appendingPathComponent("ParraNetworkCache")
+        let diskCacheURL = ParraDataManager.Path.networkCachesDirectory
         // Cache may reject image entries if they are greater than 10% of the cache's size
         // so these need to reflect that.
         let cache = URLCache(
@@ -35,14 +34,21 @@ public class Parra: ParraModule {
             dataManager: dataManager,
             urlSession: urlSession
         )
-        
-        let syncManager = ParraSyncManager(
+
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
             networkManager: networkManager
+        )
+
+        let syncManager = ParraSyncManager(
+            networkManager: networkManager,
+            sessionManager: sessionManager
         )
         
         return Parra(
             dataManager: dataManager,
             syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
     }()
@@ -53,14 +59,17 @@ public class Parra: ParraModule {
     
     internal let dataManager: ParraDataManager
     internal let syncManager: ParraSyncManager
+    internal let sessionManager: ParraSessionManager
     internal let networkManager: ParraNetworkManager
         
     internal init(dataManager: ParraDataManager,
                   syncManager: ParraSyncManager,
+                  sessionManager: ParraSessionManager,
                   networkManager: ParraNetworkManager) {
         
         self.dataManager = dataManager
         self.syncManager = syncManager
+        self.sessionManager = sessionManager
         self.networkManager = networkManager
         
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
@@ -73,6 +82,27 @@ public class Parra: ParraModule {
         // app is being killed anyway.
         removeEventObservers()
     }
+
+    // MARK: - Authentication
+
+    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
+    /// will be invoked the very next time the Parra API is accessed.
+    public static func logout(completion: (() -> Void)? = nil) {
+        Task {
+            await logout()
+
+            completion?()
+        }
+    }
+
+    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
+    /// will be invoked the very next time the Parra API is accessed.
+    public static func logout() async {
+        await shared.syncManager.enqueueSync(with: .immediate)
+        await shared.dataManager.updateCredential(credential: nil)
+    }
+
+    // MARK: - Parra Modules
     
     /// Registers the provided ParraModule with the ParraCore module. This exists for usage by other Parra modules only. It is used
     /// to allow the Core module to identify which other Parra modules have been installed.
@@ -85,22 +115,7 @@ public class Parra: ParraModule {
         return registeredModules[module.name] != nil
     }
 
-    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
-    /// will be invoked the very next time the Parra API is accessed.
-    public static func logout(completion: (() -> Void)? = nil) {
-        Task {
-            await logout()
-            
-            completion?()
-        }
-    }
-
-    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
-    /// will be invoked the very next time the Parra API is accessed.
-    public static func logout() async {
-        await shared.syncManager.enqueueSync(with: .immediate)
-        await shared.dataManager.updateCredential(credential: nil)
-    }
+    // MARK: - Synchronization
 
     /// Uploads any cached Parra data. This includes data like answers to questions.
     public static func triggerSync(completion: (() -> Void)? = nil) {
@@ -116,8 +131,6 @@ public class Parra: ParraModule {
         await shared.triggerSync()
     }
     
-    // MARK: - ParraModule Conformance
-    
     public func hasDataToSync() async -> Bool {
         return false // TODO:
     }
@@ -129,5 +142,29 @@ public class Parra: ParraModule {
     public func triggerSync() async {
         // Don't expose sync mode publically.
         await syncManager.enqueueSync(with: .eventual)
+    }
+
+    // MARK: - Analytics
+
+    /// <#Description#>
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - params: <#params description#>
+    public static func logAnalyticsEvent<Key>(_ name: String,
+                                              params: [Key: Any]) where Key: CustomStringConvertible {
+        Task {
+            await shared.sessionManager.logEvent(name, params: params)
+        }
+    }
+
+    /// <#Description#>
+    /// - Parameters:
+    ///   - value: <#value description#>
+    ///   - key: <#key description#>
+    public static func setUserProperty<Key>(_ value: Any,
+                                            forKey key: Key) where Key: CustomStringConvertible {
+        Task {
+            await shared.sessionManager.setUserProperty(value, forKey: key)
+        }
     }
 }

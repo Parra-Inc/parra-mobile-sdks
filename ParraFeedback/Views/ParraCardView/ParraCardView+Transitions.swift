@@ -160,7 +160,7 @@ extension ParraCardView {
                             self.delegate?.parraCardView(self, didEndDisplaying: oldCardInfo.cardItem)
                         }
                         
-                        self.delegate?.parraCardView(self, didDisplay: cardItem)
+                        self.sendDidDisplay(cardItem: cardItem)
                     }
             }
         } else {            
@@ -179,7 +179,17 @@ extension ParraCardView {
                 cardItem: cardItem
             )
             
-            self.delegate?.parraCardView(self, didDisplay: cardItem)
+            self.sendDidDisplay(cardItem: cardItem)
+        }
+    }
+
+    private func sendDidDisplay(cardItem: ParraCardItem?) {
+        self.delegate?.parraCardView(self, didDisplay: cardItem)
+
+        if let cardItem {
+            Parra.logAnalyticsEvent("impression", params: [
+                "card_id": cardItem.id
+            ])
         }
     }
     
