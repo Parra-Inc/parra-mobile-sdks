@@ -54,6 +54,7 @@ public class Parra: ParraModule {
     }()
     
     internal var isInitialized = false
+    public static internal(set) var config: ParraConfiguration = .default
     
     internal private(set) static var registeredModules: [String: ParraModule] = [:]
     

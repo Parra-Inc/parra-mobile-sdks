@@ -15,10 +15,15 @@ public struct ParraLoggerConfig {
     public var printPrefix: String? = "PARRA"
 
     static let `default` = ParraLoggerConfig()
-}
 
-public struct ParraLogger {
-    static var config: ParraLoggerConfig = .default
+    enum Constant {
+        static let logEventPrefix = "parra:logger:"
+        static let logEventMessageKey = "\(logEventPrefix)message"
+        static let logEventLevelKey = "\(logEventPrefix)level"
+        static let logEventTimestampKey = "\(logEventPrefix)timestamp"
+        static let logEventThreadKey = "\(logEventPrefix)thread"
+        static let logEventExtraKey = "\(logEventPrefix)extra"
+    }
 }
 
 public enum ParraLogLevel: Int, Comparable {
@@ -61,22 +66,26 @@ fileprivate func _parraLog(_ message: String,
         return
     }
 
+    let timestamp = ISO8601DateFormatter().string(from: Date())
+    let queue = Thread.current.queueName
+
+#if DEBUG
     var markerComponents: [String] = []
 
-    if ParraLogger.config.printTimestamps {
-        markerComponents.append(ISO8601DateFormatter().string(from: Date()))
+    if Parra.config.loggerConfig.printTimestamps {
+        markerComponents.append(timestamp)
     }
 
-    if let prefix = ParraLogger.config.printPrefix {
+    if let prefix = Parra.config.loggerConfig.printPrefix {
         markerComponents.append(prefix)
     }
 
-    if ParraLogger.config.printLevel {
+    if Parra.config.loggerConfig.printLevel {
         markerComponents.append(level.outputName)
     }
 
-    if ParraLogger.config.printThread {
-        markerComponents.append("🧵 \(Thread.current.queueName)")
+    if Parra.config.loggerConfig.printThread {
+        markerComponents.append("🧵 \(queue)")
     }
 
     let formattedMarkers = markerComponents.map { "[\($0)]" }.joined()
@@ -86,8 +95,20 @@ fileprivate func _parraLog(_ message: String,
     if !extra.isEmpty {
         formattedMessage.append(contentsOf: " extra: \(extra.description)")
     }
-    
+
     print(formattedMessage)
+#else
+    var params = [String: Any]()
+    params[ParraLoggerConfig.Constant.logEventMessageKey] = message
+    params[ParraLoggerConfig.Constant.logEventLevelKey] = level.outputName
+    params[ParraLoggerConfig.Constant.logEventTimestampKey] = timestamp
+    params[ParraLoggerConfig.Constant.logEventThreadKey] = queue
+    if !extra.isEmpty {
+        params[ParraLoggerConfig.Constant.logEventExtraKey] = extra
+    }
+
+    Parra.logAnalyticsEvent(ParraSessionEventType.log, params: params)
+#endif
 }
 
 public func parraLog(_ message: @autoclosure () -> String,

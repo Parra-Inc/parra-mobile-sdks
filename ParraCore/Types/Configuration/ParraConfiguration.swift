@@ -9,5 +9,9 @@
 import Foundation
 
 public struct ParraConfiguration {
-    public static let `default` = ParraConfiguration()
+    public let loggerConfig: ParraLoggerConfig
+
+    public static let `default` = ParraConfiguration(
+        loggerConfig: .default
+    )
 }

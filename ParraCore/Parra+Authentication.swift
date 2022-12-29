@@ -27,6 +27,7 @@ public extension Parra {
         }
 
         shared.isInitialized = true
+        Parra.config = config
 
         switch authProvider {
         case .default(let provider):
