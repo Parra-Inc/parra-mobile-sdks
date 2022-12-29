@@ -144,28 +144,4 @@ public class Parra: ParraModule {
         // Don't expose sync mode publically.
         await syncManager.enqueueSync(with: .eventual)
     }
-
-    // MARK: - Analytics
-
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - params: <#params description#>
-    public static func logAnalyticsEvent<Key>(_ name: String,
-                                              params: [Key: Any]) where Key: CustomStringConvertible {
-        Task {
-            await shared.sessionManager.logEvent(name, params: params)
-        }
-    }
-
-    /// <#Description#>
-    /// - Parameters:
-    ///   - value: <#value description#>
-    ///   - key: <#key description#>
-    public static func setUserProperty<Key>(_ value: Any,
-                                            forKey key: Key) where Key: CustomStringConvertible {
-        Task {
-            await shared.sessionManager.setUserProperty(value, forKey: key)
-        }
-    }
 }

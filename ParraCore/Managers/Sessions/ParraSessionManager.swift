@@ -7,63 +7,6 @@
 //
 
 import Foundation
-import UIKit
-
-internal enum ParraSessionEventType: String {
-    case impression
-}
-
-internal struct ParraSessionEvent: Codable {
-    let eventId: String
-
-    /// The type of the event. Event properties should be consistent for each event name
-    let name: String
-
-    /// The date the event occurred
-    let createdAt: Date
-
-    let metadata: [String: AnyCodable]
-}
-
-internal struct ParraSession: Codable {
-    let sessionId: String
-    let createdAt: Date
-    private(set) var updatedAt: Date
-
-    private(set) var events: [ParraSessionEvent]
-    private(set) var userProperties: [String: AnyCodable]
-    private(set) var hasNewData: Bool
-
-    init() {
-        let now = Date()
-
-        self.sessionId = UUID().uuidString
-        self.createdAt = now
-        self.updatedAt = now
-        self.events = []
-        self.userProperties = [:]
-        self.hasNewData = true
-    }
-
-    mutating func addEvent(_ event: ParraSessionEvent) {
-        events.append(event)
-
-        hasNewData = true
-        updatedAt = Date()
-    }
-
-    mutating func updateUserProperties(_ newProperties: [String: AnyCodable]) {
-        userProperties = newProperties
-
-        hasNewData = true
-        updatedAt = Date()
-    }
-
-    mutating func resetSentData() {
-        hasNewData = false
-        updatedAt = Date()
-    }
-}
 
 internal actor ParraSessionManager: Syncable {
     private let dataManager: ParraDataManager
