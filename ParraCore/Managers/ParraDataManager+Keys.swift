@@ -22,10 +22,8 @@ public extension ParraDataManager {
     }
 
     enum Path {
-        internal static let networkCachesDirectory = Base.cachesURL.appendingPathComponent("ParraNetworkCache")
-
-        public static let parraDirectory = Base.applicationSupportDirectory.appendingPathComponent("parra",
-                                                                                              isDirectory: true)
+        internal static let networkCachesDirectory = Base.cachesURL.safeAppendDirectory("ParraNetworkCache")
+        public static let parraDirectory = Base.applicationSupportDirectory.safeAppendDirectory("parra")
     }
     
     enum Key {

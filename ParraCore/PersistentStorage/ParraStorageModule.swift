@@ -37,8 +37,9 @@ public actor ParraStorageModule<DataType: Codable> {
         case .memory:
             self.persistentStorage = nil
         case .fileSystem(folder: let folder, fileName: let fileName):
-            let baseUrl = ParraDataManager.Path.parraDirectory.appendingPathComponent(folder, isDirectory: true)
-            
+            let baseUrl = ParraDataManager.Path.parraDirectory
+                .safeAppendDirectory(folder)
+
             let fileSystemStorage = FileSystemStorage(
                 baseUrl: baseUrl,
                 jsonEncoder: .parraEncoder,

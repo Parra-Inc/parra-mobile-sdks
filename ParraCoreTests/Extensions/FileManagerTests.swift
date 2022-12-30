@@ -8,7 +8,7 @@
 import XCTest
 @testable import ParraCore
 
-let testPath = ParraDataManager.Base.applicationSupportDirectory.appendingPathComponent("testDir", isDirectory: true)
+let testPath = ParraDataManager.Base.applicationSupportDirectory.safeAppendDirectory("testDir")
 
 class FileManagerTests: XCTestCase {
     let fileManager = FileManager.default

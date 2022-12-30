@@ -123,6 +123,7 @@
 		00DA7FF3295DD2D500109081 /* ParraSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FF2295DD2D500109081 /* ParraSession.swift */; };
 		00DA7FF5295DD2EC00109081 /* ParraSessionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FF4295DD2EC00109081 /* ParraSessionEvent.swift */; };
 		00DA7FF7295DD2FD00109081 /* ParraSessionEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FF6295DD2FD00109081 /* ParraSessionEventType.swift */; };
+		00DA7FF9295F2A1600109081 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FF8295F2A1600109081 /* URL.swift */; };
 		00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFF8274C69F800DAF301 /* AppDelegate.swift */; };
 		00DED000274C69F800DAF301 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DECFFE274C69F800DAF301 /* Main.storyboard */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
@@ -327,6 +328,7 @@
 		00DA7FF2295DD2D500109081 /* ParraSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSession.swift; sourceTree = "<group>"; };
 		00DA7FF4295DD2EC00109081 /* ParraSessionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionEvent.swift; sourceTree = "<group>"; };
 		00DA7FF6295DD2FD00109081 /* ParraSessionEventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionEventType.swift; sourceTree = "<group>"; };
+		00DA7FF8295F2A1600109081 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		00DECFF5274C69F800DAF301 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00DECFF8274C69F800DAF301 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00DECFFF274C69F800DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 				001286FE277FE3180090CDB5 /* UIFont.swift */,
 				00E15A28293269100049C2C7 /* UIViewController.swift */,
 				00E15A2A29326FBE0049C2C7 /* UIWindow.swift */,
+				00DA7FF8295F2A1600109081 /* URL.swift */,
 				0018A60D28D77FF2008CC97E /* URLComponents.swift */,
 				00BDB2B028BD822700C16649 /* URLRequest.swift */,
 				00707D1A27FA0A07004E9567 /* URLSession.swift */,
@@ -1071,6 +1074,7 @@
 				00707D1B27FA0A07004E9567 /* URLSession.swift in Sources */,
 				001B7B2627DE3AC200DEEECD /* UIFont.swift in Sources */,
 				003C214727DE855A001CAE03 /* ItemStorage.swift in Sources */,
+				00DA7FF9295F2A1600109081 /* URL.swift in Sources */,
 				001B7B2027DE3ABC00DEEECD /* UserDefaultsStorage.swift in Sources */,
 				00DA7FF5295DD2EC00109081 /* ParraSessionEvent.swift in Sources */,
 				001B7B2727DE3AC200DEEECD /* JSONEncoder.swift in Sources */,
