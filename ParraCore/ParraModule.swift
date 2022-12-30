@@ -27,4 +27,8 @@ public extension ParraModule {
     static func persistentStorageFolder() -> String {
         return name.lowercased()
     }
+
+    static func eventPrefix() -> String {
+        return "parra:\(name.lowercased()):"
+    }
 }

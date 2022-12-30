@@ -13,6 +13,17 @@ public extension Parra {
     /// - Parameters:
     ///   - name: <#name description#>
     ///   - params: <#params description#>
+    static func logAnalyticsEvent<Key>(_ name: ParraSessionNamedEvent,
+                                       params: [Key: Any]) where Key: CustomStringConvertible {
+        Task {
+            await shared.sessionManager.logEvent(name.eventName, params: params)
+        }
+    }
+
+    /// <#Description#>
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - params: <#params description#>
     static func logAnalyticsEvent<Key>(_ name: String,
                                        params: [Key: Any]) where Key: CustomStringConvertible {
         Task {

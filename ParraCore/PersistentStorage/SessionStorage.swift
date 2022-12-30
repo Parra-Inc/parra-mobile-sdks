@@ -9,10 +9,6 @@
 import Foundation
 
 internal actor SessionStorage: ItemStorage {
-//    internal enum Key {
-//        static let currentUser = "current_user_credential"
-//    }
-
     typealias DataType = ParraSession
 
     let storageModule: ParraStorageModule<ParraSession>

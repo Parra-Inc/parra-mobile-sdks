@@ -8,6 +8,33 @@
 
 import Foundation
 
-internal enum ParraSessionEventType: String {
-    case impression, log
+public protocol ParraSessionNamedEvent {
+    var eventName: String { get }
+}
+
+public enum ParraSessionEventType: ParraSessionNamedEvent {
+    private enum Constant {
+        static let corePrefix = Parra.eventPrefix()
+    }
+
+    // Publicly accessible events
+    case impression(location: String, module: ParraModule.Type)
+
+    public enum _Internal: ParraSessionNamedEvent {
+        case log
+
+        public var eventName: String {
+            switch self {
+            case .log:
+                return "\(Constant.corePrefix)log"
+            }
+        }
+    }
+
+    public var eventName: String {
+        switch self {
+        case .impression(let location, let module):
+            return "\(module.eventPrefix())\(location):viewed"
+        }
+    }
 }

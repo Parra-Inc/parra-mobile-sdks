@@ -107,7 +107,7 @@ fileprivate func _parraLog(_ message: String,
         params[ParraLoggerConfig.Constant.logEventExtraKey] = extra
     }
 
-    Parra.logAnalyticsEvent(ParraSessionEventType.log, params: params)
+    Parra.logAnalyticsEvent(ParraSessionEventType._Internal.log, params: params)
 #endif
 }
 
