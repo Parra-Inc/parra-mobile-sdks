@@ -132,9 +132,20 @@ class ParraNetworkManagerTests: XCTestCase {
             }
         )
 
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
+            networkManager: networkManager
+        )
+
+        let syncManager = ParraSyncManager(
+            networkManager: networkManager,
+            sessionManager: sessionManager
+        )
+
         Parra.shared = Parra(
             dataManager: dataManager,
-            syncManager: ParraSyncManager(networkManager: networkManager),
+            syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
         
@@ -353,9 +364,20 @@ class ParraNetworkManagerTests: XCTestCase {
             }
         )
 
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
+            networkManager: networkManager
+        )
+
+        let syncManager = ParraSyncManager(
+            networkManager: networkManager,
+            sessionManager: sessionManager
+        )
+
         Parra.shared = Parra(
             dataManager: dataManager,
-            syncManager: ParraSyncManager(networkManager: networkManager),
+            syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
 

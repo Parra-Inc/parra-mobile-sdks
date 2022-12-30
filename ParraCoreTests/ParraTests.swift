@@ -24,19 +24,26 @@ class ParraCoreTests: XCTestCase {
     override func setUp() async throws {
         let dataManager = ParraDataManager()
         await dataManager.updateCredential(credential: ParraCredential(token: UUID().uuidString))
-        
+
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: URLSession.shared
         )
-        
-        let syncManager = ParraSyncManager(
+
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
             networkManager: networkManager
+        )
+
+        let syncManager = ParraSyncManager(
+            networkManager: networkManager,
+            sessionManager: sessionManager
         )
 
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
     }

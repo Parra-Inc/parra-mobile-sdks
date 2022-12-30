@@ -52,14 +52,21 @@ class ParraSyncManagerTests: XCTestCase {
             dataManager: dataManager,
             urlSession: MockURLSession(dataTaskResolver: resolver)
         )
+
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
+            networkManager: networkManager
+        )
         
         let syncManager = ParraSyncManager(
-            networkManager: networkManager
+            networkManager: networkManager,
+            sessionManager: sessionManager
         )
         
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
         
