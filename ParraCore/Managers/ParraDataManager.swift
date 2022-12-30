@@ -25,8 +25,7 @@ public class ParraDataManager {
             dataStorageMedium: .fileSystem(
                 folder: folder,
                 fileName: ParraDataManager.Key.userSessionsKey
-            ),
-            storeItemsSeparately: true
+            )
         )
         
         self.credentialStorage = CredentialStorage(storageModule: credentialStorageModule)
