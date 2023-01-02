@@ -15,45 +15,6 @@ internal let kEmptyJsonObjectData = "{}".data(using: .utf8)!
 internal struct EmptyRequestObject: Codable {}
 internal struct EmptyResponseObject: Codable {}
 
-fileprivate enum ParraHeader {
-    static let parraHeaderPrefix = "parra"
-    
-    case debug
-    case moduleVersion(module: String)
-    case os
-    case osVersion
-    case device
-    case appLocale
-    case deviceLocale
-    case timeZoneAbbreviation
-    case timeZoneOffset
-    
-    var headerName: String {
-        switch self {
-        case .debug:
-            return "debug"
-        case .moduleVersion(let module):
-            return "\(module.lowercased())-version"
-        case .os:
-            return "os"
-        case .osVersion:
-            return "os-version"
-        case .device:
-            return "device"
-        case .appLocale:
-            return "app-locale"
-        case .deviceLocale:
-            return "device-locale"
-        case .timeZoneAbbreviation:
-            return "timezone-abbreviation"
-        case .timeZoneOffset:
-            return "timezone-offset"
-        }
-    }
-    
-    var prefixedHeaderName: String { "\(ParraHeader.parraHeaderPrefix)-\(headerName)" }
-}
-
 internal protocol URLSessionType {
     func dataForRequest(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
     
