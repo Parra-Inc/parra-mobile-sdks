@@ -90,6 +90,17 @@ internal class ParraCardPopupViewController: UIViewController, ParraCardModal {
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        Parra.logAnalyticsEvent(ParraSessionEventType.impression(
+            location: "modal",
+            module: ParraFeedback.self
+        ), params: [
+            "type": "popup"
+        ])
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 

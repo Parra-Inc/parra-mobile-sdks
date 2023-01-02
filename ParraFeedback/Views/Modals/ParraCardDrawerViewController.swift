@@ -45,6 +45,17 @@ internal class ParraCardDrawerViewController: UIViewController, ParraCardModal {
         ])
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        Parra.logAnalyticsEvent(ParraSessionEventType.impression(
+            location: "modal",
+            module: ParraFeedback.self
+        ), params: [
+            "type": "drawer"
+        ])
+    }
+
     @objc private func dismissPopup() {
         dismiss(animated: true)
     }
