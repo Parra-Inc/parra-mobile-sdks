@@ -191,13 +191,13 @@ internal class ParraNetworkManager: NetworkManagerType {
                 credential: newCredential,
                 shouldReauthenticate: false
             )
-        case (400...499, _):
-            throw ParraError.networkError(
-                "Client error \(response.statusCode): \(response.debugDescription)"
+                config: config.withoutReauthenticating()
             )
-        case (500...599, _):
+        case (400...599, _):
             throw ParraError.networkError(
-                "Server error \(response.statusCode): \(response.debugDescription)"
+                status: response.statusCode,
+                message: response.debugDescription,
+                request: request
             )
         default:
             return data
@@ -228,17 +228,11 @@ internal class ParraNetworkManager: NetworkManagerType {
             let credential = try jsonDecoder.decode(ParraCredential.self, from: data)
 
             return credential.token
-        case 400...499:
-            throw ParraError.networkError(
-                "Client error \(response.statusCode): \(response.debugDescription)"
-            )
-        case 500...599:
-            throw ParraError.networkError(
-                "Server error \(response.statusCode): \(response.debugDescription)"
-            )
         default:
             throw ParraError.networkError(
-                "Unexpected error \(response.statusCode): \(response.debugDescription)"
+                status: response.statusCode,
+                message: response.debugDescription,
+                request: request
             )
         }
     }

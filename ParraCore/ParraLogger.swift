@@ -157,6 +157,23 @@ public func parraLogE(_ message: @autoclosure () -> String,
     _parraLog(message(), extra: extra, level: .error, file: file, fileID: fileID, function: function, line: line)
 }
 
+public func parraLogE(_ message: @autoclosure () -> ParraError,
+                      file: String = #file,
+                      fileID: String = #fileID,
+                      function: String = #function,
+                      line: Int = #line) {
+    _parraLog(message().errorDescription, extra: [:], level: .error, file: file, fileID: fileID, function: function, line: line)
+}
+
+public func parraLogE(_ message: @autoclosure () -> Error,
+                      _ extra: [String: AnyHashable] = [:],
+                      file: String = #file,
+                      fileID: String = #fileID,
+                      function: String = #function,
+                      line: Int = #line) {
+    _parraLog(message().localizedDescription, extra: extra, level: .error, file: file, fileID: fileID, function: function, line: line)
+}
+
 private func createFormattedLocation(fileID: String, function: String, line: Int) -> String {
     let file: String
     if let extIndex = fileID.lastIndex(of: ".") {

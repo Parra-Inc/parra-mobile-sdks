@@ -36,7 +36,7 @@ public class ParraFeedback: ParraModule {
                 }
             } catch let error {
                 DispatchQueue.main.async {
-                    completion(.failure(ParraError.dataLoadingError(error.localizedDescription)))
+                    completion(.failure(ParraError.custom("Error fetching Parra Feedback cards", error)))
                 }
             }
         }
@@ -136,7 +136,7 @@ public class ParraFeedback: ParraModule {
                         try await self.dataManager.clearCompletedCardData(completedCards: chunk)
                         await self.dataManager.removeCardsForCompletedCards(completedCards: chunk)
                     } catch let error {
-                        parraLogE("Error uploading card data: \(ParraError.networkError(error.localizedDescription))")
+                        parraLogE(ParraError.custom("Error uploading card data", error))
                     }
                 }
             }
