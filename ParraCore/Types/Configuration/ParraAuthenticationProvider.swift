@@ -13,7 +13,7 @@ public typealias ParraAuthenticationProviderFunction = () async throws -> String
 public enum ParraAuthenticationProviderType {
     /// The standard way of authenticating with Parra. You provide a provider function that interacts with your API to return
     /// a signed access token for your user.
-    case `default`(provider: ParraAuthenticationProviderFunction)
+    case `default`(tenantId: String, authProvider: ParraAuthenticationProviderFunction)
 
     /// Uses public API key authentication to authenticate with the Parra API. A tenant ID and API key ID are both provided up front
     /// and a user provider function is used to allow the Parra SDK to request information about the current user when authentication is needed.

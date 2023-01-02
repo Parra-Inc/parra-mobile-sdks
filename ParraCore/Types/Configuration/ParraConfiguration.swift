@@ -10,8 +10,20 @@ import Foundation
 
 public struct ParraConfiguration {
     public let loggerConfig: ParraLoggerConfig
+    public internal(set) var tenantId: String?
+
+    // Public version of this initializer should be kept up to date to include
+    // all fields except for tenantId.
+    public init(loggerConfig: ParraLoggerConfig) {
+        self.loggerConfig = loggerConfig
+        self.tenantId = nil
+    }
 
     public static let `default` = ParraConfiguration(
         loggerConfig: .default
     )
+
+    internal mutating func setTenantId(_ tenantId: String?) {
+        self.tenantId = tenantId
+    }
 }

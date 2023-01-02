@@ -14,10 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let myAppAccessToken = "9B5CDA6B-7538-4A2A-9611-7308D56DFFA1"
+        let myAppTenantId = "f2d60da7-8aea-4882-9ee7-307e0ff18728"
 
         Parra.initialize(
             config: .default,
-            authProvider: .default {
+            authProvider: .default(tenantId: myAppTenantId) {
                 var request = URLRequest(
                     // Replace this with your Parra access token generation endpoint
                     url: URL(string: "http://localhost:8080/v1/parra/auth/token")!

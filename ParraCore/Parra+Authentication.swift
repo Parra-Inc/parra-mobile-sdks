@@ -26,12 +26,13 @@ public extension Parra {
             return
         }
 
-        shared.isInitialized = true
-        Parra.config = config
+        var newConfig = config
 
         switch authProvider {
-        case .default(let provider):
+        case .default(let tenantId, let provider):
             shared.networkManager.updateAuthenticationProvider(provider)
+
+            newConfig.setTenantId(tenantId)
         case .publicKey(let tenantId, let apiKeyId, let userIdProvider):
             shared.networkManager.updateAuthenticationProvider { [weak shared] in
                 guard let networkManager = shared?.networkManager else {
@@ -46,8 +47,12 @@ public extension Parra {
                     userId: userId
                 )
             }
+
+            newConfig.setTenantId(tenantId)
         }
 
+        Parra.config = newConfig
+        shared.isInitialized = true
 
         Task {
             do {
