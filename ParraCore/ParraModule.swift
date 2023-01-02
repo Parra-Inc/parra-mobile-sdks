@@ -29,6 +29,6 @@ public extension ParraModule {
     }
 
     static func eventPrefix() -> String {
-        return "parra:\(name.lowercased()):"
+        return "parra:\(name.lowercased())"
     }
 }

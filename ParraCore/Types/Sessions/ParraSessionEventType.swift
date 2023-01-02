@@ -26,7 +26,7 @@ public enum ParraSessionEventType: ParraSessionNamedEvent {
         public var eventName: String {
             switch self {
             case .log:
-                return "\(Constant.corePrefix)log"
+                return "\(Constant.corePrefix):log"
             }
         }
     }
@@ -34,7 +34,7 @@ public enum ParraSessionEventType: ParraSessionNamedEvent {
     public var eventName: String {
         switch self {
         case .impression(let location, let module):
-            return "\(module.eventPrefix())\(location):viewed"
+            return "\(module.eventPrefix()):\(location):viewed"
         }
     }
 }
