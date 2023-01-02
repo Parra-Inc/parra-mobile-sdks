@@ -9,22 +9,18 @@
 import UIKit
 import ParraCore
 
-internal class ParraCardPopupViewController: UIViewController, ParraCardModal {
-    private let cardView: ParraCardView
-    internal let transitionStyle: ParraCardModalTransitionStyle
+internal class ParraCardPopupViewController: ParraCardModalViewController, ParraCardModal {
 
     required init(cards: [ParraCardItem],
                   config: ParraCardViewConfig,
                   transitionStyle: ParraCardModalTransitionStyle) {
 
-        self.transitionStyle = transitionStyle
-
-        cardView = ParraCardView(config: config)
-
-        super.init(nibName: nil, bundle: nil)
-
-        cardView.cardItems = cards
-        cardView.delegate = self
+        super.init(
+            cards: cards,
+            config: config,
+            transitionStyle: transitionStyle,
+            modalType: .popup
+        )
 
         modalPresentationStyle = .overCurrentContext
         modalTransitionStyle = .crossDissolve
@@ -40,7 +36,7 @@ internal class ParraCardPopupViewController: UIViewController, ParraCardModal {
         let dismissButton = UIButton.systemButton(
             with: UIImage(systemName: "xmark")!,
             target: self,
-            action: #selector(dismissPopup)
+            action: #selector(dismissModal)
         )
 
         dismissButton.tintColor = cardView.config.tintColor
@@ -59,7 +55,7 @@ internal class ParraCardPopupViewController: UIViewController, ParraCardModal {
 
         let backgroundTap = UITapGestureRecognizer(
             target: self,
-            action: #selector(dismissPopup)
+            action: #selector(dismissModal)
         )
 
         backgroundTap.delegate = self
@@ -69,7 +65,7 @@ internal class ParraCardPopupViewController: UIViewController, ParraCardModal {
         if transitionStyle == .slide {
             let backgroundSwipe = UISwipeGestureRecognizer(
                 target: self,
-                action: #selector(dismissPopup)
+                action: #selector(dismissModal)
             )
 
             backgroundSwipe.direction = .down
@@ -90,17 +86,6 @@ internal class ParraCardPopupViewController: UIViewController, ParraCardModal {
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        Parra.logAnalyticsEvent(ParraSessionEventType.impression(
-            location: "modal",
-            module: ParraFeedback.self
-        ), params: [
-            "type": "popup"
-        ])
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
@@ -113,21 +98,11 @@ internal class ParraCardPopupViewController: UIViewController, ParraCardModal {
         }
     }
 
-    @objc private func dismissPopup() {
-        dismiss(animated: true)
-    }
-
     private func cardViewDismissedTransform() -> CGAffineTransform {
         return .identity.translatedBy(
             x: 0.0,
             y: view.bounds.height / 2 + cardView.bounds.height / 2
         )
-    }
-}
-
-extension ParraCardPopupViewController: ParraCardViewDelegate {
-    func parraCardViewDidRequestDismissal(_ parraCardView: ParraCardView) {
-        dismissPopup()
     }
 }
 

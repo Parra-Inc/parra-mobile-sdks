@@ -56,7 +56,7 @@ public extension ParraFeedback {
         )
     }
 
-    private static func presentModal(modal: UIViewController & ParraCardModal,
+    private static func presentModal(modal: ParraCardModalViewController & ParraCardModal,
                                      fromViewController: UIViewController?,
                                      config: ParraCardViewConfig) {
         guard let vc = fromViewController ?? UIViewController.topMostViewController() else {
