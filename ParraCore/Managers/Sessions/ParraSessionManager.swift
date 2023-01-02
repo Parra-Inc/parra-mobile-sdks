@@ -11,16 +11,6 @@ import Foundation
 internal actor ParraSessionManager: Syncable {
     private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager
-
-    private let jsonEncoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-
-        encoder.dateEncodingStrategy = .iso8601
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-
-        return encoder
-    }()
-
     private var currentSession = ParraSession()
     private var userProperties: [String: AnyCodable] = [:]
 

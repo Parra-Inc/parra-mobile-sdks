@@ -16,4 +16,20 @@ internal extension URL {
             return appendingPathComponent(dir, isDirectory: true)
         }
     }
+
+    func safeAppendPathComponent(_ pathComponent: String) -> URL {
+        if #available(iOS 16.0, *) {
+            return appending(component: pathComponent, directoryHint: .notDirectory)
+        } else {
+            return appendingPathComponent(pathComponent, isDirectory: false)
+        }
+    }
+
+    func safeNonEncodedPath() -> String {
+        if #available(iOS 16.0, *) {
+            return path(percentEncoded: false)
+        } else {
+            return path
+        }
+    }
 }

@@ -17,14 +17,16 @@ public class ParraDataManager {
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
             dataStorageMedium: .fileSystem(
                 folder: folder,
-                fileName: ParraDataManager.Key.userCredentialsKey
+                fileName: ParraDataManager.Key.userCredentialsKey,
+                storeItemsSeparately: false
             )
         )
 
         let sessionStorageModule = ParraStorageModule<ParraSession>(
             dataStorageMedium: .fileSystem(
-                folder: folder,
-                fileName: ParraDataManager.Key.userSessionsKey
+                folder: folder.appending("/sessions"),
+                fileName: ParraDataManager.Key.userSessionsKey,
+                storeItemsSeparately: true
             )
         )
         

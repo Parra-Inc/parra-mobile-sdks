@@ -9,6 +9,6 @@ import Foundation
 
 public enum DataStorageMedium {
     case memory
-    case fileSystem(folder: String, fileName: String)
+    case fileSystem(folder: String, fileName: String, storeItemsSeparately: Bool)
     case userDefaults(key: String)
 }

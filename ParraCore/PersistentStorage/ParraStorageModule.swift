@@ -31,8 +31,8 @@ public actor ParraStorageModule<DataType: Codable> {
         switch dataStorageMedium {
         case .memory, .userDefaults(_):
             return false
-        case .fileSystem(_, _):
-            return true
+        case .fileSystem(_, _, let storeItemsSeparately):
+            return storeItemsSeparately
         }
     }
 
@@ -42,7 +42,7 @@ public actor ParraStorageModule<DataType: Codable> {
         switch dataStorageMedium {
         case .memory:
             self.persistentStorage = nil
-        case .fileSystem(folder: let folder, fileName: let fileName):
+        case .fileSystem(folder: let folder, fileName: let fileName, _):
             let baseUrl = ParraDataManager.Path.parraDirectory
                 .safeAppendDirectory(folder)
 
@@ -70,28 +70,21 @@ public actor ParraStorageModule<DataType: Codable> {
         defer {
             isLoaded = true
         }
-
-        // If files are stored separately the cache stays empty at first since we don't know
-        // the names of the files that will be stored in it. The cache will be lazily populated
-        // as files are accessed.
-        if storeItemsSeparately {
-            storageCache = [:]
-
-            return
-        }
         
         // Persistent storage is missing when the underlying store is a memory store.
         guard let persistentStorage else {
             return
         }
-        
-        guard let existingData: [String: DataType] = try? await persistentStorage.medium.read(
-            name: persistentStorage.key
-        ) else {
-            return
+
+        if let fileSystem = persistentStorage.medium as? FileSystemStorage, storeItemsSeparately {
+            storageCache = await fileSystem.readAllInDirectory()
+        } else {
+            if let existingData: [String: DataType] = try? await persistentStorage.medium.read(
+                name: persistentStorage.key
+            ) {
+                storageCache = existingData
+            }
         }
-        
-        storageCache = existingData
     }
     
     public func currentData() async -> [String: DataType] {

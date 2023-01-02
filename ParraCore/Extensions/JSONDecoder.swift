@@ -10,8 +10,7 @@ import Foundation
 private let parraJsonDecoder: JSONDecoder = {
     let decoder = JSONDecoder()
     
-    // Apparently this is problematic when mixed with custom decoders
-    //    decoder.keyDecodingStrategy = .convertFromSnakeCase
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
     
     return decoder
 }()
