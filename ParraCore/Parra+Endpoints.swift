@@ -20,14 +20,19 @@ public extension Parra {
                 queryItems["app_area_id"] = appAreaName
             }
 
-            let cardsResponse: CardsResponse = try await Parra.shared.networkManager.performAuthenticatedRequest(
+            let response: AuthenticatedRequestResult<CardsResponse> = await Parra.shared.networkManager.performAuthenticatedRequest(
                 route: "cards",
                 method: .get,
                 queryItems: queryItems,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
             )
 
-            return cardsResponse.items
+            switch response.result {
+            case .success(let cardsResponse):
+                return cardsResponse.items
+            case .failure(let error):
+                throw error
+            }
         }
 
         /// Submits the provided list of CompleteCards as answers to the cards linked to them.
@@ -35,12 +40,12 @@ public extension Parra {
             if cards.isEmpty {
                 return
             }
-            
+
             let serializableCards = cards.map { $0.serializedForRequestBody() }
 
             let route = "bulk/questions/answer"
 
-            let _: EmptyResponseObject = try await Parra.shared.networkManager.performAuthenticatedRequest(
+            let _: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
                 route: route,
                 method: .post,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
