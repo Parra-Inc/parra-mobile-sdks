@@ -191,7 +191,7 @@ extension ParraCardView {
                 location: "question",
                 module: ParraFeedback.self
             ), params: [
-                "card_id": cardItem.id
+                "question_id": cardItem.id
             ])
         }
     }
