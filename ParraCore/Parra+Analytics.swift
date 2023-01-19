@@ -9,10 +9,7 @@
 import Foundation
 
 public extension Parra {
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - params: <#params description#>
+    /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate campaigns configured in the Parra dashboard.
     static func logAnalyticsEvent<Key>(_ name: ParraSessionNamedEvent,
                                        params: [Key: Any]) where Key: CustomStringConvertible {
         Task {
@@ -20,10 +17,7 @@ public extension Parra {
         }
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - params: <#params description#>
+    /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate campaigns configured in the Parra dashboard.
     static func logAnalyticsEvent<Key>(_ name: String,
                                        params: [Key: Any]) where Key: CustomStringConvertible {
         Task {
@@ -31,6 +25,7 @@ public extension Parra {
         }
     }
 
+    /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate campaigns configured in the Parra dashboard.
     static func logAnalyticsEvent<Name, Key>(_ name: Name,
                                              params: [Key: Any]) where Key: CustomStringConvertible, Name: RawRepresentable, Name.RawValue == String {
         Task {
@@ -38,10 +33,8 @@ public extension Parra {
         }
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - value: <#value description#>
-    ///   - key: <#key description#>
+    /// Attaches a property to the current user, as defined by the Parra authentication handler. User properties can be used to activate campaigns
+    /// configured in the Parra dashboard.
     static func setUserProperty<Key>(_ value: Any,
                                      forKey key: Key) where Key: CustomStringConvertible {
         Task {
