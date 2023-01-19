@@ -198,7 +198,16 @@ internal class ParraNetworkManager: NetworkManagerType {
                         .withoutReauthenticating()
                         .withAttribute(.requiredReauthentication)
                 )
-            case (400...599, _):
+            case (400...499, _):
+                return (
+                    .failure(ParraError.networkError(
+                        status: response.statusCode,
+                        message: response.debugDescription,
+                        request: request
+                    )),
+                    config.attributes
+                )
+            case (500...599, _):
                 if config.shouldRetry {
                     let nextConfig = config
                         .afterRetrying()

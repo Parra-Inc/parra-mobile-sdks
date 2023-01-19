@@ -9,6 +9,7 @@ import Foundation
 
 public enum ParraError: LocalizedError {
     case custom(String, Error?)
+    case notInitialized
     case missingAuthentication
     case authenticationFailed(String)
     case networkError(status: Int, message: String, request: URLRequest)
@@ -23,6 +24,8 @@ public enum ParraError: LocalizedError {
             }
 
             return message
+        case .notInitialized:
+            return "Parra has not been initialized. Call Parra.initialize() in applicationDidFinishLaunchingWithOptions"
         case .missingAuthentication:
             return "An authentication provider has not been set. Add Parra.initialize() to your applicationDidFinishLaunchingWithOptions method."
         case .authenticationFailed(let error):

@@ -158,15 +158,19 @@ public actor ParraStorageModule<DataType: Codable> {
             return
         }
 
-        if storeItemsSeparately {
-            try? await persistentStorage.medium.delete(
-                name: name
-            )
-        } else {
-            try? await persistentStorage.medium.write(
-                name: persistentStorage.key,
-                value: storageCache
-            )
+        do {
+            if storeItemsSeparately {
+                try await persistentStorage.medium.delete(
+                    name: name
+                )
+            } else {
+                try await persistentStorage.medium.write(
+                    name: persistentStorage.key,
+                    value: storageCache
+                )
+            }
+        } catch let error {
+            parraLogE("ParraStorageModule error deleting file", error)
         }
     }
     

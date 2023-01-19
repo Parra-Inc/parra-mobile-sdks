@@ -23,7 +23,7 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     }
     
     internal func read<T>(name: String) async throws -> T? where T: Codable {
-        let file = baseUrl.appendingPathComponent(name)
+        let file = baseUrl.safeAppendPathComponent(name)
         guard let data = try? Data(contentsOf: file) else {
             return nil
         }
@@ -79,14 +79,14 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     }
     
     internal func write<T>(name: String, value: T) async throws where T: Codable {
-        let file = baseUrl.appendingPathComponent(name)
+        let file = baseUrl.safeAppendPathComponent(name)
         let data = try jsonEncoder.encode(value)
         
         try data.write(to: file, options: .atomic)
     }
     
     internal func delete(name: String) async throws {
-        let file = baseUrl.appendingPathComponent(name)
+        let file = baseUrl.safeAppendPathComponent(name)
         
         try fileManager.removeItem(at: file)
     }

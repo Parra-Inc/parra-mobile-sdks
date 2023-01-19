@@ -22,11 +22,33 @@ internal actor ParraSessionManager: Syncable {
     }
 
     func hasDataToSync() async -> Bool {
-        return currentSession.hasNewData
+        let persistedSessionCount = await dataManager.sessionStorage.numberOfTrackedSessions()
+
+        // Sync if there are any sessions that aren't still in progress, or if the session
+        // in progress has new events to report.
+        return currentSession.hasNewData || persistedSessionCount > 0
     }
 
     func triggerSync() async {
+        // Reset and update the cache for the current session so the most up to take data is uploaded.
         currentSession.resetSentData()
+        await dataManager.sessionStorage.update(session: currentSession)
+
+        let sessions = await dataManager.sessionStorage.allTrackedSessions()
+
+        do {
+            let completedSessionIds = try await Parra.Sessions.bulkSubmitSessions(
+                sessions: sessions
+            )
+
+            // Remove all of the successfully uploaded sessions except for the
+            // session that is in progress.
+            await dataManager.sessionStorage.deleteSessions(
+                with: completedSessionIds.subtracting([currentSession.sessionId])
+            )
+        } catch let error {
+            parraLogE("Syncing sessions failed", error)
+        }
     }
 
     internal func logEvent<Key>(_ name: String,
@@ -38,7 +60,6 @@ internal actor ParraSessionManager: Syncable {
         })
 
         let newEvent = ParraSessionEvent(
-            eventId: UUID().uuidString,
             name: name,
             createdAt: Date(),
             metadata: metadata

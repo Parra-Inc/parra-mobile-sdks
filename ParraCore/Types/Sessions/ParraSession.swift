@@ -8,6 +8,22 @@
 
 import Foundation
 
+public struct ParraSessionUpload: Encodable {
+    let session: ParraSession
+
+    public enum CodingKeys: String, CodingKey {
+        case events
+        case userProperties
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(self.session.events, forKey: .events)
+        try container.encode(self.session.userProperties, forKey: .userProperties)
+    }
+}
+
 public struct ParraSession: Codable {
     public let sessionId: String
     public let createdAt: Date
@@ -25,7 +41,7 @@ public struct ParraSession: Codable {
         self.updatedAt = now
         self.events = []
         self.userProperties = [:]
-        self.hasNewData = true
+        self.hasNewData = false
     }
 
     internal mutating func addEvent(_ event: ParraSessionEvent) {

@@ -19,16 +19,33 @@ internal actor SessionStorage: ItemStorage {
 
     func update(session: ParraSession) async {
         try? await storageModule.write(
-            name: String(session.createdAt.timeIntervalSince1970),
+            name: session.sessionId,
             value: session
         )
     }
 
-    func start(session: ParraSession) {
-//        storageModule.write(name: <#T##String#>, value: <#T##ParraSession?#>)
+    func deleteSessions(with sessionIds: Set<String>) async {
+        for sessionId in sessionIds {
+            await storageModule.delete(name: sessionId)
+        }
     }
 
-    func write(event: ParraSessionEvent, to session: ParraSession) {
+    func allTrackedSessions() async -> [ParraSession] {
+        let sessions = await storageModule.currentData()
 
+        return sessions.sorted { (first, second) in
+            let firstKey = Float(first.key) ?? 0
+            let secondKey = Float(second.key) ?? 0
+
+            return firstKey < secondKey
+        }.map { (key: String, value: ParraSession) in
+            return value
+        }
+    }
+
+    func numberOfTrackedSessions() async -> Int {
+        let sessions = await storageModule.currentData()
+
+        return sessions.count
     }
 }
