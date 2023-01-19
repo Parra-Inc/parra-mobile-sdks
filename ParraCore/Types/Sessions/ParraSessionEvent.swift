@@ -9,8 +9,6 @@
 import Foundation
 
 public struct ParraSessionEvent: Codable {
-    public let eventId: String
-
     /// The type of the event. Event properties should be consistent for each event name
     public let name: String
 
