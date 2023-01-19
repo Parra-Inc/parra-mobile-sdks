@@ -10,7 +10,7 @@ import Foundation
 public struct ParraLoggerConfig {
     public var printTimestamps = true
     public var printLevel = true
-    public var printThread = true
+    public var printThread = false
     public var printCallsite = true
     public var printPrefix: String? = "PARRA"
 
@@ -172,6 +172,16 @@ public func parraLogE(_ message: @autoclosure () -> Error,
                       function: String = #function,
                       line: Int = #line) {
     _parraLog(message().localizedDescription, extra: extra, level: .error, file: file, fileID: fileID, function: function, line: line)
+}
+
+public func parraLogE(_ message: @autoclosure () -> String,
+                      _ error: Error,
+                      _ extra: [String: AnyHashable] = [:],
+                      file: String = #file,
+                      fileID: String = #fileID,
+                      function: String = #function,
+                      line: Int = #line) {
+    _parraLog("\(message()) error: \(error.localizedDescription)", extra: extra, level: .error, file: file, fileID: fileID, function: function, line: line)
 }
 
 private func createFormattedLocation(fileID: String, function: String, line: Int) -> String {
