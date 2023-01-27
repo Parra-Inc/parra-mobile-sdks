@@ -14,6 +14,8 @@ public struct ParraSessionUpload: Encodable {
     public enum CodingKeys: String, CodingKey {
         case events
         case userProperties
+        case createdAt
+        case endedAt
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -21,6 +23,8 @@ public struct ParraSessionUpload: Encodable {
 
         try container.encode(self.session.events, forKey: .events)
         try container.encode(self.session.userProperties, forKey: .userProperties)
+        try container.encode(self.session.createdAt, forKey: .createdAt)
+        try container.encode(self.session.endedAt, forKey: .endedAt)
     }
 }
 
@@ -28,6 +32,7 @@ public struct ParraSession: Codable {
     public let sessionId: String
     public let createdAt: Date
     public private(set) var updatedAt: Date
+    public private(set) var endedAt: Date?
 
     public private(set) var events: [ParraSessionEvent]
     public private(set) var userProperties: [String: AnyCodable]
@@ -39,6 +44,7 @@ public struct ParraSession: Codable {
         self.sessionId = UUID().uuidString
         self.createdAt = now
         self.updatedAt = now
+        self.endedAt = nil
         self.events = []
         self.userProperties = [:]
         self.hasNewData = false
@@ -61,5 +67,10 @@ public struct ParraSession: Codable {
     internal mutating func resetSentData() {
         hasNewData = false
         updatedAt = Date()
+    }
+
+    internal mutating func end() {
+        self.hasNewData = true
+        self.endedAt = Date()
     }
 }
