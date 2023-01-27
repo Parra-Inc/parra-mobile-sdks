@@ -14,7 +14,7 @@ internal enum ParraSyncMode: String {
 }
 
 /// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
-internal class ParraSyncManager {
+internal actor ParraSyncManager {
     internal enum Constant {
         static let eventualSyncDelay: TimeInterval = 30.0
     }
@@ -36,8 +36,6 @@ internal class ParraSyncManager {
                   sessionManager: ParraSessionManager) {
         self.networkManager = networkManager
         self.sessionManager = sessionManager
-
-        startSyncTimer()
     }
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
@@ -153,16 +151,21 @@ internal class ParraSyncManager {
         return shouldSync
     }
     
-    private func startSyncTimer() {
+    internal func startSyncTimer() {
+        parraLogV("Starting sync timer")
+
         stopSyncTimer()
-        
+
         syncTimer = Timer.scheduledTimer(
-            timeInterval: Constant.eventualSyncDelay,
-            target: self,
-            selector: #selector(syncTimerDidTick),
-            userInfo: nil,
+            withTimeInterval: Constant.eventualSyncDelay,
             repeats: true
-        )
+        ) { timer in
+            parraLogV("Sync timer fired")
+
+            Task {
+                await self.enqueueSync(with: .immediate)
+            }
+        }
     }
     
     private func stopSyncTimer() {
@@ -172,13 +175,5 @@ internal class ParraSyncManager {
         
         syncTimer.invalidate()
         self.syncTimer = nil
-    }
-    
-    @objc private func syncTimerDidTick() {
-        parraLogV("Sync timer fired")
-
-        Task {
-            await self.enqueueSync(with: .immediate)
-        }
     }
 }
