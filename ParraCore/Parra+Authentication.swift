@@ -61,5 +61,7 @@ public extension Parra {
                 parraLogE("Refresh authentication on user change: \(error)")
             }
         }
+
+        parraLogI("Parra SDK Initialized")
     }
 }

@@ -24,6 +24,10 @@ public struct ParraLoggerConfig {
         static let logEventThreadKey = "\(logEventPrefix)thread"
         static let logEventExtraKey = "\(logEventPrefix)extra"
     }
+
+    enum Environment {
+        static let verboseLoggingEnabledKey = "PARRA_VERBOSE_LOGGING_ENABLED"
+    }
 }
 
 public enum ParraLogLevel: Int, Comparable {
@@ -32,13 +36,16 @@ public enum ParraLogLevel: Int, Comparable {
     }
     
     case verbose = 1, info = 2, warn = 3, error = 4
-    
+
     var isAllowed: Bool {
-#if DEBUG
-        return true
-#else
+        if let verbose = ProcessInfo.processInfo.environment[ParraLoggerConfig.Environment.verboseLoggingEnabledKey],
+            let verboseNum = NumberFormatter().number(from: verbose),
+            verboseNum.boolValue{
+
+            return true
+        }
+
         return self > .verbose
-#endif
     }
     
     var outputName: String {
@@ -136,7 +143,7 @@ public func parraLogI(_ message: @autoclosure () -> String,
                       fileID: String = #fileID,
                       function: String = #function,
                       line: Int = #line) {
-    _parraLog(message(), extra: extra, level: .verbose, file: file, fileID: fileID, function: function, line: line)
+    _parraLog(message(), extra: extra, level: .info, file: file, fileID: fileID, function: function, line: line)
 }
 
 public func parraLogW(_ message: @autoclosure () -> String,
