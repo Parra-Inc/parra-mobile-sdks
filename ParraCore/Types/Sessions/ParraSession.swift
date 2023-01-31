@@ -14,7 +14,7 @@ public struct ParraSessionUpload: Encodable {
     public enum CodingKeys: String, CodingKey {
         case events
         case userProperties
-        case createdAt
+        case startedAt
         case endedAt
     }
 
@@ -23,7 +23,7 @@ public struct ParraSessionUpload: Encodable {
 
         try container.encode(self.session.events, forKey: .events)
         try container.encode(self.session.userProperties, forKey: .userProperties)
-        try container.encode(self.session.createdAt, forKey: .createdAt)
+        try container.encode(self.session.createdAt, forKey: .startedAt)
         try container.encode(self.session.endedAt, forKey: .endedAt)
     }
 }
