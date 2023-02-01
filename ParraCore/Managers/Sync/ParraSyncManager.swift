@@ -30,7 +30,7 @@ internal actor ParraSyncManager {
     private let networkManager: ParraNetworkManager
     private let sessionManager: ParraSessionManager
 
-    private var syncTimer: Timer?
+    @MainActor private var syncTimer: Timer?
     
     internal init(networkManager: ParraNetworkManager,
                   sessionManager: ParraSessionManager) {
@@ -151,7 +151,7 @@ internal actor ParraSyncManager {
         return shouldSync
     }
     
-    internal func startSyncTimer() {
+    @MainActor internal func startSyncTimer() {
         parraLogV("Starting sync timer")
 
         stopSyncTimer()
@@ -168,7 +168,7 @@ internal actor ParraSyncManager {
         }
     }
     
-    private func stopSyncTimer() {
+    @MainActor private func stopSyncTimer() {
         guard let syncTimer = syncTimer else {
             return
         }

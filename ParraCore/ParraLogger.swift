@@ -40,7 +40,7 @@ public enum ParraLogLevel: Int, Comparable {
     var isAllowed: Bool {
         if let verbose = ProcessInfo.processInfo.environment[ParraLoggerConfig.Environment.verboseLoggingEnabledKey],
             let verboseNum = NumberFormatter().number(from: verbose),
-            verboseNum.boolValue{
+            verboseNum.boolValue {
 
             return true
         }
