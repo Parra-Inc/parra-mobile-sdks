@@ -22,7 +22,7 @@ class ParraStorageModuleTests: XCTestCase {
         
         storageModules = [
             .init(dataStorageMedium: .memory),
-            .init(dataStorageMedium: .fileSystem(folder: folder, fileName: file)),
+            .init(dataStorageMedium: .fileSystem(folder: folder, fileName: file, storeItemsSeparately: true)),
             .init(dataStorageMedium: .userDefaults(key: file)),
         ]
     }
