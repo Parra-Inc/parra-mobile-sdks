@@ -199,6 +199,12 @@ internal class ParraNetworkManager: NetworkManagerType {
                         .withAttribute(.requiredReauthentication)
                 )
             case (400...499, _):
+#if DEBUG
+                if let dataString = String(data: data, encoding: .utf8) {
+                    parraLogV("Client error received response: \(dataString)")
+                }
+#endif
+
                 return (
                     .failure(ParraError.networkError(
                         status: response.statusCode,
