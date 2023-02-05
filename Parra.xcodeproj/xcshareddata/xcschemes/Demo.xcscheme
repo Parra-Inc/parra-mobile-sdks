@@ -83,7 +83,7 @@
          <EnvironmentVariable
             key = "PARRA_VERBOSE_LOGGING_ENABLED"
             value = "1"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
