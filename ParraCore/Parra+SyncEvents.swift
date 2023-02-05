@@ -19,10 +19,6 @@ internal extension Parra {
                                        name: UIApplication.didBecomeActiveNotification,
                                        object: nil)
 
-        notificationCenter.addObserver(self, selector: #selector(self.applicationDidBecomeActive),
-                                       name: UIApplication.didBecomeActiveNotification,
-                                       object: nil)
-
         notificationCenter.addObserver(self, selector: #selector(self.applicationWillResignActive),
                                        name: UIApplication.willResignActiveNotification,
                                        object: nil)
