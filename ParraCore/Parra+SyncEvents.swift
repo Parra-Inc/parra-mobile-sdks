@@ -45,6 +45,12 @@ internal extension Parra {
 
     @MainActor
     @objc func applicationDidBecomeActive(notification: Notification) {
+        if let taskId = Parra.backgroundTaskId,
+            let app = notification.object as? UIApplication {
+
+            app.endBackgroundTask(taskId)
+        }
+
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .active))
 
         triggerEventualSyncFromNotification(notification: notification)
@@ -54,28 +60,44 @@ internal extension Parra {
     @objc func applicationWillResignActive(notification: Notification) {
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .inactive))
 
-        guard let application = notification.object as? UIApplication else {
-            return
-        }
+        triggerSyncFromNotification(notification: notification)
 
-        Parra.backgroundTaskId = application.beginBackgroundTask(
-            withName: Constant.backgroundTaskName
-        ) { [weak application] in
-            parraLogV("Background task expiration handler invoked")
-            guard let app = application, let taskId = Parra.backgroundTaskId else {
+        let endSession = {
+            guard let taskId = Parra.backgroundTaskId else {
                 return
             }
+
+            Parra.backgroundTaskId = nil
 
             parraLogV("Background task: \(taskId) triggering session end")
 
             Task {
                 await Parra.shared.sessionManager.endSession()
 
-                app.endBackgroundTask(taskId)
+                Task { @MainActor in
+                    UIApplication.shared.endBackgroundTask(taskId)
+                }
             }
         }
 
-        triggerSyncFromNotification(notification: notification)
+        Parra.backgroundTaskId = UIApplication.shared.beginBackgroundTask(
+            withName: Constant.backgroundTaskName
+        ) {
+            parraLogV("Background task expiration handler invoked")
+
+            endSession()
+        }
+
+        let startTime = Date()
+        Task(priority: .background) {
+            while Date().timeIntervalSince(startTime) < Constant.backgroundTaskDuration {
+                try await Task.sleep(nanoseconds: 100_000_000)
+            }
+
+            parraLogV("Ending Parra background execution after \(Constant.backgroundTaskDuration)s")
+
+            endSession()
+        }
     }
 
     @MainActor
