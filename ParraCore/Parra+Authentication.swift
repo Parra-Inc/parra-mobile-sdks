@@ -57,6 +57,8 @@ public extension Parra {
         }
 
         Parra.config = newConfig
+        Parra.registerModule(module: shared)
+
         Initializer.isInitialized = true
 
         parraLogI("Parra SDK Initialized")

@@ -134,11 +134,7 @@ public class Parra: ParraModule {
     public static func triggerSync() async {
         await shared.triggerSync()
     }
-    
-    public func hasDataToSync() async -> Bool {
-        return false // TODO:
-    }
-    
+
     /// Parra data is syncrhonized automatically. Use this method if you wish to trigger a synchronization event manually.
     /// This may be something you want to do in response to a significant event in your app, or in response to a low memory
     /// warning, for example. Note that in order to prevent excessive network activity it may take up to 30 seconds for the sync
@@ -146,5 +142,13 @@ public class Parra: ParraModule {
     public func triggerSync() async {
         // Don't expose sync mode publically.
         await syncManager.enqueueSync(with: .eventual)
+    }
+
+    public func hasDataToSync() async -> Bool {
+        return await sessionManager.hasDataToSync()
+    }
+
+    public func synchronizeData() async {
+        await sessionManager.synchronizeData()
     }
 }

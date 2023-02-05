@@ -10,5 +10,5 @@ import Foundation
 
 public protocol Syncable {
     func hasDataToSync() async -> Bool
-    func triggerSync() async
+    func synchronizeData() async
 }

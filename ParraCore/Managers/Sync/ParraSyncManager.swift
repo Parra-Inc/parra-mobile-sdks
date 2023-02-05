@@ -40,8 +40,13 @@ internal actor ParraSyncManager {
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
     internal func enqueueSync(with mode: ParraSyncMode) async {
+        guard await hasDataToSync() else {
+            parraLogV("Skipping \(mode) sync. No sync necessary.")
+            return
+        }
+
         parraLogV("Enqueuing sync: \(mode)")
-        
+
         if isSyncing {
             if mode == .immediate {
                 parraLogV("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
@@ -125,21 +130,12 @@ internal actor ParraSyncManager {
     }
 
     private func performSync() async {
-        // Sync ParraCore internal services, then other Parra modules
-
-        await sessionManager.triggerSync()
-
         for (_, module) in Parra.registeredModules {
-            await module.triggerSync()
+            await module.synchronizeData()
         }
     }
     
     private func hasDataToSync() async -> Bool {
-        let hasSessionsToSync = await sessionManager.hasDataToSync()
-        if hasSessionsToSync {
-            return true
-        }
-
         var shouldSync = false
         for (_, module) in Parra.registeredModules {
             if await module.hasDataToSync() {

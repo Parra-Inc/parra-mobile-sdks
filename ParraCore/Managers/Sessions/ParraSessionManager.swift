@@ -38,7 +38,7 @@ internal actor ParraSessionManager: Syncable {
         return currentSession?.hasNewData ?? false
     }
 
-    func triggerSync() async {
+    func synchronizeData() async {
         // Not making a copy, we'll need to modify the instance property
         guard currentSession != nil else {
             return
