@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public protocol ParraSessionNamedEvent {
     var eventName: String { get }
@@ -22,11 +23,14 @@ public enum ParraSessionEventType: ParraSessionNamedEvent {
 
     public enum _Internal: ParraSessionNamedEvent {
         case log
+        case appState(state: UIApplication.State)
 
         public var eventName: String {
             switch self {
             case .log:
                 return "\(Constant.corePrefix):log"
+            case .appState(let state):
+                return "\(Constant.corePrefix):appstate:\(state.description)"
             }
         }
     }
