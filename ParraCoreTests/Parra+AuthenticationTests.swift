@@ -11,6 +11,8 @@ import XCTest
 class ParraAuthenticationTests: XCTestCase {
 
     override func setUp() {
+        Parra.Initializer.isInitialized = false
+
         configureWithRequestResolver { request in
             return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
         }
@@ -64,8 +66,7 @@ class ParraAuthenticationTests: XCTestCase {
             authProvider: .publicKey(tenantId: tenantId, apiKeyId: apiKeyId, userIdProvider: {
                 authProviderExpectation.fulfill()
                 return UUID().uuidString
-            })
-        )
+            }))
 
         let _ = try await Parra.shared.networkManager.authenticationProvider!()
 

@@ -8,8 +8,8 @@
 import Foundation
 
 public extension Parra {
-    actor Initializer {
-        static var isInitialized = false
+    internal actor Initializer {
+        internal static var isInitialized = false
     }
 
     /// Checks whether an authentication provider has already been set.
@@ -25,51 +25,50 @@ public extension Parra {
     ///   the authentication state for your user.
     class func initialize(config: ParraConfiguration = .default,
                           authProvider: ParraAuthenticationProviderType) {
-        Task {
-            if Initializer.isInitialized {
-                parraLogW("Parra.initialize called more than once. Subsequent calls are ignored")
-                return
+        if Initializer.isInitialized {
+            parraLogW("Parra.initialize called more than once. Subsequent calls are ignored")
+
+            return
+        }
+
+        var newConfig = config
+
+        switch authProvider {
+        case .default(let tenantId, let provider):
+            shared.networkManager.updateAuthenticationProvider(provider)
+
+            newConfig.setTenantId(tenantId)
+        case .publicKey(let tenantId, let apiKeyId, let userIdProvider):
+            shared.networkManager.updateAuthenticationProvider { [weak shared] in
+                guard let networkManager = shared?.networkManager else {
+                    throw ParraError.unknown
+                }
+
+                let userId = try await userIdProvider()
+
+                return try await networkManager.performPublicApiKeyAuthenticationRequest(
+                    forTentant: tenantId,
+                    apiKeyId: apiKeyId,
+                    userId: userId
+                )
             }
 
+            newConfig.setTenantId(tenantId)
+        }
+
+        Parra.config = newConfig
+        Initializer.isInitialized = true
+
+        parraLogI("Parra SDK Initialized")
+
+        Task {
             await shared.sessionManager.createSessionIfNotExists()
 
-            var newConfig = config
-
-            switch authProvider {
-            case .default(let tenantId, let provider):
-                shared.networkManager.updateAuthenticationProvider(provider)
-
-                newConfig.setTenantId(tenantId)
-            case .publicKey(let tenantId, let apiKeyId, let userIdProvider):
-                shared.networkManager.updateAuthenticationProvider { [weak shared] in
-                    guard let networkManager = shared?.networkManager else {
-                        throw ParraError.unknown
-                    }
-
-                    let userId = try await userIdProvider()
-
-                    return try await networkManager.performPublicApiKeyAuthenticationRequest(
-                        forTentant: tenantId,
-                        apiKeyId: apiKeyId,
-                        userId: userId
-                    )
-                }
-
-                newConfig.setTenantId(tenantId)
+            do {
+                let _ = try await shared.networkManager.refreshAuthentication()
+            } catch let error {
+                parraLogE("Refresh authentication on user change: \(error)")
             }
-
-            Parra.config = newConfig
-            Initializer.isInitialized = true
-
-            Task {
-                do {
-                    let _ = try await shared.networkManager.refreshAuthentication()
-                } catch let error {
-                    parraLogE("Refresh authentication on user change: \(error)")
-                }
-            }
-
-            parraLogI("Parra SDK Initialized")
         }
     }
 }
