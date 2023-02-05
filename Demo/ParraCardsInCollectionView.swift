@@ -41,7 +41,7 @@ class ParraCardsInCollectionView: UICollectionViewController, UICollectionViewDe
             flowLayout.sectionInset = .init(top: 8, left: 8, bottom: 8, right: 8)
         }
         
-        ParraFeedback.fetchFeedbackCards { cards, error in
+        ParraFeedback.fetchFeedbackCards(appArea: .all) { cards, error in
             if let error = error {
                 self.navigationItem.prompt = "Error fetching Parra cards"
                 print("Error fetching Parra cards: \(error)")
