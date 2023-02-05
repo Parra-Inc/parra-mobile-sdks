@@ -127,6 +127,11 @@ internal actor ParraSessionManager: Syncable {
 
         currentSession!.updateUserProperties(userProperties)
 
+        // TODO: Instead of logging events for things like app state when session is first created
+        // TODO: Add a new session property deviceProperties, which can be updated whenever a event is logged.
+        // TODO: Best way to do this is probably to make an event to log called devicePropertiesChanged that
+        // TODO: contains all of the changed properties.
+
         await dataManager.sessionStorage.update(session: currentSession!)
     }
 }
