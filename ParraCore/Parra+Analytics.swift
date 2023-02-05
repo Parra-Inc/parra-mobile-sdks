@@ -11,7 +11,7 @@ import Foundation
 public extension Parra {
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate campaigns configured in the Parra dashboard.
     static func logAnalyticsEvent<Key>(_ name: ParraSessionNamedEvent,
-                                       params: [Key: Any]) where Key: CustomStringConvertible {
+                                       params: [Key: Any] = [String: Any]()) where Key: CustomStringConvertible {
         Task {
             await shared.sessionManager.logEvent(name.eventName, params: params)
         }
@@ -19,7 +19,7 @@ public extension Parra {
 
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate campaigns configured in the Parra dashboard.
     static func logAnalyticsEvent<Key>(_ name: String,
-                                       params: [Key: Any]) where Key: CustomStringConvertible {
+                                       params: [Key: Any] = [String: Any]()) where Key: CustomStringConvertible {
         Task {
             await shared.sessionManager.logEvent(name, params: params)
         }
@@ -27,7 +27,7 @@ public extension Parra {
 
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate campaigns configured in the Parra dashboard.
     static func logAnalyticsEvent<Name, Key>(_ name: Name,
-                                             params: [Key: Any]) where Key: CustomStringConvertible, Name: RawRepresentable, Name.RawValue == String {
+                                             params: [Key: Any] = [String: Any]()) where Key: CustomStringConvertible, Name: RawRepresentable, Name.RawValue == String {
         Task {
             await shared.sessionManager.logEvent(name.rawValue, params: params)
         }
