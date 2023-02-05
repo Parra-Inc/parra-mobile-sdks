@@ -75,7 +75,8 @@ public class Parra: ParraModule {
         
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
 
-        self.addEventObservers()
+        addEventObservers()
+
         Task {
             await self.syncManager.startSyncTimer()
         }
