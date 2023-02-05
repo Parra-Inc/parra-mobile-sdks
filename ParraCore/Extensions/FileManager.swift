@@ -37,4 +37,12 @@ internal extension FileManager {
             parraLogV("Directory already exists at \(url)")
         }
     }
+
+    func safeFileExists(at url: URL) -> Bool {
+        if #available(iOS 16.0, *) {
+            return fileExists(atPath: url.path(percentEncoded: false))
+        } else {
+            return fileExists(atPath: url.path)
+        }
+    }
 }
