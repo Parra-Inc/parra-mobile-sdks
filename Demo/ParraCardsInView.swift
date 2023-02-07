@@ -28,7 +28,7 @@ class ParraCardsInView: UIViewController {
         view.addConstraint(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
 
         print("Fetching Parra Cards...")
-        ParraFeedback.fetchFeedbackCards(appArea: .all) { cards, error in
+        ParraFeedback.fetchFeedbackCards { cards, error in
             self.activityIndicator.removeFromSuperview()
 
             if error != nil || cards.isEmpty {
