@@ -33,6 +33,20 @@ public extension Parra {
         }
     }
 
+    /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate campaigns configured in the Parra dashboard.
+    static func logAnalyticsEvent<Name>(_ name: Name,
+                                        params: Encodable) where Name: RawRepresentable, Name.RawValue == String {
+        Task {
+            do {
+                let paramsDict = try params.asDictionary()
+
+                await shared.sessionManager.logEvent(name.rawValue, params: paramsDict)
+            } catch let error {
+                parraLogE("Error logging analytics event. Encodable params failed to encode as JSON.", error)
+            }
+        }
+    }
+
     /// Attaches a property to the current user, as defined by the Parra authentication handler. User properties can be used to activate campaigns
     /// configured in the Parra dashboard.
     static func setUserProperty<Key>(_ value: Any,
