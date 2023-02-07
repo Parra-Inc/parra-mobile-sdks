@@ -122,7 +122,10 @@ internal class ParraNetworkManager: NetworkManagerType {
 
         do {
             let url = Parra.Constant.parraApiRoot.appendingPathComponent(route)
-            var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+            guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+                throw ParraError.custom("Failed to create components for url: \(url)", nil)
+            }
+
             urlComponents.setQueryItems(with: queryItems)
             let credential = await dataManager.getCurrentCredential()
 
@@ -261,7 +264,9 @@ internal class ParraNetworkManager: NetworkManagerType {
         request.httpBody = try jsonEncoder.encode(["user_id": userId])
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
 
-        let authData = ("api_key:" + apiKeyId).data(using: .utf8)!.base64EncodedString()
+        guard let authData = ("api_key:" + apiKeyId).data(using: .utf8)?.base64EncodedString() else {
+            throw ParraError.custom("Unable to encode API key as NSData", nil)
+        }
         
         addStandardHeaders(toRequest: &request)
         request.setValue("Basic \(authData)", forHTTPHeaderField: .authorization)

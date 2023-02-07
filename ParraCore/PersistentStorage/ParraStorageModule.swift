@@ -54,7 +54,7 @@ public actor ParraStorageModule<DataType: Codable> {
             
             self.persistentStorage = (fileSystemStorage, fileName)
         case .userDefaults(key: let key):
-            let userDefaults = UserDefaults(suiteName: Parra.bundle().bundleIdentifier)!
+            let userDefaults = UserDefaults(suiteName: Parra.bundle().bundleIdentifier) ?? .standard
             
             let userDefaultsStorage = UserDefaultsStorage(
                 userDefaults: userDefaults,

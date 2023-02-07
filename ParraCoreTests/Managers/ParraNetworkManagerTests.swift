@@ -131,7 +131,7 @@ class ParraNetworkManagerTests: XCTestCase {
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                let matches = request.allHTTPHeaderFields!.keys.contains { headerKey in
+                let matches = (request.allHTTPHeaderFields ?? [:]).keys.contains { headerKey in
                     return headerKey.lowercased().contains(FakeModule.name.lowercased())
                 }
                 
@@ -416,7 +416,7 @@ class ParraNetworkManagerTests: XCTestCase {
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                let matches = request.allHTTPHeaderFields!.keys.contains { headerKey in
+                let matches = (request.allHTTPHeaderFields ?? [:]).keys.contains { headerKey in
                     return headerKey.lowercased().contains(FakeModule.name.lowercased())
                 }
 

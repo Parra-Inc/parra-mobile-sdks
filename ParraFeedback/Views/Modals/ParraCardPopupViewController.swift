@@ -34,6 +34,7 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
         super.viewDidLoad()
 
         let dismissButton = UIButton.systemButton(
+            // Works on all app versions within deploy target
             with: UIImage(systemName: "xmark")!,
             target: self,
             action: #selector(dismissModal)
