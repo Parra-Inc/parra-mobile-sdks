@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import CoreGraphics
 
 public extension Parra {
     enum Constant {
