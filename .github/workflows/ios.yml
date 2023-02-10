@@ -20,9 +20,9 @@ jobs:
 
     steps:
       - name: Select Xcode
-        run: sudo xcode-select -switch /Applications/Xcode_$.app && /usr/bin/xcodebuild -version
+        run: sudo xcode-select -switch /Applications/Xcode_${{ matrix.xcode }}.app && /usr/bin/xcodebuild -version
       - name: Run Parra Core Unit Tests
-        run: xcodebuild test -scheme ParraCore -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=$' | xcpretty && exit ${PIPESTATUS[0]}
+        run: xcodebuild test -scheme ParraCore -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=${{ matrix.ios }}' | xcpretty && exit ${PIPESTATUS[0]}
 
       # - name: Checkout
       #   uses: actions/checkout@v2
