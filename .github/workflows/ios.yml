@@ -14,8 +14,10 @@ jobs:
         include:
           - xcode: "13.2"
             ios: "15.2"
+            device: "iPhone 13"
           - xcode: "14.2"
             ios: "16.2"
+            device: "iPhone 14"
     name: Parra Tests on iOS (${{ matrix.ios }})
 
     steps:
@@ -24,7 +26,4 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode_${{ matrix.xcode }}.app && /usr/bin/xcodebuild -version
       - name: Run Parra Core Unit Tests
-        run: xcodebuild test -scheme ParraCoreTests -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=${{ matrix.ios }}' | xcpretty && exit ${PIPESTATUS[0]}
-
-      # - name: Run Core tests
-      #   run: xcodebuild test -project Parra.xcodeproj -scheme ParraCore -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2'
+        run: xcodebuild test -scheme ParraCore -project Parra.xcodeproj -sdk iphonesimulator -destination 'platform=iOS Simulator,name=${{ matrix.device }},OS=${{ matrix.ios }}' | xcpretty && exit ${PIPESTATUS[0]}
