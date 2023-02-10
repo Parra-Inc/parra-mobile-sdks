@@ -53,13 +53,9 @@
 		001B7B2727DE3AC200DEEECD /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */; };
 		001B7B2927DE3AC800DEEECD /* ParraSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5156427D4376500C4F2CC /* ParraSyncManager.swift */; };
 		001B7B2C27DE3AC800DEEECD /* ParraNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5156827D45C8F00C4F2CC /* ParraNetworkManager.swift */; };
-		001B7B3A27DE3AEC00DEEECD /* ParraFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7B3227DE3AEC00DEEECD /* ParraFeedback.framework */; };
-		001B7B4127DE3AEC00DEEECD /* ParraFeedbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B4027DE3AEC00DEEECD /* ParraFeedbackTests.swift */; };
 		001B7B4227DE3AEC00DEEECD /* ParraFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 001B7B3427DE3AEC00DEEECD /* ParraFeedback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		001B7B4527DE3AEC00DEEECD /* ParraFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7B3227DE3AEC00DEEECD /* ParraFeedback.framework */; };
 		001B7B4627DE3AEC00DEEECD /* ParraFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7B3227DE3AEC00DEEECD /* ParraFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		001B7B4D27DE3B1000DEEECD /* ParraFeedbackDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */; };
-		001B7B4E27DE3B1000DEEECD /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287202784CF6C0090CDB5 /* SampleData.swift */; };
 		001B7B4F27DE3B2500DEEECD /* ParraFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7A8F27DD8D6700DEEECD /* ParraFeedback.swift */; };
 		001B7B5027DE3B2500DEEECD /* ParraQuestionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraQuestionHandler.swift */; };
 		001B7B5327DE3B3800DEEECD /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00120EF2274D1EEE00CA3247 /* UIColor.swift */; };
@@ -170,20 +166,6 @@
 			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
 			remoteInfo = ParraCore;
 		};
-		001B7B3B27DE3AEC00DEEECD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 001B7B3127DE3AEC00DEEECD;
-			remoteInfo = ParraFeedback;
-		};
-		001B7B3D27DE3AEC00DEEECD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 00DECFF4274C69F800DAF301;
-			remoteInfo = Demo;
-		};
 		001B7B4327DE3AEC00DEEECD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
@@ -232,8 +214,6 @@
 		001286FE277FE3180090CDB5 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManager.swift; sourceTree = "<group>"; };
 		001287022784CD0D0090CDB5 /* ParraStarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStarButton.swift; sourceTree = "<group>"; };
-		001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManagerTests.swift; sourceTree = "<group>"; };
-		001287202784CF6C0090CDB5 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		0015599627E2BEBF006450BE /* ParraEmptyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraEmptyCardView.swift; sourceTree = "<group>"; };
 		0015599B27E40B13006450BE /* FileSystemStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemStorageTests.swift; sourceTree = "<group>"; };
 		0015599E27E40B71006450BE /* FileManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerTests.swift; sourceTree = "<group>"; };
@@ -263,8 +243,6 @@
 		001B7B0027DE3A7600DEEECD /* ParraTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTests.swift; sourceTree = "<group>"; };
 		001B7B3227DE3AEC00DEEECD /* ParraFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParraFeedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		001B7B3427DE3AEC00DEEECD /* ParraFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParraFeedback.h; sourceTree = "<group>"; };
-		001B7B3927DE3AEC00DEEECD /* ParraFeedbackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParraFeedbackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		001B7B4027DE3AEC00DEEECD /* ParraFeedbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackTests.swift; sourceTree = "<group>"; };
 		001B7B6327DE3BE700DEEECD /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		001B7B6527DE3BFB00DEEECD /* ParraCardViewConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardViewConfig.swift; sourceTree = "<group>"; };
 		001B7B6727DE3C1200DEEECD /* VisibleButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleButtonOptions.swift; sourceTree = "<group>"; };
@@ -382,14 +360,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				001B7B6B27DE3C4D00DEEECD /* ParraCore.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		001B7B3627DE3AEC00DEEECD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				001B7B3A27DE3AEC00DEEECD /* ParraFeedback.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,16 +584,6 @@
 			path = ParraFeedback;
 			sourceTree = "<group>";
 		};
-		001B7B3F27DE3AEC00DEEECD /* ParraFeedbackTests */ = {
-			isa = PBXGroup;
-			children = (
-				001B7B4027DE3AEC00DEEECD /* ParraFeedbackTests.swift */,
-				001287182784CDC20090CDB5 /* ParraFeedbackDataManagerTests.swift */,
-				001287202784CF6C0090CDB5 /* SampleData.swift */,
-			);
-			path = ParraFeedbackTests;
-			sourceTree = "<group>";
-		};
 		001B7B6227DE3BD000DEEECD /* Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -759,7 +719,6 @@
 				001B7AF327DE3A7600DEEECD /* ParraCore */,
 				001B7AFF27DE3A7600DEEECD /* ParraCoreTests */,
 				001B7B3327DE3AEC00DEEECD /* ParraFeedback */,
-				001B7B3F27DE3AEC00DEEECD /* ParraFeedbackTests */,
 				00DECFF6274C69F800DAF301 /* Products */,
 				02A060188E5CD1963038AE8C /* Pods */,
 				39DADA99F3B351D04A5CD522 /* Frameworks */,
@@ -773,7 +732,6 @@
 				001B7AF227DE3A7600DEEECD /* ParraCore.framework */,
 				001B7AF927DE3A7600DEEECD /* ParraCoreTests.xctest */,
 				001B7B3227DE3AEC00DEEECD /* ParraFeedback.framework */,
-				001B7B3927DE3AEC00DEEECD /* ParraFeedbackTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -920,25 +878,6 @@
 			productReference = 001B7B3227DE3AEC00DEEECD /* ParraFeedback.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		001B7B3827DE3AEC00DEEECD /* ParraFeedbackTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 001B7B4A27DE3AEC00DEEECD /* Build configuration list for PBXNativeTarget "ParraFeedbackTests" */;
-			buildPhases = (
-				001B7B3527DE3AEC00DEEECD /* Sources */,
-				001B7B3627DE3AEC00DEEECD /* Frameworks */,
-				001B7B3727DE3AEC00DEEECD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				001B7B3C27DE3AEC00DEEECD /* PBXTargetDependency */,
-				001B7B3E27DE3AEC00DEEECD /* PBXTargetDependency */,
-			);
-			name = ParraFeedbackTests;
-			productName = ParraFeedbackTests;
-			productReference = 001B7B3927DE3AEC00DEEECD /* ParraFeedbackTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		00DECFF4274C69F800DAF301 /* Demo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Demo" */;
@@ -981,10 +920,6 @@
 					001B7B3127DE3AEC00DEEECD = {
 						CreatedOnToolsVersion = 13.2.1;
 					};
-					001B7B3827DE3AEC00DEEECD = {
-						CreatedOnToolsVersion = 13.2.1;
-						TestTargetID = 00DECFF4274C69F800DAF301;
-					};
 					00DECFF4274C69F800DAF301 = {
 						CreatedOnToolsVersion = 13.1;
 						LastSwiftMigration = 1320;
@@ -1008,7 +943,6 @@
 				001B7AF127DE3A7600DEEECD /* ParraCore */,
 				001B7AF827DE3A7600DEEECD /* ParraCoreTests */,
 				001B7B3127DE3AEC00DEEECD /* ParraFeedback */,
-				001B7B3827DE3AEC00DEEECD /* ParraFeedbackTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1030,13 +964,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		001B7B3027DE3AEC00DEEECD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		001B7B3727DE3AEC00DEEECD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1193,16 +1120,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		001B7B3527DE3AEC00DEEECD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				001B7B4127DE3AEC00DEEECD /* ParraFeedbackTests.swift in Sources */,
-				001B7B4E27DE3B1000DEEECD /* SampleData.swift in Sources */,
-				001B7B4D27DE3B1000DEEECD /* ParraFeedbackDataManagerTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		00DECFF1274C69F800DAF301 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1234,16 +1151,6 @@
 			isa = PBXTargetDependency;
 			target = 001B7AF127DE3A7600DEEECD /* ParraCore */;
 			targetProxy = 001B7B0327DE3A7600DEEECD /* PBXContainerItemProxy */;
-		};
-		001B7B3C27DE3AEC00DEEECD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 001B7B3127DE3AEC00DEEECD /* ParraFeedback */;
-			targetProxy = 001B7B3B27DE3AEC00DEEECD /* PBXContainerItemProxy */;
-		};
-		001B7B3E27DE3AEC00DEEECD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 00DECFF4274C69F800DAF301 /* Demo */;
-			targetProxy = 001B7B3D27DE3AEC00DEEECD /* PBXContainerItemProxy */;
 		};
 		001B7B4427DE3AEC00DEEECD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1450,50 +1357,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		001B7B4B27DE3AEC00DEEECD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraFeedbackTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Demo.app/Demo";
-			};
-			name = Debug;
-		};
-		001B7B4C27DE3AEC00DEEECD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraFeedbackTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Demo.app/Demo";
 			};
 			name = Release;
 		};
@@ -1710,15 +1573,6 @@
 			buildConfigurations = (
 				001B7B4827DE3AEC00DEEECD /* Debug */,
 				001B7B4927DE3AEC00DEEECD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		001B7B4A27DE3AEC00DEEECD /* Build configuration list for PBXNativeTarget "ParraFeedbackTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				001B7B4B27DE3AEC00DEEECD /* Debug */,
-				001B7B4C27DE3AEC00DEEECD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
