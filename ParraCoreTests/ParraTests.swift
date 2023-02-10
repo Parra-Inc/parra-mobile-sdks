@@ -15,7 +15,7 @@ class FakeModule: ParraModule {
         return true
     }
     
-    func triggerSync() async {
+    func synchronizeData() async {
         try! await Task.sleep(nanoseconds: 1_000_000_000)
     }
 }
@@ -69,7 +69,7 @@ class ParraCoreTests: XCTestCase {
 
         XCTAssertTrue(Parra.hasRegisteredModule(module: FakeModule.self))
         XCTAssert(Parra.registeredModules.keys.contains(FakeModule.name))
-        XCTAssertEqual(Parra.registeredModules.count, 1)
+        XCTAssertEqual(Parra.registeredModules.count, 2)
     }
     
     func testLogout() async throws {
