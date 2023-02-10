@@ -8,11 +8,23 @@ on:
 
 jobs:
   build:
-    name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-12
+    strategy:
+      matrix:
+        include:
+          - xcode: "13.1"
+            ios: "15.0"
+          - xcode: "14.2"
+            ios: "16.2"
+    name: Parra Tests on iOS (${{ matrix.ios }})
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Run Core tests
-        run: xcodebuild test -project Parra.xcodeproj -scheme ParraCore -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2'
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_$.app && /usr/bin/xcodebuild -version
+      - name: Run Parra Core Unit Tests
+        run: xcodebuild test -scheme ParraCore -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=$' | xcpretty && exit ${PIPESTATUS[0]}
+
+      # - name: Checkout
+      #   uses: actions/checkout@v2
+      # - name: Run Core tests
+      #   run: xcodebuild test -project Parra.xcodeproj -scheme ParraCore -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2'
