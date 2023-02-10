@@ -15,6 +15,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Core tests
-        run: xcodebuild test -scheme ParraCoreTests -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.5' CODE_SIGNING_ALLOWED=NO
-      - name: Run Feedback tests
-        run: xcodebuild test -scheme ParraFeedbackTests -project Parra.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.5' CODE_SIGNING_ALLOWED=NO
+        run: xcodebuild test -project Parra.xcodeproj -scheme ParraCore -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.1'
