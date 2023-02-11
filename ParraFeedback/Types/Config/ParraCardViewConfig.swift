@@ -51,10 +51,21 @@ public struct ParraCardViewConfig {
     
     /// The default configuration used by `ParraCardView`s when no other configuration is provided.
     public static let `default` = ParraCardViewConfig()
-    
+
     public static let defaultDark = ParraCardViewConfig(
         backgroundColor: Constant.defaultBackgroundColorDark,
         shadow: .defaultDark,
+        title: .titleDefaultDark,
+        subtitle: .subtitleDefaultDark,
+        body: .bodyDefaultDark,
+        bodyBold: .bodyDefaultDark
+    )
+
+    public static let drawerDefault = ParraCardViewConfig(shadow: .none)
+
+    public static let drawerDefaultDark = ParraCardViewConfig(
+        backgroundColor: Constant.defaultBackgroundColorDark,
+        shadow: .none,
         title: .titleDefaultDark,
         subtitle: .subtitleDefaultDark,
         body: .bodyDefaultDark,

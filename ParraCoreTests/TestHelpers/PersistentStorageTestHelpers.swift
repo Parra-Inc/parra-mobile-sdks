@@ -8,14 +8,9 @@
 import Foundation
 import ParraCore
 
-let applicationSupportDirectory = FileManager.default.urls(
-    for: .applicationSupportDirectory,
-       in: .userDomainMask
-).first!
-
 func deleteDirectoriesInApplicationSupport() throws {
     let directoryPaths = try FileManager.default.contentsOfDirectory(
-        at: applicationSupportDirectory,
+        at: ParraDataManager.Base.applicationSupportDirectory,
         includingPropertiesForKeys: [.isDirectoryKey],
         options: .skipsHiddenFiles
     )

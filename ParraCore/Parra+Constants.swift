@@ -22,5 +22,8 @@ public extension Parra {
         
         public static let parraWebRoot = URL(string: "https://parra.io/")!
         internal static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
+
+        internal static let backgroundTaskName = "com.parra.session.backgroundtask"
+        internal static let backgroundTaskDuration: TimeInterval = 25.0
     }
 }

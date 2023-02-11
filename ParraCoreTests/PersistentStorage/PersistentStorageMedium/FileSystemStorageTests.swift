@@ -12,7 +12,7 @@ class FileSystemStorageTests: XCTestCase {
 
     private let fileManager = FileManager.default
     private var fileSystemStorage: FileSystemStorage!
-    private let baseUrl = applicationSupportDirectory.appendingPathComponent("files", isDirectory: true)
+    private let baseUrl = ParraDataManager.Base.applicationSupportDirectory.safeAppendDirectory("files")
     
     override func setUpWithError() throws {
         try deleteDirectoriesInApplicationSupport()

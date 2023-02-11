@@ -34,7 +34,7 @@ public extension ParraFeedback {
     @available(iOS 15.0, *)
     static func presentCardDrawer(with cards: [ParraCardItem],
                                   fromViewController: UIViewController?,
-                                  config: ParraCardViewConfig = .default) {
+                                  config: ParraCardViewConfig = .drawerDefault) {
 
         parraLogV("Presenting drawer view controller with \(cards.count) card(s)")
 
@@ -56,7 +56,7 @@ public extension ParraFeedback {
         )
     }
 
-    private static func presentModal(modal: UIViewController & ParraCardModal,
+    private static func presentModal(modal: ParraCardModalViewController & ParraCardModal,
                                      fromViewController: UIViewController?,
                                      config: ParraCardViewConfig) {
         guard let vc = fromViewController ?? UIViewController.topMostViewController() else {

@@ -23,7 +23,7 @@ class ParraCardsInModal: UIViewController {
         popupButton.isEnabled = false
         drawerButton.isEnabled = false
 
-        ParraFeedback.fetchFeedbackCards(appArea: .all) { [self] response in
+        ParraFeedback.fetchFeedbackCards { [self] response in
             switch response {
             case .success(let cards):
                 self.cards = cards

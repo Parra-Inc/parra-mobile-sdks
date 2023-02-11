@@ -21,10 +21,10 @@ class ParraSyncManagerTests: XCTestCase {
 
         await waitForExpectations(timeout: 0.1)
         
-        let isSyncing = Parra.shared.syncManager.isSyncing
+        let isSyncing = await Parra.shared.syncManager.isSyncing
         XCTAssertTrue(isSyncing)
 
-        let hasEnqueuedSyncJobs = Parra.shared.syncManager.enqueuedSyncMode != nil
+        let hasEnqueuedSyncJobs = await Parra.shared.syncManager.enqueuedSyncMode != nil
         XCTAssertFalse(hasEnqueuedSyncJobs)
     }
 
@@ -37,12 +37,12 @@ class ParraSyncManagerTests: XCTestCase {
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
         await waitForExpectations(timeout: 0.1)
         
-        let isSyncing = Parra.shared.syncManager.isSyncing
+        let isSyncing = await Parra.shared.syncManager.isSyncing
         XCTAssertTrue(isSyncing)
         
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
         
-        let hasEnqueuedSyncJobs = Parra.shared.syncManager.enqueuedSyncMode != nil
+        let hasEnqueuedSyncJobs = await Parra.shared.syncManager.enqueuedSyncMode != nil
         XCTAssertTrue(hasEnqueuedSyncJobs)
     }
 
@@ -52,14 +52,21 @@ class ParraSyncManagerTests: XCTestCase {
             dataManager: dataManager,
             urlSession: MockURLSession(dataTaskResolver: resolver)
         )
+
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
+            networkManager: networkManager
+        )
         
         let syncManager = ParraSyncManager(
-            networkManager: networkManager
+            networkManager: networkManager,
+            sessionManager: sessionManager
         )
         
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
         

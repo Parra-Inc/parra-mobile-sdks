@@ -15,7 +15,7 @@ class FakeModule: ParraModule {
         return true
     }
     
-    func triggerSync() async {
+    func synchronizeData() async {
         try! await Task.sleep(nanoseconds: 1_000_000_000)
     }
 }
@@ -24,19 +24,26 @@ class ParraCoreTests: XCTestCase {
     override func setUp() async throws {
         let dataManager = ParraDataManager()
         await dataManager.updateCredential(credential: ParraCredential(token: UUID().uuidString))
-        
+
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: URLSession.shared
         )
-        
-        let syncManager = ParraSyncManager(
+
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
             networkManager: networkManager
+        )
+
+        let syncManager = ParraSyncManager(
+            networkManager: networkManager,
+            sessionManager: sessionManager
         )
 
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
     }
@@ -62,7 +69,7 @@ class ParraCoreTests: XCTestCase {
 
         XCTAssertTrue(Parra.hasRegisteredModule(module: FakeModule.self))
         XCTAssert(Parra.registeredModules.keys.contains(FakeModule.name))
-        XCTAssertEqual(Parra.registeredModules.count, 1)
+        XCTAssertEqual(Parra.registeredModules.count, 2)
     }
     
     func testLogout() async throws {

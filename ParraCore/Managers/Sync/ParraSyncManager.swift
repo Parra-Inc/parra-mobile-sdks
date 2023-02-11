@@ -14,7 +14,7 @@ internal enum ParraSyncMode: String {
 }
 
 /// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
-internal class ParraSyncManager {
+internal actor ParraSyncManager {
     internal enum Constant {
         static let eventualSyncDelay: TimeInterval = 30.0
     }
@@ -28,17 +28,25 @@ internal class ParraSyncManager {
     internal private(set) var enqueuedSyncMode: ParraSyncMode? = nil
     
     private let networkManager: ParraNetworkManager
+    private let sessionManager: ParraSessionManager
+
+    @MainActor private var syncTimer: Timer?
     
-    private var syncTimer: Timer?
-    
-    internal init(networkManager: ParraNetworkManager) {
+    internal init(networkManager: ParraNetworkManager,
+                  sessionManager: ParraSessionManager) {
         self.networkManager = networkManager
+        self.sessionManager = sessionManager
     }
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
     internal func enqueueSync(with mode: ParraSyncMode) async {
+        guard await hasDataToSync() else {
+            parraLogV("Skipping \(mode) sync. No sync necessary.")
+            return
+        }
+
         parraLogV("Enqueuing sync: \(mode)")
-        
+
         if isSyncing {
             if mode == .immediate {
                 parraLogV("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
@@ -89,7 +97,7 @@ internal class ParraSyncManager {
         guard await hasDataToSync() else {
             parraLogV("No data available to sync")
             isSyncing = false
-            
+
             return
         }
         
@@ -97,11 +105,9 @@ internal class ParraSyncManager {
         
         let start = CFAbsoluteTimeGetCurrent()
         parraLogV("Sending sync data...")
-        
-        for (_, module) in Parra.registeredModules {
-            await module.triggerSync()
-        }
-        
+
+        await performSync()
+
         let duration = CFAbsoluteTimeGetCurrent() - start
         parraLogV("Sync data sent. Took \(duration)(s)")
         
@@ -113,8 +119,8 @@ internal class ParraSyncManager {
             switch enqueuedSyncMode {
             case .immediate:
                 await sync()
-            case .eventual:
-                startSyncTimer()
+            default:
+                break
             }
         } else {
             parraLogV("No more jobs found. Completing sync.")
@@ -122,10 +128,15 @@ internal class ParraSyncManager {
             isSyncing = false
         }
     }
+
+    private func performSync() async {
+        for (_, module) in Parra.registeredModules {
+            await module.synchronizeData()
+        }
+    }
     
     private func hasDataToSync() async -> Bool {
         var shouldSync = false
-        
         for (_, module) in Parra.registeredModules {
             if await module.hasDataToSync() {
                 shouldSync = true
@@ -136,32 +147,29 @@ internal class ParraSyncManager {
         return shouldSync
     }
     
-    private func startSyncTimer() {
+    @MainActor internal func startSyncTimer() {
+        parraLogV("Starting sync timer")
+
         stopSyncTimer()
-        
+
         syncTimer = Timer.scheduledTimer(
-            timeInterval: Constant.eventualSyncDelay,
-            target: self,
-            selector: #selector(syncTimerDidTick),
-            userInfo: nil,
-            repeats: false
-        )
+            withTimeInterval: Constant.eventualSyncDelay,
+            repeats: true
+        ) { timer in
+            parraLogV("Sync timer fired")
+
+            Task {
+                await self.enqueueSync(with: .immediate)
+            }
+        }
     }
     
-    private func stopSyncTimer() {
+    @MainActor private func stopSyncTimer() {
         guard let syncTimer = syncTimer else {
             return
         }
         
         syncTimer.invalidate()
         self.syncTimer = nil
-    }
-    
-    @objc private func syncTimerDidTick() {
-        stopSyncTimer()
-        
-        Task {
-            await self.enqueueSync(with: .immediate)
-        }
     }
 }

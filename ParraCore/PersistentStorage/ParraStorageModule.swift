@@ -26,16 +26,26 @@ public actor ParraStorageModule<DataType: Codable> {
         }
         """
     }
-    
+
+    private var storeItemsSeparately: Bool {
+        switch dataStorageMedium {
+        case .memory, .userDefaults(_):
+            return false
+        case .fileSystem(_, _, let storeItemsSeparately):
+            return storeItemsSeparately
+        }
+    }
+
     public init(dataStorageMedium: DataStorageMedium) {
         self.dataStorageMedium = dataStorageMedium
-        
+
         switch dataStorageMedium {
         case .memory:
             self.persistentStorage = nil
-        case .fileSystem(folder: let folder, fileName: let fileName):
-            let baseUrl = ParraDataManager.Path.parraDirectory.appendingPathComponent(folder, isDirectory: true)
-            
+        case .fileSystem(folder: let folder, fileName: let fileName, _):
+            let baseUrl = ParraDataManager.Path.parraDirectory
+                .safeAppendDirectory(folder)
+
             let fileSystemStorage = FileSystemStorage(
                 baseUrl: baseUrl,
                 jsonEncoder: .parraEncoder,
@@ -44,7 +54,7 @@ public actor ParraStorageModule<DataType: Codable> {
             
             self.persistentStorage = (fileSystemStorage, fileName)
         case .userDefaults(key: let key):
-            let userDefaults = UserDefaults(suiteName: Parra.bundle().bundleIdentifier)!
+            let userDefaults = UserDefaults(suiteName: Parra.bundle().bundleIdentifier) ?? .standard
             
             let userDefaultsStorage = UserDefaultsStorage(
                 userDefaults: userDefaults,
@@ -62,17 +72,19 @@ public actor ParraStorageModule<DataType: Codable> {
         }
         
         // Persistent storage is missing when the underlying store is a memory store.
-        guard let persistentStorage = persistentStorage else {
+        guard let persistentStorage else {
             return
         }
-        
-        guard let existingData: [String: DataType] = try? await persistentStorage.medium.read(
-            name: persistentStorage.key
-        ) else {
-            return
+
+        if let fileSystem = persistentStorage.medium as? FileSystemStorage, storeItemsSeparately {
+            storageCache = await fileSystem.readAllInDirectory()
+        } else {
+            if let existingData: [String: DataType] = try? await persistentStorage.medium.read(
+                name: persistentStorage.key
+            ) {
+                storageCache = existingData
+            }
         }
-        
-        storageCache = existingData
     }
     
     public func currentData() async -> [String: DataType] {
@@ -88,17 +100,46 @@ public actor ParraStorageModule<DataType: Codable> {
             await loadData()
         }
         
-        return storageCache[name]
+        if let cached = storageCache[name] {
+            return cached
+        }
+
+        if let persistentStorage, storeItemsSeparately {
+            if let loadedData: [String: DataType] = try? await persistentStorage.medium.read(name: name) {
+                storageCache.merge(loadedData) { (_, new) in new }
+
+                return storageCache[name]
+            }
+        }
+
+        return nil
     }
     
-    public func write(name: String, value: DataType?) async throws {
+    public func write(name: String,
+                      value: DataType?) async throws {
+
         if !isLoaded {
             await loadData()
         }
         
         storageCache[name] = value
-        
-        if let persistentStorage = persistentStorage {
+
+        guard let value else {
+            await delete(name: name)
+
+            return
+        }
+
+        guard let persistentStorage else {
+            return
+        }
+
+        if storeItemsSeparately {
+            try await persistentStorage.medium.write(
+                name: name,
+                value: value
+            )
+        } else {
             try await persistentStorage.medium.write(
                 name: persistentStorage.key,
                 value: storageCache
@@ -112,19 +153,43 @@ public actor ParraStorageModule<DataType: Codable> {
         }
         
         storageCache.removeValue(forKey: name)
-        
-        if let persistentStorage = persistentStorage {
-            try? await persistentStorage.medium.write(
-                name: persistentStorage.key,
-                value: storageCache
-            )
+
+        guard let persistentStorage else {
+            return
+        }
+
+        do {
+            if storeItemsSeparately {
+                try await persistentStorage.medium.delete(
+                    name: name
+                )
+            } else {
+                try await persistentStorage.medium.write(
+                    name: persistentStorage.key,
+                    value: storageCache
+                )
+            }
+        } catch let error {
+            parraLogE("ParraStorageModule error deleting file", error)
         }
     }
     
     public func clear() async {
-        storageCache.removeAll()
-        
-        if let persistentStorage = persistentStorage {
+        defer {
+            storageCache.removeAll()
+        }
+
+        guard let persistentStorage else {
+            return
+        }
+
+        if storeItemsSeparately {
+            for (name, _) in storageCache {
+                try? await persistentStorage.medium.delete(
+                    name: name
+                )
+            }
+        } else {
             try? await persistentStorage.medium.delete(
                 name: persistentStorage.key
             )

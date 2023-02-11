@@ -20,14 +20,19 @@ public extension Parra {
                 queryItems["app_area_id"] = appAreaName
             }
 
-            let cardsResponse: CardsResponse = try await Parra.shared.networkManager.performAuthenticatedRequest(
+            let response: AuthenticatedRequestResult<CardsResponse> = await Parra.shared.networkManager.performAuthenticatedRequest(
                 route: "cards",
                 method: .get,
                 queryItems: queryItems,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
             )
 
-            return cardsResponse.items
+            switch response.result {
+            case .success(let cardsResponse):
+                return cardsResponse.items
+            case .failure(let error):
+                throw error
+            }
         }
 
         /// Submits the provided list of CompleteCards as answers to the cards linked to them.
@@ -35,17 +40,68 @@ public extension Parra {
             if cards.isEmpty {
                 return
             }
-            
+
             let serializableCards = cards.map { $0.serializedForRequestBody() }
 
             let route = "bulk/questions/answer"
 
-            let _: EmptyResponseObject = try await Parra.shared.networkManager.performAuthenticatedRequest(
+            let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
                 route: route,
                 method: .post,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                 body: serializableCards
             )
+
+            switch response.result {
+            case .success:
+                return
+            case .failure(let error):
+                throw error
+            }
+        }
+    }
+
+    internal enum Sessions {
+        /// Uploads the provided sessions, failing outright if enough sessions fail to upload
+        /// - Returns: A set of ids of the sessions that were successfully uploaded.
+        static func bulkSubmitSessions(sessions: [ParraSession]) async throws -> Set<String> {
+            guard let tenantId = Parra.config.tenantId else {
+                throw ParraError.notInitialized
+            }
+
+            if sessions.isEmpty {
+                return []
+            }
+
+            var completedSessions = Set<String>()
+            let route = "tenants/\(tenantId)/sessions"
+            for session in sessions {
+                parraLogV("Uploading session: \(session.sessionId)")
+
+                let sessionUpload = ParraSessionUpload(session: session)
+
+                let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
+                    route: route,
+                    method: .post,
+                    config: .defaultWithRetries,
+                    body: sessionUpload
+                )
+
+                switch response.result {
+                case .success:
+                    completedSessions.insert(session.sessionId)
+                case .failure(let error):
+                    parraLogE(error)
+
+                    // If any of the sessions fail to upload afty rerying, fail the entire operation
+                    // returning the sessions that have been completed so far.
+                    if response.attributes.contains(.exceededRetryLimit) {
+                        return completedSessions
+                    }
+                }
+            }
+
+            return completedSessions
         }
     }
 

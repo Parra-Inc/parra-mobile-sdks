@@ -7,16 +7,17 @@
 
 import Foundation
 
-public protocol ParraModule {
+public protocol ParraModule: Syncable {
     static var name: String { get }
-    
-    func hasDataToSync() async -> Bool
-    func triggerSync() async -> Void
 }
 
 public extension ParraModule {
     dynamic static func bundle() -> Bundle {
-        return Bundle(for: self as! AnyClass)
+        if let `class` = self as? AnyClass {
+            return Bundle(for: `class`)
+        }
+
+        return .main
     }
     
     dynamic static func errorDomain() -> String {
@@ -24,10 +25,14 @@ public extension ParraModule {
     }
     
     dynamic static func libraryVersion() -> String {
-        return bundle().infoDictionary!["CFBundleShortVersionString"] as! String
+        return bundle().infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
     }
     
     static func persistentStorageFolder() -> String {
         return name.lowercased()
+    }
+
+    static func eventPrefix() -> String {
+        return "parra:\(name.lowercased())"
     }
 }

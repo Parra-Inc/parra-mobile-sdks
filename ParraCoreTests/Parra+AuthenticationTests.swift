@@ -11,100 +11,88 @@ import XCTest
 class ParraAuthenticationTests: XCTestCase {
 
     override func setUp() {
+        Parra.Initializer.isInitialized = false
+
         configureWithRequestResolver { request in
             return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
         }
     }
     
-    func testSetAuthenticationProviderAsyncFunc() async throws {
-        let credential = ParraCredential(token: UUID().uuidString)
+    func testInitWithDefaultAuthProvider() async throws {
+        let token = UUID().uuidString
         XCTAssertNil(Parra.shared.networkManager.authenticationProvider)
 
-        Parra.setAuthenticationProvider({
-            return credential
-        })
-        
+        Parra.initialize(authProvider: .default(tenantId: "tenant", authProvider: {
+            return token
+        }))
+
         XCTAssertNotNil(Parra.shared.networkManager.authenticationProvider)
     }
-    
-    func testSetAuthenticationProviderCompletionHandlerFunc() async throws {
-        let credential = ParraCredential(token: UUID().uuidString)
-        XCTAssertNil(Parra.shared.networkManager.authenticationProvider)
 
-        Parra.setAuthenticationProvider { (completion: (ParraCredential) -> Void) in
-            completion(credential)
-        }
-        
-        XCTAssertNotNil(Parra.shared.networkManager.authenticationProvider)
+    func testInitWithPublicKeyAuthProvider() async throws {
+        let dataManager = ParraDataManager()
+        let tenantId = UUID().uuidString
+        let apiKeyId = UUID().uuidString
+
+        let route = "tenants/\(tenantId)/issuers/public/auth/token"
+        let networkManager = ParraNetworkManager(
+            dataManager: dataManager,
+            urlSession: MockURLSession { request in
+                let data = try! JSONEncoder().encode(ParraCredential(token: UUID().uuidString))
+                return (data, createTestResponse(route: route), nil)
+            }
+        )
+
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
+            networkManager: networkManager
+        )
+
+        let syncManager = ParraSyncManager(
+            networkManager: networkManager,
+            sessionManager: sessionManager
+        )
+
+        Parra.shared = Parra(
+            dataManager: dataManager,
+            syncManager: syncManager,
+            sessionManager: sessionManager,
+            networkManager: networkManager
+        )
+
+        let authProviderExpectation = XCTestExpectation()
+
+        Parra.initialize(
+            authProvider: .publicKey(tenantId: tenantId, apiKeyId: apiKeyId, userIdProvider: {
+                authProviderExpectation.fulfill()
+                return UUID().uuidString
+            }))
+
+        let _ = try await Parra.shared.networkManager.authenticationProvider!()
+
+        wait(for: [authProviderExpectation], timeout: 0.1)
     }
     
-    
-    func testSetAuthenticationProviderCompletionHandlerNonThrowingFunc() async throws {
-        let credential = ParraCredential(token: UUID().uuidString)
-        XCTAssertNil(Parra.shared.networkManager.authenticationProvider)
-
-        Parra.setAuthenticationProvider { (completion: (ParraCredential) -> Void) in
-            completion(credential)
-        }
-        
-        XCTAssertNotNil(Parra.shared.networkManager.authenticationProvider)
-    }
-    
-    func testSetAuthenticationProviderResultFunc() async throws {
-        let credential = ParraCredential(token: UUID().uuidString)
-        XCTAssertNil(Parra.shared.networkManager.authenticationProvider)
-
-        Parra.setAuthenticationProvider { (completion: (Result<ParraCredential, Error>) -> Void) in
-            completion(.success(credential))
-        }
-        
-        XCTAssertNotNil(Parra.shared.networkManager.authenticationProvider)
-    }
-    
-    func testAsyncConversionFromCompletionHandlerSuccess() async throws {
-        let credential = ParraCredential(token: UUID().uuidString)
-
-        Parra.setAuthenticationProvider { (completion: (ParraCredential) -> Void) in
-            completion(credential)
-        }
-        
-        let result = try await Parra.shared.networkManager.authenticationProvider!()
-        
-        XCTAssertEqual(result, credential)
-    }
-    
-    func testAsyncConversionFromCompletionHandlerFailure() async throws {
-        Parra.setAuthenticationProvider { (completion: (ParraCredential) -> Void) in
+    func testInitWithDefaultAuthProviderFailure() async throws {
+        Parra.initialize(authProvider: .default(tenantId: "tenant", authProvider: {
             throw URLError(.badServerResponse)
-        }
-        
+        }))
+
         do {
             let _ = try await Parra.shared.networkManager.authenticationProvider!()
-            
+
             XCTFail()
         } catch {}
     }
-    
-    func testAsyncConversionFromResultSuccess() async throws {
-        let credential = ParraCredential(token: UUID().uuidString)
 
-        Parra.setAuthenticationProvider { (completion: (Result<ParraCredential, Error>) -> Void) in
-            completion(.success(credential))
-        }
-
-        let result = try await Parra.shared.networkManager.authenticationProvider!()
-        
-        XCTAssertEqual(result, credential)
-    }
-
-    func testAsyncConversionFromResultFailure() async throws {
-        Parra.setAuthenticationProvider { (completion: (Result<ParraCredential, Error>) -> Void) in
-            completion(.failure(URLError(.badServerResponse)))
-        }
+    func testInitWithPublicKeyAuthProviderFailure() async throws {
+        Parra.initialize(authProvider: .publicKey(tenantId: "", apiKeyId: "", userIdProvider: {
+            throw URLError(.badServerResponse)
+        }))
 
         do {
             let _ = try await Parra.shared.networkManager.authenticationProvider!()
-            
+
             XCTFail()
         } catch {}
     }
@@ -116,64 +104,21 @@ class ParraAuthenticationTests: XCTestCase {
             urlSession: MockURLSession(dataTaskResolver: resolver)
         )
         
-        let syncManager = ParraSyncManager(
-            networkManager: networkManager
-        )
-        
-        Parra.shared = Parra(
+        let sessionManager = ParraSessionManager(
             dataManager: dataManager,
-            syncManager: syncManager,
             networkManager: networkManager
-        )
-    }
-
-    func testSetPublicApiKeyAuthenticationProvider() async throws {
-        XCTAssertNil(Parra.shared.networkManager.authenticationProvider)
-
-        Parra.setPublicApiKeyAuthProvider(
-            tenantId: UUID().uuidString,
-            apiKeyId: UUID().uuidString
-        ) {
-            return UUID().uuidString
-        }
-
-        XCTAssertNotNil(Parra.shared.networkManager.authenticationProvider)
-    }
-
-    func testAsyncConversionFromPublicApiKeyAuthProvider() async throws {
-        let dataManager = ParraDataManager()
-        let tenantId = UUID().uuidString
-        let route = "tenants/\(tenantId)/issuers/public/auth/token"
-        let networkManager = ParraNetworkManager(
-            dataManager: dataManager,
-            urlSession: MockURLSession { request in
-                let data = try! JSONEncoder().encode(ParraCredential(token: UUID().uuidString))
-                return (data, createTestResponse(route: route), nil)
-            }
         )
 
         let syncManager = ParraSyncManager(
-            networkManager: networkManager
+            networkManager: networkManager,
+            sessionManager: sessionManager
         )
 
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
-
-        let authProviderExpectation = XCTestExpectation()
-
-        Parra.setPublicApiKeyAuthProvider(
-            tenantId: UUID().uuidString,
-            apiKeyId: UUID().uuidString
-        ) {
-            authProviderExpectation.fulfill()
-            return UUID().uuidString
-        }
-
-        let _ = try await Parra.shared.networkManager.authenticationProvider!()
-
-        wait(for: [authProviderExpectation], timeout: 0.1)
     }
 }

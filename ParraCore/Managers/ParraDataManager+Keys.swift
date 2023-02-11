@@ -7,19 +7,27 @@
 
 import Foundation
 
-private let applicationSupportDirectory = FileManager.default.urls(
-    for: .applicationSupportDirectory,
-    in: .userDomainMask
-).first!
-
 // !!! Think really before changing anything here!
 public extension ParraDataManager {
+    enum Base {
+        public static let applicationSupportDirectory = FileManager.default.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask
+        ).first!
+
+        public static let cachesURL = FileManager.default.urls(
+            for: .cachesDirectory,
+            in: .userDomainMask
+        ).first!
+    }
+
     enum Path {
-        public static let parraDirectory = applicationSupportDirectory.appendingPathComponent("parra",
-                                                                                              isDirectory: true)
+        internal static let networkCachesDirectory = Base.cachesURL.safeAppendDirectory("ParraNetworkCache")
+        public static let parraDirectory = Base.applicationSupportDirectory.safeAppendDirectory("parra")
     }
     
     enum Key {
         internal static let userCredentialsKey = "com.parra.usercredential"
+        internal static let userSessionsKey = "com.parra.usersession"
     }
 }

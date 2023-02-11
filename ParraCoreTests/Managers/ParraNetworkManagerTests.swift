@@ -18,16 +18,19 @@ class ParraNetworkManagerTests: XCTestCase {
         )
 
         // Can't expect throw with async func
-        do {
-            let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(route: "whatever", method: .get)
-            
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(route: "whatever", method: .get)
+
+        switch response.result {
+        case .success:
             XCTFail()
-        } catch {}
+        case .failure:
+            break
+        }
     }
     
     func testAuthenticatedRequestInvokesAuthProvider() async throws {
         let dataManager = MockDataManager()
-        let credential = ParraCredential(token: UUID().uuidString)
+        let token = UUID().uuidString
         let route = "whatever"
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
@@ -37,20 +40,20 @@ class ParraNetworkManagerTests: XCTestCase {
         )
         
         let authProviderExpectation = XCTestExpectation()
-        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> String in
             authProviderExpectation.fulfill()
             
-            return credential
+            return token
         }
 
-        let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
+        let _: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
             route: route,
             method: .get
         )
         
         wait(for: [authProviderExpectation], timeout: 0.1)
         let persistedCredential = await dataManager.getCurrentCredential()
-        XCTAssertEqual(credential, persistedCredential)
+        XCTAssertEqual(token, persistedCredential?.token)
     }
     
     func testThrowingAuthenticationHandlerFailsRequest() async throws {
@@ -63,23 +66,27 @@ class ParraNetworkManagerTests: XCTestCase {
             }
         )
         
-        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> String in
             throw URLError(.cannotLoadFromNetwork)
         }
         
         // Can't expect throw with async func
-        do {
-            let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
-                route: route,
-                method: .get
-            )
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
+            route: route,
+            method: .get
+        )
 
+        switch response.result {
+        case .success:
             XCTFail()
-        } catch {}
+        case .failure:
+            break
+        }
     }
     
     func testDoesNotRefreshCredentialWhenOneIsPresent() async throws {
-        let credential = ParraCredential(token: UUID().uuidString)
+        let token = UUID().uuidString
+        let credential = ParraCredential(token: token)
         let dataManager = MockDataManager()
         
         await dataManager.updateCredential(credential: credential)
@@ -94,18 +101,23 @@ class ParraNetworkManagerTests: XCTestCase {
         
         let authProviderExpectation = XCTestExpectation()
         authProviderExpectation.isInverted = true
-        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> String in
             authProviderExpectation.fulfill()
             
-            return credential
+            return token
         }
-        
-        let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
+
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
             route: route,
             method: .get
         )
 
-        wait(for: [authProviderExpectation], timeout: 0.1)
+        switch response.result {
+        case .success:
+            wait(for: [authProviderExpectation], timeout: 0.1)
+        case .failure(let error):
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testSendsLibraryVersionHeadersForRegisteredModules() async throws {
@@ -119,7 +131,7 @@ class ParraNetworkManagerTests: XCTestCase {
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                let matches = request.allHTTPHeaderFields!.keys.contains { headerKey in
+                let matches = (request.allHTTPHeaderFields ?? [:]).keys.contains { headerKey in
                     return headerKey.lowercased().contains(FakeModule.name.lowercased())
                 }
                 
@@ -131,28 +143,73 @@ class ParraNetworkManagerTests: XCTestCase {
             }
         )
 
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
+            networkManager: networkManager
+        )
+
+        let syncManager = ParraSyncManager(
+            networkManager: networkManager,
+            sessionManager: sessionManager
+        )
+
         Parra.shared = Parra(
             dataManager: dataManager,
-            syncManager: ParraSyncManager(networkManager: networkManager),
+            syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
         
         Parra.registerModule(module: FakeModule())
-        
-        let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
+
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
             route: route,
             method: .get
         )
-        
-        wait(for: [requestHeadersExpectation], timeout: 0.1)
+
+        switch response.result {
+        case .success:
+            wait(for: [requestHeadersExpectation], timeout: 0.1)
+        case .failure(let error):
+            XCTFail(error.localizedDescription)
+        }
     }
     
-    func testSendsBodyWithRequests() async throws {
+    func testSendsNoBodyWithGetRequests() async throws {
+        let dataManager = MockDataManager()
+        let route = "whatever"
+        let jsonEncoder = JSONEncoder.parraEncoder
+
+        let credential = ParraCredential(token: UUID().uuidString)
+        await dataManager.updateCredential(credential: credential)
+
+        let requestBodyExpectation = XCTestExpectation()
+        let networkManager = ParraNetworkManager(
+            dataManager: dataManager,
+            urlSession: MockURLSession { request in
+                if request.httpBody == nil {
+                    requestBodyExpectation.fulfill()
+                }
+
+                return (kEmptyJsonObjectData, createTestResponse(route: route), nil)
+            },
+            jsonEncoder: jsonEncoder
+        )
+
+        let _: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
+            route: route,
+            method: .get
+        )
+
+        wait(for: [requestBodyExpectation], timeout: 0.1)
+    }
+
+    func testSendsBodyWithNonGetRequests() async throws {
         let dataManager = MockDataManager()
         let route = "whatever"
         let bodyObject = EmptyRequestObject()
         let jsonEncoder = JSONEncoder.parraEncoder
-        
+
         let credential = ParraCredential(token: UUID().uuidString)
         await dataManager.updateCredential(credential: credential)
 
@@ -164,21 +221,20 @@ class ParraNetworkManagerTests: XCTestCase {
                 if request.httpBody == encoded {
                     requestBodyExpectation.fulfill()
                 }
-                
+
                 return (kEmptyJsonObjectData, createTestResponse(route: route), nil)
             },
             jsonEncoder: jsonEncoder
         )
-                
-        let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
+
+        let _: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
             route: route,
-            method: .post,
-            body: bodyObject
+            method: .post
         )
 
         wait(for: [requestBodyExpectation], timeout: 0.1)
     }
-    
+
     func testHandlesNoContentHeader() async throws {
         let credential = ParraCredential(token: UUID().uuidString)
         let dataManager = MockDataManager()
@@ -195,13 +251,18 @@ class ParraNetworkManagerTests: XCTestCase {
             },
             jsonEncoder: jsonEncoder
         )
-                
-        let response: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
+
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
             route: route,
             method: .get
         )
 
-        XCTAssertEqual(kEmptyJsonObjectData, try! jsonEncoder.encode(response))
+        switch response.result {
+        case .success(let data):
+            XCTAssertEqual(kEmptyJsonObjectData, try! jsonEncoder.encode(data))
+        case .failure(let error):
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testClientErrorsFailRequests() async throws {
@@ -218,14 +279,17 @@ class ParraNetworkManagerTests: XCTestCase {
         )
 
         // Can't expect throw with async func
-        do {
-            let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
-                route: route,
-                method: .get
-            )
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
+            route: route,
+            method: .get
+        )
 
+        switch response.result {
+        case .success:
             XCTFail()
-        } catch {}
+        case .failure:
+            break
+        }
     }
     
     func testServerErrorsFailRequests() async throws {
@@ -242,20 +306,24 @@ class ParraNetworkManagerTests: XCTestCase {
         )
 
         // Can't expect throw with async func
-        do {
-            let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
-                route: route,
-                method: .get
-            )
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
+            route: route,
+            method: .get
+        )
 
+        switch response.result {
+        case .success:
             XCTFail()
-        } catch {}
+        case .failure:
+            break
+        }
     }
     
     func testReauthenticationSuccess() async throws {
         var isFirstRequest = true
         
         let dataManager = MockDataManager()
+        let token = UUID().uuidString
         let credential = ParraCredential(token: UUID().uuidString)
         await dataManager.updateCredential(credential: credential)
 
@@ -274,23 +342,31 @@ class ParraNetworkManagerTests: XCTestCase {
         )
         
         let authProviderExpectation = XCTestExpectation()
-        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> String in
             authProviderExpectation.fulfill()
             
-            return credential
+            return token
         }
 
-        let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
             route: route,
             method: .get
         )
+
+        switch response.result {
+        case .success:
+            break
+        case .failure(let error):
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testReauthenticationFailure() async throws {
         var isFirstRequest = true
         
         let dataManager = MockDataManager()
-        let credential = ParraCredential(token: UUID().uuidString)
+        let token = UUID().uuidString
+        let credential = ParraCredential(token: token)
         await dataManager.updateCredential(credential: credential)
 
         let route = "whatever"
@@ -308,21 +384,24 @@ class ParraNetworkManagerTests: XCTestCase {
         )
         
         let authProviderExpectation = XCTestExpectation()
-        networkManager.updateAuthenticationProvider { () async throws -> ParraCredential in
+        networkManager.updateAuthenticationProvider { () async throws -> String in
             authProviderExpectation.fulfill()
             
-            return credential
+            return token
         }
 
         // Can't expect throw with async func
-        do {
-            let _: EmptyResponseObject = try await networkManager.performAuthenticatedRequest(
-                route: route,
-                method: .get
-            )
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
+            route: route,
+            method: .get
+        )
 
+        switch response.result {
+        case .success:
             XCTFail()
-        } catch {}
+        case .failure:
+            break
+        }
     }
 
     func testPublicApiKeyAuthentication() async throws {
@@ -337,7 +416,7 @@ class ParraNetworkManagerTests: XCTestCase {
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                let matches = request.allHTTPHeaderFields!.keys.contains { headerKey in
+                let matches = (request.allHTTPHeaderFields ?? [:]).keys.contains { headerKey in
                     return headerKey.lowercased().contains(FakeModule.name.lowercased())
                 }
 
@@ -350,9 +429,20 @@ class ParraNetworkManagerTests: XCTestCase {
             }
         )
 
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
+            networkManager: networkManager
+        )
+
+        let syncManager = ParraSyncManager(
+            networkManager: networkManager,
+            sessionManager: sessionManager
+        )
+
         Parra.shared = Parra(
             dataManager: dataManager,
-            syncManager: ParraSyncManager(networkManager: networkManager),
+            syncManager: syncManager,
+            sessionManager: sessionManager,
             networkManager: networkManager
         )
 

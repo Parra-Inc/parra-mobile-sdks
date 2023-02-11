@@ -10,15 +10,24 @@ import Foundation
 public struct ParraLoggerConfig {
     public var printTimestamps = true
     public var printLevel = true
-    public var printThread = true
+    public var printThread = false
     public var printCallsite = true
     public var printPrefix: String? = "PARRA"
 
     static let `default` = ParraLoggerConfig()
-}
 
-public struct ParraLogger {
-    static var config: ParraLoggerConfig = .default
+    enum Constant {
+        static let logEventPrefix = "parra:logger:"
+        static let logEventMessageKey = "\(logEventPrefix)message"
+        static let logEventLevelKey = "\(logEventPrefix)level"
+        static let logEventTimestampKey = "\(logEventPrefix)timestamp"
+        static let logEventThreadKey = "\(logEventPrefix)thread"
+        static let logEventExtraKey = "\(logEventPrefix)extra"
+    }
+
+    enum Environment {
+        static let verboseLoggingEnabledKey = "PARRA_VERBOSE_LOGGING_ENABLED"
+    }
 }
 
 public enum ParraLogLevel: Int, Comparable {
@@ -27,13 +36,16 @@ public enum ParraLogLevel: Int, Comparable {
     }
     
     case verbose = 1, info = 2, warn = 3, error = 4
-    
+
     var isAllowed: Bool {
-#if DEBUG
-        return true
-#else
+        if let verbose = ProcessInfo.processInfo.environment[ParraLoggerConfig.Environment.verboseLoggingEnabledKey],
+            let verboseNum = NumberFormatter().number(from: verbose),
+            verboseNum.boolValue {
+
+            return true
+        }
+
         return self > .verbose
-#endif
     }
     
     var outputName: String {
@@ -61,22 +73,26 @@ fileprivate func _parraLog(_ message: String,
         return
     }
 
+    let timestamp = ISO8601DateFormatter().string(from: Date())
+    let queue = Thread.current.queueName
+
+#if DEBUG
     var markerComponents: [String] = []
 
-    if ParraLogger.config.printTimestamps {
-        markerComponents.append(ISO8601DateFormatter().string(from: Date()))
+    if Parra.config.loggerConfig.printTimestamps {
+        markerComponents.append(timestamp)
     }
 
-    if let prefix = ParraLogger.config.printPrefix {
+    if let prefix = Parra.config.loggerConfig.printPrefix {
         markerComponents.append(prefix)
     }
 
-    if ParraLogger.config.printLevel {
+    if Parra.config.loggerConfig.printLevel {
         markerComponents.append(level.outputName)
     }
 
-    if ParraLogger.config.printThread {
-        markerComponents.append("🧵 \(Thread.current.queueName)")
+    if Parra.config.loggerConfig.printThread {
+        markerComponents.append("🧵 \(queue)")
     }
 
     let formattedMarkers = markerComponents.map { "[\($0)]" }.joined()
@@ -86,8 +102,20 @@ fileprivate func _parraLog(_ message: String,
     if !extra.isEmpty {
         formattedMessage.append(contentsOf: " extra: \(extra.description)")
     }
-    
+
     print(formattedMessage)
+#else
+    var params = [String: Any]()
+    params[ParraLoggerConfig.Constant.logEventMessageKey] = message
+    params[ParraLoggerConfig.Constant.logEventLevelKey] = level.outputName
+    params[ParraLoggerConfig.Constant.logEventTimestampKey] = timestamp
+    params[ParraLoggerConfig.Constant.logEventThreadKey] = queue
+    if !extra.isEmpty {
+        params[ParraLoggerConfig.Constant.logEventExtraKey] = extra
+    }
+
+    Parra.logAnalyticsEvent(ParraSessionEventType._Internal.log, params: params)
+#endif
 }
 
 public func parraLog(_ message: @autoclosure () -> String,
@@ -115,7 +143,7 @@ public func parraLogI(_ message: @autoclosure () -> String,
                       fileID: String = #fileID,
                       function: String = #function,
                       line: Int = #line) {
-    _parraLog(message(), extra: extra, level: .verbose, file: file, fileID: fileID, function: function, line: line)
+    _parraLog(message(), extra: extra, level: .info, file: file, fileID: fileID, function: function, line: line)
 }
 
 public func parraLogW(_ message: @autoclosure () -> String,
@@ -134,6 +162,33 @@ public func parraLogE(_ message: @autoclosure () -> String,
                       function: String = #function,
                       line: Int = #line) {
     _parraLog(message(), extra: extra, level: .error, file: file, fileID: fileID, function: function, line: line)
+}
+
+public func parraLogE(_ message: @autoclosure () -> ParraError,
+                      file: String = #file,
+                      fileID: String = #fileID,
+                      function: String = #function,
+                      line: Int = #line) {
+    _parraLog(message().errorDescription, extra: [:], level: .error, file: file, fileID: fileID, function: function, line: line)
+}
+
+public func parraLogE(_ message: @autoclosure () -> Error,
+                      _ extra: [String: AnyHashable] = [:],
+                      file: String = #file,
+                      fileID: String = #fileID,
+                      function: String = #function,
+                      line: Int = #line) {
+    _parraLog(message().localizedDescription, extra: extra, level: .error, file: file, fileID: fileID, function: function, line: line)
+}
+
+public func parraLogE(_ message: @autoclosure () -> String,
+                      _ error: Error,
+                      _ extra: [String: AnyHashable] = [:],
+                      file: String = #file,
+                      fileID: String = #fileID,
+                      function: String = #function,
+                      line: Int = #line) {
+    _parraLog("\(message()) error: \(error.localizedDescription)", extra: extra, level: .error, file: file, fileID: fileID, function: function, line: line)
 }
 
 private func createFormattedLocation(fileID: String, function: String, line: Int) -> String {

@@ -14,32 +14,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let myAppAccessToken = "9B5CDA6B-7538-4A2A-9611-7308D56DFFA1"
+        let myAppTenantId = "f2d60da7-8aea-4882-9ee7-307e0ff18728"
 
-        Parra.setAuthenticationProvider { (completion: @escaping (Result<ParraCredential, Error>) -> Void) in
-            var request = URLRequest(
-                // Replace this with your Parra access token generation endpoint
-                url: URL(string: "http://localhost:8080/v1/parra/auth/token")!
-            )
+        Parra.initialize(
+            config: .default,
+            authProvider: .default(tenantId: myAppTenantId) {
+                var request = URLRequest(
+                    // Replace this with your Parra access token generation endpoint
+                    url: URL(string: "http://localhost:8080/v1/parra/auth/token")!
+                )
 
-            request.httpMethod = "POST"
-            // Replace this with your app's way of authenticating users
-            request.setValue("Bearer \(myAppAccessToken)", forHTTPHeaderField: "Authorization")
+                request.httpMethod = "POST"
+                // Replace this with your app's way of authenticating users
+                request.setValue("Bearer \(myAppAccessToken)", forHTTPHeaderField: "Authorization")
 
-            URLSession.shared.dataTask(with: request) { data, _, error in
-                if let error = error {
-                    completion(.failure(error))
-                } else {
-                    do {
-                        let response = try JSONDecoder().decode([String: String].self, from: data!)
-                        
-                        completion(.success(ParraCredential(token: response["access_token"]!)))
-                    } catch let error {
-                        completion(.failure(error))
-                    }
-                }
-            }.resume()
-        }
-                
+                let (data, _) = try await URLSession.shared.data(for: request)
+                let response = try JSONDecoder().decode([String: String].self, from: data)
+
+                return response["access_token"]!
+            }
+        )
+
         return true
     }
 

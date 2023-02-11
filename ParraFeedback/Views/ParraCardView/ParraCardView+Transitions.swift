@@ -94,9 +94,7 @@ extension ParraCardView {
         
         let nextCard = cardViewFromCardItem(cardItem)
         nextCard.accessibilityIdentifier = "Next Card"
-        
-        let visibleButtons = visibleNavigationButtonsForCardItem(cardItem)
-        
+                
         contentView.addSubview(nextCard)
         
         if let currentCardConstraint = currentCardConstraint {
@@ -119,10 +117,7 @@ extension ParraCardView {
         
         if animated {
             let oldCardInfo = currentCardInfo
-            
-            backButton.isEnabled = false
-            forwardButton.isEnabled = false
-            
+
             self.currentCardInfo?.cardItemView.transform = .identity
             
             nextCard.frame = CGRect(origin: .zero, size: contentView.bounds.size)
@@ -157,12 +152,7 @@ extension ParraCardView {
                         )
                         nextCard.transform = .identity
                         self.layoutIfNeeded()
-                        
-                        self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
                     } completion: { _ in
-                        self.backButton.isEnabled = true
-                        self.forwardButton.isEnabled = true
-                        
                         if let oldCardInfo = oldCardInfo {
                             NSLayoutConstraint.deactivate(oldCardInfo.cardItemView.constraints)
                             oldCardInfo.cardItemView.removeFromSuperview()
@@ -170,12 +160,10 @@ extension ParraCardView {
                             self.delegate?.parraCardView(self, didEndDisplaying: oldCardInfo.cardItem)
                         }
                         
-                        self.delegate?.parraCardView(self, didDisplay: cardItem)
+                        self.sendDidDisplay(cardItem: cardItem)
                     }
             }
-        } else {
-            updateVisibleNavigationButtons(visibleButtons: visibleButtons)
-            
+        } else {            
             if let currentCardInfo = self.currentCardInfo {
                 delegate?.parraCardView(self, willEndDisplaying: currentCardInfo.cardItem)
                 
@@ -191,30 +179,21 @@ extension ParraCardView {
                 cardItem: cardItem
             )
             
-            self.delegate?.parraCardView(self, didDisplay: cardItem)
+            self.sendDidDisplay(cardItem: cardItem)
         }
     }
-    
-    internal func visibleNavigationButtonsForCardItem(_ cardItem: ParraCardItem?) -> VisibleButtonOptions {
-        guard let cardItem = cardItem else {
-            return []
+
+    private func sendDidDisplay(cardItem: ParraCardItem?) {
+        self.delegate?.parraCardView(self, didDisplay: cardItem)
+
+        if let cardItem {
+            Parra.logAnalyticsEvent(ParraSessionEventType.impression(
+                location: "question",
+                module: ParraFeedback.self
+            ), params: [
+                "question_id": cardItem.id
+            ])
         }
-        
-        guard let index = cardItems.firstIndex(of: cardItem) else {
-            return []
-        }
-        
-        var visibleButtons: VisibleButtonOptions = []
-        let hasPrevious = index > 0
-        if hasPrevious {
-            visibleButtons.update(with: .back)
-        }
-        let hasNext = index < cardItems.count - 1
-        if hasNext {
-            visibleButtons.update(with: .forward)
-        }
-        
-        return visibleButtons
     }
     
     private func canTransitionInDirection(_ direction: Direction) -> Bool {
@@ -228,22 +207,10 @@ extension ParraCardView {
         
         switch direction {
         case .left:
-            return currentIndex > 0 && backButton.isEnabled
+            return currentIndex > 0
         case .right:
-            return currentIndex < cardItems.count - 1 && forwardButton.isEnabled
+            return currentIndex < cardItems.count - 1
         }
-    }
-    
-    internal func updateVisibleNavigationButtons(visibleButtons: VisibleButtonOptions) {
-        let showBack = visibleButtons.contains(.back)
-        
-        backButton.alpha = showBack ? 1.0 : 0.0
-        backButton.isEnabled = showBack
-        
-        let showForward = visibleButtons.contains(.forward)
-        
-        forwardButton.alpha = showForward ? 1.0 : 0.0
-        forwardButton.isEnabled = showForward
     }
     
     private func cardViewFromCardItem(_ cardItem: ParraCardItem?) -> ParraCardItemView {

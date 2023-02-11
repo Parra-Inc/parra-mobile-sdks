@@ -36,7 +36,7 @@ public class ParraFeedback: ParraModule {
                 }
             } catch let error {
                 DispatchQueue.main.async {
-                    completion(.failure(ParraError.dataLoadingError(error.localizedDescription)))
+                    completion(.failure(ParraError.custom("Error fetching Parra Feedback cards", error)))
                 }
             }
         }
@@ -95,6 +95,13 @@ public class ParraFeedback: ParraModule {
         
         return cardsToKeep
     }
+
+    /// Whether the `ParraFeedback` module has data that has yet to be synced with the Parra API.
+    public func hasDataToSync() async -> Bool {
+        let answers = await dataManager.currentCompletedCardData()
+
+        return !answers.isEmpty
+    }
     
     /// Triggers an immediate sync of any stored ParraFeedback data with the Parra API. Instead of using this method, you should prefer to call `Parra.triggerSync()`
     /// on the ParraCore module, which can better handle enqueuing multiple sync requests. Sync calls will automatically happen when:
@@ -104,7 +111,7 @@ public class ParraFeedback: ParraModule {
     /// 4. All cards for a `ParraCardView` are completed.
     /// 5. A `ParraCardView` is deinitialized or removed from the view hierarchy.
     ///
-    public func triggerSync() async {
+    public func synchronizeData() async {
         await sendCardData()
     }
     
@@ -114,14 +121,7 @@ public class ParraFeedback: ParraModule {
         
         return completed != nil
     }
-    
-    /// Whether the `ParraFeedback` module has data that has yet to be synced with the Parra API.
-    public func hasDataToSync() async -> Bool {
-        let answers = await dataManager.currentCompletedCardData()
-        
-        return !answers.isEmpty
-    }
-    
+
     private func sendCardData() async {
         let completedCardData = await dataManager.currentCompletedCardData()
         let completedCards = Array(completedCardData.values)
@@ -136,7 +136,7 @@ public class ParraFeedback: ParraModule {
                         try await self.dataManager.clearCompletedCardData(completedCards: chunk)
                         await self.dataManager.removeCardsForCompletedCards(completedCards: chunk)
                     } catch let error {
-                        parraLogE("Error uploading card data: \(ParraError.networkError(error.localizedDescription))")
+                        parraLogE(ParraError.custom("Error uploading card data", error))
                     }
                 }
             }

@@ -22,7 +22,7 @@ class ParraStorageModuleTests: XCTestCase {
         
         storageModules = [
             .init(dataStorageMedium: .memory),
-            .init(dataStorageMedium: .fileSystem(folder: folder, fileName: file)),
+            .init(dataStorageMedium: .fileSystem(folder: folder, fileName: file, storeItemsSeparately: true)),
             .init(dataStorageMedium: .userDefaults(key: file)),
         ]
     }
@@ -57,12 +57,9 @@ class ParraStorageModuleTests: XCTestCase {
                 let (medium, key) = await storageModule.persistentStorage!
                 try await medium.write(name: key, value: data)
                 await storageModule.loadData()
-                
-                let cache = await storageModule.storageCache
-                XCTAssertEqual(data, cache)
 
-                let readData = await storageModule.read(name: testKey)
-                XCTAssertEqual(readData, testValue)
+                let cache = await storageModule.storageCache
+                XCTAssertEqual([:], cache)
             }
         }
     }
@@ -90,15 +87,26 @@ class ParraStorageModuleTests: XCTestCase {
             switch await storageModule.dataStorageMedium {
             case .memory:
                 await storageModule.loadData()
-                break
-            case .fileSystem, .userDefaults:
+            case .userDefaults:
                 let (medium, key) = await storageModule.persistentStorage!
                 try await medium.write(name: key, value: testData)
 
                 await checkLoadedState(storageModule: storageModule, isLoaded: false)
+
+                let value = await storageModule.read(name: testKey)
+
+                if value != testValue {
+                    let description = await storageModule.description
+                    XCTFail("load data not correct for \(description)")
+                }
+            case .fileSystem:
+                let (medium, _) = await storageModule.persistentStorage!
+                try await medium.write(name: testKey, value: testData)
+
+                await checkLoadedState(storageModule: storageModule, isLoaded: false)
                 
                 let value = await storageModule.read(name: testKey)
-                
+
                 if value != testValue {
                     let description = await storageModule.description
                     XCTFail("load data not correct for \(description)")
@@ -161,7 +169,7 @@ class ParraStorageModuleTests: XCTestCase {
         for storageModule in storageModules {
             try await storageModule.write(name: "clearKey1", value: "value")
             try await storageModule.write(name: "clearKey2", value: "value")
-            
+
             await storageModule.clear()
 
             let current = await storageModule.currentData()

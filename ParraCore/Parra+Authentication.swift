@@ -7,97 +7,65 @@
 
 import Foundation
 
-public typealias ParraFeedbackUserProvider = () async throws -> String
-public typealias ParraFeedbackAuthenticationProvider = () async throws -> ParraCredential
-
 public extension Parra {
+    internal actor Initializer {
+        internal static var isInitialized = false
+    }
+
     /// Checks whether an authentication provider has already been set.
     class func hasAuthenticationProvider() -> Bool {
         return shared.networkManager.authenticationProvider != nil
     }
 
-    /// Uses public API key authentication to authenticate with the Parra API. A tenant ID and API key ID are both provided up front
-    /// and a user provider function is used to allow the Parra SDK to request information about the current user when authentication is needed.
-    class func setPublicApiKeyAuthProvider(
-        tenantId: String,
-        apiKeyId: String,
-        userProvider: @escaping ParraFeedbackUserProvider
-    ) {
-        setAuthenticationProvider {
-            let userId = try await userProvider()
+    /// Initializes the Parra SDK using the provided configuration and auth provider. This method should be invoked as early as possible
+    /// inside of applicationDidFinishLaunchingWithOptions.
+    /// - Parameters:
+    ///   - authProvider: An async function that is expected to return a ParraCredential object containing a user's access token.
+    ///   This function will be invoked automatically whenever the user's credential is missing or expired and Parra needs to refresh
+    ///   the authentication state for your user.
+    class func initialize(config: ParraConfiguration = .default,
+                          authProvider: ParraAuthenticationProviderType) {
+        if Initializer.isInitialized {
+            parraLogW("Parra.initialize called more than once. Subsequent calls are ignored")
 
-            return try await shared.networkManager.performPublicApiKeyAuthenticationRequest(
-                forTentant: tenantId,
-                apiKeyId: apiKeyId,
-                userId: userId
-            )
+            return
         }
-    }
-    
-    /// Sets the provided function as the authentication provider that will be invoked when the Parra API needs to refresh the credential
-    /// for your user. This function will be invoked automatically whenever the user's credential is missing or expired.
-    /// - Parameter provider: An async function that is expected to return a ParraCredential object containing a user's access token.
-    class func setAuthenticationProvider(_ provider: @escaping ParraFeedbackAuthenticationProvider) {
-        shared.networkManager.updateAuthenticationProvider(provider)
 
-        refreshAuthentication()
-    }
-    
-    /// Sets the provided function as the authentication provider that will be invoked when the Parra API needs to refresh the credential
-    /// for your user. This function will be invoked automatically whenever the user's credential is missing or expired.
-    /// - Parameter provider: A function that expects a Result object containing a ParraCredential with an access token in its success case.
-    class func setAuthenticationProvider(_ provider: @escaping (@escaping (Result<ParraCredential, Error>) -> Void) -> Void) {
-        shared.networkManager.updateAuthenticationProvider(
-            shared.asyncAuthenticationFromResultCallback(provider)
-        )
+        var newConfig = config
 
-        refreshAuthentication()
-    }
-    
-    /// Sets the provided function as the authentication provider that will be invoked when the Parra API needs to refresh the credential
-    /// for your user. This function will be invoked automatically whenever the user's credential is missing or expired.
-    /// - Parameter provider: A function that expects a ParraCredential with an access token in its success case, or throws in the event of an error.
-    class func setAuthenticationProvider(_ provider: @escaping (@escaping (ParraCredential) -> Void) throws -> Void) {
-        shared.networkManager.updateAuthenticationProvider(
-            shared.asyncAuthenticationFromThrowingValueCallback(provider)
-        )
+        switch authProvider {
+        case .default(let tenantId, let provider):
+            shared.networkManager.updateAuthenticationProvider(provider)
 
-        refreshAuthentication()
-    }
-    
-    private func asyncAuthenticationFromThrowingValueCallback(_ provider:
-                                                              @escaping (@escaping (ParraCredential) -> Void) throws -> Void) -> (() async throws -> ParraCredential) {
-        return {
-            return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ParraCredential, Error>) in
-                do {
-                    try provider { credential in
-                        continuation.resume(returning: credential)
-                    }
-                } catch let error {
-                    continuation.resume(throwing: error)
+            newConfig.setTenantId(tenantId)
+        case .publicKey(let tenantId, let apiKeyId, let userIdProvider):
+            shared.networkManager.updateAuthenticationProvider { [weak shared] in
+                guard let networkManager = shared?.networkManager else {
+                    throw ParraError.unknown
                 }
-            }
-        }
-    }
-    
-    private func asyncAuthenticationFromResultCallback(_ provider:
-                                                       @escaping (@escaping (Result<ParraCredential, Error>) -> Void) -> Void) -> (() async throws -> ParraCredential) {
-        return {
-            return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ParraCredential, Error>) in
-                provider { result in
-                    switch result {
-                    case .success(let credential):
-                        continuation.resume(returning: credential)
-                    case .failure(let error):
-                        continuation.resume(throwing: error)
-                    }
-                }
-            }
-        }
-    }
 
-    private class func refreshAuthentication() {
+                let userId = try await userIdProvider()
+
+                return try await networkManager.performPublicApiKeyAuthenticationRequest(
+                    forTentant: tenantId,
+                    apiKeyId: apiKeyId,
+                    userId: userId
+                )
+            }
+
+            newConfig.setTenantId(tenantId)
+        }
+
+        Parra.config = newConfig
+        Parra.registerModule(module: shared)
+
+        Initializer.isInitialized = true
+
+        parraLogI("Parra SDK Initialized")
+
         Task {
+            await shared.sessionManager.createSessionIfNotExists()
+
             do {
                 let _ = try await shared.networkManager.refreshAuthentication()
             } catch let error {

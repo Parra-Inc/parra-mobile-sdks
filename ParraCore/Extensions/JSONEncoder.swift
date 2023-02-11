@@ -11,6 +11,8 @@ private let parraJsonEncoder: JSONEncoder = {
     let encoder = JSONEncoder()
     
     encoder.keyEncodingStrategy = .convertToSnakeCase
+    encoder.dateEncodingStrategy = .iso8601
+
 #if DEBUG
     encoder.outputFormatting = .prettyPrinted
 #endif

@@ -7,8 +7,6 @@
 
 import Foundation
 
-public typealias AnyCodable = [String: String]
-
 public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
     public let name: String
     public let isTest: Bool
@@ -23,7 +21,7 @@ public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case name
-        case isTest = "is_test"
+        case isTest
     }
 }
 
@@ -53,11 +51,11 @@ public struct Tenant: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
+        case createdAt
+        case updatedAt
+        case deletedAt
         case name
-        case isTest = "is_test"
+        case isTest
     }
 }
 
@@ -84,9 +82,9 @@ public struct TenantCollectionResponse: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case page
-        case pageCount = "page_count"
-        case pageSize = "page_size"
-        case totalCount = "total_count"
+        case pageCount
+        case pageSize
+        case totalCount
         case data
     }
 }
@@ -133,12 +131,12 @@ public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
+        case createdAt
+        case updatedAt
+        case deletedAt
         case name
         case description
-        case tenantId = "tenant_id"
+        case tenantId
     }
 }
 
@@ -174,12 +172,12 @@ public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable, Identifiab
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
+        case createdAt
+        case updatedAt
+        case deletedAt
         case name
         case description
-        case tenantId = "tenant_id"
+        case tenantId
         case secret
     }
 }
@@ -207,9 +205,9 @@ public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case page
-        case pageCount = "page_count"
-        case pageSize = "page_size"
-        case totalCount = "total_count"
+        case pageCount
+        case pageSize
+        case totalCount
         case data
     }
 }
@@ -253,12 +251,12 @@ public struct Answer: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
-        case questionId = "question_id"
-        case userId = "user_id"
-        case tenantId = "tenant_id"
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case questionId
+        case userId
+        case tenantId
         case data
     }
 }
@@ -392,7 +390,7 @@ public struct CreateChoiceQuestionOption: Codable, Equatable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case title
         case value
-        case isOther = "is_other"
+        case isOther
     }
 }
 
@@ -424,10 +422,10 @@ public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case title
-        case imageAssetId = "image_asset_id"
-        case imageAssetUrl = "image_asset_url"
+        case imageAssetId
+        case imageAssetUrl
         case value
-        case isOther = "is_other"
+        case isOther
         case id
     }
 
@@ -529,8 +527,8 @@ public struct CreateQuestionRequestBody: Codable, Equatable, Hashable {
         case kind
         case data
         case active
-        case expiresAt = "expires_at"
-        case answerQuota = "answer_quota"
+        case expiresAt
+        case answerQuota
     }
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -600,18 +598,18 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
-        case tenantId = "tenant_id"
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case tenantId
         case title
         case subtitle
         case type
         case kind
         case data
         case active
-        case expiresAt = "expires_at"
-        case answerQuota = "answer_quota"
+        case expiresAt
+        case answerQuota
         case answer
     }
     
@@ -686,9 +684,9 @@ public struct QuestionCollectionResponse: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case page
-        case pageCount = "page_count"
-        case pageSize = "page_size"
-        case totalCount = "total_count"
+        case pageCount
+        case pageSize
+        case totalCount
         case data
     }
 }
@@ -703,7 +701,7 @@ public struct NotificationRecipient: Codable, Equatable, Hashable {
     }
 
     public enum CodingKeys: String, CodingKey {
-        case userId = "user_id"
+        case userId
     }
 }
 
@@ -760,15 +758,15 @@ public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
         case title
         case subtitle
         case body
-        case imageUrl = "image_url"
+        case imageUrl
         case data
         case action
-        case deduplicationId = "deduplication_id"
-        case groupId = "group_id"
+        case deduplicationId
+        case groupId
         case visible
         case silent
-        case contentAvailable = "content_available"
-        case expiresAt = "expires_at"
+        case contentAvailable
+        case expiresAt
         case recipients
     }
 }
@@ -844,21 +842,21 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
         case title
         case subtitle
         case body
-        case imageUrl = "image_url"
+        case imageUrl
         case data
         case action
-        case deduplicationId = "deduplication_id"
-        case groupId = "group_id"
+        case deduplicationId
+        case groupId
         case visible
         case silent
-        case contentAvailable = "content_available"
-        case expiresAt = "expires_at"
-        case userId = "user_id"
+        case contentAvailable
+        case expiresAt
+        case userId
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
-        case viewedAt = "viewed_at"
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case viewedAt
         case version
     }
 }
@@ -886,9 +884,9 @@ public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case page
-        case pageCount = "page_count"
-        case pageSize = "page_size"
-        case totalCount = "total_count"
+        case pageCount
+        case pageSize
+        case totalCount
         case data
     }
 }
@@ -903,7 +901,7 @@ public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
     }
 
     public enum CodingKeys: String, CodingKey {
-        case notificationIds = "notification_ids"
+        case notificationIds
     }
 }
 
@@ -920,8 +918,8 @@ public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
     }
 
     public enum CodingKeys: String, CodingKey {
-        case userId = "user_id"
-        case apnsToken = "apns_token"
+        case userId
+        case apnsToken
     }
 }
 
@@ -969,15 +967,15 @@ public struct UserResponse: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
+        case createdAt
+        case updatedAt
+        case deletedAt
         case name
-        case firstName = "first_name"
-        case lastName = "last_name"
+        case firstName
+        case lastName
         case email
-        case emailVerified = "email_verified"
-        case avatarUrl = "avatar_url"
+        case emailVerified
+        case avatarUrl
         case locale
         case type
     }
@@ -997,7 +995,7 @@ public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case provider
-        case providerUserId = "provider_user_id"
+        case providerUserId
     }
 }
 
@@ -1030,12 +1028,12 @@ public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
+        case createdAt
+        case updatedAt
+        case deletedAt
         case provider
-        case providerUserId = "provider_user_id"
-        case userId = "user_id"
+        case providerUserId
+        case userId
     }
 }
 
@@ -1070,11 +1068,11 @@ public struct CreateUserRequestBody: Codable, Equatable, Hashable {
     }
 
     public enum CodingKeys: String, CodingKey {
-        case firstName = "first_name"
-        case lastName = "last_name"
+        case firstName
+        case lastName
         case email
-        case emailVerified = "email_verified"
-        case avatarUrl = "avatar_url"
+        case emailVerified
+        case avatarUrl
         case locale
         case type
         case identities
@@ -1097,8 +1095,8 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     }
 
     public enum CodingKeys: String, CodingKey {
-        case firstName = "first_name"
-        case lastName = "last_name"
+        case firstName
+        case lastName
         case email
     }
 }
@@ -1126,9 +1124,9 @@ public struct UserCollectionResponse: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case page
-        case pageCount = "page_count"
-        case pageSize = "page_size"
-        case totalCount = "total_count"
+        case pageCount
+        case pageSize
+        case totalCount
         case data
     }
 }

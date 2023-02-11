@@ -19,7 +19,8 @@ class ParraFeedbackDataManager {
         let completedCardDataStorageModule = ParraStorageModule<CompletedCard>(
             dataStorageMedium: .fileSystem(
                 folder: completedCardDataFolder,
-                fileName: completedCardDataFileName
+                fileName: completedCardDataFileName,
+                storeItemsSeparately: false
             )
         )
         

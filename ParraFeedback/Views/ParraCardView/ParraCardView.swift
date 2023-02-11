@@ -125,17 +125,6 @@ public class ParraCardView: UIView {
     /// The object that acts as the delegate of the `ParraCardView`. The delegate is not retained.
     public weak var delegate: ParraCardViewDelegate?
     
-    /// Whether or not swipe gestures can be used to transition between cards.
-    public var areSwipeGesturesEnabled = true {
-        didSet {
-            for swipe in cardSwipeGestureRecognizers {
-                swipe.isEnabled = areSwipeGesturesEnabled
-            }
-        }
-    }
-    
-    internal var cardSwipeGestureRecognizers = [UISwipeGestureRecognizer]()
-    
     internal let questionHandler = ParraQuestionHandler()
     
     internal var cardItems: [ParraCardItem] = [] {
@@ -147,18 +136,6 @@ public class ParraCardView: UIView {
                 // we want to make sure that item stays visible.
                 if let currentCardInfo = currentCardInfo,
                     let currentCardItem = currentCardInfo.cardItem, cardItems.contains(where: { $0.id == currentCardItem.id }) {
-                    
-                    let visibleButtons = visibleNavigationButtonsForCardItem(currentCardItem)
-                    
-                    UIView.animate(
-                        withDuration: 0.375,
-                        delay: 0.0,
-                        options: [.curveEaseInOut, .beginFromCurrentState],
-                        animations: {
-                            self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
-                        },
-                        completion: nil
-                    )
                 } else {
                     transitionToNextCard(direction: .right, animated: existedPreviously)
                 }
@@ -197,39 +174,11 @@ public class ParraCardView: UIView {
             applyConfig(config)
         }
     }
-    
-    /// The image used for the back button used to transition to the previous card. By default, a left facing arrow.
-    public var backButtonImage: UIImage = UIImage(systemName: "arrow.left")! {
-        didSet {
-            backButton.setImage(backButtonImage, for: .normal)
-        }
-    }
-    
-    /// The image used for the forward button used to transition to the next card. By default, a right facing arrow.
-    public var forwardButtonImage: UIImage = UIImage(systemName: "arrow.right")! {
-        didSet {
-            forwardButton.setImage(forwardButtonImage, for: .normal)
-        }
-    }
-    
-    internal lazy var backButton: UIButton = {
-        return UIButton.systemButton(
-            with: self.backButtonImage,
-            target: self,
-            action: #selector(navigateToPreviousCard)
-        )
-    }()
-    internal lazy var forwardButton: UIButton = {
-        return UIButton.systemButton(
-            with: self.forwardButtonImage,
-            target: self,
-            action: #selector(navigateToNextCard)
-        )
-    }()
+
     internal let poweredByButton = UIButton(type: .system)
     internal lazy var navigationStack: UIStackView = ({
         return UIStackView(arrangedSubviews: [
-            backButton, poweredByButton, forwardButton
+            poweredByButton
         ])
     })()
 
