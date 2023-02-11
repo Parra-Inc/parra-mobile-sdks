@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - xcode: "13.2"
+          - xcode: "16.2"
             ios: "15.2"
             device: "iPhone 13"
           - xcode: "14.2"
