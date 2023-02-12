@@ -20,7 +20,7 @@ public enum ParraError: LocalizedError {
         switch self {
         case .custom(let message, let error):
             if let error {
-                return "\(message) Error: \(error.localizedDescription)"
+                return "\(message) Error: \(error)"
             }
 
             return message
