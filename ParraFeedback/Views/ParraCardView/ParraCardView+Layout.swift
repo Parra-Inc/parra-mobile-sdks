@@ -159,6 +159,11 @@ extension ParraCardView {
     }
 
     @objc private func openParraLink() {
+        Parra.logAnalyticsEvent(ParraSessionEventType.impression(
+            location: "powered-by-parra",
+            module: ParraFeedback.self
+        ))
+
         UIApplication.shared.open(Parra.Constant.parraWebRoot)
     }
 }
