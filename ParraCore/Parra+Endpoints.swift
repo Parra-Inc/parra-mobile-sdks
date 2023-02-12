@@ -9,9 +9,8 @@ import UIKit
 
 public extension Parra {
     enum API {
-        /// <#Description#>
-        /// - Parameter appArea: <#appArea description#>
-        /// - Returns: <#description#>
+        /// Fetches all available Parra Feedback cards for the supplied app area. If `ParraQuestionAppArea.all` is provided
+        /// cards from all app areas will be combined and returned.
         public static func getCards(appArea: ParraQuestionAppArea) async throws -> [ParraCardItem] {
             var queryItems: [String: String] = [:]
             // It is important that an app area name is only provided if a specific one is meant to be returned.
