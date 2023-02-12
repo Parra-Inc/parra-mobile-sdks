@@ -100,7 +100,7 @@ fileprivate func _parraLog(_ message: String,
     var formattedMessage = "\(formattedMarkers) \(formattedLocation) \(message)"
 
     if !extra.isEmpty {
-        formattedMessage.append(contentsOf: " extra: \(extra.description)")
+        formattedMessage.append(contentsOf: " \(extra.description)")
     }
 
     print(formattedMessage)
