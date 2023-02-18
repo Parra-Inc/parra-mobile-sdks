@@ -75,10 +75,6 @@ public class Parra: ParraModule {
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
 
         addEventObservers()
-
-        Task {
-            await self.syncManager.startSyncTimer()
-        }
     }
     
     deinit {
@@ -104,6 +100,7 @@ public class Parra: ParraModule {
     public static func logout() async {
         await shared.syncManager.enqueueSync(with: .immediate)
         await shared.dataManager.updateCredential(credential: nil)
+        await shared.syncManager.stopSyncTimer()
     }
 
     // MARK: - Parra Modules

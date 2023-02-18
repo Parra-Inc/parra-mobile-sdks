@@ -68,6 +68,10 @@ public extension Parra {
 
             do {
                 let _ = try await shared.networkManager.refreshAuthentication()
+
+                Task {
+                    await shared.syncManager.startSyncTimer()
+                }
             } catch let error {
                 parraLogError("Refresh authentication on user change: \(error)")
             }
