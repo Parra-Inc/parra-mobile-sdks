@@ -13,7 +13,7 @@ internal class ParraDefaultLogger: ParraLogger {
 
     func log(level: ParraLogLevel,
              message: String,
-             extra: [String : AnyHashable]?,
+             extra: [String : Any]?,
              file: String,
              fileID: String,
              function: String,
@@ -51,7 +51,7 @@ internal class ParraDefaultLogger: ParraLogger {
 
         let extraOrDefault = extra ?? [:]
         if !extraOrDefault.isEmpty {
-            formattedMessage.append(contentsOf: " \(extraOrDefault.description)")
+            formattedMessage.append(contentsOf: " \(extraOrDefault.debugDescription)")
         }
         if level == .fatal {
             let formattedStackTrace = Thread.callStackSymbols.joined(separator: "\n")

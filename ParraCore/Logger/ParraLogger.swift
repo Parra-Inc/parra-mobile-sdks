@@ -10,7 +10,7 @@ import Foundation
 public protocol ParraLogger: AnyObject {
     func log(level: ParraLogLevel,
              message: String,
-             extra: [String: AnyHashable]?,
+             extra: [String: Any]?,
              file: String,
              fileID: String,
              function: String,
@@ -18,7 +18,7 @@ public protocol ParraLogger: AnyObject {
 }
 
 fileprivate func _parraLog(_ message: String,
-                           extra: [String: AnyHashable] = [:],
+                           extra: [String: Any] = [:],
                            level: ParraLogLevel,
                            file: String,
                            fileID: String,
@@ -35,8 +35,10 @@ fileprivate func _parraLog(_ message: String,
     )
 }
 
+// TODO: Wrap extra in its own autoclosure
+
 public func parraLog(_ message: @autoclosure () -> String,
-                     extra: [String: AnyHashable] = [:],
+                     extra: [String: Any] = [:],
                      level: ParraLogLevel = .info,
                      file: String = #file,
                      fileID: String = #fileID,
@@ -53,7 +55,7 @@ public func parraLog(_ message: @autoclosure () -> String,
 }
 
 public func parraLogTrace(_ message: @autoclosure () -> String,
-                          _ extra: [String: AnyHashable] = [:],
+                          _ extra: [String: Any] = [:],
                           file: String = #file,
                           fileID: String = #fileID,
                           function: String = #function,
@@ -69,7 +71,7 @@ public func parraLogTrace(_ message: @autoclosure () -> String,
 }
 
 public func parraLogDebug(_ message: @autoclosure () -> String,
-                          _ extra: [String: AnyHashable] = [:],
+                          _ extra: [String: Any] = [:],
                           file: String = #file,
                           fileID: String = #fileID,
                           function: String = #function,
@@ -85,7 +87,7 @@ public func parraLogDebug(_ message: @autoclosure () -> String,
 }
 
 public func parraLogInfo(_ message: @autoclosure () -> String,
-                         _ extra: [String: AnyHashable] = [:],
+                         _ extra: [String: Any] = [:],
                          file: String = #file,
                          fileID: String = #fileID,
                          function: String = #function,
@@ -101,7 +103,7 @@ public func parraLogInfo(_ message: @autoclosure () -> String,
 }
 
 public func parraLogWarn(_ message: @autoclosure () -> String,
-                         _ extra: [String: AnyHashable] = [:],
+                         _ extra: [String: Any] = [:],
                          file: String = #file,
                          fileID: String = #fileID,
                          function: String = #function,
@@ -117,7 +119,7 @@ public func parraLogWarn(_ message: @autoclosure () -> String,
 }
 
 public func parraLogError(_ message: @autoclosure () -> String,
-                          _ extra: [String: AnyHashable] = [:],
+                          _ extra: [String: Any] = [:],
                           file: String = #file,
                           fileID: String = #fileID,
                           function: String = #function,
@@ -148,7 +150,7 @@ public func parraLogError(_ message: @autoclosure () -> ParraError,
 }
 
 public func parraLogError(_ message: @autoclosure () -> Error,
-                          _ extra: [String: AnyHashable] = [:],
+                          _ extra: [String: Any] = [:],
                           file: String = #file,
                           fileID: String = #fileID,
                           function: String = #function,
@@ -165,7 +167,7 @@ public func parraLogError(_ message: @autoclosure () -> Error,
 
 public func parraLogError(_ message: @autoclosure () -> String,
                           _ error: Error,
-                          _ extra: [String: AnyHashable] = [:],
+                          _ extra: [String: Any] = [:],
                           file: String = #file,
                           fileID: String = #fileID,
                           function: String = #function,
@@ -181,7 +183,7 @@ public func parraLogError(_ message: @autoclosure () -> String,
 }
 
 public func parraLogFatal(_ message: @autoclosure () -> String,
-                          _ extra: [String: AnyHashable] = [:],
+                          _ extra: [String: Any] = [:],
                           file: String = #file,
                           fileID: String = #fileID,
                           function: String = #function,
@@ -212,7 +214,7 @@ public func parraLogFatal(_ message: @autoclosure () -> ParraError,
 }
 
 public func parraLogFatal(_ message: @autoclosure () -> Error,
-                          _ extra: [String: AnyHashable] = [:],
+                          _ extra: [String: Any] = [:],
                           file: String = #file,
                           fileID: String = #fileID,
                           function: String = #function,
@@ -229,7 +231,7 @@ public func parraLogFatal(_ message: @autoclosure () -> Error,
 
 public func parraLogFatal(_ message: @autoclosure () -> String,
                           _ error: Error,
-                          _ extra: [String: AnyHashable] = [:],
+                          _ extra: [String: Any] = [:],
                           file: String = #file,
                           fileID: String = #fileID,
                           function: String = #function,
