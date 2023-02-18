@@ -129,7 +129,7 @@ class ParraQuestionHandler: ParraQuestionViewDelegate {
         }
         
         guard let completedCard = completedCard else {
-            parraLogE("Attempting to answer card with unknown data type", [
+            parraLogError("Attempting to answer card with unknown data type", [
                 "type": question.kind.rawValue
             ])
             return

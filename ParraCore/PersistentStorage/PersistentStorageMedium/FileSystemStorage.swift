@@ -32,7 +32,7 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     }
 
     internal func readAllInDirectory<T>() async -> [String: T] where T: Codable {
-        parraLogD("readAllInDirectory")
+        parraLogDebug("readAllInDirectory")
         guard let enumerator = fileManager.enumerator(
             atPath: baseUrl.safeNonEncodedPath()
         ) else {
@@ -46,18 +46,18 @@ internal actor FileSystemStorage: PersistentStorageMedium {
                 return accumulator
             }
 
-            parraLogD("readAllInDirectory reading file: \(fileName)")
+            parraLogDebug("readAllInDirectory reading file: \(fileName)")
 
             let path = baseUrl.safeAppendPathComponent(fileName)
             var isDirectory: ObjCBool = false
             let exists = fileManager.fileExists(atPath: path.safeNonEncodedPath(), isDirectory: &isDirectory)
 
             if !exists || isDirectory.boolValue || fileName.starts(with: ".") {
-                parraLogD("readAllInDirectory skipping file: \(fileName) - is likely hidden or a directory")
+                parraLogDebug("readAllInDirectory skipping file: \(fileName) - is likely hidden or a directory")
                 return accumulator
             }
 
-            parraLogD("readAllInDirectory file: \(fileName) exists and is not hidden or a directory")
+            parraLogDebug("readAllInDirectory file: \(fileName) exists and is not hidden or a directory")
 
             do {
                 let data = try Data(contentsOf: path)
@@ -65,15 +65,15 @@ internal actor FileSystemStorage: PersistentStorageMedium {
 
                 accumulator[fileName] = next
 
-                parraLogD("readAllInDirectory reading file: \(fileName) into cache")
+                parraLogDebug("readAllInDirectory reading file: \(fileName) into cache")
             } catch let error {
-                parraLogD("readAllInDirectory error: \(error.localizedDescription)")
+                parraLogDebug("readAllInDirectory error: \(error.localizedDescription)")
             }
 
             return accumulator
         }
 
-        parraLogD("readAllInDirectory read \(result.count) item(s) into cache")
+        parraLogDebug("readAllInDirectory read \(result.count) item(s) into cache")
 
         return result
     }

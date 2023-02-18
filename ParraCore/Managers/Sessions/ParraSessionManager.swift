@@ -60,7 +60,7 @@ internal actor ParraSessionManager: Syncable {
                 with: completedSessionIds.subtracting([currentSession.sessionId])
             )
         } catch let error {
-            parraLogE("Syncing sessions failed", error)
+            parraLogError("Syncing sessions failed", error)
         }
 
         self.currentSession = currentSession
@@ -130,7 +130,7 @@ internal actor ParraSessionManager: Syncable {
 
     internal func createSessionIfNotExists() async {
         guard currentSession == nil else {
-            parraLogD("Session is already in progress. Skipping creating new one.")
+            parraLogDebug("Session is already in progress. Skipping creating new one.")
 
             return
         }

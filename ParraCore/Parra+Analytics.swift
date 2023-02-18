@@ -42,7 +42,7 @@ public extension Parra {
 
                 await shared.sessionManager.logEvent(name.rawValue, params: paramsDict)
             } catch let error {
-                parraLogE("Error logging analytics event. Encodable params failed to encode as JSON.", error)
+                parraLogError("Error logging analytics event. Encodable params failed to encode as JSON.", error)
             }
         }
     }

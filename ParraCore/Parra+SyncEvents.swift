@@ -69,7 +69,7 @@ internal extension Parra {
 
             Parra.backgroundTaskId = nil
 
-            parraLogD("Background task: \(taskId) triggering session end")
+            parraLogDebug("Background task: \(taskId) triggering session end")
 
             Task {
                 await Parra.shared.sessionManager.endSession()
@@ -83,7 +83,7 @@ internal extension Parra {
         Parra.backgroundTaskId = UIApplication.shared.beginBackgroundTask(
             withName: Constant.backgroundTaskName
         ) {
-            parraLogD("Background task expiration handler invoked")
+            parraLogDebug("Background task expiration handler invoked")
 
             endSession()
         }
@@ -94,7 +94,7 @@ internal extension Parra {
                 try await Task.sleep(nanoseconds: 100_000_000)
             }
 
-            parraLogD("Ending Parra background execution after \(Constant.backgroundTaskDuration)s")
+            parraLogDebug("Ending Parra background execution after \(Constant.backgroundTaskDuration)s")
 
             endSession()
         }

@@ -26,7 +26,7 @@ public extension Parra {
     class func initialize(config: ParraConfiguration = .default,
                           authProvider: ParraAuthenticationProviderType) {
         if Initializer.isInitialized {
-            parraLogW("Parra.initialize called more than once. Subsequent calls are ignored")
+            parraLogWarn("Parra.initialize called more than once. Subsequent calls are ignored")
 
             return
         }
@@ -61,7 +61,7 @@ public extension Parra {
 
         Initializer.isInitialized = true
 
-        parraLogI("Parra SDK Initialized")
+        parraLogInfo("Parra SDK Initialized")
 
         Task {
             await shared.sessionManager.createSessionIfNotExists()
@@ -69,7 +69,7 @@ public extension Parra {
             do {
                 let _ = try await shared.networkManager.refreshAuthentication()
             } catch let error {
-                parraLogE("Refresh authentication on user change: \(error)")
+                parraLogError("Refresh authentication on user change: \(error)")
             }
         }
     }

@@ -11,7 +11,7 @@ internal extension FileManager {
     func safeCreateDirectory(at url: URL) throws {
         let logName = url.pathComponents.suffix(3).joined(separator: "/")
         
-        parraLogD("Checking if directory exists at: \(logName)")
+        parraLogDebug("Checking if directory exists at: \(logName)")
         var isDirectory: ObjCBool = false
         let exists = fileExists(
             atPath: url.path,
@@ -19,7 +19,7 @@ internal extension FileManager {
         )
         
         if exists && !isDirectory.boolValue {
-            parraLogD("Error: File existed at directory path \(logName)")
+            parraLogDebug("Error: File existed at directory path \(logName)")
             throw NSError(
                 domain: "Parra",
                 code: 2139,
@@ -31,10 +31,10 @@ internal extension FileManager {
         }
         
         if !exists {
-            parraLogD("Directory didn't exist at \(logName). Creating...")
+            parraLogDebug("Directory didn't exist at \(logName). Creating...")
             try createDirectory(at: url, withIntermediateDirectories: true)
         } else {
-            parraLogD("Directory already exists at \(url)")
+            parraLogDebug("Directory already exists at \(url)")
         }
     }
 

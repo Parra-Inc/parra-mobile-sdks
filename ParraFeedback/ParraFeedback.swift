@@ -136,7 +136,7 @@ public class ParraFeedback: ParraModule {
                         try await self.dataManager.clearCompletedCardData(completedCards: chunk)
                         await self.dataManager.removeCardsForCompletedCards(completedCards: chunk)
                     } catch let error {
-                        parraLogE(ParraError.custom("Error uploading card data", error))
+                        parraLogError(ParraError.custom("Error uploading card data", error))
                     }
                 }
             }

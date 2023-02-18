@@ -75,7 +75,7 @@ public extension Parra {
             var completedSessions = Set<String>()
             let route = "tenants/\(tenantId)/sessions"
             for session in sessions {
-                parraLogD("Uploading session: \(session.sessionId)")
+                parraLogDebug("Uploading session: \(session.sessionId)")
 
                 let sessionUpload = ParraSessionUpload(session: session)
 
@@ -90,7 +90,7 @@ public extension Parra {
                 case .success:
                     completedSessions.insert(session.sessionId)
                 case .failure(let error):
-                    parraLogE(error)
+                    parraLogError(error)
 
                     // If any of the sessions fail to upload afty rerying, fail the entire operation
                     // returning the sessions that have been completed so far.

@@ -170,7 +170,7 @@ public actor ParraStorageModule<DataType: Codable> {
                 )
             }
         } catch let error {
-            parraLogE("ParraStorageModule error deleting file", error)
+            parraLogError("ParraStorageModule error deleting file", error)
         }
     }
     

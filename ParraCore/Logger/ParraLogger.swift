@@ -68,12 +68,12 @@ public func parraLogT(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogD(_ message: @autoclosure () -> String,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogDebug(_ message: @autoclosure () -> String,
+                          _ extra: [String: AnyHashable] = [:],
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog(message(),
               extra: extra,
               level: .debug,
@@ -84,12 +84,12 @@ public func parraLogD(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogI(_ message: @autoclosure () -> String,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogInfo(_ message: @autoclosure () -> String,
+                         _ extra: [String: AnyHashable] = [:],
+                         file: String = #file,
+                         fileID: String = #fileID,
+                         function: String = #function,
+                         line: Int = #line) {
     _parraLog(message(),
               extra: extra,
               level: .info,
@@ -100,12 +100,12 @@ public func parraLogI(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogW(_ message: @autoclosure () -> String,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogWarn(_ message: @autoclosure () -> String,
+                         _ extra: [String: AnyHashable] = [:],
+                         file: String = #file,
+                         fileID: String = #fileID,
+                         function: String = #function,
+                         line: Int = #line) {
     _parraLog(message(),
               extra: extra,
               level: .warn,
@@ -116,12 +116,12 @@ public func parraLogW(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogE(_ message: @autoclosure () -> String,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogError(_ message: @autoclosure () -> String,
+                          _ extra: [String: AnyHashable] = [:],
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog(message(),
               extra: extra,
               level: .error,
@@ -132,11 +132,11 @@ public func parraLogE(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogE(_ message: @autoclosure () -> ParraError,
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogError(_ message: @autoclosure () -> ParraError,
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog(message().errorDescription,
               extra: [:],
               level: .error,
@@ -147,12 +147,12 @@ public func parraLogE(_ message: @autoclosure () -> ParraError,
     )
 }
 
-public func parraLogE(_ message: @autoclosure () -> Error,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogError(_ message: @autoclosure () -> Error,
+                          _ extra: [String: AnyHashable] = [:],
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog(message().localizedDescription,
               extra: extra,
               level: .error,
@@ -163,13 +163,13 @@ public func parraLogE(_ message: @autoclosure () -> Error,
     )
 }
 
-public func parraLogE(_ message: @autoclosure () -> String,
-                      _ error: Error,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogError(_ message: @autoclosure () -> String,
+                          _ error: Error,
+                          _ extra: [String: AnyHashable] = [:],
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog("\(message()) error: \(error.localizedDescription)",
               extra: extra,
               level: .error,
@@ -180,12 +180,12 @@ public func parraLogE(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogF(_ message: @autoclosure () -> String,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogFatal(_ message: @autoclosure () -> String,
+                          _ extra: [String: AnyHashable] = [:],
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog(message(),
               extra: extra,
               level: .fatal,
@@ -196,11 +196,11 @@ public func parraLogF(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogF(_ message: @autoclosure () -> ParraError,
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogFatal(_ message: @autoclosure () -> ParraError,
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog(message().errorDescription,
               extra: [:],
               level: .fatal,
@@ -211,12 +211,12 @@ public func parraLogF(_ message: @autoclosure () -> ParraError,
     )
 }
 
-public func parraLogF(_ message: @autoclosure () -> Error,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogFatal(_ message: @autoclosure () -> Error,
+                          _ extra: [String: AnyHashable] = [:],
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog(message().localizedDescription,
               extra: extra,
               level: .fatal,
@@ -227,13 +227,13 @@ public func parraLogF(_ message: @autoclosure () -> Error,
     )
 }
 
-public func parraLogF(_ message: @autoclosure () -> String,
-                      _ error: Error,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogFatal(_ message: @autoclosure () -> String,
+                          _ error: Error,
+                          _ extra: [String: AnyHashable] = [:],
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog("\(message()) error: \(error.localizedDescription)",
               extra: extra,
               level: .fatal,
