@@ -130,7 +130,7 @@ internal actor ParraSessionManager: Syncable {
 
     internal func createSessionIfNotExists() async {
         guard currentSession == nil else {
-            parraLogV("Session is already in progress. Skipping creating new one.")
+            parraLogD("Session is already in progress. Skipping creating new one.")
 
             return
         }

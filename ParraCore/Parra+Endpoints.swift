@@ -75,7 +75,7 @@ public extension Parra {
             var completedSessions = Set<String>()
             let route = "tenants/\(tenantId)/sessions"
             for session in sessions {
-                parraLogV("Uploading session: \(session.sessionId)")
+                parraLogD("Uploading session: \(session.sessionId)")
 
                 let sessionUpload = ParraSessionUpload(session: session)
 

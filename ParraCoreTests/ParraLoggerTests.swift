@@ -9,10 +9,11 @@ import XCTest
 @testable import ParraCore
 
 class ParraLoggerTests: XCTestCase {
-
     func testLogLevels() throws {
+        XCTAssert(ParraLogLevel.fatal > .error)
         XCTAssert(ParraLogLevel.error > .warn)
         XCTAssert(ParraLogLevel.warn > .info)
-        XCTAssert(ParraLogLevel.info > .verbose)
+        XCTAssert(ParraLogLevel.info > .debug)
+        XCTAssert(ParraLogLevel.debug > .trace)
     }
 }

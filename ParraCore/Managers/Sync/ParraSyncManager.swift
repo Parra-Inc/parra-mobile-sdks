@@ -41,19 +41,19 @@ internal actor ParraSyncManager {
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
     internal func enqueueSync(with mode: ParraSyncMode) async {
         guard await hasDataToSync() else {
-            parraLogV("Skipping \(mode) sync. No sync necessary.")
+            parraLogD("Skipping \(mode) sync. No sync necessary.")
             return
         }
 
-        parraLogV("Enqueuing sync: \(mode)")
+        parraLogD("Enqueuing sync: \(mode)")
 
         if isSyncing {
             if mode == .immediate {
-                parraLogV("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
+                parraLogD("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
                 
                 enqueuedSyncMode = .immediate
             } else {
-                parraLogV("Sync already in progress. Marking enqued sync.")
+                parraLogD("Sync already in progress. Marking enqued sync.")
                 
                 if enqueuedSyncMode != .immediate {
                     // An enqueued eventual sync shouldn't override an enqueued immediate sync.
@@ -68,7 +68,7 @@ internal actor ParraSyncManager {
             await self.sync()
         }
         
-        parraLogV("Sync enqued")
+        parraLogD("Sync enqued")
     }
     
     private func sync() async {
@@ -95,24 +95,24 @@ internal actor ParraSyncManager {
         }
         
         guard await hasDataToSync() else {
-            parraLogV("No data available to sync")
+            parraLogD("No data available to sync")
             isSyncing = false
 
             return
         }
         
-        parraLogV("Starting sync")
+        parraLogD("Starting sync")
         
         let start = CFAbsoluteTimeGetCurrent()
-        parraLogV("Sending sync data...")
+        parraLogD("Sending sync data...")
 
         await performSync()
 
         let duration = CFAbsoluteTimeGetCurrent() - start
-        parraLogV("Sync data sent. Took \(duration)(s)")
+        parraLogD("Sync data sent. Took \(duration)(s)")
         
         if let enqueuedSyncMode = enqueuedSyncMode {
-            parraLogV("More sync jobs were enqueued. Repeating sync.")
+            parraLogD("More sync jobs were enqueued. Repeating sync.")
             
             self.enqueuedSyncMode = nil
             
@@ -123,7 +123,7 @@ internal actor ParraSyncManager {
                 break
             }
         } else {
-            parraLogV("No more jobs found. Completing sync.")
+            parraLogD("No more jobs found. Completing sync.")
             
             isSyncing = false
         }
@@ -148,7 +148,7 @@ internal actor ParraSyncManager {
     }
     
     @MainActor internal func startSyncTimer() {
-        parraLogV("Starting sync timer")
+        parraLogD("Starting sync timer")
 
         stopSyncTimer()
 
@@ -156,7 +156,7 @@ internal actor ParraSyncManager {
             withTimeInterval: Constant.eventualSyncDelay,
             repeats: true
         ) { timer in
-            parraLogV("Sync timer fired")
+            parraLogD("Sync timer fired")
 
             Task {
                 await self.enqueueSync(with: .immediate)
