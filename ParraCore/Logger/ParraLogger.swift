@@ -52,12 +52,12 @@ public func parraLog(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogT(_ message: @autoclosure () -> String,
-                      _ extra: [String: AnyHashable] = [:],
-                      file: String = #file,
-                      fileID: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+public func parraLogTrace(_ message: @autoclosure () -> String,
+                          _ extra: [String: AnyHashable] = [:],
+                          file: String = #file,
+                          fileID: String = #fileID,
+                          function: String = #function,
+                          line: Int = #line) {
     _parraLog(message(),
               extra: extra,
               level: .trace,
