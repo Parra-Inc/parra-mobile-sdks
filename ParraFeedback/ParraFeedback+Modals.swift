@@ -16,7 +16,7 @@ public extension ParraFeedback {
                                  config: ParraCardViewConfig = .default,
                                  transitionStyle: ParraCardModalTransitionStyle = .slide) {
 
-        parraLogDebug("Presenting card popup view controller with \(cards.count) card(s)")
+        parraLogInfo("Presenting card popup view controller with \(cards.count) card(s)")
 
         let cardViewController = ParraCardPopupViewController(
             cards: cards,
@@ -36,7 +36,7 @@ public extension ParraFeedback {
                                   fromViewController: UIViewController?,
                                   config: ParraCardViewConfig = .drawerDefault) {
 
-        parraLogDebug("Presenting drawer view controller with \(cards.count) card(s)")
+        parraLogInfo("Presenting drawer view controller with \(cards.count) card(s)")
 
         let cardViewController = ParraCardDrawerViewController(
             cards: cards,

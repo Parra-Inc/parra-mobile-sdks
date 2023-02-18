@@ -104,12 +104,12 @@ internal actor ParraSyncManager {
         parraLogDebug("Starting sync")
         
         let start = CFAbsoluteTimeGetCurrent()
-        parraLogDebug("Sending sync data...")
+        parraLogTrace("Sending sync data...")
 
         await performSync()
 
         let duration = CFAbsoluteTimeGetCurrent() - start
-        parraLogDebug("Sync data sent. Took \(duration)(s)")
+        parraLogTrace("Sync data sent. Took \(duration)(s)")
         
         if let enqueuedSyncMode = enqueuedSyncMode {
             parraLogDebug("More sync jobs were enqueued. Repeating sync.")
@@ -148,7 +148,7 @@ internal actor ParraSyncManager {
     }
     
     @MainActor internal func startSyncTimer() {
-        parraLogDebug("Starting sync timer")
+        parraLogTrace("Starting sync timer")
 
         stopSyncTimer()
 
@@ -156,7 +156,7 @@ internal actor ParraSyncManager {
             withTimeInterval: Constant.eventualSyncDelay,
             repeats: true
         ) { timer in
-            parraLogDebug("Sync timer fired")
+            parraLogTrace("Sync timer fired")
 
             Task {
                 await self.enqueueSync(with: .immediate)

@@ -32,7 +32,7 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     }
 
     internal func readAllInDirectory<T>() async -> [String: T] where T: Codable {
-        parraLogDebug("readAllInDirectory")
+        parraLogTrace("readAllInDirectory")
         guard let enumerator = fileManager.enumerator(
             atPath: baseUrl.safeNonEncodedPath()
         ) else {
@@ -46,18 +46,18 @@ internal actor FileSystemStorage: PersistentStorageMedium {
                 return accumulator
             }
 
-            parraLogDebug("readAllInDirectory reading file: \(fileName)")
+            parraLogTrace("readAllInDirectory reading file: \(fileName)")
 
             let path = baseUrl.safeAppendPathComponent(fileName)
             var isDirectory: ObjCBool = false
             let exists = fileManager.fileExists(atPath: path.safeNonEncodedPath(), isDirectory: &isDirectory)
 
             if !exists || isDirectory.boolValue || fileName.starts(with: ".") {
-                parraLogDebug("readAllInDirectory skipping file: \(fileName) - is likely hidden or a directory")
+                parraLogTrace("readAllInDirectory skipping file: \(fileName) - is likely hidden or a directory")
                 return accumulator
             }
 
-            parraLogDebug("readAllInDirectory file: \(fileName) exists and is not hidden or a directory")
+            parraLogTrace("readAllInDirectory file: \(fileName) exists and is not hidden or a directory")
 
             do {
                 let data = try Data(contentsOf: path)
@@ -65,9 +65,9 @@ internal actor FileSystemStorage: PersistentStorageMedium {
 
                 accumulator[fileName] = next
 
-                parraLogDebug("readAllInDirectory reading file: \(fileName) into cache")
+                parraLogTrace("readAllInDirectory reading file: \(fileName) into cache")
             } catch let error {
-                parraLogDebug("readAllInDirectory error: \(error.localizedDescription)")
+                parraLogError("readAllInDirectory", error)
             }
 
             return accumulator
