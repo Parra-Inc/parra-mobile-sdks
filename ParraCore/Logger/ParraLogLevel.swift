@@ -46,7 +46,7 @@ public enum ParraLogLevel: Int, Comparable {
             return level
         }
 
-        return .warn
+        return .info
     }()
 
     var isAllowed: Bool {
