@@ -30,6 +30,8 @@ public extension Parra {
             case .success(let cardsResponse):
                 return cardsResponse.items
             case .failure(let error):
+                parraLogError("Error fetching cards from Parra", error)
+
                 throw error
             }
         }
@@ -55,6 +57,8 @@ public extension Parra {
             case .success:
                 return
             case .failure(let error):
+                parraLogError("Error submitting card responses to Parra", error)
+
                 throw error
             }
         }

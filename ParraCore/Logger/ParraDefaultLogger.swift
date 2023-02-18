@@ -46,8 +46,13 @@ internal class ParraDefaultLogger: ParraLogger {
         }
 
         let formattedMarkers = markerComponents.map { "[\($0)]" }.joined()
-        let formattedLocation = createFormattedLocation(fileID: fileID, function: function, line: line)
-        var formattedMessage = "\(formattedMarkers) \(formattedLocation) \(message)"
+
+        var formattedMessage = "\(formattedMarkers) \(message)"
+
+        if Parra.config.loggerConfig.printCallsite {
+            let formattedLocation = createFormattedLocation(fileID: fileID, function: function, line: line)
+            formattedMessage = "\(formattedMarkers) \(formattedLocation) \(message)"
+        }
 
         let extraOrDefault = extra ?? [:]
         if !extraOrDefault.isEmpty {

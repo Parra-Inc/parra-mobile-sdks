@@ -79,20 +79,27 @@ internal class ParraNetworkManager: NetworkManagerType {
     }
     
     internal func refreshAuthentication() async throws -> ParraCredential {
+        parraLogDebug("Performing reauthentication for Parra")
+
         guard let authenticationProvider = authenticationProvider else {
             throw ParraError.missingAuthentication
         }
         
         do {
+            parraLogInfo("Invoking Parra authentication provider")
+
             let token = try await authenticationProvider()
             let credential = ParraCredential(token: token)
             
             await dataManager.updateCredential(
                 credential: credential
             )
-            
+
+            parraLogInfo("Reauthentication with Parra succeeded")
+
             return credential
         } catch let error {
+            parraLogError("Reauthentication with Parra failed", error)
             throw ParraError.authenticationFailed(error.localizedDescription)
         }
     }
@@ -119,6 +126,8 @@ internal class ParraNetworkManager: NetworkManagerType {
                                                                           cachePolicy: URLRequest.CachePolicy? = nil,
                                                                           body: U) async -> AuthenticatedRequestResult<T> {
         var responseAttributes: AuthenticatedRequestAttributeOptions = []
+
+        parraLogTrace("Performing authenticated request to route: \(route)")
 
         do {
             let url = Parra.Constant.parraApiRoot.appendingPathComponent(route)
@@ -163,11 +172,13 @@ internal class ParraNetworkManager: NetworkManagerType {
             case .success(let data):
 #if DEBUG
                 if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
-                   let prettyData = try? jsonEncoder.encode(dataString),
-                   let prettyString = String(data: prettyData, encoding: .utf8) {
+                    let prettyData = try? jsonEncoder.encode(dataString),
+                    let prettyString = String(data: prettyData, encoding: .utf8) {
 
-                    parraLogTrace("Parra client received success response:")
-                    parraLogTrace(prettyString)
+                    parraLogTrace("Parra client received success response")
+                    if data != kEmptyJsonObjectData {
+                        parraLogTrace(prettyString)
+                    }
                 }
 #endif
 
@@ -200,6 +211,7 @@ internal class ParraNetworkManager: NetworkManagerType {
             case (204, _):
                 return (.success(kEmptyJsonObjectData), config.attributes)
             case (401, true):
+                parraLogTrace("Request required reauthentication")
                 let newCredential = try await refreshAuthentication()
 
                 request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: .authorization)
@@ -214,11 +226,13 @@ internal class ParraNetworkManager: NetworkManagerType {
             case (400...499, _):
 #if DEBUG
                 if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
-                    let prettyData = try? jsonEncoder.encode(dataString),
-                    let prettyString = String(data: prettyData, encoding: .utf8) {
+                   let prettyData = try? jsonEncoder.encode(dataString),
+                   let prettyString = String(data: prettyData, encoding: .utf8) {
 
-                    parraLogTrace("Client error received response:")
-                    parraLogTrace(prettyString)
+                    parraLogTrace("Received 400...499 status in response")
+                    if data != kEmptyJsonObjectData {
+                        parraLogTrace(prettyString)
+                    }
                 }
 #endif
 
@@ -231,7 +245,21 @@ internal class ParraNetworkManager: NetworkManagerType {
                     config.attributes
                 )
             case (500...599, _):
+#if DEBUG
+                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
+                   let prettyData = try? jsonEncoder.encode(dataString),
+                   let prettyString = String(data: prettyData, encoding: .utf8) {
+
+                    parraLogTrace("Received 500...599 status in response")
+                    if data != kEmptyJsonObjectData {
+                        parraLogTrace(prettyString)
+                    }
+                }
+#endif
+
                 if config.shouldRetry {
+                    parraLogTrace("Retrying previous request")
+
                     let nextConfig = config
                         .afterRetrying()
                         .withAttribute(.requiredRetry)

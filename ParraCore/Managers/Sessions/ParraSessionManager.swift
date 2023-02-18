@@ -75,6 +75,8 @@ internal actor ParraSessionManager: Syncable {
             return
         }
 
+        parraLogDebug("Logging event", ["name": String(describing: name)])
+
         let metadata: [String: AnyCodable] = Dictionary(
             uniqueKeysWithValues: params.map { key, value in
                 (key.description, .init(value))
@@ -102,6 +104,12 @@ internal actor ParraSessionManager: Syncable {
         guard var currentSession else {
             return
         }
+
+        parraLogDebug("Updating user property", [
+            "key": key.description,
+            "new value": String(describing: value),
+            "old value": String(describing: userProperties[key.description])
+        ])
 
         if let value {
             userProperties[key.description] = .init(value)

@@ -12,7 +12,7 @@ public struct ParraLoggerConfig {
     public var printTimestamps = true
     public var printLevel = true
     public var printThread = false
-    public var printCallsite = true
+    public var printCallsite = false
     public var printPrefix: String? = "PARRA"
     public var logger: ParraLogger = ParraDefaultLogger.default
 
