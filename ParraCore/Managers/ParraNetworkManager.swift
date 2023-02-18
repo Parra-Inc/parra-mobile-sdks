@@ -162,11 +162,15 @@ internal class ParraNetworkManager: NetworkManagerType {
             switch result {
             case .success(let data):
 #if DEBUG
-                if let dataString = String(data: data, encoding: .utf8) {
-                    parraLogDebug("Parra client received success response:")
-                    parraLogDebug(dataString)
+                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
+                   let prettyData = try? jsonEncoder.encode(dataString),
+                   let prettyString = String(data: prettyData, encoding: .utf8) {
+
+                    parraLogTrace("Parra client received success response:")
+                    parraLogTrace(prettyString)
                 }
 #endif
+
                 let response = try jsonDecoder.decode(T.self, from: data)
 
                 return AuthenticatedRequestResult(
@@ -209,8 +213,12 @@ internal class ParraNetworkManager: NetworkManagerType {
                 )
             case (400...499, _):
 #if DEBUG
-                if let dataString = String(data: data, encoding: .utf8) {
-                    parraLogDebug("Client error received response: \(dataString)")
+                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
+                    let prettyData = try? jsonEncoder.encode(dataString),
+                    let prettyString = String(data: prettyData, encoding: .utf8) {
+
+                    parraLogTrace("Client error received response:")
+                    parraLogTrace(prettyString)
                 }
 #endif
 
