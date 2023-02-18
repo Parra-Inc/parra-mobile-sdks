@@ -82,7 +82,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "PARRA_LOG_LEVEL"
-            value = "trace"
+            value = "debug"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
