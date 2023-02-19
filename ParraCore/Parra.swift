@@ -73,8 +73,6 @@ public class Parra: ParraModule {
         self.networkManager = networkManager
         
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
-
-        addEventObservers()
     }
     
     deinit {

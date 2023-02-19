@@ -154,9 +154,8 @@ internal actor ParraSyncManager {
     }
     
     @MainActor internal func startSyncTimer() {
-        parraLogTrace("Starting sync timer")
-
         stopSyncTimer()
+        parraLogTrace("Starting sync timer")
 
         syncTimer = Timer.scheduledTimer(
             withTimeInterval: Constant.eventualSyncDelay,
@@ -174,7 +173,9 @@ internal actor ParraSyncManager {
         guard let syncTimer = syncTimer else {
             return
         }
-        
+
+        parraLogTrace("Stopping sync timer")
+
         syncTimer.invalidate()
         self.syncTimer = nil
     }

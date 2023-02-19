@@ -10,8 +10,15 @@ import UIKit
 
 internal extension Parra {
     private static var backgroundTaskId: UIBackgroundTaskIdentifier?
+    private static var hasStartedEventObservers = false
 
     func addEventObservers() {
+        if Parra.hasStartedEventObservers {
+            return
+        }
+
+        Parra.hasStartedEventObservers = true
+
         let notificationCenter = NotificationCenter.default
 
         notificationCenter.addObserver(self,
@@ -104,7 +111,6 @@ internal extension Parra {
     @objc func applicationDidEnterBackground(notification: Notification) {
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .background))
     }
-
 
     @MainActor
     @objc private func triggerSyncFromNotification(notification: Notification) {

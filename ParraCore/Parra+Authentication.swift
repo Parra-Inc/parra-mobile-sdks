@@ -17,12 +17,12 @@ public extension Parra {
         return shared.networkManager.authenticationProvider != nil
     }
 
-    /// Initializes the Parra SDK using the provided configuration and auth provider. This method should be invoked as early as possible
-    /// inside of applicationDidFinishLaunchingWithOptions.
+    /// Initializes the Parra SDK using the provided configuration and auth provider. This method should be invoked as
+    /// early as possible inside of applicationDidFinishLaunchingWithOptions.
     /// - Parameters:
-    ///   - authProvider: An async function that is expected to return a ParraCredential object containing a user's access token.
-    ///   This function will be invoked automatically whenever the user's credential is missing or expired and Parra needs to refresh
-    ///   the authentication state for your user.
+    ///   - authProvider: An async function that is expected to return a ParraCredential object containing a user's
+    ///    access token. This function will be invoked automatically whenever the user's credential is missing or
+    ///    expired and Parra needs to refresh the authentication state for your user.
     class func initialize(config: ParraConfiguration = .default,
                           authProvider: ParraAuthenticationProviderType) {
         if Initializer.isInitialized {
@@ -33,28 +33,26 @@ public extension Parra {
 
         var newConfig = config
 
-        switch authProvider {
-        case .default(let tenantId, let provider):
-            shared.networkManager.updateAuthenticationProvider(provider)
-
-            newConfig.setTenantId(tenantId)
-        case .publicKey(let tenantId, let apiKeyId, let userIdProvider):
-            shared.networkManager.updateAuthenticationProvider { [weak shared] in
-                guard let networkManager = shared?.networkManager else {
-                    throw ParraError.unknown
-                }
-
-                let userId = try await userIdProvider()
-
-                return try await networkManager.performPublicApiKeyAuthenticationRequest(
-                    forTentant: tenantId,
-                    apiKeyId: apiKeyId,
-                    userId: userId
-                )
+        let (tenantId, authenticationProvider) = withAuthenticationMiddleware(
+            for: authProvider
+        ) { [weak shared] success in
+            guard let shared else {
+                return
             }
 
-            newConfig.setTenantId(tenantId)
+            Task {
+                if success {
+                    shared.addEventObservers()
+                    await shared.syncManager.startSyncTimer()
+                } else {
+                    await shared.dataManager.updateCredential(credential: nil)
+                    await shared.syncManager.stopSyncTimer()
+                }
+            }
         }
+
+        shared.networkManager.updateAuthenticationProvider(authenticationProvider)
+        newConfig.setTenantId(tenantId)
 
         Parra.config = newConfig
         Parra.registerModule(module: shared)
@@ -68,13 +66,56 @@ public extension Parra {
 
             do {
                 let _ = try await shared.networkManager.refreshAuthentication()
-
-                Task {
-                    await shared.syncManager.startSyncTimer()
-                }
             } catch let error {
-                parraLogError("Refresh authentication on user change: \(error)")
+                parraLogError("Authentication handler in call to Parra.initialize failed", error)
             }
+        }
+    }
+
+    private class func withAuthenticationMiddleware(
+        for authProvider: ParraAuthenticationProviderType,
+        onAuthenticationRefresh: @escaping (_ success: Bool) -> Void
+    ) -> (String, ParraAuthenticationProviderFunction) {
+        
+
+        switch authProvider {
+        case .default(let tenantId, let authProvider):
+            return (tenantId, { () async throws -> String in
+                do {
+                    let result = try await authProvider()
+
+                    onAuthenticationRefresh(true)
+
+                    return result
+                } catch let error {
+                    onAuthenticationRefresh(false)
+                    throw error
+                }
+            })
+            // () async throws -> String
+        case .publicKey(let tenantId, let apiKeyId, let userIdProvider):
+            return (tenantId, { [weak shared] () async throws -> String in
+                do {
+                    guard let networkManager = shared?.networkManager else {
+                        throw ParraError.unknown
+                    }
+
+                    let userId = try await userIdProvider()
+
+                    let result = try await networkManager.performPublicApiKeyAuthenticationRequest(
+                        forTentant: tenantId,
+                        apiKeyId: apiKeyId,
+                        userId: userId
+                    )
+
+                    onAuthenticationRefresh(true)
+
+                    return result
+                } catch let error {
+                    onAuthenticationRefresh(false)
+                    throw error
+                }
+            })
         }
     }
 }
