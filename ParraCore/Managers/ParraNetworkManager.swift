@@ -127,7 +127,7 @@ internal class ParraNetworkManager: NetworkManagerType {
                                                                           body: U) async -> AuthenticatedRequestResult<T> {
         var responseAttributes: AuthenticatedRequestAttributeOptions = []
 
-        parraLogTrace("Performing authenticated request to route: \(route)")
+        parraLogTrace("Performing authenticated request to route: \(method.rawValue) \(route)")
 
         do {
             let url = Parra.Constant.parraApiRoot.appendingPathComponent(route)
@@ -383,7 +383,9 @@ internal class ParraNetworkManager: NetworkManagerType {
 
     private func performAsyncDataDask(request: URLRequest) async throws -> (Data, HTTPURLResponse) {
 #if DEBUG
-        try await Task.sleep(nanoseconds: 1_000_000_000)
+        if NSClassFromString("XCTestCase") != nil {
+            try await Task.sleep(nanoseconds: 1_000_000_000)
+        }
 #endif
         
         let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
