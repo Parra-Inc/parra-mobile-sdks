@@ -16,7 +16,10 @@ class ParraCardsInTableView: UITableViewController {
     private var shouldShowFeedback = false {
         didSet {
             tableView.beginUpdates()
-            tableView.reloadRows(at: [.init(row: Constant.feedbackRow, section: 0)], with: .automatic)
+            tableView.reloadRows(
+                at: [.init(row: Constant.feedbackRow, section: 0)],
+                with: .automatic
+            )
             tableView.endUpdates()
         }
     }
