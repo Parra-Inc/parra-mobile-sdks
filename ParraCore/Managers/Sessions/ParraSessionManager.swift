@@ -75,7 +75,10 @@ internal actor ParraSessionManager: Syncable {
             return
         }
 
-        parraLogDebug("Logging event", ["name": String(describing: name)])
+        parraLogDebug("Logging event", [
+            "name": String(describing: name),
+            "params": String(describing: params),
+        ])
 
         let metadata: [String: AnyCodable] = Dictionary(
             uniqueKeysWithValues: params.map { key, value in
@@ -138,7 +141,7 @@ internal actor ParraSessionManager: Syncable {
 
     internal func createSessionIfNotExists() async {
         guard currentSession == nil else {
-            parraLogDebug("Session is already in progress. Skipping creating new one.")
+            parraLogTrace("Session is already in progress. Skipping creating new one.")
 
             return
         }
