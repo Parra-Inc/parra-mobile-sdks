@@ -44,16 +44,20 @@ class ParraCardsInTableView: UITableViewController {
 
     override func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == Constant.feedbackRow && shouldShowFeedback {
-            let parraCell = tableView.dequeueReusableCell(withIdentifier: ParraCardTableViewCell.defaultCellId, for: indexPath) as! ParraCardTableViewCell
-            
+        if let parraCell = tableView.dequeueReusableCell(
+            withIdentifier: ParraCardTableViewCell.defaultCellId,
+            for: indexPath
+        ) as? ParraCardTableViewCell, indexPath.row == Constant.feedbackRow && shouldShowFeedback {
             parraCell.config = .default
             parraCell.delegate = self
-            
+
             return parraCell
         }
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "demoCell", for: indexPath)
+
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "demoCell",
+            for: indexPath
+        )
 
         var contentConfig = UIListContentConfiguration.sidebarSubtitleCell()
         

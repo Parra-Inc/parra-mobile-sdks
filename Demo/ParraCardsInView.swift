@@ -52,9 +52,9 @@ class ParraCardsInView: UIViewController {
             self.view.addSubview(self.cardView)
             
             NSLayoutConstraint.activate([
-                self.cardView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.centerYAnchor),
-                self.cardView.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
-                self.cardView.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor)
+                self.cardView.centerYAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerYAnchor),
+                self.cardView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+                self.cardView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
             ])
         }
     }
