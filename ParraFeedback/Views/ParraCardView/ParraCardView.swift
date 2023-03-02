@@ -119,13 +119,13 @@ public extension ParraCardViewDelegate {
 public class ParraCardView: UIView {
     public enum Dimensions {
         public static let minWidth: CGFloat = 320
-        public static let minHeight: CGFloat = 274
+        public static let minHeight: CGFloat = 254
     }
     
     /// The object that acts as the delegate of the `ParraCardView`. The delegate is not retained.
     public weak var delegate: ParraCardViewDelegate?
     
-    internal let questionHandler = ParraQuestionHandler()
+    internal let answerHandler = ParraCardAnswerHandler()
     
     internal var cardItems: [ParraCardItem] = [] {
         didSet {
@@ -162,8 +162,6 @@ public class ParraCardView: UIView {
         ]
     }
     
-    internal var currentCardConstraint: NSLayoutConstraint?
-    
     internal let containerView = UIView(frame: .zero)
     internal let contentView = UIView(frame: .zero)
     
@@ -175,12 +173,8 @@ public class ParraCardView: UIView {
         }
     }
 
-    internal let poweredByButton = UIButton(type: .system)
-    internal lazy var navigationStack: UIStackView = ({
-        return UIStackView(arrangedSubviews: [
-            poweredByButton
-        ])
-    })()
+    internal let poweredByButton = UIButton(frame: .zero)
+    internal lazy var poweredByContainer = UIView(frame: .zero)
 
     /// Creates a `ParraCardView`. If there are any `ParraCardItem`s available in hte `ParraFeedback` module,
     /// they will be displayed automatically when adding this view to your view hierarchy.
@@ -191,7 +185,7 @@ public class ParraCardView: UIView {
         
         super.init(frame: .zero)
         
-        questionHandler.questionHandlerDelegate = self
+        answerHandler.questionHandlerDelegate = self
         
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
@@ -201,7 +195,8 @@ public class ParraCardView: UIView {
         accessibilityIdentifier = "ParraCardView"
         
         addSubview(containerView)
-        containerView.addSubview(navigationStack)
+        containerView.addSubview(poweredByContainer)
+        poweredByContainer.addSubview(poweredByButton)
         addSubview(contentView)
         
         containerView.translatesAutoresizingMaskIntoConstraints = false

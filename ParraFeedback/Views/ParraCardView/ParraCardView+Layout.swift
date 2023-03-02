@@ -10,7 +10,7 @@ import ParraCore
 
 extension ParraCardView {
     enum LayoutConstants {
-        static let navigationPadding: CGFloat = 10
+        static let navigationPadding: CGFloat = 5
         static let contentPadding: CGFloat = 12
     }
     
@@ -31,31 +31,41 @@ extension ParraCardView {
         let widthConstraint = widthAnchor.constraint(
             greaterThanOrEqualToConstant: Dimensions.minWidth
         )
-        
-        let heightConstraint = heightAnchor.constraint(
-            greaterThanOrEqualToConstant: Dimensions.minHeight
+        widthConstraint.priority = .init(999)
+
+        let aspectRatioConstraint = heightAnchor.constraint(
+            equalTo: widthAnchor,
+            multiplier: Dimensions.minHeight / Dimensions.minWidth
         )
+        aspectRatioConstraint.priority = .required
         
-        constraintsOnSuperView = [widthConstraint, heightConstraint]
+        constraintsOnSuperView = [
+            widthConstraint,
+            aspectRatioConstraint
+        ]
         
         NSLayoutConstraint.activate(constraintsOnSuperView)
     }
     
     internal func configureSubviews(config: ParraCardViewConfig) {        
         configureContentView()
-        configureNavigationStack()
+        configurePoweredByParraButton()
 
         containerLeadingConstraint = containerView.leadingAnchor.constraint(
-            equalTo: leadingAnchor, constant: config.contentInsets.left
+            equalTo: leadingAnchor,
+            constant: config.contentInsets.left
         )
         containerTrailingConstraint = containerView.trailingAnchor.constraint(
-            equalTo: trailingAnchor, constant: -config.contentInsets.right
+            equalTo: trailingAnchor,
+            constant: -config.contentInsets.right
         )
         containerTopConstraint = containerView.topAnchor.constraint(
-            equalTo: topAnchor, constant: config.contentInsets.top
+            equalTo: topAnchor,
+            constant: config.contentInsets.top
         )
         containerBottomConstraint = containerView.bottomAnchor.constraint(
-            equalTo: bottomAnchor, constant: -config.contentInsets.bottom
+            equalTo: bottomAnchor,
+            constant: -config.contentInsets.bottom
         )
         
         NSLayoutConstraint.activate(constraintsOncontainerView)
@@ -70,10 +80,10 @@ extension ParraCardView {
         containerView.layer.cornerRadius = config.cornerRadius
         
         poweredByButton.setTitleColor(config.backgroundColor.isLight()
-                                      ? UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 0.1)
-                                      : UIColor(hue: 0.0, saturation: 0.0, brightness: 1.0, alpha: 0.2),
+                                      ? .black.withAlphaComponent(0.1)
+                                      : .white.withAlphaComponent(0.2),
                                       for: .normal)
-        
+
         layer.shadowColor = config.shadow.color.cgColor
         layer.shadowOpacity = Float(config.shadow.opacity)
         layer.shadowRadius = config.shadow.radius
@@ -115,52 +125,97 @@ extension ParraCardView {
     private func configureContentView() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.setContentCompressionResistancePriority(.required, for: .vertical)
+        contentView.setContentHuggingPriority(.init(0), for: .vertical)
         contentView.clipsToBounds = true
         contentView.isUserInteractionEnabled = true
         contentView.accessibilityIdentifier = "ParraFeedbackContentView"
-        
+
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: navigationStack.bottomAnchor, constant: LayoutConstants.navigationPadding),
-            contentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0),
-            contentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0),
-            contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0)
+            contentView.topAnchor.constraint(
+                equalTo: poweredByContainer.bottomAnchor,
+                constant: LayoutConstants.navigationPadding
+            ),
+            contentView.leadingAnchor.constraint(
+                equalTo: containerView.leadingAnchor,
+                constant: 0
+            ),
+            contentView.trailingAnchor.constraint(
+                equalTo: containerView.trailingAnchor,
+                constant: 0
+            ),
+            contentView.bottomAnchor.constraint(
+                equalTo: containerView.bottomAnchor,
+                constant: 0
+            )
         ])
     }
     
-    private func configureNavigationStack() {
-        navigationStack.translatesAutoresizingMaskIntoConstraints = false
-        navigationStack.alignment = .center
-        navigationStack.axis = .horizontal
-        navigationStack.distribution = .equalSpacing
-        navigationStack.isUserInteractionEnabled = true
-        navigationStack.accessibilityIdentifier = "ParraFeedbackNavigation"
+    private func configurePoweredByParraButton() {
+        poweredByContainer.translatesAutoresizingMaskIntoConstraints = false
+        poweredByContainer.accessibilityIdentifier = "PoweredByParraContainer"
+        poweredByContainer.setContentHuggingPriority(.required, for: .vertical)
 
         poweredByButton.isUserInteractionEnabled = true
-        poweredByButton.accessibilityIdentifier = "ParraFeedbackPoweredBy"
-
-        poweredByButton.addTarget(self, action: #selector(openParraLink), for: .touchUpInside)
+        poweredByButton.translatesAutoresizingMaskIntoConstraints = false
+        poweredByButton.showsTouchWhenHighlighted = false
+        poweredByButton.accessibilityIdentifier = "PoweredByParraButton"
+        poweredByButton.setContentHuggingPriority(.init(999),
+                                                  for: .vertical)
+        poweredByButton.addTarget(self,
+                                  action: #selector(openParraLink),
+                                  for: .touchUpInside)
         
         let defaultAttributes = [NSAttributedString.Key.kern: 0.24]
-        let poweredBy = NSMutableAttributedString(string: "Powered by ", attributes: defaultAttributes)
-        poweredBy.addAttributes([.font: UIFont.boldSystemFont(ofSize: 12.0)], range: NSMakeRange(0, poweredBy.length))
+        let poweredBy = NSMutableAttributedString(
+            string: "Powered by ",
+            attributes: defaultAttributes
+        )
+
+        poweredBy.addAttributes(
+            [.font: UIFont.systemFont(ofSize: 8.0, weight: .bold)],
+            range: NSMakeRange(0, poweredBy.length)
+        )
         
-        let font = UIFont(name: "Pacifico-Regular", size: 16) ?? UIFont.boldSystemFont(ofSize: 16)
-        let parra = NSMutableAttributedString(string: "Parra", attributes: [.font: font])
-        parra.addAttributes(defaultAttributes, range: NSMakeRange(0, parra.length))
+        let font = UIFont(name: "Pacifico-Regular", size: 11) ?? UIFont.boldSystemFont(ofSize: 11)
+        let parra = NSMutableAttributedString(
+            string: "Parra",
+            attributes: [.font: font]
+        )
+        parra.addAttributes(defaultAttributes,
+                            range: NSMakeRange(0, parra.length))
         poweredBy.append(parra)
 
         poweredByButton.setAttributedTitle(poweredBy, for: .normal)
-        
+        poweredByButton.setAttributedTitle(poweredBy, for: .highlighted)
+
         NSLayoutConstraint.activate([
-            navigationStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            navigationStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
-            navigationStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12)
+            poweredByContainer.topAnchor.constraint(
+                equalTo: containerView.topAnchor,
+                constant: LayoutConstants.navigationPadding
+            ),
+            poweredByContainer.leadingAnchor.constraint(
+                equalTo: containerView.leadingAnchor,
+                constant: LayoutConstants.contentPadding
+            ),
+            poweredByContainer.trailingAnchor.constraint(
+                equalTo: containerView.trailingAnchor,
+                constant: -LayoutConstants.contentPadding
+            ),
+            poweredByButton.centerXAnchor.constraint(
+                equalTo: poweredByContainer.centerXAnchor
+            ),
+            poweredByButton.topAnchor.constraint(
+                equalTo: poweredByContainer.topAnchor
+            ),
+            poweredByButton.bottomAnchor.constraint(
+                equalTo: poweredByContainer.bottomAnchor
+            )
         ])
     }
 
     @objc private func openParraLink() {
-        Parra.logAnalyticsEvent(ParraSessionEventType.impression(
-            location: "powered-by-parra",
+        Parra.logAnalyticsEvent(ParraSessionEventType.action(
+            source: "powered-by-parra",
             module: ParraFeedback.self
         ))
 

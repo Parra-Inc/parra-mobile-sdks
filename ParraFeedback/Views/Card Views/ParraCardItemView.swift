@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 // TODO: Common ancestor. Might be able to just be a protocol.
-public class ParraCardItemView: UIView {
+public class ParraCardItemView: UIView, ParraConfigurableView {
     internal var config: ParraCardViewConfig
     
     internal required init(config: ParraCardViewConfig) {
@@ -22,5 +22,9 @@ public class ParraCardItemView: UIView {
     
     internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyConfig(_ config: ParraCardViewConfig) {
+
     }
 }

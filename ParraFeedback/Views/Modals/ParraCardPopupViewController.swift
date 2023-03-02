@@ -46,13 +46,30 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
         view.backgroundColor = .black.withAlphaComponent(0.3)
         view.addSubview(cardView)
 
-        NSLayoutConstraint.activate([
-            cardView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+        let centerYAnchor = cardView.centerYAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.centerYAnchor
+        )
+        centerYAnchor.priority = .init(900)
+
+        var constraints = [
+            centerYAnchor,
             cardView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             dismissButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,  constant: -24)
-        ])
+        ]
+
+        if #available(iOS 15.0, *) {
+            let keyboardAvoidingAnchor = cardView.bottomAnchor.constraint(
+                lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor
+            )
+
+            keyboardAvoidingAnchor.priority = .required
+
+            constraints.append(keyboardAvoidingAnchor)
+        }
+
+        NSLayoutConstraint.activate(constraints)
 
         let backgroundTap = UITapGestureRecognizer(
             target: self,

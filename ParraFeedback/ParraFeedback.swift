@@ -110,7 +110,6 @@ public class ParraFeedback: ParraModule {
     /// 3. There is a significant time change on the system clock.
     /// 4. All cards for a `ParraCardView` are completed.
     /// 5. A `ParraCardView` is deinitialized or removed from the view hierarchy.
-    ///
     public func synchronizeData() async {
         await sendCardData()
     }

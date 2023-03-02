@@ -94,23 +94,15 @@ extension ParraCardView {
         
         let nextCard = cardViewFromCardItem(cardItem)
         nextCard.accessibilityIdentifier = "Next Card"
-                
+
         contentView.addSubview(nextCard)
-        
-        if let currentCardConstraint = currentCardConstraint {
-            NSLayoutConstraint.deactivate([currentCardConstraint])
-        }
-        currentCardConstraint = contentView.heightAnchor.constraint(
-            greaterThanOrEqualTo: nextCard.heightAnchor
-        )
-        
+
         // If these change, make sure that changing nextCard.frame below still makes sense.
         NSLayoutConstraint.activate([
             nextCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nextCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             nextCard.topAnchor.constraint(equalTo: contentView.topAnchor),
-            nextCard.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
-            currentCardConstraint!
+            nextCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
         
         delegate?.parraCardView(self, willDisplay: cardItem)
@@ -229,7 +221,7 @@ extension ParraCardView {
         case .question(let question):
             card = ParraQuestionCardView(
                 question: question,
-                questionHandler: questionHandler,
+                answerHandler: answerHandler,
                 config: config
             )
         }

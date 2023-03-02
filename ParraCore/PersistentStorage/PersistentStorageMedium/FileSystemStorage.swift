@@ -32,7 +32,6 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     }
 
     internal func readAllInDirectory<T>() async -> [String: T] where T: Codable {
-        parraLogTrace("readAllInDirectory")
         guard let enumerator = fileManager.enumerator(
             atPath: baseUrl.safeNonEncodedPath()
         ) else {

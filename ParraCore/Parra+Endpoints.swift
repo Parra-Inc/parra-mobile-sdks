@@ -42,15 +42,13 @@ public extension Parra {
                 return
             }
 
-            let serializableCards = cards.map { $0.serializedForRequestBody() }
-
             let route = "bulk/questions/answer"
 
             let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
                 route: route,
                 method: .post,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                body: serializableCards
+                body: cards
             )
 
             switch response.result {
@@ -109,6 +107,7 @@ public extension Parra {
     }
 
     enum Assets {
+        // TODO: This needs to be called
         public static func performBulkAssetCachingRequest(assets: [Asset]) async {
             await Parra.shared.networkManager.performBulkAssetCachingRequest(
                 assets: assets

@@ -32,7 +32,10 @@ internal actor CompletedCardDataStorage: ItemStorage {
     }
     
     internal func completeCard(completedCard: CompletedCard) async {
-        try! await storageModule.write(name: completedCard.id, value: completedCard)
+        try! await storageModule.write(
+            name: completedCard.questionId,
+            value: completedCard
+        )
     }
     
     internal func clearCompletedCardData(completedCards: [CompletedCard] = []) async throws {
@@ -40,14 +43,21 @@ internal actor CompletedCardDataStorage: ItemStorage {
         
         if completedCards.isEmpty {
             for (_, card) in underlyingStorage {
-                successfullSubmittedCompletedCardIds.update(with: card.id)
+                successfullSubmittedCompletedCardIds.update(
+                    with: card.questionId
+                )
             }
             
             await storageModule.clear()
         } else {
             for completedCard in completedCards {
-                successfullSubmittedCompletedCardIds.update(with: completedCard.id)
-                await storageModule.delete(name: completedCard.id)
+                successfullSubmittedCompletedCardIds.update(
+                    with: completedCard.questionId
+                )
+
+                await storageModule.delete(
+                    name: completedCard.questionId
+                )
             }
         }
     }

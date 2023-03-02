@@ -8,6 +8,10 @@
 import UIKit
 import ParraCore
 
+internal protocol ParraConfigurableCardView {
+    func applyConfig(_ config: ParraCardViewConfig)
+}
+
 /// A configuration object for how a `ParraCardView` should look. Use this to customize `ParraCardView`s
 /// so that they better blend in with your app's UI.
 public struct ParraCardViewConfig {
@@ -17,10 +21,14 @@ public struct ParraCardViewConfig {
         public static let defaultCornerRadius: CGFloat = 12.0
         public static let defaultContentInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         public static let defaultTintColor = Parra.Constant.brandColor
+        public static let defaultAccessoryTintColor = UIColor(hex: 0x5BC0DE)
+        public static let defaultAccessoryDisabledTintColor = UIColor(hex: 0xe3e4e6)
     }
     
     public private(set) var backgroundColor: UIColor
     public private(set) var tintColor: UIColor?
+    public private(set) var accessoryTintColor: UIColor?
+    public private(set) var accessoryDisabledTintColor: UIColor?
     public private(set) var cornerRadius: CGFloat = 0.0
     public private(set) var contentInsets: UIEdgeInsets
     public private(set) var shadow: ParraShadowConfig
@@ -31,6 +39,8 @@ public struct ParraCardViewConfig {
 
     public init(backgroundColor: UIColor = Constant.defaultBackgroundColor,
                 tintColor: UIColor? = Constant.defaultTintColor,
+                accessoryTintColor: UIColor? = Constant.defaultAccessoryTintColor,
+                accessoryDisabledTintColor: UIColor? = Constant.defaultAccessoryDisabledTintColor,
                 cornerRadius: CGFloat = Constant.defaultCornerRadius,
                 contentInsets: UIEdgeInsets = Constant.defaultContentInsets,
                 shadow: ParraShadowConfig = .default,
@@ -38,15 +48,18 @@ public struct ParraCardViewConfig {
                 subtitle: ParraTextConfig = .subtitleDefault,
                 body: ParraTextConfig = .bodyDefault,
                 bodyBold: ParraTextConfig = .bodyBold) {
-        self.backgroundColor = backgroundColor
-        self.tintColor = tintColor
-        self.cornerRadius = cornerRadius
-        self.contentInsets = contentInsets
-        self.shadow = shadow
-        self.title = title
-        self.subtitle = subtitle
-        self.body = body
-        self.bodyBold = bodyBold
+
+        self.backgroundColor                = backgroundColor
+        self.tintColor                      = tintColor
+        self.accessoryTintColor             = accessoryTintColor
+        self.accessoryDisabledTintColor     = accessoryDisabledTintColor
+        self.cornerRadius                   = cornerRadius
+        self.contentInsets                  = contentInsets
+        self.shadow                         = shadow
+        self.title                          = title
+        self.subtitle                       = subtitle
+        self.body                           = body
+        self.bodyBold                       = bodyBold
     }
     
     /// The default configuration used by `ParraCardView`s when no other configuration is provided.

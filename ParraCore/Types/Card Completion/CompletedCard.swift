@@ -8,15 +8,11 @@
 import Foundation
 
 public struct CompletedCard: Codable {
-    public let id: String
-    public let data: CompletedCardData
+    public let questionId: String
+    public let data: QuestionAnswer
     
-    public init(id: String, data: CompletedCardData) {
-        self.id = id
+    public init(questionId: String, data: QuestionAnswer) {
+        self.questionId = questionId
         self.data = data
-    }
-    
-    public func serializedForRequestBody() -> SerializableCompletedCard {
-        return SerializableCompletedCard(completedCard: self)
     }
 }
