@@ -15,7 +15,7 @@ internal class ParraChoiceKindView: UIView, ParraQuestionKindView {
     typealias AnswerType = SingleOptionAnswer
 
     private let contentContainer = UIStackView(frame: .zero)
-    private var optionViewMap = [ParraBorderedButton: ChoiceQuestionOption ]()
+    private var optionViewMap = [ParraBorderedButton: ChoiceQuestionOption]()
 
     private let question: Question
     private let answerHandler: ParraAnswerHandler
