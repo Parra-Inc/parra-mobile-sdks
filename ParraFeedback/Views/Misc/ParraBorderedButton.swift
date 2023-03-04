@@ -22,9 +22,13 @@ internal class ParraBorderedButton: UIView, ParraConfigurableView {
 
     private var isSelected: Bool {
         didSet {
+            if isSelected == oldValue {
+                return
+            }
+
             applyConfig(config)
 
-            if isSelected && isSelected != oldValue {
+            if isSelected {
                 delegate?.buttonDidSelect(button: self, optionId: optionId)
             } else {
                 delegate?.buttonDidDeselect(button: self, optionId: optionId)
@@ -127,7 +131,7 @@ internal class ParraBorderedButton: UIView, ParraConfigurableView {
         if canSelect {
             applyWithAnimation { [self] in
                 isHighlighted = false
-                isSelected = true
+                isSelected.toggle()
             }
         }
     }
