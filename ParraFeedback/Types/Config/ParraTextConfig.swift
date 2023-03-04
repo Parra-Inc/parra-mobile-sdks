@@ -40,33 +40,45 @@ public struct ParraTextConfig {
         shadow: .default
     )
 
-    public static let bodyBold = ParraTextConfig(
+    public static let bodyDefaultBold = ParraTextConfig(
         color: .black.withAlphaComponent(0.87),
         font: .systemFont(ofSize: 13, weight: .bold),
+        shadow: .default
+    )
+
+    public static let labelDefault = ParraTextConfig(
+        color: .black.withAlphaComponent(0.87),
+        font: .systemFont(ofSize: 10, weight: .regular),
         shadow: .default
     )
 
     public static let titleDefaultDark = ParraTextConfig(
         color: .white,
         font: .systemFont(ofSize: 18, weight: .medium),
-        shadow: .default
+        shadow: .defaultDark
     )
     
     public static let subtitleDefaultDark = ParraTextConfig(
         color: UIColor(hex: 0x9C9BA4),
         font: .systemFont(ofSize: 12, weight: .light),
-        shadow: .default
+        shadow: .defaultDark
     )
     
     public static let bodyDefaultDark = ParraTextConfig(
         color: UIColor(hex: 0x9C9BA4).withAlphaComponent(0.87),
         font: .systemFont(ofSize: 12, weight: .medium),
-        shadow: .default
+        shadow: .defaultDark
     )
 
-    public static let bodyBoldDark = ParraTextConfig(
+    public static let bodyBoldDefaultDark = ParraTextConfig(
         color: UIColor(hex: 0x9C9BA4).withAlphaComponent(0.87),
         font: .systemFont(ofSize: 13, weight: .bold),
-        shadow: .default
+        shadow: .defaultDark
+    )
+
+    public static let labelDefaultDark = ParraTextConfig(
+        color: UIColor(hex: 0x9C9BA4).withAlphaComponent(0.87),
+        font: .systemFont(ofSize: 10, weight: .regular),
+        shadow: .defaultDark
     )
 }

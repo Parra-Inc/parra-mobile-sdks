@@ -36,6 +36,7 @@ public struct ParraCardViewConfig {
     public private(set) var subtitle: ParraTextConfig
     public private(set) var body: ParraTextConfig
     public private(set) var bodyBold: ParraTextConfig
+    public private(set) var label: ParraTextConfig
 
     public init(backgroundColor: UIColor = Constant.defaultBackgroundColor,
                 tintColor: UIColor? = Constant.defaultTintColor,
@@ -47,7 +48,8 @@ public struct ParraCardViewConfig {
                 title: ParraTextConfig = .titleDefault,
                 subtitle: ParraTextConfig = .subtitleDefault,
                 body: ParraTextConfig = .bodyDefault,
-                bodyBold: ParraTextConfig = .bodyBold) {
+                bodyBold: ParraTextConfig = .bodyDefaultBold,
+                label: ParraTextConfig = .labelDefault) {
 
         self.backgroundColor                = backgroundColor
         self.tintColor                      = tintColor
@@ -60,6 +62,7 @@ public struct ParraCardViewConfig {
         self.subtitle                       = subtitle
         self.body                           = body
         self.bodyBold                       = bodyBold
+        self.label                          = label
     }
     
     /// The default configuration used by `ParraCardView`s when no other configuration is provided.
