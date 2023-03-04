@@ -33,6 +33,7 @@ internal class ParraChoiceKindView: UIView, ParraQuestionKindView {
 
         contentContainer.axis = .vertical
         contentContainer.alignment = .fill
+        contentContainer.spacing = 8.0
         contentContainer.distribution = .equalCentering
         contentContainer.translatesAutoresizingMaskIntoConstraints = false
 
@@ -55,12 +56,15 @@ internal class ParraChoiceKindView: UIView, ParraQuestionKindView {
                 equalTo: trailingAnchor,
                 constant: -8
             ),
+            contentContainer.centerYAnchor.constraint(
+                equalTo: centerYAnchor
+            ),
             contentContainer.topAnchor.constraint(
-                equalTo: topAnchor,
+                greaterThanOrEqualTo: topAnchor,
                 constant: 8
             ),
             contentContainer.bottomAnchor.constraint(
-                equalTo: bottomAnchor,
+                lessThanOrEqualTo: bottomAnchor,
                 constant: -8
             )
         ])

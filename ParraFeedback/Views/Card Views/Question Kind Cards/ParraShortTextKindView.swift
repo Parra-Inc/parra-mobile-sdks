@@ -55,9 +55,17 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
         addSubview(textField)
 
         NSLayoutConstraint.activate([
-            textField.centerYAnchor.constraint(equalTo: centerYAnchor),
-            textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            textField.centerYAnchor.constraint(
+                equalTo: centerYAnchor
+            ),
+            textField.leadingAnchor.constraint(
+                equalTo: leadingAnchor,
+                constant: 8
+            ),
+            textField.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
+                constant: -8
+            ),
         ])
     }
 

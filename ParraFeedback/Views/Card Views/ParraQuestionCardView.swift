@@ -10,8 +10,9 @@ import ParraCore
 
 internal class ParraQuestionCardView: ParraCardItemView {
     internal enum Constant {
-        static let bottomPadding: CGFloat = 12.0
+        static let bottomPadding: CGFloat = 8.0
         static let horizontalPadding: CGFloat = 10.0
+        static let contentPadding: CGFloat = 6.0
     }
 
     internal override var config: ParraCardViewConfig {
@@ -19,14 +20,14 @@ internal class ParraQuestionCardView: ParraCardItemView {
             applyConfig(config)
         }
     }
-    
+
     private let question: Question
     private let answerHandler: ParraCardAnswerHandler
     private var questionTypeView: any (UIView & ParraQuestionKindView)
-    
+
     private let titleLabel: UILabel
     private var subtitleLabel: UILabel?
-    
+
     internal required init(question: Question,
                            answerHandler: ParraCardAnswerHandler,
                            config: ParraCardViewConfig) {
@@ -112,7 +113,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
 
         addSubview(titleLabel)
         addSubview(questionTypeView)
-        
+
         var constraints: [NSLayoutConstraint] = [
             titleLabel.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
@@ -141,7 +142,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
 
         if let subtitle = question.subtitle {
             let subtitleLabel = UILabel(frame: .zero)
-            
+
             subtitleLabel.text = subtitle
             subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
             subtitleLabel.numberOfLines = 2
@@ -150,7 +151,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
             subtitleLabel.accessibilityIdentifier = "Parra Question Subtitle Label"
 
             self.subtitleLabel = subtitleLabel
-            
+
             addSubview(subtitleLabel)
 
             constraints.append(contentsOf: [
@@ -164,18 +165,18 @@ internal class ParraQuestionCardView: ParraCardItemView {
                 ),
                 subtitleLabel.topAnchor.constraint(
                     equalTo: titleLabel.bottomAnchor,
-                    constant: 6
+                    constant: Constant.contentPadding
                 ),
                 questionTypeView.topAnchor.constraint(
                     equalTo: subtitleLabel.bottomAnchor,
-                    constant: Constant.bottomPadding
+                    constant: Constant.contentPadding
                 )
             ])
         } else {
             constraints.append(
                 questionTypeView.topAnchor.constraint(
                     equalTo: titleLabel.bottomAnchor,
-                    constant: Constant.bottomPadding
+                    constant: Constant.contentPadding
                 )
             )
         }
@@ -184,15 +185,15 @@ internal class ParraQuestionCardView: ParraCardItemView {
 
         applyConfig(config)
     }
-    
+
     internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     internal required init(config: ParraCardViewConfig) {
         fatalError("init(config:) has not been implemented")
     }
-    
+
     internal override func applyConfig(_ config: ParraCardViewConfig) {
         titleLabel.font = config.title.font
         titleLabel.textColor = config.title.color
@@ -200,7 +201,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
         titleLabel.layer.shadowOffset = config.title.shadow.offset
         titleLabel.layer.shadowRadius = config.title.shadow.radius
         titleLabel.layer.shadowOpacity = config.title.shadow.opacity
-        
+
         if let subtitleLabel = subtitleLabel {
             subtitleLabel.font = config.subtitle.font
             subtitleLabel.textColor = config.subtitle.color
@@ -213,3 +214,4 @@ internal class ParraQuestionCardView: ParraCardItemView {
         questionTypeView.applyConfig(config)
     }
 }
+
