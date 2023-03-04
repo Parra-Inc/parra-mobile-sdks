@@ -104,7 +104,7 @@ internal class ParraCheckboxKindView: UIView, ParraQuestionKindView {
     }
 }
 
-extension ParraCheckboxKindView: ParraBorderedButtonDelegate {
+extension ParraCheckboxKindView: ParraBorderedButtonDelegate, ViewTimer {
     func buttonShouldSelect(button: ParraBorderedButton,
                             optionId: String) -> Bool {
         return true
@@ -124,10 +124,20 @@ extension ParraCheckboxKindView: ParraBorderedButtonDelegate {
             ),
             for: question
         )
+
+        selectionDidUpdate()
     }
 
     func buttonDidDeselect(button: ParraBorderedButton,
                            optionId: String) {
         answerHandler.update(answer: nil, for: question)
+
+        selectionDidUpdate()
+    }
+
+    private func selectionDidUpdate() {
+        performAfter(delay: 5.0) { [self] in
+            answerHandler.commitAnswers(for: question)
+        }
     }
 }

@@ -60,6 +60,8 @@ class ParraCardAnswerHandler: ParraAnswerHandler {
 
     func commitAnswers(for question: Question) {
         guard let answer = currentAnswerState[question.id] else {
+            // This check is critical since it's possible that a card could commit a selection change
+            // without any answers selected.
             return
         }
 

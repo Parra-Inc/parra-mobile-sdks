@@ -93,6 +93,7 @@
 		005D31F629AAF396001D0E0A /* ParraPaddedBaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D31F529AAF396001D0E0A /* ParraPaddedBaseButton.swift */; };
 		005D31F829ADA7C3001D0E0A /* ParraPaddedBaseTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D31F729ADA7C3001D0E0A /* ParraPaddedBaseTextField.swift */; };
 		005D31FA29AEEB5B001D0E0A /* ParraBorderedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D31F929AEEB5B001D0E0A /* ParraBorderedTextField.swift */; };
+		005D31FD29B39979001D0E0A /* ViewTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D31FC29B39979001D0E0A /* ViewTimer.swift */; };
 		005E38A527FA1E0200F32F96 /* NetworkTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E38A427FA1E0200F32F96 /* NetworkTestHelpers.swift */; };
 		005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */; };
 		00707D1727F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00707D1627F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift */; };
@@ -282,6 +283,7 @@
 		005D31F529AAF396001D0E0A /* ParraPaddedBaseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddedBaseButton.swift; sourceTree = "<group>"; };
 		005D31F729ADA7C3001D0E0A /* ParraPaddedBaseTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddedBaseTextField.swift; sourceTree = "<group>"; };
 		005D31F929AEEB5B001D0E0A /* ParraBorderedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraBorderedTextField.swift; sourceTree = "<group>"; };
+		005D31FC29B39979001D0E0A /* ViewTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTimer.swift; sourceTree = "<group>"; };
 		005E38A427FA1E0200F32F96 /* NetworkTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTestHelpers.swift; sourceTree = "<group>"; };
 		005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Notifications.swift"; sourceTree = "<group>"; };
 		00707D1627F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraNetworkManagerTests+Mocks.swift"; sourceTree = "<group>"; };
@@ -593,6 +595,7 @@
 				001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */,
 				0036D60527D049EB0016DE97 /* ParraFeedbackDataManager+Keys.swift */,
 				00E8B32B278730D500FC3FFD /* ParraCardAnswerHandler.swift */,
+				005D31FB29B39960001D0E0A /* Utils */,
 				001B7A9727DE348700DEEECD /* Extensions */,
 				001B7B6227DE3BD000DEEECD /* Types */,
 				003C214A27DEBD53001CAE03 /* Storage */,
@@ -663,6 +666,14 @@
 				005D31E729A301DB001D0E0A /* ParraConfigurableView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		005D31FB29B39960001D0E0A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				005D31FC29B39979001D0E0A /* ViewTimer.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		00901F322999AC990071647F /* Question Kind Cards */ = {
@@ -1123,6 +1134,7 @@
 				001B7B5E27DE3B3800DEEECD /* ParraQuestionCardView.swift in Sources */,
 				00E15A352932971C0049C2C7 /* ParraCardDrawerViewController.swift in Sources */,
 				005D31F629AAF396001D0E0A /* ParraPaddedBaseButton.swift in Sources */,
+				005D31FD29B39979001D0E0A /* ViewTimer.swift in Sources */,
 				005D31E829A301DB001D0E0A /* ParraConfigurableView.swift in Sources */,
 				001B7B5527DE3B3800DEEECD /* ParraCardItemView.swift in Sources */,
 				001B7B4F27DE3B2500DEEECD /* ParraFeedback.swift in Sources */,
