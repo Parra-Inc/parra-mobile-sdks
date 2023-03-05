@@ -40,13 +40,17 @@ public enum ParraLogLevel: Int, Comparable {
     }
 
     private static var minAllowedLogLevel: ParraLogLevel = {
+        #if DEBUG
         if let rawLevelOverride = ProcessInfo.processInfo.environment[ParraLoggerConfig.Environment.allowedLogLevelOverrideKey],
            let level = ParraLogLevel(name: rawLevelOverride) {
 
             return level
         }
 
-        return .info
+        return Parra.config.loggerConfig.minimumAllowedLogLevel
+        #else
+        return Parra.config.loggerConfig.minimumAllowedLogLevel
+        #endif
     }()
 
     var isAllowed: Bool {

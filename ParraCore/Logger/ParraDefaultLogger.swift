@@ -71,10 +71,14 @@ internal class ParraDefaultLogger: ParraLogger {
 
         print(formattedMessage)
 #else
+        let (module, file) = splitFileId(fileId: fileID)
+
         var params = [String: Any]()
         params[ParraLoggerConfig.Constant.logEventMessageKey] = message
         params[ParraLoggerConfig.Constant.logEventLevelKey] = level.name
         params[ParraLoggerConfig.Constant.logEventTimestampKey] = timestamp
+        params[ParraLoggerConfig.Constant.logEventFileKey] = file
+        params[ParraLoggerConfig.Constant.logEventModuleKey] = module
         params[ParraLoggerConfig.Constant.logEventThreadKey] = queue
         if !extra.isEmpty {
             params[ParraLoggerConfig.Constant.logEventExtraKey] = extra
