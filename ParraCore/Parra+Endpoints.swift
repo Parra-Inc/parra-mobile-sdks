@@ -107,7 +107,6 @@ public extension Parra {
     }
 
     enum Assets {
-        // TODO: This needs to be called
         public static func performBulkAssetCachingRequest(assets: [Asset]) async {
             await Parra.shared.networkManager.performBulkAssetCachingRequest(
                 assets: assets

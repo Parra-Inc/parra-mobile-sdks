@@ -330,18 +330,25 @@ internal class ParraNetworkManager: NetworkManagerType {
     }
 
     internal func performBulkAssetCachingRequest(assets: [Asset]) async {
+        parraLogTrace("Performing bulk asset caching request for \(assets.count) asset(s)")
         let _ = await assets.asyncMap { asset in
             return try? await fetchAsset(asset: asset)
         }
     }
 
     internal func fetchAsset(asset: Asset) async throws -> UIImage? {
+        parraLogTrace("Fetching asset: \(asset.id)", [
+            "url": asset.url
+        ])
+
         let request = request(for: asset)
 
         let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
         let httpResponse = response as! HTTPURLResponse
 
         defer {
+            parraLogTrace("Caching asset: \(asset.id)")
+
             let cacheResponse = CachedURLResponse(
                 response: response,
                 data: data,
@@ -352,22 +359,39 @@ internal class ParraNetworkManager: NetworkManagerType {
         }
 
         if httpResponse.statusCode < 300 {
+            parraLogTrace("Successfully retreived image for asset: \(asset.id)")
+
             return UIImage(data: data)
         }
+
+        parraLogTrace("Failed to download image for asset: \(asset.id)")
 
         return nil
     }
 
     internal func isAssetCached(asset: Asset) -> Bool {
+        parraLogTrace("Checking if asset is cached: \(asset.id)")
+
         guard let cache = urlSession.configuration.urlCache else {
+            parraLogTrace("Cache is missing")
+
             return false
         }
 
         guard let cachedResponse = cache.cachedResponse(for: request(for: asset)) else {
+            parraLogTrace("Cache miss for asset: \(asset.id)")
             return false
         }
 
-        return cachedResponse.storagePolicy != .notAllowed
+        guard cachedResponse.storagePolicy != .notAllowed else {
+            parraLogTrace("Storage policy disallowed for asset: \(asset.id)")
+
+            return false
+        }
+
+        parraLogTrace("Cache hit for asset: \(asset.id)")
+
+        return true
     }
 
     private func request(for asset: Asset) -> URLRequest {

@@ -90,7 +90,8 @@ public class ParraFeedback: ParraModule {
                 }
             }
         }
-                
+
+        shared.performAssetPrefetch(for: cardsToKeep)
         shared.dataManager.setCards(cards: cardsToKeep)
         
         return cardsToKeep
@@ -144,5 +145,18 @@ public class ParraFeedback: ParraModule {
 
     private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {
         try await Parra.API.bulkAnswerQuestions(cards: cards)
+    }
+
+    private func performAssetPrefetch(for cards: [ParraCardItem]) {
+        Task {
+            parraLogDebug("Attempting asset prefetch for \(cards.count) card(s)...")
+            let assets = cards.flatMap { $0.getAllAssets() }
+            parraLogDebug("\(assets.count) asset(s) available for prefetching")
+
+
+            await Parra.Assets.performBulkAssetCachingRequest(assets: assets)
+
+            parraLogDebug("Completed prefetching assets")
+        }
     }
 }

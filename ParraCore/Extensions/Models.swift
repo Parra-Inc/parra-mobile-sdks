@@ -14,4 +14,17 @@ extension ParraCardItem: Identifiable {
             return question.id
         }
     }
+
+    public func getAllAssets() -> [Asset] {
+        switch self.data {
+        case .question(let question):
+            switch question.data {
+            case .imageQuestionBody(let imageQuestionBody):
+                return imageQuestionBody.options.map { $0.asset }
+            case .longTextQuestionBody, .shortTextQuestionBody, .ratingQuestionBody,
+                    .starQuestionBody, .booleanQuestionBody, .choiceQuestionBody, .checkboxQuestionBody:
+                return []
+            }
+        }
+    }
 }
