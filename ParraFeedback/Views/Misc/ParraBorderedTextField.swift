@@ -35,15 +35,19 @@ class ParraBorderedTextField: ParraPaddedBaseTextField, ParraConfigurableView {
     }
 
     override func becomeFirstResponder() -> Bool {
+        let result = super.becomeFirstResponder()
+
         applyConfig(config)
 
-        return super.becomeFirstResponder()
+        return result
     }
 
     override func resignFirstResponder() -> Bool {
+        let result = super.resignFirstResponder()
+
         applyConfig(config)
 
-        return super.resignFirstResponder()
+        return result
     }
 
     func applyConfig(_ config: ParraCardViewConfig) {
@@ -51,7 +55,7 @@ class ParraBorderedTextField: ParraPaddedBaseTextField, ParraConfigurableView {
         layer.masksToBounds = true
         layer.borderWidth = 1.5
 
-        let highlightColor = isHighlighted
+        let highlightColor = isFirstResponder
             ? config.accessoryTintColor
             : config.accessoryDisabledTintColor
 

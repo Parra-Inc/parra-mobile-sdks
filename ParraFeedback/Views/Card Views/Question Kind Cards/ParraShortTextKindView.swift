@@ -42,7 +42,7 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
     private func setup() {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
-        textField.returnKeyType = .next
+        textField.returnKeyType = .done
         textField.enablesReturnKeyAutomatically = true
         textField.keyboardType = .asciiCapable
         textField.autocorrectionType = .yes

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ParraPaddedBaseTextField: UITextField {
+internal class ParraPaddedBaseTextField: UITextField {
     private let forcedEdgeInsets: UIEdgeInsets
 
     required init(forcedEdgeInsets: UIEdgeInsets) {

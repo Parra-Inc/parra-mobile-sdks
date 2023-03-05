@@ -100,6 +100,7 @@
 		005D320529B4DF6B001D0E0A /* ParraStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D320429B4DF6B001D0E0A /* ParraStar.swift */; };
 		005D320729B52039001D0E0A /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D320629B52039001D0E0A /* UIView.swift */; };
 		005D320929B523E4001D0E0A /* UIEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D320829B523E4001D0E0A /* UIEdgeInsets.swift */; };
+		005D320B29B530E8001D0E0A /* ParraBorderedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D320A29B530E8001D0E0A /* ParraBorderedTextView.swift */; };
 		005E38A527FA1E0200F32F96 /* NetworkTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E38A427FA1E0200F32F96 /* NetworkTestHelpers.swift */; };
 		005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */; };
 		00707D1727F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00707D1627F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift */; };
@@ -296,6 +297,7 @@
 		005D320429B4DF6B001D0E0A /* ParraStar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStar.swift; sourceTree = "<group>"; };
 		005D320629B52039001D0E0A /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		005D320829B523E4001D0E0A /* UIEdgeInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIEdgeInsets.swift; sourceTree = "<group>"; };
+		005D320A29B530E8001D0E0A /* ParraBorderedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraBorderedTextView.swift; sourceTree = "<group>"; };
 		005E38A427FA1E0200F32F96 /* NetworkTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTestHelpers.swift; sourceTree = "<group>"; };
 		005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Notifications.swift"; sourceTree = "<group>"; };
 		00707D1627F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraNetworkManagerTests+Mocks.swift"; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 				005D31F329AADF4E001D0E0A /* ParraBorderedButton.swift */,
 				005D31FE29B3AB79001D0E0A /* ParraBorderedRatingControl.swift */,
 				005D31F929AEEB5B001D0E0A /* ParraBorderedTextField.swift */,
+				005D320A29B530E8001D0E0A /* ParraBorderedTextView.swift */,
 				0019CBC628FB1B580015E703 /* ParraImageButton.swift */,
 				005D31F529AAF396001D0E0A /* ParraPaddedBaseButton.swift */,
 				005D31F729ADA7C3001D0E0A /* ParraPaddedBaseTextField.swift */,
@@ -1151,6 +1154,7 @@
 				005D320729B52039001D0E0A /* UIView.swift in Sources */,
 				001B7B5927DE3B3800DEEECD /* CAShapeLayer.swift in Sources */,
 				001B7B5E27DE3B3800DEEECD /* ParraQuestionCardView.swift in Sources */,
+				005D320B29B530E8001D0E0A /* ParraBorderedTextView.swift in Sources */,
 				00E15A352932971C0049C2C7 /* ParraCardDrawerViewController.swift in Sources */,
 				005D31F629AAF396001D0E0A /* ParraPaddedBaseButton.swift in Sources */,
 				005D31FD29B39979001D0E0A /* ViewTimer.swift in Sources */,

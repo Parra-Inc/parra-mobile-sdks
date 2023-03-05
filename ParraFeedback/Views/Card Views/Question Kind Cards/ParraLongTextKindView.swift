@@ -14,6 +14,8 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
     typealias AnswerType = TextValueAnswer
 
     private let answerHandler: ParraAnswerHandler
+    private let textView: ParraBorderedTextView
+    private let question: Question
 
     required init(
         question: Question,
@@ -22,18 +24,58 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
         answerHandler: ParraAnswerHandler
     ) {
         self.answerHandler = answerHandler
+        self.question = question
+        self.textView = ParraBorderedTextView(config: config)
 
         super.init(frame: .zero)
 
-        backgroundColor = .yellow
+        textView.placeholder = data.placeholder
+
+        setup()
+        applyConfig(config)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal func applyConfig(_ config: ParraCardViewConfig) {
+    private func setup() {
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.delegate = self
+        textView.returnKeyType = .default
+        textView.enablesReturnKeyAutomatically = true
+        textView.keyboardType = .asciiCapable
+        textView.autocorrectionType = .yes
+        textView.autocapitalizationType = .sentences
+        textView.spellCheckingType = .yes
 
+        addSubview(textView)
+
+        textView.activateEdgeConstraints(to: self, with: .parraDefaultCardContentPadding)
+    }
+
+    internal func applyConfig(_ config: ParraCardViewConfig) {
+        textView.applyConfig(config)
     }
 }
 
+extension ParraLongTextKindView: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        var answer: QuestionAnswer?
+        if let text = textView.text {
+            answer = QuestionAnswer(
+                kind: .textShort,
+                data: TextValueAnswer(value: text)
+            )
+        }
+
+        answerHandler.update(
+            answer: answer,
+            for: question
+        )
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        answerHandler.commitAnswers(for: question)
+    }
+}
