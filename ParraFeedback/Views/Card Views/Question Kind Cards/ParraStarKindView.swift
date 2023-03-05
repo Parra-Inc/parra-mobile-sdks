@@ -13,7 +13,12 @@ internal class ParraStarKindView: UIView, ParraQuestionKindView {
     typealias DataType = StarQuestionBody
     typealias AnswerType = IntValueAnswer
 
+    private let question: Question
     private let answerHandler: ParraAnswerHandler
+    private let config: ParraCardViewConfig
+    private let starControl: ParraStarControl
+    private let contentContainer = UIStackView(frame: .zero)
+    private let ratingLabels: ParraRatingLabels?
 
     required init(
         question: Question,
@@ -21,11 +26,44 @@ internal class ParraStarKindView: UIView, ParraQuestionKindView {
         config: ParraCardViewConfig,
         answerHandler: ParraAnswerHandler
     ) {
+        self.question = question
+        self.config = config
         self.answerHandler = answerHandler
+        self.starControl = ParraStarControl(
+            starCount: data.starCount,
+            config: config
+        )
+        self.ratingLabels = ParraRatingLabels(
+            leadingText: data.leadingLabel,
+            centerText: data.centerLabel,
+            trailingText: data.trailingLabel
+        )
 
         super.init(frame: .zero)
 
-        backgroundColor = .brown
+        contentContainer.axis = .vertical
+        contentContainer.alignment = .fill
+        contentContainer.spacing = 12.0
+        contentContainer.distribution = .equalCentering
+        contentContainer.translatesAutoresizingMaskIntoConstraints = false
+        
+        starControl.translatesAutoresizingMaskIntoConstraints = false
+        starControl.delegate = self
+        contentContainer.addArrangedSubview(starControl)
+
+        if let ratingLabels {
+            ratingLabels.translatesAutoresizingMaskIntoConstraints = false
+            contentContainer.addArrangedSubview(ratingLabels)
+        }
+
+        addSubview(contentContainer)
+
+        contentContainer.activateEdgeConstraintsWithVerticalCenteringPreference(
+            to: self,
+            with: .parraDefaultCardContentPadding
+        )
+
+        applyConfig(config)
     }
 
     required init?(coder: NSCoder) {
@@ -33,7 +71,32 @@ internal class ParraStarKindView: UIView, ParraQuestionKindView {
     }
 
     internal func applyConfig(_ config: ParraCardViewConfig) {
-
+        starControl.applyConfig(config)
+        ratingLabels?.applyConfig(config)
     }
 }
 
+extension ParraStarKindView: ParraStarControlDelegate {
+    func parraStarControl(_ control: ParraStarControl,
+                          didSelectStarCount count: Int) {
+
+        updateAnswer(for: count)
+    }
+
+    func parraStarControl(_ control: ParraStarControl,
+                          didConfirmStarCount count: Int) {
+
+        updateAnswer(for: count)
+        answerHandler.commitAnswers(for: question)
+    }
+
+    private func updateAnswer(for count: Int) {
+        answerHandler.update(
+            answer: QuestionAnswer(
+                kind: .star,
+                data: IntValueAnswer(value: count)
+            ),
+            for: question
+        )
+    }
+}

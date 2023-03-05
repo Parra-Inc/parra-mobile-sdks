@@ -49,8 +49,8 @@ public struct ParraCardViewConfig {
                 subtitle: ParraTextConfig = .subtitleDefault,
                 body: ParraTextConfig = .bodyDefault,
                 bodyBold: ParraTextConfig = .bodyDefaultBold,
-                label: ParraTextConfig = .labelDefault) {
-
+                label: ParraTextConfig = .labelDefault
+    ) {
         self.backgroundColor                = backgroundColor
         self.tintColor                      = tintColor
         self.accessoryTintColor             = accessoryTintColor

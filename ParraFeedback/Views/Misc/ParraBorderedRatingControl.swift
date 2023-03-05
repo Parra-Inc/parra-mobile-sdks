@@ -13,6 +13,9 @@ import ParraCore
 internal protocol ParraBorderedRatingControlDelegate: AnyObject {
     func parraBorderedRatingControl(_ control: ParraBorderedRatingControl,
                                     didSelectOption option: RatingQuestionOption)
+
+    func parraBorderedRatingControl(_ control: ParraBorderedRatingControl,
+                                    didConfirmOption option: RatingQuestionOption)
 }
 
 internal class ParraBorderedRatingControl: UIControl, ParraConfigurableView {
@@ -128,15 +131,20 @@ internal class ParraBorderedRatingControl: UIControl, ParraConfigurableView {
     }
 
     private func respondToTouchChange(touch: UITouch, with event: UIEvent?) {
-        let label = self.labelBelow(touch: touch, with: event)
-
-        guard let label else {
+        guard let label = labelBelow(touch: touch, with: event) else {
             return
         }
 
-        let nextHightedOption = optionLabelMap[label]
+        guard let nextHightedOption = optionLabelMap[label] else {
+            return
+        }
 
-        guard nextHightedOption != highlightedOption else {
+        if nextHightedOption == highlightedOption {
+            if touch.phase == .ended {
+                delegate?.parraBorderedRatingControl(self,
+                                                     didConfirmOption: nextHightedOption)
+            }
+
             return
         }
 
@@ -149,14 +157,13 @@ internal class ParraBorderedRatingControl: UIControl, ParraConfigurableView {
         ) { [self] in
             applyConfig(config)
         } completion: { [weak self] _ in
-            guard let strongSelf = self,
-                  let nextHightedOption else {
-
+            guard let strongSelf = self else {
                 return
             }
 
             strongSelf.delegate?.parraBorderedRatingControl(strongSelf,
                                                             didSelectOption: nextHightedOption)
+
         }
     }
 
