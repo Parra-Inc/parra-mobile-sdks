@@ -25,7 +25,6 @@ class GeneratedTypesTests: XCTestCase {
                             tenantId: "24234234",
                             title: "Sample question 1",
                             subtitle: nil,
-                            type: .choice,
                             kind: .radio,
                             data: .choiceQuestionBody(
                                 ChoiceQuestionBody(
@@ -66,7 +65,6 @@ class GeneratedTypesTests: XCTestCase {
                             tenantId: "24234234",
                             title: "Sample question 2",
                             subtitle: "this one has a subtitle",
-                            type: .choice,
                             kind: .checkbox,
                             data: .choiceQuestionBody(
                                 ChoiceQuestionBody(
