@@ -9,7 +9,7 @@
 import UIKit
 import ParraCore
 
-internal class ParraImageButton: UIButton, SelectableButton {
+internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableView {
     enum Style {
         static let outer: CGFloat = 18
         static let inner: CGFloat = 9
@@ -26,13 +26,13 @@ internal class ParraImageButton: UIButton, SelectableButton {
         }
     }
 
-    private var asset: Asset?
+    private let asset: Asset
     private var buttonImageView = UIImageView(frame: .zero)
     private var activityIndicator = UIActivityIndicatorView(style: .medium)
 
     internal required init(initiallySelected: Bool,
                            config: ParraCardViewConfig,
-                           asset: Asset?) {
+                           asset: Asset) {
         self.asset = asset
         self.config = config
 
@@ -51,7 +51,6 @@ internal class ParraImageButton: UIButton, SelectableButton {
         addTarget(self, action: #selector(selectionAction), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
 
-        buttonImageView.backgroundColor = .white
         buttonImageView.translatesAutoresizingMaskIntoConstraints = false
         buttonImageView.layer.cornerRadius = 8.0
         buttonImageView.layer.masksToBounds = true
@@ -71,18 +70,19 @@ internal class ParraImageButton: UIButton, SelectableButton {
             buttonImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
             activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+            widthAnchor.constraint(equalTo: heightAnchor),
         ])
 
-        if let asset = asset {
-            Task {
-                let isCached = Parra.Assets.isAssetCached(asset: asset)
+        Task {
+            let isCached = Parra.Assets.isAssetCached(asset: asset)
 
-                if !isCached {
-                    self.activityIndicator.startAnimating()
-                }
+            if !isCached {
+                self.activityIndicator.startAnimating()
+            }
 
-                let image = try? await Parra.Assets.fetchAsset(asset: asset)
+            let image = try? await Parra.Assets.fetchAsset(asset: asset)
 
+            Task { @MainActor in
                 self.activityIndicator.stopAnimating()
                 buttonImageView.image = image
             }
@@ -96,9 +96,9 @@ internal class ParraImageButton: UIButton, SelectableButton {
         buttonImageView.layer.borderColor = config.tintColor?.cgColor
     }
 
-    override var intrinsicContentSize: CGSize {
-        return buttonImageView.intrinsicContentSize
-    }
+//    override var intrinsicContentSize: CGSize {
+//        return buttonImageView.intrinsicContentSize
+//    }
 
     internal override func layoutSubviews() {
         super.layoutSubviews()
