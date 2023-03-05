@@ -70,20 +70,20 @@ public enum ParraLogLevel: Int, Comparable {
         }
     }
 
-    var outputName: String {
+    var symbol: String {
         switch self {
         case .trace:
-            return "🟣 \(name)"
+            return "🟣"
         case .debug:
-            return "🔵 \(name)"
+            return "🔵"
         case .info:
-            return "⚪ \(name)"
+            return "⚪"
         case .warn:
-            return "🟡 \(name)"
+            return "🟡"
         case .error:
-            return "🔴 \(name)"
+            return "🔴"
         case .fatal:
-            return "💀 \(name)"
+            return "💀"
         }
     }
 }

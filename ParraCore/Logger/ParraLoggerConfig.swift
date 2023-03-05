@@ -10,7 +10,8 @@ import Foundation
 
 public struct ParraLoggerConfig {
     public var printTimestamps = true
-    public var printLevel = true
+    public var printVerbosity = true
+    public var printVerbositySymbol = true
     public var printThread = false
     public var printCallsite = false
     public var printModuleName = true

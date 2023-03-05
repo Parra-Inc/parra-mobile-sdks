@@ -32,13 +32,13 @@ internal class ParraDefaultLogger: ParraLogger {
             markerComponents.append(timestamp)
         }
 
+        if Parra.config.loggerConfig.printVerbosity {
+            markerComponents.append(level.name)
+        }
+
         if Parra.config.loggerConfig.printModuleName {
             let (module, _) = splitFileId(fileId: fileID)
             markerComponents.append(module)
-        }
-
-        if Parra.config.loggerConfig.printLevel {
-            markerComponents.append(level.outputName)
         }
 
         if Parra.config.loggerConfig.printThread {
@@ -47,7 +47,12 @@ internal class ParraDefaultLogger: ParraLogger {
 
         let formattedMarkers = markerComponents.map { "[\($0)]" }.joined()
 
-        var formattedMessage = "\(formattedMarkers) \(message)"
+        var formattedMessage: String
+        if Parra.config.loggerConfig.printVerbositySymbol {
+            formattedMessage = " \(level.symbol) \(formattedMarkers) \(message)"
+        } else {
+            formattedMessage = "\(formattedMarkers) \(message)"
+        }
 
         if Parra.config.loggerConfig.printCallsite {
             let formattedLocation = createFormattedLocation(fileID: fileID, function: function, line: line)
