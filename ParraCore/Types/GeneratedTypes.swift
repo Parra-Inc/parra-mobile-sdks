@@ -413,32 +413,59 @@ public struct CheckboxQuestionBody: Codable, Equatable, Hashable {
 }
 
 public struct ImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    public let imageAssetId: String
     public let title: String?
     public let value: String
     public let id: String
-    public let imageAssetUrl: String
+    public let asset: Asset
 
     public init(
-        imageAssetId: String,
         title: String?,
         value: String,
         id: String,
-        imageAssetUrl: String
+        asset: Asset
     ) {
-        self.imageAssetId = imageAssetId
         self.title = title
         self.value = value
         self.id = id
-        self.imageAssetUrl = imageAssetUrl
+        self.asset = asset
     }
 
     public enum CodingKeys: String, CodingKey {
-        case imageAssetId = "image_asset_id"
+        case imageAssetId
         case title
         case value
         case id
-        case imageAssetUrl = "image_asset_url"
+        case imageAssetUrl
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
+        self.value = try container.decode(String.self, forKey: .value)
+        self.id = try container.decode(String.self, forKey: .id)
+
+        let imageId = try container.decodeIfPresent(String.self, forKey: .imageAssetId)
+        let imageUrlString = try container.decodeIfPresent(String.self, forKey: .imageAssetUrl)
+
+        if let imageId = imageId,
+           let imageUrlString = imageUrlString,
+           let imageUrl = URL(string: imageUrlString) {
+
+            self.asset = Asset(id: imageId, url: imageUrl)
+        } else {
+            throw ParraError.jsonError("Failed to decode asset for image question option")
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(title, forKey: .title)
+        try container.encode(value, forKey: .value)
+        try container.encode(id, forKey: .id)
+        try container.encode(asset.id, forKey: .imageAssetId)
+        try container.encode(asset.url, forKey: .imageAssetUrl)
     }
 }
 
@@ -452,23 +479,19 @@ public struct ImageQuestionBody: Codable, Equatable, Hashable {
     }
 }
 
-
 public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
     public let title: String?
-    public let asset: Asset?
     public let value: String
     public let isOther: Bool?
     public let id: String
     
     public init(
         title: String?,
-        asset: Asset?,
         value: String,
         isOther: Bool?,
         id: String
     ) {
         self.title = title
-        self.asset = asset
         self.value = value
         self.isOther = isOther
         self.id = id
@@ -476,43 +499,9 @@ public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case title
-        case imageAssetId
-        case imageAssetUrl
         case value
         case isOther
         case id
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        self.title = try container.decodeIfPresent(String.self, forKey: .title)
-        self.value = try container.decode(String.self, forKey: .value)
-        self.isOther = try container.decodeIfPresent(Bool.self, forKey: .isOther)
-        self.id = try container.decode(String.self, forKey: .id)
-
-        let imageId = try container.decodeIfPresent(String.self, forKey: .imageAssetId)
-        let imageUrlString = try container.decodeIfPresent(String.self, forKey: .imageAssetUrl)
-
-        if let imageId = imageId,
-            let imageUrlString = imageUrlString,
-            let imageUrl = URL(string: imageUrlString) {
-
-            self.asset = Asset(id: imageId, url: imageUrl)
-        } else {
-            self.asset = nil
-        }
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encode(title, forKey: .title)
-        try container.encode(value, forKey: .value)
-        try container.encode(isOther, forKey: .isOther)
-        try container.encode(id, forKey: .id)
-        try container.encode(asset?.id, forKey: .imageAssetId)
-        try container.encode(asset?.url, forKey: .imageAssetUrl)
     }
 }
 

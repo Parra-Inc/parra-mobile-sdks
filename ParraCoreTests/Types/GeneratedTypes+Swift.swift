@@ -31,14 +31,12 @@ class GeneratedTypesTests: XCTestCase {
                                     options: [
                                         ChoiceQuestionOption(
                                             title: "option 1",
-                                            asset: nil,
                                             value: "",
                                             isOther: nil,
                                             id: "op1"
                                         ),
                                         ChoiceQuestionOption(
                                             title: "option 2",
-                                            asset: nil,
                                             value: "",
                                             isOther: nil,
                                             id: "op2"
@@ -66,19 +64,17 @@ class GeneratedTypesTests: XCTestCase {
                             title: "Sample question 2",
                             subtitle: "this one has a subtitle",
                             kind: .checkbox,
-                            data: .choiceQuestionBody(
-                                ChoiceQuestionBody(
+                            data: .checkboxQuestionBody(
+                                CheckboxQuestionBody(
                                     options: [
-                                        ChoiceQuestionOption(
+                                        CheckboxQuestionOption(
                                             title: "option 1",
-                                            asset: nil,
                                             value: "",
                                             isOther: nil,
                                             id: "op1"
                                         ),
-                                        ChoiceQuestionOption(
+                                        CheckboxQuestionOption(
                                             title: "option 2",
-                                            asset: nil,
                                             value: "",
                                             isOther: nil,
                                             id: "op2"
@@ -92,14 +88,188 @@ class GeneratedTypesTests: XCTestCase {
                             answer: nil
                         )
                     )
+                ),
+                ParraCardItem(
+                    type: .question,
+                    version: "1",
+                    data: .question(
+                        Question(
+                            id: "3",
+                            createdAt: Date().ISO8601Format(),
+                            updatedAt: Date().ISO8601Format(),
+                            deletedAt: nil,
+                            tenantId: "24234234",
+                            title: "Sample question 2",
+                            subtitle: "this one has a subtitle",
+                            kind: .boolean,
+                            data: .booleanQuestionBody(
+                                BooleanQuestionBody(options: [
+                                    BooleanQuestionOption(title: "title", value: "value", id: "id"),
+                                    BooleanQuestionOption(title: "title", value: "value", id: "id"),
+                                ])
+                            ),
+                            active: false,
+                            expiresAt: nil,
+                            answerQuota: nil,
+                            answer: nil
+                        )
+                    )
+                ),
+                ParraCardItem(
+                    type: .question,
+                    version: "1",
+                    data: .question(
+                        Question(
+                            id: "4",
+                            createdAt: Date().ISO8601Format(),
+                            updatedAt: Date().ISO8601Format(),
+                            deletedAt: nil,
+                            tenantId: "24234234",
+                            title: "Sample question 2",
+                            subtitle: "this one has a subtitle",
+                            kind: .star,
+                            data: .starQuestionBody(
+                                StarQuestionBody(
+                                    starCount: 5,
+                                    leadingLabel: "leading",
+                                    centerLabel: "center",
+                                    trailingLabel: "trailing"
+                                )
+                            ),
+                            active: false,
+                            expiresAt: nil,
+                            answerQuota: nil,
+                            answer: nil
+                        )
+                    )
+                ),
+                ParraCardItem(
+                    type: .question,
+                    version: "1",
+                    data: .question(
+                        Question(
+                            id: "5",
+                            createdAt: Date().ISO8601Format(),
+                            updatedAt: Date().ISO8601Format(),
+                            deletedAt: nil,
+                            tenantId: "24234234",
+                            title: "Sample question 2",
+                            subtitle: "this one has a subtitle",
+                            kind: .image,
+                            data: .imageQuestionBody(
+                                ImageQuestionBody(
+                                    options: [
+                                        ImageQuestionOption(
+                                            title: "title",
+                                            value: "val",
+                                            id: "id",
+                                            asset: Asset(id: "id", url: URL(string: "parra.io/image.png")!)
+                                        ),
+                                        ImageQuestionOption(
+                                            title: "title2",
+                                            value: "val2",
+                                            id: "id2",
+                                            asset: Asset(id: "id2222", url: URL(string: "parra.io/image2.png")!)
+                                        )
+                                    ]
+                                )
+                            ),
+                            active: false,
+                            expiresAt: nil,
+                            answerQuota: nil,
+                            answer: nil
+                        )
+                    )
+                ),
+                ParraCardItem(
+                    type: .question,
+                    version: "1",
+                    data: .question(
+                        Question(
+                            id: "6",
+                            createdAt: Date().ISO8601Format(),
+                            updatedAt: Date().ISO8601Format(),
+                            deletedAt: nil,
+                            tenantId: "24234234",
+                            title: "Sample question 2",
+                            subtitle: "this one has a subtitle",
+                            kind: .rating,
+                            data: .ratingQuestionBody(
+                                RatingQuestionBody(
+                                    options: [
+                                        RatingQuestionOption(title: "title1", value: 1, id: "1"),
+                                        RatingQuestionOption(title: "title2", value: 2, id: "2"),
+                                        RatingQuestionOption(title: "title3", value: 3, id: "3"),
+                                        RatingQuestionOption(title: "title4", value: 4, id: "4"),
+                                        RatingQuestionOption(title: "title5", value: 5, id: "5"),
+                                    ],
+                                    leadingLabel: "leading",
+                                    centerLabel: "center",
+                                    trailingLabel: "trailing"
+                                )
+                            ),
+                            active: false,
+                            expiresAt: nil,
+                            answerQuota: nil,
+                            answer: nil
+                        )
+                    )
+                ),
+                ParraCardItem(
+                    type: .question,
+                    version: "1",
+                    data: .question(
+                        Question(
+                            id: "7",
+                            createdAt: Date().ISO8601Format(),
+                            updatedAt: Date().ISO8601Format(),
+                            deletedAt: nil,
+                            tenantId: "24234234",
+                            title: "Sample question 2",
+                            subtitle: "this one has a subtitle",
+                            kind: .textShort,
+                            data: .shortTextQuestionBody(
+                                ShortTextQuestionBody(placeholder: "placeholder", minLength: 50, maxLength: nil)
+                            ),
+                            active: false,
+                            expiresAt: nil,
+                            answerQuota: nil,
+                            answer: nil
+                        )
+                    )
+                ),
+                ParraCardItem(
+                    type: .question,
+                    version: "1",
+                    data: .question(
+                        Question(
+                            id: "7",
+                            createdAt: Date().ISO8601Format(),
+                            updatedAt: Date().ISO8601Format(),
+                            deletedAt: nil,
+                            tenantId: "24234234",
+                            title: "Sample question 2",
+                            subtitle: "this one has a subtitle",
+                            kind: .textLong,
+                            data: .longTextQuestionBody(
+                                LongTextQuestionBody(placeholder: "placeholder", minLength: nil, maxLength: 1000)
+                            ),
+                            active: false,
+                            expiresAt: nil,
+                            answerQuota: nil,
+                            answer: nil
+                        )
+                    )
                 )
             ]
         )
 
         let encoded = try JSONEncoder().encode(cardsResponse)
+        print("Encoding successful")
         print(String(data: encoded, encoding: .utf8))
         let decoded = try JSONDecoder().decode(CardsResponse.self, from: encoded)
-        
+        print("Decoding successful")
+
         XCTAssertEqual(cardsResponse, decoded)
     }
 }
