@@ -13,7 +13,7 @@ public struct ParraLoggerConfig {
     public var printLevel = true
     public var printThread = false
     public var printCallsite = false
-    public var printPrefix: String? = "PARRA"
+    public var printModuleName = true
     public var logger: ParraLogger = ParraDefaultLogger.default
 
     static let `default` = ParraLoggerConfig()

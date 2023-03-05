@@ -14,7 +14,6 @@ internal class ParraDefaultLogger: ParraLogger {
     func log(level: ParraLogLevel,
              message: String,
              extra: [String : Any]?,
-             file: String,
              fileID: String,
              function: String,
              line: Int) {
@@ -33,8 +32,9 @@ internal class ParraDefaultLogger: ParraLogger {
             markerComponents.append(timestamp)
         }
 
-        if let prefix = Parra.config.loggerConfig.printPrefix {
-            markerComponents.append(prefix)
+        if Parra.config.loggerConfig.printModuleName {
+            let (module, _) = splitFileId(fileId: fileID)
+            markerComponents.append(module)
         }
 
         if Parra.config.loggerConfig.printLevel {
@@ -82,6 +82,20 @@ internal class ParraDefaultLogger: ParraLogger {
 
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.log, params: params)
 #endif
+    }
+
+    private func splitFileId(fileId: String) -> (module: String, fileName: String) {
+        let parts = fileId.split(separator: "/")
+
+        if parts.count == 0 {
+            return ("Unknown", "Unknown")
+        } else if parts.count == 1 {
+            return ("Unknown", String(parts[0]))
+        } else if parts.count == 2 {
+            return (String(parts[0]), String(parts[1]))
+        } else {
+            return (String(parts[0]), parts.dropFirst(1).joined(separator: "/"))
+        }
     }
 
     private func createFormattedLocation(fileID: String, function: String, line: Int) -> String {
