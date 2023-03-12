@@ -17,7 +17,6 @@ internal protocol SelectableButton: ParraConfigurableView {
     var delegate: SelectableButtonDelegate? { get set }
     var buttonIsSelected: Bool { get set }
     var allowsDeselection: Bool { get set }
-    var config: ParraCardViewConfig { get set }
 }
 
 extension SelectableButton {

@@ -10,21 +10,9 @@ import UIKit
 import ParraCore
 
 internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableView {
-    enum Style {
-        static let outer: CGFloat = 18
-        static let inner: CGFloat = 9
-        static let lineWidth: CGFloat = 2.5
-        static let padding: CGFloat = 0
-    }
-
     internal weak var delegate: SelectableButtonDelegate?
     internal var buttonIsSelected: Bool
     internal var allowsDeselection: Bool = false
-    internal var config: ParraCardViewConfig {
-        didSet {
-            applyConfig(config)
-        }
-    }
 
     private let asset: Asset
     private var buttonImageView = UIImageView(frame: .zero)
@@ -34,20 +22,19 @@ internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableV
                            config: ParraCardViewConfig,
                            asset: Asset) {
         self.asset = asset
-        self.config = config
 
         buttonIsSelected = initiallySelected
 
         super.init(frame: .zero)
 
-        setup()
+        setup(config: config)
     }
 
     internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal func setup() {
+    internal func setup(config: ParraCardViewConfig) {
         addTarget(self, action: #selector(selectionAction), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
 
@@ -62,15 +49,19 @@ internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableV
         addSubview(buttonImageView)
         buttonImageView.addSubview(activityIndicator)
 
-        NSLayoutConstraint.activate([
+        NSLayoutConstraint.activate(
+            buttonImageView.constrainEdgesWithVerticalCenteringPreference(
+                to: self,
+                with: .init(top: 8, left: 8, bottom: 8, right: 8)
+            ) + [
             buttonImageView.widthAnchor.constraint(equalTo: buttonImageView.heightAnchor),
             buttonImageView.widthAnchor.constraint(equalToConstant: 60),
-            buttonImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            buttonImageView.topAnchor.constraint(equalTo: topAnchor),
-            buttonImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            buttonImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+//            buttonImageView.topAnchor.constraint(equalTo: topAnchor),
+//            buttonImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
             activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
-            widthAnchor.constraint(equalTo: heightAnchor),
+//            widthAnchor.constraint(equalTo: heightAnchor),
         ])
 
         Task {
@@ -96,9 +87,9 @@ internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableV
         buttonImageView.layer.borderColor = config.tintColor?.cgColor
     }
 
-//    override var intrinsicContentSize: CGSize {
-//        return buttonImageView.intrinsicContentSize
-//    }
+    override var intrinsicContentSize: CGSize {
+        return buttonImageView.intrinsicContentSize
+    }
 
     internal override func layoutSubviews() {
         super.layoutSubviews()
