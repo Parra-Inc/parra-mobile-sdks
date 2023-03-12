@@ -9,16 +9,40 @@
 import Foundation
 
 public struct ParraLoggerConfig {
-    public var printTimestamps = true
-    public var printVerbosity = true
-    public var printVerbositySymbol = true
-    public var printThread = false
-    public var printCallsite = false
-    public var printModuleName = true
-    public var logger: ParraLogger = ParraDefaultLogger.default
-    public var minimumAllowedLogLevel: ParraLogLevel = .info
+    public var printTimestamps: Bool
+    public var printVerbosity: Bool
+    public var printVerbositySymbol: Bool
+    public var printThread: Bool
+    public var printCallsite: Bool
+    public var printModuleName: Bool
+    public var logger: ParraLogger
+    public var minimumAllowedLogLevel: ParraLogLevel = .default {
+        didSet {
+            ParraLogLevel.setMinAllowedLogLevel(minimumAllowedLogLevel)
+        }
+    }
 
     static let `default` = ParraLoggerConfig()
+
+    init(
+        printTimestamps: Bool = true,
+        printVerbosity: Bool = true,
+        printVerbositySymbol: Bool = true,
+        printThread: Bool = false,
+        printCallsite: Bool = false,
+        printModuleName: Bool = true,
+        logger: ParraLogger = ParraDefaultLogger.default
+    ) {
+        self.printTimestamps = printTimestamps
+        self.printVerbosity = printVerbosity
+        self.printVerbositySymbol = printVerbositySymbol
+        self.printThread = printThread
+        self.printCallsite = printCallsite
+        self.printModuleName = printModuleName
+        self.logger = logger
+
+        ParraLogLevel.setMinAllowedLogLevel(minimumAllowedLogLevel)
+    }
 
     enum Constant {
         static let logEventPrefix = "parra:logger:"

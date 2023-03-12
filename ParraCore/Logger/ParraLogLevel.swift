@@ -9,16 +9,14 @@
 import Foundation
 
 public enum ParraLogLevel: Int, Comparable {
-    public static func < (lhs: ParraLogLevel, rhs: ParraLogLevel) -> Bool {
-        return lhs.rawValue < rhs.rawValue
-    }
-
     case trace  = 1
     case debug  = 2
     case info   = 4
     case warn   = 8
     case error  = 16
     case fatal  = 32
+
+    internal static let `default` = ParraLogLevel.info
 
     public init?(name: String) {
         switch name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
@@ -39,19 +37,25 @@ public enum ParraLogLevel: Int, Comparable {
         }
     }
 
-    private static var minAllowedLogLevel: ParraLogLevel = {
-        #if DEBUG
+    public static func < (lhs: ParraLogLevel, rhs: ParraLogLevel) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+
+    internal private(set) static var minAllowedLogLevel: ParraLogLevel = .default
+
+    internal static func setMinAllowedLogLevel(_ minLevel: ParraLogLevel) {
+#if DEBUG
         if let rawLevelOverride = ProcessInfo.processInfo.environment[ParraLoggerConfig.Environment.allowedLogLevelOverrideKey],
            let level = ParraLogLevel(name: rawLevelOverride) {
 
-            return level
+            minAllowedLogLevel = level
+        } else {
+            minAllowedLogLevel = minLevel
         }
-
-        return Parra.config.loggerConfig.minimumAllowedLogLevel
-        #else
-        return Parra.config.loggerConfig.minimumAllowedLogLevel
-        #endif
-    }()
+#else
+        minAllowedLogLevel = minLevel
+#endif
+    }
 
     var isAllowed: Bool {
         return self >= ParraLogLevel.minAllowedLogLevel
