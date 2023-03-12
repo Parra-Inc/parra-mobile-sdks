@@ -45,7 +45,7 @@ public extension ParraFeedback {
         )
 
         if let sheetPresentationController = cardViewController.sheetPresentationController {
-            sheetPresentationController.detents = [.medium(), .large()]
+            sheetPresentationController.detents = [.medium()]
             sheetPresentationController.prefersGrabberVisible = true
         }
 
