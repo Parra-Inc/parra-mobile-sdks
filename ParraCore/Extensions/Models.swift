@@ -27,4 +27,18 @@ extension ParraCardItem: Identifiable {
             }
         }
     }
+
+    /// Cards that don't have a good mechanism for determining that the user is done making their selection.
+    /// This determines which cards show the forward arrow button to manually commit their changes.
+    public var requiresManualNextSelection: Bool {
+        switch data {
+        case .question(let question):
+            switch question.kind {
+            case .checkbox, .textLong:
+                return true
+            case .image, .boolean, .radio, .rating, .star, .textShort:
+                return false
+            }
+        }
+    }
 }

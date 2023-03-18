@@ -27,4 +27,10 @@ public class ParraCardItemView: UIView, ParraConfigurableView {
     func applyConfig(_ config: ParraCardViewConfig) {
 
     }
+
+    /// An external action has informed the card that it should commit any pending changes. This may indicate the user
+    /// has taken an action that is causing navigation away from the card.
+    func commitToSelection() {
+        assertionFailure("Subclasses of ParraCardItemView should override commitToSelection")
+    }
 }

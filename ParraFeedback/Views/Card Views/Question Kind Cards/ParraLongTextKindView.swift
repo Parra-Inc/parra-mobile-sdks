@@ -85,8 +85,4 @@ extension ParraLongTextKindView: UITextViewDelegate {
             for: question
         )
     }
-
-    func textViewDidEndEditing(_ textView: UITextView) {
-        answerHandler.commitAnswers(for: question)
-    }
 }

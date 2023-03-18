@@ -194,6 +194,10 @@ internal class ParraQuestionCardView: ParraCardItemView {
         fatalError("init(config:) has not been implemented")
     }
 
+    override func commitToSelection() {
+        answerHandler.commitAnswers(for: question)
+    }
+
     internal override func applyConfig(_ config: ParraCardViewConfig) {
         titleLabel.font = config.title.font
         titleLabel.textColor = config.title.color

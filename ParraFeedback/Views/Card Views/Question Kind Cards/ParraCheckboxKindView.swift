@@ -121,8 +121,6 @@ extension ParraCheckboxKindView: ParraBorderedButtonDelegate, ViewTimer {
 
         selectedOptionIds.insert(option.id)
         updateForSelectedOptions()
-
-        selectionDidUpdate()
     }
 
     func buttonDidDeselect(button: ParraBorderedButton,
@@ -133,8 +131,6 @@ extension ParraCheckboxKindView: ParraBorderedButtonDelegate, ViewTimer {
 
         selectedOptionIds.remove(option.id)
         updateForSelectedOptions()
-
-        selectionDidUpdate()
     }
 
     private func updateForSelectedOptions() {
@@ -154,11 +150,5 @@ extension ParraCheckboxKindView: ParraBorderedButtonDelegate, ViewTimer {
             answer: answer,
             for: question
         )
-    }
-
-    private func selectionDidUpdate() {
-        performAfter(delay: 5.0) { [self] in
-            answerHandler.commitAnswers(for: question)
-        }
     }
 }
