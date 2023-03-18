@@ -16,6 +16,7 @@ internal class ParraCheckboxKindView: UIView, ParraQuestionKindView {
 
     private let contentContainer = UIStackView(frame: .zero)
     private var optionViewMap = [ParraBorderedButton: CheckboxQuestionOption]()
+    private var selectedOptionIds = Set<String>()
 
     private let question: Question
     private let answerHandler: ParraAnswerHandler
@@ -88,7 +89,8 @@ internal class ParraCheckboxKindView: UIView, ParraQuestionKindView {
         optionViewMap.removeAll()
 
         for option in data.options {
-            let isSelected = (currentState?.options ?? []).contains(option.id)
+            let currentOptions = currentState?.options ?? []
+            let isSelected = currentOptions.contains { $0.id == option.id }
 
             let button = ParraBorderedButton(
                 title: option.title,
@@ -117,22 +119,41 @@ extension ParraCheckboxKindView: ParraBorderedButtonDelegate, ViewTimer {
             return
         }
 
-        answerHandler.update(
-            answer: QuestionAnswer(
-                kind: .radio,
-                data: SingleOptionAnswer(optionId: option.id)
-            ),
-            for: question
-        )
+        selectedOptionIds.insert(option.id)
+        updateForSelectedOptions()
 
         selectionDidUpdate()
     }
 
     func buttonDidDeselect(button: ParraBorderedButton,
                            optionId: String) {
-        answerHandler.update(answer: nil, for: question)
+        guard let option = optionViewMap[button], option.id == optionId else {
+            return
+        }
+
+        selectedOptionIds.remove(option.id)
+        updateForSelectedOptions()
 
         selectionDidUpdate()
+    }
+
+    private func updateForSelectedOptions() {
+        let answer: QuestionAnswer?
+        if selectedOptionIds.isEmpty {
+            answer = nil
+        } else {
+            answer = QuestionAnswer(
+                kind: .checkbox,
+                data: MultiOptionAnswer(
+                    options: selectedOptionIds.map { MultiOptionIndividualOption(id: $0) }
+                )
+            )
+        }
+
+        answerHandler.update(
+            answer: answer,
+            for: question
+        )
     }
 
     private func selectionDidUpdate() {
