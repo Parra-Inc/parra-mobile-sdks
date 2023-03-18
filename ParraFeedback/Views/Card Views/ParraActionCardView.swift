@@ -35,7 +35,8 @@ internal class ParraActionCardView: ParraCardItemView {
             subtitleLabel.font = .preferredFont(forTextStyle: .callout)
             subtitleLabel.numberOfLines = 3
             subtitleLabel.lineBreakMode = .byTruncatingTail
-            
+            subtitleLabel.textAlignment = .center
+
             stackView.addArrangedSubview(subtitleLabel)
         }
         stackView.addArrangedSubview(cta)
