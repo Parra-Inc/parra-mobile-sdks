@@ -93,6 +93,8 @@ extension ParraCardView {
         let nextCard = cardViewFromCardItem(cardItem)
         nextCard.accessibilityIdentifier = "Next Card"
 
+        let visibleButtons = visibleNavigationButtonsForCardItem(cardItem)
+
         contentView.addSubview(nextCard)
 
         // If these change, make sure that changing nextCard.frame below still makes sense.
@@ -107,6 +109,8 @@ extension ParraCardView {
         
         if animated {
             let oldCardInfo = currentCardInfo
+
+            forwardButton.isEnabled = false
 
             self.currentCardInfo?.cardItemView.transform = .identity
             
@@ -142,6 +146,8 @@ extension ParraCardView {
                         )
                         nextCard.transform = .identity
                         self.layoutIfNeeded()
+
+                        self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
                     } completion: { _ in
                         if let oldCardInfo = oldCardInfo {
                             NSLayoutConstraint.deactivate(oldCardInfo.cardItemView.constraints)
@@ -153,7 +159,9 @@ extension ParraCardView {
                         self.sendDidDisplay(cardItem: cardItem)
                     }
             }
-        } else {            
+        } else {
+            updateVisibleNavigationButtons(visibleButtons: visibleButtons)
+
             if let currentCardInfo = self.currentCardInfo {
                 delegate?.parraCardView(self, willEndDisplaying: currentCardInfo.cardItem)
                 
@@ -185,6 +193,20 @@ extension ParraCardView {
             ])
         }
     }
+
+    internal func visibleNavigationButtonsForCardItem(_ cardItem: ParraCardItem?) -> VisibleButtonOptions {
+        guard let cardItem = cardItem else {
+            return []
+        }
+
+        var visibleButtons: VisibleButtonOptions = []
+
+        if cardItem.requiresManualNextSelection {
+            visibleButtons.update(with: .forward)
+        }
+
+        return visibleButtons
+    }
     
     private func canTransitionInDirection(_ direction: Direction) -> Bool {
         guard let currentCardInfo = currentCardInfo else {
@@ -201,6 +223,18 @@ extension ParraCardView {
         case .right:
             return currentIndex < cardItems.count - 1
         }
+    }
+
+    internal func updateVisibleNavigationButtons(visibleButtons: VisibleButtonOptions) {
+        let showBack = visibleButtons.contains(.back)
+
+        backButton.alpha = showBack ? 1.0 : 0.0
+        backButton.isEnabled = showBack
+
+        let showForward = visibleButtons.contains(.forward)
+
+        forwardButton.alpha = showForward ? 1.0 : 0.0
+        forwardButton.isEnabled = showForward
     }
     
     private func cardViewFromCardItem(_ cardItem: ParraCardItem?) -> ParraCardItemView {

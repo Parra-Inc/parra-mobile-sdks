@@ -49,7 +49,7 @@ extension ParraCardView {
     
     internal func configureSubviews(config: ParraCardViewConfig) {        
         configureContentView()
-        configurePoweredByParraButton()
+        configureNavigationStack()
 
         containerLeadingConstraint = containerView.leadingAnchor.constraint(
             equalTo: leadingAnchor,
@@ -132,7 +132,7 @@ extension ParraCardView {
 
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(
-                equalTo: poweredByContainer.bottomAnchor,
+                equalTo: navigationStack.bottomAnchor,
                 constant: LayoutConstants.navigationPadding
             ),
             contentView.leadingAnchor.constraint(
@@ -150,10 +150,14 @@ extension ParraCardView {
         ])
     }
     
-    private func configurePoweredByParraButton() {
-        poweredByContainer.translatesAutoresizingMaskIntoConstraints = false
-        poweredByContainer.accessibilityIdentifier = "PoweredByParraContainer"
-        poweredByContainer.setContentHuggingPriority(.required, for: .vertical)
+    private func configureNavigationStack() {
+        navigationStack.translatesAutoresizingMaskIntoConstraints = false
+        navigationStack.alignment = .center
+        navigationStack.axis = .horizontal
+        navigationStack.distribution = .equalSpacing
+        navigationStack.isUserInteractionEnabled = true
+        navigationStack.accessibilityIdentifier = "ParraFeedbackNavigation"
+        navigationStack.setContentHuggingPriority(.required, for: .vertical)
 
         poweredByButton.isUserInteractionEnabled = true
         poweredByButton.translatesAutoresizingMaskIntoConstraints = false
@@ -189,26 +193,17 @@ extension ParraCardView {
         poweredByButton.setAttributedTitle(poweredBy, for: .highlighted)
 
         NSLayoutConstraint.activate([
-            poweredByContainer.topAnchor.constraint(
+            navigationStack.topAnchor.constraint(
                 equalTo: containerView.topAnchor,
                 constant: LayoutConstants.navigationPadding
             ),
-            poweredByContainer.leadingAnchor.constraint(
+            navigationStack.leadingAnchor.constraint(
                 equalTo: containerView.leadingAnchor,
                 constant: LayoutConstants.contentPadding
             ),
-            poweredByContainer.trailingAnchor.constraint(
+            navigationStack.trailingAnchor.constraint(
                 equalTo: containerView.trailingAnchor,
                 constant: -LayoutConstants.contentPadding
-            ),
-            poweredByButton.centerXAnchor.constraint(
-                equalTo: poweredByContainer.centerXAnchor
-            ),
-            poweredByButton.topAnchor.constraint(
-                equalTo: poweredByContainer.topAnchor
-            ),
-            poweredByButton.bottomAnchor.constraint(
-                equalTo: poweredByContainer.bottomAnchor
             )
         ])
     }
@@ -220,5 +215,16 @@ extension ParraCardView {
         ))
 
         UIApplication.shared.open(Parra.Constant.parraWebRoot)
+    }
+
+    @objc internal func navigateToPreviousCard() {
+        suggestTransitionInDirection(.left, animated: true)
+    }
+
+    @objc internal func navigateToNextCard() {
+        // Currently only used on card types that don't have a straight forward way of determining that the user
+        // is done interacting with them (currently long text and checkbox). It is implied that cards like this
+        // shouldn't be manually commiting to the answer handler, since this action is taken here.
+        self.currentCardInfo?.cardItemView.commitToSelection()
     }
 }
