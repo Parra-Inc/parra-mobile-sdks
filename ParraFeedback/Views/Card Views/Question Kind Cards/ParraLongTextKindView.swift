@@ -51,7 +51,18 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
 
         addSubview(textView)
 
-        textView.activateEdgeConstraints(to: self, with: .parraDefaultCardContentPadding)
+        textView.activateEdgeConstraintsWithVerticalCenteringPreference(
+            to: self,
+            with: UIEdgeInsets(
+                top: 12,
+                left: 8,
+                bottom: 12,
+                right: 8
+            )
+        )
+        NSLayoutConstraint.activate([
+            textView.heightAnchor.constraint(equalToConstant: 120)
+        ])
     }
 
     internal func applyConfig(_ config: ParraCardViewConfig) {
