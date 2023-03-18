@@ -32,10 +32,14 @@ internal actor CompletedCardDataStorage: ItemStorage {
     }
     
     internal func completeCard(completedCard: CompletedCard) async {
-        try! await storageModule.write(
-            name: completedCard.questionId,
-            value: completedCard
-        )
+        do {
+            try await storageModule.write(
+                name: completedCard.questionId,
+                value: completedCard
+            )
+        } catch let error {
+            parraLogError("Error writing completed card to cache", error)
+        }
     }
     
     internal func clearCompletedCardData(completedCards: [CompletedCard] = []) async throws {

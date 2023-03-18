@@ -18,10 +18,18 @@ public struct SingleOptionAnswer: AnswerOption {
     }
 }
 
-public struct MultiOptionAnswer: AnswerOption {
-    public let options: [String]
+public struct MultiOptionIndividualOption: Codable {
+    public let id: String
 
-    public init(options: [String]) {
+    public init(id: String) {
+        self.id = id
+    }
+}
+
+public struct MultiOptionAnswer: AnswerOption {
+    public let options: [MultiOptionIndividualOption]
+
+    public init(options: [MultiOptionIndividualOption]) {
         self.options = options
     }
 }

@@ -8,9 +8,11 @@
 import Foundation
 import ParraCore
 
-private let kCurrentCardsKey = "current_cards"
-
 internal actor CardStorage: ItemStorage {
+    private enum Constant {
+        static let currentCardsKey = "current_cards"
+    }
+
     internal typealias DataType = [ParraCardItem]
     internal let storageModule: ParraStorageModule<[ParraCardItem]>
     
@@ -20,11 +22,16 @@ internal actor CardStorage: ItemStorage {
     
     internal func setCards(cardItems: [ParraCardItem]) {
         Task {
-            try await storageModule.write(name: kCurrentCardsKey, value: cardItems)
+            try await storageModule.write(
+                name: Constant.currentCardsKey,
+                value: cardItems
+            )
         }
     }
     
     internal func currentCards() async -> [ParraCardItem] {
-        return await storageModule.read(name: kCurrentCardsKey) ?? []
+        return await storageModule.read(
+            name: Constant.currentCardsKey
+        ) ?? []
     }
 }

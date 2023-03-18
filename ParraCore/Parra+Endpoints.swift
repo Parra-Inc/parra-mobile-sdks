@@ -48,7 +48,7 @@ public extension Parra {
                 route: route,
                 method: .post,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                body: cards
+                body: cards.map { CompletedCardUpload(completedCard: $0) }
             )
 
             switch response.result {

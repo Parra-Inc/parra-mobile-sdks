@@ -9,26 +9,24 @@ import UIKit
 import ParraCore
 
 extension ParraCardView: ParraQuestionHandlerDelegate {
-    internal func questionHandlerDidMakeNewSelection(forQuestion question: Question) {
-        Task {
-            try await Task.sleep(nanoseconds: 333_000_000)
-            
-            let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
-            
-            guard let nextCardItem = nextCardItem, nextCardItemDiection == .right else {
-                return
-            }
-            
-            guard !(await ParraFeedback.hasCardBeenCompleted(nextCardItem)) else {
-                return
-            }
-            
-            // If there is a next card, we ask the delegate if we should transition.
-            let shouldTransition = delegate?.parraCardView(self, shouldAutoNavigateTo: nextCardItem) ?? true
-            
-            if shouldTransition {
-                suggestTransitionInDirection(.right, animated: true)
-            }
+    internal func questionHandlerDidMakeNewSelection(forQuestion question: Question) async {
+        try? await Task.sleep(nanoseconds: 333_000_000)
+
+        let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
+
+        guard let nextCardItem = nextCardItem, nextCardItemDiection == .right else {
+            return
+        }
+
+        guard !(await ParraFeedback.hasCardBeenCompleted(nextCardItem)) else {
+            return
+        }
+
+        // If there is a next card, we ask the delegate if we should transition.
+        let shouldTransition = delegate?.parraCardView(self, shouldAutoNavigateTo: nextCardItem) ?? true
+
+        if shouldTransition {
+            suggestTransitionInDirection(.right, animated: true)
         }
     }
 }

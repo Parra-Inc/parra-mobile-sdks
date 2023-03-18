@@ -19,7 +19,7 @@ typealias AnswerStateMap = [String: QuestionAnswer]
 protocol ParraQuestionHandlerDelegate: AnyObject {
     /// Not meant to be triggered during every selection event. Just when a new selection occurs that may be
     /// required to cause a transition or other side effects.
-    func questionHandlerDidMakeNewSelection(forQuestion question: Question)
+    func questionHandlerDidMakeNewSelection(forQuestion question: Question) async
 }
 
 protocol ParraAnswerHandler {
@@ -72,11 +72,11 @@ class ParraCardAnswerHandler: ParraAnswerHandler {
 
         Task {
             await ParraFeedback.shared.dataManager.completeCard(completedCard)
-        }
 
-        // This should only be invoked when a new selection is made, not when it changes
-        questionHandlerDelegate?.questionHandlerDidMakeNewSelection(
-            forQuestion: question
-        )
+            // This should only be invoked when a new selection is made, not when it changes
+            await questionHandlerDelegate?.questionHandlerDidMakeNewSelection(
+                forQuestion: question
+            )
+        }
     }
 }
