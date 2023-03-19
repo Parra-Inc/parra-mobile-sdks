@@ -134,7 +134,7 @@ public class ParraCardView: UIView {
             if cardItems != oldValue {
                 // If there is already a card item and that item exists in the updated cards list,
                 // we want to make sure that item stays visible.
-                if let currentCardInfo = currentCardInfo,
+                if let currentCardInfo,
                     let currentCardItem = currentCardInfo.cardItem, cardItems.contains(where: { $0.id == currentCardItem.id }) {
 
                     let visibleButtons = visibleNavigationButtonsForCardItem(currentCardItem)

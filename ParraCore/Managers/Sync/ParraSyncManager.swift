@@ -117,7 +117,7 @@ internal actor ParraSyncManager {
         let duration = CFAbsoluteTimeGetCurrent() - start
         parraLogTrace("Sync data sent. Took \(duration)(s)")
         
-        if let enqueuedSyncMode = enqueuedSyncMode {
+        if let enqueuedSyncMode {
             parraLogDebug("More sync jobs were enqueued. Repeating sync.")
             
             self.enqueuedSyncMode = nil

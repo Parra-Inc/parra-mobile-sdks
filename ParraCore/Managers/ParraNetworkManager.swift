@@ -143,7 +143,7 @@ internal class ParraNetworkManager: NetworkManagerType {
             let credential = await dataManager.getCurrentCredential()
 
             let nextCredential: ParraCredential
-            if let credential = credential {
+            if let credential {
                 nextCredential = credential
             } else {
                 nextCredential = try await refreshAuthentication()

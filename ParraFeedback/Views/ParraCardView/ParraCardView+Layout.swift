@@ -117,7 +117,7 @@ extension ParraCardView {
             layoutIfNeeded()
         }
         
-        if let currentCardInfo = currentCardInfo {
+        if let currentCardInfo {
             currentCardInfo.cardItemView.config = config
         }
     }

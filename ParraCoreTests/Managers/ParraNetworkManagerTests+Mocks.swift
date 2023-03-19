@@ -55,7 +55,7 @@ class MockURLSession: URLSessionType {
     func data(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
         let (data, response, error) = dataTaskResolver(request)
                 
-        if let error = error {
+        if let error {
             throw error
         }
 

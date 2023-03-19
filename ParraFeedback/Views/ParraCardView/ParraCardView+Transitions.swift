@@ -130,7 +130,7 @@ extension ParraCardView {
                     cardItemView: nextCard,
                     cardItem: cardItem
                 )
-                if let oldCardInfo = oldCardInfo {
+                if let oldCardInfo {
                     self.delegate?.parraCardView(self, willEndDisplaying: oldCardInfo.cardItem)
                 }
                 
@@ -149,7 +149,7 @@ extension ParraCardView {
 
                         self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
                     } completion: { _ in
-                        if let oldCardInfo = oldCardInfo {
+                        if let oldCardInfo {
                             NSLayoutConstraint.deactivate(oldCardInfo.cardItemView.constraints)
                             oldCardInfo.cardItemView.removeFromSuperview()
                             
@@ -162,7 +162,7 @@ extension ParraCardView {
         } else {
             updateVisibleNavigationButtons(visibleButtons: visibleButtons)
 
-            if let currentCardInfo = self.currentCardInfo {
+            if let currentCardInfo {
                 delegate?.parraCardView(self, willEndDisplaying: currentCardInfo.cardItem)
                 
                 NSLayoutConstraint.deactivate(currentCardInfo.cardItemView.constraints)

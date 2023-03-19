@@ -448,7 +448,7 @@ public struct ImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
         let imageId = try container.decodeIfPresent(String.self, forKey: .imageAssetId)
         let imageUrlString = try container.decodeIfPresent(String.self, forKey: .imageAssetUrl)
 
-        if let imageId = imageId,
+        if let imageId,
            let imageUrlString = imageUrlString,
            let imageUrl = URL(string: imageUrlString) {
 
