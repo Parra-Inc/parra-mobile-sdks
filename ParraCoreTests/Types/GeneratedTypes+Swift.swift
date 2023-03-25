@@ -229,7 +229,7 @@ class GeneratedTypesTests: XCTestCase {
                             subtitle: "this one has a subtitle",
                             kind: .textShort,
                             data: .shortTextQuestionBody(
-                                ShortTextQuestionBody(placeholder: "placeholder", minLength: 50, maxLength: nil)
+                                ShortTextQuestionBody(placeholder: "placeholder", minLength: 50)
                             ),
                             active: false,
                             expiresAt: nil,
@@ -252,7 +252,7 @@ class GeneratedTypesTests: XCTestCase {
                             subtitle: "this one has a subtitle",
                             kind: .textLong,
                             data: .longTextQuestionBody(
-                                LongTextQuestionBody(placeholder: "placeholder", minLength: nil, maxLength: 1000)
+                                LongTextQuestionBody(placeholder: "placeholder", minLength: 1, maxLength: 1000)
                             ),
                             active: false,
                             expiresAt: nil,
