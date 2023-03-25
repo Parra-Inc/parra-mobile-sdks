@@ -83,7 +83,7 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
             ),
             validationLabel.trailingAnchor.constraint(
                 equalTo: textField.trailingAnchor,
-                constant: 4
+                constant: -4
             ),
         ])
     }

@@ -78,7 +78,7 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
             ),
             validationLabel.trailingAnchor.constraint(
                 equalTo: textView.trailingAnchor,
-                constant: 4
+                constant: -4
             ),
         ])
     }
