@@ -28,4 +28,12 @@ internal protocol ParraQuestionKindView: ParraConfigurableCardView {
         config: ParraCardViewConfig,
         answerHandler: ParraAnswerHandler
     )
+
+    func shouldAllowCommittingSelection() -> Bool
+}
+
+extension ParraQuestionKindView {
+    func shouldAllowCommittingSelection() -> Bool {
+        return true
+    }
 }

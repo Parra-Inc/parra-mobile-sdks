@@ -126,6 +126,8 @@
 		00A60BA0293392C700B7168A /* ParraDeviceAttributeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B9F293392C700B7168A /* ParraDeviceAttributeProvider.swift */; };
 		00BDB2AF28BC24E700C16649 /* ParraCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */; };
 		00BDB2B128BD822700C16649 /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2B028BD822700C16649 /* URLRequest.swift */; };
+		00CAD73429CFA1350093599E /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CAD73329CFA1350093599E /* Int.swift */; };
+		00CAD73629CFAE910093599E /* TextValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CAD73529CFAE910093599E /* TextValidationError.swift */; };
 		00DA7FE5295C95C400109081 /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE4295C95C400109081 /* Syncable.swift */; };
 		00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE7295CAB8F00109081 /* AnyCodable.swift */; };
 		00DA7FEA295CAB9700109081 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE9295CAB9700109081 /* AnyEncodable.swift */; };
@@ -327,6 +329,8 @@
 		00A60B9F293392C700B7168A /* ParraDeviceAttributeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraDeviceAttributeProvider.swift; sourceTree = "<group>"; };
 		00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCredentialTests.swift; sourceTree = "<group>"; };
 		00BDB2B028BD822700C16649 /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
+		00CAD73329CFA1350093599E /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		00CAD73529CFAE910093599E /* TextValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextValidationError.swift; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Constants.swift"; sourceTree = "<group>"; };
 		00D5156227D424C800C4F2CC /* ParraLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogger.swift; sourceTree = "<group>"; };
 		00D5156427D4376500C4F2CC /* ParraSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManager.swift; sourceTree = "<group>"; };
@@ -554,6 +558,7 @@
 				00120EF2274D1EEE00CA3247 /* UIColor.swift */,
 				005D320829B523E4001D0E0A /* UIEdgeInsets.swift */,
 				005D320629B52039001D0E0A /* UIView.swift */,
+				00CAD73329CFA1350093599E /* Int.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -630,6 +635,7 @@
 			children = (
 				001B7B6327DE3BE700DEEECD /* Direction.swift */,
 				001B7B6727DE3C1200DEEECD /* VisibleButtonOptions.swift */,
+				00CAD73529CFAE910093599E /* TextValidationError.swift */,
 				001B7B6927DE3C2400DEEECD /* CurrentCardInfo.swift */,
 				000AF4C1283AE6D8008A17A3 /* Config */,
 			);
@@ -1158,6 +1164,7 @@
 				00E15A352932971C0049C2C7 /* ParraCardDrawerViewController.swift in Sources */,
 				005D31F629AAF396001D0E0A /* ParraPaddedBaseButton.swift in Sources */,
 				005D31FD29B39979001D0E0A /* ViewTimer.swift in Sources */,
+				00CAD73429CFA1350093599E /* Int.swift in Sources */,
 				005D31E829A301DB001D0E0A /* ParraConfigurableView.swift in Sources */,
 				001B7B5527DE3B3800DEEECD /* ParraCardItemView.swift in Sources */,
 				001B7B4F27DE3B2500DEEECD /* ParraFeedback.swift in Sources */,
@@ -1196,6 +1203,7 @@
 				001B7B7D27DE60E000DEEECD /* ParraFeedbackDataManager.swift in Sources */,
 				007F30F329A18B80005731C4 /* ParraBooleanKindView.swift in Sources */,
 				001B7B5727DE3B3800DEEECD /* SelectableButton.swift in Sources */,
+				00CAD73629CFAE910093599E /* TextValidationError.swift in Sources */,
 				00901F312999AC940071647F /* ParraCheckboxKindView.swift in Sources */,
 				001B7B6827DE3C1200DEEECD /* VisibleButtonOptions.swift in Sources */,
 				0015599727E2BEBF006450BE /* ParraEmptyCardView.swift in Sources */,

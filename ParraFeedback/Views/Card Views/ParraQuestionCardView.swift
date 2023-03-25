@@ -195,7 +195,9 @@ internal class ParraQuestionCardView: ParraCardItemView {
     }
 
     override func commitToSelection() {
-        answerHandler.commitAnswers(for: question)
+        if questionTypeView.shouldAllowCommittingSelection() {
+            answerHandler.commitAnswers(for: question)
+        }
     }
 
     internal override func applyConfig(_ config: ParraCardViewConfig) {

@@ -517,17 +517,25 @@ public struct ChoiceQuestionBody: Codable, Equatable, Hashable {
 
 public struct ShortTextQuestionBody: Codable, Equatable, Hashable {
     public let placeholder: String?
-    public let minLength: Int?
-    public let maxLength: Int?
+    public let minLength: Int
+    public let maxLength: Int
 
     public init(
         placeholder: String?,
-        minLength: Int?,
-        maxLength: Int?
+        minLength: Int = 1,
+        maxLength: Int = Int.max
     ) {
         self.placeholder = placeholder
         self.minLength = minLength
         self.maxLength = maxLength
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.placeholder = try container.decodeIfPresent(String.self, forKey: .placeholder)
+        self.minLength = try container.decodeIfPresent(Int.self, forKey: .minLength) ?? 1
+        self.maxLength = try container.decodeIfPresent(Int.self, forKey: .maxLength) ?? Int.max
     }
 
     public enum CodingKeys: String, CodingKey {
@@ -539,17 +547,25 @@ public struct ShortTextQuestionBody: Codable, Equatable, Hashable {
 
 public struct LongTextQuestionBody: Codable, Equatable, Hashable {
     public let placeholder: String?
-    public let minLength: Int?
-    public let maxLength: Int?
+    public let minLength: Int
+    public let maxLength: Int
 
     public init(
         placeholder: String?,
-        minLength: Int?,
-        maxLength: Int?
+        minLength: Int = 1,
+        maxLength: Int = .max
     ) {
         self.placeholder = placeholder
         self.minLength = minLength
         self.maxLength = maxLength
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.placeholder = try container.decodeIfPresent(String.self, forKey: .placeholder)
+        self.minLength = try container.decodeIfPresent(Int.self, forKey: .minLength) ?? 1
+        self.maxLength = try container.decodeIfPresent(Int.self, forKey: .maxLength) ?? .max
     }
 
     public enum CodingKeys: String, CodingKey {

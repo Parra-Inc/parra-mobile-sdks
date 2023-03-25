@@ -16,6 +16,9 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
     private let answerHandler: ParraAnswerHandler
     private let textView: ParraBorderedTextView
     private let question: Question
+    private let data: DataType
+    private var validationError = TextValidationError.none
+    private let validationLabel = UILabel(frame: .zero)
 
     required init(
         question: Question,
@@ -25,6 +28,7 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
     ) {
         self.answerHandler = answerHandler
         self.question = question
+        self.data = data
         self.textView = ParraBorderedTextView(config: config)
 
         super.init(frame: .zero)
@@ -51,6 +55,12 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
 
         addSubview(textView)
 
+        validationLabel.translatesAutoresizingMaskIntoConstraints = false
+        validationLabel.textAlignment = .right
+        validationLabel.textColor = Parra.Constant.brandColor
+
+        addSubview(validationLabel)
+
         textView.activateEdgeConstraintsWithVerticalCenteringPreference(
             to: self,
             with: UIEdgeInsets(
@@ -61,12 +71,53 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
             )
         )
         NSLayoutConstraint.activate([
-            textView.heightAnchor.constraint(equalToConstant: 120)
+            textView.heightAnchor.constraint(equalToConstant: 120),
+            validationLabel.topAnchor.constraint(
+                equalTo: textView.bottomAnchor,
+                constant: 8
+            ),
+            validationLabel.trailingAnchor.constraint(
+                equalTo: textView.trailingAnchor,
+                constant: 4
+            ),
         ])
     }
 
     internal func applyConfig(_ config: ParraCardViewConfig) {
         textView.applyConfig(config)
+    }
+
+    func shouldAllowCommittingSelection() -> Bool {
+        return validationError == .none
+    }
+
+    private func validateText(text: String) -> TextValidationError {
+        let minLength = data.minLength
+        let maxLength = data.maxLength
+        let textLength = text.trimmingCharacters(in: .whitespacesAndNewlines).count
+
+        if textLength > maxLength {
+            return .maximum
+        } else if textLength < minLength {
+            return .minimum
+        } else {
+            return .none
+        }
+    }
+
+    private func updateValidation(text: String) {
+        validationError = validateText(text: text)
+
+        switch validationError {
+        case .none:
+            validationLabel.text = nil
+        case .minimum:
+            let chars = data.minLength.simplePluralized(singularString: "character")
+            validationLabel.text = "must have at least \(data.minLength) \(chars)"
+        case .maximum:
+            let chars = data.maxLength.simplePluralized(singularString: "character")
+            validationLabel.text = "must have at most \(data.maxLength) \(chars)"
+        }
     }
 }
 
@@ -80,9 +131,13 @@ extension ParraLongTextKindView: UITextViewDelegate {
             )
         }
 
-        answerHandler.update(
-            answer: answer,
-            for: question
-        )
+        updateValidation(text: textView.text)
+
+        if validationError == .none {
+            answerHandler.update(
+                answer: answer,
+                for: question
+            )
+        }
     }
 }
