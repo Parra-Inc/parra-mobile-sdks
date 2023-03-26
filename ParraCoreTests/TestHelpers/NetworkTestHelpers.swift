@@ -21,3 +21,28 @@ func createTestResponse(route: String,
         headerFields: [:].merging(additionalHeaders) { (_, new) in new }
     )!
 }
+
+func configureWithRequestResolver(resolver: @escaping (_ request: URLRequest) -> (Data?, HTTPURLResponse?, Error?)) {
+    let dataManager = ParraDataManager()
+    let networkManager = ParraNetworkManager(
+        dataManager: dataManager,
+        urlSession: MockURLSession(dataTaskResolver: resolver)
+    )
+
+    let sessionManager = ParraSessionManager(
+        dataManager: dataManager,
+        networkManager: networkManager
+    )
+
+    let syncManager = ParraSyncManager(
+        networkManager: networkManager,
+        sessionManager: sessionManager
+    )
+
+    Parra.shared = Parra(
+        dataManager: dataManager,
+        syncManager: syncManager,
+        sessionManager: sessionManager,
+        networkManager: networkManager
+    )
+}
