@@ -13,6 +13,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        guard NSClassFromString("XCTestCase") == nil else {
+            return true
+        }
+
         let myAppAccessToken = "9B5CDA6B-7538-4A2A-9611-7308D56DFFA1"
         let myAppTenantId = "f2d60da7-8aea-4882-9ee7-307e0ff18728"
 
