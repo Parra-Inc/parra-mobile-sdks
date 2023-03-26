@@ -52,6 +52,10 @@ internal extension Parra {
 
     @MainActor
     @objc func applicationDidBecomeActive(notification: Notification) {
+        guard NSClassFromString("XCTestCase") == nil else {
+            return
+        }
+
         if let taskId = Parra.backgroundTaskId,
             let app = notification.object as? UIApplication {
 
@@ -65,6 +69,10 @@ internal extension Parra {
 
     @MainActor
     @objc func applicationWillResignActive(notification: Notification) {
+        guard NSClassFromString("XCTestCase") == nil else {
+            return
+        }
+
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .inactive))
 
         triggerSyncFromNotification(notification: notification)
@@ -109,6 +117,10 @@ internal extension Parra {
 
     @MainActor
     @objc func applicationDidEnterBackground(notification: Notification) {
+        guard NSClassFromString("XCTestCase") == nil else {
+            return
+        }
+
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .background))
     }
 
