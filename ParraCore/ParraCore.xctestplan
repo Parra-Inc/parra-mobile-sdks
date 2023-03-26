@@ -4,7 +4,12 @@
       "id" : "492DA479-B400-49C6-BCE9-D77AE1BC0EB7",
       "name" : "Configuration 1",
       "options" : {
-
+        "environmentVariableEntries" : [
+          {
+            "key" : "PARRA_LOG_LEVEL",
+            "value" : "trace"
+          }
+        ]
       }
     }
   ],
