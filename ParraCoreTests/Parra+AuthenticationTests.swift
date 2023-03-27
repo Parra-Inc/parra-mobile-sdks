@@ -10,7 +10,7 @@ import XCTest
 
 class ParraAuthenticationTests: XCTestCase {
 
-    override func setUp() {
+    override func setUp() async throws {
         Parra.Initializer.isInitialized = false
 
         configureWithRequestResolver { request in
@@ -95,30 +95,5 @@ class ParraAuthenticationTests: XCTestCase {
 
             XCTFail()
         } catch {}
-    }
-
-    private func configureWithRequestResolver(resolver: @escaping (_ request: URLRequest) -> (Data?, HTTPURLResponse?, Error?)) {
-        let dataManager = ParraDataManager()
-        let networkManager = ParraNetworkManager(
-            dataManager: dataManager,
-            urlSession: MockURLSession(dataTaskResolver: resolver)
-        )
-        
-        let sessionManager = ParraSessionManager(
-            dataManager: dataManager,
-            networkManager: networkManager
-        )
-
-        let syncManager = ParraSyncManager(
-            networkManager: networkManager,
-            sessionManager: sessionManager
-        )
-
-        Parra.shared = Parra(
-            dataManager: dataManager,
-            syncManager: syncManager,
-            sessionManager: sessionManager,
-            networkManager: networkManager
-        )
     }
 }

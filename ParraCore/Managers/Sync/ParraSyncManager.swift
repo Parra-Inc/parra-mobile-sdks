@@ -69,8 +69,10 @@ internal actor ParraSyncManager {
             
             return
         }
-        
-        Task {
+
+        isSyncing = true
+
+        Task.detached {
             await self.sync()
         }
         
@@ -81,23 +83,27 @@ internal actor ParraSyncManager {
         isSyncing = true
         
         let syncToken = UUID().uuidString
-        
-        NotificationCenter.default.post(
-            name: Parra.syncDidBeginNotification,
-            object: self,
-            userInfo: [
-                Parra.Constant.syncTokenKey: syncToken
-            ]
-        )
-        
-        defer {
+
+        DispatchQueue.main.async {
             NotificationCenter.default.post(
-                name: Parra.syncDidEndNotification,
-                object: self,
+                name: Parra.syncDidBeginNotification,
+                object: nil,
                 userInfo: [
                     Parra.Constant.syncTokenKey: syncToken
                 ]
             )
+        }
+
+        defer {
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(
+                    name: Parra.syncDidEndNotification,
+                    object: nil,
+                    userInfo: [
+                        Parra.Constant.syncTokenKey: syncToken
+                    ]
+                )
+            }
         }
         
         guard await hasDataToSync() else {

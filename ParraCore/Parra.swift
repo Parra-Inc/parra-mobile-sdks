@@ -89,7 +89,9 @@ public class Parra: ParraModule {
         Task {
             await logout()
 
-            completion?()
+            DispatchQueue.main.async {
+                completion?()
+            }
         }
     }
 
