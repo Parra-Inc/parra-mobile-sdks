@@ -13,11 +13,17 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     private let jsonDecoder: JSONDecoder
     private let baseUrl: URL
     
-    internal init(baseUrl: URL, jsonEncoder: JSONEncoder, jsonDecoder: JSONDecoder) {
+    internal init(
+        baseUrl: URL,
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) {
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
         self.baseUrl = baseUrl
-        
+
+        parraLogTrace("FileSystemStorage init with baseUrl: \(baseUrl.safeNonEncodedPath())")
+
         // TODO: Think about this more later, but I think this is a fatalError()
         try? fileManager.safeCreateDirectory(at: baseUrl)
     }
@@ -49,7 +55,10 @@ internal actor FileSystemStorage: PersistentStorageMedium {
 
             let path = baseUrl.safeAppendPathComponent(fileName)
             var isDirectory: ObjCBool = false
-            let exists = fileManager.fileExists(atPath: path.safeNonEncodedPath(), isDirectory: &isDirectory)
+            let exists = fileManager.fileExists(
+                atPath: path.safeNonEncodedPath(),
+                isDirectory: &isDirectory
+            )
 
             if !exists || isDirectory.boolValue || fileName.starts(with: ".") {
                 parraLogTrace("readAllInDirectory skipping file: \(fileName) - is likely hidden or a directory")
