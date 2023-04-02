@@ -74,7 +74,7 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
             textView.heightAnchor.constraint(equalToConstant: 120),
             validationLabel.topAnchor.constraint(
                 equalTo: textView.bottomAnchor,
-                constant: 8
+                constant: 4
             ),
             validationLabel.trailingAnchor.constraint(
                 equalTo: textView.trailingAnchor,
@@ -85,6 +85,7 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
 
     internal func applyConfig(_ config: ParraCardViewConfig) {
         textView.applyConfig(config)
+        validationLabel.font = config.label.font
     }
 
     func shouldAllowCommittingSelection() -> Bool {
