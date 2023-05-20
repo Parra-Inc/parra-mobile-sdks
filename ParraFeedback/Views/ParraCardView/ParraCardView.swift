@@ -119,13 +119,13 @@ public extension ParraCardViewDelegate {
 public class ParraCardView: UIView {
     public enum Dimensions {
         public static let minWidth: CGFloat = 320
-        public static let minHeight: CGFloat = 274
+        public static let minHeight: CGFloat = 254
     }
     
     /// The object that acts as the delegate of the `ParraCardView`. The delegate is not retained.
     public weak var delegate: ParraCardViewDelegate?
     
-    internal let questionHandler = ParraQuestionHandler()
+    internal let answerHandler = ParraCardAnswerHandler()
     
     internal var cardItems: [ParraCardItem] = [] {
         didSet {
@@ -134,8 +134,20 @@ public class ParraCardView: UIView {
             if cardItems != oldValue {
                 // If there is already a card item and that item exists in the updated cards list,
                 // we want to make sure that item stays visible.
-                if let currentCardInfo = currentCardInfo,
+                if let currentCardInfo,
                     let currentCardItem = currentCardInfo.cardItem, cardItems.contains(where: { $0.id == currentCardItem.id }) {
+
+                    let visibleButtons = visibleNavigationButtonsForCardItem(currentCardItem)
+
+                    UIView.animate(
+                        withDuration: 0.375,
+                        delay: 0.0,
+                        options: [.curveEaseInOut, .beginFromCurrentState],
+                        animations: {
+                            self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
+                        },
+                        completion: nil
+                    )
                 } else {
                     transitionToNextCard(direction: .right, animated: existedPreviously)
                 }
@@ -162,8 +174,6 @@ public class ParraCardView: UIView {
         ]
     }
     
-    internal var currentCardConstraint: NSLayoutConstraint?
-    
     internal let containerView = UIView(frame: .zero)
     internal let contentView = UIView(frame: .zero)
     
@@ -175,12 +185,41 @@ public class ParraCardView: UIView {
         }
     }
 
-    internal let poweredByButton = UIButton(type: .system)
+    internal let poweredByButton = UIButton(frame: .zero)
     internal lazy var navigationStack: UIStackView = ({
         return UIStackView(arrangedSubviews: [
-            poweredByButton
+            backButton, poweredByButton, forwardButton
         ])
     })()
+
+    /// The image used for the back button used to transition to the previous card. By default, a left facing arrow.
+    internal var backButtonImage: UIImage = UIImage(systemName: "arrow.left")! {
+        didSet {
+            backButton.setImage(backButtonImage, for: .normal)
+        }
+    }
+
+    /// The image used for the forward button used to transition to the next card. By default, a right facing arrow.
+    public var forwardButtonImage: UIImage = UIImage(systemName: "arrow.right")! {
+        didSet {
+            forwardButton.setImage(forwardButtonImage, for: .normal)
+        }
+    }
+
+    internal lazy var backButton: UIButton = {
+        return UIButton.systemButton(
+            with: self.backButtonImage,
+            target: self,
+            action: #selector(navigateToPreviousCard)
+        )
+    }()
+    internal lazy var forwardButton: UIButton = {
+        return UIButton.systemButton(
+            with: self.forwardButtonImage,
+            target: self,
+            action: #selector(navigateToNextCard)
+        )
+    }()
 
     /// Creates a `ParraCardView`. If there are any `ParraCardItem`s available in hte `ParraFeedback` module,
     /// they will be displayed automatically when adding this view to your view hierarchy.
@@ -191,7 +230,7 @@ public class ParraCardView: UIView {
         
         super.init(frame: .zero)
         
-        questionHandler.questionHandlerDelegate = self
+        answerHandler.questionHandlerDelegate = self
         
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear

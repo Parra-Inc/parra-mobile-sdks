@@ -9,9 +9,8 @@ import UIKit
 
 public extension Parra {
     enum API {
-        /// <#Description#>
-        /// - Parameter appArea: <#appArea description#>
-        /// - Returns: <#description#>
+        /// Fetches all available Parra Feedback cards for the supplied app area. If `ParraQuestionAppArea.all` is provided
+        /// cards from all app areas will be combined and returned.
         public static func getCards(appArea: ParraQuestionAppArea) async throws -> [ParraCardItem] {
             var queryItems: [String: String] = [:]
             // It is important that an app area name is only provided if a specific one is meant to be returned.
@@ -31,6 +30,8 @@ public extension Parra {
             case .success(let cardsResponse):
                 return cardsResponse.items
             case .failure(let error):
+                parraLogError("Error fetching cards from Parra", error)
+
                 throw error
             }
         }
@@ -41,21 +42,21 @@ public extension Parra {
                 return
             }
 
-            let serializableCards = cards.map { $0.serializedForRequestBody() }
-
             let route = "bulk/questions/answer"
 
             let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
                 route: route,
                 method: .post,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                body: serializableCards
+                body: cards.map { CompletedCardUpload(completedCard: $0) }
             )
 
             switch response.result {
             case .success:
                 return
             case .failure(let error):
+                parraLogError("Error submitting card responses to Parra", error)
+
                 throw error
             }
         }
@@ -76,7 +77,7 @@ public extension Parra {
             var completedSessions = Set<String>()
             let route = "tenants/\(tenantId)/sessions"
             for session in sessions {
-                parraLogV("Uploading session: \(session.sessionId)")
+                parraLogDebug("Uploading session: \(session.sessionId)")
 
                 let sessionUpload = ParraSessionUpload(session: session)
 
@@ -91,7 +92,7 @@ public extension Parra {
                 case .success:
                     completedSessions.insert(session.sessionId)
                 case .failure(let error):
-                    parraLogE(error)
+                    parraLogError(error)
 
                     // If any of the sessions fail to upload afty rerying, fail the entire operation
                     // returning the sessions that have been completed so far.

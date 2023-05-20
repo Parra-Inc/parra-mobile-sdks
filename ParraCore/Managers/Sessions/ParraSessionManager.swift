@@ -60,7 +60,7 @@ internal actor ParraSessionManager: Syncable {
                 with: completedSessionIds.subtracting([currentSession.sessionId])
             )
         } catch let error {
-            parraLogE("Syncing sessions failed", error)
+            parraLogError("Syncing sessions failed", error)
         }
 
         self.currentSession = currentSession
@@ -74,6 +74,11 @@ internal actor ParraSessionManager: Syncable {
         guard var currentSession else {
             return
         }
+
+        parraLogDebug("Logging event", [
+            "name": String(describing: name),
+            "params": String(describing: params),
+        ])
 
         let metadata: [String: AnyCodable] = Dictionary(
             uniqueKeysWithValues: params.map { key, value in
@@ -103,6 +108,12 @@ internal actor ParraSessionManager: Syncable {
             return
         }
 
+        parraLogDebug("Updating user property", [
+            "key": key.description,
+            "new value": String(describing: value),
+            "old value": String(describing: userProperties[key.description])
+        ])
+
         if let value {
             userProperties[key.description] = .init(value)
         } else {
@@ -130,7 +141,7 @@ internal actor ParraSessionManager: Syncable {
 
     internal func createSessionIfNotExists() async {
         guard currentSession == nil else {
-            parraLogV("Session is already in progress. Skipping creating new one.")
+            parraLogTrace("Session is already in progress. Skipping creating new one.")
 
             return
         }

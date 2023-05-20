@@ -7,44 +7,38 @@
 
 import Foundation
 
-public enum QuestionChoiceDirection {
-    case vertical, horizontal
-}
-
-public extension QuestionKind {
-    var allowsMultipleSelection: Bool {
-        switch self {
-        case .radio, .star, .image:
-            return false
-        case .checkbox:
-            return true
-        }
-    }
-    
-    var allowsDeselection: Bool {
-        switch self {
-        case .radio, .star, .image:
-            return false
-        case .checkbox:
-            return true
-        }
-    }
-
-    var direction: QuestionChoiceDirection {
-        switch self {
-        case .radio, .checkbox:
-            return .vertical
-        case .star, .image:
-            return .horizontal
-        }
-    }
-}
-
 extension ParraCardItem: Identifiable {
     public var id: String {
         switch data {
         case .question(let question):
             return question.id
+        }
+    }
+
+    public func getAllAssets() -> [Asset] {
+        switch self.data {
+        case .question(let question):
+            switch question.data {
+            case .imageQuestionBody(let imageQuestionBody):
+                return imageQuestionBody.options.map { $0.asset }
+            case .longTextQuestionBody, .shortTextQuestionBody, .ratingQuestionBody,
+                    .starQuestionBody, .booleanQuestionBody, .choiceQuestionBody, .checkboxQuestionBody:
+                return []
+            }
+        }
+    }
+
+    /// Cards that don't have a good mechanism for determining that the user is done making their selection.
+    /// This determines which cards show the forward arrow button to manually commit their changes.
+    public var requiresManualNextSelection: Bool {
+        switch data {
+        case .question(let question):
+            switch question.kind {
+            case .checkbox, .textLong:
+                return true
+            case .image, .boolean, .radio, .rating, .star, .textShort:
+                return false
+            }
         }
     }
 }

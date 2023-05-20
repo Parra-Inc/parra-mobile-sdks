@@ -67,7 +67,8 @@ internal class ParraNetworkManager: NetworkManagerType {
     internal required init(dataManager: ParraDataManager,
                            urlSession: URLSessionType,
                            jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
-                           jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder) {
+                           jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder
+    ) {
         self.dataManager = dataManager
         self.urlSession = urlSession
         self.jsonEncoder = jsonEncoder
@@ -79,20 +80,28 @@ internal class ParraNetworkManager: NetworkManagerType {
     }
     
     internal func refreshAuthentication() async throws -> ParraCredential {
+        parraLogDebug("Performing reauthentication for Parra")
+
         guard let authenticationProvider = authenticationProvider else {
             throw ParraError.missingAuthentication
         }
         
         do {
+            parraLogInfo("Invoking Parra authentication provider")
+
             let token = try await authenticationProvider()
             let credential = ParraCredential(token: token)
             
             await dataManager.updateCredential(
                 credential: credential
             )
-            
+
+            parraLogInfo("Reauthentication with Parra succeeded")
+
             return credential
         } catch let error {
+            let framing = "╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍"
+            parraLogError("\n\(framing)\n\nReauthentication with Parra failed.\nInvoking the authProvider passed to Parra.initialize failed with error: \(error.localizedDescription)\n\n\(framing)")
             throw ParraError.authenticationFailed(error.localizedDescription)
         }
     }
@@ -101,7 +110,8 @@ internal class ParraNetworkManager: NetworkManagerType {
                                                             method: HttpMethod,
                                                             queryItems: [String: String] = [:],
                                                             config: RequestConfig = .default,
-                                                            cachePolicy: URLRequest.CachePolicy? = nil) async -> AuthenticatedRequestResult<T> {
+                                                            cachePolicy: URLRequest.CachePolicy? = nil
+    ) async -> AuthenticatedRequestResult<T> {
         return await performAuthenticatedRequest(
             route: route,
             method: method,
@@ -117,8 +127,11 @@ internal class ParraNetworkManager: NetworkManagerType {
                                                                           queryItems: [String: String] = [:],
                                                                           config: RequestConfig = .default,
                                                                           cachePolicy: URLRequest.CachePolicy? = nil,
-                                                                          body: U) async -> AuthenticatedRequestResult<T> {
+                                                                          body: U
+    ) async -> AuthenticatedRequestResult<T> {
         var responseAttributes: AuthenticatedRequestAttributeOptions = []
+
+        parraLogTrace("Performing authenticated request to route: \(method.rawValue) \(route)")
 
         do {
             let url = Parra.Constant.parraApiRoot.appendingPathComponent(route)
@@ -130,7 +143,7 @@ internal class ParraNetworkManager: NetworkManagerType {
             let credential = await dataManager.getCurrentCredential()
 
             let nextCredential: ParraCredential
-            if let credential = credential {
+            if let credential {
                 nextCredential = credential
             } else {
                 nextCredential = try await refreshAuthentication()
@@ -161,6 +174,18 @@ internal class ParraNetworkManager: NetworkManagerType {
 
             switch result {
             case .success(let data):
+                parraLogTrace("Parra client received success response")
+#if DEBUG
+                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
+                    let prettyData = try? jsonEncoder.encode(dataString),
+                    let prettyString = String(data: prettyData, encoding: .utf8) {
+
+                    if data != kEmptyJsonObjectData {
+                        parraLogTrace(prettyString)
+                    }
+                }
+#endif
+
                 let response = try jsonDecoder.decode(T.self, from: data)
 
                 return AuthenticatedRequestResult(
@@ -186,10 +211,14 @@ internal class ParraNetworkManager: NetworkManagerType {
             request.setValue("Bearer \(credential.token)", forHTTPHeaderField: .authorization)
 
             let (data, response) = try await performAsyncDataDask(request: request)
+
+            parraLogTrace("Parra client received response. Status: \(response.statusCode)")
+
             switch (response.statusCode, config.shouldReauthenticate) {
             case (204, _):
                 return (.success(kEmptyJsonObjectData), config.attributes)
             case (401, true):
+                parraLogTrace("Request required reauthentication")
                 let newCredential = try await refreshAuthentication()
 
                 request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: .authorization)
@@ -203,8 +232,14 @@ internal class ParraNetworkManager: NetworkManagerType {
                 )
             case (400...499, _):
 #if DEBUG
-                if let dataString = String(data: data, encoding: .utf8) {
-                    parraLogV("Client error received response: \(dataString)")
+                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
+                   let prettyData = try? jsonEncoder.encode(dataString),
+                   let prettyString = String(data: prettyData, encoding: .utf8) {
+
+                    parraLogTrace("Received 400...499 status in response")
+                    if data != kEmptyJsonObjectData {
+                        parraLogTrace(prettyString)
+                    }
                 }
 #endif
 
@@ -217,7 +252,21 @@ internal class ParraNetworkManager: NetworkManagerType {
                     config.attributes
                 )
             case (500...599, _):
+#if DEBUG
+                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
+                   let prettyData = try? jsonEncoder.encode(dataString),
+                   let prettyString = String(data: prettyData, encoding: .utf8) {
+
+                    parraLogTrace("Received 500...599 status in response")
+                    if data != kEmptyJsonObjectData {
+                        parraLogTrace(prettyString)
+                    }
+                }
+#endif
+
                 if config.shouldRetry {
+                    parraLogTrace("Retrying previous request")
+
                     let nextConfig = config
                         .afterRetrying()
                         .withAttribute(.requiredRetry)
@@ -288,18 +337,25 @@ internal class ParraNetworkManager: NetworkManagerType {
     }
 
     internal func performBulkAssetCachingRequest(assets: [Asset]) async {
+        parraLogTrace("Performing bulk asset caching request for \(assets.count) asset(s)")
         let _ = await assets.asyncMap { asset in
             return try? await fetchAsset(asset: asset)
         }
     }
 
     internal func fetchAsset(asset: Asset) async throws -> UIImage? {
+        parraLogTrace("Fetching asset: \(asset.id)", [
+            "url": asset.url
+        ])
+
         let request = request(for: asset)
 
         let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
         let httpResponse = response as! HTTPURLResponse
 
         defer {
+            parraLogTrace("Caching asset: \(asset.id)")
+
             let cacheResponse = CachedURLResponse(
                 response: response,
                 data: data,
@@ -310,22 +366,39 @@ internal class ParraNetworkManager: NetworkManagerType {
         }
 
         if httpResponse.statusCode < 300 {
+            parraLogTrace("Successfully retreived image for asset: \(asset.id)")
+
             return UIImage(data: data)
         }
+
+        parraLogTrace("Failed to download image for asset: \(asset.id)")
 
         return nil
     }
 
     internal func isAssetCached(asset: Asset) -> Bool {
+        parraLogTrace("Checking if asset is cached: \(asset.id)")
+
         guard let cache = urlSession.configuration.urlCache else {
+            parraLogTrace("Cache is missing")
+
             return false
         }
 
         guard let cachedResponse = cache.cachedResponse(for: request(for: asset)) else {
+            parraLogTrace("Cache miss for asset: \(asset.id)")
             return false
         }
 
-        return cachedResponse.storagePolicy != .notAllowed
+        guard cachedResponse.storagePolicy != .notAllowed else {
+            parraLogTrace("Storage policy disallowed for asset: \(asset.id)")
+
+            return false
+        }
+
+        parraLogTrace("Cache hit for asset: \(asset.id)")
+
+        return true
     }
 
     private func request(for asset: Asset) -> URLRequest {
@@ -341,7 +414,9 @@ internal class ParraNetworkManager: NetworkManagerType {
 
     private func performAsyncDataDask(request: URLRequest) async throws -> (Data, HTTPURLResponse) {
 #if DEBUG
-        try await Task.sleep(nanoseconds: 1_000_000_000)
+        if NSClassFromString("XCTestCase") != nil {
+            try await Task.sleep(nanoseconds: 1_000_000_000)
+        }
 #endif
         
         let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)

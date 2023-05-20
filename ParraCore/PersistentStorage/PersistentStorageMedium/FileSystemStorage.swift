@@ -13,11 +13,17 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     private let jsonDecoder: JSONDecoder
     private let baseUrl: URL
     
-    internal init(baseUrl: URL, jsonEncoder: JSONEncoder, jsonDecoder: JSONDecoder) {
+    internal init(
+        baseUrl: URL,
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) {
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
         self.baseUrl = baseUrl
-        
+
+        parraLogTrace("FileSystemStorage init with baseUrl: \(baseUrl.safeNonEncodedPath())")
+
         // TODO: Think about this more later, but I think this is a fatalError()
         try? fileManager.safeCreateDirectory(at: baseUrl)
     }
@@ -32,7 +38,6 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     }
 
     internal func readAllInDirectory<T>() async -> [String: T] where T: Codable {
-        parraLogV("readAllInDirectory")
         guard let enumerator = fileManager.enumerator(
             atPath: baseUrl.safeNonEncodedPath()
         ) else {
@@ -46,18 +51,21 @@ internal actor FileSystemStorage: PersistentStorageMedium {
                 return accumulator
             }
 
-            parraLogV("readAllInDirectory reading file: \(fileName)")
+            parraLogTrace("readAllInDirectory reading file: \(fileName)")
 
             let path = baseUrl.safeAppendPathComponent(fileName)
             var isDirectory: ObjCBool = false
-            let exists = fileManager.fileExists(atPath: path.safeNonEncodedPath(), isDirectory: &isDirectory)
+            let exists = fileManager.fileExists(
+                atPath: path.safeNonEncodedPath(),
+                isDirectory: &isDirectory
+            )
 
             if !exists || isDirectory.boolValue || fileName.starts(with: ".") {
-                parraLogV("readAllInDirectory skipping file: \(fileName) - is likely hidden or a directory")
+                parraLogTrace("readAllInDirectory skipping file: \(fileName) - is likely hidden or a directory")
                 return accumulator
             }
 
-            parraLogV("readAllInDirectory file: \(fileName) exists and is not hidden or a directory")
+            parraLogTrace("readAllInDirectory file: \(fileName) exists and is not hidden or a directory")
 
             do {
                 let data = try Data(contentsOf: path)
@@ -65,15 +73,15 @@ internal actor FileSystemStorage: PersistentStorageMedium {
 
                 accumulator[fileName] = next
 
-                parraLogV("readAllInDirectory reading file: \(fileName) into cache")
+                parraLogTrace("readAllInDirectory reading file: \(fileName) into cache")
             } catch let error {
-                parraLogV("readAllInDirectory error: \(error.localizedDescription)")
+                parraLogError("readAllInDirectory", error)
             }
 
             return accumulator
         }
 
-        parraLogV("readAllInDirectory read \(result.count) item(s) into cache")
+        parraLogDebug("readAllInDirectory read \(result.count) item(s) into cache")
 
         return result
     }

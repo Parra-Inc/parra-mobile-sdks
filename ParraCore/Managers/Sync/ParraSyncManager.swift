@@ -40,20 +40,26 @@ internal actor ParraSyncManager {
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
     internal func enqueueSync(with mode: ParraSyncMode) async {
-        guard await hasDataToSync() else {
-            parraLogV("Skipping \(mode) sync. No sync necessary.")
+        guard networkManager.authenticationProvider != nil else {
+            parraLogTrace("Skipping \(mode) sync. Authentication provider is unset.")
+
             return
         }
 
-        parraLogV("Enqueuing sync: \(mode)")
+        guard await hasDataToSync() else {
+            parraLogDebug("Skipping \(mode) sync. No sync necessary.")
+            return
+        }
+
+        parraLogDebug("Enqueuing sync: \(mode)")
 
         if isSyncing {
             if mode == .immediate {
-                parraLogV("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
+                parraLogDebug("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
                 
                 enqueuedSyncMode = .immediate
             } else {
-                parraLogV("Sync already in progress. Marking enqued sync.")
+                parraLogDebug("Sync already in progress. Marking enqued sync.")
                 
                 if enqueuedSyncMode != .immediate {
                     // An enqueued eventual sync shouldn't override an enqueued immediate sync.
@@ -63,56 +69,62 @@ internal actor ParraSyncManager {
             
             return
         }
-        
-        Task {
+
+        isSyncing = true
+
+        Task.detached {
             await self.sync()
         }
         
-        parraLogV("Sync enqued")
+        parraLogDebug("Sync enqued")
     }
     
     private func sync() async {
         isSyncing = true
         
         let syncToken = UUID().uuidString
-        
-        NotificationCenter.default.post(
-            name: Parra.syncDidBeginNotification,
-            object: self,
-            userInfo: [
-                Parra.Constant.syncTokenKey: syncToken
-            ]
-        )
-        
-        defer {
+
+        DispatchQueue.main.async {
             NotificationCenter.default.post(
-                name: Parra.syncDidEndNotification,
-                object: self,
+                name: Parra.syncDidBeginNotification,
+                object: nil,
                 userInfo: [
                     Parra.Constant.syncTokenKey: syncToken
                 ]
             )
         }
+
+        defer {
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(
+                    name: Parra.syncDidEndNotification,
+                    object: nil,
+                    userInfo: [
+                        Parra.Constant.syncTokenKey: syncToken
+                    ]
+                )
+            }
+        }
         
         guard await hasDataToSync() else {
-            parraLogV("No data available to sync")
+            parraLogDebug("No data available to sync")
             isSyncing = false
 
             return
         }
         
-        parraLogV("Starting sync")
+        parraLogDebug("Starting sync")
         
         let start = CFAbsoluteTimeGetCurrent()
-        parraLogV("Sending sync data...")
+        parraLogTrace("Sending sync data...")
 
         await performSync()
 
         let duration = CFAbsoluteTimeGetCurrent() - start
-        parraLogV("Sync data sent. Took \(duration)(s)")
+        parraLogTrace("Sync data sent. Took \(duration)(s)")
         
-        if let enqueuedSyncMode = enqueuedSyncMode {
-            parraLogV("More sync jobs were enqueued. Repeating sync.")
+        if let enqueuedSyncMode {
+            parraLogDebug("More sync jobs were enqueued. Repeating sync.")
             
             self.enqueuedSyncMode = nil
             
@@ -123,7 +135,7 @@ internal actor ParraSyncManager {
                 break
             }
         } else {
-            parraLogV("No more jobs found. Completing sync.")
+            parraLogDebug("No more jobs found. Completing sync.")
             
             isSyncing = false
         }
@@ -148,15 +160,14 @@ internal actor ParraSyncManager {
     }
     
     @MainActor internal func startSyncTimer() {
-        parraLogV("Starting sync timer")
-
         stopSyncTimer()
+        parraLogTrace("Starting sync timer")
 
         syncTimer = Timer.scheduledTimer(
             withTimeInterval: Constant.eventualSyncDelay,
             repeats: true
         ) { timer in
-            parraLogV("Sync timer fired")
+            parraLogTrace("Sync timer fired")
 
             Task {
                 await self.enqueueSync(with: .immediate)
@@ -164,11 +175,13 @@ internal actor ParraSyncManager {
         }
     }
     
-    @MainActor private func stopSyncTimer() {
+    @MainActor internal func stopSyncTimer() {
         guard let syncTimer = syncTimer else {
             return
         }
-        
+
+        parraLogTrace("Stopping sync timer")
+
         syncTimer.invalidate()
         self.syncTimer = nil
     }

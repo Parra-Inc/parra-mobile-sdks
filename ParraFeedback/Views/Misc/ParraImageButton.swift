@@ -9,55 +9,39 @@
 import UIKit
 import ParraCore
 
-internal class ParraImageButton: UIButton, SelectableButton {
-    enum Style {
-        static let outer: CGFloat = 18
-        static let inner: CGFloat = 9
-        static let lineWidth: CGFloat = 2.5
-        static let padding: CGFloat = 0
-    }
-
+internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableView {
     internal weak var delegate: SelectableButtonDelegate?
     internal var buttonIsSelected: Bool
     internal var allowsDeselection: Bool = false
-    private let config: ParraCardViewConfig
-    private var asset: Asset?
+
+    private let asset: Asset
     private var buttonImageView = UIImageView(frame: .zero)
     private var activityIndicator = UIActivityIndicatorView(style: .medium)
 
     internal required init(initiallySelected: Bool,
                            config: ParraCardViewConfig,
-                           asset: Asset?) {
+                           asset: Asset) {
         self.asset = asset
-        self.config = config
+
         buttonIsSelected = initiallySelected
 
         super.init(frame: .zero)
 
-        setup()
+        setup(config: config)
     }
 
     internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal override func layoutSubviews() {
-        super.layoutSubviews()
-
-        updateSelectionState(animated: false)
-    }
-
-    internal func setup() {
+    internal func setup(config: ParraCardViewConfig) {
         addTarget(self, action: #selector(selectionAction), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = config.backgroundColor
 
-        buttonImageView.backgroundColor = .white
         buttonImageView.translatesAutoresizingMaskIntoConstraints = false
         buttonImageView.layer.cornerRadius = 8.0
         buttonImageView.layer.masksToBounds = true
         buttonImageView.contentMode = .scaleAspectFill
-        buttonImageView.layer.borderColor = config.tintColor?.cgColor
 
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
@@ -65,69 +49,67 @@ internal class ParraImageButton: UIButton, SelectableButton {
         addSubview(buttonImageView)
         buttonImageView.addSubview(activityIndicator)
 
-        NSLayoutConstraint.activate([
+        NSLayoutConstraint.activate(
+            buttonImageView.constrainEdgesWithVerticalCenteringPreference(
+                to: self,
+                with: .init(top: 8, left: 8, bottom: 8, right: 8)
+            ) + [
             buttonImageView.widthAnchor.constraint(equalTo: buttonImageView.heightAnchor),
             buttonImageView.widthAnchor.constraint(equalToConstant: 60),
-            buttonImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            buttonImageView.topAnchor.constraint(equalTo: topAnchor),
-            buttonImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            buttonImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+//            buttonImageView.topAnchor.constraint(equalTo: topAnchor),
+//            buttonImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
             activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+//            widthAnchor.constraint(equalTo: heightAnchor),
         ])
 
-        if let asset = asset {
-            Task {
-                let isCached = Parra.Assets.isAssetCached(asset: asset)
+        Task {
+            let isCached = Parra.Assets.isAssetCached(asset: asset)
 
-                if !isCached {
-                    self.activityIndicator.startAnimating()
-                }
+            if !isCached {
+                self.activityIndicator.startAnimating()
+            }
 
-                let image = try? await Parra.Assets.fetchAsset(asset: asset)
+            let image = try? await Parra.Assets.fetchAsset(asset: asset)
 
+            Task { @MainActor in
                 self.activityIndicator.stopAnimating()
                 buttonImageView.image = image
             }
         }
+
+        applyConfig(config)
+    }
+
+    func applyConfig(_ config: ParraCardViewConfig) {
+        backgroundColor = config.backgroundColor
+        buttonImageView.layer.borderColor = config.tintColor?.cgColor
     }
 
     override var intrinsicContentSize: CGSize {
         return buttonImageView.intrinsicContentSize
     }
 
-    @objc internal func selectionAction(_ sender: ParraRadioButton) {
+    internal override func layoutSubviews() {
+        super.layoutSubviews()
+
+        applyBorderStyleForSelection(animated: false, for: buttonImageView)
+    }
+
+    @objc internal func selectionAction(_ sender: ParraImageButton) {
         if allowsDeselection {
             buttonIsSelected = !buttonIsSelected
         } else if !buttonIsSelected {
             buttonIsSelected = true
         }
 
-        updateSelectionState(animated: true)
+        applyBorderStyleForSelection(animated: true, for: buttonImageView)
 
         if buttonIsSelected {
             delegate?.buttonDidSelect(button: self)
         } else {
             delegate?.buttonDidDeselect(button: self)
-        }
-    }
-
-    internal func updateSelectionState(animated: Bool) {
-        let performBorderUpdates = { [self] in
-            buttonImageView.layer.borderWidth = buttonIsSelected ? 1.5 : 0
-        }
-
-        if animated {
-            UIView.animate(
-                withDuration: 0.2,
-                delay: 0.0,
-                options: [.beginFromCurrentState, .allowUserInteraction],
-                animations: {
-                    performBorderUpdates()
-                },
-                completion: nil
-            )
-        } else {
-            performBorderUpdates()
         }
     }
 }

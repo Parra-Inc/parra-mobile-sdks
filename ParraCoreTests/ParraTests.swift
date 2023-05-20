@@ -22,34 +22,17 @@ class FakeModule: ParraModule {
 
 class ParraCoreTests: XCTestCase {
     override func setUp() async throws {
-        let dataManager = ParraDataManager()
-        await dataManager.updateCredential(credential: ParraCredential(token: UUID().uuidString))
+        configureWithRequestResolver { request in
+            return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
+        }
 
-        let networkManager = ParraNetworkManager(
-            dataManager: dataManager,
-            urlSession: URLSession.shared
-        )
-
-        let sessionManager = ParraSessionManager(
-            dataManager: dataManager,
-            networkManager: networkManager
-        )
-
-        let syncManager = ParraSyncManager(
-            networkManager: networkManager,
-            sessionManager: sessionManager
-        )
-
-        Parra.shared = Parra(
-            dataManager: dataManager,
-            syncManager: syncManager,
-            sessionManager: sessionManager,
-            networkManager: networkManager
-        )
+        Parra.initialize(authProvider: .default(tenantId: "tenant", authProvider: {
+            return UUID().uuidString
+        }))
     }
 
-    override func tearDownWithError() throws {
-        Parra.shared = nil
+    override func tearDown() async throws {
+        Parra.Initializer.isInitialized = false
     }
 
     func testModulesCanBeRegistered() throws {
@@ -73,21 +56,29 @@ class ParraCoreTests: XCTestCase {
     }
     
     func testLogout() async throws {
-        let exp = expectation(description: "logout completion")
-        Parra.logout {
-            exp.fulfill()
-        }
-        
-        await waitForExpectations(timeout: 0.1)
-        
+        await Parra.logout()
+
         let currentCredential = await Parra.shared.dataManager.getCurrentCredential()
         XCTAssertNil(currentCredential)
     }
-    
-    func testTriggerSync() async throws {
-        expectation(forNotification: Parra.syncDidBeginNotification, object: nil)
+
+    func testTriggerSyncDoesNothingWithoutAuthProvider() async throws {
+        let exp  = expectation(forNotification: Parra.syncDidBeginNotification, object: nil)
+        exp.isInverted = true
         Parra.triggerSync {}
-        
-        await waitForExpectations(timeout: 0.1)
+
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    func testTriggerSync() async throws {
+        let notificationExpectation = XCTNSNotificationExpectation(
+            name: Parra.syncDidBeginNotification,
+            object: nil,
+            notificationCenter: NotificationCenter.default
+        )
+
+        await Parra.triggerSync()
+
+        wait(for: [notificationExpectation], timeout: 0.1)
     }
 }

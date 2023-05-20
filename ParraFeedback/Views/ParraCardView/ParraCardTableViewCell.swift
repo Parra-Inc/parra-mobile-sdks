@@ -74,14 +74,27 @@ public class ParraCardTableViewCell: UITableViewCell {
     
     private func commonInit() {
         selectionStyle = .none
-        
+
         contentView.addSubview(parraCardView)
-        
+
+        let heightAnchor = parraCardView.heightAnchor.constraint(
+            equalTo: contentView.heightAnchor
+        )
+        heightAnchor.priority = .defaultHigh
+
+        let centerYAnchor = parraCardView.centerYAnchor.constraint(
+            equalTo: contentView.centerYAnchor
+        )
+
         NSLayoutConstraint.activate([
-            parraCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            parraCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            parraCardView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            parraCardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            parraCardView.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor
+            ),
+            parraCardView.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor
+            ),
+            heightAnchor,
+            centerYAnchor
         ])
     }
 }

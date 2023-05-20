@@ -90,7 +90,8 @@ public class ParraFeedback: ParraModule {
                 }
             }
         }
-                
+
+        shared.performAssetPrefetch(for: cardsToKeep)
         shared.dataManager.setCards(cards: cardsToKeep)
         
         return cardsToKeep
@@ -110,7 +111,6 @@ public class ParraFeedback: ParraModule {
     /// 3. There is a significant time change on the system clock.
     /// 4. All cards for a `ParraCardView` are completed.
     /// 5. A `ParraCardView` is deinitialized or removed from the view hierarchy.
-    ///
     public func synchronizeData() async {
         await sendCardData()
     }
@@ -136,7 +136,7 @@ public class ParraFeedback: ParraModule {
                         try await self.dataManager.clearCompletedCardData(completedCards: chunk)
                         await self.dataManager.removeCardsForCompletedCards(completedCards: chunk)
                     } catch let error {
-                        parraLogE(ParraError.custom("Error uploading card data", error))
+                        parraLogError(ParraError.custom("Error uploading card data", error))
                     }
                 }
             }
@@ -145,5 +145,18 @@ public class ParraFeedback: ParraModule {
 
     private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {
         try await Parra.API.bulkAnswerQuestions(cards: cards)
+    }
+
+    private func performAssetPrefetch(for cards: [ParraCardItem]) {
+        Task {
+            parraLogDebug("Attempting asset prefetch for \(cards.count) card(s)...")
+            let assets = cards.flatMap { $0.getAllAssets() }
+            parraLogDebug("\(assets.count) asset(s) available for prefetching")
+
+
+            await Parra.Assets.performBulkAssetCachingRequest(assets: assets)
+
+            parraLogDebug("Completed prefetching assets")
+        }
     }
 }

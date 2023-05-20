@@ -11,7 +11,7 @@ import ParraCore
 class ParraFeedbackDataManager {
     private let completedCardDataStorage: CompletedCardDataStorage
     private let cardStorage: CardStorage
-        
+
     init() {
         let completedCardDataFolder = ParraFeedback.persistentStorageFolder()
         let completedCardDataFileName = ParraFeedbackDataManager.Key.completedCardsKey
@@ -36,8 +36,7 @@ class ParraFeedbackDataManager {
             storageModule: cardStorageModule
         )
     }
-    
-    
+
     func completedCardData(forId id: String) async -> CompletedCard? {
         return await completedCardDataStorage.completedCardData(
             forId: id
@@ -94,7 +93,7 @@ class ParraFeedbackDataManager {
     }
     
     func removeCardsForCompletedCards(completedCards: [CompletedCard]) async {
-        let cardIds = completedCards.map { $0.id }
+        let cardIds = completedCards.map { $0.questionId }
         
         let currentCards = await cardStorage.currentCards()
         let remainingCards = currentCards.filter { !cardIds.contains($0.id) }

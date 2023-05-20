@@ -9,18 +9,33 @@ import XCTest
 @testable import ParraCore
 
 class ParraSyncManagerTests: XCTestCase {
-
-    func testEnqueueSync() async throws {
+    override func setUp() async throws {
         configureWithRequestResolver { request in
             return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
         }
-        
-        expectation(forNotification: Parra.syncDidBeginNotification, object: nil)
-        
+
+        Parra.initialize(authProvider: .default(tenantId: "tenant", authProvider: {
+            return UUID().uuidString
+        }))
+    }
+
+    override func tearDown() async throws {
+        await Parra.logout()
+        Parra.Initializer.isInitialized = false
+        Parra.shared = nil
+    }
+
+    func testEnqueueSync() async throws {
+        let notificationExpectation = XCTNSNotificationExpectation(
+            name: Parra.syncDidBeginNotification,
+            object: nil,
+            notificationCenter: NotificationCenter.default
+        )
+
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
 
-        await waitForExpectations(timeout: 0.1)
-        
+        wait(for: [notificationExpectation], timeout: 0.1)
+
         let isSyncing = await Parra.shared.syncManager.isSyncing
         XCTAssertTrue(isSyncing)
 
@@ -29,14 +44,15 @@ class ParraSyncManagerTests: XCTestCase {
     }
 
     func testEnqueueSyncWhileSyncInProgress() async throws {
-        configureWithRequestResolver { request in
-            return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
-        }
+        let notificationExpectation = XCTNSNotificationExpectation(
+            name: Parra.syncDidBeginNotification,
+            object: nil,
+            notificationCenter: NotificationCenter.default
+        )
         
-        expectation(forNotification: Parra.syncDidBeginNotification, object: nil)
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
-        await waitForExpectations(timeout: 0.1)
-        
+        wait(for: [notificationExpectation], timeout: 0.1)
+
         let isSyncing = await Parra.shared.syncManager.isSyncing
         XCTAssertTrue(isSyncing)
         

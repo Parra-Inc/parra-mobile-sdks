@@ -7,16 +7,35 @@
 
 import Foundation
 
+// Completed card needs to be able to be converted to and from JSON for storage on disk.
 public struct CompletedCard: Codable {
-    public let id: String
-    public let data: CompletedCardData
+    public let questionId: String
+    public let data: QuestionAnswer
     
-    public init(id: String, data: CompletedCardData) {
-        self.id = id
+    public init(questionId: String, data: QuestionAnswer) {
+        self.questionId = questionId
         self.data = data
     }
-    
-    public func serializedForRequestBody() -> SerializableCompletedCard {
-        return SerializableCompletedCard(completedCard: self)
+}
+
+// A special wrapper around CompletedCard to convert it into JSON suitable to sending the Parra API.
+// This is a lossy operation, so must be a separate type from CompletedCard, which is used for local storage.
+internal struct CompletedCardUpload: Encodable {
+    enum CodingKeys: String, CodingKey {
+        case questionId
+        case data
+    }
+
+    internal let completedCard: CompletedCard
+
+    init(completedCard: CompletedCard) {
+        self.completedCard = completedCard
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(completedCard.questionId, forKey: .questionId)
+        try container.encode(completedCard.data.data, forKey: .data)
     }
 }

@@ -41,15 +41,15 @@ class ParraCardsInCollectionView: UICollectionViewController, UICollectionViewDe
             flowLayout.sectionInset = .init(top: 8, left: 8, bottom: 8, right: 8)
         }
         
-        ParraFeedback.fetchFeedbackCards { cards, error in
+        ParraFeedback.fetchFeedbackCards { [self] cards, error in
             if let error = error {
-                self.navigationItem.prompt = "Error fetching Parra cards"
+                navigationItem.prompt = "Error fetching Parra cards"
                 print("Error fetching Parra cards: \(error)")
             } else if cards.isEmpty {
-                self.navigationItem.prompt = "No Parra cards currently available."
+                navigationItem.prompt = "No Parra cards currently available."
                 print("No Parra cards currently available.")
             } else {
-                self.shouldShowFeedback = true
+                shouldShowFeedback = true
             }
         }
     }

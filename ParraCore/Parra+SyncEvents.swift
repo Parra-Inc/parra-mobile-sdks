@@ -10,8 +10,15 @@ import UIKit
 
 internal extension Parra {
     private static var backgroundTaskId: UIBackgroundTaskIdentifier?
+    private static var hasStartedEventObservers = false
 
     func addEventObservers() {
+        if Parra.hasStartedEventObservers {
+            return
+        }
+
+        Parra.hasStartedEventObservers = true
+
         let notificationCenter = NotificationCenter.default
 
         notificationCenter.addObserver(self,
@@ -45,6 +52,10 @@ internal extension Parra {
 
     @MainActor
     @objc func applicationDidBecomeActive(notification: Notification) {
+        guard NSClassFromString("XCTestCase") == nil else {
+            return
+        }
+
         if let taskId = Parra.backgroundTaskId,
             let app = notification.object as? UIApplication {
 
@@ -58,6 +69,10 @@ internal extension Parra {
 
     @MainActor
     @objc func applicationWillResignActive(notification: Notification) {
+        guard NSClassFromString("XCTestCase") == nil else {
+            return
+        }
+
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .inactive))
 
         triggerSyncFromNotification(notification: notification)
@@ -69,23 +84,21 @@ internal extension Parra {
 
             Parra.backgroundTaskId = nil
 
-            parraLogV("Background task: \(taskId) triggering session end")
+            parraLogDebug("Background task: \(taskId) triggering session end")
 
-            Task {
-                await Parra.shared.sessionManager.endSession()
+            await Parra.shared.sessionManager.endSession()
 
-                Task { @MainActor in
-                    UIApplication.shared.endBackgroundTask(taskId)
-                }
-            }
+            UIApplication.shared.endBackgroundTask(taskId)
         }
 
         Parra.backgroundTaskId = UIApplication.shared.beginBackgroundTask(
             withName: Constant.backgroundTaskName
         ) {
-            parraLogV("Background task expiration handler invoked")
+            parraLogDebug("Background task expiration handler invoked")
 
-            endSession()
+            Task { @MainActor in
+                await endSession()
+            }
         }
 
         let startTime = Date()
@@ -94,17 +107,22 @@ internal extension Parra {
                 try await Task.sleep(nanoseconds: 100_000_000)
             }
 
-            parraLogV("Ending Parra background execution after \(Constant.backgroundTaskDuration)s")
+            parraLogDebug("Ending Parra background execution after \(Constant.backgroundTaskDuration)s")
 
-            endSession()
+            Task { @MainActor in
+                await endSession()
+            }
         }
     }
 
     @MainActor
     @objc func applicationDidEnterBackground(notification: Notification) {
+        guard NSClassFromString("XCTestCase") == nil else {
+            return
+        }
+
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .background))
     }
-
 
     @MainActor
     @objc private func triggerSyncFromNotification(notification: Notification) {

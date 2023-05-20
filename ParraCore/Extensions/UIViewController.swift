@@ -9,14 +9,20 @@
 import UIKit
 
 public extension UIViewController {
-    @available(iOS, deprecated: 13.0)
     static func topMostViewController() -> UIViewController? {
-        // There does not appear to be a work-around for this yet for applications
-        // that use multiple scenes.
-        guard let window = UIApplication.shared.keyWindow else {
-            return nil
+        return safeGetKeyWindow()?.topViewController()
+    }
+
+    static func safeGetKeyWindow() -> UIWindow? {
+        let app = UIApplication.shared
+
+        if #available(iOS 15.0, *) {
+            return app
+                .connectedScenes
+                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                .first
         }
 
-        return window.topViewController()
+        return app.windows.first
     }
 }

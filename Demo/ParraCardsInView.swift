@@ -28,8 +28,8 @@ class ParraCardsInView: UIViewController {
         view.addConstraint(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
 
         print("Fetching Parra Cards...")
-        ParraFeedback.fetchFeedbackCards { cards, error in
-            self.activityIndicator.removeFromSuperview()
+        ParraFeedback.fetchFeedbackCards { [self] cards, error in
+            activityIndicator.removeFromSuperview()
 
             if error != nil || cards.isEmpty {
                 let text = error != nil ? "Error fetching Parra cards: \(error!)" : "No Parra cards currently available."
@@ -39,22 +39,22 @@ class ParraCardsInView: UIViewController {
                 label.numberOfLines = 0
                 label.translatesAutoresizingMaskIntoConstraints = false
                 
-                self.view.addSubview(label)
-                self.view.addConstraints([
-                    label.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                    label.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-                    label.widthAnchor.constraint(lessThanOrEqualTo: self.view.widthAnchor, constant: -24)
+                view.addSubview(label)
+                view.addConstraints([
+                    label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                    label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                    label.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, constant: -24)
                 ])
                 
                 return
             }
 
-            self.view.addSubview(self.cardView)
-            
+            view.addSubview(cardView)
+
             NSLayoutConstraint.activate([
-                self.cardView.centerYAnchor.constraint(equalTo: self.view.layoutMarginsGuide.centerYAnchor),
-                self.cardView.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
-                self.cardView.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor)
+                cardView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+                cardView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                cardView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             ])
         }
     }

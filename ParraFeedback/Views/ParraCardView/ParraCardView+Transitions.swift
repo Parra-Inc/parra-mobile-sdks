@@ -9,26 +9,24 @@ import UIKit
 import ParraCore
 
 extension ParraCardView: ParraQuestionHandlerDelegate {
-    internal func questionHandlerDidMakeNewSelection(forQuestion question: Question) {
-        Task {
-            try await Task.sleep(nanoseconds: 333_000_000)
-            
-            let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
-            
-            guard let nextCardItem = nextCardItem, nextCardItemDiection == .right else {
-                return
-            }
-            
-            guard !(await ParraFeedback.hasCardBeenCompleted(nextCardItem)) else {
-                return
-            }
-            
-            // If there is a next card, we ask the delegate if we should transition.
-            let shouldTransition = delegate?.parraCardView(self, shouldAutoNavigateTo: nextCardItem) ?? true
-            
-            if shouldTransition {
-                suggestTransitionInDirection(.right, animated: true)
-            }
+    internal func questionHandlerDidMakeNewSelection(forQuestion question: Question) async {
+        try? await Task.sleep(nanoseconds: 333_000_000)
+
+        let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
+
+        guard let nextCardItem = nextCardItem, nextCardItemDiection == .right else {
+            return
+        }
+
+        guard !(await ParraFeedback.hasCardBeenCompleted(nextCardItem)) else {
+            return
+        }
+
+        // If there is a next card, we ask the delegate if we should transition.
+        let shouldTransition = delegate?.parraCardView(self, shouldAutoNavigateTo: nextCardItem) ?? true
+
+        if shouldTransition {
+            suggestTransitionInDirection(.right, animated: true)
         }
     }
 }
@@ -94,29 +92,25 @@ extension ParraCardView {
         
         let nextCard = cardViewFromCardItem(cardItem)
         nextCard.accessibilityIdentifier = "Next Card"
-                
+
+        let visibleButtons = visibleNavigationButtonsForCardItem(cardItem)
+
         contentView.addSubview(nextCard)
-        
-        if let currentCardConstraint = currentCardConstraint {
-            NSLayoutConstraint.deactivate([currentCardConstraint])
-        }
-        currentCardConstraint = contentView.heightAnchor.constraint(
-            greaterThanOrEqualTo: nextCard.heightAnchor
-        )
-        
+
         // If these change, make sure that changing nextCard.frame below still makes sense.
         NSLayoutConstraint.activate([
             nextCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nextCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             nextCard.topAnchor.constraint(equalTo: contentView.topAnchor),
-            nextCard.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
-            currentCardConstraint!
+            nextCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
         
         delegate?.parraCardView(self, willDisplay: cardItem)
         
         if animated {
             let oldCardInfo = currentCardInfo
+
+            forwardButton.isEnabled = false
 
             self.currentCardInfo?.cardItemView.transform = .identity
             
@@ -136,7 +130,7 @@ extension ParraCardView {
                     cardItemView: nextCard,
                     cardItem: cardItem
                 )
-                if let oldCardInfo = oldCardInfo {
+                if let oldCardInfo {
                     self.delegate?.parraCardView(self, willEndDisplaying: oldCardInfo.cardItem)
                 }
                 
@@ -152,8 +146,10 @@ extension ParraCardView {
                         )
                         nextCard.transform = .identity
                         self.layoutIfNeeded()
+
+                        self.updateVisibleNavigationButtons(visibleButtons: visibleButtons)
                     } completion: { _ in
-                        if let oldCardInfo = oldCardInfo {
+                        if let oldCardInfo {
                             NSLayoutConstraint.deactivate(oldCardInfo.cardItemView.constraints)
                             oldCardInfo.cardItemView.removeFromSuperview()
                             
@@ -163,8 +159,10 @@ extension ParraCardView {
                         self.sendDidDisplay(cardItem: cardItem)
                     }
             }
-        } else {            
-            if let currentCardInfo = self.currentCardInfo {
+        } else {
+            updateVisibleNavigationButtons(visibleButtons: visibleButtons)
+
+            if let currentCardInfo {
                 delegate?.parraCardView(self, willEndDisplaying: currentCardInfo.cardItem)
                 
                 NSLayoutConstraint.deactivate(currentCardInfo.cardItemView.constraints)
@@ -195,6 +193,20 @@ extension ParraCardView {
             ])
         }
     }
+
+    internal func visibleNavigationButtonsForCardItem(_ cardItem: ParraCardItem?) -> VisibleButtonOptions {
+        guard let cardItem = cardItem else {
+            return []
+        }
+
+        var visibleButtons: VisibleButtonOptions = []
+
+        if cardItem.requiresManualNextSelection {
+            visibleButtons.update(with: .forward)
+        }
+
+        return visibleButtons
+    }
     
     private func canTransitionInDirection(_ direction: Direction) -> Bool {
         guard let currentCardInfo = currentCardInfo else {
@@ -211,6 +223,18 @@ extension ParraCardView {
         case .right:
             return currentIndex < cardItems.count - 1
         }
+    }
+
+    internal func updateVisibleNavigationButtons(visibleButtons: VisibleButtonOptions) {
+        let showBack = visibleButtons.contains(.back)
+
+        backButton.alpha = showBack ? 1.0 : 0.0
+        backButton.isEnabled = showBack
+
+        let showForward = visibleButtons.contains(.forward)
+
+        forwardButton.alpha = showForward ? 1.0 : 0.0
+        forwardButton.isEnabled = showForward
     }
     
     private func cardViewFromCardItem(_ cardItem: ParraCardItem?) -> ParraCardItemView {
@@ -229,7 +253,7 @@ extension ParraCardView {
         case .question(let question):
             card = ParraQuestionCardView(
                 question: question,
-                questionHandler: questionHandler,
+                answerHandler: answerHandler,
                 config: config
             )
         }

@@ -81,8 +81,8 @@
       </BuildableProductRunnable>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "PARRA_VERBOSE_LOGGING_ENABLED"
-            value = "1"
+            key = "PARRA_LOG_LEVEL"
+            value = "debug"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

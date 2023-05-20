@@ -19,6 +19,7 @@ public enum ParraSessionEventType: ParraSessionNamedEvent {
     }
 
     // Publicly accessible events
+    case action(source: String, module: ParraModule.Type)
     case impression(location: String, module: ParraModule.Type)
 
     public enum _Internal: ParraSessionNamedEvent {
@@ -37,6 +38,8 @@ public enum ParraSessionEventType: ParraSessionNamedEvent {
 
     public var eventName: String {
         switch self {
+        case .action(let source, let module):
+            return "\(module.eventPrefix()):\(source):action"
         case .impression(let location, let module):
             return "\(module.eventPrefix()):\(location):viewed"
         }
