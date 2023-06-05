@@ -8,17 +8,21 @@
 import Foundation
 import UIKit
 
-internal struct AuthenticatedRequestAttributeOptions: OptionSet {
-    let rawValue: Int
+public struct AuthenticatedRequestAttributeOptions: OptionSet {
+    public let rawValue: Int
 
-    static let requiredReauthentication = AuthenticatedRequestAttributeOptions(rawValue: 1 << 0)
-    static let requiredRetry = AuthenticatedRequestAttributeOptions(rawValue: 1 << 1)
-    static let exceededRetryLimit = AuthenticatedRequestAttributeOptions(rawValue: 1 << 2)
+    public static let requiredReauthentication = AuthenticatedRequestAttributeOptions(rawValue: 1 << 0)
+    public static let requiredRetry = AuthenticatedRequestAttributeOptions(rawValue: 1 << 1)
+    public static let exceededRetryLimit = AuthenticatedRequestAttributeOptions(rawValue: 1 << 2)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 }
 
-internal struct AuthenticatedRequestResult<T: Decodable> {
-    let result: Result<T, Error>
-    let attributes: AuthenticatedRequestAttributeOptions
+public struct AuthenticatedRequestResult<T: Decodable> {
+    public let result: Result<T, Error>
+    public let attributes: AuthenticatedRequestAttributeOptions
 
     init(result: Result<T, Error>,
          responseAttributes: AuthenticatedRequestAttributeOptions = []) {
