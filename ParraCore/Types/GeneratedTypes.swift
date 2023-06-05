@@ -275,34 +275,65 @@ public enum CardItemData: Codable, Equatable, Hashable {
     case question(Question)
 }
 
+public enum CardItemDisplayType: String, Codable {
+    case inline = "inline"
+    case popup = "popup"
+    case drawer = "drawer"
+}
+
 public enum CardItemType: String, Codable {
     case question = "question"
 }
 
 public struct ParraCardItem: Codable, Equatable, Hashable {
+    public let id: String
+    public let campaignId: String
+    public let campaignActionId: String
+    public let questionId: String?
     public let type: CardItemType
+    public let displayType: CardItemDisplayType?
     public let version: String
     public let data: CardItemData
-    
+
     public enum CodingKeys: String, CodingKey {
+        case id
+        case campaignId
+        case campaignActionId
+        case questionId
         case type
+        case displayType
         case version
         case data
     }
 
     public init(
+        id: String,
+        campaignId: String,
+        campaignActionId: String,
+        questionId: String?,
         type: CardItemType,
+        displayType: CardItemDisplayType?,
         version: String,
         data: CardItemData
     ) {
+        self.id = id
+        self.campaignId = campaignId
+        self.campaignActionId = campaignActionId
+        self.questionId = questionId
         self.type = type
+        self.displayType = displayType
         self.version = version
         self.data = data
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.campaignId = try container.decode(String.self, forKey: .campaignId)
+        self.campaignActionId = try container.decode(String.self, forKey: .campaignActionId)
+        self.questionId = try container.decode(String.self, forKey: .questionId)
         self.type = try container.decode(CardItemType.self, forKey: .type)
+        self.displayType = try container.decode(CardItemDisplayType.self, forKey: .displayType)
         self.version = try container.decode(String.self, forKey: .version)
         switch type {
         case .question:
@@ -320,18 +351,7 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
         case .question(let question):
             try container.encode(question, forKey: .data)
         }
-    }
-    
-    public var hash: Int {
-        var hasher = Hasher()
-
-        hasher.combine(id)
-        hasher.combine(type)
-        hasher.combine(version)
-        hasher.combine(data)
-
-        return hasher.finalize()
-    }
+    }    
 }
 
 public struct CardsResponse: Codable, Equatable, Hashable {

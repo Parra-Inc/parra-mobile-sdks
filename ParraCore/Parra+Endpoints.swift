@@ -65,23 +65,26 @@ public extension Parra {
     internal enum Sessions {
         /// Uploads the provided sessions, failing outright if enough sessions fail to upload
         /// - Returns: A set of ids of the sessions that were successfully uploaded.
-        static func bulkSubmitSessions(sessions: [ParraSession]) async throws -> Set<String> {
+        static func bulkSubmitSessions(sessions: [ParraSession]) async throws -> (Set<String>, ParraSessionsResponse?) {
             guard let tenantId = Parra.config.tenantId else {
                 throw ParraError.notInitialized
             }
 
             if sessions.isEmpty {
-                return []
+                return ([], nil)
             }
 
             var completedSessions = Set<String>()
+            // It's possible that multiple sessions that are uploaded could receive a response indicating that polling
+            // should occur. If this happens, we'll honor the most recent of these.
+            var sessionResponse: ParraSessionsResponse?
             let route = "tenants/\(tenantId)/sessions"
             for session in sessions {
                 parraLogDebug("Uploading session: \(session.sessionId)")
 
                 let sessionUpload = ParraSessionUpload(session: session)
 
-                let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
+                let response: AuthenticatedRequestResult<ParraSessionsResponse> = await Parra.shared.networkManager.performAuthenticatedRequest(
                     route: route,
                     method: .post,
                     config: .defaultWithRetries,
@@ -89,7 +92,12 @@ public extension Parra {
                 )
 
                 switch response.result {
-                case .success:
+                case .success(let payload):
+                    // Don't override the session response unless it's another one with shouldPoll enabled.
+                    if payload.shouldPoll {
+                        sessionResponse = payload
+                    }
+
                     completedSessions.insert(session.sessionId)
                 case .failure(let error):
                     parraLogError(error)
@@ -97,12 +105,12 @@ public extension Parra {
                     // If any of the sessions fail to upload afty rerying, fail the entire operation
                     // returning the sessions that have been completed so far.
                     if response.attributes.contains(.exceededRetryLimit) {
-                        return completedSessions
+                        return (completedSessions, sessionResponse)
                     }
                 }
             }
 
-            return completedSessions
+            return (completedSessions, sessionResponse)
         }
     }
 

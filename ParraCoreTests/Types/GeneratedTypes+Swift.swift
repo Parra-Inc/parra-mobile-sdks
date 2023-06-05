@@ -14,7 +14,12 @@ class GeneratedTypesTests: XCTestCase {
         let cardsResponse = CardsResponse(
             items: [
                 ParraCardItem(
+                    id: "id",
+                    campaignId: "",
+                    campaignActionId: "",
+                    questionId: "qid",
                     type: .question,
+                    displayType: .none,
                     version: "1",
                     data: .question(
                         Question(
@@ -52,7 +57,12 @@ class GeneratedTypesTests: XCTestCase {
                     )
                 ),
                 ParraCardItem(
+                    id: "id",
+                    campaignId: "",
+                    campaignActionId: "",
+                    questionId: "qid",
                     type: .question,
+                    displayType: .none,
                     version: "1",
                     data: .question(
                         Question(
@@ -90,7 +100,12 @@ class GeneratedTypesTests: XCTestCase {
                     )
                 ),
                 ParraCardItem(
+                    id: "id",
+                    campaignId: "",
+                    campaignActionId: "",
+                    questionId: "qid",
                     type: .question,
+                    displayType: .none,
                     version: "1",
                     data: .question(
                         Question(
@@ -116,7 +131,12 @@ class GeneratedTypesTests: XCTestCase {
                     )
                 ),
                 ParraCardItem(
+                    id: "id",
+                    campaignId: "",
+                    campaignActionId: "",
+                    questionId: "qid",
                     type: .question,
+                    displayType: .none,
                     version: "1",
                     data: .question(
                         Question(
@@ -144,7 +164,12 @@ class GeneratedTypesTests: XCTestCase {
                     )
                 ),
                 ParraCardItem(
+                    id: "id",
+                    campaignId: "",
+                    campaignActionId: "",
+                    questionId: "qid",
                     type: .question,
+                    displayType: .none,
                     version: "1",
                     data: .question(
                         Question(
@@ -182,7 +207,12 @@ class GeneratedTypesTests: XCTestCase {
                     )
                 ),
                 ParraCardItem(
+                    id: "id",
+                    campaignId: "",
+                    campaignActionId: "",
+                    questionId: "qid",
                     type: .question,
+                    displayType: .none,
                     version: "1",
                     data: .question(
                         Question(
@@ -216,7 +246,12 @@ class GeneratedTypesTests: XCTestCase {
                     )
                 ),
                 ParraCardItem(
+                    id: "id",
+                    campaignId: "",
+                    campaignActionId: "",
+                    questionId: "qid",
                     type: .question,
+                    displayType: .none,
                     version: "1",
                     data: .question(
                         Question(
@@ -239,7 +274,12 @@ class GeneratedTypesTests: XCTestCase {
                     )
                 ),
                 ParraCardItem(
+                    id: "id",
+                    campaignId: "",
+                    campaignActionId: "",
+                    questionId: "qid",
                     type: .question,
+                    displayType: .none,
                     version: "1",
                     data: .question(
                         Question(

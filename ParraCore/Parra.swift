@@ -146,6 +146,12 @@ public class Parra: ParraModule {
     }
 
     public func synchronizeData() async {
-        await sessionManager.synchronizeData()
+        let response = await sessionManager.synchronizeData()
+
+        if let response, response.shouldPoll {
+            for module in Parra.registeredModules.values {
+                module.didReceiveSessionResponse(sessionResponse: response)
+            }
+        }
     }
 }

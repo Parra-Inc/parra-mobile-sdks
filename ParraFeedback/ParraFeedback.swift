@@ -20,7 +20,7 @@ public class ParraFeedback: ParraModule {
     }
     
     public private(set) static var name: String = "Feedback"
-        
+
     /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
@@ -157,6 +157,101 @@ public class ParraFeedback: ParraModule {
             await Parra.Assets.performBulkAssetCachingRequest(assets: assets)
 
             parraLogDebug("Completed prefetching assets")
+        }
+    }
+
+    public func didReceiveSessionResponse(sessionResponse: ParraSessionsResponse) {
+        Task {
+            await pollForQuestions(context: sessionResponse)
+        }
+    }
+
+    private func pollForQuestions(context: ParraSessionsResponse) async {
+        parraLogDebug("Checking if polling for questions should occur")
+
+        guard context.shouldPoll else {
+            parraLogTrace("Should poll flag not set, skipping polling")
+            return
+        }
+
+        // Success means the request didn't fail and there are cards in the response that have a display type popup or drawer
+        for attempt in 0...context.retryTimes {
+            do {
+                parraLogTrace("Fetching cards. Attempt #\(attempt + 1)")
+
+                let cards = try await getCardsForPresentation()
+
+                if cards.isEmpty {
+                    parraLogTrace(
+                        "No cards found. Retrying \(context.retryTimes - attempt) more time(s). Next attempt in \(context.retryDelay)ms"
+                    )
+
+                    try await Task.sleep(ms: context.retryDelay)
+
+                    continue
+                }
+
+                let validPopupCards = cards.filter { cardItem in
+                    // TODO: Filter card items without an app area.
+                    return cardItem.displayType == .drawer || cardItem.displayType == .popup
+                }
+
+                displayPopupCards(cardItems: validPopupCards)
+            } catch let error {
+                parraLogError("Encountered error fetching cards. Cancelling polling.", error)
+            }
+        }
+    }
+
+    private func displayPopupCards(cardItems: [ParraCardItem]) {
+        parraLogTrace("Displaying popup cards")
+
+        guard !cardItems.isEmpty else {
+            parraLogTrace("Skipping presenting popup. No valid cards")
+            return
+        }
+
+        // Take the displayType of the first card and use that to deterine the modal style.
+        guard let displayType = cardItems.first?.displayType else {
+            parraLogTrace("Skipping presenting popup. No displayType set")
+
+            return
+        }
+
+        switch displayType {
+        case .popup:
+            ParraFeedback.presentCardPopup(
+                with: cardItems,
+                fromViewController: nil,
+                config: .default,
+                transitionStyle: .slide
+            )
+        case .drawer:
+            if #available(iOS 15.0, *) {
+                ParraFeedback.presentCardDrawer(
+                    with: cardItems,
+                    fromViewController: nil,
+                    config: .default
+                )
+            } else {
+                parraLogTrace("Drawer displayType not available on current iOS version. Using popup style instead.")
+                ParraFeedback.presentCardPopup(
+                    with: cardItems,
+                    fromViewController: nil,
+                    config: .default,
+                    transitionStyle: .slide
+                )
+            }
+        default:
+            parraLogTrace("Skipping presenting popup. displayType \(displayType) is not a valid modal type")
+        }
+    }
+
+    private func getCardsForPresentation() async throws -> [ParraCardItem] {
+        let cards = try await Parra.API.getCards(appArea: .none)
+
+        return cards.filter {
+            $0.displayType == .popup || $0.displayType == .drawer
         }
     }
 }

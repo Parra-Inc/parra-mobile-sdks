@@ -12,7 +12,7 @@ import UIKit
 /// ParraSessionManager
 /// Session Lifecycle
 ///
-internal actor ParraSessionManager: Syncable {
+internal actor ParraSessionManager {
     private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager
     private var currentSession: ParraSession?
@@ -38,9 +38,9 @@ internal actor ParraSessionManager: Syncable {
         return currentSession?.hasNewData ?? false
     }
 
-    func synchronizeData() async {
+    func synchronizeData() async -> ParraSessionsResponse? {
         guard var currentSession else {
-            return
+            return nil
         }
 
         // Reset and update the cache for the current session so the most up to take data is uploaded.
@@ -49,10 +49,13 @@ internal actor ParraSessionManager: Syncable {
 
         let sessions = await dataManager.sessionStorage.allTrackedSessions()
 
+        var sessionResponse: ParraSessionsResponse?
         do {
-            let completedSessionIds = try await Parra.Sessions.bulkSubmitSessions(
+            let (completedSessionIds, nextSessionResponse) = try await Parra.Sessions.bulkSubmitSessions(
                 sessions: sessions
             )
+
+            sessionResponse = nextSessionResponse
 
             // Remove all of the successfully uploaded sessions except for the
             // session that is in progress.
@@ -64,6 +67,8 @@ internal actor ParraSessionManager: Syncable {
         }
 
         self.currentSession = currentSession
+
+        return sessionResponse
     }
 
     internal func logEvent<Key>(_ name: String,
