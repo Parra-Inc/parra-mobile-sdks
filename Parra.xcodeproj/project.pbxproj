@@ -140,7 +140,6 @@
 		00DA7FFC296367D400109081 /* RequestConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FFB296367D400109081 /* RequestConfig.swift */; };
 		00DA7FFE296367E400109081 /* ParraHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FFD296367E400109081 /* ParraHeader.swift */; };
 		00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DECFF8274C69F800DAF301 /* AppDelegate.swift */; };
-		00DED000274C69F800DAF301 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DECFFE274C69F800DAF301 /* Main.storyboard */; };
 		00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */; };
 		00E15A1F2929B7C10049C2C7 /* ParraSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A1E2929B7C10049C2C7 /* ParraSessionManager.swift */; };
 		00E15A212929BC790049C2C7 /* UIDeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A202929BC790049C2C7 /* UIDeviceOrientation.swift */; };
@@ -160,6 +159,19 @@
 		00F5AAF428023EF300A94C85 /* GeneratedTypes+Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */; };
 		00FD310B28329F5B0080689C /* ParraCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */; };
 		00FD310D28329FF00080689C /* ParraCardsInCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD310C28329FF00080689C /* ParraCardsInCollectionView.swift */; };
+		82E627F32A158C8A00F84951 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E627F22A158C8A00F84951 /* NotificationsView.swift */; };
+		82E627F52A15903E00F84951 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E627F42A15903E00F84951 /* TabView.swift */; };
+		82E627F72A1590ED00F84951 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E627F62A1590ED00F84951 /* AuthView.swift */; };
+		82E627F92A1595B500F84951 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E627F82A1595B500F84951 /* RootView.swift */; };
+		82E627FB2A15AA9100F84951 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E627FA2A15AA9100F84951 /* AccountView.swift */; };
+		82E627FD2A18421400F84951 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E627FC2A18421400F84951 /* HomeView.swift */; };
+		82E627FF2A1A5AD400F84951 /* PrivacyPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E627FE2A1A5AD400F84951 /* PrivacyPolicy.swift */; };
+		82E628012A1A5B9400F84951 /* OpenSourceLicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E628002A1A5B9400F84951 /* OpenSourceLicensesView.swift */; };
+		82E628032A1A5C1A00F84951 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E628022A1A5C1A00F84951 /* LicenseView.swift */; };
+		82E628052A1A5DED00F84951 /* TermsAndConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E628042A1A5DED00F84951 /* TermsAndConditionsView.swift */; };
+		82E628072A1A60C100F84951 /* AgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E628062A1A60C100F84951 /* AgreementView.swift */; };
+		82E628092A1A676800F84951 /* ParraFeedbackFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E628082A1A676800F84951 /* ParraFeedbackFormView.swift */; };
+		82E6280C2A1A911C00F84951 /* WhatsNewKit in Frameworks */ = {isa = PBXBuildFile; productRef = 82E6280B2A1A911C00F84951 /* WhatsNewKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -350,7 +362,6 @@
 		00DA7FFD296367E400109081 /* ParraHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraHeader.swift; sourceTree = "<group>"; };
 		00DECFF5274C69F800DAF301 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00DECFF8274C69F800DAF301 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		00DECFFF274C69F800DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		00DED004274C69FA00DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		00DED006274C69FA00DAF301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E15A1E2929B7C10049C2C7 /* ParraSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionManager.swift; sourceTree = "<group>"; };
@@ -373,6 +384,18 @@
 		00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeneratedTypes+Swift.swift"; sourceTree = "<group>"; };
 		00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardCollectionViewCell.swift; sourceTree = "<group>"; };
 		00FD310C28329FF00080689C /* ParraCardsInCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardsInCollectionView.swift; sourceTree = "<group>"; };
+		82E627F22A158C8A00F84951 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		82E627F42A15903E00F84951 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
+		82E627F62A1590ED00F84951 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		82E627F82A1595B500F84951 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		82E627FA2A15AA9100F84951 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		82E627FC2A18421400F84951 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		82E627FE2A1A5AD400F84951 /* PrivacyPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicy.swift; sourceTree = "<group>"; };
+		82E628002A1A5B9400F84951 /* OpenSourceLicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceLicensesView.swift; sourceTree = "<group>"; };
+		82E628022A1A5C1A00F84951 /* LicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
+		82E628042A1A5DED00F84951 /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
+		82E628062A1A60C100F84951 /* AgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementView.swift; sourceTree = "<group>"; };
+		82E628082A1A676800F84951 /* ParraFeedbackFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackFormView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -405,6 +428,7 @@
 			files = (
 				001B7B4527DE3AEC00DEEECD /* ParraFeedback.framework in Frameworks */,
 				001B7B0527DE3A7600DEEECD /* ParraCore.framework in Frameworks */,
+				82E6280C2A1A911C00F84951 /* WhatsNewKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -813,10 +837,21 @@
 				00F5AAF027FA819200A94C85 /* ParraCardsInTableView.swift */,
 				00FD310C28329FF00080689C /* ParraCardsInCollectionView.swift */,
 				00E15A24293266470049C2C7 /* ParraCardsInModal.swift */,
-				00DECFFE274C69F800DAF301 /* Main.storyboard */,
 				00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */,
 				00DED006274C69FA00DAF301 /* Info.plist */,
 				003C216D27DEE77D001CAE03 /* Demo-Bridging-Header.h */,
+				82E627F22A158C8A00F84951 /* NotificationsView.swift */,
+				82E627FC2A18421400F84951 /* HomeView.swift */,
+				82E627F42A15903E00F84951 /* TabView.swift */,
+				82E627F62A1590ED00F84951 /* AuthView.swift */,
+				82E627F82A1595B500F84951 /* RootView.swift */,
+				82E627FA2A15AA9100F84951 /* AccountView.swift */,
+				82E628042A1A5DED00F84951 /* TermsAndConditionsView.swift */,
+				82E628002A1A5B9400F84951 /* OpenSourceLicensesView.swift */,
+				82E628062A1A60C100F84951 /* AgreementView.swift */,
+				82E628022A1A5C1A00F84951 /* LicenseView.swift */,
+				82E627FE2A1A5AD400F84951 /* PrivacyPolicy.swift */,
+				82E628082A1A676800F84951 /* ParraFeedbackFormView.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -972,6 +1007,9 @@
 				001B7B4427DE3AEC00DEEECD /* PBXTargetDependency */,
 			);
 			name = Demo;
+			packageProductDependencies = (
+				82E6280B2A1A911C00F84951 /* WhatsNewKit */,
+			);
 			productName = "Parra Feedback SDK";
 			productReference = 00DECFF5274C69F800DAF301 /* Demo.app */;
 			productType = "com.apple.product-type.application";
@@ -1013,6 +1051,9 @@
 				Base,
 			);
 			mainGroup = 00DECFEC274C69F800DAF301;
+			packageReferences = (
+				82E6280A2A1A911C00F84951 /* XCRemoteSwiftPackageReference "WhatsNewKit" */,
+			);
 			productRefGroup = 00DECFF6274C69F800DAF301 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1053,7 +1094,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				00DED005274C69FA00DAF301 /* LaunchScreen.storyboard in Resources */,
-				00DED000274C69F800DAF301 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1220,13 +1260,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82E627FB2A15AA9100F84951 /* AccountView.swift in Sources */,
 				00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */,
+				82E627FF2A1A5AD400F84951 /* PrivacyPolicy.swift in Sources */,
+				82E627FD2A18421400F84951 /* HomeView.swift in Sources */,
+				82E627F72A1590ED00F84951 /* AuthView.swift in Sources */,
 				00FD310D28329FF00080689C /* ParraCardsInCollectionView.swift in Sources */,
 				00E15A25293266470049C2C7 /* ParraCardsInModal.swift in Sources */,
 				0084014A27D5613A00E2B0ED /* ParraCardsInView.swift in Sources */,
+				82E628052A1A5DED00F84951 /* TermsAndConditionsView.swift in Sources */,
 				0084014827D560B900E2B0ED /* ParraDemoTableViewController.swift in Sources */,
+				82E628012A1A5B9400F84951 /* OpenSourceLicensesView.swift in Sources */,
+				82E628032A1A5C1A00F84951 /* LicenseView.swift in Sources */,
 				003C216C27DED58C001CAE03 /* SceneDelegate.swift in Sources */,
+				82E628072A1A60C100F84951 /* AgreementView.swift in Sources */,
 				00F5AAF127FA819200A94C85 /* ParraCardsInTableView.swift in Sources */,
+				82E628092A1A676800F84951 /* ParraFeedbackFormView.swift in Sources */,
+				82E627F52A15903E00F84951 /* TabView.swift in Sources */,
+				82E627F32A158C8A00F84951 /* NotificationsView.swift in Sources */,
+				82E627F92A1595B500F84951 /* RootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1261,14 +1313,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		00DECFFE274C69F800DAF301 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				00DECFFF274C69F800DAF301 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1589,7 +1633,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Parra Demo";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1624,7 +1667,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Parra Demo";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1692,6 +1734,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		82E6280A2A1A911C00F84951 /* XCRemoteSwiftPackageReference "WhatsNewKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SvenTiigi/WhatsNewKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		82E6280B2A1A911C00F84951 /* WhatsNewKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 82E6280A2A1A911C00F84951 /* XCRemoteSwiftPackageReference "WhatsNewKit" */;
+			productName = WhatsNewKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 00DECFED274C69F800DAF301 /* Project object */;
 }

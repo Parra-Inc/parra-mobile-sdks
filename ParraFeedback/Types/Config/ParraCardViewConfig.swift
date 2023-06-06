@@ -16,7 +16,7 @@ internal protocol ParraConfigurableCardView {
 /// so that they better blend in with your app's UI.
 public struct ParraCardViewConfig {
     public enum Constant {
-        public static let defaultBackgroundColor = UIColor(hex: 0xFAFAFA)
+        public static let defaultBackgroundColor = UIColor(hex: 0xFFFFFF)
         public static let defaultBackgroundColorDark = UIColor(hex: 0x27252C)
         public static let defaultCornerRadius: CGFloat = 12.0
         public static let defaultContentInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
@@ -25,18 +25,18 @@ public struct ParraCardViewConfig {
         public static let defaultAccessoryDisabledTintColor = UIColor(hex: 0xe3e4e6)
     }
     
-    public private(set) var backgroundColor: UIColor
-    public private(set) var tintColor: UIColor?
-    public private(set) var accessoryTintColor: UIColor?
-    public private(set) var accessoryDisabledTintColor: UIColor?
-    public private(set) var cornerRadius: CGFloat = 0.0
-    public private(set) var contentInsets: UIEdgeInsets
-    public private(set) var shadow: ParraShadowConfig
-    public private(set) var title: ParraTextConfig
-    public private(set) var subtitle: ParraTextConfig
-    public private(set) var body: ParraTextConfig
-    public private(set) var bodyBold: ParraTextConfig
-    public private(set) var label: ParraTextConfig
+    public var backgroundColor: UIColor
+    public var tintColor: UIColor?
+    public var accessoryTintColor: UIColor?
+    public var accessoryDisabledTintColor: UIColor?
+    public var cornerRadius: CGFloat = 0.0
+    public var contentInsets: UIEdgeInsets
+    public var shadow: ParraShadowConfig
+    public var title: ParraTextConfig
+    public var subtitle: ParraTextConfig
+    public var body: ParraTextConfig
+    public var bodyBold: ParraTextConfig
+    public var label: ParraTextConfig
 
     public init(backgroundColor: UIColor = Constant.defaultBackgroundColor,
                 tintColor: UIColor? = Constant.defaultTintColor,
@@ -44,7 +44,7 @@ public struct ParraCardViewConfig {
                 accessoryDisabledTintColor: UIColor? = Constant.defaultAccessoryDisabledTintColor,
                 cornerRadius: CGFloat = Constant.defaultCornerRadius,
                 contentInsets: UIEdgeInsets = Constant.defaultContentInsets,
-                shadow: ParraShadowConfig = .default,
+                shadow: ParraShadowConfig = .none,
                 title: ParraTextConfig = .titleDefault,
                 subtitle: ParraTextConfig = .subtitleDefault,
                 body: ParraTextConfig = .bodyDefault,

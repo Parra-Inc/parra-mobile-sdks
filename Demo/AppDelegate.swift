@@ -8,7 +8,7 @@
 import UIKit
 import ParraCore
 
-@main
+@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -16,21 +16,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard NSClassFromString("XCTestCase") == nil else {
             return true
         }
-
-        let myAppAccessToken = "9B5CDA6B-7538-4A2A-9611-7308D56DFFA1"
-        let myAppTenantId = "f2d60da7-8aea-4882-9ee7-307e0ff18728"
+        let userId = "377f8230-cca3-4732-8a5c-00ce7d0c67b4"
+        let baseUrl = URL(string: "https://api.parra.io")!
+        let tenantId = "f2d60da7-8aea-4882-9ee7-307e0ff18728"
+        let publicApiKeyId = "1cec7de9-1818-4929-98f0-64d35c9f9388"
+        let parraPublicAuthTokenUrl = URL(string: "v1/tenants/\(tenantId)/issuers/public/auth/token", relativeTo: baseUrl)!
 
         Parra.initialize(
             config: .default,
-            authProvider: .default(tenantId: myAppTenantId) {
-                var request = URLRequest(
-                    // Replace this with your Parra access token generation endpoint
-                    url: URL(string: "http://localhost:8080/v1/parra/auth/token")!
-                )
+            authProvider: .default(tenantId: tenantId) {
+                var request = URLRequest(url: parraPublicAuthTokenUrl)
 
                 request.httpMethod = "POST"
-                // Replace this with your app's way of authenticating users
-                request.setValue("Bearer \(myAppAccessToken)", forHTTPHeaderField: "Authorization")
+
+                let json: [String: Any] = ["user_id": userId]  // TODO: - Replace me with the id of the user in your system
+                let jsonData = try! JSONSerialization.data(withJSONObject: json)
+                let authData = ("api_key:" + publicApiKeyId).data(using: .utf8)!.base64EncodedString()
+                
+                request.httpMethod = "POST"
+                request.httpBody = jsonData
+                request.setValue("Basic \(authData)", forHTTPHeaderField: "Authorization")
 
                 let (data, _) = try await URLSession.shared.data(for: request)
                 let response = try JSONDecoder().decode([String: String].self, from: data)
@@ -38,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return response["access_token"]!
             }
         )
-
+                
         return true
     }
 

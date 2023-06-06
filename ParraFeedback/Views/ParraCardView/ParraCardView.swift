@@ -174,8 +174,8 @@ public class ParraCardView: UIView {
         ]
     }
     
-    internal let containerView = UIView(frame: .zero)
-    internal let contentView = UIView(frame: .zero)
+    public let containerView = UIView(frame: .zero)
+    public let contentView = UIView(frame: .zero)
     
     /// A `ParraCardViewConfig` used to configure how `ParraCardView`s look. Use this to make `ParraCardView`s
     /// blend in with the UI in the rest of your app.
@@ -235,8 +235,9 @@ public class ParraCardView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
         layer.masksToBounds = false
-        setContentHuggingPriority(.init(rawValue: 999), for: .horizontal)
-        setContentHuggingPriority(.defaultHigh, for: .vertical)
+        
+//        setContentHuggingPriority(.init(rawValue: 999), for: .horizontal)
+//        setContentHuggingPriority(.defaultHigh, for: .vertical)
         accessibilityIdentifier = "ParraCardView"
         
         addSubview(containerView)

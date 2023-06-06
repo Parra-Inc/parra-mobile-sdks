@@ -71,7 +71,7 @@ internal class ParraBorderedButton: UIView, ParraConfigurableView {
         translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius = 8.0
         layer.masksToBounds = true
-        layer.borderWidth = 1.5
+        layer.borderWidth = 1.0
 
         innerButton.translatesAutoresizingMaskIntoConstraints = false
         innerButton.showsTouchWhenHighlighted = false

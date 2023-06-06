@@ -37,7 +37,7 @@ internal class ParraBorderedRatingControl: UIControl, ParraConfigurableView {
 
         layer.cornerRadius = 8.0
         layer.masksToBounds = true
-        layer.borderWidth = 1.5
+        layer.borderWidth = 1.0
 
         labelStack.translatesAutoresizingMaskIntoConstraints = false
         labelStack.isUserInteractionEnabled = false

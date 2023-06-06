@@ -83,7 +83,7 @@ internal class ParraBorderedTextView: UITextView, ParraConfigurableView {
     func applyConfig(_ config: ParraCardViewConfig) {
         layer.cornerRadius = 8.0
         layer.masksToBounds = true
-        layer.borderWidth = 1.5
+        layer.borderWidth = 1.0
 
         let highlightColor = isFirstResponder
             ? config.accessoryTintColor

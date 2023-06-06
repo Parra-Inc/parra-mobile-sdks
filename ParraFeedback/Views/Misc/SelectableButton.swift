@@ -27,7 +27,7 @@ extension SelectableButton {
         completion: (() -> Void)? = nil
     ) {
         let performBorderUpdates = { [self] in
-            view.layer.borderWidth = buttonIsSelected ? 1.5 : 0
+            view.layer.borderWidth = buttonIsSelected ? 1.0 : 0
         }
 
         if animated {

@@ -23,28 +23,36 @@ extension ParraCardView {
     public override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
-        if superview == nil {
+        guard let superView = superview else {
             return
         }
-        removeConstraints(constraintsOnSuperView)
         
-        let widthConstraint = widthAnchor.constraint(
-            greaterThanOrEqualToConstant: Dimensions.minWidth
-        )
-        widthConstraint.priority = .init(999)
+        widthAnchor.constraint(equalTo: superView.widthAnchor).isActive = true
 
-        let aspectRatioConstraint = heightAnchor.constraint(
-            equalTo: widthAnchor,
-            multiplier: Dimensions.minHeight / Dimensions.minWidth
-        )
-        aspectRatioConstraint.priority = .required
+            
         
-        constraintsOnSuperView = [
-            widthConstraint,
-            aspectRatioConstraint
-        ]
-        
-        NSLayoutConstraint.activate(constraintsOnSuperView)
+//        if superview == nil {
+//            return
+//        }
+//        removeConstraints(constraintsOnSuperView)
+//
+//        let widthConstraint = widthAnchor.constraint(
+//            greaterThanOrEqualToConstant: Dimensions.minWidth
+//        )
+//        widthConstraint.priority = .init(999)
+//
+//        let aspectRatioConstraint = heightAnchor.constraint(
+//            equalTo: widthAnchor,
+//            multiplier: Dimensions.minHeight / Dimensions.minWidth
+//        )
+//        aspectRatioConstraint.priority = .required
+//
+//        constraintsOnSuperView = [
+//            widthConstraint,
+//            aspectRatioConstraint
+//        ]
+//
+//        NSLayoutConstraint.activate(constraintsOnSuperView)
     }
     
     internal func configureSubviews(config: ParraCardViewConfig) {        
