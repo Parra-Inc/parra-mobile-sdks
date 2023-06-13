@@ -109,7 +109,7 @@ internal class ParraNetworkManager: NetworkManagerType {
             throw ParraError.authenticationFailed(error.localizedDescription)
         }
     }
-    
+
     internal func performAuthenticatedRequest<T: Decodable>(route: String,
                                                             method: HttpMethod,
                                                             queryItems: [String: String] = [:],

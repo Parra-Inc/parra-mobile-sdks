@@ -86,6 +86,7 @@
 		003C214827DE96EA001CAE03 /* ParraFeedback+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5156A27D4798400C4F2CC /* ParraFeedback+Notifications.swift */; };
 		003C214927DE98F0001CAE03 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0084014E27D7030D00E2B0ED /* Array.swift */; };
 		003C216C27DED58C001CAE03 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003C216B27DED58C001CAE03 /* SceneDelegate.swift */; };
+		003E3F8C2A2E3B25007373C2 /* ParraFeedbackFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E3F8B2A2E3B25007373C2 /* ParraFeedbackFormViewController.swift */; };
 		00497D7929F88CC4004EF5AB /* ParraSessionsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00497D7829F88CC4004EF5AB /* ParraSessionsResponse.swift */; };
 		005D31E829A301DB001D0E0A /* ParraConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D31E729A301DB001D0E0A /* ParraConfigurableView.swift */; };
 		005D31EB29A83EC5001D0E0A /* CompletedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B7927DE3D1C00DEEECD /* CompletedCard.swift */; };
@@ -104,6 +105,13 @@
 		005D320B29B530E8001D0E0A /* ParraBorderedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D320A29B530E8001D0E0A /* ParraBorderedTextView.swift */; };
 		005E38A527FA1E0200F32F96 /* NetworkTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E38A427FA1E0200F32F96 /* NetworkTestHelpers.swift */; };
 		005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */; };
+		006153E22A2FCCD600ED4CBF /* ParraFeedbackFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006153E12A2FCCD600ED4CBF /* ParraFeedbackFormView.swift */; };
+		006153E42A31539900ED4CBF /* ParraFeedbackForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006153E32A31539900ED4CBF /* ParraFeedbackForm.swift */; };
+		006153E62A34A29800ED4CBF /* NSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006153E52A34A29800ED4CBF /* NSAttributedString.swift */; };
+		006153EA2A36200300ED4CBF /* TextValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006153E92A36200300ED4CBF /* TextValidator.swift */; };
+		006153ED2A36823900ED4CBF /* ParraFeedbackFormFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006153EC2A36823900ED4CBF /* ParraFeedbackFormFieldView.swift */; };
+		006153EF2A36825500ED4CBF /* ParraFeedbackFormSelectFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006153EE2A36825500ED4CBF /* ParraFeedbackFormSelectFieldView.swift */; };
+		006153F12A36826400ED4CBF /* ParraFeedbackFormTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006153F02A36826400ED4CBF /* ParraFeedbackFormTextFieldView.swift */; };
 		00707D1727F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00707D1627F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift */; };
 		00707D1927F88B2A004E9567 /* ParraDataManagerTests+Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00707D1827F88B2A004E9567 /* ParraDataManagerTests+Mocks.swift */; };
 		00707D1B27FA0A07004E9567 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00707D1A27FA0A07004E9567 /* URLSession.swift */; };
@@ -288,6 +296,7 @@
 		003C216D27DEE77D001CAE03 /* Demo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Demo-Bridging-Header.h"; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* Parra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parra.swift; sourceTree = "<group>"; };
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
+		003E3F8B2A2E3B25007373C2 /* ParraFeedbackFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackFormViewController.swift; sourceTree = "<group>"; };
 		00497D7829F88CC4004EF5AB /* ParraSessionsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionsResponse.swift; sourceTree = "<group>"; };
 		005D31E729A301DB001D0E0A /* ParraConfigurableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraConfigurableView.swift; sourceTree = "<group>"; };
 		005D31EC29A8561D001D0E0A /* QuestionAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionAnswer.swift; sourceTree = "<group>"; };
@@ -305,6 +314,13 @@
 		005D320A29B530E8001D0E0A /* ParraBorderedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraBorderedTextView.swift; sourceTree = "<group>"; };
 		005E38A427FA1E0200F32F96 /* NetworkTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTestHelpers.swift; sourceTree = "<group>"; };
 		005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Notifications.swift"; sourceTree = "<group>"; };
+		006153E12A2FCCD600ED4CBF /* ParraFeedbackFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackFormView.swift; sourceTree = "<group>"; };
+		006153E32A31539900ED4CBF /* ParraFeedbackForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackForm.swift; sourceTree = "<group>"; };
+		006153E52A34A29800ED4CBF /* NSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedString.swift; sourceTree = "<group>"; };
+		006153E92A36200300ED4CBF /* TextValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextValidator.swift; sourceTree = "<group>"; };
+		006153EC2A36823900ED4CBF /* ParraFeedbackFormFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackFormFieldView.swift; sourceTree = "<group>"; };
+		006153EE2A36825500ED4CBF /* ParraFeedbackFormSelectFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackFormSelectFieldView.swift; sourceTree = "<group>"; };
+		006153F02A36826400ED4CBF /* ParraFeedbackFormTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackFormTextFieldView.swift; sourceTree = "<group>"; };
 		00707D1627F884BB004E9567 /* ParraNetworkManagerTests+Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraNetworkManagerTests+Mocks.swift"; sourceTree = "<group>"; };
 		00707D1827F88B2A004E9567 /* ParraDataManagerTests+Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraDataManagerTests+Mocks.swift"; sourceTree = "<group>"; };
 		00707D1A27FA0A07004E9567 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
@@ -561,6 +577,7 @@
 			children = (
 				0084014E27D7030D00E2B0ED /* Array.swift */,
 				001286F5277D54480090CDB5 /* CAShapeLayer.swift */,
+				006153E52A34A29800ED4CBF /* NSAttributedString.swift */,
 				00120EF2274D1EEE00CA3247 /* UIColor.swift */,
 				005D320829B523E4001D0E0A /* UIEdgeInsets.swift */,
 				005D320629B52039001D0E0A /* UIView.swift */,
@@ -705,8 +722,19 @@
 			isa = PBXGroup;
 			children = (
 				005D31FC29B39979001D0E0A /* ViewTimer.swift */,
+				006153E92A36200300ED4CBF /* TextValidator.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		006153EB2A36822200ED4CBF /* Fields */ = {
+			isa = PBXGroup;
+			children = (
+				006153EC2A36823900ED4CBF /* ParraFeedbackFormFieldView.swift */,
+				006153EE2A36825500ED4CBF /* ParraFeedbackFormSelectFieldView.swift */,
+				006153F02A36826400ED4CBF /* ParraFeedbackFormTextFieldView.swift */,
+			);
+			path = Fields;
 			sourceTree = "<group>";
 		};
 		00901F322999AC990071647F /* Question Kind Cards */ = {
@@ -819,6 +847,7 @@
 				00F5AAF027FA819200A94C85 /* ParraCardsInTableView.swift */,
 				00FD310C28329FF00080689C /* ParraCardsInCollectionView.swift */,
 				00E15A24293266470049C2C7 /* ParraCardsInModal.swift */,
+				006153E32A31539900ED4CBF /* ParraFeedbackForm.swift */,
 				00DECFFE274C69F800DAF301 /* Main.storyboard */,
 				00DED003274C69FA00DAF301 /* LaunchScreen.storyboard */,
 				00DED006274C69FA00DAF301 /* Info.plist */,
@@ -845,6 +874,9 @@
 				00E15A32293279B80049C2C7 /* ParraCardModal.swift */,
 				00E15A30293279A20049C2C7 /* ParraCardPopupViewController.swift */,
 				00E15A342932971C0049C2C7 /* ParraCardDrawerViewController.swift */,
+				003E3F8B2A2E3B25007373C2 /* ParraFeedbackFormViewController.swift */,
+				006153E12A2FCCD600ED4CBF /* ParraFeedbackFormView.swift */,
+				006153EB2A36822200ED4CBF /* Fields */,
 			);
 			path = Modals;
 			sourceTree = "<group>";
@@ -1165,6 +1197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006153F12A36826400ED4CBF /* ParraFeedbackFormTextFieldView.swift in Sources */,
 				005D320729B52039001D0E0A /* UIView.swift in Sources */,
 				001B7B5927DE3B3800DEEECD /* CAShapeLayer.swift in Sources */,
 				001B7B5E27DE3B3800DEEECD /* ParraQuestionCardView.swift in Sources */,
@@ -1172,10 +1205,14 @@
 				00E15A352932971C0049C2C7 /* ParraCardDrawerViewController.swift in Sources */,
 				005D31F629AAF396001D0E0A /* ParraPaddedBaseButton.swift in Sources */,
 				005D31FD29B39979001D0E0A /* ViewTimer.swift in Sources */,
+				006153EF2A36825500ED4CBF /* ParraFeedbackFormSelectFieldView.swift in Sources */,
 				00CAD73429CFA1350093599E /* Int.swift in Sources */,
 				005D31E829A301DB001D0E0A /* ParraConfigurableView.swift in Sources */,
 				001B7B5527DE3B3800DEEECD /* ParraCardItemView.swift in Sources */,
+				006153E22A2FCCD600ED4CBF /* ParraFeedbackFormView.swift in Sources */,
+				003E3F8C2A2E3B25007373C2 /* ParraFeedbackFormViewController.swift in Sources */,
 				001B7B4F27DE3B2500DEEECD /* ParraFeedback.swift in Sources */,
+				006153ED2A36823900ED4CBF /* ParraFeedbackFormFieldView.swift in Sources */,
 				005D320129B3EF43001D0E0A /* ParraStarControl.swift in Sources */,
 				00FD310B28329F5B0080689C /* ParraCardCollectionViewCell.swift in Sources */,
 				001B7B5B27DE3B3800DEEECD /* ParraActionCardView.swift in Sources */,
@@ -1196,6 +1233,8 @@
 				001B7B6027DE3B3800DEEECD /* ParraCardView.swift in Sources */,
 				00E15A31293279A20049C2C7 /* ParraCardPopupViewController.swift in Sources */,
 				007F30EF29A18A87005731C4 /* ParraStarKindView.swift in Sources */,
+				006153EA2A36200300ED4CBF /* TextValidator.swift in Sources */,
+				006153E62A34A29800ED4CBF /* NSAttributedString.swift in Sources */,
 				001B7B6627DE3BFB00DEEECD /* ParraCardViewConfig.swift in Sources */,
 				001B7B5627DE3B3800DEEECD /* ParraCardView+Layout.swift in Sources */,
 				00901F342999ACAB0071647F /* ParraChoiceKindView.swift in Sources */,
@@ -1229,6 +1268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00DECFF9274C69F800DAF301 /* AppDelegate.swift in Sources */,
+				006153E42A31539900ED4CBF /* ParraFeedbackForm.swift in Sources */,
 				00FD310D28329FF00080689C /* ParraCardsInCollectionView.swift in Sources */,
 				00E15A25293266470049C2C7 /* ParraCardsInModal.swift in Sources */,
 				0084014A27D5613A00E2B0ED /* ParraCardsInView.swift in Sources */,
@@ -1301,7 +1341,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1334,7 +1374,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1411,7 +1451,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1444,7 +1484,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

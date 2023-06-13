@@ -17,7 +17,7 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
     private let textView: ParraBorderedTextView
     private let question: Question
     private let data: DataType
-    private var validationError = TextValidationError.none
+    private var validationError: String?
     private let validationLabel = UILabel(frame: .zero)
 
     required init(
@@ -92,33 +92,12 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
         return validationError == .none
     }
 
-    private func validateText(text: String) -> TextValidationError {
-        let minLength = data.minLength
-        let maxLength = data.maxLength
-        let textLength = text.trimmingCharacters(in: .whitespacesAndNewlines).count
-
-        if textLength > maxLength {
-            return .maximum
-        } else if textLength < minLength {
-            return .minimum
-        } else {
-            return .none
-        }
-    }
-
     private func updateValidation(text: String) {
-        validationError = validateText(text: text)
-
-        switch validationError {
-        case .none:
-            validationLabel.text = nil
-        case .minimum:
-            let chars = data.minLength.simplePluralized(singularString: "character")
-            validationLabel.text = "must have at least \(data.minLength) \(chars)"
-        case .maximum:
-            let chars = data.maxLength.simplePluralized(singularString: "character")
-            validationLabel.text = "must have at most \(data.maxLength) \(chars)"
-        }
+        validationError = TextValidator.validate(
+            text: text.trimmingCharacters(in: .whitespacesAndNewlines),
+            against: [.minLength(data.minLength), .maxLength(data.maxLength)],
+            requiredField: false
+        )
     }
 }
 
@@ -134,7 +113,7 @@ extension ParraLongTextKindView: UITextViewDelegate {
 
         updateValidation(text: textView.text)
 
-        if validationError == .none {
+        if validationError == nil {
             answerHandler.update(
                 answer: answer,
                 for: question

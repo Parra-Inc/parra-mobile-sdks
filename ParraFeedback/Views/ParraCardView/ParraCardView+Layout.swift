@@ -168,29 +168,9 @@ extension ParraCardView {
         poweredByButton.addTarget(self,
                                   action: #selector(openParraLink),
                                   for: .touchUpInside)
-        
-        let defaultAttributes = [NSAttributedString.Key.kern: 0.24]
-        let poweredBy = NSMutableAttributedString(
-            string: "Powered by ",
-            attributes: defaultAttributes
-        )
 
-        poweredBy.addAttributes(
-            [.font: UIFont.systemFont(ofSize: 8.0, weight: .bold)],
-            range: NSMakeRange(0, poweredBy.length)
-        )
-        
-        let font = UIFont(name: "Pacifico-Regular", size: 11) ?? UIFont.boldSystemFont(ofSize: 11)
-        let parra = NSMutableAttributedString(
-            string: "Parra",
-            attributes: [.font: font]
-        )
-        parra.addAttributes(defaultAttributes,
-                            range: NSMakeRange(0, parra.length))
-        poweredBy.append(parra)
-
-        poweredByButton.setAttributedTitle(poweredBy, for: .normal)
-        poweredByButton.setAttributedTitle(poweredBy, for: .highlighted)
+        poweredByButton.setAttributedTitle(NSAttributedString.poweredByParraUIKit, for: .normal)
+        poweredByButton.setAttributedTitle(NSAttributedString.poweredByParraUIKit, for: .highlighted)
 
         NSLayoutConstraint.activate([
             navigationStack.topAnchor.constraint(

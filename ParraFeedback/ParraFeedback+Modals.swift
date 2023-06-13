@@ -11,6 +11,8 @@ import UIKit
 import ParraCore
 
 public extension ParraFeedback {
+    // MARK: - Modals
+
     static func presentCardPopup(with cards: [ParraCardItem],
                                  fromViewController: UIViewController?,
                                  config: ParraCardViewConfig = .default,
@@ -27,6 +29,7 @@ public extension ParraFeedback {
         presentModal(
             modal: cardViewController,
             fromViewController: fromViewController,
+            transitionStyle: transitionStyle,
             config: config
         )
     }
@@ -38,10 +41,11 @@ public extension ParraFeedback {
 
         parraLogInfo("Presenting drawer view controller with \(cards.count) card(s)")
 
+        let transitionStyle = ParraCardModalTransitionStyle.slide
         let cardViewController = ParraCardDrawerViewController(
             cards: cards,
             config: config,
-            transitionStyle: .slide
+            transitionStyle: transitionStyle
         )
 
         if let sheetPresentationController = cardViewController.sheetPresentationController {
@@ -52,18 +56,46 @@ public extension ParraFeedback {
         presentModal(
             modal: cardViewController,
             fromViewController: fromViewController,
+            transitionStyle: transitionStyle,
             config: config
         )
     }
 
-    private static func presentModal(modal: ParraCardModalViewController & ParraCardModal,
+    // MARK: - Feedback Forms
+
+    static func presentFeedbackForm(with form: ParraFeedbackFormResponse,
+                                    config: ParraCardViewConfig = .drawerDefault) {
+
+        let formViewController = ParraFeedbackFormViewController(
+            form: form,
+            config: config
+        )
+
+        if #available(iOS 15.0, *) {
+            if let sheetPresentationController = formViewController.sheetPresentationController {
+                sheetPresentationController.detents = [.large()]
+                sheetPresentationController.prefersGrabberVisible = true
+            }
+        }
+
+        presentModal(
+            modal: formViewController,
+            fromViewController: nil,
+            transitionStyle: .slide,
+            config: config
+        )
+    }
+
+    // MARK: - Helpers
+    private static func presentModal(modal: UIViewController & ParraModal,
                                      fromViewController: UIViewController?,
+                                     transitionStyle: ParraCardModalTransitionStyle,
                                      config: ParraCardViewConfig) {
         guard let vc = fromViewController ?? UIViewController.topMostViewController() else {
             parraLogWarn("Missing view controller to present popup from.")
             return
         }
 
-        vc.present(modal, animated: modal.transitionStyle != .none)
+        vc.present(modal, animated: transitionStyle != .none)
     }
 }

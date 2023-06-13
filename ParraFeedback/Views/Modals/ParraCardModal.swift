@@ -31,7 +31,9 @@ public enum ParraCardModalTransitionStyle {
     case slide
 }
 
-internal protocol ParraCardModal  {
+internal protocol ParraModal {}
+
+internal protocol ParraCardModal: ParraModal {
     init(cards: [ParraCardItem],
          config: ParraCardViewConfig,
          transitionStyle: ParraCardModalTransitionStyle)

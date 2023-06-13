@@ -60,6 +60,63 @@ public extension Parra {
                 throw error
             }
         }
+
+        /// Fetches the feedback form with the provided id from the Parra API.
+        public static func getFeedbackForm(with formId: String) async throws -> ParraFeedbackFormResponse {
+            guard let escapedFormId = formId.addingPercentEncoding(
+                withAllowedCharacters: .urlPathAllowed
+            ) else {
+                throw ParraError.message("Provided form id: \(formId) contains invalid characters. Must be URL path encodable.")
+            }
+
+            let response: AuthenticatedRequestResult<ParraFeedbackFormResponse> = await Parra.shared.networkManager.performAuthenticatedRequest(
+                route: "feedback/forms/\(escapedFormId)",
+                method: .get
+            )
+
+            switch response.result {
+            case .success(let formResponse):
+                return formResponse
+            case .failure(let error):
+                parraLogError("Error fetching feedback form from Parra", error)
+
+                throw error
+            }
+        }
+
+        /// Submits the provided data as answers for the form with the provided id.
+        public static func submitFeedbackForm(
+            with formId: String,
+            data: [FeedbackFormField: String]
+        ) async throws {
+            // Map of FeedbackFormField.name -> a String (or value if applicable)
+            let body = data.reduce([String: String]()) { partialResult, entry in
+                var next = partialResult
+                next[entry.key.name] = entry.value
+                return next
+            }
+
+            guard let escapedFormId = formId.addingPercentEncoding(
+                withAllowedCharacters: .urlPathAllowed
+            ) else {
+                throw ParraError.message("Provided form id: \(formId) contains invalid characters. Must be URL path encodable.")
+            }
+
+            let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
+                route: "feedback/forms/\(escapedFormId)/submit",
+                method: .post,
+                body: body
+            )
+
+            switch response.result {
+            case .success:
+                return
+            case .failure(let error):
+                parraLogError("Error submitting form to Parra", error)
+
+                throw error
+            }
+        }
     }
 
     internal enum Sessions {
