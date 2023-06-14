@@ -10,6 +10,7 @@ import Foundation
 
 internal class ParraDefaultLogger: ParraLogger {
     static let `default` = ParraDefaultLogger()
+    static let timestampFormatter = ISO8601DateFormatter()
 
     func log(level: ParraLogLevel,
              message: String,
@@ -22,7 +23,7 @@ internal class ParraDefaultLogger: ParraLogger {
             return
         }
 
-        let timestamp = ISO8601DateFormatter().string(from: Date())
+        let timestamp = ParraDefaultLogger.timestampFormatter.string(from: Date())
         let queue = Thread.current.queueName
 
 #if DEBUG
@@ -36,9 +37,14 @@ internal class ParraDefaultLogger: ParraLogger {
             markerComponents.append(level.name)
         }
 
+        let (module, file) = splitFileId(fileId: fileID)
+
         if Parra.config.loggerConfig.printModuleName {
-            let (module, _) = splitFileId(fileId: fileID)
             markerComponents.append(module)
+        }
+
+        if Parra.config.loggerConfig.printFileName {
+            markerComponents.append(file)
         }
 
         if Parra.config.loggerConfig.printThread {
@@ -94,16 +100,27 @@ internal class ParraDefaultLogger: ParraLogger {
     }
 
     private func splitFileId(fileId: String) -> (module: String, fileName: String) {
-        let parts = fileId.split(separator: "/")
+        let initialSplit = {
+            let parts = fileId.split(separator: "/")
 
-        if parts.count == 0 {
-            return ("Unknown", "Unknown")
-        } else if parts.count == 1 {
-            return ("Unknown", String(parts[0]))
-        } else if parts.count == 2 {
-            return (String(parts[0]), String(parts[1]))
+            if parts.count == 0 {
+                return ("Unknown", "Unknown")
+            } else if parts.count == 1 {
+                return ("Unknown", String(parts[0]))
+            } else if parts.count == 2 {
+                return (String(parts[0]), String(parts[1]))
+            } else {
+                return (String(parts[0]), parts.dropFirst(1).joined(separator: "/"))
+            }
+        }
+
+        let (module, fileName) = initialSplit()
+
+        let fileParts = fileName.split(separator: ".")
+        if fileParts.count == 1 {
+            return (module, fileName)
         } else {
-            return (String(parts[0]), parts.dropFirst(1).joined(separator: "/"))
+            return (module, fileParts.dropLast(1).joined(separator: "."))
         }
     }
 
