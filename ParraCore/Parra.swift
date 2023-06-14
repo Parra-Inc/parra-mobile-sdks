@@ -112,8 +112,8 @@ public class Parra: ParraModule {
     }
     
     /// Checks whether the provided module has already been registered with ParraCore
-    public static func hasRegisteredModule(module: ParraModule.Type) -> Bool {
-        return registeredModules[module.name] != nil
+    public static func hasRegisteredModule(module: ParraModule) -> Bool {
+        return registeredModules[type(of: module).name] != nil
     }
 
     // MARK: - Synchronization

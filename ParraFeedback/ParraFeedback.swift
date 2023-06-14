@@ -14,21 +14,19 @@ import ParraCore
 public class ParraFeedback: ParraModule {
     internal static let shared = ParraFeedback()
     internal let dataManager = ParraFeedbackDataManager()
-    
-    private init() {
-        Parra.registerModule(module: self)
-    }
-    
+
     public private(set) static var name: String = "Feedback"
 
     /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
     /// view the `ParraCardView` initializer if you'd like to only display certain cards.
-    public class func fetchFeedbackCards(
+    public static func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all,
         withCompletion completion: @escaping (Result<[ParraCardItem], ParraError>) -> Void
     ) {
+        ensureModuleRegistered()
+
         Task {
             do {
                 let cards = try await fetchFeedbackCards(appArea: appArea)
@@ -48,10 +46,12 @@ public class ParraFeedback: ParraModule {
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
     /// view the `ParraCardView` initializer if you'd like to only display certain cards.
-    public class func fetchFeedbackCards(
+    public static func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all,
         withCompletion completion: @escaping ([ParraCardItem], Error?) -> Void
     ) {
+        ensureModuleRegistered()
+
         fetchFeedbackCards(appArea: appArea) { result in
             switch result {
             case .success(let cards):
@@ -74,9 +74,11 @@ public class ParraFeedback: ParraModule {
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
     /// view the `ParraCardView` initializer if you'd like to only display certain cards.
-    public class func fetchFeedbackCards(
+    public static func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
+        ensureModuleRegistered()
+
         let cards = try await Parra.API.getCards(appArea: appArea)
         
         // Only keep cards that we don't already have an answer cached for. This isn't something that
@@ -109,6 +111,8 @@ public class ParraFeedback: ParraModule {
     public static func fetchFeedbackForm(
         formId: String
     ) async throws -> ParraFeedbackFormResponse {
+        ensureModuleRegistered()
+
         let response = try await Parra.API.getFeedbackForm(with: formId)
 
         return response
@@ -121,6 +125,8 @@ public class ParraFeedback: ParraModule {
         formId: String,
         withCompletion completion: @escaping (Result<ParraFeedbackFormResponse, ParraError>) -> Void
     ) {
+        ensureModuleRegistered()
+        
         Task {
             do {
                 let response = try await fetchFeedbackForm(formId: formId)
@@ -296,5 +302,13 @@ public class ParraFeedback: ParraModule {
         return cards.filter {
             $0.displayType == .popup || $0.displayType == .drawer
         }
+    }
+
+    private static func ensureModuleRegistered() {
+        if Parra.hasRegisteredModule(module: shared) {
+            return
+        }
+
+        Parra.registerModule(module: shared)
     }
 }

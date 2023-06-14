@@ -40,7 +40,7 @@ class ParraCoreTests: XCTestCase {
 
         Parra.registerModule(module: module)
         
-        XCTAssertTrue(Parra.hasRegisteredModule(module: FakeModule.self))
+        XCTAssertTrue(Parra.hasRegisteredModule(module: module))
         XCTAssert(Parra.registeredModules.keys.contains(FakeModule.name))
     }
     
@@ -50,7 +50,7 @@ class ParraCoreTests: XCTestCase {
         Parra.registerModule(module: module)
         Parra.registerModule(module: module)
 
-        XCTAssertTrue(Parra.hasRegisteredModule(module: FakeModule.self))
+        XCTAssertTrue(Parra.hasRegisteredModule(module: module))
         XCTAssert(Parra.registeredModules.keys.contains(FakeModule.name))
         XCTAssertEqual(Parra.registeredModules.count, 2)
     }
