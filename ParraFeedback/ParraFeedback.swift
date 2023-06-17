@@ -234,7 +234,6 @@ public class ParraFeedback: ParraModule {
                     )
 
                     try await Task.sleep(ms: context.retryDelay)
-
                     continue
                 }
 
@@ -243,8 +242,15 @@ public class ParraFeedback: ParraModule {
                     return cardItem.displayType == .drawer || cardItem.displayType == .popup
                 }
 
-                DispatchQueue.main.async {
-                    self.displayPopupCards(cardItems: validPopupCards)
+                if validPopupCards.isEmpty {
+                    try await Task.sleep(ms: context.retryDelay)
+                    continue
+                } else {
+                    DispatchQueue.main.async {
+                        self.displayPopupCards(cardItems: validPopupCards)
+                    }
+
+                    break
                 }
             } catch let error {
                 parraLogError("Encountered error fetching cards. Cancelling polling.", error)
