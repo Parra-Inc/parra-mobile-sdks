@@ -18,6 +18,7 @@ public extension ParraFeedback {
         fromViewController: UIViewController?,
         config: ParraCardViewConfig = .default,
         transitionStyle: ParraCardModalTransitionStyle = .slide,
+        userDismissable: Bool = true,
         onDismiss: (() -> Void)? = nil
     ) {
         parraLogInfo("Presenting card popup view controller with \(cards.count) card(s)")
@@ -26,6 +27,7 @@ public extension ParraFeedback {
             cards: cards,
             config: config,
             transitionStyle: transitionStyle,
+            userDismissable: userDismissable,
             onDismiss: onDismiss
         )
 

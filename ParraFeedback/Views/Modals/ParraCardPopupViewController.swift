@@ -10,6 +10,24 @@ import UIKit
 import ParraCore
 
 internal class ParraCardPopupViewController: ParraCardModalViewController, ParraCardModal {
+    private var userDismissable = true
+
+    convenience init(
+        cards: [ParraCardItem],
+        config: ParraCardViewConfig,
+        transitionStyle: ParraCardModalTransitionStyle,
+        userDismissable: Bool = true,
+        onDismiss: (() -> Void)? = nil
+    ) {
+        self.init(
+            cards: cards,
+            config: config,
+            transitionStyle: transitionStyle,
+            onDismiss: onDismiss
+        )
+        self.userDismissable = userDismissable
+    }
+
     required init(
         cards: [ParraCardItem],
         config: ParraCardViewConfig,
@@ -35,16 +53,6 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let dismissButton = UIButton.systemButton(
-            // Works on all app versions within deploy target
-            with: UIImage(systemName: "xmark")!,
-            target: self,
-            action: #selector(dismissModal)
-        )
-
-        dismissButton.tintColor = cardView.config.tintColor
-        dismissButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(dismissButton)
         view.backgroundColor = .black.withAlphaComponent(0.3)
         view.addSubview(cardView)
 
@@ -55,11 +63,37 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
 
         var constraints = [
             centerYAnchor,
-            cardView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            cardView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            dismissButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,  constant: -24)
+            cardView.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
+            ),
+            cardView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
+            ),
         ]
+
+        if userDismissable {
+            let dismissButton = UIButton.systemButton(
+                // Works on all app versions within deploy target
+                with: UIImage(systemName: "xmark")!,
+                target: self,
+                action: #selector(dismissModal)
+            )
+
+            dismissButton.tintColor = cardView.config.tintColor
+            dismissButton.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(dismissButton)
+
+            constraints.append(contentsOf: [
+                dismissButton.topAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.topAnchor,
+                    constant: 16
+                ),
+                dismissButton.trailingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -24
+                )
+            ])
+        }
 
         if #available(iOS 15.0, *) {
             let keyboardAvoidingAnchor = cardView.bottomAnchor.constraint(
@@ -73,24 +107,26 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
 
         NSLayoutConstraint.activate(constraints)
 
-        let backgroundTap = UITapGestureRecognizer(
-            target: self,
-            action: #selector(dismissModal)
-        )
-
-        backgroundTap.delegate = self
-
-        view.addGestureRecognizer(backgroundTap)
-
-        if transitionStyle == .slide {
-            let backgroundSwipe = UISwipeGestureRecognizer(
+        if userDismissable {
+            let backgroundTap = UITapGestureRecognizer(
                 target: self,
                 action: #selector(dismissModal)
             )
 
-            backgroundSwipe.direction = .down
+            backgroundTap.delegate = self
 
-            view.addGestureRecognizer(backgroundSwipe)
+            view.addGestureRecognizer(backgroundTap)
+
+            if transitionStyle == .slide {
+                let backgroundSwipe = UISwipeGestureRecognizer(
+                    target: self,
+                    action: #selector(dismissModal)
+                )
+
+                backgroundSwipe.direction = .down
+
+                view.addGestureRecognizer(backgroundSwipe)
+            }
         }
     }
 

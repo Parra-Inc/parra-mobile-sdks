@@ -8,6 +8,20 @@
 import Foundation
 import ParraCore
 
+fileprivate actor ParraFeedbackPopupState {
+    static let shared = ParraFeedbackPopupState()
+
+    var isPresented = false
+
+    func present() async {
+        isPresented = true
+    }
+
+    func dismiss() async {
+        isPresented = false
+    }
+}
+
 /// The `ParraFeedback` module is used to fetch Parra Feedback data from the Parra API. Once data is fetched,
 /// it will be displayed automatically in any `ParraCardView`s that you add to your view hierarchy.
 /// To handle authentication, see the Parra Core module.
@@ -201,7 +215,12 @@ public class ParraFeedback: ParraModule {
 
     public func didReceiveSessionResponse(sessionResponse: ParraSessionsResponse) {
         Task {
-            await pollForQuestions(context: sessionResponse)
+            let isPopupPresent = await ParraFeedbackPopupState.shared.isPresented
+            if isPopupPresent {
+                parraLogDebug("Skipping polling for questions. Popup currently open.")
+            } else {
+                await pollForQuestions(context: sessionResponse)
+            }
         }
     }
 
@@ -258,30 +277,28 @@ public class ParraFeedback: ParraModule {
             return
         }
 
+        let onDismiss: () -> Void = {
+            Task {
+                await ParraFeedbackPopupState.shared.dismiss()
+            }
+        }
+
         switch displayType {
         case .popup:
+            Task {
+                await ParraFeedbackPopupState.shared.present()
+            }
+
             ParraFeedback.presentCardPopup(
                 with: cardItems,
                 fromViewController: nil,
                 config: .default,
-                transitionStyle: .slide
+                transitionStyle: .slide,
+                // In this context the user isn't allowed to dismiss the modal manually. It will be auto-
+                // dismissed when they complete the cards.
+                userDismissable: false,
+                onDismiss: onDismiss
             )
-        case .drawer:
-            if #available(iOS 15.0, *) {
-                ParraFeedback.presentCardDrawer(
-                    with: cardItems,
-                    fromViewController: nil,
-                    config: .default
-                )
-            } else {
-                parraLogTrace("Drawer displayType not available on current iOS version. Using popup style instead.")
-                ParraFeedback.presentCardPopup(
-                    with: cardItems,
-                    fromViewController: nil,
-                    config: .default,
-                    transitionStyle: .slide
-                )
-            }
         default:
             parraLogTrace("Skipping presenting popup. displayType \(displayType) is not a valid modal type")
         }
