@@ -179,16 +179,6 @@ internal class ParraNetworkManager: NetworkManagerType {
             switch result {
             case .success(let data):
                 parraLogTrace("Parra client received success response")
-#if DEBUG
-                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
-                    let prettyData = try? jsonEncoder.encode(dataString),
-                    let prettyString = String(data: prettyData, encoding: .utf8) {
-
-                    if data != kEmptyJsonObjectData {
-                        parraLogTrace(prettyString)
-                    }
-                }
-#endif
 
                 let response = try jsonDecoder.decode(T.self, from: data)
 
@@ -243,6 +233,11 @@ internal class ParraNetworkManager: NetworkManagerType {
                     parraLogTrace("Received 400...499 status in response")
                     if data != kEmptyJsonObjectData {
                         parraLogTrace(prettyString)
+                    }
+
+                    if let body = request.httpBody, let bodyString = String(data: body, encoding: .utf8) {
+                        parraLogTrace("Request data was:")
+                        parraLogTrace(bodyString)
                     }
                 }
 #endif
