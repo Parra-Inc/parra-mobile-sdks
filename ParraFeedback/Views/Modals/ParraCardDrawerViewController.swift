@@ -14,13 +14,15 @@ internal class ParraCardDrawerViewController: ParraCardModalViewController, Parr
     required init(
         cards: [ParraCore.ParraCardItem],
         config: ParraCardViewConfig,
-        transitionStyle: ParraCardModalTransitionStyle
+        transitionStyle: ParraCardModalTransitionStyle,
+        onDismiss: (() -> Void)? = nil
     ) {
         super.init(
             cards: cards,
             config: config,
             transitionStyle: transitionStyle,
-            modalType: .drawer
+            modalType: .drawer,
+            onDismiss: onDismiss
         )
     }
 

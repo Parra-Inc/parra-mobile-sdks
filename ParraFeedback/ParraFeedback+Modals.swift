@@ -13,17 +13,20 @@ import ParraCore
 public extension ParraFeedback {
     // MARK: - Modals
 
-    static func presentCardPopup(with cards: [ParraCardItem],
-                                 fromViewController: UIViewController?,
-                                 config: ParraCardViewConfig = .default,
-                                 transitionStyle: ParraCardModalTransitionStyle = .slide) {
-
+    static func presentCardPopup(
+        with cards: [ParraCardItem],
+        fromViewController: UIViewController?,
+        config: ParraCardViewConfig = .default,
+        transitionStyle: ParraCardModalTransitionStyle = .slide,
+        onDismiss: (() -> Void)? = nil
+    ) {
         parraLogInfo("Presenting card popup view controller with \(cards.count) card(s)")
 
         let cardViewController = ParraCardPopupViewController(
             cards: cards,
             config: config,
-            transitionStyle: transitionStyle
+            transitionStyle: transitionStyle,
+            onDismiss: onDismiss
         )
 
         presentModal(
@@ -35,17 +38,20 @@ public extension ParraFeedback {
     }
 
     @available(iOS 15.0, *)
-    static func presentCardDrawer(with cards: [ParraCardItem],
-                                  fromViewController: UIViewController?,
-                                  config: ParraCardViewConfig = .drawerDefault) {
-
+    static func presentCardDrawer(
+        with cards: [ParraCardItem],
+        fromViewController: UIViewController?,
+        config: ParraCardViewConfig = .drawerDefault,
+        onDismiss: (() -> Void)? = nil
+    ) {
         parraLogInfo("Presenting drawer view controller with \(cards.count) card(s)")
 
         let transitionStyle = ParraCardModalTransitionStyle.slide
         let cardViewController = ParraCardDrawerViewController(
             cards: cards,
             config: config,
-            transitionStyle: transitionStyle
+            transitionStyle: transitionStyle,
+            onDismiss: onDismiss
         )
 
         if let sheetPresentationController = cardViewController.sheetPresentationController {

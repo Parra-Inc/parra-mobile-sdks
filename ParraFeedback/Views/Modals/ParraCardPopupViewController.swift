@@ -10,16 +10,18 @@ import UIKit
 import ParraCore
 
 internal class ParraCardPopupViewController: ParraCardModalViewController, ParraCardModal {
-
-    required init(cards: [ParraCardItem],
-                  config: ParraCardViewConfig,
-                  transitionStyle: ParraCardModalTransitionStyle) {
-
+    required init(
+        cards: [ParraCardItem],
+        config: ParraCardViewConfig,
+        transitionStyle: ParraCardModalTransitionStyle,
+        onDismiss: (() -> Void)? = nil
+    ) {
         super.init(
             cards: cards,
             config: config,
             transitionStyle: transitionStyle,
-            modalType: .popup
+            modalType: .popup,
+            onDismiss: onDismiss
         )
 
         modalPresentationStyle = .overCurrentContext
