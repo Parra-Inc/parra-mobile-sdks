@@ -72,7 +72,7 @@ internal actor ParraSyncManager {
 
         isSyncing = true
 
-        Task.detached {
+        Task {
             await self.sync()
         }
         
@@ -118,32 +118,50 @@ internal actor ParraSyncManager {
         let start = CFAbsoluteTimeGetCurrent()
         parraLogTrace("Sending sync data...")
 
-        await performSync()
+        do {
+            try await performSync()
 
-        let duration = CFAbsoluteTimeGetCurrent() - start
-        parraLogTrace("Sync data sent. Took \(duration)(s)")
-        
-        if let enqueuedSyncMode {
-            parraLogDebug("More sync jobs were enqueued. Repeating sync.")
-            
-            self.enqueuedSyncMode = nil
-            
-            switch enqueuedSyncMode {
-            case .immediate:
-                await sync()
-            default:
-                break
-            }
-        } else {
+            let duration = CFAbsoluteTimeGetCurrent() - start
+            parraLogTrace("Sync data sent. Took \(duration)(s)")
+        } catch let error {
+            parraLogError("Error performing sync", error)
+            // TODO: Maybe cancel the sync timer, double the countdown then start a new one?
+        }
+
+        guard let enqueuedSyncMode else {
             parraLogDebug("No more jobs found. Completing sync.")
-            
+
+            isSyncing = false
+
+            return
+        }
+
+        parraLogDebug("More sync jobs were enqueued. Repeating sync.")
+
+        self.enqueuedSyncMode = nil
+
+        switch enqueuedSyncMode {
+        case .immediate:
+            await sync()
+        case .eventual:
             isSyncing = false
         }
     }
 
-    private func performSync() async {
+    private func performSync() async throws {
+        var syncError: Error?
+
+        // Rethrow after receiving an error for throttling, but allow each module to attempt a sync once
         for (_, module) in Parra.registeredModules {
-            await module.synchronizeData()
+            do {
+                try await module.synchronizeData()
+            } catch let error {
+                syncError = error
+            }
+        }
+
+        if let syncError {
+            throw syncError
         }
     }
     

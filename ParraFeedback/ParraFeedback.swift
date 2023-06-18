@@ -88,19 +88,12 @@ public class ParraFeedback: ParraModule {
         var cardsToKeep = [ParraCardItem]()
 
         for card in cards {
-            switch card.data {
-            case .question(let question):
-                let previouslyCleared = await shared.dataManager.hasClearedCompletedCardWithId(card: card)
-                let cardData = await shared.dataManager.completedCardData(forId: question.id)
-            
-                if !previouslyCleared && cardData == nil {
-                    cardsToKeep.append(card)
-                }
+            if await shared.cachedCardPredicate(card: card) {
+                cardsToKeep.append(card)
             }
         }
 
-        shared.performAssetPrefetch(for: cardsToKeep)
-        shared.dataManager.setCards(cards: cardsToKeep)
+        shared.applyNewCards(cards: cardsToKeep)
         
         return cardsToKeep
     }
@@ -158,8 +151,8 @@ public class ParraFeedback: ParraModule {
     /// 3. There is a significant time change on the system clock.
     /// 4. All cards for a `ParraCardView` are completed.
     /// 5. A `ParraCardView` is deinitialized or removed from the view hierarchy.
-    public func synchronizeData() async {
-        await sendCardData()
+    public func synchronizeData() async throws {
+        try await sendCardData()
     }
     
     /// Checks whether the user has previously supplied input for the provided `ParraCardItem`.
@@ -169,23 +162,22 @@ public class ParraFeedback: ParraModule {
         return completed != nil
     }
 
-    private func sendCardData() async {
+    // Need to bubble up sync failures to attempt backoff in sync manager if uploads are failing.
+    private func sendCardData() async throws {
         let completedCardData = await dataManager.currentCompletedCardData()
         let completedCards = Array(completedCardData.values)
         
         let completedChunks = completedCards.chunked(into: ParraFeedback.Constant.maxBulkAnswers)
 
-        await withTaskGroup(of: Void.self) { group in
-            for chunk in completedChunks {
-                group.addTask {
-                    do {
-                        try await self.uploadCompletedCards(chunk)
-                        try await self.dataManager.clearCompletedCardData(completedCards: chunk)
-                        await self.dataManager.removeCardsForCompletedCards(completedCards: chunk)
-                    } catch let error {
-                        parraLogError(ParraError.custom("Error uploading card data", error))
-                    }
-                }
+        for chunk in completedChunks {
+            do {
+                try await self.uploadCompletedCards(chunk)
+                try await self.dataManager.clearCompletedCardData(completedCards: chunk)
+                await self.dataManager.removeCardsForCompletedCards(completedCards: chunk)
+            } catch let error {
+                parraLogError(ParraError.custom("Error uploading card data", error))
+
+                throw error
             }
         }
     }
@@ -235,19 +227,11 @@ public class ParraFeedback: ParraModule {
 
                     try await Task.sleep(ms: context.retryDelay)
                     continue
-                }
-
-                let validPopupCards = cards.filter { cardItem in
-                    // TODO: Filter card items without an app area.
-                    return cardItem.displayType == .drawer || cardItem.displayType == .popup
-                }
-
-                if validPopupCards.isEmpty {
-                    try await Task.sleep(ms: context.retryDelay)
-                    continue
                 } else {
+                    applyNewCards(cards: cards)
+
                     DispatchQueue.main.async {
-                        self.displayPopupCards(cardItems: validPopupCards)
+                        self.displayPopupCards(cardItems: cards)
                     }
 
                     break
@@ -266,8 +250,9 @@ public class ParraFeedback: ParraModule {
             return
         }
 
-        // Take the displayType of the first card and use that to deterine the modal style.
-        guard let displayType = cardItems.first?.displayType else {
+        // Take the display type of the first card that has one set as the display type to use for this set of cards.
+        // It is unlikely there will ever be a case where this isn't found on the first element.
+        guard let displayType = cardItems.first(where: { $0.displayType != nil })?.displayType else {
             parraLogTrace("Skipping presenting popup. No displayType set")
 
             return
@@ -305,8 +290,39 @@ public class ParraFeedback: ParraModule {
     private func getCardsForPresentation() async throws -> [ParraCardItem] {
         let cards = try await Parra.API.getCards(appArea: .none)
 
-        return cards.filter {
-            $0.displayType == .popup || $0.displayType == .drawer
+        var validCards = [ParraCardItem]()
+        for card in cards {
+            // TODO: Filter card items without an app area.
+            guard card.displayType == .drawer || card.displayType == .popup else {
+                continue
+            }
+
+            guard await cachedCardPredicate(card: card) else {
+                continue
+            }
+
+            validCards.append(card)
+        }
+
+        return validCards
+    }
+
+    private func applyNewCards(cards: [ParraCardItem]) {
+        performAssetPrefetch(for: cards)
+        dataManager.setCards(cards: cards)
+    }
+
+    private func cachedCardPredicate(card: ParraCardItem) async -> Bool {
+        switch card.data {
+        case .question(let question):
+            let previouslyCleared = await dataManager.hasClearedCompletedCardWithId(card: card)
+            let cardData = await dataManager.completedCardData(forId: question.id)
+
+            if !previouslyCleared && cardData == nil {
+                return true
+            }
+
+            return false
         }
     }
 

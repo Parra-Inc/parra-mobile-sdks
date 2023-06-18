@@ -146,12 +146,12 @@ public class Parra: ParraModule {
     }
 
     public func synchronizeData() async {
-        let response = await sessionManager.synchronizeData()
+        guard let response = await sessionManager.synchronizeData() else {
+            return
+        }
 
-        if let response, response.shouldPoll {
-            for module in Parra.registeredModules.values {
-                module.didReceiveSessionResponse(sessionResponse: response)
-            }
+        for module in Parra.registeredModules.values {
+            module.didReceiveSessionResponse(sessionResponse: response)
         }
     }
 }
