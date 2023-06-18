@@ -11,7 +11,11 @@ import UIKit
 import ParraCore
 
 internal class ParraCardDrawerViewController: ParraCardModalViewController, ParraCardModal {
-    required init(cards: [ParraCore.ParraCardItem], config: ParraCardViewConfig, transitionStyle: ParraCardModalTransitionStyle) {
+    required init(
+        cards: [ParraCore.ParraCardItem],
+        config: ParraCardViewConfig,
+        transitionStyle: ParraCardModalTransitionStyle
+    ) {
         super.init(
             cards: cards,
             config: config,

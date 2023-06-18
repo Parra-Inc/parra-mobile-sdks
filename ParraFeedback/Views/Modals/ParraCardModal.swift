@@ -44,11 +44,12 @@ internal class ParraCardModalViewController: UIViewController {
     internal let modalType: ParraCardModalType
     internal let transitionStyle: ParraCardModalTransitionStyle
 
-    init(cards: [ParraCore.ParraCardItem],
-                  config: ParraCardViewConfig,
-                  transitionStyle: ParraCardModalTransitionStyle,
-                  modalType: ParraCardModalType) {
-
+    init(
+        cards: [ParraCore.ParraCardItem],
+        config: ParraCardViewConfig,
+        transitionStyle: ParraCardModalTransitionStyle,
+        modalType: ParraCardModalType
+    ) {
         self.transitionStyle = transitionStyle
         self.modalType = modalType
 
