@@ -20,7 +20,7 @@ struct ParraFeedbackFormTextFieldView: ParraFeedbackFormFieldView {
     @State var onFieldDataChanged: ParraFeedbackFormFieldUpdateHandler
 
     @State private var text = ""
-    @State private var isFeedbackTextValid = false
+    @State private var hasReceivedInput = false
 
     var body: some View {
         let errorMessage = validate(
@@ -42,7 +42,9 @@ struct ParraFeedbackFormTextFieldView: ParraFeedbackFormFieldView {
                 .onReceive(Just(text)) { newValue in
                     onFieldDataChanged(field.name, newValue, errorMessage == nil)
                 }
-
+                .onChange(of: text) { newValue in
+                    hasReceivedInput = true
+                }
             if #available(iOS 16.0, *) {
                 textEditor.lineLimit(3...)
             } else {
@@ -54,7 +56,7 @@ struct ParraFeedbackFormTextFieldView: ParraFeedbackFormFieldView {
 
                 if let errorMessage {
                     Text(errorMessage)
-                        .foregroundColor(.red)
+                        .foregroundColor(hasReceivedInput ? .red : .gray)
                         .padding(.trailing, 4)
                 } else {
                     let characterCount = text.count
