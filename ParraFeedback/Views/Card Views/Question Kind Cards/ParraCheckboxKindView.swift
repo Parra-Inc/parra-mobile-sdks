@@ -20,8 +20,10 @@ internal class ParraCheckboxKindView: UIView, ParraQuestionKindView {
 
     private let question: Question
     private let answerHandler: ParraAnswerHandler
+    private let bucketId: String
 
     required init(
+        bucketId: String,
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
@@ -29,6 +31,7 @@ internal class ParraCheckboxKindView: UIView, ParraQuestionKindView {
     ) {
         self.question = question
         self.answerHandler = answerHandler
+        self.bucketId = bucketId
 
         super.init(frame: .zero)
 
@@ -43,9 +46,7 @@ internal class ParraCheckboxKindView: UIView, ParraQuestionKindView {
         generateOptions(
             for: data,
             config: config,
-            currentState: answerHandler.initialState(
-                for: question
-            )
+            currentState: answerHandler.initialState(for: bucketId)
         )
 
         NSLayoutConstraint.activate([
@@ -148,7 +149,7 @@ extension ParraCheckboxKindView: ParraBorderedButtonDelegate, ViewTimer {
 
         answerHandler.update(
             answer: answer,
-            for: question
+            for: bucketId
         )
     }
 }

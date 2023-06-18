@@ -19,16 +19,19 @@ internal class ParraRatingKindView: UIView, ParraQuestionKindView {
     private let ratingControl: ParraBorderedRatingControl
     private let contentContainer = UIStackView(frame: .zero)
     private let ratingLabels: ParraRatingLabels?
+    private let bucketId: String
 
     required init(
+        bucketId: String,
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
         answerHandler: ParraAnswerHandler
     ) {
         self.question = question
-        self.config = config
         self.answerHandler = answerHandler
+        self.bucketId = bucketId
+        self.config = config
         self.ratingControl = ParraBorderedRatingControl(
             options: data.options,
             config: config
@@ -87,7 +90,7 @@ extension ParraRatingKindView: ParraBorderedRatingControlDelegate {
                                     didConfirmOption option: RatingQuestionOption) {
 
         updateAnswer(for: option)
-        answerHandler.commitAnswers(for: question)
+        answerHandler.commitAnswers(for: bucketId, question: question)
     }
 
     private func updateAnswer(for option: RatingQuestionOption) {
@@ -96,7 +99,7 @@ extension ParraRatingKindView: ParraBorderedRatingControlDelegate {
                 kind: .rating,
                 data: SingleOptionAnswer(optionId: option.id)
             ),
-            for: question
+            for: bucketId
         )
     }
 }

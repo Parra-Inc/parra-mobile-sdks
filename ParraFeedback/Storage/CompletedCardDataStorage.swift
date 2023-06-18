@@ -34,7 +34,7 @@ internal actor CompletedCardDataStorage: ItemStorage {
     internal func completeCard(completedCard: CompletedCard) async {
         do {
             try await storageModule.write(
-                name: completedCard.questionId,
+                name: completedCard.bucketItemId,
                 value: completedCard
             )
         } catch let error {
@@ -48,7 +48,7 @@ internal actor CompletedCardDataStorage: ItemStorage {
         if completedCards.isEmpty {
             for (_, card) in underlyingStorage {
                 successfullSubmittedCompletedCardIds.update(
-                    with: card.questionId
+                    with: card.bucketItemId
                 )
             }
             
@@ -56,11 +56,11 @@ internal actor CompletedCardDataStorage: ItemStorage {
         } else {
             for completedCard in completedCards {
                 successfullSubmittedCompletedCardIds.update(
-                    with: completedCard.questionId
+                    with: completedCard.bucketItemId
                 )
 
                 await storageModule.delete(
-                    name: completedCard.questionId
+                    name: completedCard.bucketItemId
                 )
             }
         }

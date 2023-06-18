@@ -19,15 +19,18 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
     private let data: DataType
     private var validationError: String?
     private let validationLabel = UILabel(frame: .zero)
+    private let bucketId: String
 
     required init(
+        bucketId: String,
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
         answerHandler: ParraAnswerHandler
     ) {
-        self.answerHandler = answerHandler
         self.question = question
+        self.answerHandler = answerHandler
+        self.bucketId = bucketId
         self.data = data
         self.textView = ParraBorderedTextView(config: config)
 
@@ -116,7 +119,7 @@ extension ParraLongTextKindView: UITextViewDelegate {
         if validationError == nil {
             answerHandler.update(
                 answer: answer,
-                for: question
+                for: bucketId
             )
         }
     }
