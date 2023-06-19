@@ -72,7 +72,7 @@ internal enum ParraHeader {
             return Bundle.main.bundleIdentifier
         case .debug:
 #if DEBUG
-            return "DEBUG"
+            return "1"
 #else
             return nil
 #endif
@@ -84,6 +84,10 @@ internal enum ParraHeader {
             return NSLocale.current.languageCode
         case .deviceManufacturer:
             return "Apple"
+        case .deviceTimeZoneAbbreviation:
+            return TimeZone.current.abbreviation()
+        case .deviceTimeZoneOffset:
+            return String(TimeZone.current.secondsFromGMT())
         case .moduleVersion(_, let module):
             return type(of: module).libraryVersion()
         case .platform:
@@ -92,17 +96,13 @@ internal enum ParraHeader {
             return "parra-ios-swift"
         case .platformVersion:
             return UIDevice.current.systemVersion
-        case .timeZoneAbbreviation:
-            return TimeZone.current.abbreviation()
-        case .timeZoneOffset:
-            return String(TimeZone.current.secondsFromGMT())
         }
     }
 
     static var headerDictionary: [String: String] {
         let keys: [ParraHeader] = [
-            .appLocale, .bundleId, .debug, .device, .deviceId, .deviceLocale, .manufacturer,
-            .platform, .platformAgent, .platformVersion, .timeZoneAbbreviation, .timeZoneOffset
+            .appLocale, .appBundleId, .debug, .device, .deviceId, .deviceLocale, .deviceManufacturer,
+            .deviceTimeZoneAbbreviation, .deviceTimeZoneOffset, .platform, .platformAgent, .platformVersion
         ]
 
         var headers = [String: String]()
