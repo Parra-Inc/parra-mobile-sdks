@@ -425,50 +425,8 @@ internal class ParraNetworkManager: NetworkManagerType {
     }
 
     private func addStandardHeaders(toRequest request: inout URLRequest) {
-        for (header, value) in libraryVersionHeaders() {
+        for (header, value) in ParraHeader.headerDictionary {
             request.setValue(value, forHTTPHeaderField: header)
         }
-
-        for (header, value) in additionalHeaders() {
-            request.setValue(value, forHTTPHeaderField: header)
-        }
-    }
-    
-    private func libraryVersionHeaders() -> [String: String] {
-        var headers = [String: String]()
-        
-        for (moduleName, module) in Parra.registeredModules {
-            headers[ParraHeader.moduleVersion(module: moduleName).prefixedHeaderName] = type(of: module).libraryVersion()
-        }
-        
-        return headers
-    }
-    
-    private func additionalHeaders() -> [String: String] {
-        var headers = [String: String]()
-        
-#if DEBUG
-        headers[ParraHeader.debug.prefixedHeaderName] = "debug"
-#endif
-        
-        headers[ParraHeader.os.prefixedHeaderName] = UIDevice.current.systemName
-        headers[ParraHeader.osVersion.prefixedHeaderName] = UIDevice.current.systemVersion
-        headers[ParraHeader.device.prefixedHeaderName] = UIDevice.current.name
-        headers[ParraHeader.appLocale.prefixedHeaderName] = UIDevice.current.name
-        
-        if let deviceLanguageCode = NSLocale.current.languageCode {
-            headers[ParraHeader.deviceLocale.prefixedHeaderName] = deviceLanguageCode
-        }
-        
-        if let appLanguageCode = Locale.preferredLanguages.first {
-            headers[ParraHeader.appLocale.prefixedHeaderName] = appLanguageCode
-        }
-        
-        headers[ParraHeader.timeZoneOffset.prefixedHeaderName] = String(TimeZone.current.secondsFromGMT())
-        if let timeZoneAbbreviation = TimeZone.current.abbreviation() {
-            headers[ParraHeader.timeZoneAbbreviation.prefixedHeaderName] = timeZoneAbbreviation
-        }
-        
-        return headers
     }
 }

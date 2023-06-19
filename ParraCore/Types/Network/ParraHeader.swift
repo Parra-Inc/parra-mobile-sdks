@@ -7,42 +7,129 @@
 //
 
 import Foundation
+import UIKit
+import AdSupport
 
 internal enum ParraHeader {
-    static let parraHeaderPrefix = "parra"
+    static let parraHeaderPrefix = "X-PARRA"
 
-    case debug
-    case moduleVersion(module: String)
-    case os
-    case osVersion
-    case device
+    private var prefixedHeaderName: String {
+        "\(ParraHeader.parraHeaderPrefix)-\(name)"
+    }
+
     case appLocale
+    case appBundleId
+    case debug
+    case device
+    case deviceId
     case deviceLocale
-    case timeZoneAbbreviation
-    case timeZoneOffset
+    case deviceManufacturer
+    case deviceTimeZoneAbbreviation
+    case deviceTimeZoneOffset
+    case moduleVersion(moduleName: String, module: ParraModule)
+    case platform
+    case platformAgent
+    case platformVersion
 
-    var headerName: String {
+    var name: String {
         switch self {
-        case .debug:
-            return "debug"
-        case .moduleVersion(let module):
-            return "\(module.lowercased())-version"
-        case .os:
-            return "os"
-        case .osVersion:
-            return "os-version"
-        case .device:
-            return "device"
+            // TODO: Application id (application in parra dashboard)
+            // TODO: X-PARRA-PLATFORM-SDK-VERSION when we combine parra modules into one
         case .appLocale:
-            return "app-locale"
+            return "APP-LOCALE"
+        case .appBundleId:
+            return "APP-BUNDLE-ID"
+        case .debug:
+            return "DEBUG"
+        case .device:
+            return "DEVICE"
+        case .deviceId:
+            return "DEVICE-ID"
         case .deviceLocale:
-            return "device-locale"
-        case .timeZoneAbbreviation:
-            return "timezone-abbreviation"
-        case .timeZoneOffset:
-            return "timezone-offset"
+            return "DEVICE-LOCALE"
+        case .deviceTimeZoneAbbreviation:
+            return "DEVICE-TIMEZONE-ABBREVIATION"
+        case .deviceTimeZoneOffset:
+            return "DEVICE-TIMEZONE-OFFSET"
+        case .deviceManufacturer:
+            return "DEVICE-MANUFACTURER"
+        case .moduleVersion(let moduleName, _):
+            return "\(moduleName.uppercased())-VERSION"
+        case .platform:
+            return "PLATFORM"
+        case .platformAgent:
+            return "PLATFORM-AGENT"
+        case .platformVersion:
+            return "PLATFORM-VERSION"
         }
     }
 
-    var prefixedHeaderName: String { "\(ParraHeader.parraHeaderPrefix)-\(headerName)" }
+    var currentValue: String? {
+        switch self {
+        case .appLocale:
+            return Locale.preferredLanguages.first
+        case .appBundleId:
+            return Bundle.main.bundleIdentifier
+        case .debug:
+#if DEBUG
+            return "DEBUG"
+#else
+            return nil
+#endif
+        case .device:
+            return UIDevice.modelCode
+        case .deviceId:
+            return UIDevice.current.identifierForVendor?.uuidString
+        case .deviceLocale:
+            return NSLocale.current.languageCode
+        case .deviceManufacturer:
+            return "Apple"
+        case .moduleVersion(_, let module):
+            return type(of: module).libraryVersion()
+        case .platform:
+            return UIDevice.current.systemName
+        case .platformAgent:
+            return "parra-ios-swift"
+        case .platformVersion:
+            return UIDevice.current.systemVersion
+        case .timeZoneAbbreviation:
+            return TimeZone.current.abbreviation()
+        case .timeZoneOffset:
+            return String(TimeZone.current.secondsFromGMT())
+        }
+    }
+
+    static var headerDictionary: [String: String] {
+        let keys: [ParraHeader] = [
+            .appLocale, .bundleId, .debug, .device, .deviceId, .deviceLocale, .manufacturer,
+            .platform, .platformAgent, .platformVersion, .timeZoneAbbreviation, .timeZoneOffset
+        ]
+
+        var headers = [String: String]()
+
+        for key in keys {
+            if let value = key.currentValue {
+                headers[key.prefixedHeaderName] = value
+            }
+        }
+
+        for (moduleName, module) in Parra.registeredModules {
+            let header = ParraHeader.moduleVersion(
+                moduleName: moduleName,
+                module: module
+            )
+
+            if let value = header.currentValue {
+                headers[header.prefixedHeaderName] = value
+            }
+        }
+
+        let debugString = headers.reduce("\n\n") { partialResult, next in
+            return "\(partialResult)\n\(next.key): \(next.value)"
+        }
+
+        print("++++++++++++++++++++++++++++++++++++++\n\(debugString)\n\n")
+
+        return headers
+    }
 }
