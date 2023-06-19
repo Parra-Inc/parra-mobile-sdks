@@ -110,15 +110,14 @@ internal class ParraNetworkManager: NetworkManagerType {
         }
     }
 
-    internal func performAuthenticatedRequest<T: Decodable>(route: String,
-                                                            method: HttpMethod,
-                                                            queryItems: [String: String] = [:],
-                                                            config: RequestConfig = .default,
-                                                            cachePolicy: URLRequest.CachePolicy? = nil
+    internal func performAuthenticatedRequest<T: Decodable>(
+        endpoint: ParraEndpoint,
+        queryItems: [String: String] = [:],
+        config: RequestConfig = .default,
+        cachePolicy: URLRequest.CachePolicy? = nil
     ) async -> AuthenticatedRequestResult<T> {
         return await performAuthenticatedRequest(
-            route: route,
-            method: method,
+            endpoint: endpoint,
             queryItems: queryItems,
             config: config,
             cachePolicy: cachePolicy,
@@ -126,13 +125,16 @@ internal class ParraNetworkManager: NetworkManagerType {
         )
     }
     
-    internal func performAuthenticatedRequest<T: Decodable, U: Encodable>(route: String,
-                                                                          method: HttpMethod,
-                                                                          queryItems: [String: String] = [:],
-                                                                          config: RequestConfig = .default,
-                                                                          cachePolicy: URLRequest.CachePolicy? = nil,
-                                                                          body: U
+    internal func performAuthenticatedRequest<T: Decodable, U: Encodable>(
+        endpoint: ParraEndpoint,
+        queryItems: [String: String] = [:],
+        config: RequestConfig = .default,
+        cachePolicy: URLRequest.CachePolicy? = nil,
+        body: U
     ) async -> AuthenticatedRequestResult<T> {
+        let route = endpoint.route
+        let method = endpoint.method
+
         var responseAttributes: AuthenticatedRequestAttributeOptions = []
 
         parraLogTrace("Performing authenticated request to route: \(method.rawValue) \(route)")
@@ -161,7 +163,7 @@ internal class ParraNetworkManager: NetworkManagerType {
             request.httpMethod = method.rawValue
             request.setValue("application/json", forHTTPHeaderField: .accept)
 
-            addStandardHeaders(toRequest: &request)
+            addTrackingHeaders(toRequest: &request, for: endpoint)
 
             if method.allowsBody {
                 request.httpBody = try jsonEncoder.encode(body)
@@ -197,9 +199,11 @@ internal class ParraNetworkManager: NetworkManagerType {
         }
     }
     
-    private func performRequest(request: URLRequest,
-                                credential: ParraCredential,
-                                config: RequestConfig = .default) async -> (Result<Data, Error>, AuthenticatedRequestAttributeOptions) {
+    private func performRequest(
+        request: URLRequest,
+        credential: ParraCredential,
+        config: RequestConfig = .default
+    ) async -> (Result<Data, Error>, AuthenticatedRequestAttributeOptions) {
         do {
             var request = request
             request.setValue("Bearer \(credential.token)", forHTTPHeaderField: .authorization)
@@ -305,10 +309,11 @@ internal class ParraNetworkManager: NetworkManagerType {
         apiKeyId: String,
         userId: String
     ) async throws -> String {
-        let url = Parra.Constant.parraApiRoot.appendingPathComponent("tenants/\(tenantId)/issuers/public/auth/token")
+        let endpoint = ParraEndpoint.postAuthentication(tenantId: tenantId)
+        let url = Parra.Constant.parraApiRoot.appendingPathComponent(endpoint.route)
         var request = URLRequest(url: url)
 
-        request.httpMethod = "POST"
+        request.httpMethod = endpoint.method.rawValue
         request.httpBody = try jsonEncoder.encode(["user_id": userId])
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
 
@@ -316,7 +321,7 @@ internal class ParraNetworkManager: NetworkManagerType {
             throw ParraError.custom("Unable to encode API key as NSData", nil)
         }
         
-        addStandardHeaders(toRequest: &request)
+        addTrackingHeaders(toRequest: &request, for: endpoint)
         request.setValue("Basic \(authData)", forHTTPHeaderField: .authorization)
 
         let (data, response) = try await performAsyncDataDask(request: request)
@@ -424,8 +429,15 @@ internal class ParraNetworkManager: NetworkManagerType {
         return (data, response as! HTTPURLResponse)
     }
 
-    private func addStandardHeaders(toRequest request: inout URLRequest) {
-        for (header, value) in ParraHeader.headerDictionary {
+    private func addTrackingHeaders(
+        toRequest request: inout URLRequest,
+        for endpoint: ParraEndpoint
+    ) {
+        guard endpoint.isTrackingEnabled else {
+            return
+        }
+
+        for (header, value) in ParraHeader.trackingHeaderDictionary {
             request.setValue(value, forHTTPHeaderField: header)
         }
     }

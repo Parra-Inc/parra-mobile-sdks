@@ -99,7 +99,7 @@ internal enum ParraHeader {
         }
     }
 
-    static var headerDictionary: [String: String] {
+    static var trackingHeaderDictionary: [String: String] {
         let keys: [ParraHeader] = [
             .appLocale, .appBundleId, .debug, .device, .deviceId, .deviceLocale, .deviceManufacturer,
             .deviceTimeZoneAbbreviation, .deviceTimeZoneOffset, .platform, .platformAgent, .platformVersion
@@ -123,12 +123,6 @@ internal enum ParraHeader {
                 headers[header.prefixedHeaderName] = value
             }
         }
-
-        let debugString = headers.reduce("\n\n") { partialResult, next in
-            return "\(partialResult)\n\(next.key): \(next.value)"
-        }
-
-        print("++++++++++++++++++++++++++++++++++++++\n\(debugString)\n\n")
 
         return headers
     }

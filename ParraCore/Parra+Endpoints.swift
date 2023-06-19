@@ -7,6 +7,62 @@
 
 import UIKit
 
+internal enum ParraEndpoint {
+    // Auth
+    case postAuthentication(tenantId: String)
+
+    // Feedback
+    case getCards
+    case getFeedbackForm(formId: String)
+    case postSubmitFeedbackForm(formId: String)
+    case postBulkAnswerQuestions
+
+    // Sessions
+    case postBulkSubmitSessions(tenantId: String)
+
+    // Push
+    case postPushTokens(tenantId: String)
+
+    // All endpoints should use kebab case!
+    var route: String {
+        switch self {
+        case .getCards:
+            return "cards"
+        case .getFeedbackForm(let formId):
+            return "feedback/forms/\(formId)"
+        case .postSubmitFeedbackForm(let formId):
+            return "feedback/forms/\(formId)/submit"
+        case .postBulkAnswerQuestions:
+            return "bulk/questions/answer"
+        case .postBulkSubmitSessions(let tenantId):
+            return "tenants/\(tenantId)/sessions"
+        case .postPushTokens(let tenantId):
+            return "tenants/\(tenantId)/push-tokens"
+        case .postAuthentication(let tenantId):
+            return "tenants/\(tenantId)/issuers/public/auth/token"
+        }
+    }
+
+    var method: HttpMethod {
+        switch self {
+        case .getCards, .getFeedbackForm:
+            return .get
+        case .postBulkAnswerQuestions, .postSubmitFeedbackForm, .postBulkSubmitSessions,
+                .postPushTokens, .postAuthentication:
+            return .post
+        }
+    }
+
+    var isTrackingEnabled: Bool {
+        switch self {
+        case .postAuthentication, .postBulkSubmitSessions, .postPushTokens:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 public extension Parra {
     enum API {
         /// Fetches all available Parra Feedback cards for the supplied app area. If `ParraQuestionAppArea.all` is provided
@@ -20,8 +76,7 @@ public extension Parra {
             }
 
             let response: AuthenticatedRequestResult<CardsResponse> = await Parra.shared.networkManager.performAuthenticatedRequest(
-                route: "cards",
-                method: .get,
+                endpoint: .getCards,
                 queryItems: queryItems,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
             )
@@ -42,11 +97,8 @@ public extension Parra {
                 return
             }
 
-            let route = "bulk/questions/answer"
-
             let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
-                route: route,
-                method: .post,
+                endpoint: .postBulkAnswerQuestions,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                 body: cards.map { CompletedCardUpload(completedCard: $0) }
             )
@@ -70,8 +122,7 @@ public extension Parra {
             }
 
             let response: AuthenticatedRequestResult<ParraFeedbackFormResponse> = await Parra.shared.networkManager.performAuthenticatedRequest(
-                route: "feedback/forms/\(escapedFormId)",
-                method: .get
+                endpoint: .getFeedbackForm(formId: escapedFormId)
             )
 
             switch response.result {
@@ -103,8 +154,7 @@ public extension Parra {
             }
 
             let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
-                route: "feedback/forms/\(escapedFormId)/submit",
-                method: .post,
+                endpoint: .postSubmitFeedbackForm(formId: escapedFormId),
                 body: body
             )
 
@@ -135,15 +185,13 @@ public extension Parra {
             // It's possible that multiple sessions that are uploaded could receive a response indicating that polling
             // should occur. If this happens, we'll honor the most recent of these.
             var sessionResponse: ParraSessionsResponse?
-            let route = "tenants/\(tenantId)/sessions"
             for session in sessions {
                 parraLogDebug("Uploading session: \(session.sessionId)")
 
                 let sessionUpload = ParraSessionUpload(session: session)
 
                 let response: AuthenticatedRequestResult<ParraSessionsResponse> = await Parra.shared.networkManager.performAuthenticatedRequest(
-                    route: route,
-                    method: .post,
+                    endpoint: .postBulkSubmitSessions(tenantId: tenantId),
                     config: .defaultWithRetries,
                     body: sessionUpload
                 )
