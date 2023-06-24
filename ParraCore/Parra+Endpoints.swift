@@ -172,11 +172,14 @@ public extension Parra {
         internal enum Push {
             @MainActor
             static func uploadPushToken(token: String) async throws {
-                guard let tenantId = Parra.config.tenantId else {
+                guard let tenantId = Parra.config.tenantId,
+                        let applicationId = Parra.config.applicationId else {
+
                     throw ParraError.notInitialized
                 }
 
                 let body: [String: String] = [
+                    "application_id": applicationId,
                     "device_token": token
                 ]
 

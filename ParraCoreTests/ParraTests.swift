@@ -69,7 +69,7 @@ class ParraCoreTests: XCTestCase {
     }
 
     func testTriggerSync() async throws {
-        Parra.initialize(authProvider: .default(tenantId: "tenant", authProvider: {
+        Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
             return UUID().uuidString
         }))
 

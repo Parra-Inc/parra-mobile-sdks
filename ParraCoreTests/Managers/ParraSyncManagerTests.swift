@@ -16,7 +16,7 @@ class ParraSyncManagerTests: XCTestCase {
             return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
         }
 
-        Parra.initialize(authProvider: .default(tenantId: "tenant", authProvider: {
+        Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
             return UUID().uuidString
         }))
     }

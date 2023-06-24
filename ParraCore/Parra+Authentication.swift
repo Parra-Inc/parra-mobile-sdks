@@ -35,7 +35,7 @@ public extension Parra {
 
         var newConfig = config
 
-        let (tenantId, authenticationProvider) = withAuthenticationMiddleware(
+        let (tenantId, applicationId, authenticationProvider) = withAuthenticationMiddleware(
             for: authProvider
         ) { [weak shared] success in
             guard let shared else {
@@ -55,6 +55,7 @@ public extension Parra {
 
         shared.networkManager.updateAuthenticationProvider(authenticationProvider)
         newConfig.setTenantId(tenantId)
+        newConfig.setApplicationId(applicationId)
 
         Parra.config = newConfig
         Parra.registerModule(module: shared)
@@ -97,12 +98,12 @@ public extension Parra {
     private class func withAuthenticationMiddleware(
         for authProvider: ParraAuthenticationProviderType,
         onAuthenticationRefresh: @escaping (_ success: Bool) -> Void
-    ) -> (String, ParraAuthenticationProviderFunction) {
+    ) -> (String, String, ParraAuthenticationProviderFunction) {
         
 
         switch authProvider {
-        case .default(let tenantId, let authProvider):
-            return (tenantId, { () async throws -> String in
+        case .default(let tenantId, let applicationId, let authProvider):
+            return (tenantId, applicationId, { () async throws -> String in
                 do {
                     let result = try await authProvider()
 
@@ -114,8 +115,8 @@ public extension Parra {
                     throw error
                 }
             })
-        case .publicKey(let tenantId, let apiKeyId, let userIdProvider):
-            return (tenantId, { [weak shared] () async throws -> String in
+        case .publicKey(let tenantId, let applicationId, let apiKeyId, let userIdProvider):
+            return (tenantId, applicationId, { [weak shared] () async throws -> String in
                 do {
                     guard let networkManager = shared?.networkManager else {
                         throw ParraError.unknown
