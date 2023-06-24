@@ -25,7 +25,8 @@
       ]
     },
     "testExecutionOrdering" : "random",
-    "testTimeoutsEnabled" : true
+    "testTimeoutsEnabled" : true,
+    "threadSanitizerEnabled" : true
   },
   "testTargets" : [
     {
