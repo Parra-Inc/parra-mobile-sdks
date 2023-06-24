@@ -61,17 +61,36 @@ public extension Parra {
 
         Initializer.isInitialized = true
 
-        parraLogInfo("Parra SDK Initialized")
-
         Task {
+            // Generally nothing that can generate events should happen before this call. Even logs
             await shared.sessionManager.createSessionIfNotExists()
+            parraLogInfo("Parra SDK Initialized")
 
             do {
                 let _ = try await shared.networkManager.refreshAuthentication()
+
+                await performPoshAuthRefreshActions()
             } catch let error {
                 parraLogError("Authentication handler in call to Parra.initialize failed", error)
             }
         }
+    }
+
+    private class func performPoshAuthRefreshActions() async {
+        parraLogDebug("Performing push authentication refresh actions.")
+
+        await uploadCachedPushNotificationToken()
+    }
+
+    private class func uploadCachedPushNotificationToken() async {
+        guard let token = await PushTokenState.shared.getCachedTemporaryPushToken() else {
+            parraLogTrace("No push notification token is cached. Skipping upload.")
+            return
+        }
+
+        parraLogTrace("Push notification token was cached. Attempting upload.")
+
+        await uploadDevicePushToken(token)
     }
 
     @MainActor

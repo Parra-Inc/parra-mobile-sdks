@@ -168,6 +168,34 @@ public extension Parra {
             }
         }
 
+        // MARK: - Push API
+        internal enum Push {
+            @MainActor
+            static func uploadPushToken(token: String) async throws {
+                guard let tenantId = Parra.config.tenantId else {
+                    throw ParraError.notInitialized
+                }
+
+                let body: [String: String] = [
+                    "device_token": token
+                ]
+
+                let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
+                    endpoint: .postPushTokens(tenantId: tenantId),
+                    body: body
+                )
+
+                switch response.result {
+                case .success:
+                    return
+                case .failure(let error):
+                    parraLogError("Error uploading device push token to Parra", error)
+
+                    throw error
+                }
+            }
+        }
+
         // MARK: - Assets API
         public enum Assets {
             public static func performBulkAssetCachingRequest(assets: [Asset]) async {
