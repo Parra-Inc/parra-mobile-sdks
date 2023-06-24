@@ -67,7 +67,7 @@ class ParraCoreTests: XCTestCase {
         exp.isInverted = true
         Parra.triggerSync {}
 
-        wait(for: [exp], timeout: 1.0)
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testTriggerSync() async throws {
@@ -77,8 +77,9 @@ class ParraCoreTests: XCTestCase {
             notificationCenter: NotificationCenter.default
         )
 
+        await Parra.shared.sessionManager.logEvent("test", params: [String: Any]())
         await Parra.triggerSync()
 
-        wait(for: [notificationExpectation], timeout: 0.1)
+        await fulfillment(of: [notificationExpectation], timeout: 1.0)
     }
 }

@@ -70,7 +70,7 @@ class ParraAuthenticationTests: XCTestCase {
 
         let _ = try await Parra.shared.networkManager.authenticationProvider!()
 
-        wait(for: [authProviderExpectation], timeout: 0.1)
+        await fulfillment(of: [authProviderExpectation], timeout: 0.1)
     }
     
     func testInitWithDefaultAuthProviderFailure() async throws {

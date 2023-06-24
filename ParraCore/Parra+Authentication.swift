@@ -92,7 +92,6 @@ public extension Parra {
                     throw error
                 }
             })
-            // () async throws -> String
         case .publicKey(let tenantId, let apiKeyId, let userIdProvider):
             return (tenantId, { [weak shared] () async throws -> String in
                 do {

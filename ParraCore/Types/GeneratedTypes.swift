@@ -670,8 +670,13 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
+
+        try container.encode(id, forKey: .id)
+        try container.encode(campaignId, forKey: .campaignId)
+        try container.encode(campaignActionId, forKey: .campaignActionId)
+        try container.encodeIfPresent(questionId, forKey: .questionId)
         try container.encode(type, forKey: .type)
+        try container.encode(displayType, forKey: .displayType)
         try container.encode(version, forKey: .version)
         
         switch data {

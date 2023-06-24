@@ -34,7 +34,7 @@ class ParraSyncManagerTests: XCTestCase {
 
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
 
-        wait(for: [notificationExpectation], timeout: 0.1)
+        await fulfillment(of: [notificationExpectation], timeout: 0.1)
 
         let isSyncing = await Parra.shared.syncManager.isSyncing
         XCTAssertTrue(isSyncing)
@@ -51,7 +51,8 @@ class ParraSyncManagerTests: XCTestCase {
         )
         
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
-        wait(for: [notificationExpectation], timeout: 0.1)
+
+        await fulfillment(of: [notificationExpectation], timeout: 0.1)
 
         let isSyncing = await Parra.shared.syncManager.isSyncing
         XCTAssertTrue(isSyncing)

@@ -18,7 +18,9 @@ class ParraNetworkManagerTests: XCTestCase {
         )
 
         // Can't expect throw with async func
-        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(route: "whatever", method: .get)
+        let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
+            endpoint: .custom(route: "whatever", method: .get)
+        )
 
         switch response.result {
         case .success:
@@ -47,11 +49,11 @@ class ParraNetworkManagerTests: XCTestCase {
         }
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: .custom(route: route, method: .get)
         )
-        
-        wait(for: [authProviderExpectation], timeout: 0.1)
+
+        await fulfillment(of: [authProviderExpectation], timeout: 0.1)
+
         let persistedCredential = await dataManager.getCurrentCredential()
         XCTAssertEqual(token, persistedCredential?.token)
     }
@@ -72,8 +74,7 @@ class ParraNetworkManagerTests: XCTestCase {
         
         // Can't expect throw with async func
         let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: .custom(route: route, method: .get)
         )
 
         switch response.result {
@@ -108,13 +109,12 @@ class ParraNetworkManagerTests: XCTestCase {
         }
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: .custom(route: route, method: .get)
         )
 
         switch response.result {
         case .success:
-            wait(for: [authProviderExpectation], timeout: 0.1)
+            await fulfillment(of: [authProviderExpectation], timeout: 0.1)
         case .failure(let error):
             XCTFail(error.localizedDescription)
         }
@@ -125,8 +125,8 @@ class ParraNetworkManagerTests: XCTestCase {
         let credential = ParraCredential(token: UUID().uuidString)
 
         await dataManager.updateCredential(credential: credential)
-        
-        let route = "whatever"
+
+        let endpoint = ParraEndpoint.postBulkSubmitSessions(tenantId: "whatever")
         let requestHeadersExpectation = XCTestExpectation()
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
@@ -139,7 +139,7 @@ class ParraNetworkManagerTests: XCTestCase {
                     requestHeadersExpectation.fulfill()
                 }
                 
-                return (kEmptyJsonObjectData, createTestResponse(route: route), nil)
+                return (kEmptyJsonObjectData, createTestResponse(route: endpoint.route), nil)
             }
         )
 
@@ -163,13 +163,12 @@ class ParraNetworkManagerTests: XCTestCase {
         Parra.registerModule(module: FakeModule())
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: endpoint
         )
 
         switch response.result {
         case .success:
-            wait(for: [requestHeadersExpectation], timeout: 0.1)
+            await fulfillment(of: [requestHeadersExpectation], timeout: 0.1)
         case .failure(let error):
             XCTFail(error.localizedDescription)
         }
@@ -197,11 +196,10 @@ class ParraNetworkManagerTests: XCTestCase {
         )
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: .custom(route: route, method: .get)
         )
 
-        wait(for: [requestBodyExpectation], timeout: 0.1)
+        await fulfillment(of: [requestBodyExpectation], timeout: 0.1)
     }
 
     func testSendsBodyWithNonGetRequests() async throws {
@@ -228,11 +226,10 @@ class ParraNetworkManagerTests: XCTestCase {
         )
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .post
+            endpoint: .custom(route: route, method: .post)
         )
 
-        wait(for: [requestBodyExpectation], timeout: 0.1)
+        await fulfillment(of: [requestBodyExpectation], timeout: 0.1)
     }
 
     func testHandlesNoContentHeader() async throws {
@@ -253,8 +250,7 @@ class ParraNetworkManagerTests: XCTestCase {
         )
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: .custom(route: route, method: .get)
         )
 
         switch response.result {
@@ -280,8 +276,7 @@ class ParraNetworkManagerTests: XCTestCase {
 
         // Can't expect throw with async func
         let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: .custom(route: route, method: .get)
         )
 
         switch response.result {
@@ -307,8 +302,7 @@ class ParraNetworkManagerTests: XCTestCase {
 
         // Can't expect throw with async func
         let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: .custom(route: route, method: .get)
         )
 
         switch response.result {
@@ -349,8 +343,7 @@ class ParraNetworkManagerTests: XCTestCase {
         }
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: .custom(route: route, method: .get)
         )
 
         switch response.result {
@@ -392,8 +385,7 @@ class ParraNetworkManagerTests: XCTestCase {
 
         // Can't expect throw with async func
         let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
-            route: route,
-            method: .get
+            endpoint: .custom(route: route, method: .get)
         )
 
         switch response.result {
@@ -454,7 +446,7 @@ class ParraNetworkManagerTests: XCTestCase {
             userId: userId
         )
 
-        wait(for: [requestHeadersExpectation], timeout: 0.1)
+        await fulfillment(of: [requestHeadersExpectation], timeout: 0.1)
     }
 }
 
