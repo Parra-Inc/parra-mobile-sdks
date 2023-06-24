@@ -8,8 +8,10 @@
 import XCTest
 @testable import ParraCore
 
+@MainActor
 class ParraAuthenticationTests: XCTestCase {
 
+    @MainActor
     override func setUp() async throws {
         Parra.Initializer.isInitialized = false
 
@@ -18,6 +20,7 @@ class ParraAuthenticationTests: XCTestCase {
         }
     }
     
+    @MainActor
     func testInitWithDefaultAuthProvider() async throws {
         let token = UUID().uuidString
         XCTAssertNil(Parra.shared.networkManager.authenticationProvider)
@@ -29,6 +32,7 @@ class ParraAuthenticationTests: XCTestCase {
         XCTAssertNotNil(Parra.shared.networkManager.authenticationProvider)
     }
 
+    @MainActor
     func testInitWithPublicKeyAuthProvider() async throws {
         let dataManager = ParraDataManager()
         let tenantId = UUID().uuidString
@@ -73,6 +77,7 @@ class ParraAuthenticationTests: XCTestCase {
         await fulfillment(of: [authProviderExpectation], timeout: 0.1)
     }
     
+    @MainActor
     func testInitWithDefaultAuthProviderFailure() async throws {
         Parra.initialize(authProvider: .default(tenantId: "tenant", authProvider: {
             throw URLError(.badServerResponse)
@@ -85,6 +90,7 @@ class ParraAuthenticationTests: XCTestCase {
         } catch {}
     }
 
+    @MainActor
     func testInitWithPublicKeyAuthProviderFailure() async throws {
         Parra.initialize(authProvider: .publicKey(tenantId: "", apiKeyId: "", userIdProvider: {
             throw URLError(.badServerResponse)

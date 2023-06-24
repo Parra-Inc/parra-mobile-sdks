@@ -179,6 +179,7 @@ public extension Parra {
     internal enum Sessions {
         /// Uploads the provided sessions, failing outright if enough sessions fail to upload
         /// - Returns: A set of ids of the sessions that were successfully uploaded.
+        @MainActor
         static func bulkSubmitSessions(sessions: [ParraSession]) async throws -> (Set<String>, ParraSessionsResponse?) {
             guard let tenantId = Parra.config.tenantId else {
                 throw ParraError.notInitialized
@@ -239,8 +240,8 @@ public extension Parra {
             )
         }
 
-        public static func isAssetCached(asset: Asset) -> Bool {
-            return Parra.shared.networkManager.isAssetCached(
+        public static func isAssetCached(asset: Asset) async -> Bool {
+            return await Parra.shared.networkManager.isAssetCached(
                 asset: asset
             )
         }

@@ -12,7 +12,8 @@ import UIKit
 /// to install and use other Parra libraries.
 public class Parra: ParraModule {
     public static private(set) var name = "core"
-        
+
+    @MainActor
     internal static var shared: Parra! = {
         let diskCacheURL = ParraDataManager.Path.networkCachesDirectory
         // Cache may reject image entries if they are greater than 10% of the cache's size

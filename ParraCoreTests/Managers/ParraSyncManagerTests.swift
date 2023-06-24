@@ -8,7 +8,9 @@
 import XCTest
 @testable import ParraCore
 
+@MainActor
 class ParraSyncManagerTests: XCTestCase {
+    @MainActor
     override func setUp() async throws {
         configureWithRequestResolver { request in
             return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
@@ -19,12 +21,13 @@ class ParraSyncManagerTests: XCTestCase {
         }))
     }
 
+    @MainActor
     override func tearDown() async throws {
         await Parra.logout()
         Parra.Initializer.isInitialized = false
-        Parra.shared = nil
     }
 
+    @MainActor
     func testEnqueueSync() async throws {
         let notificationExpectation = XCTNSNotificationExpectation(
             name: Parra.syncDidBeginNotification,
@@ -43,6 +46,7 @@ class ParraSyncManagerTests: XCTestCase {
         XCTAssertFalse(hasEnqueuedSyncJobs)
     }
 
+    @MainActor
     func testEnqueueSyncWhileSyncInProgress() async throws {
         let notificationExpectation = XCTNSNotificationExpectation(
             name: Parra.syncDidBeginNotification,
@@ -63,7 +67,10 @@ class ParraSyncManagerTests: XCTestCase {
         XCTAssertTrue(hasEnqueuedSyncJobs)
     }
 
-    private func configureWithRequestResolver(resolver: @escaping (_ request: URLRequest) -> (Data?, HTTPURLResponse?, Error?)) {
+    @MainActor
+    private func configureWithRequestResolver(
+        resolver: @escaping (_ request: URLRequest) -> (Data?, HTTPURLResponse?, Error?)
+    ) {
         let dataManager = ParraDataManager()
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
@@ -74,19 +81,19 @@ class ParraSyncManagerTests: XCTestCase {
             dataManager: dataManager,
             networkManager: networkManager
         )
-        
+
         let syncManager = ParraSyncManager(
             networkManager: networkManager,
             sessionManager: sessionManager
         )
-        
+
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
             networkManager: networkManager
         )
-        
+
         Parra.registerModule(module: FakeModule())
     }
 }

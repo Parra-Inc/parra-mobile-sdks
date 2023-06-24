@@ -8,6 +8,7 @@
 import XCTest
 @testable import ParraCore
 
+@MainActor
 class ParraNetworkManagerTests: XCTestCase {
     func testAuthenticatedRequestFailsWithoutAuthProvider() async throws {
         let networkManager = ParraNetworkManager(

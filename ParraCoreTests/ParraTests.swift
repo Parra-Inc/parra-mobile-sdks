@@ -20,15 +20,12 @@ class FakeModule: ParraModule {
     }
 }
 
+@MainActor
 class ParraCoreTests: XCTestCase {
     override func setUp() async throws {
         configureWithRequestResolver { request in
             return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
         }
-
-        Parra.initialize(authProvider: .default(tenantId: "tenant", authProvider: {
-            return UUID().uuidString
-        }))
     }
 
     override func tearDown() async throws {
@@ -65,12 +62,17 @@ class ParraCoreTests: XCTestCase {
     func testTriggerSyncDoesNothingWithoutAuthProvider() async throws {
         let exp  = expectation(forNotification: Parra.syncDidBeginNotification, object: nil)
         exp.isInverted = true
+
         Parra.triggerSync {}
 
         await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testTriggerSync() async throws {
+        Parra.initialize(authProvider: .default(tenantId: "tenant", authProvider: {
+            return UUID().uuidString
+        }))
+
         let notificationExpectation = XCTNSNotificationExpectation(
             name: Parra.syncDidBeginNotification,
             object: nil,

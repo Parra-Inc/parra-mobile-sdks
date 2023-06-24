@@ -22,7 +22,10 @@ func createTestResponse(route: String,
     )!
 }
 
-func configureWithRequestResolver(resolver: @escaping (_ request: URLRequest) -> (Data?, HTTPURLResponse?, Error?)) {
+@MainActor
+func configureWithRequestResolver(
+    resolver: @escaping (_ request: URLRequest) -> (Data?, HTTPURLResponse?, Error?)
+) {
     let dataManager = ParraDataManager()
     let networkManager = ParraNetworkManager(
         dataManager: dataManager,

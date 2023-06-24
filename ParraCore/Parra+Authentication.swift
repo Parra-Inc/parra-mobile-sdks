@@ -13,6 +13,7 @@ public extension Parra {
     }
 
     /// Checks whether an authentication provider has already been set.
+    @MainActor
     class func hasAuthenticationProvider() -> Bool {
         return shared.networkManager.authenticationProvider != nil
     }
@@ -23,6 +24,7 @@ public extension Parra {
     ///   - authProvider: An async function that is expected to return a ParraCredential object containing a user's
     ///    access token. This function will be invoked automatically whenever the user's credential is missing or
     ///    expired and Parra needs to refresh the authentication state for your user.
+    @MainActor
     class func initialize(config: ParraConfiguration = .default,
                           authProvider: ParraAuthenticationProviderType) {
         if Initializer.isInitialized {
@@ -43,10 +45,10 @@ public extension Parra {
             Task {
                 if success {
                     shared.addEventObservers()
-                    await shared.syncManager.startSyncTimer()
+                    shared.syncManager.startSyncTimer()
                 } else {
                     await shared.dataManager.updateCredential(credential: nil)
-                    await shared.syncManager.stopSyncTimer()
+                    shared.syncManager.stopSyncTimer()
                 }
             }
         }
@@ -72,6 +74,7 @@ public extension Parra {
         }
     }
 
+    @MainActor
     private class func withAuthenticationMiddleware(
         for authProvider: ParraAuthenticationProviderType,
         onAuthenticationRefresh: @escaping (_ success: Bool) -> Void

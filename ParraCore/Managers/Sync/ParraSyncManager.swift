@@ -177,7 +177,8 @@ internal actor ParraSyncManager {
         return shouldSync
     }
     
-    @MainActor internal func startSyncTimer() {
+    @MainActor
+    internal func startSyncTimer() {
         stopSyncTimer()
         parraLogTrace("Starting sync timer")
 
@@ -193,7 +194,8 @@ internal actor ParraSyncManager {
         }
     }
     
-    @MainActor internal func stopSyncTimer() {
+    @MainActor
+    internal func stopSyncTimer() {
         guard let syncTimer = syncTimer else {
             return
         }
