@@ -57,8 +57,6 @@ public class Parra: ParraModule {
         )
     }()
     
-    public static internal(set) var config: ParraConfiguration = .default
-    
     internal private(set) static var registeredModules: [String: ParraModule] = [:]
     
     internal let dataManager: ParraDataManager

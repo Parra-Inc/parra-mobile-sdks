@@ -101,7 +101,7 @@ internal actor ParraNetworkManager: NetworkManagerType {
         parraLogTrace("Performing authenticated request to route: \(method.rawValue) \(route)")
 
         do {
-            guard let applicationId = Parra.config.applicationId else {
+            guard let applicationId = await ParraConfigState.shared.getCurrentState().applicationId else {
                 throw ParraError.notInitialized
             }
 

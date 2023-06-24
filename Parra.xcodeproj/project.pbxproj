@@ -142,6 +142,7 @@
 		00BD2FF82A47774300B4BEB2 /* URLSessionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FF72A47774300B4BEB2 /* URLSessionType.swift */; };
 		00BD2FFA2A47778E00B4BEB2 /* NotificationCenterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FF92A47778E00B4BEB2 /* NotificationCenterType.swift */; };
 		00BD2FFC2A477D7700B4BEB2 /* ParraNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFB2A477D7700B4BEB2 /* ParraNotificationCenter.swift */; };
+		00BD2FFE2A479BBA00B4BEB2 /* ParraConfigState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFD2A479BBA00B4BEB2 /* ParraConfigState.swift */; };
 		00BDB2AF28BC24E700C16649 /* ParraCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */; };
 		00BDB2B128BD822700C16649 /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2B028BD822700C16649 /* URLRequest.swift */; };
 		00CAD73429CFA1350093599E /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CAD73329CFA1350093599E /* Int.swift */; };
@@ -366,6 +367,7 @@
 		00BD2FF72A47774300B4BEB2 /* URLSessionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionType.swift; sourceTree = "<group>"; };
 		00BD2FF92A47778E00B4BEB2 /* NotificationCenterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterType.swift; sourceTree = "<group>"; };
 		00BD2FFB2A477D7700B4BEB2 /* ParraNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraNotificationCenter.swift; sourceTree = "<group>"; };
+		00BD2FFD2A479BBA00B4BEB2 /* ParraConfigState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraConfigState.swift; sourceTree = "<group>"; };
 		00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCredentialTests.swift; sourceTree = "<group>"; };
 		00BDB2B028BD822700C16649 /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
 		00CAD73329CFA1350093599E /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
@@ -632,8 +634,8 @@
 				006DE97F2A472F1B00521F5D /* Parra+Push.swift */,
 				00D5156627D4506B00C4F2CC /* Parra+SyncEvents.swift */,
 				0036D5E127CACA100016DE97 /* ParraError.swift */,
-				00E7957A29A05CB0003FE68D /* Logger */,
 				00120EF1274D1ECA00CA3247 /* Extensions */,
+				00E7957A29A05CB0003FE68D /* Logger */,
 				001286F7277F50A20090CDB5 /* Managers */,
 				0036D5EF27CD9BC90016DE97 /* PersistentStorage */,
 				006DE9842A4738F000521F5D /* State */,
@@ -767,6 +769,7 @@
 			children = (
 				006DE9852A47390600521F5D /* PushTokenState.swift */,
 				00BD2FED2A4771D700B4BEB2 /* SyncState.swift */,
+				00BD2FFD2A479BBA00B4BEB2 /* ParraConfigState.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -1172,6 +1175,7 @@
 				001B7B1627DE3AA900DEEECD /* ParraCredential.swift in Sources */,
 				001B7B2C27DE3AC800DEEECD /* ParraNetworkManager.swift in Sources */,
 				001B7B1F27DE3ABC00DEEECD /* PersistentStorageMedium.swift in Sources */,
+				00BD2FFE2A479BBA00B4BEB2 /* ParraConfigState.swift in Sources */,
 				00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */,
 				00DA7FEA295CAB9700109081 /* AnyEncodable.swift in Sources */,
 				00A60B9B2932D37000B7168A /* ParraAuthenticationProvider.swift in Sources */,

@@ -16,7 +16,7 @@ public struct ParraLoggerConfig {
     public var printCallsite: Bool
     public var printModuleName: Bool
     public var printFileName: Bool
-    public var logger: ParraLogger
+
     public var minimumAllowedLogLevel: ParraLogLevel = .default {
         didSet {
             ParraLogLevel.setMinAllowedLogLevel(minimumAllowedLogLevel)
@@ -32,8 +32,7 @@ public struct ParraLoggerConfig {
         printThread: Bool = false,
         printCallsite: Bool = false,
         printModuleName: Bool = true,
-        printFileName: Bool = true,
-        logger: ParraLogger = ParraDefaultLogger.default
+        printFileName: Bool = true
     ) {
         self.printTimestamps = printTimestamps
         self.printVerbosity = printVerbosity
@@ -42,7 +41,6 @@ public struct ParraLoggerConfig {
         self.printCallsite = printCallsite
         self.printModuleName = printModuleName
         self.printFileName = printFileName
-        self.logger = logger
 
         ParraLogLevel.setMinAllowedLogLevel(minimumAllowedLogLevel)
     }

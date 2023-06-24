@@ -122,7 +122,7 @@ public extension Parra {
             /// - Returns: A set of ids of the sessions that were successfully uploaded.
             @MainActor
             static func bulkSubmitSessions(sessions: [ParraSession]) async throws -> (Set<String>, ParraSessionsResponse?) {
-                guard let tenantId = Parra.config.tenantId else {
+                guard let tenantId = await ParraConfigState.shared.getCurrentState().tenantId else {
                     throw ParraError.notInitialized
                 }
 
@@ -172,7 +172,7 @@ public extension Parra {
         internal enum Push {
             @MainActor
             static func uploadPushToken(token: String) async throws {
-                guard let tenantId = Parra.config.tenantId else {
+                guard let tenantId = await ParraConfigState.shared.getCurrentState().tenantId else {
                     throw ParraError.notInitialized
                 }
 

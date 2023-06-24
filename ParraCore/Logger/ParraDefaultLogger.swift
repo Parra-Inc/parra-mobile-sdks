@@ -12,6 +12,8 @@ internal class ParraDefaultLogger: ParraLogger {
     static let `default` = ParraDefaultLogger()
     static let timestampFormatter = ISO8601DateFormatter()
 
+    var loggerConfig: ParraLoggerConfig = .default
+
     private static let logQueue = DispatchQueue(label: "com.parra.default-logger", qos: .utility)
 
     func log(
@@ -81,37 +83,37 @@ internal class ParraDefaultLogger: ParraLogger {
 #if DEBUG
         var markerComponents: [String] = []
 
-        if Parra.config.loggerConfig.printTimestamps {
+        if loggerConfig.printTimestamps {
             markerComponents.append(timestamp)
         }
 
-        if Parra.config.loggerConfig.printVerbosity {
+        if loggerConfig.printVerbosity {
             markerComponents.append(level.name)
         }
 
 
-        if Parra.config.loggerConfig.printModuleName {
+        if loggerConfig.printModuleName {
             markerComponents.append(module)
         }
 
-        if Parra.config.loggerConfig.printFileName {
+        if loggerConfig.printFileName {
             markerComponents.append(file)
         }
 
-        if Parra.config.loggerConfig.printThread {
+        if loggerConfig.printThread {
             markerComponents.append("🧵 \(queue)")
         }
 
         let formattedMarkers = markerComponents.map { "[\($0)]" }.joined()
 
         var formattedMessage: String
-        if Parra.config.loggerConfig.printVerbositySymbol {
+        if loggerConfig.printVerbositySymbol {
             formattedMessage = " \(level.symbol) \(formattedMarkers) \(baseMessage)"
         } else {
             formattedMessage = "\(formattedMarkers) \(baseMessage)"
         }
 
-        if Parra.config.loggerConfig.printCallsite {
+        if loggerConfig.printCallsite {
             let formattedLocation = createFormattedLocation(fileID: fileID, function: function, line: line)
             formattedMessage = "\(formattedMarkers) \(formattedLocation) \(baseMessage)"
         }

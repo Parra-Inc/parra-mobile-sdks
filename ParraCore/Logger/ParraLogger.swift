@@ -32,7 +32,7 @@ fileprivate func _parraLog(
     function: String,
     line: Int
 ) {
-    Parra.config.loggerConfig.logger.log(
+    ParraDefaultLogger.default.log(
         level: level,
         message: message,
         extraError: extraError,

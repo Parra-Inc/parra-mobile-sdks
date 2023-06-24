@@ -15,8 +15,8 @@ public extension Parra {
     @MainActor
     internal class func deinitialize() async {
         await shared.networkManager.updateAuthenticationProvider(nil)
+        await ParraConfigState.shared.resetState()
 
-        Parra.config = .default
         Parra.unregisterModule(module: shared)
 
         Initializer.isInitialized = false
@@ -69,7 +69,8 @@ public extension Parra {
         newConfig.setTenantId(tenantId)
         newConfig.setApplicationId(applicationId)
 
-        Parra.config = newConfig
+        await ParraConfigState.shared.updateState(newConfig)
+
         Parra.registerModule(module: shared)
 
         Initializer.isInitialized = true

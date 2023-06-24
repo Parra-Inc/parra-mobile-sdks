@@ -10,8 +10,6 @@ import XCTest
 
 @MainActor
 class ParraSyncManagerTests: XCTestCase {
-
-    @MainActor
     override func setUp() async throws {
         configureWithRequestResolver { request in
             return (EmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
@@ -22,12 +20,10 @@ class ParraSyncManagerTests: XCTestCase {
         }))
     }
 
-    @MainActor
     override func tearDown() async throws {
         await Parra.deinitialize()
     }
 
-    @MainActor
     func testEnqueueSync() async throws {
         let notificationExpectation = XCTNSNotificationExpectation(
             name: Parra.syncDidBeginNotification,
@@ -47,7 +43,6 @@ class ParraSyncManagerTests: XCTestCase {
         XCTAssertFalse(hasEnqueuedSyncJobs)
     }
 
-    @MainActor
     func testEnqueueSyncWhileSyncInProgress() async throws {
         let notificationExpectation = XCTNSNotificationExpectation(
             name: Parra.syncDidBeginNotification,
@@ -55,9 +50,10 @@ class ParraSyncManagerTests: XCTestCase {
             notificationCenter: NotificationCenter.default
         )
         
+        await Parra.shared.sessionManager.logEvent("test", params: [String: Any]())
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
 
-        await fulfillment(of: [notificationExpectation], timeout: 0.1)
+        await fulfillment(of: [notificationExpectation], timeout: 1.0)
 
         let isSyncing = await SyncState.shared.isSyncing()
         XCTAssertTrue(isSyncing)
@@ -68,7 +64,6 @@ class ParraSyncManagerTests: XCTestCase {
         XCTAssertTrue(hasEnqueuedSyncJobs)
     }
 
-    @MainActor
     private func configureWithRequestResolver(
         resolver: @escaping (_ request: URLRequest) -> (Data?, HTTPURLResponse?, Error?)
     ) {

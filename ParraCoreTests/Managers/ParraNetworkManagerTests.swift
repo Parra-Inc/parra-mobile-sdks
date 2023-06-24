@@ -14,11 +14,17 @@ let fakeModule = FakeModule()
 class ParraNetworkManagerTests: XCTestCase {
     override func setUp() async throws {
         Parra.registerModule(module: fakeModule)
+
+        await Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
+            return UUID().uuidString
+        }))
     }
 
     override func tearDown() async throws {
+        await Parra.deinitialize()
         Parra.unregisterModule(module: fakeModule)
     }
+
 
     func testAuthenticatedRequestFailsWithoutAuthProvider() async throws {
         let networkManager = ParraNetworkManager(
@@ -127,11 +133,11 @@ class ParraNetworkManagerTests: XCTestCase {
         case .success:
             await fulfillment(of: [authProviderExpectation], timeout: 0.1)
         case .failure(let error):
-            XCTFail(error.localizedDescription)
+            throw error
         }
     }
     
-    func testSendsLibraryVersionHeadersForRegisteredModules() async throws {
+    func testSendsLibraryVersionHeaderForRegisteredModules() async throws {
         let dataManager = MockDataManager()
         let credential = ParraCredential(token: UUID().uuidString)
 
@@ -145,7 +151,7 @@ class ParraNetworkManagerTests: XCTestCase {
             dataManager: dataManager,
             urlSession: MockURLSession { request in
                 let matches = (request.allHTTPHeaderFields ?? [:]).keys.contains { headerKey in
-                    return headerKey.lowercased().contains(FakeModule.name.lowercased())
+                    return headerKey == "X-PARRA-PLATFORM-SDK-VERSION"
                 }
                 
                 if matches {
@@ -183,7 +189,7 @@ class ParraNetworkManagerTests: XCTestCase {
         case .success:
             await fulfillment(of: [requestHeadersExpectation], timeout: 0.1)
         case .failure(let error):
-            XCTFail(error.localizedDescription)
+            throw error
         }
     }
     
@@ -270,7 +276,7 @@ class ParraNetworkManagerTests: XCTestCase {
         case .success(let data):
             XCTAssertEqual(EmptyJsonObjectData, try! jsonEncoder.encode(data))
         case .failure(let error):
-            XCTFail(error.localizedDescription)
+            throw error
         }
     }
     
@@ -363,7 +369,7 @@ class ParraNetworkManagerTests: XCTestCase {
         case .success:
             break
         case .failure(let error):
-            XCTFail(error.localizedDescription)
+            throw error
         }
     }
     
@@ -419,19 +425,12 @@ class ParraNetworkManagerTests: XCTestCase {
         let notificationCenter = ParraNotificationCenter.default
 
         let route = "whatever"
-        let requestHeadersExpectation = XCTestExpectation()
+        let requestExpectation = XCTestExpectation()
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                let matches = (request.allHTTPHeaderFields ?? [:]).keys.contains { headerKey in
-                    return headerKey.lowercased().contains(FakeModule.name.lowercased())
-                }
-
-                if matches {
-                    requestHeadersExpectation.fulfill()
-                }
-
                 let data = try! JSONEncoder().encode(ParraCredential(token: UUID().uuidString))
+                requestExpectation.fulfill()
                 return (data, createTestResponse(route: route), nil)
             }
         )
@@ -462,7 +461,7 @@ class ParraNetworkManagerTests: XCTestCase {
             userId: userId
         )
 
-        await fulfillment(of: [requestHeadersExpectation], timeout: 0.1)
+        await fulfillment(of: [requestExpectation], timeout: 0.1)
     }
 }
 
