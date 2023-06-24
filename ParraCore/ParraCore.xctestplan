@@ -9,7 +9,8 @@
             "key" : "PARRA_LOG_LEVEL",
             "value" : "trace"
           }
-        ]
+        ],
+        "threadSanitizerEnabled" : true
       }
     }
   ],
