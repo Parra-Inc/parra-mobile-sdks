@@ -12,6 +12,8 @@ internal class ParraDefaultLogger: ParraLogger {
     static let `default` = ParraDefaultLogger()
     static let timestampFormatter = ISO8601DateFormatter()
 
+    private static let logQueue = DispatchQueue(label: "com.parra.default-logger", qos: .utility)
+
     func log(
         level: ParraLogLevel,
         message: ParraWrappedLogMessage,
@@ -20,6 +22,41 @@ internal class ParraDefaultLogger: ParraLogger {
         fileID: String,
         function: String,
         line: Int
+    ) {
+        // A serial queue needs to be used to process log events in order to remove races and keep them in order.
+        // This also means that we need to capture thread information before the context switch.
+
+        let currentThread = Thread.current
+        var callStackSymbols: [String]?
+        if level == .fatal {
+            callStackSymbols = Thread.callStackSymbols
+        }
+
+        ParraDefaultLogger.logQueue.async {
+            self.processLog(
+                level: level,
+                message: message,
+                extraError: extraError,
+                extra: extra,
+                fileID: fileID,
+                function: function,
+                line: line,
+                currentThread: currentThread,
+                callStackSymbols: callStackSymbols
+            )
+        }
+    }
+
+    private func processLog(
+        level: ParraLogLevel,
+        message: ParraWrappedLogMessage,
+        extraError: Error?,
+        extra: [String : Any]?,
+        fileID: String,
+        function: String,
+        line: Int,
+        currentThread: Thread,
+        callStackSymbols: [String]?
     ) {
         guard level.isAllowed else {
             return
@@ -34,7 +71,7 @@ internal class ParraDefaultLogger: ParraLogger {
         }
 
         let timestamp = ParraDefaultLogger.timestampFormatter.string(from: Date())
-        let queue = Thread.current.queueName
+        let queue = currentThread.queueName
         let (module, file) = splitFileId(fileId: fileID)
         var extraWithAdditions = extra ?? [:]
         if let extraError {
@@ -82,8 +119,9 @@ internal class ParraDefaultLogger: ParraLogger {
         if !extraWithAdditions.isEmpty {
             formattedMessage.append(contentsOf: " \(extraWithAdditions.debugDescription)")
         }
-        if level == .fatal {
-            let formattedStackTrace = Thread.callStackSymbols.joined(separator: "\n")
+
+        if let callStackSymbols {
+            let formattedStackTrace = callStackSymbols.joined(separator: "\n")
 
             formattedMessage.append(" - Call stack:\n\(formattedStackTrace)")
         }
