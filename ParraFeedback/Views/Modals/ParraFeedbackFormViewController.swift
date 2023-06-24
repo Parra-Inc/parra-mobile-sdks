@@ -76,7 +76,7 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
 
         Task {
             do {
-                try await Parra.API.submitFeedbackForm(with: form.id, data: data)
+                try await Parra.API.Feedback.submitFeedbackForm(with: form.id, data: data)
             } catch let error {
                 parraLogError("Error submitting feedback form: \(form.id)", error)
             }

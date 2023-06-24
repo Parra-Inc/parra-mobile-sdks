@@ -51,7 +51,7 @@ internal actor ParraSessionManager {
 
         var sessionResponse: ParraSessionsResponse?
         do {
-            let (completedSessionIds, nextSessionResponse) = try await Parra.Sessions.bulkSubmitSessions(
+            let (completedSessionIds, nextSessionResponse) = try await Parra.API.Sessions.bulkSubmitSessions(
                 sessions: sessions
             )
 

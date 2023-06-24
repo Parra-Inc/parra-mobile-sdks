@@ -93,7 +93,7 @@ public class ParraFeedback: ParraModule {
     ) async throws -> [ParraCardItem] {
         ensureModuleRegistered()
 
-        let cards = try await Parra.API.getCards(appArea: appArea)
+        let cards = try await Parra.API.Feedback.getCards(appArea: appArea)
         
         // Only keep cards that we don't already have an answer cached for. This isn't something that
         // should ever even happen, but in event that new cards are retreived that include cards we
@@ -120,7 +120,7 @@ public class ParraFeedback: ParraModule {
     ) async throws -> ParraFeedbackFormResponse {
         ensureModuleRegistered()
 
-        let response = try await Parra.API.getFeedbackForm(with: formId)
+        let response = try await Parra.API.Feedback.getFeedbackForm(with: formId)
 
         return response
     }
@@ -197,7 +197,7 @@ public class ParraFeedback: ParraModule {
     }
 
     private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {
-        try await Parra.API.bulkAnswerQuestions(cards: cards)
+        try await Parra.API.Feedback.bulkAnswerQuestions(cards: cards)
     }
 
     private func performAssetPrefetch(for cards: [ParraCardItem]) {
@@ -207,7 +207,7 @@ public class ParraFeedback: ParraModule {
             parraLogDebug("\(assets.count) asset(s) available for prefetching")
 
 
-            await Parra.Assets.performBulkAssetCachingRequest(assets: assets)
+            await Parra.API.Assets.performBulkAssetCachingRequest(assets: assets)
 
             parraLogDebug("Completed prefetching assets")
         }
@@ -305,7 +305,7 @@ public class ParraFeedback: ParraModule {
     }
 
     private func getCardsForPresentation() async throws -> [ParraCardItem] {
-        let cards = try await Parra.API.getCards(appArea: .none)
+        let cards = try await Parra.API.Feedback.getCards(appArea: .none)
 
         var validCards = [ParraCardItem]()
         for card in cards {
