@@ -158,10 +158,8 @@ extension ParraCardView {
         navigationStack.isUserInteractionEnabled = true
         navigationStack.accessibilityIdentifier = "ParraFeedbackNavigation"
         navigationStack.setContentHuggingPriority(.required, for: .vertical)
-
         poweredByButton.isUserInteractionEnabled = true
         poweredByButton.translatesAutoresizingMaskIntoConstraints = false
-        poweredByButton.showsTouchWhenHighlighted = false
         poweredByButton.accessibilityIdentifier = "PoweredByParraButton"
         poweredByButton.setContentHuggingPriority(.init(999),
                                                   for: .vertical)

@@ -41,8 +41,6 @@ internal struct EmptyResponseObject: Codable {}
 
 internal protocol URLSessionType {
     func dataForRequest(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
-    
-    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
 
     var configuration: URLSessionConfiguration { get }
 }
@@ -422,9 +420,9 @@ internal class ParraNetworkManager: NetworkManagerType {
             try await Task.sleep(nanoseconds: 1_000_000_000)
         }
 #endif
-        
+
         let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
-        
+
         // It is documented that for data tasks, response is always actually HTTPURLResponse
         return (data, response as! HTTPURLResponse)
     }

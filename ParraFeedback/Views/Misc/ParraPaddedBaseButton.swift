@@ -23,16 +23,17 @@ internal class ParraPaddedBaseButton: UIButton {
 
     override var intrinsicContentSize: CGSize {
         let baseSize = super.intrinsicContentSize
+        let insets = configuration?.contentInsets ?? .zero
 
         return CGSize(
             width: baseSize.width
-                + titleEdgeInsets.left
-                + titleEdgeInsets.right
+                + insets.leading
+                + insets.trailing
                 + forcedEdgeInsets.left
                 + forcedEdgeInsets.right,
             height: baseSize.height
-                + titleEdgeInsets.top
-                + titleEdgeInsets.bottom
+                + insets.top
+                + insets.bottom
                 + forcedEdgeInsets.top
                 + forcedEdgeInsets.bottom
         )

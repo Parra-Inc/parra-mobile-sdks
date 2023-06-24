@@ -39,7 +39,6 @@ public extension ParraFeedback {
         )
     }
 
-    @available(iOS 15.0, *)
     static func presentCardDrawer(
         with cards: [ParraCardItem],
         fromViewController: UIViewController?,
@@ -79,11 +78,9 @@ public extension ParraFeedback {
             config: config
         )
 
-        if #available(iOS 15.0, *) {
-            if let sheetPresentationController = formViewController.sheetPresentationController {
-                sheetPresentationController.detents = [.large()]
-                sheetPresentationController.prefersGrabberVisible = true
-            }
+        if let sheetPresentationController = formViewController.sheetPresentationController {
+            sheetPresentationController.detents = [.large()]
+            sheetPresentationController.prefersGrabberVisible = true
         }
 
         presentModal(

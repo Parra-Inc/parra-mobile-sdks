@@ -16,13 +16,9 @@ public extension UIViewController {
     static func safeGetKeyWindow() -> UIWindow? {
         let app = UIApplication.shared
 
-        if #available(iOS 15.0, *) {
-            return app
-                .connectedScenes
-                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-                .first
-        }
-
-        return app.windows.first
+        return app
+            .connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+            .first
     }
 }

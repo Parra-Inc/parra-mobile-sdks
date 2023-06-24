@@ -74,7 +74,6 @@ internal class ParraBorderedButton: UIView, ParraConfigurableView {
         layer.borderWidth = 1.5
 
         innerButton.translatesAutoresizingMaskIntoConstraints = false
-        innerButton.showsTouchWhenHighlighted = false
         innerButton.setTitle(title, for: .normal)
         innerButton.addTarget(self,
                               action: #selector(buttonShouldHighlight),

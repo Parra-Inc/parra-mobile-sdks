@@ -95,15 +95,13 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
             ])
         }
 
-        if #available(iOS 15.0, *) {
-            let keyboardAvoidingAnchor = cardView.bottomAnchor.constraint(
-                lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor
-            )
+        let keyboardAvoidingAnchor = cardView.bottomAnchor.constraint(
+            lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor
+        )
 
-            keyboardAvoidingAnchor.priority = .required
+        keyboardAvoidingAnchor.priority = .required
 
-            constraints.append(keyboardAvoidingAnchor)
-        }
+        constraints.append(keyboardAvoidingAnchor)
 
         NSLayoutConstraint.activate(constraints)
 
