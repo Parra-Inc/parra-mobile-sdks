@@ -51,7 +51,6 @@ class MockURLSession: URLSessionType {
         self.dataTaskResolver = dataTaskResolver
     }
 
-    @available(iOS 13.0, *)
     func data(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
         let (data, response, error) = dataTaskResolver(request)
                 

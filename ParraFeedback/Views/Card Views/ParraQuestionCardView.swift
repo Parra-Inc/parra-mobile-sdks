@@ -118,9 +118,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 2
         titleLabel.lineBreakMode = .byWordWrapping
-        if #available(iOS 14.0, *) {
-            titleLabel.lineBreakStrategy = .hangulWordPriority
-        }
+        titleLabel.lineBreakStrategy = .hangulWordPriority
         titleLabel.isUserInteractionEnabled = true
         titleLabel.accessibilityIdentifier = "Parra Question Title Label"
 
