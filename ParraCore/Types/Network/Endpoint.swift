@@ -69,4 +69,29 @@ internal enum ParraEndpoint {
             return false
         }
     }
+
+    var displayName: String {
+        return "\(method.rawValue.uppercased()) \(slug)"
+    }
+
+    var slug: String {
+        switch self {
+        case .custom(let route, _):
+            return route
+        case .getCards:
+            return "cards"
+        case .getFeedbackForm:
+            return "feedback/forms/:formId"
+        case .postSubmitFeedbackForm:
+            return "feedback/forms/:formId/submit"
+        case .postBulkAnswerQuestions:
+            return "bulk/questions/answer"
+        case .postBulkSubmitSessions:
+            return "tenants/:tenantId/sessions"
+        case .postPushTokens:
+            return "tenants/:tenantId/push-tokens"
+        case .postAuthentication:
+            return "tenants/:tenantId/issuers/public/auth/token"
+        }
+    }
 }
