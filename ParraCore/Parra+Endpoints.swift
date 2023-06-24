@@ -180,7 +180,8 @@ public extension Parra {
 
                 let body: [String: String] = [
                     "application_id": applicationId,
-                    "device_token": token
+                    "token": token,
+                    "type": "apns"
                 ]
 
                 let response: AuthenticatedRequestResult<EmptyResponseObject> = await Parra.shared.networkManager.performAuthenticatedRequest(
