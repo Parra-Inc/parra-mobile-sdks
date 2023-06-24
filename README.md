@@ -2,15 +2,15 @@
 
 [![Building and Test Status](https://github.com/Parra-Inc/parra-ios-sdk/actions/workflows/ios.yml/badge.svg?branch=main)](https://github.com/Parra-Inc/parra-ios-sdk/actions/workflows/ios.yml)
 
-| Parra Core                                                           | Parra Feedback                                                               |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Parra Core                                            | Parra Feedback                                                |
+| ----------------------------------------------------- | ------------------------------------------------------------- |
 | ![core](https://img.shields.io/cocoapods/v/ParraCore) | ![feedback](https://img.shields.io/cocoapods/v/ParraFeedback) |
 
 The ParraFeedback iOS SDK allows you to quickly and easily collect valuable product feedback data from your users. We provide customizable UI elements that blend right in with your app's design allowing for a first party look and experience.
 
 ## Requirements
 
-The Parra iOS SDK can be built using Xcode 13.2.1 or later and can be installed in apps targetting iOS 13 or greater.
+The Parra iOS SDK can be built using Xcode 14.3.1 or later and can be installed in apps targetting iOS 15 or greater.
 
 ## Getting Started
 
