@@ -17,8 +17,9 @@ internal enum ParraHeader {
         "\(ParraHeader.parraHeaderPrefix)-\(name)"
     }
 
-    case appLocale
-    case appBundleId
+    case applicationId(String)
+    case applicationLocale
+    case applicationBundleId
     case debug
     case device
     case deviceId
@@ -26,19 +27,19 @@ internal enum ParraHeader {
     case deviceManufacturer
     case deviceTimeZoneAbbreviation
     case deviceTimeZoneOffset
-    case moduleVersion(moduleName: String, module: ParraModule)
     case platform
     case platformAgent
+    case platformSdkVersion
     case platformVersion
 
     var name: String {
         switch self {
-            // TODO: Application id (application in parra dashboard)
-            // TODO: X-PARRA-PLATFORM-SDK-VERSION when we combine parra modules into one
-        case .appLocale:
-            return "APP-LOCALE"
-        case .appBundleId:
-            return "APP-BUNDLE-ID"
+        case .applicationLocale:
+            return "APPLICATION-LOCALE"
+        case .applicationId:
+            return "APPLICATION-ID"
+        case .applicationBundleId:
+            return "APPLICATION-BUNDLE-ID"
         case .debug:
             return "DEBUG"
         case .device:
@@ -53,12 +54,12 @@ internal enum ParraHeader {
             return "DEVICE-TIMEZONE-OFFSET"
         case .deviceManufacturer:
             return "DEVICE-MANUFACTURER"
-        case .moduleVersion(let moduleName, _):
-            return "\(moduleName.uppercased())-VERSION"
         case .platform:
             return "PLATFORM"
         case .platformAgent:
             return "PLATFORM-AGENT"
+        case .platformSdkVersion:
+            return "PLATFORM-SDK-VERSION"
         case .platformVersion:
             return "PLATFORM-VERSION"
         }
@@ -66,9 +67,11 @@ internal enum ParraHeader {
 
     var currentValue: String? {
         switch self {
-        case .appLocale:
+        case .applicationId(let applicationId):
+            return applicationId
+        case .applicationLocale:
             return Locale.preferredLanguages.first
-        case .appBundleId:
+        case .applicationBundleId:
             return Bundle.main.bundleIdentifier
         case .debug:
 #if DEBUG
@@ -88,12 +91,12 @@ internal enum ParraHeader {
             return TimeZone.current.abbreviation()
         case .deviceTimeZoneOffset:
             return String(TimeZone.current.secondsFromGMT())
-        case .moduleVersion(_, let module):
-            return type(of: module).libraryVersion()
         case .platform:
             return UIDevice.current.systemName
         case .platformAgent:
             return "parra-ios-swift"
+        case .platformSdkVersion:
+            return Parra.libraryVersion()
         case .platformVersion:
             return UIDevice.current.systemVersion
         }
@@ -101,8 +104,9 @@ internal enum ParraHeader {
 
     static var trackingHeaderDictionary: [String: String] {
         let keys: [ParraHeader] = [
-            .appLocale, .appBundleId, .debug, .device, .deviceId, .deviceLocale, .deviceManufacturer,
-            .deviceTimeZoneAbbreviation, .deviceTimeZoneOffset, .platform, .platformAgent, .platformVersion
+            .applicationLocale, .applicationBundleId, .debug, .device, .deviceId, .deviceLocale,
+            .deviceManufacturer, .deviceTimeZoneAbbreviation, .deviceTimeZoneOffset, .platform,
+            .platformAgent, .platformSdkVersion, .platformVersion
         ]
 
         var headers = [String: String]()
@@ -110,17 +114,6 @@ internal enum ParraHeader {
         for key in keys {
             if let value = key.currentValue {
                 headers[key.prefixedHeaderName] = value
-            }
-        }
-
-        for (moduleName, module) in Parra.registeredModules {
-            let header = ParraHeader.moduleVersion(
-                moduleName: moduleName,
-                module: module
-            )
-
-            if let value = header.currentValue {
-                headers[header.prefixedHeaderName] = value
             }
         }
 

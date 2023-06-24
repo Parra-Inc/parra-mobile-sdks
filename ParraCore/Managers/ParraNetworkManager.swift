@@ -138,6 +138,10 @@ internal class ParraNetworkManager: NetworkManagerType {
         parraLogTrace("Performing authenticated request to route: \(method.rawValue) \(route)")
 
         do {
+            guard let applicationId = Parra.config.applicationId else {
+                throw ParraError.notInitialized
+            }
+
             let url = Parra.Constant.parraApiRoot.appendingPathComponent(route)
             guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
                 throw ParraError.custom("Failed to create components for url: \(url)", nil)
@@ -159,14 +163,10 @@ internal class ParraNetworkManager: NetworkManagerType {
             )
 
             request.httpMethod = method.rawValue
-            request.setValue("application/json", forHTTPHeaderField: .accept)
-
-            addTrackingHeaders(toRequest: &request, for: endpoint)
-
             if method.allowsBody {
                 request.httpBody = try jsonEncoder.encode(body)
-                request.setValue("application/json", forHTTPHeaderField: .contentType)
             }
+            addHeaders(to: &request, endpoint: endpoint, for: applicationId)
 
             let (result, attributes) = await performRequest(
                 request: request,
@@ -304,6 +304,7 @@ internal class ParraNetworkManager: NetworkManagerType {
 
     func performPublicApiKeyAuthenticationRequest(
         forTentant tenantId: String,
+        applicationId: String,
         apiKeyId: String,
         userId: String
     ) async throws -> String {
@@ -318,8 +319,8 @@ internal class ParraNetworkManager: NetworkManagerType {
         guard let authData = ("api_key:" + apiKeyId).data(using: .utf8)?.base64EncodedString() else {
             throw ParraError.custom("Unable to encode API key as NSData", nil)
         }
-        
-        addTrackingHeaders(toRequest: &request, for: endpoint)
+
+        addHeaders(to: &request, endpoint: endpoint, for: applicationId)
         request.setValue("Basic \(authData)", forHTTPHeaderField: .authorization)
 
         let (data, response) = try await performAsyncDataDask(request: request)
@@ -427,6 +428,23 @@ internal class ParraNetworkManager: NetworkManagerType {
         return (data, response as! HTTPURLResponse)
     }
 
+    private func addHeaders(
+        to request: inout URLRequest,
+        endpoint: ParraEndpoint,
+        for applicationId: String
+    ) {
+        request.setValue("application/json", forHTTPHeaderField: .accept)
+        request.setValue(for: .applicationId(applicationId))
+
+        if endpoint.method.allowsBody {
+            request.setValue("application/json", forHTTPHeaderField: .contentType)
+        }
+
+        addTrackingHeaders(toRequest: &request, for: endpoint)
+
+        parraLogTrace("Finished attaching request headers for endpoint: \(endpoint.displayName)", request.allHTTPHeaderFields ?? [:])
+    }
+
     private func addTrackingHeaders(
         toRequest request: inout URLRequest,
         for endpoint: ParraEndpoint
@@ -437,7 +455,7 @@ internal class ParraNetworkManager: NetworkManagerType {
 
         let headers = ParraHeader.trackingHeaderDictionary
 
-        parraLogTrace("Adding extra tracking headers to tracking enabled endpoint: \(endpoint.displayName)", headers)
+        parraLogTrace("Adding extra tracking headers to tracking enabled endpoint: \(endpoint.displayName)")
 
         for (header, value) in headers {
             request.setValue(value, forHTTPHeaderField: header)
