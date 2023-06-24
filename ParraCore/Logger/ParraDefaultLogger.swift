@@ -12,19 +12,34 @@ internal class ParraDefaultLogger: ParraLogger {
     static let `default` = ParraDefaultLogger()
     static let timestampFormatter = ISO8601DateFormatter()
 
-    func log(level: ParraLogLevel,
-             message: String,
-             extra: [String : Any]?,
-             fileID: String,
-             function: String,
-             line: Int) {
-
+    func log(
+        level: ParraLogLevel,
+        message: ParraWrappedLogMessage,
+        extraError: Error?,
+        extra: [String : Any]?,
+        fileID: String,
+        function: String,
+        line: Int
+    ) {
         guard level.isAllowed else {
             return
         }
 
+        let baseMessage: String
+        switch message {
+        case .string(let messageProvider):
+            baseMessage = messageProvider()
+        case .error(let errorProvider):
+            baseMessage = extractMessage(from: errorProvider())
+        }
+
         let timestamp = ParraDefaultLogger.timestampFormatter.string(from: Date())
         let queue = Thread.current.queueName
+        let (module, file) = splitFileId(fileId: fileID)
+        var extraWithAdditions = extra ?? [:]
+        if let extraError {
+            extraWithAdditions["errorDescription"] = extractMessage(from: extraError)
+        }
 
 #if DEBUG
         var markerComponents: [String] = []
@@ -37,7 +52,6 @@ internal class ParraDefaultLogger: ParraLogger {
             markerComponents.append(level.name)
         }
 
-        let (module, file) = splitFileId(fileId: fileID)
 
         if Parra.config.loggerConfig.printModuleName {
             markerComponents.append(module)
@@ -55,19 +69,18 @@ internal class ParraDefaultLogger: ParraLogger {
 
         var formattedMessage: String
         if Parra.config.loggerConfig.printVerbositySymbol {
-            formattedMessage = " \(level.symbol) \(formattedMarkers) \(message)"
+            formattedMessage = " \(level.symbol) \(formattedMarkers) \(baseMessage)"
         } else {
-            formattedMessage = "\(formattedMarkers) \(message)"
+            formattedMessage = "\(formattedMarkers) \(baseMessage)"
         }
 
         if Parra.config.loggerConfig.printCallsite {
             let formattedLocation = createFormattedLocation(fileID: fileID, function: function, line: line)
-            formattedMessage = "\(formattedMarkers) \(formattedLocation) \(message)"
+            formattedMessage = "\(formattedMarkers) \(formattedLocation) \(baseMessage)"
         }
 
-        let extraOrDefault = extra ?? [:]
-        if !extraOrDefault.isEmpty {
-            formattedMessage.append(contentsOf: " \(extraOrDefault.debugDescription)")
+        if !extraWithAdditions.isEmpty {
+            formattedMessage.append(contentsOf: " \(extraWithAdditions.debugDescription)")
         }
         if level == .fatal {
             let formattedStackTrace = Thread.callStackSymbols.joined(separator: "\n")
@@ -77,17 +90,15 @@ internal class ParraDefaultLogger: ParraLogger {
 
         print(formattedMessage)
 #else
-        let (module, file) = splitFileId(fileId: fileID)
-
         var params = [String: Any]()
-        params[ParraLoggerConfig.Constant.logEventMessageKey] = message
+        params[ParraLoggerConfig.Constant.logEventMessageKey] = baseMessage
         params[ParraLoggerConfig.Constant.logEventLevelKey] = level.name
         params[ParraLoggerConfig.Constant.logEventTimestampKey] = timestamp
         params[ParraLoggerConfig.Constant.logEventFileKey] = file
         params[ParraLoggerConfig.Constant.logEventModuleKey] = module
         params[ParraLoggerConfig.Constant.logEventThreadKey] = queue
-        if !extra.isEmpty {
-            params[ParraLoggerConfig.Constant.logEventExtraKey] = extra
+        if !extraWithAdditions.isEmpty {
+            params[ParraLoggerConfig.Constant.logEventExtraKey] = extraWithAdditions
         }
         if level >= .error {
             params[ParraLoggerConfig.Constant.logEventCallStackKey] = Thread.callStackSymbols
@@ -97,6 +108,21 @@ internal class ParraDefaultLogger: ParraLogger {
 
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.log, params: params)
 #endif
+    }
+
+    private func extractMessage(from error: Error) -> String {
+        if let parraError = error as? ParraError {
+            return parraError.errorDescription
+        } else {
+            // Error is always bridged to NSError, can't downcast to check.
+            if type(of: error) is NSError.Type {
+                let nsError = error as NSError
+
+                return "Error domain: \(nsError.domain), code: \(nsError.code), description: \(nsError.localizedDescription)"
+            } else {
+                return String(reflecting: error)
+            }
+        }
     }
 
     private func splitFileId(fileId: String) -> (module: String, fileName: String) {

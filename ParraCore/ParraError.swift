@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ParraError: LocalizedError {
+public enum ParraError: LocalizedError, CustomStringConvertible {
     case message(String)
     case custom(String, Error?)
     case notInitialized
@@ -40,5 +40,9 @@ public enum ParraError: LocalizedError {
         case .unknown:
             return "An unknown error occurred."
         }
+    }
+
+    public var description: String {
+        errorDescription
     }
 }
