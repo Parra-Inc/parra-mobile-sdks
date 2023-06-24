@@ -13,7 +13,7 @@ import AdSupport
 internal enum ParraHeader {
     static let parraHeaderPrefix = "X-PARRA"
 
-    private var prefixedHeaderName: String {
+    var prefixedName: String {
         "\(ParraHeader.parraHeaderPrefix)-\(name)"
     }
 
@@ -32,7 +32,7 @@ internal enum ParraHeader {
     case platformSdkVersion
     case platformVersion
 
-    var name: String {
+    private var name: String {
         switch self {
         case .applicationLocale:
             return "APPLICATION-LOCALE"
@@ -113,7 +113,7 @@ internal enum ParraHeader {
 
         for key in keys {
             if let value = key.currentValue {
-                headers[key.prefixedHeaderName] = value
+                headers[key.prefixedName] = value
             }
         }
 
