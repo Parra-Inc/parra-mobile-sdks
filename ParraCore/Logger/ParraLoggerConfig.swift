@@ -55,6 +55,7 @@ public struct ParraLoggerConfig {
         static let logEventFileKey = "\(logEventPrefix)file"
         static let logEventModuleKey = "\(logEventPrefix)module"
         static let logEventThreadKey = "\(logEventPrefix)thread"
+        static let logEventThreadIdKey = "\(logEventPrefix)threadId"
         static let logEventExtraKey = "\(logEventPrefix)extra"
         static let logEventCallStackKey = "\(logEventPrefix)stack"
     }

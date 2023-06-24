@@ -97,6 +97,7 @@ internal class ParraDefaultLogger: ParraLogger {
         params[ParraLoggerConfig.Constant.logEventFileKey] = file
         params[ParraLoggerConfig.Constant.logEventModuleKey] = module
         params[ParraLoggerConfig.Constant.logEventThreadKey] = queue
+        params[ParraLoggerConfig.Constant.logEventThreadIdKey] = String(Thread.current.threadId)
         if !extraWithAdditions.isEmpty {
             params[ParraLoggerConfig.Constant.logEventExtraKey] = extraWithAdditions
         }
