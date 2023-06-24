@@ -12,12 +12,24 @@ public extension Parra {
         internal static var isInitialized = false
     }
 
-    /// Checks whether an authentication provider has already been set.
     @MainActor
-    class func hasAuthenticationProvider() -> Bool {
-        return shared.networkManager.authenticationProvider != nil
+    internal class func deinitialize() async {
+        await shared.networkManager.updateAuthenticationProvider(nil)
+
+        Parra.config = .default
+        Parra.unregisterModule(module: shared)
+
+        Initializer.isInitialized = false
+
+        await shared.sessionManager.endSession()
     }
 
+    class func initialize(config: ParraConfiguration = .default,
+                          authProvider: ParraAuthenticationProviderType) {
+        Task { @MainActor in
+            await initialize(config: config, authProvider: authProvider)
+        }
+    }
     /// Initializes the Parra SDK using the provided configuration and auth provider. This method should be invoked as
     /// early as possible inside of applicationDidFinishLaunchingWithOptions.
     /// - Parameters:
@@ -26,7 +38,7 @@ public extension Parra {
     ///    expired and Parra needs to refresh the authentication state for your user.
     @MainActor
     class func initialize(config: ParraConfiguration = .default,
-                          authProvider: ParraAuthenticationProviderType) {
+                          authProvider: ParraAuthenticationProviderType) async {
         if Initializer.isInitialized {
             parraLogWarn("Parra.initialize called more than once. Subsequent calls are ignored")
 
@@ -53,7 +65,7 @@ public extension Parra {
             }
         }
 
-        shared.networkManager.updateAuthenticationProvider(authenticationProvider)
+        await shared.networkManager.updateAuthenticationProvider(authenticationProvider)
         newConfig.setTenantId(tenantId)
         newConfig.setApplicationId(applicationId)
 
@@ -62,18 +74,16 @@ public extension Parra {
 
         Initializer.isInitialized = true
 
-        Task {
-            // Generally nothing that can generate events should happen before this call. Even logs
-            await shared.sessionManager.createSessionIfNotExists()
-            parraLogInfo("Parra SDK Initialized")
+        // Generally nothing that can generate events should happen before this call. Even logs
+        await shared.sessionManager.createSessionIfNotExists()
+        parraLogInfo("Parra SDK Initialized")
 
-            do {
-                let _ = try await shared.networkManager.refreshAuthentication()
+        do {
+            let _ = try await shared.networkManager.refreshAuthentication()
 
-                await performPoshAuthRefreshActions()
-            } catch let error {
-                parraLogError("Authentication handler in call to Parra.initialize failed", error)
-            }
+            await performPoshAuthRefreshActions()
+        } catch let error {
+            parraLogError("Authentication handler in call to Parra.initialize failed", error)
         }
     }
 
@@ -126,6 +136,7 @@ public extension Parra {
 
                     let result = try await networkManager.performPublicApiKeyAuthenticationRequest(
                         forTentant: tenantId,
+                        applicationId: applicationId,
                         apiKeyId: apiKeyId,
                         userId: userId
                     )

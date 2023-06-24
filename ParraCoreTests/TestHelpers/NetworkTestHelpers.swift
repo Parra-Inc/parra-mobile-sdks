@@ -26,6 +26,7 @@ func createTestResponse(route: String,
 func configureWithRequestResolver(
     resolver: @escaping (_ request: URLRequest) -> (Data?, HTTPURLResponse?, Error?)
 ) {
+    let notificationCenter = ParraNotificationCenter.default
     let dataManager = ParraDataManager()
     let networkManager = ParraNetworkManager(
         dataManager: dataManager,
@@ -39,13 +40,15 @@ func configureWithRequestResolver(
 
     let syncManager = ParraSyncManager(
         networkManager: networkManager,
-        sessionManager: sessionManager
+        sessionManager: sessionManager,
+        notificationCenter: notificationCenter
     )
 
     Parra.shared = Parra(
         dataManager: dataManager,
         syncManager: syncManager,
         sessionManager: sessionManager,
-        networkManager: networkManager
+        networkManager: networkManager,
+        notificationCenter: notificationCenter
     )
 }

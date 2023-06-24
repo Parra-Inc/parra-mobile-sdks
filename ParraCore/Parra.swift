@@ -28,6 +28,7 @@ public class Parra: ParraModule {
         configuration.urlCache = cache
         configuration.requestCachePolicy = .returnCacheDataElseLoad
 
+        let notificationCenter = ParraNotificationCenter.default
         let urlSession = URLSession(configuration: configuration)
         let dataManager = ParraDataManager()
 
@@ -43,14 +44,16 @@ public class Parra: ParraModule {
 
         let syncManager = ParraSyncManager(
             networkManager: networkManager,
-            sessionManager: sessionManager
+            sessionManager: sessionManager,
+            notificationCenter: notificationCenter
         )
         
         return Parra(
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
-            networkManager: networkManager
+            networkManager: networkManager,
+            notificationCenter: notificationCenter
         )
     }()
     
@@ -62,16 +65,21 @@ public class Parra: ParraModule {
     internal let syncManager: ParraSyncManager
     internal let sessionManager: ParraSessionManager
     internal let networkManager: ParraNetworkManager
+    internal let notificationCenter: NotificationCenterType
         
-    internal init(dataManager: ParraDataManager,
-                  syncManager: ParraSyncManager,
-                  sessionManager: ParraSessionManager,
-                  networkManager: ParraNetworkManager) {
+    internal init(
+        dataManager: ParraDataManager,
+        syncManager: ParraSyncManager,
+        sessionManager: ParraSessionManager,
+        networkManager: ParraNetworkManager,
+        notificationCenter: NotificationCenterType
+    ) {
         
         self.dataManager = dataManager
         self.syncManager = syncManager
         self.sessionManager = sessionManager
         self.networkManager = networkManager
+        self.notificationCenter = notificationCenter
         
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
     }
@@ -110,6 +118,11 @@ public class Parra: ParraModule {
     /// to allow the Core module to identify which other Parra modules have been installed.
     public static func registerModule(module: ParraModule) {
         registeredModules[type(of: module).name] = module
+    }
+
+    // Mostly just a test helper
+    internal static func unregisterModule(module: ParraModule) {
+        registeredModules.removeValue(forKey: type(of: module).name)
     }
     
     /// Checks whether the provided module has already been registered with ParraCore

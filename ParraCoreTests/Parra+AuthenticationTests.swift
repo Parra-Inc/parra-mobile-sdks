@@ -16,20 +16,22 @@ class ParraAuthenticationTests: XCTestCase {
         Parra.Initializer.isInitialized = false
 
         configureWithRequestResolver { request in
-            return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
+            return (EmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
         }
     }
     
     @MainActor
     func testInitWithDefaultAuthProvider() async throws {
         let token = UUID().uuidString
-        XCTAssertNil(Parra.shared.networkManager.authenticationProvider)
+        let startAuthProvider = await Parra.shared.networkManager.getAuthenticationProvider()
+        XCTAssertNil(startAuthProvider)
 
-        Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
+        await Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
             return token
         }))
 
-        XCTAssertNotNil(Parra.shared.networkManager.authenticationProvider)
+        let endAuthProvider = await Parra.shared.networkManager.getAuthenticationProvider()
+        XCTAssertNotNil(endAuthProvider)
     }
 
     @MainActor
@@ -37,6 +39,8 @@ class ParraAuthenticationTests: XCTestCase {
         let dataManager = ParraDataManager()
         let tenantId = UUID().uuidString
         let apiKeyId = UUID().uuidString
+
+        let notificationCenter = ParraNotificationCenter.default
 
         let route = "tenants/\(tenantId)/issuers/public/auth/token"
         let networkManager = ParraNetworkManager(
@@ -54,37 +58,39 @@ class ParraAuthenticationTests: XCTestCase {
 
         let syncManager = ParraSyncManager(
             networkManager: networkManager,
-            sessionManager: sessionManager
+            sessionManager: sessionManager,
+            notificationCenter: notificationCenter
         )
 
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
-            networkManager: networkManager
+            networkManager: networkManager,
+            notificationCenter: notificationCenter
         )
 
         let authProviderExpectation = XCTestExpectation()
 
-        Parra.initialize(
+        await Parra.initialize(
             authProvider: .publicKey(tenantId: tenantId, applicationId: "myapp", apiKeyId: apiKeyId, userIdProvider: {
                 authProviderExpectation.fulfill()
                 return UUID().uuidString
             }))
 
-        let _ = try await Parra.shared.networkManager.authenticationProvider!()
+        let _ = try await Parra.shared.networkManager.getAuthenticationProvider()!()
 
         await fulfillment(of: [authProviderExpectation], timeout: 0.1)
     }
     
     @MainActor
     func testInitWithDefaultAuthProviderFailure() async throws {
-        Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
+        await Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
             throw URLError(.badServerResponse)
         }))
 
         do {
-            let _ = try await Parra.shared.networkManager.authenticationProvider!()
+            let _ = try await Parra.shared.networkManager.getAuthenticationProvider()!()
 
             XCTFail()
         } catch {}
@@ -92,12 +98,12 @@ class ParraAuthenticationTests: XCTestCase {
 
     @MainActor
     func testInitWithPublicKeyAuthProviderFailure() async throws {
-        Parra.initialize(authProvider: .publicKey(tenantId: "", applicationId: "myapp", apiKeyId: "", userIdProvider: {
+        await Parra.initialize(authProvider: .publicKey(tenantId: "", applicationId: "myapp", apiKeyId: "", userIdProvider: {
             throw URLError(.badServerResponse)
         }))
 
         do {
-            let _ = try await Parra.shared.networkManager.authenticationProvider!()
+            let _ = try await Parra.shared.networkManager.getAuthenticationProvider()!()
 
             XCTFail()
         } catch {}

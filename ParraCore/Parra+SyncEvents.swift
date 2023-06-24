@@ -19,35 +19,57 @@ internal extension Parra {
 
         Parra.hasStartedEventObservers = true
 
-        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(self.applicationDidBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
 
-        notificationCenter.addObserver(self,
-                                       selector: #selector(self.applicationDidBecomeActive),
-                                       name: UIApplication.didBecomeActiveNotification,
-                                       object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(self.applicationWillResignActive),
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
 
-        notificationCenter.addObserver(self, selector: #selector(self.applicationWillResignActive),
-                                       name: UIApplication.willResignActiveNotification,
-                                       object: nil)
+        notificationCenter.addObserver(
+            self,
 
-        notificationCenter.addObserver(self, selector: #selector(self.applicationDidEnterBackground),
-                                       name: UIApplication.didEnterBackgroundNotification,
-                                       object: nil)
+            selector: #selector(self.applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
 
-        notificationCenter.addObserver(self, selector: #selector(self.triggerEventualSyncFromNotification),
-                                       name: UIApplication.significantTimeChangeNotification,
-                                       object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(self.triggerEventualSyncFromNotification),
+            name: UIApplication.significantTimeChangeNotification,
+            object: nil
+        )
     }
     
     func removeEventObservers() {
-        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIApplication.significantTimeChangeNotification,
-                                                  object: nil)
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.significantTimeChangeNotification,
+            object: nil
+        )
     }
 
     @MainActor
@@ -57,7 +79,7 @@ internal extension Parra {
         }
 
         if let taskId = Parra.backgroundTaskId,
-            let app = notification.object as? UIApplication {
+           let app = notification.object as? UIApplication {
 
             app.endBackgroundTask(taskId)
         }

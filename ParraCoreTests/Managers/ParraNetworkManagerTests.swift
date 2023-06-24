@@ -8,8 +8,18 @@
 import XCTest
 @testable import ParraCore
 
+let fakeModule = FakeModule()
+
 @MainActor
 class ParraNetworkManagerTests: XCTestCase {
+    override func setUp() async throws {
+        Parra.registerModule(module: fakeModule)
+    }
+
+    override func tearDown() async throws {
+        Parra.unregisterModule(module: fakeModule)
+    }
+
     func testAuthenticatedRequestFailsWithoutAuthProvider() async throws {
         let networkManager = ParraNetworkManager(
             dataManager: MockDataManager(),
@@ -38,12 +48,12 @@ class ParraNetworkManagerTests: XCTestCase {
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                return (kEmptyJsonObjectData, createTestResponse(route: route), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: route), nil)
             }
         )
         
         let authProviderExpectation = XCTestExpectation()
-        networkManager.updateAuthenticationProvider { () async throws -> String in
+        await networkManager.updateAuthenticationProvider { () async throws -> String in
             authProviderExpectation.fulfill()
             
             return token
@@ -65,11 +75,11 @@ class ParraNetworkManagerTests: XCTestCase {
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                return (kEmptyJsonObjectData, createTestResponse(route: route), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: route), nil)
             }
         )
         
-        networkManager.updateAuthenticationProvider { () async throws -> String in
+        await networkManager.updateAuthenticationProvider { () async throws -> String in
             throw URLError(.cannotLoadFromNetwork)
         }
         
@@ -97,13 +107,13 @@ class ParraNetworkManagerTests: XCTestCase {
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                return (kEmptyJsonObjectData, createTestResponse(route: route), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: route), nil)
             }
         )
         
         let authProviderExpectation = XCTestExpectation()
         authProviderExpectation.isInverted = true
-        networkManager.updateAuthenticationProvider { () async throws -> String in
+        await networkManager.updateAuthenticationProvider { () async throws -> String in
             authProviderExpectation.fulfill()
             
             return token
@@ -127,6 +137,8 @@ class ParraNetworkManagerTests: XCTestCase {
 
         await dataManager.updateCredential(credential: credential)
 
+        let notificationCenter = ParraNotificationCenter.default
+
         let endpoint = ParraEndpoint.postBulkSubmitSessions(tenantId: "whatever")
         let requestHeadersExpectation = XCTestExpectation()
         let networkManager = ParraNetworkManager(
@@ -140,7 +152,7 @@ class ParraNetworkManagerTests: XCTestCase {
                     requestHeadersExpectation.fulfill()
                 }
                 
-                return (kEmptyJsonObjectData, createTestResponse(route: endpoint.route), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: endpoint.route), nil)
             }
         )
 
@@ -151,17 +163,17 @@ class ParraNetworkManagerTests: XCTestCase {
 
         let syncManager = ParraSyncManager(
             networkManager: networkManager,
-            sessionManager: sessionManager
+            sessionManager: sessionManager,
+            notificationCenter: notificationCenter
         )
 
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
-            networkManager: networkManager
+            networkManager: networkManager,
+            notificationCenter: notificationCenter
         )
-        
-        Parra.registerModule(module: FakeModule())
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> = await networkManager.performAuthenticatedRequest(
             endpoint: endpoint
@@ -191,7 +203,7 @@ class ParraNetworkManagerTests: XCTestCase {
                     requestBodyExpectation.fulfill()
                 }
 
-                return (kEmptyJsonObjectData, createTestResponse(route: route), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: route), nil)
             },
             jsonEncoder: jsonEncoder
         )
@@ -221,7 +233,7 @@ class ParraNetworkManagerTests: XCTestCase {
                     requestBodyExpectation.fulfill()
                 }
 
-                return (kEmptyJsonObjectData, createTestResponse(route: route), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: route), nil)
             },
             jsonEncoder: jsonEncoder
         )
@@ -256,7 +268,7 @@ class ParraNetworkManagerTests: XCTestCase {
 
         switch response.result {
         case .success(let data):
-            XCTAssertEqual(kEmptyJsonObjectData, try! jsonEncoder.encode(data))
+            XCTAssertEqual(EmptyJsonObjectData, try! jsonEncoder.encode(data))
         case .failure(let error):
             XCTFail(error.localizedDescription)
         }
@@ -271,7 +283,7 @@ class ParraNetworkManagerTests: XCTestCase {
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                return (kEmptyJsonObjectData, createTestResponse(route: route, statusCode: 400), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: route, statusCode: 400), nil)
             }
         )
 
@@ -297,7 +309,7 @@ class ParraNetworkManagerTests: XCTestCase {
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
             urlSession: MockURLSession { request in
-                return (kEmptyJsonObjectData, createTestResponse(route: route, statusCode: 500), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: route, statusCode: 500), nil)
             }
         )
 
@@ -329,15 +341,15 @@ class ParraNetworkManagerTests: XCTestCase {
                 if isFirstRequest {
                     isFirstRequest = false
 
-                    return (kEmptyJsonObjectData, createTestResponse(route: route, statusCode: 401), nil)
+                    return (EmptyJsonObjectData, createTestResponse(route: route, statusCode: 401), nil)
                 }
 
-                return (kEmptyJsonObjectData, createTestResponse(route: route, statusCode: 200), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: route, statusCode: 200), nil)
             }
         )
         
         let authProviderExpectation = XCTestExpectation()
-        networkManager.updateAuthenticationProvider { () async throws -> String in
+        await networkManager.updateAuthenticationProvider { () async throws -> String in
             authProviderExpectation.fulfill()
             
             return token
@@ -370,15 +382,15 @@ class ParraNetworkManagerTests: XCTestCase {
                 if isFirstRequest {
                     isFirstRequest = false
 
-                    return (kEmptyJsonObjectData, createTestResponse(route: route, statusCode: 401), nil)
+                    return (EmptyJsonObjectData, createTestResponse(route: route, statusCode: 401), nil)
                 }
 
-                return (kEmptyJsonObjectData, createTestResponse(route: route, statusCode: 400), nil)
+                return (EmptyJsonObjectData, createTestResponse(route: route, statusCode: 400), nil)
             }
         )
         
         let authProviderExpectation = XCTestExpectation()
-        networkManager.updateAuthenticationProvider { () async throws -> String in
+        await networkManager.updateAuthenticationProvider { () async throws -> String in
             authProviderExpectation.fulfill()
             
             return token
@@ -399,10 +411,12 @@ class ParraNetworkManagerTests: XCTestCase {
 
     func testPublicApiKeyAuthentication() async throws {
         let tenantId = UUID().uuidString
+        let applicationId = UUID().uuidString
         let apiKeyId = UUID().uuidString
         let userId = UUID().uuidString
 
         let dataManager = MockDataManager()
+        let notificationCenter = ParraNotificationCenter.default
 
         let route = "whatever"
         let requestHeadersExpectation = XCTestExpectation()
@@ -429,20 +443,21 @@ class ParraNetworkManagerTests: XCTestCase {
 
         let syncManager = ParraSyncManager(
             networkManager: networkManager,
-            sessionManager: sessionManager
+            sessionManager: sessionManager,
+            notificationCenter: notificationCenter
         )
 
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
-            networkManager: networkManager
+            networkManager: networkManager,
+            notificationCenter: notificationCenter
         )
-
-        Parra.registerModule(module: FakeModule())
 
         let _ = try await networkManager.performPublicApiKeyAuthenticationRequest(
             forTentant: tenantId,
+            applicationId: applicationId,
             apiKeyId: apiKeyId,
             userId: userId
         )

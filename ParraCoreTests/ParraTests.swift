@@ -24,32 +24,32 @@ class FakeModule: ParraModule {
 class ParraCoreTests: XCTestCase {
     override func setUp() async throws {
         configureWithRequestResolver { request in
-            return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
+            return (EmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
         }
     }
 
     override func tearDown() async throws {
-        Parra.Initializer.isInitialized = false
+        await Parra.deinitialize()
     }
 
     func testModulesCanBeRegistered() throws {
         let module = FakeModule()
 
         Parra.registerModule(module: module)
-        
+
         XCTAssertTrue(Parra.hasRegisteredModule(module: module))
         XCTAssert(Parra.registeredModules.keys.contains(FakeModule.name))
     }
-    
+
     func testModuleRegistrationIsDeduplicated() throws {
         let module = FakeModule()
-        
+
         Parra.registerModule(module: module)
         Parra.registerModule(module: module)
 
         XCTAssertTrue(Parra.hasRegisteredModule(module: module))
         XCTAssert(Parra.registeredModules.keys.contains(FakeModule.name))
-        XCTAssertEqual(Parra.registeredModules.count, 2)
+        XCTAssertEqual(Parra.registeredModules.count, 1)
     }
     
     func testLogout() async throws {
@@ -63,21 +63,21 @@ class ParraCoreTests: XCTestCase {
         let exp  = expectation(forNotification: Parra.syncDidBeginNotification, object: nil)
         exp.isInverted = true
 
-        Parra.triggerSync {}
+        await Parra.triggerSync()
 
         await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testTriggerSync() async throws {
-        Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
+        await Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
             return UUID().uuidString
         }))
 
         let notificationExpectation = XCTNSNotificationExpectation(
-            name: Parra.syncDidBeginNotification,
-            object: nil,
-            notificationCenter: NotificationCenter.default
+            name: Parra.syncDidBeginNotification
         )
+        notificationExpectation.expectedFulfillmentCount = 1
+        notificationExpectation.assertForOverFulfill = true
 
         await Parra.shared.sessionManager.logEvent("test", params: [String: Any]())
         await Parra.triggerSync()

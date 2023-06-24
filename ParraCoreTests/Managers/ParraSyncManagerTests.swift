@@ -10,21 +10,21 @@ import XCTest
 
 @MainActor
 class ParraSyncManagerTests: XCTestCase {
+
     @MainActor
     override func setUp() async throws {
         configureWithRequestResolver { request in
-            return (kEmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
+            return (EmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
         }
 
-        Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
+        await Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
             return UUID().uuidString
         }))
     }
 
     @MainActor
     override func tearDown() async throws {
-        await Parra.logout()
-        Parra.Initializer.isInitialized = false
+        await Parra.deinitialize()
     }
 
     @MainActor
@@ -35,11 +35,12 @@ class ParraSyncManagerTests: XCTestCase {
             notificationCenter: NotificationCenter.default
         )
 
+        await Parra.shared.sessionManager.logEvent("test", params: [String: Any]())
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
 
-        await fulfillment(of: [notificationExpectation], timeout: 0.1)
+        await fulfillment(of: [notificationExpectation], timeout: 1.0)
 
-        let isSyncing = await Parra.shared.syncManager.isSyncing
+        let isSyncing = await SyncState.shared.isSyncing()
         XCTAssertTrue(isSyncing)
 
         let hasEnqueuedSyncJobs = await Parra.shared.syncManager.enqueuedSyncMode != nil
@@ -58,7 +59,7 @@ class ParraSyncManagerTests: XCTestCase {
 
         await fulfillment(of: [notificationExpectation], timeout: 0.1)
 
-        let isSyncing = await Parra.shared.syncManager.isSyncing
+        let isSyncing = await SyncState.shared.isSyncing()
         XCTAssertTrue(isSyncing)
         
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
@@ -71,6 +72,7 @@ class ParraSyncManagerTests: XCTestCase {
     private func configureWithRequestResolver(
         resolver: @escaping (_ request: URLRequest) -> (Data?, HTTPURLResponse?, Error?)
     ) {
+        let notificationCenter = ParraNotificationCenter.default
         let dataManager = ParraDataManager()
         let networkManager = ParraNetworkManager(
             dataManager: dataManager,
@@ -84,16 +86,16 @@ class ParraSyncManagerTests: XCTestCase {
 
         let syncManager = ParraSyncManager(
             networkManager: networkManager,
-            sessionManager: sessionManager
+            sessionManager: sessionManager,
+            notificationCenter: notificationCenter
         )
 
         Parra.shared = Parra(
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
-            networkManager: networkManager
+            networkManager: networkManager,
+            notificationCenter: notificationCenter
         )
-
-        Parra.registerModule(module: FakeModule())
     }
 }

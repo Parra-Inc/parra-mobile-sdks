@@ -8,73 +8,36 @@
 import Foundation
 import UIKit
 
-public struct AuthenticatedRequestAttributeOptions: OptionSet {
-    public let rawValue: Int
-
-    public static let requiredReauthentication = AuthenticatedRequestAttributeOptions(rawValue: 1 << 0)
-    public static let requiredRetry = AuthenticatedRequestAttributeOptions(rawValue: 1 << 1)
-    public static let exceededRetryLimit = AuthenticatedRequestAttributeOptions(rawValue: 1 << 2)
-
-    public init(rawValue: Int) {
-        self.rawValue = rawValue
-    }
-}
-
-public struct AuthenticatedRequestResult<T: Decodable> {
-    public let result: Result<T, Error>
-    public let attributes: AuthenticatedRequestAttributeOptions
-
-    init(result: Result<T, Error>,
-         responseAttributes: AuthenticatedRequestAttributeOptions = []) {
-
-        self.result = result
-        self.attributes = responseAttributes
-    }
-}
-
 public typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
-internal let kEmptyJsonObjectData = "{}".data(using: .utf8)!
+internal let EmptyJsonObjectData = "{}".data(using: .utf8)!
 
 internal struct EmptyRequestObject: Codable {}
 internal struct EmptyResponseObject: Codable {}
 
-internal protocol URLSessionType {
-    func dataForRequest(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
-
-    var configuration: URLSessionConfiguration { get }
-}
-
-internal protocol NetworkManagerType {
-    init(dataManager: ParraDataManager,
-         urlSession: URLSessionType,
-         jsonEncoder: JSONEncoder,
-         jsonDecoder: JSONDecoder)
-    
-    var authenticationProvider: ParraAuthenticationProviderFunction? { get }
-    
-    func updateAuthenticationProvider(_ provider: ParraAuthenticationProviderFunction?) async
-    func refreshAuthentication() async throws -> ParraCredential
-}
-
-internal class ParraNetworkManager: NetworkManagerType {
+internal actor ParraNetworkManager: NetworkManagerType {
     private let dataManager: ParraDataManager
-    
-    internal private(set) var authenticationProvider: ParraAuthenticationProviderFunction?
+
+    private var authenticationProvider: ParraAuthenticationProviderFunction?
     
     private let urlSession: URLSessionType
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
     
-    internal required init(dataManager: ParraDataManager,
-                           urlSession: URLSessionType,
-                           jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
-                           jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder
+    internal init(
+        dataManager: ParraDataManager,
+        urlSession: URLSessionType,
+        jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
+        jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder
     ) {
         self.dataManager = dataManager
         self.urlSession = urlSession
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
+    }
+
+    internal func getAuthenticationProvider() async -> ParraAuthenticationProviderFunction? {
+        return authenticationProvider
     }
     
     internal func updateAuthenticationProvider(_ provider: ParraAuthenticationProviderFunction?) {
@@ -212,7 +175,7 @@ internal class ParraNetworkManager: NetworkManagerType {
 
             switch (response.statusCode, config.shouldReauthenticate) {
             case (204, _):
-                return (.success(kEmptyJsonObjectData), config.attributes)
+                return (.success(EmptyJsonObjectData), config.attributes)
             case (401, true):
                 parraLogTrace("Request required reauthentication")
                 let newCredential = try await refreshAuthentication()
@@ -233,7 +196,7 @@ internal class ParraNetworkManager: NetworkManagerType {
                    let prettyString = String(data: prettyData, encoding: .utf8) {
 
                     parraLogTrace("Received 400...499 status in response")
-                    if data != kEmptyJsonObjectData {
+                    if data != EmptyJsonObjectData {
                         parraLogTrace(prettyString)
                     }
 
@@ -259,7 +222,7 @@ internal class ParraNetworkManager: NetworkManagerType {
                    let prettyString = String(data: prettyData, encoding: .utf8) {
 
                     parraLogTrace("Received 500...599 status in response")
-                    if data != kEmptyJsonObjectData {
+                    if data != EmptyJsonObjectData {
                         parraLogTrace(prettyString)
                     }
                 }
