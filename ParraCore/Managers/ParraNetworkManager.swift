@@ -435,7 +435,11 @@ internal class ParraNetworkManager: NetworkManagerType {
             return
         }
 
-        for (header, value) in ParraHeader.trackingHeaderDictionary {
+        let headers = ParraHeader.trackingHeaderDictionary
+
+        parraLogTrace("Adding extra tracking headers to tracking enabled endpoint: \(endpoint.displayName)", headers)
+
+        for (header, value) in headers {
             request.setValue(value, forHTTPHeaderField: header)
         }
     }
