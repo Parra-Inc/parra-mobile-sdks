@@ -47,7 +47,7 @@ public class Parra: ParraModule {
             sessionManager: sessionManager,
             notificationCenter: notificationCenter
         )
-        
+
         return Parra(
             dataManager: dataManager,
             syncManager: syncManager,
@@ -80,6 +80,8 @@ public class Parra: ParraModule {
         self.notificationCenter = notificationCenter
         
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
+
+        Parra.registerModule(module: self)
     }
     
     deinit {

@@ -14,7 +14,7 @@ internal class ParraDefaultLogger: ParraLogger {
 
     var loggerConfig: ParraLoggerConfig = .default
 
-    private static let logQueue = DispatchQueue(label: "com.parra.default-logger", qos: .utility)
+    internal static let logQueue = DispatchQueue(label: "com.parra.default-logger", qos: .utility)
 
     func log(
         level: ParraLogLevel,
@@ -90,7 +90,6 @@ internal class ParraDefaultLogger: ParraLogger {
         if loggerConfig.printVerbosity {
             markerComponents.append(level.name)
         }
-
 
         if loggerConfig.printModuleName {
             markerComponents.append(module)

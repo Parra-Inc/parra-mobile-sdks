@@ -65,13 +65,11 @@ public extension Parra {
             }
         }
 
-        await shared.networkManager.updateAuthenticationProvider(authenticationProvider)
         newConfig.setTenantId(tenantId)
         newConfig.setApplicationId(applicationId)
-
+        
         await ParraConfigState.shared.updateState(newConfig)
-
-        Parra.registerModule(module: shared)
+        await shared.networkManager.updateAuthenticationProvider(authenticationProvider)
 
         Initializer.isInitialized = true
 
@@ -82,13 +80,13 @@ public extension Parra {
         do {
             let _ = try await shared.networkManager.refreshAuthentication()
 
-            await performPoshAuthRefreshActions()
+            await performPostAuthRefreshActions()
         } catch let error {
             parraLogError("Authentication handler in call to Parra.initialize failed", error)
         }
     }
 
-    private class func performPoshAuthRefreshActions() async {
+    private class func performPostAuthRefreshActions() async {
         parraLogDebug("Performing push authentication refresh actions.")
 
         await uploadCachedPushNotificationToken()
@@ -106,7 +104,7 @@ public extension Parra {
     }
 
     @MainActor
-    private class func withAuthenticationMiddleware(
+    internal class func withAuthenticationMiddleware(
         for authProvider: ParraAuthenticationProviderType,
         onAuthenticationRefresh: @escaping (_ success: Bool) -> Void
     ) -> (String, String, ParraAuthenticationProviderFunction) {

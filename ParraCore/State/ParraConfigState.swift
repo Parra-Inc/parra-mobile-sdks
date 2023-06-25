@@ -24,7 +24,9 @@ internal struct ParraConfigState {
         internal func updateState(_ newValue: ParraConfiguration) {
             currentState = newValue
 
-            ParraDefaultLogger.default.loggerConfig = newValue.loggerConfig
+            ParraDefaultLogger.logQueue.async {
+                ParraDefaultLogger.default.loggerConfig = newValue.loggerConfig
+            }
         }
 
         internal func resetState() {

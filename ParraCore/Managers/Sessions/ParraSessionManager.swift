@@ -38,6 +38,19 @@ internal actor ParraSessionManager {
         return currentSession?.hasNewData ?? false
     }
 
+    func clearSessionHistory() async {
+        parraLogDebug("Clearing previous session history")
+
+        let allSessions = await dataManager.sessionStorage.allTrackedSessions()
+        let sessionIds = allSessions.reduce(Set<String>()) { partialResult, session in
+            var next = partialResult
+            next.insert(session.sessionId)
+            return next
+        }
+
+        await dataManager.sessionStorage.deleteSessions(with: sessionIds)
+    }
+
     func synchronizeData() async -> ParraSessionsResponse? {
         guard var currentSession else {
             return nil
@@ -130,6 +143,19 @@ internal actor ParraSessionManager {
         await dataManager.sessionStorage.update(session: currentSession)
 
         self.currentSession = currentSession
+    }
+
+    internal func resetSession() async {
+        guard var currentSession else {
+            return
+        }
+
+        currentSession.end()
+        currentSession.resetSentData()
+
+        await dataManager.sessionStorage.update(session: currentSession)
+
+        self.currentSession = nil
     }
 
     internal func endSession() async {

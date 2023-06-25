@@ -15,7 +15,7 @@ class ParraAuthenticationTests: XCTestCase {
     override func setUp() async throws {
         Parra.Initializer.isInitialized = false
 
-        configureWithRequestResolver { request in
+        await configureWithRequestResolverOnly { request in
             return (EmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
         }
     }

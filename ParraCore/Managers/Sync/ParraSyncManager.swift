@@ -86,7 +86,7 @@ internal actor ParraSyncManager {
 
         await notificationCenter.postAsync(
             name: Parra.syncDidBeginNotification,
-            object: nil,
+            object: self,
             userInfo: [
                 Parra.Constant.syncTokenKey: syncToken
             ]
@@ -96,7 +96,7 @@ internal actor ParraSyncManager {
             Task {
                 await notificationCenter.postAsync(
                     name: Parra.syncDidEndNotification,
-                    object: nil,
+                    object: self,
                     userInfo: [
                         Parra.Constant.syncTokenKey: syncToken
                     ]

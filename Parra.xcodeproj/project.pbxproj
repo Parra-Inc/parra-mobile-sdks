@@ -143,6 +143,7 @@
 		00BD2FFA2A47778E00B4BEB2 /* NotificationCenterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FF92A47778E00B4BEB2 /* NotificationCenterType.swift */; };
 		00BD2FFC2A477D7700B4BEB2 /* ParraNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFB2A477D7700B4BEB2 /* ParraNotificationCenter.swift */; };
 		00BD2FFE2A479BBA00B4BEB2 /* ParraConfigState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFD2A479BBA00B4BEB2 /* ParraConfigState.swift */; };
+		00BD30002A47A70800B4BEB2 /* Parra+PushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */; };
 		00BDB2AF28BC24E700C16649 /* ParraCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */; };
 		00BDB2B128BD822700C16649 /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2B028BD822700C16649 /* URLRequest.swift */; };
 		00CAD73429CFA1350093599E /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CAD73329CFA1350093599E /* Int.swift */; };
@@ -368,6 +369,7 @@
 		00BD2FF92A47778E00B4BEB2 /* NotificationCenterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterType.swift; sourceTree = "<group>"; };
 		00BD2FFB2A477D7700B4BEB2 /* ParraNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraNotificationCenter.swift; sourceTree = "<group>"; };
 		00BD2FFD2A479BBA00B4BEB2 /* ParraConfigState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraConfigState.swift; sourceTree = "<group>"; };
+		00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+PushTests.swift"; sourceTree = "<group>"; };
 		00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCredentialTests.swift; sourceTree = "<group>"; };
 		00BDB2B028BD822700C16649 /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
 		00CAD73329CFA1350093599E /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
@@ -650,6 +652,7 @@
 			children = (
 				001B7B0027DE3A7600DEEECD /* ParraTests.swift */,
 				00320A5A27ED4EF0001EB323 /* Parra+AuthenticationTests.swift */,
+				00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */,
 				001559A727E417D4006450BE /* ParraLoggerTests.swift */,
 				0015599D27E40B64006450BE /* Extensions */,
 				0015599827E40AC7006450BE /* Managers */,
@@ -1227,6 +1230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00BD30002A47A70800B4BEB2 /* Parra+PushTests.swift in Sources */,
 				00F5AAF428023EF300A94C85 /* GeneratedTypes+Swift.swift in Sources */,
 				001559AA27E41A8A006450BE /* ParraStorageModuleTests.swift in Sources */,
 				0015599C27E40B13006450BE /* FileSystemStorageTests.swift in Sources */,
