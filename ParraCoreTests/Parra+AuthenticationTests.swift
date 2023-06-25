@@ -13,7 +13,7 @@ class ParraAuthenticationTests: XCTestCase {
 
     @MainActor
     override func setUp() async throws {
-        Parra.Initializer.isInitialized = false
+        await ParraGlobalState.shared.deinitialize()
 
         await configureWithRequestResolverOnly { request in
             return (EmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
