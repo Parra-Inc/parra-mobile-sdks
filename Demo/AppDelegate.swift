@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import ParraCore
+import Parra
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

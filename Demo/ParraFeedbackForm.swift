@@ -7,8 +7,7 @@
 //
 
 import UIKit
-import ParraCore
-import ParraFeedback
+import Parra
 
 class ParraFeedbackForm: UIViewController {
     @IBOutlet weak var presentFormButton: UIButton!

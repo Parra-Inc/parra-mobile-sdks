@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import ParraFeedback
+import Parra
 
 class ParraCardsInCollectionView: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     struct Constant {

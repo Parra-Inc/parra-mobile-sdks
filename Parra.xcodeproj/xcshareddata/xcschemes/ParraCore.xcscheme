@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "001B7AF127DE3A7600DEEECD"
-               BuildableName = "ParraCore.framework"
-               BlueprintName = "ParraCore"
+               BuildableName = "Parra.framework"
+               BlueprintName = "Parra"
                ReferencedContainer = "container:Parra.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -39,8 +39,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "001B7AF827DE3A7600DEEECD"
-               BuildableName = "ParraCoreTests.xctest"
-               BlueprintName = "ParraCoreTests"
+               BuildableName = "ParraTests.xctest"
+               BlueprintName = "ParraTests"
                ReferencedContainer = "container:Parra.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -67,8 +67,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "001B7AF127DE3A7600DEEECD"
-            BuildableName = "ParraCore.framework"
-            BlueprintName = "ParraCore"
+            BuildableName = "Parra.framework"
+            BlueprintName = "Parra"
             ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
