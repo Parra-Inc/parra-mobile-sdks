@@ -14,7 +14,10 @@ internal class ParraDefaultLogger: ParraLogger {
 
     var loggerConfig: ParraLoggerConfig = .default
 
-    internal static let logQueue = DispatchQueue(label: "com.parra.default-logger", qos: .utility)
+    internal static let logQueue = DispatchQueue(
+        label: "com.parra.default-logger",
+        qos: .utility
+    )
 
     func log(
         level: ParraLogLevel,
