@@ -71,4 +71,16 @@ public class ParraNotificationCenter: NotificationCenterType {
             using: block
         )
     }
+
+    public func removeObserver(
+        _ observer: Any,
+        name aName: NSNotification.Name?,
+        object anObject: Any?
+    ) {
+        underlyingNotificationCenter.removeObserver(
+            observer,
+            name: aName,
+            object: anObject
+        )
+    }
 }

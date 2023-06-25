@@ -12,6 +12,15 @@ internal extension Parra {
     private static var backgroundTaskId: UIBackgroundTaskIdentifier?
     private static var hasStartedEventObservers = false
 
+    private var notificationsToObserve: [(Notification.Name, Selector)] {
+        [
+            (UIApplication.didBecomeActiveNotification, #selector(self.applicationDidBecomeActive)),
+            (UIApplication.willResignActiveNotification, #selector(self.applicationWillResignActive)),
+            (UIApplication.didEnterBackgroundNotification, #selector(self.applicationDidEnterBackground)),
+            (UIApplication.significantTimeChangeNotification, #selector(self.triggerEventualSyncFromNotification)),
+        ]
+    }
+
     func addEventObservers() {
         guard NSClassFromString("XCTestCase") == nil && !Parra.hasStartedEventObservers else {
             return
@@ -19,28 +28,120 @@ internal extension Parra {
 
         Parra.hasStartedEventObservers = true
 
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(self.applicationDidBecomeActive),
-            name: UIApplication.didBecomeActiveNotification,
-            object: nil
-        )
+        for (notificationName, selector) in notificationsToObserve {
+            addObserver(for: notificationName, selector: selector)
+        }
+    }
 
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(self.applicationWillResignActive),
-            name: UIApplication.willResignActiveNotification,
-            object: nil
-        )
+    func removeEventObservers() {
+        guard NSClassFromString("XCTestCase") == nil else {
+            return
+        }
 
-        notificationCenter.addObserver(
-            self,
+        for (notificationName, _) in notificationsToObserve {
+            removeObserver(for: notificationName)
+        }
+    }
 
-            selector: #selector(self.applicationDidEnterBackground),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
+    @MainActor
+    @objc func applicationDidBecomeActive(notification: Notification) {
+        withInitializationCheck { [self] in
+            if let taskId = Parra.backgroundTaskId,
+               let app = notification.object as? UIApplication {
 
+                app.endBackgroundTask(taskId)
+            }
+
+            Parra.logEvent(ParraSessionEventType._Internal.appState(state: .active))
+
+            triggerEventualSyncFromNotification(notification: notification)
+        }
+    }
+
+    @MainActor
+    @objc func applicationWillResignActive(notification: Notification) {
+        withInitializationCheck { [self] in
+            Parra.logEvent(ParraSessionEventType._Internal.appState(state: .inactive))
+
+            triggerSyncFromNotification(notification: notification)
+
+            let endSession = {
+                guard let taskId = Parra.backgroundTaskId else {
+                    return
+                }
+
+                Parra.backgroundTaskId = nil
+
+                parraLogDebug("Background task: \(taskId) triggering session end")
+
+                await Parra.shared.sessionManager.endSession()
+
+                UIApplication.shared.endBackgroundTask(taskId)
+            }
+
+            Parra.backgroundTaskId = UIApplication.shared.beginBackgroundTask(
+                withName: InternalConstants.backgroundTaskName
+            ) {
+                parraLogDebug("Background task expiration handler invoked")
+
+                Task { @MainActor in
+                    await endSession()
+                }
+            }
+
+            let startTime = Date()
+            Task(priority: .background) {
+                while Date().timeIntervalSince(startTime) < InternalConstants.backgroundTaskDuration {
+                    try await Task.sleep(nanoseconds: 100_000_000)
+                }
+
+                parraLogDebug("Ending Parra background execution after \(InternalConstants.backgroundTaskDuration)s")
+
+                Task { @MainActor in
+                    await endSession()
+                }
+            }
+        }
+    }
+
+    @MainActor
+    @objc func applicationDidEnterBackground(notification: Notification) {
+        withInitializationCheck {
+            Parra.logEvent(ParraSessionEventType._Internal.appState(state: .background))
+        }
+    }
+
+    @MainActor
+    @objc private func triggerSyncFromNotification(notification: Notification) {
+        withInitializationCheck { [self] in
+            await syncManager.enqueueSync(with: .immediate)
+        }
+    }
+    
+    @MainActor
+    @objc private func triggerEventualSyncFromNotification(notification: Notification) {
+        withInitializationCheck { [self] in
+            await syncManager.enqueueSync(with: .eventual)
+        }
+    }
+
+    /// Prevent processing events if initialization hasn't occurred.
+    private func withInitializationCheck(_ function: @escaping () async -> Void) {
+        Task {
+            guard await ParraGlobalState.shared.isInitialized() else {
+                return
+            }
+
+            Task { @MainActor in
+                await function()
+            }
+        }
+    }
+
+    private func addObserver(
+        for notificationName: Notification.Name,
+        selector: Selector
+    ) {
         notificationCenter.addObserver(
             self,
             selector: #selector(self.triggerEventualSyncFromNotification),
@@ -48,107 +149,14 @@ internal extension Parra {
             object: nil
         )
     }
-    
-    func removeEventObservers() {
-        guard NSClassFromString("XCTestCase") == nil else {
-            return
-        }
 
-        NotificationCenter.default.removeObserver(
+    private func removeObserver(
+        for notificationName: Notification.Name
+    ) {
+        notificationCenter.removeObserver(
             self,
-            name: UIApplication.didBecomeActiveNotification,
+            name: notificationName,
             object: nil
         )
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIApplication.willResignActiveNotification,
-            object: nil
-        )
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIApplication.significantTimeChangeNotification,
-            object: nil
-        )
-    }
-
-    @MainActor
-    @objc func applicationDidBecomeActive(notification: Notification) {
-        if let taskId = Parra.backgroundTaskId,
-           let app = notification.object as? UIApplication {
-
-            app.endBackgroundTask(taskId)
-        }
-
-        Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .active))
-
-        triggerEventualSyncFromNotification(notification: notification)
-    }
-
-    @MainActor
-    @objc func applicationWillResignActive(notification: Notification) {
-        Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .inactive))
-
-        triggerSyncFromNotification(notification: notification)
-
-        let endSession = {
-            guard let taskId = Parra.backgroundTaskId else {
-                return
-            }
-
-            Parra.backgroundTaskId = nil
-
-            parraLogDebug("Background task: \(taskId) triggering session end")
-
-            await Parra.shared.sessionManager.endSession()
-
-            UIApplication.shared.endBackgroundTask(taskId)
-        }
-
-        Parra.backgroundTaskId = UIApplication.shared.beginBackgroundTask(
-            withName: InternalConstants.backgroundTaskName
-        ) {
-            parraLogDebug("Background task expiration handler invoked")
-
-            Task { @MainActor in
-                await endSession()
-            }
-        }
-
-        let startTime = Date()
-        Task(priority: .background) {
-            while Date().timeIntervalSince(startTime) < InternalConstants.backgroundTaskDuration {
-                try await Task.sleep(nanoseconds: 100_000_000)
-            }
-
-            parraLogDebug("Ending Parra background execution after \(InternalConstants.backgroundTaskDuration)s")
-
-            Task { @MainActor in
-                await endSession()
-            }
-        }
-    }
-
-    @MainActor
-    @objc func applicationDidEnterBackground(notification: Notification) {
-        Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .background))
-    }
-
-    @MainActor
-    @objc private func triggerSyncFromNotification(notification: Notification) {
-        Task {
-            await syncManager.enqueueSync(with: .immediate)
-        }
-    }
-    
-    @MainActor
-    @objc private func triggerEventualSyncFromNotification(notification: Notification) {
-        Task {
-            await syncManager.enqueueSync(with: .eventual)
-        }
     }
 }

@@ -34,4 +34,10 @@ public protocol NotificationCenterType {
         queue: OperationQueue?,
         using block: @escaping @Sendable (Notification) -> Void
     ) -> NSObjectProtocol
+
+    func removeObserver(
+        _ observer: Any,
+        name aName: NSNotification.Name?,
+        object anObject: Any?
+    )
 }
