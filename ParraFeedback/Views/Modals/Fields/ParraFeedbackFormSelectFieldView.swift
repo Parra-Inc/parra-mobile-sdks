@@ -21,7 +21,7 @@ struct ParraFeedbackFormSelectFieldView: ParraFeedbackFormFieldView {
     @State private var selectedType: String?
 
     var body: some View {
-        Picker("Type of Feedback", selection: $selectedType) {
+        Picker(field.title ?? "", selection: $selectedType) {
             // Only show the nil option if a selection hasn't been made yet.
             if selectedType == nil {
                 Text(fieldData.placeholder ?? "Select an Option").tag(nil as String?)
