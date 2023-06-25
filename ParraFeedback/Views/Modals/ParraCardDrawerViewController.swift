@@ -11,12 +11,18 @@ import UIKit
 import ParraCore
 
 internal class ParraCardDrawerViewController: ParraCardModalViewController, ParraCardModal {
-    required init(cards: [ParraCore.ParraCardItem], config: ParraCardViewConfig, transitionStyle: ParraCardModalTransitionStyle) {
+    required init(
+        cards: [ParraCore.ParraCardItem],
+        config: ParraCardViewConfig,
+        transitionStyle: ParraCardModalTransitionStyle,
+        onDismiss: (() -> Void)? = nil
+    ) {
         super.init(
             cards: cards,
             config: config,
             transitionStyle: transitionStyle,
-            modalType: .drawer
+            modalType: .drawer,
+            onDismiss: onDismiss
         )
     }
 

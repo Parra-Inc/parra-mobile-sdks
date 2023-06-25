@@ -29,4 +29,12 @@ internal extension URLRequest {
     mutating func setValue(_ value: String?, forHTTPHeaderField field: URLRequestHeaderField) {
         setValue(value, forHTTPHeaderField: field.description)
     }
+
+    mutating func setValue(_ value: String?, forHTTPHeaderField field: ParraHeader) {
+        setValue(value, forHTTPHeaderField: field.prefixedName)
+    }
+
+    mutating func setValue(for parraHeader: ParraHeader) {
+        setValue(parraHeader.currentValue, forHTTPHeaderField: parraHeader.prefixedName)
+    }
 }

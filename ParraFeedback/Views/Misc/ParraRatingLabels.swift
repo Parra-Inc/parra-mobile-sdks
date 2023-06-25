@@ -80,9 +80,6 @@ internal class ParraRatingLabels: UIView, ParraConfigurableView {
         label.textAlignment = .center
         label.lineBreakMode = .byWordWrapping
         label.accessibilityIdentifier = "ParraRating\(name)Label"
-
-        if #available(iOS 14.0, *) {
-            label.lineBreakStrategy = .standard
-        }
+        label.lineBreakStrategy = .standard
     }
 }

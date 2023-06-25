@@ -8,71 +8,36 @@
 import Foundation
 import UIKit
 
-internal struct AuthenticatedRequestAttributeOptions: OptionSet {
-    let rawValue: Int
-
-    static let requiredReauthentication = AuthenticatedRequestAttributeOptions(rawValue: 1 << 0)
-    static let requiredRetry = AuthenticatedRequestAttributeOptions(rawValue: 1 << 1)
-    static let exceededRetryLimit = AuthenticatedRequestAttributeOptions(rawValue: 1 << 2)
-}
-
-internal struct AuthenticatedRequestResult<T: Decodable> {
-    let result: Result<T, Error>
-    let attributes: AuthenticatedRequestAttributeOptions
-
-    init(result: Result<T, Error>,
-         responseAttributes: AuthenticatedRequestAttributeOptions = []) {
-
-        self.result = result
-        self.attributes = responseAttributes
-    }
-}
-
 public typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
-internal let kEmptyJsonObjectData = "{}".data(using: .utf8)!
+internal let EmptyJsonObjectData = "{}".data(using: .utf8)!
 
 internal struct EmptyRequestObject: Codable {}
 internal struct EmptyResponseObject: Codable {}
 
-internal protocol URLSessionType {
-    func dataForRequest(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
-    
-    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
-
-    var configuration: URLSessionConfiguration { get }
-}
-
-internal protocol NetworkManagerType {
-    init(dataManager: ParraDataManager,
-         urlSession: URLSessionType,
-         jsonEncoder: JSONEncoder,
-         jsonDecoder: JSONDecoder)
-    
-    var authenticationProvider: ParraAuthenticationProviderFunction? { get }
-    
-    func updateAuthenticationProvider(_ provider: ParraAuthenticationProviderFunction?) async
-    func refreshAuthentication() async throws -> ParraCredential
-}
-
-internal class ParraNetworkManager: NetworkManagerType {
+internal actor ParraNetworkManager: NetworkManagerType {
     private let dataManager: ParraDataManager
-    
-    internal private(set) var authenticationProvider: ParraAuthenticationProviderFunction?
+
+    private var authenticationProvider: ParraAuthenticationProviderFunction?
     
     private let urlSession: URLSessionType
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
     
-    internal required init(dataManager: ParraDataManager,
-                           urlSession: URLSessionType,
-                           jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
-                           jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder
+    internal init(
+        dataManager: ParraDataManager,
+        urlSession: URLSessionType,
+        jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
+        jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder
     ) {
         self.dataManager = dataManager
         self.urlSession = urlSession
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
+    }
+
+    internal func getAuthenticationProvider() async -> ParraAuthenticationProviderFunction? {
+        return authenticationProvider
     }
     
     internal func updateAuthenticationProvider(_ provider: ParraAuthenticationProviderFunction?) {
@@ -105,16 +70,15 @@ internal class ParraNetworkManager: NetworkManagerType {
             throw ParraError.authenticationFailed(error.localizedDescription)
         }
     }
-    
-    internal func performAuthenticatedRequest<T: Decodable>(route: String,
-                                                            method: HttpMethod,
-                                                            queryItems: [String: String] = [:],
-                                                            config: RequestConfig = .default,
-                                                            cachePolicy: URLRequest.CachePolicy? = nil
+
+    internal func performAuthenticatedRequest<T: Decodable>(
+        endpoint: ParraEndpoint,
+        queryItems: [String: String] = [:],
+        config: RequestConfig = .default,
+        cachePolicy: URLRequest.CachePolicy? = nil
     ) async -> AuthenticatedRequestResult<T> {
         return await performAuthenticatedRequest(
-            route: route,
-            method: method,
+            endpoint: endpoint,
             queryItems: queryItems,
             config: config,
             cachePolicy: cachePolicy,
@@ -122,18 +86,25 @@ internal class ParraNetworkManager: NetworkManagerType {
         )
     }
     
-    internal func performAuthenticatedRequest<T: Decodable, U: Encodable>(route: String,
-                                                                          method: HttpMethod,
-                                                                          queryItems: [String: String] = [:],
-                                                                          config: RequestConfig = .default,
-                                                                          cachePolicy: URLRequest.CachePolicy? = nil,
-                                                                          body: U
+    internal func performAuthenticatedRequest<T: Decodable, U: Encodable>(
+        endpoint: ParraEndpoint,
+        queryItems: [String: String] = [:],
+        config: RequestConfig = .default,
+        cachePolicy: URLRequest.CachePolicy? = nil,
+        body: U
     ) async -> AuthenticatedRequestResult<T> {
+        let route = endpoint.route
+        let method = endpoint.method
+
         var responseAttributes: AuthenticatedRequestAttributeOptions = []
 
         parraLogTrace("Performing authenticated request to route: \(method.rawValue) \(route)")
 
         do {
+            guard let applicationId = await ParraConfigState.shared.getCurrentState().applicationId else {
+                throw ParraError.notInitialized
+            }
+
             let url = Parra.Constant.parraApiRoot.appendingPathComponent(route)
             guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
                 throw ParraError.custom("Failed to create components for url: \(url)", nil)
@@ -155,14 +126,10 @@ internal class ParraNetworkManager: NetworkManagerType {
             )
 
             request.httpMethod = method.rawValue
-            request.setValue("application/json", forHTTPHeaderField: .accept)
-
-            addStandardHeaders(toRequest: &request)
-
             if method.allowsBody {
                 request.httpBody = try jsonEncoder.encode(body)
-                request.setValue("application/json", forHTTPHeaderField: .contentType)
             }
+            addHeaders(to: &request, endpoint: endpoint, for: applicationId)
 
             let (result, attributes) = await performRequest(
                 request: request,
@@ -175,16 +142,6 @@ internal class ParraNetworkManager: NetworkManagerType {
             switch result {
             case .success(let data):
                 parraLogTrace("Parra client received success response")
-#if DEBUG
-                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
-                    let prettyData = try? jsonEncoder.encode(dataString),
-                    let prettyString = String(data: prettyData, encoding: .utf8) {
-
-                    if data != kEmptyJsonObjectData {
-                        parraLogTrace(prettyString)
-                    }
-                }
-#endif
 
                 let response = try jsonDecoder.decode(T.self, from: data)
 
@@ -203,9 +160,11 @@ internal class ParraNetworkManager: NetworkManagerType {
         }
     }
     
-    private func performRequest(request: URLRequest,
-                                credential: ParraCredential,
-                                config: RequestConfig = .default) async -> (Result<Data, Error>, AuthenticatedRequestAttributeOptions) {
+    private func performRequest(
+        request: URLRequest,
+        credential: ParraCredential,
+        config: RequestConfig = .default
+    ) async -> (Result<Data, Error>, AuthenticatedRequestAttributeOptions) {
         do {
             var request = request
             request.setValue("Bearer \(credential.token)", forHTTPHeaderField: .authorization)
@@ -216,7 +175,7 @@ internal class ParraNetworkManager: NetworkManagerType {
 
             switch (response.statusCode, config.shouldReauthenticate) {
             case (204, _):
-                return (.success(kEmptyJsonObjectData), config.attributes)
+                return (.success(EmptyJsonObjectData), config.attributes)
             case (401, true):
                 parraLogTrace("Request required reauthentication")
                 let newCredential = try await refreshAuthentication()
@@ -237,8 +196,13 @@ internal class ParraNetworkManager: NetworkManagerType {
                    let prettyString = String(data: prettyData, encoding: .utf8) {
 
                     parraLogTrace("Received 400...499 status in response")
-                    if data != kEmptyJsonObjectData {
+                    if data != EmptyJsonObjectData {
                         parraLogTrace(prettyString)
+                    }
+
+                    if let body = request.httpBody, let bodyString = String(data: body, encoding: .utf8) {
+                        parraLogTrace("Request data was:")
+                        parraLogTrace(bodyString)
                     }
                 }
 #endif
@@ -258,7 +222,7 @@ internal class ParraNetworkManager: NetworkManagerType {
                    let prettyString = String(data: prettyData, encoding: .utf8) {
 
                     parraLogTrace("Received 500...599 status in response")
-                    if data != kEmptyJsonObjectData {
+                    if data != EmptyJsonObjectData {
                         parraLogTrace(prettyString)
                     }
                 }
@@ -303,21 +267,23 @@ internal class ParraNetworkManager: NetworkManagerType {
 
     func performPublicApiKeyAuthenticationRequest(
         forTentant tenantId: String,
+        applicationId: String,
         apiKeyId: String,
         userId: String
     ) async throws -> String {
-        let url = Parra.Constant.parraApiRoot.appendingPathComponent("tenants/\(tenantId)/issuers/public/auth/token")
+        let endpoint = ParraEndpoint.postAuthentication(tenantId: tenantId)
+        let url = Parra.Constant.parraApiRoot.appendingPathComponent(endpoint.route)
         var request = URLRequest(url: url)
 
-        request.httpMethod = "POST"
+        request.httpMethod = endpoint.method.rawValue
         request.httpBody = try jsonEncoder.encode(["user_id": userId])
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
 
         guard let authData = ("api_key:" + apiKeyId).data(using: .utf8)?.base64EncodedString() else {
             throw ParraError.custom("Unable to encode API key as NSData", nil)
         }
-        
-        addStandardHeaders(toRequest: &request)
+
+        addHeaders(to: &request, endpoint: endpoint, for: applicationId)
         request.setValue("Basic \(authData)", forHTTPHeaderField: .authorization)
 
         let (data, response) = try await performAsyncDataDask(request: request)
@@ -418,58 +384,44 @@ internal class ParraNetworkManager: NetworkManagerType {
             try await Task.sleep(nanoseconds: 1_000_000_000)
         }
 #endif
-        
+
         let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
-        
+
         // It is documented that for data tasks, response is always actually HTTPURLResponse
         return (data, response as! HTTPURLResponse)
     }
 
-    private func addStandardHeaders(toRequest request: inout URLRequest) {
-        for (header, value) in libraryVersionHeaders() {
-            request.setValue(value, forHTTPHeaderField: header)
+    private func addHeaders(
+        to request: inout URLRequest,
+        endpoint: ParraEndpoint,
+        for applicationId: String
+    ) {
+        request.setValue("application/json", forHTTPHeaderField: .accept)
+        request.setValue(for: .applicationId(applicationId))
+
+        if endpoint.method.allowsBody {
+            request.setValue("application/json", forHTTPHeaderField: .contentType)
         }
 
-        for (header, value) in additionalHeaders() {
+        addTrackingHeaders(toRequest: &request, for: endpoint)
+
+        parraLogTrace("Finished attaching request headers for endpoint: \(endpoint.displayName)", request.allHTTPHeaderFields ?? [:])
+    }
+
+    private func addTrackingHeaders(
+        toRequest request: inout URLRequest,
+        for endpoint: ParraEndpoint
+    ) {
+        guard endpoint.isTrackingEnabled else {
+            return
+        }
+
+        let headers = ParraHeader.trackingHeaderDictionary
+
+        parraLogTrace("Adding extra tracking headers to tracking enabled endpoint: \(endpoint.displayName)")
+
+        for (header, value) in headers {
             request.setValue(value, forHTTPHeaderField: header)
         }
-    }
-    
-    private func libraryVersionHeaders() -> [String: String] {
-        var headers = [String: String]()
-        
-        for (moduleName, module) in Parra.registeredModules {
-            headers[ParraHeader.moduleVersion(module: moduleName).prefixedHeaderName] = type(of: module).libraryVersion()
-        }
-        
-        return headers
-    }
-    
-    private func additionalHeaders() -> [String: String] {
-        var headers = [String: String]()
-        
-#if DEBUG
-        headers[ParraHeader.debug.prefixedHeaderName] = "debug"
-#endif
-        
-        headers[ParraHeader.os.prefixedHeaderName] = UIDevice.current.systemName
-        headers[ParraHeader.osVersion.prefixedHeaderName] = UIDevice.current.systemVersion
-        headers[ParraHeader.device.prefixedHeaderName] = UIDevice.current.name
-        headers[ParraHeader.appLocale.prefixedHeaderName] = UIDevice.current.name
-        
-        if let deviceLanguageCode = NSLocale.current.languageCode {
-            headers[ParraHeader.deviceLocale.prefixedHeaderName] = deviceLanguageCode
-        }
-        
-        if let appLanguageCode = Locale.preferredLanguages.first {
-            headers[ParraHeader.appLocale.prefixedHeaderName] = appLanguageCode
-        }
-        
-        headers[ParraHeader.timeZoneOffset.prefixedHeaderName] = String(TimeZone.current.secondsFromGMT())
-        if let timeZoneAbbreviation = TimeZone.current.abbreviation() {
-            headers[ParraHeader.timeZoneAbbreviation.prefixedHeaderName] = timeZoneAbbreviation
-        }
-        
-        return headers
     }
 }

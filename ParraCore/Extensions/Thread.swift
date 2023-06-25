@@ -19,6 +19,10 @@ extension Thread {
         }
     }
 
+    var threadId: Int {
+        return Int(pthread_mach_thread_np(pthread_self()))
+    }
+
     var queueName: String {
         if let queueName = String(validatingUTF8: __dispatch_queue_get_label(nil)) {
             return queueName

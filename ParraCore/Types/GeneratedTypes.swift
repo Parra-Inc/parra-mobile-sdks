@@ -212,6 +212,333 @@ public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
     }
 }
 
+public struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let title: String
+    public let description: String?
+    public let data: FeedbackFormData
+
+    public init(
+        id: String,
+        createdAt: String,
+        updatedAt: String,
+        deletedAt: String?,
+        title: String,
+        description: String?,
+        data: FeedbackFormData
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.title = title
+        self.description = description
+        self.data = data
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case title
+        case description
+        case data
+    }
+}
+
+public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let data: FeedbackFormData
+
+    public init(
+        id: String,
+        createdAt: String,
+        updatedAt: String,
+        deletedAt: String?,
+        data: FeedbackFormData
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.data = data
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case data
+    }
+}
+
+public struct FeedbackFormData: Codable, Equatable, Hashable {
+    public let title: String
+    public let description: String?
+    public let fields: Array<FeedbackFormField>
+
+    public init(
+        title: String,
+        description: String?,
+        fields: Array<FeedbackFormField>
+    ) {
+        self.title = title
+        self.description = description
+        self.fields = fields
+    }
+}
+
+public enum FeedbackFormFieldType: String, Codable {
+    case text = "text"
+    case input = "input"
+    case select = "select"
+}
+
+public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
+    public var id: String {
+        name
+    }
+
+    public let name: String
+    public let title: String?
+    public let helperText: String?
+    public let type: FeedbackFormFieldType
+    public let required: Bool?
+    public let data: FeedbackFormFieldData
+
+    public init(
+        name: String,
+        title: String?,
+        helperText: String?,
+        type: FeedbackFormFieldType,
+        required: Bool?,
+        data: FeedbackFormFieldData
+    ) {
+        self.name = name
+        self.title = title
+        self.helperText = helperText
+        self.type = type
+        self.required = required
+        self.data = data
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case name
+        case title
+        case helperText
+        case type
+        case required
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.helperText = try container.decodeIfPresent(String.self, forKey: .helperText)
+        self.type = try container.decode(FeedbackFormFieldType.self, forKey: .type)
+        self.required = try container.decode(Bool.self, forKey: .required)
+        switch type {
+        case .input:
+            self.data = .feedbackFormInputFieldData(try container.decode(FeedbackFormInputFieldData.self, forKey: .data))
+        case .text:
+            self.data = .feedbackFormTextFieldData(try container.decode(FeedbackFormTextFieldData.self, forKey: .data))
+        case .select:
+            self.data = .feedbackFormSelectFieldData(try container.decode(FeedbackFormSelectFieldData.self, forKey: .data))
+        }
+    }
+}
+
+public enum FeedbackFormFieldData: Codable, Equatable, Hashable {
+    case feedbackFormTextFieldData(FeedbackFormTextFieldData)
+    case feedbackFormSelectFieldData(FeedbackFormSelectFieldData)
+    case feedbackFormInputFieldData(FeedbackFormInputFieldData)
+}
+
+public protocol FeedbackFormFieldDataType {}
+
+public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable, FeedbackFormFieldDataType {
+    public let placeholder: String?
+    public let lines: Int?
+    public let maxLines: Int?
+    public let minCharacters: Int?
+    public let maxCharacters: Int?
+    public let maxHeight: Int?
+
+    public init(
+        placeholder: String?,
+        lines: Int?,
+        maxLines: Int?,
+        minCharacters: Int?,
+        maxCharacters: Int?,
+        maxHeight: Int?
+    ) {
+        self.placeholder = placeholder
+        self.lines = lines
+        self.maxLines = maxLines
+        self.minCharacters = minCharacters
+        self.maxCharacters = maxCharacters
+        self.maxHeight = maxHeight
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case placeholder
+        case lines
+        case maxLines
+        case minCharacters
+        case maxCharacters
+        case maxHeight
+    }
+}
+
+public struct FeedbackFormInputFieldData: Codable, Equatable, Hashable, FeedbackFormFieldDataType {
+    public let placeholder: String
+
+    public init(
+        placeholder: String
+    ) {
+        self.placeholder = placeholder
+    }
+}
+
+public struct FeedbackFormSelectFieldData: Codable, Equatable, Hashable, FeedbackFormFieldDataType {
+    public let placeholder: String?
+    public let options: Array<FeedbackFormSelectFieldOption>
+
+    public init(
+        placeholder: String?,
+        options: Array<FeedbackFormSelectFieldOption>
+    ) {
+        self.placeholder = placeholder
+        self.options = options
+    }
+}
+
+public struct FeedbackFormSelectFieldOption: Codable, Equatable, Hashable, Identifiable {
+    public var id: String {
+        value
+    }
+
+    public let title: String
+    public let value: String
+    public let isOther: Bool?
+
+    public init(
+        title: String,
+        value: String,
+        isOther: Bool?
+    ) {
+        self.title = title
+        self.value = value
+        self.isOther = isOther
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case title
+        case value
+        case isOther
+    }
+}
+
+public struct FeedbackFormStub: Codable, Equatable, Hashable, Identifiable {
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let title: String
+    public let description: String?
+
+    public init(
+        id: String,
+        createdAt: String,
+        updatedAt: String,
+        deletedAt: String?,
+        title: String,
+        description: String?
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.title = title
+        self.description = description
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case title
+        case description
+    }
+}
+
+public struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: Array<FeedbackFormStub>
+
+    public init(
+        page: Int,
+        pageCount: Int,
+        pageSize: Int,
+        totalCount: Int,
+        data: Array<FeedbackFormStub>
+    ) {
+        self.page = page
+        self.pageCount = pageCount
+        self.pageSize = pageSize
+        self.totalCount = totalCount
+        self.data = data
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case page
+        case pageCount
+        case pageSize
+        case totalCount
+        case data
+    }
+}
+
+public struct FeedbackMetrics: Codable, Equatable, Hashable {
+    public let userCount: Int
+    public let answerCount: Int
+    public let questionCount: Int
+    public let questionsCreatedThisMonth: Int
+
+    public init(
+        userCount: Int,
+        answerCount: Int,
+        questionCount: Int,
+        questionsCreatedThisMonth: Int
+    ) {
+        self.userCount = userCount
+        self.answerCount = answerCount
+        self.questionCount = questionCount
+        self.questionsCreatedThisMonth = questionsCreatedThisMonth
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case userCount
+        case answerCount
+        case questionCount
+        case questionsCreatedThisMonth
+    }
+}
+
+
 public struct AnswerData: Codable, Equatable, Hashable {
     
     public init(
@@ -275,34 +602,65 @@ public enum CardItemData: Codable, Equatable, Hashable {
     case question(Question)
 }
 
+public enum CardItemDisplayType: String, Codable {
+    case inline = "inline"
+    case popup = "popup"
+    case drawer = "drawer"
+}
+
 public enum CardItemType: String, Codable {
     case question = "question"
 }
 
 public struct ParraCardItem: Codable, Equatable, Hashable {
+    public let id: String
+    public let campaignId: String
+    public let campaignActionId: String
+    public let questionId: String?
     public let type: CardItemType
+    public let displayType: CardItemDisplayType?
     public let version: String
     public let data: CardItemData
-    
+
     public enum CodingKeys: String, CodingKey {
+        case id
+        case campaignId
+        case campaignActionId
+        case questionId
         case type
+        case displayType
         case version
         case data
     }
 
     public init(
+        id: String,
+        campaignId: String,
+        campaignActionId: String,
+        questionId: String?,
         type: CardItemType,
+        displayType: CardItemDisplayType?,
         version: String,
         data: CardItemData
     ) {
+        self.id = id
+        self.campaignId = campaignId
+        self.campaignActionId = campaignActionId
+        self.questionId = questionId
         self.type = type
+        self.displayType = displayType
         self.version = version
         self.data = data
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.campaignId = try container.decode(String.self, forKey: .campaignId)
+        self.campaignActionId = try container.decode(String.self, forKey: .campaignActionId)
+        self.questionId = try container.decode(String.self, forKey: .questionId)
         self.type = try container.decode(CardItemType.self, forKey: .type)
+        self.displayType = try container.decode(CardItemDisplayType.self, forKey: .displayType)
         self.version = try container.decode(String.self, forKey: .version)
         switch type {
         case .question:
@@ -312,26 +670,20 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
+
+        try container.encode(id, forKey: .id)
+        try container.encode(campaignId, forKey: .campaignId)
+        try container.encode(campaignActionId, forKey: .campaignActionId)
+        try container.encodeIfPresent(questionId, forKey: .questionId)
         try container.encode(type, forKey: .type)
+        try container.encode(displayType, forKey: .displayType)
         try container.encode(version, forKey: .version)
         
         switch data {
         case .question(let question):
             try container.encode(question, forKey: .data)
         }
-    }
-    
-    public var hash: Int {
-        var hasher = Hasher()
-
-        hasher.combine(id)
-        hasher.combine(type)
-        hasher.combine(version)
-        hasher.combine(data)
-
-        return hasher.finalize()
-    }
+    }    
 }
 
 public struct CardsResponse: Codable, Equatable, Hashable {
@@ -397,7 +749,7 @@ public struct CheckboxQuestionOption: Codable, Equatable, Hashable, Identifiable
     public enum CodingKeys: String, CodingKey {
         case title
         case value
-        case isOther = "is_other"
+        case isOther
         case id
     }
 }
@@ -540,8 +892,8 @@ public struct ShortTextQuestionBody: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case placeholder
-        case minLength = "min_length"
-        case maxLength = "max_length"
+        case minLength
+        case maxLength
     }
 }
 
@@ -570,8 +922,8 @@ public struct LongTextQuestionBody: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case placeholder
-        case minLength = "min_length"
-        case maxLength = "max_length"
+        case minLength
+        case maxLength
     }
 }
 
@@ -665,10 +1017,10 @@ public struct RatingQuestionBody: Codable, Equatable, Hashable {
     }
 
     public enum CodingKeys: String, CodingKey {
-        case options = "options"
-        case leadingLabel = "leading_label"
-        case centerLabel = "center_label"
-        case trailingLabel = "trailing_label"
+        case options
+        case leadingLabel
+        case centerLabel
+        case trailingLabel
     }
 }
 

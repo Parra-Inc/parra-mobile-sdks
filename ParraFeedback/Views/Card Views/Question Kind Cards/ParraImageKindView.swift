@@ -15,6 +15,7 @@ internal class ParraImageKindView: UIView, ParraQuestionKindView {
 
     private let question: Question
     private let answerHandler: ParraAnswerHandler
+    private let bucketId: String
     private let config: ParraCardViewConfig
     private let contentContainer = UIStackView(frame: .zero)
 
@@ -22,6 +23,7 @@ internal class ParraImageKindView: UIView, ParraQuestionKindView {
     private var labels = [UILabel]()
 
     required init(
+        bucketId: String,
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
@@ -32,6 +34,7 @@ internal class ParraImageKindView: UIView, ParraQuestionKindView {
         self.question = question
         self.config = config
         self.answerHandler = answerHandler
+        self.bucketId = bucketId
 
         super.init(frame: .zero)
 
@@ -155,10 +158,10 @@ extension ParraImageKindView: SelectableButtonDelegate {
                 kind: .image,
                 data: AnswerType(optionId: option.id)
             ),
-            for: question
+            for: bucketId
         )
 
-        answerHandler.commitAnswers(for: question)
+        answerHandler.commitAnswers(for: bucketId, question: question)
     }
 
     func buttonDidDeselect(button: SelectableButton) {

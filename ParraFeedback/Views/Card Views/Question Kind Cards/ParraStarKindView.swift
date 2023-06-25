@@ -19,16 +19,19 @@ internal class ParraStarKindView: UIView, ParraQuestionKindView {
     private let starControl: ParraStarControl
     private let contentContainer = UIStackView(frame: .zero)
     private let ratingLabels: ParraRatingLabels?
+    private let bucketId: String
 
     required init(
+        bucketId: String,
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
         answerHandler: ParraAnswerHandler
     ) {
         self.question = question
-        self.config = config
         self.answerHandler = answerHandler
+        self.bucketId = bucketId
+        self.config = config
         self.starControl = ParraStarControl(
             starCount: data.starCount,
             config: config
@@ -87,7 +90,7 @@ extension ParraStarKindView: ParraStarControlDelegate {
                           didConfirmStarCount count: Int) {
 
         updateAnswer(for: count)
-        answerHandler.commitAnswers(for: question)
+        answerHandler.commitAnswers(for: bucketId, question: question)
     }
 
     private func updateAnswer(for count: Int) {
@@ -96,7 +99,7 @@ extension ParraStarKindView: ParraStarControlDelegate {
                 kind: .star,
                 data: IntValueAnswer(value: count)
             ),
-            for: question
+            for: bucketId
         )
     }
 }

@@ -7,42 +7,116 @@
 //
 
 import Foundation
+import UIKit
+import AdSupport
 
 internal enum ParraHeader {
-    static let parraHeaderPrefix = "parra"
+    static let parraHeaderPrefix = "X-PARRA"
 
+    var prefixedName: String {
+        "\(ParraHeader.parraHeaderPrefix)-\(name)"
+    }
+
+    case applicationId(String)
+    case applicationLocale
+    case applicationBundleId
     case debug
-    case moduleVersion(module: String)
-    case os
-    case osVersion
     case device
-    case appLocale
+    case deviceId
     case deviceLocale
-    case timeZoneAbbreviation
-    case timeZoneOffset
+    case deviceManufacturer
+    case deviceTimeZoneAbbreviation
+    case deviceTimeZoneOffset
+    case platform
+    case platformAgent
+    case platformSdkVersion
+    case platformVersion
 
-    var headerName: String {
+    private var name: String {
         switch self {
+        case .applicationLocale:
+            return "APPLICATION-LOCALE"
+        case .applicationId:
+            return "APPLICATION-ID"
+        case .applicationBundleId:
+            return "APPLICATION-BUNDLE-ID"
         case .debug:
-            return "debug"
-        case .moduleVersion(let module):
-            return "\(module.lowercased())-version"
-        case .os:
-            return "os"
-        case .osVersion:
-            return "os-version"
+            return "DEBUG"
         case .device:
-            return "device"
-        case .appLocale:
-            return "app-locale"
+            return "DEVICE"
+        case .deviceId:
+            return "DEVICE-ID"
         case .deviceLocale:
-            return "device-locale"
-        case .timeZoneAbbreviation:
-            return "timezone-abbreviation"
-        case .timeZoneOffset:
-            return "timezone-offset"
+            return "DEVICE-LOCALE"
+        case .deviceTimeZoneAbbreviation:
+            return "DEVICE-TIMEZONE-ABBREVIATION"
+        case .deviceTimeZoneOffset:
+            return "DEVICE-TIMEZONE-OFFSET"
+        case .deviceManufacturer:
+            return "DEVICE-MANUFACTURER"
+        case .platform:
+            return "PLATFORM"
+        case .platformAgent:
+            return "PLATFORM-AGENT"
+        case .platformSdkVersion:
+            return "PLATFORM-SDK-VERSION"
+        case .platformVersion:
+            return "PLATFORM-VERSION"
         }
     }
 
-    var prefixedHeaderName: String { "\(ParraHeader.parraHeaderPrefix)-\(headerName)" }
+    var currentValue: String? {
+        switch self {
+        case .applicationId(let applicationId):
+            return applicationId
+        case .applicationLocale:
+            return Locale.preferredLanguages.first
+        case .applicationBundleId:
+            return Bundle.main.bundleIdentifier
+        case .debug:
+#if DEBUG
+            return "1"
+#else
+            return nil
+#endif
+        case .device:
+            return UIDevice.modelCode
+        case .deviceId:
+            return UIDevice.current.identifierForVendor?.uuidString
+        case .deviceLocale:
+            return NSLocale.current.languageCode
+        case .deviceManufacturer:
+            return "Apple"
+        case .deviceTimeZoneAbbreviation:
+            return TimeZone.current.abbreviation()
+        case .deviceTimeZoneOffset:
+            return String(TimeZone.current.secondsFromGMT())
+        case .platform:
+            return UIDevice.current.systemName
+        case .platformAgent:
+            return "parra-ios-swift"
+        case .platformSdkVersion:
+            return Parra.libraryVersion()
+        case .platformVersion:
+            return UIDevice.current.systemVersion
+        }
+    }
+
+    static var trackingHeaderDictionary: [String: String] {
+        let keys: [ParraHeader] = [
+            .applicationLocale, .applicationBundleId, .debug, .device, .deviceId, .deviceLocale,
+            .deviceManufacturer, .deviceTimeZoneAbbreviation, .deviceTimeZoneOffset, .platform,
+            .platformAgent, .platformSdkVersion, .platformVersion
+        ]
+
+        var headers = [String: String]()
+
+        for key in keys {
+            if let value = key.currentValue {
+                headers[key.prefixedName] = value
+            }
+        }
+
+        return headers
+    }
 }

@@ -12,7 +12,8 @@ import UIKit
 /// to install and use other Parra libraries.
 public class Parra: ParraModule {
     public static private(set) var name = "core"
-        
+
+    @MainActor
     internal static var shared: Parra! = {
         let diskCacheURL = ParraDataManager.Path.networkCachesDirectory
         // Cache may reject image entries if they are greater than 10% of the cache's size
@@ -27,6 +28,7 @@ public class Parra: ParraModule {
         configuration.urlCache = cache
         configuration.requestCachePolicy = .returnCacheDataElseLoad
 
+        let notificationCenter = ParraNotificationCenter.default
         let urlSession = URLSession(configuration: configuration)
         let dataManager = ParraDataManager()
 
@@ -42,18 +44,18 @@ public class Parra: ParraModule {
 
         let syncManager = ParraSyncManager(
             networkManager: networkManager,
-            sessionManager: sessionManager
+            sessionManager: sessionManager,
+            notificationCenter: notificationCenter
         )
-        
+
         return Parra(
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
-            networkManager: networkManager
+            networkManager: networkManager,
+            notificationCenter: notificationCenter
         )
     }()
-    
-    public static internal(set) var config: ParraConfiguration = .default
     
     internal private(set) static var registeredModules: [String: ParraModule] = [:]
     
@@ -61,18 +63,25 @@ public class Parra: ParraModule {
     internal let syncManager: ParraSyncManager
     internal let sessionManager: ParraSessionManager
     internal let networkManager: ParraNetworkManager
+    internal let notificationCenter: NotificationCenterType
         
-    internal init(dataManager: ParraDataManager,
-                  syncManager: ParraSyncManager,
-                  sessionManager: ParraSessionManager,
-                  networkManager: ParraNetworkManager) {
+    internal init(
+        dataManager: ParraDataManager,
+        syncManager: ParraSyncManager,
+        sessionManager: ParraSessionManager,
+        networkManager: ParraNetworkManager,
+        notificationCenter: NotificationCenterType
+    ) {
         
         self.dataManager = dataManager
         self.syncManager = syncManager
         self.sessionManager = sessionManager
         self.networkManager = networkManager
+        self.notificationCenter = notificationCenter
         
         UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
+
+        Parra.registerModule(module: self)
     }
     
     deinit {
@@ -110,10 +119,15 @@ public class Parra: ParraModule {
     public static func registerModule(module: ParraModule) {
         registeredModules[type(of: module).name] = module
     }
+
+    // Mostly just a test helper
+    internal static func unregisterModule(module: ParraModule) {
+        registeredModules.removeValue(forKey: type(of: module).name)
+    }
     
     /// Checks whether the provided module has already been registered with ParraCore
-    public static func hasRegisteredModule(module: ParraModule.Type) -> Bool {
-        return registeredModules[module.name] != nil
+    public static func hasRegisteredModule(module: ParraModule) -> Bool {
+        return registeredModules[type(of: module).name] != nil
     }
 
     // MARK: - Synchronization
@@ -146,6 +160,12 @@ public class Parra: ParraModule {
     }
 
     public func synchronizeData() async {
-        await sessionManager.synchronizeData()
+        guard let response = await sessionManager.synchronizeData() else {
+            return
+        }
+
+        for module in Parra.registeredModules.values {
+            module.didReceiveSessionResponse(sessionResponse: response)
+        }
     }
 }

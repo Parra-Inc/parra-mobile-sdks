@@ -22,8 +22,10 @@ internal class ParraBooleanKindView: UIView, ParraQuestionKindView {
 
     private let question: Question
     private let answerHandler: ParraAnswerHandler
+    private let bucketId: String
 
     required init(
+        bucketId: String,
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
@@ -31,6 +33,7 @@ internal class ParraBooleanKindView: UIView, ParraQuestionKindView {
     ) {
         self.question = question
         self.answerHandler = answerHandler
+        self.bucketId = bucketId
 
         super.init(frame: .zero)
 
@@ -46,7 +49,7 @@ internal class ParraBooleanKindView: UIView, ParraQuestionKindView {
             for: data,
             config: config,
             currentState: answerHandler.initialState(
-                for: question
+                for: bucketId
             )
         )
 
@@ -123,16 +126,16 @@ extension ParraBooleanKindView: ParraBorderedButtonDelegate {
                 kind: .radio,
                 data: SingleOptionAnswer(optionId: option.id)
             ),
-            for: question
+            for: bucketId
         )
 
-        answerHandler.commitAnswers(for: question)
+        answerHandler.commitAnswers(for: bucketId, question: question)
     }
 
     func buttonDidDeselect(button: ParraBorderedButton,
                            optionId: String) {
-        answerHandler.update(answer: nil, for: question)
+        answerHandler.update(answer: nil, for: bucketId)
 
-        answerHandler.commitAnswers(for: question)
+        answerHandler.commitAnswers(for: bucketId, question: question)
     }
 }

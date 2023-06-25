@@ -23,6 +23,7 @@ internal protocol ParraQuestionKindView: ParraConfigurableCardView {
     associatedtype AnswerType
 
     init(
+        bucketId: String,
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,

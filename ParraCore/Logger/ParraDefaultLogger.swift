@@ -10,78 +10,138 @@ import Foundation
 
 internal class ParraDefaultLogger: ParraLogger {
     static let `default` = ParraDefaultLogger()
+    static let timestampFormatter = ISO8601DateFormatter()
 
-    func log(level: ParraLogLevel,
-             message: String,
-             extra: [String : Any]?,
-             fileID: String,
-             function: String,
-             line: Int) {
+    var loggerConfig: ParraLoggerConfig = .default
 
+    internal static let logQueue = DispatchQueue(
+        label: "com.parra.default-logger",
+        qos: .utility
+    )
+
+    func log(
+        level: ParraLogLevel,
+        message: ParraWrappedLogMessage,
+        extraError: Error?,
+        extra: [String : Any]?,
+        fileID: String,
+        function: String,
+        line: Int
+    ) {
+        // A serial queue needs to be used to process log events in order to remove races and keep them in order.
+        // This also means that we need to capture thread information before the context switch.
+
+        let currentThread = Thread.current
+        var callStackSymbols: [String]?
+        if level == .fatal {
+            callStackSymbols = Thread.callStackSymbols
+        }
+
+        ParraDefaultLogger.logQueue.async {
+            self.processLog(
+                level: level,
+                message: message,
+                extraError: extraError,
+                extra: extra,
+                fileID: fileID,
+                function: function,
+                line: line,
+                currentThread: currentThread,
+                callStackSymbols: callStackSymbols
+            )
+        }
+    }
+
+    private func processLog(
+        level: ParraLogLevel,
+        message: ParraWrappedLogMessage,
+        extraError: Error?,
+        extra: [String : Any]?,
+        fileID: String,
+        function: String,
+        line: Int,
+        currentThread: Thread,
+        callStackSymbols: [String]?
+    ) {
         guard level.isAllowed else {
             return
         }
 
-        let timestamp = ISO8601DateFormatter().string(from: Date())
-        let queue = Thread.current.queueName
+        let baseMessage: String
+        switch message {
+        case .string(let messageProvider):
+            baseMessage = messageProvider()
+        case .error(let errorProvider):
+            baseMessage = extractMessage(from: errorProvider())
+        }
+
+        let timestamp = ParraDefaultLogger.timestampFormatter.string(from: Date())
+        let queue = currentThread.queueName
+        let (module, file) = splitFileId(fileId: fileID)
+        var extraWithAdditions = extra ?? [:]
+        if let extraError {
+            extraWithAdditions["errorDescription"] = extractMessage(from: extraError)
+        }
 
 #if DEBUG
         var markerComponents: [String] = []
 
-        if Parra.config.loggerConfig.printTimestamps {
+        if loggerConfig.printTimestamps {
             markerComponents.append(timestamp)
         }
 
-        if Parra.config.loggerConfig.printVerbosity {
+        if loggerConfig.printVerbosity {
             markerComponents.append(level.name)
         }
 
-        if Parra.config.loggerConfig.printModuleName {
-            let (module, _) = splitFileId(fileId: fileID)
+        if loggerConfig.printModuleName {
             markerComponents.append(module)
         }
 
-        if Parra.config.loggerConfig.printThread {
+        if loggerConfig.printFileName {
+            markerComponents.append(file)
+        }
+
+        if loggerConfig.printThread {
             markerComponents.append("🧵 \(queue)")
         }
 
         let formattedMarkers = markerComponents.map { "[\($0)]" }.joined()
 
         var formattedMessage: String
-        if Parra.config.loggerConfig.printVerbositySymbol {
-            formattedMessage = " \(level.symbol) \(formattedMarkers) \(message)"
+        if loggerConfig.printVerbositySymbol {
+            formattedMessage = " \(level.symbol) \(formattedMarkers) \(baseMessage)"
         } else {
-            formattedMessage = "\(formattedMarkers) \(message)"
+            formattedMessage = "\(formattedMarkers) \(baseMessage)"
         }
 
-        if Parra.config.loggerConfig.printCallsite {
+        if loggerConfig.printCallsite {
             let formattedLocation = createFormattedLocation(fileID: fileID, function: function, line: line)
-            formattedMessage = "\(formattedMarkers) \(formattedLocation) \(message)"
+            formattedMessage = "\(formattedMarkers) \(formattedLocation) \(baseMessage)"
         }
 
-        let extraOrDefault = extra ?? [:]
-        if !extraOrDefault.isEmpty {
-            formattedMessage.append(contentsOf: " \(extraOrDefault.debugDescription)")
+        if !extraWithAdditions.isEmpty {
+            formattedMessage.append(contentsOf: " \(extraWithAdditions.debugDescription)")
         }
-        if level == .fatal {
-            let formattedStackTrace = Thread.callStackSymbols.joined(separator: "\n")
+
+        if let callStackSymbols {
+            let formattedStackTrace = callStackSymbols.joined(separator: "\n")
 
             formattedMessage.append(" - Call stack:\n\(formattedStackTrace)")
         }
 
         print(formattedMessage)
 #else
-        let (module, file) = splitFileId(fileId: fileID)
-
         var params = [String: Any]()
-        params[ParraLoggerConfig.Constant.logEventMessageKey] = message
+        params[ParraLoggerConfig.Constant.logEventMessageKey] = baseMessage
         params[ParraLoggerConfig.Constant.logEventLevelKey] = level.name
         params[ParraLoggerConfig.Constant.logEventTimestampKey] = timestamp
         params[ParraLoggerConfig.Constant.logEventFileKey] = file
         params[ParraLoggerConfig.Constant.logEventModuleKey] = module
         params[ParraLoggerConfig.Constant.logEventThreadKey] = queue
-        if !extra.isEmpty {
-            params[ParraLoggerConfig.Constant.logEventExtraKey] = extra
+        params[ParraLoggerConfig.Constant.logEventThreadIdKey] = String(Thread.current.threadId)
+        if !extraWithAdditions.isEmpty {
+            params[ParraLoggerConfig.Constant.logEventExtraKey] = extraWithAdditions
         }
         if level >= .error {
             params[ParraLoggerConfig.Constant.logEventCallStackKey] = Thread.callStackSymbols
@@ -93,17 +153,43 @@ internal class ParraDefaultLogger: ParraLogger {
 #endif
     }
 
-    private func splitFileId(fileId: String) -> (module: String, fileName: String) {
-        let parts = fileId.split(separator: "/")
-
-        if parts.count == 0 {
-            return ("Unknown", "Unknown")
-        } else if parts.count == 1 {
-            return ("Unknown", String(parts[0]))
-        } else if parts.count == 2 {
-            return (String(parts[0]), String(parts[1]))
+    private func extractMessage(from error: Error) -> String {
+        if let parraError = error as? ParraError {
+            return parraError.errorDescription
         } else {
-            return (String(parts[0]), parts.dropFirst(1).joined(separator: "/"))
+            // Error is always bridged to NSError, can't downcast to check.
+            if type(of: error) is NSError.Type {
+                let nsError = error as NSError
+
+                return "Error domain: \(nsError.domain), code: \(nsError.code), description: \(nsError.localizedDescription)"
+            } else {
+                return String(reflecting: error)
+            }
+        }
+    }
+
+    private func splitFileId(fileId: String) -> (module: String, fileName: String) {
+        let initialSplit = {
+            let parts = fileId.split(separator: "/")
+
+            if parts.count == 0 {
+                return ("Unknown", "Unknown")
+            } else if parts.count == 1 {
+                return ("Unknown", String(parts[0]))
+            } else if parts.count == 2 {
+                return (String(parts[0]), String(parts[1]))
+            } else {
+                return (String(parts[0]), parts.dropFirst(1).joined(separator: "/"))
+            }
+        }
+
+        let (module, fileName) = initialSplit()
+
+        let fileParts = fileName.split(separator: ".")
+        if fileParts.count == 1 {
+            return (module, fileName)
+        } else {
+            return (module, fileParts.dropLast(1).joined(separator: "."))
         }
     }
 

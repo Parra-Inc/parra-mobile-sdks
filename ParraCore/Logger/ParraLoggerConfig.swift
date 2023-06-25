@@ -15,7 +15,8 @@ public struct ParraLoggerConfig {
     public var printThread: Bool
     public var printCallsite: Bool
     public var printModuleName: Bool
-    public var logger: ParraLogger
+    public var printFileName: Bool
+
     public var minimumAllowedLogLevel: ParraLogLevel = .default {
         didSet {
             ParraLogLevel.setMinAllowedLogLevel(minimumAllowedLogLevel)
@@ -31,7 +32,7 @@ public struct ParraLoggerConfig {
         printThread: Bool = false,
         printCallsite: Bool = false,
         printModuleName: Bool = true,
-        logger: ParraLogger = ParraDefaultLogger.default
+        printFileName: Bool = true
     ) {
         self.printTimestamps = printTimestamps
         self.printVerbosity = printVerbosity
@@ -39,7 +40,7 @@ public struct ParraLoggerConfig {
         self.printThread = printThread
         self.printCallsite = printCallsite
         self.printModuleName = printModuleName
-        self.logger = logger
+        self.printFileName = printFileName
 
         ParraLogLevel.setMinAllowedLogLevel(minimumAllowedLogLevel)
     }
@@ -52,6 +53,7 @@ public struct ParraLoggerConfig {
         static let logEventFileKey = "\(logEventPrefix)file"
         static let logEventModuleKey = "\(logEventPrefix)module"
         static let logEventThreadKey = "\(logEventPrefix)thread"
+        static let logEventThreadIdKey = "\(logEventPrefix)threadId"
         static let logEventExtraKey = "\(logEventPrefix)extra"
         static let logEventCallStackKey = "\(logEventPrefix)stack"
     }

@@ -93,7 +93,7 @@ class ParraFeedbackDataManager {
     }
     
     func removeCardsForCompletedCards(completedCards: [CompletedCard]) async {
-        let cardIds = completedCards.map { $0.questionId }
+        let cardIds = completedCards.map { $0.bucketItemId }
         
         let currentCards = await cardStorage.currentCards()
         let remainingCards = currentCards.filter { !cardIds.contains($0.id) }

@@ -24,15 +24,18 @@ protocol ParraQuestionHandlerDelegate: AnyObject {
 
 protocol ParraAnswerHandler {
     func initialState<T: AnswerOption>(
-        for question: Question
+        for bucketItemId: String
     ) -> T?
 
     func update(
         answer: QuestionAnswer?,
-        for question: Question
+        for bucketItemId: String
     )
 
-    func commitAnswers(for question: Question)
+    func commitAnswers(
+        for bucketItemId: String,
+        question: Question
+    )
 }
 
 class ParraCardAnswerHandler: ParraAnswerHandler {
@@ -42,9 +45,9 @@ class ParraCardAnswerHandler: ParraAnswerHandler {
     required init() {}
 
     func initialState<T: AnswerOption>(
-        for question: Question
+        for bucketItemId: String
     ) -> T? {
-        guard let value = currentAnswerState[question.id] else {
+        guard let value = currentAnswerState[bucketItemId] else {
             return nil
         }
 
@@ -53,19 +56,23 @@ class ParraCardAnswerHandler: ParraAnswerHandler {
 
     func update(
         answer: QuestionAnswer?,
-        for question: Question
+        for bucketItemId: String
     ) {
-        currentAnswerState[question.id] = answer
+        currentAnswerState[bucketItemId] = answer
     }
 
-    func commitAnswers(for question: Question) {
-        guard let answer = currentAnswerState[question.id] else {
+    func commitAnswers(
+        for bucketItemId: String,
+        question: Question
+    ) {
+        guard let answer = currentAnswerState[bucketItemId] else {
             // This check is critical since it's possible that a card could commit a selection change
             // without any answers selected.
             return
         }
 
         let completedCard = CompletedCard(
+            bucketItemId: bucketItemId,
             questionId: question.id,
             data: answer
         )

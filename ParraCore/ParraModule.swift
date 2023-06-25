@@ -9,6 +9,8 @@ import Foundation
 
 public protocol ParraModule: Syncable {
     static var name: String { get }
+
+    func didReceiveSessionResponse(sessionResponse: ParraSessionsResponse)
 }
 
 public extension ParraModule {
@@ -35,4 +37,6 @@ public extension ParraModule {
     static func eventPrefix() -> String {
         return "parra:\(name.lowercased())"
     }
+
+    func didReceiveSessionResponse(sessionResponse: ParraSessionsResponse) {}
 }

@@ -18,10 +18,7 @@ internal actor ParraSyncManager {
     internal enum Constant {
         static let eventualSyncDelay: TimeInterval = 30.0
     }
-    
-    /// Whether or not a sync operation is in progress.
-    internal private(set) var isSyncing = false
-    
+
     /// Whether or not new attempts to sync occured while a sync was in progress. Many sync events could be received while a sync
     /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
     /// is completed.
@@ -29,18 +26,23 @@ internal actor ParraSyncManager {
     
     private let networkManager: ParraNetworkManager
     private let sessionManager: ParraSessionManager
+    private let notificationCenter: NotificationCenterType
 
     @MainActor private var syncTimer: Timer?
     
-    internal init(networkManager: ParraNetworkManager,
-                  sessionManager: ParraSessionManager) {
+    internal init(
+        networkManager: ParraNetworkManager,
+        sessionManager: ParraSessionManager,
+        notificationCenter: NotificationCenterType
+    ) {
         self.networkManager = networkManager
         self.sessionManager = sessionManager
+        self.notificationCenter = notificationCenter
     }
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
     internal func enqueueSync(with mode: ParraSyncMode) async {
-        guard networkManager.authenticationProvider != nil else {
+        guard await networkManager.getAuthenticationProvider() != nil else {
             parraLogTrace("Skipping \(mode) sync. Authentication provider is unset.")
 
             return
@@ -53,7 +55,7 @@ internal actor ParraSyncManager {
 
         parraLogDebug("Enqueuing sync: \(mode)")
 
-        if isSyncing {
+        if await SyncState.shared.isSyncing() {
             if mode == .immediate {
                 parraLogDebug("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
                 
@@ -70,9 +72,7 @@ internal actor ParraSyncManager {
             return
         }
 
-        isSyncing = true
-
-        Task.detached {
+        Task {
             await self.sync()
         }
         
@@ -80,25 +80,23 @@ internal actor ParraSyncManager {
     }
     
     private func sync() async {
-        isSyncing = true
+        await SyncState.shared.beginSync()
         
         let syncToken = UUID().uuidString
 
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(
-                name: Parra.syncDidBeginNotification,
-                object: nil,
-                userInfo: [
-                    Parra.Constant.syncTokenKey: syncToken
-                ]
-            )
-        }
+        await notificationCenter.postAsync(
+            name: Parra.syncDidBeginNotification,
+            object: self,
+            userInfo: [
+                Parra.Constant.syncTokenKey: syncToken
+            ]
+        )
 
         defer {
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(
+            Task {
+                await notificationCenter.postAsync(
                     name: Parra.syncDidEndNotification,
-                    object: nil,
+                    object: self,
                     userInfo: [
                         Parra.Constant.syncTokenKey: syncToken
                     ]
@@ -108,7 +106,8 @@ internal actor ParraSyncManager {
         
         guard await hasDataToSync() else {
             parraLogDebug("No data available to sync")
-            isSyncing = false
+
+            await SyncState.shared.endSync()
 
             return
         }
@@ -118,32 +117,50 @@ internal actor ParraSyncManager {
         let start = CFAbsoluteTimeGetCurrent()
         parraLogTrace("Sending sync data...")
 
-        await performSync()
+        do {
+            try await performSync()
 
-        let duration = CFAbsoluteTimeGetCurrent() - start
-        parraLogTrace("Sync data sent. Took \(duration)(s)")
-        
-        if let enqueuedSyncMode {
-            parraLogDebug("More sync jobs were enqueued. Repeating sync.")
-            
-            self.enqueuedSyncMode = nil
-            
-            switch enqueuedSyncMode {
-            case .immediate:
-                await sync()
-            default:
-                break
-            }
-        } else {
+            let duration = CFAbsoluteTimeGetCurrent() - start
+            parraLogTrace("Sync data sent. Took \(duration)(s)")
+        } catch let error {
+            parraLogError("Error performing sync", error)
+            // TODO: Maybe cancel the sync timer, double the countdown then start a new one?
+        }
+
+        guard let enqueuedSyncMode else {
             parraLogDebug("No more jobs found. Completing sync.")
-            
-            isSyncing = false
+
+            await SyncState.shared.endSync()
+
+            return
+        }
+
+        parraLogDebug("More sync jobs were enqueued. Repeating sync.")
+
+        self.enqueuedSyncMode = nil
+
+        switch enqueuedSyncMode {
+        case .immediate:
+            await sync()
+        case .eventual:
+            await SyncState.shared.endSync()
         }
     }
 
-    private func performSync() async {
+    private func performSync() async throws {
+        var syncError: Error?
+
+        // Rethrow after receiving an error for throttling, but allow each module to attempt a sync once
         for (_, module) in Parra.registeredModules {
-            await module.synchronizeData()
+            do {
+                try await module.synchronizeData()
+            } catch let error {
+                syncError = error
+            }
+        }
+
+        if let syncError {
+            throw syncError
         }
     }
     
@@ -159,7 +176,8 @@ internal actor ParraSyncManager {
         return shouldSync
     }
     
-    @MainActor internal func startSyncTimer() {
+    @MainActor
+    internal func startSyncTimer() {
         stopSyncTimer()
         parraLogTrace("Starting sync timer")
 
@@ -175,7 +193,8 @@ internal actor ParraSyncManager {
         }
     }
     
-    @MainActor internal func stopSyncTimer() {
+    @MainActor
+    internal func stopSyncTimer() {
         guard let syncTimer = syncTimer else {
             return
         }

@@ -252,6 +252,7 @@ extension ParraCardView {
         switch (cardItem.data) {
         case .question(let question):
             card = ParraQuestionCardView(
+                bucketId: cardItem.id,
                 question: question,
                 answerHandler: answerHandler,
                 config: config

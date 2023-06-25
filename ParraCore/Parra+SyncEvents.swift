@@ -13,51 +13,73 @@ internal extension Parra {
     private static var hasStartedEventObservers = false
 
     func addEventObservers() {
-        if Parra.hasStartedEventObservers {
+        guard NSClassFromString("XCTestCase") == nil && !Parra.hasStartedEventObservers else {
             return
         }
 
         Parra.hasStartedEventObservers = true
 
-        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(self.applicationDidBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
 
-        notificationCenter.addObserver(self,
-                                       selector: #selector(self.applicationDidBecomeActive),
-                                       name: UIApplication.didBecomeActiveNotification,
-                                       object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(self.applicationWillResignActive),
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
 
-        notificationCenter.addObserver(self, selector: #selector(self.applicationWillResignActive),
-                                       name: UIApplication.willResignActiveNotification,
-                                       object: nil)
+        notificationCenter.addObserver(
+            self,
 
-        notificationCenter.addObserver(self, selector: #selector(self.applicationDidEnterBackground),
-                                       name: UIApplication.didEnterBackgroundNotification,
-                                       object: nil)
+            selector: #selector(self.applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
 
-        notificationCenter.addObserver(self, selector: #selector(self.triggerEventualSyncFromNotification),
-                                       name: UIApplication.significantTimeChangeNotification,
-                                       object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(self.triggerEventualSyncFromNotification),
+            name: UIApplication.significantTimeChangeNotification,
+            object: nil
+        )
     }
     
     func removeEventObservers() {
-        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIApplication.significantTimeChangeNotification,
-                                                  object: nil)
-    }
-
-    @MainActor
-    @objc func applicationDidBecomeActive(notification: Notification) {
         guard NSClassFromString("XCTestCase") == nil else {
             return
         }
 
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.significantTimeChangeNotification,
+            object: nil
+        )
+    }
+
+    @MainActor
+    @objc func applicationDidBecomeActive(notification: Notification) {
         if let taskId = Parra.backgroundTaskId,
-            let app = notification.object as? UIApplication {
+           let app = notification.object as? UIApplication {
 
             app.endBackgroundTask(taskId)
         }
@@ -69,10 +91,6 @@ internal extension Parra {
 
     @MainActor
     @objc func applicationWillResignActive(notification: Notification) {
-        guard NSClassFromString("XCTestCase") == nil else {
-            return
-        }
-
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .inactive))
 
         triggerSyncFromNotification(notification: notification)
@@ -117,19 +135,11 @@ internal extension Parra {
 
     @MainActor
     @objc func applicationDidEnterBackground(notification: Notification) {
-        guard NSClassFromString("XCTestCase") == nil else {
-            return
-        }
-
         Parra.logAnalyticsEvent(ParraSessionEventType._Internal.appState(state: .background))
     }
 
     @MainActor
     @objc private func triggerSyncFromNotification(notification: Notification) {
-        guard NSClassFromString("XCTestCase") == nil else {
-            return
-        }
-        
         Task {
             await syncManager.enqueueSync(with: .immediate)
         }
@@ -137,10 +147,6 @@ internal extension Parra {
     
     @MainActor
     @objc private func triggerEventualSyncFromNotification(notification: Notification) {
-        guard NSClassFromString("XCTestCase") == nil else {
-            return
-        }
-        
         Task {
             await syncManager.enqueueSync(with: .eventual)
         }

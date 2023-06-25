@@ -18,10 +18,16 @@ internal actor SessionStorage: ItemStorage {
     }
 
     func update(session: ParraSession) async {
-        try? await storageModule.write(
-            name: session.sessionId,
-            value: session
-        )
+        do {
+            try await storageModule.write(
+                name: session.sessionId,
+                value: session
+            )
+        } catch let error {
+            parraLogError("Error storing session", error, [
+                "sessionId": session.sessionId
+            ])
+        }
     }
 
     func deleteSessions(with sessionIds: Set<String>) async {

@@ -19,16 +19,19 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
     private let textField: ParraBorderedTextField
     private var validationError = TextValidationError.none
     private let validationLabel = UILabel(frame: .zero)
+    private let bucketId: String
 
     required init(
+        bucketId: String,
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
         answerHandler: ParraAnswerHandler
     ) {
         self.question = question
-        self.data = data
         self.answerHandler = answerHandler
+        self.bucketId = bucketId
+        self.data = data
         self.textField = ParraBorderedTextField(config: config)
 
         super.init(frame: .zero)
@@ -129,7 +132,7 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
 
         answerHandler.update(
             answer: answer,
-            for: question
+            for: bucketId
         )
     }
 
@@ -153,7 +156,7 @@ extension ParraShortTextKindView: UITextFieldDelegate {
                                 reason: UITextField.DidEndEditingReason) {
 
         if validationError == .none {
-            answerHandler.commitAnswers(for: question)
+            answerHandler.commitAnswers(for: bucketId, question: question)
         }
     }
 

@@ -23,22 +23,28 @@ internal class ParraQuestionCardView: ParraCardItemView {
 
     private let question: Question
     private let answerHandler: ParraCardAnswerHandler
+    private let bucketId: String
     private var questionTypeView: any (UIView & ParraQuestionKindView)
 
     private let titleLabel: UILabel
     private var subtitleLabel: UILabel?
 
-    internal required init(question: Question,
-                           answerHandler: ParraCardAnswerHandler,
-                           config: ParraCardViewConfig) {
+    internal required init(
+        bucketId: String,
+        question: Question,
+        answerHandler: ParraCardAnswerHandler,
+        config: ParraCardViewConfig
+    ) {
         self.question = question
         self.answerHandler = answerHandler
+        self.bucketId = bucketId
 
         titleLabel = UILabel(frame: .zero)
 
         switch question.data {
         case .booleanQuestionBody(let data):
             questionTypeView = ParraBooleanKindView(
+                bucketId: bucketId,
                 question: question,
                 data: data,
                 config: config,
@@ -46,6 +52,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
             )
         case .checkboxQuestionBody(let data):
             questionTypeView = ParraCheckboxKindView(
+                bucketId: bucketId,
                 question: question,
                 data: data,
                 config: config,
@@ -53,6 +60,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
             )
         case .choiceQuestionBody(let data):
             questionTypeView = ParraChoiceKindView(
+                bucketId: bucketId,
                 question: question,
                 data: data,
                 config: config,
@@ -60,6 +68,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
             )
         case .imageQuestionBody(let data):
             questionTypeView = ParraImageKindView(
+                bucketId: bucketId,
                 question: question,
                 data: data,
                 config: config,
@@ -67,6 +76,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
             )
         case .longTextQuestionBody(let data):
             questionTypeView = ParraLongTextKindView(
+                bucketId: bucketId,
                 question: question,
                 data: data,
                 config: config,
@@ -74,6 +84,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
             )
         case .ratingQuestionBody(let data):
             questionTypeView = ParraRatingKindView(
+                bucketId: bucketId,
                 question: question,
                 data: data,
                 config: config,
@@ -81,6 +92,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
             )
         case .shortTextQuestionBody(let data):
             questionTypeView = ParraShortTextKindView(
+                bucketId: bucketId,
                 question: question,
                 data: data,
                 config: config,
@@ -88,6 +100,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
             )
         case .starQuestionBody(let data):
             questionTypeView = ParraStarKindView(
+                bucketId: bucketId,
                 question: question,
                 data: data,
                 config: config,
@@ -105,9 +118,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 2
         titleLabel.lineBreakMode = .byWordWrapping
-        if #available(iOS 14.0, *) {
-            titleLabel.lineBreakStrategy = .hangulWordPriority
-        }
+        titleLabel.lineBreakStrategy = .hangulWordPriority
         titleLabel.isUserInteractionEnabled = true
         titleLabel.accessibilityIdentifier = "Parra Question Title Label"
 
@@ -196,7 +207,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
 
     override func commitToSelection() {
         if questionTypeView.shouldAllowCommittingSelection() {
-            answerHandler.commitAnswers(for: question)
+            answerHandler.commitAnswers(for: bucketId, question: question)
         }
     }
 

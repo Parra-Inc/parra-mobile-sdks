@@ -8,15 +8,15 @@ on:
 
 jobs:
   build:
-    runs-on: macos-12
+    runs-on: macos-13
     strategy:
       matrix:
         include:
           # - xcode: "16.2"
           #   ios: "15.2"
           #   device: "iPhone 13"
-          - xcode: "14.2"
-            ios: "16.2"
+          - xcode: "14.3.1"
+            ios: "16.4"
             device: "iPhone 14"
     name: Parra Tests on iOS (${{ matrix.ios }})
 

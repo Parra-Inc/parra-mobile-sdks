@@ -38,3 +38,5 @@ internal actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable
         userDefaults.removeObject(forKey: name)
     }
 }
+
+extension UserDefaults: @unchecked Sendable {}

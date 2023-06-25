@@ -7,14 +7,7 @@
 
 import Foundation
 
-extension ParraCardItem: Identifiable {
-    public var id: String {
-        switch data {
-        case .question(let question):
-            return question.id
-        }
-    }
-
+extension ParraCardItem {
     public func getAllAssets() -> [Asset] {
         switch self.data {
         case .question(let question):

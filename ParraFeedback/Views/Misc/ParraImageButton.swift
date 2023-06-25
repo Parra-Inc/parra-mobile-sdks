@@ -65,13 +65,13 @@ internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableV
         ])
 
         Task {
-            let isCached = Parra.Assets.isAssetCached(asset: asset)
+            let isCached = await Parra.API.Assets.isAssetCached(asset: asset)
 
             if !isCached {
                 self.activityIndicator.startAnimating()
             }
 
-            let image = try? await Parra.Assets.fetchAsset(asset: asset)
+            let image = try? await Parra.API.Assets.fetchAsset(asset: asset)
 
             Task { @MainActor in
                 self.activityIndicator.stopAnimating()

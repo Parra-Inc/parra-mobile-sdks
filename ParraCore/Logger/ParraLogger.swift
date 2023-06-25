@@ -10,7 +10,11 @@ import Foundation
 public protocol ParraLogger: AnyObject {
     func log(
         level: ParraLogLevel,
-        message: String,
+        // Messages should always be functions that return a message. This allows the logger to only execute potentially
+        // expensive code if the logger is enabled. A wrapper object is provided to help differentiate between log types.
+        message: ParraWrappedLogMessage,
+        // When a primary message is provided but there is still an error object attached to the log.
+        extraError: Error?,
         extra: [String: Any]?,
         // It is expected that #fileID is passed here for module resolution to function properly
         fileID: String,
@@ -20,16 +24,18 @@ public protocol ParraLogger: AnyObject {
 }
 
 fileprivate func _parraLog(
-    _ message: String,
+    message: ParraWrappedLogMessage,
+    extraError: Error? = nil,
     extra: [String: Any] = [:],
     level: ParraLogLevel,
     fileID: String,
     function: String,
     line: Int
 ) {
-    Parra.config.loggerConfig.logger.log(
+    ParraDefaultLogger.default.log(
         level: level,
         message: message,
+        extraError: extraError,
         extra: extra,
         fileID: fileID,
         function: function,
@@ -39,14 +45,14 @@ fileprivate func _parraLog(
 
 // TODO: Wrap extra in its own autoclosure
 
-public func parraLog(_ message: @autoclosure () -> String,
+public func parraLog(_ message: @autoclosure @escaping () -> String,
                      extra: [String: Any] = [:],
                      level: ParraLogLevel = .info,
                      fileID: String = #fileID,
                      function: String = #function,
                      line: Int = #line) {
     _parraLog(
-        message(),
+        message: .string(message),
         extra: extra,
         level: level,
         fileID: fileID,
@@ -55,13 +61,13 @@ public func parraLog(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogTrace(_ message: @autoclosure () -> String,
+public func parraLogTrace(_ message: @autoclosure @escaping () -> String,
                           _ extra: [String: Any] = [:],
                           fileID: String = #fileID,
                           function: String = #function,
                           line: Int = #line) {
     _parraLog(
-        message(),
+        message: .string(message),
         extra: extra,
         level: .trace,
         fileID: fileID,
@@ -70,13 +76,13 @@ public func parraLogTrace(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogDebug(_ message: @autoclosure () -> String,
+public func parraLogDebug(_ message: @autoclosure @escaping () -> String,
                           _ extra: [String: Any] = [:],
                           fileID: String = #fileID,
                           function: String = #function,
                           line: Int = #line) {
     _parraLog(
-        message(),
+        message: .string(message),
         extra: extra,
         level: .debug,
         fileID: fileID,
@@ -85,13 +91,13 @@ public func parraLogDebug(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogInfo(_ message: @autoclosure () -> String,
+public func parraLogInfo(_ message: @autoclosure @escaping () -> String,
                          _ extra: [String: Any] = [:],
                          fileID: String = #fileID,
                          function: String = #function,
                          line: Int = #line) {
     _parraLog(
-        message(),
+        message: .string(message),
         extra: extra,
         level: .info,
         fileID: fileID,
@@ -100,13 +106,13 @@ public func parraLogInfo(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogWarn(_ message: @autoclosure () -> String,
+public func parraLogWarn(_ message: @autoclosure @escaping () -> String,
                          _ extra: [String: Any] = [:],
                          fileID: String = #fileID,
                          function: String = #function,
                          line: Int = #line) {
     _parraLog(
-        message(),
+        message: .string(message),
         extra: extra,
         level: .warn,
         fileID: fileID,
@@ -115,13 +121,13 @@ public func parraLogWarn(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogError(_ message: @autoclosure () -> String,
+public func parraLogError(_ message: @autoclosure @escaping () -> String,
                           _ extra: [String: Any] = [:],
                           fileID: String = #fileID,
                           function: String = #function,
                           line: Int = #line) {
     _parraLog(
-        message(),
+        message: .string(message),
         extra: extra,
         level: .error,
         fileID: fileID,
@@ -130,12 +136,12 @@ public func parraLogError(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogError(_ message: @autoclosure () -> ParraError,
+public func parraLogError(_ message: @autoclosure @escaping () -> ParraError,
                           fileID: String = #fileID,
                           function: String = #function,
                           line: Int = #line) {
     _parraLog(
-        message().errorDescription,
+        message: .error(message),
         extra: [:],
         level: .error,
         fileID: fileID,
@@ -144,13 +150,13 @@ public func parraLogError(_ message: @autoclosure () -> ParraError,
     )
 }
 
-public func parraLogError(_ message: @autoclosure () -> Error,
+public func parraLogError(_ message: @autoclosure @escaping () -> Error,
                           _ extra: [String: Any] = [:],
                           fileID: String = #fileID,
                           function: String = #function,
                           line: Int = #line) {
     _parraLog(
-        message().localizedDescription,
+        message: .error(message),
         extra: extra,
         level: .error,
         fileID: fileID,
@@ -159,14 +165,15 @@ public func parraLogError(_ message: @autoclosure () -> Error,
     )
 }
 
-public func parraLogError(_ message: @autoclosure () -> String,
+public func parraLogError(_ message: @autoclosure @escaping () -> String,
                           _ error: Error,
                           _ extra: [String: Any] = [:],
                           fileID: String = #fileID,
                           function: String = #function,
                           line: Int = #line) {
     _parraLog(
-        "\(message()) error: \(error.localizedDescription)",
+        message: .string(message),
+        extraError: error,
         extra: extra,
         level: .error,
         fileID: fileID,
@@ -175,13 +182,13 @@ public func parraLogError(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogFatal(_ message: @autoclosure () -> String,
+public func parraLogFatal(_ message: @autoclosure @escaping () -> String,
                           _ extra: [String: Any] = [:],
                           fileID: String = #fileID,
                           function: String = #function,
                           line: Int = #line) {
     _parraLog(
-        message(),
+        message: .string(message),
         extra: extra,
         level: .fatal,
         fileID: fileID,
@@ -190,27 +197,13 @@ public func parraLogFatal(_ message: @autoclosure () -> String,
     )
 }
 
-public func parraLogFatal(_ message: @autoclosure () -> ParraError,
-                          fileID: String = #fileID,
-                          function: String = #function,
-                          line: Int = #line) {
-    _parraLog(
-        message().errorDescription,
-        extra: [:],
-        level: .fatal,
-        fileID: fileID,
-        function: function,
-        line: line
-    )
-}
-
-public func parraLogFatal(_ message: @autoclosure () -> Error,
+public func parraLogFatal(_ message: @autoclosure @escaping () -> Error,
                           _ extra: [String: Any] = [:],
                           fileID: String = #fileID,
                           function: String = #function,
                           line: Int = #line) {
     _parraLog(
-        message().localizedDescription,
+        message: .error(message),
         extra: extra,
         level: .fatal,
         fileID: fileID,
@@ -219,14 +212,15 @@ public func parraLogFatal(_ message: @autoclosure () -> Error,
     )
 }
 
-public func parraLogFatal(_ message: @autoclosure () -> String,
+public func parraLogFatal(_ message: @autoclosure @escaping () -> String,
                           _ error: Error,
                           _ extra: [String: Any] = [:],
                           fileID: String = #fileID,
                           function: String = #function,
                           line: Int = #line) {
     _parraLog(
-        "\(message()) error: \(error.localizedDescription)",
+        message: .string(message),
+        extraError: error,
         extra: extra,
         level: .fatal,
         fileID: fileID,
