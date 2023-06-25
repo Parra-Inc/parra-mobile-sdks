@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import ParraCore
+import Parra
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
 
-        window?.tintColor = Parra.Constant.brandColor
+        window?.tintColor = Parra.Constants.brandColor
     }
     func sceneDidDisconnect(_ scene: UIScene) {}
     func sceneDidBecomeActive(_ scene: UIScene) {}

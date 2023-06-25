@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ParraCore
-import ParraFeedback
+import Parra
 
 class ParraDemoTableViewController: UITableViewController {}

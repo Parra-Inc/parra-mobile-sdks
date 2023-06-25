@@ -7,8 +7,7 @@
 //
 
 import UIKit
-import ParraFeedback
-import ParraCore
+import Parra
 
 class ParraCardsInModal: UIViewController {
     @IBOutlet weak var popupButton: UIButton!

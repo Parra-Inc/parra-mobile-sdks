@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import ParraFeedback
+import Parra
 
 class ParraCardsInTableView: UITableViewController {
     struct Constant {

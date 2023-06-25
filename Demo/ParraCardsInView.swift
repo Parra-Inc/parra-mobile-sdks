@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import ParraFeedback
+import Parra
 
 class ParraCardsInView: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)

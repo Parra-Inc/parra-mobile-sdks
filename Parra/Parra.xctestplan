@@ -1,0 +1,41 @@
+{
+  "configurations" : [
+    {
+      "id" : "492DA479-B400-49C6-BCE9-D77AE1BC0EB7",
+      "name" : "Configuration 1",
+      "options" : {
+        "environmentVariableEntries" : [
+          {
+            "key" : "PARRA_LOG_LEVEL",
+            "value" : "trace"
+          }
+        ],
+        "threadSanitizerEnabled" : true
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:Parra.xcodeproj",
+          "identifier" : "001B7AF127DE3A7600DEEECD",
+          "name" : "Parra"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true,
+    "threadSanitizerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Parra.xcodeproj",
+        "identifier" : "001B7AF827DE3A7600DEEECD",
+        "name" : "ParraTests"
+      }
+    }
+  ],
+  "version" : 1
+}
