@@ -37,10 +37,10 @@ class ParraCardsInModal: UIViewController {
     }
 
     @IBAction func presentPopupStyleFeedbackModal(_ sender: UIButton) {
-        ParraFeedback.presentCardPopup(with: cards, fromViewController: self)
+        ParraFeedback.presentCardPopup(with: cards, from: self)
     }
 
     @IBAction func presentDrawerStyleFeedbackModal(_ sender: UIButton) {
-        ParraFeedback.presentCardDrawer(with: cards, fromViewController: self)
+        ParraFeedback.presentCardDrawer(with: cards, from: self)
     }
 }

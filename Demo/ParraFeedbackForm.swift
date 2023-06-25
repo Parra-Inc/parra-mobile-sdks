@@ -37,6 +37,6 @@ class ParraFeedbackForm: UIViewController {
             return
         }
 
-        ParraFeedback.presentFeedbackForm(with: formData)
+        ParraFeedback.presentFeedbackForm(with: formData, from: self)
     }
 }

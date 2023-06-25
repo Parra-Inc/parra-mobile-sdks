@@ -291,7 +291,7 @@ public class ParraFeedback: ParraModule {
 
             ParraFeedback.presentCardPopup(
                 with: cardItems,
-                fromViewController: nil,
+                from: nil,
                 config: .default,
                 transitionStyle: .slide,
                 // In this context the user isn't allowed to dismiss the modal manually. It will be auto-
