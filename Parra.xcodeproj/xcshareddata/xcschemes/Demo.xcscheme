@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:ParraCore/ParraCore.xctestplan"
+            reference = "container:Parra/Parra.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

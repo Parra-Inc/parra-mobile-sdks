@@ -186,7 +186,7 @@
 			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
-			remoteInfo = ParraCore;
+			remoteInfo = Parra;
 		};
 		001B7AFD27DE3A7600DEEECD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -200,7 +200,7 @@
 			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
-			remoteInfo = ParraCore;
+			remoteInfo = Parra;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -956,7 +956,7 @@
 			dependencies = (
 			);
 			name = Parra;
-			productName = ParraCore;
+			productName = Parra;
 			productReference = 001B7AF227DE3A7600DEEECD /* Parra.framework */;
 			productType = "com.apple.product-type.framework";
 		};
@@ -975,7 +975,7 @@
 				001B7AFE27DE3A7600DEEECD /* PBXTargetDependency */,
 			);
 			name = ParraTests;
-			productName = ParraCoreTests;
+			productName = ParraTests;
 			productReference = 001B7AF927DE3A7600DEEECD /* ParraTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -1381,7 +1381,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraCoreTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
@@ -1403,7 +1403,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraCoreTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
