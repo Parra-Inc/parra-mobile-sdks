@@ -52,7 +52,7 @@ internal extension Parra {
                 app.endBackgroundTask(taskId)
             }
 
-            Parra.logEvent(ParraSessionEventType._Internal.appState(state: .active))
+            Parra.logEvent(.appStateChanged(state: .active))
 
             triggerEventualSyncFromNotification(notification: notification)
         }
@@ -61,7 +61,7 @@ internal extension Parra {
     @MainActor
     @objc func applicationWillResignActive(notification: Notification) {
         withInitializationCheck { [self] in
-            Parra.logEvent(ParraSessionEventType._Internal.appState(state: .inactive))
+            Parra.logEvent(.appStateChanged(state: .inactive))
 
             triggerSyncFromNotification(notification: notification)
 
@@ -107,7 +107,7 @@ internal extension Parra {
     @MainActor
     @objc func applicationDidEnterBackground(notification: Notification) {
         withInitializationCheck {
-            Parra.logEvent(ParraSessionEventType._Internal.appState(state: .background))
+            Parra.logEvent(.appStateChanged(state: .background))
         }
     }
 

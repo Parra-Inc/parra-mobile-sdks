@@ -29,25 +29,28 @@ internal struct LoggerHelpers {
         }
     }
 
+    /// Safely splits a file id (#fileID) into a module name, and a file name, with extension.
+    internal static func splitFileId(
+        fileId: String
+    ) -> (module: String, fileName: String) {
+        let parts = fileId.split(separator: "/")
+
+        if parts.count == 0 {
+            return ("Unknown", "Unknown")
+        } else if parts.count == 1 {
+            return ("Unknown", String(parts[0]))
+        } else if parts.count == 2 {
+            return (String(parts[0]), String(parts[1]))
+        } else {
+            return (String(parts[0]), parts.dropFirst(1).joined(separator: "/"))
+        }
+    }
+
     /// Safely splits a file id (#fileID) into a module name, a file name and a file extension.
     internal static func splitFileId(
         fileId: String
     ) -> (module: String, fileName: String, fileExtension: String) {
-        let initialSplit = {
-            let parts = fileId.split(separator: "/")
-
-            if parts.count == 0 {
-                return ("Unknown", "Unknown")
-            } else if parts.count == 1 {
-                return ("Unknown", String(parts[0]))
-            } else if parts.count == 2 {
-                return (String(parts[0]), String(parts[1]))
-            } else {
-                return (String(parts[0]), parts.dropFirst(1).joined(separator: "/"))
-            }
-        }
-
-        let (module, fileName) = initialSplit()
+        let (module, fileName) = splitFileId(fileId: fileId)
 
         let fileParts = fileName.split(separator: ".")
         if fileParts.count == 1 {

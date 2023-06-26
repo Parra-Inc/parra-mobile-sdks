@@ -10,6 +10,8 @@ import Foundation
 public extension Parra {
     @MainActor
     internal class func deinitialize() async {
+        shared.removeEventObservers()
+
         await shared.networkManager.updateAuthenticationProvider(nil)
         await ParraConfigState.shared.resetState()
         await ParraGlobalState.shared.unregisterModule(module: shared)

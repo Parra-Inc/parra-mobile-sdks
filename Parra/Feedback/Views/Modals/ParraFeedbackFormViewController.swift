@@ -45,10 +45,7 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
 
         formViewController.didMove(toParent: self)
 
-        Parra.logAnalyticsEvent(ParraSessionEventType.impression(
-            location: "form",
-            module: ParraFeedback.self
-        ), params: [
+        Parra.logEvent(.view(element: "feedback_form"), params: [
             "formId": form.id
         ])
     }
@@ -64,10 +61,7 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
     private func onSubmit(data: [FeedbackFormField: String]) {
         parraLogInfo("Submitting feedback form data")
 
-        Parra.logAnalyticsEvent(ParraSessionEventType.action(
-            source: "form-submit",
-            module: ParraFeedback.self
-        ), params: [
+        Parra.logEvent(.submit(form: "feedback_form"), params: [
             "formId": form.id
         ])
 

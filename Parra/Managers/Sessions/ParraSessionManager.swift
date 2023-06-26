@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
+// TODO: Any logs used in here cause recursion in production
+
 /// ParraSessionManager
-/// Session Lifecycle
-///
 internal actor ParraSessionManager {
     private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager
@@ -84,29 +84,38 @@ internal actor ParraSessionManager {
         return sessionResponse
     }
 
-    internal func logEvent<Key>(_ name: String,
-                                params: [Key: Any]) async where Key: CustomStringConvertible {
+    /// Logs the supplied event on the user's session.
+    /// Do not interact with this method directly. Logging events should be done through the
+    /// Parra.logEvent helpers.
+    internal func log(
+        event: ParraEventWrapper,
+        fileId: String = #fileID
+    ) async {
+        let (module, file) = LoggerHelpers.splitFileId(fileId: fileId)
 
         await createSessionIfNotExists()
-
+        
         guard var currentSession else {
             return
         }
 
-        parraLogDebug("Logging event", [
-            "name": String(describing: name),
-            "params": String(describing: params),
-        ])
-
-        let metadata: [String: AnyCodable] = Dictionary(
-            uniqueKeysWithValues: params.map { key, value in
-                (key.description, .init(value))
-            })
+        #if DEBUG
+        // !Very important! There is a similar condition inside the logger to send log events
+        // to the session manager when NOT in DEBUG builds. Removing this condition will result
+        // in infinite recursion.
+        parraLogDebug(event.name, event.params)
+        #endif
 
         let newEvent = ParraSessionEvent(
-            name: name,
+            name: event.name,
             createdAt: Date(),
-            metadata: metadata
+            metadata: [
+                "origin": [
+                    "module": module,
+                    "file": file
+                ],
+                "params": AnyCodable.init(event.params)
+            ]
         )
 
         currentSession.updateUserProperties(userProperties)
@@ -117,25 +126,28 @@ internal actor ParraSessionManager {
         self.currentSession = currentSession
     }
 
-    internal func setUserProperty<Key>(_ value: Any?,
-                                       forKey key: Key) async where Key: CustomStringConvertible {
-
+    internal func setUserProperty(
+        _ value: Any?,
+        forKey key: String
+    ) async {
         await createSessionIfNotExists()
 
         guard var currentSession else {
             return
         }
 
+        #if DEBUG
         parraLogDebug("Updating user property", [
-            "key": key.description,
+            "key": key,
             "new value": String(describing: value),
-            "old value": String(describing: userProperties[key.description])
+            "old value": String(describing: userProperties[key])
         ])
+        #endif
 
         if let value {
-            userProperties[key.description] = .init(value)
+            userProperties[key] = .init(value)
         } else {
-            userProperties.removeValue(forKey: key.description)
+            userProperties.removeValue(forKey: key)
         }
 
         currentSession.updateUserProperties(userProperties)

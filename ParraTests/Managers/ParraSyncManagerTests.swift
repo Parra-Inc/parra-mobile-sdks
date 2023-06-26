@@ -45,7 +45,7 @@ class ParraSyncManagerTests: XCTestCase {
             notificationCenter: NotificationCenter.default
         )
 
-        await sessionManager.logEvent("test", params: [String: Any]())
+        await sessionManager.log(event: .init(name: "test"))
         await syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(of: [notificationExpectation], timeout: 1.0)
@@ -73,7 +73,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: syncManager
         )
 
-        await Parra.shared.sessionManager.logEvent("test", params: [String: Any]())
+        await sessionManager.log(event: .init(name: "test"))
         await Parra.shared.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(of: [syncDidBegin], timeout: 1.0)

@@ -101,10 +101,7 @@ struct ParraFeedbackFormView: View {
             .disabled(!canSubmit)
 
             Button {
-                Parra.logAnalyticsEvent(ParraSessionEventType.action(
-                    source: "powered-by-parra",
-                    module: ParraFeedback.self
-                ))
+                Parra.logEvent(.tap(element: "powered-by-parra"))
 
                 UIApplication.shared.open(Parra.Constants.parraWebRoot)
             } label: {
