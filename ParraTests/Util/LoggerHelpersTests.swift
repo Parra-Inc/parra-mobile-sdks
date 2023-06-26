@@ -113,7 +113,7 @@ final class LoggerHelpersTests: XCTestCase {
 
     func testFormatsLogLocation() {
         let slug = LoggerHelpers.createFormattedLocation(
-            fileID: "Parra/LoggerHelpers.swift",
+            fileId: "Parra/LoggerHelpers.swift",
             function: "createFormattedLocation(fileID:function:line:)",
             line: 69
         )
@@ -123,7 +123,7 @@ final class LoggerHelpersTests: XCTestCase {
 
     func testFormatsLogLocationMissingFileExtension() {
         let slug = LoggerHelpers.createFormattedLocation(
-            fileID: "Parra/LoggerHelpers",
+            fileId: "Parra/LoggerHelpers",
             function: "createFormattedLocation(fileID:function:line:)",
             line: 69
         )
@@ -133,7 +133,7 @@ final class LoggerHelpersTests: XCTestCase {
 
     func testFormatsLogLocationForFunctionsWithoutParams() {
         let slug = LoggerHelpers.createFormattedLocation(
-            fileID: "Parra/LoggerHelpers.swift",
+            fileId: "Parra/LoggerHelpers.swift",
             function: "createFormattedLocation",
             line: 69
         )

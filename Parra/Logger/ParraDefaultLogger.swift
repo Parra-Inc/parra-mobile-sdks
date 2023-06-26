@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO: Memoize fileID/etc parsing?
+
 internal class ParraDefaultLogger: ParraLogger {
     static let `default` = ParraDefaultLogger()
     static let timestampFormatter = ISO8601DateFormatter()
@@ -24,7 +26,7 @@ internal class ParraDefaultLogger: ParraLogger {
         message: ParraWrappedLogMessage,
         extraError: Error?,
         extra: [String : Any]?,
-        fileID: String,
+        fileId: String,
         function: String,
         line: Int
     ) {
@@ -43,7 +45,7 @@ internal class ParraDefaultLogger: ParraLogger {
                 message: message,
                 extraError: extraError,
                 extra: extra,
-                fileID: fileID,
+                fileId: fileId,
                 function: function,
                 line: line,
                 currentThread: currentThread,
@@ -57,7 +59,7 @@ internal class ParraDefaultLogger: ParraLogger {
         message: ParraWrappedLogMessage,
         extraError: Error?,
         extra: [String : Any]?,
-        fileID: String,
+        fileId: String,
         function: String,
         line: Int,
         currentThread: Thread,
@@ -79,7 +81,7 @@ internal class ParraDefaultLogger: ParraLogger {
 
         let timestamp = ParraDefaultLogger.timestampFormatter.string(from: Date())
         let queue = currentThread.queueName
-        let (module, file, _) = LoggerHelpers.splitFileId(fileId: fileID)
+        let (module, file, _) = LoggerHelpers.splitFileId(fileId: fileId)
         var extraWithAdditions = extra ?? [:]
         if let extraError {
             extraWithAdditions["errorDescription"] = LoggerHelpers.extractMessage(
@@ -121,7 +123,7 @@ internal class ParraDefaultLogger: ParraLogger {
 
         if loggerConfig.printCallsite {
             let formattedLocation = LoggerHelpers.createFormattedLocation(
-                fileID: fileID,
+                fileId: fileId,
                 function: function,
                 line: line
             )
@@ -157,7 +159,7 @@ internal class ParraDefaultLogger: ParraLogger {
 
         // TODO: Would capturing other info from ProcessInfo.processInfo.environment help with symbolication?
 
-        Parra.logEvent(ParraSessionEventType._Internal.log, params: params)
+        Parra.logEvent(.log, params: params)
 #endif
     }
 }

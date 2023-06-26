@@ -60,15 +60,15 @@ internal struct LoggerHelpers {
 
     /// Generates a slug representative of a callsite.
     internal static func createFormattedLocation(
-        fileID: String,
+        fileId: String,
         function: String,
         line: Int
     ) -> String {
         let file: String
-        if let extIndex = fileID.lastIndex(of: ".") {
-            file = String(fileID[..<extIndex])
+        if let extIndex = fileId.lastIndex(of: ".") {
+            file = String(fileId[..<extIndex])
         } else {
-            file = fileID
+            file = fileId
         }
 
         let functionName: String
