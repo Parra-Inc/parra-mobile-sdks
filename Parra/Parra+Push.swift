@@ -29,7 +29,9 @@ public extension Parra {
         }
     }
 
-    internal class func registerDevicePushTokenString(_ tokenString: String) async {
+    internal class func registerDevicePushTokenString(
+        _ tokenString: String
+    ) async {
         guard await ParraGlobalState.shared.isInitialized() else {
             parraLogWarn("Parra.registerDevicePushToken was called before Parra.initialize(). Make sure that you're calling Parra.initialize() before application.registerForRemoteNotifications()")
 

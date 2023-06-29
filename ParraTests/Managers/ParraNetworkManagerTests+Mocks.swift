@@ -31,7 +31,7 @@ class MockURLSessionDataTask: URLSessionDataTask {
         Task {
             let (data, response, error) = dataTaskResolver(request)
             
-            try await Task.sleep(nanoseconds: 1_000_000_000)
+            try await Task.sleep(nanoseconds: 100_000_000)
             
             handler(data, response, error)
         }

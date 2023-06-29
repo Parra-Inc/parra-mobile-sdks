@@ -88,7 +88,6 @@ extension XCTestCase {
             notificationCenter: notificationCenter
         )
     }
-
 }
 
 func createTestResponse(route: String,
