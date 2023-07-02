@@ -26,11 +26,11 @@ public extension Parra {
     ///    access token. This function will be invoked automatically whenever the user's credential is missing or
     ///    expired and Parra needs to refresh the authentication state for your user.
     func initialize(
-        config: ParraConfiguration = .default,
+        options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) {
         Task { @MainActor in
-            await initialize(config: config, authProvider: authProvider)
+            await initialize(options: options, authProvider: authProvider)
         }
     }
     /// Initializes the Parra SDK using the provided configuration and auth provider. This method should be invoked as
@@ -41,7 +41,7 @@ public extension Parra {
     ///    expired and Parra needs to refresh the authentication state for your user.
     @MainActor
     func initialize(
-        config: ParraConfiguration = .default,
+        options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) async {
         if await ParraGlobalState.shared.isInitialized() {
@@ -50,7 +50,7 @@ public extension Parra {
             return
         }
 
-        var newConfig = config
+        var newConfig = ParraConfiguration(options: options)
 
         let (tenantId, applicationId, authenticationProvider) = withAuthenticationMiddleware(
             for: authProvider

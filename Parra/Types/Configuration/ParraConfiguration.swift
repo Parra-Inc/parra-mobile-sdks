@@ -10,19 +10,42 @@ import Foundation
 
 public struct ParraConfiguration {
     public let loggerConfig: ParraLoggerConfig
+    public let pushNotificationsEnabled: Bool
+
     public internal(set) var tenantId: String?
     public internal(set) var applicationId: String?
 
-    // Public version of this initializer should be kept up to date to include
-    // all fields except for tenantId and applicationId
-    public init(loggerConfig: ParraLoggerConfig) {
+    internal init(
+        loggerConfig: ParraLoggerConfig,
+        pushNotificationsEnabled: Bool
+    ) {
         self.loggerConfig = loggerConfig
+        self.pushNotificationsEnabled = pushNotificationsEnabled
+
         self.tenantId = nil
         self.applicationId = nil
     }
 
+    internal init(options: [ParraConfigurationOption]) {
+        var loggerConfig = ParraConfiguration.default.loggerConfig
+        var pushNotificationsEnabled = ParraConfiguration.default.pushNotificationsEnabled
+
+        for option in options {
+            switch option {
+            case .logger(let parraLoggerConfig):
+                loggerConfig = parraLoggerConfig
+            case .pushNotifications:
+                pushNotificationsEnabled = true
+            }
+        }
+
+        self.loggerConfig = loggerConfig
+        self.pushNotificationsEnabled = pushNotificationsEnabled
+    }
+
     public static let `default` = ParraConfiguration(
-        loggerConfig: .default
+        loggerConfig: .default,
+        pushNotificationsEnabled: false
     )
 
     internal mutating func setTenantId(_ tenantId: String?) {

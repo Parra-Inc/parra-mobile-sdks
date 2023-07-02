@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let myParraApplicationId = "cb22fd90-2abc-4044-b985-fcb86f61daa9"
 
         Parra.shared.initialize(
-            config: .default,
+            options: [.pushNotifications],
             authProvider: .default(
                 tenantId: myParraTenantId,
                 applicationId: myParraApplicationId
@@ -45,9 +45,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return response["access_token"]!
             }
         )
-
-        // Call this after Parra.initialize()
-        application.registerForRemoteNotifications()
 
         return true
     }

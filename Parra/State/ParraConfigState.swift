@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 @globalActor
 internal struct ParraConfigState {
@@ -26,6 +27,12 @@ internal struct ParraConfigState {
 
             ParraDefaultLogger.logQueue.async {
                 ParraDefaultLogger.default.loggerConfig = newValue.loggerConfig
+            }
+
+            if newValue.pushNotificationsEnabled {
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
             }
         }
 
