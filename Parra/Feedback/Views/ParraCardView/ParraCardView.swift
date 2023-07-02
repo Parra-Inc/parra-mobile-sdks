@@ -253,9 +253,9 @@ public class ParraCardView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
-        Parra.triggerSync()
+        Parra.shared.triggerSync(completion: nil)
     }
     
     public override func willMove(toWindow newWindow: UIWindow?) {
@@ -266,7 +266,7 @@ public class ParraCardView: UIView {
                                                       name: ParraFeedback.cardsDidChangeNotification,
                                                       object: nil)
             
-            Parra.triggerSync()
+            Parra.shared.triggerSync(completion: nil)
         } else {
             checkAndUpdateCards()
         }

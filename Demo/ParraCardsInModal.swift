@@ -22,7 +22,7 @@ class ParraCardsInModal: UIViewController {
         popupButton.isEnabled = false
         drawerButton.isEnabled = false
 
-        ParraFeedback.fetchFeedbackCards { [self] response in
+        ParraFeedback.shared.fetchFeedbackCards { [self] response in
             switch response {
             case .success(let cards):
                 self.cards = cards
@@ -36,10 +36,11 @@ class ParraCardsInModal: UIViewController {
     }
 
     @IBAction func presentPopupStyleFeedbackModal(_ sender: UIButton) {
-        ParraFeedback.presentCardPopup(with: cards, from: self)
+        ParraFeedback.shared.presentCardPopup(with: cards, from: self)
+
     }
 
     @IBAction func presentDrawerStyleFeedbackModal(_ sender: UIButton) {
-        ParraFeedback.presentCardDrawer(with: cards, from: self)
+        ParraFeedback.shared.presentCardDrawer(with: cards, from: self)
     }
 }

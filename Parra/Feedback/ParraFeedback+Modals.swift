@@ -12,7 +12,7 @@ import UIKit
 public extension ParraFeedback {
     // MARK: - Modals
 
-    static func presentCardPopup(
+    func presentCardPopup(
         with cards: [ParraCardItem],
         from fromViewController: UIViewController? = nil,
         config: ParraCardViewConfig = .default,
@@ -38,7 +38,7 @@ public extension ParraFeedback {
         )
     }
 
-    static func presentCardDrawer(
+    func presentCardDrawer(
         with cards: [ParraCardItem],
         from fromViewController: UIViewController? = nil,
         config: ParraCardViewConfig = .drawerDefault,
@@ -69,7 +69,7 @@ public extension ParraFeedback {
 
     // MARK: - Feedback Forms
 
-    static func presentFeedbackForm(
+    func presentFeedbackForm(
         with form: ParraFeedbackFormResponse,
         from fromViewController: UIViewController? = nil,
         config: ParraCardViewConfig = .drawerDefault
@@ -94,10 +94,12 @@ public extension ParraFeedback {
     }
 
     // MARK: - Helpers
-    private static func presentModal(modal: UIViewController & ParraModal,
-                                     fromViewController: UIViewController?,
-                                     transitionStyle: ParraCardModalTransitionStyle,
-                                     config: ParraCardViewConfig) {
+    private func presentModal(
+        modal: UIViewController & ParraModal,
+        fromViewController: UIViewController?,
+        transitionStyle: ParraCardModalTransitionStyle,
+        config: ParraCardViewConfig
+    ) {
         guard let vc = fromViewController ?? UIViewController.topMostViewController() else {
             parraLogWarn("Missing view controller to present popup from.")
             return

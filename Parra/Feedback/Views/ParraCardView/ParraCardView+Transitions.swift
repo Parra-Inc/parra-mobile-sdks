@@ -17,7 +17,7 @@ extension ParraCardView: ParraQuestionHandlerDelegate {
             return
         }
 
-        guard !(await ParraFeedback.hasCardBeenCompleted(nextCardItem)) else {
+        guard !(await ParraFeedback.shared.hasCardBeenCompleted(nextCardItem)) else {
             return
         }
 

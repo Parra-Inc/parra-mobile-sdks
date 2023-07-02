@@ -34,7 +34,7 @@ public class ParraCardTableViewCell: UITableViewCell {
             parraCardView.config = config
         }
     }
-    
+
     private let parraCardView = ParraCardView(config: .default)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -68,7 +68,7 @@ public class ParraCardTableViewCell: UITableViewCell {
     ///        }
     ///    }
     public func endDisplaying() {
-        Parra.triggerSync()
+        Parra.shared.triggerSync()
     }
     
     private func commonInit() {

@@ -10,8 +10,11 @@ import Foundation
 internal class ParraFeedbackDataManager {
     private let completedCardDataStorage: CompletedCardDataStorage
     private let cardStorage: CardStorage
+    private let parra: Parra
 
-    internal init() {
+    internal init(parra: Parra) {
+        self.parra = parra
+
         let completedCardDataFolder = ParraFeedback.persistentStorageFolder()
         let completedCardDataFileName = ParraFeedbackDataManager.Key.completedCardsKey
         
@@ -73,7 +76,7 @@ internal class ParraFeedbackDataManager {
                 completedCards: completedCards
             )
 
-            await Parra.triggerSync()
+            await parra.triggerSync()
         }
     }
 

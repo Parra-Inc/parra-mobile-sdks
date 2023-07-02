@@ -20,7 +20,7 @@ class ParraFeedbackForm: UIViewController {
 
         presentFormButton.isEnabled = false
 
-        ParraFeedback.fetchFeedbackForm(formId: "c15256c2-d21d-4d9f-85ac-1d4655416a95") { [self] response in
+        ParraFeedback.shared.fetchFeedbackForm(formId: "c15256c2-d21d-4d9f-85ac-1d4655416a95") { [self] response in
             switch response {
             case .success(let data):
                 formData = data
@@ -36,6 +36,6 @@ class ParraFeedbackForm: UIViewController {
             return
         }
 
-        ParraFeedback.presentFeedbackForm(with: formData, from: self)
+        ParraFeedback.shared.presentFeedbackForm(with: formData, from: self)
     }
 }

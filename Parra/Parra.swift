@@ -13,7 +13,6 @@ import UIKit
 public class Parra: ParraModule {
     internal static private(set) var name = "core"
 
-    @MainActor
     internal static var shared: Parra! = {
         let diskCacheURL = ParraDataManager.Path.networkCachesDirectory
         // Cache may reject image entries if they are greater than 10% of the cache's size
@@ -62,7 +61,7 @@ public class Parra: ParraModule {
     internal let sessionManager: ParraSessionManager
     internal let networkManager: ParraNetworkManager
     internal let notificationCenter: NotificationCenterType
-        
+
     internal init(
         dataManager: ParraDataManager,
         syncManager: ParraSyncManager,
@@ -89,7 +88,7 @@ public class Parra: ParraModule {
 
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
-    public static func logout(completion: (() -> Void)? = nil) {
+    public func logout(completion: (() -> Void)? = nil) {
         Task {
             await logout()
 
@@ -101,16 +100,16 @@ public class Parra: ParraModule {
 
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
-    public static func logout() async {
-        await shared.syncManager.enqueueSync(with: .immediate)
-        await shared.dataManager.updateCredential(credential: nil)
-        await shared.syncManager.stopSyncTimer()
+    public func logout() async {
+        await syncManager.enqueueSync(with: .immediate)
+        await dataManager.updateCredential(credential: nil)
+        await syncManager.stopSyncTimer()
     }
 
     // MARK: - Synchronization
 
     /// Uploads any cached Parra data. This includes data like answers to questions.
-    public static func triggerSync(completion: (() -> Void)? = nil) {
+    public func triggerSync(completion: (() -> Void)? = nil) {
         Task {
             await triggerSync()
             
@@ -122,12 +121,8 @@ public class Parra: ParraModule {
     /// This may be something you want to do in response to a significant event in your app, or in response to a low memory
     /// warning, for example. Note that in order to prevent excessive network activity it may take up to 30 seconds for the sync
     /// to complete after being initiated.
-    public static func triggerSync() async {
-        await shared.triggerSync()
-    }
-
-    /// Uploads any cached Parra data. This includes data like answers to questions.
-    internal func triggerSync() async {
+    public func triggerSync() async {
+        // Uploads any cached Parra data. This includes data like answers to questions.
         // Don't expose sync mode publically.
         await syncManager.enqueueSync(with: .eventual)
     }

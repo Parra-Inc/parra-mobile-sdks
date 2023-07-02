@@ -7,26 +7,34 @@
 
 import Foundation
 
-fileprivate actor ParraFeedbackPopupState {
-    static let shared = ParraFeedbackPopupState()
-
-    var isPresented = false
-
-    func present() async {
-        isPresented = true
-    }
-
-    func dismiss() async {
-        isPresented = false
-    }
-}
-
 /// The `ParraFeedback` module is used to fetch Parra Feedback data from the Parra API. Once data is fetched,
 /// it will be displayed automatically in any `ParraCardView`s that you add to your view hierarchy.
 /// To handle authentication, see the Parra module.
 public class ParraFeedback: ParraModule {
-    internal static let shared = ParraFeedback()
-    internal let dataManager = ParraFeedbackDataManager()
+    internal let parra: Parra
+    internal let dataManager: ParraFeedbackDataManager
+
+    @MainActor
+    public static var shared: ParraFeedback! = {
+        let parra = Parra.shared!
+        let dataManager = ParraFeedbackDataManager(
+            parra: parra
+        )
+
+        return ParraFeedback(
+            parra: parra,
+            dataManager: dataManager
+        )
+    }()
+
+    @MainActor
+    internal init(
+        parra: Parra,
+        dataManager: ParraFeedbackDataManager
+    ) {
+        self.parra = parra
+        self.dataManager = dataManager
+    }
 
     internal private(set) static var name: String = "Feedback"
 
@@ -34,7 +42,7 @@ public class ParraFeedback: ParraModule {
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
     /// view the `ParraCardView` initializer if you'd like to only display certain cards.
-    public static func fetchFeedbackCards(
+    public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all,
         withCompletion completion: @escaping (Result<[ParraCardItem], ParraError>) -> Void
     ) {
@@ -57,7 +65,7 @@ public class ParraFeedback: ParraModule {
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
     /// view the `ParraCardView` initializer if you'd like to only display certain cards.
-    public static func fetchFeedbackCards(
+    public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all,
         withCompletion completion: @escaping ([ParraCardItem], Error?) -> Void
     ) {
@@ -83,7 +91,7 @@ public class ParraFeedback: ParraModule {
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
     /// view the `ParraCardView` initializer if you'd like to only display certain cards.
-    public static func fetchFeedbackCards(
+    public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
         let cards = try await Parra.API.Feedback.getCards(appArea: appArea)
@@ -95,12 +103,12 @@ public class ParraFeedback: ParraModule {
         var cardsToKeep = [ParraCardItem]()
 
         for card in cards {
-            if await shared.cachedCardPredicate(card: card) {
+            if await cachedCardPredicate(card: card) {
                 cardsToKeep.append(card)
             }
         }
 
-        shared.applyNewCards(cards: cardsToKeep)
+        applyNewCards(cards: cardsToKeep)
         
         return cardsToKeep
     }
@@ -108,7 +116,7 @@ public class ParraFeedback: ParraModule {
     /// Fetches the feedback form with the provided ID from the Parra API. If a form is returned, it is up to the caller
     /// to pass this response to `ParraFeedback.presentFeedbackForm` to present the feedback form. Splitting up feedback
     /// form presentation in this way allows us to skip having to show loading indicators.
-    public static func fetchFeedbackForm(
+    public func fetchFeedbackForm(
         formId: String
     ) async throws -> ParraFeedbackFormResponse {
         let response = try await Parra.API.Feedback.getFeedbackForm(with: formId)
@@ -119,7 +127,7 @@ public class ParraFeedback: ParraModule {
     /// Fetches the feedback form with the provided ID from the Parra API. If a form is returned, it is up to the caller
     /// to pass this response to `ParraFeedback.presentFeedbackForm` to present the feedback form. Splitting up feedback
     /// form presentation in this way allows us to skip having to show loading indicators.
-    public static func fetchFeedbackForm(
+    public func fetchFeedbackForm(
         formId: String,
         withCompletion completion: @escaping (Result<ParraFeedbackFormResponse, ParraError>) -> Void
     ) {
@@ -159,8 +167,8 @@ public class ParraFeedback: ParraModule {
     }
     
     /// Checks whether the user has previously supplied input for the provided `ParraCardItem`.
-    internal class func hasCardBeenCompleted(_ cardItem: ParraCardItem) async -> Bool {
-        let completed = await shared.dataManager.completedCardData(forId: cardItem.id)
+    internal func hasCardBeenCompleted(_ cardItem: ParraCardItem) async -> Bool {
+        let completed = await dataManager.completedCardData(forId: cardItem.id)
         
         return completed != nil
     }
@@ -278,7 +286,7 @@ public class ParraFeedback: ParraModule {
                 await ParraFeedbackPopupState.shared.present()
             }
 
-            ParraFeedback.presentCardPopup(
+            presentCardPopup(
                 with: cardItems,
                 from: nil,
                 config: .default,
