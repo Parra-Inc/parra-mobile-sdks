@@ -9,14 +9,14 @@ import Foundation
 
 public extension Parra {
     @MainActor
-    internal class func deinitialize() async {
-        shared.removeEventObservers()
+    internal func deinitialize() async {
+        removeEventObservers()
 
-        await shared.networkManager.updateAuthenticationProvider(nil)
+        await networkManager.updateAuthenticationProvider(nil)
         await ParraConfigState.shared.resetState()
-        await ParraGlobalState.shared.unregisterModule(module: shared)
+        await ParraGlobalState.shared.unregisterModule(module: self)
         await ParraGlobalState.shared.deinitialize()
-        await shared.sessionManager.endSession()
+        await sessionManager.endSession()
     }
 
     /// Initializes the Parra SDK using the provided configuration and auth provider. This method should be invoked as
@@ -25,8 +25,10 @@ public extension Parra {
     ///   - authProvider: An async function that is expected to return a ParraCredential object containing a user's
     ///    access token. This function will be invoked automatically whenever the user's credential is missing or
     ///    expired and Parra needs to refresh the authentication state for your user.
-    class func initialize(config: ParraConfiguration = .default,
-                          authProvider: ParraAuthenticationProviderType) {
+    func initialize(
+        config: ParraConfiguration = .default,
+        authProvider: ParraAuthenticationProviderType
+    ) {
         Task { @MainActor in
             await initialize(config: config, authProvider: authProvider)
         }
@@ -38,8 +40,10 @@ public extension Parra {
     ///    access token. This function will be invoked automatically whenever the user's credential is missing or
     ///    expired and Parra needs to refresh the authentication state for your user.
     @MainActor
-    class func initialize(config: ParraConfiguration = .default,
-                          authProvider: ParraAuthenticationProviderType) async {
+    func initialize(
+        config: ParraConfiguration = .default,
+        authProvider: ParraAuthenticationProviderType
+    ) async {
         if await ParraGlobalState.shared.isInitialized() {
             parraLogWarn("Parra.initialize called more than once. Subsequent calls are ignored")
 
@@ -50,18 +54,18 @@ public extension Parra {
 
         let (tenantId, applicationId, authenticationProvider) = withAuthenticationMiddleware(
             for: authProvider
-        ) { [weak shared] success in
-            guard let shared else {
+        ) { [weak self] success in
+            guard let self else {
                 return
             }
 
             Task {
                 if success {
-                    shared.addEventObservers()
-                    shared.syncManager.startSyncTimer()
+                    self.addEventObservers()
+                    self.syncManager.startSyncTimer()
                 } else {
-                    await shared.dataManager.updateCredential(credential: nil)
-                    shared.syncManager.stopSyncTimer()
+                    await self.dataManager.updateCredential(credential: nil)
+                    self.syncManager.stopSyncTimer()
                 }
             }
         }
@@ -75,15 +79,15 @@ public extension Parra {
         }
 
         await ParraConfigState.shared.updateState(newConfig)
-        await shared.networkManager.updateAuthenticationProvider(authenticationProvider)
+        await networkManager.updateAuthenticationProvider(authenticationProvider)
         await ParraGlobalState.shared.initialize()
 
         // Generally nothing that can generate events should happen before this call. Even logs
-        await shared.sessionManager.createSessionIfNotExists()
+        await sessionManager.createSessionIfNotExists()
         parraLogInfo("Parra SDK Initialized")
 
         do {
-            let _ = try await shared.networkManager.refreshAuthentication()
+            let _ = try await networkManager.refreshAuthentication()
 
             await performPostAuthRefreshActions()
         } catch let error {
@@ -91,13 +95,13 @@ public extension Parra {
         }
     }
 
-    private class func performPostAuthRefreshActions() async {
+    private func performPostAuthRefreshActions() async {
         parraLogDebug("Performing push authentication refresh actions.")
 
         await uploadCachedPushNotificationToken()
     }
 
-    private class func uploadCachedPushNotificationToken() async {
+    private func uploadCachedPushNotificationToken() async {
         guard let token = await ParraGlobalState.shared.getCachedTemporaryPushToken() else {
             parraLogTrace("No push notification token is cached. Skipping upload.")
             return
@@ -109,11 +113,10 @@ public extension Parra {
     }
 
     @MainActor
-    internal class func withAuthenticationMiddleware(
+    internal func withAuthenticationMiddleware(
         for authProvider: ParraAuthenticationProviderType,
         onAuthenticationRefresh: @escaping (_ success: Bool) -> Void
     ) -> (String, String, ParraAuthenticationProviderFunction) {
-        
 
         switch authProvider {
         case .default(let tenantId, let applicationId, let authProvider):
@@ -130,9 +133,9 @@ public extension Parra {
                 }
             })
         case .publicKey(let tenantId, let applicationId, let apiKeyId, let userIdProvider):
-            return (tenantId, applicationId, { [weak shared] () async throws -> String in
+            return (tenantId, applicationId, { [weak self] () async throws -> String in
                 do {
-                    guard let networkManager = shared?.networkManager else {
+                    guard let networkManager = self?.networkManager else {
                         throw ParraError.unknown
                     }
 

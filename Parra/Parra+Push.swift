@@ -19,7 +19,7 @@ public extension Parra {
     /// initilizing Parra. For more information, see:
     ///  https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns
     @MainActor
-    class func registerDevicePushToken(_ token: Data) {
+    func registerDevicePushToken(_ token: Data) {
         parraLogDebug("Registering device push token")
 
         let tokenString = token.map { String(format: "%02.2hhx", $0) }.joined()
@@ -29,7 +29,7 @@ public extension Parra {
         }
     }
 
-    internal class func registerDevicePushTokenString(
+    internal func registerDevicePushTokenString(
         _ tokenString: String
     ) async {
         guard await ParraGlobalState.shared.isInitialized() else {
@@ -45,7 +45,7 @@ public extension Parra {
         await uploadDevicePushToken(tokenString)
     }
 
-    internal class func uploadDevicePushToken(_ token: String) async {
+    internal func uploadDevicePushToken(_ token: String) async {
         do {
             try await Parra.API.Push.uploadPushToken(token: token)
 
@@ -64,7 +64,6 @@ public extension Parra {
         }
     }
 
-
     /// This method should be invoked from the UIApplication delegate method
     /// application(_:didFailToRegisterForRemoteNotificationsWithError:) and pass in its error parameter to indicate to
     /// the Parra API that push notification token regsitration has failed for this device.
@@ -73,7 +72,7 @@ public extension Parra {
     /// unreachable for any reason, or if the app doesn’t have the proper code-signing entitlement. When a failure
     /// occurs, set a flag and try to register again at a later time.
     @MainActor
-    class func didFailToRegisterForRemoteNotifications(with error: Error) {
+    func didFailToRegisterForRemoteNotifications(with error: Error) {
         parraLogError("Failed to register for remote notifications", error)
     }
 }

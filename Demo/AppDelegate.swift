@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
 
-
         let myAppAccessToken     = "9B5CDA6B-7538-4A2A-9611-7308D56DFFA1"
 
         // Find this at https://dashboard.parra.io/settings
@@ -25,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Find this at https://dashboard.parra.io/applications
         let myParraApplicationId = "cb22fd90-2abc-4044-b985-fcb86f61daa9"
 
-        Parra.initialize(
+        Parra.shared.initialize(
             config: .default,
             authProvider: .default(
                 tenantId: myParraTenantId,
@@ -74,13 +73,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
-        Parra.registerDevicePushToken(deviceToken)
+        Parra.shared.registerDevicePushToken(deviceToken)
     }
 
     func application(
         _ application: UIApplication,
         didFailToRegisterForRemoteNotificationsWithError error: Error
     ) {
-        Parra.didFailToRegisterForRemoteNotifications(with: error)
+        Parra.shared.didFailToRegisterForRemoteNotifications(with: error)
     }
 }

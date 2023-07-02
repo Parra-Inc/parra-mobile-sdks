@@ -13,7 +13,7 @@ import UIKit
 public class Parra: ParraModule {
     internal static private(set) var name = "core"
 
-    internal static var shared: Parra! = {
+    public internal(set) static var shared: Parra! = {
         let diskCacheURL = ParraDataManager.Path.networkCachesDirectory
         // Cache may reject image entries if they are greater than 10% of the cache's size
         // so these need to reflect that.
