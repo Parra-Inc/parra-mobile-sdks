@@ -57,7 +57,8 @@ class ParraAuthenticationTests: XCTestCase {
                 userIdProvider: {
                     authProviderExpectation.fulfill()
                     return UUID().uuidString
-                })
+                }
+            )
         )
 
         let _ = try await mockParra.mockNetworkManager.networkManager.getAuthenticationProvider()!()
@@ -103,5 +104,28 @@ class ParraAuthenticationTests: XCTestCase {
 
             XCTFail()
         } catch {}
+    }
+
+    func testMultipleInvocationsDoNotReinitialize() async throws {
+        await mockParra.parra.initialize(authProvider: .mockPublicKey(mockParra))
+
+        let isInitialized = await mockParra.parra.state.isInitialized()
+        XCTAssertTrue(isInitialized)
+
+        await mockParra.parra.initialize(
+            authProvider: .publicKey(
+                tenantId: UUID().uuidString,
+                applicationId: UUID().uuidString,
+                apiKeyId: UUID().uuidString,
+                userIdProvider: {
+                    return UUID().uuidString
+                }
+            )
+        )
+
+        let configState = await mockParra.parra.configState.getCurrentState()
+
+        XCTAssertEqual(configState.applicationId, mockParra.applicationId)
+        XCTAssertEqual(configState.tenantId, mockParra.tenantId)
     }
 }
