@@ -116,6 +116,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
                 throw ParraError.custom("Failed to create components for url: \(url)", nil)
             }
 
+            // TODO: Should this merge the query items dictionary with any existing query params on the url string?
             urlComponents.setQueryItems(with: queryItems)
             let credential = await dataManager.getCurrentCredential()
 
@@ -173,7 +174,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
     ) async -> (Result<Data, Error>, AuthenticatedRequestAttributeOptions) {
         do {
             var request = request
-            request.setValue("Bearer \(credential.token)", forHTTPHeaderField: .authorization)
+            request.setValue(for: .authorization(.bearer(credential.token)))
 
             let (data, response) = try await performAsyncDataDask(request: request)
 
@@ -186,7 +187,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
                 parraLogTrace("Request required reauthentication")
                 let newCredential = try await refreshAuthentication()
 
-                request.setValue("Bearer \(newCredential.token)", forHTTPHeaderField: .authorization)
+                request.setValue(for: .authorization(.bearer(newCredential.token)))
 
                 return await performRequest(
                     request: request,
@@ -285,12 +286,12 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
         request.httpBody = try jsonEncoder.encode(["user_id": userId])
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
 
-        guard let authData = ("api_key:" + apiKeyId).data(using: .utf8)?.base64EncodedString() else {
+        guard let authToken = ("api_key:" + apiKeyId).data(using: .utf8)?.base64EncodedString() else {
             throw ParraError.custom("Unable to encode API key as NSData", nil)
         }
 
         addHeaders(to: &request, endpoint: endpoint, for: applicationId)
-        request.setValue("Basic \(authData)", forHTTPHeaderField: .authorization)
+        request.setValue(for: .authorization(.basic(authToken)))
 
         let (data, response) = try await performAsyncDataDask(request: request)
 
@@ -402,11 +403,11 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
         endpoint: ParraEndpoint,
         for applicationId: String
     ) {
-        request.setValue("application/json", forHTTPHeaderField: .accept)
+        request.setValue(for: .accept(.applicationJson))
         request.setValue(for: .applicationId(applicationId))
 
         if endpoint.method.allowsBody {
-            request.setValue("application/json", forHTTPHeaderField: .contentType)
+            request.setValue(for: .contentType(.applicationJson))
         }
 
         addTrackingHeaders(toRequest: &request, for: endpoint)
