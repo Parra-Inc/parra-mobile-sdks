@@ -388,7 +388,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
     private func performAsyncDataDask(request: URLRequest) async throws -> (Data, HTTPURLResponse) {
 #if DEBUG
         if NSClassFromString("XCTestCase") != nil {
-            try await Task.sleep(nanoseconds: 1_000_000_000)
+            try await Task.sleep(ms: 100)
         }
 #endif
 
