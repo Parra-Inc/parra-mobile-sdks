@@ -8,10 +8,7 @@
 
 import Foundation
 
-internal enum ParraEndpoint {
-    // mostly just for testing
-    case custom(route: String, method: HttpMethod)
-
+internal enum ParraEndpoint: Hashable {
     // Auth
     case postAuthentication(tenantId: String)
 
@@ -30,8 +27,6 @@ internal enum ParraEndpoint {
     // All endpoints should use kebab case!
     var route: String {
         switch self {
-        case .custom(let route, _):
-            return route
         case .getCards:
             return "cards"
         case .getFeedbackForm(let formId):
@@ -49,10 +44,13 @@ internal enum ParraEndpoint {
         }
     }
 
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(method)
+        hasher.combine(route)
+    }
+
     var method: HttpMethod {
         switch self {
-        case .custom(_, let method):
-            return method
         case .getCards, .getFeedbackForm:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm, .postBulkSubmitSessions,
@@ -76,8 +74,6 @@ internal enum ParraEndpoint {
 
     var slug: String {
         switch self {
-        case .custom(let route, _):
-            return route
         case .getCards:
             return "cards"
         case .getFeedbackForm:
