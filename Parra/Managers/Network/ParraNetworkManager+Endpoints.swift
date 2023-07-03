@@ -136,10 +136,10 @@ internal extension ParraNetworkManager {
             let sessionUpload = ParraSessionUpload(session: session)
 
             let response: AuthenticatedRequestResult<ParraSessionsResponse> = await performAuthenticatedRequest(
-                endpoint: .postBulkSubmitSessions(tenantId: tenantId),
-                config: .defaultWithRetries,
-                body: sessionUpload
-            )
+                    endpoint: .postBulkSubmitSessions(tenantId: tenantId),
+                    config: .defaultWithRetries,
+                    body: sessionUpload
+                )
 
             switch response.result {
             case .success(let payload):

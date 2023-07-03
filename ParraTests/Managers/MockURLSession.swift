@@ -10,7 +10,8 @@ import Foundation
 import XCTest
 @testable import Parra
 
-typealias DataTaskResolver = (_ request: URLRequest) -> (data: Data?, response: URLResponse?, error: Error?)
+typealias DataTaskResponse = (data: Data?, response: URLResponse?, error: Error?)
+typealias DataTaskResolver = (_ request: URLRequest) -> DataTaskResponse
 
 internal class MockURLSession: URLSessionType {
     var configuration: URLSessionConfiguration = .default
@@ -19,7 +20,7 @@ internal class MockURLSession: URLSessionType {
         ParraEndpoint: (testCase: XCTestCase, expectation: XCTestExpectation)
     ]()
 
-    func resolve(_ request: URLRequest) -> (Data?, URLResponse?, Error?) {
+    private func resolve(_ request: URLRequest) -> DataTaskResponse {
         guard let endpoint = matchingEndpoint(for: request) else {
             let route = request.url!.absoluteString
             return (
@@ -120,7 +121,7 @@ internal class MockURLSession: URLSessionType {
 
     func dataTask(
         with request: URLRequest,
-        completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void
+        completionHandler: @escaping (DataTaskResponse) -> Void
     ) -> URLSessionDataTask {
         return MockURLSessionDataTask(
             request: request,

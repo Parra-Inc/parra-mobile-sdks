@@ -11,7 +11,7 @@ import UIKit
 /// The Parra module is primarily used for authenticating with the Parra API.  For usage beyond this, you'll need
 /// to install and use other Parra libraries.
 public class Parra: ParraModule, ParraModuleStateAccessor {
-    internal static private(set) var name = "core"
+    internal static private(set) var name = "parra"
 
     internal let state: ParraState
     internal let configState: ParraConfigState

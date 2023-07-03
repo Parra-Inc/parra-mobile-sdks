@@ -190,6 +190,8 @@
 		00E269FC2A5310BF001A0F50 /* MockURLSessionDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269FB2A5310BF001A0F50 /* MockURLSessionDataTask.swift */; };
 		00E269FE2A5310D5001A0F50 /* URLSessionDataTaskType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269FD2A5310D5001A0F50 /* URLSessionDataTaskType.swift */; };
 		00E26A002A53110F001A0F50 /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269FF2A53110F001A0F50 /* MockURLSession.swift */; };
+		00E26A032A53120F001A0F50 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E26A022A53120F001A0F50 /* TestData.swift */; };
+		00E26A052A53132E001A0F50 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E26A042A53132E001A0F50 /* String.swift */; };
 		00E7957C29A05CBD003FE68D /* ParraLoggerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E7957B29A05CBD003FE68D /* ParraLoggerConfig.swift */; };
 		00E7957E29A05CD6003FE68D /* ParraLogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E7957D29A05CD6003FE68D /* ParraLogLevel.swift */; };
 		00E7958029A12E29003FE68D /* ParraDefaultLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E7957F29A12E29003FE68D /* ParraDefaultLogger.swift */; };
@@ -423,6 +425,8 @@
 		00E269FB2A5310BF001A0F50 /* MockURLSessionDataTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSessionDataTask.swift; sourceTree = "<group>"; };
 		00E269FD2A5310D5001A0F50 /* URLSessionDataTaskType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskType.swift; sourceTree = "<group>"; };
 		00E269FF2A53110F001A0F50 /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
+		00E26A022A53120F001A0F50 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		00E26A042A53132E001A0F50 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		00E7957B29A05CBD003FE68D /* ParraLoggerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLoggerConfig.swift; sourceTree = "<group>"; };
 		00E7957D29A05CD6003FE68D /* ParraLogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogLevel.swift; sourceTree = "<group>"; };
 		00E7957F29A12E29003FE68D /* ParraDefaultLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraDefaultLogger.swift; sourceTree = "<group>"; };
@@ -574,6 +578,7 @@
 			children = (
 				0015599E27E40B71006450BE /* FileManagerTests.swift */,
 				00E269F92A530D69001A0F50 /* ParraEndpoint+CaseIterable.swift */,
+				00E26A042A53132E001A0F50 /* String.swift */,
 				00E269F72A530771001A0F50 /* XCTestCase.swift */,
 			);
 			path = Extensions;
@@ -663,6 +668,7 @@
 				00320A5A27ED4EF0001EB323 /* Parra+AuthenticationTests.swift */,
 				00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */,
 				001559A727E417D4006450BE /* ParraLoggerTests.swift */,
+				00E26A012A5311F8001A0F50 /* Data */,
 				0015599D27E40B64006450BE /* Extensions */,
 				0015599827E40AC7006450BE /* Managers */,
 				0015599927E40ADD006450BE /* PersistentStorage */,
@@ -992,6 +998,14 @@
 				006153EB2A36822200ED4CBF /* Fields */,
 			);
 			path = Modals;
+			sourceTree = "<group>";
+		};
+		00E26A012A5311F8001A0F50 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				00E26A022A53120F001A0F50 /* TestData.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		00E7957A29A05CB0003FE68D /* Logger */ = {
@@ -1338,6 +1352,7 @@
 				00E26A002A53110F001A0F50 /* MockURLSession.swift in Sources */,
 				00E269F62A526776001A0F50 /* Endpoint+Mocks.swift in Sources */,
 				00BD30002A47A70800B4BEB2 /* Parra+PushTests.swift in Sources */,
+				00E26A032A53120F001A0F50 /* TestData.swift in Sources */,
 				00F5AAF428023EF300A94C85 /* GeneratedTypes+Swift.swift in Sources */,
 				001559AA27E41A8A006450BE /* ParraStorageModuleTests.swift in Sources */,
 				0015599C27E40B13006450BE /* FileSystemStorageTests.swift in Sources */,
@@ -1351,6 +1366,7 @@
 				00E269FA2A530D69001A0F50 /* ParraEndpoint+CaseIterable.swift in Sources */,
 				00E269F82A530771001A0F50 /* XCTestCase.swift in Sources */,
 				00320A5B27ED4EF0001EB323 /* Parra+AuthenticationTests.swift in Sources */,
+				00E26A052A53132E001A0F50 /* String.swift in Sources */,
 				001559B527E7EAD9006450BE /* ParraNetworkManagerTests.swift in Sources */,
 				0029AD2E2A48E11300E30CCD /* LoggerHelpersTests.swift in Sources */,
 				001B7B0127DE3A7600DEEECD /* ParraTests.swift in Sources */,

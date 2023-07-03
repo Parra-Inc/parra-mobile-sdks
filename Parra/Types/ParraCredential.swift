@@ -21,7 +21,9 @@ public struct ParraCredential: Codable, Equatable {
     }
 
     public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(
+            keyedBy: CodingKeys.self
+        )
 
         if let token = try? container.decode(String.self, forKey: .token) {
             self.token = token

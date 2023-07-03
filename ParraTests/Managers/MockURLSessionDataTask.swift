@@ -11,12 +11,12 @@ import Foundation
 internal class MockURLSessionDataTask: URLSessionDataTask {
     let request: URLRequest
     let dataTaskResolver: DataTaskResolver
-    let handler: (Data?, URLResponse?, Error?) -> Void
+    let handler: (DataTaskResponse) -> Void
 
     required init(
         request: URLRequest,
         dataTaskResolver: @escaping DataTaskResolver,
-        handler: @escaping (Data?, URLResponse?, Error?) -> Void
+        handler: @escaping (DataTaskResponse) -> Void
     ) {
         self.request = request
         self.dataTaskResolver = dataTaskResolver
@@ -29,7 +29,7 @@ internal class MockURLSessionDataTask: URLSessionDataTask {
 
             try await Task.sleep(nanoseconds: 100_000_000)
 
-            handler(data, response, error)
+            handler((data, response, error))
         }
     }
 }

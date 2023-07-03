@@ -9,25 +9,32 @@
 import Foundation
 @testable import Parra
 
-// TODO: Example objects for each of these
 extension ParraEndpoint {
-    func getMockResponseData() throws -> Data {
+    func getMockResponseData(for status: Int = 200) throws -> Data {
         let object: Codable
-        switch self {
-        case .getCards:
-            object = EmptyResponseObject()
-        case .getFeedbackForm(let formId):
-            object = EmptyResponseObject()
-        case .postSubmitFeedbackForm(let formId):
-            object = EmptyResponseObject()
-        case .postBulkAnswerQuestions:
-            object = EmptyResponseObject()
-        case .postBulkSubmitSessions(let tenantId):
-            object = EmptyResponseObject()
-        case .postPushTokens(let tenantId):
-            object = EmptyResponseObject()
-        case .postAuthentication(let tenantId):
-            object = EmptyResponseObject()
+        switch status {
+        case 200..<300:
+            switch self {
+            case .getCards:
+                object = TestData.Cards.cardsResponse
+            case .getFeedbackForm(let formId):
+                object = TestData.Forms.formResponse(formId: formId)
+            case .postSubmitFeedbackForm:
+                object = EmptyResponseObject()
+            case .postBulkAnswerQuestions:
+                object = EmptyResponseObject()
+            case .postBulkSubmitSessions:
+                object = TestData.Sessions.successResponse
+            case .postPushTokens:
+                object = EmptyResponseObject()
+            case .postAuthentication:
+                object = TestData.Auth.successResponse
+            }
+        default:
+            throw ParraError.custom(
+                "getMockResponseData has no implemented return for status: \(status) for endpoint: \(slug)",
+                nil
+            )
         }
 
         return try JSONEncoder.parraEncoder.encode(object)
