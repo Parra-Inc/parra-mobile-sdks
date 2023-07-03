@@ -18,9 +18,10 @@ internal actor ParraSessionManager {
     private var currentSession: ParraSession?
     private var userProperties: [String: AnyCodable] = [:]
 
-    internal init(dataManager: ParraDataManager,
-                  networkManager: ParraNetworkManager) {
-
+    internal init(
+        dataManager: ParraDataManager,
+        networkManager: ParraNetworkManager
+    ) {
         self.dataManager = dataManager
         self.networkManager = networkManager
         self.currentSession = ParraSession()
@@ -64,7 +65,7 @@ internal actor ParraSessionManager {
 
         var sessionResponse: ParraSessionsResponse?
         do {
-            let (completedSessionIds, nextSessionResponse) = try await Parra.API.Sessions.bulkSubmitSessions(
+            let (completedSessionIds, nextSessionResponse) = try await networkManager.bulkSubmitSessions(
                 sessions: sessions
             )
 

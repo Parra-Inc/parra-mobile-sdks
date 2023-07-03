@@ -13,9 +13,9 @@ public extension Parra {
         removeEventObservers()
 
         await networkManager.updateAuthenticationProvider(nil)
-        await ParraConfigState.shared.resetState()
-        await ParraGlobalState.shared.unregisterModule(module: self)
-        await ParraGlobalState.shared.deinitialize()
+        await configState.resetState()
+        await state.unregisterModule(module: self)
+        await state.deinitialize()
         await sessionManager.endSession()
     }
 
@@ -44,7 +44,7 @@ public extension Parra {
         options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) async {
-        if await ParraGlobalState.shared.isInitialized() {
+        if await state.isInitialized() {
             parraLogWarn("Parra.initialize called more than once. Subsequent calls are ignored")
 
             return
@@ -75,12 +75,12 @@ public extension Parra {
 
         let modules: [ParraModule] = [Parra.shared, ParraFeedback.shared]
         for module in modules {
-            await ParraGlobalState.shared.registerModule(module: module)
+            await state.registerModule(module: module)
         }
 
-        await ParraConfigState.shared.updateState(newConfig)
+        await configState.updateState(newConfig)
         await networkManager.updateAuthenticationProvider(authenticationProvider)
-        await ParraGlobalState.shared.initialize()
+        await state.initialize()
 
         // Generally nothing that can generate events should happen before this call. Even logs
         await sessionManager.createSessionIfNotExists()
@@ -102,7 +102,7 @@ public extension Parra {
     }
 
     private func uploadCachedPushNotificationToken() async {
-        guard let token = await ParraGlobalState.shared.getCachedTemporaryPushToken() else {
+        guard let token = await state.getCachedTemporaryPushToken() else {
             parraLogTrace("No push notification token is cached. Skipping upload.")
             return
         }

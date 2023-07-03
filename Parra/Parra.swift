@@ -10,10 +10,17 @@ import UIKit
 
 /// The Parra module is primarily used for authenticating with the Parra API.  For usage beyond this, you'll need
 /// to install and use other Parra libraries.
-public class Parra: ParraModule {
+public class Parra: ParraModule, ParraModuleStateAccessor {
     internal static private(set) var name = "core"
 
+    internal let state: ParraState
+    internal let configState: ParraConfigState
+
     public internal(set) static var shared: Parra! = {
+        let state = ParraState()
+        let configState = ParraConfigState()
+        let syncState = ParraSyncState()
+
         let diskCacheURL = ParraDataManager.Path.networkCachesDirectory
         // Cache may reject image entries if they are greater than 10% of the cache's size
         // so these need to reflect that.
@@ -23,15 +30,17 @@ public class Parra: ParraModule {
             directory: diskCacheURL
         )
 
-        let configuration = URLSessionConfiguration.default
-        configuration.urlCache = cache
-        configuration.requestCachePolicy = .returnCacheDataElseLoad
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.urlCache = cache
+        sessionConfig.requestCachePolicy = .returnCacheDataElseLoad
 
         let notificationCenter = ParraNotificationCenter.default
-        let urlSession = URLSession(configuration: configuration)
+        let urlSession = URLSession(configuration: sessionConfig)
         let dataManager = ParraDataManager()
 
         let networkManager = ParraNetworkManager(
+            state: state,
+            configState: configState,
             dataManager: dataManager,
             urlSession: urlSession
         )
@@ -42,12 +51,16 @@ public class Parra: ParraModule {
         )
 
         let syncManager = ParraSyncManager(
+            state: state,
+            syncState: syncState,
             networkManager: networkManager,
             sessionManager: sessionManager,
             notificationCenter: notificationCenter
         )
 
         return Parra(
+            state: state,
+            configState: configState,
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
@@ -63,12 +76,16 @@ public class Parra: ParraModule {
     internal let notificationCenter: NotificationCenterType
 
     internal init(
+        state: ParraState,
+        configState: ParraConfigState,
         dataManager: ParraDataManager,
         syncManager: ParraSyncManager,
         sessionManager: ParraSessionManager,
         networkManager: ParraNetworkManager,
         notificationCenter: NotificationCenterType
     ) {
+        self.state = state
+        self.configState = configState
         self.dataManager = dataManager
         self.syncManager = syncManager
         self.sessionManager = sessionManager
@@ -136,7 +153,7 @@ public class Parra: ParraModule {
             return
         }
 
-        for module in (await ParraGlobalState.shared.getAllRegisteredModules()).values {
+        for module in (await state.getAllRegisteredModules()).values {
             module.didReceiveSessionResponse(sessionResponse: response)
         }
     }

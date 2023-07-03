@@ -94,7 +94,7 @@ public class ParraFeedback: ParraModule {
     public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
-        let cards = try await Parra.API.Feedback.getCards(appArea: appArea)
+        let cards = try await parra.networkManager.getCards(appArea: appArea)
         
         // Only keep cards that we don't already have an answer cached for. This isn't something that
         // should ever even happen, but in event that new cards are retreived that include cards we
@@ -119,9 +119,7 @@ public class ParraFeedback: ParraModule {
     public func fetchFeedbackForm(
         formId: String
     ) async throws -> ParraFeedbackFormResponse {
-        let response = try await Parra.API.Feedback.getFeedbackForm(with: formId)
-
-        return response
+        return try await parra.networkManager.getFeedbackForm(with: formId)
     }
 
     /// Fetches the feedback form with the provided ID from the Parra API. If a form is returned, it is up to the caller
@@ -194,7 +192,7 @@ public class ParraFeedback: ParraModule {
     }
 
     private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {
-        try await Parra.API.Feedback.bulkAnswerQuestions(cards: cards)
+        try await parra.networkManager.bulkAnswerQuestions(cards: cards)
     }
 
     private func performAssetPrefetch(for cards: [ParraCardItem]) {
@@ -204,7 +202,7 @@ public class ParraFeedback: ParraModule {
             parraLogDebug("\(assets.count) asset(s) available for prefetching")
 
 
-            await Parra.API.Assets.performBulkAssetCachingRequest(assets: assets)
+            await parra.networkManager.performBulkAssetCachingRequest(assets: assets)
 
             parraLogDebug("Completed prefetching assets")
         }
@@ -302,7 +300,7 @@ public class ParraFeedback: ParraModule {
     }
 
     private func getCardsForPresentation() async throws -> [ParraCardItem] {
-        let cards = try await Parra.API.Feedback.getCards(appArea: .none)
+        let cards = try await parra.networkManager.getCards(appArea: .none)
 
         var validCards = [ParraCardItem]()
         for card in cards {

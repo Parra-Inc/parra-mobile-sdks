@@ -23,7 +23,9 @@ internal actor ParraSyncManager {
     /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
     /// is completed.
     internal private(set) var enqueuedSyncMode: ParraSyncMode? = nil
-    
+
+    private let state: ParraState
+    private let syncState: ParraSyncState
     private let networkManager: ParraNetworkManager
     private let sessionManager: ParraSessionManager
     private let notificationCenter: NotificationCenterType
@@ -31,10 +33,14 @@ internal actor ParraSyncManager {
     @MainActor private var syncTimer: Timer?
     
     internal init(
+        state: ParraState,
+        syncState: ParraSyncState,
         networkManager: ParraNetworkManager,
         sessionManager: ParraSessionManager,
         notificationCenter: NotificationCenterType
     ) {
+        self.state = state
+        self.syncState = syncState
         self.networkManager = networkManager
         self.sessionManager = sessionManager
         self.notificationCenter = notificationCenter
@@ -55,7 +61,7 @@ internal actor ParraSyncManager {
 
         parraLogDebug("Enqueuing sync: \(mode)")
 
-        if await SyncState.shared.isSyncing() {
+        if await syncState.isSyncing() {
             if mode == .immediate {
                 parraLogDebug("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
                 
@@ -80,7 +86,7 @@ internal actor ParraSyncManager {
     }
     
     private func sync() async {
-        await SyncState.shared.beginSync()
+        await syncState.beginSync()
         
         let syncToken = UUID().uuidString
 
@@ -107,7 +113,7 @@ internal actor ParraSyncManager {
         guard await hasDataToSync() else {
             parraLogDebug("No data available to sync")
 
-            await SyncState.shared.endSync()
+            await syncState.endSync()
 
             return
         }
@@ -130,7 +136,7 @@ internal actor ParraSyncManager {
         guard let enqueuedSyncMode else {
             parraLogDebug("No more jobs found. Completing sync.")
 
-            await SyncState.shared.endSync()
+            await syncState.endSync()
 
             return
         }
@@ -143,7 +149,7 @@ internal actor ParraSyncManager {
         case .immediate:
             await sync()
         case .eventual:
-            await SyncState.shared.endSync()
+            await syncState.endSync()
         }
     }
 
@@ -151,7 +157,7 @@ internal actor ParraSyncManager {
         var syncError: Error?
 
         // Rethrow after receiving an error for throttling, but allow each module to attempt a sync once
-        for (_, module) in await ParraGlobalState.shared.getAllRegisteredModules() {
+        for (_, module) in await state.getAllRegisteredModules() {
             do {
                 try await module.synchronizeData()
             } catch let error {
@@ -166,7 +172,7 @@ internal actor ParraSyncManager {
     
     private func hasDataToSync() async -> Bool {
         var shouldSync = false
-        for (_, module) in await ParraGlobalState.shared.getAllRegisteredModules() {
+        for (_, module) in await state.getAllRegisteredModules() {
             if await module.hasDataToSync() {
                 shouldSync = true
                 break

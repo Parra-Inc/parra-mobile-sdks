@@ -128,7 +128,7 @@ internal extension Parra {
     /// Prevent processing events if initialization hasn't occurred.
     private func withInitializationCheck(_ function: @escaping () async -> Void) {
         Task {
-            guard await ParraGlobalState.shared.isInitialized() else {
+            guard await state.isInitialized() else {
                 return
             }
 

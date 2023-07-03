@@ -9,35 +9,28 @@
 import Foundation
 import UIKit
 
-@globalActor
-internal struct ParraConfigState {
-    internal static let shared = State()
+internal actor ParraConfigState {
+    private var currentState: ParraConfiguration = .default
 
-    internal actor State {
-        private var currentState: ParraConfiguration = .default
+    internal func getCurrentState() -> ParraConfiguration {
+        return currentState
+    }
 
-        fileprivate init() {}
+    internal func updateState(_ newValue: ParraConfiguration) {
+        currentState = newValue
 
-        internal func getCurrentState() -> ParraConfiguration {
-            return currentState
+        ParraDefaultLogger.logQueue.async {
+            ParraDefaultLogger.default.loggerConfig = newValue.loggerConfig
         }
 
-        internal func updateState(_ newValue: ParraConfiguration) {
-            currentState = newValue
-
-            ParraDefaultLogger.logQueue.async {
-                ParraDefaultLogger.default.loggerConfig = newValue.loggerConfig
-            }
-
-            if newValue.pushNotificationsEnabled {
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
+        if newValue.pushNotificationsEnabled {
+            DispatchQueue.main.async {
+                UIApplication.shared.registerForRemoteNotifications()
             }
         }
+    }
 
-        internal func resetState() {
-            currentState = .default
-        }
+    internal func resetState() {
+        currentState = .default
     }
 }

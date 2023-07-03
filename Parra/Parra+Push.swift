@@ -32,12 +32,12 @@ public extension Parra {
     internal func registerDevicePushTokenString(
         _ tokenString: String
     ) async {
-        guard await ParraGlobalState.shared.isInitialized() else {
+        guard await state.isInitialized() else {
             parraLogWarn("Parra.registerDevicePushToken was called before Parra.initialize(). Make sure that you're calling Parra.initialize() before application.registerForRemoteNotifications()")
 
             // Still try to recover from this situation. Temporarily cache the token, which we can check for when
             // initialization does occur and proceed to upload it.
-            await ParraGlobalState.shared.setTemporaryPushToken(tokenString)
+            await state.setTemporaryPushToken(tokenString)
 
             return
         }
@@ -47,18 +47,18 @@ public extension Parra {
 
     internal func uploadDevicePushToken(_ token: String) async {
         do {
-            try await Parra.API.Push.uploadPushToken(token: token)
+            try await networkManager.uploadPushToken(token: token)
 
             parraLogTrace("Device push token successfully uploaded. Clearing cache.")
             // Token shouldn't be cached when it isn't absolutely necessary to recover from errors. If a new token
             // is issued, it will replace the old one.
-            await ParraGlobalState.shared.clearTemporaryPushToken()
+            await state.clearTemporaryPushToken()
         } catch let error {
             parraLogTrace("Device push token failed to upload. Caching token to try later.")
             // In the event that the upload failed, we'll cache the token. This will be overridden by any new token
             // on the next app launch, but in the event that we're able to retry the request later, we'll have this
             // one on hand.
-            await ParraGlobalState.shared.setTemporaryPushToken(token)
+            await state.setTemporaryPushToken(token)
 
             parraLogError("Error uploading push token to Parra API", error)
         }

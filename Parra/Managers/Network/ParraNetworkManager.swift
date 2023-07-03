@@ -15,7 +15,9 @@ internal let EmptyJsonObjectData = "{}".data(using: .utf8)!
 internal struct EmptyRequestObject: Codable {}
 internal struct EmptyResponseObject: Codable {}
 
-internal actor ParraNetworkManager: NetworkManagerType {
+internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
+    internal let state: ParraState
+    internal let configState: ParraConfigState
     private let dataManager: ParraDataManager
 
     private var authenticationProvider: ParraAuthenticationProviderFunction?
@@ -25,11 +27,15 @@ internal actor ParraNetworkManager: NetworkManagerType {
     private let jsonDecoder: JSONDecoder
     
     internal init(
+        state: ParraState,
+        configState: ParraConfigState,
         dataManager: ParraDataManager,
         urlSession: URLSessionType,
         jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
         jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder
     ) {
+        self.state = state
+        self.configState = configState
         self.dataManager = dataManager
         self.urlSession = urlSession
         self.jsonEncoder = jsonEncoder
@@ -101,7 +107,7 @@ internal actor ParraNetworkManager: NetworkManagerType {
         parraLogTrace("Performing authenticated request to route: \(method.rawValue) \(route)")
 
         do {
-            guard let applicationId = await ParraConfigState.shared.getCurrentState().applicationId else {
+            guard let applicationId = await configState.getCurrentState().applicationId else {
                 throw ParraError.notInitialized
             }
 
