@@ -163,7 +163,7 @@ internal class MockURLSession: URLSessionType {
         toReturn responder: (() throws -> (Int, Data))? = nil
     ) -> XCTestExpectation {
         let expectation = testCase.expectation(
-            description: "Expecting endpoint \(endpoint.slug) to be called"
+            description: "Expected endpoint \(endpoint.slug) to be called"
         )
         expectation.assertForOverFulfill = true
         expectation.expectedFulfillmentCount = times
@@ -172,6 +172,24 @@ internal class MockURLSession: URLSessionType {
         expectedEndpoints[endpoint.slug] = (expectation, times, predicate, responder)
 
         return expectation
+    }
+
+    func expectInvocation<T: Codable>(
+        of endpoint: ParraEndpoint,
+        times: Int = 1,
+        matching predicate: ((URLRequest) throws -> Bool)? = nil,
+        toReturn value: (Int, T)
+    ) throws -> XCTestExpectation {
+        let (status, data) = value
+        let encodedData = try JSONEncoder.parraEncoder.encode(data)
+
+        return expectInvocation(
+            of: endpoint,
+            times: times,
+            matching: predicate
+        ) {
+            return (status, encodedData)
+        }
     }
 
     /// Attempts to find a ParraEndpoint case that most closely matches the request url.

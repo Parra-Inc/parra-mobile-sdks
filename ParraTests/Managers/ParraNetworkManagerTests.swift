@@ -13,7 +13,9 @@ class ParraNetworkManagerTests: XCTestCase {
     private var mockNetworkManager: MockParraNetworkManager!
 
     override func setUp() async throws {
-        mockNetworkManager = await createMockNetworkManager()
+        mockNetworkManager = await createMockNetworkManager {
+            return UUID().uuidString
+        }
     }
 
     override func tearDown() async throws {

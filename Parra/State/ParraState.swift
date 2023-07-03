@@ -19,6 +19,8 @@ internal actor ParraState {
 
     private var registeredModules: [String: ParraModule] = [:]
 
+    internal init() {}
+
     internal init(
         initialized: Bool = false,
         pushToken: String? = nil,
