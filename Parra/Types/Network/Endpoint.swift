@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum ParraEndpoint: Hashable {
+internal enum ParraEndpoint {
     // Auth
     case postAuthentication(tenantId: String)
 
@@ -42,11 +42,6 @@ internal enum ParraEndpoint: Hashable {
         case .postAuthentication(let tenantId):
             return "tenants/\(tenantId)/issuers/public/auth/token"
         }
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(method)
-        hasher.combine(route)
     }
 
     var method: HttpMethod {

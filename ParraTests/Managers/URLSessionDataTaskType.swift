@@ -12,4 +12,4 @@ internal protocol URLSessionDataTaskType {
     func resume()
 }
 
-internal extension URLSessionDataTask: URLSessionDataTaskType {}
+extension URLSessionDataTask: URLSessionDataTaskType {}

@@ -8,7 +8,7 @@
 import XCTest
 @testable import Parra
 
-typealias TestDataType = [String: String]
+fileprivate typealias TestDataType = [String: String]
 
 class ParraStorageModuleTests: XCTestCase {
     var storageModules = [ParraStorageModule<String>]()

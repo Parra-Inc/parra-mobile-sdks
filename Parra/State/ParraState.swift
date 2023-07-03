@@ -19,6 +19,16 @@ internal actor ParraState {
 
     private var registeredModules: [String: ParraModule] = [:]
 
+    internal init(
+        initialized: Bool = false,
+        pushToken: String? = nil,
+        registeredModules: [String: ParraModule] = [:]
+    ) {
+        self.initialized = initialized
+        self.pushToken = pushToken
+        self.registeredModules = registeredModules
+    }
+
     // MARK: Init
     internal func isInitialized() -> Bool {
         return initialized

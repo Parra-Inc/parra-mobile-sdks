@@ -9,20 +9,47 @@ import Foundation
 import XCTest
 @testable import Parra
 
+struct MockParraNetworkManager {
+    let networkManager: ParraNetworkManager
+    let dataManager: MockDataManager
+    let urlSession: MockURLSession
+    let tenantId: String
+    let applicationId: String
+}
+
 @MainActor
 extension XCTestCase {
     func createMockNetworkManager(
-        state: ParraState = ParraState(),
-        configState: ParraConfigState = ParraConfigState()
-    ) -> ParraNetworkManager {
-        let dataManager = ParraDataManager()
-        let urlSession = MockURLSession()
+        state: ParraState = .initialized,
+        authenticationProvider: @escaping ParraAuthenticationProviderFunction = { () -> String in
+            return UUID().uuidString
+        }
+    ) async -> MockParraNetworkManager {
+        let tenantId = UUID().uuidString
+        let applicationId = UUID().uuidString
 
-        return ParraNetworkManager(
+        let dataManager = MockDataManager()
+        let urlSession = MockURLSession(testCase: self)
+        let configState = ParraConfigState.initialized(
+            tenantId: tenantId,
+            applicationId: applicationId
+        )
+
+        let networkManager = ParraNetworkManager(
             state: state,
             configState: configState,
             dataManager: dataManager,
             urlSession: urlSession
+        )
+
+        await networkManager.updateAuthenticationProvider(authenticationProvider)
+
+        return MockParraNetworkManager(
+            networkManager: networkManager,
+            dataManager: dataManager,
+            urlSession: urlSession,
+            tenantId: tenantId,
+            applicationId: applicationId
         )
     }
 //    func createMockedParraInstance() -> Parra {

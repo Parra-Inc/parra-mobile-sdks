@@ -12,6 +12,14 @@ import UIKit
 internal actor ParraConfigState {
     private var currentState: ParraConfiguration = .default
 
+    internal init() {
+        self.currentState = .default
+    }
+
+    internal init(currentState: ParraConfiguration) {
+        self.currentState = currentState
+    }
+
     internal func getCurrentState() -> ParraConfiguration {
         return currentState
     }

@@ -16,9 +16,20 @@ typealias DataTaskResolver = (_ request: URLRequest) -> DataTaskResponse
 internal class MockURLSession: URLSessionType {
     var configuration: URLSessionConfiguration = .default
 
+    private let testCase: XCTestCase
+
     private var expectedEndpoints = [
-        ParraEndpoint: (testCase: XCTestCase, expectation: XCTestExpectation)
+        String: (
+            expectation: XCTestExpectation,
+            times: Int,
+            predicate: ((URLRequest) throws -> Bool)?,
+            returning: (() throws -> (Int, Data))?
+        )
     ]()
+
+    init(testCase: XCTestCase) {
+        self.testCase = testCase
+    }
 
     private func resolve(_ request: URLRequest) -> DataTaskResponse {
         guard let endpoint = matchingEndpoint(for: request) else {
@@ -33,30 +44,45 @@ internal class MockURLSession: URLSessionType {
             )
         }
 
-        guard let endpointExpectation = expectedEndpoints[endpoint] else {
-            return (
-                nil,
-                createTestResponse(
-                    route: request.url!.absoluteString,
-                    statusCode: 400
-                ),
-                ParraError.custom("Endpoint invoked without any expectation set. \(endpoint.slug)", nil)
-            )
-        }
-
-        defer {
-            expectedEndpoints.removeValue(forKey: endpoint)
-        }
-
         do {
-            let responseData = try endpoint.getMockResponseData()
-
+            var responseData = try endpoint.getMockResponseData()
+            var responseStatus = 200
             // We were able to get response data for this mocked object. Fulfill the
             // expectation. Possibly expand this in the future to allow setting expected
             // status codes.
-            endpointExpectation.expectation.fulfill()
 
-            endpointExpectation.testCase.addJsonAttachment(
+            let slug = endpoint.slug
+            if let endpointExpectation = expectedEndpoints[slug] {
+                // If there is a predicate function, fulfill if it returns true
+                // If there isn't a predicate function, fulfill.
+                let predicateResult = try endpointExpectation.predicate?(request) ?? true
+
+                if predicateResult {
+                    endpointExpectation.expectation.fulfill()
+                } else {
+                    throw ParraError.custom("Predicate failed to mock of route: \(slug)", nil)
+                }
+
+                if let response = endpointExpectation.returning {
+                    let (status, data) = try response()
+
+                    responseStatus = status
+                    responseData = data
+                }
+
+                if endpointExpectation.times <= 1 {
+                    expectedEndpoints.removeValue(forKey: slug)
+                } else {
+                    expectedEndpoints[slug] = (
+                        endpointExpectation.expectation,
+                        endpointExpectation.times - 1,
+                        endpointExpectation.predicate,
+                        endpointExpectation.returning
+                    )
+                }
+            }
+
+            testCase.addJsonAttachment(
                 data: responseData,
                 name: "Response object",
                 lifetime: .keepAlways
@@ -66,20 +92,20 @@ internal class MockURLSession: URLSessionType {
                 responseData,
                 createTestResponse(
                     route: endpoint.route,
-                    statusCode: 200
+                    statusCode: responseStatus
                 ),
                 nil
             )
         } catch let error {
             if let body = request.httpBody {
-                endpointExpectation.testCase.addJsonAttachment(
+                testCase.addJsonAttachment(
                     data: body,
                     name: "Request body"
                 )
             }
 
             if let headers = request.allHTTPHeaderFields {
-                try? endpointExpectation.testCase.addJsonAttachment(
+                try? testCase.addJsonAttachment(
                     value: headers,
                     name: "Request headers"
                 )
@@ -132,16 +158,18 @@ internal class MockURLSession: URLSessionType {
 
     func expectInvocation(
         of endpoint: ParraEndpoint,
-        in testcase: XCTestCase
+        times: Int = 1,
+        matching predicate: ((URLRequest) throws -> Bool)? = nil,
+        toReturn responder: (() throws -> (Int, Data))? = nil
     ) -> XCTestExpectation {
-        let expectation = testcase.expectation(
+        let expectation = testCase.expectation(
             description: "Expecting endpoint \(endpoint.slug) to be called"
         )
         expectation.assertForOverFulfill = true
-        expectation.expectedFulfillmentCount = 1
+        expectation.expectedFulfillmentCount = times
 
         // TODO: What if an entry for this endpoint already exists?
-        expectedEndpoints[endpoint] = (testcase, expectation)
+        expectedEndpoints[endpoint.slug] = (expectation, times, predicate, responder)
 
         return expectation
     }
@@ -155,7 +183,7 @@ internal class MockURLSession: URLSessionType {
         }
 
         let apiRoot = Parra.InternalConstants.parraApiRoot
-        let urlString = url.absoluteString
+        let urlString = url.absoluteString.trimmingCharacters(in: .punctuationCharacters)
         let rootString = apiRoot.absoluteString
 
         guard urlString.starts(with: rootString) else {
