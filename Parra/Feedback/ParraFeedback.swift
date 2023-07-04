@@ -84,7 +84,9 @@ public class ParraFeedback: ParraModule {
     public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
-        let cards = try await parra.networkManager.getCards(appArea: appArea)
+        let cards = try await parra.networkManager.getCards(
+            appArea: appArea
+        )
         
         // Only keep cards that we don't already have an answer cached for. This isn't something that
         // should ever even happen, but in event that new cards are retreived that include cards we
@@ -121,7 +123,9 @@ public class ParraFeedback: ParraModule {
     ) {
         Task {
             do {
-                let response = try await fetchFeedbackForm(formId: formId)
+                let response = try await fetchFeedbackForm(
+                    formId: formId
+                )
 
                 DispatchQueue.main.async {
                     completion(.success(response))
@@ -155,8 +159,12 @@ public class ParraFeedback: ParraModule {
     }
     
     /// Checks whether the user has previously supplied input for the provided `ParraCardItem`.
-    internal func hasCardBeenCompleted(_ cardItem: ParraCardItem) async -> Bool {
-        let completed = await dataManager.completedCardData(forId: cardItem.id)
+    internal func hasCardBeenCompleted(
+        _ cardItem: ParraCardItem
+    ) async -> Bool {
+        let completed = await dataManager.completedCardData(
+            forId: cardItem.id
+        )
         
         return completed != nil
     }
@@ -166,13 +174,19 @@ public class ParraFeedback: ParraModule {
         let completedCardData = await dataManager.currentCompletedCardData()
         let completedCards = Array(completedCardData.values)
         
-        let completedChunks = completedCards.chunked(into: ParraFeedback.Constant.maxBulkAnswers)
+        let completedChunks = completedCards.chunked(
+            into: ParraFeedback.Constant.maxBulkAnswers
+        )
 
         for chunk in completedChunks {
             do {
                 try await self.uploadCompletedCards(chunk)
-                try await self.dataManager.clearCompletedCardData(completedCards: chunk)
-                await self.dataManager.removeCardsForCompletedCards(completedCards: chunk)
+                try await self.dataManager.clearCompletedCardData(
+                    completedCards: chunk
+                )
+                await self.dataManager.removeCardsForCompletedCards(
+                    completedCards: chunk
+                )
             } catch let error {
                 parraLogError(ParraError.custom("Error uploading card data", error))
 
@@ -182,10 +196,14 @@ public class ParraFeedback: ParraModule {
     }
 
     private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {
-        try await parra.networkManager.bulkAnswerQuestions(cards: cards)
+        try await parra.networkManager.bulkAnswerQuestions(
+            cards: cards
+        )
     }
 
-    private func performAssetPrefetch(for cards: [ParraCardItem]) {
+    private func performAssetPrefetch(
+        for cards: [ParraCardItem]
+    ) {
         if cards.isEmpty {
             return
         }
@@ -202,16 +220,20 @@ public class ParraFeedback: ParraModule {
 
             parraLogDebug("\(assets.count) asset(s) available for prefetching")
 
-
-            await parra.networkManager.performBulkAssetCachingRequest(assets: assets)
+            await parra.networkManager.performBulkAssetCachingRequest(
+                assets: assets
+            )
 
             parraLogDebug("Completed prefetching assets")
         }
     }
 
-    internal func didReceiveSessionResponse(sessionResponse: ParraSessionsResponse) {
+    internal func didReceiveSessionResponse(
+        sessionResponse: ParraSessionsResponse
+    ) {
         Task {
             let isPopupPresent = await ParraFeedbackPopupState.shared.isPresented
+
             if isPopupPresent {
                 parraLogDebug("Skipping polling for questions. Popup currently open.")
             } else {
@@ -220,7 +242,9 @@ public class ParraFeedback: ParraModule {
         }
     }
 
-    private func pollForQuestions(context: ParraSessionsResponse) async {
+    private func pollForQuestions(
+        context: ParraSessionsResponse
+    ) async {
         parraLogDebug("Checking if polling for questions should occur")
 
         guard context.shouldPoll else {
@@ -267,7 +291,9 @@ public class ParraFeedback: ParraModule {
 
         // Take the display type of the first card that has one set as the display type to use for this set of cards.
         // It is unlikely there will ever be a case where this isn't found on the first element.
-        guard let displayType = cardItems.first(where: { $0.displayType != nil })?.displayType else {
+        guard let displayType = cardItems.first(
+            where: { $0.displayType != nil }
+        )?.displayType else {
             parraLogTrace("Skipping presenting popup. No displayType set")
 
             return
@@ -301,7 +327,9 @@ public class ParraFeedback: ParraModule {
     }
 
     private func getCardsForPresentation() async throws -> [ParraCardItem] {
-        let cards = try await parra.networkManager.getCards(appArea: .none)
+        let cards = try await parra.networkManager.getCards(
+            appArea: .none
+        )
 
         var validCards = [ParraCardItem]()
         for card in cards {
@@ -328,8 +356,13 @@ public class ParraFeedback: ParraModule {
     private func cachedCardPredicate(card: ParraCardItem) async -> Bool {
         switch card.data {
         case .question(let question):
-            let previouslyCleared = await dataManager.hasClearedCompletedCardWithId(card: card)
-            let cardData = await dataManager.completedCardData(forId: question.id)
+            let previouslyCleared = await dataManager.hasClearedCompletedCardWithId(
+                card: card
+            )
+
+            let cardData = await dataManager.completedCardData(
+                forId: question.id
+            )
 
             if !previouslyCleared && cardData == nil {
                 return true
