@@ -92,7 +92,7 @@ internal extension Parra {
             let startTime = Date()
             Task(priority: .background) {
                 while Date().timeIntervalSince(startTime) < InternalConstants.backgroundTaskDuration {
-                    try await Task.sleep(ms: 100)
+                    try await Task.sleep(for: 0.1)
                 }
 
                 parraLogDebug("Ending Parra background execution after \(InternalConstants.backgroundTaskDuration)s")

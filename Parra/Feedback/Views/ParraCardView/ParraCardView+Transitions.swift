@@ -9,7 +9,7 @@ import UIKit
 
 extension ParraCardView: ParraQuestionHandlerDelegate {
     internal func questionHandlerDidMakeNewSelection(forQuestion question: Question) async {
-        try? await Task.sleep(ms: 333)
+        try? await Task.sleep(for: 0.333)
 
         let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
 

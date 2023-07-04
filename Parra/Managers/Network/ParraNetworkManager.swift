@@ -243,7 +243,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
                         .afterRetrying()
                         .withAttribute(.requiredRetry)
 
-                    try await Task.sleep(nanoseconds: nextConfig.retryDelayNs)
+                    try await Task.sleep(for: nextConfig.retryDelay)
 
                     return await performRequest(
                         request: request,
@@ -392,7 +392,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
         // slows down tests. This delay is specific to helping prevent us
         // from introducing UI without proper loading states.
         if NSClassFromString("XCTestCase") == nil {
-            try await Task.sleep(ms: 1000)
+            try await Task.sleep(for: 1.0)
         }
 #endif
 

@@ -16,7 +16,7 @@ class FakeModule: ParraModule {
     }
     
     func synchronizeData() async {
-        try! await Task.sleep(ms: 1000)
+        try! await Task.sleep(for: 1.0)
     }
 }
 

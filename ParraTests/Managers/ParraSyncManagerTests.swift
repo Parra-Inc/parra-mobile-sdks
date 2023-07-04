@@ -42,7 +42,7 @@ class ParraSyncManagerTests: XCTestCase {
     func testStoppingSyncTimerDeactivatesTimer() async throws {
         mockParra.syncManager.startSyncTimer()
 
-        try await Task.sleep(ms: 100)
+        try await Task.sleep(for: 0.1)
 
         mockParra.syncManager.stopSyncTimer()
 
