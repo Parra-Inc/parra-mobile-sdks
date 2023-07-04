@@ -38,6 +38,17 @@
                ReferencedContainer = "container:Parra.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "0087CA592A54C54D007D72FA"
+               BuildableName = "ParraUITests.xctest"
+               BlueprintName = "ParraUITests"
+               ReferencedContainer = "container:Parra.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -70,9 +81,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-            BuildableName = "Demo.app"
-            BlueprintName = "Demo"
+            BlueprintIdentifier = "001B7AF827DE3A7600DEEECD"
+            BuildableName = "ParraTests.xctest"
+            BlueprintName = "ParraTests"
             ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

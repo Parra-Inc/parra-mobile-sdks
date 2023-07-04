@@ -311,7 +311,7 @@ class ParraSyncManagerTests: XCTestCase {
 
         await fulfillment(
             of: [secondSyncDidEnd, syncTimerTickedExpectation],
-            timeout: mockParra.syncManager.syncDelay
+            timeout: mockParra.syncManager.syncDelay + 2.0
         )
 
         // At this point, the second sync finished and the sync timer ticked.

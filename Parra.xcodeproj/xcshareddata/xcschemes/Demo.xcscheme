@@ -47,12 +47,12 @@
          </TestableReference>
          <TestableReference
             skipped = "NO"
-            testExecutionOrdering = "random">
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "001B7B3827DE3AEC00DEEECD"
-               BuildableName = "ParraFeedbackTests.xctest"
-               BlueprintName = "ParraFeedbackTests"
+               BlueprintIdentifier = "0087CA592A54C54D007D72FA"
+               BuildableName = "ParraUITests.xctest"
+               BlueprintName = "ParraUITests"
                ReferencedContainer = "container:Parra.xcodeproj">
             </BuildableReference>
          </TestableReference>

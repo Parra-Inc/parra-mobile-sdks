@@ -153,6 +153,8 @@
 		0087CA512A5466A6007D72FA /* ParraNetworkManagerUrlSessionDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA502A5466A6007D72FA /* ParraNetworkManagerUrlSessionDelegateProxy.swift */; };
 		0087CA532A5466CF007D72FA /* ParraNetworkManager+ParraUrlSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA522A5466CF007D72FA /* ParraNetworkManager+ParraUrlSessionDelegate.swift */; };
 		0087CA552A54670A007D72FA /* EmptyJsonObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA542A54670A007D72FA /* EmptyJsonObjects.swift */; };
+		0087CA5D2A54C54D007D72FA /* ParraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA5C2A54C54D007D72FA /* ParraUITests.swift */; };
+		0087CA5F2A54C54D007D72FA /* ParraUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA5E2A54C54D007D72FA /* ParraUITestsLaunchTests.swift */; };
 		008878122979A3E20087AC1D /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008878112979A3E20087AC1D /* UIApplication.swift */; };
 		00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B982932D35E00B7168A /* ParraConfiguration.swift */; };
 		00A60B9B2932D37000B7168A /* ParraAuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B9A2932D37000B7168A /* ParraAuthenticationProvider.swift */; };
@@ -230,6 +232,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
 			remoteInfo = Parra;
+		};
+		0087CA602A54C54D007D72FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00DECFF4274C69F800DAF301;
+			remoteInfo = Demo;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -376,6 +385,9 @@
 		0087CA502A5466A6007D72FA /* ParraNetworkManagerUrlSessionDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraNetworkManagerUrlSessionDelegateProxy.swift; sourceTree = "<group>"; };
 		0087CA522A5466CF007D72FA /* ParraNetworkManager+ParraUrlSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraNetworkManager+ParraUrlSessionDelegate.swift"; sourceTree = "<group>"; };
 		0087CA542A54670A007D72FA /* EmptyJsonObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyJsonObjects.swift; sourceTree = "<group>"; };
+		0087CA5A2A54C54D007D72FA /* ParraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0087CA5C2A54C54D007D72FA /* ParraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraUITests.swift; sourceTree = "<group>"; };
+		0087CA5E2A54C54D007D72FA /* ParraUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		008878112979A3E20087AC1D /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		00901F302999AC940071647F /* ParraCheckboxKindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCheckboxKindView.swift; sourceTree = "<group>"; };
 		00901F332999ACAB0071647F /* ParraChoiceKindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraChoiceKindView.swift; sourceTree = "<group>"; };
@@ -469,6 +481,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				001B7AFA27DE3A7600DEEECD /* Parra.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0087CA572A54C54D007D72FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,6 +909,15 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
+		0087CA5B2A54C54D007D72FA /* ParraUITests */ = {
+			isa = PBXGroup;
+			children = (
+				0087CA5C2A54C54D007D72FA /* ParraUITests.swift */,
+				0087CA5E2A54C54D007D72FA /* ParraUITestsLaunchTests.swift */,
+			);
+			path = ParraUITests;
+			sourceTree = "<group>";
+		};
 		00901F322999AC990071647F /* Question Kind Cards */ = {
 			isa = PBXGroup;
 			children = (
@@ -981,6 +1009,7 @@
 				00DECFF7274C69F800DAF301 /* Demo */,
 				001B7AF327DE3A7600DEEECD /* Parra */,
 				001B7AFF27DE3A7600DEEECD /* ParraTests */,
+				0087CA5B2A54C54D007D72FA /* ParraUITests */,
 				00DECFF6274C69F800DAF301 /* Products */,
 				02A060188E5CD1963038AE8C /* Pods */,
 				39DADA99F3B351D04A5CD522 /* Frameworks */,
@@ -993,6 +1022,7 @@
 				00DECFF5274C69F800DAF301 /* Demo.app */,
 				001B7AF227DE3A7600DEEECD /* Parra.framework */,
 				001B7AF927DE3A7600DEEECD /* ParraTests.xctest */,
+				0087CA5A2A54C54D007D72FA /* ParraUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1138,6 +1168,24 @@
 			productReference = 001B7AF927DE3A7600DEEECD /* ParraTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		0087CA592A54C54D007D72FA /* ParraUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0087CA622A54C54D007D72FA /* Build configuration list for PBXNativeTarget "ParraUITests" */;
+			buildPhases = (
+				0087CA562A54C54D007D72FA /* Sources */,
+				0087CA572A54C54D007D72FA /* Frameworks */,
+				0087CA582A54C54D007D72FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0087CA612A54C54D007D72FA /* PBXTargetDependency */,
+			);
+			name = ParraUITests;
+			productName = ParraUITests;
+			productReference = 0087CA5A2A54C54D007D72FA /* ParraUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		00DECFF4274C69F800DAF301 /* Demo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Demo" */;
@@ -1165,7 +1213,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				CLASSPREFIX = PAR;
-				LastSwiftUpdateCheck = 1320;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "Parra, Inc.";
 				TargetAttributes = {
@@ -1174,6 +1222,10 @@
 					};
 					001B7AF827DE3A7600DEEECD = {
 						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 00DECFF4274C69F800DAF301;
+					};
+					0087CA592A54C54D007D72FA = {
+						CreatedOnToolsVersion = 14.3.1;
 						TestTargetID = 00DECFF4274C69F800DAF301;
 					};
 					00DECFF4274C69F800DAF301 = {
@@ -1198,6 +1250,7 @@
 				00DECFF4274C69F800DAF301 /* Demo */,
 				001B7AF127DE3A7600DEEECD /* Parra */,
 				001B7AF827DE3A7600DEEECD /* ParraTests */,
+				0087CA592A54C54D007D72FA /* ParraUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1212,6 +1265,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		001B7AF727DE3A7600DEEECD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0087CA582A54C54D007D72FA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1429,6 +1489,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0087CA562A54C54D007D72FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0087CA5D2A54C54D007D72FA /* ParraUITests.swift in Sources */,
+				0087CA5F2A54C54D007D72FA /* ParraUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		00DECFF1274C69F800DAF301 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1461,6 +1530,11 @@
 			isa = PBXTargetDependency;
 			target = 001B7AF127DE3A7600DEEECD /* Parra */;
 			targetProxy = 001B7B0327DE3A7600DEEECD /* PBXContainerItemProxy */;
+		};
+		0087CA612A54C54D007D72FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00DECFF4274C69F800DAF301 /* Demo */;
+			targetProxy = 0087CA602A54C54D007D72FA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1599,6 +1673,42 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Demo.app/Demo";
+			};
+			name = Release;
+		};
+		0087CA632A54C54D007D72FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Demo;
+			};
+			name = Debug;
+		};
+		0087CA642A54C54D007D72FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Demo;
 			};
 			name = Release;
 		};
@@ -1808,6 +1918,15 @@
 			buildConfigurations = (
 				001B7B0B27DE3A7600DEEECD /* Debug */,
 				001B7B0C27DE3A7600DEEECD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0087CA622A54C54D007D72FA /* Build configuration list for PBXNativeTarget "ParraUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0087CA632A54C54D007D72FA /* Debug */,
+				0087CA642A54C54D007D72FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
