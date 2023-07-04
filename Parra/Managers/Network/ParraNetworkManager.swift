@@ -10,11 +10,6 @@ import UIKit
 
 public typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
-internal let EmptyJsonObjectData = "{}".data(using: .utf8)!
-
-internal struct EmptyRequestObject: Codable {}
-internal struct EmptyResponseObject: Codable {}
-
 internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
     internal let state: ParraState
     internal let configState: ParraConfigState
@@ -25,6 +20,12 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
     private let urlSession: URLSessionType
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
+
+    private lazy var urlSessionDelegateProxy: ParraNetworkManagerUrlSessionDelegateProxy = {
+        return ParraNetworkManagerUrlSessionDelegateProxy(
+            delegate: self
+        )
+    }()
     
     internal init(
         state: ParraState,
@@ -177,6 +178,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
             request.setValue(for: .authorization(.bearer(credential.token)))
 
             let (data, response) = try await performAsyncDataDask(request: request)
+//            let duration = CFAbsoluteTimeGetCurrent() - start
 
             parraLogTrace("Parra client received response. Status: \(response.statusCode)")
 
@@ -392,7 +394,10 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
         }
 #endif
 
-        let (data, response) = try await urlSession.dataForRequest(for: request, delegate: nil)
+        let (data, response) = try await urlSession.dataForRequest(
+            for: request,
+            delegate: urlSessionDelegateProxy
+        )
 
         // It is documented that for data tasks, response is always actually HTTPURLResponse
         return (data, response as! HTTPURLResponse)
