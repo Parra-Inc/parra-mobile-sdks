@@ -49,6 +49,7 @@ internal actor ParraSyncManager {
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
     internal func enqueueSync(with mode: ParraSyncMode) async {
         guard await networkManager.getAuthenticationProvider() != nil else {
+            await stopSyncTimer()
             parraLogTrace("Skipping \(mode) sync. Authentication provider is unset.")
 
             return
@@ -160,7 +161,11 @@ internal actor ParraSyncManager {
 
         switch enqueuedSyncMode {
         case .immediate:
-            await sync()
+            // Don't await the next sync. Jobs that were waiting on the first
+            // shouldn't be enqueued for subsequent syncs.
+            Task {
+                await sync()
+            }
         case .eventual:
             await syncState.endSync()
         }
@@ -239,5 +244,9 @@ internal actor ParraSyncManager {
         }
 
         return syncTimer.isValid
+    }
+
+    internal func cancelEnqueuedSyncs() {
+        enqueuedSyncMode = nil
     }
 }

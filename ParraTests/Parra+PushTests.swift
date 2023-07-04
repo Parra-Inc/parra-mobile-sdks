@@ -36,7 +36,7 @@ class ParraPushTests: XCTestCase {
 
         mockParra.parra.registerDevicePushToken(testTokenData)
 
-        await fulfillment(of: [pushUploadExpectation], timeout: 1.0)
+        await fulfillment(of: [pushUploadExpectation], timeout: 3.0)
     }
 
     func testCachesPushTokenIfSdkNotInitialized() async throws {

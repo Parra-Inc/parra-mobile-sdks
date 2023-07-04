@@ -112,15 +112,12 @@ internal class ParraFeedbackDataManager {
     internal func setCards(cards: [ParraCardItem]) {
         Task {
             await cardStorage.setCards(cardItems: cards)
-            
-            await MainActor.run {
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(
-                        name: ParraFeedback.cardsDidChangeNotification,
-                        object: nil
-                    )
-                }
-            }
+
+            await parra.notificationCenter.postAsync(
+                name: ParraFeedback.cardsDidChangeNotification,
+                object: nil,
+                userInfo: nil
+            )
         }
     }
 }

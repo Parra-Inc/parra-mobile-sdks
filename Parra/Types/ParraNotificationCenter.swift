@@ -9,8 +9,9 @@
 import Foundation
 
 public class ParraNotificationCenter: NotificationCenterType {
-    public static let `default` = ParraNotificationCenter()
-    private let underlyingNotificationCenter = NotificationCenter.default
+    internal let underlyingNotificationCenter = NotificationCenter()
+
+    init() {}
 
     public func post(
         name aName: NSNotification.Name,

@@ -34,7 +34,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         sessionConfig.urlCache = cache
         sessionConfig.requestCachePolicy = .returnCacheDataElseLoad
 
-        let notificationCenter = ParraNotificationCenter.default
+        let notificationCenter = ParraNotificationCenter()
         let urlSession = URLSession(configuration: sessionConfig)
         let dataManager = ParraDataManager()
 

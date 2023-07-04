@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import XCTest
 @testable import Parra
 
 struct MockParra {
@@ -17,8 +18,19 @@ struct MockParra {
     let syncManager: ParraSyncManager
     let sessionManager: ParraSessionManager
     let networkManager: ParraNetworkManager
-    let notificationCenter: NotificationCenterType
+    let notificationCenter: ParraNotificationCenter
 
     let tenantId: String
     let applicationId: String
+
+    func notificationExpectation(
+        name: Notification.Name,
+        object: Any? = nil
+    ) -> XCTNSNotificationExpectation {
+        return XCTNSNotificationExpectation(
+            name: name,
+            object: object,
+            notificationCenter: notificationCenter.underlyingNotificationCenter
+        )
+    }
 }

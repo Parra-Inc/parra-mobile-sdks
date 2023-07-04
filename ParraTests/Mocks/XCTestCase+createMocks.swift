@@ -25,7 +25,7 @@ extension XCTestCase {
         )
         let syncState = ParraSyncState()
         let configState = ParraConfigState()
-        let notificationCenter = ParraNotificationCenter.default
+        let notificationCenter = ParraNotificationCenter()
 
         let sessionManager = ParraSessionManager(
             dataManager: mockNetworkManager.dataManager,
