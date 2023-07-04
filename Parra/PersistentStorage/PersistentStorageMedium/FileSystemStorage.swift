@@ -36,9 +36,11 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     
     internal func read<T>(name: String) async throws -> T? where T: Codable {
         let file = baseUrl.safeAppendPathComponent(name)
-        let data = try Data(contentsOf: file)
+        if let data = try? Data(contentsOf: file) {
+            return try jsonDecoder.decode(T.self, from: data)
+        }
 
-        return try jsonDecoder.decode(T.self, from: data)
+        return nil
     }
 
     internal func readAllInDirectory<T>() async -> [String: T] where T: Codable {

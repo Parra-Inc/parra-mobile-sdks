@@ -9,14 +9,27 @@ import Foundation
 @testable import Parra
 
 func deleteDirectoriesInApplicationSupport() throws {
-    let directoryPaths = try FileManager.default.contentsOfDirectory(
-        at: ParraDataManager.Base.applicationSupportDirectory,
+    let fileManager = FileManager.default
+    let baseDirectory = ParraDataManager.Base.applicationSupportDirectory
+
+    var isDirectory: ObjCBool = false
+    let exists = fileManager.fileExists(
+        atPath: baseDirectory.safeNonEncodedPath(),
+        isDirectory: &isDirectory
+    )
+
+    if !exists || !isDirectory.boolValue {
+        return
+    }
+
+    let directoryPaths = try fileManager.contentsOfDirectory(
+        at: baseDirectory,
         includingPropertiesForKeys: [.isDirectoryKey],
         options: .skipsHiddenFiles
     )
 
     for directoryPath in directoryPaths {
-        try FileManager.default.removeItem(at: directoryPath)
+        try fileManager.removeItem(at: directoryPath)
     }
 }
 
