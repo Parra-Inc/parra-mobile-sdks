@@ -145,17 +145,6 @@ internal class MockURLSession: URLSessionType {
         return (data!, response!)
     }
 
-    func dataTask(
-        with request: URLRequest,
-        completionHandler: @escaping (DataTaskResponse) -> Void
-    ) -> URLSessionDataTask {
-        return MockURLSessionDataTask(
-            request: request,
-            dataTaskResolver: self.resolve,
-            handler: completionHandler
-        )
-    }
-
     func expectInvocation(
         of endpoint: ParraEndpoint,
         times: Int = 1,
