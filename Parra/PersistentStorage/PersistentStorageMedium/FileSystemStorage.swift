@@ -25,15 +25,19 @@ internal actor FileSystemStorage: PersistentStorageMedium {
         parraLogTrace("FileSystemStorage init with baseUrl: \(baseUrl.safeNonEncodedPath())")
 
         // TODO: Think about this more later, but I think this is a fatalError()
-        try? fileManager.safeCreateDirectory(at: baseUrl)
+        do {
+            try fileManager.safeCreateDirectory(at: baseUrl)
+        } catch let error {
+            parraLogError("Error creating directory", error, [
+                "path": baseUrl.absoluteString
+            ])
+        }
     }
     
     internal func read<T>(name: String) async throws -> T? where T: Codable {
         let file = baseUrl.safeAppendPathComponent(name)
-        guard let data = try? Data(contentsOf: file) else {
-            return nil
-        }
-        
+        let data = try Data(contentsOf: file)
+
         return try jsonDecoder.decode(T.self, from: data)
     }
 

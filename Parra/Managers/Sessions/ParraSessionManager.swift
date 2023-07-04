@@ -10,12 +10,15 @@ import Foundation
 import UIKit
 
 // TODO: Any logs used in here cause recursion in production
+// TODO: General refactor for the Parra logger to just be a wrapper around writing log events to the session manager.
 
 /// ParraSessionManager
 internal actor ParraSessionManager {
     private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager
-    private var currentSession: ParraSession?
+
+    internal private(set) var currentSession: ParraSession?
+
     private var userProperties: [String: AnyCodable] = [:]
 
     internal init(
@@ -109,7 +112,7 @@ internal actor ParraSessionManager {
 
         let newEvent = ParraSessionEvent(
             name: event.name,
-            createdAt: Date(),
+            createdAt: .now,
             metadata: [
                 "origin": [
                     "module": module,
@@ -185,10 +188,11 @@ internal actor ParraSessionManager {
 
     internal func createSessionIfNotExists() async {
         guard currentSession == nil else {
-            parraLogTrace("Session is already in progress. Skipping creating new one.")
-
             return
         }
+
+        parraLogDebug("No session exists. Starting new session.")
+
 
         var currentSession = ParraSession()
 

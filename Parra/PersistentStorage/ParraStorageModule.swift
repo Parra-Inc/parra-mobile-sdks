@@ -79,10 +79,16 @@ public actor ParraStorageModule<DataType: Codable> {
         if let fileSystem = persistentStorage.medium as? FileSystemStorage, storeItemsSeparately {
             storageCache = await fileSystem.readAllInDirectory()
         } else {
-            if let existingData: [String: DataType] = try? await persistentStorage.medium.read(
-                name: persistentStorage.key
-            ) {
-                storageCache = existingData
+            do {
+                if let existingData: [String: DataType] = try await persistentStorage.medium.read(
+                    name: persistentStorage.key
+                ) {
+                    storageCache = existingData
+                }
+            } catch let error {
+                parraLogError("Error loading data from persistent storage", error, [
+                    "key": persistentStorage.key
+                ])
             }
         }
     }
@@ -105,10 +111,17 @@ public actor ParraStorageModule<DataType: Codable> {
         }
 
         if let persistentStorage, storeItemsSeparately {
-            if let loadedData: [String: DataType] = try? await persistentStorage.medium.read(name: name) {
-                storageCache.merge(loadedData) { (_, new) in new }
 
-                return storageCache[name]
+            do {
+                if let loadedData: [String: DataType] = try? await persistentStorage.medium.read(name: name) {
+                    storageCache.merge(loadedData) { (_, new) in new }
+
+                    return storageCache[name]
+                }
+            } catch let error {
+                parraLogError("Error reading data from persistent storage", error, [
+                    "key": persistentStorage.key
+                ])
             }
         }
 
@@ -183,16 +196,22 @@ public actor ParraStorageModule<DataType: Codable> {
             return
         }
 
-        if storeItemsSeparately {
-            for (name, _) in storageCache {
-                try? await persistentStorage.medium.delete(
-                    name: name
+        do {
+            if storeItemsSeparately {
+                for (name, _) in storageCache {
+                    try await persistentStorage.medium.delete(
+                        name: name
+                    )
+                }
+            } else {
+                try await persistentStorage.medium.delete(
+                    name: persistentStorage.key
                 )
             }
-        } else {
-            try? await persistentStorage.medium.delete(
-                name: persistentStorage.key
-            )
+        } catch let error {
+            parraLogError("Error deleting data from persistent storage", error, [
+                "key": persistentStorage.key
+            ])
         }
     }
 }

@@ -344,7 +344,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
             return UIImage(data: data)
         }
 
-        parraLogTrace("Failed to download image for asset: \(asset.id)")
+        parraLogWarn("Failed to download image for asset: \(asset.id)")
 
         return nil
     }

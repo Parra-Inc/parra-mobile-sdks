@@ -21,7 +21,11 @@ internal actor CredentialStorage: ItemStorage {
     }
     
     func updateCredential(credential: ParraCredential?) async {
-        try? await storageModule.write(name: Key.currentUser, value: credential)
+        do {
+            try await storageModule.write(name: Key.currentUser, value: credential)
+        } catch let error {
+            parraLogError("error updating credential", error)
+        }
     }
     
     func currentCredential() async -> ParraCredential? {
