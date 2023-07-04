@@ -12,19 +12,26 @@ import UIKit
 /// Events that should only be generated from within the Parra SDK. Events that can be generated
 /// either in or outside of the SDK, should use the `ParraEvent` type.
 internal enum ParraInternalEvent: ParraEvent {
-    case appStateChanged(state: UIApplication.State)
-    case httpRequest
+    case appStateChanged
+    case batteryLevelChanged
+    case batteryStateChanged
+    case httpRequest // TODO
     case keyboardDidHide
     case keyboardDidShow
-    case log
+    case log // TODO
     case memoryWarning
     case orientationChanged
     case screenshotTaken
+    case significantTimeChange
 
     var name: String {
         switch self {
-        case .appStateChanged(let state):
-            return "app_state_changed:\(state)"
+        case .appStateChanged:
+            return "app_state_changed"
+        case .batteryLevelChanged:
+            return "battery_level_changed"
+        case .batteryStateChanged:
+            return "battery_state_changed"
         case .httpRequest:
             return "http_request"
         case .keyboardDidHide:
@@ -39,6 +46,8 @@ internal enum ParraInternalEvent: ParraEvent {
             return "orientation_changed"
         case .screenshotTaken:
             return "screenshot_taken"
+        case .significantTimeChange:
+            return "significant_time_change"
         }
     }
 

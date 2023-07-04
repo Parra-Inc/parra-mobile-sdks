@@ -17,7 +17,14 @@ internal extension Parra {
             (UIApplication.didBecomeActiveNotification, #selector(self.applicationDidBecomeActive)),
             (UIApplication.willResignActiveNotification, #selector(self.applicationWillResignActive)),
             (UIApplication.didEnterBackgroundNotification, #selector(self.applicationDidEnterBackground)),
-            (UIApplication.significantTimeChangeNotification, #selector(self.triggerEventualSyncFromNotification)),
+            (UIApplication.significantTimeChangeNotification, #selector(self.significantTimeChange)),
+            (UIApplication.didReceiveMemoryWarningNotification, #selector(self.didReceiveMemoryWarning)),
+            (UIApplication.userDidTakeScreenshotNotification, #selector(self.didTakeScreenshot)),
+            (UIDevice.orientationDidChangeNotification, #selector(self.orientationDidChange)),
+            (UIDevice.batteryLevelDidChangeNotification, #selector(self.batteryLevelChange)),
+            (UIDevice.batteryStateDidChangeNotification, #selector(self.batteryStateChange)),
+            (UIWindow.keyboardDidShowNotification, #selector(self.keyboardDidShow)),
+            (UIWindow.keyboardDidHideNotification, #selector(self.keyboardDidHide)),
         ]
     }
 
@@ -31,6 +38,10 @@ internal extension Parra {
         for (notificationName, selector) in notificationsToObserve {
             addObserver(for: notificationName, selector: selector)
         }
+
+        // TODO: Not receiving these. Maybe just a simulator issue?
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        UIDevice.current.isBatteryMonitoringEnabled = true
     }
 
     func removeEventObservers() {
@@ -41,6 +52,9 @@ internal extension Parra {
         for (notificationName, _) in notificationsToObserve {
             removeObserver(for: notificationName)
         }
+
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        UIDevice.current.isBatteryMonitoringEnabled = false
     }
 
     @MainActor
@@ -52,7 +66,9 @@ internal extension Parra {
                 app.endBackgroundTask(taskId)
             }
 
-            logEvent(.appStateChanged(state: .active))
+            logEvent(.appStateChanged, params: [
+                "state": UIApplication.State.active.description
+            ])
 
             triggerEventualSyncFromNotification(notification: notification)
         }
@@ -61,7 +77,9 @@ internal extension Parra {
     @MainActor
     @objc func applicationWillResignActive(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.appStateChanged(state: .inactive))
+            logEvent(.appStateChanged, params: [
+                "state": UIApplication.State.inactive.description
+            ])
 
             triggerSyncFromNotification(notification: notification)
 
@@ -107,7 +125,73 @@ internal extension Parra {
     @MainActor
     @objc func applicationDidEnterBackground(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.appStateChanged(state: .background))
+            logEvent(.appStateChanged, params: [
+                "state": UIApplication.State.background.description
+            ])
+        }
+    }
+
+    @MainActor
+    @objc func significantTimeChange(notification: Notification) {
+        withInitializationCheck { [self] in
+            logEvent(.significantTimeChange)
+
+            await syncManager.enqueueSync(with: .immediate)
+        }
+    }
+
+    @MainActor
+    @objc func didReceiveMemoryWarning(notification: Notification) {
+        withInitializationCheck { [self] in
+            logEvent(.memoryWarning)
+        }
+    }
+
+    @MainActor
+    @objc func didTakeScreenshot(notification: Notification) {
+        withInitializationCheck { [self] in
+            logEvent(.screenshotTaken)
+        }
+    }
+
+    @MainActor
+    @objc func orientationDidChange(notification: Notification) {
+        withInitializationCheck { [self] in
+            logEvent(.orientationChanged, params: [
+                "orientation": UIDevice.current.orientation.description
+            ])
+        }
+    }
+
+    @MainActor
+    @objc func batteryLevelChange(notification: Notification) {
+        withInitializationCheck { [self] in
+            logEvent(.batteryLevelChanged, params: [
+                "battery_level": UIDevice.current.batteryLevel
+            ])
+        }
+    }
+
+    @MainActor
+    @objc func batteryStateChange(notification: Notification) {
+        withInitializationCheck { [self] in
+            logEvent(.batteryStateChanged, params: [
+                "battery_state": UIDevice.current.batteryState.description
+            ])
+        }
+    }
+
+    @MainActor
+    @objc func keyboardDidShow(notification: Notification) {
+        withInitializationCheck { [self] in
+            logEvent(.keyboardDidShow, params: keyboardFrameParams(from: notification))
+        }
+    }
+
+    @MainActor
+    @objc func keyboardDidHide(notification: Notification) {
+        withInitializationCheck { [self] in
+            logEvent(.keyboardDidHide, params: keyboardFrameParams(from: notification))
         }
     }
 
@@ -158,5 +242,18 @@ internal extension Parra {
             name: notificationName,
             object: nil
         )
+    }
+
+    private func keyboardFrameParams(from notification: Notification) -> [String: Any] {
+        var params = [String: Any]()
+
+        if let value = notification.userInfo?[UIWindow.keyboardFrameBeginUserInfoKey] as? NSValue {
+            params["frame_begin"] = NSCoder.string(for: value.cgRectValue)
+        }
+        if let value = notification.userInfo?[UIWindow.keyboardFrameEndUserInfoKey] as? NSValue {
+            params["frame_end"] = NSCoder.string(for: value.cgRectValue)
+        }
+
+        return params
     }
 }
