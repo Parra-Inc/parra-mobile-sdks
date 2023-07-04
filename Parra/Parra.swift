@@ -16,6 +16,21 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     internal let state: ParraState
     internal let configState: ParraConfigState
 
+    internal lazy var feedback: ParraFeedback = {
+        let parraFeedback = ParraFeedback(
+            parra: self,
+            dataManager: ParraFeedbackDataManager(
+                parra: self
+            )
+        )
+
+        Task {
+            await state.registerModule(module: parraFeedback)
+        }
+
+        return parraFeedback
+    }()
+
     internal static var shared: Parra! = {
         let state = ParraState()
         let configState = ParraConfigState()

@@ -86,11 +86,7 @@ public extension Parra {
         newConfig.setTenantId(tenantId)
         newConfig.setApplicationId(applicationId)
 
-        let modules: [ParraModule] = [Parra.shared, ParraFeedback.shared]
-        for module in modules {
-            await state.registerModule(module: module)
-        }
-
+        await state.registerModule(module: self)
         await configState.updateState(newConfig)
         await networkManager.updateAuthenticationProvider(authenticationProvider)
         await state.initialize()

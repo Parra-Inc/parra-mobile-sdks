@@ -14,20 +14,10 @@ public class ParraFeedback: ParraModule {
     internal let parra: Parra
     internal let dataManager: ParraFeedbackDataManager
 
-    @MainActor
-    public static var shared: ParraFeedback! = {
-        let parra = Parra.shared!
-        let dataManager = ParraFeedbackDataManager(
-            parra: parra
-        )
+    public static var shared: ParraFeedback {
+        return Parra.shared.feedback
+    }
 
-        return ParraFeedback(
-            parra: parra,
-            dataManager: dataManager
-        )
-    }()
-
-    @MainActor
     internal init(
         parra: Parra,
         dataManager: ParraFeedbackDataManager
@@ -196,9 +186,20 @@ public class ParraFeedback: ParraModule {
     }
 
     private func performAssetPrefetch(for cards: [ParraCardItem]) {
+        if cards.isEmpty {
+            return
+        }
+
         Task {
             parraLogDebug("Attempting asset prefetch for \(cards.count) card(s)...")
             let assets = cards.flatMap { $0.getAllAssets() }
+
+            if assets.isEmpty {
+                parraLogDebug("No assets are available for prefetching")
+
+                return
+            }
+
             parraLogDebug("\(assets.count) asset(s) available for prefetching")
 
 
