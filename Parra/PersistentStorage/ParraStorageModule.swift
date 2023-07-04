@@ -113,7 +113,7 @@ public actor ParraStorageModule<DataType: Codable> {
         if let persistentStorage, storeItemsSeparately {
 
             do {
-                if let loadedData: [String: DataType] = try? await persistentStorage.medium.read(name: name) {
+                if let loadedData: [String: DataType] = try await persistentStorage.medium.read(name: name) {
                     storageCache.merge(loadedData) { (_, new) in new }
 
                     return storageCache[name]
