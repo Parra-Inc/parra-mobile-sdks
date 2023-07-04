@@ -12,6 +12,13 @@ import Foundation
 struct MockParra {
     let parra: Parra
     let mockNetworkManager: MockParraNetworkManager
+
+    let dataManager: ParraDataManager
+    let syncManager: ParraSyncManager
+    let sessionManager: ParraSessionManager
+    let networkManager: ParraNetworkManager
+    let notificationCenter: NotificationCenterType
+
     let tenantId: String
     let applicationId: String
 }

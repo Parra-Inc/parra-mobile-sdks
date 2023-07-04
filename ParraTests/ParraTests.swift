@@ -20,53 +20,48 @@ class FakeModule: ParraModule {
     }
 }
 
-//@MainActor
-//class ParraTests: XCTestCase {
-//    override func setUp() async throws {
-//        await configureWithRequestResolver { request in
-//            return (EmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
-//        }
-//    }
-//
-//    override func tearDown() async throws {
-//        await Parra.deinitialize()
-//        await Parra.shared.sessionManager.resetSession()
-//    }
-//
-//    func testModulesCanBeRegistered() async throws {
-//        let module = FakeModule()
-//
-//        await ParraGlobalState.shared.registerModule(module: module)
-//
-//        let hasRegistered = await ParraGlobalState.shared.hasRegisteredModule(module: module)
-//        XCTAssertTrue(hasRegistered)
-//        let modules = await ParraGlobalState.shared.getAllRegisteredModules()
-//        XCTAssert(modules.keys.contains(FakeModule.name))
-//    }
-//
-//    func testModuleRegistrationIsDeduplicated() async throws {
-//        let module = FakeModule()
-//
-//        let checkBeforeRegister = await ParraGlobalState.shared.hasRegisteredModule(module: module)
-//        XCTAssertFalse(checkBeforeRegister)
-//
-//        let previous = await ParraGlobalState.shared.getAllRegisteredModules()
-//
-//        await ParraGlobalState.shared.registerModule(module: module)
-//        await ParraGlobalState.shared.registerModule(module: module)
-//
-//        let hasRegistered = await ParraGlobalState.shared.hasRegisteredModule(module: module)
-//        XCTAssertTrue(hasRegistered)
-//
-//        let modules = await ParraGlobalState.shared.getAllRegisteredModules()
-//        XCTAssert(modules.keys.contains(FakeModule.name))
-//        XCTAssertEqual(modules.count, previous.count + 1)
-//    }
-//    
-//    func testLogout() async throws {
-//        await Parra.logout()
-//
-//        let currentCredential = await Parra.shared.dataManager.getCurrentCredential()
-//        XCTAssertNil(currentCredential)
-//    }
-//}
+@MainActor
+class ParraTests: XCTestCase {
+    private var mockParra: MockParra!
+
+    override func setUp() async throws {
+        mockParra = await createMockParra()
+    }
+
+    func testModulesCanBeRegistered() async throws {
+        let module = FakeModule()
+
+        await mockParra.parra.state.registerModule(module: module)
+
+        let hasRegistered = await mockParra.parra.state.hasRegisteredModule(module: module)
+        XCTAssertTrue(hasRegistered)
+        let modules = await mockParra.parra.state.getAllRegisteredModules()
+        XCTAssert(modules.keys.contains(FakeModule.name))
+    }
+
+    func testModuleRegistrationIsDeduplicated() async throws {
+        let module = FakeModule()
+
+        let checkBeforeRegister = await mockParra.parra.state.hasRegisteredModule(module: module)
+        XCTAssertFalse(checkBeforeRegister)
+
+        let previous = await mockParra.parra.state.getAllRegisteredModules()
+
+        await mockParra.parra.state.registerModule(module: module)
+        await mockParra.parra.state.registerModule(module: module)
+
+        let hasRegistered = await mockParra.parra.state.hasRegisteredModule(module: module)
+        XCTAssertTrue(hasRegistered)
+
+        let modules = await mockParra.parra.state.getAllRegisteredModules()
+        XCTAssert(modules.keys.contains(FakeModule.name))
+        XCTAssertEqual(modules.count, previous.count + 1)
+    }
+
+    func testLogout() async throws {
+        await mockParra.parra.logout()
+
+        let currentCredential = await mockParra.dataManager.getCurrentCredential()
+        XCTAssertNil(currentCredential)
+    }
+}

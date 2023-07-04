@@ -40,17 +40,28 @@ extension XCTestCase {
             notificationCenter: notificationCenter
         )
 
+        let parra = Parra(
+            state: state,
+            configState: configState,
+            dataManager: mockNetworkManager.dataManager,
+            syncManager: syncManager,
+            sessionManager: sessionManager,
+            networkManager: mockNetworkManager.networkManager,
+            notificationCenter: notificationCenter
+        )
+
+        if await state.isInitialized() {
+            await state.registerModule(module: parra)
+        }
+
         return MockParra(
-            parra: Parra(
-                state: state,
-                configState: configState,
-                dataManager: mockNetworkManager.dataManager,
-                syncManager: syncManager,
-                sessionManager: sessionManager,
-                networkManager: mockNetworkManager.networkManager,
-                notificationCenter: notificationCenter
-            ),
+            parra: parra,
             mockNetworkManager: mockNetworkManager,
+            dataManager: mockNetworkManager.dataManager,
+            syncManager: syncManager,
+            sessionManager: sessionManager,
+            networkManager: mockNetworkManager.networkManager,
+            notificationCenter: notificationCenter,
             tenantId: tenantId,
             applicationId: applicationId
         )
@@ -76,7 +87,13 @@ extension XCTestCase {
             urlSession: urlSession
         )
 
-        await networkManager.updateAuthenticationProvider(authenticationProvider)
+        if await state.isInitialized() {
+            await networkManager.updateAuthenticationProvider(
+                authenticationProvider ?? {
+                    return UUID().uuidString
+                }
+            )
+        }
 
         return MockParraNetworkManager(
             networkManager: networkManager,

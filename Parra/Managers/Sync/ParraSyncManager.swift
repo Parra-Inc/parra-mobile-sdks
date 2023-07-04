@@ -24,8 +24,9 @@ internal actor ParraSyncManager {
     /// is completed.
     internal private(set) var enqueuedSyncMode: ParraSyncMode? = nil
 
-    private let state: ParraState
-    private let syncState: ParraSyncState
+    internal let state: ParraState
+    internal let syncState: ParraSyncState
+
     private let networkManager: ParraNetworkManager
     private let sessionManager: ParraSessionManager
     private let notificationCenter: NotificationCenterType
