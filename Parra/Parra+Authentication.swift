@@ -8,16 +8,6 @@
 import Foundation
 
 public extension Parra {
-    @MainActor
-    internal func deinitialize() async {
-        removeEventObservers()
-
-        await networkManager.updateAuthenticationProvider(nil)
-        await configState.resetState()
-        await state.unregisterModule(module: self)
-        await state.deinitialize()
-        await sessionManager.endSession()
-    }
 
     /// Initializes the Parra SDK using the provided configuration and auth provider. This method should be invoked as
     /// early as possible inside of applicationDidFinishLaunchingWithOptions.
@@ -25,7 +15,17 @@ public extension Parra {
     ///   - authProvider: An async function that is expected to return a ParraCredential object containing a user's
     ///    access token. This function will be invoked automatically whenever the user's credential is missing or
     ///    expired and Parra needs to refresh the authentication state for your user.
-    func initialize(
+    static func initialize(
+        options: [ParraConfigurationOption] = [],
+        authProvider: ParraAuthenticationProviderType
+    ) {
+        shared.initialize(
+            options: options,
+            authProvider: authProvider
+        )
+    }
+
+    internal func initialize(
         options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) {
@@ -33,14 +33,27 @@ public extension Parra {
             await initialize(options: options, authProvider: authProvider)
         }
     }
+
     /// Initializes the Parra SDK using the provided configuration and auth provider. This method should be invoked as
     /// early as possible inside of applicationDidFinishLaunchingWithOptions.
     /// - Parameters:
     ///   - authProvider: An async function that is expected to return a ParraCredential object containing a user's
     ///    access token. This function will be invoked automatically whenever the user's credential is missing or
     ///    expired and Parra needs to refresh the authentication state for your user.
+
     @MainActor
-    func initialize(
+    static func initialize(
+        options: [ParraConfigurationOption] = [],
+        authProvider: ParraAuthenticationProviderType
+    ) async {
+        await shared.initialize(
+            options: options,
+            authProvider: authProvider
+        )
+    }
+
+    @MainActor
+    internal func initialize(
         options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) async {

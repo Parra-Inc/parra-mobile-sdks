@@ -9,13 +9,13 @@
 import Foundation
 
 internal extension Parra {
-    static func logEvent(
+    func logEvent(
         _ event: ParraInternalEvent,
         params: [String: Any] = [:],
         fileId: String = #fileID
     ) {
         Task {
-            await shared.sessionManager.log(
+            await sessionManager.log(
                 event: ParraEventWrapper(event: event, extraParams: params),
                 fileId: fileId
             )

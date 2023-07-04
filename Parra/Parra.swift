@@ -16,7 +16,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     internal let state: ParraState
     internal let configState: ParraConfigState
 
-    public internal(set) static var shared: Parra! = {
+    internal static var shared: Parra! = {
         let state = ParraState()
         let configState = ParraConfigState()
         let syncState = ParraSyncState()
@@ -96,8 +96,8 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     }
     
     deinit {
-        // Being a good citizen. This should only happen when the singleton is destroyed when the
-        // app is being killed anyway.
+        // This should only happen when the singleton is destroyed when the
+        // app is being killed, or during unit tests.
         removeEventObservers()
     }
 
@@ -105,7 +105,11 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
-    public func logout(completion: (() -> Void)? = nil) {
+    public static func logout(completion: (() -> Void)? = nil) {
+        shared.logout(completion: completion)
+    }
+
+    internal func logout(completion: (() -> Void)? = nil) {
         Task {
             await logout()
 
@@ -117,7 +121,11 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
-    public func logout() async {
+    public static func logout() async {
+        await shared.logout()
+    }
+
+    internal func logout() async {
         await syncManager.enqueueSync(with: .immediate)
         await dataManager.updateCredential(credential: nil)
         await syncManager.stopSyncTimer()
@@ -126,19 +134,27 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     // MARK: - Synchronization
 
     /// Uploads any cached Parra data. This includes data like answers to questions.
-    public func triggerSync(completion: (() -> Void)? = nil) {
+    public static func triggerSync(completion: (() -> Void)? = nil) {
+        shared.triggerSync(completion: completion)
+    }
+
+    internal func triggerSync(completion: (() -> Void)? = nil) {
         Task {
             await triggerSync()
-            
+
             completion?()
         }
     }
-    
+
     /// Parra data is syncrhonized automatically. Use this method if you wish to trigger a synchronization event manually.
     /// This may be something you want to do in response to a significant event in your app, or in response to a low memory
     /// warning, for example. Note that in order to prevent excessive network activity it may take up to 30 seconds for the sync
     /// to complete after being initiated.
-    public func triggerSync() async {
+    public static func triggerSync() async {
+        await shared.triggerSync()
+    }
+
+    internal func triggerSync() async {
         // Uploads any cached Parra data. This includes data like answers to questions.
         // Don't expose sync mode publically.
         await syncManager.enqueueSync(with: .eventual)
@@ -148,7 +164,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         return await sessionManager.hasDataToSync()
     }
 
-    internal func synchronizeData() async {
+    internal func synchronizeData() async throws {
         guard let response = await sessionManager.synchronizeData() else {
             return
         }

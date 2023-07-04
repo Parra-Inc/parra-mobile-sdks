@@ -15,10 +15,6 @@ internal enum ParraSyncMode: String {
 
 /// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
 internal actor ParraSyncManager {
-    internal enum Constant {
-        static let eventualSyncDelay: TimeInterval = 30.0
-    }
-
     /// Whether or not new attempts to sync occured while a sync was in progress. Many sync events could be received while a sync
     /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
     /// is completed.
@@ -26,6 +22,7 @@ internal actor ParraSyncManager {
 
     internal let state: ParraState
     internal let syncState: ParraSyncState
+    nonisolated internal let syncDelay: TimeInterval
 
     private let networkManager: ParraNetworkManager
     private let sessionManager: ParraSessionManager
@@ -38,13 +35,15 @@ internal actor ParraSyncManager {
         syncState: ParraSyncState,
         networkManager: ParraNetworkManager,
         sessionManager: ParraSessionManager,
-        notificationCenter: NotificationCenterType
+        notificationCenter: NotificationCenterType,
+        syncDelay: TimeInterval = 30.0
     ) {
         self.state = state
         self.syncState = syncState
         self.networkManager = networkManager
         self.sessionManager = sessionManager
         self.notificationCenter = notificationCenter
+        self.syncDelay = syncDelay
     }
     
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
@@ -79,6 +78,8 @@ internal actor ParraSyncManager {
             return
         }
 
+        // Should not be awaited. enqueueSync returns when the sync job is added
+        // to the queue.
         Task {
             await self.sync()
         }
@@ -121,14 +122,10 @@ internal actor ParraSyncManager {
         
         parraLogDebug("Starting sync")
         
-        let start = CFAbsoluteTimeGetCurrent()
-        parraLogTrace("Sending sync data...")
-
         do {
             try await performSync()
 
-            let duration = CFAbsoluteTimeGetCurrent() - start
-            parraLogTrace("Sync data sent. Took \(duration)(s)")
+            parraLogTrace("Sync complete")
         } catch let error {
             parraLogError("Error performing sync", error)
             // TODO: Maybe cancel the sync timer, double the countdown then start a new one?
@@ -184,15 +181,19 @@ internal actor ParraSyncManager {
     }
     
     @MainActor
-    internal func startSyncTimer() {
+    internal func startSyncTimer(
+        willSyncHandler: (() -> Void)? = nil
+    ) {
         stopSyncTimer()
         parraLogTrace("Starting sync timer")
 
         syncTimer = Timer.scheduledTimer(
-            withTimeInterval: Constant.eventualSyncDelay,
+            withTimeInterval: syncDelay,
             repeats: true
         ) { timer in
             parraLogTrace("Sync timer fired")
+
+            willSyncHandler?()
 
             Task {
                 await self.enqueueSync(with: .immediate)
@@ -210,5 +211,14 @@ internal actor ParraSyncManager {
 
         syncTimer.invalidate()
         self.syncTimer = nil
+    }
+
+    @MainActor
+    internal func isSyncTimerActive() -> Bool {
+        guard let syncTimer else {
+            return false
+        }
+
+        return syncTimer.isValid
     }
 }
