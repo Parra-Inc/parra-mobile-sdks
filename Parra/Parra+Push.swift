@@ -78,6 +78,11 @@ public extension Parra {
     /// occurs, set a flag and try to register again at a later time.
     @MainActor
     static func didFailToRegisterForRemoteNotifications(with error: Error) {
+        shared.didFailToRegisterForRemoteNotifications(with: error)
+    }
+
+    @MainActor
+    internal func didFailToRegisterForRemoteNotifications(with error: Error) {
         parraLogError("Failed to register for remote notifications", error)
     }
 }
