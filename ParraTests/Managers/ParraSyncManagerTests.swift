@@ -17,10 +17,39 @@ class ParraSyncManagerTests: XCTestCase {
     }
 
     override func tearDown() async throws {
+        mockParra.syncManager.stopSyncTimer()
         mockParra = nil
     }
 
-    func testEnqueueSync() async throws {
+    func testStartingSyncTimerActivatesTimer() async throws {
+        mockParra.syncManager.startSyncTimer()
+
+        XCTAssertTrue(mockParra.syncManager.isSyncTimerActive())
+    }
+
+    func testStartingSyncTimerTriggersSync() async throws {
+        let syncStartedExpectation = expectation(description: "Sync started")
+        mockParra.syncManager.startSyncTimer {
+            syncStartedExpectation.fulfill()
+        }
+
+        await fulfillment(
+            of: [syncStartedExpectation],
+            timeout: mockParra.syncManager.syncDelay + 0.5
+        )
+    }
+
+    func testStoppingSyncTimerDeactivatesTimer() async throws {
+        mockParra.syncManager.startSyncTimer()
+
+        try await Task.sleep(ms: 100)
+
+        mockParra.syncManager.stopSyncTimer()
+
+        XCTAssertFalse(mockParra.syncManager.isSyncTimerActive())
+    }
+
+    func testEnqueueImmediateSync() async throws {
         let notificationExpectation = XCTNSNotificationExpectation(
             name: Parra.syncDidBeginNotification,
             object: mockParra.syncManager,

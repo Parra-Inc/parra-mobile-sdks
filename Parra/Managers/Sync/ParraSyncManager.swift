@@ -59,32 +59,45 @@ internal actor ParraSyncManager {
             return
         }
 
-        parraLogDebug("Enqueuing sync: \(mode)")
+        parraLogDebug("Preparing to enqueue sync: \(mode)")
 
         if await syncState.isSyncing() {
-            if mode == .immediate {
-                parraLogDebug("Sync already in progress. Sync was requested immediately. Will sync again upon current sync completion.")
-                
+            let logPrefix = "Sync already in progress."
+            switch mode {
+            case .immediate:
+                parraLogDebug("\(logPrefix) Sync was requested immediately. Will sync again upon current sync completion.")
+
                 enqueuedSyncMode = .immediate
-            } else {
-                parraLogDebug("Sync already in progress. Marking enqued sync.")
-                
+            case .eventual:
+                parraLogDebug("\(logPrefix) Marking enqued sync.")
+
                 if enqueuedSyncMode != .immediate {
                     // An enqueued eventual sync shouldn't override an enqueued immediate sync.
                     enqueuedSyncMode = .eventual
                 }
             }
-            
+
             return
         }
 
-        // Should not be awaited. enqueueSync returns when the sync job is added
-        // to the queue.
-        Task {
-            await self.sync()
+        let logPrefix = "No sync in progress."
+        switch mode {
+        case .immediate:
+            parraLogDebug("\(logPrefix) Initiating immediate sync.")
+            enqueuedSyncMode = nil
+            // Should not be awaited. enqueueSync returns when the sync job is added
+            // to the queue.
+            Task {
+                await self.sync()
+            }
+        case .eventual:
+            enqueuedSyncMode = .eventual
+            parraLogDebug("\(logPrefix) Queuing eventual sync.")
+
+            if !(await isSyncTimerActive()) {
+                await startSyncTimer()
+            }
         }
-        
-        parraLogDebug("Sync enqued")
     }
     
     private func sync() async {
@@ -92,6 +105,8 @@ internal actor ParraSyncManager {
         
         let syncToken = UUID().uuidString
 
+        // This notification is deliberately kept before the check for if
+        // there is data to sync.
         await notificationCenter.postAsync(
             name: Parra.syncDidBeginNotification,
             object: self,
@@ -190,7 +205,11 @@ internal actor ParraSyncManager {
         syncTimer = Timer.scheduledTimer(
             withTimeInterval: syncDelay,
             repeats: true
-        ) { timer in
+        ) { [weak self] timer in
+            guard let self else {
+                return
+            }
+
             parraLogTrace("Sync timer fired")
 
             willSyncHandler?()

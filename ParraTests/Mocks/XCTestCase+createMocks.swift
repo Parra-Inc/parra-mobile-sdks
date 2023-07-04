@@ -37,7 +37,8 @@ extension XCTestCase {
             syncState: syncState,
             networkManager: mockNetworkManager.networkManager,
             sessionManager: sessionManager,
-            notificationCenter: notificationCenter
+            notificationCenter: notificationCenter,
+            syncDelay: 5.0
         )
 
         let parra = Parra(

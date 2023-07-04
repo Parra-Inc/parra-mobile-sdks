@@ -178,7 +178,6 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
             request.setValue(for: .authorization(.bearer(credential.token)))
 
             let (data, response) = try await performAsyncDataDask(request: request)
-//            let duration = CFAbsoluteTimeGetCurrent() - start
 
             parraLogTrace("Parra client received response. Status: \(response.statusCode)")
 
@@ -389,8 +388,11 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
 
     private func performAsyncDataDask(request: URLRequest) async throws -> (Data, HTTPURLResponse) {
 #if DEBUG
-        if NSClassFromString("XCTestCase") != nil {
-            try await Task.sleep(ms: 100)
+        // There is a different delay added in the UrlSession mocks that
+        // slows down tests. This delay is specific to helping prevent us
+        // from introducing UI without proper loading states.
+        if NSClassFromString("XCTestCase") == nil {
+            try await Task.sleep(ms: 1000)
         }
 #endif
 
