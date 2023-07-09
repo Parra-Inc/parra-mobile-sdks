@@ -11,6 +11,8 @@ import Foundation
 import UIKit
 import SwiftUI
 
+fileprivate let logger = Logger(category: "Feedback form")
+
 internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
     private let form: ParraFeedbackFormResponse
 
@@ -59,7 +61,7 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
     }
 
     private func onSubmit(data: [FeedbackFormField: String]) {
-        parraLogInfo("Submitting feedback form data")
+        logger.info("Submitting feedback form data")
 
         Parra.logEvent(.submit(form: "feedback_form"), params: [
             "formId": form.id
@@ -74,7 +76,7 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
                     data: data
                 )
             } catch let error {
-                parraLogError("Error submitting feedback form: \(form.id)", error)
+                logger.error("Error submitting feedback form: \(form.id)", error)
             }
         }
     }

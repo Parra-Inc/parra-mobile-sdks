@@ -24,7 +24,7 @@ internal actor SessionStorage: ItemStorage {
                 value: session
             )
         } catch let error {
-            parraLogError("Error storing session", error, [
+            Logger.error("Error storing session", error, [
                 "sessionId": session.sessionId
             ])
         }

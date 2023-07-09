@@ -98,7 +98,7 @@ internal enum ParraHeader {
         case .platformSdkVersion:
             return Parra.libraryVersion()
         case .platformVersion:
-            return UIDevice.current.systemVersion
+            return ProcessInfo.processInfo.operatingSystemVersionString
         }
     }
 

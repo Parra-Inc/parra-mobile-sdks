@@ -7,6 +7,8 @@
 
 import UIKit
 
+fileprivate let logger = Logger(category: "Endpoints")
+
 internal extension ParraNetworkManager {
     // MARK: - Feedback
 
@@ -28,7 +30,7 @@ internal extension ParraNetworkManager {
         case .success(let cardsResponse):
             return cardsResponse.items
         case .failure(let error):
-            parraLogError("Error fetching cards from Parra", error)
+            logger.error("Error fetching cards from Parra", error)
 
             throw error
         }
@@ -50,7 +52,7 @@ internal extension ParraNetworkManager {
         case .success:
             return
         case .failure(let error):
-            parraLogError("Error submitting card responses to Parra", error)
+            logger.error("Error submitting card responses to Parra", error)
 
             throw error
         }
@@ -72,7 +74,7 @@ internal extension ParraNetworkManager {
         case .success(let formResponse):
             return formResponse
         case .failure(let error):
-            parraLogError("Error fetching feedback form from Parra", error)
+            logger.error("Error fetching feedback form from Parra", error)
 
             throw error
         }
@@ -105,7 +107,7 @@ internal extension ParraNetworkManager {
         case .success:
             return
         case .failure(let error):
-            parraLogError("Error submitting form to Parra", error)
+            logger.error("Error submitting form to Parra", error)
 
             throw error
         }
@@ -131,7 +133,7 @@ internal extension ParraNetworkManager {
         // should occur. If this happens, we'll honor the most recent of these.
         var sessionResponse: ParraSessionsResponse?
         for session in sessions {
-            parraLogDebug("Uploading session: \(session.sessionId)")
+            logger.debug("Uploading session: \(session.sessionId)")
 
             let sessionUpload = ParraSessionUpload(session: session)
 
@@ -150,7 +152,7 @@ internal extension ParraNetworkManager {
 
                 completedSessions.insert(session.sessionId)
             case .failure(let error):
-                parraLogError(error)
+                logger.error(error)
 
                 // If any of the sessions fail to upload afty rerying, fail the entire operation
                 // returning the sessions that have been completed so far.
@@ -184,7 +186,7 @@ internal extension ParraNetworkManager {
         case .success:
             return
         case .failure(let error):
-            parraLogError("Error uploading device push token to Parra", error)
+            logger.error("Error uploading device push token to Parra", error)
 
             throw error
         }

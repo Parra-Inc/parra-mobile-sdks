@@ -705,7 +705,7 @@ public struct CardsResponse: Codable, Equatable, Hashable {
                 return base
             case .failure(let error):
                 let debugError = (error as CustomDebugStringConvertible).debugDescription
-                parraLogWarn("CardsResponse error parsing card", [NSLocalizedDescriptionKey: debugError])
+                Logger.warn("CardsResponse error parsing card", [NSLocalizedDescriptionKey: debugError])
                 return nil
             }
         }

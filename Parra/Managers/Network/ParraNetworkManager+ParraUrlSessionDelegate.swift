@@ -14,7 +14,7 @@ extension ParraNetworkManager: ParraUrlSessionDelegate {
         task: URLSessionTask,
         didFinishCollecting metrics: URLSessionTaskMetrics
     ) async {
-        parraLogDebug(
+        Logger.debug(
             "Finished collecting metrics for task: \(task.taskIdentifier)",
             [
                 "redirectCount": metrics.redirectCount,

@@ -91,7 +91,7 @@ internal class ParraChoiceKindView: UIView, ParraQuestionKindView {
 
         for option in data.options {
             guard let title = option.title else {
-                parraLogWarn("ParraChoiceKindView option: \(option.id) missing a title. Skipping.")
+                Logger.warn("ParraChoiceKindView option: \(option.id) missing a title. Skipping.")
                 continue
             }
 

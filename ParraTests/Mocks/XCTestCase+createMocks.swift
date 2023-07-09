@@ -29,7 +29,8 @@ extension XCTestCase {
 
         let sessionManager = ParraSessionManager(
             dataManager: mockNetworkManager.dataManager,
-            networkManager: mockNetworkManager.networkManager
+            networkManager: mockNetworkManager.networkManager,
+            loggerOptions: ParraConfigState.defaultState.loggerOptions
         )
 
         let syncManager = ParraSyncManager(

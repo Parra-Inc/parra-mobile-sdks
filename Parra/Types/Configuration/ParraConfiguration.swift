@@ -9,17 +9,17 @@
 import Foundation
 
 public struct ParraConfiguration {
-    public let loggerConfig: ParraLoggerConfig
+    public let loggerOptions: ParraLoggerOptions
     public let pushNotificationsEnabled: Bool
 
     public internal(set) var tenantId: String?
     public internal(set) var applicationId: String?
 
     internal init(
-        loggerConfig: ParraLoggerConfig,
+        loggerOptions: ParraLoggerOptions,
         pushNotificationsEnabled: Bool
     ) {
-        self.loggerConfig = loggerConfig
+        self.loggerOptions = loggerOptions
         self.pushNotificationsEnabled = pushNotificationsEnabled
 
         self.tenantId = nil
@@ -27,26 +27,32 @@ public struct ParraConfiguration {
     }
 
     internal init(options: [ParraConfigurationOption]) {
-        var loggerConfig = ParraConfiguration.default.loggerConfig
+        var loggerOptions = ParraConfiguration.default.loggerOptions
         var pushNotificationsEnabled = ParraConfiguration.default.pushNotificationsEnabled
 
         for option in options {
             switch option {
-            case .logger(let parraLoggerConfig):
-                loggerConfig = parraLoggerConfig
+            case .logger(let logOptions):
+                loggerOptions = ParraConfiguration.applyLoggerOptionsOverrides(
+                    loggerOptions: logOptions
+                )
             case .pushNotifications:
                 pushNotificationsEnabled = true
             }
         }
 
-        self.loggerConfig = loggerConfig
+        self.loggerOptions = loggerOptions
         self.pushNotificationsEnabled = pushNotificationsEnabled
     }
 
-    public static let `default` = ParraConfiguration(
-        loggerConfig: .default,
-        pushNotificationsEnabled: false
-    )
+    public static let `default`: ParraConfiguration = {
+        return ParraConfiguration(
+            loggerOptions: applyLoggerOptionsOverrides(
+                loggerOptions: .default
+            ),
+            pushNotificationsEnabled: false
+        )
+    }()
 
     internal mutating func setTenantId(_ tenantId: String?) {
         self.tenantId = tenantId
@@ -54,5 +60,24 @@ public struct ParraConfiguration {
 
     internal mutating func setApplicationId(_ applicationId: String?) {
         self.applicationId = applicationId
+    }
+
+    private static func applyLoggerOptionsOverrides(
+        loggerOptions initialOptions: ParraLoggerOptions
+    ) -> ParraLoggerOptions {
+        var loggerOptions = initialOptions
+
+        let envVar = ParraLoggerOptions.Environment.minimumLogLevelOverride
+        if let rawLevelOverride = ProcessInfo.processInfo.environment[envVar],
+            let level = ParraLogLevel(name: rawLevelOverride) {
+
+            Logger.info(
+                "\(envVar) is set. Changing minimum log level from \(initialOptions.minimumLogLevel.name) to \(level.name)"
+            )
+
+            loggerOptions.minimumLogLevel = level
+        }
+
+        return loggerOptions
     }
 }

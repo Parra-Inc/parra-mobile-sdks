@@ -15,6 +15,11 @@ public extension ParraDataManager {
             in: .userDomainMask
         ).first!
 
+        public static let documentDirectory = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        ).first!
+
         public static let cachesURL = FileManager.default.urls(
             for: .cachesDirectory,
             in: .userDomainMask

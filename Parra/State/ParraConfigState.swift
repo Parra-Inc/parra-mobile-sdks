@@ -10,10 +10,12 @@ import Foundation
 import UIKit
 
 internal actor ParraConfigState {
-    private var currentState: ParraConfiguration = .default
+    internal static nonisolated let defaultState: ParraConfiguration = .default
+
+    private var currentState: ParraConfiguration = ParraConfigState.defaultState
 
     internal init() {
-        self.currentState = .default
+        self.currentState = ParraConfigState.defaultState
     }
 
     internal init(currentState: ParraConfiguration) {
@@ -24,12 +26,10 @@ internal actor ParraConfigState {
         return currentState
     }
 
+    // This should ONLY ever happen on initialization. Setting this elsewhere will require
+    // consideration for how ParraSessionManager receives its copy of the state.
     internal func updateState(_ newValue: ParraConfiguration) {
         currentState = newValue
-
-        ParraDefaultLogger.logQueue.async {
-            ParraDefaultLogger.default.loggerConfig = newValue.loggerConfig
-        }
 
         if newValue.pushNotificationsEnabled {
             DispatchQueue.main.async {
@@ -39,6 +39,6 @@ internal actor ParraConfigState {
     }
 
     internal func resetState() {
-        currentState = .default
+        currentState = ParraConfigState.defaultState
     }
 }

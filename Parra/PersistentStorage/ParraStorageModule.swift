@@ -86,7 +86,7 @@ public actor ParraStorageModule<DataType: Codable> {
                     storageCache = existingData
                 }
             } catch let error {
-                parraLogError("Error loading data from persistent storage", error, [
+                Logger.error("Error loading data from persistent storage", error, [
                     "key": persistentStorage.key
                 ])
             }
@@ -119,7 +119,7 @@ public actor ParraStorageModule<DataType: Codable> {
                     return storageCache[name]
                 }
             } catch let error {
-                parraLogError("Error reading data from persistent storage", error, [
+                Logger.error("Error reading data from persistent storage", error, [
                     "key": persistentStorage.key
                 ])
             }
@@ -183,7 +183,7 @@ public actor ParraStorageModule<DataType: Codable> {
                 )
             }
         } catch let error {
-            parraLogError("ParraStorageModule error deleting file", error)
+            Logger.error("ParraStorageModule error deleting file", error)
         }
     }
     
@@ -209,7 +209,7 @@ public actor ParraStorageModule<DataType: Codable> {
                 )
             }
         } catch let error {
-            parraLogError("Error deleting data from persistent storage", error, [
+            Logger.error("Error deleting data from persistent storage", error, [
                 "key": persistentStorage.key
             ])
         }

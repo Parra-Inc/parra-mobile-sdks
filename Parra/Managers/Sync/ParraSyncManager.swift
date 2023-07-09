@@ -8,6 +8,11 @@
 import Foundation
 import UIKit
 
+// TODO: What happens to the timer when the app goes to the background?
+// TODO: Timer should have exponential backoff. New eventual sync enqueued should reset this.
+
+fileprivate let logger = Logger(category: "Sync Manager")
+
 internal enum ParraSyncMode: String {
     case immediate
     case eventual
@@ -50,27 +55,27 @@ internal actor ParraSyncManager {
     internal func enqueueSync(with mode: ParraSyncMode) async {
         guard await networkManager.getAuthenticationProvider() != nil else {
             await stopSyncTimer()
-            parraLogTrace("Skipping \(mode) sync. Authentication provider is unset.")
+            logger.trace("Skipping \(mode) sync. Authentication provider is unset.")
 
             return
         }
 
         guard await hasDataToSync() else {
-            parraLogDebug("Skipping \(mode) sync. No sync necessary.")
+            logger.debug("Skipping \(mode) sync. No sync necessary.")
             return
         }
 
-        parraLogDebug("Preparing to enqueue sync: \(mode)")
+        logger.debug("Preparing to enqueue sync: \(mode)")
 
         if await syncState.isSyncing() {
             let logPrefix = "Sync already in progress."
             switch mode {
             case .immediate:
-                parraLogDebug("\(logPrefix) Sync was requested immediately. Will sync again upon current sync completion.")
+                logger.debug("\(logPrefix) Sync was requested immediately. Will sync again upon current sync completion.")
 
                 enqueuedSyncMode = .immediate
             case .eventual:
-                parraLogDebug("\(logPrefix) Marking enqued sync.")
+                logger.debug("\(logPrefix) Marking enqued sync.")
 
                 if enqueuedSyncMode != .immediate {
                     // An enqueued eventual sync shouldn't override an enqueued immediate sync.
@@ -84,7 +89,7 @@ internal actor ParraSyncManager {
         let logPrefix = "No sync in progress."
         switch mode {
         case .immediate:
-            parraLogDebug("\(logPrefix) Initiating immediate sync.")
+            logger.debug("\(logPrefix) Initiating immediate sync.")
             enqueuedSyncMode = nil
             // Should not be awaited. enqueueSync returns when the sync job is added
             // to the queue.
@@ -93,7 +98,7 @@ internal actor ParraSyncManager {
             }
         case .eventual:
             enqueuedSyncMode = .eventual
-            parraLogDebug("\(logPrefix) Queuing eventual sync.")
+            logger.debug("\(logPrefix) Queuing eventual sync.")
 
             if !(await isSyncTimerActive()) {
                 await startSyncTimer()
@@ -129,33 +134,33 @@ internal actor ParraSyncManager {
         }
         
         guard await hasDataToSync() else {
-            parraLogDebug("No data available to sync")
+            logger.debug("No data available to sync")
 
             await syncState.endSync()
 
             return
         }
         
-        parraLogDebug("Starting sync")
+        logger.debug("Starting sync")
         
         do {
             try await performSync()
 
-            parraLogTrace("Sync complete")
+            logger.trace("Sync complete")
         } catch let error {
-            parraLogError("Error performing sync", error)
+            logger.error("Error performing sync", error)
             // TODO: Maybe cancel the sync timer, double the countdown then start a new one?
         }
 
         guard let enqueuedSyncMode else {
-            parraLogDebug("No more jobs found. Completing sync.")
+            logger.debug("No more jobs found. Completing sync.")
 
             await syncState.endSync()
 
             return
         }
 
-        parraLogDebug("More sync jobs were enqueued. Repeating sync.")
+        logger.debug("More sync jobs were enqueued. Repeating sync.")
 
         self.enqueuedSyncMode = nil
 
@@ -205,7 +210,7 @@ internal actor ParraSyncManager {
         willSyncHandler: (() -> Void)? = nil
     ) {
         stopSyncTimer()
-        parraLogTrace("Starting sync timer")
+        logger.trace("Starting sync timer")
 
         syncTimer = Timer.scheduledTimer(
             withTimeInterval: syncDelay,
@@ -215,7 +220,7 @@ internal actor ParraSyncManager {
                 return
             }
 
-            parraLogTrace("Sync timer fired")
+            logger.trace("Sync timer fired")
 
             willSyncHandler?()
 
@@ -231,7 +236,7 @@ internal actor ParraSyncManager {
             return
         }
 
-        parraLogTrace("Stopping sync timer")
+        logger.trace("Stopping sync timer")
 
         syncTimer.invalidate()
         self.syncTimer = nil

@@ -8,6 +8,8 @@
 
 import Foundation
 
+fileprivate let logger = Logger(category: "Parra notification center")
+
 public class ParraNotificationCenter: NotificationCenterType {
     internal let underlyingNotificationCenter = NotificationCenter()
 
@@ -32,7 +34,7 @@ public class ParraNotificationCenter: NotificationCenterType {
         object anObject: Any? = nil,
         userInfo aUserInfo: [AnyHashable : Any]? = nil
     ) async {
-        parraLogTrace("Posting notification: \(aName.rawValue)")
+        logger.trace("Posting notification: \(aName.rawValue)")
 
         await MainActor.run {
             DispatchQueue.main.async {

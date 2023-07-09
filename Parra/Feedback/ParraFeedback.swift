@@ -7,6 +7,8 @@
 
 import Foundation
 
+fileprivate let logger = Logger(category: "Feedback module")
+
 /// The `ParraFeedback` module is used to fetch Parra Feedback data from the Parra API. Once data is fetched,
 /// it will be displayed automatically in any `ParraCardView`s that you add to your view hierarchy.
 /// To handle authentication, see the Parra module.
@@ -188,7 +190,7 @@ public class ParraFeedback: ParraModule {
                     completedCards: chunk
                 )
             } catch let error {
-                parraLogError(ParraError.custom("Error uploading card data", error))
+                logger.error(ParraError.custom("Error uploading card data", error))
 
                 throw error
             }
@@ -209,22 +211,22 @@ public class ParraFeedback: ParraModule {
         }
 
         Task {
-            parraLogDebug("Attempting asset prefetch for \(cards.count) card(s)...")
+            logger.debug("Attempting asset prefetch for \(cards.count) card(s)...")
             let assets = cards.flatMap { $0.getAllAssets() }
 
             if assets.isEmpty {
-                parraLogDebug("No assets are available for prefetching")
+                logger.debug("No assets are available for prefetching")
 
                 return
             }
 
-            parraLogDebug("\(assets.count) asset(s) available for prefetching")
+            logger.debug("\(assets.count) asset(s) available for prefetching")
 
             await parra.networkManager.performBulkAssetCachingRequest(
                 assets: assets
             )
 
-            parraLogDebug("Completed prefetching assets")
+            logger.debug("Completed prefetching assets")
         }
     }
 
@@ -235,7 +237,7 @@ public class ParraFeedback: ParraModule {
             let isPopupPresent = await ParraFeedbackPopupState.shared.isPresented
 
             if isPopupPresent {
-                parraLogDebug("Skipping polling for questions. Popup currently open.")
+                logger.debug("Skipping polling for questions. Popup currently open.")
             } else {
                 await pollForQuestions(context: sessionResponse)
             }
@@ -245,22 +247,22 @@ public class ParraFeedback: ParraModule {
     private func pollForQuestions(
         context: ParraSessionsResponse
     ) async {
-        parraLogDebug("Checking if polling for questions should occur")
+        logger.debug("Checking if polling for questions should occur")
 
         guard context.shouldPoll else {
-            parraLogTrace("Should poll flag not set, skipping polling")
+            logger.trace("Should poll flag not set, skipping polling")
             return
         }
 
         // Success means the request didn't fail and there are cards in the response that have a display type popup or drawer
         for attempt in 0...context.retryTimes {
             do {
-                parraLogTrace("Fetching cards. Attempt #\(attempt + 1)")
+                logger.trace("Fetching cards. Attempt #\(attempt + 1)")
 
                 let cards = try await getCardsForPresentation()
 
                 if cards.isEmpty {
-                    parraLogTrace(
+                    logger.trace(
                         "No cards found. Retrying \(context.retryTimes - attempt) more time(s). Next attempt in \(context.retryDelay)ms"
                     )
 
@@ -276,16 +278,16 @@ public class ParraFeedback: ParraModule {
                     break
                 }
             } catch let error {
-                parraLogError("Encountered error fetching cards. Cancelling polling.", error)
+                logger.error("Encountered error fetching cards. Cancelling polling.", error)
             }
         }
     }
 
     private func displayPopupCards(cardItems: [ParraCardItem]) {
-        parraLogTrace("Displaying popup cards")
+        logger.trace("Displaying popup cards")
 
         guard !cardItems.isEmpty else {
-            parraLogTrace("Skipping presenting popup. No valid cards")
+            logger.trace("Skipping presenting popup. No valid cards")
             return
         }
 
@@ -294,7 +296,7 @@ public class ParraFeedback: ParraModule {
         guard let displayType = cardItems.first(
             where: { $0.displayType != nil }
         )?.displayType else {
-            parraLogTrace("Skipping presenting popup. No displayType set")
+            logger.trace("Skipping presenting popup. No displayType set")
 
             return
         }
@@ -322,7 +324,7 @@ public class ParraFeedback: ParraModule {
                 onDismiss: onDismiss
             )
         default:
-            parraLogTrace("Skipping presenting popup. displayType \(displayType) is not a valid modal type")
+            logger.trace("Skipping presenting popup. displayType \(displayType) is not a valid modal type")
         }
     }
 

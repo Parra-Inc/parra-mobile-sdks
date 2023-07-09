@@ -22,7 +22,7 @@ final class ParraSessionManagerTests: XCTestCase {
     }
 
     func testSessionStartsOnInit() async throws {
-        let currentSession = await mockParra.sessionManager.currentSession
+        let currentSession = mockParra.sessionManager.currentSession
         XCTAssertNotNil(currentSession)
     }
 

@@ -37,7 +37,7 @@ internal actor CompletedCardDataStorage: ItemStorage {
                 value: completedCard
             )
         } catch let error {
-            parraLogError("Error writing completed card to cache", error)
+            Logger.error("Error writing completed card to cache", error)
         }
     }
     
