@@ -29,6 +29,15 @@ internal struct ParraEventWrapper: ParraEvent {
         )
     }
 
+    // Partially redundant overload since ParraIternalEvent conforms to ParraEvent
+    // but adding this allows us to pass interval event cases without fully qualifying them.
+    init(event: ParraInternalEvent) {
+        self.init(
+            name: event.name,
+            params: event.params
+        )
+    }
+
     init(
         event: ParraEvent,
         extraParams: [String: Any]

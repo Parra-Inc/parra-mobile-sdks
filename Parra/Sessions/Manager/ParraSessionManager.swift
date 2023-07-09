@@ -123,22 +123,21 @@ internal class ParraSessionManager: ParraLoggerBackend {
 
     internal func log(
         level: ParraLogLevel,
-        category: String?,
-        subsystem: String,
-        file: String,
+        context: ParraLoggerContext?,
         message: ParraLazyLogParam,
         extraError: @escaping () -> Error?,
         extra: @escaping () -> [String: Any]?,
         callSiteContext: ParraLoggerCallSiteContext,
         threadInfo: ParraLoggerThreadInfo
     ) {
+        let now = Date.now
+
         eventQueue.async { [self] in
             process(
                 logData: ParraLogData(
+                    date: now,
                     level: level,
-                    category: category,
-                    subsystem: subsystem,
-                    file: file,
+                    context: context,
                     message: message,
                     extraError: extraError,
                     extra: extra,

@@ -19,7 +19,7 @@ internal enum ParraInternalEvent: ParraEvent {
     case httpRequest // TODO
     case keyboardDidHide
     case keyboardDidShow
-    case log(logData: ParraLogData)
+    case log(logData: ParraLogProcessedData)
     case memoryWarning
     case orientationChanged
     case powerStateChanged

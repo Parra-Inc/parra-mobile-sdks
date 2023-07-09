@@ -8,6 +8,9 @@
 import XCTest
 @testable import Parra
 
+// TODO: Audit usage of mockParra.sessionManager.writeEvent. Tests might be invalid
+// now that the result isn't awaited.
+
 @MainActor
 class ParraSyncManagerTests: XCTestCase {
     private var mockParra: MockParra!
@@ -52,7 +55,7 @@ class ParraSyncManagerTests: XCTestCase {
             syncTimerTickedExpectation.fulfill()
         }
 
-        await mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
 
         let syncDidBeginExpectation = mockParra.notificationExpectation(
             name: Parra.syncDidBeginNotification,
@@ -102,7 +105,7 @@ class ParraSyncManagerTests: XCTestCase {
         syncEndExpectation.assertForOverFulfill = true
         syncEndExpectation.expectedFulfillmentCount = 1
 
-        await mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         // Enforces that a begin notification is received before an end notification.
@@ -119,7 +122,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        await mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(of: [syncBeginExpectation], timeout: 1.0)
@@ -134,7 +137,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        await mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
         await mockParra.syncManager.enqueueSync(with: .eventual)
 
         let isSyncing = await mockParra.syncManager.syncState.isSyncing()
@@ -149,7 +152,7 @@ class ParraSyncManagerTests: XCTestCase {
     func testEnqueuingSyncStartsStoppedSyncTimer() async throws {
         XCTAssertFalse(mockParra.syncManager.isSyncTimerActive())
 
-        await mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
         await mockParra.syncManager.enqueueSync(with: .eventual)
 
         XCTAssertTrue(mockParra.syncManager.isSyncTimerActive())
@@ -214,7 +217,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        await mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(of: [syncDidBegin], timeout: 1.0)
@@ -276,7 +279,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        await mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(
@@ -290,7 +293,7 @@ class ParraSyncManagerTests: XCTestCase {
         )
         secondSyncDidBegin.isInverted = true
 
-        await mockParra.sessionManager.writeEvent(event: .init(name: "test2"))
+        mockParra.sessionManager.writeEvent(event: .init(name: "test2"))
         await mockParra.syncManager.enqueueSync(with: .eventual)
 
         await fulfillment(
@@ -330,7 +333,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        await mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(of: [syncDidBegin], timeout: 1.0)

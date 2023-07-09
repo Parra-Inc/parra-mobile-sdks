@@ -19,14 +19,12 @@ internal extension Parra {
             column: #column
         )
     ) {
-        Task {
-            await sessionManager.writeEvent(
-                event: ParraEventWrapper(
-                    event: event,
-                    extraParams: params
-                ),
-                callSiteContext: callSiteContext
-            )
-        }
+        sessionManager.writeEvent(
+            event: ParraEventWrapper(
+                event: event,
+                extraParams: params
+            ),
+            callSiteContext: callSiteContext
+        )
     }
 }

@@ -26,7 +26,10 @@ public extension Logger {
             thread: .current
         )
     ) -> ParraLogMarkerMeasurement {
-        let endMarker = ParraLogMarker(category: startMarker.category)
+        let endMarker = ParraLogMarker(
+            context: startMarker.context,
+            startingContext: callSiteContext
+        )
         let timeInterval = endMarker.date.timeIntervalSince(startMarker.date)
 
         let createMessage = { () -> String in
@@ -55,8 +58,8 @@ public extension Logger {
 
         let nextMarker = logToBackend(
             level: .info,
-            category: startMarker.category,
             message: .string(createMessage),
+            context: startMarker.context,
             callSiteContext: callSiteContext,
             threadInfo: threadInfo
         )

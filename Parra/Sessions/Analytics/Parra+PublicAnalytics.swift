@@ -23,15 +23,13 @@ public extension Parra {
             column: #column
         )
     ) {
-        Task {
-            await shared.sessionManager.writeEvent(
-                event: ParraEventWrapper(
-                    event: event,
-                    extraParams: params
-                ),
-                callSiteContext: callSiteContext
-            )
-        }
+        shared.sessionManager.writeEvent(
+            event: ParraEventWrapper(
+                event: event,
+                extraParams: params
+            ),
+            callSiteContext: callSiteContext
+        )
     }
 
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
@@ -45,14 +43,12 @@ public extension Parra {
             column: #column
         )
     ) {
-        Task {
-            await shared.sessionManager.writeEvent(
-                event: ParraEventWrapper(
-                    event: event
-                ),
-                callSiteContext: callSiteContext
-            )
-        }
+        shared.sessionManager.writeEvent(
+            event: ParraEventWrapper(
+                event: event
+            ),
+            callSiteContext: callSiteContext
+        )
     }
 
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
@@ -67,15 +63,13 @@ public extension Parra {
             column: #column
         )
     ) {
-        Task {
-            await shared.sessionManager.writeEvent(
-                event: ParraEventWrapper(
-                    name: eventName,
-                    params: params
-                ),
-                callSiteContext: callSiteContext
-            )
-        }
+        shared.sessionManager.writeEvent(
+            event: ParraEventWrapper(
+                name: eventName,
+                params: params
+            ),
+            callSiteContext: callSiteContext
+        )
     }
 
     // MARK: - User Properties

@@ -8,49 +8,35 @@
 
 import Foundation
 
-public struct Logger {
+public class Logger {
     public static var loggerBackend: ParraLoggerBackend?
 
-    let subsystem: String
-    let file: String
-    let category: String?
+    public let context: ParraLoggerContext
+    public private(set) weak var parent: Logger?
 
     public init(
-        category: String?,
-        subsystem: String? = nil,
-        file: String? = nil,
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        )
+        category: String? = nil,
+        fileId: String = #fileID
     ) {
-        let (module, fileName, _) = LoggerHelpers.splitFileId(
-            fileId: callSiteContext.fileId
-        )
-
-        self.subsystem = subsystem ?? module
-        self.file = file ?? fileName
-        self.category = category
+        if let category {
+            context = ParraLoggerContext(
+                fileId: fileId,
+                categories: [category]
+            )
+        } else {
+            context = ParraLoggerContext(
+                fileId: fileId,
+                categories: []
+            )
+        }
     }
 
-    public init(
-        category: String?,
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        )
+    internal init(
+        parent: Logger,
+        context: ParraLoggerContext
     ) {
-        let (module, fileName, _) = LoggerHelpers.splitFileId(
-            fileId: callSiteContext.fileId
-        )
-
-        self.subsystem = module
-        self.file = fileName
-        self.category = category
+        self.context = context
+        self.parent = parent
     }
 
     internal func logToBackend(
@@ -63,9 +49,7 @@ public struct Logger {
     ) -> ParraLogMarker {
         Logger.loggerBackend?.log(
             level: level,
-            category: category,
-            subsystem: subsystem,
-            file: file,
+            context: self.context,
             message: message,
             extraError: extraError,
             extra: extra,
@@ -74,30 +58,24 @@ public struct Logger {
         )
 
         return ParraLogMarker(
-            category: category,
+            context: self.context,
             startingContext: callSiteContext
         )
     }
 
     internal static func logToBackend(
         level: ParraLogLevel,
-        category: String? = nil,
         message: ParraLazyLogParam,
+        context: ParraLoggerContext? = nil,
         extraError: @escaping () -> Error? = { nil },
         extra: @escaping () -> [String: Any]? = { nil },
         callSiteContext: ParraLoggerCallSiteContext,
         threadInfo: ParraLoggerThreadInfo
     ) -> ParraLogMarker {
-        let (module, fileName, _) = LoggerHelpers.splitFileId(
-            fileId: callSiteContext.fileId
-        )
-
         // TODO: If logger backend isn't configured yet, check env config, apply format, print to console outside of session events.
         loggerBackend?.log(
             level: level,
-            category: category,
-            subsystem: module,
-            file: fileName,
+            context: nil,
             message: message,
             extraError: extraError,
             extra: extra,
@@ -106,7 +84,7 @@ public struct Logger {
         )
 
         return ParraLogMarker(
-            category: category,
+            context: context,
             startingContext: callSiteContext
         )
     }

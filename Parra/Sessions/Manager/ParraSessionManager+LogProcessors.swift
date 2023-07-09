@@ -11,8 +11,6 @@ import Foundation
 // TODO: Markers are wrapper around OSSignPoster https://developer.apple.com/documentation/os/logging/recording_performance_data
 
 // TODO: Logger instances support instance method to return child logger
-// TODO: Refactor and actually define scopes. Too much duplication in
-//       module/file/etc. Should take child loggers into consideration.
 
 // TODO: Automatically create os activity when creating a logger instance
 //       auto apply events when logs happen. Auto handle child activities
@@ -29,66 +27,29 @@ extension ParraSessionManager {
             return
         }
 
+        // At this point, the autoclosures passed to the logger functions are finally invoked.
+        let processedLogData = ParraLogProcessedData(
+            logData: logData
+        )
+
         if options.environment.hasDebugBehavior {
-            processDebugLog(
-                logData: logData,
+            outputDebugLog(
+                processedLogData: processedLogData,
                 with: options.consoleFormatOptions
             )
         } else {
-            processProductionLog(logData: logData)
+            outputProductionLog(
+                processedLogData: processedLogData
+            )
         }
     }
 
-    private func processDebugLog(
-        logData: ParraLogData,
+    private func outputDebugLog(
+        processedLogData: ParraLogProcessedData,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
-
-    }
-
-    private func processProductionLog(
-        logData: ParraLogData
-    ) {
-        self.writeEventWithoutContextSwitch(
-            event: ParraEventWrapper(
-                event: ParraInternalEvent.log(
-                    logData: logData
-                )
-            )
-        )
-    }
-}
-
-extension ParraSessionManager {
-
-    private func _processLog(
-        level: ParraLogLevel,
-        message: ParraLazyLogParam,
-        extraError: @escaping () -> Error?,
-        extra: @escaping () -> [String: Any]?,
-        queueName: String,
-        callStackSymbols: [String]?,
-        callSiteContext: ParraLoggerCallSiteContext
-    ) {
-        let baseMessage: String
-        switch message {
-        case .string(let messageProvider):
-            baseMessage = messageProvider()
-        case .error(let errorProvider):
-            baseMessage = LoggerHelpers.extractMessage(
-                from: errorProvider()
-            )
-        }
-
-        let (module, file, _) = LoggerHelpers.splitFileId(
-            fileId: callSiteContext.fileId
-        )
-        var extraWithAdditions = extra() ?? [:]
-        if let extraError = extraError() {
-            extraWithAdditions["errorDescription"] = LoggerHelpers.extractMessage(
-                from: extraError
-            )
-        }
+        // Context:
+        // Module -> file -> context -> subcontext -> ... -> subcontext -> call site module/file/function
 
 
         //        var markerComponents: [String] = loggerOptions.compactMap { option in
@@ -165,5 +126,18 @@ extension ParraSessionManager {
         //        }
         //
         //        print(formattedMessage)
+
+    }
+
+    private func outputProductionLog(
+        processedLogData: ParraLogProcessedData
+    ) {
+        self.writeEventWithoutContextSwitch(
+            event: ParraEventWrapper(
+                event: .log(
+                    logData: processedLogData
+                )
+            )
+        )
     }
 }

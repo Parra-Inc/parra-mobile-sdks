@@ -11,9 +11,7 @@ import Foundation
 public protocol ParraLoggerBackend {
     func log(
         level: ParraLogLevel,
-        category: String?,
-        subsystem: String,
-        file: String,
+        context: ParraLoggerContext?,
         message: ParraLazyLogParam,
         extraError: @escaping () -> Error?,
         extra: @escaping () -> [String: Any]?,

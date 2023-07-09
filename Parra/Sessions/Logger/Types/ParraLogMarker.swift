@@ -11,22 +11,17 @@ import Foundation
 // TODO: Should this just be any event?
 public struct ParraLogMarker {
     public let date: Date
-    public let category: String?
+    public let context: ParraLoggerContext?
 
     internal let startingContext: ParraLoggerCallSiteContext
 
     internal init(
         date: Date = Date(),
-        category: String?,
-        startingContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        )
+        context: ParraLoggerContext?,
+        startingContext: ParraLoggerCallSiteContext
     ) {
         self.date = date
-        self.category = category
+        self.context = context
         self.startingContext = startingContext
     }
 }

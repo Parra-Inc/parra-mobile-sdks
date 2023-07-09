@@ -182,6 +182,12 @@
 		0087CAA42A59E51B007D72FA /* ParraDiskUsage+ParraSessionParamDictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAA32A59E51B007D72FA /* ParraDiskUsage+ParraSessionParamDictionaryConvertible.swift */; };
 		0087CAAB2A59F3B4007D72FA /* ParraLogData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAAA2A59F3B4007D72FA /* ParraLogData.swift */; };
 		0087CAAD2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAAC2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift */; };
+		0087CAAF2A5A4CD9007D72FA /* ParraLoggerContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAAE2A5A4CD9007D72FA /* ParraLoggerContext.swift */; };
+		0087CAB12A5A4D1B007D72FA /* Logger+childLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAB02A5A4D1B007D72FA /* Logger+childLogger.swift */; };
+		0087CAB32A5A53AC007D72FA /* ParraLogProcessedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAB22A5A53AC007D72FA /* ParraLogProcessedData.swift */; };
+		0087CAB52A5A53D3007D72FA /* ParraLogProcessedData+ParraSessionParamDictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAB42A5A53D3007D72FA /* ParraLogProcessedData+ParraSessionParamDictionaryConvertible.swift */; };
+		0087CAB72A5A5458007D72FA /* ParraLoggerContext+ParraSessionParamDictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAB62A5A5458007D72FA /* ParraLoggerContext+ParraSessionParamDictionaryConvertible.swift */; };
+		0087CAB92A5A54FF007D72FA /* ParraLoggerThreadInfo+ParraSessionParamDictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAB82A5A54FF007D72FA /* ParraLoggerThreadInfo+ParraSessionParamDictionaryConvertible.swift */; };
 		008878122979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008878112979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift */; };
 		00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B982932D35E00B7168A /* ParraConfiguration.swift */; };
 		00A60B9B2932D37000B7168A /* ParraAuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B9A2932D37000B7168A /* ParraAuthenticationProvider.swift */; };
@@ -441,6 +447,12 @@
 		0087CAA32A59E51B007D72FA /* ParraDiskUsage+ParraSessionParamDictionaryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraDiskUsage+ParraSessionParamDictionaryConvertible.swift"; sourceTree = "<group>"; };
 		0087CAAA2A59F3B4007D72FA /* ParraLogData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogData.swift; sourceTree = "<group>"; };
 		0087CAAC2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogMarkerMeasurement.swift; sourceTree = "<group>"; };
+		0087CAAE2A5A4CD9007D72FA /* ParraLoggerContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ParraLoggerContext.swift; path = ../../../../../../../Documents/ParraLoggerContext.swift; sourceTree = "<group>"; };
+		0087CAB02A5A4D1B007D72FA /* Logger+childLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Logger+childLogger.swift"; path = "../../../../../../Documents/Logger+childLogger.swift"; sourceTree = "<group>"; };
+		0087CAB22A5A53AC007D72FA /* ParraLogProcessedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ParraLogProcessedData.swift; path = ../../../../../../../Documents/ParraLogProcessedData.swift; sourceTree = "<group>"; };
+		0087CAB42A5A53D3007D72FA /* ParraLogProcessedData+ParraSessionParamDictionaryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ParraLogProcessedData+ParraSessionParamDictionaryConvertible.swift"; path = "../../../../../../../Documents/ParraLogProcessedData+ParraSessionParamDictionaryConvertible.swift"; sourceTree = "<group>"; };
+		0087CAB62A5A5458007D72FA /* ParraLoggerContext+ParraSessionParamDictionaryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ParraLoggerContext+ParraSessionParamDictionaryConvertible.swift"; path = "../../../../../../../Documents/ParraLoggerContext+ParraSessionParamDictionaryConvertible.swift"; sourceTree = "<group>"; };
+		0087CAB82A5A54FF007D72FA /* ParraLoggerThreadInfo+ParraSessionParamDictionaryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ParraLoggerThreadInfo+ParraSessionParamDictionaryConvertible.swift"; path = "../../../../../../../Documents/ParraLoggerThreadInfo+ParraSessionParamDictionaryConvertible.swift"; sourceTree = "<group>"; };
 		008878112979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplicationState+ParraLogStringConvertible.swift"; sourceTree = "<group>"; };
 		00901F302999AC940071647F /* ParraCheckboxKindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCheckboxKindView.swift; sourceTree = "<group>"; };
 		00901F332999ACAB0071647F /* ParraChoiceKindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraChoiceKindView.swift; sourceTree = "<group>"; };
@@ -958,9 +970,14 @@
 			children = (
 				0087CA882A59B3EC007D72FA /* Options */,
 				0087CA712A57B343007D72FA /* ParraLoggerCallSiteContext.swift */,
+				0087CAAE2A5A4CD9007D72FA /* ParraLoggerContext.swift */,
+				0087CAB62A5A5458007D72FA /* ParraLoggerContext+ParraSessionParamDictionaryConvertible.swift */,
 				0087CA912A59BA51007D72FA /* ParraLoggerEnvironment.swift */,
 				0087CA862A59A0D5007D72FA /* ParraLoggerThreadInfo.swift */,
+				0087CAB82A5A54FF007D72FA /* ParraLoggerThreadInfo+ParraSessionParamDictionaryConvertible.swift */,
 				0087CAAA2A59F3B4007D72FA /* ParraLogData.swift */,
+				0087CAB22A5A53AC007D72FA /* ParraLogProcessedData.swift */,
+				0087CAB42A5A53D3007D72FA /* ParraLogProcessedData+ParraSessionParamDictionaryConvertible.swift */,
 				0087CA822A599FDD007D72FA /* ParraLogStringConvertible.swift */,
 				00E7957D29A05CD6003FE68D /* ParraLogLevel.swift */,
 				0087CA6D2A57B308007D72FA /* ParraLogMarker.swift */,
@@ -1207,6 +1224,7 @@
 				0087CA6A2A57B2DB007D72FA /* Types */,
 				0087CA692A57B2D1007D72FA /* LoggerBackend */,
 				0087CA652A56114C007D72FA /* Logger.swift */,
+				0087CAB02A5A4D1B007D72FA /* Logger+childLogger.swift */,
 				0087CA752A57B3C0007D72FA /* Logger+Measurement.swift */,
 				0087CA672A561F72007D72FA /* Logger+VerbosityInstanceMethods.swift */,
 				0087CA792A58FAA2007D72FA /* Logger+VerbosityStaticMethods.swift */,
@@ -1428,6 +1446,7 @@
 				0087CA942A59C0FB007D72FA /* ParraLoggerConsoleFormatOption.swift in Sources */,
 				0039624F2A48B52700B8655F /* ParraActionCardView.swift in Sources */,
 				0087CAA22A59E507007D72FA /* ParraDiskUsage.swift in Sources */,
+				0087CAB32A5A53AC007D72FA /* ParraLogProcessedData.swift in Sources */,
 				00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */,
 				0039626A2A48B5AE00B8655F /* ParraQuestionKindView.swift in Sources */,
 				003962432A48B51800B8655F /* ParraConfigurableView.swift in Sources */,
@@ -1436,6 +1455,7 @@
 				0029AD372A4925C000E30CCD /* ParraStandardEvent.swift in Sources */,
 				00BD2FFC2A477D7700B4BEB2 /* ParraNotificationCenter.swift in Sources */,
 				0087CA722A57B343007D72FA /* ParraLoggerCallSiteContext.swift in Sources */,
+				0087CAB92A5A54FF007D72FA /* ParraLoggerThreadInfo+ParraSessionParamDictionaryConvertible.swift in Sources */,
 				006DE9882A47547900521F5D /* ParraLazyLogParam.swift in Sources */,
 				003962642A48B55300B8655F /* CurrentCardInfo.swift in Sources */,
 				0087CAA42A59E51B007D72FA /* ParraDiskUsage+ParraSessionParamDictionaryConvertible.swift in Sources */,
@@ -1491,6 +1511,7 @@
 				001B7B2C27DE3AC800DEEECD /* ParraNetworkManager.swift in Sources */,
 				001B7B1F27DE3ABC00DEEECD /* PersistentStorageMedium.swift in Sources */,
 				00BD2FFE2A479BBA00B4BEB2 /* ParraConfigState.swift in Sources */,
+				0087CAB12A5A4D1B007D72FA /* Logger+childLogger.swift in Sources */,
 				003962542A48B52E00B8655F /* ParraCardTableViewCell.swift in Sources */,
 				003962442A48B52100B8655F /* ParraBorderedTextView.swift in Sources */,
 				00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */,
@@ -1519,12 +1540,14 @@
 				00DA7FF5295DD2EC00109081 /* ParraSessionEvent.swift in Sources */,
 				003962662A48B55300B8655F /* ParraTextConfig.swift in Sources */,
 				001B7B2727DE3AC200DEEECD /* JSONEncoder.swift in Sources */,
+				0087CAB52A5A53D3007D72FA /* ParraLogProcessedData+ParraSessionParamDictionaryConvertible.swift in Sources */,
 				0018A60E28D77FF2008CC97E /* URLComponents+queryItems.swift in Sources */,
 				003962712A48B5BF00B8655F /* ParraFeedbackFormSelectFieldView.swift in Sources */,
 				003962462A48B52100B8655F /* ParraPaddedBaseTextField.swift in Sources */,
 				0039623E2A48B51100B8655F /* NSAttributedString.swift in Sources */,
 				0087CA8E2A59B41C007D72FA /* ParraLoggerCallSiteStyleOptions.swift in Sources */,
 				003962382A48B4EF00B8655F /* ParraFeedbackDataManager+Keys.swift in Sources */,
+				0087CAB72A5A5458007D72FA /* ParraLoggerContext+ParraSessionParamDictionaryConvertible.swift in Sources */,
 				0019CBC528FAE0E80015E703 /* FailableDecodable.swift in Sources */,
 				003962692A48B5AE00B8655F /* ParraChoiceKindView.swift in Sources */,
 				0087CAAD2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift in Sources */,
@@ -1586,6 +1609,7 @@
 				0029AD3C2A49291200E30CCD /* StringManipulators.swift in Sources */,
 				001B7B1A27DE3ABC00DEEECD /* FileSystemStorage.swift in Sources */,
 				00BD2FEE2A4771D700B4BEB2 /* ParraSyncState.swift in Sources */,
+				0087CAAF2A5A4CD9007D72FA /* ParraLoggerContext.swift in Sources */,
 				0087CA552A54670A007D72FA /* EmptyJsonObjects.swift in Sources */,
 				0087CA872A59A0D5007D72FA /* ParraLoggerThreadInfo.swift in Sources */,
 				003962522A48B52700B8655F /* ParraCardItemView.swift in Sources */,
@@ -1730,7 +1754,7 @@
 				MARKETING_VERSION = 1.2.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++17";
-				OTHER_SWIFT_FLAGS = "-enable-upcoming-feature ConciseMagicFile";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.parra.Parra;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1768,7 +1792,7 @@
 				MARKETING_VERSION = 1.2.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++17";
-				OTHER_SWIFT_FLAGS = "-enable-upcoming-feature ConciseMagicFile";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.parra.Parra;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

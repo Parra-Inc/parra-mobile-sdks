@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ParraLogLevel: Int, Comparable {
+public enum ParraLogLevel: Int, Comparable, ParraLogStringConvertible {
     case trace  = 1
     case debug  = 2
     case info   = 4
@@ -72,6 +72,23 @@ public enum ParraLogLevel: Int, Comparable {
             return "🔴"
         case .fatal:
             return "💀"
+        }
+    }
+
+    var loggerDescription: String {
+        switch self {
+        case .trace:
+            return "trace"
+        case .debug:
+            return "debug"
+        case .info:
+            return "info"
+        case .warn:
+            return "warn"
+        case .error:
+            return "error"
+        case .fatal:
+            return "fatal"
         }
     }
 }
