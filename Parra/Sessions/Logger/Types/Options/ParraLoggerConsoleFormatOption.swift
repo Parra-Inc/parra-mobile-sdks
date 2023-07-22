@@ -13,4 +13,5 @@ public enum ParraLoggerConsoleFormatOption {
     case printLevel(style: ParraLoggerLevelStyle)
     case printCallSite(options: ParraLoggerCallSiteStyleOptions)
     case printExtras
+    case printDelimiter(delimiter: String)
 }

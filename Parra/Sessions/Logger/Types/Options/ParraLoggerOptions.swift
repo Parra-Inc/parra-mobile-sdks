@@ -45,5 +45,10 @@ public struct ParraLoggerOptions {
     /// information, or categories. The order that options are passed to this
     /// array will be used to determine the order of their respective information
     /// in the output string.
+    ///
+    /// ``ParraLoggerConsoleFormatOption`` also provides a ``.printDelimiter`` option
+    /// which can be used to indicate the delimiter between data. This option should
+    /// be specified multiple times between other options. This allows you the flexibility
+    /// to use difference delimiter characters in different locations.
     public internal(set) var consoleFormatOptions: [ParraLoggerConsoleFormatOption]
 }
