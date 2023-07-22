@@ -20,17 +20,20 @@ public class Logger {
 
     public init(
         category: String? = nil,
+        extra: [String: Any]? = nil,
         fileId: String = #fileID
     ) {
         if let category {
             context = ParraLoggerContext(
                 fileId: fileId,
-                categories: [category]
+                categories: [category],
+                extra: extra ?? [:]
             )
         } else {
             context = ParraLoggerContext(
                 fileId: fileId,
-                categories: []
+                categories: [],
+                extra: extra ?? [:]
             )
         }
     }
