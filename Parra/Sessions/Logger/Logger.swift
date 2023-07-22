@@ -14,6 +14,10 @@ public class Logger {
     public let context: ParraLoggerContext
     public private(set) weak var parent: Logger?
 
+    /// Whether or not logging is enabled on this logger instance. Logging is enabled
+    /// by default. If you disable logging, logs are ignored until re-enabling.
+    public var isEnabled = true
+
     public init(
         category: String? = nil,
         fileId: String = #fileID
@@ -47,6 +51,10 @@ public class Logger {
         callSiteContext: ParraLoggerCallSiteContext,
         threadInfo: ParraLoggerThreadInfo
     ) -> ParraLogMarker {
+        guard isEnabled else {
+            return ParraLogMarker(startingContext: callSiteContext)
+        }
+
         Logger.loggerBackend?.log(
             level: level,
             context: self.context,
@@ -73,6 +81,8 @@ public class Logger {
         threadInfo: ParraLoggerThreadInfo
     ) -> ParraLogMarker {
         // TODO: If logger backend isn't configured yet, check env config, apply format, print to console outside of session events.
+        // We don't check that the logger is enabled here because this only applies to
+        // logger instances.
         loggerBackend?.log(
             level: level,
             context: nil,
@@ -87,5 +97,13 @@ public class Logger {
             context: context,
             startingContext: callSiteContext
         )
+    }
+
+    public func enableLogging() {
+        isEnabled = true
+    }
+
+    public func disableLogging() {
+        isEnabled = false
     }
 }

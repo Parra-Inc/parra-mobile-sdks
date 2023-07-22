@@ -17,7 +17,7 @@ public struct ParraLogMarker {
 
     internal init(
         date: Date = Date(),
-        context: ParraLoggerContext?,
+        context: ParraLoggerContext? = nil,
         startingContext: ParraLoggerCallSiteContext
     ) {
         self.date = date
