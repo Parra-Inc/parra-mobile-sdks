@@ -1,5 +1,5 @@
 //
-//  Logger+Measurement.swift
+//  Logger+Timers.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/6/23.
@@ -12,7 +12,7 @@ public extension Logger {
     // TODO: Measuring the time since a marker should automatically be considered a "moment"
 
     @discardableResult
-    static func measureTime(
+    static func time(
         since startMarker: ParraLogMarker,
         eventName: String,
         format: ParraLogMeasurementFormat,

@@ -160,7 +160,7 @@
 		0087CA702A57B331007D72FA /* ParraLoggerBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA6F2A57B331007D72FA /* ParraLoggerBackend.swift */; };
 		0087CA722A57B343007D72FA /* ParraLoggerCallSiteContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA712A57B343007D72FA /* ParraLoggerCallSiteContext.swift */; };
 		0087CA742A57B38E007D72FA /* ParraLogMeasurementFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA732A57B38E007D72FA /* ParraLogMeasurementFormat.swift */; };
-		0087CA762A57B3C0007D72FA /* Logger+Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA752A57B3C0007D72FA /* Logger+Measurement.swift */; };
+		0087CA762A57B3C0007D72FA /* Logger+Timers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA752A57B3C0007D72FA /* Logger+Timers.swift */; };
 		0087CA7A2A58FAA2007D72FA /* Logger+VerbosityStaticMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA792A58FAA2007D72FA /* Logger+VerbosityStaticMethods.swift */; };
 		0087CA7C2A599916007D72FA /* ParraSessionManager+LogFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA7B2A599916007D72FA /* ParraSessionManager+LogFormatters.swift */; };
 		0087CA7E2A5999D7007D72FA /* ParraSessionManager+LogProcessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA7D2A5999D7007D72FA /* ParraSessionManager+LogProcessors.swift */; };
@@ -425,7 +425,7 @@
 		0087CA6F2A57B331007D72FA /* ParraLoggerBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLoggerBackend.swift; sourceTree = "<group>"; };
 		0087CA712A57B343007D72FA /* ParraLoggerCallSiteContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLoggerCallSiteContext.swift; sourceTree = "<group>"; };
 		0087CA732A57B38E007D72FA /* ParraLogMeasurementFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogMeasurementFormat.swift; sourceTree = "<group>"; };
-		0087CA752A57B3C0007D72FA /* Logger+Measurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Measurement.swift"; sourceTree = "<group>"; };
+		0087CA752A57B3C0007D72FA /* Logger+Timers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Timers.swift"; sourceTree = "<group>"; };
 		0087CA792A58FAA2007D72FA /* Logger+VerbosityStaticMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+VerbosityStaticMethods.swift"; sourceTree = "<group>"; };
 		0087CA7B2A599916007D72FA /* ParraSessionManager+LogFormatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraSessionManager+LogFormatters.swift"; sourceTree = "<group>"; };
 		0087CA7D2A5999D7007D72FA /* ParraSessionManager+LogProcessors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraSessionManager+LogProcessors.swift"; sourceTree = "<group>"; };
@@ -1225,7 +1225,7 @@
 				0087CA692A57B2D1007D72FA /* LoggerBackend */,
 				0087CA652A56114C007D72FA /* Logger.swift */,
 				0087CAB02A5A4D1B007D72FA /* Logger+childLogger.swift */,
-				0087CA752A57B3C0007D72FA /* Logger+Measurement.swift */,
+				0087CA752A57B3C0007D72FA /* Logger+Timers.swift */,
 				0087CA672A561F72007D72FA /* Logger+VerbosityInstanceMethods.swift */,
 				0087CA792A58FAA2007D72FA /* Logger+VerbosityStaticMethods.swift */,
 				006DE9872A47547900521F5D /* ParraLazyLogParam.swift */,
@@ -1502,7 +1502,7 @@
 				00E269F02A525803001A0F50 /* Mimetype.swift in Sources */,
 				001B7B0F27DE3A9B00DEEECD /* Parra+Authentication.swift in Sources */,
 				001B7B1627DE3AA900DEEECD /* ParraCredential.swift in Sources */,
-				0087CA762A57B3C0007D72FA /* Logger+Measurement.swift in Sources */,
+				0087CA762A57B3C0007D72FA /* Logger+Timers.swift in Sources */,
 				0087CA982A59DEC8007D72FA /* ProcessInfoThermalState+ParraLogStringConvertible.swift in Sources */,
 				0087CA902A59B435007D72FA /* ParraLoggerOptions.swift in Sources */,
 				003962392A48B4EF00B8655F /* ParraFeedback+Modals.swift in Sources */,
