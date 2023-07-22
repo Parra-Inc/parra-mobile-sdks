@@ -10,7 +10,7 @@ import Foundation
 
 // TODO: Define and impose length limits for keys/values.
 
-internal struct ParraLogData {
+public struct ParraLogData {
     let date: Date
     let level: ParraLogLevel
     let context: ParraLoggerContext?
@@ -32,4 +32,10 @@ internal struct ParraLogData {
     /// is captured, and that we don't capture stack frames from within the Parra Logger, thus
     /// potentially omitting important context.
     let threadInfo: ParraLoggerThreadInfo
+}
+
+extension ParraLogData: Identifiable {
+    public var id: String {
+        return String(date.timeIntervalSince1970)
+    }
 }

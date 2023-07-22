@@ -957,18 +957,11 @@
 			path = ParraUITests;
 			sourceTree = "<group>";
 		};
-		0087CA692A57B2D1007D72FA /* LoggerBackend */ = {
-			isa = PBXGroup;
-			children = (
-				0087CA6F2A57B331007D72FA /* ParraLoggerBackend.swift */,
-			);
-			path = LoggerBackend;
-			sourceTree = "<group>";
-		};
 		0087CA6A2A57B2DB007D72FA /* Types */ = {
 			isa = PBXGroup;
 			children = (
 				0087CA882A59B3EC007D72FA /* Options */,
+				0087CA6F2A57B331007D72FA /* ParraLoggerBackend.swift */,
 				0087CA712A57B343007D72FA /* ParraLoggerCallSiteContext.swift */,
 				007ED4652A6BFBDC0077E446 /* ParraLoggerContext.swift */,
 				007ED4662A6BFBDC0077E446 /* ParraLoggerContext+ParraSessionParamDictionaryConvertible.swift */,
@@ -1222,7 +1215,6 @@
 			children = (
 				0087CA812A599FC4007D72FA /* Extensions */,
 				0087CA6A2A57B2DB007D72FA /* Types */,
-				0087CA692A57B2D1007D72FA /* LoggerBackend */,
 				0087CA652A56114C007D72FA /* Logger.swift */,
 				007ED46F2A6BFC020077E446 /* Logger+childLogger.swift */,
 				0087CA752A57B3C0007D72FA /* Logger+Timers.swift */,

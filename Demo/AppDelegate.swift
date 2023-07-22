@@ -8,12 +8,16 @@
 import UIKit
 import Parra
 
+fileprivate let logger = Logger(category: "UIApplicationDelegate methods")
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        logger.info("Application finished launching")
+
         guard NSClassFromString("XCTestCase") == nil else {
             return true
         }
@@ -25,12 +29,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Find this at https://dashboard.parra.io/applications
         let myParraApplicationId = "cb22fd90-2abc-4044-b985-fcb86f61daa9"
 
+        logger.debug("Initializing Parra")
+
         Parra.initialize(
             options: [.pushNotifications],
             authProvider: .default(
                 tenantId: myParraTenantId,
                 applicationId: myParraApplicationId
             ) {
+                logger.info("Parra authentication provider invoked")
+
                 var request = URLRequest(
                     // Replace this with your Parra access token generation endpoint
                     url: URL(string: "http://localhost:8080/v1/parra/auth/token")!
@@ -71,6 +79,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
+        logger.info("Successfully registered for push notifications")
+
         Parra.registerDevicePushToken(deviceToken)
     }
 
@@ -78,6 +88,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFailToRegisterForRemoteNotificationsWithError error: Error
     ) {
+        logger.warn("Failed to register for push notifications")
+
         Parra.didFailToRegisterForRemoteNotifications(with: error)
     }
 }

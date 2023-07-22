@@ -121,31 +121,19 @@ internal class ParraSessionManager: ParraLoggerBackend {
         return sessionResponse
     }
 
-    internal func log(
-        level: ParraLogLevel,
-        context: ParraLoggerContext?,
-        message: ParraLazyLogParam,
-        extraError: @escaping () -> Error?,
-        extra: @escaping () -> [String: Any]?,
-        callSiteContext: ParraLoggerCallSiteContext,
-        threadInfo: ParraLoggerThreadInfo
-    ) {
-        let now = Date.now
-
+    internal func log(data: ParraLogData) {
+        let options = loggerOptions
         eventQueue.async { [self] in
-            process(
-                logData: ParraLogData(
-                    date: now,
-                    level: level,
-                    context: context,
-                    message: message,
-                    extraError: extraError,
-                    extra: extra,
-                    callSiteContext: callSiteContext,
-                    threadInfo: threadInfo
-                ),
-                with: loggerOptions
-            )
+            process(logData: data, with: options)
+        }
+    }
+
+    internal func logMultiple(data: [ParraLogData]) {
+        let options = loggerOptions
+        eventQueue.async { [self] in
+            for datum in data {
+                process(logData: datum, with: options)
+            }
         }
     }
 
