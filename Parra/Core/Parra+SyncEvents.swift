@@ -75,7 +75,7 @@ internal extension Parra {
                 app.endBackgroundTask(taskId)
             }
 
-            logEvent(.appStateChanged, params: [
+            logEvent(.appStateChanged, [
                 "state": UIApplication.State.active.loggerDescription
             ])
 
@@ -86,7 +86,7 @@ internal extension Parra {
     @MainActor
     @objc func applicationWillResignActive(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.appStateChanged, params: [
+            logEvent(.appStateChanged, [
                 "state": UIApplication.State.inactive.loggerDescription
             ])
 
@@ -134,7 +134,7 @@ internal extension Parra {
     @MainActor
     @objc func applicationDidEnterBackground(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.appStateChanged, params: [
+            logEvent(.appStateChanged, [
                 "state": UIApplication.State.background.loggerDescription
             ])
         }
@@ -166,7 +166,7 @@ internal extension Parra {
     @MainActor
     @objc func orientationDidChange(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.orientationChanged, params: [
+            logEvent(.orientationChanged, [
                 "orientation": UIDevice.current.orientation.loggerDescription
             ])
         }
@@ -175,7 +175,7 @@ internal extension Parra {
     @MainActor
     @objc func batteryLevelChange(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.batteryLevelChanged, params: [
+            logEvent(.batteryLevelChanged, [
                 "battery_level": UIDevice.current.batteryLevel
             ])
         }
@@ -184,7 +184,7 @@ internal extension Parra {
     @MainActor
     @objc func batteryStateChange(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.batteryStateChanged, params: [
+            logEvent(.batteryStateChanged, [
                 "battery_state": UIDevice.current.batteryState.loggerDescription
             ])
         }
@@ -193,21 +193,21 @@ internal extension Parra {
     @MainActor
     @objc func keyboardDidShow(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.keyboardDidShow, params: keyboardFrameParams(from: notification))
+            logEvent(.keyboardDidShow, keyboardFrameParams(from: notification))
         }
     }
 
     @MainActor
     @objc func keyboardDidHide(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.keyboardDidHide, params: keyboardFrameParams(from: notification))
+            logEvent(.keyboardDidHide, keyboardFrameParams(from: notification))
         }
     }
 
     @MainActor
     @objc func thermalStateDidChange(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.thermalStateChanged, params: [
+            logEvent(.thermalStateChanged, [
                 "thermal_state": ProcessInfo.processInfo.thermalState.loggerDescription
             ])
         }
@@ -216,7 +216,7 @@ internal extension Parra {
     @MainActor
     @objc func powerStateDidChange(notification: Notification) {
         withInitializationCheck { [self] in
-            logEvent(.powerStateChanged, params: [
+            logEvent(.powerStateChanged, [
                 "power_state": ProcessInfo.processInfo.powerState.loggerDescription
             ])
         }
@@ -225,8 +225,8 @@ internal extension Parra {
     @MainActor
     @objc func didRequestLowDiskSpace(notification: Notification) {
         withInitializationCheck { [self] in
-            let params = URL.currentDiskUsage()?.paramDictionary ?? [:]
-            logEvent(.diskSpaceLow, params: params)
+            let extra = URL.currentDiskUsage()?.dictionary ?? [:]
+            logEvent(.diskSpaceLow, extra)
         }
     }
 

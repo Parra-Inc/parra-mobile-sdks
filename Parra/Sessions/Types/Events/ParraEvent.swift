@@ -8,12 +8,33 @@
 
 import Foundation
 
-/// <#Description#>
+
 public protocol ParraEvent {
     /// A unique name for the event. Event names should be all lowercase and in_snake_case.
     var name: String { get }
+}
 
-    /// Any additional data that you would like to attach to the event. Useful for filtering and
-    /// viewing additional context about users producing the event in the dashboard.
-    var params: [String: Any] { get }
+public protocol ParraDataEvent: ParraEvent {
+    var extra: [String: Any] { get }
+}
+
+public struct ParraBasicEvent: ParraEvent {
+    public var name: String
+
+    public init(name: String) {
+        self.name = name
+    }
+}
+
+public struct ParraBasicDataEvent: ParraDataEvent {
+    public var name: String
+    public var extra: [String: Any]
+
+    public init(
+        name: String,
+        extra: [String: Any]
+    ) {
+        self.name = name
+        self.extra = extra
+    }
 }

@@ -155,7 +155,7 @@ public class Logger {
         }
 
         // Copy and clear the cache since processing happens asynchronously
-        var logCacheCopy = cachedLogs
+        let logCacheCopy = cachedLogs
         cachedLogs = []
 
         loggerBackend.logMultiple(data: logCacheCopy)

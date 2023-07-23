@@ -1,5 +1,5 @@
 //
-//  ParraLoggerThreadInfo+ParraSessionParamDictionaryConvertible.swift
+//  ParraLoggerThreadInfo+ParraDictionaryConvertible.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/8/23.
@@ -8,16 +8,23 @@
 
 import Foundation
 
-extension ParraLoggerThreadInfo: ParraSessionParamDictionaryConvertible {
-    var paramDictionary: [String : Any] {
+extension ParraLoggerThreadInfo: ParraDictionaryConvertible {
+    public var dictionary: [String : Any] {
         var params: [String: Any] = [
             "id": id,
-            "name": name,
             "queue_name": queueName,
             "stack_size": stackSize,
             "priority": priority,
             "quality_of_service": qualityOfService.loggerDescription
         ]
+
+        if let threadName {
+            params["thread_name"] = threadName
+        }
+
+        if let threadNumber {
+            params["thread_number"] = threadNumber
+        }
 
         if let callStackSymbols {
             params["call_stack_symbols"] = callStackSymbols

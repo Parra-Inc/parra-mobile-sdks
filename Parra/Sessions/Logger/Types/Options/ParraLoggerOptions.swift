@@ -17,9 +17,13 @@ public struct ParraLoggerOptions {
         environment: .automatic,
         minimumLogLevel: .info,
         consoleFormatOptions: [
+            .printDelimiter(delimiter: "["),
             .printLevel(style: .default),
+            .printDelimiter(delimiter: "]["),
             .printTimestamps(style: .default),
+            .printDelimiter(delimiter: "]["),
             .printCallSite(options: .default),
+            .printDelimiter(delimiter: "]"),
             .printExtras
         ]
     )

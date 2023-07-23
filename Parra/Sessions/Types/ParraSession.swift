@@ -8,17 +8,17 @@
 
 import Foundation
 
-public struct ParraSessionUpload: Encodable {
+internal struct ParraSessionUpload: Encodable {
     let session: ParraSession
 
-    public enum CodingKeys: String, CodingKey {
+    internal enum CodingKeys: String, CodingKey {
         case events
         case userProperties
         case startedAt
         case endedAt
     }
 
-    public func encode(to encoder: Encoder) throws {
+    internal func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(self.session.events, forKey: .events)
@@ -28,15 +28,15 @@ public struct ParraSessionUpload: Encodable {
     }
 }
 
-public struct ParraSession: Codable {
-    public let sessionId: String
-    public let createdAt: Date
-    public private(set) var updatedAt: Date
-    public private(set) var endedAt: Date?
+internal struct ParraSession: Codable {
+    internal let sessionId: String
+    internal let createdAt: Date
+    internal private(set) var updatedAt: Date
+    internal private(set) var endedAt: Date?
 
-    public private(set) var events: [ParraSessionEvent]
-    public private(set) var userProperties: [String: AnyCodable]
-    public private(set) var hasNewData: Bool
+    internal private(set) var events: [ParraSessionEvent]
+    internal private(set) var userProperties: [String: AnyCodable]
+    internal private(set) var hasNewData: Bool
 
     internal init() {
         let now = Date()

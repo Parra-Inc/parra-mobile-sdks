@@ -8,13 +8,13 @@
 
 import UIKit
 
-internal struct ParraCardModalViewedEvent: ParraEvent {
+internal struct ParraCardModalViewedEvent: ParraDataEvent {
     var name: String
-    var params: [String : Any]
+    var extra: [String: Any]
 
     init(modalType: ParraCardModalType) {
         self.name = modalType.eventName
-        self.params = [
+        self.extra = [
             "type": modalType.rawValue
         ]
     }
@@ -35,7 +35,7 @@ public enum ParraCardModalType: String {
         }
     }
 
-    var event: ParraEvent {
+    var event: ParraDataEvent {
         return ParraCardModalViewedEvent(modalType: self)
     }
 }

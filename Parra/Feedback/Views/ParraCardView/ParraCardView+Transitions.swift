@@ -184,7 +184,7 @@ extension ParraCardView {
         self.delegate?.parraCardView(self, didDisplay: cardItem)
 
         if let cardItem {
-            Parra.logEvent(.view(element: "question"), params: [
+            Parra.logEvent(.view(element: "question"), [
                 "question_id": cardItem.id
             ])
         }

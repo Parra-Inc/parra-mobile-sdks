@@ -32,7 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         logger.debug("Initializing Parra")
 
         Parra.initialize(
-            options: [.pushNotifications],
+            options: [
+                .logger(options: .default),
+                .pushNotifications
+            ],
             authProvider: .default(
                 tenantId: myParraTenantId,
                 applicationId: myParraApplicationId

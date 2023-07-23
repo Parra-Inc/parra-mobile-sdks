@@ -7,10 +7,9 @@
 //
 
 import Foundation
+import os
 
 // TODO: Markers are wrapper around OSSignPoster https://developer.apple.com/documentation/os/logging/recording_performance_data
-
-// TODO: Logger instances support instance method to return child logger
 
 // TODO: Automatically create os activity when creating a logger instance
 //       auto apply events when logs happen. Auto handle child activities
@@ -19,38 +18,43 @@ import Foundation
 
 extension ParraSessionManager {
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
-    internal func process(
-        logData: ParraLogData,
-        with options: ParraLoggerOptions
+    internal func writeEventToConsole(
+        wrappedEvent: ParraWrappedEvent,
+        with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
-        guard logData.level >= options.minimumLogLevel else {
-            return
-        }
-
-        // At this point, the autoclosures passed to the logger functions are finally invoked.
-        let processedLogData = ParraLogProcessedData(
-            logData: logData
-        )
-
-        if options.environment.hasDebugBehavior {
-            outputDebugLog(
-                processedLogData: processedLogData,
-                with: options.consoleFormatOptions
-            )
-        } else {
-            outputProductionLog(
-                processedLogData: processedLogData
+        switch wrappedEvent {
+        case .internalEvent(let internalEvent, _):
+            switch internalEvent {
+            case .log(let logData):
+                writeLogEventToConsole(
+                    processedLogData: logData,
+                    with: consoleFormatOptions
+                )
+            default:
+                writeGenericEventToConsole(
+                    wrappedEvent: wrappedEvent,
+                    with: consoleFormatOptions
+                )
+            }
+        case .event, .dataEvent:
+            writeGenericEventToConsole(
+                wrappedEvent: wrappedEvent,
+                with: consoleFormatOptions
             )
         }
     }
 
-    private func outputDebugLog(
+    /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
+    internal func writeLogEventToConsole(
         processedLogData: ParraLogProcessedData,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
         // Context:
         // Module -> file -> context -> subcontext -> ... -> subcontext -> call site module/file/function
-
+        print(processedLogData.message, processedLogData.extra)
+        //        print(processedLogData.extra)
+        //        let log = os.Logger(subsystem: "sub", category: "cat")
+        //        log.info("test test test")
 
         //        var markerComponents: [String] = loggerOptions.compactMap { option in
         //            let component: String?
@@ -126,18 +130,12 @@ extension ParraSessionManager {
         //        }
         //
         //        print(formattedMessage)
-
     }
 
-    private func outputProductionLog(
-        processedLogData: ParraLogProcessedData
+    /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
+    internal func writeGenericEventToConsole(
+        wrappedEvent: ParraWrappedEvent,
+        with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
-        self.writeEventWithoutContextSwitch(
-            event: ParraEventWrapper(
-                event: .log(
-                    logData: processedLogData
-                )
-            )
-        )
     }
 }

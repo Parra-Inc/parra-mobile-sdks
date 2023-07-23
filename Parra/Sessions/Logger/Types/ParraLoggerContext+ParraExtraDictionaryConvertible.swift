@@ -1,5 +1,5 @@
 //
-//  ParraLoggerContext+ParraSessionParamDictionaryConvertible.swift
+//  ParraLoggerContext+ParraDictionaryConvertible.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/8/23.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension ParraLoggerContext: ParraSessionParamDictionaryConvertible {
-    var paramDictionary: [String: Any] {
+extension ParraLoggerContext: ParraDictionaryConvertible {
+    public var dictionary: [String: Any] {
         return [
             "module": module,
             "file_name": fileName,

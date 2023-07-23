@@ -55,7 +55,7 @@ class ParraSyncManagerTests: XCTestCase {
             syncTimerTickedExpectation.fulfill()
         }
 
-        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        logEventToSession(named: "test")
 
         let syncDidBeginExpectation = mockParra.notificationExpectation(
             name: Parra.syncDidBeginNotification,
@@ -105,7 +105,7 @@ class ParraSyncManagerTests: XCTestCase {
         syncEndExpectation.assertForOverFulfill = true
         syncEndExpectation.expectedFulfillmentCount = 1
 
-        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         // Enforces that a begin notification is received before an end notification.
@@ -122,7 +122,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(of: [syncBeginExpectation], timeout: 1.0)
@@ -137,7 +137,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .eventual)
 
         let isSyncing = await mockParra.syncManager.syncState.isSyncing()
@@ -152,7 +152,7 @@ class ParraSyncManagerTests: XCTestCase {
     func testEnqueuingSyncStartsStoppedSyncTimer() async throws {
         XCTAssertFalse(mockParra.syncManager.isSyncTimerActive())
 
-        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .eventual)
 
         XCTAssertTrue(mockParra.syncManager.isSyncTimerActive())
@@ -217,7 +217,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(of: [syncDidBegin], timeout: 1.0)
@@ -279,7 +279,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(
@@ -293,7 +293,7 @@ class ParraSyncManagerTests: XCTestCase {
         )
         secondSyncDidBegin.isInverted = true
 
-        mockParra.sessionManager.writeEvent(event: .init(name: "test2"))
+        logEventToSession(named: "test2")
         await mockParra.syncManager.enqueueSync(with: .eventual)
 
         await fulfillment(
@@ -333,7 +333,7 @@ class ParraSyncManagerTests: XCTestCase {
             object: mockParra.syncManager
         )
 
-        mockParra.sessionManager.writeEvent(event: .init(name: "test"))
+        logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(of: [syncDidBegin], timeout: 1.0)
@@ -360,6 +360,26 @@ class ParraSyncManagerTests: XCTestCase {
         await fulfillment(
             of: [sync2DidBegin],
             timeout: mockParra.syncManager.syncDelay
+        )
+    }
+
+    private func logEventToSession(
+        named name: String,
+        fileId: String = #fileID,
+        function: String = #function,
+        line: Int = #line,
+        column: Int = #column
+    ) {
+        mockParra.sessionManager.writeEventSync(
+            wrappedEvent: .event(
+                event: ParraBasicEvent(name: name)
+            ),
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            )
         )
     }
 }

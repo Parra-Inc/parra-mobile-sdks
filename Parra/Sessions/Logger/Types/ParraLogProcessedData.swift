@@ -15,11 +15,14 @@ internal struct ParraLogProcessedData {
     let message: String
     let extra: [String: Any]
 
-    // Differs from the module/filenames in the context. Those could be frome
+    // Differs from the module/filenames in the context. Those could be from
     // where a Logger instance was created. These will be from where the final
     // log call was made.
     let callSiteModule: String
     let callSiteFileName: String
+    let callSiteFunction: String
+    let callSiteLine: Int
+    let callSiteColumn: Int
 
     let threadInfo: ParraLoggerThreadInfo
 
@@ -34,9 +37,12 @@ internal struct ParraLogProcessedData {
             )
         }
 
-        let (module, file, _) = LoggerHelpers.splitFileId(
+        let (module, file) = LoggerHelpers.splitFileId(
             fileId: logData.callSiteContext.fileId
         )
+        callSiteFunction = logData.callSiteContext.function
+        callSiteLine = logData.callSiteContext.line
+        callSiteColumn = logData.callSiteContext.column
 
         var extra = logData.extra() ?? [:]
         if let extraError = logData.extraError() {
@@ -45,6 +51,9 @@ internal struct ParraLogProcessedData {
             )
         }
 
+        var threadInfo = logData.threadInfo
+        threadInfo.demangleCallStack()
+
         self.date = logData.date
         self.level = logData.level
         self.context = logData.context
@@ -52,6 +61,6 @@ internal struct ParraLogProcessedData {
         self.extra = extra
         self.callSiteModule = module
         self.callSiteFileName = file
-        self.threadInfo = logData.threadInfo
+        self.threadInfo = threadInfo
     }
 }

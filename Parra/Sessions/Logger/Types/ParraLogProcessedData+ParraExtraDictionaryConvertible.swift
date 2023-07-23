@@ -1,5 +1,5 @@
 //
-//  ParraLogProcessedData+ParraSessionParamDictionaryConvertible.swift
+//  ParraLogProcessedData+ParraDictionaryConvertible.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/8/23.
@@ -8,26 +8,28 @@
 
 import Foundation
 
-extension ParraLogProcessedData: ParraSessionParamDictionaryConvertible {
-    var paramDictionary: [String : Any] {
+extension ParraLogProcessedData: ParraDictionaryConvertible {
+    var dictionary: [String: Any] {
         var params: [String: Any] = [
             "timestamp": date.timeIntervalSince1970,
             "level": level.loggerDescription,
             "message": message,
             "call_site_file_name": callSiteFileName,
-            "call_site_module": callSiteModule
+            "call_site_module": callSiteModule,
+            "call_site_function": callSiteFunction,
+            "call_site_line": callSiteLine,
+            "call_site_column": callSiteColumn,
         ]
 
-        let contextDict = context?.paramDictionary ?? [:]
-        if !contextDict.isEmpty {
-            params["context"] = contextDict
+        if let context {
+            params["context"] = context.dictionary
         }
 
         if !extra.isEmpty {
             params["extra"] = extra
         }
 
-        let threadInfoDict = threadInfo.paramDictionary
+        let threadInfoDict = threadInfo.dictionary
         if !threadInfoDict.isEmpty {
             params["thread_info"] = threadInfoDict
         }

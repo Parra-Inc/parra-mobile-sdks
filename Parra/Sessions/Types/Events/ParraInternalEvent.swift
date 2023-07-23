@@ -11,7 +11,7 @@ import UIKit
 
 /// Events that should only be generated from within the Parra SDK. Events that can be generated
 /// either in or outside of the SDK, should use the `ParraEvent` type.
-internal enum ParraInternalEvent: ParraEvent {
+internal enum ParraInternalEvent: ParraDataEvent {
     case appStateChanged
     case batteryLevelChanged
     case batteryStateChanged
@@ -27,6 +27,7 @@ internal enum ParraInternalEvent: ParraEvent {
     case significantTimeChange
     case thermalStateChanged
 
+    // MUST all be snake_case. Internal events are allowed to skip automatic conversion.
     var name: String {
         switch self {
         case .appStateChanged:
@@ -60,10 +61,10 @@ internal enum ParraInternalEvent: ParraEvent {
         }
     }
 
-    public var params: [String: Any] {
+    var extra: [String : Any] {
         switch self {
         case .log(let logData):
-            return logData.paramDictionary
+            return logData.dictionary
         default:
             return [:]
         }

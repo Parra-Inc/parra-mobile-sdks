@@ -8,6 +8,8 @@
 
 import Foundation
 
+// event vs data event. event just has a name. data event has name and extra
+
 public extension Parra {
     // MARK: - Analytics Events
 
@@ -15,20 +17,41 @@ public extension Parra {
     /// campaigns configured in the Parra dashboard.
     static func logEvent(
         _ event: ParraStandardEvent,
-        params: [String: Any] = [:],
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        )
+        _ extra: [String: Any]? = nil,
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column
     ) {
         shared.sessionManager.writeEvent(
-            event: ParraEventWrapper(
-                event: event,
-                extraParams: params
-            ),
-            callSiteContext: callSiteContext
+            wrappedEvent: .dataEvent(event: event, extra: extra),
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            )
+        )
+    }
+
+    /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
+    /// campaigns configured in the Parra dashboard.
+    static func logEvent(
+        _ event: ParraDataEvent,
+        _ extra: [String: Any]? = nil,
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column
+    ) {
+        shared.sessionManager.writeEvent(
+            wrappedEvent: .dataEvent(event: event, extra: extra),
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            )
         )
     }
 
@@ -36,18 +59,20 @@ public extension Parra {
     /// campaigns configured in the Parra dashboard.
     static func logEvent(
         _ event: ParraEvent,
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        )
+        _ extra: [String: Any]? = nil,
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column
     ) {
         shared.sessionManager.writeEvent(
-            event: ParraEventWrapper(
-                event: event
-            ),
-            callSiteContext: callSiteContext
+            wrappedEvent: .event(event: event, extra: extra),
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            )
         )
     }
 
@@ -55,20 +80,36 @@ public extension Parra {
     /// campaigns configured in the Parra dashboard.
     static func logEvent(
         named eventName: String,
-        params: [String: Any] = [:],
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        )
+        _ extra: [String: Any]? = nil,
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column
     ) {
+        let wrappedEvent: ParraWrappedEvent
+        if let extra, !extra.isEmpty {
+            wrappedEvent = .dataEvent(
+                event: ParraBasicDataEvent(
+                    name: eventName,
+                    extra: extra
+                )
+            )
+        } else {
+            wrappedEvent = .event(
+                event: ParraBasicEvent(
+                    name: eventName
+                )
+            )
+        }
+
         shared.sessionManager.writeEvent(
-            event: ParraEventWrapper(
-                name: eventName,
-                params: params
-            ),
-            callSiteContext: callSiteContext
+            wrappedEvent: wrappedEvent,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            )
         )
     }
 

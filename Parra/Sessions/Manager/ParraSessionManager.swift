@@ -122,89 +122,90 @@ internal class ParraSessionManager: ParraLoggerBackend {
     }
 
     internal func log(data: ParraLogData) {
-        let options = loggerOptions
         eventQueue.async { [self] in
-            process(logData: data, with: options)
+            logEventReceived(logData: data)
         }
     }
 
     internal func logMultiple(data: [ParraLogData]) {
-        let options = loggerOptions
         eventQueue.async { [self] in
-            for datum in data {
-                process(logData: datum, with: options)
+            for logData in data {
+                logEventReceived(logData: logData)
             }
         }
+    }
+
+    private func logEventReceived(
+        logData: ParraLogData
+    ) {
+        guard logData.level >= loggerOptions.minimumLogLevel else {
+            return
+        }
+
+        // At this point, the autoclosures passed to the logger functions are finally invoked.
+        let processedLogData = ParraLogProcessedData(
+            logData: logData
+        )
+
+        writeEventSync(
+            wrappedEvent: .internalEvent(
+                event: .log(logData: processedLogData)
+            ),
+            // Special case. Call site context is that of the origin of the log.
+            callSiteContext: logData.callSiteContext
+        )
     }
 
     /// Logs the supplied event on the user's session.
     /// Do not interact with this method directly. Logging events should be done through the
     /// Parra.logEvent helpers.
     internal func writeEvent(
-        event: ParraEventWrapper,
-        callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        )
+        wrappedEvent: ParraWrappedEvent,
+        callSiteContext: ParraLoggerCallSiteContext
     ) {
-        // TODO: Event logging should take the same env flag that the logger looks at into consideration.
-
         eventQueue.async { [self] in
-            writeEventWithoutContextSwitch(
-                event: event,
+            writeEventSync(
+                wrappedEvent: wrappedEvent,
                 callSiteContext: callSiteContext
             )
         }
     }
 
-    internal func writeEventWithoutContextSwitch(
-        event: ParraEventWrapper,
-        callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        )
+    internal func writeEventSync(
+        wrappedEvent: ParraWrappedEvent,
+        callSiteContext: ParraLoggerCallSiteContext
     ) {
-        let (module, file, ext) = LoggerHelpers.splitFileId(
-            fileId: callSiteContext.fileId
-        )
+        // TODO: Event logging should take the same env flag that the logger looks at into consideration.
+        // TODO: Need to ditch the Task and async/await here and process synchronously on the event queue.
 
-        //            createSessionIfNotExists()
+        Task {
+            await createSessionIfNotExists()
 
-        //            guard var currentSession else {
-        //                return
-        //            }
+            guard var currentSession else {
+                return
+            }
 
-#if DEBUG
-        // !Very important! There is a similar condition inside the logger to send log events
-        // to the session manager when NOT in DEBUG builds. Removing this condition will result
-        // in infinite recursion.
-        //            logger.debug(event.name, event.params)
-#endif
+            let sessionEvent = ParraSessionEvent(
+                wrappedEvent: wrappedEvent,
+                callSiteContext: callSiteContext
+            )
 
-        let newEvent = ParraSessionEvent(
-            name: event.name,
-            createdAt: .now,
-            metadata: [
-                "origin": [
-                    "module": module,
-                    "file": "\(file).\(ext)"
-                ],
-                "params": AnyCodable.init(event.params)
-            ]
-        )
+            currentSession.updateUserProperties(userProperties)
+            currentSession.addEvent(sessionEvent)
 
-        //            currentSession.updateUserProperties(userProperties)
-        //            currentSession.addEvent(newEvent)
+            await dataManager.sessionStorage.update(
+                session: currentSession
+            )
 
-        //            await dataManager.sessionStorage.update(
-        //                session: currentSession
-        //            )
+            self.currentSession = currentSession
 
-        //            self.currentSession = currentSession
+            if loggerOptions.environment.hasDebugBehavior {
+                writeEventToConsole(
+                    wrappedEvent: wrappedEvent,
+                    with: loggerOptions.consoleFormatOptions
+                )
+            }
+        }
     }
 
     internal func setUserProperty(

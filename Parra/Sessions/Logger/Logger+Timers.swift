@@ -16,16 +16,21 @@ public extension Logger {
         since startMarker: ParraLogMarker,
         eventName: String,
         format: ParraLogMeasurementFormat,
-        callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
     ) -> ParraLogMarkerMeasurement {
+        let callSiteContext = ParraLoggerCallSiteContext(
+            fileId: fileId,
+            function: function,
+            line: line,
+            column: column
+        )
+        
         let endMarker = ParraLogMarker(
             context: startMarker.context,
             startingContext: callSiteContext

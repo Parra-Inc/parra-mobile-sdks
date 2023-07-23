@@ -1,5 +1,5 @@
 //
-//  ParraDiskUsage+ParraSessionParamDictionaryConvertible.swift
+//  ParraDiskUsage+ParraDictionaryConvertible.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/8/23.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension ParraDiskUsage: ParraSessionParamDictionaryConvertible {
-    var paramDictionary: [String : Any] {
+extension ParraDiskUsage: ParraDictionaryConvertible {
+    var dictionary: [String: Any] {
         return [
             "total_capacity": totalCapacity,
             "available_capacity": availableCapacity,

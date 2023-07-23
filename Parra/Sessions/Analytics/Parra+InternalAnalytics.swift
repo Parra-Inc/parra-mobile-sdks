@@ -9,22 +9,41 @@
 import Foundation
 
 internal extension Parra {
+    static func logEvent(
+        _ event: ParraInternalEvent,
+        _ extra: [String: Any]? = nil,
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column
+    ) {
+        shared.sessionManager.writeEvent(
+            wrappedEvent: .internalEvent(event: event, extra: extra),
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            )
+        )
+    }
+
     func logEvent(
         _ event: ParraInternalEvent,
-        params: [String: Any] = [:],
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        )
+        _ extra: [String: Any]? = nil,
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column
     ) {
         sessionManager.writeEvent(
-            event: ParraEventWrapper(
-                event: event,
-                extraParams: params
-            ),
-            callSiteContext: callSiteContext
+            wrappedEvent: .internalEvent(event: event, extra: extra),
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            )
         )
     }
 }

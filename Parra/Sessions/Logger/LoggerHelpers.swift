@@ -9,7 +9,11 @@
 import Foundation
 import Darwin
 
-internal typealias SplitFileId = (module: String, fileName: String, fileExtension: String)
+internal typealias SplitFileId = (
+    module: String,
+    fileName: String,
+    fileExtension: String
+)
 
 internal struct LoggerHelpers {
     /// Useful for converting various types of "Error" into an actual readable message. By default
@@ -50,7 +54,7 @@ internal struct LoggerHelpers {
 
     /// Safely splits a file id (#fileID) into a module name, and a file name, with extension.
     /// E.x. Demo/AppDelegate.swift (same if logger is top level)
-    private static func splitFileId(
+    internal static func splitFileId(
         fileId: String
     ) -> (module: String, fileName: String) {
         let parts = fileId.split(separator: "/")

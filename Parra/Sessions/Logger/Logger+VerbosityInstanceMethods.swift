@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Darwin
 
 // TODO: Should there be one more layer of wrapper around these to try to obscure all the tracking via default values?
 
@@ -15,12 +16,10 @@ public extension Logger {
     func trace(
         _ message: @autoclosure @escaping () -> String,
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
@@ -29,7 +28,12 @@ public extension Logger {
             level: .trace,
             message: .string(message),
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -38,12 +42,10 @@ public extension Logger {
     func debug(
         _ message: @autoclosure @escaping () -> String,
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
@@ -52,7 +54,12 @@ public extension Logger {
             level: .debug,
             message: .string(message),
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -61,21 +68,25 @@ public extension Logger {
     func info(
         _ message: @autoclosure @escaping () -> String,
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
     ) -> ParraLogMarker {
+
         return logToBackend(
             level: .info,
             message: .string(message),
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -84,12 +95,10 @@ public extension Logger {
     func warn(
         _ message: @autoclosure @escaping () -> String,
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
@@ -98,7 +107,12 @@ public extension Logger {
             level: .warn,
             message: .string(message),
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -107,12 +121,10 @@ public extension Logger {
     func error(
         _ message: @autoclosure @escaping () -> String,
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current,
             captureCallStack: true
@@ -122,7 +134,12 @@ public extension Logger {
             level: .error,
             message: .string(message),
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -131,12 +148,10 @@ public extension Logger {
     func error(
         _ error: @autoclosure @escaping () -> ParraError,
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current,
             captureCallStack: true
@@ -146,7 +161,12 @@ public extension Logger {
             level: .error,
             message: .error(error),
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -155,12 +175,10 @@ public extension Logger {
     func error(
         _ error: @autoclosure @escaping () -> Error,
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current,
             captureCallStack: true
@@ -170,7 +188,12 @@ public extension Logger {
             level: .error,
             message: .error(error),
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -180,12 +203,10 @@ public extension Logger {
         _ message: @autoclosure @escaping () -> String,
         _ error: @autoclosure @escaping () -> Error? = { nil }(),
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current,
             captureCallStack: true
@@ -196,7 +217,12 @@ public extension Logger {
             message: .string(message),
             extraError: error,
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -205,12 +231,10 @@ public extension Logger {
     func fatal(
         _ message: @autoclosure @escaping () -> String,
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current,
             captureCallStack: true
@@ -220,7 +244,12 @@ public extension Logger {
             level: .fatal,
             message: .string(message),
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -229,12 +258,10 @@ public extension Logger {
     func fatal(
         _ error: @autoclosure @escaping () -> Error,
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current,
             captureCallStack: true
@@ -244,7 +271,12 @@ public extension Logger {
             level: .fatal,
             message: .error(error),
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }
@@ -254,12 +286,10 @@ public extension Logger {
         _ message: @autoclosure @escaping () -> String,
         _ error: @autoclosure @escaping () -> Error? = { nil }(),
         _ extra: @autoclosure @escaping () -> [String: Any]? = { nil }(),
-        _ callSiteContext: ParraLoggerCallSiteContext = (
-            fileId: #fileID,
-            function: #function,
-            line: #line,
-            column: #column
-        ),
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column,
         _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
             thread: .current,
             captureCallStack: true
@@ -270,7 +300,12 @@ public extension Logger {
             message: .string(message),
             extraError: error,
             extra: extra,
-            callSiteContext: callSiteContext,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column
+            ),
             threadInfo: threadInfo
         )
     }

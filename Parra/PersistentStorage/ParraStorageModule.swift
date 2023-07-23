@@ -128,9 +128,10 @@ public actor ParraStorageModule<DataType: Codable> {
         return nil
     }
     
-    public func write(name: String,
-                      value: DataType?) async throws {
-
+    public func write(
+        name: String,
+        value: DataType?
+    ) async throws {
         if !isLoaded {
             await loadData()
         }
