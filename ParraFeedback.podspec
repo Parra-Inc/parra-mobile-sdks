@@ -22,5 +22,5 @@ Pod::Spec.new do |spec|
   ]
   spec.frameworks               = 'Foundation', 'UIKit'
 
-  spec.dependency 'ParraCore', '~>1.2.0'
+  spec.dependency 'ParraCore', '~>1.3.5'
 end
