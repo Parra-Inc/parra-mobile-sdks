@@ -80,8 +80,8 @@ internal class ParraDefaultLogger: ParraLogger {
         params[ParraLoggerConfig.Constant.logEventFileKey] = file
         params[ParraLoggerConfig.Constant.logEventModuleKey] = module
         params[ParraLoggerConfig.Constant.logEventThreadKey] = queue
-        if !extra.isEmpty {
-            params[ParraLoggerConfig.Constant.logEventExtraKey] = extra
+        if !extraOrDefault.isEmpty {
+            params[ParraLoggerConfig.Constant.logEventExtraKey] = extraOrDefault
         }
         if level >= .error {
             params[ParraLoggerConfig.Constant.logEventCallStackKey] = Thread.callStackSymbols

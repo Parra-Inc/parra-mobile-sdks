@@ -39,7 +39,7 @@ const gitTag = `parra-${library}-${tag}`;
 (async () => {
     try {
         console.log((await exec('bundle install')).stdout);
-        
+
         console.log((await exec(`ruby ./scripts/set-framework-version.rb ${targetName} ${tag}`)).stdout);
 
         console.log((await exec('pod repo update')).stdout);
@@ -51,18 +51,21 @@ const gitTag = `parra-${library}-${tag}`;
             console.log((await exec(`git add -A && git commit -m "Release v${tag}"`)).stdout);
         }
 
-        console.log(await exec(`git tag "${gitTag}"`));
         console.log((await exec('git push')).stdout);
-        console.log((await exec('git push --tags')).stdout);
-        
+        console.log(await exec(`git tag "${gitTag}"`));
+
         const { stdout, stderr } = await exec(
-          `${libraryEnvTag}="${gitTag}" ${libraryEnvVersion}="${tag}" pod trunk push ${podSpec} --allow-warnings`
+            `${libraryEnvTag}="${gitTag}" ${libraryEnvVersion}="${tag}" pod trunk push ${podSpec} --allow-warnings`
         );
         console.error(stderr);
         console.log(stdout);
 
+        console.log((await exec('git push --tags')).stdout);
+
         console.log(`[PARRA CLI] successfully published release version: ${tag} of ${podSpec}`);
     } catch (error) {
+        console.log((await exec(`git tag -d ${gitTag}`)).stdout);
+
         console.error(error);
         throw error;
     }
