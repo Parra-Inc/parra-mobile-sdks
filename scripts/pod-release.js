@@ -64,7 +64,7 @@ const gitTag = `parra-${library}-${tag}`;
 
         console.log(`[PARRA CLI] successfully published release version: ${tag} of ${podSpec}`);
     } catch (error) {
-        console.log((await exec(`git tag -d ${gitTag}`)).stdout);
+        exec(`git tag -d ${gitTag}`).catch(() => { });
 
         console.error(error);
         throw error;
