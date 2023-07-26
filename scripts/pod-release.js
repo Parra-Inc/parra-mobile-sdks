@@ -51,7 +51,7 @@ const gitTag = `parra-${library}-${tag}`;
             console.log((await exec(`git add -A && git commit -m "Release v${tag}"`)).stdout);
         }
 
-        console.log((await exec('git push')).stdout);
+        console.log((await exec(`git push --set-upstream origin ${gitTag}`)).stdout);
         console.log(await exec(`git tag "${gitTag}"`));
 
         const { stdout, stderr } = await exec(
