@@ -16,11 +16,12 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
+        _ column: Int = #column
+    ) -> ParraLogMarker {
+        let threadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
-    ) -> ParraLogMarker {
+
         return logToBackend(
             level: .trace,
             message: .string(message),
@@ -42,11 +43,12 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
+        _ column: Int = #column
+    ) -> ParraLogMarker {
+        let threadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
-    ) -> ParraLogMarker {
+
         return logToBackend(
             level: .debug,
             message: .string(message),
@@ -68,11 +70,12 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
+        _ column: Int = #column
+    ) -> ParraLogMarker {
+        let threadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
-    ) -> ParraLogMarker {
+
         return logToBackend(
             level: .info,
             message: .string(message),
@@ -94,11 +97,12 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
+        _ column: Int = #column
+    ) -> ParraLogMarker {
+        let threadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
-    ) -> ParraLogMarker {
+
         return logToBackend(
             level: .warn,
             message: .string(message),
@@ -120,12 +124,18 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
-            thread: .current,
-            captureCallStack: true
-        )
+        _ column: Int = #column
     ) -> ParraLogMarker {
+        // Call stack symbols must be captured directly within the body of these methods
+        // to avoid capturing additional frames. We also drop the first frame because it
+        // will always be the logger method. This means this can't be refactored to
+        // deuplicate this logic.
+        let callStackSymbols = Array(Thread.callStackSymbols.dropFirst(1))
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current,
+            callStackSymbols: .raw(callStackSymbols)
+        )
+
         return logToBackend(
             level: .error,
             message: .string(message),
@@ -147,12 +157,18 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
-            thread: .current,
-            captureCallStack: true
-        )
+        _ column: Int = #column
     ) -> ParraLogMarker {
+        // Call stack symbols must be captured directly within the body of these methods
+        // to avoid capturing additional frames. We also drop the first frame because it
+        // will always be the logger method. This means this can't be refactored to
+        // deuplicate this logic.
+        let callStackSymbols = Array(Thread.callStackSymbols.dropFirst(1))
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current,
+            callStackSymbols: .raw(callStackSymbols)
+        )
+
         return logToBackend(
             level: .error,
             message: .error(error),
@@ -174,12 +190,18 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
-            thread: .current,
-            captureCallStack: true
-        )
+        _ column: Int = #column
     ) -> ParraLogMarker {
+        // Call stack symbols must be captured directly within the body of these methods
+        // to avoid capturing additional frames. We also drop the first frame because it
+        // will always be the logger method. This means this can't be refactored to
+        // deuplicate this logic.
+        let callStackSymbols = Array(Thread.callStackSymbols.dropFirst(1))
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current,
+            callStackSymbols: .raw(callStackSymbols)
+        )
+
         return logToBackend(
             level: .error,
             message: .error(error),
@@ -202,12 +224,18 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
-            thread: .current,
-            captureCallStack: true
-        )
+        _ column: Int = #column
     ) -> ParraLogMarker {
+        // Call stack symbols must be captured directly within the body of these methods
+        // to avoid capturing additional frames. We also drop the first frame because it
+        // will always be the logger method. This means this can't be refactored to
+        // deuplicate this logic.
+        let callStackSymbols = Array(Thread.callStackSymbols.dropFirst(1))
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current,
+            callStackSymbols: .raw(callStackSymbols)
+        )
+
         return logToBackend(
             level: .error,
             message: .string(message),
@@ -230,12 +258,18 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
-            thread: .current,
-            captureCallStack: true
-        )
+        _ column: Int = #column
     ) -> ParraLogMarker {
+        // Call stack symbols must be captured directly within the body of these methods
+        // to avoid capturing additional frames. We also drop the first frame because it
+        // will always be the logger method. This means this can't be refactored to
+        // deuplicate this logic.
+        let callStackSymbols = Array(Thread.callStackSymbols.dropFirst(1))
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current,
+            callStackSymbols: .raw(callStackSymbols)
+        )
+
         return logToBackend(
             level: .fatal,
             message: .string(message),
@@ -257,12 +291,18 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
-            thread: .current,
-            captureCallStack: true
-        )
+        _ column: Int = #column
     ) -> ParraLogMarker {
+        // Call stack symbols must be captured directly within the body of these methods
+        // to avoid capturing additional frames. We also drop the first frame because it
+        // will always be the logger method. This means this can't be refactored to
+        // deuplicate this logic.
+        let callStackSymbols = Array(Thread.callStackSymbols.dropFirst(1))
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current,
+            callStackSymbols: .raw(callStackSymbols)
+        )
+
         return logToBackend(
             level: .fatal,
             message: .error(error),
@@ -285,12 +325,18 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
-            thread: .current,
-            captureCallStack: true
-        )
+        _ column: Int = #column
     ) -> ParraLogMarker {
+        // Call stack symbols must be captured directly within the body of these methods
+        // to avoid capturing additional frames. We also drop the first frame because it
+        // will always be the logger method. This means this can't be refactored to
+        // deuplicate this logic.
+        let callStackSymbols = Array(Thread.callStackSymbols.dropFirst(1))
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current,
+            callStackSymbols: .raw(callStackSymbols)
+        )
+
         return logToBackend(
             level: .fatal,
             message: .string(message),

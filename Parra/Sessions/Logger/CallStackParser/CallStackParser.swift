@@ -31,7 +31,6 @@ fileprivate func backtrace(_: UnsafeMutablePointer<UnsafeMutableRawPointer?>!, _
 
 internal struct CallStackParser {
     internal static func parse(frames: [String], discardParraFrames: Bool) -> [CallStackFrame] {
-        return []
         return frames.compactMap { frame in
             let replaced = frame.replacingOccurrences(
                 of: "\\s+",
@@ -49,7 +48,7 @@ internal struct CallStackParser {
 //            }
 
             guard let frameNumber = UInt8(components[0]),
-                  let address = UInt(components[2].dropFirst(2), radix: 16) else {
+                  let address = UInt64(components[2].dropFirst(2), radix: 16) else {
                 return nil
             }
 

@@ -15,23 +15,24 @@ extension ParraLoggerThreadInfo: ParraDictionaryConvertible {
             "queue_name": queueName,
             "stack_size": stackSize,
             "priority": priority,
-            "quality_of_service": qualityOfService.loggerDescription
+            "qos": qualityOfService.loggerDescription
         ]
 
         if let threadName {
-            params["thread_name"] = threadName
+            params["name"] = threadName
         }
 
         if let threadNumber {
-            params["thread_number"] = threadNumber
+            params["number"] = threadNumber
         }
 
         if let callStackSymbols {
-            params["call_stack_symbols"] = callStackSymbols
-        }
-
-        if let callStackReturnAddresses {
-            params["call_stack_return_addresses"] = callStackReturnAddresses
+            switch callStackSymbols {
+            case .raw(let array):
+                params["stack_frames"] = array
+            case .demangled(let array):
+                params["stack_frames"] = array
+            }
         }
 
         return params

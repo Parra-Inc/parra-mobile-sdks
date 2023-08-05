@@ -14,11 +14,13 @@ extension ParraLogProcessedData: ParraDictionaryConvertible {
             "timestamp": date.timeIntervalSince1970,
             "level": level.loggerDescription,
             "message": message,
-            "call_site_file_name": callSiteFileName,
-            "call_site_module": callSiteModule,
-            "call_site_function": callSiteFunction,
-            "call_site_line": callSiteLine,
-            "call_site_column": callSiteColumn,
+            "call_site": [
+                "file_name": callSiteFileName,
+                "module": callSiteModule,
+                "function": callSiteFunction,
+                "line": callSiteLine,
+                "column": callSiteColumn,
+            ] as [String : Any]
         ]
 
         if let context {
@@ -31,7 +33,7 @@ extension ParraLogProcessedData: ParraDictionaryConvertible {
 
         let threadInfoDict = threadInfo.dictionary
         if !threadInfoDict.isEmpty {
-            params["thread_info"] = threadInfoDict
+            params["thread"] = threadInfoDict
         }
 
         return params

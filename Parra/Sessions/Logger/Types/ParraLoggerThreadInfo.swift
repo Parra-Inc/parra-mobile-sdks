@@ -24,17 +24,17 @@ public struct ParraLoggerThreadInfo: Codable {
     public let threadName: String?
     public let threadNumber: UInt8?
     internal private(set) var callStackSymbols: StackSymbols?
-    internal let callStackReturnAddresses: [UInt]?
 
-    public init(
+    internal init(
         thread: Thread,
-        captureCallStack: Bool = false
+        callStackSymbols: StackSymbols? = nil
     ) {
         self.id = thread.threadId
         self.queueName = thread.queueName
         self.stackSize = thread.stackSize
         self.priority = thread.threadPriority
         self.qualityOfService = thread.qualityOfService
+        self.callStackSymbols = callStackSymbols
 
         if let (threadName, threadNumber) = thread.threadNameAndNumber {
             self.threadName = threadName
@@ -45,21 +45,6 @@ public struct ParraLoggerThreadInfo: Codable {
         }
 
         // TODO: Capture current OperationQueue state?
-
-        // Only capture the call stack in cases where we're specifically told to because it is expensive.
-        if captureCallStack {
-            let copy = Thread.callStackSymbols
-            // For further optimization, we store a raw copy of the symbols as strings and defer processing
-            // and demangling until `demangleCallStack` is called later. It is possible that the log
-            // could be thrown out by a filter, or that the call stack information is otherwise not needed.
-            self.callStackSymbols = .raw(copy)
-            self.callStackReturnAddresses = Thread.callStackReturnAddresses.map {
-                $0.uintValue
-            }
-        } else {
-            self.callStackSymbols = nil
-            self.callStackReturnAddresses = nil
-        }
     }
 
     /// Demangles the call stack symbols and stores them in place of the raw symbols, if symbols

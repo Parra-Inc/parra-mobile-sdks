@@ -22,7 +22,7 @@ internal struct CallStackFrame: Codable {
     /// address of the machine instruction executing on a thread when the process terminated. For other stack
     /// frames, this is the address of first machine instruction that executes after control returns to that
     /// stack frame.
-    let address: UInt
+    let address: UInt64
 
     /// The name of the function that is executing.
     let symbol: String

@@ -19,18 +19,19 @@ public extension Logger {
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
-        _ column: Int = #column,
-        _ threadInfo: ParraLoggerThreadInfo = ParraLoggerThreadInfo(
+        _ column: Int = #column
+    ) -> ParraLogMarkerMeasurement {
+        let threadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
-    ) -> ParraLogMarkerMeasurement {
+
         let callSiteContext = ParraLoggerCallSiteContext(
             fileId: fileId,
             function: function,
             line: line,
             column: column
         )
-        
+
         let endMarker = ParraLogMarker(
             context: startMarker.context,
             startingContext: callSiteContext

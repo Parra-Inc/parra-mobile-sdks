@@ -10,11 +10,16 @@ import Foundation
 
 extension ParraLoggerContext: ParraDictionaryConvertible {
     public var dictionary: [String: Any] {
-        return [
+        var params: [String: Any] = [
             "module": module,
             "file_name": fileName,
-            "categories": categories,
-            "extra": extra
+            "categories": categories
         ]
+
+        if !extra.isEmpty {
+            params["extra"] = extra
+        }
+
+        return params
     }
 }
