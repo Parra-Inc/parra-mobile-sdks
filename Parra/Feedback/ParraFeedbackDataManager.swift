@@ -80,7 +80,7 @@ internal class ParraFeedbackDataManager {
         }
     }
 
-    internal func currentCompletedCardData() async -> [String: CompletedCard] {
+    internal func currentCompletedCardData() async -> [String : CompletedCard] {
         return await completedCardDataStorage.currentCompletedCardData()
     }
     

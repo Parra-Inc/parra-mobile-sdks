@@ -102,14 +102,14 @@ internal enum ParraHeader {
         }
     }
 
-    static var trackingHeaderDictionary: [String: String] {
+    static var trackingHeaderDictionary: [String : String] {
         let keys: [ParraHeader] = [
             .applicationLocale, .applicationBundleId, .debug, .device, .deviceId, .deviceLocale,
             .deviceManufacturer, .deviceTimeZoneAbbreviation, .deviceTimeZoneOffset, .platform,
             .platformAgent, .platformSdkVersion, .platformVersion
         ]
 
-        var headers = [String: String]()
+        var headers = [String : String]()
 
         for key in keys {
             if let value = key.currentValue {

@@ -17,7 +17,7 @@ public extension Parra {
     /// campaigns configured in the Parra dashboard.
     static func logEvent(
         _ event: ParraStandardEvent,
-        _ extra: [String: Any]? = nil,
+        _ extra: [String : Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -38,7 +38,7 @@ public extension Parra {
     /// campaigns configured in the Parra dashboard.
     static func logEvent(
         _ event: ParraDataEvent,
-        _ extra: [String: Any]? = nil,
+        _ extra: [String : Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -59,7 +59,7 @@ public extension Parra {
     /// campaigns configured in the Parra dashboard.
     static func logEvent(
         _ event: ParraEvent,
-        _ extra: [String: Any]? = nil,
+        _ extra: [String : Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -80,7 +80,7 @@ public extension Parra {
     /// campaigns configured in the Parra dashboard.
     static func logEvent(
         named eventName: String,
-        _ extra: [String: Any]? = nil,
+        _ extra: [String : Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,

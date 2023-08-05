@@ -13,7 +13,7 @@ internal struct ParraLogProcessedData {
     let level: ParraLogLevel
     let context: ParraLoggerContext?
     let message: String
-    let extra: [String: Any]
+    let extra: [String : Any]
 
     // Differs from the module/filenames in the context. Those could be from
     // where a Logger instance was created. These will be from where the final
@@ -32,7 +32,7 @@ internal struct ParraLogProcessedData {
         case .string(let messageProvider):
             message = messageProvider()
         case .error(let errorProvider):
-            message = LoggerHelpers.extractMessage(
+            message = LoggerHelpers.extractMessageAndExtra(
                 from: errorProvider()
             )
         }
@@ -46,7 +46,7 @@ internal struct ParraLogProcessedData {
 
         var extra = logData.extra() ?? [:]
         if let extraError = logData.extraError() {
-            extra["error_description"] = LoggerHelpers.extractMessage(
+            extra["error_description"] = LoggerHelpers.extractMessageAndExtra(
                 from: extraError
             )
         }

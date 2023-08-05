@@ -12,7 +12,7 @@ public actor ParraStorageModule<DataType: Codable> {
     internal private(set) var isLoaded = false
     internal let dataStorageMedium: DataStorageMedium
     internal let persistentStorage: (medium: PersistentStorageMedium, key: String)?
-    internal private(set) var storageCache: [String: DataType] = [:]
+    internal private(set) var storageCache: [String : DataType] = [:]
     
     internal var description: String {
         return """
@@ -80,7 +80,7 @@ public actor ParraStorageModule<DataType: Codable> {
             storageCache = await fileSystem.readAllInDirectory()
         } else {
             do {
-                if let existingData: [String: DataType] = try await persistentStorage.medium.read(
+                if let existingData: [String : DataType] = try await persistentStorage.medium.read(
                     name: persistentStorage.key
                 ) {
                     storageCache = existingData
@@ -93,7 +93,7 @@ public actor ParraStorageModule<DataType: Codable> {
         }
     }
     
-    public func currentData() async -> [String: DataType] {
+    public func currentData() async -> [String : DataType] {
         if !isLoaded {
             await loadData()
         }
@@ -113,7 +113,7 @@ public actor ParraStorageModule<DataType: Codable> {
         if let persistentStorage, storeItemsSeparately {
 
             do {
-                if let loadedData: [String: DataType] = try await persistentStorage.medium.read(name: name) {
+                if let loadedData: [String : DataType] = try await persistentStorage.medium.read(name: name) {
                     storageCache.merge(loadedData) { (_, new) in new }
 
                     return storageCache[name]

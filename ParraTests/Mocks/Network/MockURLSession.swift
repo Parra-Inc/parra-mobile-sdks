@@ -240,7 +240,7 @@ internal class MockURLSession: URLSessionType {
     private func createTestResponse(
         route: String,
         statusCode: Int = 200,
-        additionalHeaders: [String: String] = [:]
+        additionalHeaders: [String : String] = [:]
     ) -> HTTPURLResponse {
         let url = Parra.InternalConstants.parraApiRoot.appendingPathComponent(route)
 

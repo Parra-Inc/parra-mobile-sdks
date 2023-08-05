@@ -9,7 +9,7 @@
 import Foundation
 
 extension ParraDiskUsage: ParraDictionaryConvertible {
-    var dictionary: [String: Any] {
+    var dictionary: [String : Any] {
         return [
             "total_capacity": totalCapacity,
             "available_capacity": availableCapacity,

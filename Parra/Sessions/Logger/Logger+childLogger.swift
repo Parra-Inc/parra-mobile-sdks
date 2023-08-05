@@ -10,7 +10,7 @@ import Foundation
 
 public extension Logger {
     // TODO: Call this child or scope?
-    func childLogger(subcategory: String, extra: [String: Any] = [:]) -> Logger {
+    func childLogger(subcategory: String, extra: [String : Any] = [:]) -> Logger {
         return Logger(
             parent: self,
             context: context.addingSubcategory(

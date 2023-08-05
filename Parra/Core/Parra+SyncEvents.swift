@@ -279,8 +279,8 @@ internal extension Parra {
         )
     }
 
-    private func keyboardFrameParams(from notification: Notification) -> [String: Any] {
-        var params = [String: Any]()
+    private func keyboardFrameParams(from notification: Notification) -> [String : Any] {
+        var params = [String : Any]()
 
         if let value = notification.userInfo?[UIWindow.keyboardFrameBeginUserInfoKey] as? NSValue {
             params["frame_begin"] = NSCoder.string(for: value.cgRectValue)

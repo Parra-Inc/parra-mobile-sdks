@@ -24,7 +24,7 @@ public struct ParraLogData {
     let extraError: () -> Error?
 
     /// Any additional information that you're like to attach to the log.
-    let extra: () -> [String: Any]?
+    let extra: () -> [String : Any]?
 
     let callSiteContext: ParraLoggerCallSiteContext
 

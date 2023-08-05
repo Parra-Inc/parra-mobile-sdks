@@ -29,7 +29,7 @@ class FileSystemStorageTests: XCTestCase {
     }
 
     func testReadDoesNotExist() async throws {
-        let file: [String: String]? = try await fileSystemStorage.read(
+        let file: [String : String]? = try await fileSystemStorage.read(
             name: "file.txt"
         )
         
@@ -40,7 +40,7 @@ class FileSystemStorageTests: XCTestCase {
         let fileName = "file.txt"
         let filePath = baseUrl.appendingPathComponent(fileName, isDirectory: false)
         
-        let data: [String: String] = [
+        let data: [String : String] = [
             "aKey": "aValue"
         ]
         
@@ -49,7 +49,7 @@ class FileSystemStorageTests: XCTestCase {
             contents: try JSONEncoder().encode(data)
         )
         
-        let file: [String: String]? = try await fileSystemStorage.read(
+        let file: [String : String]? = try await fileSystemStorage.read(
             name: fileName
         )
         
@@ -60,7 +60,7 @@ class FileSystemStorageTests: XCTestCase {
     func testWriteFileExists() async throws {
         let name = "file2.dat"
         let filePath = baseUrl.appendingPathComponent(name, isDirectory: false)
-        let data: [String: String] = [
+        let data: [String : String] = [
             "key": "val"
         ]
         
@@ -70,7 +70,7 @@ class FileSystemStorageTests: XCTestCase {
         )
         
         let fileData = try Data(contentsOf: filePath)
-        let file = try JSONDecoder().decode([String: String].self, from: fileData)
+        let file = try JSONDecoder().decode([String : String].self, from: fileData)
         
         XCTAssertEqual(file, data)
     }
@@ -78,7 +78,7 @@ class FileSystemStorageTests: XCTestCase {
     func testDeleteFileDoesNotExist() async throws {
         let name = "file3.dat"
         let filePath = baseUrl.appendingPathComponent(name, isDirectory: false)
-        let data: [String: String] = [
+        let data: [String : String] = [
             "key": "val"
         ]
 

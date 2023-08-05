@@ -9,8 +9,8 @@
 import Foundation
 
 extension ParraLoggerContext: ParraDictionaryConvertible {
-    public var dictionary: [String: Any] {
-        var params: [String: Any] = [
+    public var dictionary: [String : Any] {
+        var params: [String : Any] = [
             "module": module,
             "file_name": fileName,
             "categories": categories

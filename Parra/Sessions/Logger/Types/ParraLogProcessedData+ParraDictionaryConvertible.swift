@@ -9,8 +9,8 @@
 import Foundation
 
 extension ParraLogProcessedData: ParraDictionaryConvertible {
-    var dictionary: [String: Any] {
-        var params: [String: Any] = [
+    var dictionary: [String : Any] {
+        var params: [String : Any] = [
             "timestamp": date.timeIntervalSince1970,
             "level": level.loggerDescription,
             "message": message,

@@ -36,7 +36,7 @@ public class Logger {
 
     public init(
         category: String? = nil,
-        extra: [String: Any]? = nil,
+        extra: [String : Any]? = nil,
         fileId: String = #fileID
     ) {
         if let category {
@@ -66,7 +66,7 @@ public class Logger {
         level: ParraLogLevel,
         message: ParraLazyLogParam,
         extraError: @escaping () -> Error? = { nil },
-        extra: @escaping () -> [String: Any]? = { nil },
+        extra: @escaping () -> [String : Any]? = { nil },
         callSiteContext: ParraLoggerCallSiteContext,
         threadInfo: ParraLoggerThreadInfo
     ) -> ParraLogMarker {
@@ -102,7 +102,7 @@ public class Logger {
         message: ParraLazyLogParam,
         context: ParraLoggerContext? = nil,
         extraError: @escaping () -> Error? = { nil },
-        extra: @escaping () -> [String: Any]? = { nil },
+        extra: @escaping () -> [String : Any]? = { nil },
         callSiteContext: ParraLoggerCallSiteContext,
         threadInfo: ParraLoggerThreadInfo
     ) -> ParraLogMarker {

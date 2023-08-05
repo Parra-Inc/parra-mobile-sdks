@@ -11,7 +11,7 @@ import Foundation
 public enum ParraStandardEvent: ParraDataEvent {
     case action(source: String)
     case close(screen: String)
-    case custom(name: String, extra: [String: Any])
+    case custom(name: String, extra: [String : Any])
     case open(screen: String)
     case purchase(product: String)
     case start(span: String)

@@ -10,7 +10,7 @@ import UIKit
 
 internal struct ParraCardModalViewedEvent: ParraDataEvent {
     var name: String
-    var extra: [String: Any]
+    var extra: [String : Any]
 
     init(modalType: ParraCardModalType) {
         self.name = modalType.eventName

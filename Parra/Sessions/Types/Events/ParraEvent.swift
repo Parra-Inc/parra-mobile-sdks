@@ -15,7 +15,7 @@ public protocol ParraEvent {
 }
 
 public protocol ParraDataEvent: ParraEvent {
-    var extra: [String: Any] { get }
+    var extra: [String : Any] { get }
 }
 
 public struct ParraBasicEvent: ParraEvent {
@@ -28,11 +28,11 @@ public struct ParraBasicEvent: ParraEvent {
 
 public struct ParraBasicDataEvent: ParraDataEvent {
     public var name: String
-    public var extra: [String: Any]
+    public var extra: [String : Any]
 
     public init(
         name: String,
-        extra: [String: Any]
+        extra: [String : Any]
     ) {
         self.name = name
         self.extra = extra

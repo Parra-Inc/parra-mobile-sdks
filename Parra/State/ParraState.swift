@@ -17,14 +17,14 @@ internal actor ParraState {
     /// lead to invalid tokens being held onto for too long.
     private var pushToken: String?
 
-    private var registeredModules: [String: ParraModule] = [:]
+    private var registeredModules: [String : ParraModule] = [:]
 
     internal init() {}
 
     internal init(
         initialized: Bool = false,
         pushToken: String? = nil,
-        registeredModules: [String: ParraModule] = [:]
+        registeredModules: [String : ParraModule] = [:]
     ) {
         self.initialized = initialized
         self.pushToken = pushToken
@@ -46,7 +46,7 @@ internal actor ParraState {
 
     // MARK: - Parra Modules
 
-    internal func getAllRegisteredModules() async -> [String: ParraModule] {
+    internal func getAllRegisteredModules() async -> [String : ParraModule] {
         return registeredModules
     }
 

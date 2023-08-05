@@ -31,7 +31,7 @@ internal class ParraSessionManager: ParraLoggerBackend {
 
     internal private(set) var currentSession: ParraSession?
 
-    private var userProperties: [String: AnyCodable] = [:]
+    private var userProperties: [String : AnyCodable] = [:]
 
     fileprivate let eventQueue = DispatchQueue(
         label: "com.parra.sessions.event-queue",

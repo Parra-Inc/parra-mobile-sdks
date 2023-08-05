@@ -24,7 +24,7 @@ internal struct ParraSessionEvent: Codable {
         )
 
         let name: String
-        var payload: [String: Any] = [
+        var payload: [String : Any] = [
             "metadata": [
                 "module": module,
                 "file": file

@@ -9,7 +9,7 @@
 import Foundation
 
 extension URLRequest: ParraDictionaryConvertible {
-    var dictionary: [String: Any] {
+    var dictionary: [String : Any] {
         return [:]
     }
 }

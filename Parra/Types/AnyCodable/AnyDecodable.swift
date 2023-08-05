@@ -35,7 +35,7 @@ import Foundation
  """.data(using: .utf8)!
 
  let decoder = JSONDecoder()
- let dictionary = try! decoder.decode([String: AnyDecodable].self, from: json)
+ let dictionary = try! decoder.decode([String : AnyDecodable].self, from: json)
  */
 @frozen public struct AnyDecodable: Decodable {
     public let value: Any
@@ -75,7 +75,7 @@ extension _AnyDecodable {
             self.init(string)
         } else if let array = try? container.decode([AnyDecodable].self) {
             self.init(array.map { $0.value })
-        } else if let dictionary = try? container.decode([String: AnyDecodable].self) {
+        } else if let dictionary = try? container.decode([String : AnyDecodable].self) {
             self.init(dictionary.mapValues { $0.value })
         } else {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "AnyDecodable value cannot be decoded")
@@ -118,7 +118,7 @@ extension AnyDecodable: Equatable {
             return lhs == rhs
         case let (lhs as String, rhs as String):
             return lhs == rhs
-        case let (lhs as [String: AnyDecodable], rhs as [String: AnyDecodable]):
+        case let (lhs as [String : AnyDecodable], rhs as [String : AnyDecodable]):
             return lhs == rhs
         case let (lhs as [AnyDecodable], rhs as [AnyDecodable]):
             return lhs == rhs
@@ -183,7 +183,7 @@ extension AnyDecodable: Hashable {
             hasher.combine(value)
         case let value as String:
             hasher.combine(value)
-        case let value as [String: AnyDecodable]:
+        case let value as [String : AnyDecodable]:
             hasher.combine(value)
         case let value as [AnyDecodable]:
             hasher.combine(value)

@@ -35,7 +35,7 @@ internal struct ParraSession: Codable {
     internal private(set) var endedAt: Date?
 
     internal private(set) var events: [ParraSessionEvent]
-    internal private(set) var userProperties: [String: AnyCodable]
+    internal private(set) var userProperties: [String : AnyCodable]
     internal private(set) var hasNewData: Bool
 
     internal init() {
@@ -57,7 +57,7 @@ internal struct ParraSession: Codable {
         updatedAt = Date()
     }
 
-    internal mutating func updateUserProperties(_ newProperties: [String: AnyCodable]) {
+    internal mutating func updateUserProperties(_ newProperties: [String : AnyCodable]) {
         userProperties = newProperties
 
         hasNewData = true

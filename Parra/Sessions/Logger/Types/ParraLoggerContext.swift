@@ -12,12 +12,12 @@ public struct ParraLoggerContext {
     public let module: String
     public let fileName: String
     public let categories: [String]
-    public let extra: [String: Any]
+    public let extra: [String : Any]
 
     internal init(
         fileId: String,
         categories: [String],
-        extra: [String: Any]
+        extra: [String : Any]
     ) {
         let (module, fileName, _) = LoggerHelpers.splitFileId(
             fileId: fileId
@@ -33,7 +33,7 @@ public struct ParraLoggerContext {
         module: String,
         fileName: String,
         categories: [String],
-        extra: [String: Any]
+        extra: [String : Any]
     ) {
         self.module = module
         self.fileName = fileName
@@ -43,7 +43,7 @@ public struct ParraLoggerContext {
 
     internal func addingSubcategory(
         subcategory: String,
-        extra: [String: Any]
+        extra: [String : Any]
     ) -> ParraLoggerContext {
         return ParraLoggerContext(
             module: module,

@@ -26,7 +26,7 @@ internal actor CompletedCardDataStorage: ItemStorage {
         return await storageModule.read(name: id)
     }
     
-    internal func currentCompletedCardData() async -> [String: CompletedCard] {
+    internal func currentCompletedCardData() async -> [String : CompletedCard] {
         return await storageModule.currentData()
     }
     

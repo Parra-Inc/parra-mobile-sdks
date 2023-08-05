@@ -10,7 +10,7 @@ import Foundation
 
 extension ParraLoggerThreadInfo: ParraDictionaryConvertible {
     public var dictionary: [String : Any] {
-        var params: [String: Any] = [
+        var params: [String : Any] = [
             "id": id,
             "queue_name": queueName,
             "stack_size": stackSize,

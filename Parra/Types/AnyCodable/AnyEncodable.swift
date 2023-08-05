@@ -18,7 +18,7 @@ import Foundation
  and other collections that require `Encodable` conformance
  by declaring their contained type to be `AnyEncodable`:
 
- let dictionary: [String: AnyEncodable] = [
+ let dictionary: [String : AnyEncodable] = [
  "boolean": true,
  "integer": 42,
  "double": 3.141592653589793,
@@ -102,7 +102,7 @@ extension _AnyEncodable {
 #endif
         case let array as [Any?]:
             try container.encode(array.map { AnyEncodable($0) })
-        case let dictionary as [String: Any?]:
+        case let dictionary as [String : Any?]:
             try container.encode(dictionary.mapValues { AnyEncodable($0) })
         case let encodable as Encodable:
             try encodable.encode(to: encoder)
@@ -178,7 +178,7 @@ extension AnyEncodable: Equatable {
             return lhs == rhs
         case let (lhs as String, rhs as String):
             return lhs == rhs
-        case let (lhs as [String: AnyEncodable], rhs as [String: AnyEncodable]):
+        case let (lhs as [String : AnyEncodable], rhs as [String : AnyEncodable]):
             return lhs == rhs
         case let (lhs as [AnyEncodable], rhs as [AnyEncodable]):
             return lhs == rhs
@@ -286,7 +286,7 @@ extension AnyEncodable: Hashable {
             hasher.combine(value)
         case let value as String:
             hasher.combine(value)
-        case let value as [String: AnyEncodable]:
+        case let value as [String : AnyEncodable]:
             hasher.combine(value)
         case let value as [AnyEncodable]:
             hasher.combine(value)

@@ -16,7 +16,7 @@ struct ParraFeedbackFormView: View {
     @State var onSubmit: ([FeedbackFormField: String]) -> Void
 
     /// Maps form field names to their current values and whether they're currently considered valid.
-    @State private var formState = [String: (String, Bool)]()
+    @State private var formState = [String : (String, Bool)]()
 
     private var formFieldValues: [FeedbackFormField: String] {
         return data.fields.reduce([FeedbackFormField: String]()) { partialResult, next in

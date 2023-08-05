@@ -82,7 +82,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
 
     internal func performAuthenticatedRequest<T: Decodable>(
         endpoint: ParraEndpoint,
-        queryItems: [String: String] = [:],
+        queryItems: [String : String] = [:],
         config: RequestConfig = .default,
         cachePolicy: URLRequest.CachePolicy? = nil
     ) async -> AuthenticatedRequestResult<T> {
@@ -97,7 +97,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
     
     internal func performAuthenticatedRequest<T: Decodable, U: Encodable>(
         endpoint: ParraEndpoint,
-        queryItems: [String: String] = [:],
+        queryItems: [String : String] = [:],
         config: RequestConfig = .default,
         cachePolicy: URLRequest.CachePolicy? = nil,
         body: U

@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 request.setValue("Bearer \(myAppAccessToken)", forHTTPHeaderField: "Authorization")
 
                 let (data, _) = try await URLSession.shared.data(for: request)
-                let response = try JSONDecoder().decode([String: String].self, from: data)
+                let response = try JSONDecoder().decode([String : String].self, from: data)
 
                 return response["access_token"]!
             }

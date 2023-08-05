@@ -13,7 +13,7 @@ internal extension ParraNetworkManager {
     // MARK: - Feedback
 
     func getCards(appArea: ParraQuestionAppArea) async throws -> [ParraCardItem] {
-        var queryItems: [String: String] = [:]
+        var queryItems: [String : String] = [:]
         // It is important that an app area name is only provided if a specific one is meant to be returned.
         // If the app area type is `all` then there should not be a `app_area` key present in the request.
         if let appAreaName = appArea.parameterized {
@@ -86,7 +86,7 @@ internal extension ParraNetworkManager {
         data: [FeedbackFormField: String]
     ) async throws {
         // Map of FeedbackFormField.name -> a String (or value if applicable)
-        let body = data.reduce([String: String]()) { partialResult, entry in
+        let body = data.reduce([String : String]()) { partialResult, entry in
             var next = partialResult
             next[entry.key.name] = entry.value
             return next
@@ -172,7 +172,7 @@ internal extension ParraNetworkManager {
             throw ParraError.notInitialized
         }
 
-        let body: [String: String] = [
+        let body: [String : String] = [
             "token": token,
             "type": "apns"
         ]

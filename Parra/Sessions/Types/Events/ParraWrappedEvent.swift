@@ -11,16 +11,16 @@ import Foundation
 internal enum ParraWrappedEvent {
     case event(
         event: ParraEvent,
-        extra: [String: Any]? = nil
+        extra: [String : Any]? = nil
     )
 
     case dataEvent(
         event: ParraDataEvent,
-        extra: [String: Any]? = nil
+        extra: [String : Any]? = nil
     )
 
     case internalEvent(
         event: ParraInternalEvent,
-        extra: [String: Any]? = nil
+        extra: [String : Any]? = nil
     )
 }

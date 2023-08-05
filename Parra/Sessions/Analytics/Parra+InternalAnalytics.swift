@@ -11,7 +11,7 @@ import Foundation
 internal extension Parra {
     static func logEvent(
         _ event: ParraInternalEvent,
-        _ extra: [String: Any]? = nil,
+        _ extra: [String : Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -30,7 +30,7 @@ internal extension Parra {
 
     func logEvent(
         _ event: ParraInternalEvent,
-        _ extra: [String: Any]? = nil,
+        _ extra: [String : Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
