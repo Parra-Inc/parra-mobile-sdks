@@ -206,10 +206,10 @@ internal class ParraSessionManager: ParraLoggerBackend {
 
             self.currentSession = currentSession
 
-            if loggerOptions.environment.hasDebugBehavior {
+            if optionsCopy.environment.hasDebugBehavior {
                 writeEventToConsole(
                     wrappedEvent: wrappedEvent,
-                    with: loggerOptions.consoleFormatOptions
+                    with: optionsCopy.consoleFormatOptions
                 )
             }
         }

@@ -12,7 +12,7 @@ import Foundation
 internal struct ParraSessionEvent: Codable {
     internal let createdAt: Date
     internal let name: String
-    internal let payload: AnyCodable
+    internal let extra: AnyCodable
 
     internal init(
         createdAt: Date = .now,
@@ -24,7 +24,7 @@ internal struct ParraSessionEvent: Codable {
         )
 
         let name: String
-        var payload: [String : Any] = [
+        var combinedExtra: [String : Any] = [
             "metadata": [
                 "module": module,
                 "file": file
@@ -36,29 +36,29 @@ internal struct ParraSessionEvent: Codable {
             name = event.name
 
             if let extra {
-                payload.merge(extra) { $1 }
+                combinedExtra.merge(extra) { $1 }
             }
         case .dataEvent(let event, let extra):
             name = event.name
 
             if let extra {
-                payload.merge(event.extra.merging(extra) { $1 }) { $1 }
+                combinedExtra.merge(event.extra.merging(extra) { $1 }) { $1 }
             } else {
-                payload.merge(event.extra) { $1 }
+                combinedExtra.merge(event.extra) { $1 }
             }
         case .internalEvent(let event, let extra):
             name = event.name
 
             if let extra {
-                payload.merge(event.extra.merging(extra) { $1 }) { $1 }
+                combinedExtra.merge(event.extra.merging(extra) { $1 }) { $1 }
             } else {
-                payload.merge(event.extra) { $1 }
+                combinedExtra.merge(event.extra) { $1 }
             }
         }
 
         self.name = StringManipulators.snakeCaseify(text: name)
         self.createdAt = createdAt
-        self.payload = AnyCodable.init(payload)
+        self.extra = AnyCodable.init(combinedExtra)
     }
 }
 
