@@ -71,7 +71,11 @@ public class Logger {
         threadInfo: ParraLoggerThreadInfo
     ) -> ParraLogMarker {
         guard isEnabled else {
-            return ParraLogMarker(startingContext: callSiteContext)
+            return ParraLogMarker(
+                initialLevel: level,
+                message: message,
+                initialCallSiteContext: callSiteContext
+            )
         }
 
         let data = ParraLogData(
@@ -92,8 +96,10 @@ public class Logger {
         }
 
         return ParraLogMarker(
-            context: self.context,
-            startingContext: callSiteContext
+            initialLevel: level,
+            message: message,
+            initialCallSiteContext: callSiteContext,
+            context: self.context
         )
     }
 
@@ -126,8 +132,10 @@ public class Logger {
         }
 
         return ParraLogMarker(
-            context: context,
-            startingContext: callSiteContext
+            initialLevel: level,
+            message: message,
+            initialCallSiteContext: callSiteContext,
+            context: context
         )
     }
 

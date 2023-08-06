@@ -11,17 +11,23 @@ import Foundation
 // TODO: Should this just be any event?
 public struct ParraLogMarker {
     public let date: Date
-    public let context: ParraLoggerContext?
+    public let initialLevel: ParraLogLevel
 
-    internal let startingContext: ParraLoggerCallSiteContext
+    internal let initialContext: ParraLoggerContext?
+    internal let message: ParraLazyLogParam
+    internal let initialCallSiteContext: ParraLoggerCallSiteContext
 
     internal init(
-        date: Date = Date(),
+        initialLevel: ParraLogLevel,
+        message: ParraLazyLogParam,
+        initialCallSiteContext: ParraLoggerCallSiteContext,
         context: ParraLoggerContext? = nil,
-        startingContext: ParraLoggerCallSiteContext
+        date: Date = .now
     ) {
+        self.initialLevel = initialLevel
+        self.message = message
+        self.initialCallSiteContext = initialCallSiteContext
+        self.initialContext = context
         self.date = date
-        self.context = context
-        self.startingContext = startingContext
     }
 }

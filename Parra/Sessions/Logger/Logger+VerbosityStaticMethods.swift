@@ -8,6 +8,13 @@
 
 import Foundation
 
+// NOTE: All messages/errors/extras are wrapped in auto closures to prevent them from being evaluated until we're
+// sure that the log will actually be displayed. If we ever consider addeding more overloads that allow passing a
+// closure directly, we will need consideration around the fact that it is possible that the closure may be executed
+// more than once. For example, for a log that is printed to the console, but later has its message accessed during
+// a measurement. This may be unexpected for users of the Logger if they added code that produced side effects in
+// any of these closures.
+
 public extension Logger {
     @discardableResult
     static func trace(

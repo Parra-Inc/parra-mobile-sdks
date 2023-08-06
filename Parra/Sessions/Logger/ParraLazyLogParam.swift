@@ -11,4 +11,17 @@ import Foundation
 public enum ParraLazyLogParam {
     case string(() -> String)
     case error(() -> Error)
+
+    internal func produceLog() -> (String, [String : Any]?) {
+        switch self {
+        case .string(let messageProvider):
+            return (messageProvider(), nil)
+        case .error(let errorProvider):
+            let errorWithExtra = LoggerHelpers.extractMessageAndExtra(
+                from: errorProvider()
+            )
+
+            return (errorWithExtra.message, errorWithExtra.extra)
+        }
+    }
 }

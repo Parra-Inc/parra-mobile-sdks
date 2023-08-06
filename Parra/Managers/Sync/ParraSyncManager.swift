@@ -140,13 +140,13 @@ internal actor ParraSyncManager {
 
             return
         }
-        
-        logger.debug("Starting sync")
+
+        let syncStartMarker = logger.debug("Starting sync")
         
         do {
             try await performSync()
 
-            logger.trace("Sync complete")
+            logger.measureTime(since: syncStartMarker, message: "Sync complete")
         } catch let error {
             logger.error("Error performing sync", error)
             // TODO: Maybe cancel the sync timer, double the countdown then start a new one?
