@@ -51,7 +51,7 @@ extension ParraSessionManager {
     ) {
         // Context:
         // Module -> file -> context -> subcontext -> ... -> subcontext -> call site module/file/function
-        print(processedLogData.message, processedLogData.extra)
+        print("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
         //        print(processedLogData.extra)
         //        let log = os.Logger(subsystem: "sub", category: "cat")
         //        log.info("test test test")

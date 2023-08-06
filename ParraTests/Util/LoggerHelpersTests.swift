@@ -21,7 +21,7 @@ final class LoggerHelpersTests: XCTestCase {
         let extraMessage = "something"
         let error = ParraError.authenticationFailed(extraMessage)
 
-        let result = LoggerHelpers.extractMessage(from: error)
+        let result = LoggerHelpers.extractMessageAndExtra(from: error)
 
         XCTAssertEqual(result, error.errorDescription)
     }
@@ -39,7 +39,7 @@ final class LoggerHelpersTests: XCTestCase {
             ]
         )
 
-        let result = LoggerHelpers.extractMessage(from: error)
+        let result = LoggerHelpers.extractMessageAndExtra(from: error)
 
         XCTAssertTrue(result.contains(domain))
         XCTAssertTrue(result.contains(localizedDescription))
@@ -48,7 +48,7 @@ final class LoggerHelpersTests: XCTestCase {
 
     func testExtractErrorMessageFromErrorProtocolTypes() {
         let error = LoggerTestError.uniquelyNamedErrorCase
-        let result = LoggerHelpers.extractMessage(from: error)
+        let result = LoggerHelpers.extractMessageAndExtra(from: error)
 
         XCTAssertTrue(result.contains("LoggerTestError.uniquelyNamedErrorCase"))
     }

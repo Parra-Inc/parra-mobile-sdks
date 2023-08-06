@@ -10,6 +10,39 @@ import Foundation
 
 extension URLRequest: ParraDictionaryConvertible {
     var dictionary: [String : Any] {
-        return [:]
+        var dict: [String : Any] = [
+            "timeout_interval": timeoutInterval,
+            "should_handle_cookies": httpShouldHandleCookies,
+            "should_use_pipelining": httpShouldUsePipelining,
+            "allows_cellular_access": allowsCellularAccess,
+            "allows_constrainted_network_access": allowsConstrainedNetworkAccess,
+            "allows_expensive_network_access": allowsExpensiveNetworkAccess,
+            "network_service_type": networkServiceType.rawValue,
+            "attribution": attribution.rawValue == 0 ? "developer" : "user",
+            "assumes_http3_capable": assumesHTTP3Capable,
+            "cache_policy": cachePolicy.description
+        ]
+
+        if #available(iOS 16.1, *) {
+            dict["requires_dns_sec_validation"] = requiresDNSSECValidation
+        }
+
+        if let httpMethod {
+            dict["method"] = httpMethod
+        }
+
+        if let url {
+            dict["url"] = url
+        }
+
+        if let httpBody {
+            dict["body"] = httpBody
+        }
+
+        if let allHTTPHeaderFields {
+            dict["headers"] = allHTTPHeaderFields
+        }
+
+        return dict
     }
 }

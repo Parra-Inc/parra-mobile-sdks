@@ -33,10 +33,7 @@ internal class ParraSessionManager: ParraLoggerBackend {
 
     private var userProperties: [String : AnyCodable] = [:]
 
-    fileprivate let eventQueue = DispatchQueue(
-        label: "com.parra.sessions.event-queue",
-        qos: .utility
-    )
+    fileprivate let eventQueue: DispatchQueue
 
     internal init(
         dataManager: ParraDataManager,
@@ -47,6 +44,13 @@ internal class ParraSessionManager: ParraLoggerBackend {
         self.networkManager = networkManager
         self.loggerOptions = loggerOptions
         self.currentSession = ParraSession()
+
+        // Set this in init after assigning the loggerOptions to ensure reads from the event queue couldn't
+        // possibly start happening until after the initial write of these options is complete.
+        eventQueue = DispatchQueue(
+            label: "com.parra.sessions.event-queue",
+            qos: .utility
+        )
     }
 
     /// The config state will be exclusively accessed on a serial queue that will use
@@ -177,6 +181,9 @@ internal class ParraSessionManager: ParraLoggerBackend {
     ) {
         // TODO: Event logging should take the same env flag that the logger looks at into consideration.
         // TODO: Need to ditch the Task and async/await here and process synchronously on the event queue.
+
+        // Temporary until the TasK below is refactored out.
+        let optionsCopy = loggerOptions
 
         Task {
             await createSessionIfNotExists()

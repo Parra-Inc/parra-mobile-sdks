@@ -27,14 +27,21 @@ internal struct ParraLogProcessedData {
     let threadInfo: ParraLoggerThreadInfo
 
     init(logData: ParraLogData) {
+        var extra = logData.extra() ?? [:]
+
         let message: String
         switch logData.message {
         case .string(let messageProvider):
             message = messageProvider()
         case .error(let errorProvider):
-            message = LoggerHelpers.extractMessageAndExtra(
+            let errorWithExtra = LoggerHelpers.extractMessageAndExtra(
                 from: errorProvider()
             )
+
+            message = errorWithExtra.message
+            if !errorWithExtra.extra.isEmpty {
+                extra["error_extra"] = errorWithExtra.extra
+            }
         }
 
         let (module, file) = LoggerHelpers.splitFileId(
@@ -44,7 +51,6 @@ internal struct ParraLogProcessedData {
         callSiteLine = logData.callSiteContext.line
         callSiteColumn = logData.callSiteContext.column
 
-        var extra = logData.extra() ?? [:]
         if let extraError = logData.extraError() {
             extra["error_description"] = LoggerHelpers.extractMessageAndExtra(
                 from: extraError

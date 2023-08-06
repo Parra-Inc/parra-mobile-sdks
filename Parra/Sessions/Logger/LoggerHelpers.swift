@@ -19,20 +19,13 @@ internal struct LoggerHelpers {
     /// Useful for converting various types of "Error" into an actual readable message. By default
     /// Error conforming types will not display what type of error they actually are in their
     /// localizedDescription, for example.
-    internal static func extractMessage(
+    internal static func extractMessageAndExtra(
         from error: Error
-    ) -> String {
+    ) -> ParraErrorWithExtra {
         if let parraError = error as? ParraError {
-            return parraError.errorDescription
+            return ParraErrorWithExtra(parraError: parraError)
         } else {
-            // Error is always bridged to NSError, can't downcast to check.
-            if type(of: error) is NSError.Type {
-                let nsError = error as NSError
-
-                return "Error domain: \(nsError.domain), code: \(nsError.code), description: \(nsError.localizedDescription)"
-            } else {
-                return "\(String(reflecting: error)), description: \(error.localizedDescription)"
-            }
+            return ParraErrorWithExtra(error: error)
         }
     }
 

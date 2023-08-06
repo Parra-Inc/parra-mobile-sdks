@@ -219,9 +219,8 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
 
                 return (
                     .failure(ParraError.networkError(
-                        status: response.statusCode,
-                        message: response.debugDescription,
-                        request: request
+                        request: request,
+                        response: response
                     )),
                     config.attributes
                 )
@@ -261,9 +260,8 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
 
                 return (
                     .failure(ParraError.networkError(
-                        status: response.statusCode,
-                        message: response.debugDescription,
-                        request: request
+                        request: request,
+                        response: response
                     )),
                     attributes
                 )
@@ -305,9 +303,8 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
             return credential.token
         default:
             throw ParraError.networkError(
-                status: response.statusCode,
-                message: response.debugDescription,
-                request: request
+                request: request,
+                response: response
             )
         }
     }
