@@ -18,7 +18,7 @@ extension URLRequest: ParraDictionaryConvertible {
             "allows_constrainted_network_access": allowsConstrainedNetworkAccess,
             "allows_expensive_network_access": allowsExpensiveNetworkAccess,
             "network_service_type": networkServiceType.rawValue,
-            "attribution": attribution.rawValue == 0 ? "developer" : "user",
+            "attribution": attribution.description,
             "assumes_http3_capable": assumesHTTP3Capable,
             "cache_policy": cachePolicy.description
         ]
@@ -36,7 +36,7 @@ extension URLRequest: ParraDictionaryConvertible {
         }
 
         if let httpBody {
-            dict["body"] = httpBody
+            dict["body"] = httpBody.base64EncodedString()
         }
 
         if let allHTTPHeaderFields {

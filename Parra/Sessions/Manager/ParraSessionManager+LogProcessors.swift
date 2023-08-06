@@ -18,7 +18,7 @@ import os
 
 extension ParraSessionManager {
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
-    internal func writeEventToConsole(
+    internal func writeEventToConsoleSync(
         wrappedEvent: ParraWrappedEvent,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
@@ -26,18 +26,18 @@ extension ParraSessionManager {
         case .internalEvent(let internalEvent, _):
             switch internalEvent {
             case .log(let logData):
-                writeLogEventToConsole(
+                writeLogEventToConsoleSync(
                     processedLogData: logData,
                     with: consoleFormatOptions
                 )
             default:
-                writeGenericEventToConsole(
+                writeGenericEventToConsoleSync(
                     wrappedEvent: wrappedEvent,
                     with: consoleFormatOptions
                 )
             }
         case .event, .dataEvent:
-            writeGenericEventToConsole(
+            writeGenericEventToConsoleSync(
                 wrappedEvent: wrappedEvent,
                 with: consoleFormatOptions
             )
@@ -45,13 +45,21 @@ extension ParraSessionManager {
     }
 
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
-    internal func writeLogEventToConsole(
+    internal func writeLogEventToConsoleSync(
         processedLogData: ParraLogProcessedData,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
         // Context:
         // Module -> file -> context -> subcontext -> ... -> subcontext -> call site module/file/function
-        print("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
+
+        if let categories = processedLogData.context?.categories {
+            let catsString = categories.joined(separator: " -> ")
+            print("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
+        } else {
+            print("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
+        }
+
+
         //        print(processedLogData.extra)
         //        let log = os.Logger(subsystem: "sub", category: "cat")
         //        log.info("test test test")
@@ -133,7 +141,7 @@ extension ParraSessionManager {
     }
 
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
-    internal func writeGenericEventToConsole(
+    internal func writeGenericEventToConsoleSync(
         wrappedEvent: ParraWrappedEvent,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {

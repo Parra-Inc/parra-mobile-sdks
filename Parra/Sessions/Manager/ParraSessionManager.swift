@@ -12,7 +12,7 @@ import UIKit
 // TODO: Any logs used in here cause recursion in production
 // TODO: General refactor for the Parra logger to just be a wrapper around writing log events to the session manager.
 
-fileprivate let logger = Logger(category: "Session manager")
+fileprivate let logger = Logger(bypassEventCreation: true, category: "Session manager")
 
 // Needs
 // 1. Logging events without waiting.
@@ -23,8 +23,13 @@ fileprivate let logger = Logger(category: "Session manager")
 // 6. Events are written to disk in batches
 // 7. Certain high priority events trigger a write immediately
 
-/// ParraSessionManager
-internal class ParraSessionManager: ParraLoggerBackend {
+/// Handles receiving logs, session properties and events and coordinates passing these
+/// to other services responsible for underlying storage.
+///
+/// Some important notes working with this class:
+/// 1. For any method with the `Sync` suffix, you should always assume that it is a hard
+///    requirement for it to be called on a specific queue. Usually ``eventQueue``.
+internal class ParraSessionManager {
     private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager
     private var loggerOptions: ParraLoggerOptions
@@ -34,6 +39,10 @@ internal class ParraSessionManager: ParraLoggerBackend {
     private var userProperties: [String : AnyCodable] = [:]
 
     fileprivate let eventQueue: DispatchQueue
+
+    private var sessionStorage: SessionStorage {
+        return dataManager.sessionStorage
+    }
 
     internal init(
         dataManager: ParraDataManager,
@@ -63,101 +72,68 @@ internal class ParraSessionManager: ParraLoggerBackend {
         }
     }
 
+    internal func initializeSessions() async {
+        await sessionStorage.initializeSessions()
+    }
+
     internal func hasDataToSync() async -> Bool {
-        let persistedSessionCount = await dataManager.sessionStorage.numberOfTrackedSessions()
         // Sync if there are any sessions that aren't still in progress, or if the session
         // in progress has new events to report.
-
-        if persistedSessionCount > 1 {
+        if await sessionStorage.hasCompletedSessions() {
             return true
         }
 
-        return currentSession?.hasNewData ?? false
-    }
+        // TODO: Change the short circuit order here depending on which ends up being cheaper.
 
-    func clearSessionHistory() async {
-        logger.debug("Clearing previous session history")
-
-        let allSessions = await dataManager.sessionStorage.allTrackedSessions()
-        let sessionIds = allSessions.reduce(Set<String>()) { partialResult, session in
-            var next = partialResult
-            next.insert(session.sessionId)
-            return next
-        }
-
-        await dataManager.sessionStorage.deleteSessions(
-            with: sessionIds
-        )
+        return await sessionStorage.hasNewEvents()
     }
 
     func synchronizeData() async -> ParraSessionsResponse? {
-        guard var currentSession else {
-            return nil
-        }
+        let syncLogger = logger.scope()
 
         // Reset and update the cache for the current session so the most up to take data is uploaded.
-        currentSession.resetSentData()
-        await dataManager.sessionStorage.update(
-            session: currentSession
-        )
+        await sessionStorage.recordSync()
 
-        let sessions = await dataManager.sessionStorage.allTrackedSessions()
+        let sessionIterator = await sessionStorage.getAllSessions()
 
+        var uploadedSessionIds = Set<String>()
+        // It's possible that multiple sessions that are uploaded could receive a response indicating that polling
+        // should occur. If this happens, we'll honor the most recent of these.
         var sessionResponse: ParraSessionsResponse?
-        do {
-            let (completedSessionIds, nextSessionResponse) = try await networkManager.bulkSubmitSessions(
-                sessions: sessions
-            )
 
-            sessionResponse = nextSessionResponse
+        for await sessionUpload in sessionIterator {
+            let session = sessionUpload.session
 
-            // Remove all of the successfully uploaded sessions except for the
-            // session that is in progress.
-            await dataManager.sessionStorage.deleteSessions(
-                with: completedSessionIds.subtracting([currentSession.sessionId])
-            )
-        } catch let error {
-            logger.error("Syncing sessions failed", error)
-        }
+            do {
+                syncLogger.debug("Uploading session: \(session.sessionId)")
 
-        self.currentSession = currentSession
+                let response = try await networkManager.submitSession(sessionUpload)
 
-        return sessionResponse
-    }
+                switch response.result {
+                case .success(let payload):
+                    // Don't override the session response unless it's another one with shouldPoll enabled.
+                    if payload.shouldPoll {
+                        sessionResponse = payload
+                    }
 
-    internal func log(data: ParraLogData) {
-        eventQueue.async { [self] in
-            logEventReceived(logData: data)
-        }
-    }
+                    uploadedSessionIds.insert(session.sessionId)
+                case .failure(let error):
+                    syncLogger.error(error)
 
-    internal func logMultiple(data: [ParraLogData]) {
-        eventQueue.async { [self] in
-            for logData in data {
-                logEventReceived(logData: logData)
+                    // If any of the sessions fail to upload afty rerying, fail the entire operation
+                    // returning the sessions that have been completed so far.
+                    if response.attributes.contains(.exceededRetryLimit) {
+                        break
+                    }
+                }
+            } catch let error {
+                syncLogger.error("Syncing sessions failed", error)
             }
         }
-    }
 
-    private func logEventReceived(
-        logData: ParraLogData
-    ) {
-        guard logData.level >= loggerOptions.minimumLogLevel else {
-            return
-        }
+        await sessionStorage.deleteCompletedSessions(with: uploadedSessionIds)
 
-        // At this point, the autoclosures passed to the logger functions are finally invoked.
-        let processedLogData = ParraLogProcessedData(
-            logData: logData
-        )
-
-        writeEventSync(
-            wrappedEvent: .internalEvent(
-                event: .log(logData: processedLogData)
-            ),
-            // Special case. Call site context is that of the origin of the log.
-            callSiteContext: logData.callSiteContext
-        )
+        return sessionResponse
     }
 
     /// Logs the supplied event on the user's session.
@@ -179,120 +155,197 @@ internal class ParraSessionManager: ParraLoggerBackend {
         wrappedEvent: ParraWrappedEvent,
         callSiteContext: ParraLoggerCallSiteContext
     ) {
-        // TODO: Event logging should take the same env flag that the logger looks at into consideration.
-        // TODO: Need to ditch the Task and async/await here and process synchronously on the event queue.
-
-        // Temporary until the TasK below is refactored out.
-        let optionsCopy = loggerOptions
-
-        Task {
-            await createSessionIfNotExists()
-
-            guard var currentSession else {
-                return
-            }
-
-            let sessionEvent = ParraSessionEvent(
+        // When normal behavior isn't bypassed, debug behavior is to send logs to the console.
+        // Production behavior is to write events.
+        if loggerOptions.environment.hasDebugBehavior {
+            writeEventToConsoleSync(
+                wrappedEvent: wrappedEvent,
+                with: loggerOptions.consoleFormatOptions
+            )
+        } else {
+            writeEventToSessionSync(
                 wrappedEvent: wrappedEvent,
                 callSiteContext: callSiteContext
             )
-
-            currentSession.updateUserProperties(userProperties)
-            currentSession.addEvent(sessionEvent)
-
-            await dataManager.sessionStorage.update(
-                session: currentSession
-            )
-
-            self.currentSession = currentSession
-
-            if optionsCopy.environment.hasDebugBehavior {
-                writeEventToConsole(
-                    wrappedEvent: wrappedEvent,
-                    with: optionsCopy.consoleFormatOptions
-                )
-            }
         }
+    }
+
+    private func writeEventToSessionSync(
+        wrappedEvent: ParraWrappedEvent,
+        callSiteContext: ParraLoggerCallSiteContext
+    ) {
+        sessionStorage.writeEvent(
+            event: ParraSessionEvent(
+                wrappedEvent: wrappedEvent,
+                callSiteContext: callSiteContext
+            )
+        )
     }
 
     internal func setUserProperty(
         _ value: Any?,
         forKey key: String
     ) async {
-        await createSessionIfNotExists()
-
-        guard var currentSession else {
-            return
-        }
-
-        #if DEBUG
-        logger.debug("Updating user property", [
-            "key": key,
-            "new value": String(describing: value),
-            "old value": String(describing: self.userProperties[key])
-        ])
-        #endif
-
-        if let value {
-            userProperties[key] = .init(value)
-        } else {
-            userProperties.removeValue(forKey: key)
-        }
-
-        currentSession.updateUserProperties(userProperties)
-
-        await dataManager.sessionStorage.update(
-            session: currentSession
-        )
-
-        self.currentSession = currentSession
+//        await createSessionIfNotExists()
+//
+//        guard var currentSession else {
+//            return
+//        }
+//
+//        #if DEBUG
+//        logger.debug("Updating user property", [
+//            "key": key,
+//            "new value": String(describing: value),
+//            "old value": String(describing: self.userProperties[key])
+//        ])
+//        #endif
+//
+//        if let value {
+//            userProperties[key] = .init(value)
+//        } else {
+//            userProperties.removeValue(forKey: key)
+//        }
+//
+//        currentSession.updateUserProperties(userProperties)
+//
+//        do {
+//            try await sessionStorage.update(
+//                session: currentSession
+//            )
+//        } catch let error {
+//            // TODO: Log error to console DIRECTLY
+//        }
+//
+//        self.currentSession = currentSession
     }
 
     internal func resetSession() async {
-        guard var currentSession else {
-            return
-        }
-
-        currentSession.end()
-        currentSession.resetSentData()
-
-        await dataManager.sessionStorage.update(
-            session: currentSession
-        )
-
-        self.currentSession = nil
+//        guard var currentSession else {
+//            return
+//        }
+//
+//        currentSession.end()
+//        currentSession.resetSentData()
+//
+//        do {
+//            try await sessionStorage.update(
+//                session: currentSession
+//            )
+//        } catch let error {
+//            // TODO: Log error to console DIRECTLY
+//        }
+//
+//        self.currentSession = nil
     }
 
     internal func endSession() async {
-        guard var currentSession else {
-            return
-        }
-
-        currentSession.end()
-
-        await dataManager.sessionStorage.update(
-            session: currentSession
-        )
-
-        self.currentSession = nil
+//        guard var currentSession else {
+//            return
+//        }
+//
+//        currentSession.end()
+//
+//        do {
+//            try await sessionStorage.update(
+//                session: currentSession
+//            )
+//        } catch let error {
+//            // TODO: Log error to console DIRECTLY
+//        }
+//
+//        self.currentSession = nil
     }
 
     internal func createSessionIfNotExists() async {
-        guard currentSession == nil else {
+//        guard currentSession == nil else {
+//            return
+//        }
+//
+//        logger.debug("No session exists. Starting new session.")
+//
+//
+//        var currentSession = ParraSession()
+//
+//        currentSession.updateUserProperties(userProperties)
+//
+//        do {
+//            try await sessionStorage.update(
+//                session: currentSession
+//            )
+//        } catch let error {
+//            // TODO: Log error to console DIRECTLY
+//        }
+//
+//        self.currentSession = currentSession
+    }
+}
+
+// MARK: ParraLoggerBackend
+extension ParraSessionManager: ParraLoggerBackend {
+    internal func log(
+        data: ParraLogData,
+        bypassEventCreation: Bool
+    ) {
+        eventQueue.async { [self] in
+            logEventReceivedSync(
+                logData: data,
+                bypassEventCreation: bypassEventCreation
+            )
+        }
+    }
+
+    internal func logMultiple(
+        data: [ParraLogData],
+        bypassEventCreation: Bool
+    ) {
+        eventQueue.async { [self] in
+            for logData in data {
+                logEventReceivedSync(
+                    logData: logData,
+                    bypassEventCreation: bypassEventCreation
+                )
+            }
+        }
+    }
+
+    /// Any newly created log is required to pass through this method in order to ensure consistent
+    /// filtering and processing. This method should always be called from the eventQueue.
+    /// - Parameters:
+    ///   - bypassEventCreation: This flag should be used for cases where we need to write logs
+    ///   that can not trigger the creation of log events, and should instead just be written directly to
+    ///   the console. This is primarily for places where writing events for logs would create recursion,
+    ///   like logs generated by the services that store log events, for example. For now we will have a
+    ///   blind spot in these places until a better solution is implemented.
+    private func logEventReceivedSync(
+        logData: ParraLogData,
+        bypassEventCreation: Bool
+    ) {
+        guard logData.level >= loggerOptions.minimumLogLevel else {
             return
         }
 
-        logger.debug("No session exists. Starting new session.")
-
-
-        var currentSession = ParraSession()
-
-        currentSession.updateUserProperties(userProperties)
-
-        await dataManager.sessionStorage.update(
-            session: currentSession
+        // At this point, the autoclosures passed to the logger functions are finally invoked.
+        let processedLogData = ParraLogProcessedData(
+            logData: logData
         )
 
-        self.currentSession = currentSession
+        if bypassEventCreation {
+            if loggerOptions.environment.hasDebugBehavior {
+                writeLogEventToConsoleSync(
+                    processedLogData: processedLogData,
+                    with: loggerOptions.consoleFormatOptions
+                )
+            }
+        } else {
+            let wrappedEvent = ParraWrappedEvent.internalEvent(
+                event: .log(logData: processedLogData)
+            )
+
+            writeEventSync(
+                wrappedEvent: wrappedEvent,
+                // Special case. Call site context is that of the origin of the log.
+                callSiteContext: logData.callSiteContext
+            )
+        }
     }
 }

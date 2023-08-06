@@ -115,54 +115,20 @@ internal extension ParraNetworkManager {
 
     // MARK: - Sessions
 
-    /// Uploads the provided sessions, failing outright if enough sessions fail to upload
-    /// - Returns: A set of ids of the sessions that were successfully uploaded.
-    func bulkSubmitSessions(
-        sessions: [ParraSession]
-    ) async throws -> (Set<String>, ParraSessionsResponse?) {
+    func submitSession(
+        _ sessionUpload: ParraSessionUpload
+    ) async throws -> AuthenticatedRequestResult<ParraSessionsResponse> {
         guard let tenantId = await configState.getCurrentState().tenantId else {
             throw ParraError.notInitialized
         }
 
-        if sessions.isEmpty {
-            return ([], nil)
-        }
+        let response: AuthenticatedRequestResult<ParraSessionsResponse> = await performAuthenticatedRequest(
+            endpoint: .postBulkSubmitSessions(tenantId: tenantId),
+            config: .defaultWithRetries,
+            body: sessionUpload
+        )
 
-        var completedSessions = Set<String>()
-        // It's possible that multiple sessions that are uploaded could receive a response indicating that polling
-        // should occur. If this happens, we'll honor the most recent of these.
-        var sessionResponse: ParraSessionsResponse?
-        for session in sessions {
-            logger.debug("Uploading session: \(session.sessionId)")
-
-            let sessionUpload = ParraSessionUpload(session: session)
-
-            let response: AuthenticatedRequestResult<ParraSessionsResponse> = await performAuthenticatedRequest(
-                    endpoint: .postBulkSubmitSessions(tenantId: tenantId),
-                    config: .defaultWithRetries,
-                    body: sessionUpload
-                )
-
-            switch response.result {
-            case .success(let payload):
-                // Don't override the session response unless it's another one with shouldPoll enabled.
-                if payload.shouldPoll {
-                    sessionResponse = payload
-                }
-
-                completedSessions.insert(session.sessionId)
-            case .failure(let error):
-                logger.error(error)
-
-                // If any of the sessions fail to upload afty rerying, fail the entire operation
-                // returning the sessions that have been completed so far.
-                if response.attributes.contains(.exceededRetryLimit) {
-                    return (completedSessions, sessionResponse)
-                }
-            }
-        }
-
-        return (completedSessions, sessionResponse)
+        return response
     }
 
     // MARK: - Push

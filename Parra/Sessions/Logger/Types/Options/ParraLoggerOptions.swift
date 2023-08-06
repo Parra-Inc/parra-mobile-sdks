@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO: Figure out how to get a default ParraLogMeasurementFormat in here.
+
 public struct ParraLoggerOptions {
     public enum Environment {
         public static let minimumLogLevelOverride = "PARRA_LOG_LEVEL"

@@ -13,7 +13,7 @@ public class ParraDataManager {
 
     internal init() {
         let folder = Parra.persistentStorageFolder()
-        
+
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
             dataStorageMedium: .fileSystem(
                 folder: folder,
@@ -22,16 +22,16 @@ public class ParraDataManager {
             )
         )
 
-        let sessionStorageModule = ParraStorageModule<ParraSession>(
-            dataStorageMedium: .fileSystem(
-                folder: folder.appending("/sessions"),
-                fileName: ParraDataManager.Key.userSessionsKey,
-                storeItemsSeparately: true
-            )
+        let sessionStoragePath = ParraDataManager.Path.parraDirectory
+            .safeAppendDirectory(folder.appending("/sessions"))
+
+        self.credentialStorage = CredentialStorage(
+            storageModule: credentialStorageModule
         )
-        
-        self.credentialStorage = CredentialStorage(storageModule: credentialStorageModule)
-        self.sessionStorage = SessionStorage(storageModule: sessionStorageModule)
+
+        self.sessionStorage = SessionStorage(
+            sessionReader: SessionReader(basePath: sessionStoragePath)
+        )
     }
     
     internal func getCurrentCredential() async -> ParraCredential? {

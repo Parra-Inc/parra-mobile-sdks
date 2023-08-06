@@ -8,6 +8,9 @@
 
 import Foundation
 
+// TODO: How should we handle the case where someone creates a new logger and passes a category
+// name that is the exact same as the file name/class name?
+
 public struct ParraLoggerContext {
     public let module: String
     public let fileName: String
@@ -41,15 +44,22 @@ public struct ParraLoggerContext {
         self.extra = extra
     }
 
-    internal func addingSubcategory(
-        subcategory: String,
-        extra: [String : Any]
+    internal func addingSubcategories(
+        subcategories: [String],
+        extra: [String : Any]? = nil
     ) -> ParraLoggerContext {
+        let mergedExtra: [String : Any]
+        if let extra {
+            mergedExtra = self.extra.merging(extra) { $1 }
+        } else {
+            mergedExtra = self.extra
+        }
+
         return ParraLoggerContext(
             module: module,
             fileName: fileName,
-            categories: categories + [subcategory],
-            extra: self.extra.merging(extra) { $1 }
+            categories: categories + subcategories,
+            extra: mergedExtra
         )
     }
 }

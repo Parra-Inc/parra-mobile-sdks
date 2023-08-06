@@ -23,21 +23,9 @@ internal struct ParraErrorWithExtra {
     }
 
     internal init(error: Error) {
-        // Error is always bridged to NSError, can't downcast to check.
-        if type(of: error) is NSError.Type {
-            let nsError = error as NSError
+        let (message, extra) = LoggerFormatters.extractMessage(from: error)
 
-            var extra = nsError.userInfo
-            extra["domain"] = nsError.domain
-            extra["code"] = nsError.code
-
-            self.message = nsError.localizedDescription
-            self.extra = extra
-        } else {
-            // It is important to include a reflection of Error conforming types in order to actually identify which
-            // error enum they belond to. This information is not provided by their descriptions.
-            self.message = "\(String(reflecting: error)), description: \(error.localizedDescription)"
-            self.extra = [:]
-        }
+        self.message = message
+        self.extra = extra ?? [:]
     }
 }

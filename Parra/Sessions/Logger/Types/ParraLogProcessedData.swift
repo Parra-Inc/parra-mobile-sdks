@@ -9,7 +9,6 @@
 import Foundation
 
 internal struct ParraLogProcessedData {
-    let date: Date
     let level: ParraLogLevel
     let context: ParraLoggerContext?
     let message: String
@@ -27,7 +26,7 @@ internal struct ParraLogProcessedData {
     let threadInfo: ParraLoggerThreadInfo
 
     init(logData: ParraLogData) {
-        var extra = logData.extra() ?? [:]
+        var extra = logData.extra?() ?? [:]
 
         let message: String
         switch logData.message {
@@ -52,15 +51,17 @@ internal struct ParraLogProcessedData {
         callSiteColumn = logData.callSiteContext.column
 
         if let extraError = logData.extraError() {
-            extra["error_description"] = LoggerHelpers.extractMessageAndExtra(
+            let errorWithExtra = LoggerHelpers.extractMessageAndExtra(
                 from: extraError
             )
+
+            extra["extra_error_description"] = errorWithExtra.message
+            extra["extra_error"] = errorWithExtra.extra
         }
 
         var threadInfo = logData.threadInfo
         threadInfo.demangleCallStack()
 
-        self.date = logData.date
         self.level = logData.level
         self.context = logData.context
         self.message = message
