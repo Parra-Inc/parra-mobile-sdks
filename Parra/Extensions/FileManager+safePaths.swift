@@ -11,60 +11,86 @@ fileprivate let logger = Logger(category: "Extensions")
 
 internal extension FileManager {
     func safeCreateDirectory(at url: URL) throws {
-        let logName = url.pathComponents.suffix(3).joined(separator: "/")
-        
-        logger.trace("Checking if directory exists at: \(logName)")
+        try logger.withScope { logger in
+            let logName = url.lastComponents()
+            logger.trace("Checking if directory exists at: \(logName)")
 
-        var isDirectory: ObjCBool = false
-        let exists = fileExists(
-            atPath: url.path,
-            isDirectory: &isDirectory
-        )
-        
-        if exists && !isDirectory.boolValue {
-            let error = NSError(
-                domain: "Parra",
-                code: 2139,
-                userInfo: [
-                    NSLocalizedDescriptionKey: "Tried to create a directory at a location that already contained a file.",
-                    NSLocalizedFailureReasonErrorKey: "File existed at path: \(url.path)"
-                ]
-            )
+            let (exists, isDirectory) = safeFileExists(at: url)
 
-            logger.error("Error: File existed at directory path \(logName)", error)
+            if exists && !isDirectory {
+                throw ParraError.fileSystem(
+                    path: url,
+                    message: "Attempted to create a directory at a path that already contained a file."
+                )
+            }
 
-            throw error
-        }
-        
-        if !exists {
-            logger.trace("Directory didn't exist at \(logName). Creating...")
-            try createDirectory(at: url, withIntermediateDirectories: true)
-        } else {
-            logger.trace("Directory already exists at \(logName)")
+            if !exists {
+                logger.trace("Directory didn't exist at \(logName). Creating...")
+                try createDirectory(at: url, withIntermediateDirectories: true)
+            } else {
+                logger.trace("Directory already exists at \(logName)")
+            }
         }
     }
 
-    func safeFileExists(at url: URL) -> Bool {
-        if #available(iOS 16.0, *) {
-            return fileExists(atPath: url.safeNonEncodedPath())
-        } else {
-            return fileExists(atPath: url.path)
-        }
-    }
-
-    func safeCreateIfNotExists(
+    func safeCreateFile(
         at url: URL,
         contents: Data? = nil,
         attributes: [FileAttributeKey : Any]? = nil
-    ) {
-        if safeFileExists(at: url) {
-            return
+    ) throws {
+        try logger.withScope { logger in
+            let logName = url.lastComponents()
+            logger.trace("Checking if file exists at: \(logName)")
+
+            let exists: Bool = try safeFileExists(at: url)
+
+            if exists {
+                throw ParraError.fileSystem(
+                    path: url,
+                    message: "File already exists."
+                )
+            }
+
+            let success = createFile(
+                atPath: url.safeNonEncodedPath(),
+                contents: contents,
+                attributes: attributes
+            )
+
+            if !success {
+                throw ParraError.fileSystem(
+                    path: url,
+                    message: "File could not be created"
+                )
+            }
+        }
+    }
+
+    func safeFileExists(at url: URL) -> (exists: Bool, isDirectory: Bool) {
+        var isDirectory: ObjCBool = false
+
+        let exists = fileExists(
+            atPath: url.safeNonEncodedPath(),
+            isDirectory: &isDirectory
+        )
+
+        return (
+            exists: exists,
+            isDirectory: isDirectory.boolValue
+        )
+    }
+
+
+    func safeFileExists(at url: URL) throws -> Bool {
+        let (exists, isDirectory) = safeFileExists(at: url)
+
+        if isDirectory {
+            throw ParraError.fileSystem(
+                path: url,
+                message: "Directory exists at location where file should be created."
+            )
         }
 
-        createFile(
-            atPath: url.safeNonEncodedPath(),
-            contents: contents,
-            attributes: attributes
-        )
+        return exists
     }
 }

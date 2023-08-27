@@ -14,6 +14,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     case missingAuthentication
     case authenticationFailed(String)
     case networkError(request: URLRequest, response: HTTPURLResponse)
+    case fileSystem(path: URL, message: String)
     case jsonError(String)
     case unknown
 
@@ -33,6 +34,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return "A network error occurred."
         case .jsonError(let string):
             return "JSON error occurred. Error: \(string)"
+        case .fileSystem:
+            return "A file system error occurred."
         case .unknown:
             return "An unknown error occurred."
         }
@@ -57,6 +60,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return "\(baseMessage) Error: \(error)"
         case .networkError(let request, let response):
             return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)"
+        case .fileSystem(let path, let message):
+            return "\(baseMessage)\nPath: \(path.relativeString)\nError: \(message)"
         }
     }
 }
@@ -80,6 +85,11 @@ extension ParraError: ParraDictionaryConvertible {
             return [
                 "request": request.dictionary,
                 "response": response.dictionary
+            ]
+        case .fileSystem(let path, let message):
+            return [
+                "path": path.relativeString,
+                "error_description": message
             ]
         case .notInitialized, .missingAuthentication, .message, .jsonError, .unknown:
             return [:]

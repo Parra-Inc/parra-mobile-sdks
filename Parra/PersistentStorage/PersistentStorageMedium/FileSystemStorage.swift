@@ -104,7 +104,7 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     internal func delete(name: String) async throws {
         let url = baseUrl.safeAppendPathComponent(name)
 
-        if fileManager.safeFileExists(at: url) {
+        if try fileManager.safeFileExists(at: url) {
             try fileManager.removeItem(at: url)
         }
     }
