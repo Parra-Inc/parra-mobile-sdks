@@ -36,7 +36,11 @@ public actor ParraStorageModule<DataType: Codable> {
         }
     }
 
-    public init(dataStorageMedium: DataStorageMedium) {
+    public init(
+        dataStorageMedium: DataStorageMedium,
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) {
         self.dataStorageMedium = dataStorageMedium
 
         switch dataStorageMedium {
@@ -48,8 +52,8 @@ public actor ParraStorageModule<DataType: Codable> {
 
             let fileSystemStorage = FileSystemStorage(
                 baseUrl: baseUrl,
-                jsonEncoder: .parraEncoder,
-                jsonDecoder: .parraDecoder
+                jsonEncoder: jsonEncoder,
+                jsonDecoder: jsonDecoder
             )
             
             self.persistentStorage = (fileSystemStorage, fileName)
@@ -58,8 +62,8 @@ public actor ParraStorageModule<DataType: Codable> {
             
             let userDefaultsStorage = UserDefaultsStorage(
                 userDefaults: userDefaults,
-                jsonEncoder: .parraEncoder,
-                jsonDecoder: .parraDecoder
+                jsonEncoder: jsonEncoder,
+                jsonDecoder: jsonDecoder
             )
             
             self.persistentStorage = (userDefaultsStorage, key)

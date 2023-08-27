@@ -11,7 +11,10 @@ public class ParraDataManager {
     internal fileprivate(set) var credentialStorage: CredentialStorage
     internal fileprivate(set) var sessionStorage: SessionStorage
 
-    internal init() {
+    internal init(
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) {
         let folder = Parra.persistentStorageFolder()
 
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
@@ -19,7 +22,9 @@ public class ParraDataManager {
                 folder: folder,
                 fileName: ParraDataManager.Key.userCredentialsKey,
                 storeItemsSeparately: false
-            )
+            ),
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
         )
 
         let sessionStoragePath = ParraDataManager.Path.parraDirectory
@@ -30,7 +35,12 @@ public class ParraDataManager {
         )
 
         self.sessionStorage = SessionStorage(
-            sessionReader: SessionReader(basePath: sessionStoragePath)
+            sessionReader: SessionReader(
+                basePath: sessionStoragePath,
+                jsonDecoder: jsonDecoder
+            ),
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
         )
     }
     
@@ -44,11 +54,19 @@ public class ParraDataManager {
 }
 
 internal class MockDataManager: ParraDataManager {
-    override init() {
-        super.init()
-        
+    override init(
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) {
+        super.init(
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
+        )
+
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
-            dataStorageMedium: .memory
+            dataStorageMedium: .memory,
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
         )
         
         self.credentialStorage = CredentialStorage(storageModule: credentialStorageModule)

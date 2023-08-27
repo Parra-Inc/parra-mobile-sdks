@@ -34,8 +34,8 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
         configState: ParraConfigState,
         dataManager: ParraDataManager,
         urlSession: URLSessionType,
-        jsonEncoder: JSONEncoder = JSONEncoder.parraEncoder,
-        jsonDecoder: JSONDecoder = JSONDecoder.parraDecoder
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
     ) {
         self.state = state
         self.configState = configState

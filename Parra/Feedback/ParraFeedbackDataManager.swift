@@ -12,7 +12,11 @@ internal class ParraFeedbackDataManager {
     private let cardStorage: CardStorage
     private let parra: Parra
 
-    internal init(parra: Parra) {
+    internal init(
+        parra: Parra,
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) {
         self.parra = parra
 
         let completedCardDataFolder = ParraFeedback.persistentStorageFolder()
@@ -23,7 +27,9 @@ internal class ParraFeedbackDataManager {
                 folder: completedCardDataFolder,
                 fileName: completedCardDataFileName,
                 storeItemsSeparately: false
-            )
+            ),
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
         )
         
         self.completedCardDataStorage = CompletedCardDataStorage(
@@ -31,7 +37,9 @@ internal class ParraFeedbackDataManager {
         )
         
         let cardStorageModule = ParraStorageModule<[ParraCardItem]>(
-            dataStorageMedium: .memory
+            dataStorageMedium: .memory,
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
         )
         
         self.cardStorage = CardStorage(

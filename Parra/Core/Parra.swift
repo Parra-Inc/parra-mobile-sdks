@@ -20,7 +20,9 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         let parraFeedback = ParraFeedback(
             parra: self,
             dataManager: ParraFeedbackDataManager(
-                parra: self
+                parra: self,
+                jsonEncoder: Parra.jsonCoding.jsonEncoder,
+                jsonDecoder: Parra.jsonCoding.jsonDecoder
             )
         )
 
@@ -31,10 +33,23 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         return parraFeedback
     }()
 
+    internal private(set) static var jsonCoding: (
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) = {
+        return (
+            jsonEncoder: JSONEncoder.parraEncoder,
+            jsonDecoder: JSONDecoder.parraDecoder
+        )
+    }()
+
     internal static var shared: Parra! = {
         let state = ParraState()
         let configState = ParraConfigState()
         let syncState = ParraSyncState()
+
+        let jsonEncoder = Parra.jsonCoding.jsonEncoder
+        let jsonDecoder = Parra.jsonCoding.jsonDecoder
 
         let diskCacheURL = ParraDataManager.Path.networkCachesDirectory
         // Cache may reject image entries if they are greater than 10% of the cache's size
@@ -51,13 +66,18 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
         let notificationCenter = ParraNotificationCenter()
         let urlSession = URLSession(configuration: sessionConfig)
-        let dataManager = ParraDataManager()
+        let dataManager = ParraDataManager(
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
+        )
 
         let networkManager = ParraNetworkManager(
             state: state,
             configState: configState,
             dataManager: dataManager,
-            urlSession: urlSession
+            urlSession: urlSession,
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
         )
 
         let sessionManager = ParraSessionManager(
