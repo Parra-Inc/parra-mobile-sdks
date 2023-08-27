@@ -14,6 +14,7 @@ internal extension FileManager {
         let logName = url.pathComponents.suffix(3).joined(separator: "/")
         
         logger.trace("Checking if directory exists at: \(logName)")
+
         var isDirectory: ObjCBool = false
         let exists = fileExists(
             atPath: url.path,
@@ -45,9 +46,25 @@ internal extension FileManager {
 
     func safeFileExists(at url: URL) -> Bool {
         if #available(iOS 16.0, *) {
-            return fileExists(atPath: url.path(percentEncoded: false))
+            return fileExists(atPath: url.safeNonEncodedPath())
         } else {
             return fileExists(atPath: url.path)
         }
+    }
+
+    func safeCreateIfNotExists(
+        at url: URL,
+        contents: Data? = nil,
+        attributes: [FileAttributeKey : Any]? = nil
+    ) {
+        if safeFileExists(at: url) {
+            return
+        }
+
+        createFile(
+            atPath: url.safeNonEncodedPath(),
+            contents: contents,
+            attributes: attributes
+        )
     }
 }
