@@ -51,12 +51,21 @@ extension ParraSessionManager {
     ) {
         // Context:
         // Module -> file -> context -> subcontext -> ... -> subcontext -> call site module/file/function
+        let appleLogger = os.Logger(
+            subsystem: processedLogData.context?.module ?? "unknown module",
+            category: processedLogData.context?.fileName ?? "unknown file"
+        )
 
         if let categories = processedLogData.context?.categories {
             let catsString = categories.joined(separator: " -> ")
-            print("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
+
+            os_log(.info, "[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
+
+//            appleLogger.info("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
         } else {
-            print("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
+            os_log(.info, "[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
+
+//            appleLogger.info("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
         }
 
 
