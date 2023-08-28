@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 // Should be able to:
 // 1. Open a file handle when a session is started
 // 2. Close the handle when the app resigns active and re-open it on foreground
@@ -42,32 +41,43 @@ internal class SessionStorage {
 
     private var isInitialized = false
 
-    private var sessionHandle: FileHandle?
-    private var eventHandle: FileHandle?
-
     private let sessionReader: SessionReader
+    private let jsonEncoder: JSONEncoder
+    private let jsonDecoder: JSONDecoder
 
-    internal init(sessionReader: SessionReader) {
+    internal init(
+        sessionReader: SessionReader,
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) {
         self.sessionReader = sessionReader
-
-        logger.debug("initializing at path: \(sessionReader.basePath.safeNonEncodedPath())")
+        self.jsonEncoder = jsonEncoder
+        self.jsonDecoder = jsonDecoder
     }
 
     deinit {
         logger.trace("deinit")
 
         do {
-            try sessionHandle?.close()
-            try eventHandle?.close()
+            try sessionReader.closeCurrentSessionSync()
         } catch let error {
-            logger.error("Error closing file handles", error)
+            logger.error("Error closing session reader/file handles", error)
         }
     }
 
     internal func initializeSessions() async {
+        logger.debug("initializing at path: \(sessionReader.basePath.safeNonEncodedPath())")
+
         await withCheckedContinuation { continuation in
-            storageQueue.async {
-                self.sessionReader.initializeSync()
+            withCurrentSessionHandle { handle, session in
+                try self.writeSessionSync(
+                    session: session,
+                    with: handle
+                )
+            } completion: { error in
+                if let error {
+                    logger.error("Error initializing session", error)
+                }
 
                 continuation.resume()
             }
@@ -77,22 +87,48 @@ internal class SessionStorage {
     // MARK: Updating Sessions
 
     internal func writeUserPropertyUpdate(
+        key: String,
+        value: Any?,
         completion: ((Error?) -> Void)? = nil
     ) {
-
         withCurrentSessionHandle(
             handler: { handle, session in
-                let data = try JSONEncoder.parraEncoder.encode(session)
+#if DEBUG
+                logger.debug("Updating user property", [
+                    "key": key,
+                    "new value": String(describing: value),
+                    "old value": String(describing: session.userProperties[key])
+                ])
+#endif
 
-                let offset = try handle.offset()
-                if offset > data.count {
-                    // If the old file was longer, free the unneeded bytes
-                    try handle.truncate(atOffset: UInt64(data.count))
-                }
+                let updatedSession = session.withUpdatedProperty(
+                    key: key,
+                    value: value
+                )
 
-                try handle.seek(toOffset: 0)
-                try handle.write(contentsOf: data)
-                try handle.synchronize()
+                try self.writeSessionSync(
+                    session: updatedSession,
+                    with: handle
+                )
+            },
+            completion: completion
+        )
+    }
+
+    internal func writeUserPropertiesUpdate(
+        newProperties: [String : AnyCodable],
+        completion: ((Error?) -> Void)? = nil
+    ) {
+        withCurrentSessionHandle(
+            handler: { handle, session in
+                let updatedSession = session.withUpdatedProperties(
+                    newProperties: newProperties
+                )
+
+                try self.writeSessionSync(
+                    session: updatedSession,
+                    with: handle
+                )
             },
             completion: completion
         )
@@ -105,10 +141,9 @@ internal class SessionStorage {
         withCurrentSessionEventHandle(
             handler: { handle, session in
                 // TODO: Need a much more compressed format.
-                var data = try JSONEncoder.parraEncoder.encode(event)
+                var data = try self.jsonEncoder.encode(event)
                 data.append(Constant.newlineCharData)
 
-                try handle.seekToEnd()
                 try handle.write(contentsOf: data)
                 try handle.synchronize()
             },
@@ -127,10 +162,10 @@ internal class SessionStorage {
     }
 
     private func getAllSessions(completion: (ParraSessionGenerator) -> Void) {
-
+        completion(ParraSessionGenerator(paths: []))
     }
 
-    /// Whether or not there are new events on the session since the last time ``recordSync`` was called.
+    /// Whether or not there are new events on the session since the last time ``recordSyncComplete`` was called.
     /// Will also return true if it isn't previously been called for the current session.
     internal func hasNewEvents() async -> Bool {
         return await withCheckedContinuation { continuation in
@@ -140,7 +175,7 @@ internal class SessionStorage {
         }
     }
 
-    internal func recordSync() async {
+    internal func recordSyncComplete() async {
 
     }
 
@@ -165,8 +200,14 @@ internal class SessionStorage {
         completion(false)
     }
 
-    // MARK: Deleting Sessions
+    // MARK: Ending Sessions
 
+    internal func endSession() async {
+        // TODO: Need to be consistent with deinit. Both should mark session as ended, write the update, then close the session reader
+//        sessionReader.closeCurrentSessionSync()
+    }
+
+    // MARK: Deleting Sessions
 
     /// Deletes any data associated with the sessions with the provided ids. This includes
     /// caches in memory and on disk. The current in progress session will not be deleted,
@@ -183,12 +224,8 @@ internal class SessionStorage {
         completion: ((Error?) -> Void)? = nil
     ) {
         storageQueue.async { [self] in
-            let context = sessionReader.getCurrentSessionContextSync()
-
-            withHandle(
-                for: context.session,
-                at: context.path,
-                handle: &sessionHandle,
+            withHandleSync(
+                for: .session,
                 completion: completion,
                 handler: handler
             )
@@ -200,39 +237,48 @@ internal class SessionStorage {
         completion: ((Error?) -> Void)? = nil
     ) {
         storageQueue.async { [self] in
-            let context = sessionReader.getCurrentSessionContextSync()
-
-            withHandle(
-                for: context.session,
-                at: context.eventsPath,
-                handle: &eventHandle,
+            withHandleSync(
+                for: .events,
                 completion: completion,
                 handler: handler
             )
         }
     }
 
-    private func withHandle(
-        for session: ParraSession,
-        at path: URL,
-        handle: inout FileHandle?,
+    private func withHandleSync(
+        for type: FileHandleType,
         completion: ((Error?) -> Void)? = nil,
         handler: @escaping (FileHandle, ParraSession) throws -> Void
     ) {
+        // TODO: Needs logic to see if the error is related to the file handle being closed, and auto attempt to reopen it.
         do {
-            if let handle {
-                try handler(handle, session)
-            } else {
-                // TODO: This might actually be a critical enough error to justify keeping the bang.
-                let newHandle = try FileHandle(forUpdating: path)
-                handle = newHandle
-                try handler(newHandle, session)
-            }
+            let (handle, session) = try sessionReader.getFileHandleSync(
+                with: type
+            )
+
+            try handler(handle, session)
 
             completion?(nil)
         } catch let error {
             completion?(error)
         }
+    }
+
+    private func writeSessionSync(
+        session: ParraSession,
+        with handle: FileHandle
+    ) throws {
+        let data = try jsonEncoder.encode(session)
+
+        let offset = try handle.offset()
+        if offset > data.count {
+            // If the old file was longer, free the unneeded bytes
+            try handle.truncate(atOffset: UInt64(data.count))
+        }
+
+        try handle.seek(toOffset: 0)
+        try handle.write(contentsOf: data)
+        try handle.synchronize()
     }
 }
 

@@ -15,19 +15,34 @@ internal struct ParraSession: Codable {
 
     internal private(set) var userProperties: [String : AnyCodable]
 
-    internal init() {
-        let now = Date()
-
+    internal init(createdAt: Date) {
         self.sessionId = UUID().uuidString
-        self.createdAt = now
+        self.createdAt = createdAt
         self.endedAt = nil
         self.userProperties = [:]
     }
 
-    internal mutating func updateUserProperties(
-        _ newProperties: [String : AnyCodable]
-    ) {
-        userProperties = newProperties
+    internal func withUpdatedProperty(
+        key: String,
+        value: Any?
+    ) -> ParraSession {
+        var updatedSession = self
+
+        if let value {
+            updatedSession.userProperties[key] = AnyCodable(value)
+        } else {
+            updatedSession.userProperties.removeValue(forKey: key)
+        }
+
+        return updatedSession
+    }
+
+    internal func withUpdatedProperties(newProperties: [String : AnyCodable]) -> ParraSession {
+        var updatedSession = self
+
+        updatedSession.userProperties = newProperties
+
+        return updatedSession
     }
 
     internal mutating func end() {

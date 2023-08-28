@@ -10,6 +10,6 @@ import Foundation
 
 internal struct SessionStorageContext {
     let session: ParraSession
-    let path: URL
+    let sessionPath: URL
     let eventsPath: URL
 }

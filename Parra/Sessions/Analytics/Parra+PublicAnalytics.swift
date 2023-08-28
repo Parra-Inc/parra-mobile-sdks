@@ -139,8 +139,6 @@ public extension Parra {
         _ value: Any,
         forKey key: String
     ) {
-        Task {
-            await shared.sessionManager.setUserProperty(value, forKey: key)
-        }
+        shared.sessionManager.setUserProperty(value, forKey: key)
     }
 }

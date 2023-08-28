@@ -7,21 +7,27 @@
 
 import Foundation
 
-private let parraJsonEncoder: JSONEncoder = {
-    let encoder = JSONEncoder()
-    
-    encoder.keyEncodingStrategy = .convertToSnakeCase
-    encoder.dateEncodingStrategy = .iso8601
-
-#if DEBUG
-    encoder.outputFormatting = .prettyPrinted
-#endif
-    
-    return encoder
-}()
 
 extension JSONEncoder {
-    static var parraEncoder: JSONEncoder {
-        return parraJsonEncoder
-    }
+    static var parraEncoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        encoder.dateEncodingStrategy = .iso8601
+
+#if DEBUG
+        encoder.outputFormatting = .prettyPrinted
+#endif
+
+        return encoder
+    }()
+
+    static var spaceOptimizedEncoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = [.withoutEscapingSlashes]
+
+        return encoder
+    }()
 }

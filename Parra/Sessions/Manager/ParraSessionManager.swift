@@ -34,10 +34,6 @@ internal class ParraSessionManager {
     private let networkManager: ParraNetworkManager
     private var loggerOptions: ParraLoggerOptions
 
-    internal private(set) var currentSession: ParraSession?
-
-    private var userProperties: [String : AnyCodable] = [:]
-
     fileprivate let eventQueue: DispatchQueue
 
     private var sessionStorage: SessionStorage {
@@ -52,7 +48,6 @@ internal class ParraSessionManager {
         self.dataManager = dataManager
         self.networkManager = networkManager
         self.loggerOptions = loggerOptions
-        self.currentSession = ParraSession()
 
         // Set this in init after assigning the loggerOptions to ensure reads from the event queue couldn't
         // possibly start happening until after the initial write of these options is complete.
@@ -66,7 +61,9 @@ internal class ParraSessionManager {
     /// barriers. Since Parra's config state uses an actor, it is illegal to attempt
     /// to access its value synchronously. So the safest thing to do is pass a copy
     /// to this class every time it updates, and process the change on the event queue.
-    internal func updateLoggerOptions(loggerOptions: ParraLoggerOptions) {
+    internal func updateLoggerOptions(
+        loggerOptions: ParraLoggerOptions
+    ) {
         eventQueue.async {
             self.loggerOptions = loggerOptions
         }
@@ -92,7 +89,7 @@ internal class ParraSessionManager {
         let syncLogger = logger.scope()
 
         // Reset and update the cache for the current session so the most up to take data is uploaded.
-        await sessionStorage.recordSync()
+        await sessionStorage.recordSyncComplete()
 
         let sessionIterator = await sessionStorage.getAllSessions()
 
@@ -185,98 +182,15 @@ internal class ParraSessionManager {
     internal func setUserProperty(
         _ value: Any?,
         forKey key: String
-    ) async {
-//        await createSessionIfNotExists()
-//
-//        guard var currentSession else {
-//            return
-//        }
-//
-//        #if DEBUG
-//        logger.debug("Updating user property", [
-//            "key": key,
-//            "new value": String(describing: value),
-//            "old value": String(describing: self.userProperties[key])
-//        ])
-//        #endif
-//
-//        if let value {
-//            userProperties[key] = .init(value)
-//        } else {
-//            userProperties.removeValue(forKey: key)
-//        }
-//
-//        currentSession.updateUserProperties(userProperties)
-//
-//        do {
-//            try await sessionStorage.update(
-//                session: currentSession
-//            )
-//        } catch let error {
-//            // TODO: Log error to console DIRECTLY
-//        }
-//
-//        self.currentSession = currentSession
-    }
-
-    internal func resetSession() async {
-//        guard var currentSession else {
-//            return
-//        }
-//
-//        currentSession.end()
-//        currentSession.resetSentData()
-//
-//        do {
-//            try await sessionStorage.update(
-//                session: currentSession
-//            )
-//        } catch let error {
-//            // TODO: Log error to console DIRECTLY
-//        }
-//
-//        self.currentSession = nil
+    ) {
+        sessionStorage.writeUserPropertyUpdate(
+            key: key,
+            value: value
+        )
     }
 
     internal func endSession() async {
-//        guard var currentSession else {
-//            return
-//        }
-//
-//        currentSession.end()
-//
-//        do {
-//            try await sessionStorage.update(
-//                session: currentSession
-//            )
-//        } catch let error {
-//            // TODO: Log error to console DIRECTLY
-//        }
-//
-//        self.currentSession = nil
-    }
-
-    internal func createSessionIfNotExists() async {
-//        guard currentSession == nil else {
-//            return
-//        }
-//
-//        logger.debug("No session exists. Starting new session.")
-//
-//
-//        var currentSession = ParraSession()
-//
-//        currentSession.updateUserProperties(userProperties)
-//
-//        do {
-//            try await sessionStorage.update(
-//                session: currentSession
-//            )
-//        } catch let error {
-//            // TODO: Log error to console DIRECTLY
-//        }
-//
-//        self.currentSession = currentSession
+        await sessionStorage.endSession()
     }
 }
 

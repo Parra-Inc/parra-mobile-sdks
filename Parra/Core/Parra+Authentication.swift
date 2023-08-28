@@ -90,11 +90,10 @@ public extension Parra {
         await state.registerModule(module: self)
         await configState.updateState(newConfig)
         sessionManager.updateLoggerOptions(loggerOptions: newConfig.loggerOptions)
+        await sessionManager.initializeSessions()
         await networkManager.updateAuthenticationProvider(authenticationProvider)
         await state.initialize()
 
-        // Generally nothing that can generate events should happen before this call. Even logs
-        await sessionManager.createSessionIfNotExists()
         logger.info("Parra SDK Initialized")
 
         do {

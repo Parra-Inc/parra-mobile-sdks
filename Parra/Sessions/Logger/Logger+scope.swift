@@ -83,4 +83,6 @@ public extension Logger {
             throw error
         }
     }
+    
+    // TODO: static variants of these. All should also support returning from their blocks.
 }
