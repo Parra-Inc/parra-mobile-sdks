@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 fileprivate let logger = Logger(category: "Network Manager")
+fileprivate let debugLogger = Logger(bypassEventCreation: true, category: "Network Manager Debug")
 
 public typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
@@ -54,29 +55,31 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
     }
     
     internal func refreshAuthentication() async throws -> ParraCredential {
-        logger.debug("Performing reauthentication for Parra")
+        return try await logger.withScope { logger in
+            logger.debug("Performing reauthentication for Parra")
 
-        guard let authenticationProvider = authenticationProvider else {
-            throw ParraError.missingAuthentication
-        }
-        
-        do {
-            logger.info("Invoking Parra authentication provider")
+            guard let authenticationProvider = authenticationProvider else {
+                throw ParraError.missingAuthentication
+            }
 
-            let token = try await authenticationProvider()
-            let credential = ParraCredential(token: token)
-            
-            await dataManager.updateCredential(
-                credential: credential
-            )
+            do {
+                logger.info("Invoking Parra authentication provider")
 
-            logger.info("Reauthentication with Parra succeeded")
+                let token = try await authenticationProvider()
+                let credential = ParraCredential(token: token)
 
-            return credential
-        } catch let error {
-            let framing = "╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍"
-            logger.error("\n\(framing)\n\nReauthentication with Parra failed.\nInvoking the authProvider passed to Parra.initialize failed with error: \(error.localizedDescription)\n\n\(framing)")
-            throw ParraError.authenticationFailed(error.localizedDescription)
+                await dataManager.updateCredential(
+                    credential: credential
+                )
+
+                logger.info("Reauthentication with Parra succeeded")
+
+                return credential
+            } catch let error {
+                let framing = "╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍"
+                logger.error("\n\(framing)\n\nReauthentication with Parra failed.\nInvoking the authProvider passed to Parra.initialize failed with error: \(error.localizedDescription)\n\n\(framing)")
+                throw ParraError.authenticationFailed(error.localizedDescription)
+            }
         }
     }
 
@@ -207,12 +210,12 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
 
                     logger.trace("Received 400...499 status in response")
                     if data != EmptyJsonObjectData {
-                        logger.trace(prettyString)
+                        debugLogger.trace(prettyString)
                     }
 
                     if let body = request.httpBody, let bodyString = String(data: body, encoding: .utf8) {
-                        logger.trace("Request data was:")
-                        logger.trace(bodyString)
+                        debugLogger.trace("Request data was:")
+                        debugLogger.trace(bodyString)
                     }
                 }
 #endif
@@ -232,7 +235,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
 
                     logger.trace("Received 500...599 status in response")
                     if data != EmptyJsonObjectData {
-                        logger.trace(prettyString)
+                        debugLogger.trace(prettyString)
                     }
                 }
 #endif

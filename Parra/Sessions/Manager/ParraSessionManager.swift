@@ -101,6 +101,9 @@ internal class ParraSessionManager {
         var sessionResponse: ParraSessionsResponse?
 
         for await sessionUpload in sessionIterator {
+            syncLogger.trace("Session iterator produced session", [
+                "sessionId": String(describing: sessionUpload?.session.sessionId)
+            ])
             guard let sessionUpload else {
                 // The iterator can't return nil until the sequence is complete. If a the inner optional
                 // is nil, it indicates that we should skip this session for one reason or another. It may

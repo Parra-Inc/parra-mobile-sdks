@@ -12,7 +12,8 @@ import Foundation
 internal struct ParraSessionEvent: Codable {
     internal let createdAt: Date
     internal let name: String
-    internal let extra: AnyCodable
+    // Stop thinking this can be renamed. There is a server-side validation on this field name.
+    internal let metadata: AnyCodable
 
     internal init(
         createdAt: Date = .now,
@@ -58,7 +59,7 @@ internal struct ParraSessionEvent: Codable {
 
         self.name = StringManipulators.snakeCaseify(text: name)
         self.createdAt = createdAt
-        self.extra = AnyCodable.init(combinedExtra)
+        self.metadata = AnyCodable.init(combinedExtra)
     }
 }
 

@@ -32,32 +32,40 @@ internal struct ParraSessionGenerator: AsyncSequence, AsyncIteratorProtocol {
     }
 
     mutating func next() async -> Element? {
-        guard let nextSessionPath = directoryEnumerator.nextObject() as? String,
-              let nextSessionUrl = URL(string: nextSessionPath) else {
-            return nil
-        }
+        return await logger.withScope { logger in
+            guard let nextSessionUrl = directoryEnumerator.nextObject() as? URL else {
+                logger.debug("next session url couldn't be produced")
 
-        if !nextSessionUrl.hasDirectoryPath || nextSessionUrl.lastPathComponent != ParraSession.Constant.packageExtension {
-            // This is a case where we're indicating an invalid item was produced, and it is necessary to skip it.
-            return .some(.none)
-        }
+                return nil
+            }
 
-        do {
-            let (sessionPath, eventsPath) = SessionReader.sessionPaths(in: nextSessionUrl)
+            if !nextSessionUrl.hasDirectoryPath || nextSessionUrl.pathExtension != ParraSession.Constant.packageExtension {
+                logger.debug("session path was unexpected file type. skipping.")
+                // This is a case where we're indicating an invalid item was produced, and it is necessary to skip it.
+                return .some(.none)
+            }
 
-            let session = try readSessionSync(at: sessionPath)
-            let events = try await readEvents(at: eventsPath)
+            do {
+                logger.trace("combining data for session: \(nextSessionUrl.lastPathComponent)")
 
-            return ParraSessionUpload(
-                session: session,
-                events: events
-            )
-        } catch let error {
-            logger.error("Error creating upload payload for session", error, [
-                "path": nextSessionUrl.lastComponents()
-            ])
+                let (sessionPath, eventsPath) = SessionReader.sessionPaths(in: nextSessionUrl)
 
-            return .some(.none)
+                let session = try readSessionSync(at: sessionPath)
+                let events = try await readEvents(at: eventsPath)
+
+                logger.trace("finished reading session and events")
+
+                return ParraSessionUpload(
+                    session: session,
+                    events: events
+                )
+            } catch let error {
+                logger.error("Error creating upload payload for session", error, [
+                    "path": nextSessionUrl.lastComponents()
+                ])
+
+                return .some(.none)
+            }
         }
     }
 
