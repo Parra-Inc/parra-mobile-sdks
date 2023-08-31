@@ -203,7 +203,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     }
 
     internal func synchronizeData() async throws {
-        guard let response = await sessionManager.synchronizeData() else {
+        guard let response = try await sessionManager.synchronizeData() else {
             return
         }
 

@@ -51,19 +51,26 @@ extension ParraSessionManager {
     ) {
         // Context:
         // Module -> file -> context -> subcontext -> ... -> subcontext -> call site module/file/function
-        let appleLogger = os.Logger(
-            subsystem: processedLogData.context?.module ?? "unknown module",
-            category: processedLogData.context?.fileName ?? "unknown file"
-        )
+//        let appleLogger = os.Logger(
+//            subsystem: processedLogData.context?.module ?? "unknown module",
+//            category: processedLogData.context?.fileName ?? "unknown file"
+//        )
 
         if let categories = processedLogData.context?.categories {
             let catsString = categories.joined(separator: " -> ")
 
-            os_log(.info, "[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
+            let log = OSLog(
+                subsystem: processedLogData.callSiteModule,
+                category: .dynamicTracing
+            )
+
+
+
+            os_log(processedLogData.level.osLogType, log: log, "[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
 
 //            appleLogger.info("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
         } else {
-            os_log(.info, "[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
+            os_log(processedLogData.level.osLogType, "[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
 
 //            appleLogger.info("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
         }

@@ -8,6 +8,10 @@
           {
             "key" : "PARRA_LOG_LEVEL",
             "value" : "trace"
+          },
+          {
+            "key" : "PARRA_DEBUG_EVENT_LOGGING",
+            "value" : "1"
           }
         ],
         "threadSanitizerEnabled" : true

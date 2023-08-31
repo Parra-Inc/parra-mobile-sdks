@@ -13,6 +13,7 @@ import Foundation
 public struct ParraLoggerOptions {
     public enum Environment {
         public static let minimumLogLevelOverride = "PARRA_LOG_LEVEL"
+        public static let eventDebugLoggingEnabled = "PARRA_DEBUG_EVENT_LOGGING"
     }
 
     public static let `default` = ParraLoggerOptions(

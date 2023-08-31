@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os
 
 public enum ParraLogLevel: Int, Comparable, ParraLogStringConvertible {
     case trace  = 1
@@ -89,6 +90,19 @@ public enum ParraLogLevel: Int, Comparable, ParraLogStringConvertible {
             return "error"
         case .fatal:
             return "fatal"
+        }
+    }
+
+    var osLogType: os.OSLogType {
+        switch self {
+        case .trace, .debug:
+            return .debug
+        case .info:
+            return .info
+        case .warn, .error:
+            return .error
+        case .fatal:
+            return .fault
         }
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 public extension Logger {
 
-    ///     /// <#Description#>
+    /// <#Description#>
     /// - Parameters:
     ///   - name: <#name description#>
     func scope(

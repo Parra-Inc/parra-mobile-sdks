@@ -17,6 +17,9 @@ import Foundation
 /// used to determine if the environment is `debug` or `production`.
 /// This option is exposed in case you have additional schemes besides DEBUG
 /// and RELEASE and want to customize your log output in these cases.
+/// If the ``ParraLoggerOptions.Environment.eventDebugLoggingEnabled`` environmental
+/// variable is set, events will be written to both the console and the user's session
+/// regardless of this configuration.
 public enum ParraLoggerEnvironment {
     public static let `default` = ParraLoggerEnvironment.automatic
 
@@ -25,7 +28,20 @@ public enum ParraLoggerEnvironment {
 
     case automatic
 
-    internal var hasDebugBehavior: Bool {
+    internal static var eventDebugLoggingOverrideEnabled: Bool = {
+        let envVar = ParraLoggerOptions.Environment.eventDebugLoggingEnabled
+        
+        if let rawDebugLoggingEnabled = ProcessInfo.processInfo.environment[envVar],
+           let debugLoggingEnabledNumber = Int(rawDebugLoggingEnabled),
+           debugLoggingEnabledNumber > 0 {
+
+            return true
+        }
+
+        return false
+    }()
+
+    internal var hasConsoleBehavior: Bool {
         switch self {
         case .debug:
             return true

@@ -77,21 +77,23 @@ internal class ParraSessionManager {
         // Sync if there are any sessions that aren't still in progress, or if the session
         // in progress has new events to report.
         if await sessionStorage.hasCompletedSessions() {
+            logger.debug("has completed sessions to sync")
             return true
         }
 
         // TODO: Change the short circuit order here depending on which ends up being cheaper.
 
-        return await sessionStorage.hasNewEvents()
+        let hasNewEvents = await sessionStorage.hasNewEvents()
+
+        logger.debug("has new events to sync: \(hasNewEvents)")
+
+        return hasNewEvents
     }
 
-    func synchronizeData() async -> ParraSessionsResponse? {
+    func synchronizeData() async throws -> ParraSessionsResponse? {
         let syncLogger = logger.scope()
 
-        // Reset and update the cache for the current session so the most up to take data is uploaded.
-        await sessionStorage.recordSyncComplete()
-
-        let sessionIterator = await sessionStorage.getAllSessions()
+        let sessionIterator = try await sessionStorage.getAllSessions()
 
         var uploadedSessionIds = Set<String>()
         // It's possible that multiple sessions that are uploaded could receive a response indicating that polling
@@ -99,6 +101,13 @@ internal class ParraSessionManager {
         var sessionResponse: ParraSessionsResponse?
 
         for await sessionUpload in sessionIterator {
+            guard let sessionUpload else {
+                // The iterator can't return nil until the sequence is complete. If a the inner optional
+                // is nil, it indicates that we should skip this session for one reason or another. It may
+                // have been corrupted, or an incorrect file type made it into the session directory, etc.
+                continue
+            }
+
             let session = sessionUpload.session
 
             do {
@@ -128,7 +137,9 @@ internal class ParraSessionManager {
             }
         }
 
-        await sessionStorage.deleteCompletedSessions(with: uploadedSessionIds)
+        await sessionStorage.deleteSynchronizedData(
+            for: uploadedSessionIds
+        )
 
         return sessionResponse
     }
@@ -143,6 +154,7 @@ internal class ParraSessionManager {
         eventQueue.async { [self] in
             writeEventSync(
                 wrappedEvent: wrappedEvent,
+                target: .automatic,
                 callSiteContext: callSiteContext
             )
         }
@@ -150,20 +162,44 @@ internal class ParraSessionManager {
 
     internal func writeEventSync(
         wrappedEvent: ParraWrappedEvent,
+        target: ParraSessionEventTarget,
         callSiteContext: ParraLoggerCallSiteContext
     ) {
+        let environment = loggerOptions.environment
         // When normal behavior isn't bypassed, debug behavior is to send logs to the console.
         // Production behavior is to write events.
-        if loggerOptions.environment.hasDebugBehavior {
+
+        let writeToConsole = { [self] in
             writeEventToConsoleSync(
                 wrappedEvent: wrappedEvent,
                 with: loggerOptions.consoleFormatOptions
             )
-        } else {
+        }
+
+        let writeToSession = { [self] in
             writeEventToSessionSync(
                 wrappedEvent: wrappedEvent,
                 callSiteContext: callSiteContext
             )
+        }
+
+        switch target {
+        case .all:
+            writeToConsole()
+            writeToSession()
+        case .automatic:
+            if environment.hasConsoleBehavior {
+                writeToConsole()
+            } else {
+                writeToSession()
+            }
+        case .console:
+            writeToConsole()
+        case .session:
+            writeToSession()
+        case .none:
+            // The event is explicitly being skipped.
+            break
         }
     }
 
@@ -243,23 +279,40 @@ extension ParraSessionManager: ParraLoggerBackend {
             logData: logData
         )
 
-        if bypassEventCreation {
-            if loggerOptions.environment.hasDebugBehavior {
-                writeLogEventToConsoleSync(
-                    processedLogData: processedLogData,
-                    with: loggerOptions.consoleFormatOptions
-                )
-            }
-        } else {
-            let wrappedEvent = ParraWrappedEvent.internalEvent(
-                event: .log(logData: processedLogData)
-            )
+        let wrappedEvent = ParraWrappedEvent.internalEvent(
+            event: .log(logData: processedLogData)
+        )
 
-            writeEventSync(
-                wrappedEvent: wrappedEvent,
-                // Special case. Call site context is that of the origin of the log.
-                callSiteContext: logData.callSiteContext
-            )
+        // 1. The flag to bypass event creation takes precedence, since this is used in cases like logs
+        // within the logging infrastructure that could cause recursion in error cases. If it is set
+        // we send logs to the console instead of the session in DEBUG mode. Since the automatic behavior
+        // in RELEASE is to write to sessions, we skip writing entirely in this case.
+        // TODO: This will eventually need to be addressed to help catch errors in this part of our code.
+        //
+        // 2. The next check is for the event debug logging override flag, which is set by any environmental
+        // variable. This is used to allow us to force writing to both sessions and the consoles during
+        // development for testing purposes.
+        //
+        // 3. Fall back on the default behavior that takes scheme and user preferences into consideration.
+
+        let target: ParraSessionEventTarget
+        if bypassEventCreation {
+#if DEBUG
+            target = .console
+#else
+            target = .none
+#endif
+        } else if ParraLoggerEnvironment.eventDebugLoggingOverrideEnabled {
+            target = .all
+        } else {
+            target = .automatic
         }
+
+        writeEventSync(
+            wrappedEvent: wrappedEvent,
+            target: target,
+            // Special case. Call site context is that of the origin of the log.
+            callSiteContext: logData.callSiteContext
+        )
     }
 }
