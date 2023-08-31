@@ -159,7 +159,7 @@ internal class SessionStorage {
 
     // MARK: Retrieving Sessions
 
-    internal func getAllSessions() async throws -> ParraSessionGenerator {
+    internal func getAllSessions() async throws -> ParraSessionUploadGenerator {
         return try await withCheckedThrowingContinuation { continuation in
             getAllSessions { result in
                 continuation.resume(with: result)
@@ -168,7 +168,7 @@ internal class SessionStorage {
     }
 
     private func getAllSessions(
-        completion: @escaping (Result<ParraSessionGenerator, Error>) -> Void
+        completion: @escaping (Result<ParraSessionUploadGenerator, Error>) -> Void
     ) {
         storageQueue.async {
             do {

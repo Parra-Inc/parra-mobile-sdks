@@ -87,40 +87,14 @@ internal class SessionReader {
         return (newHandle, context.session)
     }
 
-    internal func generatePreviousSessionsSync() throws -> ParraSessionGenerator {
-        return try logger.withScope { logger in
-            logger.trace("Creating session generator")
+    internal func generatePreviousSessionsSync() throws -> ParraSessionUploadGenerator {
+        logger.trace("Creating session generator")
 
-            let fileManager = FileManager.default
-            let rootSessionsDirectory = SessionReader.rootSessionsDirectory
-
-            guard let directoryEnumerator = fileManager.enumerator(
-                at: rootSessionsDirectory,
-                includingPropertiesForKeys: [],
-                options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
-            ) else {
-                throw ParraError.fileSystem(
-                    path: rootSessionsDirectory,
-                    message: "Failed to create file enumerator"
-                )
-            }
-
-            let currentSessionDirectory: URL?
-            if let sessionId = currentSessionContext?.session.sessionId {
-                currentSessionDirectory = sessionDirectory(
-                    for: sessionId,
-                    in: rootSessionsDirectory
-                )
-            } else {
-                currentSessionDirectory = nil
-            }
-
-            return ParraSessionGenerator(
-                directoryEnumerator: directoryEnumerator,
-                jsonDecoder: jsonDecoder,
-                currentSessionDirectory: currentSessionDirectory
-            )
-        }
+        return try ParraSessionUploadGenerator(
+            forSessionsAt: SessionReader.rootSessionsDirectory,
+            jsonDecoder: jsonDecoder,
+            fileManager: fileManager
+        )
     }
 
     internal func closeCurrentSessionSync() throws {
