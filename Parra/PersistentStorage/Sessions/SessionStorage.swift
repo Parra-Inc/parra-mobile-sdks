@@ -68,6 +68,12 @@ internal class SessionStorage {
     internal func initializeSessions() async {
         logger.debug("initializing at path: \(sessionReader.basePath.safeNonEncodedPath())")
 
+        // Attempting to access the current session will force the session reader to load
+        // or create one, if one doesn't exist. Since this is only called during app launch,
+        // it will always create a new session, which we will turn around and persist immediately,
+        // as this is a requirement for the session to be considered initialized. If this method
+        // is mistakenly called multiple times, this will also ensure that the existing session
+        // will be used.
         await withCheckedContinuation { continuation in
             withCurrentSessionHandle { handle, session in
                 try self.writeSessionSync(
@@ -153,16 +159,26 @@ internal class SessionStorage {
 
     // MARK: Retrieving Sessions
 
-    internal func getAllSessions() async -> ParraSessionGenerator {
-        return await withCheckedContinuation { continuation in
-            getAllSessions {
-                continuation.resume(returning: $0)
+    internal func getAllSessions() async throws -> ParraSessionGenerator {
+        return try await withCheckedThrowingContinuation { continuation in
+            getAllSessions { result in
+                continuation.resume(with: result)
             }
         }
     }
 
-    private func getAllSessions(completion: (ParraSessionGenerator) -> Void) {
-        completion(ParraSessionGenerator(paths: []))
+    private func getAllSessions(
+        completion: @escaping (Result<ParraSessionGenerator, Error>) -> Void
+    ) {
+        storageQueue.async {
+            do {
+                let generator = try self.sessionReader.generatePreviousSessionsSync()
+
+                completion(.success(generator))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }
     }
 
     /// Whether or not there are new events on the session since the last time ``recordSyncComplete`` was called.
@@ -175,14 +191,36 @@ internal class SessionStorage {
         }
     }
 
-    internal func recordSyncComplete() async {
+    private func hasNewEvents(completion: @escaping (Bool) -> Void) {
+        withCurrentSessionEventHandle { handle, session in
+            let currentOffset = try handle.offset()
+            let lastSyncOffset = session.eventsHandleOffsetAtSync ?? 0
 
+            // If there was a recorded offset at the time of a previous sync, there are new events if
+            // the current offset has increased. If an offset wasn't set, a sync hasn't happened for this
+            // session yet, and should occur.
+            completion(currentOffset > lastSyncOffset)
+        }
     }
 
-    private func hasNewEvents(completion: (Bool) -> Void) {
-        // TODO: This needs to track what the most recent session/event was when it is accessed, to know
-        // if more events have happened or the session changed since that access.
-        completion(false)
+    /// Store a marker to indicate that a sync just took place, so that events before that point
+    /// can be purged.
+    private func recordSyncComplete(completion: @escaping () -> Void) {
+        withCurrentSessionHandle { [self] sessionHandle, session in
+            withHandleSync(for: .events) { eventsHandle, _ in
+                // Store the current offset of the file handle that writes events on the session object.
+                // This will be used last to know if more events have been written since this point.
+                let offset = try eventsHandle.offset()
+                let updatedSession = session.withUpdatedEventsHandleOffset(
+                    offset: offset
+                )
+
+                try self.writeSessionSync(
+                    session: updatedSession,
+                    with: sessionHandle
+                )
+            }
+        }
     }
 
     /// Whether or not there are sessions stored that have already finished. This implies that
@@ -212,10 +250,14 @@ internal class SessionStorage {
     /// Deletes any data associated with the sessions with the provided ids. This includes
     /// caches in memory and on disk. The current in progress session will not be deleted,
     /// even if its id is provided.
-    internal func deleteCompletedSessions(with sessionIds: Set<String>) async {
-        // TODO: Completed implies sessions other than the current session. Enforce this.
-    }
+    internal func deleteSynchronizedData(for sessionIds: Set<String>) async {
+        // TODO: Should fully delete all session artifacts for all sessions other than the current one.
+        // TODO: For the current session, should delete all events that have been sync'd and update the persisted offset. Using the following:
 
+//        // Reset and update the cache for the current session so the most up to take data is uploaded.
+//        await sessionStorage.recordSyncComplete()
+
+    }
 
     // MARK: Helpers
 
@@ -252,8 +294,10 @@ internal class SessionStorage {
     ) {
         // TODO: Needs logic to see if the error is related to the file handle being closed, and auto attempt to reopen it.
         do {
-            let (handle, session) = try sessionReader.getFileHandleSync(
-                with: type
+            let context = try sessionReader.loadOrCreateSessionSync()
+            let (handle, session) = try sessionReader.retreiveCurrentSessionSync(
+                with: type,
+                from: context
             )
 
             try handler(handle, session)

@@ -8,31 +8,96 @@
 
 import Foundation
 
-internal struct ParraSessionGenerator: AsyncSequence, AsyncIteratorProtocol {
-    typealias Element = ParraSessionUpload
+fileprivate let logger = Logger(category: "Session Upload Generator")
 
-    private var pathIterator: IndexingIterator<[URL]>
+internal struct ParraSessionGenerator: AsyncSequence, AsyncIteratorProtocol {
+    // Type is optional. We have to be able to filter out elements while doing the lazy enumeration
+    // so we need a way to indicate to the caller that the item produced by a given iteration can
+    // be skipped, whichout returning nil and ending the Sequence. We use a double Optional for this.
+    typealias Element = ParraSessionUpload?
+
+    private let directoryEnumerator: FileManager.DirectoryEnumerator
+    private let jsonDecoder: JSONDecoder
+    private let currentSessionDirectory: URL?
     private let fileManager = FileManager.default
 
-    internal init(paths: [URL]) {
-        pathIterator = paths.makeIterator()
+    internal init(
+        directoryEnumerator: FileManager.DirectoryEnumerator,
+        jsonDecoder: JSONDecoder,
+        currentSessionDirectory: URL?
+    ) {
+        self.directoryEnumerator = directoryEnumerator
+        self.jsonDecoder = jsonDecoder
+        self.currentSessionDirectory = currentSessionDirectory
     }
 
     mutating func next() async -> Element? {
-        guard let nextPath = pathIterator.next() else {
+        guard let nextSessionPath = directoryEnumerator.nextObject() as? String,
+              let nextSessionUrl = URL(string: nextSessionPath) else {
             return nil
         }
 
-        //        if current < 0 {
-        //            return nil
-        //        } else {
-        //            return current
-        //        }
+        if !nextSessionUrl.hasDirectoryPath || nextSessionUrl.lastPathComponent != ParraSession.Constant.packageExtension {
+            // This is a case where we're indicating an invalid item was produced, and it is necessary to skip it.
+            return .some(.none)
+        }
 
-        return nil
+        do {
+            let (sessionPath, eventsPath) = SessionReader.sessionPaths(in: nextSessionUrl)
+
+            let session = try readSessionSync(at: sessionPath)
+            let events = try await readEvents(at: eventsPath)
+
+            return ParraSessionUpload(
+                session: session,
+                events: events
+            )
+        } catch let error {
+            logger.error("Error creating upload payload for session", error, [
+                "path": nextSessionUrl.lastComponents()
+            ])
+
+            return .some(.none)
+        }
     }
 
     func makeAsyncIterator() -> ParraSessionGenerator {
         self
+    }
+
+    private func readSessionSync(at path: URL) throws -> ParraSession {
+        let fileHandle = try FileHandle(forReadingFrom: path)
+
+        guard let sessionData = try fileHandle.readToEnd() else {
+            throw ParraError.fileSystem(
+                path: path,
+                message: "Couldn't read session data"
+            )
+        }
+
+        try fileHandle.close()
+
+        return try jsonDecoder.decode(ParraSession.self, from: sessionData)
+    }
+
+    private func readEvents(at path: URL) async throws -> [ParraSessionEvent] {
+        var events = [ParraSessionEvent]()
+        let fileHandle = try FileHandle(forReadingFrom: path)
+
+        for try await eventString in fileHandle.bytes.lines {
+            // As every row is parsed, place it in an events array. This will save us have two copies
+            // of every event in memory at the same time.
+            try autoreleasepool {
+                if let eventData = eventString.data(using: .utf8) {
+                    events.append(
+                        try jsonDecoder.decode(ParraSessionEvent.self, from: eventData)
+                    )
+                }
+            }
+        }
+
+        try fileHandle.close()
+
+        return events
     }
 }

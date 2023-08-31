@@ -26,6 +26,12 @@ internal class SessionReader {
     private var sessionHandle: FileHandle?
     private var eventsHandle: FileHandle?
 
+    private static let rootSessionsDirectory: URL = {
+        return ParraDataManager.Path.parraDirectory
+            .safeAppendDirectory(Parra.persistentStorageFolder())
+            .safeAppendDirectory("sessions")
+    }()
+
     internal init(
         basePath: URL,
         jsonDecoder: JSONDecoder
@@ -34,14 +40,13 @@ internal class SessionReader {
         self.jsonDecoder = jsonDecoder
     }
 
-    internal func getFileHandleSync(
-        with type: FileHandleType
+    internal func retreiveCurrentSessionSync(
+        with type: FileHandleType,
+        from context: SessionStorageContext
     ) throws -> (
         handle: FileHandle,
         session: ParraSession
     ) {
-        let context = try loadOrCreateSessionSync()
-
         let handle: FileHandle?
         let path: URL
         switch type {
@@ -52,8 +57,6 @@ internal class SessionReader {
             handle = eventsHandle
             path = context.eventsPath
         }
-
-        // TODO: Instead of requiring SessionStorage to always seek to the end of the events file before writing, could this auto perfom the seek whenever a new handle is created. Since an existing one will maintain its previous position.
 
         if let handle {
             // It is possible that we could still have a reference to the file handle, but its descriptor has
@@ -74,6 +77,9 @@ internal class SessionReader {
         case .session:
             sessionHandle = newHandle
         case .events:
+            // Unlike the handle that writes to sessions, the events handle will always be used to append to
+            // the end of the file. So if we're creating a new one, we can seek to the end of the file now
+            // to prevent this from being necessary each time it is accessed.
             try newHandle.seekToEnd()
             eventsHandle = newHandle
         }
@@ -81,11 +87,33 @@ internal class SessionReader {
         return (newHandle, context.session)
     }
 
-    private func isHandleValid(handle: FileHandle) -> Bool {
-        let descriptor = handle.fileDescriptor
+    internal func generatePreviousSessionsSync() throws -> ParraSessionGenerator {
+        let fileManager = FileManager.default
 
-        // Cheapest way to check if a descriptor is still valid, without attempting to read/write to it.
-        return fcntl(descriptor, F_GETFL) != -1 || errno != EBADF
+        let rootSessionsDirectory = SessionReader.rootSessionsDirectory
+        guard let directoryEnumerator = fileManager.enumerator(
+            at: rootSessionsDirectory,
+            includingPropertiesForKeys: [.isDirectoryKey], 
+            options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
+        ) else {
+            throw ParraError.fileSystem(path: rootSessionsDirectory, message: "Failed to create file enumerator")
+        }
+
+        let currentSessionDirectory: URL?
+        if let sessionId = currentSessionContext?.session.sessionId {
+            currentSessionDirectory = sessionDirectory(
+                for: sessionId,
+                in: rootSessionsDirectory
+            )
+        } else {
+            currentSessionDirectory = nil
+        }
+
+        return ParraSessionGenerator(
+            directoryEnumerator: directoryEnumerator,
+            jsonDecoder: jsonDecoder,
+            currentSessionDirectory: currentSessionDirectory
+        )
     }
 
     internal func closeCurrentSessionSync() throws {
@@ -96,7 +124,7 @@ internal class SessionReader {
     }
 
     @discardableResult
-    private func loadOrCreateSessionSync() throws -> SessionStorageContext {
+    internal func loadOrCreateSessionSync() throws -> SessionStorageContext {
         // 1. If session context exists in memory, return it.
         // 2. Create the paths where the new session is to be stored, using time stamps.
         // 3. Check if the files already somehow exist. If they exist and are valid, use them.
@@ -110,13 +138,15 @@ internal class SessionReader {
         let fileManager = FileManager.default
 
         let nextSessionStart = Date.now
-        let baseDirectory = ParraDataManager.Path.parraDirectory
-            .safeAppendDirectory(Parra.persistentStorageFolder())
-            .safeAppendDirectory("sessions")
 
-        let (sessionPath, eventsPath) = sessionPaths(
-            for: nextSessionStart,
-            in: baseDirectory
+        let nextSessionId = ParraSession.timestampId(from: nextSessionStart)
+        let sessionDir = sessionDirectory(
+            for: nextSessionId,
+            in: SessionReader.rootSessionsDirectory
+        )
+
+        let (sessionPath, eventsPath) = SessionReader.sessionPaths(
+            in: sessionDir
         )
 
         var existingSession: ParraSession?
@@ -149,7 +179,7 @@ internal class SessionReader {
             return existingSessionContext
         }
 
-        try fileManager.safeCreateDirectory(at: baseDirectory)
+        try fileManager.safeCreateDirectory(at: sessionDir)
         try fileManager.safeCreateFile(at: sessionPath)
         try fileManager.safeCreateFile(at: eventsPath)
 
@@ -166,28 +196,43 @@ internal class SessionReader {
         return newSessionContext
     }
 
-    private func sessionPaths(
-        for date: Date,
+    // MARK: Private methods
+
+    private func isHandleValid(handle: FileHandle) -> Bool {
+        let descriptor = handle.fileDescriptor
+
+        // Cheapest way to check if a descriptor is still valid, without attempting to read/write to it.
+        return fcntl(descriptor, F_GETFL) != -1 || errno != EBADF
+    }
+
+    private func sessionDirectory(
+        for id: String,
         in baseDirectory: URL
+    ) -> URL {
+        // TODO: Use FileWrapper to make it so we can actually open these as bundles.
+        // Note: Using a file wrapper may require changing the file enumerator to filter by isPackage
+        // instead of isDirectory.
+        return baseDirectory.safeAppendDirectory("\(id).\(ParraSession.Constant.packageExtension)")
+    }
+
+    internal static func sessionPaths(
+        in sessionDirectory: URL
     ) -> (
         sessionPath: URL,
         eventsPath: URL
     ) {
-        let timestamp = String(format: "%.0f", date.timeIntervalSince1970 * 1000000)
-        let baseFileName = "session_\(timestamp)"
-
         // Just for conveinence while debugging to be able to open these files in an editor.
 #if DEBUG
-        let sessionFileName = "\(baseFileName).json"
-        let eventsFileName = "\(baseFileName)_events.tsv"
+        let sessionFileName = "session.json"
+        let eventsFileName = "events.tsv"
 #else
-        let sessionFileName = "\(baseFileName)"
-        let eventsFileName = "\(baseFileName)_events"
+        let sessionFileName = "session"
+        let eventsFileName = "events"
 #endif
 
         return (
-            sessionPath: baseDirectory.safeAppendPathComponent(sessionFileName),
-            eventsPath: baseDirectory.safeAppendPathComponent(eventsFileName)
+            sessionPath: sessionDirectory.safeAppendPathComponent(sessionFileName),
+            eventsPath: sessionDirectory.safeAppendPathComponent(eventsFileName)
         )
     }
 }
