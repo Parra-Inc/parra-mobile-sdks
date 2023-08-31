@@ -17,7 +17,8 @@ public extension Logger {
         named name: String? = nil,
         _ function: String = #function
     ) -> Logger {
-        return scope(named: name, extra: [:], function)
+        // TODO: Maybe capture call site info here and use it to add scope entered/exited logs
+        return scope(named: name, extra: nil, function)
     }
 
     /// - Parameters:
@@ -25,7 +26,7 @@ public extension Logger {
     ///   - extra: <#extra description#>
     func scope(
         named name: String? = nil,
-        extra: [String : Any],
+        extra: [String : Any]?,
         _ function: String = #function
     ) -> Logger {
         let subCategories: [String]
@@ -46,19 +47,20 @@ public extension Logger {
     }
 
     ///
+    ///     ///
     /// <#Description#>
     /// - Parameters:
     ///   - name: <#name description#>
     ///   - extra: <#extra description#>
     ///   - block: <#block description#>
-    func withScope(
+    func withScope<T>(
         named name: String? = nil,
-        block: (_ logger: Logger) throws -> Void,
+        block: (_ logger: Logger) throws -> T,
         _ function: String = #function
-    ) rethrows {
-        try withScope(
+    ) throws -> T {
+        return try withScope(
             named: name,
-            extra: [:],
+            extra: nil,
             block: block,
             function
         )
@@ -68,21 +70,91 @@ public extension Logger {
     ///   - name: <#name description#>
     ///   - extra: <#extra description#>
     ///   - block: <#block description#>
-    func withScope(
+    func withScope<T>(
         named name: String? = nil,
-        extra: [String : Any],
-        block: (_ logger: Logger) throws -> Void,
+        extra: [String : Any]?,
+        block: (_ logger: Logger) throws -> T,
         _ function: String = #function
-    ) rethrows {
+    ) rethrows -> T {
         let scoped = scope(named: name, extra: extra, function)
 
         do {
-            try block(scoped)
+            return try block(scoped)
         } catch let error {
             scoped.error(error)
             throw error
         }
     }
-    
+
+
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - extra: <#extra description#>
+    ///   - block: <#block description#>
+    func withScope<T>(
+        named name: String? = nil,
+        block: (_ logger: Logger) async throws -> T,
+        _ function: String = #function
+    ) async throws -> T {
+        return try await withScope(
+            named: name,
+            extra: nil,
+            block: block,
+            function
+        )
+    }
+
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - extra: <#extra description#>
+    ///   - block: <#block description#>
+    func withScope<T>(
+        named name: String? = nil,
+        extra: [String : Any]?,
+        block: (_ logger: Logger) async throws -> T,
+        _ function: String = #function
+    ) async rethrows -> T {
+        let scoped = scope(named: name, extra: extra, function)
+
+        do {
+            return try await block(scoped)
+        } catch let error {
+            scoped.error(error)
+            throw error
+        }
+    }
+
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - extra: <#extra description#>
+    ///   - block: <#block description#>
+    func withScope<T>(
+        named name: String? = nil,
+        block: (_ logger: Logger) async -> T,
+        _ function: String = #function
+    ) async -> T {
+        return await withScope(
+            named: name,
+            extra: nil,
+            block: block,
+            function
+        )
+    }
+
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - extra: <#extra description#>
+    ///   - block: <#block description#>
+    func withScope<T>(
+        named name: String? = nil,
+        extra: [String : Any]?,
+        block: (_ logger: Logger) async -> T,
+        _ function: String = #function
+    ) async -> T {
+        let scoped = scope(named: name, extra: extra, function)
+
+        return await block(scoped)
+    }
+
     // TODO: static variants of these. All should also support returning from their blocks.
 }
