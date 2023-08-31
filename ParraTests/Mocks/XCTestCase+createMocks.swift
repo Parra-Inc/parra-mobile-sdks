@@ -75,7 +75,11 @@ extension XCTestCase {
         applicationId: String = UUID().uuidString,
         authenticationProvider: ParraAuthenticationProviderFunction? = nil
     ) async -> MockParraNetworkManager {
-        let dataManager = MockDataManager()
+        let dataManager = MockDataManager(
+            jsonEncoder: .parraEncoder,
+            jsonDecoder: .parraDecoder,
+            fileManager: .default
+        )
         let urlSession = MockURLSession(testCase: self)
         let configState = ParraConfigState.initialized(
             tenantId: tenantId,
@@ -86,7 +90,9 @@ extension XCTestCase {
             state: state,
             configState: configState,
             dataManager: dataManager,
-            urlSession: urlSession
+            urlSession: urlSession,
+            jsonEncoder: .parraEncoder,
+            jsonDecoder: .parraDecoder
         )
 
         if await state.isInitialized() {

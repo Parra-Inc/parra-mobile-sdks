@@ -15,7 +15,8 @@ internal class ParraFeedbackDataManager {
     internal init(
         parra: Parra,
         jsonEncoder: JSONEncoder,
-        jsonDecoder: JSONDecoder
+        jsonDecoder: JSONDecoder,
+        fileManager: FileManager
     ) {
         self.parra = parra
 
@@ -26,7 +27,8 @@ internal class ParraFeedbackDataManager {
             dataStorageMedium: .fileSystem(
                 folder: completedCardDataFolder,
                 fileName: completedCardDataFileName,
-                storeItemsSeparately: false
+                storeItemsSeparately: false,
+                fileManager: fileManager
             ),
             jsonEncoder: jsonEncoder,
             jsonDecoder: jsonDecoder

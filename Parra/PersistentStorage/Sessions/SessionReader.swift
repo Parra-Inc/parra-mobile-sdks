@@ -16,6 +16,7 @@ internal class SessionReader {
     internal let basePath: URL
 
     private let jsonDecoder: JSONDecoder
+    private let fileManager: FileManager
 
     /// This should never be used directly outside this class. From the outside, a session can and never
     /// should be nil. The idea is that session reads/writes will always happen on a serial queue, that
@@ -34,10 +35,12 @@ internal class SessionReader {
 
     internal init(
         basePath: URL,
-        jsonDecoder: JSONDecoder
+        jsonDecoder: JSONDecoder,
+        fileManager: FileManager
     ) {
         self.basePath = basePath
         self.jsonDecoder = jsonDecoder
+        self.fileManager = fileManager
     }
 
     internal func retreiveCurrentSessionSync(
@@ -115,8 +118,6 @@ internal class SessionReader {
         if let currentSessionContext {
             return currentSessionContext
         }
-
-        let fileManager = FileManager.default
 
         let nextSessionStart = Date.now
 

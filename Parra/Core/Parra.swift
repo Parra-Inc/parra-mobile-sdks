@@ -22,7 +22,8 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
             dataManager: ParraFeedbackDataManager(
                 parra: self,
                 jsonEncoder: Parra.jsonCoding.jsonEncoder,
-                jsonDecoder: Parra.jsonCoding.jsonDecoder
+                jsonDecoder: Parra.jsonCoding.jsonDecoder,
+                fileManager: Parra.fileManager
             )
         )
 
@@ -41,6 +42,10 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
             jsonEncoder: JSONEncoder.parraEncoder,
             jsonDecoder: JSONDecoder.parraDecoder
         )
+    }()
+
+    internal private(set) static var fileManager: FileManager = {
+        return .default
     }()
 
     internal static var shared: Parra! = {
@@ -68,7 +73,8 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         let urlSession = URLSession(configuration: sessionConfig)
         let dataManager = ParraDataManager(
             jsonEncoder: .spaceOptimizedEncoder,
-            jsonDecoder: defaultJsonDecoder
+            jsonDecoder: defaultJsonDecoder,
+            fileManager: Parra.fileManager
         )
 
         let networkManager = ParraNetworkManager(

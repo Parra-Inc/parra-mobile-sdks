@@ -20,7 +20,8 @@ class FileSystemStorageTests: XCTestCase {
         fileSystemStorage = FileSystemStorage(
             baseUrl: baseUrl,
             jsonEncoder: JSONEncoder(),
-            jsonDecoder: JSONDecoder()
+            jsonDecoder: JSONDecoder(),
+            fileManager: fileManager
         )
     }
     

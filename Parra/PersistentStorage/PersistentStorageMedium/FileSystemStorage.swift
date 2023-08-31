@@ -10,19 +10,21 @@ import Foundation
 fileprivate let logger = Logger(category: "File system storage medium")
 
 internal actor FileSystemStorage: PersistentStorageMedium {
-    private let fileManager = FileManager.default
+    private let baseUrl: URL
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
-    private let baseUrl: URL
-    
+    private let fileManager: FileManager
+
     internal init(
         baseUrl: URL,
         jsonEncoder: JSONEncoder,
-        jsonDecoder: JSONDecoder
+        jsonDecoder: JSONDecoder,
+        fileManager: FileManager
     ) {
+        self.baseUrl = baseUrl
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
-        self.baseUrl = baseUrl
+        self.fileManager = fileManager
 
         logger.trace("FileSystemStorage init with baseUrl: \(baseUrl.safeNonEncodedPath())")
 

@@ -12,7 +12,11 @@ class ParraDataManagerTests: XCTestCase {
     var parraDataManager: ParraDataManager!
     
     override func setUpWithError() throws {
-        parraDataManager = ParraDataManager()
+        parraDataManager = ParraDataManager(
+            jsonEncoder: .parraEncoder,
+            jsonDecoder: .parraDecoder,
+            fileManager: .default
+        )
     }
 
     override func tearDownWithError() throws {

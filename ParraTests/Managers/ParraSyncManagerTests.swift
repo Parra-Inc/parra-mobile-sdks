@@ -374,6 +374,7 @@ class ParraSyncManagerTests: XCTestCase {
             wrappedEvent: .event(
                 event: ParraBasicEvent(name: name)
             ),
+            target: .session,
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
                 function: function,

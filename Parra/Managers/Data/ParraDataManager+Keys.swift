@@ -10,17 +10,17 @@ import Foundation
 // !!! Think really before changing anything here!
 public extension ParraDataManager {
     enum Base {
-        public static let applicationSupportDirectory = FileManager.default.urls(
+        public static let applicationSupportDirectory = Parra.fileManager.urls(
             for: .applicationSupportDirectory,
             in: .userDomainMask
         ).first!
 
-        public static let documentDirectory = FileManager.default.urls(
+        public static let documentDirectory = Parra.fileManager.urls(
             for: .documentDirectory,
             in: .userDomainMask
         ).first!
 
-        public static let cachesURL = FileManager.default.urls(
+        public static let cachesURL = Parra.fileManager.urls(
             for: .cachesDirectory,
             in: .userDomainMask
         ).first!

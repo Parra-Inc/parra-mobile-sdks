@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO: These can probably be de-duplicated if the non-throwing variants wrap a call to the throwing variant in a do/catch and just log the error without rethrowing
+
 public extension Logger {
 
     /// <#Description#>
@@ -21,6 +23,7 @@ public extension Logger {
         return scope(named: name, extra: nil, function)
     }
 
+    /// <#Description#>
     /// - Parameters:
     ///   - name: <#name description#>
     ///   - extra: <#extra description#>
@@ -46,8 +49,40 @@ public extension Logger {
         )
     }
 
-    ///
-    ///     ///
+    /// <#Description#>
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - extra: <#extra description#>
+    ///   - block: <#block description#>
+    func withScope<T>(
+        named name: String? = nil,
+        block: (_ logger: Logger) -> T,
+        _ function: String = #function
+    ) -> T {
+        return withScope(
+            named: name,
+            extra: nil,
+            block: block,
+            function
+        )
+    }
+
+    /// <#Description#>
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - extra: <#extra description#>
+    ///   - block: <#block description#>
+    func withScope<T>(
+        named name: String? = nil,
+        extra: [String : Any]?,
+        block: (_ logger: Logger) -> T,
+        _ function: String = #function
+    ) -> T {
+        let scoped = scope(named: name, extra: extra, function)
+
+        return block(scoped)
+    }
+
     /// <#Description#>
     /// - Parameters:
     ///   - name: <#name description#>
@@ -66,6 +101,7 @@ public extension Logger {
         )
     }
 
+    /// <#Description#>
     /// - Parameters:
     ///   - name: <#name description#>
     ///   - extra: <#extra description#>
@@ -86,7 +122,7 @@ public extension Logger {
         }
     }
 
-
+    /// <#Description#>
     /// - Parameters:
     ///   - name: <#name description#>
     ///   - extra: <#extra description#>
@@ -104,6 +140,7 @@ public extension Logger {
         )
     }
 
+    /// <#Description#>
     /// - Parameters:
     ///   - name: <#name description#>
     ///   - extra: <#extra description#>
@@ -124,6 +161,7 @@ public extension Logger {
         }
     }
 
+    /// <#Description#>
     /// - Parameters:
     ///   - name: <#name description#>
     ///   - extra: <#extra description#>
@@ -141,6 +179,7 @@ public extension Logger {
         )
     }
 
+    /// <#Description#>
     /// - Parameters:
     ///   - name: <#name description#>
     ///   - extra: <#extra description#>
