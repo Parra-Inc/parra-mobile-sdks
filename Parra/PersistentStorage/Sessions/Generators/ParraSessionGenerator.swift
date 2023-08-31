@@ -17,7 +17,7 @@ internal struct ParraSessionGenerator: ParraSessionGeneratorType, AsyncSequence,
     // Type is optional. We have to be able to filter out elements while doing the lazy enumeration
     // so we need a way to indicate to the caller that the item produced by a given iteration can
     // be skipped, whichout returning nil and ending the Sequence. We use a double Optional for this.
-    typealias Element = ParraSessionUpload?
+    typealias Element = ParraSession?
 
     private let directoryEnumerator: FileManager.DirectoryEnumerator
 
@@ -38,30 +38,22 @@ internal struct ParraSessionGenerator: ParraSessionGeneratorType, AsyncSequence,
     }
 
     mutating func next() async -> Element? {
-        return await logger.withScope { logger in
+        return logger.withScope { logger in
             let (sessionPaths, optionality) = produceNextSessionPaths(
                 from: directoryEnumerator,
-                type: ParraSessionUpload.self
+                type: ParraSession.self
             )
 
             guard let sessionPaths else {
                 return optionality
             }
 
-            let (sessionPath, eventsPath) = sessionPaths
+            let (sessionPath, _) = sessionPaths
 
             do {
-                let session = try readSessionSync(at: sessionPath)
-                let events = try await readEvents(at: eventsPath)
-
-                logger.trace("finished reading session and events")
-
-                return ParraSessionUpload(
-                    session: session,
-                    events: events
-                )
+                return try readSessionSync(at: sessionPath)
             } catch let error {
-                logger.error("Error creating upload payload for session", error, [
+                logger.error("Error reading session", error, [
                     "path": sessionPath.lastComponents()
                 ])
 
