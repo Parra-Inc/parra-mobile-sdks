@@ -290,7 +290,7 @@ internal class SessionStorage {
             let sessionDirectories = try self.sessionReader.getAllSessionDirectories()
 
             for sessionDirectory in sessionDirectories {
-                let sessionId = sessionDirectory.lastPathComponent
+                let sessionId = sessionDirectory.deletingPathExtension().lastPathComponent
                 logger.trace("Session iterator produced session", [
                     "sessionId": sessionId
                 ])
