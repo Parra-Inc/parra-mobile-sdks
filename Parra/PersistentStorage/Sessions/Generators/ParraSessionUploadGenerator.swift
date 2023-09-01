@@ -34,7 +34,7 @@ internal struct ParraSessionUploadGenerator: ParraSessionGeneratorType, AsyncSeq
         )
     }
 
-    mutating func next() async -> Element? {
+    mutating func next() async -> ParraSessionUpload?? {
         return await logger.withScope { logger in
             let (sessionPaths, optionality) = produceNextSessionPaths(
                 from: directoryEnumerator,

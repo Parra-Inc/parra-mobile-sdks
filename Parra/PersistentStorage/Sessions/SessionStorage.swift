@@ -6,6 +6,10 @@
 //  Copyright © 2022 Parra, Inc. All rights reserved.
 //
 
+// TODO: !!!!!!!!!!!!!!!!!!!! need to actually use the completion handlers
+// on all the with.... calls to make sure errors being thrown doesn't cause them to sometimes
+// go uncalled.
+
 import Foundation
 
 // Should be able to:
@@ -87,6 +91,22 @@ internal class SessionStorage {
 
                 continuation.resume()
             }
+        }
+    }
+
+    internal func getCurrentSession() async -> ParraSession {
+        return await withCheckedContinuation { continuation in
+            getCurrentSessionSync { session in
+                continuation.resume(returning: session)
+            }
+        }
+    }
+
+    private func getCurrentSessionSync(
+        completion: @escaping (ParraSession) -> Void
+    ) {
+        withCurrentSessionHandle { _, session in
+            completion(session)
         }
     }
 
@@ -172,7 +192,7 @@ internal class SessionStorage {
     ) {
         storageQueue.async {
             do {
-                let generator = try self.sessionReader.generatePreviousSessionsSync()
+                let generator = try self.sessionReader.generateSessionUploadsSync()
 
                 completion(.success(generator))
             } catch let error {
@@ -181,7 +201,7 @@ internal class SessionStorage {
         }
     }
 
-    /// Whether or not there are new events on the session since the last time ``recordSyncComplete`` was called.
+    /// Whether or not there are new events on the session since the last time a sync was completed.
     /// Will also return true if it isn't previously been called for the current session.
     internal func hasNewEvents() async -> Bool {
         return await withCheckedContinuation { continuation in
@@ -203,26 +223,6 @@ internal class SessionStorage {
         }
     }
 
-    /// Store a marker to indicate that a sync just took place, so that events before that point
-    /// can be purged.
-    private func recordSyncComplete(completion: @escaping () -> Void) {
-        withCurrentSessionHandle { [self] sessionHandle, session in
-            withHandleSync(for: .events) { eventsHandle, _ in
-                // Store the current offset of the file handle that writes events on the session object.
-                // This will be used last to know if more events have been written since this point.
-                let offset = try eventsHandle.offset()
-                let updatedSession = session.withUpdatedEventsHandleOffset(
-                    offset: offset
-                )
-
-                try self.writeSessionSync(
-                    session: updatedSession,
-                    with: sessionHandle
-                )
-            }
-        }
-    }
-
     /// Whether or not there are sessions stored that have already finished. This implies that
     /// there is a session in progress that is not taken into consideration.
     internal func hasCompletedSessions() async -> Bool {
@@ -238,6 +238,31 @@ internal class SessionStorage {
         completion(false)
     }
 
+    internal func recordSyncBegan() async {
+        await withCheckedContinuation { continuation in
+            recordSyncBegan {
+                continuation.resume()
+            }
+        }
+    }
+
+    /// Store a marker to indicate that a sync just took place, so that events before that point
+    /// can be purged.
+    private func recordSyncBegan(completion: @escaping () -> Void) {
+        withHandles { sessionHandle, eventsHandle, session in
+            // Store the current offset of the file handle that writes events on the session object.
+            // This will be used last to know if more events have been written since this point.
+            let offset = try eventsHandle.offset()
+            try self.writeSessionEventsOffsetUpdateSync(
+                to: session,
+                using: sessionHandle,
+                offset: offset
+            )
+
+            completion()
+        }
+    }
+
     // MARK: Ending Sessions
 
     internal func endSession() async {
@@ -251,12 +276,34 @@ internal class SessionStorage {
     /// caches in memory and on disk. The current in progress session will not be deleted,
     /// even if its id is provided.
     internal func deleteSynchronizedData(for sessionIds: Set<String>) async {
-        // TODO: Should fully delete all session artifacts for all sessions other than the current one.
-        // TODO: For the current session, should delete all events that have been sync'd and update the persisted offset. Using the following:
+        withHandles { sessionHandle, eventsHandle, currentSession in
+            // Delete the directories for every session in sessionIds, except for the current session.
+            let sessionDirectories = try self.sessionReader.getAllSessionDirectories()
 
-//        // Reset and update the cache for the current session so the most up to take data is uploaded.
-//        await sessionStorage.recordSyncComplete()
+            for sessionDirectory in sessionDirectories {
+                let sessionId = sessionDirectory.lastPathComponent
+                logger.trace("Session iterator produced session", [
+                    "sessionId": sessionId
+                ])
 
+                if sessionId != currentSession.sessionId && sessionIds.contains(sessionId) {
+                    try self.sessionReader.deleteSessionSync(with: sessionId)
+                }
+            }
+            
+            // Delete all events for the current session that were written by the time the sync began.
+            if let offset = currentSession.eventsHandleOffsetAtSync, offset > 0 {
+                try eventsHandle.truncate(atOffset: offset)
+            }
+
+            // Reset the persisted events file handle offset on the session back to 0, since any
+            // amount it was previously advanced by has been reset.
+            try self.writeSessionEventsOffsetUpdateSync(
+                to: currentSession,
+                using: sessionHandle,
+                offset: 0
+            )
+        }
     }
 
     // MARK: Helpers
@@ -265,46 +312,75 @@ internal class SessionStorage {
         handler: @escaping (FileHandle, ParraSession) throws -> Void,
         completion: ((Error?) -> Void)? = nil
     ) {
-        storageQueue.async { [self] in
-            withHandleSync(
-                for: .session,
-                completion: completion,
-                handler: handler
-            )
-        }
+        withHandle(
+            for: .session,
+            completion: completion,
+            handler: handler
+        )
     }
 
     private func withCurrentSessionEventHandle(
         handler: @escaping (FileHandle, ParraSession) throws -> Void,
         completion: ((Error?) -> Void)? = nil
     ) {
+        withHandle(
+            for: .events,
+            completion: completion,
+            handler: handler
+        )
+    }
+
+    private func withHandles(
+        completion: ((Error?) -> Void)? = nil,
+        handler: @escaping (
+            _ sessionHandle: FileHandle,
+            _ eventsHandle: FileHandle,
+            _ session: ParraSession
+        ) throws -> Void
+    ) {
         storageQueue.async { [self] in
-            withHandleSync(
-                for: .events,
-                completion: completion,
-                handler: handler
-            )
+            do {
+                let context = try sessionReader.loadOrCreateSessionSync()
+
+                let sessionHandle = try sessionReader.retreiveFileHandleForSessionSync(
+                    with: .session,
+                    from: context
+                )
+
+                let eventsHandle = try sessionReader.retreiveFileHandleForSessionSync(
+                    with: .events,
+                    from: context
+                )
+
+                try handler(sessionHandle, eventsHandle, context.session)
+
+                completion?(nil)
+            } catch let error {
+                completion?(error)
+            }
         }
     }
 
-    private func withHandleSync(
+    private func withHandle(
         for type: FileHandleType,
         completion: ((Error?) -> Void)? = nil,
         handler: @escaping (FileHandle, ParraSession) throws -> Void
     ) {
-        // TODO: Needs logic to see if the error is related to the file handle being closed, and auto attempt to reopen it.
-        do {
-            let context = try sessionReader.loadOrCreateSessionSync()
-            let (handle, session) = try sessionReader.retreiveCurrentSessionSync(
-                with: type,
-                from: context
-            )
+        storageQueue.async { [self] in
+            // TODO: Needs logic to see if the error is related to the file handle being closed, and auto attempt to reopen it.
+            do {
+                let context = try sessionReader.loadOrCreateSessionSync()
+                let handle = try sessionReader.retreiveFileHandleForSessionSync(
+                    with: type,
+                    from: context
+                )
 
-            try handler(handle, session)
+                try handler(handle, context.session)
 
-            completion?(nil)
-        } catch let error {
-            completion?(error)
+                completion?(nil)
+            } catch let error {
+                completion?(error)
+            }
         }
     }
 
@@ -324,46 +400,19 @@ internal class SessionStorage {
         try handle.write(contentsOf: data)
         try handle.synchronize()
     }
-}
 
-//internal actor SessionStorage: ItemStorage {
-//    typealias DataType = ParraSession
-//
-//    let storageModule: ParraStorageModule<ParraSession>
-//
-//    init(storageModule: ParraStorageModule<ParraSession>) {
-//        self.storageModule = storageModule
-//    }
-//
-//    func update(session: ParraSession) async throws {
-//        try await storageModule.write(
-//            name: session.sessionId,
-//            value: session
-//        )
-//    }
-//
-//    func deleteSessions(with sessionIds: Set<String>) async {
-//        for sessionId in sessionIds {
-//            await storageModule.delete(name: sessionId)
-//        }
-//    }
-//
-//    func allTrackedSessions() async -> [ParraSession] {
-//        let sessions = await storageModule.currentData()
-//
-//        return sessions.sorted { (first, second) in
-//            let firstKey = Float(first.key) ?? 0
-//            let secondKey = Float(second.key) ?? 0
-//
-//            return firstKey < secondKey
-//        }.map { (key: String, value: ParraSession) in
-//            return value
-//        }
-//    }
-//
-//    func numberOfTrackedSessions() async -> Int {
-//        let sessions = await storageModule.currentData()
-//
-//        return sessions.count
-//    }
-//}
+    private func writeSessionEventsOffsetUpdateSync(
+        to session: ParraSession,
+        using handle: FileHandle,
+        offset: UInt64
+    ) throws {
+        let updatedSession = session.withUpdatedEventsHandleOffset(
+            offset: 0
+        )
+
+        try self.writeSessionSync(
+            session: updatedSession,
+            with: handle
+        )
+    }
+}

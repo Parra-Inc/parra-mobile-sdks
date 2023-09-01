@@ -93,6 +93,7 @@ internal class ParraSessionManager {
     func synchronizeData() async throws -> ParraSessionsResponse? {
         let syncLogger = logger.scope()
 
+        let currentSession = await sessionStorage.getCurrentSession()
         let sessionIterator = try await sessionStorage.getAllSessions()
 
         var uploadedSessionIds = Set<String>()
@@ -101,7 +102,7 @@ internal class ParraSessionManager {
         var sessionResponse: ParraSessionsResponse?
 
         for await sessionUpload in sessionIterator {
-            syncLogger.trace("Session iterator produced session", [
+            syncLogger.trace("Session upload iterator produced session", [
                 "sessionId": String(describing: sessionUpload?.session.sessionId)
             ])
             guard let sessionUpload else {
@@ -112,6 +113,12 @@ internal class ParraSessionManager {
             }
 
             let session = sessionUpload.session
+
+            if currentSession.sessionId == session.sessionId {
+                // If we're about to sync the current session, inform the storage manager so that it can record
+                // the events that have been created up until this point.
+                await sessionStorage.recordSyncBegan()
+            }
 
             do {
                 syncLogger.debug("Uploading session: \(session.sessionId)")

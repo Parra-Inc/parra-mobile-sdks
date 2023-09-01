@@ -64,17 +64,10 @@ public extension Logger {
         )
 
         let lazyMessage = ParraLazyLogParam.string(messageProvider)
-        let endMarker = ParraLogMarker(
-            initialLevel: startMarker.initialLevel,
-            message: lazyMessage,
-            initialCallSiteContext: callSiteContext,
-            context: startMarker.initialContext
-        )
-
         let nextMarker = logToBackend(
             level: .info,
             message: lazyMessage,
-            context: endMarker.initialContext,
+            context: startMarker.initialContext,
             callSiteContext: callSiteContext,
             threadInfo: threadInfo
         )
@@ -133,13 +126,6 @@ public extension Logger {
         )
 
         let lazyMessage = ParraLazyLogParam.string(messageProvider)
-        let endMarker = ParraLogMarker(
-            initialLevel: startMarker.initialLevel,
-            message: lazyMessage,
-            initialCallSiteContext: callSiteContext,
-            context: startMarker.initialContext
-        )
-
         let nextMarker = logToBackend(
             level: .info,
             message: lazyMessage,

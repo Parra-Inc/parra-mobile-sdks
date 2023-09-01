@@ -43,13 +43,10 @@ internal class SessionReader {
         self.fileManager = fileManager
     }
 
-    internal func retreiveCurrentSessionSync(
+    internal func retreiveFileHandleForSessionSync(
         with type: FileHandleType,
         from context: SessionStorageContext
-    ) throws -> (
-        handle: FileHandle,
-        session: ParraSession
-    ) {
+    ) throws -> FileHandle {
         let handle: FileHandle?
         let path: URL
         switch type {
@@ -65,7 +62,7 @@ internal class SessionReader {
             // It is possible that we could still have a reference to the file handle, but its descriptor has
             // become invalid. If this happens, we need to close out the previous handle and create a new one.
             if isHandleValid(handle: handle) {
-                return (handle, context.session)
+                return handle
             }
 
             // Close and fall back on the new handle creation flow.
@@ -87,11 +84,26 @@ internal class SessionReader {
             eventsHandle = newHandle
         }
 
-        return (newHandle, context.session)
+        return newHandle
     }
 
-    internal func generatePreviousSessionsSync() throws -> ParraSessionUploadGenerator {
-        logger.trace("Creating session generator")
+    internal func getAllSessionDirectories() throws -> [URL] {
+        logger.trace("Getting all session directories")
+
+        let directories = try fileManager.contentsOfDirectory(
+            at: SessionReader.rootSessionsDirectory,
+            includingPropertiesForKeys: [],
+            options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
+        )
+
+        return directories.filter { directory in
+            return directory.hasDirectoryPath 
+                && directory.pathExtension == ParraSession.Constant.packageExtension
+        }
+    }
+
+    internal func generateSessionUploadsSync() throws -> ParraSessionUploadGenerator {
+        logger.trace("Creating session upload generator")
 
         return try ParraSessionUploadGenerator(
             forSessionsAt: SessionReader.rootSessionsDirectory,
@@ -121,7 +133,7 @@ internal class SessionReader {
 
         let nextSessionStart = Date.now
 
-        let nextSessionId = ParraSession.timestampId(from: nextSessionStart)
+        let nextSessionId = UUID().uuidString
         let sessionDir = sessionDirectory(
             for: nextSessionId,
             in: SessionReader.rootSessionsDirectory
@@ -167,6 +179,7 @@ internal class SessionReader {
 
         let newSessionContext = SessionStorageContext(
             session: ParraSession(
+                sessionId: nextSessionId,
                 createdAt: nextSessionStart
             ),
             sessionPath: sessionPath,
@@ -176,6 +189,15 @@ internal class SessionReader {
         currentSessionContext = newSessionContext
 
         return newSessionContext
+    }
+
+    internal func deleteSessionSync(with id: String) throws {
+        let sessionDir = sessionDirectory(
+            for: id,
+            in: SessionReader.rootSessionsDirectory
+        )
+
+        try fileManager.removeItem(at: sessionDir)
     }
 
     // MARK: Private methods

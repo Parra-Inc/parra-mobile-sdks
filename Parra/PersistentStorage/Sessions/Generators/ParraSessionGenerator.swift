@@ -13,7 +13,7 @@ fileprivate let logger = Logger(
     category: "Session Generator"
 )
 
-internal struct ParraSessionGenerator: ParraSessionGeneratorType, AsyncSequence, AsyncIteratorProtocol {
+internal struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence, IteratorProtocol {
     // Type is optional. We have to be able to filter out elements while doing the lazy enumeration
     // so we need a way to indicate to the caller that the item produced by a given iteration can
     // be skipped, whichout returning nil and ending the Sequence. We use a double Optional for this.
@@ -37,7 +37,7 @@ internal struct ParraSessionGenerator: ParraSessionGeneratorType, AsyncSequence,
         )
     }
 
-    mutating func next() async -> Element? {
+    mutating func next() -> ParraSession?? {
         return logger.withScope { logger in
             let (sessionPaths, optionality) = produceNextSessionPaths(
                 from: directoryEnumerator,

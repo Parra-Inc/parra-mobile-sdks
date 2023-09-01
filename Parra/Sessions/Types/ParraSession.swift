@@ -25,12 +25,8 @@ internal struct ParraSession: Codable {
     /// been synchronized.
     internal private(set) var eventsHandleOffsetAtSync: UInt64?
 
-    internal var timestampId: String {
-        return ParraSession.timestampId(from: createdAt)
-    }
-
-    internal init(createdAt: Date) {
-        self.sessionId = UUID().uuidString
+    internal init(sessionId: String, createdAt: Date) {
+        self.sessionId = sessionId
         self.createdAt = createdAt
         self.endedAt = nil
         self.userProperties = [:]
@@ -69,9 +65,5 @@ internal struct ParraSession: Codable {
 
     internal mutating func end() {
         self.endedAt = Date()
-    }
-
-    internal static func timestampId(from date: Date) -> String {
-        return String(format: "%.0f", date.timeIntervalSince1970 * 1000000)
     }
 }

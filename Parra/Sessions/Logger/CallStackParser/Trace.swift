@@ -29,7 +29,7 @@ struct StackTrace {
         let buf = UnsafeBufferPointer(start: addrs, count: Int(frameCount))
         for addr in buf {
             guard let addr = addr else { continue }
-            var dlInfoPtr = UnsafeMutablePointer<Dl_info>.allocate(capacity: 1)
+            let dlInfoPtr = UnsafeMutablePointer<Dl_info>.allocate(capacity: 1)
             defer { dlInfoPtr.deallocate() }
             guard dladdr(addr, dlInfoPtr) != 0 else {
                 continue
