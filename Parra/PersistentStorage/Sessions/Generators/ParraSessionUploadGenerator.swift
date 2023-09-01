@@ -8,7 +8,7 @@
 
 import Foundation
 
-fileprivate let logger = Logger(category: "Session Upload Generator")
+fileprivate let logger = Logger(bypassEventCreation: true, category: "Session Upload Generator")
 
 internal struct ParraSessionUploadGenerator: ParraSessionGeneratorType, AsyncSequence, AsyncIteratorProtocol {
     // Type is optional. We have to be able to filter out elements while doing the lazy enumeration

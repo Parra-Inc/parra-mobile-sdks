@@ -92,7 +92,7 @@ internal class ParraSessionManager {
 
     func synchronizeData() async throws -> ParraSessionsResponse? {
         return try await logger.withScope { logger in
-            let currentSession = await sessionStorage.getCurrentSession()
+            let currentSession = try await sessionStorage.getCurrentSession()
             let sessionIterator = try await sessionStorage.getAllSessions()
 
             var uploadedSessionIds = Set<String>()
@@ -147,7 +147,7 @@ internal class ParraSessionManager {
                 }
             }
 
-            await sessionStorage.deleteSynchronizedData(
+            try await sessionStorage.deleteSynchronizedData(
                 for: uploadedSessionIds
             )
 
