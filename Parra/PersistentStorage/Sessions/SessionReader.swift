@@ -191,6 +191,14 @@ internal class SessionReader {
         return newSessionContext
     }
 
+    internal func updateCachedCurrentSessionSync(
+        to newSession: ParraSession
+    ) {
+        currentSessionContext?.updateSession(
+            to: newSession
+        )
+    }
+
     internal func deleteSessionSync(with id: String) throws {
         let sessionDir = sessionDirectory(
             for: id,

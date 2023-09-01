@@ -9,7 +9,11 @@
 import Foundation
 
 internal struct SessionStorageContext {
-    let session: ParraSession
+    internal private(set) var session: ParraSession
     let sessionPath: URL
     let eventsPath: URL
+
+    mutating func updateSession(to newSession: ParraSession) {
+        session = newSession
+    }
 }

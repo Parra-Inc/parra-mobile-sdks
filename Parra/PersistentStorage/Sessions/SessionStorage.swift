@@ -290,11 +290,47 @@ internal class SessionStorage {
                     try self.sessionReader.deleteSessionSync(with: sessionId)
                 }
             }
-            
-            // Delete all events for the current session that were written by the time the sync began.
-            if let offset = currentSession.eventsHandleOffsetAtSync, offset > 0 {
-                try eventsHandle.truncate(atOffset: offset)
+
+            logger.trace("Cleaning up previous events for current session")
+
+            let currentEventsOffset = try eventsHandle.offset()
+            let cachedEventsOffset = currentSession.eventsHandleOffsetAtSync ?? 0
+
+            if currentEventsOffset > cachedEventsOffset {
+                logger.trace("Current events offset is greater than cache. New events have happened", [
+                    "current": currentEventsOffset,
+                    "cached": cachedEventsOffset
+                ])
+
+                // Delete all events for the current session that were written by the time the sync began.
+
+                // File handle doesn't provide a way to truncate from the beginning of the file.
+                // We need to delete all the events that happened up until the point where a sync
+                // was started:
+                // 1. Seek to where the file handle was before the sync started.
+                // 2. Read all new data from that point into memory.
+                // 3. Reset the file back to a 0 offset.
+                // 4. Write the cached data back to the file.
+
+                try eventsHandle.seek(toOffset: cachedEventsOffset)
+                if let data = try eventsHandle.readToEnd() {
+                    logger.trace("Resetting events file with cached events")
+                    try eventsHandle.truncate(atOffset: 0)
+
+                    try eventsHandle.write(contentsOf: data)
+                    logger.trace("Finished writing cached events to reset events file")
+                } else {
+                    logger.trace("New events couldn't be read")
+                    // there are new events and the they can't be read
+                    try eventsHandle.truncate(atOffset: 0)
+                }
+            } else {
+                logger.trace("No new events occurred. Resetting events file")
+                // No new events were written since the sync started. Resetting the events
+                // file back to the beginning.
+                try eventsHandle.truncate(atOffset: 0)
             }
+            try eventsHandle.synchronize()
 
             // Reset the persisted events file handle offset on the session back to 0, since any
             // amount it was previously advanced by has been reset.
@@ -388,6 +424,11 @@ internal class SessionStorage {
         session: ParraSession,
         with handle: FileHandle
     ) throws {
+        // Always update the in memory cache of the current session before writing to disk.
+        sessionReader.updateCachedCurrentSessionSync(
+            to: session
+        )
+
         let data = try jsonEncoder.encode(session)
 
         let offset = try handle.offset()
@@ -406,8 +447,9 @@ internal class SessionStorage {
         using handle: FileHandle,
         offset: UInt64
     ) throws {
+        logger.trace("Updating events file handle offset to: \(offset)")
         let updatedSession = session.withUpdatedEventsHandleOffset(
-            offset: 0
+            offset: offset
         )
 
         try self.writeSessionSync(

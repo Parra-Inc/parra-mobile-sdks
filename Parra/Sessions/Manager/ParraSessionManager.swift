@@ -91,67 +91,69 @@ internal class ParraSessionManager {
     }
 
     func synchronizeData() async throws -> ParraSessionsResponse? {
-        let syncLogger = logger.scope()
+        return try await logger.withScope { logger in
+            let currentSession = await sessionStorage.getCurrentSession()
+            let sessionIterator = try await sessionStorage.getAllSessions()
 
-        let currentSession = await sessionStorage.getCurrentSession()
-        let sessionIterator = try await sessionStorage.getAllSessions()
+            var uploadedSessionIds = Set<String>()
+            // It's possible that multiple sessions that are uploaded could receive a response indicating that polling
+            // should occur. If this happens, we'll honor the most recent of these.
+            var sessionResponse: ParraSessionsResponse?
 
-        var uploadedSessionIds = Set<String>()
-        // It's possible that multiple sessions that are uploaded could receive a response indicating that polling
-        // should occur. If this happens, we'll honor the most recent of these.
-        var sessionResponse: ParraSessionsResponse?
-
-        for await sessionUpload in sessionIterator {
-            syncLogger.trace("Session upload iterator produced session", [
-                "sessionId": String(describing: sessionUpload?.session.sessionId)
-            ])
-            guard let sessionUpload else {
-                // The iterator can't return nil until the sequence is complete. If a the inner optional
-                // is nil, it indicates that we should skip this session for one reason or another. It may
-                // have been corrupted, or an incorrect file type made it into the session directory, etc.
-                continue
-            }
-
-            let session = sessionUpload.session
-
-            if currentSession.sessionId == session.sessionId {
-                // If we're about to sync the current session, inform the storage manager so that it can record
-                // the events that have been created up until this point.
-                await sessionStorage.recordSyncBegan()
-            }
-
-            do {
-                syncLogger.debug("Uploading session: \(session.sessionId)")
-
-                let response = try await networkManager.submitSession(sessionUpload)
-
-                switch response.result {
-                case .success(let payload):
-                    // Don't override the session response unless it's another one with shouldPoll enabled.
-                    if payload.shouldPoll {
-                        sessionResponse = payload
-                    }
-
-                    uploadedSessionIds.insert(session.sessionId)
-                case .failure(let error):
-                    syncLogger.error(error)
-
-                    // If any of the sessions fail to upload afty rerying, fail the entire operation
-                    // returning the sessions that have been completed so far.
-                    if response.attributes.contains(.exceededRetryLimit) {
-                        break
-                    }
+            for await sessionUpload in sessionIterator {
+                logger.trace("Session upload iterator produced session", [
+                    "sessionId": String(describing: sessionUpload?.session.sessionId)
+                ])
+                guard let sessionUpload else {
+                    // The iterator can't return nil until the sequence is complete. If a the inner optional
+                    // is nil, it indicates that we should skip this session for one reason or another. It may
+                    // have been corrupted, or an incorrect file type made it into the session directory, etc.
+                    continue
                 }
-            } catch let error {
-                syncLogger.error("Syncing sessions failed", error)
+
+                let session = sessionUpload.session
+
+                if currentSession.sessionId == session.sessionId {
+                    // Sets a marker on the current session to indicate the offset of the file handle that stores events
+                    // just before the sync starts. This is necessary to make sure that any new events that roll in
+                    // while the sync is in progress aren't deleted as part of post-sync cleanup.
+                    await sessionStorage.recordSyncBegan()
+                }
+
+                do {
+                    logger.debug("Uploading session: \(session.sessionId)")
+
+                    let response = try await networkManager.submitSession(sessionUpload)
+
+                    switch response.result {
+                    case .success(let payload):
+                        // Don't override the session response unless it's another one with shouldPoll enabled.
+                        if payload.shouldPoll {
+                            sessionResponse = payload
+                        }
+
+                        uploadedSessionIds.insert(session.sessionId)
+                    case .failure(let error):
+                        logger.error(error)
+
+                        // If any of the sessions fail to upload afty rerying, fail the entire operation
+                        // returning the sessions that have been completed so far.
+                        if response.attributes.contains(.exceededRetryLimit) {
+                            break
+                        }
+                    }
+                } catch let error {
+                    logger.error("Syncing sessions failed", error)
+                }
             }
+
+            await sessionStorage.deleteSynchronizedData(
+                for: uploadedSessionIds
+            )
+
+            return sessionResponse
+
         }
-
-        await sessionStorage.deleteSynchronizedData(
-            for: uploadedSessionIds
-        )
-
-        return sessionResponse
     }
 
     /// Logs the supplied event on the user's session.
