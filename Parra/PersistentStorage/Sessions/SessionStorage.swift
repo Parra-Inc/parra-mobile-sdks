@@ -190,9 +190,9 @@ internal class SessionStorage {
     private func getAllSessions(
         completion: @escaping (Result<ParraSessionUploadGenerator, Error>) -> Void
     ) {
-        storageQueue.async {
+        withStorageQueue { sessionReader in
             do {
-                let generator = try self.sessionReader.generateSessionUploadsSync()
+                let generator = try sessionReader.generateSessionUploadsSync()
 
                 completion(.success(generator))
             } catch let error {
@@ -233,9 +233,18 @@ internal class SessionStorage {
         }
     }
 
-    private func hasCompletedSessions(completion: (Bool) -> Void) {
-        // TODO
-        completion(false)
+    private func hasCompletedSessions(completion: @escaping (Bool) -> Void) {
+        withStorageQueue { sessionReader in
+            do {
+                let sessionDirectories = try self.sessionReader.getAllSessionDirectories()
+
+                // The current session counts for 1. If there are more, they are the previous sessions.
+                completion(sessionDirectories.count > 1)
+            } catch let error {
+                logger.error("Error checking for completed sessions", error)
+                completion(false)
+            }
+        }
     }
 
     internal func recordSyncBegan() async {
@@ -374,7 +383,7 @@ internal class SessionStorage {
             _ session: ParraSession
         ) throws -> Void
     ) {
-        storageQueue.async { [self] in
+        withStorageQueue { sessionReader in
             do {
                 let context = try sessionReader.loadOrCreateSessionSync()
 
@@ -402,7 +411,7 @@ internal class SessionStorage {
         completion: ((Error?) -> Void)? = nil,
         handler: @escaping (FileHandle, ParraSession) throws -> Void
     ) {
-        storageQueue.async { [self] in
+        withStorageQueue { sessionReader in
             // TODO: Needs logic to see if the error is related to the file handle being closed, and auto attempt to reopen it.
             do {
                 let context = try sessionReader.loadOrCreateSessionSync()
@@ -417,6 +426,14 @@ internal class SessionStorage {
             } catch let error {
                 completion?(error)
             }
+        }
+    }
+
+    private func withStorageQueue(
+        block: @escaping (_ sessionReader: SessionReader) -> Void
+    ) {
+        storageQueue.async { [self] in
+            block(sessionReader)
         }
     }
 
