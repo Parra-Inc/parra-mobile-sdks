@@ -105,7 +105,7 @@ extension ParraSessionManager {
 
         systemLogger.log(
             level: processedLogData.level.osLogType,
-            "\(message, align: .right(columns: 200))"
+            "\(message)"
         )
     }
 

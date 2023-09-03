@@ -56,7 +56,6 @@ extension ParraSessionManager {
         callSite: ParraLoggerCallSiteContext,
         with style: ParraLoggerCallSiteStyleOptions
     ) -> String {
-        callSite.
         return "\(callSite.simpleFunctionName):\(callSite.line):\(callSite.column)"
     }
 
