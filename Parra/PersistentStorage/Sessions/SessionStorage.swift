@@ -70,7 +70,7 @@ internal class SessionStorage {
     }
 
     internal func initializeSessions() async {
-        logger.debug("initializing at path: \(sessionReader.basePath.safeNonEncodedPath())")
+        logger.debug("initializing at path: \(sessionReader.basePath.lastComponents())")
 
         // Attempting to access the current session will force the session reader to load
         // or create one, if one doesn't exist. Since this is only called during app launch,

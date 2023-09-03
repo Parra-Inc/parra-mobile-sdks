@@ -17,9 +17,9 @@ public enum ParraLogLevel: Int, Comparable, ParraLogStringConvertible {
     case error  = 16
     case fatal  = 32
 
-    internal static let `default` = ParraLogLevel.info
+    public static let `default` = ParraLogLevel.info
 
-    public init?(name: String) {
+    internal init?(name: String) {
         switch name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
         case "trace":
             self = .trace
@@ -42,58 +42,11 @@ public enum ParraLogLevel: Int, Comparable, ParraLogStringConvertible {
         return lhs.rawValue < rhs.rawValue
     }
 
-    var name: String {
-        switch self {
-        case .trace:
-            return "TRACE"
-        case .debug:
-            return "DEBUG"
-        case .info:
-            return "INFO"
-        case .warn:
-            return "WARN"
-        case .error:
-            return "ERROR"
-        case .fatal:
-            return "FATAL"
-        }
+    internal var requiresStackTraceCapture: Bool {
+        return self >= .error
     }
 
-    var symbol: String {
-        switch self {
-        case .trace:
-            return "🟣"
-        case .debug:
-            return "🔵"
-        case .info:
-            return "⚪"
-        case .warn:
-            return "🟡"
-        case .error:
-            return "🔴"
-        case .fatal:
-            return "💀"
-        }
-    }
-
-    var loggerDescription: String {
-        switch self {
-        case .trace:
-            return "trace"
-        case .debug:
-            return "debug"
-        case .info:
-            return "info"
-        case .warn:
-            return "warn"
-        case .error:
-            return "error"
-        case .fatal:
-            return "fatal"
-        }
-    }
-
-    var osLogType: os.OSLogType {
+    internal var osLogType: os.OSLogType {
         switch self {
         case .trace, .debug:
             return .debug

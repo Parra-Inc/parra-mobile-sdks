@@ -23,13 +23,18 @@ public extension Parra {
         _ line: Int = #line,
         _ column: Int = #column
     ) {
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
+
         shared.sessionManager.writeEvent(
             wrappedEvent: .dataEvent(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
+                column: column,
+                threadInfo: threadInfo
             )
         )
     }
@@ -44,13 +49,18 @@ public extension Parra {
         _ line: Int = #line,
         _ column: Int = #column
     ) {
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
+
         shared.sessionManager.writeEvent(
             wrappedEvent: .dataEvent(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
+                column: column,
+                threadInfo: threadInfo
             )
         )
     }
@@ -65,13 +75,18 @@ public extension Parra {
         _ line: Int = #line,
         _ column: Int = #column
     ) {
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
+
         shared.sessionManager.writeEvent(
             wrappedEvent: .event(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
+                column: column,
+                threadInfo: threadInfo
             )
         )
     }
@@ -86,6 +101,10 @@ public extension Parra {
         _ line: Int = #line,
         _ column: Int = #column
     ) {
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
+
         let wrappedEvent: ParraWrappedEvent
         if let extra, !extra.isEmpty {
             wrappedEvent = .dataEvent(
@@ -108,7 +127,8 @@ public extension Parra {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
+                column: column,
+                threadInfo: threadInfo
             )
         )
     }

@@ -46,9 +46,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -73,9 +73,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -99,9 +99,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -126,9 +126,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -152,9 +152,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -179,9 +179,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -205,9 +205,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -232,9 +232,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -264,9 +264,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -297,9 +297,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -329,9 +329,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -362,9 +362,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -394,9 +394,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -427,9 +427,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -461,9 +461,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -496,9 +496,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -528,9 +528,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -561,9 +561,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -593,9 +593,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -626,9 +626,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -660,9 +660,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 
@@ -695,9 +695,9 @@ public extension Logger {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
-            ),
-            threadInfo: threadInfo
+                column: column,
+                threadInfo: threadInfo
+            )
         )
     }
 }

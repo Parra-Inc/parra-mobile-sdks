@@ -16,15 +16,22 @@ public struct ParraLoggerCallSiteContext {
     let line: Int
     let column: Int
 
+    /// Must be passed in from the call site to ensure that information about the correct thread
+    /// is captured, and that we don't capture stack frames from within the Parra Logger, thus
+    /// potentially omitting important context.
+    let threadInfo: ParraLoggerThreadInfo
+
     init(
         fileId: String,
         function: String,
         line: Int,
-        column: Int
+        column: Int,
+        threadInfo: ParraLoggerThreadInfo
     ) {
         self.fileId = fileId
         self.function = function
         self.line = line
         self.column = column
+        self.threadInfo = threadInfo
     }
 }

@@ -10,9 +10,8 @@ import Foundation
 
 // TODO: Define and impose length limits for keys/values.
 
-public struct ParraLogData {
+internal struct ParraLogData {
     let level: ParraLogLevel
-    let context: ParraLoggerContext?
 
     /// Messages should always be functions that return a message. This allows the logger
     /// to only execute potentially expensive code if the logger is enabled. A wrapper object
@@ -25,10 +24,5 @@ public struct ParraLogData {
     /// Any additional information that you're like to attach to the log.
     let extra: (() -> [String : Any])?
 
-    let callSiteContext: ParraLoggerCallSiteContext
-
-    /// Must be passed in from the call site to ensure that information about the correct thread
-    /// is captured, and that we don't capture stack frames from within the Parra Logger, thus
-    /// potentially omitting important context.
-    let threadInfo: ParraLoggerThreadInfo
+    let logContext: ParraLogContext
 }

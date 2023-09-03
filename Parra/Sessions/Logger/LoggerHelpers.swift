@@ -12,10 +12,13 @@ import Darwin
 internal typealias SplitFileId = (
     module: String,
     fileName: String,
-    fileExtension: String
+    fileExtension: String?
 )
 
 internal struct LoggerHelpers {
+    // TODO: Should be LRU and size limited, and thread safe before enabling
+//    private static var fileIdCache = [String : SplitFileId]()
+
     /// Useful for converting various types of "Error" into an actual readable message. By default
     /// Error conforming types will not display what type of error they actually are in their
     /// localizedDescription, for example.
@@ -29,20 +32,29 @@ internal struct LoggerHelpers {
         }
     }
 
-    // TODO: Memoize fileID/etc parsing?
     /// Safely splits a file id (#fileID) into a module name, a file name and a file extension.
     internal static func splitFileId(
         fileId: String
     ) -> SplitFileId {
+//        if let cached = readFileIdFromCache(for: fileId) {
+//            return cached
+//        }
+
         let (module, fileName) = splitFileId(fileId: fileId)
 
         let fileParts = fileName.split(separator: ".")
+        let components: SplitFileId
         if fileParts.count == 1 {
             // No file extension found
-            return (module, fileName, "")
+            components = (module, fileName, nil)
         } else {
-            return (module, String(fileParts[0]), fileParts.dropFirst(1).joined(separator: "."))
+            // Handles cases where file extensions have multiple periods.
+            components = (module, String(fileParts[0]), fileParts.dropFirst(1).joined(separator: "."))
         }
+
+//        writeFileIdToCache(fileId: fileId, components: components)
+
+        return components
     }
 
     /// Safely splits a file id (#fileID) into a module name, and a file name, with extension.
@@ -99,4 +111,19 @@ internal struct LoggerHelpers {
 
         return String(cString: info.dli_fname)
     }
+
+    // MARK: FileId Cache
+
+//    private static func readFileIdFromCache(
+//        for fileId: String
+//    ) -> SplitFileId? {
+//        return fileIdCache[fileId]
+//    }
+//
+//    private static func writeFileIdToCache(
+//        fileId: String,
+//        components: SplitFileId
+//    ) {
+//        fileIdCache[fileId] = components
+//    }
 }

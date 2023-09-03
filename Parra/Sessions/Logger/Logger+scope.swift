@@ -32,20 +32,19 @@ public extension Logger {
         extra: [String : Any]?,
         _ function: String = #function
     ) -> Logger {
-        let subCategories: [String]
+        let scopes: [ParraLoggerScopeType]
         if let name {
-            subCategories = [name, function]
+            scopes = [.customName(name), .function(function)]
         } else {
-            subCategories = [function]
+            scopes = [.function(function)]
         }
 
         return Logger(
             parent: self,
-            context: context.addingSubcategories(
-                subcategories: subCategories,
+            context: context.addingScopes(
+                scopes: scopes,
                 extra: extra
-            ),
-            bypassEventCreation: bypassEventCreation
+            )
         )
     }
 

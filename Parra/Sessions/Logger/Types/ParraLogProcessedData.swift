@@ -8,22 +8,28 @@
 
 import Foundation
 
+// TODO: This needs a major overhaul. It should take in all the message/level/context/etc
+// and essentially only output what is needed to finally send a message to the console.
+// Like OSLogLevel, message as a string, etc.
+
 internal struct ParraLogProcessedData {
-    let level: ParraLogLevel
-    let context: ParraLoggerContext?
-    let message: String
-    let extra: [String : Any]
+    internal let level: ParraLogLevel
+    internal let message: String
+    internal let extra: [String : Any]
 
     // Differs from the module/filenames in the context. Those could be from
     // where a Logger instance was created. These will be from where the final
     // log call was made.
-    let callSiteModule: String
-    let callSiteFileName: String
-    let callSiteFunction: String
-    let callSiteLine: Int
-    let callSiteColumn: Int
+    internal let callSiteModule: String
+    internal let callSiteFileName: String
+    internal let callSiteFileExtension: String?
+    internal let callSiteFunction: String
+    internal let callSiteLine: Int
+    internal let callSiteColumn: Int
 
-    let threadInfo: ParraLoggerThreadInfo
+    internal let loggerContext: ParraLoggerContext?
+
+    internal let threadInfo: ParraLoggerThreadInfo
 
     init(logData: ParraLogData) {
         var extra = logData.extra?() ?? [:]
@@ -43,12 +49,18 @@ internal struct ParraLogProcessedData {
             }
         }
 
-        let (module, file) = LoggerHelpers.splitFileId(
-            fileId: logData.callSiteContext.fileId
+        let logContext = logData.logContext
+        let callSiteContext = logContext.callSiteContext
+
+        let (module, fileName, fileExtension) = LoggerHelpers.splitFileId(
+            fileId: callSiteContext.fileId
         )
-        callSiteFunction = logData.callSiteContext.function
-        callSiteLine = logData.callSiteContext.line
-        callSiteColumn = logData.callSiteContext.column
+        callSiteModule = module
+        callSiteFileName = fileName
+        callSiteFileExtension = fileExtension
+        callSiteFunction = callSiteContext.function
+        callSiteLine = callSiteContext.line
+        callSiteColumn = callSiteContext.column
 
         if let extraError = logData.extraError() {
             let errorWithExtra = LoggerHelpers.extractMessageAndExtra(
@@ -59,15 +71,15 @@ internal struct ParraLogProcessedData {
             extra["extra_error"] = errorWithExtra.extra
         }
 
-        var threadInfo = logData.threadInfo
-        threadInfo.demangleCallStack()
+        var threadInfo = callSiteContext.threadInfo
+        if logData.level.requiresStackTraceCapture {
+            threadInfo.demangleCallStack()
+        }
 
         self.level = logData.level
-        self.context = logData.context
+        self.loggerContext = logContext.loggerContext
         self.message = message
         self.extra = extra
-        self.callSiteModule = module
-        self.callSiteFileName = file
         self.threadInfo = threadInfo
     }
 }

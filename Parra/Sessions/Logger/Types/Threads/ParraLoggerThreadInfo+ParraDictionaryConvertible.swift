@@ -26,13 +26,14 @@ extension ParraLoggerThreadInfo: ParraDictionaryConvertible {
             params["number"] = threadNumber
         }
 
-        if let callStackSymbols {
-            switch callStackSymbols {
-            case .raw(let array):
-                params["stack_frames"] = array
-            case .demangled(let array):
-                params["stack_frames"] = array
-            }
+        switch callStackSymbols {
+        case .raw(let array):
+            params["stack_frames"] = array
+        case .demangled(let array):
+            params["stack_frames"] = array
+        case .none:
+            // No symbols, don't set the key
+            break
         }
 
         return params

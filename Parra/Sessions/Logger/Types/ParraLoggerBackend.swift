@@ -8,10 +8,10 @@
 
 import Foundation
 
-public protocol ParraLoggerBackend {
+internal protocol ParraLoggerBackend {
     /// bypassEventCreation params are for case for use within Parra SessionStorage infrastructure,
     /// in places where writing console logs can not safely generate events due to recursion risks.
 
-    func log(data: ParraLogData, bypassEventCreation: Bool)
-    func logMultiple(data: [ParraLogData], bypassEventCreation: Bool)
+    func log(data: ParraLogData)
+    func logMultiple(data: [ParraLogData])
 }

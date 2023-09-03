@@ -17,13 +17,18 @@ internal extension Parra {
         _ line: Int = #line,
         _ column: Int = #column
     ) {
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
+
         shared.sessionManager.writeEvent(
             wrappedEvent: .internalEvent(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
+                column: column,
+                threadInfo: threadInfo
             )
         )
     }
@@ -36,13 +41,18 @@ internal extension Parra {
         _ line: Int = #line,
         _ column: Int = #column
     ) {
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
+
         sessionManager.writeEvent(
             wrappedEvent: .internalEvent(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
+                column: column,
+                threadInfo: threadInfo
             )
         )
     }

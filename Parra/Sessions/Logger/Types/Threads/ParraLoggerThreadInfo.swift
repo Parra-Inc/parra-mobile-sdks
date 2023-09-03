@@ -8,13 +8,6 @@
 
 import Foundation
 
-internal enum StackSymbols: Codable {
-    case raw([String])
-    case demangled([CallStackFrame])
-}
-
-extension QualityOfService: Codable {}
-
 public struct ParraLoggerThreadInfo: Codable {
     public let id: Int
     public let queueName: String
@@ -23,11 +16,11 @@ public struct ParraLoggerThreadInfo: Codable {
     public let qualityOfService: QualityOfService
     public let threadName: String?
     public let threadNumber: UInt8?
-    internal private(set) var callStackSymbols: StackSymbols?
+    internal private(set) var callStackSymbols: ParraLoggerStackSymbols
 
     internal init(
         thread: Thread,
-        callStackSymbols: StackSymbols? = nil
+        callStackSymbols: ParraLoggerStackSymbols = .none
     ) {
         self.id = thread.threadId
         self.queueName = thread.queueName
@@ -43,23 +36,17 @@ public struct ParraLoggerThreadInfo: Codable {
             self.threadName = nil
             self.threadNumber = nil
         }
-
-        // TODO: Capture current OperationQueue state?
     }
 
     /// Demangles the call stack symbols and stores them in place of the raw symbols, if symbols
     /// exist and they haven't already been demangled.
     mutating internal func demangleCallStack() {
-        guard let callStackSymbols else {
-            return
-        }
-
         switch callStackSymbols {
         case .raw(let frames):
             self.callStackSymbols = .demangled(
                 CallStackParser.parse(frames: frames, discardParraFrames: true)
             )
-        case .demangled:
+        case .demangled, .none:
             break
         }
     }

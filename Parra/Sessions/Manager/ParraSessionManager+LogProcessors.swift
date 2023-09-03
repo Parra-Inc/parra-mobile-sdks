@@ -56,21 +56,32 @@ extension ParraSessionManager {
 //            category: processedLogData.context?.fileName ?? "unknown file"
 //        )
 
-        if let categories = processedLogData.context?.categories {
-            let catsString = categories.joined(separator: " -> ")
+        if let scopes = processedLogData.loggerContext?.scopes {
+            let scopesString = scopes.map { $0.name }.joined(separator: ".")
 
             let log = OSLog(
-                subsystem: processedLogData.callSiteModule,
-                category: .dynamicTracing
+                subsystem: "\(processedLogData.callSiteModule)/\(processedLogData.callSiteFileName)",
+                category: scopesString
             )
 
-
-
-            os_log(processedLogData.level.osLogType, log: log, "[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
+            os_log(
+                processedLogData.level.osLogType,
+                log: log,
+                "[\(processedLogData.level.name)]  \(processedLogData.callSiteFunction)#\(processedLogData.callSiteLine)  \(processedLogData.message)"
+            )
 
 //            appleLogger.info("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
         } else {
-            os_log(processedLogData.level.osLogType, "[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
+            let log = OSLog(
+                subsystem: processedLogData.callSiteModule,
+                category: processedLogData.callSiteFileName
+            )
+
+            os_log(
+                processedLogData.level.osLogType,
+                log: log,
+                "[\(processedLogData.level.name)]  \(processedLogData.callSiteFunction)#\(processedLogData.callSiteLine)  \(processedLogData.message)"
+            )
 
 //            appleLogger.info("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
         }

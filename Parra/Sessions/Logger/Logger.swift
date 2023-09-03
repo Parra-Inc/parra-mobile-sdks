@@ -23,7 +23,7 @@ public class Logger {
         }
     }
 
-    public let context: ParraLoggerContext
+    internal let context: ParraLoggerContext
     public private(set) weak var parent: Logger?
 
     /// Whether or not logging is enabled on this logger instance. Logging is enabled
@@ -39,26 +39,24 @@ public class Logger {
     /// these are meant to be flushed to the newly set logger backend.
     private static var cachedLogs = [ParraLogData]()
 
+    internal let fiberId: String?
+
     public init(
         category: String? = nil,
         extra: [String : Any]? = nil,
-        fileId: String = #fileID
+        fileId: String = #fileID,
+        function: String = #function
     ) {
         bypassEventCreation = false
+        fiberId = UUID().uuidString
 
-        if let category {
-            context = ParraLoggerContext(
-                fileId: fileId,
-                categories: [category],
-                extra: extra ?? [:]
-            )
-        } else {
-            context = ParraLoggerContext(
-                fileId: fileId,
-                categories: [],
-                extra: extra ?? [:]
-            )
-        }
+        context = ParraLoggerContext(
+            fiberId: fiberId,
+            fileId: fileId,
+            category: category,
+            scopes: [.function(function)],
+            extra: extra ?? [:]
+        )
     }
 
     internal convenience init(
@@ -78,10 +76,10 @@ public class Logger {
 
     internal init(
         parent: Logger,
-        context: ParraLoggerContext,
-        bypassEventCreation: Bool
+        context: ParraLoggerContext
     ) {
-        self.bypassEventCreation = bypassEventCreation
+        self.bypassEventCreation = parent.bypassEventCreation
+        self.fiberId = parent.fiberId
         self.context = context
         self.parent = parent
     }
@@ -91,79 +89,81 @@ public class Logger {
         message: ParraLazyLogParam,
         extraError: @escaping () -> Error? = { nil },
         extra: (() -> [String : Any])? = nil,
-        callSiteContext: ParraLoggerCallSiteContext,
-        threadInfo: ParraLoggerThreadInfo
+        callSiteContext: ParraLoggerCallSiteContext
     ) -> ParraLogMarker {
+        let logContext = ParraLogContext(
+            callSiteContext: callSiteContext,
+            loggerContext: context,
+            bypassEventCreation: bypassEventCreation
+        )
+
         guard isEnabled else {
             return ParraLogMarker(
-                initialLevel: level,
                 message: message,
-                initialCallSiteContext: callSiteContext
+                initialLevel: level,
+                initialLogContext: logContext
             )
         }
 
         let data = ParraLogData(
             level: level,
-            context: context,
             message: message,
             extraError: extraError,
             extra: extra,
-            callSiteContext: callSiteContext,
-            threadInfo: threadInfo
+            logContext: logContext
         )
 
         if let loggerBackend = Logger.loggerBackend {
             loggerBackend.log(
-                data: data,
-                bypassEventCreation: bypassEventCreation
+                data: data
             )
         } else {
             Logger.collectLogWithoutDestination(data: data)
         }
 
         return ParraLogMarker(
-            initialLevel: level,
             message: message,
-            initialCallSiteContext: callSiteContext,
-            context: self.context
+            initialLevel: level,
+            initialLogContext: logContext
         )
     }
 
     internal static func logToBackend(
         level: ParraLogLevel,
         message: ParraLazyLogParam,
-        context: ParraLoggerContext? = nil,
         extraError: @escaping () -> Error? = { nil },
         extra: (() -> [String : Any])? = nil,
-        callSiteContext: ParraLoggerCallSiteContext,
-        threadInfo: ParraLoggerThreadInfo
+        callSiteContext: ParraLoggerCallSiteContext
     ) -> ParraLogMarker {
+        let logContext = ParraLogContext(
+            callSiteContext: callSiteContext,
+            loggerContext: nil,
+            // Static logger methods do not have a way of changing this configuration (intentionally).
+            bypassEventCreation: false
+        )
+
         let data = ParraLogData(
             level: level,
-            context: context,
             message: message,
             extraError: extraError,
             extra: extra,
-            callSiteContext: callSiteContext,
-            threadInfo: threadInfo
+            logContext: logContext
         )
 
         // We don't check that the logger is enabled here because this only applies to
         // logger instances.
         if let loggerBackend {
             loggerBackend.log(
-                data: data,
-                bypassEventCreation: false
+                data: data
             )
         } else {
             collectLogWithoutDestination(data: data)
         }
 
         return ParraLogMarker(
-            initialLevel: level,
             message: message,
-            initialCallSiteContext: callSiteContext,
-            context: context
+            initialLevel: level,
+            initialLogContext: logContext
         )
     }
 
@@ -195,8 +195,7 @@ public class Logger {
         cachedLogs = []
 
         loggerBackend.logMultiple(
-            data: logCacheCopy,
-            bypassEventCreation: false
+            data: logCacheCopy
         )
     }
 

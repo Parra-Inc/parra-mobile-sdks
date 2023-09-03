@@ -14,16 +14,17 @@ extension ParraLogProcessedData: ParraDictionaryConvertible {
             "level": level.loggerDescription,
             "message": message,
             "call_site": [
-                "file_name": callSiteFileName,
                 "module": callSiteModule,
+                "file_name": callSiteFileName,
+                "file_extension": callSiteFileName,
                 "function": callSiteFunction,
                 "line": callSiteLine,
-                "column": callSiteColumn,
+                "column": callSiteColumn
             ] as [String : Any]
         ]
 
-        if let context {
-            params["context"] = context.dictionary
+        if let loggerContext {
+            params["logger_context"] = loggerContext.dictionary
         }
 
         if !extra.isEmpty {

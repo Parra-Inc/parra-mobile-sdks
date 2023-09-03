@@ -9,8 +9,6 @@
 import Foundation
 
 public extension Logger {
-    // TODO: Measuring the time since a marker should automatically be considered a "moment"
-
     // TODO: It is possible that multiple markers returned from `time()` functions could be chained together to measure
     //       the times between multiple events. It would be nice to detect that a start marker was itself a measurement
     //       against its own start marker and output in a format that allowed you to see the entire sequence of measurements.
@@ -41,7 +39,7 @@ public extension Logger {
         _ line: Int = #line,
         _ column: Int = #column
     ) -> ParraLogMarkerMeasurement {
-        let endDate = Date.now
+        let endDate = Date.now // Should be the very first line.
         let threadInfo = ParraLoggerThreadInfo(
             thread: .current
         )
@@ -50,7 +48,8 @@ public extension Logger {
             fileId: fileId,
             function: function,
             line: line,
-            column: column
+            column: column,
+            threadInfo: threadInfo
         )
 
         let timeInterval = endDate.timeIntervalSince(startMarker.date)
@@ -64,12 +63,14 @@ public extension Logger {
         )
 
         let lazyMessage = ParraLazyLogParam.string(messageProvider)
+
+        // Context is tricky here, because there is a case where a marker created by a logger instance with
+        // more context is passed to the static time measurement method, which lacks the same context.
+
         let nextMarker = logToBackend(
             level: .info,
             message: lazyMessage,
-            context: startMarker.initialContext,
-            callSiteContext: callSiteContext,
-            threadInfo: threadInfo
+            callSiteContext: callSiteContext
         )
 
         return ParraLogMarkerMeasurement(
@@ -112,7 +113,8 @@ public extension Logger {
             fileId: fileId,
             function: function,
             line: line,
-            column: column
+            column: column,
+            threadInfo: threadInfo
         )
 
         let timeInterval = endDate.timeIntervalSince(startMarker.date)
@@ -129,8 +131,7 @@ public extension Logger {
         let nextMarker = logToBackend(
             level: .info,
             message: lazyMessage,
-            callSiteContext: callSiteContext,
-            threadInfo: threadInfo
+            callSiteContext: callSiteContext
         )
 
         return ParraLogMarkerMeasurement(
