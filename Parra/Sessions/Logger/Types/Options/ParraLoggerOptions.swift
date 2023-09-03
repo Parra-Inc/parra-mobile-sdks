@@ -16,20 +16,31 @@ public struct ParraLoggerOptions {
         public static let eventDebugLoggingEnabled = "PARRA_DEBUG_EVENT_LOGGING"
     }
 
+#if swift(>=5.9)
+    // Xcode 15 (which ships with Swift 5.9) has a new console that doesn't require printing
+    // the log level or timestamp.
     public static let `default` = ParraLoggerOptions(
         environment: .automatic,
         minimumLogLevel: .info,
         consoleFormatOptions: [
-            .printDelimiter(delimiter: "["),
-            .printLevel(style: .default),
-            .printDelimiter(delimiter: "]["),
-            .printTimestamps(style: .default),
-            .printDelimiter(delimiter: "]["),
-            .printCallSite(options: .default),
-            .printDelimiter(delimiter: "]"),
-            .printExtras
+            .printMessage(leftPad: " ", rightPad: " "),
+            .printCallSite(options: .default, leftPad: "\t\t\t\t(", rightPad: ")"),
+            .printExtras(style: .pretty, leftPad: "\n", rightPad: "")
         ]
     )
+#else
+    public static let `default` = ParraLoggerOptions(
+        environment: .automatic,
+        minimumLogLevel: .info,
+        consoleFormatOptions: [
+            .printLevel(style: .default, leftPad: "[", rightPad: "]"),
+            .printTimestamps(style: .default, leftPad: "[", rightPad: "]"),
+            .printMessage(leftPad: " ", rightPad: " "),
+            .printCallSite(options: .default, leftPad: "\t\t\t\t(", rightPad: ")"),
+            .printExtras(style: .condensed, leftPad: "\n", rightPad: "")
+        ]
+    )
+#endif
 
     /// Use the environment option to override the behavior for when Parra
     /// logs are displayed in the console or uploaded to Parra. For more

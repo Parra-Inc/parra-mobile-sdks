@@ -14,72 +14,112 @@ import Foundation
 
 internal struct ParraLogProcessedData {
     internal let level: ParraLogLevel
-    internal let message: String
-    internal let extra: [String : Any]
+    internal let extra: [String : Any]?
 
     // Differs from the module/filenames in the context. Those could be from
     // where a Logger instance was created. These will be from where the final
     // log call was made.
-    internal let callSiteModule: String
-    internal let callSiteFileName: String
-    internal let callSiteFileExtension: String?
-    internal let callSiteFunction: String
-    internal let callSiteLine: Int
-    internal let callSiteColumn: Int
-
+    internal let callSiteContext: ParraLoggerCallSiteContext
     internal let loggerContext: ParraLoggerContext?
 
-    internal let threadInfo: ParraLoggerThreadInfo
+    internal let subsystem: String
+    internal let category: String
+    internal let message: String
+    internal let timestamp: Date
 
     init(logData: ParraLogData) {
-        var extra = logData.extra ?? [:]
-
         let message: String
+        let errorWithExtra: ParraErrorWithExtra?
+
         switch logData.message {
         case .string(let messageProvider):
             message = messageProvider()
+
+            // If a message string is provided, an extra error may be included as well.
+            // This field is not present when the message type is error.
+            if let extraError = logData.extraError {
+                errorWithExtra = LoggerHelpers.extractMessageAndExtra(
+                    from: extraError
+                )
+            } else {
+                errorWithExtra = nil
+            }
         case .error(let errorProvider):
-            let errorWithExtra = LoggerHelpers.extractMessageAndExtra(
+            let extracted = LoggerHelpers.extractMessageAndExtra(
                 from: errorProvider()
             )
 
-            message = errorWithExtra.message
-            if !errorWithExtra.extra.isEmpty {
-                extra["error_extra"] = errorWithExtra.extra
-            }
+            message = extracted.message
+
+            errorWithExtra = extracted
         }
 
         let logContext = logData.logContext
-        let callSiteContext = logContext.callSiteContext
+        let loggerContext = logContext.loggerContext
+        var callSiteContext = logContext.callSiteContext
 
-        let (module, fileName, fileExtension) = LoggerHelpers.splitFileId(
-            fileId: callSiteContext.fileId
-        )
-        callSiteModule = module
-        callSiteFileName = fileName
-        callSiteFileExtension = fileExtension
-        callSiteFunction = callSiteContext.function
-        callSiteLine = callSiteContext.line
-        callSiteColumn = callSiteContext.column
-
-        if let extraError = logData.extraError {
-            let errorWithExtra = LoggerHelpers.extractMessageAndExtra(
-                from: extraError
-            )
-
-            extra["extra_error_description"] = errorWithExtra.message
-            extra["extra_error"] = errorWithExtra.extra
-        }
-
-        var threadInfo = callSiteContext.threadInfo
         if logData.level.requiresStackTraceCapture {
-            threadInfo.demangleCallStack()
+            callSiteContext.threadInfo.demangleCallStack()
         }
 
+        self.subsystem = callSiteContext.fileId
+        self.category = ParraLogProcessedData.createCategory(
+            logContext: logContext
+        )
         self.level = logData.level
-        self.loggerContext = logContext.loggerContext
+        self.timestamp = logData.timestamp
+        self.loggerContext = loggerContext
         self.message = message
-        self.extra = extra
-        self.threadInfo = threadInfo
+        self.callSiteContext = callSiteContext
+        self.extra = ParraLogProcessedData.mergeAllExtras(
+            callSiteExtra: logData.extra,
+            loggerExtra: loggerContext?.extra,
+            errorWithExtra: errorWithExtra
+        )
+    }
+
+    private static func mergeAllExtras(
+        callSiteExtra: [String : Any]?,
+        loggerExtra: [String : Any]?,
+        errorWithExtra: ParraErrorWithExtra?
+    ) -> [String : Any]? {
+
+        var combinedExtra = loggerExtra ?? [:]
+
+        if let errorWithExtra {
+            var errorExtra = errorWithExtra.extra ?? [:]
+            errorExtra["$message"] = errorWithExtra.message
+
+            combinedExtra["$error"] = errorExtra
+        }
+
+        if let callSiteExtra {
+            combinedExtra.merge(callSiteExtra) { $1 }
+        }
+
+        return combinedExtra
+    }
+
+    private static func createCategory(
+        logContext: ParraLogContext
+    ) -> String {
+        var categoryComponents = [String]()
+        if let loggerContext = logContext.loggerContext {
+            if let category = loggerContext.category {
+                categoryComponents.append(category)
+            }
+
+            if !loggerContext.scopes.isEmpty {
+                categoryComponents.append(
+                    contentsOf: loggerContext.scopes.map { $0.name }
+                )
+            }
+        }
+
+        categoryComponents.append(
+            logContext.callSiteContext.function
+        )
+
+        return categoryComponents.joined(separator: "/")
     }
 }

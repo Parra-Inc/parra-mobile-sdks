@@ -51,9 +51,23 @@ public extension UIViewController {
             }
 
             // TODO: Audit/make into helper for other classes.
-            let category = self.title ?? self.accessibilityLabel ?? String(describing: type(of: self))
+            let category = String(describing: type(of: self))
 
-            let new = Logger(category: "ViewController (\(category))")
+            let fileId = type(of: self).description().split(separator: ".").joined(separator: "/")
+
+            var extra: [String : Any] = [
+                "hasNavigationController": navigationController != nil
+            ]
+            if let title {
+                extra["title"] = title
+            }
+
+            let new = Logger(
+                category: "ViewController (\(category))",
+                extra: extra,
+                fileId: fileId,
+                function: ""
+            )
 
             UIViewController.association[self] = new
 

@@ -14,12 +14,10 @@ extension ParraLogProcessedData: ParraDictionaryConvertible {
             "level": level.loggerDescription,
             "message": message,
             "call_site": [
-                "module": callSiteModule,
-                "file_name": callSiteFileName,
-                "file_extension": callSiteFileName,
-                "function": callSiteFunction,
-                "line": callSiteLine,
-                "column": callSiteColumn
+                "file_id": callSiteContext.fileId,
+                "function": callSiteContext.function,
+                "line": callSiteContext.line,
+                "column": callSiteContext.column
             ] as [String : Any]
         ]
 
@@ -27,11 +25,11 @@ extension ParraLogProcessedData: ParraDictionaryConvertible {
             params["logger_context"] = loggerContext.dictionary
         }
 
-        if !extra.isEmpty {
+        if let extra, !extra.isEmpty {
             params["extra"] = extra
         }
 
-        let threadInfoDict = threadInfo.dictionary
+        let threadInfoDict = callSiteContext.threadInfo.dictionary
         if !threadInfoDict.isEmpty {
             params["thread"] = threadInfoDict
         }

@@ -49,122 +49,64 @@ extension ParraSessionManager {
         processedLogData: ParraLogProcessedData,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
-        // Context:
-        // Module -> file -> context -> subcontext -> ... -> subcontext -> call site module/file/function
-//        let appleLogger = os.Logger(
-//            subsystem: processedLogData.context?.module ?? "unknown module",
-//            category: processedLogData.context?.fileName ?? "unknown file"
-//        )
-
-        if let scopes = processedLogData.loggerContext?.scopes {
-            let scopesString = scopes.map { $0.name }.joined(separator: ".")
-
-            let log = OSLog(
-                subsystem: "\(processedLogData.callSiteModule)/\(processedLogData.callSiteFileName)",
-                category: scopesString
-            )
-
-            os_log(
-                processedLogData.level.osLogType,
-                log: log,
-                "[\(processedLogData.level.name)]  \(processedLogData.callSiteFunction)#\(processedLogData.callSiteLine)  \(processedLogData.message)"
-            )
-
-//            appleLogger.info("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(catsString)][\(processedLogData.message)]")
-        } else {
-            let log = OSLog(
-                subsystem: processedLogData.callSiteModule,
-                category: processedLogData.callSiteFileName
-            )
-
-            os_log(
-                processedLogData.level.osLogType,
-                log: log,
-                "[\(processedLogData.level.name)]  \(processedLogData.callSiteFunction)#\(processedLogData.callSiteLine)  \(processedLogData.message)"
-            )
-
-//            appleLogger.info("[\(Date().ISO8601Format(.iso8601))][\(processedLogData.level.name)][\(processedLogData.message)]")
+        let messageSegments = consoleFormatOptions.compactMap { option in
+            switch option {
+            case .printMessage(let leftPad, let rightPad):
+                return paddedIfPresent(
+                    string: processedLogData.message,
+                    leftPad: leftPad,
+                    rightPad: rightPad
+                )
+            case .printTimestamps(let style, let leftPad, let rightPad):
+                return paddedIfPresent(
+                    string: format(
+                        timestamp: processedLogData.timestamp,
+                        with: style
+                    ),
+                    leftPad: leftPad,
+                    rightPad: rightPad
+                )
+            case .printLevel(let style, let leftPad, let rightPad):
+                return paddedIfPresent(
+                    string: format(
+                        level: processedLogData.level,
+                        with: style
+                    ),
+                    leftPad: leftPad,
+                    rightPad: rightPad
+                )
+            case .printCallSite(let options, let leftPad, let rightPad):
+                return paddedIfPresent(
+                    string: format(
+                        callSite: processedLogData.callSiteContext,
+                        with: options
+                    ),
+                    leftPad: leftPad,
+                    rightPad: rightPad
+                )
+            case .printExtras(let style, let leftPad, let rightPad):
+                return paddedIfPresent(
+                    string: format(
+                        extra: processedLogData.extra,
+                        with: style
+                    ),
+                    leftPad: leftPad,
+                    rightPad: rightPad
+                )
+            }
         }
 
+        let message = messageSegments.joined().trimmingCharacters(in: .whitespacesAndNewlines)
 
-        //        print(processedLogData.extra)
-        //        let log = os.Logger(subsystem: "sub", category: "cat")
-        //        log.info("test test test")
+        let systemLogger = os.Logger(
+            subsystem: processedLogData.subsystem,
+            category: processedLogData.category
+        )
 
-        //        var markerComponents: [String] = loggerOptions.compactMap { option in
-        //            let component: String?
-        //            switch option {
-        //            case .printTimestamp(let style):
-        //                component = format(
-        //                    timestamp: .now,
-        //                    with: style
-        //                )
-        //            case .printVerbosity(let style):
-        //                component = format(
-        //                    level: level,
-        //                    with: style
-        //                )
-        //            case .printCallSite(let options):
-        //                component = format(
-        //                    callSite: callSiteContext,
-        //                    with: options
-        //                )
-        //            }
-        //
-        //            return component
-        //        }
-
-        //        "╭─"
-        //        "├─"
-        //        "╰─"
-
-
-
-        //        if loggerConfig.printTimestamps {
-        //            markerComponents.append(timestamp)
-        //        }
-        //
-        //        if loggerConfig.printModuleName {
-        //            markerComponents.append(module)
-        //        }
-        //
-        //        if loggerConfig.printFileName {
-        //            markerComponents.append(file)
-        //        }
-        //
-        //        if loggerConfig.printThread {
-        //            markerComponents.append("🧵 \(queueName)")
-        //        }
-
-        //        let formattedMarkers = markerComponents.joined()
-        //
-        //        var formattedMessage: String
-        ////        if loggerConfig.printVerbositySymbol {
-        ////            formattedMessage = " \(level.symbol) \(formattedMarkers) \(baseMessage)"
-        ////        } else {
-        //            formattedMessage = "\(formattedMarkers) \(baseMessage)"
-        ////        }
-        //
-        ////        if loggerConfig.printCallsite {
-        ////            let formattedLocation = LoggerHelpers.createFormattedLocation(
-        ////                fileId: callSiteContext.fileId,
-        ////                function: callSiteContext.function,
-        ////                line: callSiteContext.line
-        ////            )
-        ////            formattedMessage = "\(formattedMarkers) \(formattedLocation) \(baseMessage)"
-        ////        }
-        //
-        //        if !extraWithAdditions.isEmpty {
-        //            formattedMessage.append(contentsOf: "\n\u{2009}┃\t\(extraWithAdditions.debugDescription)")
-        //        }
-        //
-        //        if let callStackSymbols {
-        //            let formattedStackTrace = callStackSymbols.joined(separator: "\n")
-        //
-        //            formattedMessage.append(" - Call stack:\n\(formattedStackTrace)")
-        //        }
-        //
-        //        print(formattedMessage)
+        systemLogger.log(
+            level: processedLogData.level.osLogType,
+            "\(message, align: .right(columns: 200))"
+        )
     }
 
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
@@ -172,5 +114,6 @@ extension ParraSessionManager {
         wrappedEvent: ParraWrappedEvent,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
+        print(wrappedEvent)
     }
 }

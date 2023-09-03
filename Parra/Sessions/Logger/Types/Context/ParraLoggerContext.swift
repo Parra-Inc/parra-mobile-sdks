@@ -116,17 +116,4 @@ internal struct ParraLoggerContext {
             extra: mergedExtra
         )
     }
-
-    lazy var slug: String = {
-        var path = "\(module)/\(fileName)/"
-        if let category {
-            path.append("\(category)/")
-        }
-        if !scopes.isEmpty {
-            let scopeString = scopes.map { $0.name }.joined(separator: "/")
-            path.append("\(scopeString)/")
-        }
-
-        return path
-    }()
 }

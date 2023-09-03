@@ -11,17 +11,17 @@ import Foundation
 public struct ParraLoggerCallSiteContext {
     // fileId is used in place of Swift < 5.8 #file or #filePath to not
     // expose sensitive information from full file paths.
-    let fileId: String
-    let function: String
-    let line: Int
-    let column: Int
+    internal let fileId: String
+    internal let function: String
+    internal let line: Int
+    internal let column: Int
 
     /// Must be passed in from the call site to ensure that information about the correct thread
     /// is captured, and that we don't capture stack frames from within the Parra Logger, thus
     /// potentially omitting important context.
-    let threadInfo: ParraLoggerThreadInfo
+    internal var threadInfo: ParraLoggerThreadInfo
 
-    init(
+    internal init(
         fileId: String,
         function: String,
         line: Int,
@@ -33,5 +33,15 @@ public struct ParraLoggerCallSiteContext {
         self.line = line
         self.column = column
         self.threadInfo = threadInfo
+    }
+
+    internal var simpleFunctionName: String {
+        let components = function.split(separator: "(")
+
+        guard let first = components.first else {
+            return function
+        }
+
+        return String(first)
     }
 }

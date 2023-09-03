@@ -17,6 +17,4 @@ public enum ParraLoggerTimestampStyle {
     case epoch
     case iso8601
     case rfc3339
-
-    case none
 }

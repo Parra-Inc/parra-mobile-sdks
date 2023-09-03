@@ -11,6 +11,8 @@ import Foundation
 // TODO: Define and impose length limits for keys/values.
 
 internal struct ParraLogData {
+    let timestamp: Date
+
     let level: ParraLogLevel
 
     /// Messages should always be functions that return a message. This allows the logger

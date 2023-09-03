@@ -91,6 +91,7 @@ public class Logger {
         extra: [String : Any]? = nil,
         callSiteContext: ParraLoggerCallSiteContext
     ) -> ParraLogMarker {
+        let timestamp = Date.now
         let logContext = ParraLogContext(
             callSiteContext: callSiteContext,
             loggerContext: context,
@@ -99,6 +100,7 @@ public class Logger {
 
         guard isEnabled else {
             return ParraLogMarker(
+                timestamp: timestamp,
                 message: message,
                 initialLevel: level,
                 initialLogContext: logContext
@@ -106,6 +108,7 @@ public class Logger {
         }
 
         let data = ParraLogData(
+            timestamp: timestamp,
             level: level,
             message: message,
             extraError: extraError,
@@ -122,6 +125,7 @@ public class Logger {
         }
 
         return ParraLogMarker(
+            timestamp: timestamp,
             message: message,
             initialLevel: level,
             initialLogContext: logContext
@@ -135,6 +139,7 @@ public class Logger {
         extra: [String : Any]? = nil,
         callSiteContext: ParraLoggerCallSiteContext
     ) -> ParraLogMarker {
+        let timestamp = Date.now
         let logContext = ParraLogContext(
             callSiteContext: callSiteContext,
             loggerContext: nil,
@@ -143,6 +148,7 @@ public class Logger {
         )
 
         let data = ParraLogData(
+            timestamp: timestamp,
             level: level,
             message: message,
             extraError: extraError,
@@ -161,6 +167,7 @@ public class Logger {
         }
 
         return ParraLogMarker(
+            timestamp: timestamp,
             message: message,
             initialLevel: level,
             initialLogContext: logContext

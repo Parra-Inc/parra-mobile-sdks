@@ -17,8 +17,13 @@ internal enum ParraLoggerScopeType: Equatable {
         case .customName(let string):
             return string
         case .function(let string):
-            // TODO: Maybe produce nicer output that doesn't include param names?
-            return string
+            let components = string.split(separator: "(")
+
+            guard let first = components.first else {
+                return string
+            }
+
+            return String(first)
         }
     }
 

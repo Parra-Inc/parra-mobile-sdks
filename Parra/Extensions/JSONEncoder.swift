@@ -30,4 +30,27 @@ extension JSONEncoder {
 
         return encoder
     }()
+
+    static var parraPrettyConsoleEncoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+
+        // TODO: Make this a function that accepts options for data/etc encoding strategies.
+
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.keyEncodingStrategy = .useDefaultKeys
+        encoder.dataEncodingStrategy = .custom({ _, encoder in
+            var container = encoder.singleValueContainer()
+            try container.encode("<data>")
+        })
+        encoder.nonConformingFloatEncodingStrategy = .convertToString(
+            positiveInfinity: "inf",
+            negativeInfinity: "-inf",
+            nan: "NaN"
+        )
+        encoder.outputFormatting = [
+            .withoutEscapingSlashes, .sortedKeys, .prettyPrinted
+        ]
+
+        return encoder
+    }()
 }

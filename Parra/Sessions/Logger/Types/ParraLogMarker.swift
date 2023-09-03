@@ -9,19 +9,19 @@
 import Foundation
 
 public struct ParraLogMarker {
-    public let date: Date
+    public let timestamp: Date
     public let initialLevel: ParraLogLevel
 
     internal let initialLogContext: ParraLogContext
     internal let message: ParraLazyLogParam
 
     internal init(
+        timestamp: Date,
         message: ParraLazyLogParam,
         initialLevel: ParraLogLevel,
-        initialLogContext: ParraLogContext,
-        date: Date = .now
+        initialLogContext: ParraLogContext
     ) {
-        self.date = date
+        self.timestamp = timestamp
         self.message = message
         self.initialLevel = initialLevel
         self.initialLogContext = initialLogContext

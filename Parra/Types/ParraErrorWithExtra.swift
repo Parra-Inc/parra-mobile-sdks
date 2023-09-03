@@ -10,9 +10,12 @@ import Foundation
 
 internal struct ParraErrorWithExtra {
     let message: String
-    let extra: [String : Any]
+    let extra: [String : Any]?
 
-    internal init(message: String, extra: [String : Any]) {
+    internal init(
+        message: String,
+        extra: [String : Any]?
+    ) {
         self.message = message
         self.extra = extra
     }
@@ -23,9 +26,11 @@ internal struct ParraErrorWithExtra {
     }
 
     internal init(error: Error) {
-        let (message, extra) = LoggerFormatters.extractMessage(from: error)
+        let (message, extra) = LoggerFormatters.extractMessage(
+            from: error
+        )
 
         self.message = message
-        self.extra = extra ?? [:]
+        self.extra = extra
     }
 }

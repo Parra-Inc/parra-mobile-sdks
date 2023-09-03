@@ -20,7 +20,7 @@ public extension Logger {
         _ function: String = #function
     ) -> Logger {
         // TODO: Maybe capture call site info here and use it to add scope entered/exited logs
-        return scope(named: name, extra: nil, function)
+        return scope(named: name, nil, function)
     }
 
     /// <#Description#>
@@ -29,7 +29,7 @@ public extension Logger {
     ///   - extra: <#extra description#>
     func scope(
         named name: String? = nil,
-        extra: [String : Any]?,
+        _ extra: [String : Any]?,
         _ function: String = #function
     ) -> Logger {
         let scopes: [ParraLoggerScopeType]
@@ -55,15 +55,10 @@ public extension Logger {
     ///   - block: <#block description#>
     func withScope<T>(
         named name: String? = nil,
-        block: (_ logger: Logger) -> T,
+        _ block: (_ logger: Logger) -> T,
         _ function: String = #function
     ) -> T {
-        return withScope(
-            named: name,
-            extra: nil,
-            block: block,
-            function
-        )
+        return withScope(named: name, nil, block, function)
     }
 
     /// <#Description#>
@@ -73,11 +68,11 @@ public extension Logger {
     ///   - block: <#block description#>
     func withScope<T>(
         named name: String? = nil,
-        extra: [String : Any]?,
-        block: (_ logger: Logger) -> T,
+        _ extra: [String : Any]?,
+        _ block: (_ logger: Logger) -> T,
         _ function: String = #function
     ) -> T {
-        let scoped = scope(named: name, extra: extra, function)
+        let scoped = scope(named: name, extra, function)
 
         return block(scoped)
     }
@@ -89,15 +84,10 @@ public extension Logger {
     ///   - block: <#block description#>
     func withScope<T>(
         named name: String? = nil,
-        block: (_ logger: Logger) throws -> T,
+        _ block: (_ logger: Logger) throws -> T,
         _ function: String = #function
     ) throws -> T {
-        return try withScope(
-            named: name,
-            extra: nil,
-            block: block,
-            function
-        )
+        return try withScope(named: name, nil, block, function)
     }
 
     /// <#Description#>
@@ -107,11 +97,11 @@ public extension Logger {
     ///   - block: <#block description#>
     func withScope<T>(
         named name: String? = nil,
-        extra: [String : Any]?,
-        block: (_ logger: Logger) throws -> T,
+        _ extra: [String : Any]?,
+        _ block: (_ logger: Logger) throws -> T,
         _ function: String = #function
     ) rethrows -> T {
-        let scoped = scope(named: name, extra: extra, function)
+        let scoped = scope(named: name, extra, function)
 
         do {
             return try block(scoped)
@@ -128,15 +118,10 @@ public extension Logger {
     ///   - block: <#block description#>
     func withScope<T>(
         named name: String? = nil,
-        block: (_ logger: Logger) async throws -> T,
+        _ block: (_ logger: Logger) async throws -> T,
         _ function: String = #function
     ) async throws -> T {
-        return try await withScope(
-            named: name,
-            extra: nil,
-            block: block,
-            function
-        )
+        return try await withScope(named: name, nil, block, function)
     }
 
     /// <#Description#>
@@ -146,11 +131,11 @@ public extension Logger {
     ///   - block: <#block description#>
     func withScope<T>(
         named name: String? = nil,
-        extra: [String : Any]?,
-        block: (_ logger: Logger) async throws -> T,
+        _ extra: [String : Any]?,
+        _ block: (_ logger: Logger) async throws -> T,
         _ function: String = #function
     ) async rethrows -> T {
-        let scoped = scope(named: name, extra: extra, function)
+        let scoped = scope(named: name, extra, function)
 
         do {
             return try await block(scoped)
@@ -167,15 +152,10 @@ public extension Logger {
     ///   - block: <#block description#>
     func withScope<T>(
         named name: String? = nil,
-        block: (_ logger: Logger) async -> T,
+        _ block: (_ logger: Logger) async -> T,
         _ function: String = #function
     ) async -> T {
-        return await withScope(
-            named: name,
-            extra: nil,
-            block: block,
-            function
-        )
+        return await withScope(named: name, nil, block, function)
     }
 
     /// <#Description#>
@@ -185,11 +165,11 @@ public extension Logger {
     ///   - block: <#block description#>
     func withScope<T>(
         named name: String? = nil,
-        extra: [String : Any]?,
-        block: (_ logger: Logger) async -> T,
+        _ extra: [String : Any]?,
+        _ block: (_ logger: Logger) async -> T,
         _ function: String = #function
     ) async -> T {
-        let scoped = scope(named: name, extra: extra, function)
+        let scoped = scope(named: name, extra, function)
 
         return await block(scoped)
     }

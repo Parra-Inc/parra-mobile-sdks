@@ -52,7 +52,7 @@ public extension Logger {
             threadInfo: threadInfo
         )
 
-        let timeInterval = endDate.timeIntervalSince(startMarker.date)
+        let timeInterval = endDate.timeIntervalSince(startMarker.timestamp)
 
         // If the user provided a custom message, use it. Otherwise use the message that was attached to the
         // start marker
@@ -117,7 +117,7 @@ public extension Logger {
             threadInfo: threadInfo
         )
 
-        let timeInterval = endDate.timeIntervalSince(startMarker.date)
+        let timeInterval = endDate.timeIntervalSince(startMarker.timestamp)
 
         // If the user provided a custom message, use it. Otherwise use the message that was attached to the
         // start marker
