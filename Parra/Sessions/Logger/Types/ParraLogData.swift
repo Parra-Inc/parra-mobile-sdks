@@ -19,10 +19,10 @@ internal struct ParraLogData {
     let message: ParraLazyLogParam
 
     /// When a primary message is provided but there is still an error object attached to the log.
-    let extraError: () -> Error?
+    let extraError: Error?
 
     /// Any additional information that you're like to attach to the log.
-    let extra: (() -> [String : Any])?
+    let extra: [String : Any]?
 
     let logContext: ParraLogContext
 }

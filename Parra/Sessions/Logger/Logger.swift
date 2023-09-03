@@ -87,8 +87,8 @@ public class Logger {
     internal func logToBackend(
         level: ParraLogLevel,
         message: ParraLazyLogParam,
-        extraError: @escaping () -> Error? = { nil },
-        extra: (() -> [String : Any])? = nil,
+        extraError: Error? = nil,
+        extra: [String : Any]? = nil,
         callSiteContext: ParraLoggerCallSiteContext
     ) -> ParraLogMarker {
         let logContext = ParraLogContext(
@@ -131,8 +131,8 @@ public class Logger {
     internal static func logToBackend(
         level: ParraLogLevel,
         message: ParraLazyLogParam,
-        extraError: @escaping () -> Error? = { nil },
-        extra: (() -> [String : Any])? = nil,
+        extraError: Error? = nil,
+        extra: [String : Any]? = nil,
         callSiteContext: ParraLoggerCallSiteContext
     ) -> ParraLogMarker {
         let logContext = ParraLogContext(

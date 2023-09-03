@@ -32,7 +32,7 @@ internal struct ParraLogProcessedData {
     internal let threadInfo: ParraLoggerThreadInfo
 
     init(logData: ParraLogData) {
-        var extra = logData.extra?() ?? [:]
+        var extra = logData.extra ?? [:]
 
         let message: String
         switch logData.message {
@@ -62,7 +62,7 @@ internal struct ParraLogProcessedData {
         callSiteLine = callSiteContext.line
         callSiteColumn = callSiteContext.column
 
-        if let extraError = logData.extraError() {
+        if let extraError = logData.extraError {
             let errorWithExtra = LoggerHelpers.extractMessageAndExtra(
                 from: extraError
             )
