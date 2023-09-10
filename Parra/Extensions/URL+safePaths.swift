@@ -41,7 +41,7 @@ internal extension URL {
             return URL(
                 filePath: path,
                 directoryHint: .inferFromPath,
-                relativeTo: ParraDataManager.Base.applicationSupportDirectory
+                relativeTo: base
             )
         }
 
@@ -49,5 +49,24 @@ internal extension URL {
             fileURLWithPath: path,
             relativeTo: base
         )
+    }
+
+    func privateRelativePath() -> String {
+        guard isFileURL else {
+            return absoluteString
+        }
+
+        let prefix = ParraDataManager.Base.homeUrl.absoluteString
+        let base = absoluteString
+
+        if #available(iOS 16.0, *) {
+            return String(base.trimmingPrefix(prefix))
+        } else {
+            if base.hasPrefix(prefix) {
+                return String(base.dropFirst(prefix.count))
+            } else {
+                return lastComponents()
+            }
+        }
     }
 }

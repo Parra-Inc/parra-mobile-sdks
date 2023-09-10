@@ -26,7 +26,7 @@ internal actor FileSystemStorage: PersistentStorageMedium {
         self.jsonDecoder = jsonDecoder
         self.fileManager = fileManager
 
-        logger.trace("FileSystemStorage init with baseUrl: \(baseUrl.safeNonEncodedPath())")
+        logger.trace("FileSystemStorage init with baseUrl: \(baseUrl.privateRelativePath())")
 
         // TODO: Think about this more later, but I think this is a fatalError()
         do {
