@@ -82,10 +82,27 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "PARRA_LOG_LEVEL"
-            value = "trace"
+            value = "info"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "PARRA_DEBUG_EVENT_LOGGING"
+            value = "0"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "PARRA_DEBUG_OPEN_APP_DATA"
+            value = "0"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
+      <AdditionalOptions>
+         <AdditionalOption
+            key = "NSZombieEnabled"
+            value = "YES"
+            isEnabled = "YES">
+         </AdditionalOption>
+      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
