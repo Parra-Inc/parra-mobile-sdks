@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Find this at https://dashboard.parra.io/settings
         let myParraTenantId      = "4caab3fe-d0e7-4bc3-9d0a-4b36f32bd1b7"
         // Find this at https://dashboard.parra.io/applications
-        let myParraApplicationId = "cb22fd90-2abc-4044-b985-fcb86f61daa9"
+        let myParraApplicationId = "e9869122-fc90-4266-9da7-e5146d70deab"
 
         logger.debug("Initializing Parra")
 
