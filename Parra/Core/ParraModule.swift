@@ -29,10 +29,6 @@ internal extension ParraModule {
     dynamic static func libraryVersion() -> String {
         return bundle().infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
     }
-    
-    static func persistentStorageFolder() -> String {
-        return name.lowercased()
-    }
 
     static func eventPrefix() -> String {
         return "parra:\(name.lowercased())"

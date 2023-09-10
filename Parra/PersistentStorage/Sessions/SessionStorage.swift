@@ -167,17 +167,21 @@ internal class SessionStorage {
     internal func writeEvent(
         event: ParraSessionEvent
     ) {
-        withCurrentSessionEventHandle(
-            handler: { handle, session in
-                // TODO: Need a much more compressed format.
-                var data = try self.jsonEncoder.encode(event)
-                data.append(Constant.newlineCharData)
+        withCurrentSessionEventHandle { handle, session in
+            // TODO: Need a much more compressed format.
+            var data = try self.jsonEncoder.encode(event)
+            data.append(Constant.newlineCharData)
 
-                try handle.write(contentsOf: data)
-                try handle.synchronize()
-            },
-            completion: nil
-        )
+            try handle.write(contentsOf: data)
+            try handle.synchronize()
+        } completion: { result in
+            switch result {
+            case .success:
+                break
+            case .failure(let error):
+                logger.error("Error writing event to session", error)
+            }
+        }
     }
 
     // MARK: Retrieving Sessions

@@ -16,7 +16,7 @@ public class ParraDataManager {
         jsonDecoder: JSONDecoder,
         fileManager: FileManager
     ) {
-        let folder = Parra.persistentStorageFolder()
+        let folder = ParraDataManager.Directory.storageDirectoryName
 
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
             dataStorageMedium: .fileSystem(

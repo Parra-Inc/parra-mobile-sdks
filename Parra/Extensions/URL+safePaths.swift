@@ -32,4 +32,22 @@ internal extension URL {
             return path
         }
     }
+
+    static func safeUrlFromPath(
+        path: String,
+        relativeTo base: URL
+    ) -> URL {
+        if #available(iOS 16.0, *) {
+            return URL(
+                filePath: path,
+                directoryHint: .inferFromPath,
+                relativeTo: ParraDataManager.Base.applicationSupportDirectory
+            )
+        }
+
+        return URL(
+            fileURLWithPath: path,
+            relativeTo: base
+        )
+    }
 }

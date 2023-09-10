@@ -20,7 +20,7 @@ internal class ParraFeedbackDataManager {
     ) {
         self.parra = parra
 
-        let completedCardDataFolder = ParraFeedback.persistentStorageFolder()
+        let completedCardDataFolder = ParraDataManager.Directory.storageDirectoryName
         let completedCardDataFileName = ParraFeedbackDataManager.Key.completedCardsKey
         
         let completedCardDataStorageModule = ParraStorageModule<CompletedCard>(

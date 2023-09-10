@@ -24,13 +24,27 @@ public extension ParraDataManager {
             for: .cachesDirectory,
             in: .userDomainMask
         ).first!
+
+        public static let homeUrl = URL(
+            fileURLWithPath: NSHomeDirectory(),
+            isDirectory: true
+        )
+    }
+
+    internal enum Directory {
+        static let storageDirectoryName = "storage"
     }
 
     internal enum Path {
         internal static let networkCachesDirectory = Base.cachesURL.safeAppendDirectory("ParraNetworkCache")
+
         internal static let parraDirectory = Base.applicationSupportDirectory.safeAppendDirectory("parra")
+
+        internal static let storageDirectory = parraDirectory.safeAppendDirectory(
+            Directory.storageDirectoryName
+        )
     }
-    
+
     internal enum Key {
         internal static let userCredentialsKey = "com.parra.usercredential"
         internal static let userSessionsKey = "com.parra.usersession"

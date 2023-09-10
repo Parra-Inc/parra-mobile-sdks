@@ -27,12 +27,6 @@ internal class SessionReader {
     private var sessionHandle: FileHandle?
     private var eventsHandle: FileHandle?
 
-    private static let rootSessionsDirectory: URL = {
-        return ParraDataManager.Path.parraDirectory
-            .safeAppendDirectory(Parra.persistentStorageFolder())
-            .safeAppendDirectory("sessions")
-    }()
-
     internal init(
         basePath: URL,
         jsonDecoder: JSONDecoder,
@@ -91,7 +85,7 @@ internal class SessionReader {
         logger.trace("Getting all session directories")
 
         let directories = try fileManager.contentsOfDirectory(
-            at: SessionReader.rootSessionsDirectory,
+            at: basePath,
             includingPropertiesForKeys: [],
             options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
         )
@@ -106,7 +100,7 @@ internal class SessionReader {
         logger.trace("Creating session upload generator")
 
         return try ParraSessionUploadGenerator(
-            forSessionsAt: SessionReader.rootSessionsDirectory,
+            forSessionsAt: basePath,
             jsonDecoder: jsonDecoder,
             fileManager: fileManager
         )
@@ -136,7 +130,7 @@ internal class SessionReader {
         let nextSessionId = UUID().uuidString
         let sessionDir = sessionDirectory(
             for: nextSessionId,
-            in: SessionReader.rootSessionsDirectory
+            in: basePath
         )
 
         let (sessionPath, eventsPath) = SessionReader.sessionPaths(
@@ -202,7 +196,7 @@ internal class SessionReader {
     internal func deleteSessionSync(with id: String) throws {
         let sessionDir = sessionDirectory(
             for: id,
-            in: SessionReader.rootSessionsDirectory
+            in: basePath
         )
 
         try fileManager.removeItem(at: sessionDir)
