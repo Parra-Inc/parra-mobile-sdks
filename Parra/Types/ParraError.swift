@@ -13,7 +13,11 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     case notInitialized
     case missingAuthentication
     case authenticationFailed(String)
-    case networkError(request: URLRequest, response: HTTPURLResponse)
+    case networkError(
+        request: URLRequest,
+        response: HTTPURLResponse,
+        responseData: Data
+    )
     case fileSystem(path: URL, message: String)
     case jsonError(String)
     case unknown
@@ -58,8 +62,13 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return baseMessage
         case .authenticationFailed(let error):
             return "\(baseMessage) Error: \(error)"
-        case .networkError(let request, let response):
-            return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)"
+        case .networkError(let request, let response, let data):
+#if DEBUG
+            let dataString = String(data: data, encoding: .utf8) ?? "unknown"
+            return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)\nData: \(dataString)"
+#else
+            return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)\nData: \(data.count) byte(s)"
+#endif
         case .fileSystem(let path, let message):
             return "\(baseMessage)\nPath: \(path.relativeString)\nError: \(message)"
         }
@@ -81,11 +90,27 @@ extension ParraError: ParraDictionaryConvertible {
             return [
                 "authentication_error": error
             ]
-        case .networkError(let request, let response):
+        case .networkError(let request, let response, let body):
+#if DEBUG
+            let dataString = String(data: body, encoding: .utf8) ?? "unknown"
+
             return [
                 "request": request.dictionary,
-                "response": response.dictionary
+                "response": response.dictionary,
+                "body": [
+                    "length": body.count,
+                    "content": dataString
+                ]
             ]
+#else
+            return [
+                "request": request.dictionary,
+                "response": response.dictionary,
+                "body": [
+                    "length": body.count
+                ]
+            ]
+#endif
         case .fileSystem(let path, let message):
             return [
                 "path": path.relativeString,

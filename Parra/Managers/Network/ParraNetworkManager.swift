@@ -203,43 +203,15 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
                         .withAttribute(.requiredReauthentication)
                 )
             case (400...499, _):
-#if DEBUG
-                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
-                   let prettyData = try? jsonEncoder.encode(dataString),
-                   let prettyString = String(data: prettyData, encoding: .utf8) {
-
-                    logger.trace("Received 400...499 status in response")
-                    if data != EmptyJsonObjectData {
-                        debugLogger.trace(prettyString)
-                    }
-
-                    if let body = request.httpBody, let bodyString = String(data: body, encoding: .utf8) {
-                        debugLogger.trace("Request data was:")
-                        debugLogger.trace(bodyString)
-                    }
-                }
-#endif
-
                 return (
                     .failure(ParraError.networkError(
                         request: request,
-                        response: response
+                        response: response,
+                        responseData: data
                     )),
                     config.attributes
                 )
             case (500...599, _):
-#if DEBUG
-                if let dataString = try? jsonDecoder.decode(AnyCodable.self, from: data),
-                   let prettyData = try? jsonEncoder.encode(dataString),
-                   let prettyString = String(data: prettyData, encoding: .utf8) {
-
-                    logger.trace("Received 500...599 status in response")
-                    if data != EmptyJsonObjectData {
-                        debugLogger.trace(prettyString)
-                    }
-                }
-#endif
-
                 if config.shouldRetry {
                     logger.trace("Retrying previous request")
 
@@ -264,7 +236,8 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
                 return (
                     .failure(ParraError.networkError(
                         request: request,
-                        response: response
+                        response: response,
+                        responseData: data
                     )),
                     attributes
                 )
@@ -307,7 +280,8 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
         default:
             throw ParraError.networkError(
                 request: request,
-                response: response
+                response: response,
+                responseData: data
             )
         }
     }

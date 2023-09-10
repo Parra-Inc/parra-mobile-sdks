@@ -36,7 +36,7 @@ extension URLRequest: ParraDictionaryConvertible {
         }
 
         if let httpBody {
-            dict["body"] = httpBody.base64EncodedString()
+            dict["body"] = String(data: httpBody, encoding: .utf8) ?? httpBody.base64EncodedString()
         }
 
         if let allHTTPHeaderFields {
