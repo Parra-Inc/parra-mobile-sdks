@@ -21,9 +21,26 @@ class ParraStorageModuleTests: XCTestCase {
         let file = "storage_data"
         
         storageModules = [
-            .init(dataStorageMedium: .memory),
-            .init(dataStorageMedium: .fileSystem(folder: folder, fileName: file, storeItemsSeparately: true)),
-            .init(dataStorageMedium: .userDefaults(key: file)),
+            .init(
+                dataStorageMedium: .memory,
+                jsonEncoder: .parraEncoder,
+                jsonDecoder: .parraDecoder
+            ),
+            .init(
+                dataStorageMedium: .fileSystem(
+                    folder: folder,
+                    fileName: file,
+                    storeItemsSeparately: true,
+                    fileManager: .default
+                ),
+                jsonEncoder: .parraEncoder,
+                jsonDecoder: .parraDecoder
+            ),
+            .init(
+                dataStorageMedium: .userDefaults(key: file),
+                jsonEncoder: .parraEncoder,
+                jsonDecoder: .parraDecoder
+            ),
         ]
     }
     

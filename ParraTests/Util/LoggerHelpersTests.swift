@@ -23,7 +23,7 @@ final class LoggerHelpersTests: XCTestCase {
 
         let result = LoggerHelpers.extractMessageAndExtra(from: error)
 
-        XCTAssertEqual(result, error.errorDescription)
+        XCTAssertEqual(result.message, error.errorDescription)
     }
 
     func testExtractErrorMessageFromNsErrors() {
@@ -41,16 +41,16 @@ final class LoggerHelpersTests: XCTestCase {
 
         let result = LoggerHelpers.extractMessageAndExtra(from: error)
 
-        XCTAssertTrue(result.contains(domain))
-        XCTAssertTrue(result.contains(localizedDescription))
-        XCTAssertTrue(result.contains(String(code)))
+        XCTAssertTrue(result.message.contains(domain))
+        XCTAssertTrue(result.message.contains(localizedDescription))
+        XCTAssertTrue(result.message.contains(String(code)))
     }
 
     func testExtractErrorMessageFromErrorProtocolTypes() {
         let error = LoggerTestError.uniquelyNamedErrorCase
         let result = LoggerHelpers.extractMessageAndExtra(from: error)
 
-        XCTAssertTrue(result.contains("LoggerTestError.uniquelyNamedErrorCase"))
+        XCTAssertTrue(result.message.contains("LoggerTestError.uniquelyNamedErrorCase"))
     }
 
     // MARK: splitFileId
