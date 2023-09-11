@@ -23,8 +23,9 @@ public struct ParraLoggerOptions {
         environment: .automatic,
         minimumLogLevel: .info,
         consoleFormatOptions: [
+            .printLevel(style: .symbol, leftPad: "", rightPad: " "),
+            .printCallSite(options: .default, leftPad: "[", rightPad: "]"),
             .printMessage(leftPad: " ", rightPad: " "),
-            .printCallSite(options: .default, leftPad: "\t\t\t\t(", rightPad: ")"),
             .printExtras(style: .pretty, leftPad: "\n", rightPad: "")
         ]
     )
