@@ -143,7 +143,7 @@ public class ParraFeedback: ParraModule {
     }
 
     /// Whether the `ParraFeedback` module has data that has yet to be synced with the Parra API.
-    internal func hasDataToSync() async -> Bool {
+    internal func hasDataToSync(since date: Date?) async -> Bool {
         let answers = await dataManager.currentCompletedCardData()
 
         return !answers.isEmpty

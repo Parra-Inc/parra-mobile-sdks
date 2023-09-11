@@ -73,21 +73,36 @@ internal class ParraSessionManager {
         await sessionStorage.initializeSessions()
     }
 
-    internal func hasDataToSync() async -> Bool {
-        // Sync if there are any sessions that aren't still in progress, or if the session
-        // in progress has new events to report.
-        if await sessionStorage.hasCompletedSessions() {
-            logger.debug("has completed sessions to sync")
-            return true
+    internal func hasDataToSync(since date: Date?) async -> Bool {
+        // Checks made in order by least resources required to check them:
+        // 1. The current session has been updated
+        // 2. There are new events
+        // 3. There are previous sessions
+
+        return await logger.withScope { logger in
+            if await sessionStorage.hasSessionUpdates(since: date) {
+                logger.trace("has updates to current session")
+
+                return true
+            }
+
+            if await sessionStorage.hasNewEvents() {
+                logger.trace("has new events on current session")
+
+                return true
+            }
+
+            // If there are sessions other than the one in progress, they should be synced.
+            if await sessionStorage.hasCompletedSessions() {
+                logger.trace("has completed sessions")
+
+                return true
+            }
+
+            logger.trace("no updates require sync")
+
+            return false
         }
-
-        // TODO: Change the short circuit order here depending on which ends up being cheaper.
-
-        let hasNewEvents = await sessionStorage.hasNewEvents()
-
-        logger.debug("has new events to sync: \(hasNewEvents)")
-
-        return hasNewEvents
     }
 
     func synchronizeData() async throws -> ParraSessionsResponse? {
@@ -219,11 +234,14 @@ internal class ParraSessionManager {
         wrappedEvent: ParraWrappedEvent,
         callSiteContext: ParraLoggerCallSiteContext
     ) {
+        let (event, context) = ParraSessionEvent.sessionEventFromEventWrapper(
+            wrappedEvent: wrappedEvent,
+            callSiteContext: callSiteContext
+        )
+
         sessionStorage.writeEvent(
-            event: ParraSessionEvent(
-                wrappedEvent: wrappedEvent,
-                callSiteContext: callSiteContext
-            )
+            event: event,
+            context: context
         )
     }
 
@@ -286,8 +304,10 @@ extension ParraSessionManager: ParraLoggerBackend {
             logData: logData
         )
 
-        let wrappedEvent = ParraWrappedEvent.internalEvent(
-            event: .log(logData: processedLogData)
+        let wrappedEvent = ParraWrappedEvent.logEvent(
+            event: ParraLogEvent(
+                logData: processedLogData
+            )
         )
 
         // 1. The flag to bypass event creation takes precedence, since this is used in cases like logs

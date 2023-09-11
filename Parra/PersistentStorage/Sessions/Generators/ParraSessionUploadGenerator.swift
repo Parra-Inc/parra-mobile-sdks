@@ -51,7 +51,10 @@ internal struct ParraSessionUploadGenerator: ParraSessionGeneratorType, AsyncSeq
                 let session = try readSessionSync(at: sessionPath)
                 let events = try await readEvents(at: eventsPath)
 
-                logger.trace("finished reading session and events")
+                logger.trace("Finished reading session and events", [
+                    "sessionId": session.sessionId,
+                    "eventCount": events.count
+                ])
 
                 return ParraSessionUpload(
                     session: session,

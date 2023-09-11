@@ -45,6 +45,11 @@ internal class SessionStorage {
 
     private var isInitialized = false
 
+    /// Whether or not, since the last time a sync occurred, session storage received
+    /// a new event with a context object that indicated that it was a high priority
+    /// event.
+    private var hasReceivedImportantEvent = false
+
     private let sessionReader: SessionReader
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
@@ -98,13 +103,13 @@ internal class SessionStorage {
 
     internal func getCurrentSession() async throws -> ParraSession {
         return try await withCheckedThrowingContinuation { continuation in
-            getCurrentSessionSync { result in
+            getCurrentSession { result in
                 continuation.resume(with: result)
             }
         }
     }
 
-    private func getCurrentSessionSync(
+    private func getCurrentSession(
         completion: @escaping (Result<ParraSession, Error>) -> Void
     ) {
         withCurrentSessionHandle(
@@ -164,16 +169,38 @@ internal class SessionStorage {
 //        )
 //    }
 
-    internal func writeEvent(
-        event: ParraSessionEvent
+    private func storeEventContextUpdateSync(
+        context: ParraSessionEventContext
     ) {
-        withCurrentSessionEventHandle { handle, session in
-            // TODO: Need a much more compressed format.
+        if hasReceivedImportantEvent {
+            // It doesn't matter if multiple important events are recievd. The first one
+            // is enough to set the flag.
+            return
+        }
+
+        if context.isClientGenerated {
+            hasReceivedImportantEvent = true
+
+            return
+        }
+
+        if [.high, .critical].contains(context.syncPriority) {
+            hasReceivedImportantEvent = true
+        }
+    }
+
+    internal func writeEvent(
+        event: ParraSessionEvent,
+        context: ParraSessionEventContext
+    ) {
+        withHandles { sessionHandle, eventsHandle, session in
+            self.storeEventContextUpdateSync(context: context)
+
             var data = try self.jsonEncoder.encode(event)
             data.append(Constant.newlineCharData)
 
-            try handle.write(contentsOf: data)
-            try handle.synchronize()
+            try eventsHandle.write(contentsOf: data)
+            try eventsHandle.synchronize()
         } completion: { result in
             switch result {
             case .success:
@@ -228,14 +255,34 @@ internal class SessionStorage {
         completion: @escaping (Result<Bool, Error>) -> Void
     ) {
         withCurrentSessionEventHandle(
-            handler: { handle, session in
-                let currentOffset = try handle.offset()
-                let lastSyncOffset = session.eventsHandleOffsetAtSync ?? 0
+            handler: { [self] _, _ in
+                return hasReceivedImportantEvent
+            },
+            completion: completion
+        )
+    }
 
-                // If there was a recorded offset at the time of a previous sync, there are new events if
-                // the current offset has increased. If an offset wasn't set, a sync hasn't happened for this
-                // session yet, and should occur.
-                return currentOffset > lastSyncOffset
+    internal func hasSessionUpdates(since date: Date?) async -> Bool {
+        do {
+            return try await withCheckedThrowingContinuation { continuation in
+                hasSessionUpdates(since: date) { result in
+                    continuation.resume(with: result)
+                }
+            }
+        } catch let error {
+            logger.error("Error checking if session has updates", error)
+
+            return false
+        }
+    }
+
+    private func hasSessionUpdates(
+        since date: Date?,
+        completion: @escaping (Result<Bool, Error>) -> Void
+    ) {
+        withCurrentSessionHandle(
+            handler: { _, session in
+                return session.hasBeenUpdated(since: date)
             },
             completion: completion
         )
@@ -288,11 +335,14 @@ internal class SessionStorage {
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         withHandles(
-            handler: { sessionHandle, eventsHandle, session in
+            handler: { [self] sessionHandle, eventsHandle, session in
                 // Store the current offset of the file handle that writes events on the session object.
                 // This will be used last to know if more events have been written since this point.
                 let offset = try eventsHandle.offset()
-                try self.writeSessionEventsOffsetUpdateSync(
+
+                hasReceivedImportantEvent = false
+
+                try writeSessionEventsOffsetUpdateSync(
                     to: session,
                     using: sessionHandle,
                     offset: offset
@@ -352,10 +402,13 @@ internal class SessionStorage {
                 let cachedEventsOffset = currentSession.eventsHandleOffsetAtSync ?? 0
 
                 if currentEventsOffset > cachedEventsOffset {
-                    logger.trace("Current events offset is greater than cache. New events have happened", [
-                        "current": currentEventsOffset,
-                        "cached": cachedEventsOffset
-                    ])
+                    logger.trace(
+                        "Current events offset is greater than cache. New events have happened",
+                        [
+                            "current": currentEventsOffset,
+                            "cached": cachedEventsOffset
+                        ]
+                    )
 
                     // Delete all events for the current session that were written by the time the sync began.
 
@@ -379,21 +432,44 @@ internal class SessionStorage {
                         // there are new events and the they can't be read
                         try eventsHandle.truncate(atOffset: 0)
                     }
+
+                    try eventsHandle.synchronize()
+
+                    let newOffset = try eventsHandle.offset()
+
+                    // Store the new position of the file handle as the last synced offset
+                    // on the session. There are two situations that this handles:
+                    // 1. There were no events written since the start of the sync. In this
+                    //    case, the new offset will be reset to 0. This is the same situation
+                    //    as the else block below.
+                    // 2. There were events written between when the sync started and ended.
+                    //    It is expected that this is generally true, since networking events
+                    //    related to syncing will occur. When this happens, we advance the
+                    //    value of the last synchronized offset to be that of the handle,
+                    //    after storing these events that happened during sync. This has the
+                    //    drawback of meaning that these events won't be synchronized until
+                    //    some other events are created later, but has the benefit of helping
+                    //    break an infinite sync loop.
+
+                    try self.writeSessionEventsOffsetUpdateSync(
+                        to: currentSession,
+                        using: sessionHandle,
+                        offset: newOffset
+                    )
                 } else {
                     logger.trace("No new events occurred. Resetting events file")
-                    // No new events were written since the sync started. Resetting the events
-                    // file back to the beginning.
-                    try eventsHandle.truncate(atOffset: 0)
-                }
-                try eventsHandle.synchronize()
 
-                // Reset the persisted events file handle offset on the session back to 0, since any
-                // amount it was previously advanced by has been reset.
-                try self.writeSessionEventsOffsetUpdateSync(
-                    to: currentSession,
-                    using: sessionHandle,
-                    offset: 0
-                )
+                    // No new events were written since the sync started. Resetting the
+                    // events file back to the beginning.
+                    try eventsHandle.truncate(atOffset: 0)
+                    try eventsHandle.synchronize()
+
+                    try self.writeSessionEventsOffsetUpdateSync(
+                        to: currentSession,
+                        using: sessionHandle,
+                        offset: 0
+                    )
+                }
             },
             completion: completion
         )
@@ -401,6 +477,49 @@ internal class SessionStorage {
 
     // MARK: Helpers
 
+    private func writeSessionSync(
+        session: ParraSession,
+        with handle: FileHandle
+    ) throws {
+        // Always update the in memory cache of the current session before writing to disk.
+        sessionReader.updateCachedCurrentSessionSync(
+            to: session
+        )
+
+        let data = try jsonEncoder.encode(session)
+
+        let offset = try handle.offset()
+        if offset > data.count {
+            // If the old file was longer, free the unneeded bytes
+            try handle.truncate(atOffset: UInt64(data.count))
+        }
+
+        try handle.seek(toOffset: 0)
+        try handle.write(contentsOf: data)
+        try handle.synchronize()
+    }
+
+    private func writeSessionEventsOffsetUpdateSync(
+        to session: ParraSession,
+        using handle: FileHandle,
+        offset: UInt64
+    ) throws {
+        logger.trace("Updating events file handle offset to: \(offset)")
+
+        let updatedSession = session.withUpdatedEventsHandleOffset(
+            offset: offset
+        )
+
+        try self.writeSessionSync(
+            session: updatedSession,
+            with: handle
+        )
+    }
+}
+
+// MARK: withHandle helpers
+
+extension SessionStorage {
     private func withCurrentSessionHandle<T>(
         handler: @escaping (FileHandle, ParraSession) throws -> T,
         completion: ((Result<T, Error>) -> Void)? = nil
@@ -483,43 +602,5 @@ internal class SessionStorage {
         storageQueue.async { [self] in
             block(sessionReader)
         }
-    }
-
-    private func writeSessionSync(
-        session: ParraSession,
-        with handle: FileHandle
-    ) throws {
-        // Always update the in memory cache of the current session before writing to disk.
-        sessionReader.updateCachedCurrentSessionSync(
-            to: session
-        )
-
-        let data = try jsonEncoder.encode(session)
-
-        let offset = try handle.offset()
-        if offset > data.count {
-            // If the old file was longer, free the unneeded bytes
-            try handle.truncate(atOffset: UInt64(data.count))
-        }
-
-        try handle.seek(toOffset: 0)
-        try handle.write(contentsOf: data)
-        try handle.synchronize()
-    }
-
-    private func writeSessionEventsOffsetUpdateSync(
-        to session: ParraSession,
-        using handle: FileHandle,
-        offset: UInt64
-    ) throws {
-        logger.trace("Updating events file handle offset to: \(offset)")
-        let updatedSession = session.withUpdatedEventsHandleOffset(
-            offset: offset
-        )
-
-        try self.writeSessionSync(
-            session: updatedSession,
-            with: handle
-        )
     }
 }

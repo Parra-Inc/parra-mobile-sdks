@@ -22,21 +22,12 @@ extension ParraSessionManager {
         wrappedEvent: ParraWrappedEvent,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
-        switch wrappedEvent {
-        case .internalEvent(let internalEvent, _):
-            switch internalEvent {
-            case .log(let logData):
-                writeLogEventToConsoleSync(
-                    processedLogData: logData,
-                    with: consoleFormatOptions
-                )
-            default:
-                writeGenericEventToConsoleSync(
-                    wrappedEvent: wrappedEvent,
-                    with: consoleFormatOptions
-                )
-            }
-        case .event, .dataEvent:
+        if case let .logEvent(event) = wrappedEvent {
+            writeLogEventToConsoleSync(
+                processedLogData: event.logData,
+                with: consoleFormatOptions
+            )
+        } else {
             writeGenericEventToConsoleSync(
                 wrappedEvent: wrappedEvent,
                 with: consoleFormatOptions

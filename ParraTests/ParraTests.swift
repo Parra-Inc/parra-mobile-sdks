@@ -11,7 +11,7 @@ import XCTest
 class FakeModule: ParraModule {
     static var name: String = "FakeModule"
     
-    func hasDataToSync() async -> Bool {
+    func hasDataToSync(since date: Date?) async -> Bool {
         return true
     }
     

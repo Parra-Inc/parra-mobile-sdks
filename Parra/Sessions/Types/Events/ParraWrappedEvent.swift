@@ -23,4 +23,8 @@ internal enum ParraWrappedEvent {
         event: ParraInternalEvent,
         extra: [String : Any]? = nil
     )
+
+    case logEvent(
+        event: ParraLogEvent
+    )
 }

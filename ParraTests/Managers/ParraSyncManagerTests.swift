@@ -370,6 +370,10 @@ class ParraSyncManagerTests: XCTestCase {
         line: Int = #line,
         column: Int = #column
     ) {
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
+
         mockParra.sessionManager.writeEventSync(
             wrappedEvent: .event(
                 event: ParraBasicEvent(name: name)
@@ -379,7 +383,8 @@ class ParraSyncManagerTests: XCTestCase {
                 fileId: fileId,
                 function: function,
                 line: line,
-                column: column
+                column: column,
+                threadInfo: threadInfo
             )
         )
     }

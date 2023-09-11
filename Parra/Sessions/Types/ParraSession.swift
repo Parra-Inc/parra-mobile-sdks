@@ -16,6 +16,7 @@ internal struct ParraSession: Codable {
     internal let sessionId: String
     internal let createdAt: Date
 
+    internal private(set) var updatedAt: Date?
     internal private(set) var endedAt: Date?
     internal private(set) var userProperties: [String : AnyCodable]
 
@@ -25,45 +26,69 @@ internal struct ParraSession: Codable {
     /// been synchronized.
     internal private(set) var eventsHandleOffsetAtSync: UInt64?
 
-    internal init(sessionId: String, createdAt: Date) {
+    internal init(
+        sessionId: String,
+        createdAt: Date
+    ) {
         self.sessionId = sessionId
         self.createdAt = createdAt
+        self.updatedAt = nil
         self.endedAt = nil
         self.userProperties = [:]
+    }
+
+    internal func hasBeenUpdated(since date: Date?) -> Bool {
+        guard let updatedAt else {
+            // If updatedAt isn't set, it hasn't been updated since it was created.
+            return false
+        }
+
+        guard let date else {
+            return true
+        }
+
+        return updatedAt > date
+    }
+
+    // MARK: Performing Session Updates
+
+    internal func withUpdates(
+        handler: ((inout ParraSession) -> Void)? = nil
+    ) -> ParraSession {
+        var updatedSession = self
+
+        handler?(&updatedSession)
+        updatedSession.updatedAt = .now
+
+        return updatedSession
     }
 
     internal func withUpdatedProperty(
         key: String,
         value: Any?
     ) -> ParraSession {
-        var updatedSession = self
-
-        if let value {
-            updatedSession.userProperties[key] = AnyCodable(value)
-        } else {
-            updatedSession.userProperties.removeValue(forKey: key)
+        return withUpdates { session in
+            if let value {
+                session.userProperties[key] = AnyCodable(value)
+            } else {
+                session.userProperties.removeValue(forKey: key)
+            }
         }
-
-        return updatedSession
     }
 
-    internal func withUpdatedProperties(newProperties: [String : AnyCodable]) -> ParraSession {
-        var updatedSession = self
-
-        updatedSession.userProperties = newProperties
-
-        return updatedSession
+    internal func withUpdatedProperties(
+        newProperties: [String : AnyCodable]
+    ) -> ParraSession {
+        return withUpdates { session in
+            session.userProperties = newProperties
+        }
     }
 
-    internal func withUpdatedEventsHandleOffset(offset: UInt64) -> ParraSession {
-        var updatedSession = self
-
-        updatedSession.eventsHandleOffsetAtSync = offset
-
-        return updatedSession
-    }
-
-    internal mutating func end() {
-        self.endedAt = Date()
+    internal func withUpdatedEventsHandleOffset(
+        offset: UInt64
+    ) -> ParraSession {
+        return withUpdates { session in
+            session.eventsHandleOffsetAtSync = offset
+        }
     }
 }

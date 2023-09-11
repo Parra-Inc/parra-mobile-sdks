@@ -8,10 +8,6 @@
 
 import Foundation
 
-// TODO: This needs a major overhaul. It should take in all the message/level/context/etc
-// and essentially only output what is needed to finally send a message to the console.
-// Like OSLogLevel, message as a string, etc.
-
 internal struct ParraLogProcessedData {
     internal let level: ParraLogLevel
     internal let extra: [String : Any]?

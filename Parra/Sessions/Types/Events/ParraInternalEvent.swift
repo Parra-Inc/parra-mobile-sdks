@@ -19,7 +19,6 @@ internal enum ParraInternalEvent: ParraDataEvent {
     case httpRequest // TODO
     case keyboardDidHide
     case keyboardDidShow
-    case log(logData: ParraLogProcessedData)
     case memoryWarning
     case orientationChanged
     case powerStateChanged
@@ -44,8 +43,6 @@ internal enum ParraInternalEvent: ParraDataEvent {
             return "keyboard_did_hide"
         case .keyboardDidShow:
             return "keyboard_did_show"
-        case .log:
-            return "log"
         case .memoryWarning:
             return "memory_warning"
         case .orientationChanged:
@@ -62,11 +59,6 @@ internal enum ParraInternalEvent: ParraDataEvent {
     }
 
     var extra: [String : Any] {
-        switch self {
-        case .log(let logData):
-            return logData.dictionary
-        default:
-            return [:]
-        }
+        return [:]
     }
 }

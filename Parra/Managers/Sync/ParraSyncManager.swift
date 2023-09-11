@@ -11,7 +11,7 @@ import UIKit
 // TODO: What happens to the timer when the app goes to the background?
 // TODO: Timer should have exponential backoff. New eventual sync enqueued should reset this.
 
-fileprivate let logger = Logger(category: "Sync Manager")
+fileprivate let logger = Logger(bypassEventCreation: true, category: "Sync Manager")
 
 internal enum ParraSyncMode: String {
     case immediate
@@ -34,7 +34,9 @@ internal actor ParraSyncManager {
     private let notificationCenter: NotificationCenterType
 
     @MainActor private var syncTimer: Timer?
-    
+
+    private var lastSyncCompleted: Date?
+
     internal init(
         state: ParraState,
         syncState: ParraSyncState,
@@ -60,7 +62,7 @@ internal actor ParraSyncManager {
             return
         }
 
-        guard await hasDataToSync() else {
+        guard await hasDataToSync(since: lastSyncCompleted) else {
             logger.debug("Skipping \(mode) sync. No sync necessary.")
             return
         }
@@ -121,8 +123,14 @@ internal actor ParraSyncManager {
             ]
         )
 
+        var shouldRepeatSync = false
+
         defer {
+            lastSyncCompleted = .now
+
             Task {
+                // Ensure that the notification that the current sync has ended is sent
+                // before the next sync begins.
                 await notificationCenter.postAsync(
                     name: Parra.syncDidEndNotification,
                     object: self,
@@ -130,10 +138,16 @@ internal actor ParraSyncManager {
                         Parra.Constants.syncTokenKey: syncToken
                     ]
                 )
+
+                if shouldRepeatSync {
+                    // Must be kept inside a Task block to avoid the current sync's 
+                    // completion awaiting the next sync.
+                    await sync()
+                }
             }
         }
         
-        guard await hasDataToSync() else {
+        guard await hasDataToSync(since: lastSyncCompleted) else {
             logger.debug("No data available to sync")
 
             await syncState.endSync()
@@ -149,6 +163,16 @@ internal actor ParraSyncManager {
             logger.measureTime(since: syncStartMarker, message: "Sync complete")
         } catch let error {
             logger.error("Error performing sync", error)
+
+            if enqueuedSyncMode == .immediate {
+                // Try to avoid the case there there might be something wrong with the data
+                // being synced that could cause it to fail again if synced immediately.
+                // This will at least keep us in a failure loop at the duration of the sync
+                // timer.
+                logger.debug("Immediate sync was enqueued after error. Resetting to eventual.")
+                enqueuedSyncMode = .eventual
+            }
+
             // TODO: Maybe cancel the sync timer, double the countdown then start a new one?
         }
 
@@ -166,11 +190,7 @@ internal actor ParraSyncManager {
 
         switch enqueuedSyncMode {
         case .immediate:
-            // Don't await the next sync. Jobs that were waiting on the first
-            // shouldn't be enqueued for subsequent syncs.
-            Task {
-                await sync()
-            }
+            shouldRepeatSync = true
         case .eventual:
             await syncState.endSync()
         }
@@ -193,10 +213,10 @@ internal actor ParraSyncManager {
         }
     }
     
-    private func hasDataToSync() async -> Bool {
+    private func hasDataToSync(since date: Date?) async -> Bool {
         var shouldSync = false
         for (_, module) in await state.getAllRegisteredModules() {
-            if await module.hasDataToSync() {
+            if await module.hasDataToSync(since: date) {
                 shouldSync = true
                 break
             }

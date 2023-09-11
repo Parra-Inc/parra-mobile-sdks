@@ -8,10 +8,9 @@
 import Foundation
 import UIKit
 
-/// The Parra module is primarily used for authenticating with the Parra API.  For usage beyond this, you'll need
-/// to install and use other Parra libraries.
+/// <#Description#>
 public class Parra: ParraModule, ParraModuleStateAccessor {
-    internal static private(set) var name = "parra"
+    internal static private(set) var name = "Parra"
 
     internal let state: ParraState
     internal let configState: ParraConfigState
@@ -204,8 +203,8 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         await syncManager.enqueueSync(with: .eventual)
     }
 
-    internal func hasDataToSync() async -> Bool {
-        return await sessionManager.hasDataToSync()
+    internal func hasDataToSync(since date: Date?) async -> Bool {
+        return await sessionManager.hasDataToSync(since: date)
     }
 
     internal func synchronizeData() async throws {
