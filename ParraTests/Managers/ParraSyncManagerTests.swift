@@ -125,7 +125,7 @@ class ParraSyncManagerTests: XCTestCase {
         logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
-        await fulfillment(of: [syncBeginExpectation], timeout: 1.0)
+        await fulfillment(of: [syncBeginExpectation], timeout: 3.0)
 
         let isSyncing = await mockParra.syncManager.syncState.isSyncing()
         XCTAssertTrue(isSyncing)

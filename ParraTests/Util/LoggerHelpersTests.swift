@@ -41,9 +41,9 @@ final class LoggerHelpersTests: XCTestCase {
 
         let result = LoggerHelpers.extractMessageAndExtra(from: error)
 
-        XCTAssertTrue(result.message.contains(domain))
         XCTAssertTrue(result.message.contains(localizedDescription))
-        XCTAssertTrue(result.message.contains(String(code)))
+        XCTAssertEqual(result.extra?["domain"] as? String, domain)
+        XCTAssertEqual(result.extra?["code"] as? Int, code)
     }
 
     func testExtractErrorMessageFromErrorProtocolTypes() {
@@ -69,7 +69,7 @@ final class LoggerHelpersTests: XCTestCase {
             fileId: "",
             expectedModule: "Unknown",
             expectedFileName: "Unknown",
-            expectedExtension: ""
+            expectedExtension: nil
         )
     }
 
@@ -96,7 +96,7 @@ final class LoggerHelpersTests: XCTestCase {
             fileId: "Parra/LoggerHelpers",
             expectedModule: "Parra",
             expectedFileName: "LoggerHelpers",
-            expectedExtension: ""
+            expectedExtension: nil
         )
     }
 
@@ -145,14 +145,14 @@ final class LoggerHelpersTests: XCTestCase {
         fileId: String,
         expectedModule: String,
         expectedFileName: String,
-        expectedExtension: String
+        expectedExtension: String?
     ) {
         let (module, fileName, ext) = LoggerHelpers.splitFileId(
             fileId: fileId
         )
 
-        XCTAssertTrue(module == expectedModule)
-        XCTAssertTrue(fileName == expectedFileName)
-        XCTAssertTrue(ext == expectedExtension)
+        XCTAssertTrue(module == expectedModule, "Expected module from: \(fileId) to be \(expectedModule)")
+        XCTAssertTrue(fileName == expectedFileName, "Expected fileName from: \(fileId) to be \(expectedFileName)")
+        XCTAssertTrue(ext == expectedExtension, "Expected extension from: \(fileId) to be \(String(describing: expectedExtension))")
     }
 }
