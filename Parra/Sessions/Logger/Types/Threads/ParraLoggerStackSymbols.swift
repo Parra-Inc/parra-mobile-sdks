@@ -8,6 +8,7 @@
 
 import Foundation
 
+@usableFromInline
 internal enum ParraLoggerStackSymbols: Codable {
     case raw([String])
     case demangled([CallStackFrame])

@@ -22,7 +22,7 @@ internal struct ParraErrorWithExtra {
 
     internal init(parraError: ParraError) {
         self.message = parraError.errorDescription
-        self.extra = parraError.dictionary
+        self.extra = parraError.sanitized.dictionary
     }
 
     internal init(error: Error) {

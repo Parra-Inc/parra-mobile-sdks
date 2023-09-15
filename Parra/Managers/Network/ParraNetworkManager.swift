@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 fileprivate let logger = Logger(category: "Network Manager")
-fileprivate let debugLogger = Logger(bypassEventCreation: true, category: "Network Manager Debug")
 
 public typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
@@ -363,6 +362,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
     }
 
     private func performAsyncDataDask(request: URLRequest) async throws -> (Data, HTTPURLResponse) {
+
 #if DEBUG
         // There is a different delay added in the UrlSession mocks that
         // slows down tests. This delay is specific to helping prevent us
@@ -377,8 +377,20 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
             delegate: urlSessionDelegateProxy
         )
 
-        // It is documented that for data tasks, response is always actually HTTPURLResponse
-        return (data, response as! HTTPURLResponse)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            // It is documented that for data tasks, response is always actually 
+            // HTTPURLResponse, so this should never happen.
+            throw ParraError.message("Unexpected networking error. HTTP response was unexpected class")
+        }
+
+        Parra.logEvent(
+            .httpRequest(
+                request: request,
+                response: httpResponse
+            )
+        )
+
+        return (data, httpResponse)
     }
 
     private func addHeaders(

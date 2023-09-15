@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension URLRequest: ParraDictionaryConvertible {
-    var dictionary: [String : Any] {
-        var dict: [String : Any] = [
+extension URLRequest: ParraSanitizedDictionaryConvertible {
+    var sanitized: ParraSanitizedDictionary {
+        var params: [String : Any] = [
             "timeout_interval": timeoutInterval,
             "should_handle_cookies": httpShouldHandleCookies,
             "should_use_pipelining": httpShouldUsePipelining,
@@ -24,25 +24,27 @@ extension URLRequest: ParraDictionaryConvertible {
         ]
 
         if #available(iOS 16.1, *) {
-            dict["requires_dns_sec_validation"] = requiresDNSSECValidation
+            params["requires_dns_sec_validation"] = requiresDNSSECValidation
         }
 
         if let httpMethod {
-            dict["method"] = httpMethod
+            params["method"] = httpMethod
         }
 
         if let url {
-            dict["url"] = url
+            params["url"] = url
         }
 
         if let httpBody {
-            dict["body"] = String(data: httpBody, encoding: .utf8) ?? httpBody.base64EncodedString()
+            params["body"] = String(data: httpBody, encoding: .utf8) ?? httpBody.base64EncodedString()
         }
 
         if let allHTTPHeaderFields {
-            dict["headers"] = allHTTPHeaderFields
+            params["headers"] = ParraDataSanitizer.sanitize(
+                httpHeaders: allHTTPHeaderFields
+            )
         }
 
-        return dict
+        return ParraSanitizedDictionary(dictionary: params)
     }
 }

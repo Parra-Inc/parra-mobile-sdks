@@ -225,7 +225,7 @@ internal extension Parra {
     @MainActor
     @objc func didRequestLowDiskSpace(notification: Notification) {
         withInitializationCheck { [self] in
-            let extra = URL.currentDiskUsage()?.dictionary ?? [:]
+            let extra = URL.currentDiskUsage()?.sanitized.dictionary ?? [:]
             logEvent(.diskSpaceLow, extra)
         }
     }

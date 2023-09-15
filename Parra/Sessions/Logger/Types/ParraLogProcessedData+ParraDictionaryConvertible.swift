@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension ParraLogProcessedData: ParraDictionaryConvertible {
-    var dictionary: [String : Any] {
+extension ParraLogProcessedData: ParraSanitizedDictionaryConvertible {
+    var sanitized: ParraSanitizedDictionary {
         var params: [String : Any] = [
             "level": level.loggerDescription,
             "message": message,
@@ -22,19 +22,19 @@ extension ParraLogProcessedData: ParraDictionaryConvertible {
         ]
 
         if let loggerContext {
-            params["logger_context"] = loggerContext.dictionary
+            params["logger_context"] = loggerContext.sanitized
         }
 
         if let extra, !extra.isEmpty {
             params["extra"] = extra
         }
 
-        let threadInfoDict = callSiteContext.threadInfo.dictionary
+        let threadInfoDict = callSiteContext.threadInfo.sanitized.dictionary
         if !threadInfoDict.isEmpty {
             params["thread"] = threadInfoDict
         }
 
-        return params
+        return ParraSanitizedDictionary(dictionary: params)
     }
 }
 

@@ -47,6 +47,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         return .default
     }()
 
+    @usableFromInline
     internal static var shared: Parra! = {
         let state = ParraState()
         let configState = ParraConfigState()
@@ -114,6 +115,8 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
     internal let dataManager: ParraDataManager
     internal let syncManager: ParraSyncManager
+
+    @usableFromInline
     internal let sessionManager: ParraSessionManager
     internal let networkManager: ParraNetworkManager
     internal let notificationCenter: NotificationCenterType

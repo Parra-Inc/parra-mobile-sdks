@@ -29,6 +29,7 @@ fileprivate let logger = Logger(bypassEventCreation: true, category: "Session ma
 /// Some important notes working with this class:
 /// 1. For any method with the `Sync` suffix, you should always assume that it is a hard
 ///    requirement for it to be called on a specific queue. Usually ``eventQueue``.
+@usableFromInline
 internal class ParraSessionManager {
     private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager
@@ -174,6 +175,7 @@ internal class ParraSessionManager {
     /// Logs the supplied event on the user's session.
     /// Do not interact with this method directly. Logging events should be done through the
     /// Parra.logEvent helpers.
+    @usableFromInline
     internal func writeEvent(
         wrappedEvent: ParraWrappedEvent,
         callSiteContext: ParraLoggerCallSiteContext
@@ -219,6 +221,13 @@ internal class ParraSessionManager {
                 writeToConsole()
             } else {
                 writeToSession()
+#if DEBUG
+                // If we're running tests, honor the configured behavior, but also write
+                // to console, if we weren't already going to.
+                if NSClassFromString("XCTestCase") != nil {
+                    writeToConsole()
+                }
+#endif
             }
         case .console:
             writeToConsole()

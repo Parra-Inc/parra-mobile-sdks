@@ -75,8 +75,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     }
 }
 
-extension ParraError: ParraDictionaryConvertible {
-    var dictionary: [String : Any] {
+extension ParraError: ParraSanitizedDictionaryConvertible {
+    var sanitized: ParraSanitizedDictionary {
         switch self {
         case .custom(_, let error):
             if let error {
@@ -95,8 +95,8 @@ extension ParraError: ParraDictionaryConvertible {
             let dataString = String(data: body, encoding: .utf8) ?? "unknown"
 
             return [
-                "request": request.dictionary,
-                "response": response.dictionary,
+                "request": request.sanitized.dictionary,
+                "response": response.sanitized.dictionary,
                 "body": [
                     "length": body.count,
                     "content": dataString
@@ -104,8 +104,8 @@ extension ParraError: ParraDictionaryConvertible {
             ]
 #else
             return [
-                "request": request.dictionary,
-                "response": response.dictionary,
+                "request": request.sanitized.dictionary,
+                "response": response.sanitized.dictionary,
                 "body": [
                     "length": body.count
                 ]

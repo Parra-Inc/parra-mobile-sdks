@@ -8,30 +8,35 @@
 
 import Foundation
 
-extension HTTPURLResponse: ParraDictionaryConvertible {
-    var dictionary: [String : Any] {
-        var dict: [String : Any] = [
+extension HTTPURLResponse: ParraSanitizedDictionaryConvertible {
+    var sanitized: ParraSanitizedDictionary {
+        var params: [String : Any] = [
             "status_code": statusCode,
-            "headers": allHeaderFields,
-            "expected_content_length": expectedContentLength,
+            "expected_content_length": expectedContentLength
         ]
 
         if let url {
-            dict["url"] = url.absoluteString
+            params["url"] = url.absoluteString
         }
 
         if let mimeType {
-            dict["mime_type"] = mimeType
+            params["mime_type"] = mimeType
+        }
+
+        if let headers = allHeaderFields as? [String : String] {
+            params["headers"] = ParraDataSanitizer.sanitize(
+                httpHeaders: headers
+            )
         }
 
         if let suggestedFilename {
-            dict["suggested_filename"] = suggestedFilename
+            params["suggested_filename"] = suggestedFilename
         }
 
         if let textEncodingName {
-            dict["text_encoding_name"] = textEncodingName
+            params["text_encoding_name"] = textEncodingName
         }
 
-        return dict
+        return ParraSanitizedDictionary(dictionary: params)
     }
 }

@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension ParraLoggerContext: ParraDictionaryConvertible {
-    public var dictionary: [String : Any] {
+extension ParraLoggerContext: ParraSanitizedDictionaryConvertible {
+    public var sanitized: ParraSanitizedDictionary {
         var params: [String : Any] = [
             "module": module,
             "file_name": fileName
@@ -35,6 +35,6 @@ extension ParraLoggerContext: ParraDictionaryConvertible {
             params["extra"] = extra
         }
 
-        return params
+        return ParraSanitizedDictionary(dictionary: params)
     }
 }

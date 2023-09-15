@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension ParraLoggerThreadInfo: ParraDictionaryConvertible {
-    public var dictionary: [String : Any] {
+extension ParraLoggerThreadInfo: ParraSanitizedDictionaryConvertible {
+    public var sanitized: ParraSanitizedDictionary {
         var params: [String : Any] = [
             "id": id,
             "queue_name": queueName,
@@ -36,6 +36,6 @@ extension ParraLoggerThreadInfo: ParraDictionaryConvertible {
             break
         }
 
-        return params
+        return ParraSanitizedDictionary(dictionary: params)
     }
 }

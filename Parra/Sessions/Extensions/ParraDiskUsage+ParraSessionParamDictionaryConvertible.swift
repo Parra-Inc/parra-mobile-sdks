@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension ParraDiskUsage: ParraDictionaryConvertible {
-    var dictionary: [String : Any] {
+extension ParraDiskUsage: ParraSanitizedDictionaryConvertible {
+    var sanitized: ParraSanitizedDictionary {
         return [
             "total_capacity": totalCapacity,
             "available_capacity": availableCapacity,

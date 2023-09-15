@@ -8,6 +8,7 @@
 
 import Foundation
 
+@usableFromInline
 internal enum ParraWrappedEvent {
     case event(
         event: ParraEvent,

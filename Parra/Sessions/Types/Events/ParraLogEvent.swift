@@ -8,12 +8,16 @@
 
 import Foundation
 
+@usableFromInline
 internal struct ParraLogEvent: ParraDataEvent {
+    @usableFromInline
     var extra: [String : Any] {
-        return logData.dictionary
+        return logData.sanitized.dictionary
     }
 
+    @usableFromInline
     let name: String = "log"
+
     let logData: ParraLogProcessedData
 
     internal init(logData: ParraLogProcessedData) {

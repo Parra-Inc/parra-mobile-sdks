@@ -15,6 +15,7 @@ public extension Parra {
 
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
     /// campaigns configured in the Parra dashboard.
+    @inlinable
     static func logEvent(
         _ event: ParraStandardEvent,
         _ extra: [String : Any]? = nil,
@@ -41,6 +42,7 @@ public extension Parra {
 
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
     /// campaigns configured in the Parra dashboard.
+    @inlinable
     static func logEvent(
         _ event: ParraDataEvent,
         _ extra: [String : Any]? = nil,
@@ -67,6 +69,7 @@ public extension Parra {
 
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
     /// campaigns configured in the Parra dashboard.
+    @inlinable
     static func logEvent(
         _ event: ParraEvent,
         _ extra: [String : Any]? = nil,
@@ -93,6 +96,7 @@ public extension Parra {
 
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
     /// campaigns configured in the Parra dashboard.
+    @inlinable
     static func logEvent(
         named eventName: String,
         _ extra: [String : Any]? = nil,

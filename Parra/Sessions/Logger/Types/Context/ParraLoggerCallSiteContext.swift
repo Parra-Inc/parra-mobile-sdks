@@ -8,7 +8,8 @@
 
 import Foundation
 
-public struct ParraLoggerCallSiteContext {
+@usableFromInline
+internal struct ParraLoggerCallSiteContext {
     // fileId is used in place of Swift < 5.8 #file or #filePath to not
     // expose sensitive information from full file paths.
     internal let fileId: String
@@ -21,6 +22,7 @@ public struct ParraLoggerCallSiteContext {
     /// potentially omitting important context.
     internal var threadInfo: ParraLoggerThreadInfo
 
+    @usableFromInline
     internal init(
         fileId: String,
         function: String,
