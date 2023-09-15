@@ -18,7 +18,6 @@ public class Logger {
     /// to console, disk, network, etc.
     internal static var loggerBackend: ParraLoggerBackend? {
         didSet {
-            // TODO: Lock?
             loggerBackendDidChange()
         }
     }
@@ -38,6 +37,7 @@ public class Logger {
     /// A cache of logs that occurred before the Parra SDK was initialized. Once initialization occurs
     /// these are meant to be flushed to the newly set logger backend.
     private static var cachedLogs = [ParraLogData]()
+    private static let cachedLogsLock = UnfairLock()
 
     internal let fiberId: String?
 
@@ -84,6 +84,7 @@ public class Logger {
         self.parent = parent
     }
 
+    @usableFromInline
     internal func logToBackend(
         level: ParraLogLevel,
         message: ParraLazyLogParam,
@@ -132,6 +133,7 @@ public class Logger {
         )
     }
 
+    @usableFromInline
     internal static func logToBackend(
         level: ParraLogLevel,
         message: ParraLazyLogParam,
@@ -187,35 +189,41 @@ public class Logger {
     }
 
     private static func loggerBackendDidChange() {
-        guard let loggerBackend else {
-            // If the logger backend is unset or still not set, there is nowhere to flush the logs to.
-            return
+        cachedLogsLock.locked {
+            guard let loggerBackend else {
+                // If the logger backend is unset or still not set, there is nowhere to flush the logs to.
+                return
+            }
+
+            if cachedLogs.isEmpty {
+                // Nothing to do with no cached logs
+                return
+            }
+
+            // Copy and clear the cache since processing happens asynchronously
+            let logCacheCopy = cachedLogs
+            cachedLogs = []
+
+            loggerBackend.logMultiple(
+                data: logCacheCopy
+            )
         }
-
-        if cachedLogs.isEmpty {
-            // Nothing to do with no cached logs
-            return
-        }
-
-        // Copy and clear the cache since processing happens asynchronously
-        let logCacheCopy = cachedLogs
-        cachedLogs = []
-
-        loggerBackend.logMultiple(
-            data: logCacheCopy
-        )
     }
 
-    private static func collectLogWithoutDestination(data: ParraLogData) {
+    private static func collectLogWithoutDestination(
+        data: ParraLogData
+    ) {
         // TODO: Maybe reference the formatter directly here and in debug level/on in #DEBUG
         // print that the log had no destination because Parra isn't initialized.
         // Also set a flag to print this message the first time this happens and not every time.
 
-        cachedLogs.append(data)
+        cachedLogsLock.locked {
+            cachedLogs.append(data)
 
-        if cachedLogs.count > Constant.maxOrphanedLogBuffer {
-            let numToDrop = cachedLogs.count - Constant.maxOrphanedLogBuffer
-            cachedLogs = Array(cachedLogs.dropFirst(numToDrop))
+            if cachedLogs.count > Constant.maxOrphanedLogBuffer {
+                let numToDrop = cachedLogs.count - Constant.maxOrphanedLogBuffer
+                cachedLogs = Array(cachedLogs.dropFirst(numToDrop))
+            }
         }
     }
 }
