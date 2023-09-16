@@ -87,7 +87,20 @@ extension ParraSessionManager {
             }
         }
 
-        let message = messageSegments.joined().trimmingCharacters(in: .whitespacesAndNewlines)
+        var message = messageSegments.joined().trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+
+        if processedLogData.level.requiresStackTraceCapture {
+            let callstackSymbols = processedLogData.callSiteContext.threadInfo.callStackSymbols
+
+            if let formattedStackTrace = format(
+                callstackSymbols: callstackSymbols
+            ) {
+                message.append("\n")
+                message.append(formattedStackTrace)
+            }
+        }
 
         let systemLogger = os.Logger(
             subsystem: processedLogData.subsystem,

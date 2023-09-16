@@ -89,6 +89,19 @@ extension ParraSessionManager {
         }
     }
 
+    internal func format(callstackSymbols: ParraLoggerStackSymbols) -> String? {
+        switch callstackSymbols {
+        case .none:
+            return nil
+        case .raw(let frames):
+            return frames.joined(separator: "\n")
+        case .demangled(let frames):
+            return frames.map({ frame in
+                return "\(frame.frameNumber)\t\(frame.binaryName)\t\(frame.address)\t\(frame.symbol) + \(frame.byteOffset)"
+            }).joined(separator: "\n")
+        }
+    }
+
     internal func paddedIfPresent(
         string: String?,
         leftPad: String,

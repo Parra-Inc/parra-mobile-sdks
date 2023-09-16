@@ -91,26 +91,24 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
                 "authentication_error": error
             ]
         case .networkError(let request, let response, let body):
+            var bodyInfo: [String : Any] = [
+                "length": body.count
+            ]
+
 #if DEBUG
-            let dataString = String(data: body, encoding: .utf8) ?? "unknown"
+            let dataString = String(
+                data: body,
+                encoding: .utf8
+            ) ?? "unknown"
+
+            bodyInfo["data"] = dataString
+#endif
 
             return [
                 "request": request.sanitized.dictionary,
                 "response": response.sanitized.dictionary,
-                "body": [
-                    "length": body.count,
-                    "content": dataString
-                ]
+                "body": bodyInfo
             ]
-#else
-            return [
-                "request": request.sanitized.dictionary,
-                "response": response.sanitized.dictionary,
-                "body": [
-                    "length": body.count
-                ]
-            ]
-#endif
         case .fileSystem(let path, let message):
             return [
                 "path": path.relativeString,

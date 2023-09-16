@@ -8,7 +8,8 @@
 
 import Foundation
 
-public struct ParraLoggerThreadInfo: Codable {
+@usableFromInline
+internal struct ParraLoggerThreadInfo: Codable {
     public let id: Int
     public let queueName: String
     public let stackSize: Int
@@ -18,6 +19,7 @@ public struct ParraLoggerThreadInfo: Codable {
     public let threadNumber: UInt8?
     internal private(set) var callStackSymbols: ParraLoggerStackSymbols
 
+    @usableFromInline
     internal init(
         thread: Thread,
         callStackSymbols: ParraLoggerStackSymbols = .none
@@ -43,9 +45,11 @@ public struct ParraLoggerThreadInfo: Codable {
     mutating internal func demangleCallStack() {
         switch callStackSymbols {
         case .raw(let frames):
-            self.callStackSymbols = .demangled(
-                CallStackParser.parse(frames: frames, discardParraFrames: true)
+            let demangledFrames = CallStackParser.parse(
+                frames: frames
             )
+
+            self.callStackSymbols = .demangled(demangledFrames)
         case .demangled, .none:
             break
         }

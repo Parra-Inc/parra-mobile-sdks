@@ -9,6 +9,8 @@
 import Foundation
 import Darwin
 
+fileprivate let logger = Logger(bypassEventCreation: true, category: "Symbolication")
+
 fileprivate typealias Swift_Demangle = @convention(c) (
     _ mangledName: UnsafePointer<UInt8>?,
     _ mangledNameLength: Int,
@@ -17,19 +19,37 @@ fileprivate typealias Swift_Demangle = @convention(c) (
     _ flags: UInt32
 ) -> UnsafeMutablePointer<Int8>?
 
-// TODO: ! Important: this is crazy and not cool. This is supported on iOS 12+ but we need
-// find a safer way to access it.
-// TODO: When doing crash handlers for real, note that it is undefined behavior to malloc after SIGKILL
-//       in this case it is important to use backtrace_symbols_fd to write the symbols to a file to be
-//       read on the next app launch.
-// https://github.com/getsentry/sentry-cocoa/issues/1919#issuecomment-1360987627
-
-@_silgen_name("backtrace")
-fileprivate func backtrace(_: UnsafeMutablePointer<UnsafeMutableRawPointer?>!, _: UInt32) -> UInt32
+fileprivate typealias Swift_Backtrace = @convention(c) (
+    _ address: UnsafeMutablePointer<UnsafeMutableRawPointer?>,
+    _ stackSize: Int32
+) -> Int32
 
 // https://developer.apple.com/documentation/xcode/adding-identifiable-symbol-names-to-a-crash-report/
 
 internal struct CallStackParser {
+    fileprivate struct Constant {
+        /// In order by expected likelihood that they'll be encountered
+        /// https://github.com/apple/swift/blob/b5ddffdb3d095e4a57abaac3f8c1e327d64ebea1/lib/Demangling/Demangler.cpp#L181-L184
+#if swift(>=5.0)
+        static let swiftSymbolPrefixes = [
+            // Swift 5+
+            "$s", "_$s",
+            // Swift 5+ for filenames
+            "@__swiftmacro_"
+        ]
+#elseif swift(>=4.1)
+        static let swiftSymbolPrefixes = [
+            // Swift 4.x
+            "$S", "_$S"
+        ]
+#else
+        static let swiftSymbolPrefixes = [
+            // Swift 4
+            "_T0"
+        ]
+#endif
+    }
+
     internal static func parse(
         frames: [String]
     ) -> [CallStackFrame] {
@@ -70,22 +90,14 @@ internal struct CallStackParser {
                 }
             }
 
-            // Objective-C symbols do not require being demangled, and will fail.
-            // If there are other cases, it's better to have a mangled symbol then
-            // no information.
-            let symbol: String = ""
-            if rawSymbol.hasPrefix("$") || rawSymbol.hasPrefix("_$") {
-                // Mangled Swift symbol
-
-            }
-            let finalSymbol = demangle(symbol: rawSymbol) ?? rawSymbol
+            let symbol = demangleSymbolIfNeeded(symbol: rawSymbol)
             let binaryName = String(components[1])
 
             return CallStackFrame(
                 frameNumber: frameNumber,
                 binaryName: binaryName,
                 address: address,
-                symbol: finalSymbol,
+                symbol: symbol,
                 byteOffset: byteOffset,
                 fileName: fileInfo?.0,
                 lineNumber: fileInfo?.1
@@ -93,13 +105,30 @@ internal struct CallStackParser {
         }
     }
 
-    internal static func demangle(symbol mangled: String) -> String? {
+    private static func demangleSymbolIfNeeded(
+        symbol: String
+    ) -> String {
+
+        if symbol.hasAnyPrefix(Constant.swiftSymbolPrefixes) {
+            // Swift symbols need to be demangled. Failing to demangle should at least
+            // return the raw symbol.
+            return demangle(symbol: symbol) ?? symbol
+        }
+
+        // Objective-C symbols do not need to be demangled. It is also possible that a symbol
+        // is unsymbolicated, in which case it will be a memory address. C++ can also require
+        // symbolication, but that's for another day.
+
+        return symbol
+    }
+
+    /// 🤞 https://github.com/apple/swift-evolution/blob/main/proposals/0262-demangle.md
+    private static func demangle(symbol mangled: String) -> String? {
         let RTLD_DEFAULT = dlopen(nil, RTLD_NOW)
 
         guard let sym = dlsym(RTLD_DEFAULT, "swift_demangle") else {
             return nil
         }
-
 
         let f = unsafeBitCast(sym, to: Swift_Demangle.self)
         guard let cString = f(mangled, mangled.count, nil, nil, 0) else {
@@ -113,24 +142,105 @@ internal struct CallStackParser {
         return String(cString: cString)
     }
 
-    private static func demangleSymbolIfNeeded(symbol: String) -> String {
-        // Swift 4                  "_T0",
-        // Swift 4.x                "$S", "_$S",
-        // Swift 5+                 "$s", "_$s",
-        // Swift 5+ for filenames   "@__swiftmacro_",
-        // https://github.com/apple/swift/blob/b5ddffdb3d095e4a57abaac3f8c1e327d64ebea1/lib/Demangling/Demangler.cpp#L181-L184
+    internal static func printBacktrace() {
+        do {
+            let symbols = try backtrace()
 
-        // https://stackoverflow.com/questions/35030998/what-is-silgen-name-in-swift-language
+            switch symbols {
+            case .none:
+                logger.info("Symbol type is none")
+            case .raw(let frames):
+                logger.info(frames.joined(separator: "\n"))
+            case .demangled(let frames):
+                let stringFrames = frames.map({ frame in
+                    return "\(frame.frameNumber)\t\(frame.binaryName)\t\(frame.address)\t\(frame.symbol) + \(frame.byteOffset)"
+                }).joined(separator: "\n")
 
-        // TODO: Start looking at:
-        // https://github.com/woshiccm/RCBacktrace/tree/master
-        if symbol.hasPrefix("$") {
-            
+                logger.info(stringFrames)
+            }
+
+        } catch let error {
+            logger.error(error)
         }
-
-        return ""
     }
 
+    private static func backtrace(
+        stackSize: Int = 256
+    ) throws -> ParraLoggerStackSymbols {
+        let RTLD_DEFAULT = dlopen(nil, RTLD_NOW)
+
+        guard let sym = dlsym(RTLD_DEFAULT, "backtrace") else {
+            throw ParraError.custom("Error linking backtrace function.", nil)
+        }
+
+        let backtrace = unsafeBitCast(sym, to: Swift_Backtrace.self)
+
+        let addresses = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(
+            capacity: stackSize
+        )
+
+        defer {
+            addresses.deallocate()
+        }
+
+        let frameCount = backtrace(addresses, Int32(stackSize))
+        let buffer = UnsafeBufferPointer(
+            start: addresses,
+            count: Int(frameCount)
+        )
+
+        let stackFrames: [CallStackFrame] = buffer.enumerated().compactMap { (index, address) in
+            guard let address else {
+                return nil
+            }
+
+            let dlInfoPrt = UnsafeMutablePointer<Dl_info>.allocate(
+                capacity: 1
+            )
+
+            defer {
+                dlInfoPrt.deallocate()
+            }
+
+            guard dladdr(address, dlInfoPrt) != 0 else {
+                return nil
+            }
+
+            let info = dlInfoPrt.pointee
+
+            // Name of nearest symbol
+            let rawSymbol = String(cString: info.dli_sname)
+            // Pathname of shared object
+            let fileName = String(cString: info.dli_fname)
+            // Address of nearest symbol
+            let symbolAddressValue = unsafeBitCast(info.dli_saddr, to: UInt64.self)
+            let addressValue = UInt64(UInt(bitPattern: address))
+
+            let symbol = demangleSymbolIfNeeded(symbol: rawSymbol)
+
+            // TODO: Review these values
+            return CallStackFrame(
+                frameNumber: UInt8(index),
+                binaryName: "",
+                address: addressValue,
+                symbol: symbol,
+                byteOffset: 0,
+                fileName: fileName,
+                lineNumber: nil
+            )
+        }
+
+        return .demangled(stackFrames)
+    }
+
+    // TODO: When doing crash handlers for real, note that it is undefined behavior to malloc after SIGKILL
+    //       in this case it is important to use backtrace_symbols_fd to write the symbols to a file to be
+    //       read on the next app launch.
+    // https://github.com/getsentry/sentry-cocoa/issues/1919#issuecomment-1360987627
+
+
+    //    @_silgen_name("backtrace")
+    //    fileprivate func backtrace(_: UnsafeMutablePointer<UnsafeMutableRawPointer?>!, _: UInt32) -> UInt32
     //    internal static func addSigKillHandler() {
     //        setupHandler(for: SIGKILL) { _ in
     //            // this is all undefined behaviour, not allowed to malloc or call backtrace here...
