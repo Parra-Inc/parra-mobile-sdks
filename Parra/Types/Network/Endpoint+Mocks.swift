@@ -31,7 +31,7 @@ extension ParraEndpoint {
                 object = TestData.Auth.successResponse
             }
         default:
-            throw ParraError.custom(
+            throw ParraError.generic(
                 "getMockResponseData has no implemented return for status: \(status) for endpoint: \(slug)",
                 nil
             )

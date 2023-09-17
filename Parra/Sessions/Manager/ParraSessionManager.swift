@@ -111,32 +111,50 @@ internal class ParraSessionManager {
             let currentSession = try await sessionStorage.getCurrentSession()
             let sessionIterator = try await sessionStorage.getAllSessions()
 
-            var uploadedSessionIds = Set<String>()
+            var removableSessionIds = Set<String>()
+            var erroredSessionIds = Set<String>()
+
+            let markSessionForDirectoryAsErrored = { (directory: URL) -> Void in
+                let ext = ParraSession.Constant.packageExtension
+                guard directory.pathExtension == ext else {
+                    return
+                }
+
+                let sessionId = directory.deletingPathExtension().lastPathComponent
+
+                // A session directory being prefixed with an underscore indicates that we
+                // have already made an attempt to synchronize it, which has failed.
+                // If the session has failed to synchronize again, we want to cut our
+                // losses and delete it, so it doesn't cause the sync manager to think
+                // there are more sessions to sync.
+
+                if sessionId.hasPrefix("_") {
+                    removableSessionIds.insert(sessionId)
+                } else {
+                    erroredSessionIds.insert(sessionId)
+                }
+            }
+
             // It's possible that multiple sessions that are uploaded could receive a response indicating that polling
             // should occur. If this happens, we'll honor the most recent of these.
             var sessionResponse: ParraSessionsResponse?
 
-            for await sessionUpload in sessionIterator {
-                logger.trace("Session upload iterator produced session", [
-                    "sessionId": String(describing: sessionUpload?.session.sessionId)
-                ])
-                guard let sessionUpload else {
-                    // The iterator can't return nil until the sequence is complete. If a the inner optional
-                    // is nil, it indicates that we should skip this session for one reason or another. It may
-                    // have been corrupted, or an incorrect file type made it into the session directory, etc.
-                    continue
-                }
+            for await nextSession in sessionIterator {
+                switch nextSession {
+                case .success(let sessionDirectory, let sessionUpload):
+                    logger.trace("Session upload iterator produced session", [
+                        "sessionId": String(describing: sessionUpload.session.sessionId)
+                    ])
 
-                let session = sessionUpload.session
+                    let session = sessionUpload.session
 
-                if currentSession.sessionId == session.sessionId {
-                    // Sets a marker on the current session to indicate the offset of the file handle that stores events
-                    // just before the sync starts. This is necessary to make sure that any new events that roll in
-                    // while the sync is in progress aren't deleted as part of post-sync cleanup.
-                    await sessionStorage.recordSyncBegan()
-                }
+                    if currentSession.sessionId == session.sessionId {
+                        // Sets a marker on the current session to indicate the offset of the file handle that stores events
+                        // just before the sync starts. This is necessary to make sure that any new events that roll in
+                        // while the sync is in progress aren't deleted as part of post-sync cleanup.
+                        await sessionStorage.recordSyncBegan()
+                    }
 
-                do {
                     logger.debug("Uploading session: \(session.sessionId)")
 
                     let response = try await networkManager.submitSession(sessionUpload)
@@ -148,9 +166,11 @@ internal class ParraSessionManager {
                             sessionResponse = payload
                         }
 
-                        uploadedSessionIds.insert(session.sessionId)
+                        removableSessionIds.insert(session.sessionId)
                     case .failure(let error):
                         logger.error(error)
+
+                        markSessionForDirectoryAsErrored(sessionDirectory)
 
                         // If any of the sessions fail to upload afty rerying, fail the entire operation
                         // returning the sessions that have been completed so far.
@@ -158,17 +178,19 @@ internal class ParraSessionManager {
                             break
                         }
                     }
-                } catch let error {
-                    logger.error("Syncing sessions failed", error)
+                case .error(let sessionDirectory, let error):
+                    markSessionForDirectoryAsErrored(sessionDirectory)
+
+                    logger.error("Error synchronizing session", error)
                 }
             }
 
-            try await sessionStorage.deleteSynchronizedData(
-                for: uploadedSessionIds
+            try await sessionStorage.deleteSessions(
+                for: removableSessionIds,
+                erroredSessions: erroredSessionIds
             )
 
             return sessionResponse
-
         }
     }
 

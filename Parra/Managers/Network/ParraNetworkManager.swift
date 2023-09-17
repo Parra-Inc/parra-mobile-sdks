@@ -118,7 +118,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
 
             let url = Parra.InternalConstants.parraApiRoot.appendingPathComponent(route)
             guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-                throw ParraError.custom("Failed to create components for url: \(url)", nil)
+                throw ParraError.generic("Failed to create components for url: \(url)", nil)
             }
 
             // TODO: Should this merge the query items dictionary with any existing query params on the url string?
@@ -263,7 +263,7 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
 
         guard let authToken = ("api_key:" + apiKeyId).data(using: .utf8)?.base64EncodedString() else {
-            throw ParraError.custom("Unable to encode API key as NSData", nil)
+            throw ParraError.generic("Unable to encode API key as NSData", nil)
         }
 
         addHeaders(to: &request, endpoint: endpoint, for: applicationId)

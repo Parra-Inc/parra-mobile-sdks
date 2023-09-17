@@ -9,7 +9,7 @@ import Foundation
 
 public enum ParraError: LocalizedError, CustomStringConvertible {
     case message(String)
-    case custom(String, Error?)
+    case generic(String, Error?)
     case notInitialized
     case missingAuthentication
     case authenticationFailed(String)
@@ -26,7 +26,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         switch self {
         case .message(let string):
             return string
-        case .custom(let string, _):
+        case .generic(let string, _):
             return string
         case .notInitialized:
             return "Parra has not been initialized. Call Parra.initialize() in applicationDidFinishLaunchingWithOptions."
@@ -54,7 +54,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         switch self {
         case .message, .unknown, .jsonError, .notInitialized, .missingAuthentication:
             return baseMessage
-        case .custom(_, let error):
+        case .generic(_, let error):
             if let error {
                 return "\(baseMessage) Error: \(error)"
             }
@@ -78,7 +78,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
 extension ParraError: ParraSanitizedDictionaryConvertible {
     var sanitized: ParraSanitizedDictionary {
         switch self {
-        case .custom(_, let error):
+        case .generic(_, let error):
             if let error {
                 return [
                     "error_description": error.localizedDescription

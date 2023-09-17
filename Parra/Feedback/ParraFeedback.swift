@@ -47,7 +47,7 @@ public class ParraFeedback: ParraModule {
                 }
             } catch let error {
                 DispatchQueue.main.async {
-                    completion(.failure(ParraError.custom("Error fetching Parra Feedback cards", error)))
+                    completion(.failure(ParraError.generic("Error fetching Parra Feedback cards", error)))
                 }
             }
         }
@@ -135,7 +135,7 @@ public class ParraFeedback: ParraModule {
             } catch let error {
                 DispatchQueue.main.async {
                     completion(
-                        .failure(ParraError.custom("Error fetching Parra Feedback form: \(formId)", error))
+                        .failure(ParraError.generic("Error fetching Parra Feedback form: \(formId)", error))
                     )
                 }
             }
@@ -190,7 +190,7 @@ public class ParraFeedback: ParraModule {
                     completedCards: chunk
                 )
             } catch let error {
-                logger.error(ParraError.custom("Error uploading card data", error))
+                logger.error(ParraError.generic("Error uploading card data", error))
 
                 throw error
             }

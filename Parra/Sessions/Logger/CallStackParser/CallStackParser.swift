@@ -170,7 +170,7 @@ internal struct CallStackParser {
         let RTLD_DEFAULT = dlopen(nil, RTLD_NOW)
 
         guard let sym = dlsym(RTLD_DEFAULT, "backtrace") else {
-            throw ParraError.custom("Error linking backtrace function.", nil)
+            throw ParraError.generic("Error linking backtrace function.", nil)
         }
 
         let backtrace = unsafeBitCast(sym, to: Swift_Backtrace.self)

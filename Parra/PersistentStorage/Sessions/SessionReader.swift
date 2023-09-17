@@ -202,6 +202,23 @@ internal class SessionReader {
         try fileManager.removeItem(at: sessionDir)
     }
 
+    internal func markSessionErrored(with id: String) throws {
+        let currentSessionDirectory = sessionDirectory(
+            for: id,
+            in: basePath
+        )
+
+        let erroredSessionDirectory = sessionDirectory(
+            for: "_\(id)",
+            in: basePath
+        )
+
+        try fileManager.moveItem(
+            at: currentSessionDirectory,
+            to: erroredSessionDirectory
+        )
+    }
+
     // MARK: Private methods
 
     private func isHandleValid(handle: FileHandle) -> Bool {
@@ -230,7 +247,7 @@ internal class SessionReader {
         // Just for conveinence while debugging to be able to open these files in an editor.
 #if DEBUG
         let sessionFileName = "session.json"
-        let eventsFileName = "events.tsv"
+        let eventsFileName = "events.csv"
 #else
         let sessionFileName = "session"
         let eventsFileName = "events"

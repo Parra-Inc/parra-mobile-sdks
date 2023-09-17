@@ -304,6 +304,22 @@ internal class SessionStorage {
         withStorageQueue { sessionReader in
             do {
                 let sessionDirectories = try self.sessionReader.getAllSessionDirectories()
+                let ext = ParraSession.Constant.packageExtension
+                let nonErroredSessions = sessionDirectories.filter { directory in
+                    // Anything that is somehow in the sessions directory without the
+                    // appropriate path extension should be counted towards completed sessions.
+                    guard directory.pathExtension == ext else {
+                        return false
+                    }
+
+                    let sessionId = directory.deletingPathExtension().lastPathComponent
+
+                    // Sessions that have errored are marked with an underscore prefix to
+                    // their names. These sessions shouldn't count when checking if there
+                    // are new sessions to sync, but will be picked up when a new session
+                    // causes a sync to be necessary.
+                    return !sessionId.hasPrefix("_")
+                }
 
                 // The current session counts for 1. If there are more, they are the previous sessions.
                 completion(sessionDirectories.count > 1)
@@ -364,20 +380,23 @@ internal class SessionStorage {
     /// Deletes any data associated with the sessions with the provided ids. This includes
     /// caches in memory and on disk. The current in progress session will not be deleted,
     /// even if its id is provided.
-    internal func deleteSynchronizedData(
-        for sessionIds: Set<String>
+    internal func deleteSessions(
+        for sessionIds: Set<String>,
+        erroredSessions erroredSessionIds: Set<String>
     ) async throws {
         return try await withCheckedThrowingContinuation { continuation in
-            deleteSynchronizedData(
-                for: sessionIds
+            deleteSessions(
+                for: sessionIds,
+                erroredSessions: erroredSessionIds
             ) { result in
                 continuation.resume(with: result)
             }
         }
     }
 
-    private func deleteSynchronizedData(
+    private func deleteSessions(
         for sessionIds: Set<String>,
+        erroredSessions erroredSessionIds: Set<String>,
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         withHandles(
@@ -391,8 +410,16 @@ internal class SessionStorage {
                         "sessionId": sessionId
                     ])
 
-                    if sessionId != currentSession.sessionId && sessionIds.contains(sessionId) {
+                    if sessionId == currentSession.sessionId {
+                        continue
+                    }
+
+                    if sessionIds.contains(sessionId) {
                         try self.sessionReader.deleteSessionSync(with: sessionId)
+                    }
+
+                    if erroredSessionIds.contains(sessionId) {
+                        try self.sessionReader.markSessionErrored(with: sessionId)
                     }
                 }
 

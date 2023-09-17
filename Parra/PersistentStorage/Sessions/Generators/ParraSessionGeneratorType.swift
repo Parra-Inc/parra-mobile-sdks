@@ -13,6 +13,11 @@ fileprivate let logger = Logger(
     category: "Session Generator Helpers"
 )
 
+internal enum ParraSessionGeneratorTypeElement {
+    case success(sessionDirectory: URL, sessionPath: URL, eventsUrl: URL)
+    case error(sessionDirectory: URL, error: ParraError)
+}
+
 internal protocol ParraSessionGeneratorType {
     var jsonDecoder: JSONDecoder { get }
     var fileManager: FileManager { get }
@@ -46,30 +51,45 @@ internal extension ParraSessionGeneratorType {
     func produceNextSessionPaths<T>(
         from directoryEnumerator: FileManager.DirectoryEnumerator,
         type: T.Type
-    ) -> (paths: (sessionPath: URL, eventsPath: URL)?, optionality: T??) {
+    ) -> ParraSessionGeneratorTypeElement? {
         return logger.withScope { logger in
             guard let nextSessionUrl = directoryEnumerator.nextObject() as? URL else {
                 logger.debug("next session url couldn't be produced")
 
-                return (nil, nil)
+                return nil
             }
 
-            if !nextSessionUrl.hasDirectoryPath || nextSessionUrl.pathExtension != ParraSession.Constant.packageExtension {
+            let ext = ParraSession.Constant.packageExtension
+            if !nextSessionUrl.hasDirectoryPath || nextSessionUrl.pathExtension != ext {
                 logger.debug("session path was unexpected file type. skipping.")
+
                 // This is a case where we're indicating an invalid item was produced, and it is necessary to skip it.
-                return (nil, .some(.none))
+                return .error(
+                    sessionDirectory: nextSessionUrl,
+                    error: .fileSystem(
+                        path: nextSessionUrl,
+                        message: "Session directory was not valid."
+                    )
+                )
             }
 
             logger.trace("combining data for session: \(nextSessionUrl.lastPathComponent)")
 
-            let paths = SessionReader.sessionPaths(in: nextSessionUrl)
+            let (sessionPath, eventsUrl) = SessionReader.sessionPaths(
+                in: nextSessionUrl
+            )
 
-            return (paths, nil)
+            return .success(
+                sessionDirectory: nextSessionUrl,
+                sessionPath: sessionPath,
+                eventsUrl: eventsUrl
+            )
         }
     }
 
     func readSessionSync(at path: URL) throws -> ParraSession {
         let fileHandle = try FileHandle(forReadingFrom: path)
+        try fileHandle.seek(toOffset: 0)
 
         guard let sessionData = try fileHandle.readToEnd() else {
             throw ParraError.fileSystem(

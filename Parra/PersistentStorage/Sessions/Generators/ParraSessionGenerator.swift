@@ -13,11 +13,16 @@ fileprivate let logger = Logger(
     category: "Session Generator"
 )
 
+internal enum ParraSessionGeneratorElement {
+    case success(sessionDirectory: URL, session: ParraSession)
+    case error(sessionDirectory: URL, error: ParraError)
+}
+
 internal struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence, IteratorProtocol {
     // Type is optional. We have to be able to filter out elements while doing the lazy enumeration
     // so we need a way to indicate to the caller that the item produced by a given iteration can
     // be skipped, whichout returning nil and ending the Sequence. We use a double Optional for this.
-    typealias Element = ParraSession?
+    typealias Element = ParraSessionGeneratorElement
 
     private let directoryEnumerator: FileManager.DirectoryEnumerator
 
@@ -37,27 +42,33 @@ internal struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence, Iter
         )
     }
 
-    mutating func next() -> ParraSession?? {
-        return logger.withScope { logger in
-            let (sessionPaths, optionality) = produceNextSessionPaths(
+    mutating func next() -> ParraSessionGeneratorElement? {
+        return logger.withScope { (logger) -> ParraSessionGeneratorElement? in
+            guard let element = produceNextSessionPaths(
                 from: directoryEnumerator,
                 type: ParraSession.self
-            )
-
-            guard let sessionPaths else {
-                return optionality
+            ) else {
+                return nil
             }
 
-            let (sessionPath, _) = sessionPaths
-
-            do {
-                return try readSessionSync(at: sessionPath)
-            } catch let error {
-                logger.error("Error reading session", error, [
-                    "path": sessionPath.lastComponents()
-                ])
-
-                return .some(.none)
+            switch element {
+            case .success(let sessionDirectory, let sessionPath, _):
+                do {
+                    return .success(
+                        sessionDirectory: sessionDirectory,
+                        session: try readSessionSync(at: sessionPath)
+                    )
+                } catch let error {
+                    return .error(
+                        sessionDirectory: sessionDirectory,
+                        error: .generic("Error reading session", error)
+                    )
+                }
+            case .error(let sessionDirectory, let error):
+                return .error(
+                    sessionDirectory: sessionDirectory,
+                    error: error
+                )
             }
         }
     }

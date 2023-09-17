@@ -10,11 +10,13 @@ import Foundation
 
 fileprivate let logger = Logger(bypassEventCreation: true, category: "Session Upload Generator")
 
+internal enum ParraSessionUploadGeneratorElement {
+    case success(sessionDirectory: URL, upload: ParraSessionUpload)
+    case error(sessionDirectory: URL, error: ParraError)
+}
+
 internal struct ParraSessionUploadGenerator: ParraSessionGeneratorType, AsyncSequence, AsyncIteratorProtocol {
-    // Type is optional. We have to be able to filter out elements while doing the lazy enumeration
-    // so we need a way to indicate to the caller that the item produced by a given iteration can
-    // be skipped, whichout returning nil and ending the Sequence. We use a double Optional for this.
-    typealias Element = ParraSessionUpload?
+    typealias Element = ParraSessionUploadGeneratorElement
 
     private let directoryEnumerator: FileManager.DirectoryEnumerator
 
@@ -34,38 +36,44 @@ internal struct ParraSessionUploadGenerator: ParraSessionGeneratorType, AsyncSeq
         )
     }
 
-    mutating func next() async -> ParraSessionUpload?? {
-        return await logger.withScope { logger in
-            let (sessionPaths, optionality) = produceNextSessionPaths(
+    mutating func next() async -> ParraSessionUploadGeneratorElement? {
+        return await logger.withScope { (logger) -> ParraSessionUploadGeneratorElement? in
+            guard let element = produceNextSessionPaths(
                 from: directoryEnumerator,
                 type: ParraSessionUpload.self
-            )
-
-            guard let sessionPaths else {
-                return optionality
+            ) else {
+                return nil
             }
 
-            let (sessionPath, eventsPath) = sessionPaths
+            switch element {
+            case .success(let sessionDirectory, let sessionPath, let eventsPath):
+                do {
+                    let session = try readSessionSync(at: sessionPath)
+                    let events = try await readEvents(at: eventsPath)
 
-            do {
-                let session = try readSessionSync(at: sessionPath)
-                let events = try await readEvents(at: eventsPath)
+                    logger.trace("Finished reading session and events", [
+                        "sessionId": session.sessionId,
+                        "eventCount": events.count
+                    ])
 
-                logger.trace("Finished reading session and events", [
-                    "sessionId": session.sessionId,
-                    "eventCount": events.count
-                ])
-
-                return ParraSessionUpload(
-                    session: session,
-                    events: events
+                    return .success(
+                        sessionDirectory: sessionDirectory,
+                        upload: ParraSessionUpload(
+                            session: session,
+                            events: events
+                        )
+                    )
+                } catch let error {
+                    return .error(
+                        sessionDirectory: sessionDirectory,
+                        error: .generic("Error creating upload payload for session", error)
+                    )
+                }
+            case .error(let sessionDirectory, let error):
+                return .error(
+                    sessionDirectory: sessionDirectory,
+                    error: error
                 )
-            } catch let error {
-                logger.error("Error creating upload payload for session", error, [
-                    "path": sessionPath.lastComponents()
-                ])
-
-                return .some(.none)
             }
         }
     }

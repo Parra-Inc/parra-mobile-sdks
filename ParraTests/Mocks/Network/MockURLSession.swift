@@ -40,7 +40,7 @@ internal class MockURLSession: URLSessionType {
                     route: route,
                     statusCode: 400
                 ),
-                ParraError.custom("URL provided with request did not match any ParraEndpoint case. \(route)", nil)
+                ParraError.generic("URL provided with request did not match any ParraEndpoint case. \(route)", nil)
             )
         }
 
@@ -60,7 +60,7 @@ internal class MockURLSession: URLSessionType {
                 if predicateResult {
                     endpointExpectation.expectation.fulfill()
                 } else {
-                    throw ParraError.custom("Predicate failed to mock of route: \(slug)", nil)
+                    throw ParraError.generic("Predicate failed to mock of route: \(slug)", nil)
                 }
 
                 if let response = endpointExpectation.returning {

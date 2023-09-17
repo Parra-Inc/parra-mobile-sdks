@@ -36,3 +36,11 @@ internal struct ParraSanitizedDictionary: ExpressibleByDictionaryLiteral {
         return url
     }
 }
+
+extension ParraSanitizedDictionary: Encodable {
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        try container.encode(AnyCodable(dictionary))
+    }
+}

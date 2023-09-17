@@ -84,7 +84,7 @@ class ParraPushTests: XCTestCase {
     }
 
     func testAcceptsRegistrationFailure() async {
-        let error = ParraError.custom("made up error", nil)
+        let error = ParraError.generic("made up error", nil)
         // no op for now
         mockParra.parra.didFailToRegisterForRemoteNotifications(with: error)
     }
