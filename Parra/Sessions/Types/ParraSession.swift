@@ -11,6 +11,7 @@ import Foundation
 internal struct ParraSession: Codable {
     internal struct Constant {
         static let packageExtension = "parsesh"
+        static let erroredSessionPrefix = "_"
     }
 
     internal let sessionId: String

@@ -128,9 +128,13 @@ internal class ParraSessionManager {
                 // losses and delete it, so it doesn't cause the sync manager to think
                 // there are more sessions to sync.
 
-                if sessionId.hasPrefix("_") {
+                if sessionId.hasPrefix(ParraSession.Constant.erroredSessionPrefix) {
+                    logger.trace("Marking previously errored session for removal: \(sessionId)")
+
                     removableSessionIds.insert(sessionId)
                 } else {
+                    logger.trace("Marking session as errored: \(sessionId)")
+
                     erroredSessionIds.insert(sessionId)
                 }
             }
@@ -146,35 +150,42 @@ internal class ParraSessionManager {
                         "sessionId": String(describing: sessionUpload.session.sessionId)
                     ])
 
-                    let session = sessionUpload.session
+                    // Reference the session ID from the path instead of from reading the session
+                    // object, since this one will include the deletion marker.
+                    let sessionId = sessionDirectory.deletingPathExtension().lastPathComponent
 
-                    if currentSession.sessionId == session.sessionId {
+                    if currentSession.sessionId == sessionId {
                         // Sets a marker on the current session to indicate the offset of the file handle that stores events
                         // just before the sync starts. This is necessary to make sure that any new events that roll in
                         // while the sync is in progress aren't deleted as part of post-sync cleanup.
                         await sessionStorage.recordSyncBegan()
                     }
 
-                    logger.debug("Uploading session: \(session.sessionId)")
+                    logger.debug("Uploading session: \(sessionId)")
 
                     let response = try await networkManager.submitSession(sessionUpload)
 
                     switch response.result {
                     case .success(let payload):
+                        logger.debug("Successfully uploaded session: \(sessionId)")
+
                         // Don't override the session response unless it's another one with shouldPoll enabled.
                         if payload.shouldPoll {
                             sessionResponse = payload
                         }
 
-                        removableSessionIds.insert(session.sessionId)
+                        removableSessionIds.insert(sessionId)
                     case .failure(let error):
-                        logger.error(error)
+                        logger.error("Failed to upload session: \(sessionId)", error)
 
                         markSessionForDirectoryAsErrored(sessionDirectory)
 
                         // If any of the sessions fail to upload afty rerying, fail the entire operation
                         // returning the sessions that have been completed so far.
                         if response.attributes.contains(.exceededRetryLimit) {
+                            logger.debug(
+                                "Network retry limited exceeded. Will not attempt to sync additional sessions."
+                            )
                             break
                         }
                     }

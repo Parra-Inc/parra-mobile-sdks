@@ -309,6 +309,10 @@ internal class SessionStorage {
                     // Anything that is somehow in the sessions directory without the
                     // appropriate path extension should be counted towards completed sessions.
                     guard directory.pathExtension == ext else {
+                        logger.trace("Encountered session directory with invalid path extension", [
+                            "name": directory.lastPathComponent
+                        ])
+
                         return false
                     }
 
@@ -318,11 +322,17 @@ internal class SessionStorage {
                     // their names. These sessions shouldn't count when checking if there
                     // are new sessions to sync, but will be picked up when a new session
                     // causes a sync to be necessary.
-                    return !sessionId.hasPrefix("_")
+                    return !sessionId.hasPrefix(ParraSession.Constant.erroredSessionPrefix)
                 }
 
-                // The current session counts for 1. If there are more, they are the previous sessions.
-                completion(sessionDirectories.count > 1)
+                logger.trace("Finished counting previous sessions", [
+                    "total": sessionDirectories.count,
+                    "valid": nonErroredSessions.count
+                ])
+
+                // The current session counts for 1. If there are more that appear to
+                // be valid, use that as an indication that a sync should occur.
+                completion(nonErroredSessions.count > 1)
             } catch let error {
                 logger.error("Error checking for completed sessions", error)
                 completion(false)
