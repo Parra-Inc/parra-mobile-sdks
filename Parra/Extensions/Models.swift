@@ -8,7 +8,7 @@
 import Foundation
 
 extension ParraCardItem {
-    public func getAllAssets() -> [Asset] {
+    internal func getAllAssets() -> [Asset] {
         switch self.data {
         case .question(let question):
             switch question.data {
@@ -23,7 +23,7 @@ extension ParraCardItem {
 
     /// Cards that don't have a good mechanism for determining that the user is done making their selection.
     /// This determines which cards show the forward arrow button to manually commit their changes.
-    public var requiresManualNextSelection: Bool {
+    internal var requiresManualNextSelection: Bool {
         switch data {
         case .question(let question):
             switch question.kind {

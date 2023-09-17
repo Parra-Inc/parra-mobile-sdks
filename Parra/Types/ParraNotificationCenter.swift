@@ -10,12 +10,12 @@ import Foundation
 
 fileprivate let logger = Logger(category: "Parra notification center")
 
-public class ParraNotificationCenter: NotificationCenterType {
+internal class ParraNotificationCenter: NotificationCenterType {
     internal let underlyingNotificationCenter = NotificationCenter()
 
     init() {}
 
-    public func post(
+    internal func post(
         name aName: NSNotification.Name,
         object anObject: Any? = nil,
         userInfo aUserInfo: [AnyHashable : Any]? = nil
@@ -29,7 +29,7 @@ public class ParraNotificationCenter: NotificationCenterType {
         }
     }
 
-    public func postAsync(
+    internal func postAsync(
         name aName: NSNotification.Name,
         object anObject: Any? = nil,
         userInfo aUserInfo: [AnyHashable : Any]? = nil
@@ -47,7 +47,7 @@ public class ParraNotificationCenter: NotificationCenterType {
         }
     }
 
-    public func addObserver(
+    internal func addObserver(
         _ observer: Any,
         selector aSelector: Selector,
         name aName: NSNotification.Name?,
@@ -61,7 +61,7 @@ public class ParraNotificationCenter: NotificationCenterType {
         )
     }
 
-    public func addObserver(
+    internal func addObserver(
         forName name: NSNotification.Name?,
         object obj: Any?,
         queue: OperationQueue?,
@@ -75,7 +75,7 @@ public class ParraNotificationCenter: NotificationCenterType {
         )
     }
 
-    public func removeObserver(
+    internal func removeObserver(
         _ observer: Any,
         name aName: NSNotification.Name?,
         object anObject: Any?

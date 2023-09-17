@@ -8,13 +8,14 @@
 
 import Foundation
 
-public struct AuthenticatedRequestResult<T: Decodable> {
-    public let result: Result<T, Error>
-    public let attributes: AuthenticatedRequestAttributeOptions
+internal struct AuthenticatedRequestResult<T: Decodable> {
+    internal let result: Result<T, Error>
+    internal let attributes: AuthenticatedRequestAttributeOptions
 
-    init(result: Result<T, Error>,
-         responseAttributes: AuthenticatedRequestAttributeOptions = []) {
-
+    internal init(
+        result: Result<T, Error>,
+        responseAttributes: AuthenticatedRequestAttributeOptions = []
+    ) {
         self.result = result
         self.attributes = responseAttributes
     }

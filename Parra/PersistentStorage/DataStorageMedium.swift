@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum DataStorageMedium {
+internal enum DataStorageMedium {
     case memory
     case fileSystem(
         folder: String,

@@ -9,7 +9,7 @@
 import Foundation
 
 extension ParraLoggerContext: ParraSanitizedDictionaryConvertible {
-    public var sanitized: ParraSanitizedDictionary {
+    internal var sanitized: ParraSanitizedDictionary {
         var params: [String : Any] = [
             "module": module,
             "file_name": fileName

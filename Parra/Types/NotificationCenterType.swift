@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol NotificationCenterType {
+internal protocol NotificationCenterType {
     func post(
         name aName: NSNotification.Name,
         object anObject: Any?,

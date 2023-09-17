@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct ParraSessionsResponse: Codable {
-    public let shouldPoll: Bool
+internal struct ParraSessionsResponse: Codable {
+    internal let shouldPoll: Bool
     /// ms
-    public let retryDelay: Int
-    public let retryTimes: Int
+    internal let retryDelay: Int
+    internal let retryTimes: Int
 }

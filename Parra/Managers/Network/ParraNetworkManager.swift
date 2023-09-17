@@ -10,7 +10,7 @@ import UIKit
 
 fileprivate let logger = Logger(category: "Network Manager")
 
-public typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
+internal typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
 internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
     internal let state: ParraState

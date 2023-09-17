@@ -10,13 +10,13 @@ import Foundation
 
 @usableFromInline
 internal struct ParraLoggerThreadInfo: Codable {
-    public let id: Int
-    public let queueName: String
-    public let stackSize: Int
-    public let priority: Double // 0.0...1.0
-    public let qualityOfService: QualityOfService
-    public let threadName: String?
-    public let threadNumber: UInt8?
+    internal let id: Int
+    internal let queueName: String
+    internal let stackSize: Int
+    internal let priority: Double // 0.0...1.0
+    internal let qualityOfService: QualityOfService
+    internal let threadName: String?
+    internal let threadNumber: UInt8?
     internal private(set) var callStackSymbols: ParraLoggerStackSymbols
 
     @usableFromInline

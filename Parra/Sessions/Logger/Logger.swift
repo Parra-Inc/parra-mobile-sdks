@@ -23,7 +23,7 @@ public class Logger {
     }
 
     internal let context: ParraLoggerContext
-    public private(set) weak var parent: Logger?
+    internal private(set) weak var parent: Logger?
 
     /// Whether or not logging is enabled on this logger instance. Logging is enabled
     /// by default. If you disable logging, logs are ignored until re-enabling. Changing this

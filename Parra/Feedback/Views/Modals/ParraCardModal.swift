@@ -21,7 +21,7 @@ internal struct ParraCardModalViewedEvent: ParraDataEvent {
 }
 
 // raw values used in events
-public enum ParraCardModalType: String {
+internal enum ParraCardModalType: String {
     case popup
     case drawer
 

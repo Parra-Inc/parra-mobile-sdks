@@ -8,14 +8,22 @@
 
 import Foundation
 
-public struct AuthenticatedRequestAttributeOptions: OptionSet {
-    public let rawValue: Int
+internal struct AuthenticatedRequestAttributeOptions: OptionSet {
+    internal let rawValue: Int
 
-    public static let requiredReauthentication = AuthenticatedRequestAttributeOptions(rawValue: 1 << 0)
-    public static let requiredRetry = AuthenticatedRequestAttributeOptions(rawValue: 1 << 1)
-    public static let exceededRetryLimit = AuthenticatedRequestAttributeOptions(rawValue: 1 << 2)
+    internal static let requiredReauthentication = AuthenticatedRequestAttributeOptions(
+        rawValue: 1 << 0
+    )
+    
+    internal static let requiredRetry = AuthenticatedRequestAttributeOptions(
+        rawValue: 1 << 1
+    )
+    
+    internal static let exceededRetryLimit = AuthenticatedRequestAttributeOptions(
+        rawValue: 1 << 2
+    )
 
-    public init(rawValue: Int) {
+    internal init(rawValue: Int) {
         self.rawValue = rawValue
     }
 }

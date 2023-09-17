@@ -9,7 +9,7 @@
 import Foundation
 
 extension ParraLoggerThreadInfo: ParraSanitizedDictionaryConvertible {
-    public var sanitized: ParraSanitizedDictionary {
+    internal var sanitized: ParraSanitizedDictionary {
         var params: [String : Any] = [
             "id": id,
             "queue_name": queueName,

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public actor ParraStorageModule<DataType: Codable> {
+internal actor ParraStorageModule<DataType: Codable> {
     // Whether or not data has previously been loaded from disk.
     internal private(set) var isLoaded = false
     internal let dataStorageMedium: DataStorageMedium
@@ -36,7 +36,7 @@ public actor ParraStorageModule<DataType: Codable> {
         }
     }
 
-    public init(
+    internal init(
         dataStorageMedium: DataStorageMedium,
         jsonEncoder: JSONEncoder,
         jsonDecoder: JSONDecoder
@@ -98,7 +98,7 @@ public actor ParraStorageModule<DataType: Codable> {
         }
     }
     
-    public func currentData() async -> [String : DataType] {
+    internal func currentData() async -> [String : DataType] {
         if !isLoaded {
             await loadData()
         }
@@ -106,7 +106,7 @@ public actor ParraStorageModule<DataType: Codable> {
         return storageCache
     }
     
-    public func read(name: String) async -> DataType? {
+    internal func read(name: String) async -> DataType? {
         if !isLoaded {
             await loadData()
         }
@@ -133,7 +133,7 @@ public actor ParraStorageModule<DataType: Codable> {
         return nil
     }
     
-    public func write(
+    internal func write(
         name: String,
         value: DataType?
     ) async throws {
@@ -166,7 +166,7 @@ public actor ParraStorageModule<DataType: Codable> {
         }
     }
     
-    public func delete(name: String) async {
+    internal func delete(name: String) async {
         if !isLoaded {
             await loadData()
         }
@@ -193,7 +193,7 @@ public actor ParraStorageModule<DataType: Codable> {
         }
     }
     
-    public func clear() async {
+    internal func clear() async {
         defer {
             storageCache.removeAll()
         }

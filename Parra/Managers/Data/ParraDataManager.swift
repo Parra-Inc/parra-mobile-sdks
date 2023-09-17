@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class ParraDataManager {
+internal class ParraDataManager {
     internal fileprivate(set) var credentialStorage: CredentialStorage
     internal fileprivate(set) var sessionStorage: SessionStorage
 
