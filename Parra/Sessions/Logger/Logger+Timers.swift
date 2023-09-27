@@ -18,15 +18,15 @@ public extension Logger {
     ///
     /// - Parameters:
     ///   - startMarker: The marker that is being measured against.
-    ///   - message: A custom message that you want to provide to be displayed before the between now and the ``startMarker``.
+    ///   - message: A custom message that you want to provide to be displayed before the between now and the `startMarker`.
     ///              If no message is provided, we will use the message that was attached to the log that created the
-    ///              ``startMarker``.
-    ///   - format: The format that the duration since the ``startMarker`` should be displayed in. Options include:
-    ///             * ``seconds`` (e.x. "70 seconds"
-    ///             * ``pretty`` (e.x. "1 minute, 10 seconds)
-    ///             * ``custom`` This option allows you to pass a ``DateComponentsFormatter``, giving you complete control
+    ///              `startMarker`.
+    ///   - format: The format that the duration since the `startMarker` should be displayed in. Options include:
+    ///             * `seconds` (e.x. "70 seconds"
+    ///             * `pretty` (e.x. "1 minute, 10 seconds)
+    ///             * `custom` This option allows you to pass a `DateComponentsFormatter`, giving you complete control
     ///                          over the output format.
-    ///             If an error is encountered formatting the output, we fall back on the ``seconds`` style.
+    ///             If an error is encountered formatting the output, we fall back on the `seconds` style.
     /// - Returns: A ``ParraLogMarkerMeasurement`` containing data about the measurement, that can be useful if you want
     ///            to record any of this information in your own systems. This return value is discardable.
     @discardableResult
@@ -83,15 +83,15 @@ public extension Logger {
     ///
     /// - Parameters:
     ///   - startMarker: The marker that is being measured against.
-    ///   - message: A custom message that you want to provide to be displayed before the between now and the ``startMarker``.
+    ///   - message: A custom message that you want to provide to be displayed before the between now and the `startMarker`.
     ///              If no message is provided, we will use the message that was attached to the log that created the
-    ///              ``startMarker``.
-    ///   - format: The format that the duration since the ``startMarker`` should be displayed in. Options include:
-    ///             * ``seconds`` (e.x. "70 seconds"
-    ///             * ``pretty`` (e.x. "1 minute, 10 seconds)
-    ///             * ``custom`` This option allows you to pass a ``DateComponentsFormatter``, giving you complete control
+    ///              `startMarker`.
+    ///   - format: The format that the duration since the `startMarker` should be displayed in. Options include:
+    ///             * `seconds` (e.x. "70 seconds"
+    ///             * `pretty` (e.x. "1 minute, 10 seconds)
+    ///             * `custom` This option allows you to pass a `DateComponentsFormatter`, giving you complete control
     ///                          over the output format.
-    ///             If an error is encountered formatting the output, we fall back on the ``seconds`` style.
+    ///             If an error is encountered formatting the output, we fall back on the `seconds` style.
     /// - Returns: A ``ParraLogMarkerMeasurement`` containing data about the measurement, that can be useful if you want
     ///            to record any of this information in your own systems. This return value is discardable.
     @discardableResult

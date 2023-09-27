@@ -17,9 +17,9 @@ import Foundation
 /// used to determine if the environment is `debug` or `production`.
 /// This option is exposed in case you have additional schemes besides DEBUG
 /// and RELEASE and want to customize your log output in these cases.
-/// If the ``ParraLoggerOptions.Environment.eventDebugLoggingEnabled`` environmental
-/// variable is set, events will be written to both the console and the user's session
-/// regardless of this configuration.
+/// If the ``ParraLoggerOptions/Environment-swift.enum/eventDebugLoggingEnabled``
+/// environmental variable is set, events will be written to both the console
+/// and the user's session regardless of this configuration.
 public enum ParraLoggerEnvironment {
     public static let `default` = ParraLoggerEnvironment.automatic
 

@@ -45,9 +45,10 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         }
     }
 
-    /// A simple error description string for cases where we don't have more complete control over the output formatting.
-    /// Interally, we want to always use ``ParraErrorWithExtra`` in combination with the ``errorDescription`` and
-    /// ``dictionary`` fields instead of this.
+    /// A simple error description string for cases where we don't have more complete control
+    /// over the output formatting. Interally, we want to always use `Parra/ParraErrorWithExtra`
+    /// in combination with the `ParraError/errorDescription` and ``ParraError/description``
+    /// fields instead of this.
     public var description: String {
         let baseMessage = errorDescription
 
