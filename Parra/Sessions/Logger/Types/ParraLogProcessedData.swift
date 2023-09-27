@@ -99,22 +99,63 @@ internal struct ParraLogProcessedData {
     private static func createCategory(
         logContext: ParraLogContext
     ) -> String {
-        var categoryComponents = [String]()
-        if let loggerContext = logContext.loggerContext {
-            if let category = loggerContext.category {
-                categoryComponents.append(category)
-            }
-
-            if !loggerContext.scopes.isEmpty {
-                categoryComponents.append(
-                    contentsOf: loggerContext.scopes.map { $0.name }
-                )
-            }
+        let callingFunctionName = logContext.callSiteContext.function
+        
+        guard let loggerContext = logContext.loggerContext else {
+            // There is no data other than the call site function. No point in building
+            // a single element category array and joining back to a string.
+            return callingFunctionName
         }
 
-        categoryComponents.append(
-            logContext.callSiteContext.function
-        )
+        var categoryComponents = [String]()
+
+        if let category = loggerContext.category {
+            categoryComponents.append(category)
+        }
+
+        if !loggerContext.scopes.isEmpty {
+            var scopes = loggerContext.scopes
+
+            // If there isn't a last element to pop, mapping the scopes wouldn't
+            // do anything anyway.
+            if let last = scopes.popLast() {
+                // Scoped logger in a function uses the function name as a scope. We need to associate
+                // both that function scope, and the function that the log was created from in the
+                // case where they aren't the same.
+
+                switch last {
+                case .customName:
+                    // The scope wasn't a function. Put it back.
+                    scopes.append(last)
+
+                    categoryComponents.append(
+                        contentsOf: scopes.map { $0.name }
+                    )
+
+                    categoryComponents.append(callingFunctionName)
+                case .function(let rawName):
+                    categoryComponents.append(
+                        contentsOf: scopes.map { $0.name }
+                    )
+
+                    // Logs that occur within a scoped logger that haven't exited
+                    // its scope will have a call site function that matches the
+                    // most recent scope. If this happens, we drop the last scope
+                    // in favor of the call site function formatting. If the logger
+                    // exited the original scope, apply special formating to indicate
+                    // that this occurred.
+                    if rawName == callingFunctionName {
+                        categoryComponents.append(callingFunctionName)
+                    } else {
+                        categoryComponents.append(
+                            "\(last.name) -> \(callingFunctionName)"
+                        )
+                    }
+                }
+            } else {
+                categoryComponents.append(callingFunctionName)
+            }
+        }
 
         return categoryComponents.joined(separator: "/")
     }

@@ -32,6 +32,36 @@ internal struct ParraLoggerContext {
         fiberId: String?,
         fileId: String,
         category: String?,
+        scope: ParraLoggerScopeType,
+        extra: [String : Any]?
+    ) {
+        let (module, fileName, fileExtension) = LoggerHelpers.splitFileId(
+            fileId: fileId
+        )
+
+        let scopes: [ParraLoggerScopeType]
+        if case let .function(rawName) = scope, rawName == module {
+            // If a function scope is present, and it has the same name as the module
+            // it means the logger instance was created at top level in a file, and
+            // this function scope is garbage data.
+            scopes = []
+        } else {
+            scopes = [scope]
+        }
+
+        self.fiberId = fiberId
+        self.module = module
+        self.fileName = fileName
+        self.fileExtension = fileExtension
+        self.category = category
+        self.scopes = scopes
+        self.extra = extra
+    }
+
+    internal init(
+        fiberId: String?,
+        fileId: String,
+        category: String?,
         scopes: [ParraLoggerScopeType],
         extra: [String : Any]?
     ) {
@@ -85,7 +115,6 @@ internal struct ParraLoggerContext {
 
         let mergeIfNotDuplicate = { (scope: ParraLoggerScopeType) in
             if !scopes.contains(scope) {
-                // TODO: Is there any other logic that would make sense here to re-order the scopes?
                 mergedScopes.append(scope)
             }
         }

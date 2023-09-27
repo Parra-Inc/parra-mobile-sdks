@@ -44,6 +44,9 @@ internal extension Parra {
 
         Parra.hasStartedEventObservers = true
 
+        // TODO: Before adding observer, should we read the current values of everything and
+        // store them in user state?
+
         for (notificationName, selector) in notificationsToObserve {
             addObserver(for: notificationName, selector: selector)
         }

@@ -54,24 +54,26 @@ public class Logger {
             fiberId: fiberId,
             fileId: fileId,
             category: category,
-            scopes: [.function(function)],
+            scope: .function(function),
             extra: extra ?? [:]
         )
     }
 
-    internal convenience init(
+    internal init(
         bypassEventCreation: Bool,
         category: String? = nil,
         extra: [String : Any]? = nil,
         fileId: String = #fileID
     ) {
-        self.init(
-            category: category,
-            extra: extra,
-            fileId: fileId
-        )
-
         self.bypassEventCreation = bypassEventCreation
+        self.fiberId = UUID().uuidString
+        self.context = ParraLoggerContext(
+            fiberId: fiberId,
+            fileId: fileId,
+            category: category,
+            scopes: [],
+            extra: extra
+        )
     }
 
     internal init(

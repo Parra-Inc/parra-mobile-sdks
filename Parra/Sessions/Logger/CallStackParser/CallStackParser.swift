@@ -214,7 +214,7 @@ internal struct CallStackParser {
             let fileName = String(cString: info.dli_fname)
             // Address of nearest symbol
             let symbolAddressValue = unsafeBitCast(info.dli_saddr, to: UInt64.self)
-            let addressValue = UInt64(UInt(bitPattern: address))
+            let addressValue = UInt16(UInt(bitPattern: address))
 
             let symbol = demangleSymbolIfNeeded(symbol: rawSymbol)
 
@@ -222,9 +222,9 @@ internal struct CallStackParser {
             return CallStackFrame(
                 frameNumber: UInt8(index),
                 binaryName: "",
-                address: addressValue,
+                address: symbolAddressValue,
                 symbol: symbol,
-                byteOffset: 0,
+                byteOffset: addressValue,
                 fileName: fileName,
                 lineNumber: nil
             )
