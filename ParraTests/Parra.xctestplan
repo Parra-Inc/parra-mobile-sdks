@@ -14,7 +14,8 @@
             "value" : "1"
           }
         ],
-        "threadSanitizerEnabled" : true
+        "threadSanitizerEnabled" : true,
+        "undefinedBehaviorSanitizerEnabled" : true
       }
     }
   ],
@@ -38,6 +39,13 @@
         "containerPath" : "container:Parra.xcodeproj",
         "identifier" : "001B7AF827DE3A7600DEEECD",
         "name" : "ParraTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Parra.xcodeproj",
+        "identifier" : "0087CA592A54C54D007D72FA",
+        "name" : "ParraUITests"
       }
     }
   ],

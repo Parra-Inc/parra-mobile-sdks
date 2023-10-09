@@ -9,6 +9,14 @@
 import Foundation
 
 internal actor ParraState {
+    private class ModuleObjectWrapper: NSObject {
+        fileprivate let module: ParraModule
+
+        init(module: ParraModule) {
+            self.module = module
+        }
+    }
+
     /// Wether or not the SDK has been initialized by calling `Parra.initialize()`
     private var initialized = false
 
@@ -17,7 +25,10 @@ internal actor ParraState {
     /// lead to invalid tokens being held onto for too long.
     private var pushToken: String?
 
-    private var registeredModules: [String : ParraModule] = [:]
+    private let registeredModules = NSMapTable<NSString, ModuleObjectWrapper>(
+        keyOptions: .copyIn,
+        valueOptions: .strongMemory
+    )
 
     internal init() {}
 
@@ -28,7 +39,13 @@ internal actor ParraState {
     ) {
         self.initialized = initialized
         self.pushToken = pushToken
-        self.registeredModules = registeredModules
+
+        for (key, value) in registeredModules {
+            self.registeredModules.setObject(
+                ModuleObjectWrapper(module: value),
+                forKey: key as NSString
+            )
+        }
     }
 
     // MARK: Init
@@ -46,24 +63,51 @@ internal actor ParraState {
 
     // MARK: - Parra Modules
 
-    internal func getAllRegisteredModules() async -> [String : ParraModule] {
-        return registeredModules
+    internal func getAllRegisteredModules() async -> [ParraModule] {
+        let modules = registeredModules.dictionaryRepresentation().values.map { wrapper in
+            return wrapper.module
+        }
+
+        return modules
     }
 
-    /// Registers the provided ParraModule with the Parra module. This exists for usage by other Parra modules only. It is used
-    /// to allow the Parra module to identify which other Parra modules have been installed.
+    /// Registers the provided ParraModule with the Parra module. This exists for 
+    /// usage by other Parra modules only. It is used to allow the Parra module
+    /// to identify which other Parra modules have been installed.
     internal func registerModule(module: ParraModule) {
-        registeredModules[type(of: module).name] = module
+        let key = type(of: module).name as NSString
+
+        registeredModules.setObject(
+            ModuleObjectWrapper(module: module),
+            forKey: key
+        )
     }
 
-    // Mostly just a test helper
-    internal func unregisterModule(module: ParraModule) {
-        registeredModules.removeValue(forKey: type(of: module).name)
+    internal func unregisterModule(module: ParraModule) async {
+        let key = type(of: module).name
+
+        unregisterModule(named: key)
+    }
+
+    nonisolated internal func unregisterModule(module: ParraModule) {
+        let key = type(of: module).name
+
+        Task {
+            await unregisterModule(named: key)
+        }
+    }
+
+    private func unregisterModule(named name: String) {
+        registeredModules.removeObject(
+            forKey: name as NSString
+        )
     }
 
     /// Checks whether the provided module has already been registered with Parra
     internal func hasRegisteredModule(module: ParraModule) -> Bool {
-        return registeredModules[type(of: module).name] != nil
+        let key = type(of: module).name as NSString
+
+        return registeredModules.object(forKey: key) != nil
     }
 
     // MARK: - Push

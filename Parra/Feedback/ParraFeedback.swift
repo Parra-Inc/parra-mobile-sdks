@@ -17,7 +17,7 @@ public class ParraFeedback: ParraModule {
     internal let dataManager: ParraFeedbackDataManager
 
     public static var shared: ParraFeedback {
-        return Parra.shared.feedback
+        return Parra.getSharedInstance().feedback
     }
 
     internal init(
@@ -29,6 +29,10 @@ public class ParraFeedback: ParraModule {
     }
 
     internal private(set) static var name: String = "Feedback"
+
+    deinit {
+        parra.state.unregisterModule(module: self)
+    }
 
     /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler

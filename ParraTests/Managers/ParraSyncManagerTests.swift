@@ -12,14 +12,10 @@ import XCTest
 // now that the result isn't awaited.
 
 @MainActor
-class ParraSyncManagerTests: XCTestCase {
-    private var mockParra: MockParra!
-
-    override func setUp() async throws {
-        mockParra = await createMockParra(state: .initialized)
-    }
+class ParraSyncManagerTests: MockedParraTestCase {
 
     override func tearDown() async throws {
+        // TODO: This should be moved to sync manager deinit and have its own test
         mockParra.syncManager.stopSyncTimer()
 
         if await mockParra.syncManager.syncState.isSyncing() {
@@ -38,7 +34,7 @@ class ParraSyncManagerTests: XCTestCase {
             )
         }
 
-        mockParra = nil
+        try await super.tearDown()
     }
 
     func testStartingSyncTimerActivatesTimer() async throws {
@@ -125,7 +121,7 @@ class ParraSyncManagerTests: XCTestCase {
         logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
-        await fulfillment(of: [syncBeginExpectation], timeout: 3.0)
+        await fulfillment(of: [syncBeginExpectation], timeout: 1.0)
 
         let isSyncing = await mockParra.syncManager.syncState.isSyncing()
         XCTAssertTrue(isSyncing)
@@ -216,20 +212,21 @@ class ParraSyncManagerTests: XCTestCase {
             name: Parra.syncDidBeginNotification,
             object: mockParra.syncManager
         )
-
-        logEventToSession(named: "test")
-        await mockParra.syncManager.enqueueSync(with: .immediate)
-
-        await fulfillment(of: [syncDidBegin], timeout: 1.0)
-
-        let isSyncing = await mockParra.syncManager.syncState.isSyncing()
-        XCTAssertTrue(isSyncing)
-
+        syncDidBegin.assertForOverFulfill = true
+        syncDidBegin.expectedFulfillmentCount = 1
         let syncDidEnd = mockParra.notificationExpectation(
             name: Parra.syncDidEndNotification,
             object: mockParra.syncManager
         )
-        syncDidEnd.expectedFulfillmentCount = 2
+        syncDidEnd.expectedFulfillmentCount = 1
+
+        logEventToSession(named: "test")
+        await mockParra.syncManager.enqueueSync(with: .immediate)
+
+        await fulfillment(of: [syncDidBegin], timeout: 0.1)
+
+        let isSyncing = await mockParra.syncManager.syncState.isSyncing()
+        XCTAssertTrue(isSyncing)
 
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
@@ -238,8 +235,21 @@ class ParraSyncManagerTests: XCTestCase {
 
         await fulfillment(
             of: [syncDidEnd],
-            timeout: mockParra.syncManager.syncDelay * 1.5
+            timeout: mockParra.syncManager.syncDelay
         )
+
+        let secondSyncDidBegin = mockParra.notificationExpectation(
+            name: Parra.syncDidBeginNotification,
+            object: mockParra.syncManager
+        )
+        secondSyncDidBegin.isInverted = true
+
+        // Make sure a 2nd sync does not start.
+        await fulfillment(
+            of: [secondSyncDidBegin],
+            timeout: 1.5
+        )
+
     }
 
     func testEnqueueEventualSyncWhileSyncInProgress() async throws {
@@ -310,7 +320,6 @@ class ParraSyncManagerTests: XCTestCase {
             name: Parra.syncDidBeginNotification,
             object: mockParra.syncManager
         )
-        thirdSyncDidBegin.isInverted = true
 
         await fulfillment(
             of: [secondSyncDidEnd, syncTimerTickedExpectation],
@@ -320,10 +329,9 @@ class ParraSyncManagerTests: XCTestCase {
         // At this point, the second sync finished and the sync timer ticked.
         // Now we just wait to make sure a 3rd sync job isn't started, since
         // all sessions should be cleared.
-
         await fulfillment(
             of: [thirdSyncDidBegin],
-            timeout: 1.0
+            timeout: mockParra.syncManager.syncDelay
         )
     }
 
@@ -374,17 +382,24 @@ class ParraSyncManagerTests: XCTestCase {
             thread: .current
         )
 
-        mockParra.sessionManager.writeEventSync(
+        let (event, _) = ParraSessionEvent.sessionEventFromEventWrapper(
             wrappedEvent: .event(
                 event: ParraBasicEvent(name: name)
             ),
-            target: .session,
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
                 function: function,
                 line: line,
                 column: column,
                 threadInfo: threadInfo
+            )
+        )
+
+        mockParra.dataManager.sessionStorage.writeEvent(
+            event: event,
+            context: ParraSessionEventContext(
+                isClientGenerated: true,
+                syncPriority: .critical
             )
         )
     }

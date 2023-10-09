@@ -9,15 +9,10 @@ import XCTest
 @testable import Parra
 
 @MainActor
-class ParraAuthenticationTests: XCTestCase {
-    private var mockParra: MockParra!
-
+class ParraAuthenticationTests: MockedParraTestCase {
     override func setUp() async throws {
+        // Setup without initialization
         mockParra = await createMockParra()
-    }
-
-    override func tearDown() async throws {
-        mockParra = nil
     }
 
     @MainActor

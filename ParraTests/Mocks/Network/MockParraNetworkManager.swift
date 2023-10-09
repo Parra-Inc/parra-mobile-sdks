@@ -11,7 +11,7 @@ import Foundation
 
 struct MockParraNetworkManager {
     let networkManager: ParraNetworkManager
-    let dataManager: MockDataManager
+    let dataManager: ParraDataManager
     let urlSession: MockURLSession
     let tenantId: String
     let applicationId: String

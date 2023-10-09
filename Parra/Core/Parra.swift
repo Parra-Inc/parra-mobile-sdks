@@ -47,71 +47,22 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         return .default
     }()
 
+    internal static var _shared: Parra!
+
     @usableFromInline
-    internal static var shared: Parra! = {
-        let state = ParraState()
-        let configState = ParraConfigState()
-        let syncState = ParraSyncState()
+    internal static func getSharedInstance() -> Parra {
+        if let _shared {
+            return _shared
+        }
 
-        let defaultJsonEncoder = Parra.jsonCoding.jsonEncoder
-        let defaultJsonDecoder = Parra.jsonCoding.jsonDecoder
+        _shared = createParraInstance(with: .default)
 
-        let diskCacheURL = ParraDataManager.Path.networkCachesDirectory
-        // Cache may reject image entries if they are greater than 10% of the cache's size
-        // so these need to reflect that.
-        let cache = URLCache(
-            memoryCapacity: 50 * 1024 * 1024,
-            diskCapacity: 300 * 1024 * 1024,
-            directory: diskCacheURL
-        )
+        return _shared
+    }
 
-        let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.urlCache = cache
-        sessionConfig.requestCachePolicy = .returnCacheDataElseLoad
-
-        let notificationCenter = ParraNotificationCenter()
-        let urlSession = URLSession(configuration: sessionConfig)
-        let dataManager = ParraDataManager(
-            jsonEncoder: .spaceOptimizedEncoder,
-            jsonDecoder: defaultJsonDecoder,
-            fileManager: Parra.fileManager
-        )
-
-        let networkManager = ParraNetworkManager(
-            state: state,
-            configState: configState,
-            dataManager: dataManager,
-            urlSession: urlSession,
-            jsonEncoder: defaultJsonEncoder,
-            jsonDecoder: defaultJsonDecoder
-        )
-
-        let sessionManager = ParraSessionManager(
-            dataManager: dataManager,
-            networkManager: networkManager,
-            loggerOptions: ParraConfigState.defaultState.loggerOptions
-        )
-
-        let syncManager = ParraSyncManager(
-            state: state,
-            syncState: syncState,
-            networkManager: networkManager,
-            sessionManager: sessionManager,
-            notificationCenter: notificationCenter
-        )
-
-        Logger.loggerBackend = sessionManager
-
-        return Parra(
-            state: state,
-            configState: configState,
-            dataManager: dataManager,
-            syncManager: syncManager,
-            sessionManager: sessionManager,
-            networkManager: networkManager,
-            notificationCenter: notificationCenter
-        )
-    }()
+    internal static func setSharedInstance(parra: Parra) {
+        _shared = parra
+    }
 
     internal let dataManager: ParraDataManager
     internal let syncManager: ParraSyncManager
@@ -152,7 +103,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
     public static func logout(completion: (() -> Void)? = nil) {
-        shared.logout(completion: completion)
+        getSharedInstance().logout(completion: completion)
     }
 
     internal func logout(completion: (() -> Void)? = nil) {
@@ -168,7 +119,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
     public static func logout() async {
-        await shared.logout()
+        await getSharedInstance().logout()
     }
 
     internal func logout() async {
@@ -181,7 +132,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
     /// Uploads any cached Parra data. This includes data like answers to questions.
     public static func triggerSync(completion: (() -> Void)? = nil) {
-        shared.triggerSync(completion: completion)
+        getSharedInstance().triggerSync(completion: completion)
     }
 
     internal func triggerSync(completion: (() -> Void)? = nil) {
@@ -197,7 +148,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     /// warning, for example. Note that in order to prevent excessive network activity it may take up to 30 seconds for the sync
     /// to complete after being initiated.
     public static func triggerSync() async {
-        await shared.triggerSync()
+        await getSharedInstance().triggerSync()
     }
 
     internal func triggerSync() async {
@@ -215,8 +166,94 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
             return
         }
 
-        for module in (await state.getAllRegisteredModules()).values {
-            module.didReceiveSessionResponse(sessionResponse: response)
+        for module in await state.getAllRegisteredModules() {
+            module.didReceiveSessionResponse(
+                sessionResponse: response
+            )
         }
+    }
+
+    // MARK: Configuration
+
+    internal static func createParraInstance(
+        with configuration: ParraInstanceConfiguration
+    ) -> Parra {
+        let state = ParraState()
+        let configState = ParraConfigState()
+        let syncState = ParraSyncState()
+
+        let credentialStorageModule = ParraStorageModule<ParraCredential>(
+            dataStorageMedium: .fileSystem(
+                baseUrl: configuration.storageConfiguration.baseDirectory,
+                folder: configuration.storageConfiguration.storageDirectoryName,
+                fileName: ParraDataManager.Key.userCredentialsKey,
+                storeItemsSeparately: false,
+                fileManager: fileManager
+            ),
+            jsonEncoder: configuration.storageConfiguration.sessionJsonEncoder,
+            jsonDecoder: configuration.storageConfiguration.sessionJsonDecoder
+        )
+
+        let sessionStorageUrl = configuration.storageConfiguration.baseDirectory
+            .safeAppendDirectory(configuration.storageConfiguration.storageDirectoryName)
+            .safeAppendDirectory("sessions")
+
+        let notificationCenter = ParraNotificationCenter()
+
+        let credentialStorage = CredentialStorage(
+            storageModule: credentialStorageModule
+        )
+
+        let sessionStorage = SessionStorage(
+            sessionReader: SessionReader(
+                basePath: sessionStorageUrl,
+                sessionJsonDecoder: .parraDecoder,
+                eventJsonDecoder: .spaceOptimizedDecoder,
+                fileManager: fileManager
+            ),
+            sessionJsonEncoder: .parraEncoder,
+            eventJsonEncoder: .spaceOptimizedEncoder
+        )
+
+        let dataManager = ParraDataManager(
+            baseDirectory: configuration.storageConfiguration.baseDirectory,
+            credentialStorage: credentialStorage,
+            sessionStorage: sessionStorage
+        )
+
+        let networkManager = ParraNetworkManager(
+            state: state,
+            configState: configState,
+            dataManager: dataManager,
+            urlSession: configuration.networkConfiguration.urlSession,
+            jsonEncoder: configuration.networkConfiguration.jsonEncoder,
+            jsonDecoder: configuration.networkConfiguration.jsonDecoder
+        )
+
+        let sessionManager = ParraSessionManager(
+            dataManager: dataManager,
+            networkManager: networkManager,
+            loggerOptions: ParraConfigState.defaultState.loggerOptions
+        )
+
+        let syncManager = ParraSyncManager(
+            state: state,
+            syncState: syncState,
+            networkManager: networkManager,
+            sessionManager: sessionManager,
+            notificationCenter: notificationCenter
+        )
+
+        Logger.loggerBackend = sessionManager
+
+        return Parra(
+            state: state,
+            configState: configState,
+            dataManager: dataManager,
+            syncManager: syncManager,
+            sessionManager: sessionManager,
+            networkManager: networkManager,
+            notificationCenter: notificationCenter
+        )
     }
 }

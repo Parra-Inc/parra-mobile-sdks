@@ -51,17 +51,18 @@ internal class SessionStorage {
     private var hasReceivedImportantEvent = false
 
     private let sessionReader: SessionReader
-    private let jsonEncoder: JSONEncoder
-    private let jsonDecoder: JSONDecoder
+
+    private let sessionJsonEncoder: JSONEncoder
+    private let eventJsonEncoder: JSONEncoder
 
     internal init(
         sessionReader: SessionReader,
-        jsonEncoder: JSONEncoder,
-        jsonDecoder: JSONDecoder
+        sessionJsonEncoder: JSONEncoder,
+        eventJsonEncoder: JSONEncoder
     ) {
         self.sessionReader = sessionReader
-        self.jsonEncoder = jsonEncoder
-        self.jsonDecoder = jsonDecoder
+        self.sessionJsonEncoder = sessionJsonEncoder
+        self.eventJsonEncoder = eventJsonEncoder
     }
 
     deinit {
@@ -196,7 +197,7 @@ internal class SessionStorage {
         withHandles { sessionHandle, eventsHandle, session in
             self.storeEventContextUpdateSync(context: context)
 
-            var data = try self.jsonEncoder.encode(event)
+            var data = try self.eventJsonEncoder.encode(event)
             data.append(Constant.newlineCharData)
 
             try eventsHandle.write(contentsOf: data)
@@ -523,7 +524,7 @@ internal class SessionStorage {
             to: session
         )
 
-        let data = try jsonEncoder.encode(session)
+        let data = try sessionJsonEncoder.encode(session)
 
         let offset = try handle.offset()
         if offset > data.count {

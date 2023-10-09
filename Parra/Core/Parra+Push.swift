@@ -22,7 +22,7 @@ public extension Parra {
     ///  https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns
     @MainActor
     static func registerDevicePushToken(_ token: Data) {
-        shared.registerDevicePushToken(token)
+        getSharedInstance().registerDevicePushToken(token)
     }
 
     @MainActor
@@ -80,7 +80,7 @@ public extension Parra {
     /// occurs, set a flag and try to register again at a later time.
     @MainActor
     static func didFailToRegisterForRemoteNotifications(with error: Error) {
-        shared.didFailToRegisterForRemoteNotifications(with: error)
+        getSharedInstance().didFailToRegisterForRemoteNotifications(with: error)
     }
 
     @MainActor

@@ -33,4 +33,13 @@ struct MockParra {
             notificationCenter: notificationCenter.underlyingNotificationCenter
         )
     }
+
+    func tearDown() async throws {
+        if await parra.state.isInitialized() {
+            await parra.state.unregisterModule(module: parra)
+        }
+
+        // Clean up data created by tests
+        try FileManager.default.removeItem(at: dataManager.baseDirectory)
+    }
 }

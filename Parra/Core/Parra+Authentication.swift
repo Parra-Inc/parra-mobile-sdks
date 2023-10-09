@@ -21,7 +21,7 @@ public extension Parra {
         options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) {
-        shared.initialize(
+        getSharedInstance().initialize(
             options: options,
             authProvider: authProvider
         )
@@ -47,7 +47,7 @@ public extension Parra {
         options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) async {
-        await shared.initialize(
+        await getSharedInstance().initialize(
             options: options,
             authProvider: authProvider
         )

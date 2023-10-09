@@ -31,7 +31,7 @@ internal actor ParraStorageModule<DataType: Codable> {
         switch dataStorageMedium {
         case .memory, .userDefaults(_):
             return false
-        case .fileSystem(_, _, let storeItemsSeparately, _):
+        case .fileSystem(_, _, _, let storeItemsSeparately, _):
             return storeItemsSeparately
         }
     }
@@ -46,12 +46,9 @@ internal actor ParraStorageModule<DataType: Codable> {
         switch dataStorageMedium {
         case .memory:
             self.persistentStorage = nil
-        case .fileSystem(let folder, let fileName, _, let fileManager):
-            let baseUrl = ParraDataManager.Path.parraDirectory
-                .safeAppendDirectory(folder)
-
+        case .fileSystem(let baseUrl, let folder, let fileName, _, let fileManager):
             let fileSystemStorage = FileSystemStorage(
-                baseUrl: baseUrl,
+                baseUrl: baseUrl.safeAppendDirectory(folder),
                 jsonEncoder: jsonEncoder,
                 jsonDecoder: jsonDecoder,
                 fileManager: fileManager

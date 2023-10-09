@@ -16,15 +16,10 @@ fileprivate let testTokenData = Data(base64Encoded: testBase64TokenString)!
 fileprivate let testTokenString = testTokenData.map { String(format: "%02.2hhx", $0) }.joined()
 
 @MainActor
-class ParraPushTests: XCTestCase {
-    private var mockParra: MockParra!
-
+class ParraPushTests: MockedParraTestCase {
     override func setUp() async throws {
+        // Setup without initialization
         mockParra = await createMockParra()
-    }
-
-    override func tearDown() async throws {
-        mockParra = nil
     }
 
     func testRegisterDataTriggersUpdate() async {

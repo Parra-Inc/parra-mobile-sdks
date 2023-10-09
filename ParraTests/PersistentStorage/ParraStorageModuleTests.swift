@@ -20,6 +20,8 @@ class ParraStorageModuleTests: XCTestCase {
         let folder = "storage_modules"
         let file = "storage_data"
         
+        let baseStorageUrl = ParraDataManager.Path.parraDirectory
+
         storageModules = [
             .init(
                 dataStorageMedium: .memory,
@@ -28,6 +30,7 @@ class ParraStorageModuleTests: XCTestCase {
             ),
             .init(
                 dataStorageMedium: .fileSystem(
+                    baseUrl: baseStorageUrl,
                     folder: folder,
                     fileName: file,
                     storeItemsSeparately: true,

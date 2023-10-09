@@ -14,7 +14,10 @@ extension ParraState {
 }
 
 extension ParraConfigState {
-    static func initialized(tenantId: String, applicationId: String) -> ParraConfigState {
+    static func initialized(
+        tenantId: String,
+        applicationId: String
+    ) -> ParraConfigState {
         var config = ParraConfiguration.default
 
         config.setTenantId(tenantId)

@@ -71,7 +71,7 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
 
         Task {
             do {
-                try await Parra.shared.networkManager.submitFeedbackForm(
+                try await Parra.getSharedInstance().networkManager.submitFeedbackForm(
                     with: form.id,
                     data: data
                 )

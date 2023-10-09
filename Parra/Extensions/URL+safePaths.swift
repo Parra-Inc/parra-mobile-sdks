@@ -56,17 +56,19 @@ internal extension URL {
             return absoluteString
         }
 
-        let prefix = ParraDataManager.Base.homeUrl.absoluteString
-        let base = absoluteString
+        let prefix = ParraDataManager.Base.homeUrl.safeNonEncodedPath()
+        let base = safeNonEncodedPath()
 
-        if #available(iOS 16.0, *) {
-            return String(base.trimmingPrefix(prefix))
+        let path: String = if #available(iOS 16.0, *) {
+            String(base.trimmingPrefix(prefix))
         } else {
             if base.hasPrefix(prefix) {
-                return String(base.dropFirst(prefix.count))
+                String(base.dropFirst(prefix.count))
             } else {
-                return lastComponents()
+                lastComponents()
             }
         }
+
+        return "~/\(path)"
     }
 }

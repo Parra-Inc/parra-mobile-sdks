@@ -146,6 +146,12 @@ public extension Logger {
         in format: ParraLogMeasurementFormat
     ) -> () -> String {
         return {
+
+            if timeInterval < 60 {
+                let formatted = timeInterval.formatted(.number.precision(.fractionLength(4)))
+                return "\(formatted) second(s)"
+            }
+
             var formatter = Parra.InternalConstants.Formatters.dateComponentsFormatter
 
             formatter.formattingContext = .middleOfSentence

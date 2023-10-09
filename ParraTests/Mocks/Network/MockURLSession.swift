@@ -137,7 +137,7 @@ internal class MockURLSession: URLSessionType {
         delegate: URLSessionTaskDelegate?
     ) async throws -> (Data, URLResponse) {
         // Changing this value may break time sensitive tests.
-        try await Task.sleep(for: 1.0)
+        try await Task.sleep(for: 2.0)
 
         let (data, response, error) = resolve(request)
 

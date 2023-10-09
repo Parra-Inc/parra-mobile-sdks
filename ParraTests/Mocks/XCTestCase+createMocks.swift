@@ -18,14 +18,21 @@ extension XCTestCase {
         applicationId: String = UUID().uuidString
     ) async -> MockParra {
 
+        var newConfig = ParraConfiguration(options: [])
+        newConfig.setTenantId(tenantId)
+        newConfig.setApplicationId(applicationId)
+
         let mockNetworkManager = await createMockNetworkManager(
             state: state,
             tenantId: tenantId,
             applicationId: applicationId
         )
-        let syncState = ParraSyncState()
-        let configState = ParraConfigState()
+
         let notificationCenter = ParraNotificationCenter()
+        let syncState = ParraSyncState()
+
+        var configState = ParraConfigState()
+        await configState.updateState(newConfig)
 
         let sessionManager = ParraSessionManager(
             dataManager: mockNetworkManager.dataManager,
@@ -42,6 +49,8 @@ extension XCTestCase {
             syncDelay: 5.0
         )
 
+        Logger.loggerBackend = sessionManager
+
         let parra = Parra(
             state: state,
             configState: configState,
@@ -52,8 +61,14 @@ extension XCTestCase {
             notificationCenter: notificationCenter
         )
 
+        // Reset the singleton. This is a bit of a problem because there are some
+        // places internally within the SDK that may access it, but this will at least
+        // prevent an uncontroller new instance from being lazily created on first access.
+        Parra.setSharedInstance(parra: parra)
+
         if await state.isInitialized() {
             await state.registerModule(module: parra)
+            await sessionManager.initializeSessions()
         }
 
         return MockParra(
@@ -69,17 +84,59 @@ extension XCTestCase {
         )
     }
 
+    func createMockDataManager() -> ParraDataManager {
+        // Create a new base directory for each test run.
+        let testDir = "test-run-\(UUID().uuidString)"
+        let baseStorageDirectory = ParraDataManager.Path.parraDirectory
+            .safeAppendDirectory(testDir)
+
+        let storageDirectoryName = ParraDataManager.Directory.storageDirectoryName
+        let credentialStorageModule = ParraStorageModule<ParraCredential>(
+            dataStorageMedium: .fileSystem(
+                baseUrl: baseStorageDirectory,
+                folder: storageDirectoryName,
+                fileName: ParraDataManager.Key.userCredentialsKey,
+                storeItemsSeparately: false,
+                fileManager: .default
+            ),
+            jsonEncoder: .parraEncoder,
+            jsonDecoder: .parraDecoder
+        )
+
+
+        let sessionStorageUrl = baseStorageDirectory
+            .safeAppendDirectory(storageDirectoryName.appending("/sessions"))
+
+        let credentialStorage = CredentialStorage(
+            storageModule: credentialStorageModule
+        )
+
+        let sessionStorage = SessionStorage(
+            sessionReader: SessionReader(
+                basePath: sessionStorageUrl,
+                sessionJsonDecoder: .parraDecoder,
+                eventJsonDecoder: .spaceOptimizedDecoder,
+                fileManager: .default
+            ),
+            sessionJsonEncoder: .parraEncoder,
+            eventJsonEncoder: .spaceOptimizedEncoder
+        )
+
+        return ParraDataManager(
+            baseDirectory: baseStorageDirectory,
+            credentialStorage: credentialStorage,
+            sessionStorage: sessionStorage
+        )
+    }
+
     func createMockNetworkManager(
         state: ParraState = .initialized,
         tenantId: String = UUID().uuidString,
         applicationId: String = UUID().uuidString,
         authenticationProvider: ParraAuthenticationProviderFunction? = nil
     ) async -> MockParraNetworkManager {
-        let dataManager = MockDataManager(
-            jsonEncoder: .parraEncoder,
-            jsonDecoder: .parraDecoder,
-            fileManager: .default
-        )
+        let dataManager = createMockDataManager()
+
         let urlSession = MockURLSession(testCase: self)
         let configState = ParraConfigState.initialized(
             tenantId: tenantId,

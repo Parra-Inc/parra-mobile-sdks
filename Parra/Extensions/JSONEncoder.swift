@@ -9,7 +9,7 @@ import Foundation
 
 
 extension JSONEncoder {
-    static var parraEncoder: JSONEncoder = {
+    internal private(set) static var parraEncoder: JSONEncoder = {
         let encoder = JSONEncoder()
 
         encoder.keyEncodingStrategy = .convertToSnakeCase
@@ -22,16 +22,23 @@ extension JSONEncoder {
         return encoder
     }()
 
-    static var spaceOptimizedEncoder: JSONEncoder = {
+    // ! Important: can never use pretty printing. It is required by consumers
+    // of this encoder that JSON all be on the same line.
+    internal private(set) static var spaceOptimizedEncoder: JSONEncoder = {
         let encoder = JSONEncoder()
 
         encoder.dateEncodingStrategy = .iso8601
+
+#if DEBUG
+        encoder.outputFormatting = [.withoutEscapingSlashes, .sortedKeys]
+#else
         encoder.outputFormatting = [.withoutEscapingSlashes]
+#endif
 
         return encoder
     }()
 
-    static var parraPrettyConsoleEncoder: JSONEncoder = {
+    internal private(set) static var parraPrettyConsoleEncoder: JSONEncoder = {
         let encoder = JSONEncoder()
 
         // TODO: Make this a function that accepts options for data/etc encoding strategies.

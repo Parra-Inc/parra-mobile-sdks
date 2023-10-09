@@ -255,20 +255,20 @@ public class ParraCardView: UIView {
     }
 
     deinit {
-        Parra.shared.triggerSync(completion: nil)
+        Parra.getSharedInstance().triggerSync(completion: nil)
     }
     
     public override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
         
         if newWindow == nil {
-            Parra.shared.notificationCenter.removeObserver(
+            Parra.getSharedInstance().notificationCenter.removeObserver(
                 self,
                 name: ParraFeedback.cardsDidChangeNotification,
                 object: nil
             )
             
-            Parra.shared.triggerSync(completion: nil)
+            Parra.getSharedInstance().triggerSync(completion: nil)
         } else {
             checkAndUpdateCards()
         }
@@ -277,7 +277,7 @@ public class ParraCardView: UIView {
     public override func didMoveToWindow() {
         super.didMoveToWindow()
 
-        Parra.shared.notificationCenter.addObserver(
+        Parra.getSharedInstance().notificationCenter.addObserver(
             self,
             selector: #selector(didReceiveCardChangeNotification(notification:)),
             name: ParraFeedback.cardsDidChangeNotification,

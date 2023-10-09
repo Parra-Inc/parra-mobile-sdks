@@ -19,7 +19,8 @@ internal enum ParraSessionGeneratorTypeElement {
 }
 
 internal protocol ParraSessionGeneratorType {
-    var jsonDecoder: JSONDecoder { get }
+    var sessionJsonDecoder: JSONDecoder { get }
+    var eventJsonDecoder: JSONDecoder { get }
     var fileManager: FileManager { get }
 }
 
@@ -89,23 +90,51 @@ internal extension ParraSessionGeneratorType {
 
     func readSessionSync(at path: URL) throws -> ParraSession {
         let fileHandle = try FileHandle(forReadingFrom: path)
+        
+        defer {
+            do {
+                try fileHandle.close()
+            } catch let error {
+                logger.error("Error closing session reader file handle", error)
+            }
+        }
+
         try fileHandle.seek(toOffset: 0)
 
-        guard let sessionData = try fileHandle.readToEnd() else {
+        let sessionData: Data?
+        do {
+            sessionData = try fileHandle.readToEnd()
+        } catch let error {
             throw ParraError.fileSystem(
                 path: path,
-                message: "Couldn't read session data"
+                message: "Couldn't read session data. \(error.localizedDescription)"
             )
         }
 
-        try fileHandle.close()
+        guard let sessionData else {
+            throw ParraError.fileSystem(
+                path: path,
+                message: "Session file was empty."
+            )
+        }
 
-        return try jsonDecoder.decode(ParraSession.self, from: sessionData)
+        return try sessionJsonDecoder.decode(
+            ParraSession.self,
+            from: sessionData
+        )
     }
 
     func readEvents(at path: URL) async throws -> [ParraSessionEvent] {
         var events = [ParraSessionEvent]()
         let fileHandle = try FileHandle(forReadingFrom: path)
+     
+        defer {
+            do {
+                try fileHandle.close()
+            } catch let error {
+                logger.error("Error closing event reader file handle", error)
+            }
+        }
 
         for try await eventString in fileHandle.bytes.lines {
             // As every row is parsed, place it in an events array. This will save us have two copies
@@ -113,13 +142,14 @@ internal extension ParraSessionGeneratorType {
             try autoreleasepool {
                 if let eventData = eventString.data(using: .utf8) {
                     events.append(
-                        try jsonDecoder.decode(ParraSessionEvent.self, from: eventData)
+                        try eventJsonDecoder.decode(
+                            ParraSessionEvent.self,
+                            from: eventData
+                        )
                     )
                 }
             }
         }
-
-        try fileHandle.close()
 
         return events
     }

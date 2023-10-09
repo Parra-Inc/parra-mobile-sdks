@@ -21,12 +21,7 @@ class FakeModule: ParraModule {
 }
 
 @MainActor
-class ParraTests: XCTestCase {
-    private var mockParra: MockParra!
-
-    override func setUp() async throws {
-        mockParra = await createMockParra()
-    }
+class ParraTests: MockedParraTestCase {
 
     func testModulesCanBeRegistered() async throws {
         let module = FakeModule()
@@ -36,7 +31,9 @@ class ParraTests: XCTestCase {
         let hasRegistered = await mockParra.parra.state.hasRegisteredModule(module: module)
         XCTAssertTrue(hasRegistered)
         let modules = await mockParra.parra.state.getAllRegisteredModules()
-        XCTAssert(modules.keys.contains(FakeModule.name))
+        XCTAssert(modules.contains(where: { testModule in
+            return type(of: module).name == type(of: testModule).name
+        }))
     }
 
     func testModuleRegistrationIsDeduplicated() async throws {
@@ -54,7 +51,9 @@ class ParraTests: XCTestCase {
         XCTAssertTrue(hasRegistered)
 
         let modules = await mockParra.parra.state.getAllRegisteredModules()
-        XCTAssert(modules.keys.contains(FakeModule.name))
+        XCTAssert(modules.contains(where: { testModule in
+            return type(of: module).name == type(of: testModule).name
+        }))
         XCTAssertEqual(modules.count, previous.count + 1)
     }
 

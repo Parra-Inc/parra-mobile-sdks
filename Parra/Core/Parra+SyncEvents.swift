@@ -226,7 +226,9 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc func didRequestLowDiskSpace(notification: Notification) {
+    @objc func didRequestLowDiskSpace(
+        notification: Notification
+    ) {
         withInitializationCheck { [self] in
             let extra = URL.currentDiskUsage()?.sanitized.dictionary ?? [:]
             logEvent(.diskSpaceLow, extra)
@@ -234,21 +236,27 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc private func triggerSyncFromNotification(notification: Notification) {
+    @objc private func triggerSyncFromNotification(
+        notification: Notification
+    ) {
         withInitializationCheck { [self] in
             await syncManager.enqueueSync(with: .immediate)
         }
     }
     
     @MainActor
-    @objc private func triggerEventualSyncFromNotification(notification: Notification) {
+    @objc private func triggerEventualSyncFromNotification(
+        notification: Notification
+    ) {
         withInitializationCheck { [self] in
             await syncManager.enqueueSync(with: .eventual)
         }
     }
 
     /// Prevent processing events if initialization hasn't occurred.
-    private func withInitializationCheck(_ function: @escaping () async -> Void) {
+    private func withInitializationCheck(
+        _ function: @escaping () async -> Void
+    ) {
         Task {
             guard await state.isInitialized() else {
                 return

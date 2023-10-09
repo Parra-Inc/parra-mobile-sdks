@@ -56,7 +56,27 @@ extension ParraSessionManager {
         callSite: ParraLoggerCallSiteContext,
         with style: ParraLoggerCallSiteStyleOptions
     ) -> String {
-        return "\(callSite.simpleFunctionName):\(callSite.line):\(callSite.column)"
+        var components = [String]()
+
+        if style.contains(.function) {
+            components.append(callSite.function)
+        }
+
+        if style.contains(.line) {
+            components.append(String(callSite.line))
+        }
+
+        if style.contains(.column) {
+            components.append(String(callSite.column))
+        }
+        
+        let joined = components.joined(separator: ":")
+
+        if style.contains(.thread) {
+            return "[\(callSite.threadInfo.queueName)] \(joined)"
+        }
+
+        return joined
     }
 
     internal func format(

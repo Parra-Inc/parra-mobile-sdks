@@ -20,15 +20,18 @@ internal struct ParraSessionUploadGenerator: ParraSessionGeneratorType, AsyncSeq
 
     private let directoryEnumerator: FileManager.DirectoryEnumerator
 
-    let jsonDecoder: JSONDecoder
+    let sessionJsonDecoder: JSONDecoder
+    let eventJsonDecoder: JSONDecoder
     let fileManager: FileManager
 
     internal init(
         forSessionsAt path: URL,
-        jsonDecoder: JSONDecoder,
+        sessionJsonDecoder: JSONDecoder,
+        eventJsonDecoder: JSONDecoder,
         fileManager: FileManager
     ) throws {
-        self.jsonDecoder = jsonDecoder
+        self.sessionJsonDecoder = sessionJsonDecoder
+        self.eventJsonDecoder = eventJsonDecoder
         self.fileManager = fileManager
         self.directoryEnumerator = try Self.directoryEnumerator(
             forSessionsAt: path,

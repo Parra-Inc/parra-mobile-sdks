@@ -15,7 +15,8 @@ internal class SessionReader {
     /// The directory where sessions will be stored.
     internal let basePath: URL
 
-    private let jsonDecoder: JSONDecoder
+    private let sessionJsonDecoder: JSONDecoder
+    private let eventJsonDecoder: JSONDecoder
     private let fileManager: FileManager
 
     /// This should never be used directly outside this class. From the outside, a session can and never
@@ -29,11 +30,13 @@ internal class SessionReader {
 
     internal init(
         basePath: URL,
-        jsonDecoder: JSONDecoder,
+        sessionJsonDecoder: JSONDecoder,
+        eventJsonDecoder: JSONDecoder,
         fileManager: FileManager
     ) {
         self.basePath = basePath
-        self.jsonDecoder = jsonDecoder
+        self.sessionJsonDecoder = sessionJsonDecoder
+        self.eventJsonDecoder = eventJsonDecoder
         self.fileManager = fileManager
     }
 
@@ -101,7 +104,8 @@ internal class SessionReader {
 
         return try ParraSessionUploadGenerator(
             forSessionsAt: basePath,
-            jsonDecoder: jsonDecoder,
+            sessionJsonDecoder: sessionJsonDecoder,
+            eventJsonDecoder: eventJsonDecoder,
             fileManager: fileManager
         )
     }
@@ -143,7 +147,10 @@ internal class SessionReader {
                 // The existence of this file implies all necessary intermediate directories have been created.
 
                 let sessionData = try Data(contentsOf: sessionPath)
-                existingSession = try jsonDecoder.decode(ParraSession.self, from: sessionData)
+                existingSession = try sessionJsonDecoder.decode(
+                    ParraSession.self,
+                    from: sessionData
+                )
 
                 // It is possible that the session existed, but events hadn't been written yet, so
                 // this shouldn't fail if there is no file at the eventsPath.

@@ -10,6 +10,7 @@ import Foundation
 internal enum DataStorageMedium {
     case memory
     case fileSystem(
+        baseUrl: URL,
         folder: String,
         fileName: String,
         storeItemsSeparately: Bool,

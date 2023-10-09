@@ -108,9 +108,19 @@ internal actor ParraSyncManager {
         }
     }
     
-    private func sync() async {
-        await syncState.beginSync()
-        
+    private func sync(
+        isRepeat: Bool = false
+    ) async {
+        if !isRepeat {
+            if await syncState.isSyncing() {
+                logger.warn("Attempted to start a sync while one is in progress.")
+
+                return
+            }
+
+            await syncState.beginSync()
+        }
+
         let syncToken = UUID().uuidString
 
         // This notification is deliberately kept before the check for if
@@ -142,7 +152,7 @@ internal actor ParraSyncManager {
                 if shouldRepeatSync {
                     // Must be kept inside a Task block to avoid the current sync's 
                     // completion awaiting the next sync.
-                    await sync()
+                    await sync(isRepeat: true)
                 }
             }
         }
@@ -158,7 +168,7 @@ internal actor ParraSyncManager {
         let syncStartMarker = logger.debug("Starting sync")
         
         do {
-            try await performSync()
+            try await performSync(with: syncToken)
 
             logger.measureTime(since: syncStartMarker, message: "Sync complete")
         } catch let error {
@@ -196,11 +206,13 @@ internal actor ParraSyncManager {
         }
     }
 
-    private func performSync() async throws {
+    private func performSync(
+        with token: String
+    ) async throws {
         var syncError: Error?
 
         // Rethrow after receiving an error for throttling, but allow each module to attempt a sync once
-        for (_, module) in await state.getAllRegisteredModules() {
+        for module in await state.getAllRegisteredModules() {
             do {
                 try await module.synchronizeData()
             } catch let error {
@@ -214,8 +226,10 @@ internal actor ParraSyncManager {
     }
     
     private func hasDataToSync(since date: Date?) async -> Bool {
+        let allRegisteredModules = await state.getAllRegisteredModules()
         var shouldSync = false
-        for (_, module) in await state.getAllRegisteredModules() {
+
+        for module in allRegisteredModules {
             if await module.hasDataToSync(since: date) {
                 shouldSync = true
                 break
