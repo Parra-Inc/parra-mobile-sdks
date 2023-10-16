@@ -42,6 +42,7 @@
       }
     },
     {
+      "enabled" : false,
       "target" : {
         "containerPath" : "container:Parra.xcodeproj",
         "identifier" : "0087CA592A54C54D007D72FA",

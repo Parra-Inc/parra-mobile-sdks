@@ -314,20 +314,6 @@
 			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
 			remoteInfo = Parra;
 		};
-		00916DDB2AD3847F00B4856F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 00DECFF4274C69F800DAF301;
-			remoteInfo = Demo;
-		};
-		00916DDD2AD3848500B4856F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 00DECFF4274C69F800DAF301;
-			remoteInfo = Demo;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1507,7 +1493,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				00916DDC2AD3847F00B4856F /* PBXTargetDependency */,
 				001B7AFC27DE3A7600DEEECD /* PBXTargetDependency */,
 			);
 			name = ParraTests;
@@ -1526,7 +1511,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				00916DDE2AD3848500B4856F /* PBXTargetDependency */,
 				00916DDA2AD3838000B4856F /* PBXTargetDependency */,
 			);
 			name = ParraUITests;
@@ -1960,16 +1944,6 @@
 			platformFilter = ios;
 			target = 001B7AF127DE3A7600DEEECD /* Parra */;
 			targetProxy = 00916DD92AD3838000B4856F /* PBXContainerItemProxy */;
-		};
-		00916DDC2AD3847F00B4856F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 00DECFF4274C69F800DAF301 /* Demo */;
-			targetProxy = 00916DDB2AD3847F00B4856F /* PBXContainerItemProxy */;
-		};
-		00916DDE2AD3848500B4856F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 00DECFF4274C69F800DAF301 /* Demo */;
-			targetProxy = 00916DDD2AD3848500B4856F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
