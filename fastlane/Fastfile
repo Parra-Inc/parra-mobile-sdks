@@ -1,0 +1,17 @@
+# fastlane/Fastfile
+default_platform :ios
+
+platform :ios do
+  before_all do
+    setup_circle_ci
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    run_tests(
+        project: "Parra.xcodeproj", 
+        devices: ["iPhone 15"],    
+        scheme: "ParraTests",
+    )
+  end
+end
