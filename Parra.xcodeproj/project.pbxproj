@@ -163,7 +163,6 @@
 		007ED4802A6C9D370077E446 /* CallStackFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007ED47F2A6C9D370077E446 /* CallStackFrame.swift */; };
 		0082DFBD2A535FDD00E7A91D /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFBC2A535FDD00E7A91D /* Data.swift */; };
 		0082DFC12A53736F00E7A91D /* MockParraNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC02A53736F00E7A91D /* MockParraNetworkManager.swift */; };
-		0082DFC32A5373BA00E7A91D /* XCTestCase+createMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC22A5373BA00E7A91D /* XCTestCase+createMocks.swift */; };
 		0082DFC42A53745F00E7A91D /* Parra+AuthenticationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00320A5A27ED4EF0001EB323 /* Parra+AuthenticationTests.swift */; };
 		0082DFC62A5374BD00E7A91D /* MockParra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC52A5374BD00E7A91D /* MockParra.swift */; };
 		0082DFC72A53883D00E7A91D /* Parra+PushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */; };
@@ -213,7 +212,6 @@
 		00916DC82AD35D8700B4856F /* ParraInstanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC72AD35D8700B4856F /* ParraInstanceConfiguration.swift */; };
 		00916DCA2AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC92AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift */; };
 		00916DCC2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DCB2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift */; };
-		00916DCD2AD3802400B4856F /* XCTestCase+createMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC22A5373BA00E7A91D /* XCTestCase+createMocks.swift */; };
 		00916DCE2AD3803400B4856F /* MockParra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC52A5374BD00E7A91D /* MockParra.swift */; };
 		00916DCF2AD3803900B4856F /* MockedParraTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DBF2ACCEE7600B4856F /* MockedParraTestCase.swift */; };
 		00916DD02AD3808C00B4856F /* ParraState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E26A062A534334001A0F50 /* ParraState.swift */; };
@@ -240,6 +238,9 @@
 		00BDB2B128BD822700C16649 /* URLRequest+headers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2B028BD822700C16649 /* URLRequest+headers.swift */; };
 		00C00ABB2A8A6BC2003B21D3 /* SessionStorageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C00ABA2A8A6BC2003B21D3 /* SessionStorageContext.swift */; };
 		00C00ABD2A8A6BD1003B21D3 /* SessionReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C00ABC2A8A6BD1003B21D3 /* SessionReader.swift */; };
+		00D04C5F2AD429620024CA4E /* SessionReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */; };
+		00D04C612AD437850024CA4E /* ParraBaseMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D04C602AD437850024CA4E /* ParraBaseMock.swift */; };
+		00D04C622AD438590024CA4E /* ParraBaseMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D04C602AD437850024CA4E /* ParraBaseMock.swift */; };
 		00DA7FE5295C95C400109081 /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE4295C95C400109081 /* Syncable.swift */; };
 		00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE7295CAB8F00109081 /* AnyCodable.swift */; };
 		00DA7FEA295CAB9700109081 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE9295CAB9700109081 /* AnyEncodable.swift */; };
@@ -484,7 +485,6 @@
 		007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		0082DFBC2A535FDD00E7A91D /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		0082DFC02A53736F00E7A91D /* MockParraNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParraNetworkManager.swift; sourceTree = "<group>"; };
-		0082DFC22A5373BA00E7A91D /* XCTestCase+createMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+createMocks.swift"; sourceTree = "<group>"; };
 		0082DFC52A5374BD00E7A91D /* MockParra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParra.swift; sourceTree = "<group>"; };
 		0082DFC82A538A5400E7A91D /* ParraAuthenticationProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAuthenticationProviderType.swift; sourceTree = "<group>"; };
 		0082DFCB2A53B6F100E7A91D /* ParraSessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionManagerTests.swift; sourceTree = "<group>"; };
@@ -557,6 +557,8 @@
 		00C00ABC2A8A6BD1003B21D3 /* SessionReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionReader.swift; sourceTree = "<group>"; };
 		00CAD73329CFA1350093599E /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		00CAD73529CFAE910093599E /* TextValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextValidationError.swift; sourceTree = "<group>"; };
+		00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionReaderTests.swift; sourceTree = "<group>"; };
+		00D04C602AD437850024CA4E /* ParraBaseMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraBaseMock.swift; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Constants.swift"; sourceTree = "<group>"; };
 		00D5156427D4376500C4F2CC /* ParraSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManager.swift; sourceTree = "<group>"; };
 		00D5156627D4506B00C4F2CC /* Parra+SyncEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+SyncEvents.swift"; sourceTree = "<group>"; };
@@ -1034,6 +1036,7 @@
 			isa = PBXGroup;
 			children = (
 				00C00ABC2A8A6BD1003B21D3 /* SessionReader.swift */,
+				00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */,
 				00E15A22292AFB2B0049C2C7 /* SessionStorage.swift */,
 				00C00ABA2A8A6BC2003B21D3 /* SessionStorageContext.swift */,
 				00EAE2FC2AA0C888003FB41C /* Generators */,
@@ -1084,9 +1087,9 @@
 			isa = PBXGroup;
 			children = (
 				0082DFC52A5374BD00E7A91D /* MockParra.swift */,
-				0082DFC22A5373BA00E7A91D /* XCTestCase+createMocks.swift */,
 				0082DFBF2A53733D00E7A91D /* Network */,
 				00916DBF2ACCEE7600B4856F /* MockedParraTestCase.swift */,
+				00D04C602AD437850024CA4E /* ParraBaseMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -1881,7 +1884,6 @@
 				0082DFBD2A535FDD00E7A91D /* Data.swift in Sources */,
 				001559AF27E7E76C006450BE /* CredentialStorageTests.swift in Sources */,
 				001559B127E7EAC0006450BE /* ParraDataManagerTests.swift in Sources */,
-				0082DFC32A5373BA00E7A91D /* XCTestCase+createMocks.swift in Sources */,
 				001559A427E412FD006450BE /* UserDefaultsStorageTests.swift in Sources */,
 				00E269FE2A5310D5001A0F50 /* URLSessionDataTaskType.swift in Sources */,
 				001559A827E417D4006450BE /* ParraLoggerTests.swift in Sources */,
@@ -1897,8 +1899,10 @@
 				0082DFC92A538A5400E7A91D /* ParraAuthenticationProviderType.swift in Sources */,
 				0029AD2E2A48E11300E30CCD /* LoggerHelpersTests.swift in Sources */,
 				001B7B0127DE3A7600DEEECD /* ParraTests.swift in Sources */,
+				00D04C612AD437850024CA4E /* ParraBaseMock.swift in Sources */,
 				001559A227E40D56006450BE /* PersistentStorageTestHelpers.swift in Sources */,
 				0015599F27E40B71006450BE /* FileManagerTests.swift in Sources */,
+				00D04C5F2AD429620024CA4E /* SessionReaderTests.swift in Sources */,
 				0082DFC62A5374BD00E7A91D /* MockParra.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1913,13 +1917,13 @@
 				00916DD52AD380DB00B4856F /* ParraEndpoint+CaseIterable.swift in Sources */,
 				00916DD62AD380E200B4856F /* TestData.swift in Sources */,
 				00916DD02AD3808C00B4856F /* ParraState.swift in Sources */,
-				00916DCD2AD3802400B4856F /* XCTestCase+createMocks.swift in Sources */,
 				0087CA5D2A54C54D007D72FA /* ParraUITests.swift in Sources */,
 				00916DCE2AD3803400B4856F /* MockParra.swift in Sources */,
 				00916DD12AD3809C00B4856F /* MockParraNetworkManager.swift in Sources */,
 				0087CA5F2A54C54D007D72FA /* ParraUITestsLaunchTests.swift in Sources */,
 				00916DCF2AD3803900B4856F /* MockedParraTestCase.swift in Sources */,
 				00916DD32AD380BC00B4856F /* Endpoint+Mocks.swift in Sources */,
+				00D04C622AD438590024CA4E /* ParraBaseMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

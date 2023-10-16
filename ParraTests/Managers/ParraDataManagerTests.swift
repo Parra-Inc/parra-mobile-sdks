@@ -9,7 +9,7 @@ import XCTest
 @testable import Parra
 
 @MainActor
-class ParraDataManagerTests: XCTestCase {
+class ParraDataManagerTests: MockedParraTestCase {
     var parraDataManager: ParraDataManager!
     
     override func setUp() async throws {

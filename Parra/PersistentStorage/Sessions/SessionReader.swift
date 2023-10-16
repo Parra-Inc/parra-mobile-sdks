@@ -23,10 +23,10 @@ internal class SessionReader {
     /// should be nil. The idea is that session reads/writes will always happen on a serial queue, that
     /// will automatically create the session if it does not exist and await the completion of this
     /// operation. This is place where these checks will be made.
-    private var currentSessionContext: SessionStorageContext?
+    internal private(set) var _currentSessionContext: SessionStorageContext?
 
-    private var sessionHandle: FileHandle?
-    private var eventsHandle: FileHandle?
+    internal private(set) var _sessionHandle: FileHandle?
+    internal private(set) var _eventsHandle: FileHandle?
 
     internal init(
         basePath: URL,
@@ -40,6 +40,23 @@ internal class SessionReader {
         self.fileManager = fileManager
     }
 
+    deinit {
+        _currentSessionContext = nil
+
+        do {
+            try _sessionHandle?.close()
+            try _eventsHandle?.close()
+        } catch let error {
+            logger.error(
+                "Error closing session/events file handles while closing session reader",
+                error
+            )
+        }
+
+        _sessionHandle = nil
+        _eventsHandle = nil
+    }
+
     internal func retreiveFileHandleForSessionSync(
         with type: FileHandleType,
         from context: SessionStorageContext
@@ -48,10 +65,10 @@ internal class SessionReader {
         let path: URL
         switch type {
         case .session:
-            handle = sessionHandle
+            handle = _sessionHandle
             path = context.sessionPath
         case .events:
-            handle = eventsHandle
+            handle = _eventsHandle
             path = context.eventsPath
         }
 
@@ -72,13 +89,13 @@ internal class SessionReader {
 
         switch type {
         case .session:
-            sessionHandle = newHandle
+            _sessionHandle = newHandle
         case .events:
             // Unlike the handle that writes to sessions, the events handle will always be used to append to
             // the end of the file. So if we're creating a new one, we can seek to the end of the file now
             // to prevent this from being necessary each time it is accessed.
             try newHandle.seekToEnd()
-            eventsHandle = newHandle
+            _eventsHandle = newHandle
         }
 
         return newHandle
@@ -111,27 +128,30 @@ internal class SessionReader {
     }
 
     internal func closeCurrentSessionSync() throws {
-        currentSessionContext = nil
+        _currentSessionContext = nil
 
-        try sessionHandle?.close()
-        try eventsHandle?.close()
+        try _sessionHandle?.close()
+        try _eventsHandle?.close()
+
+        _sessionHandle = nil
+        _eventsHandle = nil
     }
 
     @discardableResult
-    internal func loadOrCreateSessionSync() throws -> SessionStorageContext {
+    internal func loadOrCreateSessionSync(
+        nextSessionId: String = UUID().uuidString
+    ) throws -> SessionStorageContext {
         // 1. If session context exists in memory, return it.
         // 2. Create the paths where the new session is to be stored, using time stamps.
         // 3. Check if the files already somehow exist. If they exist and are valid, use them.
         // 4. Create a new session at the determined paths, overriding anything that existed.
         // 5. Return the new session.
 
-        if let currentSessionContext {
-            return currentSessionContext
+        if let _currentSessionContext {
+            return _currentSessionContext
         }
 
         let nextSessionStart = Date.now
-
-        let nextSessionId = UUID().uuidString
         let sessionDir = sessionDirectory(
             for: nextSessionId,
             in: basePath
@@ -169,16 +189,24 @@ internal class SessionReader {
                 eventsPath: eventsPath
             )
 
-            currentSessionContext = existingSessionContext
+            _currentSessionContext = existingSessionContext
 
             return existingSessionContext
         }
 
-        try fileManager.safeCreateDirectory(at: sessionDir)
-        try fileManager.safeCreateFile(at: sessionPath)
-        try fileManager.safeCreateFile(at: eventsPath)
+        try fileManager.safeCreateDirectory(
+            at: sessionDir
+        )
+        try fileManager.safeCreateFile(
+            at: sessionPath,
+            overrideExisting: true
+        )
+        try fileManager.safeCreateFile(
+            at: eventsPath,
+            overrideExisting: true
+        )
 
-        let newSessionContext = SessionStorageContext(
+        let nextSessionContext = SessionStorageContext(
             session: ParraSession(
                 sessionId: nextSessionId,
                 createdAt: nextSessionStart
@@ -187,15 +215,15 @@ internal class SessionReader {
             eventsPath: eventsPath
         )
 
-        currentSessionContext = newSessionContext
+        _currentSessionContext = nextSessionContext
 
-        return newSessionContext
+        return nextSessionContext
     }
 
     internal func updateCachedCurrentSessionSync(
         to newSession: ParraSession
     ) {
-        currentSessionContext?.updateSession(
+        _currentSessionContext?.updateSession(
             to: newSession
         )
     }
@@ -235,7 +263,7 @@ internal class SessionReader {
         return fcntl(descriptor, F_GETFL) != -1 || errno != EBADF
     }
 
-    private func sessionDirectory(
+    internal func sessionDirectory(
         for id: String,
         in baseDirectory: URL
     ) -> URL {

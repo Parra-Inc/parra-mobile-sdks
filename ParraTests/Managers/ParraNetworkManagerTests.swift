@@ -9,7 +9,7 @@ import XCTest
 @testable import Parra
 
 @MainActor
-class ParraNetworkManagerTests: XCTestCase {
+class ParraNetworkManagerTests: MockedParraTestCase {
     private var mockNetworkManager: MockParraNetworkManager!
 
     override func setUp() async throws {

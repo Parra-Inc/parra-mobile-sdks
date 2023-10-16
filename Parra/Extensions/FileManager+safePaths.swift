@@ -36,6 +36,7 @@ internal extension FileManager {
     func safeCreateFile(
         at url: URL,
         contents: Data? = nil,
+        overrideExisting: Bool = false,
         attributes: [FileAttributeKey : Any]? = nil
     ) throws {
         try logger.withScope { logger in
@@ -44,7 +45,7 @@ internal extension FileManager {
 
             let exists: Bool = try safeFileExists(at: url)
 
-            if exists {
+            if exists && !overrideExisting {
                 throw ParraError.fileSystem(
                     path: url,
                     message: "File already exists."
@@ -80,14 +81,26 @@ internal extension FileManager {
         )
     }
 
+    func safeDirectoryExists(at url: URL) throws -> Bool {
+        let (exists, isDirectory) = safeFileExists(at: url)
+
+        if exists && !isDirectory {
+            throw ParraError.fileSystem(
+                path: url,
+                message: "File exists at a path that is expected to be a directory."
+            )
+        }
+
+        return exists
+    }
 
     func safeFileExists(at url: URL) throws -> Bool {
         let (exists, isDirectory) = safeFileExists(at: url)
 
-        if isDirectory {
+        if exists && isDirectory {
             throw ParraError.fileSystem(
                 path: url,
-                message: "Directory exists at location where file should be created."
+                message: "Directory exists at at a path that is expected to be a file."
             )
         }
 

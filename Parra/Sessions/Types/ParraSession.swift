@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal struct ParraSession: Codable {
+internal struct ParraSession: Codable, Equatable {
     internal struct Constant {
         static let packageExtension = "parsesh"
         static let erroredSessionPrefix = "_"
