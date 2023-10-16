@@ -3,6 +3,7 @@ jobs:
   build-and-test:
     macos:
       xcode: 15.0.1
+    resource_class: macos.x86.medium.gen2
     environment:
       FL_OUTPUT_DIR: output
       FASTLANE_LANE: test
@@ -18,6 +19,6 @@ jobs:
           path: output/scan
 
 workflows:
-  build-test-adhoc:
+  run-unit-tests:
     jobs:
       - build-and-test
