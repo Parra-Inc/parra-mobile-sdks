@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1500"
-   version = "2.2">
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -9,11 +9,16 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <AutocreatedTestPlanReference>
-            </AutocreatedTestPlanReference>
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "00B42EAD2ADE1BCB00F365A5"
+               BuildableName = "TestRunner.app"
+               BlueprintName = "TestRunner"
+               ReferencedContainer = "container:Parra.xcodeproj">
+            </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
@@ -21,21 +26,13 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      shouldAutocreateTestPlan = "YES">
-      <Testables>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0087CA592A54C54D007D72FA"
-               BuildableName = "ParraUITests.xctest"
-               BlueprintName = "ParraUITests"
-               ReferencedContainer = "container:Parra.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:ParraTests/Parra.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+      </TestPlans>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -51,9 +48,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-            BuildableName = "Demo.app"
-            BlueprintName = "Demo"
+            BlueprintIdentifier = "00B42EAD2ADE1BCB00F365A5"
+            BuildableName = "TestRunner.app"
+            BlueprintName = "TestRunner"
             ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -64,6 +61,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "00B42EAD2ADE1BCB00F365A5"
+            BuildableName = "TestRunner.app"
+            BlueprintName = "TestRunner"
+            ReferencedContainer = "container:Parra.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

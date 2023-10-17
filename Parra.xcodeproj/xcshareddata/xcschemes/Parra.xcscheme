@@ -33,18 +33,6 @@
             default = "YES">
          </TestPlanReference>
       </TestPlans>
-      <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "001B7AF827DE3A7600DEEECD"
-               BuildableName = "ParraTests.xctest"
-               BlueprintName = "ParraTests"
-               ReferencedContainer = "container:Parra.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -56,6 +44,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "00B42EAD2ADE1BCB00F365A5"
+            BuildableName = "TestRunner.app"
+            BlueprintName = "TestRunner"
+            ReferencedContainer = "container:Parra.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

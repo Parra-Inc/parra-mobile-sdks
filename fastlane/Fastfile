@@ -3,7 +3,9 @@ default_platform :ios
 
 platform :ios do
   before_all do
-    setup_circle_ci
+    if ENV["CIRCLECI"]
+      setup_circle_ci
+    end
   end
 
   desc "Runs all the tests"
@@ -11,7 +13,10 @@ platform :ios do
     run_tests(
         project: "Parra.xcodeproj", 
         devices: ["iPhone 15"],    
-        scheme: "ParraTests",
+        scheme: "TestRunner",
+        prelaunch_simulator: true,
+        result_bundle: true, # required to gather coverage.
+        code_coverage: true
     )
   end
 end

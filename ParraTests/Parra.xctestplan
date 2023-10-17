@@ -40,14 +40,6 @@
         "identifier" : "001B7AF827DE3A7600DEEECD",
         "name" : "ParraTests"
       }
-    },
-    {
-      "enabled" : false,
-      "target" : {
-        "containerPath" : "container:Parra.xcodeproj",
-        "identifier" : "0087CA592A54C54D007D72FA",
-        "name" : "ParraUITests"
-      }
     }
   ],
   "version" : 1
