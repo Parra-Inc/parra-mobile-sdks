@@ -11,6 +11,7 @@ jobs:
     environment:
       FL_OUTPUT_DIR: output
       FASTLANE_LANE: test
+    working_directory: ~/project
     steps:
       - checkout
       - macos/add-uitest-permissions
