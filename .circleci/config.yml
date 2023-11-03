@@ -1,15 +1,23 @@
+orbs:
+  ruby: circleci/ruby@2.1.0
+  macos: circleci/macos@2.4.0
+
 version: 2.1
 jobs:
   build-and-test:
     macos:
       xcode: 15.1.0
-    resource_class: macos.x86.medium.gen2
+    resource_class: macos.m1.medium.gen1
     environment:
       FL_OUTPUT_DIR: output
       FASTLANE_LANE: test
     steps:
       - checkout
-      - run: bundle install
+      - macos/add-uitest-permissions
+      - ruby/install-deps
+      - run:
+          name: Install Brew Dependencies
+          command: ./scripts/ci/install-brew-dependencies.sh
       - run:
           name: Fastlane
           command: bundle exec fastlane $FASTLANE_LANE
