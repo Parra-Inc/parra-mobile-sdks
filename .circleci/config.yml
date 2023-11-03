@@ -17,6 +17,11 @@ jobs:
       - macos/add-uitest-permissions
       - ruby/install-deps
       - run:
+          name: Wtf
+          command: |
+            pwd
+            ls -la
+      - run:
           name: Install Brew Dependencies
           command: ./scripts/ci/install-brew-dependencies.sh
       - run:
