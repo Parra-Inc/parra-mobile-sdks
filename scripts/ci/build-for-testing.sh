@@ -11,7 +11,7 @@ ABSOLUTE_KEY_PATH=$(realpath $PARRA_ASC_API_KEY_PATH)
 build() {
     # ARGS:
     # -allowProvisioningUpdates and -allowProvisioningDeviceRegistration are required to enable -authentication... flags.
-    NSUnbufferedIO=YES set -o pipefail &&
+    CODE_SIGNING_ALLOWED=NO NSUnbufferedIO=YES set -o pipefail &&
         xcodebuild build-for-testing \
             -project "$PARRA_TEST_PROJECT_NAME" \
             -scheme "$PARRA_TEST_SCHEME_NAME" \
