@@ -430,3 +430,4 @@ Dependencies/
 # End of https://www.toptal.com/developers/gitignore/api/macos,cocoapods,xcode,swift,objective-c,reactnative
 /.vscode/settings.json
 /buildlog
+/artifacts
