@@ -46,11 +46,10 @@ jobs:
           name: Run Unit Tests
           command: ./scripts/ci/run-unit-tests.sh
       - store_artifacts:
-          path: output
-      - store_artifacts:
-          path: output
+          path: artifacts
       - store_test_results:
-          path: output/scan
+          # TODO: This is for build, no artifacts are generated for tests yet??
+          path: artifacts/junit-results.xml
 
 workflows:
   run-unit-tests:
