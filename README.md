@@ -19,7 +19,8 @@ If you're ready to install the Parra iOS SDK in your own project, check out the 
 #### Scripting
 
 1. Install [Bun](https://bun.sh/).
-2. `bun install`
+2. Run `git config diff.lockb.textconv bun && git config diff.lockb.binary true` to view bun lockfile diffs properly.
+3. Run `bun install`
 
 ## License
 
