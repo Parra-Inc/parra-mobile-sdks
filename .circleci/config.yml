@@ -21,8 +21,10 @@ jobs:
           name: Install Brew Dependencies
           command: ./scripts/ci/install-brew-dependencies.sh
       - run:
-          name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
+          name: Build for Testing
+          command: ./scripts/ci/build-for-testing.sh
+      - store_artifacts:
+          path: output
       - store_artifacts:
           path: output
       - store_test_results:

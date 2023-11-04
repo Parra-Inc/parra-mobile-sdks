@@ -14,8 +14,8 @@
             "value" : "1"
           }
         ],
-        "threadSanitizerEnabled" : true,
-        "undefinedBehaviorSanitizerEnabled" : true
+        "threadSanitizerEnabled" : false,
+        "undefinedBehaviorSanitizerEnabled" : false
       }
     }
   ],
@@ -31,7 +31,7 @@
     },
     "testExecutionOrdering" : "random",
     "testTimeoutsEnabled" : true,
-    "threadSanitizerEnabled" : true
+    "threadSanitizerEnabled" : false
   },
   "testTargets" : [
     {

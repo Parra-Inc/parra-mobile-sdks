@@ -1,15 +1,11 @@
 {
   "name": "parra-ios-sdk",
-  "scripts": {
-    "ci:build:unit-tests": "",
-    "ci:run:unit-tests": ""
-  },
+  "scripts": {},
   "bin": {
     "parra-release": "scripts/pod-release.js"
   },
   "devDependencies": {
     "child_process": "^1.0.2",
-    "commander": "^11.1.0",
     "util": "^0.12.4",
     "yargs": "~>17.1.0"
   }

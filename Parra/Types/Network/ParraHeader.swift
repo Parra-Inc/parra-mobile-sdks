@@ -84,7 +84,7 @@ internal enum ParraHeader {
         case .deviceId:
             return UIDevice.current.identifierForVendor?.uuidString
         case .deviceLocale:
-            return NSLocale.current.languageCode
+            return NSLocale.current.language.languageCode?.identifier
         case .deviceManufacturer:
             return "Apple"
         case .deviceTimeZoneAbbreviation:
