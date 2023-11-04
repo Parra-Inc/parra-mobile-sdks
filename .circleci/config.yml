@@ -14,9 +14,13 @@ jobs:
       PARRA_TEST_SCHEME_NAME: Parra
       PARRA_TEST_CONFIGURATION: Debug
       PARRA_TEST_DESTINATION: generic/platform=iOS,name=iPhone 15,OS=latest
+      PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
     working_directory: ~/project
     steps:
       - checkout
+      - run:
+          name: Extract ASC Credential
+          command: echo $ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
       - macos/add-uitest-permissions
       - macos/install-rosetta
       - ruby/install-deps
