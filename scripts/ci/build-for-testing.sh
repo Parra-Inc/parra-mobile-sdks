@@ -2,17 +2,16 @@
 
 set -xo pipefail
 
-DATADIR=build/unit-tests/derivedData
-export CONFIGURATION_BUILD_DIR="${DERIVED_DATA[@]}"
+export CONFIGURATION_BUILD_DIR="$PARRA_TEST_DERIVED_DATA_DIRECTORY"
 
 build() {
     NSUnbufferedIO=YES set -o pipefail &&
         xcodebuild build-for-testing \
-            -project ./Parra.xcodeproj \
-            -scheme Parra \
-            -configuration "Debug" \
-            -destination 'generic/platform=iOS,name=iPhone 15,OS=latest' \
-            -derivedDataPath "$DATADIR" |
+            -project "$PARRA_TEST_PROJECT_NAME" \
+            -scheme "$PARRA_TEST_SCHEME_NAME" \
+            -configuration "$PARRA_TEST_CONFIGURATION" \
+            -destination "$PARRA_TEST_DESTINATION" \
+            -derivedDataPath "$PARRA_TEST_DERIVED_DATA_DIRECTORY" |
         tee buildlog |
             xcbeautify --is-ci --junit-report-filename artifacts/junit-results.xml
 

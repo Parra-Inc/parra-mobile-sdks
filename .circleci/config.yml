@@ -9,8 +9,11 @@ jobs:
       xcode: 15.1.0
     resource_class: macos.m1.medium.gen1
     environment:
-      FL_OUTPUT_DIR: output
-      FASTLANE_LANE: test
+      PARRA_TEST_DERIVED_DATA_DIRECTORY: build/unit-tests/derivedData
+      PARRA_TEST_PROJECT_NAME: ./Parra.xcodeproj
+      PARRA_TEST_SCHEME_NAME: Parra
+      PARRA_TEST_CONFIGURATION: Debug
+      PARRA_TEST_DESTINATION: generic/platform=iOS,name=iPhone 15,OS=latest
     working_directory: ~/project
     steps:
       - checkout

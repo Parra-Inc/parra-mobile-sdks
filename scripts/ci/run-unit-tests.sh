@@ -2,6 +2,8 @@
 
 set -xo pipefail
 
+export CONFIGURATION_BUILD_DIR="$DERIVED_DATA_DIRECTORY"
+
 DATADIR=derivedData
 OUTDIR=output
 DERIVED_DATA=(-derivedDataPath "$DATADIR")
