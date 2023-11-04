@@ -24,6 +24,7 @@ executors:
     resource_class: macos.m1.medium.gen1
     environment:
       PARRA_TEST_DERIVED_DATA_DIRECTORY: build/unit-tests/derivedData
+      PARRA_TEST_OUTPUT_DIRECTORY: artifacts/unit-tests
       PARRA_TEST_PROJECT_NAME: ./Parra.xcodeproj
       PARRA_TEST_SCHEME_NAME: Parra
       PARRA_TEST_CONFIGURATION: Debug
