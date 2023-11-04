@@ -24,7 +24,7 @@ const gitTag = `parra-${tag}`;
     try {
         console.log((await exec('bundle install')).stdout);
 
-        console.log((await exec(`ruby ./scripts/set-framework-version.rb ${tag}`)).stdout);
+        console.log((await exec(`ruby ./scripts/ci/set-framework-version.rb ${tag}`)).stdout);
 
         console.log((await exec('pod repo update')).stdout);
 
