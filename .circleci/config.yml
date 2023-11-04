@@ -20,7 +20,9 @@ jobs:
       - checkout
       - run:
           name: Extract ASC Credential
-          command: echo $ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
+          command: |
+            dirname $$PARRA_ASC_API_KEY_PATH | xargs mkdir -p
+            echo $ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
       - macos/add-uitest-permissions
       - macos/install-rosetta
       - ruby/install-deps
