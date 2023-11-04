@@ -307,6 +307,13 @@
 			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
 			remoteInfo = Parra;
 		};
+		00719DBD2AF6C3D500310E25 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00B42EAD2ADE1BCB00F365A5;
+			remoteInfo = TestRunner;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1497,6 +1504,7 @@
 			);
 			dependencies = (
 				001B7AFC27DE3A7600DEEECD /* PBXTargetDependency */,
+				00719DBE2AF6C3D500310E25 /* PBXTargetDependency */,
 			);
 			name = ParraTests;
 			productName = ParraTests;
@@ -1558,7 +1566,7 @@
 					};
 					001B7AF827DE3A7600DEEECD = {
 						CreatedOnToolsVersion = 13.2.1;
-						TestTargetID = 00DECFF4274C69F800DAF301;
+						TestTargetID = 00B42EAD2ADE1BCB00F365A5;
 					};
 					00B42EAD2ADE1BCB00F365A5 = {
 						CreatedOnToolsVersion = 15.0;
@@ -1939,6 +1947,11 @@
 			target = 001B7AF127DE3A7600DEEECD /* Parra */;
 			targetProxy = 00719DBA2AF69CAA00310E25 /* PBXContainerItemProxy */;
 		};
+		00719DBE2AF6C3D500310E25 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00B42EAD2ADE1BCB00F365A5 /* TestRunner */;
+			targetProxy = 00719DBD2AF6C3D500310E25 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -2084,10 +2097,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.8;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestRunner.app/TestRunner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestRunner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TestRunner";
 			};
 			name = Debug;
 		};
@@ -2105,10 +2121,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.8;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestRunner.app/TestRunner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestRunner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TestRunner";
 			};
 			name = Release;
 		};
@@ -2126,6 +2145,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestRunner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Parra Tests";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -2141,6 +2161,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraTests.Runner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -2162,6 +2185,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestRunner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Parra Tests";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -2177,6 +2201,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.parra.ParraTests.Runner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2334,6 +2361,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-sdk-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Demo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2372,6 +2402,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-sdk-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Demo-Bridging-Header.h";
 				SWIFT_VERSION = 5.8;
