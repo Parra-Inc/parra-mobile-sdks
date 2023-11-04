@@ -43,10 +43,10 @@ jobs:
     steps:
       - checkout
       - prepare_ios_prerequisites
+      - macos/wait-until-simulator-booted
       - run:
           name: Build for Testing
           command: ./scripts/ci/build-for-testing.sh
-      - macos/wait-until-simulator-booted
       - run:
           name: Run Unit Tests
           command: ./scripts/ci/run-unit-tests.sh
