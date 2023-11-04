@@ -5,6 +5,10 @@ orbs:
 commands:
   prepare_ios_prerequisites:
     steps:
+      - macos/preboot-simulator:
+          platform: iOS
+          version: 17.2
+          device: iPhone 15
       - run:
           name: Extract ASC Credential
           command: |
@@ -21,14 +25,14 @@ executors:
   macos-m1-test-runner:
     macos:
       xcode: 15.1.0
-    resource_class: macos.m1.medium.gen1
+    resource_class: macos.m1.large.gen1
     environment:
       PARRA_TEST_DERIVED_DATA_DIRECTORY: build/unit-tests/derivedData
       PARRA_TEST_OUTPUT_DIRECTORY: artifacts/unit-tests
       PARRA_TEST_PROJECT_NAME: ./Parra.xcodeproj
       PARRA_TEST_SCHEME_NAME: Parra
       PARRA_TEST_CONFIGURATION: Debug
-      PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=latest
+      PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.2
       PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
     working_directory: ~/project
 
@@ -42,6 +46,7 @@ jobs:
       - run:
           name: Build for Testing
           command: ./scripts/ci/build-for-testing.sh
+      - macos/wait-until-simulator-booted
       - run:
           name: Run Unit Tests
           command: ./scripts/ci/run-unit-tests.sh
