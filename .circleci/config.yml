@@ -15,6 +15,7 @@ jobs:
     steps:
       - checkout
       - macos/add-uitest-permissions
+      - macos/install-rosetta
       - ruby/install-deps
       - run:
           name: Install Brew Dependencies
