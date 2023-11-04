@@ -12,6 +12,7 @@ build() {
             -scheme "$PARRA_TEST_SCHEME_NAME" \
             -configuration "$PARRA_TEST_CONFIGURATION" \
             -destination "$PARRA_TEST_DESTINATION" \
+            -allowProvisioningUpdates \
             -authenticationKeyPath "$ABSOLUTE_KEY_PATH" \
             -authenticationKeyID "$ASC_API_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_API_ISSUER_ID" \
