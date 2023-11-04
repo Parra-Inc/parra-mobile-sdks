@@ -6,9 +6,9 @@ commands:
   prepare_ios_prerequisites:
     steps:
       - macos/preboot-simulator:
-          platform: iOS
-          version: 17.2
-          device: iPhone 15
+          platform: "iOS"
+          version: "17.2"
+          device: "iPhone 15"
       - run:
           name: Extract ASC Credential
           command: |
