@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Extract ASC Credential
           command: |
-            dirname $$PARRA_ASC_API_KEY_PATH | xargs mkdir -p
+            dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
             echo $ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
       - macos/add-uitest-permissions
       - macos/install-rosetta
