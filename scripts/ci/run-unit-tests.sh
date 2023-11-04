@@ -21,6 +21,6 @@ for run in {1..5}; do
     ! grep --max-count=1 'Early unexpected exit, operation never finished bootstrapping' "$OUTDIR"/TestSummaries.plist && break
 done
 
-./scripts/plist2junit.rb "$OUTDIR"/TestSummaries.plist >"$OUTDIR"/report.junit
+# ./scripts/plist2junit.rb "$OUTDIR"/TestSummaries.plist >"$OUTDIR"/report.junit
 
 exit $RESULT

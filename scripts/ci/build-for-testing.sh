@@ -3,9 +3,14 @@
 set -xo pipefail
 
 CONFIGURATION_BUILD_DIR="$PARRA_TEST_DERIVED_DATA_DIRECTORY"
+# -authenticationKeyPath is required to be an absolute path. It makes more sense to convert it
+# from a relative path here, since it's possible that Circle will rename the user home directory
+# in the future.
 ABSOLUTE_KEY_PATH=$(realpath $PARRA_ASC_API_KEY_PATH)
 
 build() {
+    # ARGS:
+    # -allowProvisioningUpdates - Required to enable -authentication... flags.
     NSUnbufferedIO=YES set -o pipefail &&
         xcodebuild build-for-testing \
             -project "$PARRA_TEST_PROJECT_NAME" \
