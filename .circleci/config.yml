@@ -1,6 +1,6 @@
 orbs:
   ruby: circleci/ruby@2.1.0
-  macos: circleci/macos@2.4.0
+  macos: circleci/macos@2.4.1
 
 commands:
   prepare_ios_prerequisites:
@@ -59,8 +59,4 @@ jobs:
 workflows:
   run-unit-tests:
     jobs:
-      - build-and-test:
-          filters:
-            branches:
-              only:
-                - main
+      - build-and-test
