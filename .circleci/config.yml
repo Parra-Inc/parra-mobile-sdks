@@ -5,10 +5,6 @@ orbs:
 commands:
   prepare_ios_prerequisites:
     steps:
-      - macos/preboot-simulator:
-          platform: "iOS"
-          version: "17.2"
-          device: "iPhone 15"
       - run:
           name: Extract ASC Credential
           command: |
@@ -42,7 +38,6 @@ jobs:
     steps:
       - checkout
       - prepare_ios_prerequisites
-      - macos/wait-until-simulator-booted
       - run:
           name: Build for Testing
           command: ./scripts/ci/build-for-testing.sh
