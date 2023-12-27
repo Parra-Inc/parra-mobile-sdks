@@ -3,8 +3,54 @@ orbs:
   macos: circleci/macos@2.4.1
 
 commands:
+  load-env-vars:
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Loading Environment Variables
+          command: |
+            cat bash.env >> $BASH_ENV
+            printenv
+
+  run-command-and-persist-variables:
+    parameters:
+      name:
+        type: string
+      command:
+        type: string
+      variables:
+        type: string # CSV of variables to persist
+    steps:
+      - run:
+          name: ${{ parameters.name }}
+          command: |
+            # Important to source from the command that we're executing to store env vars that are
+            # exported in the command.
+            . ${{ parameters.command }}
+
+            # Iterate over variables and persist them
+            IFS=',' read -ra ADDR <<< "${{ parameters.variables }}"
+            for i in "${ADDR[@]}"; do
+              value=$(eval echo \$$i)
+              echo "Persisting variable: $i with value: $value"
+              echo "export $i=$value" >> $BASH_ENV
+            done
+
+            printenv
+            cp $BASH_ENV bash.env
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bash.env
+
   prepare_ios_prerequisites:
     steps:
+      - macos/list-permissions # TODO: Delete me
+      - run-command-and-persist-variables:
+          name: Preboot Simulator
+          command: ./scripts/ci/preboot-simulator.sh
+          variables: PARRA_TEST_DEVICE_UDID
       - run:
           name: Extract ASC Credential
           command: |
@@ -30,8 +76,9 @@ executors:
       PARRA_TEST_PROJECT_NAME: ./Parra.xcodeproj
       PARRA_TEST_SCHEME_NAME: Parra
       PARRA_TEST_CONFIGURATION: Debug
-      PARRA_TEST_PLATFORM: iOS Simulator
-      PARRA_TEST_DESTINATION: platform=${PARRA_TEST_PLATFORM},name=iPhone 15,OS=17.2
+      PARRA_TEST_DEVICE_NAME: iPhone 15
+      PARRA_TEST_DEVICE_OS_VERSION: 17.2
+      PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.2
       PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
     working_directory: ~/project
 
@@ -41,15 +88,13 @@ jobs:
     executor: macos-m1-test-runner
     steps:
       - checkout
-      - run:
-          name: TESTING ++++
-          command: |
-            echo $PARRA_TEST_PLATFORM
-            echo $PARRA_TEST_DESTINATION
       - prepare_ios_prerequisites
+      - load-env-vars
       - run:
           name: Build for Testing
           command: ./scripts/ci/build-for-testing.sh
+      - macos/wait-until-simulator-booted:
+          device-udid-var: PARRA_TEST_DEVICE_UDID
       - run:
           name: Run Unit Tests
           command: ./scripts/ci/run-unit-tests.sh
