@@ -30,7 +30,7 @@ commands:
             . ${{ parameters.command }}
 
             # Iterate over variables and persist them
-            IFS=',' read -ra ADDR <<< "${{ parameters.variables }}"
+            IFS=',' read -ra ADDR \<<< "${{ parameters.variables }}"
             for i in "${ADDR[@]}"; do
               value=$(eval echo \$$i)
               echo "Persisting variable: $i with value: $value"
