@@ -7,7 +7,7 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
-  bundler (= 2.4.19)
+  bundler (= 2.4.22)
 
 BUNDLED WITH
-   2.4.19
+   2.4.22
