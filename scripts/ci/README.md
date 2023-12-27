@@ -4,7 +4,7 @@ This directory contains scripts that intended to be used from within a CI enviro
 
 ## Philosophy
 
-CI scripts should make best efforts to always prioritize reliability, speed, and clarity. In that order. We would rather incur a most complicated initial setup cost than suffer maintenance of flaky or slow jobs and tests. To this end, you will find that most scripts interact with build tools directly and avoid using tools like Fastlane when possible. For some of the rationale on why, see [Life in the slow lane](https://silverhammermba.github.io/blog/2019/03/12/slowlane).
+CI scripts should make best efforts to always prioritize reliability, speed, and clarity. In that order. We would rather incur a more complicated initial setup cost than suffer maintenance of flaky or slow jobs and tests. To this end, you will find that most scripts interact with build tools directly and avoid using tools like Fastlane when possible. For some of the rationale on why, see [Life in the slow lane](https://silverhammermba.github.io/blog/2019/03/12/slowlane).
 
 ## Scripts
 
