@@ -15,7 +15,7 @@ commands:
 
   run-command-and-persist-variables:
     parameters:
-      name:
+      title:
         type: string
       command:
         type: string
@@ -48,7 +48,7 @@ commands:
     steps:
       - macos/list-permissions # TODO: Delete me
       - run-command-and-persist-variables:
-          name: Preboot Simulator
+          title: Preboot Simulator
           command: ./scripts/ci/preboot-simulator.sh
           variables: PARRA_TEST_DEVICE_UDID
       - run:
