@@ -6,7 +6,7 @@ The Parra iOS SDK allows you to quickly and easily collect valuable product feed
 
 ## Requirements
 
-The Parra iOS SDK can be built using Xcode 14.3.1 or later and can be installed in apps targetting iOS 15 or greater.
+The Parra iOS SDK can be built using Xcode 15.1 or later and can be installed in apps targetting iOS 17.0 or greater.
 
 ## Getting Started
 
