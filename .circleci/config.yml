@@ -15,7 +15,6 @@ commands:
             dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
             echo $ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
       - macos/add-uitest-permissions
-      - macos/install-rosetta
       - ruby/install-deps
       - run:
           name: Install Brew Dependencies
@@ -50,8 +49,11 @@ jobs:
       - run:
           name: Run Unit Tests
           command: ./scripts/ci/run-unit-tests.sh
+      - run:
+          name: Zip Artifacts
+          command: zip -0 -r artifacts.zip artifacts/*
       - store_artifacts:
-          path: artifacts
+          path: artifacts.zip
       - store_test_results:
           # TODO: This is for build, no artifacts are generated for tests yet??
           path: artifacts/junit-results.xml
