@@ -23,14 +23,14 @@ commands:
         type: string # CSV of variables to persist
     steps:
       - run:
-          name: ${{ parameters.name }}
+          name: << parameters.title >>
           command: |
             # Important to source from the command that we're executing to store env vars that are
             # exported in the command.
-            . ${{ parameters.command }}
+            . << parameters.command >>
 
             # Iterate over variables and persist them
-            IFS=',' read -ra ADDR \<<< "${{ parameters.variables }}"
+            IFS=',' read -ra ADDR \<<< "<< parameters.variables >>"
             for i in "${ADDR[@]}"; do
               value=$(eval echo \$$i)
               echo "Persisting variable: $i with value: $value"
