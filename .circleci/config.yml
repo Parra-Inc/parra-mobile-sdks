@@ -3,10 +3,12 @@ orbs:
   macos: circleci/macos@2.4.1
 
 commands:
-  load-env-vars:
+  common:
     steps:
       - attach_workspace:
           at: .
+  load-env-vars:
+    steps:
       - run:
           name: Loading Environment Variables
           command: |
@@ -88,6 +90,7 @@ jobs:
     executor: macos-m1-test-runner
     steps:
       - checkout
+      - common
       - prepare_ios_prerequisites
       - load-env-vars
       - run:
