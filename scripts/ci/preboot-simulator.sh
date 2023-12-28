@@ -2,7 +2,7 @@
 
 # This is used instead of the macOS ORB's preboot-simulator step, since it takes too long to return.
 
-deviceId=$("$CIRCLE_WORKING_DIRECTORY/scripts/ci/obtain-simulator-device-id.sh" "$PARRA_TEST_DEVICE_NAME" "$PARRA_TEST_DEVICE_OS_VERSION") 2> echo
+deviceId=$("/tmp/workspace/scripts/ci/obtain-simulator-device-id.sh" "$PARRA_TEST_DEVICE_NAME" "$PARRA_TEST_DEVICE_OS_VERSION") 2> echo
 
 echo "Booting simulator with device ID: $deviceId"
 
