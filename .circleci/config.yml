@@ -62,6 +62,8 @@ commands:
           title: Preboot Simulator
           command: ./scripts/ci/preboot-simulator.sh
           variables: PARRA_TEST_DEVICE_UDID
+          # The time saved by running this in the background is negated by the increased time the
+          # build-for-testing script will take if a simulator is mid booted when it starts.
           background: false
       - run:
           name: Extract ASC Credential
@@ -71,7 +73,6 @@ commands:
       - run:
           name: Disable Simulator Hardware Keyboard
           command: ./scripts/ci/disable-simulator-hardware-keyboard.sh
-      - macos/add-uitest-permissions
       # - ruby/install-deps: # Don't need to set bundler-version, ORB looks for Gemfile.lock by default.
       #     path: /tmp/workspace/vendor
       #     include-branch-in-cache-key: false
