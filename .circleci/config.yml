@@ -39,15 +39,15 @@ commands:
             . << parameters.command >>
 
             # Iterate over variables and persist them
-            # IFS=',' read -ra ADDR \<<< "<< parameters.variables >>"
-            # for i in "${ADDR[@]}"; do
-            #   value=$(eval echo \$$i)
-            #   echo "Persisting variable: $i with value: $value"
-            #   echo "export $i=$value" >> $BASH_ENV
-            # done
+            IFS=',' read -ra ADDR \<<< "<< parameters.variables >>"
+            for i in "${ADDR[@]}"; do
+              value=$(eval echo \$$i)
+              echo "Persisting variable: $i with value: $value"
+              echo "export $i=$value" >> $BASH_ENV
+            done
 
-            # printenv
-            # cp $BASH_ENV bash.env
+            printenv
+            cp $BASH_ENV bash.env
       - persist_to_workspace:
           root: .
           paths:

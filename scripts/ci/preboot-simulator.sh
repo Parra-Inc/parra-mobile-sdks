@@ -11,5 +11,5 @@ export PARRA_TEST_DEVICE_UDID="$deviceId"
 
 # Boot the device but don't wait for it to finish. We want to get through other preparations while it's booting
 # and there will be another task later that waits for it to finish booting before starting tests.
-xcrun simctl boot $deviceId --arch=arm64 & 
+nohup xcrun simctl boot $deviceId --arch=arm64 & 
 
