@@ -1,10 +1,19 @@
 orbs:
   ruby: circleci/ruby@2.1.0
   macos: circleci/macos@2.4.1
+  git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
 commands:
   common:
     steps:
+      - git-shallow-clone/checkout:
+          depth: 1
+          fetch_depth: 1
+          # Enable this if we get errors related to GitHub RSA failure during clone.
+          # keyscan_github: true
+          no_tags: true
+          path: /tmp/workspace
+
       - attach_workspace:
           at: /tmp/workspace
   load-env-vars:
@@ -89,7 +98,6 @@ jobs:
   build-and-test:
     executor: macos-m1-test-runner
     steps:
-      - checkout
       - common
       - prepare_ios_prerequisites
       - load-env-vars
