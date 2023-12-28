@@ -13,7 +13,6 @@ commands:
           # keyscan_github: true
           no_tags: true
           path: /tmp/workspace
-
       - attach_workspace:
           at: /tmp/workspace
   load-env-vars:
