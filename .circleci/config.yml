@@ -52,10 +52,6 @@ commands:
             printenv
             cp $BASH_ENV bash.env
           background: << parameters.background >>
-      - persist_to_workspace:
-          root: .
-          paths:
-            - bash.env
 
   prepare_ios_prerequisites:
     steps:
@@ -77,7 +73,10 @@ commands:
           command: ./scripts/ci/disable-simulator-hardware-keyboard.sh
       - macos/add-uitest-permissions
       - ruby/install-deps # Don't need to set bundler-version, ORB looks for Gemfile.lock by default.
-
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bash.env
 executors:
   macos-m1-test-runner:
     macos:
