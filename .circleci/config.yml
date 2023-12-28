@@ -30,6 +30,9 @@ commands:
         type: string
       variables:
         type: string # CSV of variables to persist
+      background:
+        type: boolean
+        default: false
     steps:
       - run:
           name: << parameters.title >>
@@ -48,6 +51,7 @@ commands:
 
             printenv
             cp $BASH_ENV bash.env
+          background: << parameters.background >>
       - persist_to_workspace:
           root: .
           paths:
@@ -55,7 +59,6 @@ commands:
 
   prepare_ios_prerequisites:
     steps:
-      - macos/list-permissions # TODO: Delete me
       - run:
           name: Install Brew Dependencies
           command: ./scripts/ci/install-brew-dependencies.sh
@@ -63,6 +66,7 @@ commands:
           title: Preboot Simulator
           command: ./scripts/ci/preboot-simulator.sh
           variables: PARRA_TEST_DEVICE_UDID
+          background: true
       - run:
           name: Extract ASC Credential
           command: |
