@@ -62,7 +62,7 @@ commands:
           title: Preboot Simulator
           command: ./scripts/ci/preboot-simulator.sh
           variables: PARRA_TEST_DEVICE_UDID
-          background: true
+          background: false
       - run:
           name: Extract ASC Credential
           command: |
