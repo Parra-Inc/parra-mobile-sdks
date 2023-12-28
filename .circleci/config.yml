@@ -49,6 +49,9 @@ commands:
   prepare_ios_prerequisites:
     steps:
       - macos/list-permissions # TODO: Delete me
+      - run:
+          name: Install Brew Dependencies
+          command: ./scripts/ci/install-brew-dependencies.sh
       - run-command-and-persist-variables:
           title: Preboot Simulator
           command: ./scripts/ci/preboot-simulator.sh
@@ -63,9 +66,6 @@ commands:
           command: ./scripts/ci/disable-simulator-hardware-keyboard.sh
       - macos/add-uitest-permissions
       - ruby/install-deps # Don't need to set bundler-version, ORB looks for Gemfile.lock by default.
-      - run:
-          name: Install Brew Dependencies
-          command: ./scripts/ci/install-brew-dependencies.sh
 
 executors:
   macos-m1-test-runner:
