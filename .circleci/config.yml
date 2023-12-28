@@ -6,7 +6,7 @@ commands:
   common:
     steps:
       - attach_workspace:
-          at: .
+          at: ~/project
   load-env-vars:
     steps:
       - run:
