@@ -12,9 +12,8 @@ commands:
           # Enable this if we get errors related to GitHub RSA failure during clone.
           # keyscan_github: true
           no_tags: true
-          path: /tmp/workspace
       - attach_workspace:
-          at: /tmp/workspace
+          at: .
   load-env-vars:
     steps:
       - run:
@@ -50,7 +49,7 @@ commands:
             # printenv
             # cp $BASH_ENV bash.env
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: .
           paths:
             - bash.env
 
@@ -90,7 +89,7 @@ executors:
       PARRA_TEST_DEVICE_OS_VERSION: 17.2
       PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.2
       PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
-    working_directory: ~/project
+    working_directory: /tmp/workspace
 
 version: 2.1
 jobs:
