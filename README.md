@@ -12,16 +12,18 @@ The Parra iOS SDK can be built using Xcode 15.1 or later and can be installed in
 
 If you're ready to install the Parra iOS SDK in your own project, check out the [iOS SDK integration guide](https://docs.parra.io/guides/ios). If you'd like to see Parra in action, clone this repo and run the [Demo target](https://github.com/Parra-Inc/parra-ios-sdk/tree/main/Demo) in the included Xcode project. There you can find examples of how to customize and add Parra Feedbacks in your app.
 
-## Contributing
-
 ### Project Setup
 
-#### Scripting
 
-1. Install [Bun](https://bun.sh/).
-2. Run `git config diff.lockb.textconv bun && git config diff.lockb.binary true` to view bun lockfile diffs properly.
-3. Run `bun install`
+
+#### CLI
+
+Instructions for setting up and running scripts can be found [here](cli/README.md).
+
+
 
 ## License
 
 - [Parra iOS SDK License](https://github.com/Parra-Inc/parra-ios-sdk/blob/main/LICENSE.md)
+
+<!-- ## Contributing -->
