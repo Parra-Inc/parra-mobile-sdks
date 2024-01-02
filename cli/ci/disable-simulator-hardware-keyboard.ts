@@ -1,7 +1,7 @@
-import { runThrowingCommand } from '../utils/command.js';
+import { runCommand } from '../utils/command.js';
 
 export const disableSimulatorHardwareKeyboard = async () => {
-  await runThrowingCommand(
+  await runCommand(
     `
     echo "Killing simulator"
     set +e
