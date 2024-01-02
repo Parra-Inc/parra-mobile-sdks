@@ -20,6 +20,9 @@ commands:
       - run:
           name: Install Bun
           command: curl -fsSL https://bun.sh/install | bash -s "bun-v1.0.20"
+      - run:
+          name: Install NPM Dependencies
+          command: bun install --frozen-lockfile
   load-env-vars:
     steps:
       - run:
@@ -71,9 +74,6 @@ commands:
           # The time saved by running this in the background is negated by the increased time the
           # build-for-testing script will take if a simulator is mid booted when it starts.
           background: false
-      - run:
-          name: Install NPM Dependencies
-          command: bun install --frozen-lockfile
       - run:
           name: Extract ASC Credential
           command: |
