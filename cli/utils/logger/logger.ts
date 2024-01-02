@@ -44,12 +44,17 @@ export default class Logger {
    * output from a child process.
    */
   public raw(isError: boolean, message: any, ...optionalParams: any[]): void {
-    if (this.options.enabled) {
-      if (isError) {
+    if (this.options.enabled && Logger.globalLevel !== LogLevel.Silent) {
+      // Stream to stderr if it's an error and we are at least at the warn level.
+      if (isError && Logger.globalLevel <= LogLevel.Error) {
         process.stderr.write(
           this.getChalkForLevel(LogLevel.Warn)(message, ...optionalParams)
         );
-      } else {
+      }
+
+      // Stream all non-error logs to stdout as long as the logger is enabled. These are to
+      // be considered debug level logs.
+      if (!isError && Logger.globalLevel < LogLevel.Info) {
         process.stdout.write(message, ...optionalParams);
       }
     }

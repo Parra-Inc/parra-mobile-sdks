@@ -30,9 +30,6 @@ export const command = (logger: Logger): Command => {
         .makeOptionMandatory(true)
         .default('artifacts')
     )
-    .showHelpAfterError(true)
-    .addHelpCommand(true)
-    .passThroughOptions(true)
     .action(async (options) => {
       const { build, run } = options;
 
@@ -54,6 +51,5 @@ export const command = (logger: Logger): Command => {
 
         process.exit(1);
       }
-    })
-    .showHelpAfterError(true);
+    });
 };

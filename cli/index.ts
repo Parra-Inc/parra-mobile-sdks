@@ -56,12 +56,13 @@ const commands = readdirSync(normalizedPath).reduce((acc, file) => {
     return acc;
   }
 
-  const commandWithDefaults = (module.command as ParraCliCommandGenerator)(
-    logger
-  )
+  let commandWithDefaults = (module.command as ParraCliCommandGenerator)(logger)
     .showHelpAfterError(true)
-    .addHelpCommand(true)
-    .passThroughOptions(true);
+    .addHelpCommand(true);
+
+  for (const option of commonOptions) {
+    commandWithDefaults = commandWithDefaults.addOption(option);
+  }
 
   return [...acc, commandWithDefaults];
 }, [] as Command[]);
@@ -77,16 +78,7 @@ let finalProgram = program
     `
   )
   .version(process.env.npm_package_version, '-v, --version')
-  .allowUnknownOption(true)
-  .enablePositionalOptions()
-  .action((args) => {
-    console.log(`+++++++++++ ${JSON.stringify(args)} +++++++++++}`);
-  })
   .addHelpCommand(true, 'Opens this help menu.');
-
-for (const option of commonOptions) {
-  finalProgram = finalProgram.addOption(option);
-}
 
 for (const command of commands) {
   finalProgram = finalProgram.addCommand(command);
