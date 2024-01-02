@@ -69,6 +69,9 @@ commands:
           # build-for-testing script will take if a simulator is mid booted when it starts.
           background: false
       - run:
+          name: Install NPM Dependencies
+          command: bun install --frozen-lockfile
+      - run:
           name: Extract ASC Credential
           command: |
             dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
