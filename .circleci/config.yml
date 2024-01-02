@@ -60,7 +60,7 @@ commands:
     steps:
       - run:
           name: Install Brew Dependencies
-          command: ./cli ci --install-brew-dependencies
+          command: ./cli.sh ci --install-brew-dependencies
       - run-command-and-persist-variables:
           title: Preboot Simulator
           command: ./cli/bin/preboot-simulator.sh
@@ -75,7 +75,7 @@ commands:
             echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
       - run:
           name: Disable Simulator Hardware Keyboard
-          command: ./cli ci --disable-simulator-hardware-keyboard
+          command: ./cli.sh ci --disable-simulator-hardware-keyboard
       # - ruby/install-deps: # Don't need to set bundler-version, ORB looks for Gemfile.lock by default.
       #     path: /tmp/workspace/vendor
       #     include-branch-in-cache-key: false
