@@ -1,3 +1,6 @@
+# TODO:
+# 1. PARRA_TEST_OUTPUT_DIRECTORY not working
+
 orbs:
   # ruby: circleci/ruby@2.1.0
   macos: circleci/macos@2.4.1
@@ -57,10 +60,10 @@ commands:
     steps:
       - run:
           name: Install Brew Dependencies
-          command: ./scripts/ci/install-brew-dependencies.sh
+          command: ./cli ci --install-brew-dependencies
       - run-command-and-persist-variables:
           title: Preboot Simulator
-          command: ./scripts/ci/preboot-simulator.sh
+          command: ./cli/bin/preboot-simulator.sh
           variables: PARRA_TEST_DEVICE_UDID
           # The time saved by running this in the background is negated by the increased time the
           # build-for-testing script will take if a simulator is mid booted when it starts.
@@ -69,10 +72,10 @@ commands:
           name: Extract ASC Credential
           command: |
             dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
-            echo $ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
+            echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
       - run:
           name: Disable Simulator Hardware Keyboard
-          command: ./scripts/ci/disable-simulator-hardware-keyboard.sh
+          command: ./cli ci --disable-simulator-hardware-keyboard
       # - ruby/install-deps: # Don't need to set bundler-version, ORB looks for Gemfile.lock by default.
       #     path: /tmp/workspace/vendor
       #     include-branch-in-cache-key: false
@@ -103,12 +106,12 @@ jobs:
       - prepare_ios_prerequisites
       - run:
           name: Build for Testing
-          command: ./scripts/ci/build-for-testing.sh
+          command: ./cli.sh tests --build --log-level debug
       - macos/wait-until-simulator-booted:
           device-udid-var: PARRA_TEST_DEVICE_UDID
       - run:
           name: Run Unit Tests
-          command: ./scripts/ci/run-unit-tests.sh
+          command: ./cli.sh tests --run --log-level debug
       - run:
           name: Zip Artifacts
           command: zip -0 -r artifacts.zip artifacts/*
