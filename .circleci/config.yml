@@ -17,6 +17,9 @@ commands:
           no_tags: true
       - attach_workspace:
           at: .
+      - run:
+          name: Install Bun
+          command: curl -fsSL https://bun.sh/install | bash -s "bun-v1.0.20"
   load-env-vars:
     steps:
       - run:

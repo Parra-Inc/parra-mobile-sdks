@@ -15,9 +15,6 @@ export const installBrewDependencies = async () => {
 
     export HOMEBREW_NO_ANALYTICS=1
 
-
-    echo "Installing Bun..."
-    brew tap oven-sh/bun && brew install bun --quiet
     
 
     echo "Installing applesimutils..."
