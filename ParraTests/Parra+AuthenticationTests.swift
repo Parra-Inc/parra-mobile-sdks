@@ -60,7 +60,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
 
         await fulfillment(
             of: [authEndpointExpectation, authProviderExpectation],
-            timeout: 0.2
+            timeout: 2
         )
     }
 

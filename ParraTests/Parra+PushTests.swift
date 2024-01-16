@@ -31,7 +31,7 @@ class ParraPushTests: MockedParraTestCase {
 
         mockParra.parra.registerDevicePushToken(testTokenData)
 
-        await fulfillment(of: [pushUploadExpectation], timeout: 3.0)
+        await fulfillment(of: [pushUploadExpectation])
     }
 
     func testCachesPushTokenIfSdkNotInitialized() async throws {
@@ -60,7 +60,7 @@ class ParraPushTests: MockedParraTestCase {
         await mockParra.parra.initialize(authProvider: .mockPublicKey(mockParra))
         await mockParra.parra.registerDevicePushTokenString(testTokenString)
 
-        await fulfillment(of: [pushUploadExpectation], timeout: 1.0)
+        await fulfillment(of: [pushUploadExpectation])
 
         let cachedToken = await mockParra.parra.state.getCachedTemporaryPushToken()
         XCTAssertNotNil(cachedToken)

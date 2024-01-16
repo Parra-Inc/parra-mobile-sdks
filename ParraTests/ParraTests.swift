@@ -16,43 +16,61 @@ class FakeModule: ParraModule {
     }
     
     func synchronizeData() async {
-        try! await Task.sleep(for: 1.0)
+        try! await Task.sleep(for: 0.25)
     }
 }
 
 @MainActor
 class ParraTests: MockedParraTestCase {
+    private var fakeModule: FakeModule?
+
+    override func tearDown() async throws {
+        if let fakeModule {
+            await mockParra.parra.state.unregisterModule(module: fakeModule)
+        }
+
+        try await super.tearDown()
+    }
 
     func testModulesCanBeRegistered() async throws {
-        let module = FakeModule()
+        fakeModule = FakeModule()
 
-        await mockParra.parra.state.registerModule(module: module)
+        await mockParra.parra.state.registerModule(module: fakeModule!)
 
-        let hasRegistered = await mockParra.parra.state.hasRegisteredModule(module: module)
+        let hasRegistered = await mockParra.parra.state.hasRegisteredModule(
+            module: fakeModule!
+        )
+        
         XCTAssertTrue(hasRegistered)
+        
         let modules = await mockParra.parra.state.getAllRegisteredModules()
+
         XCTAssert(modules.contains(where: { testModule in
-            return type(of: module).name == type(of: testModule).name
+            return type(of: fakeModule!).name == type(of: testModule).name
         }))
     }
 
     func testModuleRegistrationIsDeduplicated() async throws {
-        let module = FakeModule()
+        fakeModule = FakeModule()
 
-        let checkBeforeRegister = await mockParra.parra.state.hasRegisteredModule(module: module)
+        let checkBeforeRegister = await mockParra.parra.state.hasRegisteredModule(
+            module: fakeModule!
+        )
         XCTAssertFalse(checkBeforeRegister)
 
         let previous = await mockParra.parra.state.getAllRegisteredModules()
 
-        await mockParra.parra.state.registerModule(module: module)
-        await mockParra.parra.state.registerModule(module: module)
+        await mockParra.parra.state.registerModule(module: fakeModule!)
+        await mockParra.parra.state.registerModule(module: fakeModule!)
 
-        let hasRegistered = await mockParra.parra.state.hasRegisteredModule(module: module)
+        let hasRegistered = await mockParra.parra.state.hasRegisteredModule(
+            module: fakeModule!
+        )
         XCTAssertTrue(hasRegistered)
 
         let modules = await mockParra.parra.state.getAllRegisteredModules()
         XCTAssert(modules.contains(where: { testModule in
-            return type(of: module).name == type(of: testModule).name
+            return type(of: fakeModule!).name == type(of: testModule).name
         }))
         XCTAssertEqual(modules.count, previous.count + 1)
     }

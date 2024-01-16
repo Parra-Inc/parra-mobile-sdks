@@ -9,6 +9,8 @@
 import XCTest
 @testable import Parra
 
+fileprivate let logger = Logger(bypassEventCreation: true, category: "Parra Mock")
+
 @MainActor
 class MockedParraTestCase: ParraBaseMock {
     internal var mockParra: MockParra!
@@ -27,7 +29,13 @@ class MockedParraTestCase: ParraBaseMock {
         // Clean up data created by tests
         let fileManager = FileManager.default
         if try fileManager.safeDirectoryExists(at: baseStorageDirectory) {
-            try fileManager.removeItem(at: baseStorageDirectory)
+            do {
+                try fileManager.removeItem(at: baseStorageDirectory)
+            } catch let error {
+                logger.error("Error removing base storage directory", error)
+                
+                throw error
+            }
         }
 
         mockParra = nil

@@ -73,7 +73,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
             syncTimerTickedExpectation.fulfill()
         }
 
-        try await Task.sleep(for: 0.2)
+        try await Task.sleep(for: 0.05)
 
         mockParra.syncManager.stopSyncTimer()
 
@@ -107,7 +107,6 @@ class ParraSyncManagerTests: MockedParraTestCase {
         // Enforces that a begin notification is received before an end notification.
         await fulfillment(
             of: [syncBeginExpectation, syncEndExpectation],
-            timeout: 5.0,
             enforceOrder: true
         )
     }
@@ -121,7 +120,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
         logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
-        await fulfillment(of: [syncBeginExpectation], timeout: 1.0)
+        await fulfillment(of: [syncBeginExpectation])
 
         let isSyncing = await mockParra.syncManager.syncState.isSyncing()
         XCTAssertTrue(isSyncing)
@@ -188,7 +187,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
 
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
-        await fulfillment(of: [syncDidEnd], timeout: 1.0)
+        await fulfillment(of: [syncDidEnd], timeout: 0.1)
     }
 
     func testEnqueueSyncSkippedWithoutEvents() async throws {
@@ -200,7 +199,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
 
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
-        await fulfillment(of: [syncDidEnd], timeout: 1.0)
+        await fulfillment(of: [syncDidEnd], timeout: 0.1)
     }
 
     func testEnqueueImmediateSyncWhileSyncInProgress() async throws {

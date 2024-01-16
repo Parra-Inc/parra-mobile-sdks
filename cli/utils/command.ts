@@ -53,6 +53,9 @@ const execAsync = async (
   });
 };
 
+/**
+ * Invoke the provided command and return the stdout and stderr output.
+ */
 export const runCommand = async (
   command: string,
   { throwForStdErr }: { throwForStdErr?: boolean } & ExecOptions = {
@@ -66,6 +69,9 @@ export const runCommand = async (
   });
 };
 
+/**
+ * Invoke the provided command and throw an exception if output is piped to stderr.
+ */
 export const runThrowingCommand = async (
   command: string
 ): Promise<string | undefined> => {
