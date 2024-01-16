@@ -1,5 +1,6 @@
-import { ChildProcess, ExecOptions, exec } from 'child_process';
+import { ChildProcess, exec } from 'child_process';
 import Logger from './logger/logger.js';
+import { CommandOptions, DEFAULT_COMMAND_OPTIONS } from './types.js';
 
 const logger = new Logger('Command');
 
@@ -11,15 +12,7 @@ export class CommandResult {
   ) {}
 }
 
-const execAsync = async (
-  command: string,
-  options: {
-    /// If set, throws if stderr is not empty. Defaults to false. since many commands write
-    /// to stderr even when they succeed.
-    throwForStdErr: boolean;
-    encoding: BufferEncoding;
-  } & ExecOptions
-) => {
+const execAsync = async (command: string, options: CommandOptions) => {
   return new Promise<CommandResult>((resolve, reject) => {
     const childProcess = exec(command, options);
 
@@ -37,7 +30,14 @@ const execAsync = async (
       logger.raw(true, data);
     });
 
-    childProcess.on('close', (code) => {
+    childProcess.on('close', (code, signal) => {
+      if (code === null) {
+        // If you're seeing this, it's possible that the maxBuffer size for exec was exceeded.
+        reject(new Error(`Command failed with signal ${signal}`));
+
+        return;
+      }
+
       if (code !== 0 || (options.throwForStdErr && !!stdErrOutput)) {
         if (code === 0) {
           reject(
@@ -58,14 +58,14 @@ const execAsync = async (
  */
 export const runCommand = async (
   command: string,
-  { throwForStdErr }: { throwForStdErr?: boolean } & ExecOptions = {
-    throwForStdErr: false,
-    maxBuffer: 1024 * 1024 * 100, // 100 MB
-  }
+  options: CommandOptions = DEFAULT_COMMAND_OPTIONS
 ): Promise<CommandResult> => {
+  const { throwForStdErr, ...rest } = options;
+
   return execAsync(command, {
+    ...DEFAULT_COMMAND_OPTIONS,
     throwForStdErr: !!throwForStdErr,
-    encoding: 'utf8',
+    ...rest,
   });
 };
 
@@ -73,9 +73,14 @@ export const runCommand = async (
  * Invoke the provided command and throw an exception if output is piped to stderr.
  */
 export const runThrowingCommand = async (
-  command: string
+  command: string,
+  options: CommandOptions = DEFAULT_COMMAND_OPTIONS
 ): Promise<string | undefined> => {
-  const { stdout } = await runCommand(command, { throwForStdErr: true });
+  const { stdout } = await runCommand(command, {
+    ...DEFAULT_COMMAND_OPTIONS,
+    ...options,
+    throwForStdErr: true,
+  });
 
   return stdout;
 };

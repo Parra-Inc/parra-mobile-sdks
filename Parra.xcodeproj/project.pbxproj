@@ -307,12 +307,12 @@
 			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
 			remoteInfo = Parra;
 		};
-		00719DBD2AF6C3D500310E25 /* PBXContainerItemProxy */ = {
+		00BF36C02B56CC9B0097905C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 00B42EAD2ADE1BCB00F365A5;
-			remoteInfo = TestRunner;
+			remoteGlobalIDString = 001B7AF827DE3A7600DEEECD;
+			remoteInfo = ParraTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1504,7 +1504,6 @@
 			);
 			dependencies = (
 				001B7AFC27DE3A7600DEEECD /* PBXTargetDependency */,
-				00719DBE2AF6C3D500310E25 /* PBXTargetDependency */,
 			);
 			name = ParraTests;
 			productName = ParraTests;
@@ -1522,6 +1521,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				00BF36C12B56CC9B0097905C /* PBXTargetDependency */,
 				00719DBB2AF69CAA00310E25 /* PBXTargetDependency */,
 			);
 			name = TestRunner;
@@ -1947,10 +1947,10 @@
 			target = 001B7AF127DE3A7600DEEECD /* Parra */;
 			targetProxy = 00719DBA2AF69CAA00310E25 /* PBXContainerItemProxy */;
 		};
-		00719DBE2AF6C3D500310E25 /* PBXTargetDependency */ = {
+		00BF36C12B56CC9B0097905C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 00B42EAD2ADE1BCB00F365A5 /* TestRunner */;
-			targetProxy = 00719DBD2AF6C3D500310E25 /* PBXContainerItemProxy */;
+			target = 001B7AF827DE3A7600DEEECD /* ParraTests */;
+			targetProxy = 00BF36C02B56CC9B0097905C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
