@@ -151,25 +151,6 @@ internal class SessionStorage {
         )
     }
 
-//    internal func writeUserPropertiesUpdate(
-//        newProperties: [String : AnyCodable],
-//        completion: ((Error?) -> Void)? = nil
-//    ) {
-//        withCurrentSessionHandle(
-//            handler: { handle, session in
-//                let updatedSession = session.withUpdatedProperties(
-//                    newProperties: newProperties
-//                )
-//
-//                try self.writeSessionSync(
-//                    session: updatedSession,
-//                    with: handle
-//                )
-//            },
-//            completion: completion
-//        )
-//    }
-
     private func storeEventContextUpdateSync(
         context: ParraSessionEventContext
     ) {

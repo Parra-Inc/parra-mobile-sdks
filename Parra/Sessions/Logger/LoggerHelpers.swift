@@ -16,8 +16,6 @@ internal typealias SplitFileId = (
 )
 
 internal struct LoggerHelpers {
-    // TODO: Should be LRU and size limited, and thread safe before enabling
-//    private static var fileIdCache = [String : SplitFileId]()
 
     /// Useful for converting various types of "Error" into an actual readable message. By default
     /// Error conforming types will not display what type of error they actually are in their
@@ -43,9 +41,7 @@ internal struct LoggerHelpers {
     internal static func splitFileId(
         fileId: String
     ) -> SplitFileId {
-//        if let cached = readFileIdFromCache(for: fileId) {
-//            return cached
-//        }
+        // TODO: Maybe this should be cached since it will be accessed frequently.
 
         let (module, fileName) = splitFileId(fileId: fileId)
 
@@ -58,8 +54,6 @@ internal struct LoggerHelpers {
             // Handles cases where file extensions have multiple periods.
             components = (module, String(fileParts[0]), fileParts.dropFirst(1).joined(separator: "."))
         }
-
-//        writeFileIdToCache(fileId: fileId, components: components)
 
         return components
     }
@@ -118,19 +112,4 @@ internal struct LoggerHelpers {
 
         return String(cString: info.dli_fname)
     }
-
-    // MARK: FileId Cache
-
-//    private static func readFileIdFromCache(
-//        for fileId: String
-//    ) -> SplitFileId? {
-//        return fileIdCache[fileId]
-//    }
-//
-//    private static func writeFileIdToCache(
-//        fileId: String,
-//        components: SplitFileId
-//    ) {
-//        fileIdCache[fileId] = components
-//    }
 }
