@@ -10,6 +10,8 @@ import Foundation
 
 public class Logger {
     private struct Constant {
+        /// The maximum number of logs that can be collected before a logging backend is configured.
+        /// Once the backend is set, the most recent logs (number by this variable) will be flushed to the backend.
         static let maxOrphanedLogBuffer = 100
     }
 

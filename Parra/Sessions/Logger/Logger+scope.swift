@@ -8,13 +8,11 @@
 
 import Foundation
 
-// TODO: These can probably be de-duplicated if the non-throwing variants wrap a call to the throwing variant in a do/catch and just log the error without rethrowing
-
 public extension Logger {
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
+    /// Creates a new scope with the provided name but does not immediately enter it. This scope can be used
+    /// to group multiple logs relevant to a given action. You can also automatically encapsulate a block of code
+    /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
     func scope(
         named name: String? = nil,
         _ function: String = #function
@@ -23,10 +21,9 @@ public extension Logger {
         return scope(named: name, nil, function)
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - extra: <#extra description#>
+    /// Creates a new scope with the provided name but does not immediately enter it. This scope can be used
+    /// to group multiple logs relevant to a given action. You can also automatically encapsulate a block of code
+    /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
     func scope(
         named name: String? = nil,
         _ extra: [String : Any]?,
@@ -48,11 +45,10 @@ public extension Logger {
         )
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - extra: <#extra description#>
-    ///   - block: <#block description#>
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: Logger) -> T,
@@ -61,11 +57,10 @@ public extension Logger {
         return withScope(named: name, nil, block, function)
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - extra: <#extra description#>
-    ///   - block: <#block description#>
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ extra: [String : Any]?,
@@ -77,11 +72,10 @@ public extension Logger {
         return block(scoped)
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - extra: <#extra description#>
-    ///   - block: <#block description#>
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: Logger) throws -> T,
@@ -90,11 +84,10 @@ public extension Logger {
         return try withScope(named: name, nil, block, function)
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - extra: <#extra description#>
-    ///   - block: <#block description#>
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ extra: [String : Any]?,
@@ -111,11 +104,10 @@ public extension Logger {
         }
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - extra: <#extra description#>
-    ///   - block: <#block description#>
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: Logger) async throws -> T,
@@ -124,11 +116,10 @@ public extension Logger {
         return try await withScope(named: name, nil, block, function)
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - extra: <#extra description#>
-    ///   - block: <#block description#>
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ extra: [String : Any]?,
@@ -145,11 +136,10 @@ public extension Logger {
         }
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - extra: <#extra description#>
-    ///   - block: <#block description#>
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: Logger) async -> T,
@@ -158,11 +148,10 @@ public extension Logger {
         return await withScope(named: name, nil, block, function)
     }
 
-    /// <#Description#>
-    /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - extra: <#extra description#>
-    ///   - block: <#block description#>
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ extra: [String : Any]?,
