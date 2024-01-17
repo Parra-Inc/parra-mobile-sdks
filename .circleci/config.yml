@@ -78,9 +78,9 @@ commands:
           command: |
             dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
             echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
-      - run:
-          name: Disable Simulator Hardware Keyboard
-          command: ./cli.sh ci --disable-simulator-hardware-keyboard
+      # - run:
+      #     name: Disable Simulator Hardware Keyboard
+      #     command: ./cli.sh ci --disable-simulator-hardware-keyboard
       # - ruby/install-deps: # Don't need to set bundler-version, ORB looks for Gemfile.lock by default.
       #     path: /tmp/workspace/vendor
       #     include-branch-in-cache-key: false
@@ -123,8 +123,7 @@ jobs:
       - store_artifacts:
           path: artifacts.zip
       - store_test_results:
-          # TODO: This is for build, no artifacts are generated for tests yet??
-          path: artifacts/junit-results.xml
+          path: build/unit-tests/derivedData/Logs/Test/*.xcresult
 
 workflows:
   run-unit-tests:
