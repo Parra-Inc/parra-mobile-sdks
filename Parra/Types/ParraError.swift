@@ -26,7 +26,13 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         switch self {
         case .message(let string):
             return string
-        case .generic(let string, _):
+        case .generic(let string, let error):
+            if let error {
+                let formattedError = LoggerFormatters.extractMessage(from: error)
+
+                return "\(string) Error: \(formattedError)"
+            }
+
             return string
         case .notInitialized:
             return "Parra has not been initialized. Call Parra.initialize() in applicationDidFinishLaunchingWithOptions."

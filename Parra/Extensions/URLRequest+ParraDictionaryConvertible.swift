@@ -32,7 +32,7 @@ extension URLRequest: ParraSanitizedDictionaryConvertible {
         }
 
         if let url {
-            params["url"] = url
+            params["url"] = url.absoluteString
         }
 
         if let httpBody {
