@@ -209,7 +209,8 @@ internal class SessionReader {
         let nextSessionContext = SessionStorageContext(
             session: ParraSession(
                 sessionId: nextSessionId,
-                createdAt: nextSessionStart
+                createdAt: nextSessionStart,
+                sdkVersion: Parra.libraryVersion()
             ),
             sessionPath: sessionPath,
             eventsPath: eventsPath

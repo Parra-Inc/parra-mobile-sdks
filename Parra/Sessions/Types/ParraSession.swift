@@ -15,6 +15,9 @@ internal struct ParraSession: Codable, Equatable {
     }
 
     internal let sessionId: String
+    /// The SDK version at the time of session creation. Stored to handle cases where a session is created
+    /// and written to disk, then eventually loaded after an app update installs a newer version of the SDK.
+    internal let sdkVersion: String
     internal let createdAt: Date
 
     internal private(set) var updatedAt: Date?
@@ -29,10 +32,12 @@ internal struct ParraSession: Codable, Equatable {
 
     internal init(
         sessionId: String,
-        createdAt: Date
+        createdAt: Date,
+        sdkVersion: String
     ) {
         self.sessionId = sessionId
         self.createdAt = createdAt
+        self.sdkVersion = sdkVersion
         self.updatedAt = nil
         self.endedAt = nil
         self.userProperties = [:]
