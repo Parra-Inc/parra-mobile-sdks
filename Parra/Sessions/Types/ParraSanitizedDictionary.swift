@@ -33,6 +33,7 @@ internal struct ParraSanitizedDictionary: ExpressibleByDictionaryLiteral {
 
     private static func sanitize(url: URL) -> URL {
         // TODO: This method and others like it...
+        // Maybe values of query params become ****
         return url
     }
 }

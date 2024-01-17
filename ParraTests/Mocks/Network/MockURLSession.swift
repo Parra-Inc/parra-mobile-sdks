@@ -160,7 +160,6 @@ internal class MockURLSession: URLSessionType {
         expectation.assertForOverFulfill = true
         expectation.expectedFulfillmentCount = times
 
-        // TODO: What if an entry for this endpoint already exists?
         expectedEndpoints[endpoint.slug] = (expectation, times, predicate, responder)
 
         return expectation

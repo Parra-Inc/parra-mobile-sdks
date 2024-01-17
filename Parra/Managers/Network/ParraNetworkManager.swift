@@ -121,7 +121,6 @@ internal actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor
                 throw ParraError.generic("Failed to create components for url: \(url)", nil)
             }
 
-            // TODO: Should this merge the query items dictionary with any existing query params on the url string?
             urlComponents.setQueryItems(with: queryItems)
             let credential = await dataManager.getCurrentCredential()
 

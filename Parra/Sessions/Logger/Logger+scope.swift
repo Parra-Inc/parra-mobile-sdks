@@ -163,5 +163,144 @@ public extension Logger {
         return await block(scoped)
     }
 
-    // TODO: static variants of these. All should also support returning from their blocks.
+    /// Creates a new scope with the provided name but does not immediately enter it. This scope can be used
+    /// to group multiple logs relevant to a given action. You can also automatically encapsulate a block of code
+    /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
+    static func scope(
+        named name: String? = nil,
+        _ function: String = #function
+    ) -> Logger {
+        // TODO: Maybe capture call site info here and use it to add scope entered/exited logs
+        return scope(named: name, nil, function)
+    }
+
+    /// Creates a new scope with the provided name but does not immediately enter it. This scope can be used
+    /// to group multiple logs relevant to a given action. You can also automatically encapsulate a block of code
+    /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
+    static func scope(
+        named name: String? = nil,
+        _ extra: [String : Any]?,
+        _ function: String = #function
+    ) -> Logger {
+        return Logger(category: name, extra: extra)
+            .scope(named: nil, function)
+    }
+
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
+    static func withScope<T>(
+        named name: String? = nil,
+        _ block: (_ logger: Logger) -> T,
+        _ function: String = #function
+    ) -> T {
+        return withScope(named: name, nil, block, function)
+    }
+
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
+    static func withScope<T>(
+        named name: String? = nil,
+        _ extra: [String : Any]?,
+        _ block: (_ logger: Logger) -> T,
+        _ function: String = #function
+    ) -> T {
+        let scoped = scope(named: name, extra, function)
+
+        return block(scoped)
+    }
+
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
+    static func withScope<T>(
+        named name: String? = nil,
+        _ block: (_ logger: Logger) throws -> T,
+        _ function: String = #function
+    ) throws -> T {
+        return try withScope(named: name, nil, block, function)
+    }
+
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
+    static func withScope<T>(
+        named name: String? = nil,
+        _ extra: [String : Any]?,
+        _ block: (_ logger: Logger) throws -> T,
+        _ function: String = #function
+    ) rethrows -> T {
+        let scoped = scope(named: name, extra, function)
+
+        do {
+            return try block(scoped)
+        } catch let error {
+            scoped.error(error)
+            throw error
+        }
+    }
+
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
+    static func withScope<T>(
+        named name: String? = nil,
+        _ block: (_ logger: Logger) async throws -> T,
+        _ function: String = #function
+    ) async throws -> T {
+        return try await withScope(named: name, nil, block, function)
+    }
+
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
+    static func withScope<T>(
+        named name: String? = nil,
+        _ extra: [String : Any]?,
+        _ block: (_ logger: Logger) async throws -> T,
+        _ function: String = #function
+    ) async rethrows -> T {
+        let scoped = scope(named: name, extra, function)
+
+        do {
+            return try await block(scoped)
+        } catch let error {
+            scoped.error(error)
+            throw error
+        }
+    }
+
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
+    static func withScope<T>(
+        named name: String? = nil,
+        _ block: (_ logger: Logger) async -> T,
+        _ function: String = #function
+    ) async -> T {
+        return await withScope(named: name, nil, block, function)
+    }
+
+    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
+    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
+    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
+    /// will be returned from the `withScope` function.
+    static func withScope<T>(
+        named name: String? = nil,
+        _ extra: [String : Any]?,
+        _ block: (_ logger: Logger) async -> T,
+        _ function: String = #function
+    ) async -> T {
+        let scoped = scope(named: name, extra, function)
+
+        return await block(scoped)
+    }
 }

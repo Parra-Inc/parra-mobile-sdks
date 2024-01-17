@@ -41,7 +41,7 @@ struct ParraFeedbackFormSelectFieldView: ParraFeedbackFormFieldView {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.gray, lineWidth: 1)
         )
-        .onChange(of: selectedType) { newValue in
+        .onChange(of: selectedType) { _, newValue in
             let valid = !(selectedType?.isEmpty ?? true)
             onFieldDataChanged(field.name, newValue, valid)
         }

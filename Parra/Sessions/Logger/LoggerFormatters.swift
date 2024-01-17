@@ -9,7 +9,7 @@
 import Foundation
 
 internal struct LoggerFormatters {
-    // TODO: Implement more cases
+    
     internal static func extractMessage(
         from error: Error
     ) -> (message: String, extra: [String : Any]?) {

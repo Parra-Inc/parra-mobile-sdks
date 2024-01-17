@@ -44,8 +44,6 @@ extension JSONEncoder {
     internal private(set) static var parraPrettyConsoleEncoder: JSONEncoder = {
         let encoder = JSONEncoder()
 
-        // TODO: Make this a function that accepts options for data/etc encoding strategies.
-
         encoder.dateEncodingStrategy = .iso8601
         encoder.keyEncodingStrategy = .useDefaultKeys
         encoder.dataEncodingStrategy = .custom({ _, encoder in

@@ -23,7 +23,7 @@ class ParraNetworkManagerTests: MockedParraTestCase {
     override func tearDown() async throws {
         mockNetworkManager = nil
 
-        try deleteBaseDirectory()
+        deleteBaseDirectory()
     }
 
     func testAuthenticatedRequestFailsWithoutAuthProvider() async throws {

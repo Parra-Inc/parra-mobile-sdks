@@ -41,7 +41,7 @@ struct ParraFeedbackFormTextFieldView: ParraFeedbackFormFieldView {
                 .onReceive(Just(text)) { newValue in
                     onFieldDataChanged(field.name, newValue, errorMessage == nil)
                 }
-                .onChange(of: text) { newValue in
+                .onChange(of: text) { _, newValue in
                     hasReceivedInput = true
                 }
             if #available(iOS 16.0, *) {

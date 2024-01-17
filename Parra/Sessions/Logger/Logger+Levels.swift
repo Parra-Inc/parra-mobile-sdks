@@ -20,9 +20,9 @@ import Foundation
 import Darwin
 
 // TODO: Make another set of overloads that allow OSLogMessage/interpolation to be passed instead of string
-// TODO: Should there be one more layer of wrapper around these to try to obscure all the tracking via default values?
-// TODO: Related to ^, could we make use of @inlinable to do this, or to avoid having to parse Parra
-// frames out of stack traces? Also maybe help with Xcode 15 console showing button to jump to wrong file.
+//       Should there be one more layer of wrapper around these to try to obscure all the tracking via default values?
+//       Related to ^, could we make use of @inlinable to do this, or to avoid having to parse Parra
+//       frames out of stack traces? Also maybe help with Xcode 15 console showing button to jump to wrong file.
 
 public extension Logger {
     @discardableResult

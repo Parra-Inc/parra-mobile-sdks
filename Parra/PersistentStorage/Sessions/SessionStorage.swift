@@ -6,10 +6,6 @@
 //  Copyright © 2022 Parra, Inc. All rights reserved.
 //
 
-// TODO: Need to address issue where the current system of storing the events file handle offset
-// always means there are new events to sync, because new events that should be synced are created
-// by completing a sync.
-
 import Foundation
 
 // Should be able to:

@@ -8,14 +8,10 @@
 import XCTest
 @testable import Parra
 
-// TODO: Audit usage of mockParra.sessionManager.writeEvent. Tests might be invalid
-// now that the result isn't awaited.
-
 @MainActor
 class ParraSyncManagerTests: MockedParraTestCase {
 
     override func tearDown() async throws {
-        // TODO: This should be moved to sync manager deinit and have its own test
         mockParra.syncManager.stopSyncTimer()
 
         if await mockParra.syncManager.syncState.isSyncing() {

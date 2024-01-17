@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-// TODO: Any logs used in here cause recursion in production
-// TODO: General refactor for the Parra logger to just be a wrapper around writing log events to the session manager.
+// NOTE: Any logs used in here cause recursion in production
 
 fileprivate let logger = Logger(bypassEventCreation: true, category: "Session manager")
 

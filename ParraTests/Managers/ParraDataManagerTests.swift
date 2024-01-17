@@ -19,8 +19,8 @@ class ParraDataManagerTests: MockedParraTestCase {
     }
 
     override func tearDown() async throws {
-        try deleteBaseDirectory()
-        
+        deleteBaseDirectory()
+
         parraDataManager = nil
     }
 

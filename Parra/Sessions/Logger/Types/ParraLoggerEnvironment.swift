@@ -8,8 +8,6 @@
 
 import Foundation
 
-// TODO: Do we need another option for `staging`?
-
 /// Which environment the Parra Logger is executing in. When in `debug`
 /// mode, logs are printed to the console. When in `production` mode, logs
 /// are uploaded to Parra with other session data. By default, the `automatic`
