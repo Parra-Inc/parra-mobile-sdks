@@ -27,9 +27,12 @@ extension JSONEncoder {
     internal private(set) static var spaceOptimizedEncoder: JSONEncoder = {
         let encoder = JSONEncoder()
 
+        encoder.keyEncodingStrategy = .convertToSnakeCase
         encoder.dateEncodingStrategy = .iso8601
 
 #if DEBUG
+        // When debugging we may be looking at these lines in an events file manually
+        // and if they're sorted by key, each line will have its data in the same order.
         encoder.outputFormatting = [.withoutEscapingSlashes, .sortedKeys]
 #else
         encoder.outputFormatting = [.withoutEscapingSlashes]
