@@ -66,10 +66,10 @@ commands:
       - run:
           name: Install Brew Dependencies
           command: ./cli.sh ci --install-brew-dependencies
-          # - run-command-and-persist-variables:
-          #     title: Preboot Simulator
-          #     command: ./cli/bin/preboot-simulator.sh
-          #     variables: PARRA_TEST_DEVICE_UDID
+      - run-command-and-persist-variables:
+          title: Preboot Simulator
+          command: ./cli/bin/preboot-simulator.sh
+          variables: PARRA_TEST_DEVICE_UDID
           # The time saved by running this in the background is negated by the increased time the
           # build-for-testing script will take if a simulator is mid booted when it starts.
           background: false
@@ -112,18 +112,13 @@ jobs:
       - run:
           name: Build for Testing
           command: ./cli.sh tests --build --log-level debug
-      # - macos/wait-until-simulator-booted:
-      #     device-udid-var: PARRA_TEST_DEVICE_UDID
+      - macos/wait-until-simulator-booted:
+          device-udid-var: PARRA_TEST_DEVICE_UDID
       - run:
           name: Run Unit Tests
           command: ./cli.sh tests --run --log-level debug
-      - run:
-          name: Zip Artifacts
-          command: zip -0 -r artifacts.zip artifacts/*
-      - store_artifacts:
-          path: artifacts.zip
       - store_test_results:
-          path: build/unit-tests/derivedData/Logs/Test/*.xcresult
+          path: build/unit-tests/derivedData/Logs/Test
 
 workflows:
   run-unit-tests:
