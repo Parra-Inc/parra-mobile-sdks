@@ -9,16 +9,61 @@
 import XCTest
 @testable import Parra
 
+fileprivate let logger = Logger(bypassEventCreation: true, category: "Parra Mock Base")
+
 @MainActor
 class ParraBaseMock: XCTestCase {
+    
+    override func setUp() async throws {
+        try await super.setUp()
+
+        try createBaseDirectory()
+    }
+
+    override func tearDown() async throws {
+        try await super.tearDown()
+
+        // Clean up data created by tests
+        deleteBaseDirectory()
+    }
+
     public var baseStorageDirectory: URL {
+        return directoryPath(for: testRun)
+    }
+
+    internal func directoryName(for testRun: XCTestRun) -> String {
+        return "Testing \(testRun.test.name)"
+    }
+
+    internal func directoryPath(for testRun: XCTestRun?) -> URL {
         let testDirectory: String = if let testRun {
-            "Testing \(testRun.test.name) at \(testRun.startDate?.ISO8601Format(.iso8601) ?? "unknown")"
+            directoryName(for: testRun)
         } else {
             "test-run-\(UUID().uuidString)"
         }
 
-        return ParraDataManager.Path.parraDirectory
+        return ParraDataManager.Base.applicationSupportDirectory
             .safeAppendDirectory(testDirectory)
+    }
+
+    internal func createBaseDirectory() throws {
+        deleteBaseDirectory()
+        try FileManager.default.safeCreateDirectory(at: baseStorageDirectory)
+    }
+
+    internal func deleteBaseDirectory() {
+        let fileManager = FileManager.default
+
+        do {
+            if try fileManager.safeDirectoryExists(at: baseStorageDirectory) {
+                if fileManager.isDeletableFile(atPath: baseStorageDirectory.safeNonEncodedPath()) {
+                    try fileManager.removeItem(at: baseStorageDirectory)
+                } else {
+                    logger.warn("File was not deletable!!! \(baseStorageDirectory.safeNonEncodedPath())")
+                }
+            }
+        } catch let error {
+            logger.error("Error removing base storage directory", error)
+        }
     }
 }

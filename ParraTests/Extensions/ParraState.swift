@@ -11,6 +11,7 @@ import Foundation
 
 extension ParraState {
     static let initialized = ParraState(initialized: true)
+    static let uninitialized = ParraState(initialized: false)
 }
 
 extension ParraConfigState {

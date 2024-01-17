@@ -13,6 +13,8 @@ class ParraNetworkManagerTests: MockedParraTestCase {
     private var mockNetworkManager: MockParraNetworkManager!
 
     override func setUp() async throws {
+        try createBaseDirectory()
+
         mockNetworkManager = await createMockNetworkManager {
             return UUID().uuidString
         }
@@ -20,6 +22,8 @@ class ParraNetworkManagerTests: MockedParraTestCase {
 
     override func tearDown() async throws {
         mockNetworkManager = nil
+
+        try deleteBaseDirectory()
     }
 
     func testAuthenticatedRequestFailsWithoutAuthProvider() async throws {

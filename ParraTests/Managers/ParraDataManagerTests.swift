@@ -13,10 +13,14 @@ class ParraDataManagerTests: MockedParraTestCase {
     var parraDataManager: ParraDataManager!
     
     override func setUp() async throws {
+        try createBaseDirectory()
+
         parraDataManager = createMockDataManager()
     }
 
     override func tearDown() async throws {
+        try deleteBaseDirectory()
+        
         parraDataManager = nil
     }
 

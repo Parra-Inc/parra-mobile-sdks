@@ -22,18 +22,17 @@ public extension Parra {
     ///  https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns
     @MainActor
     static func registerDevicePushToken(_ token: Data) {
-        getSharedInstance().registerDevicePushToken(token)
+        Task {
+            await getSharedInstance().registerDevicePushToken(token)
+        }
     }
 
-    @MainActor
-    internal func registerDevicePushToken(_ token: Data) {
+    internal func registerDevicePushToken(_ token: Data) async {
         logger.debug("Registering device push token")
 
         let tokenString = token.map { String(format: "%02.2hhx", $0) }.joined()
 
-        Task {
-            await registerDevicePushTokenString(tokenString)
-        }
+        await registerDevicePushTokenString(tokenString)
     }
 
     internal func registerDevicePushTokenString(
@@ -80,11 +79,12 @@ public extension Parra {
     /// occurs, set a flag and try to register again at a later time.
     @MainActor
     static func didFailToRegisterForRemoteNotifications(with error: Error) {
-        getSharedInstance().didFailToRegisterForRemoteNotifications(with: error)
+        Task {
+            await getSharedInstance().didFailToRegisterForRemoteNotifications(with: error)
+        }
     }
 
-    @MainActor
-    internal func didFailToRegisterForRemoteNotifications(with error: Error) {
+    internal func didFailToRegisterForRemoteNotifications(with error: Error) async {
         logger.error("Failed to register for remote notifications", error)
     }
 }

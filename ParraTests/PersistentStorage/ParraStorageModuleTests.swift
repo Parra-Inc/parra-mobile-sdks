@@ -10,17 +10,16 @@ import XCTest
 
 fileprivate typealias TestDataType = [String : String]
 
-class ParraStorageModuleTests: XCTestCase {
+class ParraStorageModuleTests: ParraBaseMock {
     var storageModules = [ParraStorageModule<String>]()
-    
-    override func setUpWithError() throws {        
-        try deleteDirectoriesInApplicationSupport()
+
+    override func setUp() async throws {
+        try await super.setUp()
+
         clearParraUserDefaultsSuite()
-        
+
         let folder = "storage_modules"
         let file = "storage_data"
-        
-        let baseStorageUrl = ParraDataManager.Path.parraDirectory
 
         storageModules = [
             .init(
@@ -30,7 +29,7 @@ class ParraStorageModuleTests: XCTestCase {
             ),
             .init(
                 dataStorageMedium: .fileSystem(
-                    baseUrl: baseStorageUrl,
+                    baseUrl: baseStorageDirectory,
                     folder: folder,
                     fileName: file,
                     storeItemsSeparately: true,
@@ -46,9 +45,10 @@ class ParraStorageModuleTests: XCTestCase {
             ),
         ]
     }
-    
-    override func tearDownWithError() throws {
-        try deleteDirectoriesInApplicationSupport()
+
+    override func tearDown() async throws {
+        try await super.tearDown()
+
         clearParraUserDefaultsSuite()
     }
 

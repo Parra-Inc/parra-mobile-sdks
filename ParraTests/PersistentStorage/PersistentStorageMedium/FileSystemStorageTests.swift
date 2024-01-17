@@ -8,27 +8,22 @@
 import XCTest
 @testable import Parra
 
-class FileSystemStorageTests: XCTestCase {
+class FileSystemStorageTests: ParraBaseMock {
 
     private let fileManager = FileManager.default
     private var fileSystemStorage: FileSystemStorage!
-    private let baseUrl = ParraDataManager.Base.applicationSupportDirectory.safeAppendDirectory("files")
     
-    override func setUpWithError() throws {
-        try deleteDirectoriesInApplicationSupport()
+    override func setUp() async throws {
+        try await super.setUp()
 
         fileSystemStorage = FileSystemStorage(
-            baseUrl: baseUrl,
+            baseUrl: baseStorageDirectory,
             jsonEncoder: JSONEncoder(),
             jsonDecoder: JSONDecoder(),
             fileManager: fileManager
         )
     }
     
-    override func tearDownWithError() throws {
-        try deleteDirectoriesInApplicationSupport()
-    }
-
     func testReadDoesNotExist() async throws {
         let file: [String : String]? = try await fileSystemStorage.read(
             name: "file.txt"
@@ -39,8 +34,8 @@ class FileSystemStorageTests: XCTestCase {
     
     func testReadFileDoesExist() async throws {
         let fileName = "file.txt"
-        let filePath = baseUrl.appendingPathComponent(fileName, isDirectory: false)
-        
+        let filePath = baseStorageDirectory.appendingPathComponent(fileName, isDirectory: false)
+
         let data: [String : String] = [
             "aKey": "aValue"
         ]
@@ -60,7 +55,7 @@ class FileSystemStorageTests: XCTestCase {
 
     func testWriteFileExists() async throws {
         let name = "file2.dat"
-        let filePath = baseUrl.appendingPathComponent(name, isDirectory: false)
+        let filePath = baseStorageDirectory.appendingPathComponent(name, isDirectory: false)
         let data: [String : String] = [
             "key": "val"
         ]
@@ -78,7 +73,7 @@ class FileSystemStorageTests: XCTestCase {
     
     func testDeleteFileDoesNotExist() async throws {
         let name = "file3.dat"
-        let filePath = baseUrl.appendingPathComponent(name, isDirectory: false)
+        let filePath = baseStorageDirectory.appendingPathComponent(name, isDirectory: false)
         let data: [String : String] = [
             "key": "val"
         ]

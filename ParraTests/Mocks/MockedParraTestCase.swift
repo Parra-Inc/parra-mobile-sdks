@@ -9,13 +9,13 @@
 import XCTest
 @testable import Parra
 
-fileprivate let logger = Logger(bypassEventCreation: true, category: "Parra Mock")
-
 @MainActor
 class MockedParraTestCase: ParraBaseMock {
     internal var mockParra: MockParra!
 
     override func setUp() async throws {
+        try await super.setUp()
+
         mockParra = await createMockParra(
             state: .initialized
         )
@@ -26,22 +26,12 @@ class MockedParraTestCase: ParraBaseMock {
             try await mockParra.tearDown()
         }
 
-        // Clean up data created by tests
-        let fileManager = FileManager.default
-        if try fileManager.safeDirectoryExists(at: baseStorageDirectory) {
-            do {
-                try fileManager.removeItem(at: baseStorageDirectory)
-            } catch let error {
-                logger.error("Error removing base storage directory", error)
-                
-                throw error
-            }
-        }
-
         mockParra = nil
+
+        try await super.tearDown()
     }
 
-    func createMockParra(
+    internal func createMockParra(
         state: ParraState = ParraState(),
         tenantId: String = UUID().uuidString,
         applicationId: String = UUID().uuidString
@@ -75,7 +65,7 @@ class MockedParraTestCase: ParraBaseMock {
             networkManager: mockNetworkManager.networkManager,
             sessionManager: sessionManager,
             notificationCenter: notificationCenter,
-            syncDelay: 5.0
+            syncDelay: 0.25
         )
 
         Logger.loggerBackend = sessionManager

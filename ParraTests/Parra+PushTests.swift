@@ -12,14 +12,24 @@ import Foundation
 
 
 fileprivate let testBase64TokenString = "gHdLonk9TsQIRKG8Jhagnb1+ehF+g/qXyfPjb2O23qH4PlDAdS+m8crD0UXgH/oQm2ycdmv3Rnjt7HEYrdBM4E0g+a8HDrKFitM2RHBYPVg="
-fileprivate let testTokenData = Data(base64Encoded: testBase64TokenString)!
-fileprivate let testTokenString = testTokenData.map { String(format: "%02.2hhx", $0) }.joined()
+fileprivate let testToken = Data(base64Encoded: testBase64TokenString)!
+fileprivate let testTokenString = testToken.map { String(format: "%02.2hhx", $0) }.joined()
 
-@MainActor
 class ParraPushTests: MockedParraTestCase {
     override func setUp() async throws {
+        try createBaseDirectory()
+
         // Setup without initialization
-        mockParra = await createMockParra()
+        mockParra = await createMockParra(state: .uninitialized)
+    }
+
+    override func tearDown() async throws {
+        if let mockParra {
+            try await mockParra.tearDown()
+            await mockParra.parra.state.deinitialize()
+        }
+
+        try await super.tearDown()
     }
 
     func testRegisterDataTriggersUpdate() async {
@@ -29,13 +39,13 @@ class ParraPushTests: MockedParraTestCase {
             of: .postPushTokens(tenantId: mockParra.tenantId)
         )
 
-        mockParra.parra.registerDevicePushToken(testTokenData)
+        await mockParra.parra.registerDevicePushToken(testToken)
 
         await fulfillment(of: [pushUploadExpectation])
     }
 
     func testCachesPushTokenIfSdkNotInitialized() async throws {
-        await mockParra.parra.registerDevicePushTokenString(testTokenString)
+        await mockParra.parra.registerDevicePushToken(testToken)
 
         let cachedToken = await mockParra.parra.state.getCachedTemporaryPushToken()
         XCTAssertEqual(cachedToken, testTokenString)
@@ -43,7 +53,7 @@ class ParraPushTests: MockedParraTestCase {
 
     func testRegistrationAfterInitializationUploadsToken() async {
         await mockParra.parra.initialize(authProvider: .mockPublicKey(mockParra))
-        await mockParra.parra.registerDevicePushTokenString(testTokenString)
+        await mockParra.parra.registerDevicePushToken(testToken)
 
         let cachedToken = await mockParra.parra.state.getCachedTemporaryPushToken()
         XCTAssertNil(cachedToken)
@@ -58,7 +68,7 @@ class ParraPushTests: MockedParraTestCase {
         )
 
         await mockParra.parra.initialize(authProvider: .mockPublicKey(mockParra))
-        await mockParra.parra.registerDevicePushTokenString(testTokenString)
+        await mockParra.parra.registerDevicePushToken(testToken)
 
         await fulfillment(of: [pushUploadExpectation])
 
@@ -67,7 +77,7 @@ class ParraPushTests: MockedParraTestCase {
     }
 
     func testInitializationAfterRegistrationClearsToken() async {
-        await mockParra.parra.registerDevicePushTokenString(testTokenString)
+        await mockParra.parra.registerDevicePushToken(testToken)
 
         let cachedToken = await mockParra.parra.state.getCachedTemporaryPushToken()
         XCTAssertNotNil(cachedToken)
@@ -78,10 +88,12 @@ class ParraPushTests: MockedParraTestCase {
         XCTAssertNil(cachedTokenAfter)
     }
 
-    func testAcceptsRegistrationFailure() async {
+    func testAcceptsRegistrationFailure() async throws {
         let error = ParraError.generic("made up error", nil)
         // no op for now
-        mockParra.parra.didFailToRegisterForRemoteNotifications(with: error)
+        await mockParra.parra.didFailToRegisterForRemoteNotifications(with: error)
+
+        XCTAssertTrue(true)
     }
 }
 
