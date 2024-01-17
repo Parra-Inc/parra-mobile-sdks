@@ -100,7 +100,9 @@ extension ParraSessionManager {
                 // TODO: Should this be JSON?
                 let data = try JSONEncoder.parraPrettyConsoleEncoder.encode(AnyCodable(extra))
 
-                return String(data: data, encoding: .utf8)
+                // NSString is necessary to prevent additional escapes of quotations from being
+                // added in the Xcode console.
+                return NSString(data: data, encoding: NSUTF8StringEncoding) as String?
             } catch let error {
                 logger.error("Error formatting extra dictionary with style 'pretty'", error)
 

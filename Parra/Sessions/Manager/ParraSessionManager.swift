@@ -234,7 +234,8 @@ internal class ParraSessionManager {
         let writeToConsole = { [self] in
             writeEventToConsoleSync(
                 wrappedEvent: wrappedEvent,
-                with: loggerOptions.consoleFormatOptions
+                with: loggerOptions.consoleFormatOptions,
+                callSiteContext: callSiteContext
             )
         }
 

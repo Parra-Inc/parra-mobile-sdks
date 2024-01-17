@@ -28,4 +28,13 @@ internal enum ParraWrappedEvent {
     case logEvent(
         event: ParraLogEvent
     )
+
+    var isInternal: Bool {
+        switch self {
+        case .internalEvent:
+            return true
+        default:
+            return false
+        }
+    }
 }

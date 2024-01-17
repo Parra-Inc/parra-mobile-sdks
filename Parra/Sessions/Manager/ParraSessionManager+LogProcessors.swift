@@ -20,19 +20,29 @@ extension ParraSessionManager {
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
     internal func writeEventToConsoleSync(
         wrappedEvent: ParraWrappedEvent,
-        with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
+        with consoleFormatOptions: [ParraLoggerConsoleFormatOption],
+        callSiteContext: ParraLoggerCallSiteContext
     ) {
         if case let .logEvent(event) = wrappedEvent {
             writeLogEventToConsoleSync(
                 processedLogData: event.logData,
                 with: consoleFormatOptions
             )
-        } else {
-            writeGenericEventToConsoleSync(
-                wrappedEvent: wrappedEvent,
-                with: consoleFormatOptions
-            )
+
+            return
         }
+
+        let (name, combinedExtra) = ParraSessionEvent.normalizedEventData(
+            from: wrappedEvent
+        )
+
+        writeSessionEventToConsole(
+            named: name,
+            extra: combinedExtra,
+            isInternalEvent: wrappedEvent.isInternal,
+            with: consoleFormatOptions,
+            callSiteContext: callSiteContext
+        )
     }
 
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
@@ -40,52 +50,14 @@ extension ParraSessionManager {
         processedLogData: ParraLogProcessedData,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
-        let messageSegments = consoleFormatOptions.compactMap { option in
-            switch option {
-            case .printMessage(let leftPad, let rightPad):
-                return paddedIfPresent(
-                    string: processedLogData.message,
-                    leftPad: leftPad,
-                    rightPad: rightPad
-                )
-            case .printTimestamps(let style, let leftPad, let rightPad):
-                return paddedIfPresent(
-                    string: format(
-                        timestamp: processedLogData.timestamp,
-                        with: style
-                    ),
-                    leftPad: leftPad,
-                    rightPad: rightPad
-                )
-            case .printLevel(let style, let leftPad, let rightPad):
-                return paddedIfPresent(
-                    string: format(
-                        level: processedLogData.level,
-                        with: style
-                    ),
-                    leftPad: leftPad,
-                    rightPad: rightPad
-                )
-            case .printCallSite(let options, let leftPad, let rightPad):
-                return paddedIfPresent(
-                    string: format(
-                        callSite: processedLogData.callSiteContext,
-                        with: options
-                    ),
-                    leftPad: leftPad,
-                    rightPad: rightPad
-                )
-            case .printExtras(let style, let leftPad, let rightPad):
-                return paddedIfPresent(
-                    string: format(
-                        extra: processedLogData.extra,
-                        with: style
-                    ),
-                    leftPad: leftPad,
-                    rightPad: rightPad
-                )
-            }
-        }
+        let messageSegments = createMessageSegments(
+            for: consoleFormatOptions,
+            message: processedLogData.message,
+            timestamp: processedLogData.timestamp,
+            level: processedLogData.level,
+            extra: processedLogData.extra,
+            callSiteContext: processedLogData.callSiteContext
+        )
 
         var message = messageSegments.joined().trimmingCharacters(
             in: .whitespacesAndNewlines
@@ -113,11 +85,102 @@ extension ParraSessionManager {
         )
     }
 
-    /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
-    internal func writeGenericEventToConsoleSync(
-        wrappedEvent: ParraWrappedEvent,
-        with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
+    /// Events that are specifically not log events. Anything that happened during the session. User actions,
+    /// async system events, etc, but not logs.
+    private func writeSessionEventToConsole(
+        named name: String,
+        extra: [String : Any],
+        isInternalEvent: Bool,
+        with consoleFormatOptions: [ParraLoggerConsoleFormatOption],
+        callSiteContext: ParraLoggerCallSiteContext
     ) {
-        print(wrappedEvent)
+        let messageSegments = createMessageSegments(
+            for: consoleFormatOptions,
+            message: name,
+            timestamp: .now,
+            level: nil,
+            // Internal events shouldn't reveal extra data in console logs.
+            extra: isInternalEvent ? nil : extra,
+            callSiteContext: callSiteContext
+        )
+
+        let subsystem = "Parra Event"
+        let category = isInternalEvent ? "Internal" : "User Generated"
+        let prefix = "✨ [\(subsystem)][\(category)]"
+        let message = messageSegments.joined().trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+
+        let systemLogger = os.Logger(
+            subsystem: subsystem,
+            category: category
+        )
+
+        systemLogger.log(
+            level: .default,
+            """
+            \(prefix)\(message)
+            """
+        )
+    }
+
+    private func createMessageSegments(
+        for consoleFormatOptions: [ParraLoggerConsoleFormatOption],
+        message: String,
+        timestamp: Date,
+        level: ParraLogLevel?,
+        extra: [String : Any]?,
+        callSiteContext: ParraLoggerCallSiteContext
+    ) -> [String] {
+        return consoleFormatOptions.compactMap { option in
+            switch option {
+            case .printMessage(let leftPad, let rightPad):
+                return paddedIfPresent(
+                    string: message,
+                    leftPad: leftPad,
+                    rightPad: rightPad
+                )
+            case .printTimestamps(let style, let leftPad, let rightPad):
+                return paddedIfPresent(
+                    string: format(
+                        timestamp: timestamp,
+                        with: style
+                    ),
+                    leftPad: leftPad,
+                    rightPad: rightPad
+                )
+            case .printLevel(let style, let leftPad, let rightPad):
+                if let level {
+                    return paddedIfPresent(
+                        string: format(
+                            level: level,
+                            with: style
+                        ),
+                        leftPad: leftPad,
+                        rightPad: rightPad
+                    )
+                }
+
+                return nil
+            case .printCallSite(let options, let leftPad, let rightPad):
+                return paddedIfPresent(
+                    string: format(
+                        callSite: callSiteContext,
+                        with: options
+                    ),
+                    leftPad: leftPad,
+                    rightPad: rightPad
+                )
+            case .printExtras(let style, let leftPad, let rightPad):
+                return paddedIfPresent(
+                    string: format(
+                        extra: extra,
+                        with: style
+                    ),
+                    leftPad: leftPad,
+                    rightPad: rightPad
+                )
+            }
+        }
     }
 }

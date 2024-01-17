@@ -26,6 +26,73 @@ internal struct ParraSessionEvent: Codable {
         self.metadata = metadata
     }
 
+    internal static func normalizedEventData(
+        from wrappedEvent: ParraWrappedEvent
+    ) -> (name: String, extra: [String : Any]) {
+        let name: String
+        let combinedExtra: [String : Any]
+
+        switch wrappedEvent {
+        case .event(let event, let extra):
+            name = event.name
+
+            if let extra {
+                combinedExtra = extra
+            } else {
+                combinedExtra = [:]
+            }
+        case .dataEvent(let event, let extra):
+            name = event.name
+
+            if let extra {
+                combinedExtra = event.extra.merging(extra) { $1 }
+            } else {
+                combinedExtra = event.extra
+            }
+        case .internalEvent(let event, let extra):
+            name = event.name
+
+            if let extra {
+                combinedExtra = event.extra.merging(extra) { $1 }
+            } else {
+                combinedExtra = event.extra
+            }
+        case .logEvent(let event):
+            name = event.name
+            combinedExtra = event.extra
+        }
+
+        return (name, combinedExtra)
+    }
+
+    internal static func normalizedEventContextData(
+        from wrappedEvent: ParraWrappedEvent
+    ) -> (isClientGenerated: Bool, syncPriority: ParraSessionEventSyncPriority) {
+
+        guard case let .logEvent(event) = wrappedEvent else {
+            return (false, .low)
+        }
+
+        // It's possible that this will need to be updated to be more clever in the future
+        // but for now, we consider an event to be generated from within Parra if the
+        // current module at the call site is the name of the Parra module.
+        let isClientGenerated = !LoggerHelpers.isFileIdInternal(
+            fileId: event.logData.callSiteContext.fileId
+        )
+
+        let level = event.logData.level
+
+        let syncPriority: ParraSessionEventSyncPriority = if case .error = level {
+            .high
+        } else if case .fatal = level {
+            .critical
+        } else {
+            .low
+        }
+
+        return (isClientGenerated, syncPriority)
+    }
+
     internal static func sessionEventFromEventWrapper(
         wrappedEvent: ParraWrappedEvent,
         callSiteContext: ParraLoggerCallSiteContext
@@ -33,53 +100,8 @@ internal struct ParraSessionEvent: Codable {
         event: ParraSessionEvent,
         context: ParraSessionEventContext
     ) {
-        let name: String
-        var combinedExtra: [String : Any] = [:]
-
-        var isClientGenerated = false
-        var syncPriority: ParraSessionEventSyncPriority = .low
-
-        switch wrappedEvent {
-        case .event(let event, let extra):
-            name = event.name
-
-            if let extra {
-                combinedExtra.merge(extra) { $1 }
-            }
-        case .dataEvent(let event, let extra):
-            name = event.name
-
-            if let extra {
-                combinedExtra.merge(event.extra.merging(extra) { $1 }) { $1 }
-            } else {
-                combinedExtra.merge(event.extra) { $1 }
-            }
-        case .internalEvent(let event, let extra):
-            name = event.name
-
-            if let extra {
-                combinedExtra.merge(event.extra.merging(extra) { $1 }) { $1 }
-            } else {
-                combinedExtra.merge(event.extra) { $1 }
-            }
-        case .logEvent(let event):
-            name = event.name
-            combinedExtra.merge(event.extra) { $1 }
-
-            // It's possible that this will need to be updated to be more clever in the future
-            // but for now, we consider an event to be generated from within Parra if the
-            // current module at the call site is the name of the Parra module.
-            isClientGenerated = !LoggerHelpers.isFileIdInternal(
-                fileId: event.logData.callSiteContext.fileId
-            )
-
-            let level = event.logData.level
-            if case .error = level {
-                syncPriority = .high
-            } else if case .fatal = level {
-                syncPriority = .critical
-            }
-        }
+        let (name, combinedExtra) = normalizedEventData(from: wrappedEvent)
+        let (isClientGenerated, syncPriority) = normalizedEventContextData(from: wrappedEvent)
 
         return (
             event: ParraSessionEvent(

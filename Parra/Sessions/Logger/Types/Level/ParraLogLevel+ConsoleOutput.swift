@@ -33,7 +33,7 @@ internal extension ParraLogLevel {
         case .debug:
             return "🔵"
         case .info:
-            return "⚪"
+            return "⚪️"
         case .warn:
             return "🟡"
         case .error:
