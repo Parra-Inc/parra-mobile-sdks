@@ -50,13 +50,17 @@ internal struct ParraSessionEvent: Codable {
                 combinedExtra = event.extra
             }
         case .internalEvent(let event, let extra):
-            name = event.name
+            name = event.displayName
 
-            if let extra {
-                combinedExtra = event.extra.merging(extra) { $1 }
+            var merged = if let extra {
+                event.extra.merging(extra) { $1 }
             } else {
-                combinedExtra = event.extra
+                event.extra
             }
+
+            merged["name"] = event.name
+
+            combinedExtra = merged
         case .logEvent(let event):
             name = event.name
             combinedExtra = event.extra

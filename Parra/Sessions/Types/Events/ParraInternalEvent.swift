@@ -72,4 +72,50 @@ internal enum ParraInternalEvent: ParraDataEvent {
             return [:]
         }
     }
+
+    @usableFromInline
+    var displayName: String {
+        switch self {
+        case .appStateChanged:
+            return "app state changed to: \(UIApplication.shared.applicationState.loggerDescription)"
+        case .batteryLevelChanged:
+            return "battery level changed to: \(UIDevice.current.batteryLevel.formatted(.percent))"
+        case .batteryStateChanged:
+            return "battery state changed to: \(UIDevice.current.batteryState.loggerDescription)"
+        case .diskSpaceLow:
+            return "disk space is low"
+        case .httpRequest(let request, _):
+            guard let method = request.httpMethod,
+                    let url = request.url,
+                    let scheme = url.scheme else {
+
+                return "HTTP request"
+            }
+
+            let path = url.pathComponents.dropFirst(1).joined(separator: "/")
+            var endpoint = ""
+            if let host = url.host(percentEncoded: false) {
+                endpoint = "\(scheme)://\(host)/"
+            }
+            endpoint.append(path)
+
+            return "\(method.uppercased()) \(endpoint)"
+        case .keyboardDidHide:
+            return "keyboard did hide"
+        case .keyboardDidShow:
+            return "keyboard did show"
+        case .memoryWarning:
+            return "received memory warning"
+        case .orientationChanged:
+            return "orientation changed to: \(UIDevice.current.orientation.loggerDescription)"
+        case .powerStateChanged:
+            return "power state changed to: \(ProcessInfo.processInfo.powerState.loggerDescription)"
+        case .screenshotTaken:
+            return "screenshot taken"
+        case .significantTimeChange:
+            return "significant time change"
+        case .thermalStateChanged:
+            return "thermal state changed to: \(ProcessInfo.processInfo.thermalState.loggerDescription)"
+        }
+    }
 }
