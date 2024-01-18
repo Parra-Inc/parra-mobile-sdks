@@ -18,7 +18,7 @@ class FileManagerTests: MockedParraTestCase {
     }
 
     func testSafeCreateWhenDirectoryDoesNotExist() throws {
-        let dirPath = baseStorageDirectory.safeAppendDirectory("testDir")
+        let dirPath = baseStorageDirectory.appendDirectory("testDir")
 
         try fileManager.safeCreateDirectory(at: dirPath)
 
@@ -33,7 +33,7 @@ class FileManagerTests: MockedParraTestCase {
     }
     
     func testSafeCreateWhenDirectoryExists() throws {
-        let dirPath = baseStorageDirectory.safeAppendDirectory("testDir")
+        let dirPath = baseStorageDirectory.appendDirectory("testDir")
 
         try fileManager.createDirectory(
             at: dirPath,
@@ -53,7 +53,7 @@ class FileManagerTests: MockedParraTestCase {
     }
     
     func testSafeCreateWhenFileExistsAtDirectoryPath() throws {
-        let filePath = baseStorageDirectory.safeAppendPathComponent("testFile.txt")
+        let filePath = baseStorageDirectory.appendFilename("testFile.txt")
 
         fileManager.createFile(atPath: filePath.path, contents: nil)
 

@@ -39,7 +39,7 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     }
     
     internal func read<T>(name: String) async throws -> T? where T: Codable {
-        let file = baseUrl.safeAppendPathComponent(name)
+        let file = baseUrl.appendFilename(name)
         if let data = try? Data(contentsOf: file) {
             return try jsonDecoder.decode(T.self, from: data)
         }
@@ -49,7 +49,7 @@ internal actor FileSystemStorage: PersistentStorageMedium {
 
     internal func readAllInDirectory<T>() async -> [String : T] where T: Codable {
         guard let enumerator = fileManager.enumerator(
-            atPath: baseUrl.safeNonEncodedPath()
+            atPath: baseUrl.nonEncodedPath()
         ) else {
             return [:]
         }
@@ -63,10 +63,10 @@ internal actor FileSystemStorage: PersistentStorageMedium {
 
             logger.trace("readAllInDirectory reading file: \(fileName)")
 
-            let path = baseUrl.safeAppendPathComponent(fileName)
+            let path = baseUrl.appendFilename(fileName)
             var isDirectory: ObjCBool = false
             let exists = fileManager.fileExists(
-                atPath: path.safeNonEncodedPath(),
+                atPath: path.nonEncodedPath(),
                 isDirectory: &isDirectory
             )
 
@@ -97,14 +97,14 @@ internal actor FileSystemStorage: PersistentStorageMedium {
     }
     
     internal func write<T>(name: String, value: T) async throws where T: Codable {
-        let file = baseUrl.safeAppendPathComponent(name)
+        let file = baseUrl.appendFilename(name)
         let data = try jsonEncoder.encode(value)
         
         try data.write(to: file, options: .atomic)
     }
     
     internal func delete(name: String) async throws {
-        let url = baseUrl.safeAppendPathComponent(name)
+        let url = baseUrl.appendFilename(name)
 
         if try fileManager.safeFileExists(at: url) {
             try fileManager.removeItem(at: url)

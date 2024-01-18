@@ -53,7 +53,7 @@ internal extension FileManager {
             }
 
             let success = createFile(
-                atPath: url.safeNonEncodedPath(),
+                atPath: url.nonEncodedPath(),
                 contents: contents,
                 attributes: attributes
             )
@@ -71,7 +71,7 @@ internal extension FileManager {
         var isDirectory: ObjCBool = false
 
         let exists = fileExists(
-            atPath: url.safeNonEncodedPath(),
+            atPath: url.nonEncodedPath(),
             isDirectory: &isDirectory
         )
 

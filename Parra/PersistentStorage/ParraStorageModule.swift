@@ -48,7 +48,7 @@ internal actor ParraStorageModule<DataType: Codable> {
             self.persistentStorage = nil
         case .fileSystem(let baseUrl, let folder, let fileName, _, let fileManager):
             let fileSystemStorage = FileSystemStorage(
-                baseUrl: baseUrl.safeAppendDirectory(folder),
+                baseUrl: baseUrl.appendDirectory(folder),
                 jsonEncoder: jsonEncoder,
                 jsonDecoder: jsonDecoder,
                 fileManager: fileManager

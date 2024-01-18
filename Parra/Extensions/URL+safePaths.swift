@@ -9,65 +9,35 @@
 import Foundation
 
 internal extension URL {
-    func safeAppendDirectory(_ dir: String) -> URL {
-        if #available(iOS 16.0, *) {
-            return appending(path: dir, directoryHint: .isDirectory)
-        } else {
-            return appendingPathComponent(dir, isDirectory: true)
-        }
-    }
-
-    func safeAppendPathComponent(_ pathComponent: String) -> URL {
-        if #available(iOS 16.0, *) {
-            return appending(component: pathComponent, directoryHint: .notDirectory)
-        } else {
-            return appendingPathComponent(pathComponent, isDirectory: false)
-        }
-    }
-
-    func safeNonEncodedPath() -> String {
-        if #available(iOS 16.0, *) {
-            return path(percentEncoded: false)
-        } else {
-            return path
-        }
-    }
-
-    static func safeUrlFromPath(
-        path: String,
-        relativeTo base: URL
-    ) -> URL {
-        if #available(iOS 16.0, *) {
-            return URL(
-                filePath: path,
-                directoryHint: .inferFromPath,
-                relativeTo: base
-            )
-        }
-
-        return URL(
-            fileURLWithPath: path,
-            relativeTo: base
+    func appendDirectory(_ directory: String) -> URL {
+        return appending(
+            component: directory,
+            directoryHint: .isDirectory
         )
     }
 
+    func appendFilename(_ fileName: String) -> URL {
+        return appending(
+            component: fileName,
+            directoryHint: .notDirectory
+        )
+    }
+
+    func nonEncodedPath() -> String {
+        return path(percentEncoded: false)
+    }
+
+    /// Should be used anywhere that a file paths from the target device may be stored and/or uploaded.
+    /// This is a sanitization technique to prevent data like usernames or other sensitive information that might
+    /// be in an absolute path from being stored.
     func privateRelativePath() -> String {
         guard isFileURL else {
             return absoluteString
         }
 
-        let prefix = ParraDataManager.Base.homeUrl.safeNonEncodedPath()
-        let base = safeNonEncodedPath()
-
-        let path: String = if #available(iOS 16.0, *) {
-            String(base.trimmingPrefix(prefix))
-        } else {
-            if base.hasPrefix(prefix) {
-                String(base.dropFirst(prefix.count))
-            } else {
-                lastComponents()
-            }
-        }
+        let prefix = ParraDataManager.Base.homeUrl.nonEncodedPath()
+        let base = nonEncodedPath()
+        let path = String(base.trimmingPrefix(prefix))
 
         return "~/\(path)"
     }

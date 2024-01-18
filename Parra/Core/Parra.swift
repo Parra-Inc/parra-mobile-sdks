@@ -195,8 +195,8 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         )
 
         let sessionStorageUrl = configuration.storageConfiguration.baseDirectory
-            .safeAppendDirectory(configuration.storageConfiguration.storageDirectoryName)
-            .safeAppendDirectory("sessions")
+            .appendDirectory(configuration.storageConfiguration.storageDirectoryName)
+            .appendDirectory("sessions")
 
         let notificationCenter = ParraNotificationCenter()
 

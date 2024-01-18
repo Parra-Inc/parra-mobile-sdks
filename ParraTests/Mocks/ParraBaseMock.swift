@@ -43,7 +43,7 @@ class ParraBaseMock: XCTestCase {
         }
 
         return ParraDataManager.Base.applicationSupportDirectory
-            .safeAppendDirectory(testDirectory)
+            .appendDirectory(testDirectory)
     }
 
     internal func createBaseDirectory() throws {
@@ -56,10 +56,10 @@ class ParraBaseMock: XCTestCase {
 
         do {
             if try fileManager.safeDirectoryExists(at: baseStorageDirectory) {
-                if fileManager.isDeletableFile(atPath: baseStorageDirectory.safeNonEncodedPath()) {
+                if fileManager.isDeletableFile(atPath: baseStorageDirectory.nonEncodedPath()) {
                     try fileManager.removeItem(at: baseStorageDirectory)
                 } else {
-                    logger.warn("File was not deletable!!! \(baseStorageDirectory.safeNonEncodedPath())")
+                    logger.warn("File was not deletable!!! \(baseStorageDirectory.nonEncodedPath())")
                 }
             }
         } catch let error {

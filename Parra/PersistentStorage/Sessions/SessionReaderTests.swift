@@ -332,7 +332,7 @@ final class SessionReaderTests: MockedParraTestCase {
         XCTAssertFalse(try fileManager.safeDirectoryExists(at: sessionDir))
 
         let markedDir = "_\(sessionDir.lastPathComponent)"
-        let newSessionDir = sessionDir.deletingLastPathComponent().safeAppendPathComponent(markedDir)
+        let newSessionDir = sessionDir.deletingLastPathComponent().appendFilename(markedDir)
 
         XCTAssertTrue(try fileManager.safeDirectoryExists(at: newSessionDir))
     }
@@ -354,7 +354,7 @@ final class SessionReaderTests: MockedParraTestCase {
 
             sessionDirectory = sessionDirectory
                 .deletingLastPathComponent()
-                .safeAppendPathComponent(last)
+                .appendFilename(last)
         }
 
         if withoutPackageExt {

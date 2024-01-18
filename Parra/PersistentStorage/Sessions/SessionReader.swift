@@ -271,7 +271,7 @@ internal class SessionReader {
         // TODO: Use FileWrapper to make it so we can actually open these as bundles.
         // Note: Using a file wrapper may require changing the file enumerator to filter by isPackage
         // instead of isDirectory.
-        return baseDirectory.safeAppendDirectory("\(id).\(ParraSession.Constant.packageExtension)")
+        return baseDirectory.appendDirectory("\(id).\(ParraSession.Constant.packageExtension)")
     }
 
     internal static func sessionPaths(
@@ -290,8 +290,8 @@ internal class SessionReader {
 #endif
 
         return (
-            sessionPath: sessionDirectory.safeAppendPathComponent(sessionFileName),
-            eventsPath: sessionDirectory.safeAppendPathComponent(eventsFileName)
+            sessionPath: sessionDirectory.appendFilename(sessionFileName),
+            eventsPath: sessionDirectory.appendFilename(eventsFileName)
         )
     }
 }

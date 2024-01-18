@@ -20,12 +20,9 @@ extension URLRequest: ParraSanitizedDictionaryConvertible {
             "network_service_type": networkServiceType.rawValue,
             "attribution": attribution.description,
             "assumes_http3_capable": assumesHTTP3Capable,
-            "cache_policy": cachePolicy.description
+            "cache_policy": cachePolicy.description,
+            "requires_dns_sec_validation": requiresDNSSECValidation
         ]
-
-        if #available(iOS 16.1, *) {
-            params["requires_dns_sec_validation"] = requiresDNSSECValidation
-        }
 
         if let httpMethod {
             params["method"] = httpMethod

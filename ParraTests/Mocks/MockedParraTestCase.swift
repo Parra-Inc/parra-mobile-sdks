@@ -119,8 +119,8 @@ class MockedParraTestCase: ParraBaseMock {
         )
 
         let sessionStorageUrl = baseStorageDirectory
-            .safeAppendPathComponent(storageDirectoryName)
-            .safeAppendPathComponent("sessions")
+            .appendFilename(storageDirectoryName)
+            .appendFilename("sessions")
 
         let credentialStorage = CredentialStorage(
             storageModule: credentialStorageModule
