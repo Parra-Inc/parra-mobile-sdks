@@ -9,103 +9,118 @@ import XCTest
 @testable import Parra
 
 @MainActor
-class ParraAuthenticationTests: XCTestCase {
-
-    @MainActor
+class ParraAuthenticationTests: MockedParraTestCase {
     override func setUp() async throws {
-        await ParraGlobalState.shared.deinitialize()
-
-        await configureWithRequestResolverOnly { request in
-            return (EmptyJsonObjectData, createTestResponse(route: "whatever"), nil)
-        }
+        // Setup without initialization
+        mockParra = await createMockParra()
     }
-    
+
     @MainActor
     func testInitWithDefaultAuthProvider() async throws {
         let token = UUID().uuidString
-        let startAuthProvider = await Parra.shared.networkManager.getAuthenticationProvider()
+        let startAuthProvider = await mockParra.parra.networkManager.getAuthenticationProvider()
         XCTAssertNil(startAuthProvider)
 
-        await Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
-            return token
-        }))
+        await mockParra.parra.initialize(
+            options: [],
+            authProvider: .default(
+                tenantId: mockParra.tenantId,
+                applicationId: mockParra.applicationId,
+                authProvider: {
+                    return token
+                }
+            )
+        )
 
-        let endAuthProvider = await Parra.shared.networkManager.getAuthenticationProvider()
+        let endAuthProvider = await mockParra.parra.networkManager.getAuthenticationProvider()
         XCTAssertNotNil(endAuthProvider)
     }
 
-    @MainActor
     func testInitWithPublicKeyAuthProvider() async throws {
-        let dataManager = ParraDataManager()
-        let tenantId = UUID().uuidString
-        let apiKeyId = UUID().uuidString
-
-        let notificationCenter = ParraNotificationCenter.default
-
-        let route = "tenants/\(tenantId)/issuers/public/auth/token"
-        let networkManager = ParraNetworkManager(
-            dataManager: dataManager,
-            urlSession: MockURLSession { request in
-                let data = try! JSONEncoder().encode(ParraCredential(token: UUID().uuidString))
-                return (data, createTestResponse(route: route), nil)
-            }
-        )
-
-        let sessionManager = ParraSessionManager(
-            dataManager: dataManager,
-            networkManager: networkManager
-        )
-
-        let syncManager = ParraSyncManager(
-            networkManager: networkManager,
-            sessionManager: sessionManager,
-            notificationCenter: notificationCenter
-        )
-
-        Parra.shared = Parra(
-            dataManager: dataManager,
-            syncManager: syncManager,
-            sessionManager: sessionManager,
-            networkManager: networkManager,
-            notificationCenter: notificationCenter
+        let authEndpointExpectation = try mockParra.mockNetworkManager.urlSession.expectInvocation(
+            of: .postAuthentication(tenantId: mockParra.tenantId),
+            toReturn: (200, ParraCredential(token: UUID().uuidString))
         )
 
         let authProviderExpectation = XCTestExpectation()
+        authProviderExpectation.expectedFulfillmentCount = 2
+        await mockParra.parra.initialize(
+            authProvider: .publicKey(
+                tenantId: mockParra.tenantId,
+                applicationId: mockParra.applicationId,
+                apiKeyId: UUID().uuidString,
+                userIdProvider: {
+                    authProviderExpectation.fulfill()
+                    return UUID().uuidString
+                }
+            )
+        )
 
-        await Parra.initialize(
-            authProvider: .publicKey(tenantId: tenantId, applicationId: "myapp", apiKeyId: apiKeyId, userIdProvider: {
-                authProviderExpectation.fulfill()
-                return UUID().uuidString
-            }))
+        let _ = try await mockParra.mockNetworkManager.networkManager.getAuthenticationProvider()!()
 
-        let _ = try await Parra.shared.networkManager.getAuthenticationProvider()!()
-
-        await fulfillment(of: [authProviderExpectation], timeout: 0.1)
+        await fulfillment(
+            of: [authEndpointExpectation, authProviderExpectation],
+            timeout: 2
+        )
     }
-    
-    @MainActor
+
     func testInitWithDefaultAuthProviderFailure() async throws {
-        await Parra.initialize(authProvider: .default(tenantId: "tenant", applicationId: "myapp", authProvider: {
-            throw URLError(.badServerResponse)
-        }))
+        await mockParra.parra.initialize(
+            authProvider: .default(
+                tenantId: mockParra.tenantId,
+                applicationId: mockParra.applicationId,
+                authProvider: {
+                    throw URLError(.badServerResponse)
+                }
+            )
+        )
 
         do {
-            let _ = try await Parra.shared.networkManager.getAuthenticationProvider()!()
+            let _ = try await mockParra.mockNetworkManager.networkManager.getAuthenticationProvider()!()
 
             XCTFail()
         } catch {}
     }
 
-    @MainActor
     func testInitWithPublicKeyAuthProviderFailure() async throws {
-        await Parra.initialize(authProvider: .publicKey(tenantId: "", applicationId: "myapp", apiKeyId: "", userIdProvider: {
-            throw URLError(.badServerResponse)
-        }))
+        await mockParra.parra.initialize(
+            authProvider: .publicKey(
+                tenantId: mockParra.tenantId,
+                applicationId: mockParra.applicationId,
+                apiKeyId: UUID().uuidString,
+                userIdProvider: {
+                    throw URLError(.badServerResponse)
+                }
+            )
+        )
 
         do {
-            let _ = try await Parra.shared.networkManager.getAuthenticationProvider()!()
+            let _ = try await mockParra.mockNetworkManager.networkManager.getAuthenticationProvider()!()
 
             XCTFail()
         } catch {}
+    }
+
+    func testMultipleInvocationsDoNotReinitialize() async throws {
+        await mockParra.parra.initialize(authProvider: .mockPublicKey(mockParra))
+
+        let isInitialized = await mockParra.parra.state.isInitialized()
+        XCTAssertTrue(isInitialized)
+
+        await mockParra.parra.initialize(
+            authProvider: .publicKey(
+                tenantId: UUID().uuidString,
+                applicationId: UUID().uuidString,
+                apiKeyId: UUID().uuidString,
+                userIdProvider: {
+                    return UUID().uuidString
+                }
+            )
+        )
+
+        let configState = await mockParra.parra.configState.getCurrentState()
+
+        XCTAssertEqual(configState.applicationId, mockParra.applicationId)
+        XCTAssertEqual(configState.tenantId, mockParra.tenantId)
     }
 }

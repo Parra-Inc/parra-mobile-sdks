@@ -26,7 +26,7 @@ internal actor CompletedCardDataStorage: ItemStorage {
         return await storageModule.read(name: id)
     }
     
-    internal func currentCompletedCardData() async -> [String: CompletedCard] {
+    internal func currentCompletedCardData() async -> [String : CompletedCard] {
         return await storageModule.currentData()
     }
     
@@ -37,7 +37,7 @@ internal actor CompletedCardDataStorage: ItemStorage {
                 value: completedCard
             )
         } catch let error {
-            parraLogError("Error writing completed card to cache", error)
+            Logger.error("Error writing completed card to cache", error)
         }
     }
     

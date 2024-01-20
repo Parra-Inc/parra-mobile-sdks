@@ -7,34 +7,38 @@
 
 import Foundation
 
-fileprivate actor ParraFeedbackPopupState {
-    static let shared = ParraFeedbackPopupState()
-
-    var isPresented = false
-
-    func present() async {
-        isPresented = true
-    }
-
-    func dismiss() async {
-        isPresented = false
-    }
-}
+fileprivate let logger = Logger(category: "Feedback module")
 
 /// The `ParraFeedback` module is used to fetch Parra Feedback data from the Parra API. Once data is fetched,
 /// it will be displayed automatically in any `ParraCardView`s that you add to your view hierarchy.
 /// To handle authentication, see the Parra module.
 public class ParraFeedback: ParraModule {
-    internal static let shared = ParraFeedback()
-    internal let dataManager = ParraFeedbackDataManager()
+    internal let parra: Parra
+    internal let dataManager: ParraFeedbackDataManager
+
+    public static var shared: ParraFeedback {
+        return Parra.getSharedInstance().feedback
+    }
+
+    internal init(
+        parra: Parra,
+        dataManager: ParraFeedbackDataManager
+    ) {
+        self.parra = parra
+        self.dataManager = dataManager
+    }
 
     internal private(set) static var name: String = "Feedback"
+
+    deinit {
+        parra.state.unregisterModule(module: self)
+    }
 
     /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
     /// view the `ParraCardView` initializer if you'd like to only display certain cards.
-    public static func fetchFeedbackCards(
+    public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all,
         withCompletion completion: @escaping (Result<[ParraCardItem], ParraError>) -> Void
     ) {
@@ -47,7 +51,7 @@ public class ParraFeedback: ParraModule {
                 }
             } catch let error {
                 DispatchQueue.main.async {
-                    completion(.failure(ParraError.custom("Error fetching Parra Feedback cards", error)))
+                    completion(.failure(ParraError.generic("Error fetching Parra Feedback cards", error)))
                 }
             }
         }
@@ -57,7 +61,7 @@ public class ParraFeedback: ParraModule {
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
     /// view the `ParraCardView` initializer if you'd like to only display certain cards.
-    public static func fetchFeedbackCards(
+    public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all,
         withCompletion completion: @escaping ([ParraCardItem], Error?) -> Void
     ) {
@@ -83,10 +87,12 @@ public class ParraFeedback: ParraModule {
     /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
     /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
     /// view the `ParraCardView` initializer if you'd like to only display certain cards.
-    public static func fetchFeedbackCards(
+    public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
-        let cards = try await Parra.API.Feedback.getCards(appArea: appArea)
+        let cards = try await parra.networkManager.getCards(
+            appArea: appArea
+        )
         
         // Only keep cards that we don't already have an answer cached for. This isn't something that
         // should ever even happen, but in event that new cards are retreived that include cards we
@@ -95,12 +101,12 @@ public class ParraFeedback: ParraModule {
         var cardsToKeep = [ParraCardItem]()
 
         for card in cards {
-            if await shared.cachedCardPredicate(card: card) {
+            if await cachedCardPredicate(card: card) {
                 cardsToKeep.append(card)
             }
         }
 
-        shared.applyNewCards(cards: cardsToKeep)
+        applyNewCards(cards: cardsToKeep)
         
         return cardsToKeep
     }
@@ -108,24 +114,24 @@ public class ParraFeedback: ParraModule {
     /// Fetches the feedback form with the provided ID from the Parra API. If a form is returned, it is up to the caller
     /// to pass this response to `ParraFeedback.presentFeedbackForm` to present the feedback form. Splitting up feedback
     /// form presentation in this way allows us to skip having to show loading indicators.
-    public static func fetchFeedbackForm(
+    public func fetchFeedbackForm(
         formId: String
     ) async throws -> ParraFeedbackFormResponse {
-        let response = try await Parra.API.Feedback.getFeedbackForm(with: formId)
-
-        return response
+        return try await parra.networkManager.getFeedbackForm(with: formId)
     }
 
     /// Fetches the feedback form with the provided ID from the Parra API. If a form is returned, it is up to the caller
     /// to pass this response to `ParraFeedback.presentFeedbackForm` to present the feedback form. Splitting up feedback
     /// form presentation in this way allows us to skip having to show loading indicators.
-    public static func fetchFeedbackForm(
+    public func fetchFeedbackForm(
         formId: String,
         withCompletion completion: @escaping (Result<ParraFeedbackFormResponse, ParraError>) -> Void
     ) {
         Task {
             do {
-                let response = try await fetchFeedbackForm(formId: formId)
+                let response = try await fetchFeedbackForm(
+                    formId: formId
+                )
 
                 DispatchQueue.main.async {
                     completion(.success(response))
@@ -133,7 +139,7 @@ public class ParraFeedback: ParraModule {
             } catch let error {
                 DispatchQueue.main.async {
                     completion(
-                        .failure(ParraError.custom("Error fetching Parra Feedback form: \(formId)", error))
+                        .failure(ParraError.generic("Error fetching Parra Feedback form: \(formId)", error))
                     )
                 }
             }
@@ -141,7 +147,7 @@ public class ParraFeedback: ParraModule {
     }
 
     /// Whether the `ParraFeedback` module has data that has yet to be synced with the Parra API.
-    internal func hasDataToSync() async -> Bool {
+    internal func hasDataToSync(since date: Date?) async -> Bool {
         let answers = await dataManager.currentCompletedCardData()
 
         return !answers.isEmpty
@@ -159,8 +165,12 @@ public class ParraFeedback: ParraModule {
     }
     
     /// Checks whether the user has previously supplied input for the provided `ParraCardItem`.
-    internal class func hasCardBeenCompleted(_ cardItem: ParraCardItem) async -> Bool {
-        let completed = await shared.dataManager.completedCardData(forId: cardItem.id)
+    internal func hasCardBeenCompleted(
+        _ cardItem: ParraCardItem
+    ) async -> Bool {
+        let completed = await dataManager.completedCardData(
+            forId: cardItem.id
+        )
         
         return completed != nil
     }
@@ -170,15 +180,21 @@ public class ParraFeedback: ParraModule {
         let completedCardData = await dataManager.currentCompletedCardData()
         let completedCards = Array(completedCardData.values)
         
-        let completedChunks = completedCards.chunked(into: ParraFeedback.Constant.maxBulkAnswers)
+        let completedChunks = completedCards.chunked(
+            into: ParraFeedback.Constant.maxBulkAnswers
+        )
 
         for chunk in completedChunks {
             do {
                 try await self.uploadCompletedCards(chunk)
-                try await self.dataManager.clearCompletedCardData(completedCards: chunk)
-                await self.dataManager.removeCardsForCompletedCards(completedCards: chunk)
+                try await self.dataManager.clearCompletedCardData(
+                    completedCards: chunk
+                )
+                await self.dataManager.removeCardsForCompletedCards(
+                    completedCards: chunk
+                )
             } catch let error {
-                parraLogError(ParraError.custom("Error uploading card data", error))
+                logger.error(ParraError.generic("Error uploading card data", error))
 
                 throw error
             }
@@ -186,50 +202,71 @@ public class ParraFeedback: ParraModule {
     }
 
     private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {
-        try await Parra.API.Feedback.bulkAnswerQuestions(cards: cards)
+        try await parra.networkManager.bulkAnswerQuestions(
+            cards: cards
+        )
     }
 
-    private func performAssetPrefetch(for cards: [ParraCardItem]) {
+    private func performAssetPrefetch(
+        for cards: [ParraCardItem]
+    ) {
+        if cards.isEmpty {
+            return
+        }
+
         Task {
-            parraLogDebug("Attempting asset prefetch for \(cards.count) card(s)...")
+            logger.debug("Attempting asset prefetch for \(cards.count) card(s)...")
             let assets = cards.flatMap { $0.getAllAssets() }
-            parraLogDebug("\(assets.count) asset(s) available for prefetching")
 
+            if assets.isEmpty {
+                logger.debug("No assets are available for prefetching")
 
-            await Parra.API.Assets.performBulkAssetCachingRequest(assets: assets)
+                return
+            }
 
-            parraLogDebug("Completed prefetching assets")
+            logger.debug("\(assets.count) asset(s) available for prefetching")
+
+            await parra.networkManager.performBulkAssetCachingRequest(
+                assets: assets
+            )
+
+            logger.debug("Completed prefetching assets")
         }
     }
 
-    internal func didReceiveSessionResponse(sessionResponse: ParraSessionsResponse) {
+    internal func didReceiveSessionResponse(
+        sessionResponse: ParraSessionsResponse
+    ) {
         Task {
             let isPopupPresent = await ParraFeedbackPopupState.shared.isPresented
+
             if isPopupPresent {
-                parraLogDebug("Skipping polling for questions. Popup currently open.")
+                logger.debug("Skipping polling for questions. Popup currently open.")
             } else {
                 await pollForQuestions(context: sessionResponse)
             }
         }
     }
 
-    private func pollForQuestions(context: ParraSessionsResponse) async {
-        parraLogDebug("Checking if polling for questions should occur")
+    private func pollForQuestions(
+        context: ParraSessionsResponse
+    ) async {
+        logger.debug("Checking if polling for questions should occur")
 
         guard context.shouldPoll else {
-            parraLogTrace("Should poll flag not set, skipping polling")
+            logger.trace("Should poll flag not set, skipping polling")
             return
         }
 
         // Success means the request didn't fail and there are cards in the response that have a display type popup or drawer
         for attempt in 0...context.retryTimes {
             do {
-                parraLogTrace("Fetching cards. Attempt #\(attempt + 1)")
+                logger.trace("Fetching cards. Attempt #\(attempt + 1)")
 
                 let cards = try await getCardsForPresentation()
 
                 if cards.isEmpty {
-                    parraLogTrace(
+                    logger.trace(
                         "No cards found. Retrying \(context.retryTimes - attempt) more time(s). Next attempt in \(context.retryDelay)ms"
                     )
 
@@ -245,23 +282,25 @@ public class ParraFeedback: ParraModule {
                     break
                 }
             } catch let error {
-                parraLogError("Encountered error fetching cards. Cancelling polling.", error)
+                logger.error("Encountered error fetching cards. Cancelling polling.", error)
             }
         }
     }
 
     private func displayPopupCards(cardItems: [ParraCardItem]) {
-        parraLogTrace("Displaying popup cards")
+        logger.trace("Displaying popup cards")
 
         guard !cardItems.isEmpty else {
-            parraLogTrace("Skipping presenting popup. No valid cards")
+            logger.trace("Skipping presenting popup. No valid cards")
             return
         }
 
         // Take the display type of the first card that has one set as the display type to use for this set of cards.
         // It is unlikely there will ever be a case where this isn't found on the first element.
-        guard let displayType = cardItems.first(where: { $0.displayType != nil })?.displayType else {
-            parraLogTrace("Skipping presenting popup. No displayType set")
+        guard let displayType = cardItems.first(
+            where: { $0.displayType != nil }
+        )?.displayType else {
+            logger.trace("Skipping presenting popup. No displayType set")
 
             return
         }
@@ -278,7 +317,7 @@ public class ParraFeedback: ParraModule {
                 await ParraFeedbackPopupState.shared.present()
             }
 
-            ParraFeedback.presentCardPopup(
+            presentCardPopup(
                 with: cardItems,
                 from: nil,
                 config: .default,
@@ -289,12 +328,14 @@ public class ParraFeedback: ParraModule {
                 onDismiss: onDismiss
             )
         default:
-            parraLogTrace("Skipping presenting popup. displayType \(displayType) is not a valid modal type")
+            logger.trace("Skipping presenting popup. displayType \(displayType) is not a valid modal type")
         }
     }
 
     private func getCardsForPresentation() async throws -> [ParraCardItem] {
-        let cards = try await Parra.API.Feedback.getCards(appArea: .none)
+        let cards = try await parra.networkManager.getCards(
+            appArea: .none
+        )
 
         var validCards = [ParraCardItem]()
         for card in cards {
@@ -321,8 +362,13 @@ public class ParraFeedback: ParraModule {
     private func cachedCardPredicate(card: ParraCardItem) async -> Bool {
         switch card.data {
         case .question(let question):
-            let previouslyCleared = await dataManager.hasClearedCompletedCardWithId(card: card)
-            let cardData = await dataManager.completedCardData(forId: question.id)
+            let previouslyCleared = await dataManager.hasClearedCompletedCardWithId(
+                card: card
+            )
+
+            let cardData = await dataManager.completedCardData(
+                forId: question.id
+            )
 
             if !previouslyCleared && cardData == nil {
                 return true

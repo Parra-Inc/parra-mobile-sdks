@@ -8,27 +8,47 @@
 import XCTest
 @testable import Parra
 
-typealias TestDataType = [String: String]
+fileprivate typealias TestDataType = [String : String]
 
-class ParraStorageModuleTests: XCTestCase {
+class ParraStorageModuleTests: ParraBaseMock {
     var storageModules = [ParraStorageModule<String>]()
-    
-    override func setUpWithError() throws {        
-        try deleteDirectoriesInApplicationSupport()
+
+    override func setUp() async throws {
+        try await super.setUp()
+
         clearParraUserDefaultsSuite()
-        
+
         let folder = "storage_modules"
         let file = "storage_data"
-        
+
         storageModules = [
-            .init(dataStorageMedium: .memory),
-            .init(dataStorageMedium: .fileSystem(folder: folder, fileName: file, storeItemsSeparately: true)),
-            .init(dataStorageMedium: .userDefaults(key: file)),
+            .init(
+                dataStorageMedium: .memory,
+                jsonEncoder: .parraEncoder,
+                jsonDecoder: .parraDecoder
+            ),
+            .init(
+                dataStorageMedium: .fileSystem(
+                    baseUrl: baseStorageDirectory,
+                    folder: folder,
+                    fileName: file,
+                    storeItemsSeparately: true,
+                    fileManager: .default
+                ),
+                jsonEncoder: .parraEncoder,
+                jsonDecoder: .parraDecoder
+            ),
+            .init(
+                dataStorageMedium: .userDefaults(key: file),
+                jsonEncoder: .parraEncoder,
+                jsonDecoder: .parraDecoder
+            ),
         ]
     }
-    
-    override func tearDownWithError() throws {
-        try deleteDirectoriesInApplicationSupport()
+
+    override func tearDown() async throws {
+        try await super.tearDown()
+
         clearParraUserDefaultsSuite()
     }
 

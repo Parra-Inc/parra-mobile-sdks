@@ -8,21 +8,23 @@
 import XCTest
 @testable import Parra
 
-let testPath = ParraDataManager.Base.applicationSupportDirectory.safeAppendDirectory("testDir")
-
-class FileManagerTests: XCTestCase {
+class FileManagerTests: MockedParraTestCase {
     let fileManager = FileManager.default
 
-    override func setUpWithError() throws {
-        try deleteDirectoriesInApplicationSupport()
+    override func setUp() async throws {
+        // Specifically not calling super to avoid Parra mocks from being created.
+
+        try fileManager.safeCreateDirectory(at: baseStorageDirectory)
     }
-    
+
     func testSafeCreateWhenDirectoryDoesNotExist() throws {
-        try fileManager.safeCreateDirectory(at: testPath)
-        
+        let dirPath = baseStorageDirectory.appendDirectory("testDir")
+
+        try fileManager.safeCreateDirectory(at: dirPath)
+
         var isDirectory: ObjCBool = false
         let exists = fileManager.fileExists(
-            atPath: testPath.path,
+            atPath: dirPath.path,
             isDirectory: &isDirectory
         )
         
@@ -31,16 +33,18 @@ class FileManagerTests: XCTestCase {
     }
     
     func testSafeCreateWhenDirectoryExists() throws {
+        let dirPath = baseStorageDirectory.appendDirectory("testDir")
+
         try fileManager.createDirectory(
-            at: testPath,
+            at: dirPath,
             withIntermediateDirectories: true
         )
         
-        try fileManager.safeCreateDirectory(at: testPath)
-        
+        try fileManager.safeCreateDirectory(at: dirPath)
+
         var isDirectory: ObjCBool = false
         let exists = fileManager.fileExists(
-            atPath: testPath.path,
+            atPath: dirPath.path,
             isDirectory: &isDirectory
         )
         
@@ -49,8 +53,10 @@ class FileManagerTests: XCTestCase {
     }
     
     func testSafeCreateWhenFileExistsAtDirectoryPath() throws {
-        fileManager.createFile(atPath: testPath.path, contents: nil)
-        
-        XCTAssertThrowsError(try fileManager.safeCreateDirectory(at: testPath))
+        let filePath = baseStorageDirectory.appendFilename("testFile.txt")
+
+        fileManager.createFile(atPath: filePath.path, contents: nil)
+
+        XCTAssertThrowsError(try fileManager.safeCreateDirectory(at: filePath))
     }
 }

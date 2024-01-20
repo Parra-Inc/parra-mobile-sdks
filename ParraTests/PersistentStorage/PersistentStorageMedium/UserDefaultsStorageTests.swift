@@ -22,7 +22,7 @@ class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testReadDoesNotExist() async throws {
-        let file: [String: String]? = try await userDefaultsStorage.read(
+        let file: [String : String]? = try await userDefaultsStorage.read(
             name: "key1"
         )
         
@@ -31,13 +31,13 @@ class UserDefaultsStorageTests: XCTestCase {
     
     func testReadFileDoesExist() async throws {
         let key = "key2"
-        let data: [String: String] = [
+        let data: [String : String] = [
             "aKey": "aValue"
         ]
 
         userDefaults.set(try JSONEncoder().encode(data), forKey: key)
         
-        let readData: [String: String]? = try await userDefaultsStorage.read(
+        let readData: [String : String]? = try await userDefaultsStorage.read(
             name: key
         )
 
@@ -47,7 +47,7 @@ class UserDefaultsStorageTests: XCTestCase {
 
     func testWriteFileExists() async throws {
         let key = "key3"
-        let data: [String: String] = [
+        let data: [String : String] = [
             "key": "val"
         ]
         
@@ -58,12 +58,12 @@ class UserDefaultsStorageTests: XCTestCase {
 
         let readData = userDefaults.value(forKey: key) as? Data
         XCTAssertNotNil(readData)
-        XCTAssertEqual(data, try JSONDecoder().decode([String: String].self, from: readData!))
+        XCTAssertEqual(data, try JSONDecoder().decode([String : String].self, from: readData!))
     }
 
     func testDeleteFileDoesNotExist() async throws {
         let key = "key4"
-        let data: [String: String] = [
+        let data: [String : String] = [
             "key": "val"
         ]
 

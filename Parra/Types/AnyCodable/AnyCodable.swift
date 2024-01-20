@@ -61,11 +61,11 @@ extension AnyCodable: Equatable {
             return lhs == rhs
         case let (lhs as String, rhs as String):
             return lhs == rhs
-        case let (lhs as [String: AnyCodable], rhs as [String: AnyCodable]):
+        case let (lhs as [String : AnyCodable], rhs as [String : AnyCodable]):
             return lhs == rhs
         case let (lhs as [AnyCodable], rhs as [AnyCodable]):
             return lhs == rhs
-        case let (lhs as [String: Any], rhs as [String: Any]):
+        case let (lhs as [String : Any], rhs as [String : Any]):
             return NSDictionary(dictionary: lhs) == NSDictionary(dictionary: rhs)
         case let (lhs as [Any], rhs as [Any]):
             return NSArray(array: lhs) == NSArray(array: rhs)
@@ -142,7 +142,7 @@ extension AnyCodable: Hashable {
             hasher.combine(value)
         case let value as String:
             hasher.combine(value)
-        case let value as [String: AnyCodable]:
+        case let value as [String : AnyCodable]:
             hasher.combine(value)
         case let value as [AnyCodable]:
             hasher.combine(value)

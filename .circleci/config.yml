@@ -1,0 +1,126 @@
+# TODO:
+# 1. PARRA_TEST_OUTPUT_DIRECTORY not working
+
+orbs:
+  # ruby: circleci/ruby@2.1.0
+  macos: circleci/macos@2.4.1
+  git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
+  bun: ksylvest/bun@1.0.1
+
+commands:
+  common:
+    steps:
+      - git-shallow-clone/checkout:
+          depth: 1
+          fetch_depth: 1
+          # Enable this if we get errors related to GitHub RSA failure during clone.
+          # keyscan_github: true
+          no_tags: true
+      - attach_workspace:
+          at: .
+      - bun/install
+      - run:
+          name: Install NPM Dependencies
+          command: bun install --frozen-lockfile
+  load-env-vars:
+    steps:
+      - run:
+          name: Loading Environment Variables
+          command: |
+            cat bash.env >> $BASH_ENV
+            printenv
+
+  run-command-and-persist-variables:
+    parameters:
+      title:
+        type: string
+      command:
+        type: string
+      variables:
+        type: string # CSV of variables to persist
+      background:
+        type: boolean
+        default: false
+    steps:
+      - run:
+          name: << parameters.title >>
+          command: |
+            # Important to source from the command that we're executing to store env vars that are
+            # exported in the command.
+            . << parameters.command >>
+
+            # Iterate over variables and persist them
+            IFS=',' read -ra ADDR \<<< "<< parameters.variables >>"
+            for i in "${ADDR[@]}"; do
+              value=$(eval echo \$$i)
+              echo "Persisting variable: $i with value: $value"
+              echo "export $i=$value" >> $BASH_ENV
+            done
+
+            printenv
+            cp $BASH_ENV bash.env
+          background: << parameters.background >>
+
+  prepare_ios_prerequisites:
+    steps:
+      - run:
+          name: Install Brew Dependencies
+          command: ./cli.sh ci --install-brew-dependencies
+      # - run-command-and-persist-variables:
+      #     title: Preboot Simulator
+      #     command: ./cli/bin/preboot-simulator.sh
+      #     variables: PARRA_TEST_DEVICE_UDID
+      #     # The time saved by running this in the background is negated by the increased time the
+      #     # build-for-testing script will take if a simulator is mid booted when it starts.
+      #     background: false
+      - run:
+          name: Extract ASC Credential
+          command: |
+            dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
+            echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
+      # - run:
+      #     name: Disable Simulator Hardware Keyboard
+      #     command: ./cli.sh ci --disable-simulator-hardware-keyboard
+      # - ruby/install-deps: # Don't need to set bundler-version, ORB looks for Gemfile.lock by default.
+      #     path: /tmp/workspace/vendor
+      #     include-branch-in-cache-key: false
+
+executors:
+  macos-m1-test-runner:
+    macos:
+      xcode: 15.2.0
+    resource_class: macos.m1.medium.gen1
+    environment:
+      PARRA_TEST_DERIVED_DATA_DIRECTORY: build/unit-tests/derivedData
+      PARRA_TEST_OUTPUT_DIRECTORY: artifacts/unit-tests
+      PARRA_TEST_PROJECT_NAME: ./Parra.xcodeproj
+      PARRA_TEST_SCHEME_NAME: Parra
+      PARRA_TEST_CONFIGURATION: Debug
+      PARRA_TEST_DEVICE_NAME: iPhone 15
+      PARRA_TEST_DEVICE_OS_VERSION: 17.2
+      PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.2
+      PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
+    working_directory: /tmp/workspace
+
+version: 2.1
+jobs:
+  build-and-test:
+    executor: macos-m1-test-runner
+    steps:
+      - common
+      - prepare_ios_prerequisites
+      - run:
+          name: Build for Testing
+          command: ./cli.sh tests --build --log-level debug
+      # - macos/wait-until-simulator-booted:
+      #     device-udid-var: PARRA_TEST_DEVICE_UDID
+      - run:
+          name: Run Unit Tests
+          command: ./cli.sh tests --run --log-level debug
+      - store_test_results:
+          path: build/unit-tests/derivedData/Logs/Test
+
+workflows:
+  run-unit-tests:
+    jobs:
+      - build-and-test

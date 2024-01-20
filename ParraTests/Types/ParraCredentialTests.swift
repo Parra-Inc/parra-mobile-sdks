@@ -20,7 +20,7 @@ final class ParraCredentialTests: XCTestCase {
 
     func testEncodesToToken() throws {
         let data = try JSONEncoder().encode(ParraCredential(token: "something"))
-        let decoded = try JSONDecoder().decode([String: String].self, from: data)
+        let decoded = try JSONDecoder().decode([String : String].self, from: data)
 
         XCTAssert(decoded["token"] != nil)
     }

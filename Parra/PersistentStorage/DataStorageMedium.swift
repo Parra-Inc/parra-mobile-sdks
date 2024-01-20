@@ -7,8 +7,14 @@
 
 import Foundation
 
-public enum DataStorageMedium {
+internal enum DataStorageMedium {
     case memory
-    case fileSystem(folder: String, fileName: String, storeItemsSeparately: Bool)
+    case fileSystem(
+        baseUrl: URL,
+        folder: String,
+        fileName: String,
+        storeItemsSeparately: Bool,
+        fileManager: FileManager
+    )
     case userDefaults(key: String)
 }

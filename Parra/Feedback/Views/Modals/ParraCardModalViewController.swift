@@ -30,12 +30,7 @@ internal class ParraCardModalViewController: UIViewController {
         // We count on the fact that we control when these modals are presented to know that
         // if one is instantiated, presentation is inevitable. This allows us to guarentee that
         // the impression event for the modal is submitted before the card view starts laying out cards.
-        Parra.logAnalyticsEvent(ParraSessionEventType.impression(
-            location: "modal:\(modalType.eventName)",
-            module: ParraFeedback.self
-        ), params: [
-            "type": modalType.rawValue
-        ])
+        Parra.logEvent(modalType.event)
 
         cardView = ParraCardView(config: config)
 

@@ -253,20 +253,22 @@ public class ParraCardView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
-        Parra.triggerSync()
+        Parra.getSharedInstance().triggerSync(completion: nil)
     }
     
     public override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
         
         if newWindow == nil {
-            NotificationCenter.default.removeObserver(self,
-                                                      name: ParraFeedback.cardsDidChangeNotification,
-                                                      object: nil)
+            Parra.getSharedInstance().notificationCenter.removeObserver(
+                self,
+                name: ParraFeedback.cardsDidChangeNotification,
+                object: nil
+            )
             
-            Parra.triggerSync()
+            Parra.getSharedInstance().triggerSync(completion: nil)
         } else {
             checkAndUpdateCards()
         }
@@ -274,11 +276,13 @@ public class ParraCardView: UIView {
     
     public override func didMoveToWindow() {
         super.didMoveToWindow()
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(didReceiveCardChangeNotification(notification:)),
-                                               name: ParraFeedback.cardsDidChangeNotification,
-                                               object: nil)
+
+        Parra.getSharedInstance().notificationCenter.addObserver(
+            self,
+            selector: #selector(didReceiveCardChangeNotification(notification:)),
+            name: ParraFeedback.cardsDidChangeNotification,
+            object: nil
+        )
     }
     
     @objc private func didReceiveCardChangeNotification(notification: Notification) {

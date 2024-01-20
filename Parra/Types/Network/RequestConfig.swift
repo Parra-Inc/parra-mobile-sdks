@@ -39,11 +39,11 @@ internal struct RequestConfig {
         return remainingTries > 1
     }
 
-    var retryDelayNs: UInt64 {
+    var retryDelay: TimeInterval {
         let diff = allowedTries - remainingTries
 
         if diff > 0 {
-            return UInt64(pow(2.0, Double(diff))) * 1_000_000_000
+            return pow(2.0, TimeInterval(diff))
         }
 
         return 0

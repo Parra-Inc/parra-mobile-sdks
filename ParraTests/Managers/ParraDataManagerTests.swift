@@ -8,14 +8,19 @@
 import XCTest
 @testable import Parra
 
-class ParraDataManagerTests: XCTestCase {
+@MainActor
+class ParraDataManagerTests: MockedParraTestCase {
     var parraDataManager: ParraDataManager!
     
-    override func setUpWithError() throws {
-        parraDataManager = ParraDataManager()
+    override func setUp() async throws {
+        try createBaseDirectory()
+
+        parraDataManager = createMockDataManager()
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
+        deleteBaseDirectory()
+
         parraDataManager = nil
     }
 

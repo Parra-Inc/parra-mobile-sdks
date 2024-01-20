@@ -8,8 +8,7 @@
 import Foundation
 import UIKit
 
-// TODO: Common ancestor. Might be able to just be a protocol.
-public class ParraCardItemView: UIView, ParraConfigurableView {
+internal class ParraCardItemView: UIView, ParraConfigurableView {
     internal var config: ParraCardViewConfig
     
     internal required init(config: ParraCardViewConfig) {

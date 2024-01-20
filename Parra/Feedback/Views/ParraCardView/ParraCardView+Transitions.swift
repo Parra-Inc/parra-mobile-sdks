@@ -9,7 +9,7 @@ import UIKit
 
 extension ParraCardView: ParraQuestionHandlerDelegate {
     internal func questionHandlerDidMakeNewSelection(forQuestion question: Question) async {
-        try? await Task.sleep(nanoseconds: 333_000_000)
+        try? await Task.sleep(for: 0.333)
 
         let (nextCardItem, nextCardItemDiection) = nextCardItem(inDirection: .right)
 
@@ -17,7 +17,7 @@ extension ParraCardView: ParraQuestionHandlerDelegate {
             return
         }
 
-        guard !(await ParraFeedback.hasCardBeenCompleted(nextCardItem)) else {
+        guard !(await ParraFeedback.shared.hasCardBeenCompleted(nextCardItem)) else {
             return
         }
 
@@ -184,10 +184,7 @@ extension ParraCardView {
         self.delegate?.parraCardView(self, didDisplay: cardItem)
 
         if let cardItem {
-            Parra.logAnalyticsEvent(ParraSessionEventType.impression(
-                location: "question",
-                module: ParraFeedback.self
-            ), params: [
+            Parra.logEvent(.view(element: "question"), [
                 "question_id": cardItem.id
             ])
         }

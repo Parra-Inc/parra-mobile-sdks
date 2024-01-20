@@ -8,11 +8,14 @@
 
 import Foundation
 
-public class ParraNotificationCenter: NotificationCenterType {
-    public static let `default` = ParraNotificationCenter()
-    private let underlyingNotificationCenter = NotificationCenter.default
+fileprivate let logger = Logger(category: "Parra notification center")
 
-    public func post(
+internal class ParraNotificationCenter: NotificationCenterType {
+    internal let underlyingNotificationCenter = NotificationCenter()
+
+    init() {}
+
+    internal func post(
         name aName: NSNotification.Name,
         object anObject: Any? = nil,
         userInfo aUserInfo: [AnyHashable : Any]? = nil
@@ -26,12 +29,12 @@ public class ParraNotificationCenter: NotificationCenterType {
         }
     }
 
-    public func postAsync(
+    internal func postAsync(
         name aName: NSNotification.Name,
         object anObject: Any? = nil,
         userInfo aUserInfo: [AnyHashable : Any]? = nil
     ) async {
-        parraLogTrace("Posting notification: \(aName.rawValue)")
+        logger.trace("Posting notification: \(aName.rawValue)")
 
         await MainActor.run {
             DispatchQueue.main.async {
@@ -44,7 +47,7 @@ public class ParraNotificationCenter: NotificationCenterType {
         }
     }
 
-    public func addObserver(
+    internal func addObserver(
         _ observer: Any,
         selector aSelector: Selector,
         name aName: NSNotification.Name?,
@@ -58,7 +61,7 @@ public class ParraNotificationCenter: NotificationCenterType {
         )
     }
 
-    public func addObserver(
+    internal func addObserver(
         forName name: NSNotification.Name?,
         object obj: Any?,
         queue: OperationQueue?,
@@ -69,6 +72,18 @@ public class ParraNotificationCenter: NotificationCenterType {
             object: obj,
             queue: queue,
             using: block
+        )
+    }
+
+    internal func removeObserver(
+        _ observer: Any,
+        name aName: NSNotification.Name?,
+        object anObject: Any?
+    ) {
+        underlyingNotificationCenter.removeObserver(
+            observer,
+            name: aName,
+            object: anObject
         )
     }
 }

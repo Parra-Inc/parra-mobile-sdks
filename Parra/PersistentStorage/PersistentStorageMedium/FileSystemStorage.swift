@@ -7,65 +7,75 @@
 
 import Foundation
 
+fileprivate let logger = Logger(category: "File system storage medium")
+
 internal actor FileSystemStorage: PersistentStorageMedium {
-    private let fileManager = FileManager.default
+    private let baseUrl: URL
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
-    private let baseUrl: URL
-    
+    private let fileManager: FileManager
+
     internal init(
         baseUrl: URL,
         jsonEncoder: JSONEncoder,
-        jsonDecoder: JSONDecoder
+        jsonDecoder: JSONDecoder,
+        fileManager: FileManager
     ) {
+        self.baseUrl = baseUrl
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
-        self.baseUrl = baseUrl
+        self.fileManager = fileManager
 
-        parraLogTrace("FileSystemStorage init with baseUrl: \(baseUrl.safeNonEncodedPath())")
+        logger.trace("FileSystemStorage init with baseUrl: \(baseUrl.privateRelativePath())")
 
         // TODO: Think about this more later, but I think this is a fatalError()
-        try? fileManager.safeCreateDirectory(at: baseUrl)
+        do {
+            try fileManager.safeCreateDirectory(at: baseUrl)
+        } catch let error {
+            logger.error("Error creating directory", error, [
+                "path": baseUrl.absoluteString
+            ])
+        }
     }
     
     internal func read<T>(name: String) async throws -> T? where T: Codable {
-        let file = baseUrl.safeAppendPathComponent(name)
-        guard let data = try? Data(contentsOf: file) else {
-            return nil
+        let file = baseUrl.appendFilename(name)
+        if let data = try? Data(contentsOf: file) {
+            return try jsonDecoder.decode(T.self, from: data)
         }
-        
-        return try jsonDecoder.decode(T.self, from: data)
+
+        return nil
     }
 
-    internal func readAllInDirectory<T>() async -> [String: T] where T: Codable {
+    internal func readAllInDirectory<T>() async -> [String : T] where T: Codable {
         guard let enumerator = fileManager.enumerator(
-            atPath: baseUrl.safeNonEncodedPath()
+            atPath: baseUrl.nonEncodedPath()
         ) else {
             return [:]
         }
 
-        let result = enumerator.reduce([String: T]()) { [weak fileManager] partialResult, element in
+        let result = enumerator.reduce([String : T]()) { [weak fileManager] partialResult, element in
             var accumulator = partialResult
 
             guard let fileManager, let fileName = element as? String else {
                 return accumulator
             }
 
-            parraLogTrace("readAllInDirectory reading file: \(fileName)")
+            logger.trace("readAllInDirectory reading file: \(fileName)")
 
-            let path = baseUrl.safeAppendPathComponent(fileName)
+            let path = baseUrl.appendFilename(fileName)
             var isDirectory: ObjCBool = false
             let exists = fileManager.fileExists(
-                atPath: path.safeNonEncodedPath(),
+                atPath: path.nonEncodedPath(),
                 isDirectory: &isDirectory
             )
 
             if !exists || isDirectory.boolValue || fileName.starts(with: ".") {
-                parraLogTrace("readAllInDirectory skipping file: \(fileName) - is likely hidden or a directory")
+                logger.trace("readAllInDirectory skipping file: \(fileName) - is likely hidden or a directory")
                 return accumulator
             }
 
-            parraLogTrace("readAllInDirectory file: \(fileName) exists and is not hidden or a directory")
+            logger.trace("readAllInDirectory file: \(fileName) exists and is not hidden or a directory")
 
             do {
                 let data = try Data(contentsOf: path)
@@ -73,30 +83,30 @@ internal actor FileSystemStorage: PersistentStorageMedium {
 
                 accumulator[fileName] = next
 
-                parraLogTrace("readAllInDirectory reading file: \(fileName) into cache")
+                logger.trace("readAllInDirectory reading file: \(fileName) into cache")
             } catch let error {
-                parraLogError("readAllInDirectory", error)
+                logger.error("readAllInDirectory", error)
             }
 
             return accumulator
         }
 
-        parraLogDebug("readAllInDirectory read \(result.count) item(s) into cache")
+        logger.debug("readAllInDirectory read \(result.count) item(s) into cache")
 
         return result
     }
     
     internal func write<T>(name: String, value: T) async throws where T: Codable {
-        let file = baseUrl.safeAppendPathComponent(name)
+        let file = baseUrl.appendFilename(name)
         let data = try jsonEncoder.encode(value)
         
         try data.write(to: file, options: .atomic)
     }
     
     internal func delete(name: String) async throws {
-        let url = baseUrl.safeAppendPathComponent(name)
+        let url = baseUrl.appendFilename(name)
 
-        if fileManager.safeFileExists(at: url) {
+        if try fileManager.safeFileExists(at: url) {
             try fileManager.removeItem(at: url)
         }
     }

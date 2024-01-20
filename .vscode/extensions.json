@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "bierner.github-markdown-preview",
+    "bierner.markdown-preview-github-styles",
+    "circleci.circleci",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint"
+  ]
+}

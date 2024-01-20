@@ -8,49 +8,49 @@
 
 import Foundation
 
-public protocol AnswerOption: Codable {}
+internal protocol AnswerOption: Codable {}
 
-public struct SingleOptionAnswer: AnswerOption {
-    public let optionId: String
+internal struct SingleOptionAnswer: AnswerOption {
+    internal let optionId: String
 
-    public init(optionId: String) {
+    internal init(optionId: String) {
         self.optionId = optionId
     }
 }
 
-public struct MultiOptionIndividualOption: Codable {
-    public let id: String
+internal struct MultiOptionIndividualOption: Codable {
+    internal let id: String
 
-    public init(id: String) {
+    internal init(id: String) {
         self.id = id
     }
 }
 
-public struct MultiOptionAnswer: AnswerOption {
-    public let options: [MultiOptionIndividualOption]
+internal struct MultiOptionAnswer: AnswerOption {
+    internal let options: [MultiOptionIndividualOption]
 
-    public init(options: [MultiOptionIndividualOption]) {
+    internal init(options: [MultiOptionIndividualOption]) {
         self.options = options
     }
 }
 
-public struct TextValueAnswer: AnswerOption {
-    public let value: String
+internal struct TextValueAnswer: AnswerOption {
+    internal let value: String
 
-    public init(value: String) {
+    internal init(value: String) {
         self.value = value
     }
 }
 
-public struct IntValueAnswer: AnswerOption {
-    public let value: Int
+internal struct IntValueAnswer: AnswerOption {
+    internal let value: Int
 
-    public init(value: Int) {
+    internal init(value: Int) {
         self.value = value
     }
 }
 
-public enum QuestionAnswerKind: Codable {
+internal enum QuestionAnswerKind: Codable {
     case checkbox(MultiOptionAnswer)
     case radio(SingleOptionAnswer)
     case boolean(SingleOptionAnswer)
@@ -61,16 +61,16 @@ public enum QuestionAnswerKind: Codable {
     case textLong(TextValueAnswer)
 }
 
-public struct QuestionAnswer: Codable {
-    public let kind: QuestionKind
-    public let data: any AnswerOption
+internal struct QuestionAnswer: Codable {
+    internal let kind: QuestionKind
+    internal let data: any AnswerOption
 
-    public init(kind: QuestionKind, data: AnswerOption) {
+    internal init(kind: QuestionKind, data: AnswerOption) {
         self.kind = kind
         self.data = data
     }
 
-    public init(from decoder: Decoder) throws {
+    internal init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.kind = try container.decode(QuestionKind.self, forKey: .kind)
@@ -91,7 +91,7 @@ public struct QuestionAnswer: Codable {
         case data
     }
 
-    public func encode(to encoder: Encoder) throws {
+    internal func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(kind, forKey: .kind)

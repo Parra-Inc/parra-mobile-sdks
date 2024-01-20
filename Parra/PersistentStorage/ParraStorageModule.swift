@@ -7,12 +7,12 @@
 
 import Foundation
 
-public actor ParraStorageModule<DataType: Codable> {
+internal actor ParraStorageModule<DataType: Codable> {
     // Whether or not data has previously been loaded from disk.
     internal private(set) var isLoaded = false
     internal let dataStorageMedium: DataStorageMedium
     internal let persistentStorage: (medium: PersistentStorageMedium, key: String)?
-    internal private(set) var storageCache: [String: DataType] = [:]
+    internal private(set) var storageCache: [String : DataType] = [:]
     
     internal var description: String {
         return """
@@ -31,25 +31,27 @@ public actor ParraStorageModule<DataType: Codable> {
         switch dataStorageMedium {
         case .memory, .userDefaults(_):
             return false
-        case .fileSystem(_, _, let storeItemsSeparately):
+        case .fileSystem(_, _, _, let storeItemsSeparately, _):
             return storeItemsSeparately
         }
     }
 
-    public init(dataStorageMedium: DataStorageMedium) {
+    internal init(
+        dataStorageMedium: DataStorageMedium,
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) {
         self.dataStorageMedium = dataStorageMedium
 
         switch dataStorageMedium {
         case .memory:
             self.persistentStorage = nil
-        case .fileSystem(folder: let folder, fileName: let fileName, _):
-            let baseUrl = ParraDataManager.Path.parraDirectory
-                .safeAppendDirectory(folder)
-
+        case .fileSystem(let baseUrl, let folder, let fileName, _, let fileManager):
             let fileSystemStorage = FileSystemStorage(
-                baseUrl: baseUrl,
-                jsonEncoder: .parraEncoder,
-                jsonDecoder: .parraDecoder
+                baseUrl: baseUrl.appendDirectory(folder),
+                jsonEncoder: jsonEncoder,
+                jsonDecoder: jsonDecoder,
+                fileManager: fileManager
             )
             
             self.persistentStorage = (fileSystemStorage, fileName)
@@ -58,8 +60,8 @@ public actor ParraStorageModule<DataType: Codable> {
             
             let userDefaultsStorage = UserDefaultsStorage(
                 userDefaults: userDefaults,
-                jsonEncoder: .parraEncoder,
-                jsonDecoder: .parraDecoder
+                jsonEncoder: jsonEncoder,
+                jsonDecoder: jsonDecoder
             )
             
             self.persistentStorage = (userDefaultsStorage, key)
@@ -79,15 +81,21 @@ public actor ParraStorageModule<DataType: Codable> {
         if let fileSystem = persistentStorage.medium as? FileSystemStorage, storeItemsSeparately {
             storageCache = await fileSystem.readAllInDirectory()
         } else {
-            if let existingData: [String: DataType] = try? await persistentStorage.medium.read(
-                name: persistentStorage.key
-            ) {
-                storageCache = existingData
+            do {
+                if let existingData: [String : DataType] = try await persistentStorage.medium.read(
+                    name: persistentStorage.key
+                ) {
+                    storageCache = existingData
+                }
+            } catch let error {
+                Logger.error("Error loading data from persistent storage", error, [
+                    "key": persistentStorage.key
+                ])
             }
         }
     }
     
-    public func currentData() async -> [String: DataType] {
+    internal func currentData() async -> [String : DataType] {
         if !isLoaded {
             await loadData()
         }
@@ -95,7 +103,7 @@ public actor ParraStorageModule<DataType: Codable> {
         return storageCache
     }
     
-    public func read(name: String) async -> DataType? {
+    internal func read(name: String) async -> DataType? {
         if !isLoaded {
             await loadData()
         }
@@ -105,19 +113,27 @@ public actor ParraStorageModule<DataType: Codable> {
         }
 
         if let persistentStorage, storeItemsSeparately {
-            if let loadedData: [String: DataType] = try? await persistentStorage.medium.read(name: name) {
-                storageCache.merge(loadedData) { (_, new) in new }
 
-                return storageCache[name]
+            do {
+                if let loadedData: [String : DataType] = try await persistentStorage.medium.read(name: name) {
+                    storageCache.merge(loadedData) { (_, new) in new }
+
+                    return storageCache[name]
+                }
+            } catch let error {
+                Logger.error("Error reading data from persistent storage", error, [
+                    "key": persistentStorage.key
+                ])
             }
         }
 
         return nil
     }
     
-    public func write(name: String,
-                      value: DataType?) async throws {
-
+    internal func write(
+        name: String,
+        value: DataType?
+    ) async throws {
         if !isLoaded {
             await loadData()
         }
@@ -147,7 +163,7 @@ public actor ParraStorageModule<DataType: Codable> {
         }
     }
     
-    public func delete(name: String) async {
+    internal func delete(name: String) async {
         if !isLoaded {
             await loadData()
         }
@@ -170,11 +186,11 @@ public actor ParraStorageModule<DataType: Codable> {
                 )
             }
         } catch let error {
-            parraLogError("ParraStorageModule error deleting file", error)
+            Logger.error("ParraStorageModule error deleting file", error)
         }
     }
     
-    public func clear() async {
+    internal func clear() async {
         defer {
             storageCache.removeAll()
         }
@@ -183,16 +199,22 @@ public actor ParraStorageModule<DataType: Codable> {
             return
         }
 
-        if storeItemsSeparately {
-            for (name, _) in storageCache {
-                try? await persistentStorage.medium.delete(
-                    name: name
+        do {
+            if storeItemsSeparately {
+                for (name, _) in storageCache {
+                    try await persistentStorage.medium.delete(
+                        name: name
+                    )
+                }
+            } else {
+                try await persistentStorage.medium.delete(
+                    name: persistentStorage.key
                 )
             }
-        } else {
-            try? await persistentStorage.medium.delete(
-                name: persistentStorage.key
-            )
+        } catch let error {
+            Logger.error("Error deleting data from persistent storage", error, [
+                "key": persistentStorage.key
+            ])
         }
     }
 }

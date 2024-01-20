@@ -10,17 +10,29 @@ import Foundation
 internal class ParraFeedbackDataManager {
     private let completedCardDataStorage: CompletedCardDataStorage
     private let cardStorage: CardStorage
+    private let parra: Parra
 
-    internal init() {
-        let completedCardDataFolder = ParraFeedback.persistentStorageFolder()
+    internal init(
+        parra: Parra,
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder,
+        fileManager: FileManager
+    ) {
+        self.parra = parra
+
+        let completedCardDataFolder = ParraDataManager.Directory.storageDirectoryName
         let completedCardDataFileName = ParraFeedbackDataManager.Key.completedCardsKey
         
         let completedCardDataStorageModule = ParraStorageModule<CompletedCard>(
             dataStorageMedium: .fileSystem(
+                baseUrl: parra.dataManager.baseDirectory,
                 folder: completedCardDataFolder,
                 fileName: completedCardDataFileName,
-                storeItemsSeparately: false
-            )
+                storeItemsSeparately: false,
+                fileManager: fileManager
+            ),
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
         )
         
         self.completedCardDataStorage = CompletedCardDataStorage(
@@ -28,7 +40,9 @@ internal class ParraFeedbackDataManager {
         )
         
         let cardStorageModule = ParraStorageModule<[ParraCardItem]>(
-            dataStorageMedium: .memory
+            dataStorageMedium: .memory,
+            jsonEncoder: jsonEncoder,
+            jsonDecoder: jsonDecoder
         )
         
         self.cardStorage = CardStorage(
@@ -73,11 +87,11 @@ internal class ParraFeedbackDataManager {
                 completedCards: completedCards
             )
 
-            await Parra.triggerSync()
+            await parra.triggerSync()
         }
     }
 
-    internal func currentCompletedCardData() async -> [String: CompletedCard] {
+    internal func currentCompletedCardData() async -> [String : CompletedCard] {
         return await completedCardDataStorage.currentCompletedCardData()
     }
     
@@ -109,15 +123,12 @@ internal class ParraFeedbackDataManager {
     internal func setCards(cards: [ParraCardItem]) {
         Task {
             await cardStorage.setCards(cardItems: cards)
-            
-            await MainActor.run {
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(
-                        name: ParraFeedback.cardsDidChangeNotification,
-                        object: nil
-                    )
-                }
-            }
+
+            await parra.notificationCenter.postAsync(
+                name: ParraFeedback.cardsDidChangeNotification,
+                object: nil,
+                userInfo: nil
+            )
         }
     }
 }

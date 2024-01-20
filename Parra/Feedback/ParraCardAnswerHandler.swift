@@ -13,7 +13,7 @@ import Foundation
 // 4. Must invoke dataManager.completeCard(completedCard)
 
 /// Maps a question id to an answer for that question
-typealias AnswerStateMap = [String: QuestionAnswer]
+typealias AnswerStateMap = [String : QuestionAnswer]
 
 internal protocol ParraQuestionHandlerDelegate: AnyObject {
     /// Not meant to be triggered during every selection event. Just when a new selection occurs that may be

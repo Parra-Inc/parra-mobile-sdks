@@ -8,8 +8,20 @@
 
 import UIKit
 
+internal struct ParraCardModalViewedEvent: ParraDataEvent {
+    var name: String
+    var extra: [String : Any]
+
+    init(modalType: ParraCardModalType) {
+        self.name = modalType.eventName
+        self.extra = [
+            "type": modalType.rawValue
+        ]
+    }
+}
+
 // raw values used in events
-public enum ParraCardModalType: String {
+internal enum ParraCardModalType: String {
     case popup
     case drawer
 
@@ -17,10 +29,14 @@ public enum ParraCardModalType: String {
     var eventName: String {
         switch self {
         case .popup:
-            return "popup"
+            return "view:popup"
         case .drawer:
-            return "drawer"
+            return "view:drawer"
         }
+    }
+
+    var event: ParraDataEvent {
+        return ParraCardModalViewedEvent(modalType: self)
     }
 }
 

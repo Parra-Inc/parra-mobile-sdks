@@ -41,7 +41,7 @@ class ParraCardsInCollectionView: UICollectionViewController, UICollectionViewDe
             flowLayout.sectionInset = .init(top: 8, left: 8, bottom: 8, right: 8)
         }
         
-        ParraFeedback.fetchFeedbackCards { [self] cards, error in
+        ParraFeedback.shared.fetchFeedbackCards { [self] cards, error in
             if let error = error {
                 navigationItem.prompt = "Error fetching Parra cards"
                 print("Error fetching Parra cards: \(error)")
@@ -77,7 +77,7 @@ class ParraCardsInCollectionView: UICollectionViewController, UICollectionViewDe
         contentConfig.prefersSideBySideTextAndSecondaryText = true
         
         cell.contentConfiguration = contentConfig
-        cell.backgroundColor = .init(white: 0.95, alpha: 1.0)
+        cell.backgroundColor = .systemBackground
         cell.layer.cornerRadius = 8
         
         return cell

@@ -14,7 +14,9 @@ class CredentialStorageTests: XCTestCase {
     
     override func setUpWithError() throws {
         storageModule = ParraStorageModule<ParraCredential>(
-            dataStorageMedium: .memory
+            dataStorageMedium: .memory,
+            jsonEncoder: .parraEncoder,
+            jsonDecoder: .parraDecoder
         )
         
         credentialStorage = CredentialStorage(

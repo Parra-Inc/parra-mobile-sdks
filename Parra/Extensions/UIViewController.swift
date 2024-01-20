@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension UIViewController {
+internal extension UIViewController {
     static func topMostViewController() -> UIViewController? {
         return safeGetKeyWindow()?.topViewController()
     }

@@ -30,7 +30,7 @@ class ParraCardsInTableView: UITableViewController {
         tableView.register(ParraCardTableViewCell.self,
                            forCellReuseIdentifier: ParraCardTableViewCell.defaultCellId)
 
-        ParraFeedback.fetchFeedbackCards(appArea: .id("07eb0d9a-4912-46b8-b77e-3741753960ac")) { [self] cards, error in
+        ParraFeedback.shared.fetchFeedbackCards(appArea: .id("07eb0d9a-4912-46b8-b77e-3741753960ac")) { [self] cards, error in
             if let error = error {
                 navigationItem.prompt = "Error fetching Parra cards"
                 print("Error fetching Parra cards: \(error)")

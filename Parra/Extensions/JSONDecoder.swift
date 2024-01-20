@@ -7,17 +7,22 @@
 
 import Foundation
 
-private let parraJsonDecoder: JSONDecoder = {
-    let decoder = JSONDecoder()
-    
-    decoder.keyDecodingStrategy = .convertFromSnakeCase
-    decoder.dateDecodingStrategy = .iso8601
-
-    return decoder
-}()
-
 extension JSONDecoder {
-    static var parraDecoder: JSONDecoder {
-        return parraJsonDecoder
-    }
+    internal private(set) static var parraDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .iso8601
+
+        return decoder
+    }()
+
+    internal private(set) static var spaceOptimizedDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+
+        decoder.dateDecodingStrategy = .iso8601
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        return decoder
+    }()
 }

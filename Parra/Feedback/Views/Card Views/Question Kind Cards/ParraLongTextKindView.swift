@@ -97,8 +97,7 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
     private func updateValidation(text: String) {
         validationError = TextValidator.validate(
             text: text.trimmingCharacters(in: .whitespacesAndNewlines),
-            against: [.minLength(data.minLength), .maxLength(data.maxLength)],
-            requiredField: false
+            against: [.minLength(data.minLength), .maxLength(data.maxLength)]
         )
     }
 }

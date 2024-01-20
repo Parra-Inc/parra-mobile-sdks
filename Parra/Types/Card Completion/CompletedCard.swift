@@ -8,12 +8,12 @@
 import Foundation
 
 // Completed card needs to be able to be converted to and from JSON for storage on disk.
-public struct CompletedCard: Codable {
-    public let bucketItemId: String
-    public let questionId: String
-    public let data: QuestionAnswer
-    
-    public init(
+internal struct CompletedCard: Codable {
+    internal let bucketItemId: String
+    internal let questionId: String
+    internal let data: QuestionAnswer
+
+    internal init(
         bucketItemId: String,
         questionId: String,
         data: QuestionAnswer

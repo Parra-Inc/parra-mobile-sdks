@@ -7,30 +7,38 @@
 //
 
 import Foundation
+import UIKit
 
-@globalActor
-internal struct ParraConfigState {
-    internal static let shared = State()
+internal actor ParraConfigState {
+    internal static nonisolated let defaultState: ParraConfiguration = .default
 
-    internal actor State {
-        private var currentState: ParraConfiguration = .default
+    private var currentState: ParraConfiguration = ParraConfigState.defaultState
 
-        fileprivate init() {}
+    internal init() {
+        self.currentState = ParraConfigState.defaultState
+    }
 
-        internal func getCurrentState() -> ParraConfiguration {
-            return currentState
-        }
+    internal init(currentState: ParraConfiguration) {
+        self.currentState = currentState
+    }
 
-        internal func updateState(_ newValue: ParraConfiguration) {
-            currentState = newValue
+    internal func getCurrentState() -> ParraConfiguration {
+        return currentState
+    }
 
-            ParraDefaultLogger.logQueue.async {
-                ParraDefaultLogger.default.loggerConfig = newValue.loggerConfig
+    // This should ONLY ever happen on initialization. Setting this elsewhere will require
+    // consideration for how ParraSessionManager receives its copy of the state.
+    internal func updateState(_ newValue: ParraConfiguration) {
+        currentState = newValue
+
+        if newValue.pushNotificationsEnabled {
+            DispatchQueue.main.async {
+                UIApplication.shared.registerForRemoteNotifications()
             }
         }
+    }
 
-        internal func resetState() {
-            currentState = .default
-        }
+    internal func resetState() {
+        currentState = ParraConfigState.defaultState
     }
 }

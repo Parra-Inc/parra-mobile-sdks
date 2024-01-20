@@ -8,18 +8,6 @@
 import Foundation
 @testable import Parra
 
-func deleteDirectoriesInApplicationSupport() throws {
-    let directoryPaths = try FileManager.default.contentsOfDirectory(
-        at: ParraDataManager.Base.applicationSupportDirectory,
-        includingPropertiesForKeys: [.isDirectoryKey],
-        options: .skipsHiddenFiles
-    )
-
-    for directoryPath in directoryPaths {
-        try FileManager.default.removeItem(at: directoryPath)
-    }
-}
-
 func clearParraUserDefaultsSuite() {
     if let bundleIdentifier = Parra.bundle().bundleIdentifier {
         UserDefaults.standard.removePersistentDomain(

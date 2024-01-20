@@ -35,12 +35,12 @@ fileprivate struct ViewTimerContext {
 internal extension ViewTimer {
     func performAfter(delay: TimeInterval,
                       action: @escaping ViewTimerCallback) {
-        parraLogTrace("Delayed view action initiated with delay \(delay)")
+        Logger.trace("Delayed view action initiated with delay \(delay)")
 
         cancelTimer()
 
         let timer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
-            parraLogTrace("Performing delayed view action")
+            Logger.trace("Performing delayed view action")
             ViewTimerContext.references.removeObject(forKey: self)
 
             action()
@@ -51,7 +51,7 @@ internal extension ViewTimer {
 
     func cancelTimer() {
         if let existingTimer = ViewTimerContext.references.object(forKey: self) {
-            parraLogTrace("Cancelling existing delayed view action")
+            Logger.trace("Cancelling existing delayed view action")
             existingTimer.invalidate()
         }
     }

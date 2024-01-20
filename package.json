@@ -1,12 +1,44 @@
 {
   "name": "parra-ios-sdk",
-  "scripts": {},
+  "version": "0.1.0",
+  "license": "MIT",
+  "homepage": "https://github.com/Parra-Inc/parra-ios-sdk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Parra-Inc/parra-ios-sdk.git"
+  },
+  "main": "dist/index.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "preinstall": "git config diff.lockb.textconv bun && git config diff.lockb.binary true"
+  },
   "bin": {
     "parra-release": "scripts/pod-release.js"
   },
   "devDependencies": {
+    "@inquirer/prompts": "^3.3.0",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "chalk": "^5.3.0",
     "child_process": "^1.0.2",
-    "util": "^0.12.4",
-    "yargs": "~>17.1.0"
-  }
+    "commander": "^11.1.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "prettier": "^3.1.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "util": "^0.12.4"
+  },
+  "engines": {
+    "node": "~>21.4.0",
+    "npm": "~>10.2.4"
+  },
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "dependencies": {}
 }

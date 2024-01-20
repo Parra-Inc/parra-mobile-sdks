@@ -7,6 +7,8 @@
 
 import Foundation
 
+fileprivate let logger = Logger(category: "Credential storage")
+
 internal actor CredentialStorage: ItemStorage {
     internal enum Key {
         static let currentUser = "current_user_credential"
@@ -21,7 +23,11 @@ internal actor CredentialStorage: ItemStorage {
     }
     
     func updateCredential(credential: ParraCredential?) async {
-        try? await storageModule.write(name: Key.currentUser, value: credential)
+        do {
+            try await storageModule.write(name: Key.currentUser, value: credential)
+        } catch let error {
+            logger.error("error updating credential", error)
+        }
     }
     
     func currentCredential() async -> ParraCredential? {
