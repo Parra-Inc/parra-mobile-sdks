@@ -35,6 +35,8 @@ struct MockParra {
     }
 
     func tearDown() async throws {
+        mockNetworkManager.urlSession.resetExpectations()
+        
         if await parra.state.isInitialized() {
             await parra.state.unregisterModule(module: parra)
         }

@@ -60,6 +60,10 @@ class ParraPushTests: MockedParraTestCase {
     }
 
     func testRegistrationUploadFailureStoresToken() async {
+        await mockParra.parra.state.clearTemporaryPushToken()
+        let cachedTokenBefore = await mockParra.parra.state.getCachedTemporaryPushToken()
+        XCTAssertNil(cachedTokenBefore)
+
         let pushUploadExpectation = mockParra.mockNetworkManager.urlSession.expectInvocation(
             of: .postPushTokens(tenantId: mockParra.tenantId),
             toReturn: {
@@ -70,10 +74,10 @@ class ParraPushTests: MockedParraTestCase {
         await mockParra.parra.initialize(authProvider: .mockPublicKey(mockParra))
         await mockParra.parra.registerDevicePushToken(testToken)
 
-        await fulfillment(of: [pushUploadExpectation])
+        await fulfillment(of: [pushUploadExpectation], timeout: 2)
 
-        let cachedToken = await mockParra.parra.state.getCachedTemporaryPushToken()
-        XCTAssertNotNil(cachedToken)
+        let cachedTokenAfter = await mockParra.parra.state.getCachedTemporaryPushToken()
+        XCTAssertNotNil(cachedTokenAfter)
     }
 
     func testInitializationAfterRegistrationClearsToken() async {

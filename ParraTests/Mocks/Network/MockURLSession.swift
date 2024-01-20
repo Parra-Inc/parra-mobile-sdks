@@ -31,6 +31,10 @@ internal class MockURLSession: URLSessionType {
         self.testCase = testCase
     }
 
+    func resetExpectations() {
+        expectedEndpoints.removeAll()
+    }
+
     private func resolve(_ request: URLRequest) -> DataTaskResponse {
         guard let endpoint = matchingEndpoint(for: request) else {
             let route = request.url!.absoluteString

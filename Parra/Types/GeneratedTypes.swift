@@ -381,6 +381,7 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable, FeedbackF
 
     public init(
         placeholder: String?,
+        // TODO: Remove lines/maxLines
         lines: Int?,
         maxLines: Int?,
         minCharacters: Int?,
