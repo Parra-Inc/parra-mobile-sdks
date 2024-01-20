@@ -9,11 +9,19 @@
 import SwiftUI
 
 struct ParraLogoButton: View {
+    var type: ParraLogoType
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button {
+            Parra.logEvent(.tap(element: "powered-by-parra"))
+
+            UIApplication.shared.open(Parra.Constants.parraWebRoot)
+        } label: {
+            ParraLogo(type: type)
+        }
     }
 }
 
 #Preview {
-    ParraLogoButton()
+    ParraLogoButton(type: .poweredBy)
 }
