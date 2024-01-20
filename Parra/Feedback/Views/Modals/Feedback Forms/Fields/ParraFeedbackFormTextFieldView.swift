@@ -10,6 +10,8 @@ import Foundation
 import SwiftUI
 import Combine
 
+fileprivate let minLines = 3
+
 struct ParraFeedbackFormTextFieldView: ParraFeedbackFormFieldView {
     typealias DataType = FeedbackFormTextFieldData
 
@@ -21,12 +23,25 @@ struct ParraFeedbackFormTextFieldView: ParraFeedbackFormFieldView {
     @State private var text = ""
     @State private var hasReceivedInput = false
 
+    private var maxLines: Int {
+        guard let maxLines = fieldData.data.maxLines else {
+            return 10
+        }
+
+        // Don't allow a max that is less than the min.
+        return max(minLines, maxLines)
+    }
+
     private var textEditor: some View {
         TextEditor(text: $text)
-            .frame(minHeight: 100, idealHeight: 100, maxHeight: 240)
-            .padding()
+            .frame(
+                minHeight: 60,
+                idealHeight: 100,
+                maxHeight: CGFloat(fieldData.data.maxHeight ?? 240)
+            )
+            .padding(6)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-            .lineLimit(3...)
+            .lineLimit(minLines...maxLines)
             .background(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray, lineWidth: 1)

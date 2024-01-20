@@ -67,13 +67,7 @@ struct ParraFeedbackFormView: View {
             }
             .disabled(!viewModel.canSubmit)
 
-            Button {
-                Parra.logEvent(.tap(element: "powered-by-parra"))
-
-                UIApplication.shared.open(Parra.Constants.parraWebRoot)
-            } label: {
-                ParraLogo(type: .poweredBy)
-            }
+            ParraLogoButton(type: .poweredBy)
         }
     }
 
@@ -96,7 +90,10 @@ struct ParraFeedbackFormView: View {
         }
     }
 
-    private func onFieldValueChanged(field: FeedbackFormField, value: String?) {
+    private func onFieldValueChanged(
+        field: FeedbackFormField,
+        value: String?
+    ) {
         viewModel.onFieldValueChanged(
             field: field,
             value: value
@@ -104,58 +101,8 @@ struct ParraFeedbackFormView: View {
     }
 }
 
-struct ParraFeedbackFormView_Previews: PreviewProvider {
-    static var previews: some View {
-        let formData = FeedbackFormData(
-            title: "Leave feedback",
-            description: "We'd love to hear from you. Your input helps us make our product better.",
-            fields: [
-                .init(
-                    name: "type",
-                    title: "Type of Feedback",
-                    helperText: nil,
-                    type: .select,
-                    required: true,
-                    data: .feedbackFormSelectFieldData(
-                        .init(
-                            placeholder: "Please select an option",
-                            options: [
-                                .init(title: "General feedback", value: "general", isOther: nil),
-                                .init(title: "Bug report", value: "bug", isOther: nil),
-                                .init(title: "Feature request", value: "feature", isOther: nil),
-                                .init(title: "Idea", value: "idea", isOther: nil),
-                                .init(title: "Other", value: "other", isOther: nil),
-                            ]
-                        )
-                    )
-                ),
-                .init(
-                    name: "response",
-                    title: "Your Feedback",
-                    helperText: nil,
-                    type: .text,
-                    required: true,
-                    data: .feedbackFormTextFieldData(
-                        .init(
-                            placeholder: "Enter your feedback here...",
-                            lines: nil,
-                            maxLines: 3,
-                            minCharacters: 12,
-                            maxCharacters: 69,
-                            maxHeight: nil
-                        )
-                    )
-                )
-            ]
-        )
-
-        return VStack {
-            ParraFeedbackFormView(
-                viewModel: FeedbackFormViewState(
-                    formData: formData,
-                    config: .default
-                )
-            )
-        }
+#Preview {
+    FeedbackFormViewState.renderValidStates { formViewState in
+        ParraFeedbackFormView(viewModel: formViewState)
     }
 }

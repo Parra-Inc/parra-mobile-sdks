@@ -63,6 +63,8 @@
 		003621D72B5B563C009EFE53 /* ParraLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621D62B5B563C009EFE53 /* ParraLogo.swift */; };
 		003621DB2B5B569F009EFE53 /* ParraLogoType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621DA2B5B569F009EFE53 /* ParraLogoType.swift */; };
 		003621DD2B5B592D009EFE53 /* ParraAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 003621DC2B5B592D009EFE53 /* ParraAssets.xcassets */; };
+		003621E92B5C2784009EFE53 /* ParraLogoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621E82B5C2784009EFE53 /* ParraLogoButton.swift */; };
+		003621EB2B5C2A62009EFE53 /* FeedbackFormViewState+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621EA2B5C2A62009EFE53 /* FeedbackFormViewState+Fixtures.swift */; };
 		003962332A48B4EF00B8655F /* ParraFeedbackDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */; };
 		003962342A48B4EF00B8655F /* ParraCardAnswerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraCardAnswerHandler.swift */; };
 		003962352A48B4EF00B8655F /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B8327DE6E2400DEEECD /* ParraFeedback+Constants.swift */; };
@@ -399,6 +401,8 @@
 		003621D62B5B563C009EFE53 /* ParraLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogo.swift; sourceTree = "<group>"; };
 		003621DA2B5B569F009EFE53 /* ParraLogoType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogoType.swift; sourceTree = "<group>"; };
 		003621DC2B5B592D009EFE53 /* ParraAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ParraAssets.xcassets; sourceTree = "<group>"; };
+		003621E82B5C2784009EFE53 /* ParraLogoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogoButton.swift; sourceTree = "<group>"; };
+		003621EA2B5C2A62009EFE53 /* FeedbackFormViewState+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormViewState+Fixtures.swift"; sourceTree = "<group>"; };
 		0036D5E127CACA100016DE97 /* ParraError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraError.swift; sourceTree = "<group>"; };
 		0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONEncoder.swift; sourceTree = "<group>"; };
 		0036D5E527CB0FBD0016DE97 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
@@ -971,6 +975,7 @@
 			children = (
 				003621D62B5B563C009EFE53 /* ParraLogo.swift */,
 				003621DA2B5B569F009EFE53 /* ParraLogoType.swift */,
+				003621E82B5C2784009EFE53 /* ParraLogoButton.swift */,
 			);
 			path = Logo;
 			sourceTree = "<group>";
@@ -1298,6 +1303,7 @@
 				00BF36CA2B59B01D0097905C /* FeedbackFormField+Fixtures.swift */,
 				00BF36C82B59AB190097905C /* FeedbackFormSelectFieldData+Fixtures.swift */,
 				00BF36CC2B59BBDE0097905C /* FeedbackFormTextFieldData+Fixtures.swift */,
+				003621EA2B5C2A62009EFE53 /* FeedbackFormViewState+Fixtures.swift */,
 			);
 			path = Fixtures;
 			sourceTree = "<group>";
@@ -1834,6 +1840,7 @@
 				0087CA4F2A54668B007D72FA /* ParraUrlSessionDelegate.swift in Sources */,
 				003962372A48B4EF00B8655F /* ParraFeedback.swift in Sources */,
 				0029AD2B2A48DCE100E30CCD /* LoggerHelpers.swift in Sources */,
+				003621EB2B5C2A62009EFE53 /* FeedbackFormViewState+Fixtures.swift in Sources */,
 				00BF36CB2B59B01D0097905C /* FeedbackFormField+Fixtures.swift in Sources */,
 				00DA7FF9295F2A1600109081 /* URL+safePaths.swift in Sources */,
 				007868992AAE4DE300864CFE /* ParraLogEvent.swift in Sources */,
@@ -1862,6 +1869,7 @@
 				003962632A48B55300B8655F /* ParraCardViewConfig.swift in Sources */,
 				0087CA7A2A58FAA2007D72FA /* Logger+StaticLevels.swift in Sources */,
 				00E15A2B29326FBE0049C2C7 /* UIWindow+topViewController.swift in Sources */,
+				003621E92B5C2784009EFE53 /* ParraLogoButton.swift in Sources */,
 				00BD2FF62A47772A00B4BEB2 /* AuthenticatedRequestResult.swift in Sources */,
 				0087CA682A561F72007D72FA /* Logger+Levels.swift in Sources */,
 				0087CA852A59A046007D72FA /* QualityOfService+ParraLogDescription.swift in Sources */,

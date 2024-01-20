@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 /// The primary module used to interact with the Parra SDK.
-/// Call ``Parra.initialize()`` in your `AppDelegate.didFinishLaunchingWithOptions`
+/// Call ``Parra/Parra/initialize(options:authProvider:)-8d8fx`` in your `AppDelegate.didFinishLaunchingWithOptions`
 /// method to configure the SDK.
 public class Parra: ParraModule, ParraModuleStateAccessor {
     internal static private(set) var name = "Parra"

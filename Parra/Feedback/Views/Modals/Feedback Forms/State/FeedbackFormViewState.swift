@@ -12,7 +12,7 @@ import SwiftUI
 fileprivate let logger = Logger(category: "FeedbackFormViewState")
 
 @MainActor
-internal class FeedbackFormViewState: ObservableObject {
+final internal class FeedbackFormViewState: ObservableObject {
     internal let title: String
     internal let description: String?
     
@@ -37,7 +37,7 @@ internal class FeedbackFormViewState: ObservableObject {
 
         // Additional call on init to handle the case where there none of the fields
         // are marked as required, so their default state is valid.
-        canSubmit = Self.areAllFieldsValid(
+        canSubmit = FeedbackFormViewState.areAllFieldsValid(
             fields: fields
         )
     }
@@ -63,7 +63,7 @@ internal class FeedbackFormViewState: ObservableObject {
 
         fields = updatedFields
 
-        canSubmit = Self.areAllFieldsValid(
+        canSubmit = FeedbackFormViewState.areAllFieldsValid(
             fields: fields
         )
     }

@@ -12,10 +12,6 @@ import UIKit
 struct ParraLogo: View {
     var type: ParraLogoType
 
-    init(type: ParraLogoType = .logo) {
-        self.type = type
-    }
-
     private var iconSize: Double {
         return switch type {
         case .logo:
