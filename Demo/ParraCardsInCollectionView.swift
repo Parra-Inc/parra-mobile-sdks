@@ -77,7 +77,7 @@ class ParraCardsInCollectionView: UICollectionViewController, UICollectionViewDe
         contentConfig.prefersSideBySideTextAndSecondaryText = true
         
         cell.contentConfiguration = contentConfig
-        cell.backgroundColor = .init(white: 0.95, alpha: 1.0)
+        cell.backgroundColor = .systemBackground
         cell.layer.cornerRadius = 8
         
         return cell

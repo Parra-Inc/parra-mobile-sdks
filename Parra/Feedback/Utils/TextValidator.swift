@@ -31,12 +31,11 @@ struct TextValidator {
     /// is returned. If there is no error, nil is returned. This will only return a message for the first error
     /// that is encountered.
     static func validate(
-        text: String,
-        against rules: [TextValidatorRule],
-        requiredField: Bool
+        text: String?,
+        against rules: [TextValidatorRule]
     ) -> String? {
-        if requiredField && text.isEmpty {
-            return "response must not be empty"
+        guard let text, !text.isEmpty else {
+            return "must not be empty"
         }
 
         for rule in rules {

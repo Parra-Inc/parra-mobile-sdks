@@ -23,7 +23,7 @@ extension NSAttributedString {
 
         var parraLogoAttributes = AttributeContainer()
         parraLogoAttributes[AttributeScopes.UIKitAttributes.FontAttribute.self] =
-            UIFont(name: "Pacifico-Regular", size: 11) ?? UIFont.boldSystemFont(ofSize: 11)
+            UIFont(name: "Pacifico-Regular", size: 11) ?? UIFont.boldSystemFont(ofSize: 11) // TODO: Delete
 
         let parraLogo = AttributedString("Parra", attributes: parraLogoAttributes)
 

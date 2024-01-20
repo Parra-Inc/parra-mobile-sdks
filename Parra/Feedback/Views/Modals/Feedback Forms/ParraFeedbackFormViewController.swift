@@ -27,10 +27,11 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
 
         let formViewController = UIHostingController(
             rootView: ParraFeedbackFormView(
-                formId: form.id,
-                data: form.data,
-                config: config,
-                onSubmit: onSubmit
+                viewModel: FeedbackFormViewState(
+                    formData: form.data,
+                    config: config,
+                    submissionHandler: self.onSubmit
+                )
             )
         )
 

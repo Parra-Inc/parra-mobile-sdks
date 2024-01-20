@@ -304,7 +304,7 @@ public enum FeedbackFormFieldType: String, Codable {
 
 public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
     public var id: String {
-        name
+        return name
     }
 
     public let name: String
@@ -348,11 +348,17 @@ public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
         self.required = try container.decode(Bool.self, forKey: .required)
         switch type {
         case .input:
-            self.data = .feedbackFormInputFieldData(try container.decode(FeedbackFormInputFieldData.self, forKey: .data))
+            self.data = .feedbackFormInputFieldData(
+                try container.decode(FeedbackFormInputFieldData.self, forKey: .data)
+            )
         case .text:
-            self.data = .feedbackFormTextFieldData(try container.decode(FeedbackFormTextFieldData.self, forKey: .data))
+            self.data = .feedbackFormTextFieldData(
+                try container.decode(FeedbackFormTextFieldData.self, forKey: .data)
+            )
         case .select:
-            self.data = .feedbackFormSelectFieldData(try container.decode(FeedbackFormSelectFieldData.self, forKey: .data))
+            self.data = .feedbackFormSelectFieldData(
+                try container.decode(FeedbackFormSelectFieldData.self, forKey: .data)
+            )
         }
     }
 }
