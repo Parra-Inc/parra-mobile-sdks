@@ -11,7 +11,6 @@ import Foundation
 internal protocol NetworkManagerType: ParraModuleStateAccessor {
     init(
         state: ParraState,
-        configState: ParraConfigState,
         dataManager: ParraDataManager,
         urlSession: URLSessionType,
         jsonEncoder: JSONEncoder,

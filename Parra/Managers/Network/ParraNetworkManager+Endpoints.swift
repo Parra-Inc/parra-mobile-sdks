@@ -118,7 +118,7 @@ internal extension ParraNetworkManager {
     func submitSession(
         _ sessionUpload: ParraSessionUpload
     ) async throws -> AuthenticatedRequestResult<ParraSessionsResponse> {
-        guard let tenantId = await configState.getCurrentState().tenantId else {
+        guard let tenantId = await state.tenantId else {
             throw ParraError.notInitialized
         }
 
@@ -134,7 +134,7 @@ internal extension ParraNetworkManager {
     // MARK: - Push
 
     func uploadPushToken(token: String) async throws {
-        guard let tenantId = await configState.getCurrentState().tenantId else {
+        guard let tenantId = await state.tenantId else {
             throw ParraError.notInitialized
         }
 

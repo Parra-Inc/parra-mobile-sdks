@@ -28,7 +28,7 @@ public extension Parra {
             thread: .current
         )
 
-        getSharedInstance().sessionManager.writeEvent(
+        getExistingInstance().sessionManager.writeEvent(
             wrappedEvent: .dataEvent(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
@@ -55,7 +55,7 @@ public extension Parra {
             thread: .current
         )
 
-        getSharedInstance().sessionManager.writeEvent(
+        getExistingInstance().sessionManager.writeEvent(
             wrappedEvent: .dataEvent(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
@@ -82,7 +82,7 @@ public extension Parra {
             thread: .current
         )
 
-        getSharedInstance().sessionManager.writeEvent(
+        getExistingInstance().sessionManager.writeEvent(
             wrappedEvent: .event(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
@@ -125,7 +125,7 @@ public extension Parra {
             )
         }
 
-        getSharedInstance().sessionManager.writeEvent(
+        getExistingInstance().sessionManager.writeEvent(
             wrappedEvent: wrappedEvent,
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
@@ -163,6 +163,6 @@ public extension Parra {
         _ value: Any,
         forKey key: String
     ) {
-        getSharedInstance().sessionManager.setUserProperty(value, forKey: key)
+        getExistingInstance().sessionManager.setUserProperty(value, forKey: key)
     }
 }

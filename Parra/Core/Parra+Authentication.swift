@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 fileprivate let logger = Logger(category: "Authentication Extensions")
 
@@ -21,18 +22,19 @@ public extension Parra {
         options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) {
-        getSharedInstance().initialize(
-            options: options,
-            authProvider: authProvider
-        )
+        let configuration = ParraConfiguration(options: options)
+
+        createInitialInstance(with: configuration)
+            .initialize(
+                authProvider: authProvider
+            )
     }
 
     internal func initialize(
-        options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) {
         Task { @MainActor in
-            await initialize(options: options, authProvider: authProvider)
+            await initialize(authProvider: authProvider)
         }
     }
 
@@ -47,15 +49,16 @@ public extension Parra {
         options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) async {
-        await getSharedInstance().initialize(
-            options: options,
-            authProvider: authProvider
-        )
+        let configuration = ParraConfiguration(options: options)
+
+        await createInitialInstance(with: configuration)
+            .initialize(
+                authProvider: authProvider
+            )
     }
 
     @MainActor
     internal func initialize(
-        options: [ParraConfigurationOption] = [],
         authProvider: ParraAuthenticationProviderType
     ) async {
         if await state.isInitialized() {
@@ -63,8 +66,6 @@ public extension Parra {
 
             return
         }
-
-        var newConfig = ParraConfiguration(options: options)
 
         let (tenantId, applicationId, authenticationProvider) = withAuthenticationMiddleware(
             for: authProvider
@@ -84,12 +85,14 @@ public extension Parra {
             }
         }
 
-        newConfig.setTenantId(tenantId)
-        newConfig.setApplicationId(applicationId)
-
+        await state.setTenantId(tenantId)
+        await state.setApplicationId(applicationId)
         await state.registerModule(module: self)
-        await configState.updateState(newConfig)
-        sessionManager.updateLoggerOptions(loggerOptions: newConfig.loggerOptions)
+
+        if configuration.pushNotificationsEnabled {
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+
         await sessionManager.initializeSessions()
         await networkManager.updateAuthenticationProvider(authenticationProvider)
         await state.initialize()

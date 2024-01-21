@@ -64,7 +64,7 @@ internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableV
         ])
 
         Task {
-            let isCached = await Parra.getSharedInstance().networkManager.isAssetCached(
+            let isCached = await Parra.getExistingInstance().networkManager.isAssetCached(
                 asset: asset
             )
 
@@ -72,7 +72,7 @@ internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableV
                 self.activityIndicator.startAnimating()
             }
 
-            let image = try? await Parra.getSharedInstance().networkManager.fetchAsset(
+            let image = try? await Parra.getExistingInstance().networkManager.fetchAsset(
                 asset: asset
             )
 

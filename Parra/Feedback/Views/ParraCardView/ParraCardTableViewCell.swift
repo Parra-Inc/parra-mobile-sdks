@@ -68,7 +68,7 @@ public class ParraCardTableViewCell: UITableViewCell {
     ///        }
     ///    }
     public func endDisplaying() {
-        Parra.getSharedInstance().triggerSync()
+        Parra.getExistingInstance().triggerSync()
     }
     
     private func commonInit() {

@@ -61,7 +61,7 @@ public class ParraCardCollectionViewCell: UICollectionViewCell {
     ///        }
     ///    }
     public func endDisplaying() {
-        Parra.getSharedInstance().triggerSync()
+        Parra.getExistingInstance().triggerSync()
     }
     
     private func commonInit() {

@@ -15,7 +15,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     internal static private(set) var name = "Parra"
 
     internal let state: ParraState
-    internal let configState: ParraConfigState
+    internal let configuration: ParraConfiguration
 
     internal lazy var feedback: ParraFeedback = {
         let parraFeedback = ParraFeedback(
@@ -51,17 +51,29 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
     internal static var _shared: Parra!
 
+
     @usableFromInline
-    internal static func getSharedInstance() -> Parra {
+    /// Unsafe to use before previously calling ``Parra/Parra/createInitialInstance``
+    internal static func getExistingInstance() -> Parra {
+        return _shared
+    }
+
+    internal static func createInitialInstance(
+        with configuration: ParraConfiguration
+    ) -> Parra {
         if let _shared {
             return _shared
         }
 
-        _shared = createParraInstance(with: .default)
+        _shared = createParraInstance(
+            configuration: configuration,
+            instanceConfiguration: .default
+        )
 
         return _shared
     }
 
+    /// Do NOT use this. This only exists to assist with automated tests. Absolutely never expose this publically.
     internal static func setSharedInstance(parra: Parra) {
         _shared = parra
     }
@@ -76,7 +88,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
     internal init(
         state: ParraState,
-        configState: ParraConfigState,
+        configuration: ParraConfiguration,
         dataManager: ParraDataManager,
         syncManager: ParraSyncManager,
         sessionManager: ParraSessionManager,
@@ -84,7 +96,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         notificationCenter: NotificationCenterType
     ) {
         self.state = state
-        self.configState = configState
+        self.configuration = configuration
         self.dataManager = dataManager
         self.syncManager = syncManager
         self.sessionManager = sessionManager
@@ -105,7 +117,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
     public static func logout(completion: (() -> Void)? = nil) {
-        getSharedInstance().logout(completion: completion)
+        getExistingInstance().logout(completion: completion)
     }
 
     internal func logout(completion: (() -> Void)? = nil) {
@@ -121,7 +133,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
     public static func logout() async {
-        await getSharedInstance().logout()
+        await getExistingInstance().logout()
     }
 
     internal func logout() async {
@@ -134,7 +146,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
     /// Uploads any cached Parra data. This includes data like answers to questions.
     public static func triggerSync(completion: (() -> Void)? = nil) {
-        getSharedInstance().triggerSync(completion: completion)
+        getExistingInstance().triggerSync(completion: completion)
     }
 
     internal func triggerSync(completion: (() -> Void)? = nil) {
@@ -150,7 +162,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     /// warning, for example. Note that in order to prevent excessive network activity it may take up to 30 seconds for the sync
     /// to complete after being initiated.
     public static func triggerSync() async {
-        await getSharedInstance().triggerSync()
+        await getExistingInstance().triggerSync()
     }
 
     internal func triggerSync() async {
@@ -178,26 +190,26 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     // MARK: Configuration
 
     internal static func createParraInstance(
-        with configuration: ParraInstanceConfiguration
+        configuration: ParraConfiguration,
+        instanceConfiguration: ParraInstanceConfiguration
     ) -> Parra {
         let state = ParraState()
-        let configState = ParraConfigState()
         let syncState = ParraSyncState()
 
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
             dataStorageMedium: .fileSystem(
-                baseUrl: configuration.storageConfiguration.baseDirectory,
-                folder: configuration.storageConfiguration.storageDirectoryName,
+                baseUrl: instanceConfiguration.storageConfiguration.baseDirectory,
+                folder: instanceConfiguration.storageConfiguration.storageDirectoryName,
                 fileName: ParraDataManager.Key.userCredentialsKey,
                 storeItemsSeparately: false,
                 fileManager: fileManager
             ),
-            jsonEncoder: configuration.storageConfiguration.sessionJsonEncoder,
-            jsonDecoder: configuration.storageConfiguration.sessionJsonDecoder
+            jsonEncoder: instanceConfiguration.storageConfiguration.sessionJsonEncoder,
+            jsonDecoder: instanceConfiguration.storageConfiguration.sessionJsonDecoder
         )
 
-        let sessionStorageUrl = configuration.storageConfiguration.baseDirectory
-            .appendDirectory(configuration.storageConfiguration.storageDirectoryName)
+        let sessionStorageUrl = instanceConfiguration.storageConfiguration.baseDirectory
+            .appendDirectory(instanceConfiguration.storageConfiguration.storageDirectoryName)
             .appendDirectory("sessions")
 
         let notificationCenter = ParraNotificationCenter()
@@ -218,24 +230,23 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         )
 
         let dataManager = ParraDataManager(
-            baseDirectory: configuration.storageConfiguration.baseDirectory,
+            baseDirectory: instanceConfiguration.storageConfiguration.baseDirectory,
             credentialStorage: credentialStorage,
             sessionStorage: sessionStorage
         )
 
         let networkManager = ParraNetworkManager(
             state: state,
-            configState: configState,
             dataManager: dataManager,
-            urlSession: configuration.networkConfiguration.urlSession,
-            jsonEncoder: configuration.networkConfiguration.jsonEncoder,
-            jsonDecoder: configuration.networkConfiguration.jsonDecoder
+            urlSession: instanceConfiguration.networkConfiguration.urlSession,
+            jsonEncoder: instanceConfiguration.networkConfiguration.jsonEncoder,
+            jsonDecoder: instanceConfiguration.networkConfiguration.jsonDecoder
         )
 
         let sessionManager = ParraSessionManager(
             dataManager: dataManager,
             networkManager: networkManager,
-            loggerOptions: ParraConfigState.defaultState.loggerOptions
+            loggerOptions: configuration.loggerOptions
         )
 
         let syncManager = ParraSyncManager(
@@ -250,7 +261,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
         return Parra(
             state: state,
-            configState: configState,
+            configuration: configuration,
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,

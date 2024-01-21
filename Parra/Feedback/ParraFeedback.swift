@@ -17,7 +17,7 @@ public class ParraFeedback: ParraModule {
     internal let dataManager: ParraFeedbackDataManager
 
     public static var shared: ParraFeedback {
-        return Parra.getSharedInstance().feedback
+        return Parra.getExistingInstance().feedback
     }
 
     internal init(

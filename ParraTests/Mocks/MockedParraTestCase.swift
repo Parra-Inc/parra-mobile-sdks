@@ -37,9 +37,10 @@ class MockedParraTestCase: ParraBaseMock {
         applicationId: String = UUID().uuidString
     ) async -> MockParra {
 
-        var newConfig = ParraConfiguration(options: [])
-        newConfig.setTenantId(tenantId)
-        newConfig.setApplicationId(applicationId)
+        await state.setTenantId(tenantId)
+        await state.setApplicationId(applicationId)
+
+        let configuration = ParraConfiguration(options: [])
 
         let mockNetworkManager = await createMockNetworkManager(
             state: state,
@@ -50,13 +51,10 @@ class MockedParraTestCase: ParraBaseMock {
         let notificationCenter = ParraNotificationCenter()
         let syncState = ParraSyncState()
 
-        let configState = ParraConfigState()
-        await configState.updateState(newConfig)
-
         let sessionManager = ParraSessionManager(
             dataManager: mockNetworkManager.dataManager,
             networkManager: mockNetworkManager.networkManager,
-            loggerOptions: ParraConfigState.defaultState.loggerOptions
+            loggerOptions: configuration.loggerOptions
         )
 
         let syncManager = ParraSyncManager(
@@ -72,7 +70,7 @@ class MockedParraTestCase: ParraBaseMock {
 
         let parra = Parra(
             state: state,
-            configState: configState,
+            configuration: configuration,
             dataManager: mockNetworkManager.dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
@@ -153,14 +151,12 @@ class MockedParraTestCase: ParraBaseMock {
         let dataManager = createMockDataManager()
 
         let urlSession = MockURLSession(testCase: self)
-        let configState = ParraConfigState.initialized(
-            tenantId: tenantId,
-            applicationId: applicationId
-        )
+
+        await state.setTenantId(tenantId)
+        await state.setApplicationId(applicationId)
 
         let networkManager = ParraNetworkManager(
             state: state,
-            configState: configState,
             dataManager: dataManager,
             urlSession: urlSession,
             jsonEncoder: .parraEncoder,

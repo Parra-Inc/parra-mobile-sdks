@@ -65,6 +65,19 @@
 		003621DD2B5B592D009EFE53 /* ParraAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 003621DC2B5B592D009EFE53 /* ParraAssets.xcassets */; };
 		003621E92B5C2784009EFE53 /* ParraLogoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621E82B5C2784009EFE53 /* ParraLogoButton.swift */; };
 		003621EB2B5C2A62009EFE53 /* FeedbackFormViewState+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621EA2B5C2A62009EFE53 /* FeedbackFormViewState+Fixtures.swift */; };
+		003621EE2B5C769A009EFE53 /* ParraTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621ED2B5C769A009EFE53 /* ParraTheme.swift */; };
+		003621F02B5C77DC009EFE53 /* ParraCornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621EF2B5C77DC009EFE53 /* ParraCornerRadius.swift */; };
+		003621F22B5C77F1009EFE53 /* ParraTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621F12B5C77F1009EFE53 /* ParraTypography.swift */; };
+		003621F42B5C79F7009EFE53 /* ParraColorSwatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621F32B5C79F7009EFE53 /* ParraColorSwatch.swift */; };
+		003621F72B5C7C0A009EFE53 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621F62B5C7C0A009EFE53 /* Color+hex.swift */; };
+		003621F92B5C92E4009EFE53 /* Color+Luminosity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621F82B5C92E4009EFE53 /* Color+Luminosity.swift */; };
+		003621FB2B5C963B009EFE53 /* ParraColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621FA2B5C963B009EFE53 /* ParraColorPalette.swift */; };
+		003621FF2B5C9CDF009EFE53 /* ParraColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621FE2B5C9CDF009EFE53 /* ParraColor.swift */; };
+		003622012B5C9CFD009EFE53 /* ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003622002B5C9CFD009EFE53 /* ParraColorConvertible.swift */; };
+		003622032B5C9D12009EFE53 /* ParraColorSwatchConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003622022B5C9D12009EFE53 /* ParraColorSwatchConvertible.swift */; };
+		003622052B5C9D3D009EFE53 /* ParraColorSwatch+ParraColorSwatchConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003622042B5C9D3D009EFE53 /* ParraColorSwatch+ParraColorSwatchConvertible.swift */; };
+		003622072B5C9D53009EFE53 /* ParraColor+ParraColorSwatchConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003622062B5C9D53009EFE53 /* ParraColor+ParraColorSwatchConvertible.swift */; };
+		003622092B5C9DD7009EFE53 /* UIColor+ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003622082B5C9DD7009EFE53 /* UIColor+ParraColorConvertible.swift */; };
 		003962332A48B4EF00B8655F /* ParraFeedbackDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */; };
 		003962342A48B4EF00B8655F /* ParraCardAnswerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraCardAnswerHandler.swift */; };
 		003962352A48B4EF00B8655F /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B8327DE6E2400DEEECD /* ParraFeedback+Constants.swift */; };
@@ -230,7 +243,6 @@
 		00BD2FF82A47774300B4BEB2 /* URLSessionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FF72A47774300B4BEB2 /* URLSessionType.swift */; };
 		00BD2FFA2A47778E00B4BEB2 /* NotificationCenterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FF92A47778E00B4BEB2 /* NotificationCenterType.swift */; };
 		00BD2FFC2A477D7700B4BEB2 /* ParraNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFB2A477D7700B4BEB2 /* ParraNotificationCenter.swift */; };
-		00BD2FFE2A479BBA00B4BEB2 /* ParraConfigState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFD2A479BBA00B4BEB2 /* ParraConfigState.swift */; };
 		00BDB2AF28BC24E700C16649 /* ParraCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */; };
 		00BDB2B128BD822700C16649 /* URLRequest+headers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2B028BD822700C16649 /* URLRequest+headers.swift */; };
 		00BF36C72B59AB000097905C /* ParraFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36C62B59AB000097905C /* ParraFixture.swift */; };
@@ -403,6 +415,19 @@
 		003621DC2B5B592D009EFE53 /* ParraAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ParraAssets.xcassets; sourceTree = "<group>"; };
 		003621E82B5C2784009EFE53 /* ParraLogoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogoButton.swift; sourceTree = "<group>"; };
 		003621EA2B5C2A62009EFE53 /* FeedbackFormViewState+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormViewState+Fixtures.swift"; sourceTree = "<group>"; };
+		003621ED2B5C769A009EFE53 /* ParraTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTheme.swift; sourceTree = "<group>"; };
+		003621EF2B5C77DC009EFE53 /* ParraCornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCornerRadius.swift; sourceTree = "<group>"; };
+		003621F12B5C77F1009EFE53 /* ParraTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTypography.swift; sourceTree = "<group>"; };
+		003621F32B5C79F7009EFE53 /* ParraColorSwatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraColorSwatch.swift; sourceTree = "<group>"; };
+		003621F62B5C7C0A009EFE53 /* Color+hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
+		003621F82B5C92E4009EFE53 /* Color+Luminosity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Luminosity.swift"; sourceTree = "<group>"; };
+		003621FA2B5C963B009EFE53 /* ParraColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraColorPalette.swift; sourceTree = "<group>"; };
+		003621FE2B5C9CDF009EFE53 /* ParraColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraColor.swift; sourceTree = "<group>"; };
+		003622002B5C9CFD009EFE53 /* ParraColorConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraColorConvertible.swift; sourceTree = "<group>"; };
+		003622022B5C9D12009EFE53 /* ParraColorSwatchConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraColorSwatchConvertible.swift; sourceTree = "<group>"; };
+		003622042B5C9D3D009EFE53 /* ParraColorSwatch+ParraColorSwatchConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraColorSwatch+ParraColorSwatchConvertible.swift"; sourceTree = "<group>"; };
+		003622062B5C9D53009EFE53 /* ParraColor+ParraColorSwatchConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraColor+ParraColorSwatchConvertible.swift"; sourceTree = "<group>"; };
+		003622082B5C9DD7009EFE53 /* UIColor+ParraColorConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+ParraColorConvertible.swift"; sourceTree = "<group>"; };
 		0036D5E127CACA100016DE97 /* ParraError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraError.swift; sourceTree = "<group>"; };
 		0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONEncoder.swift; sourceTree = "<group>"; };
 		0036D5E527CB0FBD0016DE97 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
@@ -553,7 +578,6 @@
 		00BD2FF72A47774300B4BEB2 /* URLSessionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionType.swift; sourceTree = "<group>"; };
 		00BD2FF92A47778E00B4BEB2 /* NotificationCenterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterType.swift; sourceTree = "<group>"; };
 		00BD2FFB2A477D7700B4BEB2 /* ParraNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraNotificationCenter.swift; sourceTree = "<group>"; };
-		00BD2FFD2A479BBA00B4BEB2 /* ParraConfigState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraConfigState.swift; sourceTree = "<group>"; };
 		00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+PushTests.swift"; sourceTree = "<group>"; };
 		00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCredentialTests.swift; sourceTree = "<group>"; };
 		00BDB2B028BD822700C16649 /* URLRequest+headers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+headers.swift"; sourceTree = "<group>"; };
@@ -855,6 +879,7 @@
 				006DE9842A4738F000521F5D /* State */,
 				001B7A9A27DE34F200DEEECD /* Supporting Files */,
 				001B7A8A27DD881300DEEECD /* Types */,
+				003621EC2B5C7660009EFE53 /* Theme */,
 				003621D12B5B55F2009EFE53 /* Views */,
 				00BC73152AC27BD300605873 /* Documentation.docc */,
 			);
@@ -956,6 +981,7 @@
 		003621D12B5B55F2009EFE53 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				003621F52B5C7C01009EFE53 /* Extensions */,
 				003621D82B5B565A009EFE53 /* Fixtures */,
 				003621D92B5B5694009EFE53 /* Logo */,
 			);
@@ -978,6 +1004,49 @@
 				003621E82B5C2784009EFE53 /* ParraLogoButton.swift */,
 			);
 			path = Logo;
+			sourceTree = "<group>";
+		};
+		003621EC2B5C7660009EFE53 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				003621FD2B5C9CCC009EFE53 /* Colors */,
+				003621FC2B5C9CC6009EFE53 /* Swatches */,
+				003621ED2B5C769A009EFE53 /* ParraTheme.swift */,
+				003621EF2B5C77DC009EFE53 /* ParraCornerRadius.swift */,
+				003621F12B5C77F1009EFE53 /* ParraTypography.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		003621F52B5C7C01009EFE53 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				003621F62B5C7C0A009EFE53 /* Color+hex.swift */,
+				003621F82B5C92E4009EFE53 /* Color+Luminosity.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		003621FC2B5C9CC6009EFE53 /* Swatches */ = {
+			isa = PBXGroup;
+			children = (
+				003622022B5C9D12009EFE53 /* ParraColorSwatchConvertible.swift */,
+				003621F32B5C79F7009EFE53 /* ParraColorSwatch.swift */,
+				003622042B5C9D3D009EFE53 /* ParraColorSwatch+ParraColorSwatchConvertible.swift */,
+			);
+			path = Swatches;
+			sourceTree = "<group>";
+		};
+		003621FD2B5C9CCC009EFE53 /* Colors */ = {
+			isa = PBXGroup;
+			children = (
+				003621FA2B5C963B009EFE53 /* ParraColorPalette.swift */,
+				003621FE2B5C9CDF009EFE53 /* ParraColor.swift */,
+				003622062B5C9D53009EFE53 /* ParraColor+ParraColorSwatchConvertible.swift */,
+				003622002B5C9CFD009EFE53 /* ParraColorConvertible.swift */,
+				003622082B5C9DD7009EFE53 /* UIColor+ParraColorConvertible.swift */,
+			);
+			path = Colors;
 			sourceTree = "<group>";
 		};
 		0036D5EF27CD9BC90016DE97 /* PersistentStorage */ = {
@@ -1087,7 +1156,6 @@
 		006DE9842A4738F000521F5D /* State */ = {
 			isa = PBXGroup;
 			children = (
-				00BD2FFD2A479BBA00B4BEB2 /* ParraConfigState.swift */,
 				00E269E92A524842001A0F50 /* ParraModuleStateAccessor.swift */,
 				00BD2FED2A4771D700B4BEB2 /* ParraSyncState.swift */,
 				006DE9852A47390600521F5D /* ParraState.swift */,
@@ -1714,6 +1782,7 @@
 				0039624A2A48B52100B8655F /* ParraStarControl.swift in Sources */,
 				00BD2FF82A47774300B4BEB2 /* URLSessionType.swift in Sources */,
 				00916DCA2AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift in Sources */,
+				003622052B5C9D3D009EFE53 /* ParraColorSwatch+ParraColorSwatchConvertible.swift in Sources */,
 				0029AD302A490CDB00E30CCD /* Parra+InternalAnalytics.swift in Sources */,
 				008878122979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift in Sources */,
 				0039624E2A48B52100B8655F /* ParraRatingLabels.swift in Sources */,
@@ -1740,6 +1809,7 @@
 				0087CA722A57B343007D72FA /* ParraLoggerCallSiteContext.swift in Sources */,
 				006DE9882A47547900521F5D /* ParraLazyLogParam.swift in Sources */,
 				00214C6A2AB3E2BC001C5313 /* ParraSanitizedDictionary.swift in Sources */,
+				003621F92B5C92E4009EFE53 /* Color+Luminosity.swift in Sources */,
 				00BF36D32B5ACA460097905C /* FeedbackFormViewState.swift in Sources */,
 				003962642A48B55300B8655F /* CurrentCardInfo.swift in Sources */,
 				00916DCC2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift in Sources */,
@@ -1766,6 +1836,7 @@
 				00EAE2F92A9F7D42003FB41C /* ParraSessionEventTarget.swift in Sources */,
 				001B7B1227DE3A9B00DEEECD /* ParraError.swift in Sources */,
 				003962512A48B52700B8655F /* ParraQuestionCardView.swift in Sources */,
+				003622012B5C9CFD009EFE53 /* ParraColorConvertible.swift in Sources */,
 				003962552A48B52E00B8655F /* ParraCardView+Layout.swift in Sources */,
 				0082DFCE2A53BA6700E7A91D /* Date+now.swift in Sources */,
 				001B7B0D27DE3A9B00DEEECD /* Parra+Constants.swift in Sources */,
@@ -1804,12 +1875,13 @@
 				007ED4742A6C458A0077E446 /* ParraSessionEvent.swift in Sources */,
 				003962392A48B4EF00B8655F /* ParraFeedback+Modals.swift in Sources */,
 				0039625F2A48B53D00B8655F /* CompletedCardDataStorage.swift in Sources */,
+				003622092B5C9DD7009EFE53 /* UIColor+ParraColorConvertible.swift in Sources */,
 				006654102A7EBDB300CD04E6 /* NSURLRequest.CachePolicy+CustomStringConvertible.swift in Sources */,
 				0039625E2A48B53D00B8655F /* CardStorage.swift in Sources */,
+				003622032B5C9D12009EFE53 /* ParraColorSwatchConvertible.swift in Sources */,
 				001B7B2C27DE3AC800DEEECD /* ParraNetworkManager.swift in Sources */,
 				006654122A80573400CD04E6 /* URLRequest.Attribution+CustomStringConvertible.swift in Sources */,
 				001B7B1F27DE3ABC00DEEECD /* PersistentStorageMedium.swift in Sources */,
-				00BD2FFE2A479BBA00B4BEB2 /* ParraConfigState.swift in Sources */,
 				003962542A48B52E00B8655F /* ParraCardTableViewCell.swift in Sources */,
 				003962442A48B52100B8655F /* ParraBorderedTextView.swift in Sources */,
 				00214C6C2AB3E3A1001C5313 /* ParraDataSanitizer.swift in Sources */,
@@ -1818,6 +1890,7 @@
 				00214C6E2AB62510001C5313 /* String+prefixes.swift in Sources */,
 				00A60B9B2932D37000B7168A /* ParraAuthenticationProvider.swift in Sources */,
 				006DE9822A472F9C00521F5D /* Endpoint.swift in Sources */,
+				003621F22B5C77F1009EFE53 /* ParraTypography.swift in Sources */,
 				00C00ABB2A8A6BC2003B21D3 /* SessionStorageContext.swift in Sources */,
 				0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */,
 				0087CA9A2A59DFCC007D72FA /* ProcessInfoPowerState+ParraLogStringConvertible.swift in Sources */,
@@ -1828,6 +1901,7 @@
 				0087CA7E2A5999D7007D72FA /* ParraSessionManager+LogProcessors.swift in Sources */,
 				0039625A2A48B53500B8655F /* ParraCardDrawerViewController.swift in Sources */,
 				0087CAA02A59E4F1007D72FA /* ParraSanitizedDictionaryConvertible.swift in Sources */,
+				003622072B5C9D53009EFE53 /* ParraColor+ParraColorSwatchConvertible.swift in Sources */,
 				0040DEAD2AA226A3007E2190 /* UIViewController+defaultLogger.swift in Sources */,
 				00707D1B27FA0A07004E9567 /* URLSession.swift in Sources */,
 				001B7B2627DE3AC200DEEECD /* UIFont+registration.swift in Sources */,
@@ -1861,7 +1935,10 @@
 				0087CAAD2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift in Sources */,
 				0087CA512A5466A6007D72FA /* ParraNetworkManagerUrlSessionDelegateProxy.swift in Sources */,
 				00EBCE082AA4C1E300887639 /* ParraLogContext.swift in Sources */,
+				003621FB2B5C963B009EFE53 /* ParraColorPalette.swift in Sources */,
+				003621F02B5C77DC009EFE53 /* ParraCornerRadius.swift in Sources */,
 				003962452A48B52100B8655F /* ParraBorderedButton.swift in Sources */,
+				003621F72B5C7C0A009EFE53 /* Color+hex.swift in Sources */,
 				001B7B1127DE3A9B00DEEECD /* ParraModule.swift in Sources */,
 				003621D72B5B563C009EFE53 /* ParraLogo.swift in Sources */,
 				003962352A48B4EF00B8655F /* ParraFeedback+Constants.swift in Sources */,
@@ -1890,6 +1967,7 @@
 				00DA7FFC296367D400109081 /* RequestConfig.swift in Sources */,
 				0039626D2A48B5AE00B8655F /* ParraLongTextKindView.swift in Sources */,
 				003962332A48B4EF00B8655F /* ParraFeedbackDataManager.swift in Sources */,
+				003621FF2B5C9CDF009EFE53 /* ParraColor.swift in Sources */,
 				00BD2FF42A47771300B4BEB2 /* AuthenticatedRequestAttributeOptions.swift in Sources */,
 				003962492A48B52100B8655F /* ParraBorderedTextField.swift in Sources */,
 				0039624D2A48B52100B8655F /* ParraImageButton.swift in Sources */,
@@ -1931,8 +2009,10 @@
 				0087CA872A59A0D5007D72FA /* ParraLoggerThreadInfo.swift in Sources */,
 				003962522A48B52700B8655F /* ParraCardItemView.swift in Sources */,
 				00EAE2F52A9BC3DB003FB41C /* FileHandleType.swift in Sources */,
+				003621EE2B5C769A009EFE53 /* ParraTheme.swift in Sources */,
 				007ED4672A6BFBDC0077E446 /* ParraLoggerContext.swift in Sources */,
 				005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */,
+				003621F42B5C79F7009EFE53 /* ParraColorSwatch.swift in Sources */,
 				0087CA922A59BA51007D72FA /* ParraLoggerEnvironment.swift in Sources */,
 				00E15A1F2929B7C10049C2C7 /* ParraSessionManager.swift in Sources */,
 				007ED46D2A6BFBF50077E446 /* ParraLogProcessedData.swift in Sources */,

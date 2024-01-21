@@ -23,7 +23,7 @@ internal extension Parra {
             thread: .current
         )
 
-        getSharedInstance().sessionManager.writeEvent(
+        getExistingInstance().sessionManager.writeEvent(
             wrappedEvent: .internalEvent(
                 event: event,
                 extra: extra
@@ -50,7 +50,7 @@ internal extension Parra {
             thread: .current
         )
 
-        getSharedInstance().sessionManager.writeEvent(
+        getExistingInstance().sessionManager.writeEvent(
             wrappedEvent: .internalEvent(
                 event: event,
                 extra: nil

@@ -13,19 +13,3 @@ extension ParraState {
     static let initialized = ParraState(initialized: true)
     static let uninitialized = ParraState(initialized: false)
 }
-
-extension ParraConfigState {
-    static func initialized(
-        tenantId: String,
-        applicationId: String
-    ) -> ParraConfigState {
-        var config = ParraConfiguration.default
-
-        config.setTenantId(tenantId)
-        config.setApplicationId(applicationId)
-
-        return ParraConfigState(
-            currentState: config
-        )
-    }
-}

@@ -22,7 +22,6 @@ class ParraAuthenticationTests: MockedParraTestCase {
         XCTAssertNil(startAuthProvider)
 
         await mockParra.parra.initialize(
-            options: [],
             authProvider: .default(
                 tenantId: mockParra.tenantId,
                 applicationId: mockParra.applicationId,
@@ -118,9 +117,10 @@ class ParraAuthenticationTests: MockedParraTestCase {
             )
         )
 
-        let configState = await mockParra.parra.configState.getCurrentState()
+        let applicationId = await mockParra.parra.state.applicationId
+        let tenantId = await mockParra.parra.state.tenantId
 
-        XCTAssertEqual(configState.applicationId, mockParra.applicationId)
-        XCTAssertEqual(configState.tenantId, mockParra.tenantId)
+        XCTAssertEqual(applicationId, mockParra.applicationId)
+        XCTAssertEqual(tenantId, mockParra.tenantId)
     }
 }

@@ -10,5 +10,4 @@ import Foundation
 
 internal protocol ParraModuleStateAccessor {
     var state: ParraState { get }
-    var configState: ParraConfigState { get }
 }

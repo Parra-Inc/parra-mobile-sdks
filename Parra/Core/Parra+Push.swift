@@ -23,7 +23,7 @@ public extension Parra {
     @MainActor
     static func registerDevicePushToken(_ token: Data) {
         Task {
-            await getSharedInstance().registerDevicePushToken(token)
+            await getExistingInstance().registerDevicePushToken(token)
         }
     }
 
@@ -80,7 +80,7 @@ public extension Parra {
     @MainActor
     static func didFailToRegisterForRemoteNotifications(with error: Error) {
         Task {
-            await getSharedInstance().didFailToRegisterForRemoteNotifications(with: error)
+            await getExistingInstance().didFailToRegisterForRemoteNotifications(with: error)
         }
     }
 

@@ -20,6 +20,9 @@ internal actor ParraState {
     /// Wether or not the SDK has been initialized by calling `Parra.initialize()`
     private var initialized = false
 
+    public internal(set) var tenantId: String?
+    public internal(set) var applicationId: String?
+
     /// A push notification token that is being temporarily cached. Caching should only occur
     /// for short periods until the SDK is prepared to upload it. Caching it longer term can
     /// lead to invalid tokens being held onto for too long.
@@ -121,5 +124,15 @@ internal actor ParraState {
 
     internal func clearTemporaryPushToken() {
         pushToken = nil
+    }
+
+    // MARK: - Tenant/app Ids
+
+    internal func setTenantId(_ tenantId: String?) {
+        self.tenantId = tenantId
+    }
+
+    internal func setApplicationId(_ applicationId: String?) {
+        self.applicationId = applicationId
     }
 }

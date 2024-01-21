@@ -32,7 +32,7 @@ fileprivate let logger = Logger(bypassEventCreation: true, category: "Session ma
 internal class ParraSessionManager {
     private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager
-    private var loggerOptions: ParraLoggerOptions
+    private let loggerOptions: ParraLoggerOptions
 
     fileprivate let eventQueue: DispatchQueue
 
@@ -55,18 +55,6 @@ internal class ParraSessionManager {
             label: "com.parra.sessions.event-queue",
             qos: .utility
         )
-    }
-
-    /// The config state will be exclusively accessed on a serial queue that will use
-    /// barriers. Since Parra's config state uses an actor, it is illegal to attempt
-    /// to access its value synchronously. So the safest thing to do is pass a copy
-    /// to this class every time it updates, and process the change on the event queue.
-    internal func updateLoggerOptions(
-        loggerOptions: ParraLoggerOptions
-    ) {
-        eventQueue.async {
-            self.loggerOptions = loggerOptions
-        }
     }
 
     internal func initializeSessions() async {

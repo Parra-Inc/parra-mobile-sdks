@@ -8,27 +8,28 @@
 
 import Foundation
 
+/// Only static configuration that doesn't change after app initialization.
 public struct ParraConfiguration {
     public let loggerOptions: ParraLoggerOptions
     public let pushNotificationsEnabled: Bool
+    public let theme: ParraTheme
 
-    public internal(set) var tenantId: String?
-    public internal(set) var applicationId: String?
+    internal private(set) static var current: ParraConfiguration = .default
 
     internal init(
         loggerOptions: ParraLoggerOptions,
-        pushNotificationsEnabled: Bool
+        pushNotificationsEnabled: Bool,
+        theme: ParraTheme
     ) {
         self.loggerOptions = loggerOptions
         self.pushNotificationsEnabled = pushNotificationsEnabled
-
-        self.tenantId = nil
-        self.applicationId = nil
+        self.theme = theme
     }
 
     internal init(options: [ParraConfigurationOption]) {
         var loggerOptions = ParraConfiguration.default.loggerOptions
         var pushNotificationsEnabled = ParraConfiguration.default.pushNotificationsEnabled
+        var theme = ParraTheme.default
 
         for option in options {
             switch option {
@@ -38,11 +39,14 @@ public struct ParraConfiguration {
                 )
             case .pushNotifications:
                 pushNotificationsEnabled = true
+            case .theme(let userTheme):
+                theme = userTheme
             }
         }
 
         self.loggerOptions = loggerOptions
         self.pushNotificationsEnabled = pushNotificationsEnabled
+        self.theme = theme
     }
 
     public static let `default`: ParraConfiguration = {
@@ -50,17 +54,10 @@ public struct ParraConfiguration {
             loggerOptions: applyLoggerOptionsOverrides(
                 loggerOptions: .default
             ),
-            pushNotificationsEnabled: false
+            pushNotificationsEnabled: false,
+            theme: .default
         )
     }()
-
-    internal mutating func setTenantId(_ tenantId: String?) {
-        self.tenantId = tenantId
-    }
-
-    internal mutating func setApplicationId(_ applicationId: String?) {
-        self.applicationId = applicationId
-    }
 
     private static func applyLoggerOptionsOverrides(
         loggerOptions initialOptions: ParraLoggerOptions
