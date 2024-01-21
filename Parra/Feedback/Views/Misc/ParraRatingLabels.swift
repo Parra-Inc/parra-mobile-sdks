@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-internal class ParraRatingLabels: UIView, ParraConfigurableView {
+internal class ParraRatingLabels: UIView, ParraLegacyConfigurableView {
     required init?(leadingText: String?, centerText: String?, trailingText: String?) {
         if leadingText == nil && centerText == nil && trailingText == nil {
             return nil

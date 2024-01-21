@@ -15,7 +15,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     internal static private(set) var name = "Parra"
 
     internal let state: ParraState
-    internal let configuration: ParraConfiguration
+    internal private(set) var configuration: ParraConfiguration
 
     internal lazy var feedback: ParraFeedback = {
         let parraFeedback = ParraFeedback(
@@ -267,6 +267,24 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
             sessionManager: sessionManager,
             networkManager: networkManager,
             notificationCenter: notificationCenter
+        )
+    }
+
+    // MARK: - Theme
+
+    public static func updateTheme(to newTheme: ParraTheme) {
+        let parra = getExistingInstance()
+
+        let oldTheme = parra.configuration.theme
+        parra.configuration.theme = newTheme
+
+        parra.notificationCenter.post(
+            name: Parra.themeWillChangeNotification,
+            object: nil,
+            userInfo: [
+                "oldTheme": oldTheme,
+                "newTheme": newTheme,
+            ]
         )
     }
 }

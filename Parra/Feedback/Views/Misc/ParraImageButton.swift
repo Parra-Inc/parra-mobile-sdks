@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal class ParraImageButton: UIControl, SelectableButton, ParraConfigurableView {
+internal class ParraImageButton: UIControl, SelectableButton, ParraLegacyConfigurableView {
     internal weak var delegate: SelectableButtonDelegate?
     internal var buttonIsSelected: Bool
     internal var allowsDeselection: Bool = false

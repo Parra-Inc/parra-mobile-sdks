@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-internal class ParraStar: UIView, ParraConfigurableView {
+internal class ParraStar: UIView, ParraLegacyConfigurableView {
     private var config: ParraCardViewConfig
 
     var isHighlighted: Bool {

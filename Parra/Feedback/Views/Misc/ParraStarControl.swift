@@ -17,7 +17,7 @@ internal protocol ParraStarControlDelegate: AnyObject {
                           didConfirmStarCount count: Int)
 }
 
-internal class ParraStarControl: UIControl, ParraConfigurableView {
+internal class ParraStarControl: UIControl, ParraLegacyConfigurableView {
     internal weak var delegate: ParraStarControlDelegate?
 
     private let config: ParraCardViewConfig

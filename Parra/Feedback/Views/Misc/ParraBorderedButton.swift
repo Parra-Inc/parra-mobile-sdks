@@ -14,7 +14,7 @@ internal protocol ParraBorderedButtonDelegate: AnyObject {
     func buttonDidDeselect(button: ParraBorderedButton, optionId: String)
 }
 
-internal class ParraBorderedButton: UIView, ParraConfigurableView {
+internal class ParraBorderedButton: UIView, ParraLegacyConfigurableView {
     private let innerButton = ParraPaddedBaseButton(
         forcedEdgeInsets: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
     )

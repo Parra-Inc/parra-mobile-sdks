@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-internal class ParraCardItemView: UIView, ParraConfigurableView {
+internal class ParraCardItemView: UIView, ParraLegacyConfigurableView {
     internal var config: ParraCardViewConfig
     
     internal required init(config: ParraCardViewConfig) {

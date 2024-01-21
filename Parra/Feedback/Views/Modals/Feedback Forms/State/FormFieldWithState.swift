@@ -63,9 +63,6 @@ internal struct FormFieldWithState: Identifiable {
             } else {
                 .valid
             }
-        case .feedbackFormInputFieldData:
-            // TODO: Implement when support for input fields is added.
-            return .invalid("Input fields are not supported yet!")
         }
     }
 }

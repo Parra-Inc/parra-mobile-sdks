@@ -86,4 +86,8 @@ internal class ParraNotificationCenter: NotificationCenterType {
             object: anObject
         )
     }
+
+    internal func removeObserver(_ observer: Any) {
+        underlyingNotificationCenter.removeObserver(observer)
+    }
 }

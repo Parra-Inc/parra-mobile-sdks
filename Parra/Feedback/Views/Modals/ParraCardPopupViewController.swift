@@ -152,7 +152,7 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
     }
 
     private func cardViewDismissedTransform() -> CGAffineTransform {
-        return .identity.translatedBy(
+        return CGAffineTransform.identity.translatedBy(
             x: 0.0,
             y: view.bounds.height / 2 + cardView.bounds.height / 2
         )

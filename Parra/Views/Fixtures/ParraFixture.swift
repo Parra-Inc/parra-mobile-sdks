@@ -49,6 +49,5 @@ extension ParraFixture {
                 handler(states[index])
             }
         }
-        .padding()
     }
 }

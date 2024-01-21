@@ -35,8 +35,7 @@ public extension ParraFeedback {
         presentModal(
             modal: cardViewController,
             fromViewController: fromViewController,
-            transitionStyle: transitionStyle,
-            config: config
+            transitionStyle: transitionStyle
         )
     }
 
@@ -64,8 +63,7 @@ public extension ParraFeedback {
         presentModal(
             modal: cardViewController,
             fromViewController: fromViewController,
-            transitionStyle: transitionStyle,
-            config: config
+            transitionStyle: transitionStyle
         )
     }
 
@@ -74,12 +72,17 @@ public extension ParraFeedback {
     func presentFeedbackForm(
         with form: ParraFeedbackFormResponse,
         from fromViewController: UIViewController? = nil,
-        config: ParraCardViewConfig = .drawerDefault
+        configuration: ParraFeedbackFormWidgetConfig? = nil
     ) {
+        let parra = Parra.getExistingInstance()
+        let theme = parra.configuration.theme
+        let notificationCenter = parra.notificationCenter
 
         let formViewController = ParraFeedbackFormViewController(
             form: form,
-            config: config
+            theme: theme,
+            notificationCenter: notificationCenter,
+            configuration: configuration
         )
 
         if let sheetPresentationController = formViewController.sheetPresentationController {
@@ -90,8 +93,7 @@ public extension ParraFeedback {
         presentModal(
             modal: formViewController,
             fromViewController: fromViewController,
-            transitionStyle: .slide,
-            config: config
+            transitionStyle: .slide
         )
     }
 
@@ -99,8 +101,7 @@ public extension ParraFeedback {
     private func presentModal(
         modal: UIViewController & ParraModal,
         fromViewController: UIViewController?,
-        transitionStyle: ParraCardModalTransitionStyle,
-        config: ParraCardViewConfig
+        transitionStyle: ParraCardModalTransitionStyle
     ) {
         guard let vc = fromViewController ?? UIViewController.topMostViewController() else {
             logger.warn("Missing view controller to present popup from.")

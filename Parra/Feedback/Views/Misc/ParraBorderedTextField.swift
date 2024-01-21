@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ParraBorderedTextField: ParraPaddedBaseTextField, ParraConfigurableView {
+class ParraBorderedTextField: ParraPaddedBaseTextField, ParraLegacyConfigurableView {
     private var config: ParraCardViewConfig
 
     required init(config: ParraCardViewConfig) {

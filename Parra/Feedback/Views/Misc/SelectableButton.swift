@@ -12,7 +12,7 @@ internal protocol SelectableButtonDelegate: AnyObject {
     func buttonDidDeselect(button: SelectableButton)
 }
 
-internal protocol SelectableButton: ParraConfigurableView {
+internal protocol SelectableButton: ParraLegacyConfigurableView {
     var delegate: SelectableButtonDelegate? { get set }
     var buttonIsSelected: Bool { get set }
     var allowsDeselection: Bool { get set }

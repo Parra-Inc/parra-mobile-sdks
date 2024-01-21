@@ -17,7 +17,7 @@ internal protocol ParraBorderedRatingControlDelegate: AnyObject {
                                     didConfirmOption option: RatingQuestionOption)
 }
 
-internal class ParraBorderedRatingControl: UIControl, ParraConfigurableView {
+internal class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableView {
     internal weak var delegate: ParraBorderedRatingControlDelegate?
 
     private let config: ParraCardViewConfig

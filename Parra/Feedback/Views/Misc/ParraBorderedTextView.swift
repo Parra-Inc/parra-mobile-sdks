@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal class ParraBorderedTextView: UITextView, ParraConfigurableView {
+internal class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
     internal var placeholder: String? {
         didSet {
             placeholderLabel.text = placeholder

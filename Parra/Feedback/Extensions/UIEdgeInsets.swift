@@ -9,5 +9,10 @@
 import UIKit
 
 internal extension UIEdgeInsets {
-    static let parraDefaultCardContentPadding = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+    static let parraDefaultCardContentPadding = UIEdgeInsets(
+        top: 8,
+        left: 8,
+        bottom: 8,
+        right: 8
+    )
 }

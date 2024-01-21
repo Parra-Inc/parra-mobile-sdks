@@ -18,4 +18,12 @@ public extension Parra {
     /// will include a unique token used to identify a given sync. This token is attached to the notification's `userInfo` with
     /// the key `Parra.Constant.syncTokenKey`.
     static let syncDidEndNotification = NSNotification.Name("ParraSyncDidEndNotification")
+
+    /// A notification that is fired when the Parra theme is about to change. At this point, no UI elements have been updated to
+    /// reflect the new theme.
+    static let themeWillChangeNotification = NSNotification.Name("ParraThemeWillChangeNotification")
+
+    /// A notification that is fired when the Parra theme has just changed. At this point, all Parra UI elements have been updated to
+    /// reflect the new theme.
+    static let themeDidChangeNotification = NSNotification.Name("ParraThemeDidChangeNotification")
 }

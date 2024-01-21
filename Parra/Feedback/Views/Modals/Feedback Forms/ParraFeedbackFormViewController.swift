@@ -16,8 +16,12 @@ fileprivate let logger = Logger(category: "Feedback form")
 internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
     private let form: ParraFeedbackFormResponse
 
-    required init(form: ParraFeedbackFormResponse,
-                  config: ParraCardViewConfig) {
+    required init(
+        form: ParraFeedbackFormResponse,
+        theme: ParraTheme,
+        notificationCenter: NotificationCenterType,
+        configuration: ParraFeedbackFormWidgetConfig?
+    ) {
         self.form = form
 
         super.init(nibName: nil, bundle: nil)
@@ -25,14 +29,22 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
         modalPresentationStyle = .pageSheet
         modalTransitionStyle = .coverVertical
 
-        let formViewController = UIHostingController(
-            rootView: ParraFeedbackFormView(
-                viewModel: FeedbackFormViewState(
-                    formData: form.data,
-                    config: config,
-                    submissionHandler: self.onSubmit
-                )
+        let formView = ParraFeedbackFormView(
+            state: FeedbackFormViewState(
+                formData: form.data,
+                submissionHandler: self.onSubmit
+            ),
+            configObserver: .init(
+                configuration: configuration ?? .default
+            ),
+            themeObserver: .init(
+                theme: theme,
+                notificationCenter: notificationCenter
             )
+        )
+
+        let formViewController = UIHostingController(
+            rootView: formView
         )
 
         formViewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -61,7 +73,9 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
         super.viewDidLoad()
     }
 
-    private func onSubmit(data: [FeedbackFormField: String]) {
+    private func onSubmit(
+        data: [FeedbackFormField: String]
+    ) {
         logger.info("Submitting feedback form data")
 
         Parra.logEvent(.submit(form: "feedback_form"), [

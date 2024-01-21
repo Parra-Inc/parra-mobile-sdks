@@ -12,7 +12,7 @@ import Foundation
 public struct ParraConfiguration {
     public let loggerOptions: ParraLoggerOptions
     public let pushNotificationsEnabled: Bool
-    public let theme: ParraTheme
+    public internal(set) var theme: ParraTheme
 
     internal private(set) static var current: ParraConfiguration = .default
 

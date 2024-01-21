@@ -39,8 +39,6 @@ extension FeedbackFormViewState: ParraFixture {
                         )
                     ]
                 )
-                ,
-                config: .default
             )
         ]
     }

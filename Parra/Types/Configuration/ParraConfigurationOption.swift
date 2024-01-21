@@ -19,4 +19,7 @@ public enum ParraConfigurationOption {
     /// to push permissions, and should be done if you intend to use
     /// `Parra.registerDevicePushToken(_:)`
     case pushNotifications
+
+    /// The theme that will be used for an UI components rendered by Parra.
+    case theme(_ theme: ParraTheme)
 }

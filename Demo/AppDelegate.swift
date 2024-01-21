@@ -31,10 +31,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         logger.debug("Initializing Parra")
 
+
+        let theme = ParraTheme(uiColor: .magenta)
+
         Parra.initialize(
             options: [
                 .logger(options: .default),
-                .pushNotifications
+                .pushNotifications,
+                .theme(theme),
             ],
             authProvider: .default(
                 tenantId: myParraTenantId,

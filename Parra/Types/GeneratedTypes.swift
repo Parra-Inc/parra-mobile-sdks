@@ -298,7 +298,6 @@ public struct FeedbackFormData: Codable, Equatable, Hashable {
 
 public enum FeedbackFormFieldType: String, Codable {
     case text = "text"
-    case input = "input"
     case select = "select"
 }
 
@@ -347,10 +346,6 @@ public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
         self.type = try container.decode(FeedbackFormFieldType.self, forKey: .type)
         self.required = try container.decode(Bool.self, forKey: .required)
         switch type {
-        case .input:
-            self.data = .feedbackFormInputFieldData(
-                try container.decode(FeedbackFormInputFieldData.self, forKey: .data)
-            )
         case .text:
             self.data = .feedbackFormTextFieldData(
                 try container.decode(FeedbackFormTextFieldData.self, forKey: .data)
@@ -366,7 +361,6 @@ public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
 public enum FeedbackFormFieldData: Codable, Equatable, Hashable {
     case feedbackFormTextFieldData(FeedbackFormTextFieldData)
     case feedbackFormSelectFieldData(FeedbackFormSelectFieldData)
-    case feedbackFormInputFieldData(FeedbackFormInputFieldData)
 }
 
 public protocol FeedbackFormFieldDataType {}
@@ -403,16 +397,6 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable, FeedbackF
         case minCharacters
         case maxCharacters
         case maxHeight
-    }
-}
-
-public struct FeedbackFormInputFieldData: Codable, Equatable, Hashable, FeedbackFormFieldDataType {
-    public let placeholder: String
-
-    public init(
-        placeholder: String
-    ) {
-        self.placeholder = placeholder
     }
 }
 

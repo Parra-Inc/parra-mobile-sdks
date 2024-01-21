@@ -26,7 +26,6 @@ final internal class FeedbackFormViewState: ObservableObject {
 
     internal init(
         formData: FeedbackFormData,
-        config: ParraCardViewConfig,
         submissionHandler: (([FeedbackFormField : String]) -> Void)? = nil
     ) {
         title = formData.title

@@ -1,5 +1,5 @@
 //
-//  ParraConfigurableView.swift
+//  ParraLegacyConfigurableView.swift
 //  ParraFeedback
 //
 //  Created by Mick MacCallum on 2/19/23.
@@ -8,6 +8,6 @@
 
 import UIKit
 
-internal protocol ParraConfigurableView: AnyObject {
+internal protocol ParraLegacyConfigurableView: AnyObject {
     func applyConfig(_ config: ParraCardViewConfig)
 }

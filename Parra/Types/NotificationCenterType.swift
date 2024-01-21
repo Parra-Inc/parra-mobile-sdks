@@ -40,4 +40,8 @@ internal protocol NotificationCenterType {
         name aName: NSNotification.Name?,
         object anObject: Any?
     )
+
+    func removeObserver(
+        _ observer: Any
+    )
 }
