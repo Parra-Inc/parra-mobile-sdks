@@ -8,17 +8,17 @@
 
 import SwiftUI
 
-internal struct ButtonConfig: ComponentConfig {
+internal struct ButtonConfig {
     internal var style: ParraButtonStyle
     internal var size: ParraButtonSize
     internal var isMaxWidth: Bool
-    internal var title: TextConfig
+    internal var title: LabelConfig
 
     internal init(
         style: ParraButtonStyle = .primary,
         size: ParraButtonSize = .medium,
         isMaxWidth: Bool = false,
-        title: TextConfig = .init()
+        title: LabelConfig = LabelConfig(type: .body)
     ) {
         self.style = style
         self.size = size

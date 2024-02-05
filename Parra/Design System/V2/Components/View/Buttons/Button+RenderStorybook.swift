@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal func renderStorybook<T: Component>(
+internal func renderStorybook<T: ButtonComponentType>(
     for componentType: T.Type
 ) -> some View {
 
@@ -49,22 +49,25 @@ internal func renderStorybook<T: Component>(
     .padding()
 }
 
-private func renderButtonComponent<T: Component>(
+private func renderButtonComponent<T: ButtonComponentType>(
     type: T.Type,
     config: ButtonConfig,
     content: ButtonContent,
-    theme: ParraTheme = .default,
-    style: ButtonStyle? = nil
+    theme: ParraTheme = .default
 ) -> some View {
-    let style = type.defaultStyleInContext(
-        of: theme,
-        with: config as! T.Config
-    ).withUpdates(updates: style as! T.Style?)
-
     return type.init(
-        config: config as! T.Config,
-        content: content as! T.Content,
-        style: style
+        config: config,
+        content: content,
+        style: ParraAttributedButtonStyle(
+            config: config,
+            content: content,
+            attributes: type.applyStandardCustomizations(
+                onto: .init(),
+                theme: theme,
+                config: config
+            ),
+            theme: theme
+        )
     )
 }
 
@@ -78,7 +81,7 @@ private func renderRowTitle(_ title: String) -> some View {
     .padding(.top)
 }
 
-private func renderColumn<T: Component>(
+private func renderColumn<T: ButtonComponentType>(
     for componentType: T.Type,
     size: ParraButtonSize
 ) -> some View {

@@ -8,52 +8,33 @@
 
 import SwiftUI
 
-struct ContainedButtonComponent: Component {
-    typealias Config = ButtonConfig
-    typealias Content = ButtonContent
-    typealias Style = ButtonStyle
+struct ContainedButtonComponent: ButtonComponentType {
+    let config: ButtonConfig
+    let content: ButtonContent
+    let style: ParraAttributedButtonStyle
 
-    var config: Config
-    var content: Content
-    var style: Style
-
-    static func defaultStyleInContext(
-        of theme: ParraTheme,
-        with config: Config
-    ) -> ButtonStyle {
+    static func applyStandardCustomizations(
+        onto inputAttributes: ButtonAttributes?,
+        theme: ParraTheme,
+        config: ButtonConfig
+    ) -> ButtonAttributes {
         let palette = theme.palette
-        let defaults = ButtonStyle.defaultStyles(
+        let defaults = ButtonAttributes.defaultAttributes(
             for: theme,
             with: config
-        )
+        ).withUpdates(updates: inputAttributes)
 
-        let backgroundColor = switch config.style {
+        let defaultBackgroundColor = switch config.style {
         case .primary:
             palette.primary
         case .secondary:
             palette.secondary
         }
 
-        return defaults.withUpdates(
-            updates: .init(
-                background: backgroundColor.toParraColor(),
-                title: defaults.title.withUpdates(
-                    updates: .init(
-                        fontColor: ParraColorSwatch.neutral.shade50
-                    )
-                )
-            )
-        )
-    }
-
-    private var buttonStyle: StatefulButtonStyle {
-        let titleStyle = style.title.withUpdates(
-            updates: TextStyle(
-                // If specific values for these properties weren't provided for
-                // the title label in the default state, apply the values provided
-                // for the button itself.
-                background: style.title.background ?? style.background,
-                cornerRadius: style.title.cornerRadius ?? style.cornerRadius,
+        let commonAttributes = defaults.title.withUpdates(
+            updates: LabelAttributes(
+                cornerRadius: defaults.title.cornerRadius ?? defaults.cornerRadius,
+                fontColor: ParraColorSwatch.neutral.shade50,
                 // Frame is applied here to adjust width based on config. If users
                 // provide overrides for styles in different states, this will need
                 // to be re-created.
@@ -61,38 +42,49 @@ struct ContainedButtonComponent: Component {
             )
         )
 
+        let titleAttributes = commonAttributes.withUpdates(
+            updates: LabelAttributes(
+                // If specific values for these properties weren't provided for
+                // the title label in the default state, apply the values provided
+                // for the button itself.
+                background: commonAttributes.background ?? inputAttributes?.background ?? defaultBackgroundColor.toParraColor()
+            )
+        )
+
         // If a pressed/disabled styles are provided, use them outright.
-        let pressedTitleStyle = style.titlePressed ?? titleStyle.withUpdates(
-            updates: .init(
-                background: titleStyle.background?.opacity(0.8),
-                fontColor: titleStyle.fontColor?.opacity(0.8)
+        let pressedTitleAttributes = commonAttributes.withUpdates(
+            updates: LabelAttributes(
+                background: titleAttributes.background?.opacity(0.8),
+                fontColor: titleAttributes.fontColor?.opacity(0.8)
             )
         )
 
-        let disabledTitleStyle = style.titleDisabled ?? titleStyle.withUpdates(
-            updates: .init(
-                background: titleStyle.background?.opacity(0.6),
-                fontColor: titleStyle.fontColor?.opacity(0.6)
+        let disabledTitleAttributes = commonAttributes.withUpdates(
+            updates: LabelAttributes(
+                background: titleAttributes.background?.opacity(0.6),
+                fontColor: titleAttributes.fontColor?.opacity(0.6)
             )
         )
 
-        return StatefulButtonStyle(
-            config: config,
-            content: content,
-            titleStyle: titleStyle,
-            pressedTitleStyle: pressedTitleStyle,
-            disabledTitleStyle: disabledTitleStyle
+        return defaults.withUpdates(
+            updates: ButtonAttributes(
+                title: titleAttributes,
+                titleDisabled: disabledTitleAttributes,
+                titlePressed: pressedTitleAttributes
+            )
         )
     }
 
     var body: some View {
         Button(action: {
             content.onPress?()
-        }, label: {}) // awkward, but label is created in button style.
+        }, label: {
+            EmptyView()
+        })
         .disabled(content.isDisabled)
-        .buttonStyle(buttonStyle)
-        .padding(style.padding ?? .zero)
-        .applyCornerRadii(style.cornerRadius)
+        .buttonStyle(style)
+        .padding(style.attributes.padding ?? .zero)
+        .applyCornerRadii(style.attributes.cornerRadius)
     }
 }
 

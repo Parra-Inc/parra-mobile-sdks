@@ -10,15 +10,30 @@ import Foundation
 import SwiftUI
 
 public struct ParraColorPalette {
-    public static let `default` = ParraColorPalette(
+    public static let defaultLight = ParraColorPalette(
         primary: ParraColorSwatch(primary: Color.accentColor, name: "Primary"),
-        secondary: ParraColorSwatch(primary: .black, name: "Secondary"),
+        secondary: ParraColorSwatch(primary: Color.secondary, name: "Secondary"),
         primaryBackground: Color(UIColor.systemBackground),
         secondaryBackground: Color(UIColor.secondarySystemBackground),
-        error: ParraColorSwatch.red.with(name: "Error"),
-        warning: ParraColorSwatch.amber.with(name: "Warning"),
-        info: ParraColorSwatch.blue.with(name: "Info"),
-        success: ParraColorSwatch.green.with(name: "Success")
+        primaryText: ParraColorSwatch(primary: Color(hex: 0x000000), name: "Primary Text"),
+        secondaryText: ParraColorSwatch(primary: Color(hex: 0x3C3C43, opacity: 0.6), name: "Secondary Text"),
+        error: ParraColorSwatch(primary: .red, name: "Error"),
+        warning: ParraColorSwatch(primary: .yellow, name: "Warning"),
+        info: ParraColorSwatch(primary: .blue, name: "Info"),
+        success: ParraColorSwatch(primary: .green, name: "Success")
+    )
+
+    public static let defaultDark = ParraColorPalette(
+        primary: ParraColorSwatch(primary: Color.accentColor, name: "Primary"),
+        secondary: ParraColorSwatch(primary: Color.secondary, name: "Secondary"),
+        primaryBackground: Color(UIColor.systemBackground),
+        secondaryBackground: Color(UIColor.secondarySystemBackground),
+        primaryText: ParraColorSwatch(primary: Color(hex: 0xFFFFFF), name: "Primary Text"),
+        secondaryText: ParraColorSwatch(primary: Color(hex: 0xEBEBF5, opacity: 0.6), name: "Secondary Text"),
+        error: ParraColorSwatch(primary: .red, name: "Error"),
+        warning: ParraColorSwatch(primary: .yellow, name: "Warning"),
+        info: ParraColorSwatch(primary: .blue, name: "Info"),
+        success: ParraColorSwatch(primary: .green, name: "Success")
     )
 
     public let primary: ParraColorSwatch
@@ -27,25 +42,32 @@ public struct ParraColorPalette {
     public let primaryBackground: ParraColor
     public let secondaryBackground: ParraColor
 
+    public let primaryText: ParraColorSwatch
+    public let secondaryText: ParraColorSwatch
+
     public let error: ParraColorSwatch
     public let warning: ParraColorSwatch
     public let info: ParraColorSwatch
     public let success: ParraColorSwatch
 
     public init(
-        primary: ParraColorSwatchConvertible = ParraColorPalette.default.primary,
-        secondary: ParraColorSwatchConvertible = ParraColorPalette.default.secondary,
-        primaryBackground: ParraColor = ParraColorPalette.default.primaryBackground,
-        secondaryBackground: ParraColor = ParraColorPalette.default.secondaryBackground,
-        error: ParraColorSwatchConvertible = ParraColorPalette.default.error,
-        warning: ParraColorSwatchConvertible = ParraColorPalette.default.warning,
-        info: ParraColorSwatchConvertible = ParraColorPalette.default.info,
-        success: ParraColorSwatchConvertible = ParraColorPalette.default.success
+        primary: ParraColorSwatchConvertible = ParraColorPalette.defaultLight.primary,
+        secondary: ParraColorSwatchConvertible = ParraColorPalette.defaultLight.secondary,
+        primaryBackground: ParraColor = ParraColorPalette.defaultLight.primaryBackground,
+        secondaryBackground: ParraColor = ParraColorPalette.defaultLight.secondaryBackground,
+        primaryText: ParraColorSwatchConvertible = ParraColorPalette.defaultLight.primaryText,
+        secondaryText: ParraColorSwatchConvertible = ParraColorPalette.defaultLight.secondaryText,
+        error: ParraColorSwatchConvertible = ParraColorPalette.defaultLight.error,
+        warning: ParraColorSwatchConvertible = ParraColorPalette.defaultLight.warning,
+        info: ParraColorSwatchConvertible = ParraColorPalette.defaultLight.info,
+        success: ParraColorSwatchConvertible = ParraColorPalette.defaultLight.success
     ) {
         self.primary = primary.toSwatch()
         self.secondary = secondary.toSwatch()
         self.primaryBackground = primaryBackground
         self.secondaryBackground = secondaryBackground
+        self.primaryText = primaryText.toSwatch()
+        self.secondaryText = secondaryText.toSwatch()
         self.error = error.toSwatch()
         self.warning = warning.toSwatch()
         self.info = info.toSwatch()
@@ -74,6 +96,14 @@ public struct ParraColorPalette {
                 lightVariant: lightPalette.secondaryBackground,
                 darkVariant: darkPalette.secondaryBackground
             ),
+            primaryText: ParraColorSwatch(
+                lightSwatch: lightPalette.primaryText,
+                darkSwatch: darkPalette.primaryText
+            ),
+            secondaryText: ParraColorSwatch(
+                lightSwatch: lightPalette.secondaryText,
+                darkSwatch: darkPalette.secondaryText
+            ),
             error: ParraColorSwatch(
                 lightSwatch: lightPalette.error,
                 darkSwatch: darkPalette.error
@@ -99,6 +129,8 @@ public struct ParraColorPalette {
             secondary: secondary.darkened(to: luminosity),
             primaryBackground: primaryBackground.withLuminosity(luminosity),
             secondaryBackground: secondaryBackground.withLuminosity(luminosity),
+            primaryText: primaryText.darkened(to: luminosity),
+            secondaryText: secondaryText.darkened(to: luminosity),
             error: error.darkened(to: luminosity),
             warning: warning.darkened(to: luminosity),
             info: info.darkened(to: luminosity),

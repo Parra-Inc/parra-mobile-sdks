@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+// TODO: Bad practice. Delete these
+
 extension View {
     @ViewBuilder
     func `if`<Content: View>(

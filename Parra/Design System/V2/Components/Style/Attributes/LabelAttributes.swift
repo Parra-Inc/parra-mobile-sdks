@@ -1,5 +1,5 @@
 //
-//  TextStyle.swift
+//  TextAttributes.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct TextStyle: ComponentStyle {
+public struct LabelAttributes: ParraStyleAttributes {
     public let background: (any ShapeStyle)?
     public let cornerRadius: RectangleCornerRadii?
     public let font: Font?
@@ -68,9 +68,9 @@ public struct TextStyle: ComponentStyle {
     }
 
     internal func withUpdates(
-        updates: TextStyle?
-    ) -> TextStyle {
-        return TextStyle(
+        updates: LabelAttributes?
+    ) -> LabelAttributes {
+        return LabelAttributes(
             background: updates?.background ?? background,
             cornerRadius: updates?.cornerRadius ?? cornerRadius,
             font: updates?.font ?? font,

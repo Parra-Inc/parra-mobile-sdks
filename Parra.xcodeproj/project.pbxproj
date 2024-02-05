@@ -18,7 +18,11 @@
 		001559B527E7EAD9006450BE /* ParraNetworkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559B427E7EAD9006450BE /* ParraNetworkManagerTests.swift */; };
 		001677532B6ABFB700674001 /* Button+RenderStorybook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677522B6ABFB600674001 /* Button+RenderStorybook.swift */; };
 		001677552B6AE7FD00674001 /* FrameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677542B6AE7FD00674001 /* FrameAttributes.swift */; };
-		001677572B6AE8E400674001 /* StatefulButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677562B6AE8E400674001 /* StatefulButtonStyle.swift */; };
+		001677572B6AE8E400674001 /* ParraAttributedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677562B6AE8E400674001 /* ParraAttributedButtonStyle.swift */; };
+		001677592B6D5C5B00674001 /* ParraAttributedLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677582B6D5C5B00674001 /* ParraAttributedLabelStyle.swift */; };
+		0016775C2B6FDCBA00674001 /* ParraStyleAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0016775B2B6FDCBA00674001 /* ParraStyleAttributes.swift */; };
+		0016775E2B6FDEFB00674001 /* ParraAttributedStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0016775D2B6FDEFB00674001 /* ParraAttributedStyle.swift */; };
+		001677652B6FE5F000674001 /* ButtonComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677642B6FE5F000674001 /* ButtonComponentType.swift */; };
 		0018A60E28D77FF2008CC97E /* URLComponents+queryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0018A60D28D77FF2008CC97E /* URLComponents+queryItems.swift */; };
 		0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC228F639040015E703 /* ParraQuestionAppArea.swift */; };
 		0019CBC528FAE0E80015E703 /* FailableDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC428FAE0E80015E703 /* FailableDecodable.swift */; };
@@ -254,7 +258,6 @@
 		00916DC82AD35D8700B4856F /* ParraInstanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC72AD35D8700B4856F /* ParraInstanceConfiguration.swift */; };
 		00916DCA2AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC92AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift */; };
 		00916DCC2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DCB2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift */; };
-		00A2CEE32B695F8700684DC0 /* Container+DefaultConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE22B695F8700684DC0 /* Container+DefaultConfig.swift */; };
 		00A2CEE52B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */; };
 		00A2CEE72B696AE600684DC0 /* ButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE62B696AE500684DC0 /* ButtonConfig.swift */; };
 		00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */; };
@@ -327,22 +330,18 @@
 		00E26A032A53120F001A0F50 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E26A022A53120F001A0F50 /* TestData.swift */; };
 		00E26A052A53132E001A0F50 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E26A042A53132E001A0F50 /* String.swift */; };
 		00E26A072A534334001A0F50 /* ParraState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E26A062A534334001A0F50 /* ParraState.swift */; };
-		00E76D092B66D08700B01DD8 /* ComponentStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D082B66D08700B01DD8 /* ComponentStyle.swift */; };
-		00E76D0B2B66D09800B01DD8 /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D0A2B66D09800B01DD8 /* TextStyle.swift */; };
+		00E76D0B2B66D09800B01DD8 /* LabelAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D0A2B66D09800B01DD8 /* LabelAttributes.swift */; };
 		00E76D142B66D0F100B01DD8 /* ContainerStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D132B66D0F100B01DD8 /* ContainerStyle.swift */; };
 		00E76D162B66D10600B01DD8 /* ScreenStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D152B66D10600B01DD8 /* ScreenStyle.swift */; };
 		00E76D182B66D10E00B01DD8 /* ToastStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D172B66D10E00B01DD8 /* ToastStyle.swift */; };
 		00E76D1A2B66D11300B01DD8 /* WidgetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D192B66D11300B01DD8 /* WidgetStyle.swift */; };
-		00E76D1E2B66D18F00B01DD8 /* ComponentConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D1D2B66D18F00B01DD8 /* ComponentConfig.swift */; };
-		00E76D202B66D1A200B01DD8 /* ComponentContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D1F2B66D1A100B01DD8 /* ComponentContent.swift */; };
-		00E76D222B66D1E800B01DD8 /* TextConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D212B66D1E800B01DD8 /* TextConfig.swift */; };
-		00E76D242B66D1FD00B01DD8 /* TextContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D232B66D1FD00B01DD8 /* TextContent.swift */; };
-		00E76D262B66D20D00B01DD8 /* PlainButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D252B66D20D00B01DD8 /* PlainButtonConfig.swift */; };
+		00E76D222B66D1E800B01DD8 /* LabelConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D212B66D1E800B01DD8 /* LabelConfig.swift */; };
+		00E76D242B66D1FD00B01DD8 /* LabelContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D232B66D1FD00B01DD8 /* LabelContent.swift */; };
 		00E76D282B66D22000B01DD8 /* ButtonContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D272B66D22000B01DD8 /* ButtonContent.swift */; };
-		00E76D2A2B66D23A00B01DD8 /* GlobalComponentStylizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D292B66D23A00B01DD8 /* GlobalComponentStylizer.swift */; };
+		00E76D2A2B66D23A00B01DD8 /* GlobalComponentAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D292B66D23A00B01DD8 /* GlobalComponentAttributes.swift */; };
 		00E76D2D2B66D26300B01DD8 /* ParraComponentFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D2C2B66D26300B01DD8 /* ParraComponentFactory.swift */; };
 		00E76D342B66E3FD00B01DD8 /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D332B66E3FD00B01DD8 /* Container.swift */; };
-		00E76D362B66E42600B01DD8 /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D352B66E42600B01DD8 /* Component.swift */; };
+		00E76D362B66E42600B01DD8 /* LabelComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D352B66E42600B01DD8 /* LabelComponentType.swift */; };
 		00E76D382B66E49100B01DD8 /* FeedbackFormWidgetComponentFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D372B66E49100B01DD8 /* FeedbackFormWidgetComponentFactory.swift */; };
 		00E76D3B2B66E4E000B01DD8 /* FeedbackFormWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D3A2B66E4E000B01DD8 /* FeedbackFormWidget.swift */; };
 		00E76D3D2B66E6E100B01DD8 /* ContainerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D3C2B66E6E100B01DD8 /* ContainerConfig.swift */; };
@@ -350,13 +349,11 @@
 		00E76D462B66E88300B01DD8 /* FeedbackFormContentObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D452B66E88300B01DD8 /* FeedbackFormContentObserver.swift */; };
 		00E76D482B66E89C00B01DD8 /* ContainerContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D472B66E89C00B01DD8 /* ContainerContent.swift */; };
 		00E76D4C2B66ED4300B01DD8 /* ContainerContentObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D4B2B66ED4300B01DD8 /* ContainerContentObserver.swift */; };
-		00E76D502B68286600B01DD8 /* TextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D4F2B68286600B01DD8 /* TextComponent.swift */; };
+		00E76D502B68286600B01DD8 /* LabelComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D4F2B68286600B01DD8 /* LabelComponent.swift */; };
 		00E76D522B68286E00B01DD8 /* PlainButtonComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D512B68286E00B01DD8 /* PlainButtonComponent.swift */; };
 		00E76D542B68287400B01DD8 /* OutlinedButtonComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D532B68287400B01DD8 /* OutlinedButtonComponent.swift */; };
 		00E76D562B68287B00B01DD8 /* ContainedButtonComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D552B68287B00B01DD8 /* ContainedButtonComponent.swift */; };
-		00E76D582B68470C00B01DD8 /* OutlinedButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D572B68470C00B01DD8 /* OutlinedButtonConfig.swift */; };
-		00E76D5A2B68471200B01DD8 /* ContainedButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D592B68471200B01DD8 /* ContainedButtonConfig.swift */; };
-		00E76D5E2B6940A500B01DD8 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D5D2B6940A500B01DD8 /* ButtonStyle.swift */; };
+		00E76D5E2B6940A500B01DD8 /* ButtonAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D5D2B6940A500B01DD8 /* ButtonAttributes.swift */; };
 		00E76D602B695F5600B01DD8 /* Container+Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D5F2B695F5600B01DD8 /* Container+Env.swift */; };
 		00E7957E29A05CD6003FE68D /* ParraLogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E7957D29A05CD6003FE68D /* ParraLogLevel.swift */; };
 		00EAE2F52A9BC3DB003FB41C /* FileHandleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EAE2F42A9BC3DB003FB41C /* FileHandleType.swift */; };
@@ -457,7 +454,11 @@
 		001559B427E7EAD9006450BE /* ParraNetworkManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraNetworkManagerTests.swift; sourceTree = "<group>"; };
 		001677522B6ABFB600674001 /* Button+RenderStorybook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+RenderStorybook.swift"; sourceTree = "<group>"; };
 		001677542B6AE7FD00674001 /* FrameAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAttributes.swift; sourceTree = "<group>"; };
-		001677562B6AE8E400674001 /* StatefulButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulButtonStyle.swift; sourceTree = "<group>"; };
+		001677562B6AE8E400674001 /* ParraAttributedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAttributedButtonStyle.swift; sourceTree = "<group>"; };
+		001677582B6D5C5B00674001 /* ParraAttributedLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAttributedLabelStyle.swift; sourceTree = "<group>"; };
+		0016775B2B6FDCBA00674001 /* ParraStyleAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStyleAttributes.swift; sourceTree = "<group>"; };
+		0016775D2B6FDEFB00674001 /* ParraAttributedStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAttributedStyle.swift; sourceTree = "<group>"; };
+		001677642B6FE5F000674001 /* ButtonComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonComponentType.swift; sourceTree = "<group>"; };
 		0018A60D28D77FF2008CC97E /* URLComponents+queryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLComponents+queryItems.swift"; sourceTree = "<group>"; };
 		0019CBC228F639040015E703 /* ParraQuestionAppArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionAppArea.swift; sourceTree = "<group>"; };
 		0019CBC428FAE0E80015E703 /* FailableDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableDecodable.swift; sourceTree = "<group>"; };
@@ -667,7 +668,6 @@
 		00916DC72AD35D8700B4856F /* ParraInstanceConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceConfiguration.swift; sourceTree = "<group>"; };
 		00916DC92AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceStorageConfiguration.swift; sourceTree = "<group>"; };
 		00916DCB2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceNetworkConfiguration.swift; sourceTree = "<group>"; };
-		00A2CEE22B695F8700684DC0 /* Container+DefaultConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+DefaultConfig.swift"; sourceTree = "<group>"; };
 		00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraColorSwatch+ParraColorConvertible.swift"; sourceTree = "<group>"; };
 		00A2CEE62B696AE500684DC0 /* ButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfig.swift; sourceTree = "<group>"; };
 		00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+inits.swift"; sourceTree = "<group>"; };
@@ -757,22 +757,18 @@
 		00E26A022A53120F001A0F50 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		00E26A042A53132E001A0F50 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		00E26A062A534334001A0F50 /* ParraState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraState.swift; sourceTree = "<group>"; };
-		00E76D082B66D08700B01DD8 /* ComponentStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentStyle.swift; sourceTree = "<group>"; };
-		00E76D0A2B66D09800B01DD8 /* TextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
+		00E76D0A2B66D09800B01DD8 /* LabelAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelAttributes.swift; sourceTree = "<group>"; };
 		00E76D132B66D0F100B01DD8 /* ContainerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerStyle.swift; sourceTree = "<group>"; };
 		00E76D152B66D10600B01DD8 /* ScreenStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenStyle.swift; sourceTree = "<group>"; };
 		00E76D172B66D10E00B01DD8 /* ToastStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastStyle.swift; sourceTree = "<group>"; };
 		00E76D192B66D11300B01DD8 /* WidgetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetStyle.swift; sourceTree = "<group>"; };
-		00E76D1D2B66D18F00B01DD8 /* ComponentConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentConfig.swift; sourceTree = "<group>"; };
-		00E76D1F2B66D1A100B01DD8 /* ComponentContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentContent.swift; sourceTree = "<group>"; };
-		00E76D212B66D1E800B01DD8 /* TextConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextConfig.swift; sourceTree = "<group>"; };
-		00E76D232B66D1FD00B01DD8 /* TextContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextContent.swift; sourceTree = "<group>"; };
-		00E76D252B66D20D00B01DD8 /* PlainButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainButtonConfig.swift; sourceTree = "<group>"; };
+		00E76D212B66D1E800B01DD8 /* LabelConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelConfig.swift; sourceTree = "<group>"; };
+		00E76D232B66D1FD00B01DD8 /* LabelContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelContent.swift; sourceTree = "<group>"; };
 		00E76D272B66D22000B01DD8 /* ButtonContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonContent.swift; sourceTree = "<group>"; };
-		00E76D292B66D23A00B01DD8 /* GlobalComponentStylizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalComponentStylizer.swift; sourceTree = "<group>"; };
+		00E76D292B66D23A00B01DD8 /* GlobalComponentAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalComponentAttributes.swift; sourceTree = "<group>"; };
 		00E76D2C2B66D26300B01DD8 /* ParraComponentFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraComponentFactory.swift; sourceTree = "<group>"; };
 		00E76D332B66E3FD00B01DD8 /* Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
-		00E76D352B66E42600B01DD8 /* Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
+		00E76D352B66E42600B01DD8 /* LabelComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelComponentType.swift; sourceTree = "<group>"; };
 		00E76D372B66E49100B01DD8 /* FeedbackFormWidgetComponentFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormWidgetComponentFactory.swift; sourceTree = "<group>"; };
 		00E76D3A2B66E4E000B01DD8 /* FeedbackFormWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormWidget.swift; sourceTree = "<group>"; };
 		00E76D3C2B66E6E100B01DD8 /* ContainerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerConfig.swift; sourceTree = "<group>"; };
@@ -780,13 +776,11 @@
 		00E76D452B66E88300B01DD8 /* FeedbackFormContentObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormContentObserver.swift; sourceTree = "<group>"; };
 		00E76D472B66E89C00B01DD8 /* ContainerContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerContent.swift; sourceTree = "<group>"; };
 		00E76D4B2B66ED4300B01DD8 /* ContainerContentObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerContentObserver.swift; sourceTree = "<group>"; };
-		00E76D4F2B68286600B01DD8 /* TextComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextComponent.swift; sourceTree = "<group>"; };
+		00E76D4F2B68286600B01DD8 /* LabelComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelComponent.swift; sourceTree = "<group>"; };
 		00E76D512B68286E00B01DD8 /* PlainButtonComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainButtonComponent.swift; sourceTree = "<group>"; };
 		00E76D532B68287400B01DD8 /* OutlinedButtonComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlinedButtonComponent.swift; sourceTree = "<group>"; };
 		00E76D552B68287B00B01DD8 /* ContainedButtonComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainedButtonComponent.swift; sourceTree = "<group>"; };
-		00E76D572B68470C00B01DD8 /* OutlinedButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlinedButtonConfig.swift; sourceTree = "<group>"; };
-		00E76D592B68471200B01DD8 /* ContainedButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainedButtonConfig.swift; sourceTree = "<group>"; };
-		00E76D5D2B6940A500B01DD8 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
+		00E76D5D2B6940A500B01DD8 /* ButtonAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonAttributes.swift; sourceTree = "<group>"; };
 		00E76D5F2B695F5600B01DD8 /* Container+Env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Env.swift"; sourceTree = "<group>"; };
 		00E7957D29A05CD6003FE68D /* ParraLogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogLevel.swift; sourceTree = "<group>"; };
 		00E8B32B278730D500FC3FFD /* ParraCardAnswerHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardAnswerHandler.swift; sourceTree = "<group>"; };
@@ -996,6 +990,17 @@
 				00E76D552B68287B00B01DD8 /* ContainedButtonComponent.swift */,
 			);
 			path = Buttons;
+			sourceTree = "<group>";
+		};
+		0016775A2B6FDC8700674001 /* Attributes */ = {
+			isa = PBXGroup;
+			children = (
+				0016775B2B6FDCBA00674001 /* ParraStyleAttributes.swift */,
+				00E76D5D2B6940A500B01DD8 /* ButtonAttributes.swift */,
+				00E76D0A2B66D09800B01DD8 /* LabelAttributes.swift */,
+				001677542B6AE7FD00674001 /* FrameAttributes.swift */,
+			);
+			path = Attributes;
 			sourceTree = "<group>";
 		};
 		001B7A8A27DD881300DEEECD /* Types */ = {
@@ -1654,17 +1659,6 @@
 			path = "Instance Config";
 			sourceTree = "<group>";
 		};
-		00A2CEE82B696AFB00684DC0 /* Buttons */ = {
-			isa = PBXGroup;
-			children = (
-				00A2CEE62B696AE500684DC0 /* ButtonConfig.swift */,
-				00E76D252B66D20D00B01DD8 /* PlainButtonConfig.swift */,
-				00E76D592B68471200B01DD8 /* ContainedButtonConfig.swift */,
-				00E76D572B68470C00B01DD8 /* OutlinedButtonConfig.swift */,
-			);
-			path = Buttons;
-			sourceTree = "<group>";
-		};
 		00A60B972932D34F00B7168A /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -1872,7 +1866,8 @@
 		00E76D032B66D05A00B01DD8 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				00E76D352B66E42600B01DD8 /* Component.swift */,
+				001677642B6FE5F000674001 /* ButtonComponentType.swift */,
+				00E76D352B66E42600B01DD8 /* LabelComponentType.swift */,
 				00E76D1B2B66D18100B01DD8 /* Config */,
 				00E76D1C2B66D18600B01DD8 /* Content */,
 				00E76D072B66D07800B01DD8 /* Style */,
@@ -1886,7 +1881,6 @@
 			children = (
 				00E76D332B66E3FD00B01DD8 /* Container.swift */,
 				00E76D5F2B695F5600B01DD8 /* Container+Env.swift */,
-				00A2CEE22B695F8700684DC0 /* Container+DefaultConfig.swift */,
 				00E76D312B66E3E100B01DD8 /* Config */,
 				00E76D322B66E3E900B01DD8 /* Content */,
 				00E76D122B66D0EA00B01DD8 /* Style */,
@@ -1898,11 +1892,10 @@
 		00E76D072B66D07800B01DD8 /* Style */ = {
 			isa = PBXGroup;
 			children = (
-				00E76D082B66D08700B01DD8 /* ComponentStyle.swift */,
-				00E76D5D2B6940A500B01DD8 /* ButtonStyle.swift */,
-				001677562B6AE8E400674001 /* StatefulButtonStyle.swift */,
-				00E76D0A2B66D09800B01DD8 /* TextStyle.swift */,
-				001677542B6AE7FD00674001 /* FrameAttributes.swift */,
+				0016775A2B6FDC8700674001 /* Attributes */,
+				0016775D2B6FDEFB00674001 /* ParraAttributedStyle.swift */,
+				001677562B6AE8E400674001 /* ParraAttributedButtonStyle.swift */,
+				001677582B6D5C5B00674001 /* ParraAttributedLabelStyle.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -1921,9 +1914,8 @@
 		00E76D1B2B66D18100B01DD8 /* Config */ = {
 			isa = PBXGroup;
 			children = (
-				00E76D1D2B66D18F00B01DD8 /* ComponentConfig.swift */,
-				00E76D212B66D1E800B01DD8 /* TextConfig.swift */,
-				00A2CEE82B696AFB00684DC0 /* Buttons */,
+				00E76D212B66D1E800B01DD8 /* LabelConfig.swift */,
+				00A2CEE62B696AE500684DC0 /* ButtonConfig.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -1931,8 +1923,7 @@
 		00E76D1C2B66D18600B01DD8 /* Content */ = {
 			isa = PBXGroup;
 			children = (
-				00E76D1F2B66D1A100B01DD8 /* ComponentContent.swift */,
-				00E76D232B66D1FD00B01DD8 /* TextContent.swift */,
+				00E76D232B66D1FD00B01DD8 /* LabelContent.swift */,
 				00E76D272B66D22000B01DD8 /* ButtonContent.swift */,
 			);
 			path = Content;
@@ -1941,7 +1932,7 @@
 		00E76D2B2B66D25A00B01DD8 /* Factory */ = {
 			isa = PBXGroup;
 			children = (
-				00E76D292B66D23A00B01DD8 /* GlobalComponentStylizer.swift */,
+				00E76D292B66D23A00B01DD8 /* GlobalComponentAttributes.swift */,
 				00E76D2C2B66D26300B01DD8 /* ParraComponentFactory.swift */,
 				00E76D2E2B66D2BA00B01DD8 /* Container Component Factories */,
 			);
@@ -1959,7 +1950,7 @@
 		00E76D2F2B66D30C00B01DD8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				00E76D4F2B68286600B01DD8 /* TextComponent.swift */,
+				00E76D4F2B68286600B01DD8 /* LabelComponent.swift */,
 				001677512B6ABFA500674001 /* Buttons */,
 			);
 			path = View;
@@ -2323,7 +2314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E76D0B2B66D09800B01DD8 /* TextStyle.swift in Sources */,
+				00E76D0B2B66D09800B01DD8 /* LabelAttributes.swift in Sources */,
 				0036224A2B5F092F009EFE53 /* ParraConfigurableView.swift in Sources */,
 				003622232B5D9ABB009EFE53 /* UIColor+ParraColorSwatchConvertible.swift in Sources */,
 				0039624A2A48B52100B8655F /* ParraStarControl.swift in Sources */,
@@ -2345,14 +2336,14 @@
 				00A2CEE72B696AE600684DC0 /* ButtonConfig.swift in Sources */,
 				0036221E2B5D966B009EFE53 /* ButtonComponents.swift in Sources */,
 				0087CA942A59C0FB007D72FA /* ParraLoggerConsoleFormatOption.swift in Sources */,
-				00E76D5A2B68471200B01DD8 /* ContainedButtonConfig.swift in Sources */,
 				0039624F2A48B52700B8655F /* ParraActionCardView.swift in Sources */,
 				0087CAA22A59E507007D72FA /* ParraDiskUsage.swift in Sources */,
 				00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */,
 				0039626A2A48B5AE00B8655F /* ParraQuestionKindView.swift in Sources */,
 				003962432A48B51800B8655F /* ParraLegacyConfigurableView.swift in Sources */,
 				0039623A2A48B50900B8655F /* ViewTimer.swift in Sources */,
-				001677572B6AE8E400674001 /* StatefulButtonStyle.swift in Sources */,
+				0016775E2B6FDEFB00674001 /* ParraAttributedStyle.swift in Sources */,
+				001677572B6AE8E400674001 /* ParraAttributedButtonStyle.swift in Sources */,
 				00DDBA262B63FBBC00400761 /* ParraThemeObserver.swift in Sources */,
 				0087CA9C2A59E166007D72FA /* URL+diskUsage.swift in Sources */,
 				0029AD372A4925C000E30CCD /* ParraStandardEvent.swift in Sources */,
@@ -2381,15 +2372,15 @@
 				006654392A89AFB000CD04E6 /* ParraSessionUploadGenerator.swift in Sources */,
 				00EBCE142AA4D58F00887639 /* ParraLogLevel+ConsoleOutput.swift in Sources */,
 				0019CBC928FB37BC0015E703 /* Sequence+asyncMap.swift in Sources */,
-				00E76D2A2B66D23A00B01DD8 /* GlobalComponentStylizer.swift in Sources */,
+				00E76D2A2B66D23A00B01DD8 /* GlobalComponentAttributes.swift in Sources */,
 				003962562A48B52E00B8655F /* ParraCardCollectionViewCell.swift in Sources */,
 				00E76D442B66E83400B01DD8 /* FeedbackFormConfig.swift in Sources */,
 				001B7B1D27DE3ABC00DEEECD /* CredentialStorage.swift in Sources */,
 				001B7B2227DE3AC200DEEECD /* FileManager+safePaths.swift in Sources */,
 				003962532A48B52E00B8655F /* ParraCardView+Transitions.swift in Sources */,
 				00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */,
+				001677652B6FE5F000674001 /* ButtonComponentType.swift in Sources */,
 				00DA7FF0295DD28700109081 /* Parra+PublicAnalytics.swift in Sources */,
-				00E76D262B66D20D00B01DD8 /* PlainButtonConfig.swift in Sources */,
 				00E76D342B66E3FD00B01DD8 /* Container.swift in Sources */,
 				0029AD392A4925D000E30CCD /* ParraInternalEvent.swift in Sources */,
 				00EBCE162AA4F0D100887639 /* ParraLoggerExtraStyle.swift in Sources */,
@@ -2430,7 +2421,6 @@
 				0039626B2A48B5AE00B8655F /* ParraBooleanKindView.swift in Sources */,
 				003622392B5EEC31009EFE53 /* ParraWidgetConfigurationType.swift in Sources */,
 				001B7B8227DE618300DEEECD /* ParraDataManager+Keys.swift in Sources */,
-				00E76D582B68470C00B01DD8 /* OutlinedButtonConfig.swift in Sources */,
 				003962422A48B51100B8655F /* UIEdgeInsets.swift in Sources */,
 				001B7B2327DE3AC200DEEECD /* Models.swift in Sources */,
 				0039623D2A48B51100B8655F /* CAShapeLayer.swift in Sources */,
@@ -2443,9 +2433,10 @@
 				001B7B0F27DE3A9B00DEEECD /* Parra+Authentication.swift in Sources */,
 				00E76D4C2B66ED4300B01DD8 /* ContainerContentObserver.swift in Sources */,
 				00E76D462B66E88300B01DD8 /* FeedbackFormContentObserver.swift in Sources */,
+				001677592B6D5C5B00674001 /* ParraAttributedLabelStyle.swift in Sources */,
 				001B7B1627DE3AA900DEEECD /* ParraCredential.swift in Sources */,
 				003622542B5F0A73009EFE53 /* ParraLabelViewConfig.swift in Sources */,
-				00E76D5E2B6940A500B01DD8 /* ButtonStyle.swift in Sources */,
+				00E76D5E2B6940A500B01DD8 /* ButtonAttributes.swift in Sources */,
 				00BF36D52B5ACAD20097905C /* FormFieldState.swift in Sources */,
 				0036222A2B5EB13B009EFE53 /* Int+ParraColorConvertible.swift in Sources */,
 				007ED4702A6BFC020077E446 /* Logger+scope.swift in Sources */,
@@ -2465,7 +2456,6 @@
 				006654122A80573400CD04E6 /* URLRequest.Attribution+CustomStringConvertible.swift in Sources */,
 				001B7B1F27DE3ABC00DEEECD /* PersistentStorageMedium.swift in Sources */,
 				003962542A48B52E00B8655F /* ParraCardTableViewCell.swift in Sources */,
-				00E76D092B66D08700B01DD8 /* ComponentStyle.swift in Sources */,
 				003962442A48B52100B8655F /* ParraBorderedTextView.swift in Sources */,
 				00214C6C2AB3E3A1001C5313 /* ParraDataSanitizer.swift in Sources */,
 				00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */,
@@ -2476,7 +2466,7 @@
 				00A60B9B2932D37000B7168A /* ParraAuthenticationProvider.swift in Sources */,
 				006DE9822A472F9C00521F5D /* Endpoint.swift in Sources */,
 				003621F22B5C77F1009EFE53 /* ParraTypography.swift in Sources */,
-				00E76D242B66D1FD00B01DD8 /* TextContent.swift in Sources */,
+				00E76D242B66D1FD00B01DD8 /* LabelContent.swift in Sources */,
 				003622182B5D9636009EFE53 /* ParraContainedButton.swift in Sources */,
 				00C00ABB2A8A6BC2003B21D3 /* SessionStorageContext.swift in Sources */,
 				0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */,
@@ -2527,13 +2517,11 @@
 				0039623E2A48B51100B8655F /* NSAttributedString.swift in Sources */,
 				00EC6F642B60421000ABC8EC /* ParraMergableViewConfig.swift in Sources */,
 				0087CA8E2A59B41C007D72FA /* ParraLoggerCallSiteStyleOptions.swift in Sources */,
-				00E76D202B66D1A200B01DD8 /* ComponentContent.swift in Sources */,
 				00EC6F602B602F1300ABC8EC /* ParraGlobalComponentFactory.swift in Sources */,
 				003962382A48B4EF00B8655F /* ParraFeedbackDataManager+Keys.swift in Sources */,
 				0019CBC528FAE0E80015E703 /* FailableDecodable.swift in Sources */,
 				003962692A48B5AE00B8655F /* ParraChoiceKindView.swift in Sources */,
 				006654142A8066BC00CD04E6 /* ParraSessionUpload.swift in Sources */,
-				00E76D1E2B66D18F00B01DD8 /* ComponentConfig.swift in Sources */,
 				0087CAAD2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift in Sources */,
 				0087CA512A5466A6007D72FA /* ParraNetworkManagerUrlSessionDelegateProxy.swift in Sources */,
 				00EBCE082AA4C1E300887639 /* ParraLogContext.swift in Sources */,
@@ -2549,11 +2537,10 @@
 				0087CA7A2A58FAA2007D72FA /* Logger+StaticLevels.swift in Sources */,
 				00E15A2B29326FBE0049C2C7 /* UIWindow+topViewController.swift in Sources */,
 				003621E92B5C2784009EFE53 /* ParraLogoButton.swift in Sources */,
-				00A2CEE32B695F8700684DC0 /* Container+DefaultConfig.swift in Sources */,
 				00BD2FF62A47772A00B4BEB2 /* AuthenticatedRequestResult.swift in Sources */,
 				0087CA682A561F72007D72FA /* Logger+Levels.swift in Sources */,
 				0087CA852A59A046007D72FA /* QualityOfService+ParraLogDescription.swift in Sources */,
-				00E76D362B66E42600B01DD8 /* Component.swift in Sources */,
+				00E76D362B66E42600B01DD8 /* LabelComponentType.swift in Sources */,
 				005D31ED29A8561D001D0E0A /* QuestionAnswer.swift in Sources */,
 				001B7B8E27DE806100DEEECD /* DataStorageMedium.swift in Sources */,
 				00E269EA2A524842001A0F50 /* ParraModuleStateAccessor.swift in Sources */,
@@ -2570,7 +2557,7 @@
 				0087CA8C2A59B408007D72FA /* ParraLoggerLevelStyle.swift in Sources */,
 				0039626C2A48B5AE00B8655F /* ParraCheckboxKindView.swift in Sources */,
 				00DA7FFC296367D400109081 /* RequestConfig.swift in Sources */,
-				00E76D502B68286600B01DD8 /* TextComponent.swift in Sources */,
+				00E76D502B68286600B01DD8 /* LabelComponent.swift in Sources */,
 				0039626D2A48B5AE00B8655F /* ParraLongTextKindView.swift in Sources */,
 				003962332A48B4EF00B8655F /* ParraFeedbackDataManager.swift in Sources */,
 				003621FF2B5C9CDF009EFE53 /* ParraColor.swift in Sources */,
@@ -2607,7 +2594,7 @@
 				0087CA832A599FDD007D72FA /* ParraLogStringConvertible.swift in Sources */,
 				003962672A48B5AE00B8655F /* ParraRatingKindView.swift in Sources */,
 				003962412A48B51100B8655F /* Array.swift in Sources */,
-				00E76D222B66D1E800B01DD8 /* TextConfig.swift in Sources */,
+				00E76D222B66D1E800B01DD8 /* LabelConfig.swift in Sources */,
 				00DA7FE5295C95C400109081 /* Syncable.swift in Sources */,
 				003962582A48B53500B8655F /* ParraCardModal.swift in Sources */,
 				007ED4762A6C8BDF0077E446 /* CallStackParser.swift in Sources */,
@@ -2630,6 +2617,7 @@
 				0087CA872A59A0D5007D72FA /* ParraLoggerThreadInfo.swift in Sources */,
 				003962522A48B52700B8655F /* ParraCardItemView.swift in Sources */,
 				00EAE2F52A9BC3DB003FB41C /* FileHandleType.swift in Sources */,
+				0016775C2B6FDCBA00674001 /* ParraStyleAttributes.swift in Sources */,
 				003621EE2B5C769A009EFE53 /* ParraTheme.swift in Sources */,
 				007ED4672A6BFBDC0077E446 /* ParraLoggerContext.swift in Sources */,
 				005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */,

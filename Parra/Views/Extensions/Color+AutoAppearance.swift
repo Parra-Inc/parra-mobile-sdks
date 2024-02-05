@@ -22,4 +22,3 @@ internal extension Color {
         self.init(uiColor: uiColor)
     }
 }
-

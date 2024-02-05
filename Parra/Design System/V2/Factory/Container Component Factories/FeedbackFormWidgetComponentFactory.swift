@@ -9,15 +9,14 @@
 import SwiftUI
 
 final class FeedbackFormWidgetComponentFactory: ParraComponentFactory {
-
-    let title: ComponentBuilder.Factory<Text, TextConfig, TextContent, TextStyle>?
-    let description: ComponentBuilder.Factory<Text, TextConfig, TextContent, TextStyle>?
-    let submitButton: ComponentBuilder.Factory<Button<Text>, ButtonConfig, ButtonContent, ButtonStyle>?
+    let title: ComponentBuilder.Factory<Text, LabelConfig, LabelContent, LabelAttributes>?
+    let description: ComponentBuilder.Factory<Text, LabelConfig, LabelContent, LabelAttributes>?
+    let submitButton: ComponentBuilder.Factory<Button<Text>, ButtonConfig, ButtonContent, ButtonAttributes>?
 
     init(
-        titleBuilder: ComponentBuilder.Factory<Text, TextConfig, TextContent, TextStyle>? = nil,
-        descriptionBuilder: ComponentBuilder.Factory<Text, TextConfig, TextContent, TextStyle>? = nil,
-        submitButtonBuilder: ComponentBuilder.Factory<Button<Text>, ButtonConfig, ButtonContent, ButtonStyle>? = nil
+        titleBuilder: ComponentBuilder.Factory<Text, LabelConfig, LabelContent, LabelAttributes>? = nil,
+        descriptionBuilder: ComponentBuilder.Factory<Text, LabelConfig, LabelContent, LabelAttributes>? = nil,
+        submitButtonBuilder: ComponentBuilder.Factory<Button<Text>, ButtonConfig, ButtonContent, ButtonAttributes>? = nil
     ) {
         self.title = titleBuilder
         self.description = descriptionBuilder

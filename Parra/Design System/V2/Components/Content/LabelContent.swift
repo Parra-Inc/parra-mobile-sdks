@@ -1,5 +1,5 @@
 //
-//  ComponentConfig.swift
+//  LabelContent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,5 +8,6 @@
 
 import SwiftUI
 
-/// Components are base level elements like buttons and labels.
-internal protocol ComponentConfig {}
+internal struct LabelContent {
+    internal var text: String
+}

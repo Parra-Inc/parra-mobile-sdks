@@ -33,7 +33,7 @@ struct PaletteView: View {
 }
 
 #Preview("Standard Palette") {
-    let palette = ParraColorPalette.default
+    let palette = ParraColorPalette.defaultLight
 
     return PaletteView(
         palette: [

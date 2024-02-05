@@ -9,14 +9,14 @@
 import SwiftUI
 
 internal struct FeedbackFormConfig: ContainerConfig {
-    let title: TextConfig
-    let description: TextConfig
+    let title: LabelConfig
+    let description: LabelConfig
 
     /// Any dynamic "select" fields
-    let selectFields: TextConfig
+    let selectFields: LabelConfig
 
     /// Any dynamic "text" fields
-    let textFields: TextConfig
+    let textFields: LabelConfig
 
     let submitButton: ButtonConfig
 }

@@ -11,7 +11,7 @@ import SwiftUI
 
 public struct ParraTheme {
     public static let `default` = ParraTheme(
-        uiColor: Parra.Constants.brandColor
+        color: .accentColor
     )
 
     internal let palette: ParraColorPalette
@@ -39,13 +39,26 @@ public struct ParraTheme {
         color: Color,
         componentFactory: ParraGlobalComponentFactory? = nil
     ) {
-        let palette = ParraColorPalette(
+        let lightPalette = ParraColorPalette(
             primary: color
         )
 
+        let darkPalette = ParraColorPalette(
+            primary: color,
+            secondary: ParraColorPalette.defaultDark.secondary,
+            primaryBackground: ParraColorPalette.defaultDark.primaryBackground,
+            secondaryBackground: ParraColorPalette.defaultDark.secondaryBackground,
+            primaryText: ParraColorPalette.defaultDark.primaryText,
+            secondaryText: ParraColorPalette.defaultDark.secondaryText,
+            error: ParraColorPalette.defaultDark.error,
+            warning: ParraColorPalette.defaultDark.warning,
+            info: ParraColorPalette.defaultDark.info,
+            success: ParraColorPalette.defaultDark.success
+        )
+
         self.init(
-            lightPalette: palette,
-            darkPalette: palette.darkened(to: 0.12),
+            lightPalette: lightPalette,
+            darkPalette: darkPalette,
             typography: .default,
             cornerRadius: .default,
             componentFactory: componentFactory

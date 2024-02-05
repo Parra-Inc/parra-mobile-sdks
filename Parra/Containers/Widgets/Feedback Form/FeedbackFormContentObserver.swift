@@ -16,8 +16,8 @@ internal class FeedbackFormContentObserver: ContainerContentObserver {
     @MainActor
     internal struct Content: ContainerContent {
 
-        internal let title: TextContent
-        internal let description: TextContent?
+        internal let title: LabelContent
+        internal let description: LabelContent?
 
         internal fileprivate(set) var fields: [FormFieldWithState]
 
@@ -26,8 +26,8 @@ internal class FeedbackFormContentObserver: ContainerContentObserver {
         internal fileprivate(set) var canSubmit: Bool
 
         init(
-            title: TextContent,
-            description: TextContent?,
+            title: LabelContent,
+            description: LabelContent?,
             fields: [FormFieldWithState],
             submitButton: ButtonContent
         ) {
@@ -72,8 +72,8 @@ internal class FeedbackFormContentObserver: ContainerContentObserver {
     internal init(
         formData: FeedbackFormData
     ) {
-        let description: TextContent? = if let formDescription = formData.description {
-            TextContent(text: formDescription)
+        let description: LabelContent? = if let formDescription = formData.description {
+            LabelContent(text: formDescription)
         } else {
             nil
         }
@@ -85,7 +85,7 @@ internal class FeedbackFormContentObserver: ContainerContentObserver {
         )
 
         self.content = Content(
-            title: TextContent(text: formData.title),
+            title: LabelContent(text: formData.title),
             description: description,
             fields: formData.fields.map { FormFieldWithState(field: $0) },
             submitButton: submitButton

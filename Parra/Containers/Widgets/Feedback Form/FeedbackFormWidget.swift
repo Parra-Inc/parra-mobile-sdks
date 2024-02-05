@@ -24,65 +24,98 @@ struct FeedbackFormWidget: Container {
     @StateObject
     var themeObserver: ParraThemeObserver
 
-    var body: some View {
-        let titleStyle = defaultTextStyle(with: .init(
-            font: .largeTitle
-        ))
+    var header: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            componentFactory.buildLabel(
+                component: \.title,
+                config: config.title,
+                content: contentObserver.content.title,
+                localAttributes: nil
+            )
 
-        let descriptionStyle = defaultTextStyle(with: .init(
-            font: .subheadline
-        ))
+            componentFactory.buildLabel(
+                component: \.description,
+                config: config.description,
+                content: contentObserver.content.description,
+                localAttributes: nil
+            )
+        }
+    }
 
-        let submitButtonStyle = ButtonStyle(
-            background: .red,
-            cornerRadius: .zero,
-            padding: .zero
-        )
-        
-        let content = contentObserver.content
+    var fieldViews: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            ForEach(contentObserver.content.fields) { fieldWithState in
+                let field = fieldWithState.field
 
-        withEnvironmentObjects {
-            VStack {
-                componentFactory.build(
-                    component: \.title,
-                    config: config.title,
-                    content: content.title,
-                    localStyle: titleStyle,
-                    defaultComponentType: TextComponent.self
-                )
-
-                componentFactory.build(
-                    component: \.description,
-                    config: config.description,
-                    content: content.description,
-                    localStyle: descriptionStyle,
-                    defaultComponentType: TextComponent.self
-                )
-
-                componentFactory.build(
-                    component: \.submitButton,
-                    config: config.submitButton,
-                    content: content.submitButton,
-                    localStyle: submitButtonStyle,
-                    defaultComponentType: ContainedButtonComponent.self
-                )
+//                switch field.data {
+//                case .feedbackFormSelectFieldData(let data):
+//                    ParraFeedbackFormSelectFieldView(
+//                        fieldWithState: fieldWithState,
+//                        fieldData: .init(data: data),
+//                        onFieldValueChanged: self.onFieldValueChanged
+//                    )
+//                case .feedbackFormTextFieldData(let data):
+//                    ParraFeedbackFormTextFieldView(
+//                        fieldWithState: fieldWithState,
+//                        fieldData: .init(data: data),
+//                        onFieldValueChanged: self.onFieldValueChanged
+//                    )
+//                }
             }
+        }
+    }
+
+    var footer: some View {
+
+        VStack(alignment: .center, spacing: 16) {
+            componentFactory.buildButton(
+                variant: .contained,
+                component: \.submitButton,
+                config: config.submitButton,
+                content: contentObserver.content.submitButton,
+                localAttributes: .init()
+            )
+            .disabled(!contentObserver.content.canSubmit)
+
+            ParraLogoButton(type: .poweredBy)
+        }
+    }
+
+
+    var body: some View {
+        withEnvironmentObjects {
+            VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 20) {
+                    header
+
+                    fieldViews
+                }
+                .layoutPriority(100)
+
+                Spacer()
+                    .layoutPriority(0)
+
+                footer
+            }
+            .background(themeObserver.theme.palette.primaryBackground)
+            .safeAreaPadding()
         }
     }
 }
 
 #Preview {
-    let global = GlobalComponentStylizer(containedButtonStylizer:  { config, state, defaultStyle in
-        return .init(
-            background: .red,
-            cornerRadius: defaultStyle.cornerRadius,
-            padding: defaultStyle.padding
-        )
-    })
+    let global = GlobalComponentAttributes(
+        labelAttributeFactory: { config, content, defaultAttributes in
+            return defaultAttributes ?? .init()
+        },
+        buttonAttributeFactory: { config, content, defaultAttributes in
+            return defaultAttributes ?? .init()
+        }
+    )
 
     let local = FeedbackFormWidgetComponentFactory(
         titleBuilder: nil,
-        descriptionBuilder: { config, content, defaultStyle in
+        descriptionBuilder: { config, content, attributes in
             if let content {
                 Text(content.text)
                     .font(.subheadline)
@@ -100,18 +133,45 @@ struct FeedbackFormWidget: Container {
             theme: ParraTheme.default
         ),
         config: .init(
-            title: .init(),
-            description: .init(),
-            selectFields: .init(),
-            textFields: .init(),
+            title: LabelConfig(type: .title),
+            description: LabelConfig(type: .description),
+            selectFields: LabelConfig(type: .body),
+            textFields: LabelConfig(type: .body),
             submitButton: .init(
                 style: .primary,
                 size: .large,
                 isMaxWidth: true,
-                title: .init()
+                title: LabelConfig(type: .description)
             )
         ),
-        contentObserver: .init(formData: .init(title: "Title", description: "description", fields: [])),
+        contentObserver: .init(
+            formData: .init(
+                title: "Leave feedback",
+                description: "We'd love to hear from you. Your input helps us make our product better.",
+                fields: [
+                    .init(
+                        name: "type",
+                        title: "Type of Feedback",
+                        helperText: nil,
+                        type: .select,
+                        required: true,
+                        data: .feedbackFormSelectFieldData(
+                            FeedbackFormSelectFieldData.validStates()[0]
+                        )
+                    ),
+                    .init(
+                        name: "response",
+                        title: "Your Feedback",
+                        helperText: nil,
+                        type: .text,
+                        required: true,
+                        data: .feedbackFormTextFieldData(
+                            FeedbackFormTextFieldData.validStates()[0]
+                        )
+                    )
+                ]
+            )
+        ),
         themeObserver: .init(
             theme: .default,
             notificationCenter: ParraNotificationCenter()

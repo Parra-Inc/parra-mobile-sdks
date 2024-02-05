@@ -8,17 +8,17 @@
 
 import SwiftUI
 
-public struct ButtonStyle: ComponentStyle {
-    /// Styles to use for the button's title in the normal state (not disabled or selected).
-    public let title: TextStyle
+public struct ButtonAttributes: ParraStyleAttributes {
+    /// Attributes to use for the button's title in the normal state (not disabled or selected).
+    public let title: LabelAttributes
 
-    /// Styles to use for the button's title in cases where the button is in a disabled state. If omitted, defaults
-    /// based on the ``ButtonStyle/title`` will be applied.
-    public let titleDisabled: TextStyle?
+    /// Attributes to use for the button's title in cases where the button is in a disabled state. If omitted, defaults
+    /// based on the ``ButtonAttributes/title`` will be applied.
+    public let titleDisabled: LabelAttributes?
 
-    /// Styles to use for the button's title in cases where the button is in a pressed state. If omitted, defaults
-    /// based on the ``ButtonStyle/title`` will be applied.
-    public let titlePressed: TextStyle?
+    /// Attributes to use for the button's title in cases where the button is in a pressed state. If omitted, defaults
+    /// based on the ``ButtonAttributes/title`` will be applied.
+    public let titlePressed: LabelAttributes?
 
     public let background: (any ShapeStyle)?
     public let cornerRadius: RectangleCornerRadii?
@@ -30,9 +30,9 @@ public struct ButtonStyle: ComponentStyle {
         background: (any ShapeStyle)? = nil,
         cornerRadius: RectangleCornerRadii? = nil,
         padding: EdgeInsets? = nil,
-        title: TextStyle = .init(),
-        titleDisabled: TextStyle? = nil,
-        titlePressed: TextStyle? = nil
+        title: LabelAttributes = .init(),
+        titleDisabled: LabelAttributes? = nil,
+        titlePressed: LabelAttributes? = nil
     ) {
         self.background = background
         self.cornerRadius = cornerRadius
@@ -47,9 +47,9 @@ public struct ButtonStyle: ComponentStyle {
         background: (any ShapeStyle)? = nil,
         cornerRadius: RectangleCornerRadii? = nil,
         padding: EdgeInsets? = nil,
-        title: TextStyle = .init(),
-        titleDisabled: TextStyle? = nil,
-        titlePressed: TextStyle? = nil,
+        title: LabelAttributes = .init(),
+        titleDisabled: LabelAttributes? = nil,
+        titlePressed: LabelAttributes? = nil,
         frame: FrameAttributes? = nil
     ) {
         self.background = background
@@ -61,10 +61,10 @@ public struct ButtonStyle: ComponentStyle {
         self.frame = frame
     }
 
-    static func defaultStyles(
+    static func defaultAttributes(
         for theme: ParraTheme,
         with config: ButtonConfig
-    ) -> ButtonStyle {
+    ) -> ButtonAttributes {
         let size = config.size
 
         let lineHeight: CGFloat = switch size {
@@ -102,9 +102,9 @@ public struct ButtonStyle: ComponentStyle {
                 .init(allCorners: 8)
         }
 
-        return ButtonStyle(
+        return ButtonAttributes(
             cornerRadius: cornerRadius,
-            title: TextStyle(
+            title: LabelAttributes(
                 font: .system(size: fontSize),
                 padding: titlePadding
             )
@@ -112,15 +112,15 @@ public struct ButtonStyle: ComponentStyle {
     }
 }
 
-extension ButtonStyle {
+extension ButtonAttributes {
     internal func withUpdates(updates: Self?) -> Self {
-        return ButtonStyle(
+        return ButtonAttributes(
             background: updates?.background ?? background,
             cornerRadius: updates?.cornerRadius ?? cornerRadius,
             padding: updates?.padding ?? padding,
             title: title.withUpdates(updates: updates?.title),
-            titleDisabled: titleDisabled?.withUpdates(updates: updates?.titleDisabled),
-            titlePressed: titlePressed?.withUpdates(updates: updates?.titlePressed),
+            titleDisabled: updates?.titleDisabled ?? titleDisabled?.withUpdates(updates: updates?.titleDisabled),
+            titlePressed: updates?.titlePressed ?? titlePressed?.withUpdates(updates: updates?.titlePressed),
             frame: updates?.frame ?? frame
         )
     }
