@@ -9,12 +9,12 @@
 import SwiftUI
 
 internal struct ButtonContent {
-    internal var title: LabelContent
-    internal var isDisabled: Bool
+    internal let title: LabelContent
+    internal let isDisabled: Bool
 
     internal var onPress: (() -> Void)?
 
-    init(
+    internal init(
         title: LabelContent,
         isDisabled: Bool = false,
         onPress: (() -> Void)? = nil

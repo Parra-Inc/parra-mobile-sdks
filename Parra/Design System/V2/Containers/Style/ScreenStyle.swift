@@ -9,6 +9,6 @@
 import SwiftUI
 
 internal struct ScreenStyle: ContainerStyle {
-    var background: ParraBackground
+    var background: (any ShapeStyle)?
     var contentPadding: EdgeInsets
 }

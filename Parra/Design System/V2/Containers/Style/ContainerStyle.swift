@@ -9,6 +9,6 @@
 import SwiftUI
 
 internal protocol ContainerStyle {
-    var background: ParraBackground { get }
+    var background: (any ShapeStyle)? { get }
     var contentPadding: EdgeInsets { get }
 }

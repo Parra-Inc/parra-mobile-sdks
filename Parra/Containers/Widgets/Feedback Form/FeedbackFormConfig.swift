@@ -13,10 +13,13 @@ internal struct FeedbackFormConfig: ContainerConfig {
     let description: LabelConfig
 
     /// Any dynamic "select" fields
-    let selectFields: LabelConfig
+    let selectFields: MenuConfig
 
     /// Any dynamic "text" fields
-    let textFields: LabelConfig
+    let textFields: TextEditorConfig
+
+    // TODO: Single line fields
+//    let inputFields: TextFieldConfig
 
     let submitButton: ButtonConfig
 }

@@ -72,7 +72,7 @@ public extension ParraFeedback {
     func presentFeedbackForm(
         with form: ParraFeedbackFormResponse,
         from fromViewController: UIViewController? = nil,
-        configuration: ParraFeedbackFormWidgetConfig? = nil
+        componentFactory: FeedbackFormWidgetComponentFactory? = nil
     ) {
         let parra = Parra.getExistingInstance()
         let theme = parra.configuration.theme
@@ -82,7 +82,7 @@ public extension ParraFeedback {
             form: form,
             theme: theme,
             notificationCenter: notificationCenter,
-            configuration: configuration
+            componentFactory: componentFactory
         )
 
         if let sheetPresentationController = formViewController.sheetPresentationController {

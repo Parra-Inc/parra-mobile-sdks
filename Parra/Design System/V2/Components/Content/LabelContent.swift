@@ -9,5 +9,5 @@
 import SwiftUI
 
 internal struct LabelContent {
-    internal var text: String
+    internal let text: String
 }

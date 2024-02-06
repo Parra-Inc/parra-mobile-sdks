@@ -8,18 +8,24 @@
 
 import SwiftUI
 
-final class FeedbackFormWidgetComponentFactory: ParraComponentFactory {
+final public class FeedbackFormWidgetComponentFactory: ParraComponentFactory {
     let title: ComponentBuilder.Factory<Text, LabelConfig, LabelContent, LabelAttributes>?
     let description: ComponentBuilder.Factory<Text, LabelConfig, LabelContent, LabelAttributes>?
+    let selectFields: ComponentBuilder.Factory<Menu<Text, Button<Text>>, MenuConfig, MenuContent, MenuAttributes>?
+    let textFields: ComponentBuilder.Factory<TextEditor, TextEditorConfig, TextEditorContent, TextEditorAttributes>?
     let submitButton: ComponentBuilder.Factory<Button<Text>, ButtonConfig, ButtonContent, ButtonAttributes>?
 
     init(
         titleBuilder: ComponentBuilder.Factory<Text, LabelConfig, LabelContent, LabelAttributes>? = nil,
         descriptionBuilder: ComponentBuilder.Factory<Text, LabelConfig, LabelContent, LabelAttributes>? = nil,
+        selectFields: ComponentBuilder.Factory<Menu<Text, Button<Text>>, MenuConfig, MenuContent, MenuAttributes>? = nil,
+        textFields: ComponentBuilder.Factory<TextEditor, TextEditorConfig, TextEditorContent, TextEditorAttributes>? = nil,
         submitButtonBuilder: ComponentBuilder.Factory<Button<Text>, ButtonConfig, ButtonContent, ButtonAttributes>? = nil
     ) {
         self.title = titleBuilder
         self.description = descriptionBuilder
+        self.selectFields = selectFields
+        self.textFields = textFields
         self.submitButton = submitButtonBuilder
     }
 }

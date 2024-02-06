@@ -87,7 +87,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
     @ViewBuilder
     func buildButton(
-        variant: ParraButtonVariant,
+        variant: ButtonVariant,
         component componentKeyPath: KeyPath<Factory, ComponentBuilder.Factory<some View, ButtonConfig, ButtonContent, ButtonAttributes>?>,
         config: ButtonConfig,
         content: ButtonContent?,
@@ -156,6 +156,96 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
                         style: style
                     )
                 }
+            }
+        } else {
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    func buildMenu(
+        component componentKeyPath: KeyPath<Factory, ComponentBuilder.Factory<some View, MenuConfig, MenuContent, MenuAttributes>?>,
+        config: MenuConfig,
+        content: MenuContent?,
+        localAttributes: MenuAttributes? = nil
+    ) -> some View {
+        if let content {
+            let attributes = if let factory = global.menuAttributeFactory {
+                factory(config, content, localAttributes)
+            } else {
+                localAttributes
+            }
+
+            let mergedAttributes = MenuComponent.applyStandardCustomizations(
+                onto: attributes,
+                theme: theme,
+                config: config
+            )
+
+            // If a container level factory function was provided for this component,
+            // use it and supply global attribute overrides instead of local, if provided.
+            if let builder = local[keyPath: componentKeyPath],
+               let view = builder(config, content, mergedAttributes) {
+
+                view
+            } else {
+                let style = ParraAttributedMenuStyle(
+                    config: config,
+                    content: content,
+                    attributes: mergedAttributes,
+                    theme: theme
+                )
+
+                MenuComponent(
+                    config: config,
+                    content: content,
+                    style: style
+                )
+            }
+        } else {
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    func buildTextEditor(
+        component componentKeyPath: KeyPath<Factory, ComponentBuilder.Factory<some View, TextEditorConfig, TextEditorContent, TextEditorAttributes>?>,
+        config: TextEditorConfig,
+        content: TextEditorContent?,
+        localAttributes: TextEditorAttributes? = nil
+    ) -> some View {
+        if let content {
+            let attributes = if let factory = global.textEditorAttributeFactory {
+                factory(config, content, localAttributes)
+            } else {
+                localAttributes
+            }
+
+            let mergedAttributes = TextEditorComponent.applyStandardCustomizations(
+                onto: attributes,
+                theme: theme,
+                config: config
+            )
+
+            // If a container level factory function was provided for this component,
+            // use it and supply global attribute overrides instead of local, if provided.
+            if let builder = local[keyPath: componentKeyPath],
+               let view = builder(config, content, mergedAttributes) {
+
+                view
+            } else {
+                let style = ParraAttributedTextEditorStyle(
+                    config: config,
+                    content: content,
+                    attributes: mergedAttributes,
+                    theme: theme
+                )
+
+                TextEditorComponent(
+                    config: config,
+                    content: content,
+                    style: style
+                )
             }
         } else {
             EmptyView()

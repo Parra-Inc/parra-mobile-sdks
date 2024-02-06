@@ -9,7 +9,7 @@
 import SwiftUI
 
 internal struct ToastStyle: ContainerStyle {
-    var background: ParraBackground
+    var background: (any ShapeStyle)?
     var contentPadding: EdgeInsets
     var cornerRadius: RectangleCornerRadii
 

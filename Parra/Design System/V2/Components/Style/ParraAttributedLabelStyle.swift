@@ -14,9 +14,6 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
     let attributes: LabelAttributes
     let theme: ParraTheme
 
-//    // TODO:
-//        2. label/button attributes need consistent nullability when creating component instances
-
     func makeBody(configuration: Configuration) -> some View {
         let fontColor = attributes.fontColor ?? theme.palette.primaryText.toParraColor()
 
@@ -49,5 +46,14 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
                 .fontWeight(attributes.fontWeight)
                 .fontWidth(attributes.fontWidth)
         }
+    }
+
+    internal func withContent(content: LabelContent) -> ParraAttributedLabelStyle {
+        return ParraAttributedLabelStyle(
+            config: config,
+            content: content,
+            attributes: attributes,
+            theme: theme
+        )
     }
 }

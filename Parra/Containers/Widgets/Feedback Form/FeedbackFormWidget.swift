@@ -24,6 +24,17 @@ struct FeedbackFormWidget: Container {
     @StateObject
     var themeObserver: ParraThemeObserver
 
+    private func onFieldValueChanged(
+        field: FeedbackFormField,
+        value: String?
+    ) {
+        
+        contentObserver.onFieldValueChanged(
+            field: field,
+            value: value
+        )
+    }
+
     var header: some View {
         VStack(alignment: .leading, spacing: 10) {
             componentFactory.buildLabel(
@@ -47,26 +58,56 @@ struct FeedbackFormWidget: Container {
             ForEach(contentObserver.content.fields) { fieldWithState in
                 let field = fieldWithState.field
 
-//                switch field.data {
-//                case .feedbackFormSelectFieldData(let data):
-//                    ParraFeedbackFormSelectFieldView(
-//                        fieldWithState: fieldWithState,
-//                        fieldData: .init(data: data),
-//                        onFieldValueChanged: self.onFieldValueChanged
-//                    )
-//                case .feedbackFormTextFieldData(let data):
-//                    ParraFeedbackFormTextFieldView(
-//                        fieldWithState: fieldWithState,
-//                        fieldData: .init(data: data),
-//                        onFieldValueChanged: self.onFieldValueChanged
-//                    )
-//                }
+                switch field.data {
+                case .feedbackFormSelectFieldData(let data):
+                    let content = MenuContent(
+                        label: LabelContent(
+                            text: field.title ?? "Select an option"
+                        ),
+                        options: data.options.map { fieldOption in
+                            MenuComponent.Option(
+                                id: fieldOption.id,
+                                title: fieldOption.title,
+                                value: fieldOption.id
+                            )
+                        }
+                    ) { option in
+                        self.onFieldValueChanged(
+                            field: field,
+                            value: option?.value
+                        )
+                    }
+
+                    componentFactory.buildMenu(
+                        component: \.selectFields,
+                        config: config.selectFields,
+                        content: content,
+                        localAttributes: nil
+                    )
+                case .feedbackFormTextFieldData(let data):
+
+                    let content = TextEditorContent(
+                        placeholder: data.placeholder,
+                        errorMessage: fieldWithState.state.errorMessage
+                    ) { newText in
+                        self.onFieldValueChanged(
+                            field: field,
+                            value: newText
+                        )
+                    }
+
+                    componentFactory.buildTextEditor(
+                        component: \.textFields,
+                        config: config.textFields,
+                        content: content,
+                        localAttributes: nil
+                    )
+                }
             }
         }
     }
 
     var footer: some View {
-
         VStack(alignment: .center, spacing: 16) {
             componentFactory.buildButton(
                 variant: .contained,
@@ -135,8 +176,8 @@ struct FeedbackFormWidget: Container {
         config: .init(
             title: LabelConfig(type: .title),
             description: LabelConfig(type: .description),
-            selectFields: LabelConfig(type: .body),
-            textFields: LabelConfig(type: .body),
+            selectFields: MenuConfig(label: LabelConfig(type: .body)),
+            textFields: TextEditorConfig(maxCharacters: 50),
             submitButton: .init(
                 style: .primary,
                 size: .large,
@@ -156,7 +197,36 @@ struct FeedbackFormWidget: Container {
                         type: .select,
                         required: true,
                         data: .feedbackFormSelectFieldData(
-                            FeedbackFormSelectFieldData.validStates()[0]
+                            FeedbackFormSelectFieldData(
+                                placeholder: "Please select an option",
+                                options: [
+                                    FeedbackFormSelectFieldOption(
+                                        title: "General feedback",
+                                        value: "general-feedback",
+                                        isOther: nil
+                                    ),
+                                    FeedbackFormSelectFieldOption(
+                                        title: "Bug report",
+                                        value: "bug-report",
+                                        isOther: nil
+                                    ),
+                                    FeedbackFormSelectFieldOption(
+                                        title: "Feature request",
+                                        value: "feature-request",
+                                        isOther: nil
+                                    ),
+                                    FeedbackFormSelectFieldOption(
+                                        title: "Idea",
+                                        value: "idea",
+                                        isOther: nil
+                                    ),
+                                    FeedbackFormSelectFieldOption(
+                                        title: "Other",
+                                        value: "other",
+                                        isOther: nil
+                                    ),
+                                ]
+                            )
                         )
                     ),
                     .init(
@@ -166,7 +236,14 @@ struct FeedbackFormWidget: Container {
                         type: .text,
                         required: true,
                         data: .feedbackFormTextFieldData(
-                            FeedbackFormTextFieldData.validStates()[0]
+                            FeedbackFormTextFieldData(
+                                placeholder: "placeholder",
+                                lines: 5,
+                                maxLines: 10,
+                                minCharacters: 20,
+                                maxCharacters: 420,
+                                maxHeight: 200
+                            )
                         )
                     )
                 ]

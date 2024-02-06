@@ -23,14 +23,32 @@ internal class GlobalComponentAttributes {
         _ defaultAttributes: ButtonAttributes?
     ) -> ButtonAttributes
 
+    internal typealias MenuAttributeFactory = (
+        _ config: MenuConfig,
+        _ content: MenuContent,
+        _ defaultAttributes: MenuAttributes?
+    ) -> MenuAttributes
+
+    internal typealias TextEditorAttributeFactory = (
+        _ config: TextEditorConfig,
+        _ content: TextEditorContent,
+        _ defaultAttributes: TextEditorAttributes?
+    ) -> TextEditorAttributes
+
     internal private(set) var labelAttributeFactory: LabelAttributeFactory?
     internal private(set) var buttonAttributeFactory: ButtonAttributeFactory?
+    internal private(set) var menuAttributeFactory: MenuAttributeFactory?
+    internal private(set) var textEditorAttributeFactory: TextEditorAttributeFactory?
 
     internal init(
         labelAttributeFactory: LabelAttributeFactory? = nil,
-        buttonAttributeFactory: ButtonAttributeFactory? = nil
+        buttonAttributeFactory: ButtonAttributeFactory? = nil,
+        menuAttributeFactory: MenuAttributeFactory? = nil,
+        textEditorAttributeFactory: TextEditorAttributeFactory? = nil
     ) {
         self.labelAttributeFactory = labelAttributeFactory
         self.buttonAttributeFactory = buttonAttributeFactory
+        self.menuAttributeFactory = menuAttributeFactory
+        self.textEditorAttributeFactory = textEditorAttributeFactory
     }
 }
