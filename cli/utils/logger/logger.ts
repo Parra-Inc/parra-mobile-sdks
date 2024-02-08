@@ -2,20 +2,30 @@
 // Any is permissible here since we are just forwarding to console.log/etc which support any.
 
 import chalk, { ChalkInstance } from 'chalk';
-import { DEFAULT_LOGGER_OPTIONS, LogLevel, LoggerOptions } from './types.js';
-
-const DEFAULT_LOG_LEVEL = process.env.CI ? LogLevel.Debug : LogLevel.Info;
+import {
+  DEFAULT_LOG_LEVEL,
+  DEFAULT_LOGGER_OPTIONS,
+  LogLevel,
+  LoggerOptions,
+} from './types.js';
 
 export default class Logger {
   constructor(
     private readonly name: string,
-    private readonly options: LoggerOptions = DEFAULT_LOGGER_OPTIONS
-  ) {}
+    private readonly options: Partial<LoggerOptions> = DEFAULT_LOGGER_OPTIONS
+  ) {
+    this.name = name;
+    this.options = { ...DEFAULT_LOGGER_OPTIONS, ...options };
+  }
 
   static globalLevel: LogLevel = DEFAULT_LOG_LEVEL;
 
   static setGlobalLogLevel(raw: string) {
     this.globalLevel = Logger.levelForSlug(raw);
+  }
+
+  get level(): LogLevel {
+    return this.options.level || Logger.globalLevel;
   }
 
   public success(message: any, ...optionalParams: any[]): void {
@@ -44,9 +54,9 @@ export default class Logger {
    * output from a child process.
    */
   public raw(isError: boolean, message: any, ...optionalParams: any[]): void {
-    if (this.options.enabled && Logger.globalLevel !== LogLevel.Silent) {
+    if (this.options.enabled && this.level !== LogLevel.Silent) {
       // Stream to stderr if it's an error and we are at least at the warn level.
-      if (isError && Logger.globalLevel <= LogLevel.Error) {
+      if (isError && this.level <= LogLevel.Error) {
         process.stderr.write(
           this.getChalkForLevel(LogLevel.Warn)(message, ...optionalParams)
         );
@@ -54,7 +64,7 @@ export default class Logger {
 
       // Stream all non-error logs to stdout as long as the logger is enabled. These are to
       // be considered debug level logs.
-      if (!isError && Logger.globalLevel < LogLevel.Info) {
+      if (!isError && this.level < LogLevel.Info) {
         process.stdout.write(message, ...optionalParams);
       }
     }
@@ -103,7 +113,7 @@ export default class Logger {
   }
 
   private shouldLog(level: LogLevel): boolean {
-    return level >= Logger.globalLevel;
+    return level >= this.level;
   }
 
   private slugForLevel(level: LogLevel): string {
