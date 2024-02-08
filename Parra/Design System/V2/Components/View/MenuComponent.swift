@@ -9,20 +9,12 @@
 import Foundation
 import SwiftUI
 
-//struct LabelComponent: LabelComponentType {
-
 struct MenuComponent: MenuComponentType {
-    struct Option: Identifiable, Hashable {
-        let id: String
-        let title: String
-        let value: String?
-    }
-
     var config: MenuConfig
     var content: MenuContent
     var style: ParraAttributedMenuStyle
 
-    @State private var selectedOption: Option?
+    @State private var selectedOption: MenuContent.Option?
 
     private var elementOpacity: Double {
         return selectedOption != nil ? 1.0 : 0.6
@@ -41,27 +33,38 @@ struct MenuComponent: MenuComponentType {
         theme: ParraTheme,
         config: MenuConfig
     ) -> MenuAttributes {
-        let label = LabelComponent.applyStandardCustomizations(
+        let title = LabelAttributes.defaultFormTitle(in: theme, with: config.title)
+        let helper = LabelAttributes.defaultFormHelper(in: theme, with: config.helper)
+
+        let menuItem = LabelComponent.applyStandardCustomizations(
             onto: LabelAttributes(
-                fontColor: theme.palette.primaryText.toParraColor(),
+                fontColor: theme.palette.primaryText.toParraColor().opacity(0.75),
                 fontWeight: .regular,
-                padding: EdgeInsets(vertical: 18.5, horizontal: 0)
+                padding: EdgeInsets(vertical: 18.5, horizontal: 14)
             ),
             theme: theme,
-            config: config.label
+            config: config.menuOption
+        )
+
+        let menuItemSelected = LabelComponent.applyStandardCustomizations(
+            onto: LabelAttributes(
+                fontColor: theme.palette.primaryText.toParraColor(),
+                fontWeight: .medium,
+                padding: EdgeInsets(vertical: 18.5, horizontal: 14)
+            ),
+            theme: theme,
+            config: config.menuOptionSelected
         )
 
         return inputAttributes ?? MenuAttributes(
-            label: label,
-            labelWithSelection: label.withUpdates(
-                updates: LabelAttributes(
-                    fontWeight: .medium
-                )
-            ),
+            title: title,
+            helper: helper,
+            menuItem: menuItem,
+            menuItemSelected: menuItemSelected,
             sortOrder: .fixed,
             tint: theme.palette.secondaryText.toParraColor(),
-            cornerRadius: RectangleCornerRadii(allCorners: 8),
-            padding: EdgeInsets(vertical: 0, horizontal: 14),
+            cornerRadius: .medium,
+            padding: EdgeInsets(vertical: 0, horizontal: 0),
             borderWidth: 1
         )
     }
@@ -83,46 +86,82 @@ struct MenuComponent: MenuComponentType {
 
     @ViewBuilder
     private var menuLabel: some View {
-
         if let selectedOption {
-            let labelContent = content.withSelection(of: selectedOption).label
-
+            let content = LabelContent(text: selectedOption.title)
+            
             LabelComponent(
-                config: config.label,
-                content: labelContent,
-                style: style.labelWithSelectionStyle.withContent(content: labelContent)
+                config: config.menuOptionSelected,
+                content: content,
+                style: style.menuOptionSelectedStyle.withContent(
+                    content: content
+                )
             )
         } else {
-            LabelComponent(
-                config: config.label,
-                content: content.label,
-                style: style.labelStyle
-            )
+            let normalContent: LabelContent? = if let placeholder = content.placeholder {
+                placeholder
+            } else if let firstOption = content.options.first {
+                LabelContent(text: firstOption.title)
+            } else {
+                nil
+            }
+
+            if let normalContent {
+                LabelComponent(
+                    config: config.menuOption,
+                    content: normalContent,
+                    style: style.menuOptionStyle.withContent(
+                        content: normalContent
+                    )
+                )
+            } else {
+                EmptyView()
+            }
         }
     }
 
     var body: some View {
-        Menu {
-            ForEach(content.options.indices, id: \.self) { index in
-                menuItem(for: index)
+        VStack(alignment: .leading, spacing: 0) { // spacing controlled by individual component padding.
+            if let title = content.title, let titleStyle = style.titleStyle {
+                LabelComponent(
+                    config: config.title,
+                    content: title,
+                    style:  titleStyle
+                )
             }
-        } label: {
-            HStack {
-                // TODO: Use LabelComponent for this whole thing and support passing spacing/icon config to it
-                menuLabel
 
-                Spacer()
+            Menu {
+                ForEach(content.options.indices, id: \.self) { index in
+                    menuItem(for: index)
+                }
+            } label: {
+                HStack {
+                    // TODO: Use LabelComponent for this whole thing and support passing spacing/icon config to it
+                    menuLabel
 
-                Image(systemName: "chevron.up.chevron.down")
-                    .padding(.vertical, 16)
-                    .foregroundStyle(.primary.opacity(elementOpacity))
-                    .frame(width: 24, height: 24)
+                    Spacer()
+
+                    Image(systemName: "chevron.up.chevron.down")
+                        .padding(.vertical, 16)
+                        .foregroundStyle(.primary.opacity(elementOpacity))
+                        .frame(width: 24, height: 24)
+                }
+            }
+            .menuStyle(style)
+
+            if let helper = content.helper, let helperStyle = style.helperStyle {
+                LabelComponent(
+                    config: config.helper,
+                    content: helper,
+                    style: helperStyle
+                )
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
-        .menuStyle(style)
+        .padding(style.attributes.padding ?? .zero)
+        .applyBackground(style.attributes.background)
     }
 
-    private func didSelect(option: Option) {
+    private func didSelect(option: MenuContent.Option?) {
         selectedOption = option
 
         content.optionSelectionChanged?(option)
@@ -156,32 +195,28 @@ private func renderMenu(
 #Preview {
     return VStack {
         renderMenu(
-            config: MenuConfig(
-                label: LabelConfig(
-                    type: .body
-                )
-            ),
+            config: FeedbackFormConfig.default.selectFields,
             content: MenuContent(
-                label: LabelContent(
-                    text: "Select an option"
-                ),
+                title: "We want to hear from you",
+                placeholder: "Please select an option",
+                helper: "You know, so we know which one you want!",
                 options: [
-                    MenuComponent.Option(
+                    MenuContent.Option(
                         id: "first",
                         title: "First option",
                         value: "first"
                     ),
-                    MenuComponent.Option(
+                    MenuContent.Option(
                         id: "second",
                         title: "Second option",
                         value: "second"
                     ),
-                    MenuComponent.Option(
+                    MenuContent.Option(
                         id: "third",
                         title: "Third option",
                         value: "third"
                     ),
-                    MenuComponent.Option(
+                    MenuContent.Option(
                         id: "fourth",
                         title: "Fourth option",
                         value: "fourth"

@@ -10,7 +10,7 @@ import SwiftUI
 
 public struct LabelAttributes: ParraStyleAttributes {
     public let background: (any ShapeStyle)?
-    public let cornerRadius: RectangleCornerRadii?
+    public let cornerRadius: ParraCornerRadiusSize?
     public let font: Font?
     public let fontColor: Color?
     public let fontDesign: Font.Design?
@@ -23,7 +23,7 @@ public struct LabelAttributes: ParraStyleAttributes {
 
     public init(
         background: (any ShapeStyle)? = nil,
-        cornerRadius: RectangleCornerRadii? = nil,
+        cornerRadius: ParraCornerRadiusSize? = nil,
         font: Font? = nil,
         fontColor: ParraColorConvertible? = nil,
         fontDesign: Font.Design? = nil,
@@ -45,7 +45,7 @@ public struct LabelAttributes: ParraStyleAttributes {
 
     internal init(
         background: (any ShapeStyle)? = nil,
-        cornerRadius: RectangleCornerRadii? = nil,
+        cornerRadius: ParraCornerRadiusSize? = nil,
         font: Font? = nil,
         fontColor: ParraColorConvertible? = nil,
         fontDesign: Font.Design? = nil,
@@ -81,6 +81,35 @@ public struct LabelAttributes: ParraStyleAttributes {
             padding: updates?.padding ?? padding,
             frame: updates?.frame ?? frame,
             borderWidth: updates?.borderWidth ?? borderWidth
+        )
+    }
+
+    internal static func defaultFormTitle(
+        in theme: ParraTheme,
+        with config: LabelConfig
+    ) -> LabelAttributes {
+        return LabelComponent.applyStandardCustomizations(
+            onto: LabelAttributes(
+                fontColor: theme.palette.primaryText.toParraColor(),
+                fontWeight: .medium,
+                padding: EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 2)
+            ),
+            theme: theme,
+            config: config
+        )
+    }
+
+    internal static func defaultFormHelper(
+        in theme: ParraTheme,
+        with config: LabelConfig
+    ) -> LabelAttributes {
+        return LabelComponent.applyStandardCustomizations(
+            onto: LabelAttributes(
+                fontColor: theme.palette.secondaryText.toParraColor(),
+                padding: EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 2)
+            ),
+            theme: theme,
+            config: config
         )
     }
 }

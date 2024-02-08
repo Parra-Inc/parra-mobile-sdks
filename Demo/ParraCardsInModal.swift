@@ -61,7 +61,7 @@ class ParraCardsInModal: UIViewController {
         logger.withScope { logger in
             logger.info("present popup style")
 
-            ParraFeedback.shared.presentCardPopup(with: cards, from: self) {
+            ParraFeedback.presentCardPopup(with: cards, from: self) {
                 logger.info("dismissing popup style", ["super-nested-extra": true])
             }
         }
@@ -74,6 +74,6 @@ class ParraCardsInModal: UIViewController {
             ["key": "value-idk-something-broken"]
         )
         
-        ParraFeedback.shared.presentCardDrawer(with: cards, from: self)
+        ParraFeedback.presentCardDrawer(with: cards, from: self)
     }
 }

@@ -61,11 +61,11 @@ struct FeedbackFormWidget: Container {
                 switch field.data {
                 case .feedbackFormSelectFieldData(let data):
                     let content = MenuContent(
-                        label: LabelContent(
-                            text: field.title ?? "Select an option"
-                        ),
+                        title: field.title,
+                        placeholder: data.placeholder,
+                        helper: field.helperText,
                         options: data.options.map { fieldOption in
-                            MenuComponent.Option(
+                            MenuContent.Option(
                                 id: fieldOption.id,
                                 title: fieldOption.title,
                                 value: fieldOption.id
@@ -80,14 +80,15 @@ struct FeedbackFormWidget: Container {
 
                     componentFactory.buildMenu(
                         component: \.selectFields,
-                        config: config.selectFields,
+                        config: config.selectFields, // no customization currently exists
                         content: content,
                         localAttributes: nil
                     )
                 case .feedbackFormTextFieldData(let data):
-
                     let content = TextEditorContent(
+                        title: field.title,
                         placeholder: data.placeholder,
+                        helper: field.helperText,
                         errorMessage: fieldWithState.state.errorMessage
                     ) { newText in
                         self.onFieldValueChanged(
@@ -98,7 +99,7 @@ struct FeedbackFormWidget: Container {
 
                     componentFactory.buildTextEditor(
                         component: \.textFields,
-                        config: config.textFields,
+                        config: TextEditorConfig(data: data).withDefaults(from: config.textFields),
                         content: content,
                         localAttributes: nil
                     )
@@ -173,18 +174,7 @@ struct FeedbackFormWidget: Container {
             global: global,
             theme: ParraTheme.default
         ),
-        config: .init(
-            title: LabelConfig(type: .title),
-            description: LabelConfig(type: .description),
-            selectFields: MenuConfig(label: LabelConfig(type: .body)),
-            textFields: TextEditorConfig(maxCharacters: 50),
-            submitButton: .init(
-                style: .primary,
-                size: .large,
-                isMaxWidth: true,
-                title: LabelConfig(type: .description)
-            )
-        ),
+        config: FeedbackFormConfig.default,
         contentObserver: .init(
             formData: .init(
                 title: "Leave feedback",
@@ -193,7 +183,7 @@ struct FeedbackFormWidget: Container {
                     .init(
                         name: "type",
                         title: "Type of Feedback",
-                        helperText: nil,
+                        helperText: "Select one, please!",
                         type: .select,
                         required: true,
                         data: .feedbackFormSelectFieldData(

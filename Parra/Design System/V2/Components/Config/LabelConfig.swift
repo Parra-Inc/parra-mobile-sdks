@@ -8,16 +8,10 @@
 
 import SwiftUI
 
-internal enum LabelType {
-    case title
-    case description
-    case body
-}
+public struct LabelConfig {
+    public let fontStyle: Font.TextStyle
 
-internal struct LabelConfig {
-    internal let type: LabelType
-
-    internal init(type: LabelType) {
-        self.type = type
+    internal init(fontStyle: Font.TextStyle) {
+        self.fontStyle = fontStyle
     }
 }

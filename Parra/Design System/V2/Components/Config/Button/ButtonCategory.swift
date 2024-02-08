@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum ButtonCategory {
+public enum ButtonCategory {
     case primary
     case secondary
 }

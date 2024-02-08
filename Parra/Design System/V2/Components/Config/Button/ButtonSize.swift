@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum ButtonSize {
+public enum ButtonSize {
     case small
     case medium // normal
     case large

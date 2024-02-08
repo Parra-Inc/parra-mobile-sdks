@@ -8,12 +8,21 @@
 
 import SwiftUI
 
-internal struct MenuConfig {
-    internal let label: LabelConfig
+public struct MenuConfig {
+    public let title: LabelConfig
+    public let helper: LabelConfig
+    public let menuOption: LabelConfig
+    public let menuOptionSelected: LabelConfig
 
     internal init(
-        label: LabelConfig = LabelConfig(type: .body)
+        title: LabelConfig = LabelConfig(fontStyle: .body),
+        helper: LabelConfig = LabelConfig(fontStyle: .subheadline),
+        menuOption: LabelConfig = LabelConfig(fontStyle: .body),
+        menuOptionSelected: LabelConfig = LabelConfig(fontStyle: .body)
     ) {
-        self.label = label
+        self.title = title
+        self.helper = helper
+        self.menuOption = menuOption
+        self.menuOptionSelected = menuOptionSelected
     }
 }

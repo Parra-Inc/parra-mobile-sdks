@@ -13,23 +13,27 @@ public struct ParraConfiguration {
     public let loggerOptions: ParraLoggerOptions
     public let pushNotificationsEnabled: Bool
     public internal(set) var theme: ParraTheme
+    public private(set) var globalComponentAttributes: GlobalComponentAttributes
 
     internal private(set) static var current: ParraConfiguration = .default
 
     internal init(
         loggerOptions: ParraLoggerOptions,
         pushNotificationsEnabled: Bool,
-        theme: ParraTheme
+        theme: ParraTheme,
+        globalComponentAttributes: GlobalComponentAttributes
     ) {
         self.loggerOptions = loggerOptions
         self.pushNotificationsEnabled = pushNotificationsEnabled
         self.theme = theme
+        self.globalComponentAttributes = globalComponentAttributes
     }
 
     internal init(options: [ParraConfigurationOption]) {
         var loggerOptions = ParraConfiguration.default.loggerOptions
         var pushNotificationsEnabled = ParraConfiguration.default.pushNotificationsEnabled
         var theme = ParraTheme.default
+        var globalComponentAttributes = GlobalComponentAttributes()
 
         for option in options {
             switch option {
@@ -41,12 +45,15 @@ public struct ParraConfiguration {
                 pushNotificationsEnabled = true
             case .theme(let userTheme):
                 theme = userTheme
+            case .globalComponentAttributes(let attributes):
+                globalComponentAttributes = attributes
             }
         }
 
         self.loggerOptions = loggerOptions
         self.pushNotificationsEnabled = pushNotificationsEnabled
         self.theme = theme
+        self.globalComponentAttributes = globalComponentAttributes
     }
 
     public static let `default`: ParraConfiguration = {
@@ -55,7 +62,8 @@ public struct ParraConfiguration {
                 loggerOptions: .default
             ),
             pushNotificationsEnabled: false,
-            theme: .default
+            theme: .default,
+            globalComponentAttributes: GlobalComponentAttributes()
         )
     }()
 

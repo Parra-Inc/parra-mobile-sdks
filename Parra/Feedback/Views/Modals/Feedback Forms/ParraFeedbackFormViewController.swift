@@ -19,8 +19,9 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
     required init(
         form: ParraFeedbackFormResponse,
         theme: ParraTheme,
+        globalComponentAttributes: GlobalComponentAttributes,
         notificationCenter: NotificationCenterType,
-        componentFactory: FeedbackFormWidgetComponentFactory?
+        localFactory: FeedbackFormWidgetComponentFactory?
     ) {
         self.form = form
 
@@ -29,48 +30,43 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
         modalPresentationStyle = .pageSheet
         modalTransitionStyle = .coverVertical
 
-//        let componentFactory = ComponentFactory<ParraFeedbackFormWidgetConfig>
-//
-//        let form = FeedbackFormWidget(
-//            componentFactory: <#T##ComponentFactory<FeedbackFormWidget.Factory>#>,
-//            config: <#T##FeedbackFormWidget.Config#>,
-//            contentObserver: <#T##FeedbackFormContentObserver#>,
-//            themeObserver: ParraThemeObserver(
-//                theme: theme,
-//                notificationCenter: notificationCenter
-//            )
-//        )
+        let componentFactory = ComponentFactory(
+            local: localFactory,
+            global: globalComponentAttributes,
+            theme: theme
+        )
 
-//        let formView = ParraFeedbackFormView(
-//            state: FeedbackFormViewState(
-//                formData: form.data,
-//                submissionHandler: self.onSubmit
-//            ),
-//            configObserver: .init(
-//                configuration: configuration ?? .default
-//            ),
-//            themeObserver: .init(
-//                theme: theme,
-//                notificationCenter: notificationCenter
-//            )
-//        )
+        let contentObserver = FeedbackFormContentObserver(
+            formData: form.data
+        )
+        contentObserver.submissionHandler = onSubmit
 
-//        let formViewController = UIHostingController(
-//            rootView: formView
-//        )
-//
-//        formViewController.view.translatesAutoresizingMaskIntoConstraints = false
-//        addChild(formViewController)
-//        view.addSubview(formViewController.view)
-//
-//        NSLayoutConstraint.activate([
-//            formViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            formViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            formViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-//            formViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//        ])
-//
-//        formViewController.didMove(toParent: self)
+        let formView = FeedbackFormWidget(
+            componentFactory: componentFactory,
+            config: .default,
+            contentObserver: contentObserver,
+            themeObserver: ParraThemeObserver(
+                theme: theme,
+                notificationCenter: notificationCenter
+            )
+        )
+
+        let formViewController = UIHostingController(
+            rootView: formView
+        )
+
+        formViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        addChild(formViewController)
+        view.addSubview(formViewController.view)
+
+        NSLayoutConstraint.activate([
+            formViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            formViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            formViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            formViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
+        formViewController.didMove(toParent: self)
 
         Parra.logEvent(.view(element: "feedback_form"), [
             "formId": form.id

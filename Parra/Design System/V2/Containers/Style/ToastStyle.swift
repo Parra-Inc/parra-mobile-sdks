@@ -11,7 +11,7 @@ import SwiftUI
 internal struct ToastStyle: ContainerStyle {
     var background: (any ShapeStyle)?
     var contentPadding: EdgeInsets
-    var cornerRadius: RectangleCornerRadii
+    var cornerRadius: ParraCornerRadiusSize
 
     // TODO: Position enum
     // TODO: Animation and auto dismiss durations

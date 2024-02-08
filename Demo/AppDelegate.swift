@@ -12,6 +12,8 @@ fileprivate let logger = Logger(category: "UIApplicationDelegate methods")
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    var window: UIWindow?
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -32,13 +34,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         logger.debug("Initializing Parra")
 
 
-        let theme = ParraTheme(uiColor: .magenta)
+        let theme = ParraTheme(uiColor: .systemBlue)
 
         Parra.initialize(
             options: [
                 .logger(options: .default),
                 .pushNotifications,
-                .theme(theme),
+                .theme(theme)
             ],
             authProvider: .default(
                 tenantId: myParraTenantId,

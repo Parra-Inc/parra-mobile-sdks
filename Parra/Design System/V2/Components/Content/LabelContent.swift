@@ -8,6 +8,6 @@
 
 import SwiftUI
 
-internal struct LabelContent {
-    internal let text: String
+public struct LabelContent {
+    public let text: String
 }

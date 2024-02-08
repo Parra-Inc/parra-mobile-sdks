@@ -8,32 +8,59 @@
 
 import SwiftUI
 
-internal struct MenuContent {
-    internal let label: LabelContent
-    internal let options: [MenuComponent.Option]
-    internal let optionSelectionChanged: ((MenuComponent.Option?) -> Void)?
+public struct MenuContent {
+    public struct Option: Identifiable, Hashable {
+        public let id: String
+        public let title: String
+        public let value: String?
+    }
+
+    public let title: LabelContent?
+    public let placeholder: LabelContent?
+
+    /// A string which is displayed below the menu to supply suplemental information.
+    public let helper: LabelContent?
+
+    public let options: [Option]
+    public let optionSelectionChanged: ((Option?) -> Void)?
 
     internal init(
-        label: LabelContent,
-        options: [MenuComponent.Option],
-        optionSelectionChanged: ((MenuComponent.Option?) -> Void)? = nil
+        title: LabelContent? = nil,
+        placeholder: LabelContent? = nil,
+        helper: LabelContent? = nil,
+        options: [Option],
+        optionSelectionChanged: ((Option?) -> Void)? = nil
     ) {
-        self.label = label
+        self.title = title
+        self.placeholder = placeholder
+        self.helper = helper
         self.options = options
         self.optionSelectionChanged = optionSelectionChanged
     }
 
-    internal func withSelection(of option: MenuComponent.Option?) -> MenuContent {
-        let labelContent = if let option {
-            LabelContent(text: option.title)
+    internal init(
+        title: String? = nil,
+        placeholder: String? = nil,
+        helper: String? = nil,
+        options: [Option],
+        optionSelectionChanged: ((Option?) -> Void)? = nil
+    ) {
+        self.title = if let title {
+            LabelContent(text: title)
         } else {
-            label
+            nil
         }
-
-        return MenuContent(
-            label: labelContent,
-            options: options,
-            optionSelectionChanged: optionSelectionChanged
-        )
+        self.placeholder = if let placeholder {
+            LabelContent(text: placeholder)
+        } else {
+            nil
+        }
+        self.helper = if let helper {
+            LabelContent(text: helper)
+        } else {
+            nil
+        }
+        self.options = options
+        self.optionSelectionChanged = optionSelectionChanged
     }
 }

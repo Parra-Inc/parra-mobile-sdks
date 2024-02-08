@@ -67,7 +67,7 @@ internal class FeedbackFormContentObserver: ContainerContentObserver {
     @Published
     var content: Content
 
-    private var submissionHandler: (([FeedbackFormField : String]) -> Void)?
+    var submissionHandler: (([FeedbackFormField : String]) -> Void)?
 
     internal init(
         formData: FeedbackFormData
@@ -116,8 +116,10 @@ internal class FeedbackFormContentObserver: ContainerContentObserver {
         content.fields = updatedFields
 
         content.canSubmit = Content.areAllFieldsValid(
-            fields: content.fields
+            fields: updatedFields
         )
+
+        print("Content changed. Is valid: \(content.canSubmit)")
     }
 
     private func submit() {

@@ -35,35 +35,42 @@ internal struct TextEditorComponent: TextEditorComponentType {
     ) -> TextEditorAttributes {
         let palette = theme.palette
 
+        let title = LabelAttributes.defaultFormTitle(in: theme, with: config.title)
+        let helper = LabelAttributes.defaultFormHelper(in: theme, with: config.helper)
+
         return inputAttributes ?? TextEditorAttributes(
-            cornerRadius: RectangleCornerRadii(allCorners: 8),
+            title: title,
+            helper: helper,
+            cornerRadius: .medium,
             font: .body,
             fontColor: palette.primaryText.toParraColor(),
             padding: .zero,
             frame: FrameAttributes(
                 minHeight: 60,
-                idealHeight: 100
+                idealHeight: 100,
+                maxHeight: 200
             ),
             borderWidth: 1,
-            borderColor: palette.secondaryText.toParraColor().opacity(0.6)
+            borderColor: palette.secondaryText.toParraColor()
         )
     }
 
     @ViewBuilder
     func applyStyle(to view: some View) -> some View {
+        let theme = themeObserver.theme
         let palette = themeObserver.theme.palette
+
         let attributes = style.attributes
         let fontColor = attributes.fontColor ?? palette.primaryText.toParraColor()
 
+        let contentInsets = EdgeInsets(vertical: 4, horizontal: 8)
+
         view
+            .tint(theme.palette.primary.toParraColor())
+            .background(.clear)
             .contentMargins(
                 .all,
-                EdgeInsets(
-                    top: 6,
-                    leading: 8,
-                    bottom: 6, 
-                    trailing: 8
-                ),
+                contentInsets,
                 for: .automatic
             )
             .frame(
@@ -76,49 +83,80 @@ internal struct TextEditorComponent: TextEditorComponentType {
                 alignment: attributes.frame?.alignment ?? .center
             )
             .foregroundStyle(fontColor)
-            .padding(attributes.padding ?? .zero)
             .overlay(
                 UnevenRoundedRectangle(
-                    cornerRadii: attributes.cornerRadius ?? .zero
+                    cornerRadii: theme.cornerRadius.value(for: attributes.cornerRadius)
                 )
                 .stroke(
                     attributes.borderColor ?? palette.secondaryBackground,
                     lineWidth: attributes.borderWidth
                 )
             )
-            .applyBackground(attributes.background)
+            .overlay(alignment: .topLeading) {
+                if let placeholder = content.placeholder, text.isEmpty {
+                    Text(placeholder.text)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                        .padding(EdgeInsets(vertical: contentInsets.top + 8, horizontal: contentInsets.leading + 6))
+                        .foregroundStyle(fontColor.opacity(0.5))
+                        .font(attributes.font)
+                        .fontDesign(attributes.fontDesign)
+                        .fontWeight(attributes.fontWeight)
+                        .fontWidth(attributes.fontWidth)
+                        .allowsHitTesting(false)
+
+                } else {
+                    EmptyView()
+                }
+            }
             .font(attributes.font)
             .fontDesign(attributes.fontDesign)
             .fontWeight(attributes.fontWeight)
             .fontWidth(attributes.fontWidth)
-            .lineLimit(config.minLines...)
+            .lineLimit((config.minLines ?? 0)...)
     }
 
     @ViewBuilder
     private var inputMessage: some View {
-        let (message, isError): (String?, Bool) = if let errorMessage = content.errorMessage {
-            (errorMessage, true)
-        } else if config.showStatusLabel {
-            characterCountString(with: config.maxCharacters)
-        } else {
-            (nil, false)
-        }
-
-        if let message {
-            Text(message)
-                .foregroundColor(
-                    isError && hasReceivedInput
-                        ? themeObserver.theme.palette.error.toParraColor()
-                        : themeObserver.theme.palette.secondaryText.toParraColor()
-                )
-                .padding(.trailing, 4)
-        } else {
-            EmptyView()
-        }
+//        if let helper = content.helper, let helperStyle = style.helperStyle {
+//            LabelComponent(
+//                config: config.helper,
+//                content: helper,
+//                style: helperStyle
+//            )
+//            .frame(maxWidth: .infinity, alignment: .trailing)
+//        }
+        EmptyView()
+//        let (message, isError): (String?, Bool) = if let errorMessage = content.errorMessage {
+//            (errorMessage, true)
+//        } else if config.showStatusLabel {
+//            characterCountString(with: config.maxCharacters)
+//        } else {
+//            (nil, false)
+//        }
+//
+//        if let message {
+//            Text(message)
+//                .foregroundColor(
+//                    isError && hasReceivedInput
+//                        ? themeObserver.theme.palette.error.toParraColor()
+//                        : themeObserver.theme.palette.secondaryText.toParraColor()
+//                )
+//                .padding(.trailing, 4)
+//        } else {
+//            EmptyView()
+//        }
     }
 
     var body: some View {
-        VStack(spacing: 5) {
+        VStack(alignment: .leading, spacing: 0) { // spacing controlled by individual component padding.
+            if let title = content.title, let titleStyle = style.titleStyle {
+                LabelComponent(
+                    config: config.title,
+                    content: title,
+                    style:  titleStyle
+                )
+            }
+
             applyStyle(
                 to: TextEditor(text: $text)
             )
@@ -128,12 +166,10 @@ internal struct TextEditorComponent: TextEditorComponentType {
                 content.textChanged?(newValue)
             }
 
-            HStack {
-                Spacer()
-
-                inputMessage
-            }
+            inputMessage
         }
+        .padding(style.attributes.padding ?? .zero)
+        .applyBackground(style.attributes.background)
     }
 
     private func characterCountString(with max: Int?) -> (String, Bool) {
@@ -145,4 +181,84 @@ internal struct TextEditorComponent: TextEditorComponentType {
 
         return ("\(characterCount)/\(max)", characterCount > max)
     }
+}
+
+@MainActor
+private func renderTextEditor(
+    config: TextEditorConfig,
+    content: TextEditorContent,
+    attributes: TextEditorAttributes? = nil,
+    theme: ParraTheme = .default
+) -> some View {
+    let mergedAttributes = TextEditorComponent.applyStandardCustomizations(
+        onto: attributes,
+        theme: theme,
+        config: config
+    )
+
+    return TextEditorComponent(
+        config: config,
+        content: content,
+        style: ParraAttributedTextEditorStyle(
+            config: config,
+            content: content,
+            attributes: mergedAttributes,
+            theme: theme
+        )
+    )
+    .environmentObject(
+        ParraThemeObserver(
+            theme: theme, 
+            notificationCenter: ParraNotificationCenter()
+        )
+    )
+}
+
+#Preview {
+    VStack {
+        renderTextEditor(
+            config: FeedbackFormConfig.default.textFields,
+            content: TextEditorContent(
+                title: "Some title",
+                placeholder: "temp placeholder",
+                helper: "helper text woo",
+                errorMessage: nil,
+                textChanged: nil
+            )
+        )
+
+        renderTextEditor(
+            config: FeedbackFormConfig.default.textFields,
+            content: TextEditorContent(
+                title: "Some title",
+                placeholder: "temp placeholder",
+                helper: "helper text woo",
+                errorMessage: nil,
+                textChanged: nil
+            )
+        )
+
+        renderTextEditor(
+            config: FeedbackFormConfig.default.textFields,
+            content: TextEditorContent(
+                title: "Some title",
+                placeholder: "temp placeholder",
+                helper: "helper text woo",
+                errorMessage: nil,
+                textChanged: nil
+            )
+        )
+
+        renderTextEditor(
+            config: FeedbackFormConfig.default.textFields,
+            content: TextEditorContent(
+                title: "Some title",
+                placeholder: "temp placeholder",
+                helper: "helper text woo",
+                errorMessage: nil,
+                textChanged: nil
+            )
+        )
+    }
+    .padding()
 }

@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-internal struct ButtonContent {
-    internal let title: LabelContent
-    internal let isDisabled: Bool
+public struct ButtonContent {
+    public let title: LabelContent
+    public let isDisabled: Bool
 
-    internal var onPress: (() -> Void)?
+    public internal(set) var onPress: (() -> Void)?
 
     internal init(
         title: LabelContent,

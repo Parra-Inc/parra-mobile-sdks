@@ -22,4 +22,22 @@ internal struct FeedbackFormConfig: ContainerConfig {
 //    let inputFields: TextFieldConfig
 
     let submitButton: ButtonConfig
+
+    static let `default` = FeedbackFormConfig(
+        title: LabelConfig(fontStyle: .title),
+        description: LabelConfig(fontStyle: .subheadline),
+        selectFields: MenuConfig(
+            title: LabelConfig(fontStyle: .subheadline),
+            helper: LabelConfig(fontStyle: .caption),
+            menuOption: LabelConfig(fontStyle: .body),
+            menuOptionSelected: LabelConfig(fontStyle: .body)
+        ),
+        textFields: TextEditorConfig(),
+        submitButton: .init(
+            style: .primary,
+            size: .large,
+            isMaxWidth: true,
+            title: LabelConfig(fontStyle: .subheadline)
+        )
+    )
 }

@@ -10,10 +10,15 @@ import SwiftUI
 
 extension View {
     func applyCornerRadii(
-        _ cornerRadii: RectangleCornerRadii?
+        size: ParraCornerRadiusSize?,
+        from theme: ParraTheme
     ) -> some View {
         return clipShape(
-            UnevenRoundedRectangle(cornerRadii: cornerRadii ?? .zero)
+            UnevenRoundedRectangle(
+                cornerRadii: theme.cornerRadius.value(
+                    for: size ?? .zero
+                )
+            )
         )
     }
 

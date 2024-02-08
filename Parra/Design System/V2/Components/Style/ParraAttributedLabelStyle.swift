@@ -32,7 +32,7 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
                 .padding(attributes.padding ?? .zero)
                 .overlay(
                     UnevenRoundedRectangle(
-                        cornerRadii: attributes.cornerRadius ?? .zero
+                        cornerRadii: theme.cornerRadius.value(for: attributes.cornerRadius)
                     )
                     .stroke(
                         fontColor,
@@ -40,7 +40,7 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
                     )
                 )
                 .applyBackground(attributes.background)
-                .applyCornerRadii(attributes.cornerRadius)
+                .applyCornerRadii(size: attributes.cornerRadius, from: theme)
                 .font(attributes.font)
                 .fontDesign(attributes.fontDesign)
                 .fontWeight(attributes.fontWeight)

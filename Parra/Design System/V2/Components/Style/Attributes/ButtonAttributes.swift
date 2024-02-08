@@ -21,14 +21,14 @@ public struct ButtonAttributes: ParraStyleAttributes {
     public let titlePressed: LabelAttributes?
 
     public let background: (any ShapeStyle)?
-    public let cornerRadius: RectangleCornerRadii?
+    public let cornerRadius: ParraCornerRadiusSize?
     public let padding: EdgeInsets?
 
     internal let frame: FrameAttributes?
 
     public init(
         background: (any ShapeStyle)? = nil,
-        cornerRadius: RectangleCornerRadii? = nil,
+        cornerRadius: ParraCornerRadiusSize? = nil,
         padding: EdgeInsets? = nil,
         title: LabelAttributes = .init(),
         titleDisabled: LabelAttributes? = nil,
@@ -45,7 +45,7 @@ public struct ButtonAttributes: ParraStyleAttributes {
 
     internal init(
         background: (any ShapeStyle)? = nil,
-        cornerRadius: RectangleCornerRadii? = nil,
+        cornerRadius: ParraCornerRadiusSize? = nil,
         padding: EdgeInsets? = nil,
         title: LabelAttributes = .init(),
         titleDisabled: LabelAttributes? = nil,
@@ -95,11 +95,11 @@ public struct ButtonAttributes: ParraStyleAttributes {
                 .init(vertical: 10 + extraVerticalPadding, horizontal: 12)
         }
 
-        let cornerRadius: RectangleCornerRadii = switch size {
+        let cornerRadius: ParraCornerRadiusSize = switch size {
         case .small, .medium:
-                .init(allCorners: 6)
+                .small
         case .large:
-                .init(allCorners: 8)
+                .medium
         }
 
         return ButtonAttributes(

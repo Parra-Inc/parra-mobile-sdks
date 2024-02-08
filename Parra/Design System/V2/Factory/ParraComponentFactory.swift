@@ -26,13 +26,13 @@ struct ComponentBuilder {
 protocol ParraComponentFactory {}
 
 class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
-    private let local: Factory
-    private let global: GlobalComponentAttributes
+    private let local: Factory?
+    private let global: GlobalComponentAttributes?
     private let theme: ParraTheme
 
     init(
-        local: Factory,
-        global: GlobalComponentAttributes,
+        local: Factory?,
+        global: GlobalComponentAttributes?,
         theme: ParraTheme
     ) {
         self.local = local
@@ -48,7 +48,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         localAttributes: LabelAttributes? = nil
     ) -> some View {
         if let content {
-            let attributes = if let factory = global.labelAttributeFactory {
+            let attributes = if let factory = global?.labelAttributeFactory {
                 factory(config, content, localAttributes)
             } else {
                 localAttributes
@@ -62,7 +62,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
             // If a container level factory function was provided for this component,
             // use it and supply global attribute overrides instead of local, if provided.
-            if let builder = local[keyPath: componentKeyPath],
+            if let builder = local?[keyPath: componentKeyPath],
                let view = builder(config, content, mergedAttributes) {
 
                 view
@@ -94,7 +94,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         localAttributes: ButtonAttributes
     ) -> some View {
         if let content {
-            let attributes = if let factory = global.buttonAttributeFactory {
+            let attributes = if let factory = global?.buttonAttributeFactory {
                 factory(config, content, localAttributes)
             } else {
                 localAttributes
@@ -124,7 +124,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
             // If a container level factory function was provided for this component,
             // use it and supply global attribute overrides instead of local, if provided.
-            if let builder = local[keyPath: componentKeyPath],
+            if let builder = local?[keyPath: componentKeyPath],
                let view = builder(config, content, mergedAttributes) {
 
                 view
@@ -170,7 +170,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         localAttributes: MenuAttributes? = nil
     ) -> some View {
         if let content {
-            let attributes = if let factory = global.menuAttributeFactory {
+            let attributes = if let factory = global?.menuAttributeFactory {
                 factory(config, content, localAttributes)
             } else {
                 localAttributes
@@ -184,7 +184,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
             // If a container level factory function was provided for this component,
             // use it and supply global attribute overrides instead of local, if provided.
-            if let builder = local[keyPath: componentKeyPath],
+            if let builder = local?[keyPath: componentKeyPath],
                let view = builder(config, content, mergedAttributes) {
 
                 view
@@ -215,7 +215,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         localAttributes: TextEditorAttributes? = nil
     ) -> some View {
         if let content {
-            let attributes = if let factory = global.textEditorAttributeFactory {
+            let attributes = if let factory = global?.textEditorAttributeFactory {
                 factory(config, content, localAttributes)
             } else {
                 localAttributes
@@ -229,7 +229,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
             // If a container level factory function was provided for this component,
             // use it and supply global attribute overrides instead of local, if provided.
-            if let builder = local[keyPath: componentKeyPath],
+            if let builder = local?[keyPath: componentKeyPath],
                let view = builder(config, content, mergedAttributes) {
 
                 view

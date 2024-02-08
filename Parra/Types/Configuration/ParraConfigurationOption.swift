@@ -22,4 +22,6 @@ public enum ParraConfigurationOption {
 
     /// The theme that will be used for an UI components rendered by Parra.
     case theme(_ theme: ParraTheme)
+
+    case globalComponentAttributes(_ globalComponentAttributes: GlobalComponentAttributes)
 }

@@ -37,7 +37,11 @@ public struct ParraCornerRadiusConfig {
         self.extraLarge = extraLarge
     }
 
-    public func value(for size: ParraCornerRadiusSize) -> RectangleCornerRadii {
+    public func value(for size: ParraCornerRadiusSize?) -> RectangleCornerRadii {
+        guard let size else {
+            return .zero
+        }
+        
         switch size {
         case .zero:
             return .zero

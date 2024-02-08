@@ -13,8 +13,12 @@ internal struct ParraAttributedMenuStyle: MenuStyle, ParraAttributedStyle {
     internal let content: MenuContent
     internal let attributes: MenuAttributes
     internal let theme: ParraTheme
-    internal let labelStyle: ParraAttributedLabelStyle
-    internal let labelWithSelectionStyle: ParraAttributedLabelStyle
+    
+    internal let titleStyle: ParraAttributedLabelStyle?
+    internal let helperStyle: ParraAttributedLabelStyle?
+
+    internal let menuOptionStyle: ParraAttributedLabelStyle
+    internal let menuOptionSelectedStyle: ParraAttributedLabelStyle
 
     internal init(
         config: MenuConfig,
@@ -26,38 +30,58 @@ internal struct ParraAttributedMenuStyle: MenuStyle, ParraAttributedStyle {
         self.content = content
         self.attributes = attributes
         self.theme = theme
-        self.labelStyle = ParraAttributedLabelStyle(
-            config: config.label,
-            content: content.label,
-            attributes: attributes.label,
+        self.titleStyle = if let title = content.title {
+            ParraAttributedLabelStyle(
+                config: config.title,
+                content: title,
+                attributes: attributes.title,
+                theme: theme
+            )
+        } else {
+            nil
+        }
+        self.helperStyle = if let helper = content.helper {
+            ParraAttributedLabelStyle(
+                config: config.helper,
+                content: helper,
+                attributes: attributes.helper,
+                theme: theme
+            )
+        } else {
+            nil
+        }
+
+        self.menuOptionStyle = ParraAttributedLabelStyle(
+            config: config.menuOption,
+            content: .init(text: ""), // will be overridden elsewhere
+            attributes: attributes.menuItem,
             theme: theme
         )
-        self.labelWithSelectionStyle = ParraAttributedLabelStyle(
-            config: config.label,
-            content: content.label,
-            attributes: attributes.labelWithSelection ?? attributes.label,
+
+        self.menuOptionSelectedStyle = ParraAttributedLabelStyle(
+            config: config.menuOptionSelected,
+            content: .init(text: ""), // will be overridden elsewhere
+            attributes: attributes.menuItemSelected,
             theme: theme
         )
     }
 
     internal func makeBody(configuration: Configuration) -> some View {
-        let tint = attributes.tint ?? .accentColor
+        let tint = attributes.tint ?? theme.palette.secondaryText.toParraColor()
 
         Menu(configuration)
             .menuOrder(attributes.sortOrder)
             .tint(tint)
-            .padding(attributes.padding ?? .zero)
+            .applyCornerRadii(size: attributes.cornerRadius, from: theme)
             .overlay(
                 UnevenRoundedRectangle(
-                    cornerRadii: attributes.cornerRadius ?? .zero
+                    cornerRadii: theme.cornerRadius.value(for: attributes.cornerRadius)
                 )
                 .stroke(
                     tint,
                     lineWidth: attributes.borderWidth
                 )
             )
-            .applyBackground(attributes.background)
-            .applyCornerRadii(attributes.cornerRadius)
     }
 
     internal func withAttributes(attributes: MenuAttributes) -> ParraAttributedMenuStyle {

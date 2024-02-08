@@ -9,8 +9,14 @@
 import SwiftUI
 
 public struct TextEditorAttributes: ParraStyleAttributes {
+    /// Attributes to use on the optional title label shown above the menu.
+    public let title: LabelAttributes
+
+    /// Attributes to use on the optional helper field shown below the menu.
+    public let helper: LabelAttributes
+
     public let background: (any ShapeStyle)?
-    public let cornerRadius: RectangleCornerRadii?
+    public let cornerRadius: ParraCornerRadiusSize?
     public let font: Font?
     public let fontColor: Color?
     public let fontDesign: Font.Design?
@@ -23,8 +29,10 @@ public struct TextEditorAttributes: ParraStyleAttributes {
     internal let borderColor: Color?
 
     public init(
+        title: LabelAttributes,
+        helper: LabelAttributes,
         background: (any ShapeStyle)? = nil,
-        cornerRadius: RectangleCornerRadii? = nil,
+        cornerRadius: ParraCornerRadiusSize? = nil,
         font: Font? = nil,
         fontColor: ParraColorConvertible? = nil,
         fontDesign: Font.Design? = nil,
@@ -32,6 +40,8 @@ public struct TextEditorAttributes: ParraStyleAttributes {
         fontWidth: Font.Width? = nil,
         padding: EdgeInsets? = nil
     ) {
+        self.title = title
+        self.helper = helper
         self.background = background
         self.cornerRadius = cornerRadius
         self.font = font
@@ -46,8 +56,10 @@ public struct TextEditorAttributes: ParraStyleAttributes {
     }
 
     internal init(
+        title: LabelAttributes,
+        helper: LabelAttributes,
         background: (any ShapeStyle)? = nil,
-        cornerRadius: RectangleCornerRadii? = nil,
+        cornerRadius: ParraCornerRadiusSize? = nil,
         font: Font? = nil,
         fontColor: ParraColorConvertible? = nil,
         fontDesign: Font.Design? = nil,
@@ -58,6 +70,8 @@ public struct TextEditorAttributes: ParraStyleAttributes {
         borderWidth: CGFloat = 0,
         borderColor: Color? = nil
     ) {
+        self.title = title
+        self.helper = helper
         self.background = background
         self.cornerRadius = cornerRadius
         self.font = font
@@ -75,6 +89,8 @@ public struct TextEditorAttributes: ParraStyleAttributes {
         updates: TextEditorAttributes?
     ) -> TextEditorAttributes {
         return TextEditorAttributes(
+            title: updates?.title ?? title,
+            helper: updates?.helper ?? helper,
             background: updates?.background ?? background,
             cornerRadius: updates?.cornerRadius ?? cornerRadius,
             font: updates?.font ?? font,

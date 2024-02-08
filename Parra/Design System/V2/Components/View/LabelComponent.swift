@@ -19,28 +19,36 @@ struct LabelComponent: LabelComponentType {
         config: LabelConfig
     ) -> LabelAttributes {
         let base = inputAttributes ?? LabelAttributes()
+        let defaultFontStyle: Font = .system(config.fontStyle)
 
-        let defaultAttributes = switch config.type {
+        let defaultAttributes = base.withUpdates(
+            updates: LabelAttributes(
+                font: base.font ?? defaultFontStyle
+            )
+        )
+
+        let styledAttributes: LabelAttributes? = switch config.fontStyle {
         case .body:
             LabelAttributes(
-                font: base.font ?? .system(.body),
                 fontColor: base.fontColor ?? theme.palette.primaryText
             )
-        case .description:
+        case .subheadline:
             LabelAttributes(
-                font: base.font ?? .system(.subheadline),
                 fontColor: base.fontColor ?? theme.palette.secondaryText
             )
         case .title:
             LabelAttributes(
-                font: base.font ?? .system(.largeTitle),
                 fontColor: base.fontColor ?? theme.palette.primaryText,
                 fontWeight: base.fontWeight ?? .bold
             )
+        case .callout, .caption, .footnote, .caption2, .largeTitle, .headline, .title2, .title3:
+            nil
+        @unknown default:
+            nil
         }
 
-        return base.withUpdates(
-            updates: defaultAttributes
+        return defaultAttributes.withUpdates(
+            updates: styledAttributes
         )
     }
 
@@ -81,24 +89,24 @@ private func renderLabel(
 #Preview {
     return VStack(alignment: .leading, spacing: 16) {
         renderLabel(
-            config: .init(type: .body),
-            content: .init(text: "Default config")
+            config: LabelConfig(fontStyle: .body),
+            content: LabelContent(text: "Default config")
         )
 
         renderLabel(
-            config: .init(type: .title),
-            content: .init(text: "A large title")
+            config: LabelConfig(fontStyle: .title),
+            content: LabelContent(text: "A large title")
         )
 
         renderLabel(
-            config: .init(type: .description),
-            content: .init(text: "A subheadline")
+            config: LabelConfig(fontStyle: .subheadline),
+            content: LabelContent(text: "A subheadline")
         )
 
         renderLabel(
-            config: .init(type: .body),
-            content: .init(text: "With a background"),
-            attributes: .init(
+            config: LabelConfig(fontStyle: .body),
+            content: LabelContent(text: "With a background"),
+            attributes: LabelAttributes(
                 background: .red,
                 font: .title,
                 fontColor: Color.green
@@ -106,23 +114,23 @@ private func renderLabel(
         )
 
         renderLabel(
-            config: .init(type: .title),
-            content: .init(text: "With a gradient background"),
-            attributes: .init(
+            config: LabelConfig(fontStyle: .title),
+            content: LabelContent(text: "With a gradient background"),
+            attributes: LabelAttributes(
                 background: Gradient(colors: [.pink, .purple]),
-                cornerRadius: .init(allCorners: 4),
+                cornerRadius: .extraSmall,
                 fontColor: Color.white,
-                padding: .init(top: 4, leading: 10, bottom: 4, trailing: 10)
+                padding: EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10)
             )
         )
 
         renderLabel(
-            config: .init(type: .description),
-            content: .init(text: "With a corner radius"),
-            attributes: .init(
+            config: LabelConfig(fontStyle: .subheadline),
+            content: LabelContent(text: "With a corner radius"),
+            attributes: LabelAttributes(
                 background: .green,
-                cornerRadius: .init(allCorners: 12),
-                padding: .init(top: 6, leading: 6, bottom: 6, trailing: 6)
+                cornerRadius: .large,
+                padding: EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
             )
         )
    }

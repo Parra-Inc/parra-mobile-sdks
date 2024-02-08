@@ -13,6 +13,18 @@ struct OutlinedButtonComponent: ButtonComponentType {
     let content: ButtonContent
     let style: ParraAttributedButtonStyle
 
+    @EnvironmentObject var themeObserver: ParraThemeObserver
+
+    init(
+        config: ButtonConfig,
+        content: ButtonContent,
+        style: ParraAttributedButtonStyle
+    ) {
+        self.config = config
+        self.content = content
+        self.style = style
+    }
+
     static func applyStandardCustomizations(
         onto inputAttributes: ButtonAttributes?,
         theme: ParraTheme,
@@ -80,7 +92,10 @@ struct OutlinedButtonComponent: ButtonComponentType {
         .disabled(content.isDisabled)
         .buttonStyle(style)
         .padding(style.attributes.padding ?? .zero)
-        .applyCornerRadii(style.attributes.cornerRadius)
+        .applyCornerRadii(
+            size: style.attributes.cornerRadius,
+            from: themeObserver.theme
+        )
     }
 }
 

@@ -401,6 +401,7 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable, FeedbackF
 }
 
 public struct FeedbackFormSelectFieldData: Codable, Equatable, Hashable, FeedbackFormFieldDataType {
+    /// If provided, the title for an empty option.
     public let placeholder: String?
     public let options: Array<FeedbackFormSelectFieldOption>
 

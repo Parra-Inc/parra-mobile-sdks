@@ -9,35 +9,45 @@
 import SwiftUI
 
 public struct MenuAttributes: ParraStyleAttributes {
+    /// Attributes to use on the optional title label shown above the menu.
+    public let title: LabelAttributes
+
+    /// Attributes to use on the optional helper field shown below the menu.
+    public let helper: LabelAttributes
+
     /// Attributes to use on the label shown when the menu is collapsed and a selection has not been made yet.
-    public let label: LabelAttributes
+    public let menuItem: LabelAttributes
 
     /// Attributes to use on the label shown when the menu is collapsed and a selection has been made.
-    public let labelWithSelection: LabelAttributes?
+    public let menuItemSelected: LabelAttributes
 
     public let sortOrder: MenuOrder
 
     public let tint: Color?
 
     public let background: (any ShapeStyle)?
-    public let cornerRadius: RectangleCornerRadii?
+    public let cornerRadius: ParraCornerRadiusSize?
     public let padding: EdgeInsets?
 
     internal let frame: FrameAttributes?
     internal let borderWidth: CGFloat
 
     public init(
-        label: LabelAttributes,
-        labelWithSelection: LabelAttributes? = nil,
+        title: LabelAttributes,
+        helper: LabelAttributes,
+        menuItem: LabelAttributes,
+        menuItemSelected: LabelAttributes,
         sortOrder: MenuOrder = .fixed,
         tint: Color? = nil,
         background: (any ShapeStyle)? = nil,
-        cornerRadius: RectangleCornerRadii? = nil,
+        cornerRadius: ParraCornerRadiusSize? = nil,
         padding: EdgeInsets? = nil
     ) {
         self.init(
-            label: label,
-            labelWithSelection: labelWithSelection,
+            title: title,
+            helper: helper,
+            menuItem: menuItem,
+            menuItemSelected: menuItemSelected,
             sortOrder: sortOrder,
             tint: tint,
             background: background,
@@ -49,18 +59,22 @@ public struct MenuAttributes: ParraStyleAttributes {
     }
 
     internal init(
-        label: LabelAttributes,
-        labelWithSelection: LabelAttributes? = nil,
+        title: LabelAttributes,
+        helper: LabelAttributes,
+        menuItem: LabelAttributes,
+        menuItemSelected: LabelAttributes,
         sortOrder: MenuOrder = .fixed,
         tint: Color? = nil,
         background: (any ShapeStyle)? = nil,
-        cornerRadius: RectangleCornerRadii? = nil,
+        cornerRadius: ParraCornerRadiusSize? = nil,
         padding: EdgeInsets? = nil,
         frame: FrameAttributes? = nil,
         borderWidth: CGFloat = 0
     ) {
-        self.label = label
-        self.labelWithSelection = labelWithSelection
+        self.title = title
+        self.helper = helper
+        self.menuItem = menuItem
+        self.menuItemSelected = menuItemSelected
         self.sortOrder = sortOrder
         self.tint = tint
         self.background = background

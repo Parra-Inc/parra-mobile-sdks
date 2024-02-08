@@ -11,6 +11,6 @@ import SwiftUI
 internal struct WidgetStyle: ContainerStyle {
     var background: (any ShapeStyle)?
     var contentPadding: EdgeInsets
-    var cornerRadius: RectangleCornerRadii
+    var cornerRadius: ParraCornerRadiusSize
     var padding: EdgeInsets
 }

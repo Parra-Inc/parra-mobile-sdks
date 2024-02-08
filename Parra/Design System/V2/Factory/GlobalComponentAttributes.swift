@@ -10,26 +10,26 @@ import SwiftUI
 
 /// A place to provide global defaults for basic styles of Parra components, given contextual information about
 /// where they will be used.
-internal class GlobalComponentAttributes {
-    internal typealias LabelAttributeFactory = (
+public class GlobalComponentAttributes {
+    public typealias LabelAttributeFactory = (
         _ config: LabelConfig,
         _ content: LabelContent,
         _ defaultAttributes: LabelAttributes?
     ) -> LabelAttributes
 
-    internal typealias ButtonAttributeFactory = (
+    public typealias ButtonAttributeFactory = (
         _ config: ButtonConfig,
         _ content: ButtonContent,
         _ defaultAttributes: ButtonAttributes?
     ) -> ButtonAttributes
 
-    internal typealias MenuAttributeFactory = (
+    public typealias MenuAttributeFactory = (
         _ config: MenuConfig,
         _ content: MenuContent,
         _ defaultAttributes: MenuAttributes?
     ) -> MenuAttributes
 
-    internal typealias TextEditorAttributeFactory = (
+    public typealias TextEditorAttributeFactory = (
         _ config: TextEditorConfig,
         _ content: TextEditorContent,
         _ defaultAttributes: TextEditorAttributes?
@@ -40,7 +40,7 @@ internal class GlobalComponentAttributes {
     internal private(set) var menuAttributeFactory: MenuAttributeFactory?
     internal private(set) var textEditorAttributeFactory: TextEditorAttributeFactory?
 
-    internal init(
+    public init(
         labelAttributeFactory: LabelAttributeFactory? = nil,
         buttonAttributeFactory: ButtonAttributeFactory? = nil,
         menuAttributeFactory: MenuAttributeFactory? = nil,

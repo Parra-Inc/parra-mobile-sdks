@@ -14,7 +14,25 @@ fileprivate let logger = Logger(category: "Modals")
 public extension ParraFeedback {
     // MARK: - Modals
 
-    func presentCardPopup(
+    static func presentCardPopup(
+        with cards: [ParraCardItem],
+        from fromViewController: UIViewController? = nil,
+        config: ParraCardViewConfig = .default,
+        transitionStyle: ParraCardModalTransitionStyle = .slide,
+        userDismissable: Bool = true,
+        onDismiss: (() -> Void)? = nil
+    ) {
+        shared.presentCardPopup(
+            with: cards,
+            from: fromViewController,
+            config: config,
+            transitionStyle: transitionStyle,
+            userDismissable: userDismissable,
+            onDismiss: onDismiss
+        )
+    }
+
+    internal func presentCardPopup(
         with cards: [ParraCardItem],
         from fromViewController: UIViewController? = nil,
         config: ParraCardViewConfig = .default,
@@ -39,7 +57,21 @@ public extension ParraFeedback {
         )
     }
 
-    func presentCardDrawer(
+    static func presentCardDrawer(
+        with cards: [ParraCardItem],
+        from fromViewController: UIViewController? = nil,
+        config: ParraCardViewConfig = .drawerDefault,
+        onDismiss: (() -> Void)? = nil
+    ) {
+        shared.presentCardDrawer(
+            with: cards,
+            from: fromViewController,
+            config: config,
+            onDismiss: onDismiss
+        )
+    }
+
+    internal func presentCardDrawer(
         with cards: [ParraCardItem],
         from fromViewController: UIViewController? = nil,
         config: ParraCardViewConfig = .drawerDefault,
@@ -72,17 +104,19 @@ public extension ParraFeedback {
     func presentFeedbackForm(
         with form: ParraFeedbackFormResponse,
         from fromViewController: UIViewController? = nil,
-        componentFactory: FeedbackFormWidgetComponentFactory? = nil
+        localFactory: FeedbackFormWidgetComponentFactory? = nil
     ) {
         let parra = Parra.getExistingInstance()
         let theme = parra.configuration.theme
+        let globalComponentAttributes = parra.configuration.globalComponentAttributes
         let notificationCenter = parra.notificationCenter
 
         let formViewController = ParraFeedbackFormViewController(
             form: form,
             theme: theme,
+            globalComponentAttributes: globalComponentAttributes,
             notificationCenter: notificationCenter,
-            componentFactory: componentFactory
+            localFactory: localFactory
         )
 
         if let sheetPresentationController = formViewController.sheetPresentationController {
