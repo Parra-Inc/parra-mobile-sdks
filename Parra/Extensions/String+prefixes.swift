@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal extension String {
+extension String {
     func hasAnyPrefix(_ prefixes: [String]) -> Bool {
         // eventually this could be less naive
         return prefixes.contains { prefix in

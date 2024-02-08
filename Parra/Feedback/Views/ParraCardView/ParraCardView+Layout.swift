@@ -12,21 +12,21 @@ extension ParraCardView {
         static let navigationPadding: CGFloat = 5
         static let contentPadding: CGFloat = 12
     }
-    
-    public override func willMove(toSuperview newSuperview: UIView?) {
+
+    override public func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
-        
+
         removeConstraints(constraintsOnSuperView)
     }
-    
-    public override func didMoveToSuperview() {
+
+    override public func didMoveToSuperview() {
         super.didMoveToSuperview()
-        
+
         if superview == nil {
             return
         }
         removeConstraints(constraintsOnSuperView)
-        
+
         let widthConstraint = widthAnchor.constraint(
             greaterThanOrEqualToConstant: Dimensions.minWidth
         )
@@ -37,16 +37,16 @@ extension ParraCardView {
             multiplier: Dimensions.minHeight / Dimensions.minWidth
         )
         aspectRatioConstraint.priority = .required
-        
+
         constraintsOnSuperView = [
             widthConstraint,
             aspectRatioConstraint
         ]
-        
+
         NSLayoutConstraint.activate(constraintsOnSuperView)
     }
-    
-    internal func configureSubviews(config: ParraCardViewConfig) {        
+
+    func configureSubviews(config: ParraCardViewConfig) {
         configureContentView()
         configureNavigationStack()
 
@@ -66,22 +66,24 @@ extension ParraCardView {
             equalTo: bottomAnchor,
             constant: -config.contentInsets.bottom
         )
-        
+
         NSLayoutConstraint.activate(constraintsOncontainerView)
-        
+
         applyConfig(config)
-        
+
         transitionToNextCard(animated: false)
     }
-    
-    internal func applyConfig(_ config: ParraCardViewConfig) {
+
+    func applyConfig(_ config: ParraCardViewConfig) {
         containerView.backgroundColor = config.backgroundColor
         containerView.layer.cornerRadius = config.cornerRadius
-        
-        poweredByButton.setTitleColor(config.backgroundColor.isLight()
-                                      ? .black.withAlphaComponent(0.1)
-                                      : .white.withAlphaComponent(0.2),
-                                      for: .normal)
+
+        poweredByButton.setTitleColor(
+            config.backgroundColor.isLight()
+                ? .black.withAlphaComponent(0.1)
+                : .white.withAlphaComponent(0.2),
+            for: .normal
+        )
 
         layer.shadowColor = config.shadow.color.cgColor
         layer.shadowOpacity = Float(config.shadow.opacity)
@@ -89,41 +91,44 @@ extension ParraCardView {
         layer.shadowOffset = config.shadow.offset
         layer.bounds = bounds
         layer.position = center
-        
+
         var needsLayout = false
-        
+
         if config.contentInsets.left != containerLeadingConstraint.constant {
             containerLeadingConstraint.constant = config.contentInsets.left
             needsLayout = true
         }
-        
+
         if -config.contentInsets.right != containerTrailingConstraint.constant {
             containerTrailingConstraint.constant = -config.contentInsets.right
             needsLayout = true
         }
-        
+
         if config.contentInsets.top != containerTopConstraint.constant {
             containerTopConstraint.constant = config.contentInsets.top
             needsLayout = true
         }
-        
+
         if -config.contentInsets.bottom != containerBottomConstraint.constant {
             containerBottomConstraint.constant = -config.contentInsets.bottom
             needsLayout = true
         }
-        
+
         if needsLayout {
             layoutIfNeeded()
         }
-        
+
         if let currentCardInfo {
             currentCardInfo.cardItemView.config = config
         }
     }
-    
+
     private func configureContentView() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.setContentCompressionResistancePriority(.required, for: .vertical)
+        contentView.setContentCompressionResistancePriority(
+            .required,
+            for: .vertical
+        )
         contentView.setContentHuggingPriority(.init(0), for: .vertical)
         contentView.clipsToBounds = true
         contentView.isUserInteractionEnabled = true
@@ -148,7 +153,7 @@ extension ParraCardView {
             )
         ])
     }
-    
+
     private func configureNavigationStack() {
         navigationStack.translatesAutoresizingMaskIntoConstraints = false
         navigationStack.alignment = .center
@@ -160,14 +165,24 @@ extension ParraCardView {
         poweredByButton.isUserInteractionEnabled = true
         poweredByButton.translatesAutoresizingMaskIntoConstraints = false
         poweredByButton.accessibilityIdentifier = "PoweredByParraButton"
-        poweredByButton.setContentHuggingPriority(.init(999),
-                                                  for: .vertical)
-        poweredByButton.addTarget(self,
-                                  action: #selector(openParraLink),
-                                  for: .touchUpInside)
+        poweredByButton.setContentHuggingPriority(
+            .init(999),
+            for: .vertical
+        )
+        poweredByButton.addTarget(
+            self,
+            action: #selector(openParraLink),
+            for: .touchUpInside
+        )
 
-        poweredByButton.setAttributedTitle(NSAttributedString.poweredByParraUIKit, for: .normal)
-        poweredByButton.setAttributedTitle(NSAttributedString.poweredByParraUIKit, for: .highlighted)
+        poweredByButton.setAttributedTitle(
+            NSAttributedString.poweredByParraUIKit,
+            for: .normal
+        )
+        poweredByButton.setAttributedTitle(
+            NSAttributedString.poweredByParraUIKit,
+            for: .highlighted
+        )
 
         NSLayoutConstraint.activate([
             navigationStack.topAnchor.constraint(
@@ -185,20 +200,23 @@ extension ParraCardView {
         ])
     }
 
-    @objc private func openParraLink() {
+    @objc
+    private func openParraLink() {
         Parra.logEvent(.tap(element: "powered-by-parra"))
 
         UIApplication.shared.open(Parra.Constants.parraWebRoot)
     }
 
-    @objc internal func navigateToPreviousCard() {
+    @objc
+    func navigateToPreviousCard() {
         suggestTransitionInDirection(.left, animated: true)
     }
 
-    @objc internal func navigateToNextCard() {
+    @objc
+    func navigateToNextCard() {
         // Currently only used on card types that don't have a straight forward way of determining that the user
         // is done interacting with them (currently long text and checkbox). It is implied that cards like this
         // shouldn't be manually commiting to the answer handler, since this action is taken here.
-        self.currentCardInfo?.cardItemView.commitToSelection()
+        currentCardInfo?.cardItemView.commitToSelection()
     }
 }

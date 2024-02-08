@@ -1,5 +1,5 @@
 //
-//  ParraFeedbackSyncManager.swift
+//  ParraSyncManager.swift
 //  Parra Feedback
 //
 //  Created by Michael MacCallum on 3/5/22.
@@ -11,33 +11,18 @@ import UIKit
 // TODO: What happens to the timer when the app goes to the background?
 // TODO: Timer should have exponential backoff. New eventual sync enqueued should reset this.
 
-fileprivate let logger = Logger(bypassEventCreation: true, category: "Sync Manager")
+private let logger = Logger(bypassEventCreation: true, category: "Sync Manager")
 
-internal enum ParraSyncMode: String {
+enum ParraSyncMode: String {
     case immediate
     case eventual
 }
 
 /// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
-internal actor ParraSyncManager {
-    /// Whether or not new attempts to sync occured while a sync was in progress. Many sync events could be received while a sync
-    /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
-    /// is completed.
-    internal private(set) var enqueuedSyncMode: ParraSyncMode? = nil
+actor ParraSyncManager {
+    // MARK: Lifecycle
 
-    internal let state: ParraState
-    internal let syncState: ParraSyncState
-    nonisolated internal let syncDelay: TimeInterval
-
-    private let networkManager: ParraNetworkManager
-    private let sessionManager: ParraSessionManager
-    private let notificationCenter: NotificationCenterType
-
-    @MainActor private var syncTimer: Timer?
-
-    private var lastSyncCompleted: Date?
-
-    internal init(
+    init(
         state: ParraState,
         syncState: ParraSyncState,
         networkManager: ParraNetworkManager,
@@ -52,12 +37,26 @@ internal actor ParraSyncManager {
         self.notificationCenter = notificationCenter
         self.syncDelay = syncDelay
     }
-    
+
+    // MARK: Internal
+
+    /// Whether or not new attempts to sync occured while a sync was in progress. Many sync events could be received while a sync
+    /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
+    /// is completed.
+    private(set) var enqueuedSyncMode: ParraSyncMode?
+
+    let state: ParraState
+    let syncState: ParraSyncState
+    nonisolated let syncDelay: TimeInterval
+
     /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
-    internal func enqueueSync(with mode: ParraSyncMode) async {
+    func enqueueSync(with mode: ParraSyncMode) async {
         guard await networkManager.getAuthenticationProvider() != nil else {
             await stopSyncTimer()
-            logger.trace("Skipping \(mode) sync. Authentication provider is unset.")
+            logger
+                .trace(
+                    "Skipping \(mode) sync. Authentication provider is unset."
+                )
 
             return
         }
@@ -73,7 +72,10 @@ internal actor ParraSyncManager {
             let logPrefix = "Sync already in progress."
             switch mode {
             case .immediate:
-                logger.debug("\(logPrefix) Sync was requested immediately. Will sync again upon current sync completion.")
+                logger
+                    .debug(
+                        "\(logPrefix) Sync was requested immediately. Will sync again upon current sync completion."
+                    )
 
                 enqueuedSyncMode = .immediate
             case .eventual:
@@ -102,18 +104,79 @@ internal actor ParraSyncManager {
             enqueuedSyncMode = .eventual
             logger.debug("\(logPrefix) Queuing eventual sync.")
 
-            if !(await isSyncTimerActive()) {
+            if await !isSyncTimerActive() {
                 await startSyncTimer()
             }
         }
     }
-    
+
+    @MainActor
+    func startSyncTimer(
+        willSyncHandler: (() -> Void)? = nil
+    ) {
+        stopSyncTimer()
+        logger.trace("Starting sync timer")
+
+        syncTimer = Timer.scheduledTimer(
+            withTimeInterval: syncDelay,
+            repeats: true
+        ) { [weak self] _ in
+            guard let self else {
+                return
+            }
+
+            logger.trace("Sync timer fired")
+
+            willSyncHandler?()
+
+            Task {
+                await self.enqueueSync(with: .immediate)
+            }
+        }
+    }
+
+    @MainActor
+    func stopSyncTimer() {
+        guard let syncTimer else {
+            return
+        }
+
+        logger.trace("Stopping sync timer")
+
+        syncTimer.invalidate()
+        self.syncTimer = nil
+    }
+
+    @MainActor
+    func isSyncTimerActive() -> Bool {
+        guard let syncTimer else {
+            return false
+        }
+
+        return syncTimer.isValid
+    }
+
+    func cancelEnqueuedSyncs() {
+        enqueuedSyncMode = nil
+    }
+
+    // MARK: Private
+
+    private let networkManager: ParraNetworkManager
+    private let sessionManager: ParraSessionManager
+    private let notificationCenter: NotificationCenterType
+
+    @MainActor private var syncTimer: Timer?
+
+    private var lastSyncCompleted: Date?
+
     private func sync(
         isRepeat: Bool = false
     ) async {
         if !isRepeat {
             if await syncState.isSyncing() {
-                logger.warn("Attempted to start a sync while one is in progress.")
+                logger
+                    .warn("Attempted to start a sync while one is in progress.")
 
                 return
             }
@@ -150,13 +213,13 @@ internal actor ParraSyncManager {
                 )
 
                 if shouldRepeatSync {
-                    // Must be kept inside a Task block to avoid the current sync's 
+                    // Must be kept inside a Task block to avoid the current sync's
                     // completion awaiting the next sync.
                     await sync(isRepeat: true)
                 }
             }
         }
-        
+
         guard await hasDataToSync(since: lastSyncCompleted) else {
             logger.debug("No data available to sync")
 
@@ -166,12 +229,12 @@ internal actor ParraSyncManager {
         }
 
         let syncStartMarker = logger.debug("Starting sync")
-        
+
         do {
             try await performSync(with: syncToken)
 
             logger.measureTime(since: syncStartMarker, message: "Sync complete")
-        } catch let error {
+        } catch {
             logger.error("Error performing sync", error)
 
             if enqueuedSyncMode == .immediate {
@@ -179,7 +242,10 @@ internal actor ParraSyncManager {
                 // being synced that could cause it to fail again if synced immediately.
                 // This will at least keep us in a failure loop at the duration of the sync
                 // timer.
-                logger.debug("Immediate sync was enqueued after error. Resetting to eventual.")
+                logger
+                    .debug(
+                        "Immediate sync was enqueued after error. Resetting to eventual."
+                    )
                 enqueuedSyncMode = .eventual
             }
 
@@ -215,7 +281,7 @@ internal actor ParraSyncManager {
         for module in await state.getAllRegisteredModules() {
             do {
                 try await module.synchronizeData()
-            } catch let error {
+            } catch {
                 syncError = error
             }
         }
@@ -224,7 +290,7 @@ internal actor ParraSyncManager {
             throw syncError
         }
     }
-    
+
     private func hasDataToSync(since date: Date?) async -> Bool {
         let allRegisteredModules = await state.getAllRegisteredModules()
         var shouldSync = false
@@ -235,57 +301,7 @@ internal actor ParraSyncManager {
                 break
             }
         }
-        
+
         return shouldSync
-    }
-    
-    @MainActor
-    internal func startSyncTimer(
-        willSyncHandler: (() -> Void)? = nil
-    ) {
-        stopSyncTimer()
-        logger.trace("Starting sync timer")
-
-        syncTimer = Timer.scheduledTimer(
-            withTimeInterval: syncDelay,
-            repeats: true
-        ) { [weak self] timer in
-            guard let self else {
-                return
-            }
-
-            logger.trace("Sync timer fired")
-
-            willSyncHandler?()
-
-            Task {
-                await self.enqueueSync(with: .immediate)
-            }
-        }
-    }
-    
-    @MainActor
-    internal func stopSyncTimer() {
-        guard let syncTimer = syncTimer else {
-            return
-        }
-
-        logger.trace("Stopping sync timer")
-
-        syncTimer.invalidate()
-        self.syncTimer = nil
-    }
-
-    @MainActor
-    internal func isSyncTimerActive() -> Bool {
-        guard let syncTimer else {
-            return false
-        }
-
-        return syncTimer.isValid
-    }
-
-    internal func cancelEnqueuedSyncs() {
-        enqueuedSyncMode = nil
     }
 }

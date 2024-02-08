@@ -8,10 +8,12 @@
 
 import Foundation
 
-internal enum ButtonVariant: CustomStringConvertible {
+enum ButtonVariant: CustomStringConvertible {
     case plain
     case outlined
     case contained // filled
+
+    // MARK: Internal
 
     var description: String {
         switch self {

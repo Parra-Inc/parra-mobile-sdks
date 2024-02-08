@@ -14,23 +14,19 @@ public extension Parra {
 
         /// A key that cooresponds to a unique sync token provided with sync begin/ending notifications.
         public static let syncTokenKey = "syncToken"
-        
+
         public static let brandColor = UIColor(
             red: 232.0 / 255.0,
             green: 68.0 / 255.0,
             blue: 71.0 / 255.0,
             alpha: 1.0
         )
-        
+
         public static let parraWebRoot = URL(string: "https://parra.io/")!
     }
 
     internal enum InternalConstants {
-        internal static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
-        internal static let backgroundTaskName = "com.parra.session.backgroundtask"
-        internal static let backgroundTaskDuration: TimeInterval = 25.0
-
-        internal enum Formatters {
+        enum Formatters {
             static let iso8601Formatter = ISO8601DateFormatter()
 
             static let dateComponentsFormatter = DateComponentsFormatter()
@@ -54,5 +50,9 @@ public extension Parra {
                 return formatter
             }()
         }
+
+        static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
+        static let backgroundTaskName = "com.parra.session.backgroundtask"
+        static let backgroundTaskDuration: TimeInterval = 25.0
     }
 }

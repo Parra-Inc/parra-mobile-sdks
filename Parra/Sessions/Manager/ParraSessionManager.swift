@@ -11,7 +11,10 @@ import UIKit
 
 // NOTE: Any logs used in here cause recursion in production
 
-fileprivate let logger = Logger(bypassEventCreation: true, category: "Session manager")
+private let logger = Logger(
+    bypassEventCreation: true,
+    category: "Session manager"
+)
 
 // Needs
 // 1. Logging events without waiting.
@@ -29,18 +32,10 @@ fileprivate let logger = Logger(bypassEventCreation: true, category: "Session ma
 /// 1. For any method with the `Sync` suffix, you should always assume that it is a hard
 ///    requirement for it to be called on a specific queue. Usually ``eventQueue``.
 @usableFromInline
-internal class ParraSessionManager {
-    private let dataManager: ParraDataManager
-    private let networkManager: ParraNetworkManager
-    private let loggerOptions: ParraLoggerOptions
+class ParraSessionManager {
+    // MARK: Lifecycle
 
-    fileprivate let eventQueue: DispatchQueue
-
-    private var sessionStorage: SessionStorage {
-        return dataManager.sessionStorage
-    }
-
-    internal init(
+    init(
         dataManager: ParraDataManager,
         networkManager: ParraNetworkManager,
         loggerOptions: ParraLoggerOptions
@@ -51,17 +46,19 @@ internal class ParraSessionManager {
 
         // Set this in init after assigning the loggerOptions to ensure reads from the event queue couldn't
         // possibly start happening until after the initial write of these options is complete.
-        eventQueue = DispatchQueue(
+        self.eventQueue = DispatchQueue(
             label: "com.parra.sessions.event-queue",
             qos: .utility
         )
     }
 
-    internal func initializeSessions() async {
+    // MARK: Internal
+
+    func initializeSessions() async {
         await sessionStorage.initializeSessions()
     }
 
-    internal func hasDataToSync(since date: Date?) async -> Bool {
+    func hasDataToSync(since date: Date?) async -> Bool {
         // Checks made in order by least resources required to check them:
         // 1. The current session has been updated
         // 2. There are new events
@@ -101,13 +98,14 @@ internal class ParraSessionManager {
             var removableSessionIds = Set<String>()
             var erroredSessionIds = Set<String>()
 
-            let markSessionForDirectoryAsErrored = { (directory: URL) -> Void in
+            let markSessionForDirectoryAsErrored = { (directory: URL) in
                 let ext = ParraSession.Constant.packageExtension
                 guard directory.pathExtension == ext else {
                     return
                 }
 
-                let sessionId = directory.deletingPathExtension().lastPathComponent
+                let sessionId = directory.deletingPathExtension()
+                    .lastPathComponent
 
                 // A session directory being prefixed with an underscore indicates that we
                 // have already made an attempt to synchronize it, which has failed.
@@ -115,8 +113,13 @@ internal class ParraSessionManager {
                 // losses and delete it, so it doesn't cause the sync manager to think
                 // there are more sessions to sync.
 
-                if sessionId.hasPrefix(ParraSession.Constant.erroredSessionPrefix) {
-                    logger.trace("Marking previously errored session for removal: \(sessionId)")
+                if sessionId
+                    .hasPrefix(ParraSession.Constant.erroredSessionPrefix)
+                {
+                    logger
+                        .trace(
+                            "Marking previously errored session for removal: \(sessionId)"
+                        )
 
                     removableSessionIds.insert(sessionId)
                 } else {
@@ -134,12 +137,14 @@ internal class ParraSessionManager {
                 switch nextSession {
                 case .success(let sessionDirectory, let sessionUpload):
                     logger.trace("Session upload iterator produced session", [
-                        "sessionId": String(describing: sessionUpload.session.sessionId)
+                        "sessionId": String(describing: sessionUpload.session
+                            .sessionId)
                     ])
 
                     // Reference the session ID from the path instead of from reading the session
                     // object, since this one will include the deletion marker.
-                    let sessionId = sessionDirectory.deletingPathExtension().lastPathComponent
+                    let sessionId = sessionDirectory.deletingPathExtension()
+                        .lastPathComponent
 
                     if currentSession.sessionId == sessionId {
                         // Sets a marker on the current session to indicate the offset of the file handle that stores events
@@ -150,11 +155,15 @@ internal class ParraSessionManager {
 
                     logger.debug("Uploading session: \(sessionId)")
 
-                    let response = try await networkManager.submitSession(sessionUpload)
+                    let response = try await networkManager
+                        .submitSession(sessionUpload)
 
                     switch response.result {
                     case .success(let payload):
-                        logger.debug("Successfully uploaded session: \(sessionId)")
+                        logger
+                            .debug(
+                                "Successfully uploaded session: \(sessionId)"
+                            )
 
                         // Don't override the session response unless it's another one with shouldPoll enabled.
                         if payload.shouldPoll {
@@ -163,7 +172,10 @@ internal class ParraSessionManager {
 
                         removableSessionIds.insert(sessionId)
                     case .failure(let error):
-                        logger.error("Failed to upload session: \(sessionId)", error)
+                        logger.error(
+                            "Failed to upload session: \(sessionId)",
+                            error
+                        )
 
                         markSessionForDirectoryAsErrored(sessionDirectory)
 
@@ -196,7 +208,7 @@ internal class ParraSessionManager {
     /// Do not interact with this method directly. Logging events should be done through the
     /// Parra.logEvent helpers.
     @usableFromInline
-    internal func writeEvent(
+    func writeEvent(
         wrappedEvent: ParraWrappedEvent,
         callSiteContext: ParraLoggerCallSiteContext
     ) {
@@ -209,7 +221,7 @@ internal class ParraSessionManager {
         }
     }
 
-    internal func writeEventSync(
+    func writeEventSync(
         wrappedEvent: ParraWrappedEvent,
         target: ParraSessionEventTarget,
         callSiteContext: ParraLoggerCallSiteContext
@@ -242,13 +254,13 @@ internal class ParraSessionManager {
                 writeToConsole()
             } else {
                 writeToSession()
-#if DEBUG
+                #if DEBUG
                 // If we're running tests, honor the configured behavior, but also write
                 // to console, if we weren't already going to.
                 if NSClassFromString("XCTestCase") != nil {
                     writeToConsole()
                 }
-#endif
+                #endif
             }
         case .console:
             writeToConsole()
@@ -258,6 +270,32 @@ internal class ParraSessionManager {
             // The event is explicitly being skipped.
             break
         }
+    }
+
+    func setUserProperty(
+        _ value: Any?,
+        forKey key: String
+    ) {
+        sessionStorage.writeUserPropertyUpdate(
+            key: key,
+            value: value
+        )
+    }
+
+    func endSession() async {
+        await sessionStorage.endSession()
+    }
+
+    // MARK: Private
+
+    private let dataManager: ParraDataManager
+    private let networkManager: ParraNetworkManager
+    private let loggerOptions: ParraLoggerOptions
+
+    private let eventQueue: DispatchQueue
+
+    private var sessionStorage: SessionStorage {
+        return dataManager.sessionStorage
     }
 
     private func writeEventToSessionSync(
@@ -274,25 +312,12 @@ internal class ParraSessionManager {
             context: context
         )
     }
-
-    internal func setUserProperty(
-        _ value: Any?,
-        forKey key: String
-    ) {
-        sessionStorage.writeUserPropertyUpdate(
-            key: key,
-            value: value
-        )
-    }
-
-    internal func endSession() async {
-        await sessionStorage.endSession()
-    }
 }
 
 // MARK: ParraLoggerBackend
+
 extension ParraSessionManager: ParraLoggerBackend {
-    internal func log(
+    func log(
         data: ParraLogData
     ) {
         eventQueue.async { [self] in
@@ -302,7 +327,7 @@ extension ParraSessionManager: ParraLoggerBackend {
         }
     }
 
-    internal func logMultiple(
+    func logMultiple(
         data: [ParraLogData]
     ) {
         eventQueue.async { [self] in
@@ -354,11 +379,11 @@ extension ParraSessionManager: ParraLoggerBackend {
 
         let target: ParraSessionEventTarget
         if logData.logContext.bypassEventCreation {
-#if DEBUG
+            #if DEBUG
             target = .console
-#else
+            #else
             target = .none
-#endif
+            #endif
         } else if ParraLoggerEnvironment.eventDebugLoggingOverrideEnabled {
             target = .all
         } else {

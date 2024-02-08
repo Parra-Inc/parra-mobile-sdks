@@ -9,18 +9,11 @@
 import Foundation
 
 @usableFromInline
-internal struct ParraLoggerThreadInfo: Codable {
-    internal let id: Int
-    internal let queueName: String
-    internal let stackSize: Int
-    internal let priority: Double // 0.0...1.0
-    internal let qualityOfService: QualityOfService
-    internal let threadName: String?
-    internal let threadNumber: UInt8?
-    internal private(set) var callStackSymbols: ParraLoggerStackSymbols
+struct ParraLoggerThreadInfo: Codable {
+    // MARK: Lifecycle
 
     @usableFromInline
-    internal init(
+    init(
         thread: Thread,
         callStackSymbols: ParraLoggerStackSymbols = .none
     ) {
@@ -40,16 +33,27 @@ internal struct ParraLoggerThreadInfo: Codable {
         }
     }
 
+    // MARK: Internal
+
+    let id: Int
+    let queueName: String
+    let stackSize: Int
+    let priority: Double // 0.0...1.0
+    let qualityOfService: QualityOfService
+    let threadName: String?
+    let threadNumber: UInt8?
+    private(set) var callStackSymbols: ParraLoggerStackSymbols
+
     /// Demangles the call stack symbols and stores them in place of the raw symbols, if symbols
     /// exist and they haven't already been demangled.
-    mutating internal func demangleCallStack() {
+    mutating func demangleCallStack() {
         switch callStackSymbols {
         case .raw(let frames):
             let demangledFrames = CallStackParser.parse(
                 frames: frames
             )
 
-            self.callStackSymbols = .demangled(demangledFrames)
+            callStackSymbols = .demangled(demangledFrames)
         case .demangled, .none:
             break
         }

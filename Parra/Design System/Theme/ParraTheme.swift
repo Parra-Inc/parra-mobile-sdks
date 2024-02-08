@@ -10,13 +10,7 @@ import Foundation
 import SwiftUI
 
 public struct ParraTheme {
-    public static let `default` = ParraTheme(
-        color: .accentColor
-    )
-
-    internal let palette: ParraColorPalette
-    internal let typography: ParraTypography
-    internal let cornerRadius: ParraCornerRadiusConfig
+    // MARK: Lifecycle
 
     public init(
         lightPalette: ParraColorPalette,
@@ -43,7 +37,8 @@ public struct ParraTheme {
             primary: color,
             secondary: ParraColorPalette.defaultDark.secondary,
             primaryBackground: ParraColorPalette.defaultDark.primaryBackground,
-            secondaryBackground: ParraColorPalette.defaultDark.secondaryBackground,
+            secondaryBackground: ParraColorPalette.defaultDark
+                .secondaryBackground,
             primaryText: ParraColorPalette.defaultDark.primaryText,
             secondaryText: ParraColorPalette.defaultDark.secondaryText,
             error: ParraColorPalette.defaultDark.error,
@@ -77,6 +72,20 @@ public struct ParraTheme {
             color: primary
         )
     }
+
+    // MARK: Public
+
+    public static let `default` = ParraTheme(
+        color: .accentColor
+    )
+
+    // MARK: Internal
+
+    let palette: ParraColorPalette
+    let typography: ParraTypography
+    let cornerRadius: ParraCornerRadiusConfig
+
+    // MARK: Private
 
     // MARK: - Palette
 

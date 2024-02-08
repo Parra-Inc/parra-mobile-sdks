@@ -9,7 +9,11 @@
 import Foundation
 import UIKit
 
-internal class ParraCardDrawerViewController: ParraCardModalViewController, ParraCardModal {
+class ParraCardDrawerViewController: ParraCardModalViewController,
+    ParraCardModal
+{
+    // MARK: Lifecycle
+
     required init(
         cards: [ParraCardItem],
         config: ParraCardViewConfig,
@@ -25,9 +29,12 @@ internal class ParraCardDrawerViewController: ParraCardModalViewController, Parr
         )
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Internal
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,9 +43,12 @@ internal class ParraCardDrawerViewController: ParraCardModalViewController, Parr
         view.addSubview(cardView)
 
         NSLayoutConstraint.activate([
-            cardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            cardView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            cardView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            cardView.topAnchor
+                .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            cardView.leadingAnchor
+                .constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            cardView.trailingAnchor
+                .constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
 }

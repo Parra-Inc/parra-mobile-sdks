@@ -7,12 +7,10 @@
 
 import Foundation
 
-internal class ParraDataManager {
-    internal let baseDirectory: URL
-    internal let credentialStorage: CredentialStorage
-    internal let sessionStorage: SessionStorage
+class ParraDataManager {
+    // MARK: Lifecycle
 
-    internal init(
+    init(
         baseDirectory: URL,
         credentialStorage: CredentialStorage,
         sessionStorage: SessionStorage
@@ -22,11 +20,17 @@ internal class ParraDataManager {
         self.sessionStorage = sessionStorage
     }
 
-    internal func getCurrentCredential() async -> ParraCredential? {
+    // MARK: Internal
+
+    let baseDirectory: URL
+    let credentialStorage: CredentialStorage
+    let sessionStorage: SessionStorage
+
+    func getCurrentCredential() async -> ParraCredential? {
         return await credentialStorage.currentCredential()
     }
-    
-    internal func updateCredential(credential: ParraCredential?) async {
+
+    func updateCredential(credential: ParraCredential?) async {
         await credentialStorage.updateCredential(credential: credential)
     }
 }

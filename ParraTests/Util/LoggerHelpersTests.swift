@@ -6,15 +6,17 @@
 //  Copyright © 2023 Parra, Inc. All rights reserved.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
-fileprivate enum LoggerTestError: Error {
+private enum LoggerTestError: Error {
     case exception
     case uniquelyNamedErrorCase
 }
 
 final class LoggerHelpersTests: XCTestCase {
+    // MARK: Internal
+
     // MARK: - extractMessage
 
     func testExtractErrorMessageReturnsCustomParraErrors() {
@@ -50,7 +52,10 @@ final class LoggerHelpersTests: XCTestCase {
         let error = LoggerTestError.uniquelyNamedErrorCase
         let result = LoggerHelpers.extractMessageAndExtra(from: error)
 
-        XCTAssertTrue(result.message.contains("LoggerTestError.uniquelyNamedErrorCase"))
+        XCTAssertTrue(
+            result.message
+                .contains("LoggerTestError.uniquelyNamedErrorCase")
+        )
     }
 
     // MARK: splitFileId
@@ -141,6 +146,8 @@ final class LoggerHelpersTests: XCTestCase {
         XCTAssertEqual(slug, "Parra/LoggerHelpers.createFormattedLocation#69")
     }
 
+    // MARK: Private
+
     private func splitAndAssertEqual(
         fileId: String,
         expectedModule: String,
@@ -151,8 +158,17 @@ final class LoggerHelpersTests: XCTestCase {
             fileId: fileId
         )
 
-        XCTAssertTrue(module == expectedModule, "Expected module from: \(fileId) to be \(expectedModule)")
-        XCTAssertTrue(fileName == expectedFileName, "Expected fileName from: \(fileId) to be \(expectedFileName)")
-        XCTAssertTrue(ext == expectedExtension, "Expected extension from: \(fileId) to be \(String(describing: expectedExtension))")
+        XCTAssertTrue(
+            module == expectedModule,
+            "Expected module from: \(fileId) to be \(expectedModule)"
+        )
+        XCTAssertTrue(
+            fileName == expectedFileName,
+            "Expected fileName from: \(fileId) to be \(expectedFileName)"
+        )
+        XCTAssertTrue(
+            ext == expectedExtension,
+            "Expected extension from: \(fileId) to be \(String(describing: expectedExtension))"
+        )
     }
 }

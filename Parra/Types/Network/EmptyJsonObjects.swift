@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal let EmptyJsonObjectData = "{}".data(using: .utf8)!
+let EmptyJsonObjectData = "{}".data(using: .utf8)!
 
-internal struct EmptyRequestObject: Codable {}
-internal struct EmptyResponseObject: Codable {}
+struct EmptyRequestObject: Codable {}
+struct EmptyResponseObject: Codable {}

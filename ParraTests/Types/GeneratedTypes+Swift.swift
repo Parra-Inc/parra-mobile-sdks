@@ -6,10 +6,12 @@
 //  Copyright © 2022 Parra, Inc. All rights reserved.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
 class GeneratedTypesTests: XCTestCase {
+    // MARK: Internal
+
     func testCodingChoiceCard() throws {
         try assertReencodedWithoutChange(
             object: TestData.Cards.choiceCard
@@ -64,8 +66,10 @@ class GeneratedTypesTests: XCTestCase {
         )
     }
 
-    private func assertReencodedWithoutChange<T: Codable & Equatable>(
-        object: T
+    // MARK: Private
+
+    private func assertReencodedWithoutChange(
+        object: some Codable & Equatable
     ) throws {
         let reencoded = try reencode(object: object)
 
@@ -73,7 +77,7 @@ class GeneratedTypesTests: XCTestCase {
     }
 
     private func reencode<T: Codable>(
-            object: T
+        object: T
     ) throws -> T {
         let encoded = try JSONEncoder().encode(object)
 

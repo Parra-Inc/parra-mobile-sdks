@@ -9,11 +9,13 @@
 import Foundation
 
 @usableFromInline
-internal enum ParraLazyLogParam {
+enum ParraLazyLogParam {
     case string(() -> String)
     case error(() -> Error)
 
-    internal func produceLog() -> (String, [String : Any]?) {
+    // MARK: Internal
+
+    func produceLog() -> (String, [String: Any]?) {
         switch self {
         case .string(let messageProvider):
             return (messageProvider(), nil)

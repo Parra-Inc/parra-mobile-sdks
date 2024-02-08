@@ -8,6 +8,6 @@
 
 import UIKit
 
-internal protocol ParraLegacyConfigurableView: AnyObject {
+protocol ParraLegacyConfigurableView: AnyObject {
     func applyConfig(_ config: ParraCardViewConfig)
 }

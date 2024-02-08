@@ -5,11 +5,12 @@
 //  Created by Mick MacCallum on 3/20/22.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
 @MainActor
 class ParraSyncManagerTests: MockedParraTestCase {
+    // MARK: Internal
 
     override func tearDown() async throws {
         mockParra.syncManager.stopSyncTimer()
@@ -225,7 +226,8 @@ class ParraSyncManagerTests: MockedParraTestCase {
 
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
-        let hasEnqueuedSyncJobs = await mockParra.syncManager.enqueuedSyncMode != nil
+        let hasEnqueuedSyncJobs = await mockParra.syncManager
+            .enqueuedSyncMode != nil
         XCTAssertTrue(hasEnqueuedSyncJobs)
 
         await fulfillment(
@@ -244,7 +246,6 @@ class ParraSyncManagerTests: MockedParraTestCase {
             of: [secondSyncDidBegin],
             timeout: 1.5
         )
-
     }
 
     func testEnqueueEventualSyncWhileSyncInProgress() async throws {
@@ -288,7 +289,10 @@ class ParraSyncManagerTests: MockedParraTestCase {
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
         await fulfillment(
-            of: [firstSyncDidBegin, syncTimerNotTickedAfterFirstSyncExpectation],
+            of: [
+                firstSyncDidBegin,
+                syncTimerNotTickedAfterFirstSyncExpectation
+            ],
             timeout: 0.1
         )
 
@@ -302,7 +306,10 @@ class ParraSyncManagerTests: MockedParraTestCase {
         await mockParra.syncManager.enqueueSync(with: .eventual)
 
         await fulfillment(
-            of: [secondSyncDidBegin, syncTimerNotTickedAfterSecondSyncExpectation],
+            of: [
+                secondSyncDidBegin,
+                syncTimerNotTickedAfterSecondSyncExpectation
+            ],
             timeout: mockParra.syncManager.syncDelay * 0.25
         )
 
@@ -352,12 +359,14 @@ class ParraSyncManagerTests: MockedParraTestCase {
         )
         sync2DidBegin.isInverted = true
 
-        let hasEnqueuedSyncJobs = await mockParra.syncManager.enqueuedSyncMode != nil
+        let hasEnqueuedSyncJobs = await mockParra.syncManager
+            .enqueuedSyncMode != nil
         XCTAssertTrue(hasEnqueuedSyncJobs)
 
         await mockParra.syncManager.cancelEnqueuedSyncs()
 
-        let hasEnqueuedSyncJobsAfterCancel = await mockParra.syncManager.enqueuedSyncMode != nil
+        let hasEnqueuedSyncJobsAfterCancel = await mockParra.syncManager
+            .enqueuedSyncMode != nil
         XCTAssertFalse(hasEnqueuedSyncJobsAfterCancel)
 
         await fulfillment(
@@ -365,6 +374,8 @@ class ParraSyncManagerTests: MockedParraTestCase {
             timeout: mockParra.syncManager.syncDelay
         )
     }
+
+    // MARK: Private
 
     private func logEventToSession(
         named name: String,

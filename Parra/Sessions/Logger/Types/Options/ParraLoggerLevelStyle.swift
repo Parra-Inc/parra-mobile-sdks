@@ -9,9 +9,11 @@
 import Foundation
 
 public enum ParraLoggerLevelStyle {
-    public static let `default` = ParraLoggerLevelStyle.both
-
     case symbol
     case word
     case both
+
+    // MARK: Public
+
+    public static let `default` = ParraLoggerLevelStyle.both
 }

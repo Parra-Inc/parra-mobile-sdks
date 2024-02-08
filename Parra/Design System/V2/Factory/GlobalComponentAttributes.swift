@@ -1,5 +1,5 @@
 //
-//  GlobalComponentStylizer.swift
+//  GlobalComponentAttributes.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -11,6 +11,22 @@ import SwiftUI
 /// A place to provide global defaults for basic styles of Parra components, given contextual information about
 /// where they will be used.
 public class GlobalComponentAttributes {
+    // MARK: Lifecycle
+
+    public init(
+        labelAttributeFactory: LabelAttributeFactory? = nil,
+        buttonAttributeFactory: ButtonAttributeFactory? = nil,
+        menuAttributeFactory: MenuAttributeFactory? = nil,
+        textEditorAttributeFactory: TextEditorAttributeFactory? = nil
+    ) {
+        self.labelAttributeFactory = labelAttributeFactory
+        self.buttonAttributeFactory = buttonAttributeFactory
+        self.menuAttributeFactory = menuAttributeFactory
+        self.textEditorAttributeFactory = textEditorAttributeFactory
+    }
+
+    // MARK: Public
+
     public typealias LabelAttributeFactory = (
         _ config: LabelConfig,
         _ content: LabelContent,
@@ -35,20 +51,10 @@ public class GlobalComponentAttributes {
         _ defaultAttributes: TextEditorAttributes?
     ) -> TextEditorAttributes
 
-    internal private(set) var labelAttributeFactory: LabelAttributeFactory?
-    internal private(set) var buttonAttributeFactory: ButtonAttributeFactory?
-    internal private(set) var menuAttributeFactory: MenuAttributeFactory?
-    internal private(set) var textEditorAttributeFactory: TextEditorAttributeFactory?
+    // MARK: Internal
 
-    public init(
-        labelAttributeFactory: LabelAttributeFactory? = nil,
-        buttonAttributeFactory: ButtonAttributeFactory? = nil,
-        menuAttributeFactory: MenuAttributeFactory? = nil,
-        textEditorAttributeFactory: TextEditorAttributeFactory? = nil
-    ) {
-        self.labelAttributeFactory = labelAttributeFactory
-        self.buttonAttributeFactory = buttonAttributeFactory
-        self.menuAttributeFactory = menuAttributeFactory
-        self.textEditorAttributeFactory = textEditorAttributeFactory
-    }
+    private(set) var labelAttributeFactory: LabelAttributeFactory?
+    private(set) var buttonAttributeFactory: ButtonAttributeFactory?
+    private(set) var menuAttributeFactory: MenuAttributeFactory?
+    private(set) var textEditorAttributeFactory: TextEditorAttributeFactory?
 }

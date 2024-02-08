@@ -9,24 +9,7 @@
 import SwiftUI
 
 public struct TextEditorAttributes: ParraStyleAttributes {
-    /// Attributes to use on the optional title label shown above the menu.
-    public let title: LabelAttributes
-
-    /// Attributes to use on the optional helper field shown below the menu.
-    public let helper: LabelAttributes
-
-    public let background: (any ShapeStyle)?
-    public let cornerRadius: ParraCornerRadiusSize?
-    public let font: Font?
-    public let fontColor: Color?
-    public let fontDesign: Font.Design?
-    public let fontWeight: Font.Weight?
-    public let fontWidth: Font.Width?
-    public let padding: EdgeInsets?
-
-    internal let frame: FrameAttributes?
-    internal let borderWidth: CGFloat
-    internal let borderColor: Color?
+    // MARK: Lifecycle
 
     public init(
         title: LabelAttributes,
@@ -55,7 +38,7 @@ public struct TextEditorAttributes: ParraStyleAttributes {
         self.borderColor = nil
     }
 
-    internal init(
+    init(
         title: LabelAttributes,
         helper: LabelAttributes,
         background: (any ShapeStyle)? = nil,
@@ -85,7 +68,30 @@ public struct TextEditorAttributes: ParraStyleAttributes {
         self.borderColor = borderColor
     }
 
-    internal func withUpdates(
+    // MARK: Public
+
+    /// Attributes to use on the optional title label shown above the menu.
+    public let title: LabelAttributes
+
+    /// Attributes to use on the optional helper field shown below the menu.
+    public let helper: LabelAttributes
+
+    public let background: (any ShapeStyle)?
+    public let cornerRadius: ParraCornerRadiusSize?
+    public let font: Font?
+    public let fontColor: Color?
+    public let fontDesign: Font.Design?
+    public let fontWeight: Font.Weight?
+    public let fontWidth: Font.Width?
+    public let padding: EdgeInsets?
+
+    // MARK: Internal
+
+    let frame: FrameAttributes?
+    let borderWidth: CGFloat
+    let borderColor: Color?
+
+    func withUpdates(
         updates: TextEditorAttributes?
     ) -> TextEditorAttributes {
         return TextEditorAttributes(

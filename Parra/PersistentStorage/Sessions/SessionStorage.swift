@@ -22,36 +22,20 @@ import Foundation
 // 7 and 8 so we can refactor bulk session submission to load then upload
 // one at a time instead of loading all then uploading one at a time.
 
-fileprivate let logger = Logger(bypassEventCreation: true, category: "Session Storage")
+private let logger = Logger(
+    bypassEventCreation: true,
+    category: "Session Storage"
+)
 
 /// Handles underlying storage of sessions and events. The general approach that is taken is
 /// to store a session object with id, user properties, etc and seperately store a list of events.
 /// The file where events are written to will have a file handle held open to allow immediate writing
 /// of single events. All of the internal work done within this class requires the use of serial queues.
 /// async will only be used within this class to provide conveinence methods that are accessed externally.
-internal class SessionStorage {
-    private struct Constant {
-        static let newlineCharData = "\n".data(using: .utf8)!
-    }
+class SessionStorage {
+    // MARK: Lifecycle
 
-    fileprivate let storageQueue = DispatchQueue(
-        label: "com.parra.sessions.session-storage",
-        qos: .utility
-    )
-
-    private var isInitialized = false
-
-    /// Whether or not, since the last time a sync occurred, session storage received
-    /// a new event with a context object that indicated that it was a high priority
-    /// event.
-    private var hasReceivedImportantEvent = false
-
-    private let sessionReader: SessionReader
-
-    private let sessionJsonEncoder: JSONEncoder
-    private let eventJsonEncoder: JSONEncoder
-
-    internal init(
+    init(
         sessionReader: SessionReader,
         sessionJsonEncoder: JSONEncoder,
         eventJsonEncoder: JSONEncoder
@@ -66,13 +50,18 @@ internal class SessionStorage {
 
         do {
             try sessionReader.closeCurrentSessionSync()
-        } catch let error {
+        } catch {
             logger.error("Error closing session reader/file handles", error)
         }
     }
 
-    internal func initializeSessions() async {
-        logger.debug("initializing at path: \(sessionReader.basePath.lastComponents())")
+    // MARK: Internal
+
+    func initializeSessions() async {
+        logger
+            .debug(
+                "initializing at path: \(sessionReader.basePath.lastComponents())"
+            )
 
         // Attempting to access the current session will force the session reader to load
         // or create one, if one doesn't exist. Since this is only called during app launch,
@@ -98,7 +87,7 @@ internal class SessionStorage {
         }
     }
 
-    internal func getCurrentSession() async throws -> ParraSession {
+    func getCurrentSession() async throws -> ParraSession {
         return try await withCheckedThrowingContinuation { continuation in
             getCurrentSession { result in
                 continuation.resume(with: result)
@@ -106,32 +95,21 @@ internal class SessionStorage {
         }
     }
 
-    private func getCurrentSession(
-        completion: @escaping (Result<ParraSession, Error>) -> Void
-    ) {
-        withCurrentSessionHandle(
-            handler: { _, session in
-                return session
-            },
-            completion: completion
-        )
-    }
-
     // MARK: Updating Sessions
 
-    internal func writeUserPropertyUpdate(
+    func writeUserPropertyUpdate(
         key: String,
         value: Any?
     ) {
         withCurrentSessionHandle(
             handler: { handle, session in
-#if DEBUG
+                #if DEBUG
                 logger.debug("Updating user property", [
                     "key": key,
                     "new value": String(describing: value),
                     "old value": String(describing: session.userProperties[key])
                 ])
-#endif
+                #endif
 
                 let updatedSession = session.withUpdatedProperty(
                     key: key,
@@ -144,6 +122,156 @@ internal class SessionStorage {
                 )
             },
             completion: nil
+        )
+    }
+
+    func writeEvent(
+        event: ParraSessionEvent,
+        context: ParraSessionEventContext
+    ) {
+        withHandles { _, eventsHandle, _ in
+            self.storeEventContextUpdateSync(context: context)
+
+            var data = try self.eventJsonEncoder.encode(event)
+            data.append(Constant.newlineCharData)
+
+            try eventsHandle.write(contentsOf: data)
+            try eventsHandle.synchronize()
+        } completion: { result in
+            switch result {
+            case .success:
+                break
+            case .failure(let error):
+                logger.error("Error writing event to session", error)
+            }
+        }
+    }
+
+    // MARK: Retrieving Sessions
+
+    func getAllSessions() async throws -> ParraSessionUploadGenerator {
+        return try await withCheckedThrowingContinuation { continuation in
+            getAllSessions { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    /// Whether or not there are new events on the session since the last time a sync was completed.
+    /// Will also return true if it isn't previously been called for the current session.
+    func hasNewEvents() async -> Bool {
+        do {
+            return try await withCheckedThrowingContinuation { continuation in
+                hasNewEvents { result in
+                    continuation.resume(with: result)
+                }
+            }
+        } catch {
+            logger.error("Error checking if session has new events", error)
+
+            return false
+        }
+    }
+
+    func hasSessionUpdates(since date: Date?) async -> Bool {
+        do {
+            return try await withCheckedThrowingContinuation { continuation in
+                hasSessionUpdates(since: date) { result in
+                    continuation.resume(with: result)
+                }
+            }
+        } catch {
+            logger.error("Error checking if session has updates", error)
+
+            return false
+        }
+    }
+
+    /// Whether or not there are sessions stored that have already finished. This implies that
+    /// there is a session in progress that is not taken into consideration.
+    func hasCompletedSessions() async -> Bool {
+        return await withCheckedContinuation { continuation in
+            hasCompletedSessions {
+                continuation.resume(returning: $0)
+            }
+        }
+    }
+
+    func recordSyncBegan() async {
+        await withCheckedContinuation { continuation in
+            recordSyncBegan { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    logger.error(
+                        "Error recording sync marker on session",
+                        error
+                    )
+
+                    continuation.resume()
+                }
+            }
+        }
+    }
+
+    // MARK: Ending Sessions
+
+    func endSession() async {
+        // TODO: Need to be consistent with deinit. Both should mark session as ended, write the update, then close the session reader
+//        sessionReader.closeCurrentSessionSync()
+    }
+
+    // MARK: Deleting Sessions
+
+    /// Deletes any data associated with the sessions with the provided ids. This includes
+    /// caches in memory and on disk. The current in progress session will not be deleted,
+    /// even if its id is provided.
+    func deleteSessions(
+        for sessionIds: Set<String>,
+        erroredSessions erroredSessionIds: Set<String>
+    ) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            deleteSessions(
+                for: sessionIds,
+                erroredSessions: erroredSessionIds
+            ) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    // MARK: Private
+
+    private enum Constant {
+        static let newlineCharData = "\n".data(using: .utf8)!
+    }
+
+    private let storageQueue = DispatchQueue(
+        label: "com.parra.sessions.session-storage",
+        qos: .utility
+    )
+
+    private var isInitialized = false
+
+    /// Whether or not, since the last time a sync occurred, session storage received
+    /// a new event with a context object that indicated that it was a high priority
+    /// event.
+    private var hasReceivedImportantEvent = false
+
+    private let sessionReader: SessionReader
+
+    private let sessionJsonEncoder: JSONEncoder
+    private let eventJsonEncoder: JSONEncoder
+
+    private func getCurrentSession(
+        completion: @escaping (Result<ParraSession, Error>) -> Void
+    ) {
+        withCurrentSessionHandle(
+            handler: { _, session in
+                return session
+            },
+            completion: completion
         )
     }
 
@@ -167,65 +295,18 @@ internal class SessionStorage {
         }
     }
 
-    internal func writeEvent(
-        event: ParraSessionEvent,
-        context: ParraSessionEventContext
-    ) {
-        withHandles { sessionHandle, eventsHandle, session in
-            self.storeEventContextUpdateSync(context: context)
-
-            var data = try self.eventJsonEncoder.encode(event)
-            data.append(Constant.newlineCharData)
-
-            try eventsHandle.write(contentsOf: data)
-            try eventsHandle.synchronize()
-        } completion: { result in
-            switch result {
-            case .success:
-                break
-            case .failure(let error):
-                logger.error("Error writing event to session", error)
-            }
-        }
-    }
-
-    // MARK: Retrieving Sessions
-
-    internal func getAllSessions() async throws -> ParraSessionUploadGenerator {
-        return try await withCheckedThrowingContinuation { continuation in
-            getAllSessions { result in
-                continuation.resume(with: result)
-            }
-        }
-    }
-
     private func getAllSessions(
-        completion: @escaping (Result<ParraSessionUploadGenerator, Error>) -> Void
+        completion: @escaping (Result<ParraSessionUploadGenerator, Error>)
+            -> Void
     ) {
         withStorageQueue { sessionReader in
             do {
                 let generator = try sessionReader.generateSessionUploadsSync()
 
                 completion(.success(generator))
-            } catch let error {
+            } catch {
                 completion(.failure(error))
             }
-        }
-    }
-
-    /// Whether or not there are new events on the session since the last time a sync was completed.
-    /// Will also return true if it isn't previously been called for the current session.
-    internal func hasNewEvents() async -> Bool {
-        do {
-            return try await withCheckedThrowingContinuation { continuation in
-                hasNewEvents { result in
-                    continuation.resume(with: result)
-                }
-            }
-        } catch let error {
-            logger.error("Error checking if session has new events", error)
-
-            return false
         }
     }
 
@@ -240,20 +321,6 @@ internal class SessionStorage {
         )
     }
 
-    internal func hasSessionUpdates(since date: Date?) async -> Bool {
-        do {
-            return try await withCheckedThrowingContinuation { continuation in
-                hasSessionUpdates(since: date) { result in
-                    continuation.resume(with: result)
-                }
-            }
-        } catch let error {
-            logger.error("Error checking if session has updates", error)
-
-            return false
-        }
-    }
-
     private func hasSessionUpdates(
         since date: Date?,
         completion: @escaping (Result<Bool, Error>) -> Void
@@ -266,42 +333,42 @@ internal class SessionStorage {
         )
     }
 
-    /// Whether or not there are sessions stored that have already finished. This implies that
-    /// there is a session in progress that is not taken into consideration.
-    internal func hasCompletedSessions() async -> Bool {
-        return await withCheckedContinuation { continuation in
-            hasCompletedSessions {
-                continuation.resume(returning: $0)
-            }
-        }
-    }
-
     private func hasCompletedSessions(
         completion: @escaping (Bool) -> Void
     ) {
-        withStorageQueue { sessionReader in
+        withStorageQueue { _ in
             do {
-                let sessionDirectories = try self.sessionReader.getAllSessionDirectories()
+                let sessionDirectories = try self.sessionReader
+                    .getAllSessionDirectories()
                 let ext = ParraSession.Constant.packageExtension
-                let nonErroredSessions = sessionDirectories.filter { directory in
-                    // Anything that is somehow in the sessions directory without the
-                    // appropriate path extension should be counted towards completed sessions.
-                    guard directory.pathExtension == ext else {
-                        logger.trace("Encountered session directory with invalid path extension", [
-                            "name": directory.lastPathComponent
-                        ])
+                let nonErroredSessions = sessionDirectories
+                    .filter { directory in
+                        // Anything that is somehow in the sessions directory without the
+                        // appropriate path extension should be counted towards completed sessions.
+                        guard directory.pathExtension == ext else {
+                            logger.trace(
+                                "Encountered session directory with invalid path extension",
+                                [
+                                    "name": directory.lastPathComponent
+                                ]
+                            )
 
-                        return false
+                            return false
+                        }
+
+                        let sessionId = directory.deletingPathExtension()
+                            .lastPathComponent
+
+                        // Sessions that have errored are marked with an underscore prefix to
+                        // their names. These sessions shouldn't count when checking if there
+                        // are new sessions to sync, but will be picked up when a new session
+                        // causes a sync to be necessary.
+                        return !sessionId
+                            .hasPrefix(
+                                ParraSession.Constant
+                                    .erroredSessionPrefix
+                            )
                     }
-
-                    let sessionId = directory.deletingPathExtension().lastPathComponent
-
-                    // Sessions that have errored are marked with an underscore prefix to
-                    // their names. These sessions shouldn't count when checking if there
-                    // are new sessions to sync, but will be picked up when a new session
-                    // causes a sync to be necessary.
-                    return !sessionId.hasPrefix(ParraSession.Constant.erroredSessionPrefix)
-                }
 
                 logger.trace("Finished counting previous sessions", [
                     "total": sessionDirectories.count,
@@ -311,24 +378,9 @@ internal class SessionStorage {
                 // The current session counts for 1. If there are more that appear to
                 // be valid, use that as an indication that a sync should occur.
                 completion(nonErroredSessions.count > 1)
-            } catch let error {
+            } catch {
                 logger.error("Error checking for completed sessions", error)
                 completion(false)
-            }
-        }
-    }
-
-    internal func recordSyncBegan() async {
-        await withCheckedContinuation { continuation in
-            recordSyncBegan { result in
-                switch result {
-                case .success:
-                    continuation.resume()
-                case .failure(let error):
-                    logger.error("Error recording sync marker on session", error)
-
-                    continuation.resume()
-                }
             }
         }
     }
@@ -356,32 +408,6 @@ internal class SessionStorage {
         )
     }
 
-    // MARK: Ending Sessions
-
-    internal func endSession() async {
-        // TODO: Need to be consistent with deinit. Both should mark session as ended, write the update, then close the session reader
-//        sessionReader.closeCurrentSessionSync()
-    }
-
-    // MARK: Deleting Sessions
-
-    /// Deletes any data associated with the sessions with the provided ids. This includes
-    /// caches in memory and on disk. The current in progress session will not be deleted,
-    /// even if its id is provided.
-    internal func deleteSessions(
-        for sessionIds: Set<String>,
-        erroredSessions erroredSessionIds: Set<String>
-    ) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
-            deleteSessions(
-                for: sessionIds,
-                erroredSessions: erroredSessionIds
-            ) { result in
-                continuation.resume(with: result)
-            }
-        }
-    }
-
     private func deleteSessions(
         for sessionIds: Set<String>,
         erroredSessions erroredSessionIds: Set<String>,
@@ -390,10 +416,12 @@ internal class SessionStorage {
         withHandles(
             handler: { sessionHandle, eventsHandle, currentSession in
                 // Delete the directories for every session in sessionIds, except for the current session.
-                let sessionDirectories = try self.sessionReader.getAllSessionDirectories()
+                let sessionDirectories = try self.sessionReader
+                    .getAllSessionDirectories()
 
                 for sessionDirectory in sessionDirectories {
-                    let sessionId = sessionDirectory.deletingPathExtension().lastPathComponent
+                    let sessionId = sessionDirectory.deletingPathExtension()
+                        .lastPathComponent
                     logger.trace("Session iterator produced session", [
                         "sessionId": sessionId
                     ])
@@ -403,18 +431,21 @@ internal class SessionStorage {
                     }
 
                     if sessionIds.contains(sessionId) {
-                        try self.sessionReader.deleteSessionSync(with: sessionId)
+                        try self.sessionReader
+                            .deleteSessionSync(with: sessionId)
                     }
 
                     if erroredSessionIds.contains(sessionId) {
-                        try self.sessionReader.markSessionErrored(with: sessionId)
+                        try self.sessionReader
+                            .markSessionErrored(with: sessionId)
                     }
                 }
 
                 logger.trace("Cleaning up previous events for current session")
 
                 let currentEventsOffset = try eventsHandle.offset()
-                let cachedEventsOffset = currentSession.eventsHandleOffsetAtSync ?? 0
+                let cachedEventsOffset = currentSession
+                    .eventsHandleOffsetAtSync ?? 0
 
                 if currentEventsOffset > cachedEventsOffset {
                     logger.trace(
@@ -441,7 +472,10 @@ internal class SessionStorage {
                         try eventsHandle.truncate(atOffset: 0)
 
                         try eventsHandle.write(contentsOf: data)
-                        logger.trace("Finished writing cached events to reset events file")
+                        logger
+                            .trace(
+                                "Finished writing cached events to reset events file"
+                            )
                     } else {
                         logger.trace("New events couldn't be read")
                         // there are new events and the they can't be read
@@ -472,7 +506,8 @@ internal class SessionStorage {
                         offset: newOffset
                     )
                 } else {
-                    logger.trace("No new events occurred. Resetting events file")
+                    logger
+                        .trace("No new events occurred. Resetting events file")
 
                     // No new events were written since the sync started. Resetting the
                     // events file back to the beginning.
@@ -525,7 +560,7 @@ internal class SessionStorage {
             offset: offset
         )
 
-        try self.writeSessionSync(
+        try writeSessionSync(
             session: updatedSession,
             with: handle
         )
@@ -569,20 +604,26 @@ extension SessionStorage {
             do {
                 let context = try sessionReader.loadOrCreateSessionSync()
 
-                let sessionHandle = try sessionReader.retreiveFileHandleForSessionSync(
-                    with: .session,
-                    from: context
-                )
+                let sessionHandle = try sessionReader
+                    .retreiveFileHandleForSessionSync(
+                        with: .session,
+                        from: context
+                    )
 
-                let eventsHandle = try sessionReader.retreiveFileHandleForSessionSync(
-                    with: .events,
-                    from: context
-                )
+                let eventsHandle = try sessionReader
+                    .retreiveFileHandleForSessionSync(
+                        with: .events,
+                        from: context
+                    )
 
-                completion?(
-                    .success(try handler(sessionHandle, eventsHandle, context.session))
+                try completion?(
+                    .success(handler(
+                        sessionHandle,
+                        eventsHandle,
+                        context.session
+                    ))
                 )
-            } catch let error {
+            } catch {
                 completion?(.failure(error))
             }
         }
@@ -602,10 +643,10 @@ extension SessionStorage {
                     from: context
                 )
 
-                completion?(
-                    .success(try handler(handle, context.session))
+                try completion?(
+                    .success(handler(handle, context.session))
                 )
-            } catch let error {
+            } catch {
                 completion?(.failure(error))
             }
         }

@@ -8,9 +8,11 @@
 
 import Foundation
 
-internal enum ParraLoggerScopeType: Equatable {
+enum ParraLoggerScopeType: Equatable {
     case customName(String)
     case function(String)
+
+    // MARK: Internal
 
     var name: String {
         switch self {
@@ -27,7 +29,10 @@ internal enum ParraLoggerScopeType: Equatable {
         }
     }
 
-    static func == (lhs: ParraLoggerScopeType, rhs: ParraLoggerScopeType) -> Bool {
+    static func == (
+        lhs: ParraLoggerScopeType,
+        rhs: ParraLoggerScopeType
+    ) -> Bool {
         switch (lhs, rhs) {
         case (.customName(let lhsName), .customName(let rhsName)):
             return lhsName == rhsName

@@ -10,14 +10,9 @@ import Foundation
 
 /// Only static configuration that doesn't change after app initialization.
 public struct ParraConfiguration {
-    public let loggerOptions: ParraLoggerOptions
-    public let pushNotificationsEnabled: Bool
-    public internal(set) var theme: ParraTheme
-    public private(set) var globalComponentAttributes: GlobalComponentAttributes
+    // MARK: Lifecycle
 
-    internal private(set) static var current: ParraConfiguration = .default
-
-    internal init(
+    init(
         loggerOptions: ParraLoggerOptions,
         pushNotificationsEnabled: Bool,
         theme: ParraTheme,
@@ -29,9 +24,10 @@ public struct ParraConfiguration {
         self.globalComponentAttributes = globalComponentAttributes
     }
 
-    internal init(options: [ParraConfigurationOption]) {
+    init(options: [ParraConfigurationOption]) {
         var loggerOptions = ParraConfiguration.default.loggerOptions
-        var pushNotificationsEnabled = ParraConfiguration.default.pushNotificationsEnabled
+        var pushNotificationsEnabled = ParraConfiguration.default
+            .pushNotificationsEnabled
         var theme = ParraTheme.default
         var globalComponentAttributes = GlobalComponentAttributes()
 
@@ -56,16 +52,27 @@ public struct ParraConfiguration {
         self.globalComponentAttributes = globalComponentAttributes
     }
 
-    public static let `default`: ParraConfiguration = {
-        return ParraConfiguration(
-            loggerOptions: applyLoggerOptionsOverrides(
-                loggerOptions: .default
-            ),
-            pushNotificationsEnabled: false,
-            theme: .default,
-            globalComponentAttributes: GlobalComponentAttributes()
-        )
-    }()
+    // MARK: Public
+
+    public static let `default`: ParraConfiguration = .init(
+        loggerOptions: applyLoggerOptionsOverrides(
+            loggerOptions: .default
+        ),
+        pushNotificationsEnabled: false,
+        theme: .default,
+        globalComponentAttributes: GlobalComponentAttributes()
+    )
+
+    public let loggerOptions: ParraLoggerOptions
+    public let pushNotificationsEnabled: Bool
+    public internal(set) var theme: ParraTheme
+    public private(set) var globalComponentAttributes: GlobalComponentAttributes
+
+    // MARK: Internal
+
+    private(set) static var current: ParraConfiguration = .default
+
+    // MARK: Private
 
     private static func applyLoggerOptionsOverrides(
         loggerOptions initialOptions: ParraLoggerOptions
@@ -74,8 +81,8 @@ public struct ParraConfiguration {
 
         let envVar = ParraLoggerOptions.Environment.minimumLogLevelOverride
         if let rawLevelOverride = ProcessInfo.processInfo.environment[envVar],
-            let level = ParraLogLevel(name: rawLevelOverride) {
-
+           let level = ParraLogLevel(name: rawLevelOverride)
+        {
             Logger.info(
                 "\(envVar) is set. Changing minimum log level from \(initialOptions.minimumLogLevel.name) to \(level.name)"
             )

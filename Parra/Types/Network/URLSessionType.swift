@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal protocol URLSessionType {
+protocol URLSessionType {
     func dataForRequest(
         for request: URLRequest,
         delegate: URLSessionTaskDelegate?

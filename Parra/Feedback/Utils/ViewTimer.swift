@@ -6,40 +6,51 @@
 //  Copyright © 2023 Parra, Inc. All rights reserved.
 //
 
-import UIKit
 import Foundation
+import UIKit
 
-internal typealias ViewTimerCallback = () -> Void
-internal class ViewTimerCallbackContainer {
-    internal let callback: ViewTimerCallback
+typealias ViewTimerCallback = () -> Void
+class ViewTimerCallbackContainer {
+    // MARK: Lifecycle
 
     required init(callback: @escaping ViewTimerCallback) {
         self.callback = callback
     }
+
+    // MARK: Internal
+
+    let callback: ViewTimerCallback
 }
 
-internal protocol ViewTimer: UIView {
-    func performAfter(delay: TimeInterval,
-                      action: @escaping ViewTimerCallback)
+protocol ViewTimer: UIView {
+    func performAfter(
+        delay: TimeInterval,
+        action: @escaping ViewTimerCallback
+    )
 
     func cancelTimer()
 }
 
-fileprivate struct ViewTimerContext {
+private enum ViewTimerContext {
     static let references = NSMapTable<UIView, Timer>(
         keyOptions: .weakMemory,
         valueOptions: .strongMemory
     )
 }
 
-internal extension ViewTimer {
-    func performAfter(delay: TimeInterval,
-                      action: @escaping ViewTimerCallback) {
+extension ViewTimer {
+    func performAfter(
+        delay: TimeInterval,
+        action: @escaping ViewTimerCallback
+    ) {
         Logger.trace("Delayed view action initiated with delay \(delay)")
 
         cancelTimer()
 
-        let timer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
+        let timer = Timer.scheduledTimer(
+            withTimeInterval: delay,
+            repeats: false
+        ) { [weak self] _ in
             Logger.trace("Performing delayed view action")
             ViewTimerContext.references.removeObject(forKey: self)
 
@@ -50,10 +61,11 @@ internal extension ViewTimer {
     }
 
     func cancelTimer() {
-        if let existingTimer = ViewTimerContext.references.object(forKey: self) {
+        if let existingTimer = ViewTimerContext.references
+            .object(forKey: self)
+        {
             Logger.trace("Cancelling existing delayed view action")
             existingTimer.invalidate()
         }
     }
 }
-

@@ -8,17 +8,8 @@
 
 import UIKit
 
-internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
-    typealias DataType = LongTextQuestionBody
-    typealias AnswerType = TextValueAnswer
-
-    private let answerHandler: ParraAnswerHandler
-    private let textView: ParraBorderedTextView
-    private let question: Question
-    private let data: DataType
-    private var validationError: String?
-    private let validationLabel = UILabel(frame: .zero)
-    private let bucketId: String
+class ParraLongTextKindView: UIView, ParraQuestionKindView {
+    // MARK: Lifecycle
 
     required init(
         bucketId: String,
@@ -41,9 +32,34 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Internal
+
+    typealias DataType = LongTextQuestionBody
+    typealias AnswerType = TextValueAnswer
+
+    func applyConfig(_ config: ParraCardViewConfig) {
+        textView.applyConfig(config)
+        validationLabel.font = config.label.font
+    }
+
+    func shouldAllowCommittingSelection() -> Bool {
+        return validationError == .none
+    }
+
+    // MARK: Private
+
+    private let answerHandler: ParraAnswerHandler
+    private let textView: ParraBorderedTextView
+    private let question: Question
+    private let data: DataType
+    private var validationError: String?
+    private let validationLabel = UILabel(frame: .zero)
+    private let bucketId: String
 
     private func setup() {
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,17 +97,8 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
             validationLabel.trailingAnchor.constraint(
                 equalTo: textView.trailingAnchor,
                 constant: -4
-            ),
+            )
         ])
-    }
-
-    internal func applyConfig(_ config: ParraCardViewConfig) {
-        textView.applyConfig(config)
-        validationLabel.font = config.label.font
-    }
-
-    func shouldAllowCommittingSelection() -> Bool {
-        return validationError == .none
     }
 
     private func updateValidation(text: String) {
@@ -101,6 +108,8 @@ internal class ParraLongTextKindView: UIView, ParraQuestionKindView {
         )
     }
 }
+
+// MARK: UITextViewDelegate
 
 extension ParraLongTextKindView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {

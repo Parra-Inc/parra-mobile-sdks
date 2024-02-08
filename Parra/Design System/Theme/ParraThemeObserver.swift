@@ -8,21 +8,15 @@
 
 import SwiftUI
 
-fileprivate let logger = Logger(category: "Parra Theme Observer")
+private let logger = Logger(category: "Parra Theme Observer")
 
 @MainActor
 /// Listens for changes to the configured ParraTheme and provides a @Published property ``palette``
 /// for SwiftUI views to use to respond to theme changes.
 class ParraThemeObserver: ObservableObject {
-    private let notificationCenter: NotificationCenterType
+    // MARK: Lifecycle
 
-    private var themeWillChangeObserver: NSObjectProtocol!
-
-    /// A color palette representative of the configured ``ParraTheme``. If a dark mode palette was provided,
-    /// this will automatically update to provide those colors when the system appearance changes.
-    @Published var theme: ParraTheme
-
-    internal init(
+    init(
         theme: ParraTheme,
         notificationCenter: NotificationCenterType
     ) {
@@ -39,6 +33,18 @@ class ParraThemeObserver: ObservableObject {
         }
     }
 
+    // MARK: Internal
+
+    /// A color palette representative of the configured ``ParraTheme``. If a dark mode palette was provided,
+    /// this will automatically update to provide those colors when the system appearance changes.
+    @Published var theme: ParraTheme
+
+    // MARK: Private
+
+    private let notificationCenter: NotificationCenterType
+
+    private var themeWillChangeObserver: NSObjectProtocol!
+
     private func addThemeWillChangeObserver(
         with notificationCenter: NotificationCenterType
     ) -> NSObjectProtocol {
@@ -52,9 +58,12 @@ class ParraThemeObserver: ObservableObject {
             let userInfo = notification.userInfo ?? [:]
 
             guard let oldTheme = userInfo["oldTheme"] as? ParraTheme,
-                  let newTheme = userInfo["newTheme"] as? ParraTheme else {
-
-                logger.warn("oldTheme or newTheme was missing from theme change notification.")
+                  let newTheme = userInfo["newTheme"] as? ParraTheme else
+            {
+                logger
+                    .warn(
+                        "oldTheme or newTheme was missing from theme change notification."
+                    )
 
                 return
             }
@@ -80,11 +89,9 @@ class ParraThemeObserver: ObservableObject {
                 object: nil,
                 userInfo: [
                     "oldTheme": oldTheme,
-                    "newTheme": newTheme,
+                    "newTheme": newTheme
                 ]
             )
         }
     }
 }
-
-

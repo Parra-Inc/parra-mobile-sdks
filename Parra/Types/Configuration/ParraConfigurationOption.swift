@@ -9,7 +9,6 @@
 import Foundation
 
 public enum ParraConfigurationOption {
-
     /// Options to configure the Parra Logger. If no value is set here,
     /// you can still use the logger with its default options.
     case logger(options: ParraLoggerOptions)
@@ -23,5 +22,7 @@ public enum ParraConfigurationOption {
     /// The theme that will be used for an UI components rendered by Parra.
     case theme(_ theme: ParraTheme)
 
-    case globalComponentAttributes(_ globalComponentAttributes: GlobalComponentAttributes)
+    case globalComponentAttributes(
+        _ globalComponentAttributes: GlobalComponentAttributes
+    )
 }

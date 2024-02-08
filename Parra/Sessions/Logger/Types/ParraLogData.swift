@@ -10,7 +10,7 @@ import Foundation
 
 // TODO: Define and impose length limits for keys/values.
 
-internal struct ParraLogData {
+struct ParraLogData {
     let timestamp: Date
 
     let level: ParraLogLevel
@@ -24,7 +24,7 @@ internal struct ParraLogData {
     let extraError: Error?
 
     /// Any additional information that you're like to attach to the log.
-    let extra: [String : Any]?
+    let extra: [String: Any]?
 
     let logContext: ParraLogContext
 }

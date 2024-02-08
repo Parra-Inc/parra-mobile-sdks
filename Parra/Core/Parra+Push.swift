@@ -8,10 +8,9 @@
 
 import Foundation
 
-fileprivate let logger = Logger(category: "Push Extensions")
+private let logger = Logger(category: "Push Extensions")
 
 public extension Parra {
-
     /// This method should be invoked from the UIApplication delegate method
     /// application(_:didRegisterForRemoteNotificationsWithDeviceToken:), passing in the Data parameter from this method.
     ///
@@ -39,7 +38,10 @@ public extension Parra {
         _ tokenString: String
     ) async {
         guard await state.isInitialized() else {
-            logger.warn("Parra.registerDevicePushToken was called before Parra.initialize(). Make sure that you're calling Parra.initialize() before application.registerForRemoteNotifications()")
+            logger
+                .warn(
+                    "Parra.registerDevicePushToken was called before Parra.initialize(). Make sure that you're calling Parra.initialize() before application.registerForRemoteNotifications()"
+                )
 
             // Still try to recover from this situation. Temporarily cache the token, which we can check for when
             // initialization does occur and proceed to upload it.
@@ -55,12 +57,18 @@ public extension Parra {
         do {
             try await networkManager.uploadPushToken(token: token)
 
-            logger.trace("Device push token successfully uploaded. Clearing cache.")
+            logger
+                .trace(
+                    "Device push token successfully uploaded. Clearing cache."
+                )
             // Token shouldn't be cached when it isn't absolutely necessary to recover from errors. If a new token
             // is issued, it will replace the old one.
             await state.clearTemporaryPushToken()
-        } catch let error {
-            logger.trace("Device push token failed to upload. Caching token to try later.")
+        } catch {
+            logger
+                .trace(
+                    "Device push token failed to upload. Caching token to try later."
+                )
             // In the event that the upload failed, we'll cache the token. This will be overridden by any new token
             // on the next app launch, but in the event that we're able to retry the request later, we'll have this
             // one on hand.
@@ -80,11 +88,14 @@ public extension Parra {
     @MainActor
     static func didFailToRegisterForRemoteNotifications(with error: Error) {
         Task {
-            await getExistingInstance().didFailToRegisterForRemoteNotifications(with: error)
+            await getExistingInstance()
+                .didFailToRegisterForRemoteNotifications(with: error)
         }
     }
 
-    internal func didFailToRegisterForRemoteNotifications(with error: Error) async {
+    internal func didFailToRegisterForRemoteNotifications(
+        with error: Error
+    ) async {
         logger.error("Failed to register for remote notifications", error)
     }
 }

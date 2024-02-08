@@ -8,8 +8,8 @@
 
 import Foundation
 
-internal struct ParraInstanceNetworkConfiguration {
-    internal let urlSession: URLSession
-    internal let jsonEncoder: JSONEncoder
-    internal let jsonDecoder: JSONDecoder
+struct ParraInstanceNetworkConfiguration {
+    let urlSession: URLSession
+    let jsonEncoder: JSONEncoder
+    let jsonDecoder: JSONDecoder
 }

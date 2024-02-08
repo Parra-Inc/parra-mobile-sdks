@@ -8,9 +8,11 @@
 
 import Foundation
 
-internal enum AuthorizationType {
+enum AuthorizationType {
     case basic(String)
     case bearer(String)
+
+    // MARK: Internal
 
     var value: String {
         switch self {

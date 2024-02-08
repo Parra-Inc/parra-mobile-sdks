@@ -8,4 +8,4 @@
 
 import SwiftUI
 
-internal protocol ContainerConfig {}
+protocol ContainerConfig {}

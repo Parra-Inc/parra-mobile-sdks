@@ -8,8 +8,11 @@
 import Foundation
 import UIKit
 
-internal enum Direction {
-    case left, right
+enum Direction {
+    case left
+    case right
+
+    // MARK: Internal
 
     var swipeDirection: UISwipeGestureRecognizer.Direction {
         switch self {

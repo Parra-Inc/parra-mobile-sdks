@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal extension URL {
+extension URL {
     func lastComponents(max: Int = 3) -> String {
         return pathComponents.suffix(max).joined(separator: "/")
     }

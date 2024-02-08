@@ -8,21 +8,7 @@
 
 import SwiftUI
 
-internal struct FeedbackFormConfig: ContainerConfig {
-    let title: LabelConfig
-    let description: LabelConfig
-
-    /// Any dynamic "select" fields
-    let selectFields: MenuConfig
-
-    /// Any dynamic "text" fields
-    let textFields: TextEditorConfig
-
-    // TODO: Single line fields
-//    let inputFields: TextFieldConfig
-
-    let submitButton: ButtonConfig
-
+struct FeedbackFormConfig: ContainerConfig {
     static let `default` = FeedbackFormConfig(
         title: LabelConfig(fontStyle: .title),
         description: LabelConfig(fontStyle: .subheadline),
@@ -40,4 +26,18 @@ internal struct FeedbackFormConfig: ContainerConfig {
             title: LabelConfig(fontStyle: .subheadline)
         )
     )
+
+    let title: LabelConfig
+    let description: LabelConfig
+
+    /// Any dynamic "select" fields
+    let selectFields: MenuConfig
+
+    /// Any dynamic "text" fields
+    let textFields: TextEditorConfig
+
+    // TODO: Single line fields
+//    let inputFields: TextFieldConfig
+
+    let submitButton: ButtonConfig
 }

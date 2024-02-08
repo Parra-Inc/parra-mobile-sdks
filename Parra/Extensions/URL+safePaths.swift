@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal extension URL {
+extension URL {
     func appendDirectory(_ directory: String) -> URL {
         return appending(
             component: directory,

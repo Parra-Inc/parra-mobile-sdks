@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal protocol TextEditorComponentType: View {
+protocol TextEditorComponentType: View {
     var config: TextEditorConfig { get }
     var content: TextEditorContent { get }
     var style: ParraAttributedTextEditorStyle { get }

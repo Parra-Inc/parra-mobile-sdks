@@ -19,7 +19,11 @@ extension ProcessInfo {
     }
 }
 
-extension ProcessInfo.PowerState: ParraLogStringConvertible, CustomStringConvertible {
+// MARK: - ProcessInfo.PowerState + ParraLogStringConvertible, CustomStringConvertible
+
+extension ProcessInfo.PowerState: ParraLogStringConvertible,
+    CustomStringConvertible
+{
     var loggerDescription: String {
         switch self {
         case .normal:

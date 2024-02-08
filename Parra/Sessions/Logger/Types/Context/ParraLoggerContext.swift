@@ -10,43 +10,29 @@ import Foundation
 
 /// A context object representative of the logger and the state that it's in at the
 /// time when a log is created.
-internal struct ParraLoggerContext {
-    internal let fiberId: String?
+struct ParraLoggerContext {
+    // MARK: Lifecycle
 
-    // Context items in order of precedence
-    internal let module: String
-    internal let fileName: String
-    internal let fileExtension: String?
-
-    // This is the name provided when creating a logger instance. It will be the name of the class/etc
-    // that a logger is an instance variable of, in cases where we auto-create them. Some cases, like
-    // static logger methods, will not have a category defined.
-    internal let category: String?
-
-    // Think of scopes as subcategories, which allow for arbitrary nesting
-    internal let scopes: [ParraLoggerScopeType]
-
-    internal let extra: [String : Any]?
-
-    internal init(
+    init(
         fiberId: String?,
         fileId: String,
         category: String?,
         scope: ParraLoggerScopeType,
-        extra: [String : Any]?
+        extra: [String: Any]?
     ) {
         let (module, fileName, fileExtension) = LoggerHelpers.splitFileId(
             fileId: fileId
         )
 
-        let scopes: [ParraLoggerScopeType]
-        if case let .function(rawName) = scope, rawName == module {
+        let scopes: [ParraLoggerScopeType] = if case .function(let rawName) =
+            scope, rawName == module
+        {
             // If a function scope is present, and it has the same name as the module
             // it means the logger instance was created at top level in a file, and
             // this function scope is garbage data.
-            scopes = []
+            []
         } else {
-            scopes = [scope]
+            [scope]
         }
 
         self.fiberId = fiberId
@@ -58,12 +44,12 @@ internal struct ParraLoggerContext {
         self.extra = extra
     }
 
-    internal init(
+    init(
         fiberId: String?,
         fileId: String,
         category: String?,
         scopes: [ParraLoggerScopeType],
-        extra: [String : Any]?
+        extra: [String: Any]?
     ) {
         let (module, fileName, fileExtension) = LoggerHelpers.splitFileId(
             fileId: fileId
@@ -78,14 +64,14 @@ internal struct ParraLoggerContext {
         self.extra = extra
     }
 
-    internal init(
+    init(
         fiberId: String?,
         module: String,
         fileName: String,
         fileExtension: String?,
         category: String?,
         scopes: [ParraLoggerScopeType],
-        extra: [String : Any]?
+        extra: [String: Any]?
     ) {
         self.fiberId = fiberId
         self.module = module
@@ -96,19 +82,37 @@ internal struct ParraLoggerContext {
         self.extra = extra
     }
 
-    internal func addingScopes(
+    // MARK: Internal
+
+    let fiberId: String?
+
+    // Context items in order of precedence
+    let module: String
+    let fileName: String
+    let fileExtension: String?
+
+    // This is the name provided when creating a logger instance. It will be the name of the class/etc
+    // that a logger is an instance variable of, in cases where we auto-create them. Some cases, like
+    // static logger methods, will not have a category defined.
+    let category: String?
+
+    // Think of scopes as subcategories, which allow for arbitrary nesting
+    let scopes: [ParraLoggerScopeType]
+
+    let extra: [String: Any]?
+
+    func addingScopes(
         scopes newScopes: [ParraLoggerScopeType],
-        extra newExtra: [String : Any]? = nil
+        extra newExtra: [String: Any]? = nil
     ) -> ParraLoggerContext {
-        let mergedExtra: [String : Any]?
-        if let newExtra {
+        let mergedExtra: [String: Any]? = if let newExtra {
             if let extra {
-                mergedExtra = extra.merging(newExtra) { $1 }
+                extra.merging(newExtra) { $1 }
             } else {
-                mergedExtra = newExtra
+                newExtra
             }
         } else {
-            mergedExtra = extra
+            extra
         }
 
         var mergedScopes = [ParraLoggerScopeType]()

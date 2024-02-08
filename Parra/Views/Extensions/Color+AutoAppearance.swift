@@ -6,10 +6,10 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
-internal extension Color {
+extension Color {
     init(lightVariant: Color, darkVariant: Color) {
         let uiColor = UIColor { traitCollection in
             if traitCollection.userInterfaceStyle == .dark {

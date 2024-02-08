@@ -9,11 +9,7 @@
 import SwiftUI
 
 struct PlainButtonComponent: ButtonComponentType {
-    let config: ButtonConfig
-    let content: ButtonContent
-    let style: ParraAttributedButtonStyle
-
-    @EnvironmentObject var themeObserver: ParraThemeObserver
+    // MARK: Lifecycle
 
     init(
         config: ButtonConfig,
@@ -23,6 +19,29 @@ struct PlainButtonComponent: ButtonComponentType {
         self.config = config
         self.content = content
         self.style = style
+    }
+
+    // MARK: Internal
+
+    let config: ButtonConfig
+    let content: ButtonContent
+    let style: ParraAttributedButtonStyle
+
+    @EnvironmentObject var themeObserver: ParraThemeObserver
+
+    var body: some View {
+        Button(action: {
+            content.onPress?()
+        }, label: {
+            EmptyView()
+        })
+        .disabled(content.isDisabled)
+        .buttonStyle(style)
+        .padding(style.attributes.padding ?? .zero)
+        .applyCornerRadii(
+            size: style.attributes.cornerRadius,
+            from: themeObserver.theme
+        )
     }
 
     static func applyStandardCustomizations(
@@ -48,7 +67,8 @@ struct PlainButtonComponent: ButtonComponentType {
                 // the title label in the default state, apply the values provided
                 // for the button itself.
                 background: defaults.title.background ?? defaults.background,
-                cornerRadius: defaults.title.cornerRadius ?? defaults.cornerRadius,
+                cornerRadius: defaults.title.cornerRadius ?? defaults
+                    .cornerRadius,
                 fontColor: fontColor,
                 // Frame is applied here to adjust width based on config. If users
                 // provide overrides for styles in different states, this will need
@@ -58,14 +78,18 @@ struct PlainButtonComponent: ButtonComponentType {
         )
 
         // If a pressed/disabled styles are provided, use them outright.
-        let pressedTitleAttributes = (defaults.titlePressed ?? titleAttributes).withUpdates(
-            updates: .init(
-                background: titleAttributes.background?.opacity(0.6),
-                fontColor: titleAttributes.fontColor?.opacity(0.6)
+        let pressedTitleAttributes = (defaults.titlePressed ?? titleAttributes)
+            .withUpdates(
+                updates: .init(
+                    background: titleAttributes.background?.opacity(0.6),
+                    fontColor: titleAttributes.fontColor?.opacity(0.6)
+                )
             )
-        )
 
-        let disabledTitleAttributes = (defaults.titleDisabled ?? titleAttributes).withUpdates(
+        let disabledTitleAttributes = (
+            defaults
+                .titleDisabled ?? titleAttributes
+        ).withUpdates(
             updates: .init(
                 background: titleAttributes.background?.opacity(0.6),
                 fontColor: titleAttributes.fontColor?.opacity(0.6)
@@ -78,21 +102,6 @@ struct PlainButtonComponent: ButtonComponentType {
                 titleDisabled: disabledTitleAttributes,
                 titlePressed: pressedTitleAttributes
             )
-        )
-    }
-
-    var body: some View {
-        Button(action: {
-            content.onPress?()
-        }, label: {
-            EmptyView()
-        })
-        .disabled(content.isDisabled)
-        .buttonStyle(style)
-        .padding(style.attributes.padding ?? .zero)
-        .applyCornerRadii(
-            size: style.attributes.cornerRadius,
-            from: themeObserver.theme
         )
     }
 }

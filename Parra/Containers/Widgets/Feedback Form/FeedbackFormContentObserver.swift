@@ -8,22 +8,44 @@
 
 import SwiftUI
 
-fileprivate let logger = Logger()
+private let logger = Logger()
 
 @MainActor
-internal class FeedbackFormContentObserver: ContainerContentObserver {
+class FeedbackFormContentObserver: ContainerContentObserver {
+    // MARK: Lifecycle
+
+    init(
+        formData: FeedbackFormData
+    ) {
+        let description: LabelContent? = if let formDescription = formData
+            .description
+        {
+            LabelContent(text: formDescription)
+        } else {
+            nil
+        }
+
+        let submitButton = ButtonContent(
+            title: .init(text: "Submit"),
+            isDisabled: false,
+            onPress: nil
+        )
+
+        self.content = Content(
+            title: LabelContent(text: formData.title),
+            description: description,
+            fields: formData.fields.map { FormFieldWithState(field: $0) },
+            submitButton: submitButton
+        )
+
+        content.submitButton.onPress = submit
+    }
+
+    // MARK: Internal
 
     @MainActor
-    internal struct Content: ContainerContent {
-
-        internal let title: LabelContent
-        internal let description: LabelContent?
-
-        internal fileprivate(set) var fields: [FormFieldWithState]
-
-        internal fileprivate(set) var submitButton: ButtonContent
-
-        internal fileprivate(set) var canSubmit: Bool
+    struct Content: ContainerContent {
+        // MARK: Lifecycle
 
         init(
             title: LabelContent,
@@ -41,6 +63,19 @@ internal class FeedbackFormContentObserver: ContainerContentObserver {
                 fields: fields
             )
         }
+
+        // MARK: Internal
+
+        let title: LabelContent
+        let description: LabelContent?
+
+        fileprivate(set) var fields: [FormFieldWithState]
+
+        fileprivate(set) var submitButton: ButtonContent
+
+        fileprivate(set) var canSubmit: Bool
+
+        // MARK: Fileprivate
 
         fileprivate static func areAllFieldsValid(
             fields: [FormFieldWithState]
@@ -64,37 +99,11 @@ internal class FeedbackFormContentObserver: ContainerContentObserver {
         }
     }
 
-    @Published
-    var content: Content
+    @Published var content: Content
 
-    var submissionHandler: (([FeedbackFormField : String]) -> Void)?
+    var submissionHandler: (([FeedbackFormField: String]) -> Void)?
 
-    internal init(
-        formData: FeedbackFormData
-    ) {
-        let description: LabelContent? = if let formDescription = formData.description {
-            LabelContent(text: formDescription)
-        } else {
-            nil
-        }
-
-        let submitButton = ButtonContent(
-            title: .init(text: "Submit"),
-            isDisabled: false,
-            onPress: nil
-        )
-
-        self.content = Content(
-            title: LabelContent(text: formData.title),
-            description: description,
-            fields: formData.fields.map { FormFieldWithState(field: $0) },
-            submitButton: submitButton
-        )
-
-        self.content.submitButton.onPress = submit
-    }
-
-    internal func onFieldValueChanged(
+    func onFieldValueChanged(
         field: FeedbackFormField,
         value: String?
     ) {
@@ -122,16 +131,20 @@ internal class FeedbackFormContentObserver: ContainerContentObserver {
         print("Content changed. Is valid: \(content.canSubmit)")
     }
 
-    private func submit() {
-        let data = content.fields.reduce([FeedbackFormField : String]()) { accumulator, fieldWithState in
-            guard let value = fieldWithState.value else {
-                return accumulator
-            }
+    // MARK: Private
 
-            var next = accumulator
-            next[fieldWithState.field] = value
-            return next
-        }
+    private func submit() {
+        let data = content.fields
+            .reduce([FeedbackFormField: String](
+            )) { accumulator, fieldWithState in
+                guard let value = fieldWithState.value else {
+                    return accumulator
+                }
+
+                var next = accumulator
+                next[fieldWithState.field] = value
+                return next
+            }
 
         submissionHandler?(data)
     }

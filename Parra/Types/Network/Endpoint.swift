@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum ParraEndpoint {
+enum ParraEndpoint {
     // Auth
     case postAuthentication(tenantId: String)
 
@@ -23,6 +23,8 @@ internal enum ParraEndpoint {
 
     // Push
     case postPushTokens(tenantId: String)
+
+    // MARK: Internal
 
     // All endpoints should use kebab case!
     var route: String {
@@ -48,8 +50,9 @@ internal enum ParraEndpoint {
         switch self {
         case .getCards, .getFeedbackForm:
             return .get
-        case .postBulkAnswerQuestions, .postSubmitFeedbackForm, .postBulkSubmitSessions,
-                .postPushTokens, .postAuthentication:
+        case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
+             .postBulkSubmitSessions,
+             .postPushTokens, .postAuthentication:
             return .post
         }
     }

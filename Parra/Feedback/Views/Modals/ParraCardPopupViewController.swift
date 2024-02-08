@@ -8,8 +8,10 @@
 
 import UIKit
 
-internal class ParraCardPopupViewController: ParraCardModalViewController, ParraCardModal {
-    private var userDismissable = true
+class ParraCardPopupViewController: ParraCardModalViewController,
+    ParraCardModal
+{
+    // MARK: Lifecycle
 
     convenience init(
         cards: [ParraCardItem],
@@ -45,9 +47,12 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
         modalTransitionStyle = .crossDissolve
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Internal
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +72,7 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
             ),
             cardView.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor
-            ),
+            )
         ]
 
         if userDismissable {
@@ -133,7 +138,7 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
         if transitionStyle == .slide {
             cardView.transform = cardViewDismissedTransform()
 
-            transitionCoordinator?.animate { [self] context in
+            transitionCoordinator?.animate { [self] _ in
                 cardView.transform = .identity
             }
         }
@@ -145,11 +150,15 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
         if transitionStyle == .slide {
             cardView.transform = .identity
 
-            transitionCoordinator?.animate { [self] context in
+            transitionCoordinator?.animate { [self] _ in
                 cardView.transform = cardViewDismissedTransform()
             }
         }
     }
+
+    // MARK: Private
+
+    private var userDismissable = true
 
     private func cardViewDismissedTransform() -> CGAffineTransform {
         return CGAffineTransform.identity.translatedBy(
@@ -159,9 +168,13 @@ internal class ParraCardPopupViewController: ParraCardModalViewController, Parra
     }
 }
 
+// MARK: UIGestureRecognizerDelegate
+
 extension ParraCardPopupViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldReceive touch: UITouch) -> Bool {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldReceive touch: UITouch
+    ) -> Bool {
         guard let view = touch.view else {
             return false
         }

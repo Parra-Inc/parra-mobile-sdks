@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal protocol Syncable {
+protocol Syncable {
     func hasDataToSync(since date: Date?) async -> Bool
     func synchronizeData() async throws
 }

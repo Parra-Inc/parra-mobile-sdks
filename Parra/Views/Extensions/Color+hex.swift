@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-internal extension Color {
+extension Color {
     init(
         red: Int,
         green: Int,
@@ -43,7 +43,12 @@ internal extension Color {
     func hex(
         withHashPrefix: Bool = true
     ) -> String {
-        var (r, g, b, a): (CGFloat, CGFloat, CGFloat, CGFloat) = (0.0, 0.0, 0.0, 0.0)
+        var (r, g, b, a): (CGFloat, CGFloat, CGFloat, CGFloat) = (
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        )
 
         UIColor(self).getRed(&r, green: &g, blue: &b, alpha: &a)
 

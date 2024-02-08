@@ -9,18 +9,20 @@
 import Foundation
 
 @usableFromInline
-internal struct ParraLogEvent: ParraDataEvent {
-    @usableFromInline
-    var extra: [String : Any] {
-        return logData.sanitized.dictionary
+struct ParraLogEvent: ParraDataEvent {
+    // MARK: Lifecycle
+
+    init(logData: ParraLogProcessedData) {
+        self.logData = logData
     }
 
-    @usableFromInline
-    let name: String = "log"
+    // MARK: Internal
+
+    @usableFromInline let name: String = "log"
 
     let logData: ParraLogProcessedData
 
-    internal init(logData: ParraLogProcessedData) {
-        self.logData = logData
+    @usableFromInline var extra: [String: Any] {
+        return logData.sanitized.dictionary
     }
 }

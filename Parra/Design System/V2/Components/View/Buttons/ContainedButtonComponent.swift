@@ -9,11 +9,7 @@
 import SwiftUI
 
 struct ContainedButtonComponent: ButtonComponentType {
-    let config: ButtonConfig
-    let content: ButtonContent
-    let style: ParraAttributedButtonStyle
-
-    @EnvironmentObject var themeObserver: ParraThemeObserver
+    // MARK: Lifecycle
 
     init(
         config: ButtonConfig,
@@ -23,6 +19,29 @@ struct ContainedButtonComponent: ButtonComponentType {
         self.config = config
         self.content = content
         self.style = style
+    }
+
+    // MARK: Internal
+
+    let config: ButtonConfig
+    let content: ButtonContent
+    let style: ParraAttributedButtonStyle
+
+    @EnvironmentObject var themeObserver: ParraThemeObserver
+
+    var body: some View {
+        Button(action: {
+            content.onPress?()
+        }, label: {
+            EmptyView()
+        })
+        .disabled(content.isDisabled)
+        .buttonStyle(style)
+        .padding(style.attributes.padding ?? .zero)
+        .applyCornerRadii(
+            size: style.attributes.cornerRadius,
+            from: themeObserver.theme
+        )
     }
 
     static func applyStandardCustomizations(
@@ -45,7 +64,8 @@ struct ContainedButtonComponent: ButtonComponentType {
 
         let commonAttributes = defaults.title.withUpdates(
             updates: LabelAttributes(
-                cornerRadius: defaults.title.cornerRadius ?? defaults.cornerRadius,
+                cornerRadius: defaults.title.cornerRadius ?? defaults
+                    .cornerRadius,
                 fontColor: ParraColorSwatch.neutral.shade50,
                 // Frame is applied here to adjust width based on config. If users
                 // provide overrides for styles in different states, this will need
@@ -59,7 +79,8 @@ struct ContainedButtonComponent: ButtonComponentType {
                 // If specific values for these properties weren't provided for
                 // the title label in the default state, apply the values provided
                 // for the button itself.
-                background: commonAttributes.background ?? inputAttributes?.background ?? defaultBackgroundColor.toParraColor()
+                background: commonAttributes.background ?? inputAttributes?
+                    .background ?? defaultBackgroundColor.toParraColor()
             )
         )
 
@@ -84,21 +105,6 @@ struct ContainedButtonComponent: ButtonComponentType {
                 titleDisabled: disabledTitleAttributes,
                 titlePressed: pressedTitleAttributes
             )
-        )
-    }
-
-    var body: some View {
-        Button(action: {
-            content.onPress?()
-        }, label: {
-            EmptyView()
-        })
-        .disabled(content.isDisabled)
-        .buttonStyle(style)
-        .padding(style.attributes.padding ?? .zero)
-        .applyCornerRadii(
-            size: style.attributes.cornerRadius,
-            from: themeObserver.theme
         )
     }
 }

@@ -9,12 +9,9 @@
 import SwiftUI
 
 public struct MenuConfig {
-    public let title: LabelConfig
-    public let helper: LabelConfig
-    public let menuOption: LabelConfig
-    public let menuOptionSelected: LabelConfig
+    // MARK: Lifecycle
 
-    internal init(
+    init(
         title: LabelConfig = LabelConfig(fontStyle: .body),
         helper: LabelConfig = LabelConfig(fontStyle: .subheadline),
         menuOption: LabelConfig = LabelConfig(fontStyle: .body),
@@ -25,4 +22,11 @@ public struct MenuConfig {
         self.menuOption = menuOption
         self.menuOptionSelected = menuOptionSelected
     }
+
+    // MARK: Public
+
+    public let title: LabelConfig
+    public let helper: LabelConfig
+    public let menuOption: LabelConfig
+    public let menuOptionSelected: LabelConfig
 }

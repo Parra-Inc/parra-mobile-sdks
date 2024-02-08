@@ -11,34 +11,69 @@ import UIKit
 // TODO: Everything here that is updated via notification should be checked and reported in the params
 //       for significant events like app state change/session start/stop/etc.
 
-fileprivate let logger = Logger(category: "Sync Event Extensions")
+private let logger = Logger(category: "Sync Event Extensions")
 
-internal extension Parra {
+extension Parra {
     private static var backgroundTaskId: UIBackgroundTaskIdentifier?
     private static var hasStartedEventObservers = false
 
     private var notificationsToObserve: [(Notification.Name, Selector)] {
         [
-            (UIApplication.didBecomeActiveNotification, #selector(self.applicationDidBecomeActive)),
-            (UIApplication.willResignActiveNotification, #selector(self.applicationWillResignActive)),
-            (UIApplication.didEnterBackgroundNotification, #selector(self.applicationDidEnterBackground)),
-            (UIApplication.significantTimeChangeNotification, #selector(self.significantTimeChange)),
-            (UIApplication.didReceiveMemoryWarningNotification, #selector(self.didReceiveMemoryWarning)),
-            (UIApplication.userDidTakeScreenshotNotification, #selector(self.didTakeScreenshot)),
-            (UIDevice.orientationDidChangeNotification, #selector(self.orientationDidChange)),
-            (UIDevice.batteryLevelDidChangeNotification, #selector(self.batteryLevelChange)),
-            (UIDevice.batteryStateDidChangeNotification, #selector(self.batteryStateChange)),
-            (UIWindow.keyboardDidShowNotification, #selector(self.keyboardDidShow)),
-            (UIWindow.keyboardDidHideNotification, #selector(self.keyboardDidHide)),
+            (
+                UIApplication.didBecomeActiveNotification,
+                #selector(applicationDidBecomeActive)
+            ),
+            (
+                UIApplication.willResignActiveNotification,
+                #selector(applicationWillResignActive)
+            ),
+            (
+                UIApplication.didEnterBackgroundNotification,
+                #selector(applicationDidEnterBackground)
+            ),
+            (
+                UIApplication.significantTimeChangeNotification,
+                #selector(significantTimeChange)
+            ),
+            (
+                UIApplication.didReceiveMemoryWarningNotification,
+                #selector(didReceiveMemoryWarning)
+            ),
+            (
+                UIApplication.userDidTakeScreenshotNotification,
+                #selector(didTakeScreenshot)
+            ),
+            (
+                UIDevice.orientationDidChangeNotification,
+                #selector(orientationDidChange)
+            ),
+            (
+                UIDevice.batteryLevelDidChangeNotification,
+                #selector(batteryLevelChange)
+            ),
+            (
+                UIDevice.batteryStateDidChangeNotification,
+                #selector(batteryStateChange)
+            ),
+            (UIWindow.keyboardDidShowNotification, #selector(keyboardDidShow)),
+            (UIWindow.keyboardDidHideNotification, #selector(keyboardDidHide)),
             // TODO: Need to access `ProcessInfo.thermalState` BEFORE registering this notification to receive updates.
-            (ProcessInfo.thermalStateDidChangeNotification, #selector(self.thermalStateDidChange)),
-            (.NSProcessInfoPowerStateDidChange, #selector(self.powerStateDidChange)),
-            (.NSBundleResourceRequestLowDiskSpace, #selector(self.didRequestLowDiskSpace)),
+            (
+                ProcessInfo.thermalStateDidChangeNotification,
+                #selector(thermalStateDidChange)
+            ),
+            (.NSProcessInfoPowerStateDidChange, #selector(powerStateDidChange)),
+            (
+                .NSBundleResourceRequestLowDiskSpace,
+                #selector(didRequestLowDiskSpace)
+            )
         ]
     }
 
     func addEventObservers() {
-        guard NSClassFromString("XCTestCase") == nil && !Parra.hasStartedEventObservers else {
+        guard NSClassFromString("XCTestCase") == nil,
+              !Parra.hasStartedEventObservers else
+        {
             return
         }
 
@@ -70,11 +105,12 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc func applicationDidBecomeActive(notification: Notification) {
+    @objc
+    func applicationDidBecomeActive(notification: Notification) {
         withInitializationCheck { [self] in
             if let taskId = Parra.backgroundTaskId,
-               let app = notification.object as? UIApplication {
-
+               let app = notification.object as? UIApplication
+            {
                 app.endBackgroundTask(taskId)
             }
 
@@ -87,7 +123,8 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc func applicationWillResignActive(notification: Notification) {
+    @objc
+    func applicationWillResignActive(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.appStateChanged, [
                 "state": UIApplication.State.inactive.loggerDescription
@@ -102,7 +139,8 @@ internal extension Parra {
 
                 Parra.backgroundTaskId = nil
 
-                logger.debug("Background task: \(taskId) triggering session end")
+                logger
+                    .debug("Background task: \(taskId) triggering session end")
 
                 await sessionManager.endSession()
 
@@ -121,11 +159,16 @@ internal extension Parra {
 
             let startTime = Date()
             Task(priority: .background) {
-                while Date().timeIntervalSince(startTime) < InternalConstants.backgroundTaskDuration {
+                while Date().timeIntervalSince(startTime) < InternalConstants
+                    .backgroundTaskDuration
+                {
                     try await Task.sleep(for: 0.1)
                 }
 
-                logger.debug("Ending Parra background execution after \(InternalConstants.backgroundTaskDuration)s")
+                logger
+                    .debug(
+                        "Ending Parra background execution after \(InternalConstants.backgroundTaskDuration)s"
+                    )
 
                 Task { @MainActor in
                     await endSession()
@@ -135,7 +178,8 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc func applicationDidEnterBackground(notification: Notification) {
+    @objc
+    func applicationDidEnterBackground(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.appStateChanged, [
                 "state": UIApplication.State.background.loggerDescription
@@ -144,7 +188,8 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc func significantTimeChange(notification: Notification) {
+    @objc
+    func significantTimeChange(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.significantTimeChange)
 
@@ -153,21 +198,24 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc func didReceiveMemoryWarning(notification: Notification) {
+    @objc
+    func didReceiveMemoryWarning(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.memoryWarning)
         }
     }
 
     @MainActor
-    @objc func didTakeScreenshot(notification: Notification) {
+    @objc
+    func didTakeScreenshot(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.screenshotTaken)
         }
     }
 
     @MainActor
-    @objc func orientationDidChange(notification: Notification) {
+    @objc
+    func orientationDidChange(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.orientationChanged, [
                 "orientation": UIDevice.current.orientation.loggerDescription
@@ -176,7 +224,8 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc func batteryLevelChange(notification: Notification) {
+    @objc
+    func batteryLevelChange(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.batteryLevelChanged, [
                 "battery_level": UIDevice.current.batteryLevel
@@ -185,7 +234,8 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc func batteryStateChange(notification: Notification) {
+    @objc
+    func batteryStateChange(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.batteryStateChanged, [
                 "battery_state": UIDevice.current.batteryState.loggerDescription
@@ -194,39 +244,46 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc func keyboardDidShow(notification: Notification) {
+    @objc
+    func keyboardDidShow(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.keyboardDidShow, keyboardFrameParams(from: notification))
         }
     }
 
     @MainActor
-    @objc func keyboardDidHide(notification: Notification) {
+    @objc
+    func keyboardDidHide(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.keyboardDidHide, keyboardFrameParams(from: notification))
         }
     }
 
     @MainActor
-    @objc func thermalStateDidChange(notification: Notification) {
+    @objc
+    func thermalStateDidChange(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.thermalStateChanged, [
-                "thermal_state": ProcessInfo.processInfo.thermalState.loggerDescription
+                "thermal_state": ProcessInfo.processInfo.thermalState
+                    .loggerDescription
             ])
         }
     }
 
     @MainActor
-    @objc func powerStateDidChange(notification: Notification) {
+    @objc
+    func powerStateDidChange(notification: Notification) {
         withInitializationCheck { [self] in
             logEvent(.powerStateChanged, [
-                "power_state": ProcessInfo.processInfo.powerState.loggerDescription
+                "power_state": ProcessInfo.processInfo.powerState
+                    .loggerDescription
             ])
         }
     }
 
     @MainActor
-    @objc func didRequestLowDiskSpace(
+    @objc
+    func didRequestLowDiskSpace(
         notification: Notification
     ) {
         withInitializationCheck { [self] in
@@ -236,16 +293,18 @@ internal extension Parra {
     }
 
     @MainActor
-    @objc private func triggerSyncFromNotification(
+    @objc
+    private func triggerSyncFromNotification(
         notification: Notification
     ) {
         withInitializationCheck { [self] in
             await syncManager.enqueueSync(with: .immediate)
         }
     }
-    
+
     @MainActor
-    @objc private func triggerEventualSyncFromNotification(
+    @objc
+    private func triggerEventualSyncFromNotification(
         notification: Notification
     ) {
         withInitializationCheck { [self] in
@@ -274,7 +333,7 @@ internal extension Parra {
     ) {
         notificationCenter.addObserver(
             self,
-            selector: #selector(self.triggerEventualSyncFromNotification),
+            selector: #selector(triggerEventualSyncFromNotification),
             name: UIApplication.significantTimeChangeNotification,
             object: nil
         )
@@ -290,13 +349,19 @@ internal extension Parra {
         )
     }
 
-    private func keyboardFrameParams(from notification: Notification) -> [String : Any] {
-        var params = [String : Any]()
+    private func keyboardFrameParams(from notification: Notification)
+        -> [String: Any]
+    {
+        var params = [String: Any]()
 
-        if let value = notification.userInfo?[UIWindow.keyboardFrameBeginUserInfoKey] as? NSValue {
+        if let value = notification
+            .userInfo?[UIWindow.keyboardFrameBeginUserInfoKey] as? NSValue
+        {
             params["frame_begin"] = NSCoder.string(for: value.cgRectValue)
         }
-        if let value = notification.userInfo?[UIWindow.keyboardFrameEndUserInfoKey] as? NSValue {
+        if let value = notification
+            .userInfo?[UIWindow.keyboardFrameEndUserInfoKey] as? NSValue
+        {
             params["frame_end"] = NSCoder.string(for: value.cgRectValue)
         }
 

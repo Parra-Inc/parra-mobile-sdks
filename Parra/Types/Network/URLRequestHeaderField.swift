@@ -8,10 +8,12 @@
 
 import Foundation
 
-internal enum URLRequestHeaderField {
+enum URLRequestHeaderField {
     case authorization(AuthorizationType)
     case accept(Mimetype)
     case contentType(Mimetype)
+
+    // MARK: Internal
 
     var name: String {
         switch self {

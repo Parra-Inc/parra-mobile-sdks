@@ -8,19 +8,23 @@
 
 import Foundation
 
-internal actor ParraSyncState {
-    /// Whether or not a sync operation is in progress.
-    private var syncing = false
+actor ParraSyncState {
+    // MARK: Internal
 
-    internal func isSyncing() -> Bool {
+    func isSyncing() -> Bool {
         return syncing
     }
 
-    internal func beginSync() {
+    func beginSync() {
         syncing = true
     }
 
-    internal func endSync() {
+    func endSync() {
         syncing = false
     }
+
+    // MARK: Private
+
+    /// Whether or not a sync operation is in progress.
+    private var syncing = false
 }

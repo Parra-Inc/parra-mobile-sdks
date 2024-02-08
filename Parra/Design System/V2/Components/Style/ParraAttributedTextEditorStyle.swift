@@ -8,14 +8,8 @@
 
 import SwiftUI
 
-internal struct ParraAttributedTextEditorStyle: TextEditorStyle, ParraAttributedStyle {
-    internal let config: TextEditorConfig
-    internal let content: TextEditorContent
-    internal let attributes: TextEditorAttributes
-    internal let theme: ParraTheme
-
-    internal let titleStyle: ParraAttributedLabelStyle?
-    internal let helperStyle: ParraAttributedLabelStyle?
+struct ParraAttributedTextEditorStyle: TextEditorStyle, ParraAttributedStyle {
+    // MARK: Lifecycle
 
     init(
         config: TextEditorConfig,
@@ -50,8 +44,18 @@ internal struct ParraAttributedTextEditorStyle: TextEditorStyle, ParraAttributed
         }
     }
 
+    // MARK: Internal
+
+    let config: TextEditorConfig
+    let content: TextEditorContent
+    let attributes: TextEditorAttributes
+    let theme: ParraTheme
+
+    let titleStyle: ParraAttributedLabelStyle?
+    let helperStyle: ParraAttributedLabelStyle?
+
     @ViewBuilder
-    internal func makeBody(configuration: Configuration) -> some View {
+    func makeBody(configuration: Configuration) -> some View {
         EmptyView()
     }
 }

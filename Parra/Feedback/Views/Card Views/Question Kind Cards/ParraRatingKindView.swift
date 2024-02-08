@@ -8,17 +8,8 @@
 
 import UIKit
 
-internal class ParraRatingKindView: UIView, ParraQuestionKindView {
-    typealias DataType = RatingQuestionBody
-    typealias AnswerType = SingleOptionAnswer
-
-    private let question: Question
-    private let answerHandler: ParraAnswerHandler
-    private let config: ParraCardViewConfig
-    private let ratingControl: ParraBorderedRatingControl
-    private let contentContainer = UIStackView(frame: .zero)
-    private let ratingLabels: ParraRatingLabels?
-    private let bucketId: String
+class ParraRatingKindView: UIView, ParraQuestionKindView {
+    // MARK: Lifecycle
 
     required init(
         bucketId: String,
@@ -68,26 +59,46 @@ internal class ParraRatingKindView: UIView, ParraQuestionKindView {
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal func applyConfig(_ config: ParraCardViewConfig) {
+    // MARK: Internal
+
+    typealias DataType = RatingQuestionBody
+    typealias AnswerType = SingleOptionAnswer
+
+    func applyConfig(_ config: ParraCardViewConfig) {
         ratingControl.applyConfig(config)
         ratingLabels?.applyConfig(config)
     }
+
+    // MARK: Private
+
+    private let question: Question
+    private let answerHandler: ParraAnswerHandler
+    private let config: ParraCardViewConfig
+    private let ratingControl: ParraBorderedRatingControl
+    private let contentContainer = UIStackView(frame: .zero)
+    private let ratingLabels: ParraRatingLabels?
+    private let bucketId: String
 }
 
-extension ParraRatingKindView: ParraBorderedRatingControlDelegate {
-    func parraBorderedRatingControl(_ control: ParraBorderedRatingControl,
-                                    didSelectOption option: RatingQuestionOption) {
+// MARK: ParraBorderedRatingControlDelegate
 
+extension ParraRatingKindView: ParraBorderedRatingControlDelegate {
+    func parraBorderedRatingControl(
+        _ control: ParraBorderedRatingControl,
+        didSelectOption option: RatingQuestionOption
+    ) {
         updateAnswer(for: option)
     }
 
-    func parraBorderedRatingControl(_ control: ParraBorderedRatingControl,
-                                    didConfirmOption option: RatingQuestionOption) {
-
+    func parraBorderedRatingControl(
+        _ control: ParraBorderedRatingControl,
+        didConfirmOption option: RatingQuestionOption
+    ) {
         updateAnswer(for: option)
         answerHandler.commitAnswers(for: bucketId, question: question)
     }

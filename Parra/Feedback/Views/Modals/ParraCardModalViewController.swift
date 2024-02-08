@@ -9,12 +9,8 @@
 import Foundation
 import UIKit
 
-internal class ParraCardModalViewController: UIViewController {
-    internal let cardView: ParraCardView
-    internal let modalType: ParraCardModalType
-    internal let transitionStyle: ParraCardModalTransitionStyle
-
-    private var onDismiss: (() -> Void)?
+class ParraCardModalViewController: UIViewController {
+    // MARK: Lifecycle
 
     init(
         cards: [ParraCardItem],
@@ -32,7 +28,7 @@ internal class ParraCardModalViewController: UIViewController {
         // the impression event for the modal is submitted before the card view starts laying out cards.
         Parra.logEvent(modalType.event)
 
-        cardView = ParraCardView(config: config)
+        self.cardView = ParraCardView(config: config)
 
         super.init(nibName: nil, bundle: nil)
 
@@ -40,11 +36,19 @@ internal class ParraCardModalViewController: UIViewController {
         cardView.delegate = self
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc func dismissModal() {
+    // MARK: Internal
+
+    let cardView: ParraCardView
+    let modalType: ParraCardModalType
+    let transitionStyle: ParraCardModalTransitionStyle
+
+    @objc
+    func dismissModal() {
         dismiss(animated: true)
     }
 
@@ -59,7 +63,13 @@ internal class ParraCardModalViewController: UIViewController {
             onDismiss?()
         }
     }
+
+    // MARK: Private
+
+    private var onDismiss: (() -> Void)?
 }
+
+// MARK: ParraCardViewDelegate
 
 extension ParraCardModalViewController: ParraCardViewDelegate {
     func parraCardViewDidRequestDismissal(_ parraCardView: ParraCardView) {

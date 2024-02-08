@@ -7,14 +7,12 @@
 //
 
 import Foundation
-import XCTest
 import OSLog
+import XCTest
 
 /// https://www.iosdev.recipes/os-signpost/
 class SignpostTestObserver: NSObject, XCTestObservation {
-
-    // Create a custom log subsystem and relevant category
-    let log = OSLog(subsystem: "com.parra.test-profiling", category: "signposts")
+    // MARK: Lifecycle
 
     override init() {
         super.init()
@@ -23,15 +21,37 @@ class SignpostTestObserver: NSObject, XCTestObservation {
         XCTestObservationCenter.shared.addTestObserver(self)
     }
 
+    // MARK: Internal
+
+    // Create a custom log subsystem and relevant category
+    let log = OSLog(
+        subsystem: "com.parra.test-profiling",
+        category: "signposts"
+    )
+
     // MARK: - Test Bundle
 
     func testBundleWillStart(_ testBundle: Bundle) {
         let id = OSSignpostID(log: log, object: testBundle)
-        os_signpost(.begin, log: log, name: "test bundle", signpostID: id, "%@", testBundle.description)
+        os_signpost(
+            .begin,
+            log: log,
+            name: "test bundle",
+            signpostID: id,
+            "%@",
+            testBundle.description
+        )
     }
 
     func testBundleDidFinish(_ testBundle: Bundle) {
         let id = OSSignpostID(log: log, object: testBundle)
-        os_signpost(.end, log: log, name: "test bundle", signpostID: id, "%@", testBundle.description)
+        os_signpost(
+            .end,
+            log: log,
+            name: "test bundle",
+            signpostID: id,
+            "%@",
+            testBundle.description
+        )
     }
 }

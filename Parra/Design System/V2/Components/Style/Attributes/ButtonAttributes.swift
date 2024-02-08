@@ -1,5 +1,5 @@
 //
-//  ButtonStyle.swift
+//  ButtonAttributes.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/30/24.
@@ -9,22 +9,7 @@
 import SwiftUI
 
 public struct ButtonAttributes: ParraStyleAttributes {
-    /// Attributes to use for the button's title in the normal state (not disabled or selected).
-    public let title: LabelAttributes
-
-    /// Attributes to use for the button's title in cases where the button is in a disabled state. If omitted, defaults
-    /// based on the ``ButtonAttributes/title`` will be applied.
-    public let titleDisabled: LabelAttributes?
-
-    /// Attributes to use for the button's title in cases where the button is in a pressed state. If omitted, defaults
-    /// based on the ``ButtonAttributes/title`` will be applied.
-    public let titlePressed: LabelAttributes?
-
-    public let background: (any ShapeStyle)?
-    public let cornerRadius: ParraCornerRadiusSize?
-    public let padding: EdgeInsets?
-
-    internal let frame: FrameAttributes?
+    // MARK: Lifecycle
 
     public init(
         background: (any ShapeStyle)? = nil,
@@ -43,7 +28,7 @@ public struct ButtonAttributes: ParraStyleAttributes {
         self.frame = nil
     }
 
-    internal init(
+    init(
         background: (any ShapeStyle)? = nil,
         cornerRadius: ParraCornerRadiusSize? = nil,
         padding: EdgeInsets? = nil,
@@ -60,6 +45,27 @@ public struct ButtonAttributes: ParraStyleAttributes {
         self.titlePressed = titlePressed
         self.frame = frame
     }
+
+    // MARK: Public
+
+    /// Attributes to use for the button's title in the normal state (not disabled or selected).
+    public let title: LabelAttributes
+
+    /// Attributes to use for the button's title in cases where the button is in a disabled state. If omitted, defaults
+    /// based on the ``ButtonAttributes/title`` will be applied.
+    public let titleDisabled: LabelAttributes?
+
+    /// Attributes to use for the button's title in cases where the button is in a pressed state. If omitted, defaults
+    /// based on the ``ButtonAttributes/title`` will be applied.
+    public let titlePressed: LabelAttributes?
+
+    public let background: (any ShapeStyle)?
+    public let cornerRadius: ParraCornerRadiusSize?
+    public let padding: EdgeInsets?
+
+    // MARK: Internal
+
+    let frame: FrameAttributes?
 
     static func defaultAttributes(
         for theme: ParraTheme,
@@ -88,18 +94,18 @@ public struct ButtonAttributes: ParraStyleAttributes {
         let extraVerticalPadding = ((lineHeight - fontSize) / 2.0).rounded()
         let titlePadding: EdgeInsets = switch size {
         case .small:
-                .init(vertical: 4 + extraVerticalPadding, horizontal: 8)
+            .init(vertical: 4 + extraVerticalPadding, horizontal: 8)
         case .medium:
-                .init(vertical: 6 + extraVerticalPadding, horizontal: 10)
+            .init(vertical: 6 + extraVerticalPadding, horizontal: 10)
         case .large:
-                .init(vertical: 10 + extraVerticalPadding, horizontal: 12)
+            .init(vertical: 10 + extraVerticalPadding, horizontal: 12)
         }
 
         let cornerRadius: ParraCornerRadiusSize = switch size {
         case .small, .medium:
-                .small
+            .small
         case .large:
-                .medium
+            .medium
         }
 
         return ButtonAttributes(
@@ -113,14 +119,16 @@ public struct ButtonAttributes: ParraStyleAttributes {
 }
 
 extension ButtonAttributes {
-    internal func withUpdates(updates: Self?) -> Self {
+    func withUpdates(updates: Self?) -> Self {
         return ButtonAttributes(
             background: updates?.background ?? background,
             cornerRadius: updates?.cornerRadius ?? cornerRadius,
             padding: updates?.padding ?? padding,
             title: title.withUpdates(updates: updates?.title),
-            titleDisabled: updates?.titleDisabled ?? titleDisabled?.withUpdates(updates: updates?.titleDisabled),
-            titlePressed: updates?.titlePressed ?? titlePressed?.withUpdates(updates: updates?.titlePressed),
+            titleDisabled: updates?.titleDisabled ?? titleDisabled?
+                .withUpdates(updates: updates?.titleDisabled),
+            titlePressed: updates?.titlePressed ?? titlePressed?
+                .withUpdates(updates: updates?.titlePressed),
             frame: updates?.frame ?? frame
         )
     }

@@ -6,8 +6,8 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
 extension UIColor: ParraColorSwatchConvertible {
     public func toSwatch() -> ParraColorSwatch {
@@ -16,4 +16,3 @@ extension UIColor: ParraColorSwatchConvertible {
         )
     }
 }
-

@@ -18,7 +18,7 @@ public extension Parra {
     @inlinable
     static func logEvent(
         _ event: ParraStandardEvent,
-        _ extra: [String : Any]? = nil,
+        _ extra: [String: Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -45,7 +45,7 @@ public extension Parra {
     @inlinable
     static func logEvent(
         _ event: ParraDataEvent,
-        _ extra: [String : Any]? = nil,
+        _ extra: [String: Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -72,7 +72,7 @@ public extension Parra {
     @inlinable
     static func logEvent(
         _ event: ParraEvent,
-        _ extra: [String : Any]? = nil,
+        _ extra: [String: Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -99,7 +99,7 @@ public extension Parra {
     @inlinable
     static func logEvent(
         named eventName: String,
-        _ extra: [String : Any]? = nil,
+        _ extra: [String: Any]? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -109,16 +109,15 @@ public extension Parra {
             thread: .current
         )
 
-        let wrappedEvent: ParraWrappedEvent
-        if let extra, !extra.isEmpty {
-            wrappedEvent = .dataEvent(
+        let wrappedEvent: ParraWrappedEvent = if let extra, !extra.isEmpty {
+            .dataEvent(
                 event: ParraBasicDataEvent(
                     name: eventName,
                     extra: extra
                 )
             )
         } else {
-            wrappedEvent = .event(
+            .event(
                 event: ParraBasicEvent(
                     name: eventName
                 )
@@ -141,10 +140,10 @@ public extension Parra {
 
     /// Attaches a property to the current user, as defined by the Parra authentication handler. User properties
     /// can be used to activate campaigns configured in the Parra dashboard.
-    static func setUserProperty<Key>(
+    static func setUserProperty(
         _ value: Any,
-        forKey key: Key
-    ) where Key: CustomStringConvertible {
+        forKey key: some CustomStringConvertible
+    ) {
         setUserProperty(value, forKey: key.description)
     }
 

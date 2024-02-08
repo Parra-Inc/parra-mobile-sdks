@@ -6,17 +6,11 @@
 //  Copyright © 2023 Parra, Inc. All rights reserved.
 //
 
+import AdSupport
 import Foundation
 import UIKit
-import AdSupport
 
-internal enum ParraHeader {
-    static let parraHeaderPrefix = "X-PARRA"
-
-    var prefixedName: String {
-        "\(ParraHeader.parraHeaderPrefix)-\(name)"
-    }
-
+enum ParraHeader {
     case applicationId(String)
     case applicationLocale
     case applicationBundleId
@@ -31,6 +25,74 @@ internal enum ParraHeader {
     case platformAgent
     case platformSdkVersion
     case platformVersion
+
+    // MARK: Internal
+
+    static let parraHeaderPrefix = "X-PARRA"
+
+    static var trackingHeaderDictionary: [String: String] {
+        let keys: [ParraHeader] = [
+            .applicationLocale, .applicationBundleId, .debug, .device,
+            .deviceId,
+            .deviceLocale,
+            .deviceManufacturer, .deviceTimeZoneAbbreviation,
+            .deviceTimeZoneOffset, .platform,
+            .platformAgent, .platformSdkVersion, .platformVersion
+        ]
+
+        var headers = [String: String]()
+
+        for key in keys {
+            if let value = key.currentValue {
+                headers[key.prefixedName] = value
+            }
+        }
+
+        return headers
+    }
+
+    var prefixedName: String {
+        "\(ParraHeader.parraHeaderPrefix)-\(name)"
+    }
+
+    var currentValue: String? {
+        switch self {
+        case .applicationId(let applicationId):
+            return applicationId
+        case .applicationLocale:
+            return Locale.preferredLanguages.first
+        case .applicationBundleId:
+            return Bundle.main.bundleIdentifier
+        case .debug:
+            #if DEBUG
+            return "1"
+            #else
+            return nil
+            #endif
+        case .device:
+            return UIDevice.modelCode
+        case .deviceId:
+            return UIDevice.current.identifierForVendor?.uuidString
+        case .deviceLocale:
+            return NSLocale.current.language.languageCode?.identifier
+        case .deviceManufacturer:
+            return "Apple"
+        case .deviceTimeZoneAbbreviation:
+            return TimeZone.current.abbreviation()
+        case .deviceTimeZoneOffset:
+            return String(TimeZone.current.secondsFromGMT())
+        case .platform:
+            return UIDevice.current.systemName
+        case .platformAgent:
+            return "parra-ios-swift"
+        case .platformSdkVersion:
+            return Parra.libraryVersion()
+        case .platformVersion:
+            return ProcessInfo.processInfo.operatingSystemVersionString
+        }
+    }
+
+    // MARK: Private
 
     private var name: String {
         switch self {
@@ -63,60 +125,5 @@ internal enum ParraHeader {
         case .platformVersion:
             return "PLATFORM-VERSION"
         }
-    }
-
-    var currentValue: String? {
-        switch self {
-        case .applicationId(let applicationId):
-            return applicationId
-        case .applicationLocale:
-            return Locale.preferredLanguages.first
-        case .applicationBundleId:
-            return Bundle.main.bundleIdentifier
-        case .debug:
-#if DEBUG
-            return "1"
-#else
-            return nil
-#endif
-        case .device:
-            return UIDevice.modelCode
-        case .deviceId:
-            return UIDevice.current.identifierForVendor?.uuidString
-        case .deviceLocale:
-            return NSLocale.current.language.languageCode?.identifier
-        case .deviceManufacturer:
-            return "Apple"
-        case .deviceTimeZoneAbbreviation:
-            return TimeZone.current.abbreviation()
-        case .deviceTimeZoneOffset:
-            return String(TimeZone.current.secondsFromGMT())
-        case .platform:
-            return UIDevice.current.systemName
-        case .platformAgent:
-            return "parra-ios-swift"
-        case .platformSdkVersion:
-            return Parra.libraryVersion()
-        case .platformVersion:
-            return ProcessInfo.processInfo.operatingSystemVersionString
-        }
-    }
-
-    static var trackingHeaderDictionary: [String : String] {
-        let keys: [ParraHeader] = [
-            .applicationLocale, .applicationBundleId, .debug, .device, .deviceId, .deviceLocale,
-            .deviceManufacturer, .deviceTimeZoneAbbreviation, .deviceTimeZoneOffset, .platform,
-            .platformAgent, .platformSdkVersion, .platformVersion
-        ]
-
-        var headers = [String : String]()
-
-        for key in keys {
-            if let value = key.currentValue {
-                headers[key.prefixedName] = value
-            }
-        }
-
-        return headers
     }
 }

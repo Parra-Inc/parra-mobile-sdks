@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum TextValidationError {
+enum TextValidationError {
     case none
     case minimum
     case maximum

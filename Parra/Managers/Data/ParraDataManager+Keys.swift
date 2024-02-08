@@ -8,24 +8,24 @@
 import Foundation
 
 // !!! Think really before changing anything here!
-internal extension ParraDataManager {
+extension ParraDataManager {
     enum Base {
-        internal static let applicationSupportDirectory = Parra.fileManager.urls(
+        static let applicationSupportDirectory = Parra.fileManager.urls(
             for: .applicationSupportDirectory,
             in: .userDomainMask
         ).first!
 
-        internal static let documentDirectory = Parra.fileManager.urls(
+        static let documentDirectory = Parra.fileManager.urls(
             for: .documentDirectory,
             in: .userDomainMask
         ).first!
 
-        internal static let cachesURL = Parra.fileManager.urls(
+        static let cachesURL = Parra.fileManager.urls(
             for: .cachesDirectory,
             in: .userDomainMask
         ).first!
 
-        internal static let homeUrl = URL(
+        static let homeUrl = URL(
             fileURLWithPath: NSHomeDirectory(),
             isDirectory: true
         )
@@ -36,13 +36,15 @@ internal extension ParraDataManager {
     }
 
     enum Path {
-        internal static let networkCachesDirectory = Base.cachesURL.appendDirectory("parra-network-cache")
+        static let networkCachesDirectory = Base.cachesURL
+            .appendDirectory("parra-network-cache")
 
-        internal static let parraDirectory = Base.applicationSupportDirectory.appendDirectory("parra")
+        static let parraDirectory = Base.applicationSupportDirectory
+            .appendDirectory("parra")
     }
 
     enum Key {
-        internal static let userCredentialsKey = "com.parra.usercredential"
-        internal static let userSessionsKey = "com.parra.usersession"
+        static let userCredentialsKey = "com.parra.usercredential"
+        static let userSessionsKey = "com.parra.usersession"
     }
 }

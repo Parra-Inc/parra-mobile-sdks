@@ -8,17 +8,8 @@
 
 import UIKit
 
-internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
-    typealias DataType = ShortTextQuestionBody
-    typealias AnswerType = TextValueAnswer
-
-    private let question: Question
-    private let data: DataType
-    private let answerHandler: ParraAnswerHandler
-    private let textField: ParraBorderedTextField
-    private var validationError = TextValidationError.none
-    private let validationLabel = UILabel(frame: .zero)
-    private let bucketId: String
+class ParraShortTextKindView: UIView, ParraQuestionKindView {
+    // MARK: Lifecycle
 
     required init(
         bucketId: String,
@@ -41,9 +32,34 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Internal
+
+    typealias DataType = ShortTextQuestionBody
+    typealias AnswerType = TextValueAnswer
+
+    func applyConfig(_ config: ParraCardViewConfig) {
+        textField.applyConfig(config)
+        validationLabel.font = config.label.font
+    }
+
+    func shouldAllowCommittingSelection() -> Bool {
+        return validationError == .none
+    }
+
+    // MARK: Private
+
+    private let question: Question
+    private let data: DataType
+    private let answerHandler: ParraAnswerHandler
+    private let textField: ParraBorderedTextField
+    private var validationError = TextValidationError.none
+    private let validationLabel = UILabel(frame: .zero)
+    private let bucketId: String
 
     private func setup() {
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -54,16 +70,17 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
         textField.autocorrectionType = .yes
         textField.autocapitalizationType = .sentences
         textField.spellCheckingType = .yes
-        textField.addTarget(self,
-                            action: #selector(self.textDidChange),
-                            for: .editingChanged)
+        textField.addTarget(
+            self,
+            action: #selector(textDidChange),
+            for: .editingChanged
+        )
 
         addSubview(textField)
 
         validationLabel.translatesAutoresizingMaskIntoConstraints = false
         validationLabel.textAlignment = .right
         validationLabel.textColor = Parra.Constants.brandColor
-
 
         addSubview(validationLabel)
 
@@ -86,17 +103,8 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
             validationLabel.trailingAnchor.constraint(
                 equalTo: textField.trailingAnchor,
                 constant: -4
-            ),
+            )
         ])
-    }
-
-    internal func applyConfig(_ config: ParraCardViewConfig) {
-        textField.applyConfig(config)
-        validationLabel.font = config.label.font
-    }
-
-    func shouldAllowCommittingSelection() -> Bool {
-        return validationError == .none
     }
 
     private func updateValidation(text: String) {
@@ -106,15 +114,20 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
         case .none:
             validationLabel.text = nil
         case .minimum:
-            let chars = data.minLength.simplePluralized(singularString: "character")
-            validationLabel.text = "must have at least \(data.minLength) \(chars)"
+            let chars = data.minLength
+                .simplePluralized(singularString: "character")
+            validationLabel
+                .text = "must have at least \(data.minLength) \(chars)"
         case .maximum:
-            let chars = data.maxLength.simplePluralized(singularString: "character")
-            validationLabel.text = "must have at most \(data.maxLength) \(chars)"
+            let chars = data.maxLength
+                .simplePluralized(singularString: "character")
+            validationLabel
+                .text = "must have at most \(data.maxLength) \(chars)"
         }
     }
 
-    @objc private func textDidChange() {
+    @objc
+    private func textDidChange() {
         guard validationError == .none else {
             return
         }
@@ -138,7 +151,8 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
     private func validateText(text: String) -> TextValidationError {
         let minLength = data.minLength
         let maxLength = data.maxLength
-        let textLength = text.trimmingCharacters(in: .whitespacesAndNewlines).count
+        let textLength = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            .count
 
         if textLength > maxLength {
             return .maximum
@@ -150,10 +164,13 @@ internal class ParraShortTextKindView: UIView, ParraQuestionKindView {
     }
 }
 
-extension ParraShortTextKindView: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField,
-                                reason: UITextField.DidEndEditingReason) {
+// MARK: UITextFieldDelegate
 
+extension ParraShortTextKindView: UITextFieldDelegate {
+    func textFieldDidEndEditing(
+        _ textField: UITextField,
+        reason: UITextField.DidEndEditingReason
+    ) {
         if validationError == .none {
             answerHandler.commitAnswers(for: bucketId, question: question)
         }
@@ -165,10 +182,11 @@ extension ParraShortTextKindView: UITextFieldDelegate {
         return validationError == .none
     }
 
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
-
+    func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
         let currentText = textField.text ?? ""
         guard let stringRange = Range(range, in: currentText) else {
             return false

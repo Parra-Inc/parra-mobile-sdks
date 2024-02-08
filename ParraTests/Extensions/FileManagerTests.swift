@@ -5,8 +5,8 @@
 //  Created by Mick MacCallum on 3/17/22.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
 class FileManagerTests: MockedParraTestCase {
     let fileManager = FileManager.default
@@ -27,11 +27,11 @@ class FileManagerTests: MockedParraTestCase {
             atPath: dirPath.path,
             isDirectory: &isDirectory
         )
-        
+
         XCTAssertTrue(exists)
         XCTAssertTrue(isDirectory.boolValue)
     }
-    
+
     func testSafeCreateWhenDirectoryExists() throws {
         let dirPath = baseStorageDirectory.appendDirectory("testDir")
 
@@ -39,7 +39,7 @@ class FileManagerTests: MockedParraTestCase {
             at: dirPath,
             withIntermediateDirectories: true
         )
-        
+
         try fileManager.safeCreateDirectory(at: dirPath)
 
         var isDirectory: ObjCBool = false
@@ -47,11 +47,11 @@ class FileManagerTests: MockedParraTestCase {
             atPath: dirPath.path,
             isDirectory: &isDirectory
         )
-        
+
         XCTAssertTrue(exists)
         XCTAssertTrue(isDirectory.boolValue)
     }
-    
+
     func testSafeCreateWhenFileExistsAtDirectoryPath() throws {
         let filePath = baseStorageDirectory.appendFilename("testFile.txt")
 

@@ -9,9 +9,10 @@
 import Foundation
 @testable import Parra
 
-struct TestData {
+enum TestData {
     // MARK: - Cards
-    struct Cards {
+
+    enum Cards {
         static let choiceCard = ParraCardItem(
             id: "id",
             campaignId: "",
@@ -49,7 +50,8 @@ struct TestData {
                         )
                     ),
                     active: true,
-                    expiresAt: Date().addingTimeInterval(100000).ISO8601Format(),
+                    expiresAt: Date().addingTimeInterval(100_000)
+                        .ISO8601Format(),
                     answerQuota: nil,
                     answer: nil
                 )
@@ -120,8 +122,16 @@ struct TestData {
                     kind: .boolean,
                     data: .booleanQuestionBody(
                         BooleanQuestionBody(options: [
-                            BooleanQuestionOption(title: "title", value: "value", id: "id"),
-                            BooleanQuestionOption(title: "title", value: "value", id: "id"),
+                            BooleanQuestionOption(
+                                title: "title",
+                                value: "value",
+                                id: "id"
+                            ),
+                            BooleanQuestionOption(
+                                title: "title",
+                                value: "value",
+                                id: "id"
+                            )
                         ])
                     ),
                     active: false,
@@ -191,13 +201,19 @@ struct TestData {
                                     title: "title",
                                     value: "val",
                                     id: "id",
-                                    asset: Asset(id: "id", url: URL(string: "parra.io/image.png")!)
+                                    asset: Asset(
+                                        id: "id",
+                                        url: URL(string: "parra.io/image.png")!
+                                    )
                                 ),
                                 ImageQuestionOption(
                                     title: "title2",
                                     value: "val2",
                                     id: "id2",
-                                    asset: Asset(id: "id2222", url: URL(string: "parra.io/image2.png")!)
+                                    asset: Asset(
+                                        id: "id2222",
+                                        url: URL(string: "parra.io/image2.png")!
+                                    )
                                 )
                             ]
                         )
@@ -231,11 +247,31 @@ struct TestData {
                     data: .ratingQuestionBody(
                         RatingQuestionBody(
                             options: [
-                                RatingQuestionOption(title: "title1", value: 1, id: "1"),
-                                RatingQuestionOption(title: "title2", value: 2, id: "2"),
-                                RatingQuestionOption(title: "title3", value: 3, id: "3"),
-                                RatingQuestionOption(title: "title4", value: 4, id: "4"),
-                                RatingQuestionOption(title: "title5", value: 5, id: "5"),
+                                RatingQuestionOption(
+                                    title: "title1",
+                                    value: 1,
+                                    id: "1"
+                                ),
+                                RatingQuestionOption(
+                                    title: "title2",
+                                    value: 2,
+                                    id: "2"
+                                ),
+                                RatingQuestionOption(
+                                    title: "title3",
+                                    value: 3,
+                                    id: "3"
+                                ),
+                                RatingQuestionOption(
+                                    title: "title4",
+                                    value: 4,
+                                    id: "4"
+                                ),
+                                RatingQuestionOption(
+                                    title: "title5",
+                                    value: 5,
+                                    id: "5"
+                                )
                             ],
                             leadingLabel: "leading",
                             centerLabel: "center",
@@ -269,7 +305,10 @@ struct TestData {
                     subtitle: "this one has a subtitle",
                     kind: .textShort,
                     data: .shortTextQuestionBody(
-                        ShortTextQuestionBody(placeholder: "placeholder", minLength: 50)
+                        ShortTextQuestionBody(
+                            placeholder: "placeholder",
+                            minLength: 50
+                        )
                     ),
                     active: false,
                     expiresAt: nil,
@@ -298,7 +337,11 @@ struct TestData {
                     subtitle: "this one has a subtitle",
                     kind: .textLong,
                     data: .longTextQuestionBody(
-                        LongTextQuestionBody(placeholder: "placeholder", minLength: 1, maxLength: 1000)
+                        LongTextQuestionBody(
+                            placeholder: "placeholder",
+                            minLength: 1,
+                            maxLength: 1_000
+                        )
                     ),
                     active: false,
                     expiresAt: nil,
@@ -323,7 +366,8 @@ struct TestData {
     }
 
     // MARK: - Forms
-    struct Forms {
+
+    enum Forms {
         static func formResponse(
             formId: String = UUID().uuidString
         ) -> ParraFeedbackFormResponse {
@@ -360,7 +404,8 @@ struct TestData {
     }
 
     // MARK: - Sessions
-    struct Sessions {
+
+    enum Sessions {
         static let successResponse = ParraSessionsResponse(
             shouldPoll: false,
             retryDelay: 0,
@@ -375,7 +420,8 @@ struct TestData {
     }
 
     // MARK: - Auth
-    struct Auth {
+
+    enum Auth {
         static let successResponse = ParraCredential(
             token: UUID().uuidString
         )

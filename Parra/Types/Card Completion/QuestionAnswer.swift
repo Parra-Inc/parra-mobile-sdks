@@ -8,49 +8,69 @@
 
 import Foundation
 
-internal protocol AnswerOption: Codable {}
+protocol AnswerOption: Codable {}
 
-internal struct SingleOptionAnswer: AnswerOption {
-    internal let optionId: String
+struct SingleOptionAnswer: AnswerOption {
+    // MARK: Lifecycle
 
-    internal init(optionId: String) {
+    init(optionId: String) {
         self.optionId = optionId
     }
+
+    // MARK: Internal
+
+    let optionId: String
 }
 
-internal struct MultiOptionIndividualOption: Codable {
-    internal let id: String
+struct MultiOptionIndividualOption: Codable {
+    // MARK: Lifecycle
 
-    internal init(id: String) {
+    init(id: String) {
         self.id = id
     }
+
+    // MARK: Internal
+
+    let id: String
 }
 
-internal struct MultiOptionAnswer: AnswerOption {
-    internal let options: [MultiOptionIndividualOption]
+struct MultiOptionAnswer: AnswerOption {
+    // MARK: Lifecycle
 
-    internal init(options: [MultiOptionIndividualOption]) {
+    init(options: [MultiOptionIndividualOption]) {
         self.options = options
     }
+
+    // MARK: Internal
+
+    let options: [MultiOptionIndividualOption]
 }
 
-internal struct TextValueAnswer: AnswerOption {
-    internal let value: String
+struct TextValueAnswer: AnswerOption {
+    // MARK: Lifecycle
 
-    internal init(value: String) {
+    init(value: String) {
         self.value = value
     }
+
+    // MARK: Internal
+
+    let value: String
 }
 
-internal struct IntValueAnswer: AnswerOption {
-    internal let value: Int
+struct IntValueAnswer: AnswerOption {
+    // MARK: Lifecycle
 
-    internal init(value: Int) {
+    init(value: Int) {
         self.value = value
     }
+
+    // MARK: Internal
+
+    let value: Int
 }
 
-internal enum QuestionAnswerKind: Codable {
+enum QuestionAnswerKind: Codable {
     case checkbox(MultiOptionAnswer)
     case radio(SingleOptionAnswer)
     case boolean(SingleOptionAnswer)
@@ -61,37 +81,50 @@ internal enum QuestionAnswerKind: Codable {
     case textLong(TextValueAnswer)
 }
 
-internal struct QuestionAnswer: Codable {
-    internal let kind: QuestionKind
-    internal let data: any AnswerOption
+struct QuestionAnswer: Codable {
+    // MARK: Lifecycle
 
-    internal init(kind: QuestionKind, data: AnswerOption) {
+    init(kind: QuestionKind, data: AnswerOption) {
         self.kind = kind
         self.data = data
     }
 
-    internal init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.kind = try container.decode(QuestionKind.self, forKey: .kind)
-        switch self.kind {
+        switch kind {
         case .checkbox:
-            self.data = try container.decode(MultiOptionAnswer.self, forKey: .data)
+            self.data = try container.decode(
+                MultiOptionAnswer.self,
+                forKey: .data
+            )
         case .radio, .boolean, .image, .rating:
-            self.data = try container.decode(SingleOptionAnswer.self, forKey: .data)
+            self.data = try container.decode(
+                SingleOptionAnswer.self,
+                forKey: .data
+            )
         case .star:
             self.data = try container.decode(IntValueAnswer.self, forKey: .data)
         case .textLong, .textShort:
-            self.data = try container.decode(TextValueAnswer.self, forKey: .data)
+            self.data = try container.decode(
+                TextValueAnswer.self,
+                forKey: .data
+            )
         }
     }
+
+    // MARK: Internal
 
     enum CodingKeys: CodingKey {
         case kind
         case data
     }
 
-    internal func encode(to encoder: Encoder) throws {
+    let kind: QuestionKind
+    let data: any AnswerOption
+
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(kind, forKey: .kind)

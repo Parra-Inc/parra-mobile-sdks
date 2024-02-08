@@ -5,16 +5,17 @@
 //  Created by Mick MacCallum on 3/13/22.
 //
 
-import UIKit
 import Parra
+import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    
-    func scene(_ scene: UIScene,
-               willConnectTo session: UISceneSession,
-               options connectionOptions: UIScene.ConnectionOptions) {
 
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
 //        window?.tintColor = Parra.Constants.brandColor
     }
 

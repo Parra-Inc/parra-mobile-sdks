@@ -5,8 +5,8 @@
 //  Created by Mick MacCallum on 3/24/22.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
 @MainActor
 class ParraAuthenticationTests: MockedParraTestCase {
@@ -18,7 +18,8 @@ class ParraAuthenticationTests: MockedParraTestCase {
     @MainActor
     func testInitWithDefaultAuthProvider() async throws {
         let token = UUID().uuidString
-        let startAuthProvider = await mockParra.parra.networkManager.getAuthenticationProvider()
+        let startAuthProvider = await mockParra.parra.networkManager
+            .getAuthenticationProvider()
         XCTAssertNil(startAuthProvider)
 
         await mockParra.parra.initialize(
@@ -31,15 +32,17 @@ class ParraAuthenticationTests: MockedParraTestCase {
             )
         )
 
-        let endAuthProvider = await mockParra.parra.networkManager.getAuthenticationProvider()
+        let endAuthProvider = await mockParra.parra.networkManager
+            .getAuthenticationProvider()
         XCTAssertNotNil(endAuthProvider)
     }
 
     func testInitWithPublicKeyAuthProvider() async throws {
-        let authEndpointExpectation = try mockParra.mockNetworkManager.urlSession.expectInvocation(
-            of: .postAuthentication(tenantId: mockParra.tenantId),
-            toReturn: (200, ParraCredential(token: UUID().uuidString))
-        )
+        let authEndpointExpectation = try mockParra.mockNetworkManager
+            .urlSession.expectInvocation(
+                of: .postAuthentication(tenantId: mockParra.tenantId),
+                toReturn: (200, ParraCredential(token: UUID().uuidString))
+            )
 
         let authProviderExpectation = XCTestExpectation()
         authProviderExpectation.expectedFulfillmentCount = 2
@@ -55,7 +58,8 @@ class ParraAuthenticationTests: MockedParraTestCase {
             )
         )
 
-        let _ = try await mockParra.mockNetworkManager.networkManager.getAuthenticationProvider()!()
+        let _ = try await mockParra.mockNetworkManager.networkManager
+            .getAuthenticationProvider()!()
 
         await fulfillment(
             of: [authEndpointExpectation, authProviderExpectation],
@@ -75,7 +79,8 @@ class ParraAuthenticationTests: MockedParraTestCase {
         )
 
         do {
-            let _ = try await mockParra.mockNetworkManager.networkManager.getAuthenticationProvider()!()
+            let _ = try await mockParra.mockNetworkManager.networkManager
+                .getAuthenticationProvider()!()
 
             XCTFail()
         } catch {}
@@ -94,14 +99,16 @@ class ParraAuthenticationTests: MockedParraTestCase {
         )
 
         do {
-            let _ = try await mockParra.mockNetworkManager.networkManager.getAuthenticationProvider()!()
+            let _ = try await mockParra.mockNetworkManager.networkManager
+                .getAuthenticationProvider()!()
 
             XCTFail()
         } catch {}
     }
 
     func testMultipleInvocationsDoNotReinitialize() async throws {
-        await mockParra.parra.initialize(authProvider: .mockPublicKey(mockParra))
+        await mockParra.parra
+            .initialize(authProvider: .mockPublicKey(mockParra))
 
         let isInitialized = await mockParra.parra.state.isInitialized()
         XCTAssertTrue(isInitialized)

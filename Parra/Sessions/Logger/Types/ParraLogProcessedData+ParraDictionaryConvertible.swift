@@ -10,7 +10,7 @@ import Foundation
 
 extension ParraLogProcessedData: ParraSanitizedDictionaryConvertible {
     var sanitized: ParraSanitizedDictionary {
-        var params: [String : Any] = [
+        var params: [String: Any] = [
             "level": level.loggerDescription,
             "message": message,
             "call_site": [
@@ -18,7 +18,7 @@ extension ParraLogProcessedData: ParraSanitizedDictionaryConvertible {
                 "function": callSiteContext.function,
                 "line": callSiteContext.line,
                 "column": callSiteContext.column
-            ] as [String : Any]
+            ] as [String: Any]
         ]
 
         if let loggerContext {
@@ -37,4 +37,3 @@ extension ParraLogProcessedData: ParraSanitizedDictionaryConvertible {
         return ParraSanitizedDictionary(dictionary: params)
     }
 }
-

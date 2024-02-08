@@ -8,20 +8,8 @@
 
 import Foundation
 
-internal struct ParraLogProcessedData {
-    internal let level: ParraLogLevel
-    internal let extra: [String : Any]?
-
-    // Differs from the module/filenames in the context. Those could be from
-    // where a Logger instance was created. These will be from where the final
-    // log call was made.
-    internal let callSiteContext: ParraLoggerCallSiteContext
-    internal let loggerContext: ParraLoggerContext?
-
-    internal let subsystem: String
-    internal let category: String
-    internal let message: String
-    internal let timestamp: Date
+struct ParraLogProcessedData {
+    // MARK: Lifecycle
 
     init(logData: ParraLogData) {
         let message: String
@@ -74,12 +62,29 @@ internal struct ParraLogProcessedData {
         )
     }
 
-    private static func mergeAllExtras(
-        callSiteExtra: [String : Any]?,
-        loggerExtra: [String : Any]?,
-        errorWithExtra: ParraErrorWithExtra?
-    ) -> [String : Any]? {
+    // MARK: Internal
 
+    let level: ParraLogLevel
+    let extra: [String: Any]?
+
+    // Differs from the module/filenames in the context. Those could be from
+    // where a Logger instance was created. These will be from where the final
+    // log call was made.
+    let callSiteContext: ParraLoggerCallSiteContext
+    let loggerContext: ParraLoggerContext?
+
+    let subsystem: String
+    let category: String
+    let message: String
+    let timestamp: Date
+
+    // MARK: Private
+
+    private static func mergeAllExtras(
+        callSiteExtra: [String: Any]?,
+        loggerExtra: [String: Any]?,
+        errorWithExtra: ParraErrorWithExtra?
+    ) -> [String: Any]? {
         var combinedExtra = loggerExtra ?? [:]
 
         if let errorWithExtra {
@@ -100,7 +105,7 @@ internal struct ParraLogProcessedData {
         logContext: ParraLogContext
     ) -> String {
         let callingFunctionName = logContext.callSiteContext.function
-        
+
         guard let loggerContext = logContext.loggerContext else {
             // There is no data other than the call site function. No point in building
             // a single element category array and joining back to a string.
@@ -129,13 +134,13 @@ internal struct ParraLogProcessedData {
                     scopes.append(last)
 
                     categoryComponents.append(
-                        contentsOf: scopes.map { $0.name }
+                        contentsOf: scopes.map(\.name)
                     )
 
                     categoryComponents.append(callingFunctionName)
                 case .function(let rawName):
                     categoryComponents.append(
-                        contentsOf: scopes.map { $0.name }
+                        contentsOf: scopes.map(\.name)
                     )
 
                     // Logs that occur within a scoped logger that haven't exited

@@ -9,28 +9,31 @@
 import Foundation
 import UIKit
 
-internal protocol ParraBorderedRatingControlDelegate: AnyObject {
-    func parraBorderedRatingControl(_ control: ParraBorderedRatingControl,
-                                    didSelectOption option: RatingQuestionOption)
+protocol ParraBorderedRatingControlDelegate: AnyObject {
+    func parraBorderedRatingControl(
+        _ control: ParraBorderedRatingControl,
+        didSelectOption option: RatingQuestionOption
+    )
 
-    func parraBorderedRatingControl(_ control: ParraBorderedRatingControl,
-                                    didConfirmOption option: RatingQuestionOption)
+    func parraBorderedRatingControl(
+        _ control: ParraBorderedRatingControl,
+        didConfirmOption option: RatingQuestionOption
+    )
 }
 
-internal class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableView {
-    internal weak var delegate: ParraBorderedRatingControlDelegate?
+class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableView {
+    // MARK: Lifecycle
 
-    private let config: ParraCardViewConfig
-    private let labelStack = UIStackView(frame: .zero)
-    private var highlightedOption: RatingQuestionOption?
-
-    private var optionLabelMap = [UILabel: RatingQuestionOption]()
-
-    required init(options: [RatingQuestionOption],
-                  config: ParraCardViewConfig) {
+    required init(
+        options: [RatingQuestionOption],
+        config: ParraCardViewConfig
+    ) {
         self.config = config
 
-        assert(options.count <= 10, "The layout of this control was never considered with this many options")
+        assert(
+            options.count <= 10,
+            "The layout of this control was never considered with this many options"
+        )
 
         super.init(frame: .zero)
 
@@ -72,23 +75,41 @@ internal class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableVie
             ),
             labelStack.bottomAnchor.constraint(
                 equalTo: bottomAnchor
-            ),
+            )
         ])
 
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+    // MARK: Internal
+
+    weak var delegate: ParraBorderedRatingControlDelegate?
+
+    override var intrinsicContentSize: CGSize {
+        return CGSize(
+            width: labelStack.intrinsicContentSize.width,
+            height: 54
+        )
+    }
+
+    override func beginTracking(
+        _ touch: UITouch,
+        with event: UIEvent?
+    ) -> Bool {
         respondToTouchChange(touch: touch, with: event)
 
         return super.beginTracking(touch, with: event)
     }
 
-    override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+    override func continueTracking(
+        _ touch: UITouch,
+        with event: UIEvent?
+    ) -> Bool {
         respondToTouchChange(touch: touch, with: event)
 
         return super.continueTracking(touch, with: event)
@@ -100,13 +121,6 @@ internal class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableVie
         }
 
         return super.endTracking(touch, with: event)
-    }
-
-    override var intrinsicContentSize: CGSize {
-        return CGSize(
-            width: labelStack.intrinsicContentSize.width,
-            height: 54
-        )
     }
 
     func applyConfig(_ config: ParraCardViewConfig) {
@@ -129,6 +143,14 @@ internal class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableVie
         }
     }
 
+    // MARK: Private
+
+    private let config: ParraCardViewConfig
+    private let labelStack = UIStackView(frame: .zero)
+    private var highlightedOption: RatingQuestionOption?
+
+    private var optionLabelMap = [UILabel: RatingQuestionOption]()
+
     private func respondToTouchChange(touch: UITouch, with event: UIEvent?) {
         guard let label = labelBelow(touch: touch, with: event) else {
             return
@@ -140,8 +162,10 @@ internal class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableVie
 
         if nextHightedOption == highlightedOption {
             if touch.phase == .ended {
-                delegate?.parraBorderedRatingControl(self,
-                                                     didConfirmOption: nextHightedOption)
+                delegate?.parraBorderedRatingControl(
+                    self,
+                    didConfirmOption: nextHightedOption
+                )
             }
 
             return
@@ -160,14 +184,18 @@ internal class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableVie
                 return
             }
 
-            strongSelf.delegate?.parraBorderedRatingControl(strongSelf,
-                                                            didSelectOption: nextHightedOption)
-
+            strongSelf.delegate?.parraBorderedRatingControl(
+                strongSelf,
+                didSelectOption: nextHightedOption
+            )
         }
     }
 
     private func labelBelow(touch: UITouch, with event: UIEvent?) -> UILabel? {
-        let touchLocation = labelStack.convert(touch.location(in: self), from: self)
+        let touchLocation = labelStack.convert(
+            touch.location(in: self),
+            from: self
+        )
 
         for subview in labelStack.arrangedSubviews {
             guard let label = subview as? UILabel else {

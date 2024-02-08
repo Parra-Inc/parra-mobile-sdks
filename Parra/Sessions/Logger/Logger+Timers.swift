@@ -13,7 +13,6 @@ public extension Logger {
     //       the times between multiple events. It would be nice to detect that a start marker was itself a measurement
     //       against its own start marker and output in a format that allowed you to see the entire sequence of measurements.
 
-
     /// Measures the time since the start marker was created and then prints a message indicating how long the action took.
     ///
     /// - Parameters:
@@ -57,7 +56,7 @@ public extension Logger {
         // If the user provided a custom message, use it. Otherwise use the message that was attached to the
         // start marker
         let messageProvider = createMessageProvider(
-            for: message ?? { startMarker.message.produceLog().0 }(),
+            for: message ?? startMarker.message.produceLog().0,
             with: timeInterval,
             in: format
         )
@@ -122,7 +121,7 @@ public extension Logger {
         // If the user provided a custom message, use it. Otherwise use the message that was attached to the
         // start marker
         let messageProvider = Logger.createMessageProvider(
-            for: message ?? { startMarker.message.produceLog().0 }(),
+            for: message ?? startMarker.message.produceLog().0,
             with: timeInterval,
             in: format
         )
@@ -146,13 +145,14 @@ public extension Logger {
         in format: ParraLogMeasurementFormat
     ) -> () -> String {
         return {
-
             if timeInterval < 60 {
-                let formatted = timeInterval.formatted(.number.precision(.fractionLength(4)))
+                let formatted = timeInterval
+                    .formatted(.number.precision(.fractionLength(4)))
                 return "\(formatted) second(s)"
             }
 
-            var formatter = Parra.InternalConstants.Formatters.dateComponentsFormatter
+            var formatter = Parra.InternalConstants.Formatters
+                .dateComponentsFormatter
 
             formatter.formattingContext = .middleOfSentence
             formatter.includesApproximationPhrase = false

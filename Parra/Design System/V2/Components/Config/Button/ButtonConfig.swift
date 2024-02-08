@@ -9,12 +9,9 @@
 import SwiftUI
 
 public struct ButtonConfig {
-    public let style: ButtonCategory
-    public let size: ButtonSize
-    public let isMaxWidth: Bool
-    public let title: LabelConfig
+    // MARK: Lifecycle
 
-    internal init(
+    init(
         style: ButtonCategory = .primary,
         size: ButtonSize = .medium,
         isMaxWidth: Bool = false,
@@ -25,4 +22,11 @@ public struct ButtonConfig {
         self.isMaxWidth = isMaxWidth
         self.title = title
     }
+
+    // MARK: Public
+
+    public let style: ButtonCategory
+    public let size: ButtonSize
+    public let isMaxWidth: Bool
+    public let title: LabelConfig
 }

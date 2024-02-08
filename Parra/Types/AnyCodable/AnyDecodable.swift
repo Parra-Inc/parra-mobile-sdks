@@ -37,12 +37,17 @@ import Foundation
  let decoder = JSONDecoder()
  let dictionary = try! decoder.decode([String : AnyDecodable].self, from: json)
  */
-@frozen public struct AnyDecodable: Decodable {
-    public let value: Any
+@frozen
+public struct AnyDecodable: Decodable {
+    // MARK: Lifecycle
 
-    public init<T>(_ value: T?) {
+    public init(_ value: (some Any)?) {
         self.value = value ?? ()
     }
+
+    // MARK: Public
+
+    public let value: Any
 }
 
 @usableFromInline
@@ -51,6 +56,8 @@ protocol _AnyDecodable {
     init<T>(_ value: T?)
 }
 
+// MARK: - AnyDecodable + _AnyDecodable
+
 extension AnyDecodable: _AnyDecodable {}
 
 extension _AnyDecodable {
@@ -58,11 +65,11 @@ extension _AnyDecodable {
         let container = try decoder.singleValueContainer()
 
         if container.decodeNil() {
-#if canImport(Foundation)
+            #if canImport(Foundation)
             self.init(NSNull())
-#else
-            self.init(Optional<Self>.none)
-#endif
+            #else
+            self.init(Self?.none)
+            #endif
         } else if let bool = try? container.decode(Bool.self) {
             self.init(bool)
         } else if let int = try? container.decode(Int.self) {
@@ -74,59 +81,71 @@ extension _AnyDecodable {
         } else if let string = try? container.decode(String.self) {
             self.init(string)
         } else if let array = try? container.decode([AnyDecodable].self) {
-            self.init(array.map { $0.value })
-        } else if let dictionary = try? container.decode([String : AnyDecodable].self) {
+            self.init(array.map(\.value))
+        } else if let dictionary = try? container
+            .decode([String: AnyDecodable].self)
+        {
             self.init(dictionary.mapValues { $0.value })
         } else {
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "AnyDecodable value cannot be decoded")
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "AnyDecodable value cannot be decoded"
+            )
         }
     }
 }
 
+// MARK: - AnyDecodable + Equatable
+
 extension AnyDecodable: Equatable {
     public static func == (lhs: AnyDecodable, rhs: AnyDecodable) -> Bool {
         switch (lhs.value, rhs.value) {
-#if canImport(Foundation)
+        #if canImport(Foundation)
         case is (NSNull, NSNull), is (Void, Void):
             return true
-#endif
-        case let (lhs as Bool, rhs as Bool):
+        #endif
+        case (let lhs as Bool, let rhs as Bool):
             return lhs == rhs
-        case let (lhs as Int, rhs as Int):
+        case (let lhs as Int, let rhs as Int):
             return lhs == rhs
-        case let (lhs as Int8, rhs as Int8):
+        case (let lhs as Int8, let rhs as Int8):
             return lhs == rhs
-        case let (lhs as Int16, rhs as Int16):
+        case (let lhs as Int16, let rhs as Int16):
             return lhs == rhs
-        case let (lhs as Int32, rhs as Int32):
+        case (let lhs as Int32, let rhs as Int32):
             return lhs == rhs
-        case let (lhs as Int64, rhs as Int64):
+        case (let lhs as Int64, let rhs as Int64):
             return lhs == rhs
-        case let (lhs as UInt, rhs as UInt):
+        case (let lhs as UInt, let rhs as UInt):
             return lhs == rhs
-        case let (lhs as UInt8, rhs as UInt8):
+        case (let lhs as UInt8, let rhs as UInt8):
             return lhs == rhs
-        case let (lhs as UInt16, rhs as UInt16):
+        case (let lhs as UInt16, let rhs as UInt16):
             return lhs == rhs
-        case let (lhs as UInt32, rhs as UInt32):
+        case (let lhs as UInt32, let rhs as UInt32):
             return lhs == rhs
-        case let (lhs as UInt64, rhs as UInt64):
+        case (let lhs as UInt64, let rhs as UInt64):
             return lhs == rhs
-        case let (lhs as Float, rhs as Float):
+        case (let lhs as Float, let rhs as Float):
             return lhs == rhs
-        case let (lhs as Double, rhs as Double):
+        case (let lhs as Double, let rhs as Double):
             return lhs == rhs
-        case let (lhs as String, rhs as String):
+        case (let lhs as String, let rhs as String):
             return lhs == rhs
-        case let (lhs as [String : AnyDecodable], rhs as [String : AnyDecodable]):
+        case (
+            let lhs as [String: AnyDecodable],
+            let rhs as [String: AnyDecodable]
+        ):
             return lhs == rhs
-        case let (lhs as [AnyDecodable], rhs as [AnyDecodable]):
+        case (let lhs as [AnyDecodable], let rhs as [AnyDecodable]):
             return lhs == rhs
         default:
             return false
         }
     }
 }
+
+// MARK: - AnyDecodable + CustomStringConvertible
 
 extension AnyDecodable: CustomStringConvertible {
     public var description: String {
@@ -141,6 +160,8 @@ extension AnyDecodable: CustomStringConvertible {
     }
 }
 
+// MARK: - AnyDecodable + CustomDebugStringConvertible
+
 extension AnyDecodable: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch value {
@@ -151,6 +172,8 @@ extension AnyDecodable: CustomDebugStringConvertible {
         }
     }
 }
+
+// MARK: - AnyDecodable + Hashable
 
 extension AnyDecodable: Hashable {
     public func hash(into hasher: inout Hasher) {
@@ -183,7 +206,7 @@ extension AnyDecodable: Hashable {
             hasher.combine(value)
         case let value as String:
             hasher.combine(value)
-        case let value as [String : AnyDecodable]:
+        case let value as [String: AnyDecodable]:
             hasher.combine(value)
         case let value as [AnyDecodable]:
             hasher.combine(value)

@@ -8,8 +8,18 @@
 
 import Foundation
 
-internal struct ParraDataSanitizer {
-    private struct Constant {
+enum ParraDataSanitizer {
+    // MARK: Internal
+
+    static func sanitize(httpHeaders: [String: String]) -> [String: String] {
+        return httpHeaders.filter { name, _ in
+            return !Constant.naughtyHeaders.contains(name.uppercased())
+        }
+    }
+
+    // MARK: Private
+
+    private enum Constant {
         static let naughtyHeaders = Set(
             [
                 "AUTHORIZATION",
@@ -26,11 +36,5 @@ internal struct ParraDataSanitizer {
                 "X-XSRF-TOKEN"
             ]
         )
-    }
-
-    static func sanitize(httpHeaders: [String : String]) -> [String : String] {
-        return httpHeaders.filter { (name, _) in
-            return !Constant.naughtyHeaders.contains(name.uppercased())
-        }
     }
 }

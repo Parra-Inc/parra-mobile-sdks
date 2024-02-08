@@ -13,7 +13,7 @@ enum TextValidatorRule {
     case maxLength(Int)
 }
 
-struct TextValidator {
+enum TextValidator {
     static func isValid(
         text: String,
         against rule: TextValidatorRule
@@ -25,7 +25,6 @@ struct TextValidator {
             return text.count <= max
         }
     }
-
 
     /// Validates the supplied text against the provided rules. If there is an error, a human readable message
     /// is returned. If there is no error, nil is returned. This will only return a message for the first error

@@ -5,8 +5,8 @@
 //  Created by Mick MacCallum on 3/17/22.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
 class ParraLoggerTests: XCTestCase {
     func testLogLevels() throws {

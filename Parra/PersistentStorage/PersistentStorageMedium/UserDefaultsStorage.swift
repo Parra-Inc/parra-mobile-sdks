@@ -7,36 +7,46 @@
 
 import Foundation
 
-internal actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
-    private let userDefaults: UserDefaults
-    private let jsonEncoder: JSONEncoder
-    private let jsonDecoder: JSONDecoder
-    
-    internal init(userDefaults: UserDefaults,
-                  jsonEncoder: JSONEncoder,
-                  jsonDecoder: JSONDecoder) {
+actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
+    // MARK: Lifecycle
+
+    init(
+        userDefaults: UserDefaults,
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) {
         self.userDefaults = userDefaults
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
     }
-    
-    internal func read<T>(name: String) async throws -> T? where T: Codable {
+
+    // MARK: Internal
+
+    func read<T>(name: String) async throws -> T? where T: Codable {
         guard let data = userDefaults.data(forKey: name) else {
             return nil
         }
-        
+
         return try jsonDecoder.decode(T.self, from: data)
     }
-    
-    internal func write<T>(name: String, value: T) async throws where T: Codable {
+
+    func write(name: String, value: some Codable) async throws {
         let data = try jsonEncoder.encode(value)
-        
+
         userDefaults.set(data, forKey: name)
     }
-    
-    internal func delete(name: String) async throws {
+
+    func delete(name: String) async throws {
         userDefaults.removeObject(forKey: name)
     }
+
+    // MARK: Private
+
+    private let userDefaults: UserDefaults
+    private let jsonEncoder: JSONEncoder
+    private let jsonDecoder: JSONDecoder
 }
+
+// MARK: - UserDefaults + Sendable
 
 extension UserDefaults: @unchecked Sendable {}

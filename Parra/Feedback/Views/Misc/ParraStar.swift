@@ -9,20 +9,8 @@
 import Foundation
 import UIKit
 
-internal class ParraStar: UIView, ParraLegacyConfigurableView {
-    private var config: ParraCardViewConfig
-
-    var isHighlighted: Bool {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
-
-    var edgeInsets: UIEdgeInsets {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
+class ParraStar: UIView, ParraLegacyConfigurableView {
+    // MARK: Lifecycle
 
     required init(
         frame: CGRect,
@@ -42,8 +30,23 @@ internal class ParraStar: UIView, ParraLegacyConfigurableView {
         super.init(frame: frame)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: Internal
+
+    var isHighlighted: Bool {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+
+    var edgeInsets: UIEdgeInsets {
+        didSet {
+            setNeedsDisplay()
+        }
     }
 
     override func draw(_ rect: CGRect) {
@@ -56,7 +59,7 @@ internal class ParraStar: UIView, ParraLegacyConfigurableView {
         let innerRadius = isHighlighted ? radius * 0.43 : radius * 0.38
 
         var cangle: CGFloat = 18
-        for i in 1...10 {
+        for i in 1 ... 10 {
             let rad = i % 2 == 0 ? tipRadius : innerRadius
             let cc = CGPoint(
                 x: center.x + rad * cos(cangle * .pi / 180),
@@ -96,4 +99,8 @@ internal class ParraStar: UIView, ParraLegacyConfigurableView {
 
         setNeedsDisplay()
     }
+
+    // MARK: Private
+
+    private var config: ParraCardViewConfig
 }

@@ -8,12 +8,10 @@
 
 import Foundation
 
-internal struct LoggerFormatters {
-    
-    internal static func extractMessage(
+enum LoggerFormatters {
+    static func extractMessage(
         from error: Error
-    ) -> (message: String, extra: [String : Any]?) {
-
+    ) -> (message: String, extra: [String: Any]?) {
         // Errors when JSON encoding/decoding fails
         if let encodingError = error as? EncodingError {
             switch encodingError {
@@ -26,12 +24,13 @@ internal struct LoggerFormatters {
                     return path.stringValue
                 }.joined(separator: ".")
 
-                var extra: [String : Any] = [
+                var extra: [String: Any] = [
                     "coding_path": context.codingPath
                 ]
 
                 if let underlyingError = context.underlyingError {
-                    extra["underlying_error"] = underlyingError.localizedDescription
+                    extra["underlying_error"] = underlyingError
+                        .localizedDescription
                 }
 
                 return (

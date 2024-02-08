@@ -6,12 +6,11 @@
 //  Copyright © 2023 Parra, Inc. All rights reserved.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
 final class SessionReaderTests: MockedParraTestCase {
-    private let fileManager = FileManager.default
-    private var sessionReader: SessionReader!
+    // MARK: Internal
 
     override func setUp() async throws {
         sessionReader = SessionReader(
@@ -69,7 +68,8 @@ final class SessionReaderTests: MockedParraTestCase {
         XCTAssertEqual(try fileHandle.offset(), 0)
     }
 
-    func testCanRetreiveEventsFileHandleCreatesHandleIfUnsetWithExistingEvents() async throws {
+    func testCanRetreiveEventsFileHandleCreatesHandleIfUnsetWithExistingEvents(
+    ) async throws {
         let ctx = try createSessionContext(includeEvents: true)
 
         XCTAssertNil(sessionReader._eventsHandle)
@@ -116,10 +116,10 @@ final class SessionReaderTests: MockedParraTestCase {
     }
 
     func testGetAllSessionDirectoriesGetsSessions() async throws {
-        let contexts = [
-            try createSessionContext(),
-            try createSessionContext(),
-            try createSessionContext(),
+        let contexts = try [
+            createSessionContext(),
+            createSessionContext(),
+            createSessionContext()
         ]
 
         let allSessionDirectories = try sessionReader.getAllSessionDirectories()
@@ -172,10 +172,10 @@ final class SessionReaderTests: MockedParraTestCase {
     }
 
     func testCreatesSessionUploadGenerator() async throws {
-        let contexts = [
-            try createSessionContext(includeEvents: true),
-            try createSessionContext(includeEvents: true),
-            try createSessionContext(includeEvents: true),
+        let contexts = try [
+            createSessionContext(includeEvents: true),
+            createSessionContext(includeEvents: true),
+            createSessionContext(includeEvents: true)
         ]
 
         let generator = try sessionReader.generateSessionUploadsSync()
@@ -185,7 +185,8 @@ final class SessionReaderTests: MockedParraTestCase {
             switch session {
             case .success(let sessionDirectory, _):
                 let matchingContext = contexts.first { context in
-                    context.sessionPath.deletingLastPathComponent() == sessionDirectory
+                    context.sessionPath
+                        .deletingLastPathComponent() == sessionDirectory
                 }
 
                 XCTAssertNotNil(matchingContext)
@@ -276,7 +277,10 @@ final class SessionReaderTests: MockedParraTestCase {
         XCTAssertNil(sessionReader._currentSessionContext)
 
         let corruptJsonData = "i am not real json".data(using: .utf8)!
-        try corruptJsonData.write(to: fakeSessionCtx.sessionPath, options: .atomic)
+        try corruptJsonData.write(
+            to: fakeSessionCtx.sessionPath,
+            options: .atomic
+        )
 
         let newCtx = try sessionReader.loadOrCreateSessionSync(
             nextSessionId: fakeSessionCtx.session.sessionId
@@ -296,13 +300,19 @@ final class SessionReaderTests: MockedParraTestCase {
         )
 
         XCTAssertNotNil(sessionReader._currentSessionContext)
-        XCTAssertNotEqual(newSession, sessionReader._currentSessionContext?.session)
+        XCTAssertNotEqual(
+            newSession,
+            sessionReader._currentSessionContext?.session
+        )
 
         sessionReader.updateCachedCurrentSessionSync(
             to: newSession
         )
 
-        XCTAssertEqual(newSession, sessionReader._currentSessionContext?.session)
+        XCTAssertEqual(
+            newSession,
+            sessionReader._currentSessionContext?.session
+        )
     }
 
     func testDeletingSessionRemovesSessionDirectory() async throws {
@@ -332,10 +342,16 @@ final class SessionReaderTests: MockedParraTestCase {
         XCTAssertFalse(try fileManager.safeDirectoryExists(at: sessionDir))
 
         let markedDir = "_\(sessionDir.lastPathComponent)"
-        let newSessionDir = sessionDir.deletingLastPathComponent().appendFilename(markedDir)
+        let newSessionDir = sessionDir.deletingLastPathComponent()
+            .appendFilename(markedDir)
 
         XCTAssertTrue(try fileManager.safeDirectoryExists(at: newSessionDir))
     }
+
+    // MARK: Private
+
+    private let fileManager = FileManager.default
+    private var sessionReader: SessionReader!
 
     @discardableResult
     private func createSessionContext(
@@ -410,7 +426,6 @@ final class SessionReaderTests: MockedParraTestCase {
 
         try handle.write(contentsOf: data)
         try handle.synchronize()
-
     }
 
     private func createSessionEvents(
@@ -418,17 +433,17 @@ final class SessionReaderTests: MockedParraTestCase {
     ) throws {
         let events = [
             ParraSessionEvent(
-                createdAt: Date().addingTimeInterval(-10000.0),
+                createdAt: Date().addingTimeInterval(-10_000.0),
                 name: "first event",
                 metadata: [:]
             ),
             ParraSessionEvent(
-                createdAt: Date().addingTimeInterval(-8000.0),
+                createdAt: Date().addingTimeInterval(-8_000.0),
                 name: "second event",
                 metadata: [:]
             ),
             ParraSessionEvent(
-                createdAt: Date().addingTimeInterval(-4000.0),
+                createdAt: Date().addingTimeInterval(-4_000.0),
                 name: "third event",
                 metadata: [:]
             )

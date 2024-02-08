@@ -16,8 +16,8 @@
 //
 //
 
-import Foundation
 import Darwin
+import Foundation
 
 // TODO: Make another set of overloads that allow OSLogMessage/interpolation to be passed instead of string
 //       Should there be one more layer of wrapper around these to try to obscure all the tracking via default values?
@@ -56,7 +56,7 @@ public extension Logger {
     @inlinable
     func trace(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -111,7 +111,7 @@ public extension Logger {
     @inlinable
     func debug(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -166,7 +166,7 @@ public extension Logger {
     @inlinable
     func info(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -221,7 +221,7 @@ public extension Logger {
     @inlinable
     func warn(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -282,7 +282,7 @@ public extension Logger {
     @inlinable
     func error(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -349,7 +349,7 @@ public extension Logger {
     @inlinable
     func error(
         _ error: @autoclosure @escaping () -> ParraError,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -416,7 +416,7 @@ public extension Logger {
     @inlinable
     func error(
         _ error: @autoclosure @escaping () -> Error,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -486,7 +486,7 @@ public extension Logger {
     func error(
         _ message: @autoclosure @escaping () -> String,
         _ error: Error? = nil,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -554,7 +554,7 @@ public extension Logger {
     @inlinable
     func fatal(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -621,7 +621,7 @@ public extension Logger {
     @inlinable
     func fatal(
         _ error: @autoclosure @escaping () -> Error,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -691,7 +691,7 @@ public extension Logger {
     func fatal(
         _ message: @autoclosure @escaping () -> String,
         _ error: Error? = nil,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,

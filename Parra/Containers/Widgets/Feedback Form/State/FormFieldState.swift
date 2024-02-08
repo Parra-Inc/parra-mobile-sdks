@@ -8,9 +8,11 @@
 
 import Foundation
 
-internal enum FormFieldState {
+enum FormFieldState {
     case valid
     case invalid(String)
+
+    // MARK: Internal
 
     var errorMessage: String? {
         switch self {

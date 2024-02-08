@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal struct CurrentCardInfo {
+struct CurrentCardInfo {
     let cardItemView: ParraCardItemView
     let cardItem: ParraCardItem?
 }

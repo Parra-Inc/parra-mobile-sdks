@@ -6,14 +6,24 @@
 //  Copyright © 2023 Parra, Inc. All rights reserved.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
-fileprivate let logger = Logger(bypassEventCreation: true, category: "Parra Mock Base")
+private let logger = Logger(
+    bypassEventCreation: true,
+    category: "Parra Mock Base"
+)
 
 @MainActor
 class ParraBaseMock: XCTestCase {
-    
+    // MARK: Public
+
+    public var baseStorageDirectory: URL {
+        return directoryPath(for: testRun)
+    }
+
+    // MARK: Internal
+
     override func setUp() async throws {
         try await super.setUp()
 
@@ -27,15 +37,11 @@ class ParraBaseMock: XCTestCase {
         deleteBaseDirectory()
     }
 
-    public var baseStorageDirectory: URL {
-        return directoryPath(for: testRun)
-    }
-
-    internal func directoryName(for testRun: XCTestRun) -> String {
+    func directoryName(for testRun: XCTestRun) -> String {
         return "Testing \(testRun.test.name)"
     }
 
-    internal func directoryPath(for testRun: XCTestRun?) -> URL {
+    func directoryPath(for testRun: XCTestRun?) -> URL {
         let testDirectory: String = if let testRun {
             directoryName(for: testRun)
         } else {
@@ -46,23 +52,31 @@ class ParraBaseMock: XCTestCase {
             .appendDirectory(testDirectory)
     }
 
-    internal func createBaseDirectory() throws {
+    func createBaseDirectory() throws {
         deleteBaseDirectory()
         try FileManager.default.safeCreateDirectory(at: baseStorageDirectory)
     }
 
-    internal func deleteBaseDirectory() {
+    func deleteBaseDirectory() {
         let fileManager = FileManager.default
 
         do {
             if try fileManager.safeDirectoryExists(at: baseStorageDirectory) {
-                if fileManager.isDeletableFile(atPath: baseStorageDirectory.nonEncodedPath()) {
+                if fileManager
+                    .isDeletableFile(
+                        atPath: baseStorageDirectory
+                            .nonEncodedPath()
+                    )
+                {
                     try fileManager.removeItem(at: baseStorageDirectory)
                 } else {
-                    logger.warn("File was not deletable!!! \(baseStorageDirectory.nonEncodedPath())")
+                    logger
+                        .warn(
+                            "File was not deletable!!! \(baseStorageDirectory.nonEncodedPath())"
+                        )
                 }
             }
-        } catch let error {
+        } catch {
             logger.error("Error removing base storage directory", error)
         }
     }

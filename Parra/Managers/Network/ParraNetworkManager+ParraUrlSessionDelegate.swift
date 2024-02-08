@@ -25,21 +25,23 @@ extension ParraNetworkManager: ParraUrlSessionDelegate {
                     "unit": "seconds"
                 ],
                 "transactionMetrics": metrics.transactionMetrics.map { tx in
-                    var metrics: [String : Any] = [
-                        "isCellular" : tx.isCellular,
-                        "isExpensive" : tx.isExpensive,
-                        "isConstrained" : tx.isConstrained,
-                        "isProxyConnection" : tx.isProxyConnection,
-                        "isReusedConnection" : tx.isReusedConnection,
-                        "isMultipath" : tx.isMultipath
+                    var metrics: [String: Any] = [
+                        "isCellular": tx.isCellular,
+                        "isExpensive": tx.isExpensive,
+                        "isConstrained": tx.isConstrained,
+                        "isProxyConnection": tx.isProxyConnection,
+                        "isReusedConnection": tx.isReusedConnection,
+                        "isMultipath": tx.isMultipath
                     ]
 
                     if let fetchStartDate = tx.fetchStartDate {
-                        metrics["fetchStartDate"] = fetchStartDate.timeIntervalSince1970
+                        metrics["fetchStartDate"] = fetchStartDate
+                            .timeIntervalSince1970
                     }
 
                     if let responseEndDate = tx.responseEndDate {
-                        metrics["responseEndDate"] = responseEndDate.timeIntervalSince1970
+                        metrics["responseEndDate"] = responseEndDate
+                            .timeIntervalSince1970
                     }
 
                     if let networkProtocolName = tx.networkProtocolName {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum ParraSessionEventSyncPriority: Codable {
+enum ParraSessionEventSyncPriority: Codable {
     case low
     case high
     case critical

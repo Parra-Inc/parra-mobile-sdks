@@ -7,13 +7,13 @@
 
 import Foundation
 
-internal protocol ParraModule: Syncable {
+protocol ParraModule: Syncable {
     static var name: String { get }
 
     func didReceiveSessionResponse(sessionResponse: ParraSessionsResponse)
 }
 
-internal extension ParraModule {
+extension ParraModule {
     dynamic static func bundle() -> Bundle {
         if let `class` = self as? AnyClass {
             return Bundle(for: `class`)
@@ -21,13 +21,15 @@ internal extension ParraModule {
 
         return .main
     }
-    
+
     dynamic static func errorDomain() -> String {
         return "com.parra.error"
     }
-    
+
     dynamic static func libraryVersion() -> String {
-        return bundle().infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
+        return bundle()
+            .infoDictionary?["CFBundleShortVersionString"] as? String ??
+            "unknown"
     }
 
     static func eventPrefix() -> String {

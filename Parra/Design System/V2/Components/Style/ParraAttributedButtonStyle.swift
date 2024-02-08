@@ -1,5 +1,5 @@
 //
-//  StatefulButtonStyle.swift
+//  ParraAttributedButtonStyle.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/31/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
+struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
     let config: ButtonConfig
     let content: ButtonContent
     let attributes: ButtonAttributes

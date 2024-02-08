@@ -35,12 +35,17 @@ import Foundation
  let encoder = JSONEncoder()
  let json = try! encoder.encode(dictionary)
  */
-@frozen public struct AnyEncodable: Encodable {
-    public let value: Any
+@frozen
+public struct AnyEncodable: Encodable {
+    // MARK: Lifecycle
 
-    public init<T>(_ value: T?) {
+    public init(_ value: (some Any)?) {
         self.value = value ?? ()
     }
+
+    // MARK: Public
+
+    public let value: Any
 }
 
 @usableFromInline
@@ -48,6 +53,8 @@ protocol _AnyEncodable {
     var value: Any { get }
     init<T>(_ value: T?)
 }
+
+// MARK: - AnyEncodable + _AnyEncodable
 
 extension AnyEncodable: _AnyEncodable {}
 
@@ -58,10 +65,10 @@ extension _AnyEncodable {
         var container = encoder.singleValueContainer()
 
         switch value {
-#if canImport(Foundation)
+        #if canImport(Foundation)
         case is NSNull:
             try container.encodeNil()
-#endif
+        #endif
         case is Void:
             try container.encodeNil()
         case let bool as Bool:
@@ -92,29 +99,35 @@ extension _AnyEncodable {
             try container.encode(double)
         case let string as String:
             try container.encode(string)
-#if canImport(Foundation)
+        #if canImport(Foundation)
         case let number as NSNumber:
             try encode(nsnumber: number, into: &container)
         case let date as Date:
             try container.encode(date)
         case let url as URL:
             try container.encode(url)
-#endif
+        #endif
         case let array as [Any?]:
             try container.encode(array.map { AnyEncodable($0) })
-        case let dictionary as [String : Any?]:
+        case let dictionary as [String: Any?]:
             try container.encode(dictionary.mapValues { AnyEncodable($0) })
         case let encodable as Encodable:
             try encodable.encode(to: encoder)
         default:
-            let context = EncodingError.Context(codingPath: container.codingPath, debugDescription: "AnyEncodable value cannot be encoded")
+            let context = EncodingError.Context(
+                codingPath: container.codingPath,
+                debugDescription: "AnyEncodable value cannot be encoded"
+            )
             throw EncodingError.invalidValue(value, context)
         }
     }
 
-#if canImport(Foundation)
-    private func encode(nsnumber: NSNumber, into container: inout SingleValueEncodingContainer) throws {
-        switch Character(Unicode.Scalar(UInt8(nsnumber.objCType.pointee)))  {
+    #if canImport(Foundation)
+    private func encode(
+        nsnumber: NSNumber,
+        into container: inout SingleValueEncodingContainer
+    ) throws {
+        switch Character(Unicode.Scalar(UInt8(nsnumber.objCType.pointee))) {
         case "B":
             try container.encode(nsnumber.boolValue)
         case "c":
@@ -138,55 +151,65 @@ extension _AnyEncodable {
         case "d":
             try container.encode(nsnumber.doubleValue)
         default:
-            let context = EncodingError.Context(codingPath: container.codingPath, debugDescription: "NSNumber cannot be encoded because its type is not handled")
+            let context = EncodingError.Context(
+                codingPath: container.codingPath,
+                debugDescription: "NSNumber cannot be encoded because its type is not handled"
+            )
             throw EncodingError.invalidValue(nsnumber, context)
         }
     }
-#endif
+    #endif
 }
+
+// MARK: - AnyEncodable + Equatable
 
 extension AnyEncodable: Equatable {
     public static func == (lhs: AnyEncodable, rhs: AnyEncodable) -> Bool {
         switch (lhs.value, rhs.value) {
         case is (Void, Void):
             return true
-        case let (lhs as Bool, rhs as Bool):
+        case (let lhs as Bool, let rhs as Bool):
             return lhs == rhs
-        case let (lhs as Int, rhs as Int):
+        case (let lhs as Int, let rhs as Int):
             return lhs == rhs
-        case let (lhs as Int8, rhs as Int8):
+        case (let lhs as Int8, let rhs as Int8):
             return lhs == rhs
-        case let (lhs as Int16, rhs as Int16):
+        case (let lhs as Int16, let rhs as Int16):
             return lhs == rhs
-        case let (lhs as Int32, rhs as Int32):
+        case (let lhs as Int32, let rhs as Int32):
             return lhs == rhs
-        case let (lhs as Int64, rhs as Int64):
+        case (let lhs as Int64, let rhs as Int64):
             return lhs == rhs
-        case let (lhs as UInt, rhs as UInt):
+        case (let lhs as UInt, let rhs as UInt):
             return lhs == rhs
-        case let (lhs as UInt8, rhs as UInt8):
+        case (let lhs as UInt8, let rhs as UInt8):
             return lhs == rhs
-        case let (lhs as UInt16, rhs as UInt16):
+        case (let lhs as UInt16, let rhs as UInt16):
             return lhs == rhs
-        case let (lhs as UInt32, rhs as UInt32):
+        case (let lhs as UInt32, let rhs as UInt32):
             return lhs == rhs
-        case let (lhs as UInt64, rhs as UInt64):
+        case (let lhs as UInt64, let rhs as UInt64):
             return lhs == rhs
-        case let (lhs as Float, rhs as Float):
+        case (let lhs as Float, let rhs as Float):
             return lhs == rhs
-        case let (lhs as Double, rhs as Double):
+        case (let lhs as Double, let rhs as Double):
             return lhs == rhs
-        case let (lhs as String, rhs as String):
+        case (let lhs as String, let rhs as String):
             return lhs == rhs
-        case let (lhs as [String : AnyEncodable], rhs as [String : AnyEncodable]):
+        case (
+            let lhs as [String: AnyEncodable],
+            let rhs as [String: AnyEncodable]
+        ):
             return lhs == rhs
-        case let (lhs as [AnyEncodable], rhs as [AnyEncodable]):
+        case (let lhs as [AnyEncodable], let rhs as [AnyEncodable]):
             return lhs == rhs
         default:
             return false
         }
     }
 }
+
+// MARK: - AnyEncodable + CustomStringConvertible
 
 extension AnyEncodable: CustomStringConvertible {
     public var description: String {
@@ -201,6 +224,8 @@ extension AnyEncodable: CustomStringConvertible {
     }
 }
 
+// MARK: - AnyEncodable + CustomDebugStringConvertible
+
 extension AnyEncodable: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch value {
@@ -212,13 +237,36 @@ extension AnyEncodable: CustomDebugStringConvertible {
     }
 }
 
+// MARK: - AnyEncodable + ExpressibleByNilLiteral
+
 extension AnyEncodable: ExpressibleByNilLiteral {}
+
+// MARK: - AnyEncodable + ExpressibleByBooleanLiteral
+
 extension AnyEncodable: ExpressibleByBooleanLiteral {}
+
+// MARK: - AnyEncodable + ExpressibleByIntegerLiteral
+
 extension AnyEncodable: ExpressibleByIntegerLiteral {}
+
+// MARK: - AnyEncodable + ExpressibleByFloatLiteral
+
 extension AnyEncodable: ExpressibleByFloatLiteral {}
+
+// MARK: - AnyEncodable + ExpressibleByStringLiteral
+
 extension AnyEncodable: ExpressibleByStringLiteral {}
+
+// MARK: - AnyEncodable + ExpressibleByStringInterpolation
+
 extension AnyEncodable: ExpressibleByStringInterpolation {}
+
+// MARK: - AnyEncodable + ExpressibleByArrayLiteral
+
 extension AnyEncodable: ExpressibleByArrayLiteral {}
+
+// MARK: - AnyEncodable + ExpressibleByDictionaryLiteral
+
 extension AnyEncodable: ExpressibleByDictionaryLiteral {}
 
 extension _AnyEncodable {
@@ -251,9 +299,14 @@ extension _AnyEncodable {
     }
 
     public init(dictionaryLiteral elements: (AnyHashable, Any)...) {
-        self.init([AnyHashable: Any](elements, uniquingKeysWith: { first, _ in first }))
+        self.init([AnyHashable: Any](
+            elements,
+            uniquingKeysWith: { first, _ in first }
+        ))
     }
 }
+
+// MARK: - AnyEncodable + Hashable
 
 extension AnyEncodable: Hashable {
     public func hash(into hasher: inout Hasher) {
@@ -286,7 +339,7 @@ extension AnyEncodable: Hashable {
             hasher.combine(value)
         case let value as String:
             hasher.combine(value)
-        case let value as [String : AnyEncodable]:
+        case let value as [String: AnyEncodable]:
             hasher.combine(value)
         case let value as [AnyEncodable]:
             hasher.combine(value)

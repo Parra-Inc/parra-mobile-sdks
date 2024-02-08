@@ -8,8 +8,10 @@
 
 import Foundation
 
-internal protocol URLSessionDataTaskType {
+protocol URLSessionDataTaskType {
     func resume()
 }
+
+// MARK: - URLSessionDataTask + URLSessionDataTaskType
 
 extension URLSessionDataTask: URLSessionDataTaskType {}

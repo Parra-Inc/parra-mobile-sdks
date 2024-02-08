@@ -5,6 +5,7 @@
 //
 
 import Foundation
+
 /**
  A type-erased `Codable` value.
 
@@ -18,56 +19,66 @@ import Foundation
  - SeeAlso: `AnyEncodable`
  - SeeAlso: `AnyDecodable`
  */
-@frozen public struct AnyCodable: Codable {
-    public let value: Any
+@frozen
+public struct AnyCodable: Codable {
+    // MARK: Lifecycle
 
-    public init<T>(_ value: T?) {
+    public init(_ value: (some Any)?) {
         self.value = value ?? ()
     }
+
+    // MARK: Public
+
+    public let value: Any
 }
 
+// MARK: _AnyEncodable, _AnyDecodable
+
 extension AnyCodable: _AnyEncodable, _AnyDecodable {}
+
+// MARK: Equatable
 
 extension AnyCodable: Equatable {
     public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {
         switch (lhs.value, rhs.value) {
         case is (Void, Void):
             return true
-        case let (lhs as Bool, rhs as Bool):
+        case (let lhs as Bool, let rhs as Bool):
             return lhs == rhs
-        case let (lhs as Int, rhs as Int):
+        case (let lhs as Int, let rhs as Int):
             return lhs == rhs
-        case let (lhs as Int8, rhs as Int8):
+        case (let lhs as Int8, let rhs as Int8):
             return lhs == rhs
-        case let (lhs as Int16, rhs as Int16):
+        case (let lhs as Int16, let rhs as Int16):
             return lhs == rhs
-        case let (lhs as Int32, rhs as Int32):
+        case (let lhs as Int32, let rhs as Int32):
             return lhs == rhs
-        case let (lhs as Int64, rhs as Int64):
+        case (let lhs as Int64, let rhs as Int64):
             return lhs == rhs
-        case let (lhs as UInt, rhs as UInt):
+        case (let lhs as UInt, let rhs as UInt):
             return lhs == rhs
-        case let (lhs as UInt8, rhs as UInt8):
+        case (let lhs as UInt8, let rhs as UInt8):
             return lhs == rhs
-        case let (lhs as UInt16, rhs as UInt16):
+        case (let lhs as UInt16, let rhs as UInt16):
             return lhs == rhs
-        case let (lhs as UInt32, rhs as UInt32):
+        case (let lhs as UInt32, let rhs as UInt32):
             return lhs == rhs
-        case let (lhs as UInt64, rhs as UInt64):
+        case (let lhs as UInt64, let rhs as UInt64):
             return lhs == rhs
-        case let (lhs as Float, rhs as Float):
+        case (let lhs as Float, let rhs as Float):
             return lhs == rhs
-        case let (lhs as Double, rhs as Double):
+        case (let lhs as Double, let rhs as Double):
             return lhs == rhs
-        case let (lhs as String, rhs as String):
+        case (let lhs as String, let rhs as String):
             return lhs == rhs
-        case let (lhs as [String : AnyCodable], rhs as [String : AnyCodable]):
+        case (let lhs as [String: AnyCodable], let rhs as [String: AnyCodable]):
             return lhs == rhs
-        case let (lhs as [AnyCodable], rhs as [AnyCodable]):
+        case (let lhs as [AnyCodable], let rhs as [AnyCodable]):
             return lhs == rhs
-        case let (lhs as [String : Any], rhs as [String : Any]):
-            return NSDictionary(dictionary: lhs) == NSDictionary(dictionary: rhs)
-        case let (lhs as [Any], rhs as [Any]):
+        case (let lhs as [String: Any], let rhs as [String: Any]):
+            return NSDictionary(dictionary: lhs) ==
+                NSDictionary(dictionary: rhs)
+        case (let lhs as [Any], let rhs as [Any]):
             return NSArray(array: lhs) == NSArray(array: rhs)
         case is (NSNull, NSNull):
             return true
@@ -76,6 +87,8 @@ extension AnyCodable: Equatable {
         }
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension AnyCodable: CustomStringConvertible {
     public var description: String {
@@ -90,6 +103,8 @@ extension AnyCodable: CustomStringConvertible {
     }
 }
 
+// MARK: CustomDebugStringConvertible
+
 extension AnyCodable: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch value {
@@ -101,15 +116,39 @@ extension AnyCodable: CustomDebugStringConvertible {
     }
 }
 
+// MARK: ExpressibleByNilLiteral
+
 extension AnyCodable: ExpressibleByNilLiteral {}
+
+// MARK: ExpressibleByBooleanLiteral
+
 extension AnyCodable: ExpressibleByBooleanLiteral {}
+
+// MARK: ExpressibleByIntegerLiteral
+
 extension AnyCodable: ExpressibleByIntegerLiteral {}
+
+// MARK: ExpressibleByFloatLiteral
+
 extension AnyCodable: ExpressibleByFloatLiteral {}
+
+// MARK: ExpressibleByStringLiteral
+
 extension AnyCodable: ExpressibleByStringLiteral {}
+
+// MARK: ExpressibleByStringInterpolation
+
 extension AnyCodable: ExpressibleByStringInterpolation {}
+
+// MARK: ExpressibleByArrayLiteral
+
 extension AnyCodable: ExpressibleByArrayLiteral {}
+
+// MARK: ExpressibleByDictionaryLiteral
+
 extension AnyCodable: ExpressibleByDictionaryLiteral {}
 
+// MARK: Hashable
 
 extension AnyCodable: Hashable {
     public func hash(into hasher: inout Hasher) {
@@ -142,7 +181,7 @@ extension AnyCodable: Hashable {
             hasher.combine(value)
         case let value as String:
             hasher.combine(value)
-        case let value as [String : AnyCodable]:
+        case let value as [String: AnyCodable]:
             hasher.combine(value)
         case let value as [AnyCodable]:
             hasher.combine(value)

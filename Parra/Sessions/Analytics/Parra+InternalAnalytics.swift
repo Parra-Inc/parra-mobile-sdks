@@ -8,12 +8,11 @@
 
 import Foundation
 
-internal extension Parra {
-
+extension Parra {
     @inlinable
     static func logEvent(
         _ event: ParraInternalEvent,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -68,7 +67,7 @@ internal extension Parra {
     @inlinable
     func logEvent(
         _ event: ParraInternalEvent,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,

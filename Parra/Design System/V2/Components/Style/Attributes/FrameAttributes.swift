@@ -8,16 +8,10 @@
 
 import SwiftUI
 
-internal struct FrameAttributes {
-    internal let minWidth: CGFloat?
-    internal let idealWidth: CGFloat?
-    internal let maxWidth: CGFloat?
-    internal let minHeight: CGFloat?
-    internal let idealHeight: CGFloat?
-    internal let maxHeight: CGFloat?
-    internal let alignment: Alignment
+struct FrameAttributes {
+    // MARK: Lifecycle
 
-    internal init(
+    init(
         minWidth: CGFloat? = nil,
         idealWidth: CGFloat? = nil,
         maxWidth: CGFloat? = nil,
@@ -34,4 +28,14 @@ internal struct FrameAttributes {
         self.maxHeight = maxHeight
         self.alignment = alignment
     }
+
+    // MARK: Internal
+
+    let minWidth: CGFloat?
+    let idealWidth: CGFloat?
+    let maxWidth: CGFloat?
+    let minHeight: CGFloat?
+    let idealHeight: CGFloat?
+    let maxHeight: CGFloat?
+    let alignment: Alignment
 }

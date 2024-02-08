@@ -9,14 +9,10 @@
 import Foundation
 
 /// Contains ``ParraEvent`` data suitable for storage within a session.
-internal struct ParraSessionEvent: Codable {
-    internal let createdAt: Date
-    internal let name: String
-    
-    // Stop thinking this can be renamed. There is a server-side validation on this field name.
-    internal let metadata: AnyCodable
+struct ParraSessionEvent: Codable {
+    // MARK: Lifecycle
 
-    internal init(
+    init(
         createdAt: Date,
         name: String,
         metadata: AnyCodable
@@ -26,11 +22,19 @@ internal struct ParraSessionEvent: Codable {
         self.metadata = metadata
     }
 
-    internal static func normalizedEventData(
+    // MARK: Internal
+
+    let createdAt: Date
+    let name: String
+
+    // Stop thinking this can be renamed. There is a server-side validation on this field name.
+    let metadata: AnyCodable
+
+    static func normalizedEventData(
         from wrappedEvent: ParraWrappedEvent
-    ) -> (name: String, extra: [String : Any]) {
+    ) -> (name: String, extra: [String: Any]) {
         let name: String
-        let combinedExtra: [String : Any]
+        let combinedExtra: [String: Any]
 
         switch wrappedEvent {
         case .event(let event, let extra):
@@ -69,11 +73,15 @@ internal struct ParraSessionEvent: Codable {
         return (name, combinedExtra)
     }
 
-    internal static func normalizedEventContextData(
+    static func normalizedEventContextData(
         from wrappedEvent: ParraWrappedEvent
-    ) -> (isClientGenerated: Bool, syncPriority: ParraSessionEventSyncPriority) {
-
-        guard case let .logEvent(event) = wrappedEvent else {
+    )
+        -> (
+            isClientGenerated: Bool,
+            syncPriority: ParraSessionEventSyncPriority
+        )
+    {
+        guard case .logEvent(let event) = wrappedEvent else {
             return (false, .low)
         }
 
@@ -86,7 +94,9 @@ internal struct ParraSessionEvent: Codable {
 
         let level = event.logData.level
 
-        let syncPriority: ParraSessionEventSyncPriority = if case .error = level {
+        let syncPriority: ParraSessionEventSyncPriority = if case .error =
+            level
+        {
             .high
         } else if case .fatal = level {
             .critical
@@ -97,7 +107,7 @@ internal struct ParraSessionEvent: Codable {
         return (isClientGenerated, syncPriority)
     }
 
-    internal static func sessionEventFromEventWrapper(
+    static func sessionEventFromEventWrapper(
         wrappedEvent: ParraWrappedEvent,
         callSiteContext: ParraLoggerCallSiteContext
     ) -> (
@@ -105,7 +115,10 @@ internal struct ParraSessionEvent: Codable {
         context: ParraSessionEventContext
     ) {
         let (name, combinedExtra) = normalizedEventData(from: wrappedEvent)
-        let (isClientGenerated, syncPriority) = normalizedEventContextData(from: wrappedEvent)
+        let (
+            isClientGenerated,
+            syncPriority
+        ) = normalizedEventContextData(from: wrappedEvent)
 
         return (
             event: ParraSessionEvent(
@@ -113,7 +126,7 @@ internal struct ParraSessionEvent: Codable {
                 name: StringManipulators.snakeCaseify(
                     text: name
                 ),
-                metadata: AnyCodable.init(combinedExtra)
+                metadata: AnyCodable(combinedExtra)
             ),
             context: ParraSessionEventContext(
                 isClientGenerated: isClientGenerated,
@@ -122,4 +135,3 @@ internal struct ParraSessionEvent: Codable {
         )
     }
 }
-

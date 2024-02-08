@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal protocol ButtonComponentType: View {
+protocol ButtonComponentType: View {
     var config: ButtonConfig { get }
     var content: ButtonContent { get }
     var style: ParraAttributedButtonStyle { get }

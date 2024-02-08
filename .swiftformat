@@ -26,11 +26,18 @@
 --enable linebreakAtEndOfFile
 --enable marktypes
 --enable numberFormatting
+--enable organizeDeclarations
+--enable preferForLoop
 --enable preferkeypath
 --enable redundantbackticks
+--enable redundantBreak
+--enable redundantClosure
 --enable redundantextensionacl
 --enable redundantfileprivate
+--enable redundantGet
+--enable redundantInternal
 --enable redundantlet
+--enable redundantLetError
 --enable redundantnilinit
 --enable redundantobjc
 --enable redundantparens
@@ -54,6 +61,7 @@
 --enable spaceinsideparens
 --enable trailingclosures
 --enable trailingCommas
+--enable todos
 --enable typesugar
 --enable wrapArguments
 --enable wrapAttributes
@@ -73,7 +81,7 @@
 ### MARK
 --marktypes never
 
- ### Wrap
+### Wrap
 --wraparguments before-first
 --wrapcollections before-first
 --wrapconditions preserve
@@ -93,10 +101,19 @@
 --elseposition same-line
 --guardelse same-line
 
+### Loops
+--anonymousforeach convert
+--onelineforeach convert
+
+### Declarations
+--markcategories true
+
+
 ### Others
 --commas inline
 --ifdef noindent
 --indent 4
+--indentstrings true
 --linebreaks lf ##default
 --maxwidth 80
 --patternlet inline
@@ -113,8 +130,5 @@
 ### SwiftFormat also removes from funcs, so let's let SwiftLint takes care of it.
 --disable redundantReturn
 
-### SwiftFormat also removes from end of scope, which is against our empty line guidelines.
---disable blankLinesAtEndOfScope
-
-### SwiftFormat also removes from start of scope, which is against our empty line guidelines.
---disable blankLinesAtStartOfScope
+### SwiftFormat hard wraps comments without bringing the contents of the next line up, which looks pretty bad.
+--disable wrapSingleLineComments

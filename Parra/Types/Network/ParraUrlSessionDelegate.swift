@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal protocol ParraUrlSessionDelegate: AnyObject {
+protocol ParraUrlSessionDelegate: AnyObject {
     func urlSession(
         _ session: URLSession,
         task: URLSessionTask,

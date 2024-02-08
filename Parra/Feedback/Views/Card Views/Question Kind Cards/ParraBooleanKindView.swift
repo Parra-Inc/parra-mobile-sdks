@@ -12,16 +12,8 @@ import UIKit
 // This is basically an exact copy of ParraChoiceKindView, but we're making the decision to
 // not try to make abstractions and share major elements between question kinds, since the UIs
 // for each will likely change.
-internal class ParraBooleanKindView: UIView, ParraQuestionKindView {
-    typealias DataType = BooleanQuestionBody
-    typealias AnswerType = SingleOptionAnswer
-
-    private let contentContainer = UIStackView(frame: .zero)
-    private var optionViewMap = [ParraBorderedButton: BooleanQuestionOption]()
-
-    private let question: Question
-    private let answerHandler: ParraAnswerHandler
-    private let bucketId: String
+class ParraBooleanKindView: UIView, ParraQuestionKindView {
+    // MARK: Lifecycle
 
     required init(
         bucketId: String,
@@ -77,19 +69,36 @@ internal class ParraBooleanKindView: UIView, ParraQuestionKindView {
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal func applyConfig(_ config: ParraCardViewConfig) {
+    // MARK: Internal
+
+    typealias DataType = BooleanQuestionBody
+    typealias AnswerType = SingleOptionAnswer
+
+    func applyConfig(_ config: ParraCardViewConfig) {
         for optionView in optionViewMap.keys {
             optionView.applyConfig(config)
         }
     }
 
-    private func generateOptions(for data: DataType,
-                                 config: ParraCardViewConfig,
-                                 currentState: AnswerType?) {
+    // MARK: Private
+
+    private let contentContainer = UIStackView(frame: .zero)
+    private var optionViewMap = [ParraBorderedButton: BooleanQuestionOption]()
+
+    private let question: Question
+    private let answerHandler: ParraAnswerHandler
+    private let bucketId: String
+
+    private func generateOptions(
+        for data: DataType,
+        config: ParraCardViewConfig,
+        currentState: AnswerType?
+    ) {
         optionViewMap.removeAll()
 
         for option in data.options {
@@ -107,15 +116,20 @@ internal class ParraBooleanKindView: UIView, ParraQuestionKindView {
     }
 }
 
+// MARK: ParraBorderedButtonDelegate
+
 extension ParraBooleanKindView: ParraBorderedButtonDelegate {
-    func buttonShouldSelect(button: ParraBorderedButton,
-                            optionId: String) -> Bool {
+    func buttonShouldSelect(
+        button: ParraBorderedButton,
+        optionId: String
+    ) -> Bool {
         return true
     }
 
-    func buttonDidSelect(button: ParraBorderedButton,
-                         optionId: String) {
-
+    func buttonDidSelect(
+        button: ParraBorderedButton,
+        optionId: String
+    ) {
         guard let option = optionViewMap[button], option.id == optionId else {
             return
         }
@@ -131,8 +145,10 @@ extension ParraBooleanKindView: ParraBorderedButtonDelegate {
         answerHandler.commitAnswers(for: bucketId, question: question)
     }
 
-    func buttonDidDeselect(button: ParraBorderedButton,
-                           optionId: String) {
+    func buttonDidDeselect(
+        button: ParraBorderedButton,
+        optionId: String
+    ) {
         answerHandler.update(answer: nil, for: bucketId)
 
         answerHandler.commitAnswers(for: bucketId, question: question)

@@ -7,12 +7,12 @@
 //
 
 import Foundation
-import XCTest
 @testable import Parra
+import XCTest
 
-internal extension XCTestCase {
-    func addJsonAttachment<T: Encodable>(
-        value: T,
+extension XCTestCase {
+    func addJsonAttachment(
+        value: some Encodable,
         name: String? = nil,
         lifetime: XCTAttachment.Lifetime = .deleteOnSuccess,
         userInfo: [AnyHashable: Any] = [:]

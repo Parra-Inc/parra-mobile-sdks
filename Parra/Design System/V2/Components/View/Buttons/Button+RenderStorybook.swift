@@ -8,10 +8,9 @@
 
 import SwiftUI
 
-internal func renderStorybook<T: ButtonComponentType>(
-    for componentType: T.Type
+func renderStorybook(
+    for componentType: (some ButtonComponentType).Type
 ) -> some View {
-
     return VStack {
         HStack {
             Spacer()
@@ -32,7 +31,6 @@ internal func renderStorybook<T: ButtonComponentType>(
         Divider()
 
         HStack(alignment: .top) {
-
             renderColumn(for: componentType, size: .small)
                 .frame(width: 70)
 
@@ -49,8 +47,8 @@ internal func renderStorybook<T: ButtonComponentType>(
     .padding()
 }
 
-private func renderButtonComponent<T: ButtonComponentType>(
-    type: T.Type,
+private func renderButtonComponent(
+    type: (some ButtonComponentType).Type,
     config: ButtonConfig,
     content: ButtonContent,
     theme: ParraTheme = .default
@@ -81,8 +79,8 @@ private func renderRowTitle(_ title: String) -> some View {
     .padding(.top)
 }
 
-private func renderColumn<T: ButtonComponentType>(
-    for componentType: T.Type,
+private func renderColumn(
+    for componentType: (some ButtonComponentType).Type,
     size: ButtonSize
 ) -> some View {
     let title = switch size {

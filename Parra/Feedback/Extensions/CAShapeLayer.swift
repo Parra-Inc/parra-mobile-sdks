@@ -1,5 +1,5 @@
 //
-//  CAShapeLayer+Extensions.swift
+//  CAShapeLayer.swift
 //  Parra Feedback
 //
 //  Created by Michael MacCallum on 12/29/21.
@@ -7,12 +7,12 @@
 
 import UIKit
 
-internal extension CAShapeLayer {
+extension CAShapeLayer {
     func animateStrokeEnd(from: CGFloat, to: CGFloat) {
-        self.strokeEnd = from
-        self.strokeEnd = to
+        strokeEnd = from
+        strokeEnd = to
     }
-    
+
     func animatePath(start: CGPath, end: CGPath) {
         removeAllAnimations()
         let animation = CABasicAnimation(keyPath: "path")

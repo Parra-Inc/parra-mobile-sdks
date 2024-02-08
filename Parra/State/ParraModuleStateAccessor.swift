@@ -8,6 +8,6 @@
 
 import Foundation
 
-internal protocol ParraModuleStateAccessor {
+protocol ParraModuleStateAccessor {
     var state: ParraState { get }
 }

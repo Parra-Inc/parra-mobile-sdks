@@ -6,29 +6,18 @@
 //  Copyright © 2023 Parra, Inc. All rights reserved.
 //
 
-import Foundation
 import Darwin
+import Foundation
 
-fileprivate let logger = Logger(bypassEventCreation: true, category: "SessionReader")
+private let logger = Logger(
+    bypassEventCreation: true,
+    category: "SessionReader"
+)
 
-internal class SessionReader {
-    /// The directory where sessions will be stored.
-    internal let basePath: URL
+class SessionReader {
+    // MARK: Lifecycle
 
-    private let sessionJsonDecoder: JSONDecoder
-    private let eventJsonDecoder: JSONDecoder
-    private let fileManager: FileManager
-
-    /// This should never be used directly outside this class. From the outside, a session can and never
-    /// should be nil. The idea is that session reads/writes will always happen on a serial queue, that
-    /// will automatically create the session if it does not exist and await the completion of this
-    /// operation. This is place where these checks will be made.
-    internal private(set) var _currentSessionContext: SessionStorageContext?
-
-    internal private(set) var _sessionHandle: FileHandle?
-    internal private(set) var _eventsHandle: FileHandle?
-
-    internal init(
+    init(
         basePath: URL,
         sessionJsonDecoder: JSONDecoder,
         eventJsonDecoder: JSONDecoder,
@@ -46,7 +35,7 @@ internal class SessionReader {
         do {
             try _sessionHandle?.close()
             try _eventsHandle?.close()
-        } catch let error {
+        } catch {
             logger.error(
                 "Error closing session/events file handles while closing session reader",
                 error
@@ -57,7 +46,42 @@ internal class SessionReader {
         _eventsHandle = nil
     }
 
-    internal func retreiveFileHandleForSessionSync(
+    // MARK: Internal
+
+    /// The directory where sessions will be stored.
+    let basePath: URL
+
+    /// This should never be used directly outside this class. From the outside, a session can and never
+    /// should be nil. The idea is that session reads/writes will always happen on a serial queue, that
+    /// will automatically create the session if it does not exist and await the completion of this
+    /// operation. This is place where these checks will be made.
+    private(set) var _currentSessionContext: SessionStorageContext?
+
+    private(set) var _sessionHandle: FileHandle?
+    private(set) var _eventsHandle: FileHandle?
+
+    static func sessionPaths(
+        in sessionDirectory: URL
+    ) -> (
+        sessionPath: URL,
+        eventsPath: URL
+    ) {
+        // Just for conveinence while debugging to be able to open these files in an editor.
+        #if DEBUG
+        let sessionFileName = "session.json"
+        let eventsFileName = "events.csv"
+        #else
+        let sessionFileName = "session"
+        let eventsFileName = "events"
+        #endif
+
+        return (
+            sessionPath: sessionDirectory.appendFilename(sessionFileName),
+            eventsPath: sessionDirectory.appendFilename(eventsFileName)
+        )
+    }
+
+    func retreiveFileHandleForSessionSync(
         with type: FileHandleType,
         from context: SessionStorageContext
     ) throws -> FileHandle {
@@ -101,7 +125,7 @@ internal class SessionReader {
         return newHandle
     }
 
-    internal func getAllSessionDirectories() throws -> [URL] {
+    func getAllSessionDirectories() throws -> [URL] {
         logger.trace("Getting all session directories")
 
         let directories = try fileManager.contentsOfDirectory(
@@ -111,12 +135,13 @@ internal class SessionReader {
         )
 
         return directories.filter { directory in
-            return directory.hasDirectoryPath 
-                && directory.pathExtension == ParraSession.Constant.packageExtension
+            return directory.hasDirectoryPath
+                && directory.pathExtension == ParraSession.Constant
+                .packageExtension
         }
     }
 
-    internal func generateSessionUploadsSync() throws -> ParraSessionUploadGenerator {
+    func generateSessionUploadsSync() throws -> ParraSessionUploadGenerator {
         logger.trace("Creating session upload generator")
 
         return try ParraSessionUploadGenerator(
@@ -127,7 +152,7 @@ internal class SessionReader {
         )
     }
 
-    internal func closeCurrentSessionSync() throws {
+    func closeCurrentSessionSync() throws {
         _currentSessionContext = nil
 
         try _sessionHandle?.close()
@@ -138,7 +163,7 @@ internal class SessionReader {
     }
 
     @discardableResult
-    internal func loadOrCreateSessionSync(
+    func loadOrCreateSessionSync(
         nextSessionId: String = UUID().uuidString
     ) throws -> SessionStorageContext {
         // 1. If session context exists in memory, return it.
@@ -176,7 +201,7 @@ internal class SessionReader {
                 // this shouldn't fail if there is no file at the eventsPath.
                 try fileManager.safeCreateFile(at: eventsPath)
             }
-        } catch let error {
+        } catch {
             existingSession = nil
 
             logger.error(error)
@@ -221,7 +246,7 @@ internal class SessionReader {
         return nextSessionContext
     }
 
-    internal func updateCachedCurrentSessionSync(
+    func updateCachedCurrentSessionSync(
         to newSession: ParraSession
     ) {
         _currentSessionContext?.updateSession(
@@ -229,7 +254,7 @@ internal class SessionReader {
         )
     }
 
-    internal func deleteSessionSync(with id: String) throws {
+    func deleteSessionSync(with id: String) throws {
         let sessionDir = sessionDirectory(
             for: id,
             in: basePath
@@ -238,7 +263,7 @@ internal class SessionReader {
         try fileManager.removeItem(at: sessionDir)
     }
 
-    internal func markSessionErrored(with id: String) throws {
+    func markSessionErrored(with id: String) throws {
         let currentSessionDirectory = sessionDirectory(
             for: id,
             in: basePath
@@ -255,6 +280,23 @@ internal class SessionReader {
         )
     }
 
+    func sessionDirectory(
+        for id: String,
+        in baseDirectory: URL
+    ) -> URL {
+        // TODO: Use FileWrapper to make it so we can actually open these as bundles.
+        // Note: Using a file wrapper may require changing the file enumerator to filter by isPackage
+        // instead of isDirectory.
+        return baseDirectory
+            .appendDirectory("\(id).\(ParraSession.Constant.packageExtension)")
+    }
+
+    // MARK: Private
+
+    private let sessionJsonDecoder: JSONDecoder
+    private let eventJsonDecoder: JSONDecoder
+    private let fileManager: FileManager
+
     // MARK: Private methods
 
     private func isHandleValid(handle: FileHandle) -> Bool {
@@ -262,36 +304,5 @@ internal class SessionReader {
 
         // Cheapest way to check if a descriptor is still valid, without attempting to read/write to it.
         return fcntl(descriptor, F_GETFL) != -1 || errno != EBADF
-    }
-
-    internal func sessionDirectory(
-        for id: String,
-        in baseDirectory: URL
-    ) -> URL {
-        // TODO: Use FileWrapper to make it so we can actually open these as bundles.
-        // Note: Using a file wrapper may require changing the file enumerator to filter by isPackage
-        // instead of isDirectory.
-        return baseDirectory.appendDirectory("\(id).\(ParraSession.Constant.packageExtension)")
-    }
-
-    internal static func sessionPaths(
-        in sessionDirectory: URL
-    ) -> (
-        sessionPath: URL,
-        eventsPath: URL
-    ) {
-        // Just for conveinence while debugging to be able to open these files in an editor.
-#if DEBUG
-        let sessionFileName = "session.json"
-        let eventsFileName = "events.csv"
-#else
-        let sessionFileName = "session"
-        let eventsFileName = "events"
-#endif
-
-        return (
-            sessionPath: sessionDirectory.appendFilename(sessionFileName),
-            eventsPath: sessionDirectory.appendFilename(eventsFileName)
-        )
     }
 }

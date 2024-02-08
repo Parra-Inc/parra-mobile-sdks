@@ -1,5 +1,5 @@
 //
-//  ParraEndpoint.swift
+//  ParraEndpoint+CaseIterable.swift
 //  ParraTests
 //
 //  Created by Mick MacCallum on 7/3/23.

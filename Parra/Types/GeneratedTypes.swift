@@ -1,5 +1,5 @@
 //
-//  Parra+GeneratedTypes.swift
+//  GeneratedTypes.swift
 //  Parra
 //
 //  Created by Michael MacCallum on 12/27/21.
@@ -8,9 +8,8 @@
 import Foundation
 
 public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
-    public let name: String
-    public let isTest: Bool
-    
+    // MARK: Lifecycle
+
     public init(
         name: String,
         isTest: Bool
@@ -19,20 +18,20 @@ public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
         self.isTest = isTest
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case name
         case isTest
     }
+
+    public let name: String
+    public let isTest: Bool
 }
 
 public struct Tenant: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let name: String
-    public let isTest: Bool
-    
+    // MARK: Lifecycle
+
     public init(
         id: String,
         createdAt: String,
@@ -49,6 +48,8 @@ public struct Tenant: Codable, Equatable, Hashable, Identifiable {
         self.isTest = isTest
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -57,21 +58,24 @@ public struct Tenant: Codable, Equatable, Hashable, Identifiable {
         case name
         case isTest
     }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let name: String
+    public let isTest: Bool
 }
 
 public struct TenantCollectionResponse: Codable, Equatable, Hashable {
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: Array<Tenant>
-    
+    // MARK: Lifecycle
+
     public init(
         page: Int,
         pageCount: Int,
         pageSize: Int,
         totalCount: Int,
-        data: Array<Tenant>
+        data: [Tenant]
     ) {
         self.page = page
         self.pageCount = pageCount
@@ -80,6 +84,8 @@ public struct TenantCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -87,12 +93,17 @@ public struct TenantCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [Tenant]
 }
 
 public struct CreateApiKeyRequestBody: Codable, Equatable, Hashable {
-    public let name: String
-    public let description: String?
-    
+    // MARK: Lifecycle
+
     public init(
         name: String,
         description: String?
@@ -100,17 +111,16 @@ public struct CreateApiKeyRequestBody: Codable, Equatable, Hashable {
         self.name = name
         self.description = description
     }
+
+    // MARK: Public
+
+    public let name: String
+    public let description: String?
 }
 
 public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let name: String
-    public let description: String?
-    public let tenantId: String
-    
+    // MARK: Lifecycle
+
     public init(
         id: String,
         createdAt: String,
@@ -129,6 +139,8 @@ public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
         self.tenantId = tenantId
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -138,9 +150,7 @@ public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
         case description
         case tenantId
     }
-}
 
-public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable, Identifiable {
     public let id: String
     public let createdAt: String
     public let updatedAt: String
@@ -148,8 +158,13 @@ public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable, Identifiab
     public let name: String
     public let description: String?
     public let tenantId: String
-    public let secret: String
-    
+}
+
+public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: Lifecycle
+
     public init(
         id: String,
         createdAt: String,
@@ -170,6 +185,8 @@ public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable, Identifiab
         self.secret = secret
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -180,21 +197,26 @@ public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable, Identifiab
         case tenantId
         case secret
     }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let name: String
+    public let description: String?
+    public let tenantId: String
+    public let secret: String
 }
 
 public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: Array<ApiKey>
-    
+    // MARK: Lifecycle
+
     public init(
         page: Int,
         pageCount: Int,
         pageSize: Int,
         totalCount: Int,
-        data: Array<ApiKey>
+        data: [ApiKey]
     ) {
         self.page = page
         self.pageCount = pageCount
@@ -203,6 +225,8 @@ public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -210,16 +234,16 @@ public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [ApiKey]
 }
 
 public struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let title: String
-    public let description: String?
-    public let data: FeedbackFormData
+    // MARK: Lifecycle
 
     public init(
         id: String,
@@ -238,6 +262,8 @@ public struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
         self.description = description
         self.data = data
     }
+
+    // MARK: Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -248,14 +274,20 @@ public struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
         case description
         case data
     }
-}
 
-public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
     public let id: String
     public let createdAt: String
     public let updatedAt: String
     public let deletedAt: String?
+    public let title: String
+    public let description: String?
     public let data: FeedbackFormData
+}
+
+public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: Lifecycle
 
     public init(
         id: String,
@@ -271,6 +303,8 @@ public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable, Identifia
         self.data = data
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -278,40 +312,41 @@ public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable, Identifia
         case deletedAt
         case data
     }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let data: FeedbackFormData
 }
 
 public struct FeedbackFormData: Codable, Equatable, Hashable {
-    public let title: String
-    public let description: String?
-    public let fields: Array<FeedbackFormField>
+    // MARK: Lifecycle
 
     public init(
         title: String,
         description: String?,
-        fields: Array<FeedbackFormField>
+        fields: [FeedbackFormField]
     ) {
         self.title = title
         self.description = description
         self.fields = fields
     }
+
+    // MARK: Public
+
+    public let title: String
+    public let description: String?
+    public let fields: [FeedbackFormField]
 }
 
 public enum FeedbackFormFieldType: String, Codable {
-    case text = "text"
-    case select = "select"
+    case text
+    case select
 }
 
 public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
-    public var id: String {
-        return name
-    }
-
-    public let name: String
-    public let title: String?
-    public let helperText: String?
-    public let type: FeedbackFormFieldType
-    public let required: Bool?
-    public let data: FeedbackFormFieldData
+    // MARK: Lifecycle
 
     public init(
         name: String,
@@ -329,6 +364,36 @@ public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
         self.data = data
     }
 
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.helperText = try container.decodeIfPresent(
+            String.self,
+            forKey: .helperText
+        )
+        self.type = try container.decode(
+            FeedbackFormFieldType.self,
+            forKey: .type
+        )
+        self.required = try container.decode(Bool.self, forKey: .required)
+        switch type {
+        case .text:
+            self.data = try .feedbackFormTextFieldData(
+                container.decode(FeedbackFormTextFieldData.self, forKey: .data)
+            )
+        case .select:
+            self.data = try .feedbackFormSelectFieldData(
+                container.decode(
+                    FeedbackFormSelectFieldData.self,
+                    forKey: .data
+                )
+            )
+        }
+    }
+
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case name
         case title
@@ -338,23 +403,15 @@ public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
         case data
     }
 
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.decode(String.self, forKey: .name)
-        self.title = try container.decode(String.self, forKey: .title)
-        self.helperText = try container.decodeIfPresent(String.self, forKey: .helperText)
-        self.type = try container.decode(FeedbackFormFieldType.self, forKey: .type)
-        self.required = try container.decode(Bool.self, forKey: .required)
-        switch type {
-        case .text:
-            self.data = .feedbackFormTextFieldData(
-                try container.decode(FeedbackFormTextFieldData.self, forKey: .data)
-            )
-        case .select:
-            self.data = .feedbackFormSelectFieldData(
-                try container.decode(FeedbackFormSelectFieldData.self, forKey: .data)
-            )
-        }
+    public let name: String
+    public let title: String?
+    public let helperText: String?
+    public let type: FeedbackFormFieldType
+    public let required: Bool?
+    public let data: FeedbackFormFieldData
+
+    public var id: String {
+        return name
     }
 }
 
@@ -365,13 +422,10 @@ public enum FeedbackFormFieldData: Codable, Equatable, Hashable {
 
 public protocol FeedbackFormFieldDataType {}
 
-public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable, FeedbackFormFieldDataType {
-    public let placeholder: String?
-    public let lines: Int?
-    public let maxLines: Int?
-    public let minCharacters: Int?
-    public let maxCharacters: Int?
-    public let maxHeight: Int?
+public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable,
+    FeedbackFormFieldDataType
+{
+    // MARK: Lifecycle
 
     public init(
         placeholder: String?,
@@ -390,6 +444,8 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable, FeedbackF
         self.maxHeight = maxHeight
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case placeholder
         case lines
@@ -398,30 +454,39 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable, FeedbackF
         case maxCharacters
         case maxHeight
     }
+
+    public let placeholder: String?
+    public let lines: Int?
+    public let maxLines: Int?
+    public let minCharacters: Int?
+    public let maxCharacters: Int?
+    public let maxHeight: Int?
 }
 
-public struct FeedbackFormSelectFieldData: Codable, Equatable, Hashable, FeedbackFormFieldDataType {
-    /// If provided, the title for an empty option.
-    public let placeholder: String?
-    public let options: Array<FeedbackFormSelectFieldOption>
+public struct FeedbackFormSelectFieldData: Codable, Equatable, Hashable,
+    FeedbackFormFieldDataType
+{
+    // MARK: Lifecycle
 
     public init(
         placeholder: String?,
-        options: Array<FeedbackFormSelectFieldOption>
+        options: [FeedbackFormSelectFieldOption]
     ) {
         self.placeholder = placeholder
         self.options = options
     }
+
+    // MARK: Public
+
+    /// If provided, the title for an empty option.
+    public let placeholder: String?
+    public let options: [FeedbackFormSelectFieldOption]
 }
 
-public struct FeedbackFormSelectFieldOption: Codable, Equatable, Hashable, Identifiable {
-    public var id: String {
-        value
-    }
-
-    public let title: String
-    public let value: String
-    public let isOther: Bool?
+public struct FeedbackFormSelectFieldOption: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: Lifecycle
 
     public init(
         title: String,
@@ -433,20 +498,25 @@ public struct FeedbackFormSelectFieldOption: Codable, Equatable, Hashable, Ident
         self.isOther = isOther
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case title
         case value
         case isOther
     }
+
+    public let title: String
+    public let value: String
+    public let isOther: Bool?
+
+    public var id: String {
+        value
+    }
 }
 
 public struct FeedbackFormStub: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let title: String
-    public let description: String?
+    // MARK: Lifecycle
 
     public init(
         id: String,
@@ -464,6 +534,8 @@ public struct FeedbackFormStub: Codable, Equatable, Hashable, Identifiable {
         self.description = description
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -472,21 +544,24 @@ public struct FeedbackFormStub: Codable, Equatable, Hashable, Identifiable {
         case title
         case description
     }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let title: String
+    public let description: String?
 }
 
 public struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: Array<FeedbackFormStub>
+    // MARK: Lifecycle
 
     public init(
         page: Int,
         pageCount: Int,
         pageSize: Int,
         totalCount: Int,
-        data: Array<FeedbackFormStub>
+        data: [FeedbackFormStub]
     ) {
         self.page = page
         self.pageCount = pageCount
@@ -495,6 +570,8 @@ public struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -502,13 +579,16 @@ public struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [FeedbackFormStub]
 }
 
 public struct FeedbackMetrics: Codable, Equatable, Hashable {
-    public let userCount: Int
-    public let answerCount: Int
-    public let questionCount: Int
-    public let questionsCreatedThisMonth: Int
+    // MARK: Lifecycle
 
     public init(
         userCount: Int,
@@ -522,32 +602,29 @@ public struct FeedbackMetrics: Codable, Equatable, Hashable {
         self.questionsCreatedThisMonth = questionsCreatedThisMonth
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case userCount
         case answerCount
         case questionCount
         case questionsCreatedThisMonth
     }
+
+    public let userCount: Int
+    public let answerCount: Int
+    public let questionCount: Int
+    public let questionsCreatedThisMonth: Int
 }
 
-
 public struct AnswerData: Codable, Equatable, Hashable {
-    
     public init(
-    ) {
-    }
+    ) {}
 }
 
 public struct Answer: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let questionId: String
-    public let userId: String
-    public let tenantId: String
-    public let data: AnswerData
-    
+    // MARK: Lifecycle
+
     public init(
         id: String,
         createdAt: String,
@@ -568,6 +645,8 @@ public struct Answer: Codable, Equatable, Hashable, Identifiable {
         self.data = data
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -578,16 +657,29 @@ public struct Answer: Codable, Equatable, Hashable, Identifiable {
         case tenantId
         case data
     }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let questionId: String
+    public let userId: String
+    public let tenantId: String
+    public let data: AnswerData
 }
 
 public struct AnswerQuestionBody: Codable, Equatable, Hashable {
-    public let data: AnswerData
-    
+    // MARK: Lifecycle
+
     public init(
         data: AnswerData
     ) {
         self.data = data
     }
+
+    // MARK: Public
+
+    public let data: AnswerData
 }
 
 public enum CardItemData: Codable, Equatable, Hashable {
@@ -595,35 +687,17 @@ public enum CardItemData: Codable, Equatable, Hashable {
 }
 
 public enum CardItemDisplayType: String, Codable {
-    case inline = "inline"
-    case popup = "popup"
-    case drawer = "drawer"
+    case inline
+    case popup
+    case drawer
 }
 
 public enum CardItemType: String, Codable {
-    case question = "question"
+    case question
 }
 
 public struct ParraCardItem: Codable, Equatable, Hashable {
-    public let id: String
-    public let campaignId: String
-    public let campaignActionId: String
-    public let questionId: String?
-    public let type: CardItemType
-    public let displayType: CardItemDisplayType?
-    public let version: String
-    public let data: CardItemData
-
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case campaignId
-        case campaignActionId
-        case questionId
-        case type
-        case displayType
-        case version
-        case data
-    }
+    // MARK: Lifecycle
 
     public init(
         id: String,
@@ -644,22 +718,53 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
         self.version = version
         self.data = data
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
         self.campaignId = try container.decode(String.self, forKey: .campaignId)
-        self.campaignActionId = try container.decode(String.self, forKey: .campaignActionId)
+        self.campaignActionId = try container.decode(
+            String.self,
+            forKey: .campaignActionId
+        )
         self.questionId = try container.decode(String.self, forKey: .questionId)
         self.type = try container.decode(CardItemType.self, forKey: .type)
-        self.displayType = try container.decode(CardItemDisplayType.self, forKey: .displayType)
+        self.displayType = try container.decode(
+            CardItemDisplayType.self,
+            forKey: .displayType
+        )
         self.version = try container.decode(String.self, forKey: .version)
         switch type {
         case .question:
-            self.data = .question(try container.decode(Question.self, forKey: .data))
+            self.data = try .question(container.decode(
+                Question.self,
+                forKey: .data
+            ))
         }
     }
-    
+
+    // MARK: Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case campaignId
+        case campaignActionId
+        case questionId
+        case type
+        case displayType
+        case version
+        case data
+    }
+
+    public let id: String
+    public let campaignId: String
+    public let campaignActionId: String
+    public let questionId: String?
+    public let type: CardItemType
+    public let displayType: CardItemDisplayType?
+    public let version: String
+    public let data: CardItemData
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -670,47 +775,58 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
         try container.encode(type, forKey: .type)
         try container.encode(displayType, forKey: .displayType)
         try container.encode(version, forKey: .version)
-        
+
         switch data {
         case .question(let question):
             try container.encode(question, forKey: .data)
         }
-    }    
+    }
 }
 
 public struct CardsResponse: Codable, Equatable, Hashable {
-    public let items: Array<ParraCardItem>
-    
-    internal init(
-        items: Array<ParraCardItem>
+    // MARK: Lifecycle
+
+    init(
+        items: [ParraCardItem]
     ) {
         self.items = items
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let unfilteredItems = try container.decode([FailableDecodable<ParraCardItem>].self, forKey: .items)
+        let unfilteredItems = try container.decode(
+            [FailableDecodable<ParraCardItem>].self,
+            forKey: .items
+        )
 
         self.items = unfilteredItems.compactMap { item in
             switch item.result {
             case .success(let base):
                 return base
             case .failure(let error):
-                let debugError = (error as CustomDebugStringConvertible).debugDescription
-                Logger.warn("CardsResponse error parsing card", [NSLocalizedDescriptionKey: debugError])
+                let debugError = (error as CustomDebugStringConvertible)
+                    .debugDescription
+                Logger.warn(
+                    "CardsResponse error parsing card",
+                    [NSLocalizedDescriptionKey: debugError]
+                )
                 return nil
             }
         }
     }
+
+    // MARK: Public
+
+    public let items: [ParraCardItem]
 }
 
 public enum QuestionKind: String, Codable {
-    case radio = "radio"
-    case checkbox = "checkbox"
-    case rating = "rating"
-    case star = "star"
-    case boolean = "boolean"
-    case image = "image"
+    case radio
+    case checkbox
+    case rating
+    case star
+    case boolean
+    case image
     case textShort = "short-text"
     case textLong = "long-text"
 }
@@ -720,11 +836,10 @@ public struct Asset: Codable, Equatable, Hashable, Identifiable {
     public let url: URL
 }
 
-public struct CheckboxQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    public let title: String
-    public let value: String
-    public let isOther: Bool?
-    public let id: String
+public struct CheckboxQuestionOption: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: Lifecycle
 
     public init(
         title: String,
@@ -738,29 +853,37 @@ public struct CheckboxQuestionOption: Codable, Equatable, Hashable, Identifiable
         self.id = id
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case title
         case value
         case isOther
         case id
     }
+
+    public let title: String
+    public let value: String
+    public let isOther: Bool?
+    public let id: String
 }
 
 public struct CheckboxQuestionBody: Codable, Equatable, Hashable {
-    public let options: Array<CheckboxQuestionOption>
+    // MARK: Lifecycle
 
     public init(
-        options: Array<CheckboxQuestionOption>
+        options: [CheckboxQuestionOption]
     ) {
         self.options = options
     }
+
+    // MARK: Public
+
+    public let options: [CheckboxQuestionOption]
 }
 
 public struct ImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    public let title: String?
-    public let value: String
-    public let id: String
-    public let asset: Asset
+    // MARK: Lifecycle
 
     public init(
         title: String?,
@@ -774,6 +897,35 @@ public struct ImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
         self.asset = asset
     }
 
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
+        self.value = try container.decode(String.self, forKey: .value)
+        self.id = try container.decode(String.self, forKey: .id)
+
+        let imageId = try container.decodeIfPresent(
+            String.self,
+            forKey: .imageAssetId
+        )
+        let imageUrlString = try container.decodeIfPresent(
+            String.self,
+            forKey: .imageAssetUrl
+        )
+
+        if let imageId,
+           let imageUrlString,
+           let imageUrl = URL(string: imageUrlString)
+        {
+            self.asset = Asset(id: imageId, url: imageUrl)
+        } else {
+            throw ParraError
+                .jsonError("Failed to decode asset for image question option")
+        }
+    }
+
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case imageAssetId
         case title
@@ -782,25 +934,10 @@ public struct ImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
         case imageAssetUrl
     }
 
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        self.title = try container.decodeIfPresent(String.self, forKey: .title)
-        self.value = try container.decode(String.self, forKey: .value)
-        self.id = try container.decode(String.self, forKey: .id)
-
-        let imageId = try container.decodeIfPresent(String.self, forKey: .imageAssetId)
-        let imageUrlString = try container.decodeIfPresent(String.self, forKey: .imageAssetUrl)
-
-        if let imageId,
-           let imageUrlString = imageUrlString,
-           let imageUrl = URL(string: imageUrlString) {
-
-            self.asset = Asset(id: imageId, url: imageUrl)
-        } else {
-            throw ParraError.jsonError("Failed to decode asset for image question option")
-        }
-    }
+    public let title: String?
+    public let value: String
+    public let id: String
+    public let asset: Asset
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -814,21 +951,22 @@ public struct ImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct ImageQuestionBody: Codable, Equatable, Hashable {
-    public let options: Array<ImageQuestionOption>
+    // MARK: Lifecycle
 
     public init(
-        options: Array<ImageQuestionOption>
+        options: [ImageQuestionOption]
     ) {
         self.options = options
     }
+
+    // MARK: Public
+
+    public let options: [ImageQuestionOption]
 }
 
 public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    public let title: String?
-    public let value: String
-    public let isOther: Bool?
-    public let id: String
-    
+    // MARK: Lifecycle
+
     public init(
         title: String?,
         value: String,
@@ -841,28 +979,37 @@ public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
         self.id = id
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case title
         case value
         case isOther
         case id
     }
+
+    public let title: String?
+    public let value: String
+    public let isOther: Bool?
+    public let id: String
 }
 
 public struct ChoiceQuestionBody: Codable, Equatable, Hashable {
-    public let options: Array<ChoiceQuestionOption>
-    
+    // MARK: Lifecycle
+
     public init(
-        options: Array<ChoiceQuestionOption>
+        options: [ChoiceQuestionOption]
     ) {
         self.options = options
     }
+
+    // MARK: Public
+
+    public let options: [ChoiceQuestionOption]
 }
 
 public struct ShortTextQuestionBody: Codable, Equatable, Hashable {
-    public let placeholder: String?
-    public let minLength: Int
-    public let maxLength: Int
+    // MARK: Lifecycle
 
     public init(
         placeholder: String?,
@@ -877,22 +1024,35 @@ public struct ShortTextQuestionBody: Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.placeholder = try container.decodeIfPresent(String.self, forKey: .placeholder)
-        self.minLength = try container.decodeIfPresent(Int.self, forKey: .minLength) ?? 1
-        self.maxLength = try container.decodeIfPresent(Int.self, forKey: .maxLength) ?? Int.max
+        self.placeholder = try container.decodeIfPresent(
+            String.self,
+            forKey: .placeholder
+        )
+        self.minLength = try container.decodeIfPresent(
+            Int.self,
+            forKey: .minLength
+        ) ?? 1
+        self.maxLength = try container.decodeIfPresent(
+            Int.self,
+            forKey: .maxLength
+        ) ?? Int.max
     }
+
+    // MARK: Public
 
     public enum CodingKeys: String, CodingKey {
         case placeholder
         case minLength
         case maxLength
     }
-}
 
-public struct LongTextQuestionBody: Codable, Equatable, Hashable {
     public let placeholder: String?
     public let minLength: Int
     public let maxLength: Int
+}
+
+public struct LongTextQuestionBody: Codable, Equatable, Hashable {
+    // MARK: Lifecycle
 
     public init(
         placeholder: String?,
@@ -907,22 +1067,37 @@ public struct LongTextQuestionBody: Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.placeholder = try container.decodeIfPresent(String.self, forKey: .placeholder)
-        self.minLength = try container.decodeIfPresent(Int.self, forKey: .minLength) ?? 1
-        self.maxLength = try container.decodeIfPresent(Int.self, forKey: .maxLength) ?? .max
+        self.placeholder = try container.decodeIfPresent(
+            String.self,
+            forKey: .placeholder
+        )
+        self.minLength = try container.decodeIfPresent(
+            Int.self,
+            forKey: .minLength
+        ) ?? 1
+        self.maxLength = try container.decodeIfPresent(
+            Int.self,
+            forKey: .maxLength
+        ) ?? .max
     }
+
+    // MARK: Public
 
     public enum CodingKeys: String, CodingKey {
         case placeholder
         case minLength
         case maxLength
     }
+
+    public let placeholder: String?
+    public let minLength: Int
+    public let maxLength: Int
 }
 
-public struct BooleanQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    public let title: String
-    public let value: String
-    public let id: String
+public struct BooleanQuestionOption: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: Lifecycle
 
     public init(
         title: String,
@@ -933,24 +1108,30 @@ public struct BooleanQuestionOption: Codable, Equatable, Hashable, Identifiable 
         self.value = value
         self.id = id
     }
+
+    // MARK: Public
+
+    public let title: String
+    public let value: String
+    public let id: String
 }
 
 public struct BooleanQuestionBody: Codable, Equatable, Hashable {
-    public let options: Array<BooleanQuestionOption>
+    // MARK: Lifecycle
 
     public init(
-        options: Array<BooleanQuestionOption>
+        options: [BooleanQuestionOption]
     ) {
         self.options = options
     }
+
+    // MARK: Public
+
+    public let options: [BooleanQuestionOption]
 }
 
-
 public struct StarQuestionBody: Codable, Equatable, Hashable {
-    public let starCount: Int
-    public let leadingLabel: String?
-    public let centerLabel: String?
-    public let trailingLabel: String?
+    // MARK: Lifecycle
 
     public init(
         starCount: Int,
@@ -968,16 +1149,30 @@ public struct StarQuestionBody: Codable, Equatable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.starCount = try container.decode(Int.self, forKey: .starCount)
-        self.leadingLabel = try container.decodeIfPresent(String.self, forKey: .leadingLabel)
-        self.centerLabel = try container.decodeIfPresent(String.self, forKey: .centerLabel)
-        self.trailingLabel = try container.decodeIfPresent(String.self, forKey: .trailingLabel)
+        self.leadingLabel = try container.decodeIfPresent(
+            String.self,
+            forKey: .leadingLabel
+        )
+        self.centerLabel = try container.decodeIfPresent(
+            String.self,
+            forKey: .centerLabel
+        )
+        self.trailingLabel = try container.decodeIfPresent(
+            String.self,
+            forKey: .trailingLabel
+        )
     }
+
+    // MARK: Public
+
+    public let starCount: Int
+    public let leadingLabel: String?
+    public let centerLabel: String?
+    public let trailingLabel: String?
 }
 
 public struct RatingQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    public let title: String
-    public let value: Int
-    public let id: String
+    // MARK: Lifecycle
 
     public init(
         title: String,
@@ -988,16 +1183,19 @@ public struct RatingQuestionOption: Codable, Equatable, Hashable, Identifiable {
         self.value = value
         self.id = id
     }
+
+    // MARK: Public
+
+    public let title: String
+    public let value: Int
+    public let id: String
 }
 
 public struct RatingQuestionBody: Codable, Equatable, Hashable {
-    public let options: Array<RatingQuestionOption>
-    public let leadingLabel: String?
-    public let centerLabel: String?
-    public let trailingLabel: String?
+    // MARK: Lifecycle
 
     public init(
-        options: Array<RatingQuestionOption>,
+        options: [RatingQuestionOption],
         leadingLabel: String?,
         centerLabel: String?,
         trailingLabel: String?
@@ -1008,12 +1206,19 @@ public struct RatingQuestionBody: Codable, Equatable, Hashable {
         self.trailingLabel = trailingLabel
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case options
         case leadingLabel
         case centerLabel
         case trailingLabel
     }
+
+    public let options: [RatingQuestionOption]
+    public let leadingLabel: String?
+    public let centerLabel: String?
+    public let trailingLabel: String?
 }
 
 public enum QuestionData: Codable, Equatable, Hashable {
@@ -1028,20 +1233,8 @@ public enum QuestionData: Codable, Equatable, Hashable {
 }
 
 public struct Question: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let tenantId: String
-    public let title: String
-    public let subtitle: String?
-    public let kind: QuestionKind
-    public let data: QuestionData
-    public let active: Bool?
-    public let expiresAt: String?
-    public let answerQuota: Int?
-    public let answer: Answer?
-    
+    // MARK: Lifecycle
+
     public init(
         id: String,
         createdAt: String,
@@ -1072,6 +1265,82 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
         self.answer = answer
     }
 
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.createdAt = try container.decode(String.self, forKey: .createdAt)
+        self.updatedAt = try container.decode(String.self, forKey: .updatedAt)
+        self.deletedAt = try container.decodeIfPresent(
+            String.self,
+            forKey: .deletedAt
+        )
+        self.tenantId = try container.decode(String.self, forKey: .tenantId)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.subtitle = try container.decodeIfPresent(
+            String.self,
+            forKey: .subtitle
+        )
+        self.active = try container.decodeIfPresent(Bool.self, forKey: .active)
+        self.expiresAt = try container.decodeIfPresent(
+            String.self,
+            forKey: .expiresAt
+        )
+        self.answerQuota = try container.decodeIfPresent(
+            Int.self,
+            forKey: .answerQuota
+        )
+        self.answer = try container.decodeIfPresent(
+            Answer.self,
+            forKey: .answer
+        )
+        self.kind = try container.decode(QuestionKind.self, forKey: .kind)
+
+        switch kind {
+        case .checkbox:
+            self.data = try .checkboxQuestionBody(container.decode(
+                CheckboxQuestionBody.self,
+                forKey: .data
+            ))
+        case .image:
+            self.data = try .imageQuestionBody(container.decode(
+                ImageQuestionBody.self,
+                forKey: .data
+            ))
+        case .radio:
+            self.data = try .choiceQuestionBody(container.decode(
+                ChoiceQuestionBody.self,
+                forKey: .data
+            ))
+        case .star:
+            self.data = try .starQuestionBody(container.decode(
+                StarQuestionBody.self,
+                forKey: .data
+            ))
+        case .rating:
+            self.data = try .ratingQuestionBody(container.decode(
+                RatingQuestionBody.self,
+                forKey: .data
+            ))
+        case .textShort:
+            self.data = try .shortTextQuestionBody(container.decode(
+                ShortTextQuestionBody.self,
+                forKey: .data
+            ))
+        case .textLong:
+            self.data = try .longTextQuestionBody(container.decode(
+                LongTextQuestionBody.self,
+                forKey: .data
+            ))
+        case .boolean:
+            self.data = try .booleanQuestionBody(container.decode(
+                BooleanQuestionBody.self,
+                forKey: .data
+            ))
+        }
+    }
+
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -1088,45 +1357,24 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
         case answerQuota
         case answer
     }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(String.self, forKey: .id)
-        self.createdAt = try container.decode(String.self, forKey: .createdAt)
-        self.updatedAt = try container.decode(String.self, forKey: .updatedAt)
-        self.deletedAt = try container.decodeIfPresent(String.self, forKey: .deletedAt)
-        self.tenantId = try container.decode(String.self, forKey: .tenantId)
-        self.title = try container.decode(String.self, forKey: .title)
-        self.subtitle = try container.decodeIfPresent(String.self, forKey: .subtitle)
-        self.active = try container.decodeIfPresent(Bool.self, forKey: .active)
-        self.expiresAt = try container.decodeIfPresent(String.self, forKey: .expiresAt)
-        self.answerQuota = try container.decodeIfPresent(Int.self, forKey: .answerQuota)
-        self.answer = try container.decodeIfPresent(Answer.self, forKey: .answer)
-        self.kind = try container.decode(QuestionKind.self, forKey: .kind)
 
-        switch kind {
-        case .checkbox:
-            self.data = .checkboxQuestionBody(try container.decode(CheckboxQuestionBody.self, forKey: .data))
-        case .image:
-            self.data = .imageQuestionBody(try container.decode(ImageQuestionBody.self, forKey: .data))
-        case .radio:
-            self.data = .choiceQuestionBody(try container.decode(ChoiceQuestionBody.self, forKey: .data))
-        case .star:
-            self.data = .starQuestionBody(try container.decode(StarQuestionBody.self, forKey: .data))
-        case .rating:
-            self.data = .ratingQuestionBody(try container.decode(RatingQuestionBody.self, forKey: .data))
-        case .textShort:
-            self.data = .shortTextQuestionBody(try container.decode(ShortTextQuestionBody.self, forKey: .data))
-        case .textLong:
-            self.data = .longTextQuestionBody(try container.decode(LongTextQuestionBody.self, forKey: .data))
-        case .boolean:
-            self.data = .booleanQuestionBody(try container.decode(BooleanQuestionBody.self, forKey: .data))
-        }
-    }
-    
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let tenantId: String
+    public let title: String
+    public let subtitle: String?
+    public let kind: QuestionKind
+    public let data: QuestionData
+    public let active: Bool?
+    public let expiresAt: String?
+    public let answerQuota: Int?
+    public let answer: Answer?
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
+
         try container.encode(id, forKey: .id)
         try container.encode(createdAt, forKey: .createdAt)
         try container.encode(updatedAt, forKey: .updatedAt)
@@ -1139,7 +1387,7 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
         try container.encode(expiresAt, forKey: .expiresAt)
         try container.encode(answerQuota, forKey: .answerQuota)
         try container.encode(answer, forKey: .answer)
-        
+
         switch data {
         case .checkboxQuestionBody(let checkboxQuestionBody):
             try container.encode(checkboxQuestionBody, forKey: .data)
@@ -1162,18 +1410,14 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct QuestionCollectionResponse: Codable, Equatable, Hashable {
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: Array<Question>
-    
+    // MARK: Lifecycle
+
     public init(
         page: Int,
         pageCount: Int,
         pageSize: Int,
         totalCount: Int,
-        data: Array<Question>
+        data: [Question]
     ) {
         self.page = page
         self.pageCount = pageCount
@@ -1182,6 +1426,8 @@ public struct QuestionCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -1189,53 +1435,50 @@ public struct QuestionCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [Question]
 }
 
 public struct NotificationRecipient: Codable, Equatable, Hashable {
-    public let userId: String?
-    
+    // MARK: Lifecycle
+
     public init(
         userId: String?
     ) {
         self.userId = userId
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case userId
     }
+
+    public let userId: String?
 }
 
 public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
-    public let type: String?
-    public let title: String
-    public let subtitle: String?
-    public let body: String?
-    public let imageUrl: String?
-    public let data: Dictionary<String, AnyCodable>?
-    public let action: Dictionary<String, AnyCodable>?
-    public let deduplicationId: String?
-    public let groupId: String?
-    public let visible: Bool?
-    public let silent: Bool?
-    public let contentAvailable: Bool?
-    public let expiresAt: String?
-    public let recipients: Array<NotificationRecipient>
-    
+    // MARK: Lifecycle
+
     public init(
         type: String?,
         title: String,
         subtitle: String?,
         body: String?,
         imageUrl: String?,
-        data: Dictionary<String, AnyCodable>?,
-        action: Dictionary<String, AnyCodable>?,
+        data: [String: AnyCodable]?,
+        action: [String: AnyCodable]?,
         deduplicationId: String?,
         groupId: String?,
         visible: Bool?,
         silent: Bool?,
         contentAvailable: Bool?,
         expiresAt: String?,
-        recipients: Array<NotificationRecipient>
+        recipients: [NotificationRecipient]
     ) {
         self.type = type
         self.title = title
@@ -1253,6 +1496,8 @@ public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
         self.recipients = recipients
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case type
         case title
@@ -1269,38 +1514,34 @@ public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
         case expiresAt
         case recipients
     }
-}
 
-public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
     public let type: String?
     public let title: String
     public let subtitle: String?
     public let body: String?
     public let imageUrl: String?
-    public let data: Dictionary<String, AnyCodable>?
-    public let action: Dictionary<String, AnyCodable>?
+    public let data: [String: AnyCodable]?
+    public let action: [String: AnyCodable]?
     public let deduplicationId: String?
     public let groupId: String?
     public let visible: Bool?
     public let silent: Bool?
     public let contentAvailable: Bool?
     public let expiresAt: String?
-    public let userId: String?
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let viewedAt: String?
-    public let version: String?
-    
+    public let recipients: [NotificationRecipient]
+}
+
+public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
+    // MARK: Lifecycle
+
     public init(
         type: String?,
         title: String,
         subtitle: String?,
         body: String?,
         imageUrl: String?,
-        data: Dictionary<String, AnyCodable>?,
-        action: Dictionary<String, AnyCodable>?,
+        data: [String: AnyCodable]?,
+        action: [String: AnyCodable]?,
         deduplicationId: String?,
         groupId: String?,
         visible: Bool?,
@@ -1337,6 +1578,8 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
         self.version = version
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case type
         case title
@@ -1359,21 +1602,38 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
         case viewedAt
         case version
     }
+
+    public let type: String?
+    public let title: String
+    public let subtitle: String?
+    public let body: String?
+    public let imageUrl: String?
+    public let data: [String: AnyCodable]?
+    public let action: [String: AnyCodable]?
+    public let deduplicationId: String?
+    public let groupId: String?
+    public let visible: Bool?
+    public let silent: Bool?
+    public let contentAvailable: Bool?
+    public let expiresAt: String?
+    public let userId: String?
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let viewedAt: String?
+    public let version: String?
 }
 
 public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: Array<NotificationResponse>
-    
+    // MARK: Lifecycle
+
     public init(
         page: Int,
         pageCount: Int,
         pageSize: Int,
         totalCount: Int,
-        data: Array<NotificationResponse>
+        data: [NotificationResponse]
     ) {
         self.page = page
         self.pageCount = pageCount
@@ -1382,6 +1642,8 @@ public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -1389,26 +1651,35 @@ public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [NotificationResponse]
 }
 
 public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
-    public let notificationIds: Array<String>
-    
+    // MARK: Lifecycle
+
     public init(
-        notificationIds: Array<String>
+        notificationIds: [String]
     ) {
         self.notificationIds = notificationIds
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case notificationIds
     }
+
+    public let notificationIds: [String]
 }
 
 public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
-    public let userId: String?
-    public let apnsToken: String
-    
+    // MARK: Lifecycle
+
     public init(
         userId: String?,
         apnsToken: String
@@ -1417,26 +1688,20 @@ public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
         self.apnsToken = apnsToken
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case userId
         case apnsToken
     }
+
+    public let userId: String?
+    public let apnsToken: String
 }
 
 public struct UserResponse: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let name: String
-    public let firstName: String?
-    public let lastName: String?
-    public let email: String?
-    public let emailVerified: Bool?
-    public let avatarUrl: String?
-    public let locale: String?
-    public let type: String
-    
+    // MARK: Lifecycle
+
     public init(
         id: String,
         createdAt: String,
@@ -1465,6 +1730,8 @@ public struct UserResponse: Codable, Equatable, Hashable, Identifiable {
         self.type = type
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -1479,12 +1746,24 @@ public struct UserResponse: Codable, Equatable, Hashable, Identifiable {
         case locale
         case type
     }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let name: String
+    public let firstName: String?
+    public let lastName: String?
+    public let email: String?
+    public let emailVerified: Bool?
+    public let avatarUrl: String?
+    public let locale: String?
+    public let type: String
 }
 
 public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
-    public let provider: String
-    public let providerUserId: String
-    
+    // MARK: Lifecycle
+
     public init(
         provider: String,
         providerUserId: String
@@ -1493,21 +1772,20 @@ public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
         self.providerUserId = providerUserId
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case provider
         case providerUserId
     }
+
+    public let provider: String
+    public let providerUserId: String
 }
 
 public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let provider: String
-    public let providerUserId: String
-    public let userId: String
-    
+    // MARK: Lifecycle
+
     public init(
         id: String,
         createdAt: String,
@@ -1526,6 +1804,8 @@ public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
         self.userId = userId
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -1535,18 +1815,19 @@ public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
         case providerUserId
         case userId
     }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let provider: String
+    public let providerUserId: String
+    public let userId: String
 }
 
 public struct CreateUserRequestBody: Codable, Equatable, Hashable {
-    public let firstName: String?
-    public let lastName: String?
-    public let email: String?
-    public let emailVerified: Bool?
-    public let avatarUrl: String?
-    public let locale: String?
-    public let type: String
-    public let identities: Array<CreateIdentityRequestBody>?
-    
+    // MARK: Lifecycle
+
     public init(
         firstName: String?,
         lastName: String?,
@@ -1555,7 +1836,7 @@ public struct CreateUserRequestBody: Codable, Equatable, Hashable {
         avatarUrl: String?,
         locale: String?,
         type: String,
-        identities: Array<CreateIdentityRequestBody>?
+        identities: [CreateIdentityRequestBody]?
     ) {
         self.firstName = firstName
         self.lastName = lastName
@@ -1567,6 +1848,8 @@ public struct CreateUserRequestBody: Codable, Equatable, Hashable {
         self.identities = identities
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case firstName
         case lastName
@@ -1577,13 +1860,20 @@ public struct CreateUserRequestBody: Codable, Equatable, Hashable {
         case type
         case identities
     }
+
+    public let firstName: String?
+    public let lastName: String?
+    public let email: String?
+    public let emailVerified: Bool?
+    public let avatarUrl: String?
+    public let locale: String?
+    public let type: String
+    public let identities: [CreateIdentityRequestBody]?
 }
 
 public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
-    public let firstName: String
-    public let lastName: String
-    public let email: String
-    
+    // MARK: Lifecycle
+
     public init(
         firstName: String,
         lastName: String,
@@ -1594,26 +1884,28 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
         self.email = email
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case firstName
         case lastName
         case email
     }
+
+    public let firstName: String
+    public let lastName: String
+    public let email: String
 }
 
 public struct UserCollectionResponse: Codable, Equatable, Hashable {
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: Array<UserResponse>
-    
+    // MARK: Lifecycle
+
     public init(
         page: Int,
         pageCount: Int,
         pageSize: Int,
         totalCount: Int,
-        data: Array<UserResponse>
+        data: [UserResponse]
     ) {
         self.page = page
         self.pageCount = pageCount
@@ -1622,6 +1914,8 @@ public struct UserCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -1629,28 +1923,31 @@ public struct UserCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [UserResponse]
 }
 
 public struct UserInfoResponse: Codable, Equatable, Hashable {
-    public let user: UserResponse?
-    
+    // MARK: Lifecycle
+
     public init(
         user: UserResponse?
     ) {
         self.user = user
     }
+
+    // MARK: Public
+
+    public let user: UserResponse?
 }
 
-
 public struct ListUsersQuery: Codable, Equatable, Hashable {
-    public let select: String?
-    public let top: Int?
-    public let skip: Int?
-    public let orderBy: String?
-    public let filter: String?
-    public let expand: String?
-    public let search: String?
-    
+    // MARK: Lifecycle
+
     public init(
         select: String?,
         top: Int?,
@@ -1669,6 +1966,8 @@ public struct ListUsersQuery: Codable, Equatable, Hashable {
         self.search = search
     }
 
+    // MARK: Public
+
     public enum CodingKeys: String, CodingKey {
         case select = "$select"
         case top = "$top"
@@ -1678,4 +1977,12 @@ public struct ListUsersQuery: Codable, Equatable, Hashable {
         case expand = "$expand"
         case search = "$search"
     }
+
+    public let select: String?
+    public let top: Int?
+    public let skip: Int?
+    public let orderBy: String?
+    public let filter: String?
+    public let expand: String?
+    public let search: String?
 }

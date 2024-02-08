@@ -8,17 +8,21 @@
 
 import Foundation
 
-fileprivate let logger = Logger(category: "Parra notification center")
+private let logger = Logger(category: "Parra notification center")
 
-internal class ParraNotificationCenter: NotificationCenterType {
-    internal let underlyingNotificationCenter = NotificationCenter()
+class ParraNotificationCenter: NotificationCenterType {
+    // MARK: Lifecycle
 
     init() {}
 
-    internal func post(
+    // MARK: Internal
+
+    let underlyingNotificationCenter = NotificationCenter()
+
+    func post(
         name aName: NSNotification.Name,
         object anObject: Any? = nil,
-        userInfo aUserInfo: [AnyHashable : Any]? = nil
+        userInfo aUserInfo: [AnyHashable: Any]? = nil
     ) {
         Task {
             await postAsync(
@@ -29,10 +33,10 @@ internal class ParraNotificationCenter: NotificationCenterType {
         }
     }
 
-    internal func postAsync(
+    func postAsync(
         name aName: NSNotification.Name,
         object anObject: Any? = nil,
-        userInfo aUserInfo: [AnyHashable : Any]? = nil
+        userInfo aUserInfo: [AnyHashable: Any]? = nil
     ) async {
         logger.trace("Posting notification: \(aName.rawValue)")
 
@@ -47,7 +51,7 @@ internal class ParraNotificationCenter: NotificationCenterType {
         }
     }
 
-    internal func addObserver(
+    func addObserver(
         _ observer: Any,
         selector aSelector: Selector,
         name aName: NSNotification.Name?,
@@ -61,7 +65,7 @@ internal class ParraNotificationCenter: NotificationCenterType {
         )
     }
 
-    internal func addObserver(
+    func addObserver(
         forName name: NSNotification.Name?,
         object obj: Any?,
         queue: OperationQueue?,
@@ -75,7 +79,7 @@ internal class ParraNotificationCenter: NotificationCenterType {
         )
     }
 
-    internal func removeObserver(
+    func removeObserver(
         _ observer: Any,
         name aName: NSNotification.Name?,
         object anObject: Any?
@@ -87,7 +91,7 @@ internal class ParraNotificationCenter: NotificationCenterType {
         )
     }
 
-    internal func removeObserver(_ observer: Any) {
+    func removeObserver(_ observer: Any) {
         underlyingNotificationCenter.removeObserver(observer)
     }
 }

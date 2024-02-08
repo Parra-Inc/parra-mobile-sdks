@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal extension ParraFeedbackDataManager {    
+extension ParraFeedbackDataManager {
     enum Key {
         static let cardsKey = "com.parrafeedback.cards.data"
         static let completedCardsKey = "com.parrafeedback.answers.data"

@@ -8,29 +8,10 @@
 
 import Foundation
 
-internal struct ParraSession: Codable, Equatable {
-    internal struct Constant {
-        static let packageExtension = "parsesh"
-        static let erroredSessionPrefix = "_"
-    }
+struct ParraSession: Codable, Equatable {
+    // MARK: Lifecycle
 
-    internal let sessionId: String
-    /// The SDK version at the time of session creation. Stored to handle cases where a session is created
-    /// and written to disk, then eventually loaded after an app update installs a newer version of the SDK.
-    internal let sdkVersion: String
-    internal let createdAt: Date
-
-    internal private(set) var updatedAt: Date?
-    internal private(set) var endedAt: Date?
-    internal private(set) var userProperties: [String : AnyCodable]
-
-    /// The byte offset of the file handle responsible for writing the events associated with this session
-    /// at the point where the last sync was initiated. This will be used to determine which events were
-    /// written since the last sync, as well as deleting events in the current session that have already
-    /// been synchronized.
-    internal private(set) var eventsHandleOffsetAtSync: UInt64?
-
-    internal init(
+    init(
         sessionId: String,
         createdAt: Date,
         sdkVersion: String
@@ -43,7 +24,30 @@ internal struct ParraSession: Codable, Equatable {
         self.userProperties = [:]
     }
 
-    internal func hasBeenUpdated(since date: Date?) -> Bool {
+    // MARK: Internal
+
+    enum Constant {
+        static let packageExtension = "parsesh"
+        static let erroredSessionPrefix = "_"
+    }
+
+    let sessionId: String
+    /// The SDK version at the time of session creation. Stored to handle cases where a session is created
+    /// and written to disk, then eventually loaded after an app update installs a newer version of the SDK.
+    let sdkVersion: String
+    let createdAt: Date
+
+    private(set) var updatedAt: Date?
+    private(set) var endedAt: Date?
+    private(set) var userProperties: [String: AnyCodable]
+
+    /// The byte offset of the file handle responsible for writing the events associated with this session
+    /// at the point where the last sync was initiated. This will be used to determine which events were
+    /// written since the last sync, as well as deleting events in the current session that have already
+    /// been synchronized.
+    private(set) var eventsHandleOffsetAtSync: UInt64?
+
+    func hasBeenUpdated(since date: Date?) -> Bool {
         guard let updatedAt else {
             // If updatedAt isn't set, it hasn't been updated since it was created.
             return false
@@ -58,7 +62,7 @@ internal struct ParraSession: Codable, Equatable {
 
     // MARK: Performing Session Updates
 
-    internal func withUpdates(
+    func withUpdates(
         handler: ((inout ParraSession) -> Void)? = nil
     ) -> ParraSession {
         var updatedSession = self
@@ -69,7 +73,7 @@ internal struct ParraSession: Codable, Equatable {
         return updatedSession
     }
 
-    internal func withUpdatedProperty(
+    func withUpdatedProperty(
         key: String,
         value: Any?
     ) -> ParraSession {
@@ -82,15 +86,15 @@ internal struct ParraSession: Codable, Equatable {
         }
     }
 
-    internal func withUpdatedProperties(
-        newProperties: [String : AnyCodable]
+    func withUpdatedProperties(
+        newProperties: [String: AnyCodable]
     ) -> ParraSession {
         return withUpdates { session in
             session.userProperties = newProperties
         }
     }
 
-    internal func withUpdatedEventsHandleOffset(
+    func withUpdatedEventsHandleOffset(
         offset: UInt64
     ) -> ParraSession {
         return withUpdates { session in

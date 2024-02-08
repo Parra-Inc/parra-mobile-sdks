@@ -10,22 +10,35 @@ import Foundation
 import UIKit
 
 extension NSAttributedString {
-    static let poweredByParraUIKit: NSAttributedString = {
-        return NSAttributedString(poweredByParra)
-    }()
+    static let poweredByParraUIKit: NSAttributedString = .init(poweredByParra)
 
     static let poweredByParra: AttributedString = {
         var defaultAttributes = AttributeContainer()
-        defaultAttributes[AttributeScopes.UIKitAttributes.KernAttribute.self] = 0.24
-        defaultAttributes[AttributeScopes.UIKitAttributes.FontAttribute.self] = UIFont.systemFont(ofSize: 8.0, weight: .bold)
+        defaultAttributes[AttributeScopes.UIKitAttributes.KernAttribute.self] =
+            0.24
+        defaultAttributes[AttributeScopes.UIKitAttributes.FontAttribute.self] =
+            UIFont.systemFont(
+                ofSize: 8.0,
+                weight: .bold
+            )
 
-        var poweredBy = AttributedString("Powered by ", attributes: defaultAttributes)
+        var poweredBy = AttributedString(
+            "Powered by ",
+            attributes: defaultAttributes
+        )
 
         var parraLogoAttributes = AttributeContainer()
-        parraLogoAttributes[AttributeScopes.UIKitAttributes.FontAttribute.self] =
-            UIFont(name: "Pacifico-Regular", size: 11) ?? UIFont.boldSystemFont(ofSize: 11) // TODO: Delete
+        parraLogoAttributes[
+            AttributeScopes.UIKitAttributes.FontAttribute
+                .self
+        ] =
+            UIFont(name: "Pacifico-Regular", size: 11) ?? UIFont
+                .boldSystemFont(ofSize: 11) // TODO: Delete
 
-        let parraLogo = AttributedString("Parra", attributes: parraLogoAttributes)
+        let parraLogo = AttributedString(
+            "Parra",
+            attributes: parraLogoAttributes
+        )
 
         poweredBy.append(parraLogo)
 

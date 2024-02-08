@@ -8,19 +8,10 @@
 
 import SwiftUI
 
-internal struct ParraAttributedMenuStyle: MenuStyle, ParraAttributedStyle {
-    internal let config: MenuConfig
-    internal let content: MenuContent
-    internal let attributes: MenuAttributes
-    internal let theme: ParraTheme
-    
-    internal let titleStyle: ParraAttributedLabelStyle?
-    internal let helperStyle: ParraAttributedLabelStyle?
+struct ParraAttributedMenuStyle: MenuStyle, ParraAttributedStyle {
+    // MARK: Lifecycle
 
-    internal let menuOptionStyle: ParraAttributedLabelStyle
-    internal let menuOptionSelectedStyle: ParraAttributedLabelStyle
-
-    internal init(
+    init(
         config: MenuConfig,
         content: MenuContent,
         attributes: MenuAttributes,
@@ -66,7 +57,20 @@ internal struct ParraAttributedMenuStyle: MenuStyle, ParraAttributedStyle {
         )
     }
 
-    internal func makeBody(configuration: Configuration) -> some View {
+    // MARK: Internal
+
+    let config: MenuConfig
+    let content: MenuContent
+    let attributes: MenuAttributes
+    let theme: ParraTheme
+
+    let titleStyle: ParraAttributedLabelStyle?
+    let helperStyle: ParraAttributedLabelStyle?
+
+    let menuOptionStyle: ParraAttributedLabelStyle
+    let menuOptionSelectedStyle: ParraAttributedLabelStyle
+
+    func makeBody(configuration: Configuration) -> some View {
         let tint = attributes.tint ?? theme.palette.secondaryText.toParraColor()
 
         Menu(configuration)
@@ -75,7 +79,8 @@ internal struct ParraAttributedMenuStyle: MenuStyle, ParraAttributedStyle {
             .applyCornerRadii(size: attributes.cornerRadius, from: theme)
             .overlay(
                 UnevenRoundedRectangle(
-                    cornerRadii: theme.cornerRadius.value(for: attributes.cornerRadius)
+                    cornerRadii: theme.cornerRadius
+                        .value(for: attributes.cornerRadius)
                 )
                 .stroke(
                     tint,
@@ -84,7 +89,9 @@ internal struct ParraAttributedMenuStyle: MenuStyle, ParraAttributedStyle {
             )
     }
 
-    internal func withAttributes(attributes: MenuAttributes) -> ParraAttributedMenuStyle {
+    func withAttributes(attributes: MenuAttributes)
+        -> ParraAttributedMenuStyle
+    {
         return ParraAttributedMenuStyle(
             config: config,
             content: content,

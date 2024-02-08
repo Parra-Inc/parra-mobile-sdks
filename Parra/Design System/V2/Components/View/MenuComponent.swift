@@ -10,22 +10,55 @@ import Foundation
 import SwiftUI
 
 struct MenuComponent: MenuComponentType {
+    // MARK: Internal
+
     var config: MenuConfig
     var content: MenuContent
     var style: ParraAttributedMenuStyle
 
-    @State private var selectedOption: MenuContent.Option?
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // spacing controlled by individual component padding.
+            if let title = content.title, let titleStyle = style.titleStyle {
+                LabelComponent(
+                    config: config.title,
+                    content: title,
+                    style: titleStyle
+                )
+            }
 
-    private var elementOpacity: Double {
-        return selectedOption != nil ? 1.0 : 0.6
-    }
+            Menu {
+                ForEach(content.options.indices, id: \.self) { index in
+                    menuItem(for: index)
+                }
+            } label: {
+                HStack {
+                    // TODO: Use LabelComponent for this whole thing and support passing spacing/icon config to it
+                    menuLabel
 
-    private var currentStyle: ParraAttributedMenuStyle {
-        if selectedOption == nil {
-            style
-        } else {
-            style
+                    Spacer()
+
+                    Image(systemName: "chevron.up.chevron.down")
+                        .padding(.vertical, 16)
+                        .foregroundStyle(.primary.opacity(elementOpacity))
+                        .frame(width: 24, height: 24)
+                }
+            }
+            .menuStyle(style)
+
+            if let helper = content.helper,
+               let helperStyle = style.helperStyle
+            {
+                LabelComponent(
+                    config: config.helper,
+                    content: helper,
+                    style: helperStyle
+                )
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
         }
+        .padding(style.attributes.padding ?? .zero)
+        .applyBackground(style.attributes.background)
     }
 
     static func applyStandardCustomizations(
@@ -33,12 +66,19 @@ struct MenuComponent: MenuComponentType {
         theme: ParraTheme,
         config: MenuConfig
     ) -> MenuAttributes {
-        let title = LabelAttributes.defaultFormTitle(in: theme, with: config.title)
-        let helper = LabelAttributes.defaultFormHelper(in: theme, with: config.helper)
+        let title = LabelAttributes.defaultFormTitle(
+            in: theme,
+            with: config.title
+        )
+        let helper = LabelAttributes.defaultFormHelper(
+            in: theme,
+            with: config.helper
+        )
 
         let menuItem = LabelComponent.applyStandardCustomizations(
             onto: LabelAttributes(
-                fontColor: theme.palette.primaryText.toParraColor().opacity(0.75),
+                fontColor: theme.palette.primaryText.toParraColor()
+                    .opacity(0.75),
                 fontWeight: .regular,
                 padding: EdgeInsets(vertical: 18.5, horizontal: 14)
             ),
@@ -69,26 +109,26 @@ struct MenuComponent: MenuComponentType {
         )
     }
 
-    @ViewBuilder
-    private func menuItem(for index: Int) -> some View {
-        let option = content.options[index]
+    // MARK: Private
 
-        if option == selectedOption {
-            Button(option.title, systemImage: "checkmark") {
-                didSelect(option: option)
-            }
+    @State private var selectedOption: MenuContent.Option?
+
+    private var elementOpacity: Double {
+        return selectedOption != nil ? 1.0 : 0.6
+    }
+
+    private var currentStyle: ParraAttributedMenuStyle {
+        if selectedOption == nil {
+            style
         } else {
-            Button(option.title) {
-                didSelect(option: option)
-            }
+            style
         }
     }
 
-    @ViewBuilder
-    private var menuLabel: some View {
+    @ViewBuilder private var menuLabel: some View {
         if let selectedOption {
             let content = LabelContent(text: selectedOption.title)
-            
+
             LabelComponent(
                 config: config.menuOptionSelected,
                 content: content,
@@ -97,7 +137,9 @@ struct MenuComponent: MenuComponentType {
                 )
             )
         } else {
-            let normalContent: LabelContent? = if let placeholder = content.placeholder {
+            let normalContent: LabelContent? = if let placeholder = content
+                .placeholder
+            {
                 placeholder
             } else if let firstOption = content.options.first {
                 LabelContent(text: firstOption.title)
@@ -119,46 +161,19 @@ struct MenuComponent: MenuComponentType {
         }
     }
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) { // spacing controlled by individual component padding.
-            if let title = content.title, let titleStyle = style.titleStyle {
-                LabelComponent(
-                    config: config.title,
-                    content: title,
-                    style:  titleStyle
-                )
+    @ViewBuilder
+    private func menuItem(for index: Int) -> some View {
+        let option = content.options[index]
+
+        if option == selectedOption {
+            Button(option.title, systemImage: "checkmark") {
+                didSelect(option: option)
             }
-
-            Menu {
-                ForEach(content.options.indices, id: \.self) { index in
-                    menuItem(for: index)
-                }
-            } label: {
-                HStack {
-                    // TODO: Use LabelComponent for this whole thing and support passing spacing/icon config to it
-                    menuLabel
-
-                    Spacer()
-
-                    Image(systemName: "chevron.up.chevron.down")
-                        .padding(.vertical, 16)
-                        .foregroundStyle(.primary.opacity(elementOpacity))
-                        .frame(width: 24, height: 24)
-                }
-            }
-            .menuStyle(style)
-
-            if let helper = content.helper, let helperStyle = style.helperStyle {
-                LabelComponent(
-                    config: config.helper,
-                    content: helper,
-                    style: helperStyle
-                )
-                .frame(maxWidth: .infinity, alignment: .trailing)
+        } else {
+            Button(option.title) {
+                didSelect(option: option)
             }
         }
-        .padding(style.attributes.padding ?? .zero)
-        .applyBackground(style.attributes.background)
     }
 
     private func didSelect(option: MenuContent.Option?) {
@@ -228,4 +243,3 @@ private func renderMenu(
     }
     .padding()
 }
-

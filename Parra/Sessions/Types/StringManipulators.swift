@@ -8,8 +8,9 @@
 
 import Foundation
 
-internal struct StringManipulators {
-    static let hyphenAndSpaceCharset: CharacterSet = .whitespacesAndNewlines.union(.init(charactersIn: "-"))
+enum StringManipulators {
+    static let hyphenAndSpaceCharset: CharacterSet = .whitespacesAndNewlines
+        .union(.init(charactersIn: "-"))
 
     static func snakeCaseify(text: String) -> String {
         return text.components(

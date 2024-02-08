@@ -11,7 +11,7 @@ import Foundation
 public enum ParraStandardEvent: ParraDataEvent {
     case action(source: String)
     case close(screen: String)
-    case custom(name: String, extra: [String : Any])
+    case custom(name: String, extra: [String: Any])
     case open(screen: String)
     case purchase(product: String)
     case start(span: String)
@@ -20,41 +20,9 @@ public enum ParraStandardEvent: ParraDataEvent {
     case tap(element: String)
     case view(element: String)
 
-    public var name: String {
-        switch self {
-        case .action(let source):
-            return "action:\(source)"
-        case .close(let screen):
-            return "close:\(screen)"
-        case .custom(let name, _):
-            return "custom:\(name)"
-        case .open(let screen):
-            return "open:\(screen)"
-        case .purchase(let product):
-            return "purchase:\(product)"
-        case .start(let span):
-            return "start:\(span)"
-        case .stop(let span):
-            return "stop:\(span)"
-        case .submit(let form):
-            return "submit:\(form)"
-        case .tap(let element):
-            return "tap:\(element)"
-        case .view(let element):
-            return "view:\(element)"
-        }
-    }
+    // MARK: Lifecycle
 
-    public var extra: [String : Any] {
-        switch self {
-        case .custom(_, let extra):
-            return extra
-        default:
-            return [:]
-        }
-    }
-
-    public init(name: String, extra: [String : Any]) {
+    public init(name: String, extra: [String: Any]) {
         let components = name.split(separator: ":")
         if components.count != 2 {
             self = .custom(name: name, extra: extra)
@@ -89,6 +57,42 @@ public enum ParraStandardEvent: ParraDataEvent {
                 name: value,
                 extra: extra
             )
+        }
+    }
+
+    // MARK: Public
+
+    public var name: String {
+        switch self {
+        case .action(let source):
+            return "action:\(source)"
+        case .close(let screen):
+            return "close:\(screen)"
+        case .custom(let name, _):
+            return "custom:\(name)"
+        case .open(let screen):
+            return "open:\(screen)"
+        case .purchase(let product):
+            return "purchase:\(product)"
+        case .start(let span):
+            return "start:\(span)"
+        case .stop(let span):
+            return "stop:\(span)"
+        case .submit(let form):
+            return "submit:\(form)"
+        case .tap(let element):
+            return "tap:\(element)"
+        case .view(let element):
+            return "view:\(element)"
+        }
+    }
+
+    public var extra: [String: Any] {
+        switch self {
+        case .custom(_, let extra):
+            return extra
+        default:
+            return [:]
         }
     }
 }

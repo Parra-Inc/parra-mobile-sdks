@@ -8,7 +8,9 @@
 
 import UIKit
 
-extension UIDevice.BatteryState: ParraLogStringConvertible, CustomStringConvertible {
+extension UIDevice.BatteryState: ParraLogStringConvertible,
+    CustomStringConvertible
+{
     public var loggerDescription: String {
         switch self {
         case .unknown:

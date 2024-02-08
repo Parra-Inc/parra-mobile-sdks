@@ -8,10 +8,9 @@
 import Foundation
 import UIKit
 
-fileprivate let logger = Logger(category: "Authentication Extensions")
+private let logger = Logger(category: "Authentication Extensions")
 
 public extension Parra {
-
     /// Initializes the Parra SDK using the provided configuration and auth provider. This method should be invoked as
     /// early as possible inside of applicationDidFinishLaunchingWithOptions.
     /// - Parameters:
@@ -62,12 +61,19 @@ public extension Parra {
         authProvider: ParraAuthenticationProviderType
     ) async {
         if await state.isInitialized() {
-            logger.warn("Parra.initialize called more than once. Subsequent calls are ignored")
+            logger
+                .warn(
+                    "Parra.initialize called more than once. Subsequent calls are ignored"
+                )
 
             return
         }
 
-        let (tenantId, applicationId, authenticationProvider) = withAuthenticationMiddleware(
+        let (
+            tenantId,
+            applicationId,
+            authenticationProvider
+        ) = withAuthenticationMiddleware(
             for: authProvider
         ) { [weak self] success in
             guard let self else {
@@ -94,17 +100,21 @@ public extension Parra {
         }
 
         await sessionManager.initializeSessions()
-        await networkManager.updateAuthenticationProvider(authenticationProvider)
+        await networkManager
+            .updateAuthenticationProvider(authenticationProvider)
         await state.initialize()
 
         logger.info("Parra SDK Initialized")
 
         do {
-            let _ = try await networkManager.refreshAuthentication()
+            _ = try await networkManager.refreshAuthentication()
 
             await performPostAuthRefreshActions()
-        } catch let error {
-            logger.error("Authentication handler in call to Parra.initialize failed", error)
+        } catch {
+            logger.error(
+                "Authentication handler in call to Parra.initialize failed",
+                error
+            )
         }
     }
 
@@ -116,7 +126,8 @@ public extension Parra {
 
     private func uploadCachedPushNotificationToken() async {
         guard let token = await state.getCachedTemporaryPushToken() else {
-            logger.trace("No push notification token is cached. Skipping upload.")
+            logger
+                .trace("No push notification token is cached. Skipping upload.")
             return
         }
 
@@ -130,7 +141,6 @@ public extension Parra {
         for authProvider: ParraAuthenticationProviderType,
         onAuthenticationRefresh: @escaping (_ success: Bool) -> Void
     ) -> (String, String, ParraAuthenticationProviderFunction) {
-
         switch authProvider {
         case .default(let tenantId, let applicationId, let authProvider):
             return (tenantId, applicationId, { () async throws -> String in
@@ -140,35 +150,45 @@ public extension Parra {
                     onAuthenticationRefresh(true)
 
                     return result
-                } catch let error {
+                } catch {
                     onAuthenticationRefresh(false)
                     throw error
                 }
             })
-        case .publicKey(let tenantId, let applicationId, let apiKeyId, let userIdProvider):
-            return (tenantId, applicationId, { [weak self] () async throws -> String in
-                do {
-                    guard let networkManager = self?.networkManager else {
-                        throw ParraError.unknown
+        case .publicKey(
+            let tenantId,
+            let applicationId,
+            let apiKeyId,
+            let userIdProvider
+        ):
+            return (
+                tenantId,
+                applicationId,
+                { [weak self] () async throws -> String in
+                    do {
+                        guard let networkManager = self?.networkManager else {
+                            throw ParraError.unknown
+                        }
+
+                        let userId = try await userIdProvider()
+
+                        let result = try await networkManager
+                            .performPublicApiKeyAuthenticationRequest(
+                                forTentant: tenantId,
+                                applicationId: applicationId,
+                                apiKeyId: apiKeyId,
+                                userId: userId
+                            )
+
+                        onAuthenticationRefresh(true)
+
+                        return result
+                    } catch {
+                        onAuthenticationRefresh(false)
+                        throw error
                     }
-
-                    let userId = try await userIdProvider()
-
-                    let result = try await networkManager.performPublicApiKeyAuthenticationRequest(
-                        forTentant: tenantId,
-                        applicationId: applicationId,
-                        apiKeyId: apiKeyId,
-                        userId: userId
-                    )
-
-                    onAuthenticationRefresh(true)
-
-                    return result
-                } catch let error {
-                    onAuthenticationRefresh(false)
-                    throw error
                 }
-            })
+            )
         }
     }
 }

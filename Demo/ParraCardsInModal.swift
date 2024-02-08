@@ -6,17 +6,20 @@
 //  Copyright © 2022 Parra, Inc. All rights reserved.
 //
 
-import UIKit
 import Parra
+import UIKit
 
-fileprivate let logger = Logger(category: "ParraCardsInModal", extra: ["top-level": "extra-thing"])
+private let logger = Logger(
+    category: "ParraCardsInModal",
+    extra: ["top-level": "extra-thing"]
+)
 
 class ParraCardsInModal: UIViewController {
-    @IBOutlet weak var popupButton: UIButton!
-    @IBOutlet weak var errorLabel: UILabel!
-    @IBOutlet weak var drawerButton: UIButton!
+    // MARK: Internal
 
-    private var cards: [ParraCardItem] = []
+    @IBOutlet var popupButton: UIButton!
+    @IBOutlet var errorLabel: UILabel!
+    @IBOutlet var drawerButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,23 +60,32 @@ class ParraCardsInModal: UIViewController {
         }
     }
 
-    @IBAction func presentPopupStyleFeedbackModal(_ sender: UIButton) {
+    @IBAction
+    func presentPopupStyleFeedbackModal(_ sender: UIButton) {
         logger.withScope { logger in
             logger.info("present popup style")
 
             ParraFeedback.presentCardPopup(with: cards, from: self) {
-                logger.info("dismissing popup style", ["super-nested-extra": true])
+                logger.info(
+                    "dismissing popup style",
+                    ["super-nested-extra": true]
+                )
             }
         }
     }
 
-    @IBAction func presentDrawerStyleFeedbackModal(_ sender: UIButton) {
+    @IBAction
+    func presentDrawerStyleFeedbackModal(_ sender: UIButton) {
         logger.error(
             "Error presenting drawer feedback modal",
             ParraError.message("Not really, it's a fake error"),
             ["key": "value-idk-something-broken"]
         )
-        
+
         ParraFeedback.presentCardDrawer(with: cards, from: self)
     }
+
+    // MARK: Private
+
+    private var cards: [ParraCardItem] = []
 }

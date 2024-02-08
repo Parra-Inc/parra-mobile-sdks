@@ -8,14 +8,16 @@
 import Foundation
 
 extension ParraCardItem {
-    internal func getAllAssets() -> [Asset] {
-        switch self.data {
+    func getAllAssets() -> [Asset] {
+        switch data {
         case .question(let question):
             switch question.data {
             case .imageQuestionBody(let imageQuestionBody):
-                return imageQuestionBody.options.map { $0.asset }
-            case .longTextQuestionBody, .shortTextQuestionBody, .ratingQuestionBody,
-                    .starQuestionBody, .booleanQuestionBody, .choiceQuestionBody, .checkboxQuestionBody:
+                return imageQuestionBody.options.map(\.asset)
+            case .longTextQuestionBody, .shortTextQuestionBody,
+                 .ratingQuestionBody,
+                 .starQuestionBody, .booleanQuestionBody, .choiceQuestionBody,
+                 .checkboxQuestionBody:
                 return []
             }
         }
@@ -23,7 +25,7 @@ extension ParraCardItem {
 
     /// Cards that don't have a good mechanism for determining that the user is done making their selection.
     /// This determines which cards show the forward arrow button to manually commit their changes.
-    internal var requiresManualNextSelection: Bool {
+    var requiresManualNextSelection: Bool {
         switch data {
         case .question(let question):
             switch question.kind {

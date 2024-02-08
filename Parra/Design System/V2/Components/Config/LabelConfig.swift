@@ -9,9 +9,13 @@
 import SwiftUI
 
 public struct LabelConfig {
-    public let fontStyle: Font.TextStyle
+    // MARK: Lifecycle
 
-    internal init(fontStyle: Font.TextStyle) {
+    init(fontStyle: Font.TextStyle) {
         self.fontStyle = fontStyle
     }
+
+    // MARK: Public
+
+    public let fontStyle: Font.TextStyle
 }

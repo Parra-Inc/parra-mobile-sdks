@@ -10,7 +10,7 @@ import Foundation
 
 /// Field definitions from [Apple documentation(https://developer.apple.com/documentation/xcode/examining-the-fields-in-a-crash-report#Backtraces)
 @usableFromInline
-internal struct CallStackFrame: Codable {
+struct CallStackFrame: Codable {
     /// The stack frame number. Stack frames are in calling order, where frame 0 is the function that
     /// was executing at the time execution halted. Frame 1 is the function that called the
     /// function in frame 0, and so on.

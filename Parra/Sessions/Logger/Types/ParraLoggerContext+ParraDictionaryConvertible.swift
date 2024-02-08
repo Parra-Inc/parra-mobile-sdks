@@ -9,8 +9,8 @@
 import Foundation
 
 extension ParraLoggerContext: ParraSanitizedDictionaryConvertible {
-    internal var sanitized: ParraSanitizedDictionary {
-        var params: [String : Any] = [
+    var sanitized: ParraSanitizedDictionary {
+        var params: [String: Any] = [
             "module": module,
             "file_name": fileName
         ]
@@ -28,7 +28,7 @@ extension ParraLoggerContext: ParraSanitizedDictionaryConvertible {
         }
 
         if !scopes.isEmpty {
-            params["scopes"] = scopes.map { $0.name }
+            params["scopes"] = scopes.map(\.name)
         }
 
         if let extra, !extra.isEmpty {

@@ -57,7 +57,7 @@ public extension Logger {
     @inlinable
     static func trace(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -112,7 +112,7 @@ public extension Logger {
     @inlinable
     static func debug(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -167,7 +167,7 @@ public extension Logger {
     @inlinable
     static func info(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -222,7 +222,7 @@ public extension Logger {
     @inlinable
     static func warn(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -283,7 +283,7 @@ public extension Logger {
     @inlinable
     static func error(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -350,7 +350,7 @@ public extension Logger {
     @inlinable
     static func error(
         _ error: @autoclosure @escaping () -> ParraError,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -417,7 +417,7 @@ public extension Logger {
     @inlinable
     static func error(
         _ error: @autoclosure @escaping () -> Error,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -487,7 +487,7 @@ public extension Logger {
     static func error(
         _ message: @autoclosure @escaping () -> String,
         _ error: Error? = nil,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -555,7 +555,7 @@ public extension Logger {
     @inlinable
     static func fatal(
         _ message: @autoclosure @escaping () -> String,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -622,7 +622,7 @@ public extension Logger {
     @inlinable
     static func fatal(
         _ error: @autoclosure @escaping () -> Error,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -692,7 +692,7 @@ public extension Logger {
     static func fatal(
         _ message: @autoclosure @escaping () -> String,
         _ error: Error? = nil,
-        _ extra: [String : Any],
+        _ extra: [String: Any],
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,

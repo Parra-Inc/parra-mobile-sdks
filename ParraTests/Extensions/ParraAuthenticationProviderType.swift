@@ -10,7 +10,9 @@ import Foundation
 @testable import Parra
 
 extension ParraAuthenticationProviderType {
-    static func mockPublicKey(_ mockParra: MockParra) -> ParraAuthenticationProviderType {
+    static func mockPublicKey(_ mockParra: MockParra)
+        -> ParraAuthenticationProviderType
+    {
         return .publicKey(
             tenantId: mockParra.tenantId,
             applicationId: mockParra.applicationId,

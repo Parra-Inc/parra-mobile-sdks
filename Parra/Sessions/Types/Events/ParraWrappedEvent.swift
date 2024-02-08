@@ -9,25 +9,27 @@
 import Foundation
 
 @usableFromInline
-internal enum ParraWrappedEvent {
+enum ParraWrappedEvent {
     case event(
         event: ParraEvent,
-        extra: [String : Any]? = nil
+        extra: [String: Any]? = nil
     )
 
     case dataEvent(
         event: ParraDataEvent,
-        extra: [String : Any]? = nil
+        extra: [String: Any]? = nil
     )
 
     case internalEvent(
         event: ParraInternalEvent,
-        extra: [String : Any]? = nil
+        extra: [String: Any]? = nil
     )
 
     case logEvent(
         event: ParraLogEvent
     )
+
+    // MARK: Internal
 
     var isInternal: Bool {
         switch self {

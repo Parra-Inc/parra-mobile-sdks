@@ -10,49 +10,18 @@ import Foundation
 import os
 
 public class Logger {
-    private struct Constant {
-        /// The maximum number of logs that can be collected before a logging backend is configured.
-        /// Once the backend is set, the most recent logs (number by this variable) will be flushed to the backend.
-        static let maxOrphanedLogBuffer = 100
-    }
-
-    /// A backend for all the methods for different verbosities provided by the Parra
-    /// Logger. The logger backend is the place where log events should be written
-    /// to console, disk, network, etc.
-    internal static var loggerBackend: ParraLoggerBackend? {
-        didSet {
-            loggerBackendDidChange()
-        }
-    }
-
-    internal let context: ParraLoggerContext
-    internal private(set) weak var parent: Logger?
-
-    /// Whether or not logging is enabled on this logger instance. Logging is enabled
-    /// by default. If you disable logging, logs are ignored until re-enabling. Changing this
-    /// property will not affect any logs made before enabling/disabling the logger.
-    public var isEnabled = true
-
-    /// Wether logs written to this instance of the Logger should bypass being written to events
-    /// for the session. This should always default to false and only be allowed to be enabled internally.
-    internal private(set) var bypassEventCreation: Bool
-
-    /// A cache of logs that occurred before the Parra SDK was initialized. Once initialization occurs
-    /// these are meant to be flushed to the newly set logger backend.
-    private static let cachedLogsLock = OSAllocatedUnfairLock(initialState: [ParraLogData]())
-
-    internal let fiberId: String?
+    // MARK: Lifecycle
 
     public init(
         category: String? = nil,
-        extra: [String : Any]? = nil,
+        extra: [String: Any]? = nil,
         fileId: String = #fileID,
         function: String = #function
     ) {
-        bypassEventCreation = false
-        fiberId = UUID().uuidString
+        self.bypassEventCreation = false
+        self.fiberId = UUID().uuidString
 
-        context = ParraLoggerContext(
+        self.context = ParraLoggerContext(
             fiberId: fiberId,
             fileId: fileId,
             category: category,
@@ -61,10 +30,10 @@ public class Logger {
         )
     }
 
-    internal init(
+    init(
         bypassEventCreation: Bool,
         category: String? = nil,
-        extra: [String : Any]? = nil,
+        extra: [String: Any]? = nil,
         fileId: String = #fileID
     ) {
         self.bypassEventCreation = bypassEventCreation
@@ -78,7 +47,7 @@ public class Logger {
         )
     }
 
-    internal init(
+    init(
         parent: Logger,
         context: ParraLoggerContext
     ) {
@@ -88,12 +57,94 @@ public class Logger {
         self.parent = parent
     }
 
+    // MARK: Public
+
+    /// Whether or not logging is enabled on this logger instance. Logging is enabled
+    /// by default. If you disable logging, logs are ignored until re-enabling. Changing this
+    /// property will not affect any logs made before enabling/disabling the logger.
+    public var isEnabled = true
+
+    /// Enabling logging on this logger instance. This update only applies to the current Logger
+    /// instance and not to other instances or static Logger.info/etc methods. Logging is enabled by default.
+    public func enable() {
+        isEnabled = true
+    }
+
+    /// Disabling logging on this logger instance. This update only applies to the current Logger
+    /// instance and not to other instances or static Logger.info/etc methods. Logging is enabled by default.
+    public func disable() {
+        isEnabled = false
+    }
+
+    // MARK: Internal
+
+    /// A backend for all the methods for different verbosities provided by the Parra
+    /// Logger. The logger backend is the place where log events should be written
+    /// to console, disk, network, etc.
+    static var loggerBackend: ParraLoggerBackend? {
+        didSet {
+            loggerBackendDidChange()
+        }
+    }
+
+    let context: ParraLoggerContext
+    private(set) weak var parent: Logger?
+
+    /// Wether logs written to this instance of the Logger should bypass being written to events
+    /// for the session. This should always default to false and only be allowed to be enabled internally.
+    private(set) var bypassEventCreation: Bool
+
+    let fiberId: String?
+
     @usableFromInline
-    internal func logToBackend(
+    static func logToBackend(
         level: ParraLogLevel,
         message: ParraLazyLogParam,
         extraError: Error? = nil,
-        extra: [String : Any]? = nil,
+        extra: [String: Any]? = nil,
+        callSiteContext: ParraLoggerCallSiteContext
+    ) -> ParraLogMarker {
+        let timestamp = Date.now
+        let logContext = ParraLogContext(
+            callSiteContext: callSiteContext,
+            loggerContext: nil,
+            // Static logger methods do not have a way of changing this configuration (intentionally).
+            bypassEventCreation: false
+        )
+
+        let data = ParraLogData(
+            timestamp: timestamp,
+            level: level,
+            message: message,
+            extraError: extraError,
+            extra: extra,
+            logContext: logContext
+        )
+
+        // We don't check that the logger is enabled here because this only applies to
+        // logger instances.
+        if let loggerBackend {
+            loggerBackend.log(
+                data: data
+            )
+        } else {
+            collectLogWithoutDestination(data: data)
+        }
+
+        return ParraLogMarker(
+            timestamp: timestamp,
+            message: message,
+            initialLevel: level,
+            initialLogContext: logContext
+        )
+    }
+
+    @usableFromInline
+    func logToBackend(
+        level: ParraLogLevel,
+        message: ParraLazyLogParam,
+        extraError: Error? = nil,
+        extra: [String: Any]? = nil,
         callSiteContext: ParraLoggerCallSiteContext
     ) -> ParraLogMarker {
         let timestamp = Date.now
@@ -137,60 +188,18 @@ public class Logger {
         )
     }
 
-    @usableFromInline
-    internal static func logToBackend(
-        level: ParraLogLevel,
-        message: ParraLazyLogParam,
-        extraError: Error? = nil,
-        extra: [String : Any]? = nil,
-        callSiteContext: ParraLoggerCallSiteContext
-    ) -> ParraLogMarker {
-        let timestamp = Date.now
-        let logContext = ParraLogContext(
-            callSiteContext: callSiteContext,
-            loggerContext: nil,
-            // Static logger methods do not have a way of changing this configuration (intentionally).
-            bypassEventCreation: false
-        )
+    // MARK: Private
 
-        let data = ParraLogData(
-            timestamp: timestamp,
-            level: level,
-            message: message,
-            extraError: extraError,
-            extra: extra,
-            logContext: logContext
-        )
-
-        // We don't check that the logger is enabled here because this only applies to
-        // logger instances.
-        if let loggerBackend {
-            loggerBackend.log(
-                data: data
-            )
-        } else {
-            collectLogWithoutDestination(data: data)
-        }
-
-        return ParraLogMarker(
-            timestamp: timestamp,
-            message: message,
-            initialLevel: level,
-            initialLogContext: logContext
-        )
+    private enum Constant {
+        /// The maximum number of logs that can be collected before a logging backend is configured.
+        /// Once the backend is set, the most recent logs (number by this variable) will be flushed to the backend.
+        static let maxOrphanedLogBuffer = 100
     }
 
-    /// Enabling logging on this logger instance. This update only applies to the current Logger
-    /// instance and not to other instances or static Logger.info/etc methods. Logging is enabled by default.
-    public func enable() {
-        isEnabled = true
-    }
-
-    /// Disabling logging on this logger instance. This update only applies to the current Logger
-    /// instance and not to other instances or static Logger.info/etc methods. Logging is enabled by default.
-    public func disable() {
-        isEnabled = false
-    }
+    /// A cache of logs that occurred before the Parra SDK was initialized. Once initialization occurs
+    /// these are meant to be flushed to the newly set logger backend.
+    private static let cachedLogsLock =
+        OSAllocatedUnfairLock(initialState: [ParraLogData]())
 
     private static func loggerBackendDidChange() {
         cachedLogsLock.withLock { cachedLogs in

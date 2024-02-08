@@ -8,6 +8,6 @@
 
 import Foundation
 
-internal enum Mimetype: String {
+enum Mimetype: String {
     case applicationJson = "application/json"
 }

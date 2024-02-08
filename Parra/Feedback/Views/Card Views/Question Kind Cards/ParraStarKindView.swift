@@ -8,17 +8,8 @@
 
 import UIKit
 
-internal class ParraStarKindView: UIView, ParraQuestionKindView {
-    typealias DataType = StarQuestionBody
-    typealias AnswerType = IntValueAnswer
-
-    private let question: Question
-    private let answerHandler: ParraAnswerHandler
-    private let config: ParraCardViewConfig
-    private let starControl: ParraStarControl
-    private let contentContainer = UIStackView(frame: .zero)
-    private let ratingLabels: ParraRatingLabels?
-    private let bucketId: String
+class ParraStarKindView: UIView, ParraQuestionKindView {
+    // MARK: Lifecycle
 
     required init(
         bucketId: String,
@@ -48,7 +39,7 @@ internal class ParraStarKindView: UIView, ParraQuestionKindView {
         contentContainer.spacing = 12.0
         contentContainer.distribution = .equalCentering
         contentContainer.translatesAutoresizingMaskIntoConstraints = false
-        
+
         starControl.translatesAutoresizingMaskIntoConstraints = false
         starControl.delegate = self
         contentContainer.addArrangedSubview(starControl)
@@ -68,26 +59,46 @@ internal class ParraStarKindView: UIView, ParraQuestionKindView {
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal func applyConfig(_ config: ParraCardViewConfig) {
+    // MARK: Internal
+
+    typealias DataType = StarQuestionBody
+    typealias AnswerType = IntValueAnswer
+
+    func applyConfig(_ config: ParraCardViewConfig) {
         starControl.applyConfig(config)
         ratingLabels?.applyConfig(config)
     }
+
+    // MARK: Private
+
+    private let question: Question
+    private let answerHandler: ParraAnswerHandler
+    private let config: ParraCardViewConfig
+    private let starControl: ParraStarControl
+    private let contentContainer = UIStackView(frame: .zero)
+    private let ratingLabels: ParraRatingLabels?
+    private let bucketId: String
 }
 
-extension ParraStarKindView: ParraStarControlDelegate {
-    func parraStarControl(_ control: ParraStarControl,
-                          didSelectStarCount count: Int) {
+// MARK: ParraStarControlDelegate
 
+extension ParraStarKindView: ParraStarControlDelegate {
+    func parraStarControl(
+        _ control: ParraStarControl,
+        didSelectStarCount count: Int
+    ) {
         updateAnswer(for: count)
     }
 
-    func parraStarControl(_ control: ParraStarControl,
-                          didConfirmStarCount count: Int) {
-
+    func parraStarControl(
+        _ control: ParraStarControl,
+        didConfirmStarCount count: Int
+    ) {
         updateAnswer(for: count)
         answerHandler.commitAnswers(for: bucketId, question: question)
     }

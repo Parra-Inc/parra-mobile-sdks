@@ -8,21 +8,17 @@
 
 import Foundation
 
-internal struct ParraDiskUsage {
-    let totalCapacity: Int
-    let availableCapacity: Int
-
-    // Capacity for storing essential resources
-    let availableEssentialCapacity: Int64
-
-    // Capacity for storing non-essential resources
-    let availableOpportunisticCapacity: Int64
+struct ParraDiskUsage {
+    // MARK: Lifecycle
 
     init?(resourceValues: URLResourceValues) {
         guard let totalCapacity = resourceValues.volumeTotalCapacity,
               let availableCapacity = resourceValues.volumeAvailableCapacity,
-              let availableEssentialCapacity = resourceValues.volumeAvailableCapacityForImportantUsage,
-              let availableOpportunisticCapacity = resourceValues.volumeAvailableCapacityForOpportunisticUsage else {
+              let availableEssentialCapacity = resourceValues
+              .volumeAvailableCapacityForImportantUsage,
+              let availableOpportunisticCapacity = resourceValues
+              .volumeAvailableCapacityForOpportunisticUsage else
+        {
             return nil
         }
 
@@ -31,4 +27,15 @@ internal struct ParraDiskUsage {
         self.availableEssentialCapacity = availableEssentialCapacity
         self.availableOpportunisticCapacity = availableOpportunisticCapacity
     }
+
+    // MARK: Internal
+
+    let totalCapacity: Int
+    let availableCapacity: Int
+
+    // Capacity for storing essential resources
+    let availableEssentialCapacity: Int64
+
+    // Capacity for storing non-essential resources
+    let availableOpportunisticCapacity: Int64
 }

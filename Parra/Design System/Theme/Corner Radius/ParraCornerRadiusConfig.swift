@@ -9,19 +9,7 @@
 import SwiftUI
 
 public struct ParraCornerRadiusConfig {
-    public static let `default` = ParraCornerRadiusConfig(
-        extraSmall: .init(allCorners: 4),
-        small: .init(allCorners: 6),
-        medium: .init(allCorners: 8),
-        large: .init(allCorners: 12),
-        extraLarge: .init(allCorners: 16)
-    )
-
-    public let extraSmall: RectangleCornerRadii
-    public let small: RectangleCornerRadii
-    public let medium: RectangleCornerRadii
-    public let large: RectangleCornerRadii
-    public let extraLarge: RectangleCornerRadii
+    // MARK: Lifecycle
 
     public init(
         extraSmall: RectangleCornerRadii,
@@ -37,11 +25,29 @@ public struct ParraCornerRadiusConfig {
         self.extraLarge = extraLarge
     }
 
-    public func value(for size: ParraCornerRadiusSize?) -> RectangleCornerRadii {
+    // MARK: Public
+
+    public static let `default` = ParraCornerRadiusConfig(
+        extraSmall: .init(allCorners: 4),
+        small: .init(allCorners: 6),
+        medium: .init(allCorners: 8),
+        large: .init(allCorners: 12),
+        extraLarge: .init(allCorners: 16)
+    )
+
+    public let extraSmall: RectangleCornerRadii
+    public let small: RectangleCornerRadii
+    public let medium: RectangleCornerRadii
+    public let large: RectangleCornerRadii
+    public let extraLarge: RectangleCornerRadii
+
+    public func value(for size: ParraCornerRadiusSize?)
+        -> RectangleCornerRadii
+    {
         guard let size else {
             return .zero
         }
-        
+
         switch size {
         case .zero:
             return .zero

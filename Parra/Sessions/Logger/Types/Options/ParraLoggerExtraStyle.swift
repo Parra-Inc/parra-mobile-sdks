@@ -9,8 +9,6 @@
 import Foundation
 
 public enum ParraLoggerExtraStyle {
-    public static let `default` = ParraLoggerExtraStyle.pretty
-
     // Extra dictionaries are printed using their default ``description``.
     case raw
 
@@ -19,4 +17,8 @@ public enum ParraLoggerExtraStyle {
 
     // Easy to read, lots of whitespace, and indentation between different levels.
     case pretty
+
+    // MARK: Public
+
+    public static let `default` = ParraLoggerExtraStyle.pretty
 }

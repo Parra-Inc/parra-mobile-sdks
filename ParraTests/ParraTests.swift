@@ -5,16 +5,16 @@
 //  Created by Mick MacCallum on 3/13/22.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
 class FakeModule: ParraModule {
     static var name: String = "FakeModule"
-    
+
     func hasDataToSync(since date: Date?) async -> Bool {
         return true
     }
-    
+
     func synchronizeData() async {
         try! await Task.sleep(for: 0.25)
     }
@@ -22,7 +22,7 @@ class FakeModule: ParraModule {
 
 @MainActor
 class ParraTests: MockedParraTestCase {
-    private var fakeModule: FakeModule?
+    // MARK: Internal
 
     override func tearDown() async throws {
         if let fakeModule {
@@ -40,9 +40,9 @@ class ParraTests: MockedParraTestCase {
         let hasRegistered = await mockParra.parra.state.hasRegisteredModule(
             module: fakeModule!
         )
-        
+
         XCTAssertTrue(hasRegistered)
-        
+
         let modules = await mockParra.parra.state.getAllRegisteredModules()
 
         XCTAssert(modules.contains(where: { testModule in
@@ -53,9 +53,10 @@ class ParraTests: MockedParraTestCase {
     func testModuleRegistrationIsDeduplicated() async throws {
         fakeModule = FakeModule()
 
-        let checkBeforeRegister = await mockParra.parra.state.hasRegisteredModule(
-            module: fakeModule!
-        )
+        let checkBeforeRegister = await mockParra.parra.state
+            .hasRegisteredModule(
+                module: fakeModule!
+            )
         XCTAssertFalse(checkBeforeRegister)
 
         let previous = await mockParra.parra.state.getAllRegisteredModules()
@@ -78,7 +79,12 @@ class ParraTests: MockedParraTestCase {
     func testLogout() async throws {
         await mockParra.parra.logout()
 
-        let currentCredential = await mockParra.dataManager.getCurrentCredential()
+        let currentCredential = await mockParra.dataManager
+            .getCurrentCredential()
         XCTAssertNil(currentCredential)
     }
+
+    // MARK: Private
+
+    private var fakeModule: FakeModule?
 }

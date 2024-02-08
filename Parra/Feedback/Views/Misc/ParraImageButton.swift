@@ -8,32 +8,41 @@
 
 import UIKit
 
-internal class ParraImageButton: UIControl, SelectableButton, ParraLegacyConfigurableView {
-    internal weak var delegate: SelectableButtonDelegate?
-    internal var buttonIsSelected: Bool
-    internal var allowsDeselection: Bool = false
+class ParraImageButton: UIControl, SelectableButton,
+    ParraLegacyConfigurableView
+{
+    // MARK: Lifecycle
 
-    private let asset: Asset
-    private var buttonImageView = UIImageView(frame: .zero)
-    private var activityIndicator = UIActivityIndicatorView(style: .medium)
-
-    internal required init(initiallySelected: Bool,
-                           config: ParraCardViewConfig,
-                           asset: Asset) {
+    required init(
+        initiallySelected: Bool,
+        config: ParraCardViewConfig,
+        asset: Asset
+    ) {
         self.asset = asset
 
-        buttonIsSelected = initiallySelected
+        self.buttonIsSelected = initiallySelected
 
         super.init(frame: .zero)
 
         setup(config: config)
     }
 
-    internal required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal func setup(config: ParraCardViewConfig) {
+    // MARK: Internal
+
+    weak var delegate: SelectableButtonDelegate?
+    var buttonIsSelected: Bool
+    var allowsDeselection: Bool = false
+
+    override var intrinsicContentSize: CGSize {
+        return buttonImageView.intrinsicContentSize
+    }
+
+    func setup(config: ParraCardViewConfig) {
         addTarget(self, action: #selector(selectionAction), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
 
@@ -53,28 +62,35 @@ internal class ParraImageButton: UIControl, SelectableButton, ParraLegacyConfigu
                 to: self,
                 with: .init(top: 8, left: 8, bottom: 8, right: 8)
             ) + [
-            buttonImageView.widthAnchor.constraint(equalTo: buttonImageView.heightAnchor),
-            buttonImageView.widthAnchor.constraint(equalToConstant: 60),
+                buttonImageView.widthAnchor
+                    .constraint(equalTo: buttonImageView.heightAnchor),
+                buttonImageView.widthAnchor.constraint(equalToConstant: 60),
 //            buttonImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
 //            buttonImageView.topAnchor.constraint(equalTo: topAnchor),
 //            buttonImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+                activityIndicator.centerXAnchor
+                    .constraint(equalTo: centerXAnchor),
+                activityIndicator.centerYAnchor.constraint(
+                    equalTo: centerYAnchor
+                )
 //            widthAnchor.constraint(equalTo: heightAnchor),
-        ])
+            ]
+        )
 
         Task {
-            let isCached = await Parra.getExistingInstance().networkManager.isAssetCached(
-                asset: asset
-            )
+            let isCached = await Parra.getExistingInstance().networkManager
+                .isAssetCached(
+                    asset: asset
+                )
 
             if !isCached {
                 self.activityIndicator.startAnimating()
             }
 
-            let image = try? await Parra.getExistingInstance().networkManager.fetchAsset(
-                asset: asset
-            )
+            let image = try? await Parra.getExistingInstance().networkManager
+                .fetchAsset(
+                    asset: asset
+                )
 
             Task { @MainActor in
                 self.activityIndicator.stopAnimating()
@@ -90,17 +106,14 @@ internal class ParraImageButton: UIControl, SelectableButton, ParraLegacyConfigu
         buttonImageView.layer.borderColor = config.tintColor?.cgColor
     }
 
-    override var intrinsicContentSize: CGSize {
-        return buttonImageView.intrinsicContentSize
-    }
-
-    internal override func layoutSubviews() {
+    override func layoutSubviews() {
         super.layoutSubviews()
 
         applyBorderStyleForSelection(animated: false, for: buttonImageView)
     }
 
-    @objc internal func selectionAction(_ sender: ParraImageButton) {
+    @objc
+    func selectionAction(_ sender: ParraImageButton) {
         if allowsDeselection {
             buttonIsSelected = !buttonIsSelected
         } else if !buttonIsSelected {
@@ -115,4 +128,10 @@ internal class ParraImageButton: UIControl, SelectableButton, ParraLegacyConfigu
             delegate?.buttonDidDeselect(button: self)
         }
     }
+
+    // MARK: Private
+
+    private let asset: Asset
+    private var buttonImageView = UIImageView(frame: .zero)
+    private var activityIndicator = UIActivityIndicatorView(style: .medium)
 }

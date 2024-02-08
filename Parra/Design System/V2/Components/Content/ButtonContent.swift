@@ -9,12 +9,9 @@
 import SwiftUI
 
 public struct ButtonContent {
-    public let title: LabelContent
-    public let isDisabled: Bool
+    // MARK: Lifecycle
 
-    public internal(set) var onPress: (() -> Void)?
-
-    internal init(
+    init(
         title: LabelContent,
         isDisabled: Bool = false,
         onPress: (() -> Void)? = nil
@@ -23,4 +20,11 @@ public struct ButtonContent {
         self.isDisabled = isDisabled
         self.onPress = onPress
     }
+
+    // MARK: Public
+
+    public let title: LabelContent
+    public let isDisabled: Bool
+
+    public internal(set) var onPress: (() -> Void)?
 }

@@ -7,8 +7,8 @@
 
 import Foundation
 
-internal protocol ItemStorage {
+protocol ItemStorage {
     associatedtype DataType: Codable
-    
+
     init(storageModule: ParraStorageModule<DataType>)
 }

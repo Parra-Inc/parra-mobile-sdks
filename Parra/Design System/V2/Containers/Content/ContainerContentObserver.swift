@@ -9,8 +9,7 @@
 import SwiftUI
 
 @MainActor
-internal protocol ContainerContentObserver: ObservableObject {
-
+protocol ContainerContentObserver: ObservableObject {
     associatedtype Content: ContainerContent
 
     var content: Content { get }

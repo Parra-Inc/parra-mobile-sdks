@@ -8,15 +8,8 @@
 
 import Foundation
 
-internal struct FormFieldWithState: Identifiable {
-    internal let field: FeedbackFormField
-    
-    internal private(set) var state: FormFieldState
-    internal private(set) var value: String?
-
-    var id: String {
-        return field.id
-    }
+struct FormFieldWithState: Identifiable {
+    // MARK: Lifecycle
 
     init(
         field: FeedbackFormField
@@ -26,10 +19,23 @@ internal struct FormFieldWithState: Identifiable {
         self.value = nil
     }
 
+    // MARK: Internal
+
+    let field: FeedbackFormField
+
+    private(set) var state: FormFieldState
+    private(set) var value: String?
+
+    var id: String {
+        return field.id
+    }
+
     mutating func updateValue(_ value: String?) {
         self.value = value
-        self.state = Self.validateUpdate(value: value, for: field)
+        state = Self.validateUpdate(value: value, for: field)
     }
+
+    // MARK: Private
 
     private static func validateUpdate(
         value: String?,

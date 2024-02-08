@@ -17,10 +17,9 @@ struct SwatchView: View {
                 .font(.callout)
                 .fontWeight(.semibold)
 
-
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(swatch.allShades, id: \.1) { (shade) in
+                    ForEach(swatch.allShades, id: \.1) { shade in
                         let (name, color) = shade
 
                         VStack(alignment: .center) {
@@ -28,7 +27,10 @@ struct SwatchView: View {
                                 .font(.caption2)
                                 .frame(width: 60, height: 60)
                                 .background(color)
-                                .foregroundStyle(color.isLight() ? .black : .white)
+                                .foregroundStyle(
+                                    color
+                                        .isLight() ? .black : .white
+                                )
 
                             Text(name)
                                 .font(.caption)
@@ -44,9 +46,8 @@ struct SwatchView: View {
     Group {
         SwatchView(swatch: .init(primary: .accentColor, name: "A swatch name"))
             .padding()
-        
+
         SwatchView(swatch: .amber)
             .padding()
     }
 }
-

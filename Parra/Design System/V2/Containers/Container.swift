@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal protocol Container: View {
+protocol Container: View {
     associatedtype Factory: ParraComponentFactory
     associatedtype Config: ContainerConfig
     associatedtype ContentObserver: ContainerContentObserver
@@ -21,7 +21,7 @@ internal protocol Container: View {
 
     var config: Config { get }
     var componentFactory: ComponentFactory<Factory> { get }
-    
+
     var contentObserver: ContentObserver { get }
     var themeObserver: ParraThemeObserver { get }
 }

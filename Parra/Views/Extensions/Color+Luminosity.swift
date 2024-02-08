@@ -13,7 +13,7 @@ import SwiftUI
 
 // Fantastic explanation of how it works
 // http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
-fileprivate extension CGFloat {
+private extension CGFloat {
     /// clamp the supplied value between a min and max
     /// - Parameter min: The min value
     /// - Parameter max: The max value
@@ -64,7 +64,11 @@ extension Color {
 
         // Now we need to convert it to the RGB colorspace. UIColor.white / UIColor.black are greyscale and not RGB.
         // If you don't do this then you will crash when accessing components index 2 below when evaluating greyscale colors.
-        let RGBCGColor = originalCGColor.converted(to: CGColorSpaceCreateDeviceRGB(), intent: .defaultIntent, options: nil)
+        let RGBCGColor = originalCGColor.converted(
+            to: CGColorSpaceCreateDeviceRGB(),
+            intent: .defaultIntent,
+            options: nil
+        )
         guard let components = RGBCGColor?.components else {
             return true
         }
@@ -73,9 +77,13 @@ extension Color {
             return true
         }
 
-        let brightness = Float(((components[0] * 299) + (components[1] * 587) + (components[2] * 114)) / 1000)
+        let brightness =
+            Float((
+                (components[0] * 299) + (components[1] * 587) +
+                    (components[2] * 114)
+            ) / 1_000)
 
-        return (brightness > threshold)
+        return brightness > threshold
     }
 
     /// Return a UIColor with adjusted luminosity, returns self if unable to convert
@@ -94,14 +102,18 @@ extension Color {
         blue = blue.clamp(min: 0, max: 1)
 
         // 2 - Find the minimum and maximum values of R, G and B.
-        guard let minRGB = [red, green, blue].min(), let maxRGB = [red, green, blue].max() else {
+        guard let minRGB = [red, green, blue].min(), let maxRGB = [
+            red,
+            green,
+            blue
+        ].max() else {
             return self
         }
 
         // 3 - Now calculate the Luminace value by adding the max and min values and divide by 2.
         var luminosity = (minRGB + maxRGB) / 2
 
-        if luminosity == 0 && newLuminosity <= 0.5 {
+        if luminosity == 0, newLuminosity <= 0.5 {
             // The color is black. There's nothing we can do
             return self
         }
@@ -165,7 +177,8 @@ extension Color {
         if luminosity < 0.5 {
             temporaryVariableOne = luminosity * (1 + saturation)
         } else {
-            temporaryVariableOne = luminosity + saturation - luminosity * saturation
+            temporaryVariableOne = luminosity + saturation - luminosity *
+                saturation
         }
 
         // 3 - Final calculated temporary variable
@@ -180,9 +193,18 @@ extension Color {
         let tempBlue = (convertedHue - 0.333).convertToColourChannel()
 
         // 6 we must run up to 3 tests to select the correct formula for each colour channel, converting to RGB
-        let newRed = tempRed.convertToRGB(temp1: temporaryVariableOne, temp2: temporaryVariableTwo)
-        let newGreen = tempGreen.convertToRGB(temp1: temporaryVariableOne, temp2: temporaryVariableTwo)
-        let newBlue = tempBlue.convertToRGB(temp1: temporaryVariableOne, temp2: temporaryVariableTwo)
+        let newRed = tempRed.convertToRGB(
+            temp1: temporaryVariableOne,
+            temp2: temporaryVariableTwo
+        )
+        let newGreen = tempGreen.convertToRGB(
+            temp1: temporaryVariableOne,
+            temp2: temporaryVariableTwo
+        )
+        let newBlue = tempBlue.convertToRGB(
+            temp1: temporaryVariableOne,
+            temp2: temporaryVariableTwo
+        )
 
         guard newRed.isFinite, newGreen.isFinite, newBlue.isFinite else {
             return self

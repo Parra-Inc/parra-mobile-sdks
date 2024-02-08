@@ -1,5 +1,5 @@
 //
-//  ParraDiskUsage+ParraDictionaryConvertible.swift
+//  ParraDiskUsage+ParraSessionParamDictionaryConvertible.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/8/23.
@@ -14,7 +14,7 @@ extension ParraDiskUsage: ParraSanitizedDictionaryConvertible {
             "total_capacity": totalCapacity,
             "available_capacity": availableCapacity,
             "available_essential_capacity": availableEssentialCapacity,
-            "available_opportunistic_capacity": availableOpportunisticCapacity,
+            "available_opportunistic_capacity": availableOpportunisticCapacity
         ]
     }
 }

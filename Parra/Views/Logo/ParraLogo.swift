@@ -10,7 +10,36 @@ import SwiftUI
 import UIKit
 
 struct ParraLogo: View {
+    // MARK: Internal
+
     var type: ParraLogoType
+
+    @ViewBuilder var logoRight: some View {
+        switch type {
+        case .logo:
+            EmptyView()
+        case .logoAndText, .poweredBy:
+            Image(uiImage: getLogoImage(of: type)!)
+                .resizable()
+                .frame(width: textSize.width, height: textSize.height)
+        }
+    }
+
+    @ViewBuilder var logo: some View {
+        HStack(alignment: .center, spacing: elementSpacing) {
+            Image(uiImage: getLogoImage(of: .logo)!)
+                .resizable()
+                .frame(width: iconSize, height: iconSize)
+
+            logoRight
+        }
+    }
+
+    var body: some View {
+        logo
+    }
+
+    // MARK: Private
 
     private var iconSize: Double {
         return switch type {
@@ -43,33 +72,6 @@ struct ParraLogo: View {
         case .poweredBy:
             6
         }
-    }
-
-    @ViewBuilder
-    var logoRight: some View {
-        switch type {
-        case .logo:
-            EmptyView()
-        case .logoAndText, .poweredBy:
-            Image(uiImage: getLogoImage(of: type)!)
-                .resizable()
-                .frame(width: textSize.width, height: textSize.height)
-        }
-    }
-
-    @ViewBuilder
-    var logo: some View {
-        HStack(alignment: .center, spacing: elementSpacing) {
-            Image(uiImage: getLogoImage(of: .logo)!)
-                .resizable()
-                .frame(width: iconSize, height: iconSize)
-
-            logoRight
-        }
-    }
-
-    var body: some View {
-        logo
     }
 
     private func getLogoImage(of type: ParraLogoType) -> UIImage? {

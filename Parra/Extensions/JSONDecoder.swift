@@ -8,7 +8,7 @@
 import Foundation
 
 extension JSONDecoder {
-    internal private(set) static var parraDecoder: JSONDecoder = {
+    private(set) static var parraDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
 
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -17,7 +17,7 @@ extension JSONDecoder {
         return decoder
     }()
 
-    internal private(set) static var spaceOptimizedDecoder: JSONDecoder = {
+    private(set) static var spaceOptimizedDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
 
         decoder.dateDecodingStrategy = .iso8601

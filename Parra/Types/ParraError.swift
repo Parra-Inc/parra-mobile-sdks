@@ -22,13 +22,49 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     case jsonError(String)
     case unknown
 
-    internal var errorDescription: String {
+    // MARK: Public
+
+    /// A simple error description string for cases where we don't have more complete control
+    /// over the output formatting. Interally, we want to always use `Parra/ParraErrorWithExtra`
+    /// in combination with the `ParraError/errorDescription` and ``ParraError/description``
+    /// fields instead of this.
+    public var description: String {
+        let baseMessage = errorDescription
+
+        switch self {
+        case .message, .unknown, .jsonError, .notInitialized,
+             .missingAuthentication:
+            return baseMessage
+        case .generic(_, let error):
+            if let error {
+                return "\(baseMessage) Error: \(error)"
+            }
+
+            return baseMessage
+        case .authenticationFailed(let error):
+            return "\(baseMessage) Error: \(error)"
+        case .networkError(let request, let response, let data):
+            #if DEBUG
+            let dataString = String(data: data, encoding: .utf8) ?? "unknown"
+            return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)\nData: \(dataString)"
+            #else
+            return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)\nData: \(data.count) byte(s)"
+            #endif
+        case .fileSystem(let path, let message):
+            return "\(baseMessage)\nPath: \(path.relativeString)\nError: \(message)"
+        }
+    }
+
+    // MARK: Internal
+
+    var errorDescription: String {
         switch self {
         case .message(let string):
             return string
         case .generic(let string, let error):
             if let error {
-                let formattedError = LoggerFormatters.extractMessage(from: error)
+                let formattedError = LoggerFormatters
+                    .extractMessage(from: error)
 
                 return "\(string) Error: \(formattedError)"
             }
@@ -50,37 +86,9 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return "An unknown error occurred."
         }
     }
-
-    /// A simple error description string for cases where we don't have more complete control
-    /// over the output formatting. Interally, we want to always use `Parra/ParraErrorWithExtra`
-    /// in combination with the `ParraError/errorDescription` and ``ParraError/description``
-    /// fields instead of this.
-    public var description: String {
-        let baseMessage = errorDescription
-
-        switch self {
-        case .message, .unknown, .jsonError, .notInitialized, .missingAuthentication:
-            return baseMessage
-        case .generic(_, let error):
-            if let error {
-                return "\(baseMessage) Error: \(error)"
-            }
-
-            return baseMessage
-        case .authenticationFailed(let error):
-            return "\(baseMessage) Error: \(error)"
-        case .networkError(let request, let response, let data):
-#if DEBUG
-            let dataString = String(data: data, encoding: .utf8) ?? "unknown"
-            return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)\nData: \(dataString)"
-#else
-            return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)\nData: \(data.count) byte(s)"
-#endif
-        case .fileSystem(let path, let message):
-            return "\(baseMessage)\nPath: \(path.relativeString)\nError: \(message)"
-        }
-    }
 }
+
+// MARK: ParraSanitizedDictionaryConvertible
 
 extension ParraError: ParraSanitizedDictionaryConvertible {
     var sanitized: ParraSanitizedDictionary {
@@ -98,18 +106,18 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
                 "authentication_error": error
             ]
         case .networkError(let request, let response, let body):
-            var bodyInfo: [String : Any] = [
+            var bodyInfo: [String: Any] = [
                 "length": body.count
             ]
 
-#if DEBUG
+            #if DEBUG
             let dataString = String(
                 data: body,
                 encoding: .utf8
             ) ?? "unknown"
 
             bodyInfo["data"] = dataString
-#endif
+            #endif
 
             return [
                 "request": request.sanitized.dictionary,
@@ -121,7 +129,8 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
                 "path": path.relativeString,
                 "error_description": message
             ]
-        case .notInitialized, .missingAuthentication, .message, .jsonError, .unknown:
+        case .notInitialized, .missingAuthentication, .message, .jsonError,
+             .unknown:
             return [:]
         }
     }

@@ -8,16 +8,22 @@
 
 import Foundation
 
-internal extension URLRequest {
+extension URLRequest {
     mutating func setValue(for field: URLRequestHeaderField) {
         setValue(field.value, forHTTPHeaderField: field.name)
     }
 
-    mutating func setValue(_ value: String?, forHTTPHeaderField field: ParraHeader) {
+    mutating func setValue(
+        _ value: String?,
+        forHTTPHeaderField field: ParraHeader
+    ) {
         setValue(value, forHTTPHeaderField: field.prefixedName)
     }
 
     mutating func setValue(for parraHeader: ParraHeader) {
-        setValue(parraHeader.currentValue, forHTTPHeaderField: parraHeader.prefixedName)
+        setValue(
+            parraHeader.currentValue,
+            forHTTPHeaderField: parraHeader.prefixedName
+        )
     }
 }

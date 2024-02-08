@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-fileprivate let logger = Logger(category: "Modals")
+private let logger = Logger(category: "Modals")
 
 public extension ParraFeedback {
     // MARK: - Modals
@@ -40,7 +40,10 @@ public extension ParraFeedback {
         userDismissable: Bool = true,
         onDismiss: (() -> Void)? = nil
     ) {
-        logger.info("Presenting card popup view controller with \(cards.count) card(s)")
+        logger
+            .info(
+                "Presenting card popup view controller with \(cards.count) card(s)"
+            )
 
         let cardViewController = ParraCardPopupViewController(
             cards: cards,
@@ -77,7 +80,10 @@ public extension ParraFeedback {
         config: ParraCardViewConfig = .drawerDefault,
         onDismiss: (() -> Void)? = nil
     ) {
-        logger.info("Presenting drawer view controller with \(cards.count) card(s)")
+        logger
+            .info(
+                "Presenting drawer view controller with \(cards.count) card(s)"
+            )
 
         let transitionStyle = ParraCardModalTransitionStyle.slide
         let cardViewController = ParraCardDrawerViewController(
@@ -87,7 +93,9 @@ public extension ParraFeedback {
             onDismiss: onDismiss
         )
 
-        if let sheetPresentationController = cardViewController.sheetPresentationController {
+        if let sheetPresentationController = cardViewController
+            .sheetPresentationController
+        {
             sheetPresentationController.detents = [.medium()]
             sheetPresentationController.prefersGrabberVisible = true
         }
@@ -108,7 +116,8 @@ public extension ParraFeedback {
     ) {
         let parra = Parra.getExistingInstance()
         let theme = parra.configuration.theme
-        let globalComponentAttributes = parra.configuration.globalComponentAttributes
+        let globalComponentAttributes = parra.configuration
+            .globalComponentAttributes
         let notificationCenter = parra.notificationCenter
 
         let formViewController = ParraFeedbackFormViewController(
@@ -119,7 +128,9 @@ public extension ParraFeedback {
             localFactory: localFactory
         )
 
-        if let sheetPresentationController = formViewController.sheetPresentationController {
+        if let sheetPresentationController = formViewController
+            .sheetPresentationController
+        {
             sheetPresentationController.detents = [.large()]
             sheetPresentationController.prefersGrabberVisible = true
         }
@@ -132,12 +143,15 @@ public extension ParraFeedback {
     }
 
     // MARK: - Helpers
+
     private func presentModal(
         modal: UIViewController & ParraModal,
         fromViewController: UIViewController?,
         transitionStyle: ParraCardModalTransitionStyle
     ) {
-        guard let vc = fromViewController ?? UIViewController.topMostViewController() else {
+        guard let vc = fromViewController ?? UIViewController
+            .topMostViewController() else
+        {
             logger.warn("Missing view controller to present popup from.")
             return
         }

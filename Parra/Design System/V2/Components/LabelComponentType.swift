@@ -1,5 +1,5 @@
 //
-//  Component.swift
+//  LabelComponentType.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal protocol LabelComponentType: View {
+protocol LabelComponentType: View {
     var config: LabelConfig { get }
     var content: LabelContent { get }
     var style: ParraAttributedLabelStyle { get }

@@ -7,24 +7,27 @@
 
 import UIKit
 
-fileprivate let logger = Logger(category: "Endpoints")
+private let logger = Logger(category: "Endpoints")
 
-internal extension ParraNetworkManager {
+extension ParraNetworkManager {
     // MARK: - Feedback
 
-    func getCards(appArea: ParraQuestionAppArea) async throws -> [ParraCardItem] {
-        var queryItems: [String : String] = [:]
+    func getCards(appArea: ParraQuestionAppArea) async throws
+        -> [ParraCardItem]
+    {
+        var queryItems: [String: String] = [:]
         // It is important that an app area name is only provided if a specific one is meant to be returned.
         // If the app area type is `all` then there should not be a `app_area` key present in the request.
         if let appAreaName = appArea.parameterized {
             queryItems["app_area_id"] = appAreaName
         }
 
-        let response: AuthenticatedRequestResult<CardsResponse> = await performAuthenticatedRequest(
-            endpoint: .getCards,
-            queryItems: queryItems,
-            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
-        )
+        let response: AuthenticatedRequestResult<CardsResponse> =
+            await performAuthenticatedRequest(
+                endpoint: .getCards,
+                queryItems: queryItems,
+                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
+            )
 
         switch response.result {
         case .success(let cardsResponse):
@@ -42,11 +45,12 @@ internal extension ParraNetworkManager {
             return
         }
 
-        let response: AuthenticatedRequestResult<EmptyResponseObject> = await performAuthenticatedRequest(
-            endpoint: .postBulkAnswerQuestions,
-            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-            body: cards.map { CompletedCardUpload(completedCard: $0) }
-        )
+        let response: AuthenticatedRequestResult<EmptyResponseObject> =
+            await performAuthenticatedRequest(
+                endpoint: .postBulkAnswerQuestions,
+                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+                body: cards.map { CompletedCardUpload(completedCard: $0) }
+            )
 
         switch response.result {
         case .success:
@@ -59,16 +63,22 @@ internal extension ParraNetworkManager {
     }
 
     /// Fetches the feedback form with the provided id from the Parra API.
-    func getFeedbackForm(with formId: String) async throws -> ParraFeedbackFormResponse {
+    func getFeedbackForm(with formId: String) async throws
+        -> ParraFeedbackFormResponse
+    {
         guard let escapedFormId = formId.addingPercentEncoding(
             withAllowedCharacters: .urlPathAllowed
         ) else {
-            throw ParraError.message("Provided form id: \(formId) contains invalid characters. Must be URL path encodable.")
+            throw ParraError
+                .message(
+                    "Provided form id: \(formId) contains invalid characters. Must be URL path encodable."
+                )
         }
 
-        let response: AuthenticatedRequestResult<ParraFeedbackFormResponse> = await performAuthenticatedRequest(
-            endpoint: .getFeedbackForm(formId: escapedFormId)
-        )
+        let response: AuthenticatedRequestResult<ParraFeedbackFormResponse> =
+            await performAuthenticatedRequest(
+                endpoint: .getFeedbackForm(formId: escapedFormId)
+            )
 
         switch response.result {
         case .success(let formResponse):
@@ -86,7 +96,7 @@ internal extension ParraNetworkManager {
         data: [FeedbackFormField: String]
     ) async throws {
         // Map of FeedbackFormField.name -> a String (or value if applicable)
-        let body = data.reduce([String : String]()) { partialResult, entry in
+        let body = data.reduce([String: String]()) { partialResult, entry in
             var next = partialResult
             next[entry.key.name] = entry.value
             return next
@@ -95,13 +105,17 @@ internal extension ParraNetworkManager {
         guard let escapedFormId = formId.addingPercentEncoding(
             withAllowedCharacters: .urlPathAllowed
         ) else {
-            throw ParraError.message("Provided form id: \(formId) contains invalid characters. Must be URL path encodable.")
+            throw ParraError
+                .message(
+                    "Provided form id: \(formId) contains invalid characters. Must be URL path encodable."
+                )
         }
 
-        let response: AuthenticatedRequestResult<EmptyResponseObject> = await performAuthenticatedRequest(
-            endpoint: .postSubmitFeedbackForm(formId: escapedFormId),
-            body: body
-        )
+        let response: AuthenticatedRequestResult<EmptyResponseObject> =
+            await performAuthenticatedRequest(
+                endpoint: .postSubmitFeedbackForm(formId: escapedFormId),
+                body: body
+            )
 
         switch response.result {
         case .success:
@@ -122,11 +136,12 @@ internal extension ParraNetworkManager {
             throw ParraError.notInitialized
         }
 
-        let response: AuthenticatedRequestResult<ParraSessionsResponse> = await performAuthenticatedRequest(
-            endpoint: .postBulkSubmitSessions(tenantId: tenantId),
-            config: .defaultWithRetries,
-            body: sessionUpload
-        )
+        let response: AuthenticatedRequestResult<ParraSessionsResponse> =
+            await performAuthenticatedRequest(
+                endpoint: .postBulkSubmitSessions(tenantId: tenantId),
+                config: .defaultWithRetries,
+                body: sessionUpload
+            )
 
         return response
     }
@@ -138,15 +153,16 @@ internal extension ParraNetworkManager {
             throw ParraError.notInitialized
         }
 
-        let body: [String : String] = [
+        let body: [String: String] = [
             "token": token,
             "type": "apns"
         ]
 
-        let response: AuthenticatedRequestResult<EmptyResponseObject> = await performAuthenticatedRequest(
-            endpoint: .postPushTokens(tenantId: tenantId),
-            body: body
-        )
+        let response: AuthenticatedRequestResult<EmptyResponseObject> =
+            await performAuthenticatedRequest(
+                endpoint: .postPushTokens(tenantId: tenantId),
+                body: body
+            )
 
         switch response.result {
         case .success:

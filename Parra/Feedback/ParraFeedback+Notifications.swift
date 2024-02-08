@@ -7,6 +7,7 @@
 
 import Foundation
 
-internal extension ParraFeedback {
-    static let cardsDidChangeNotification = NSNotification.Name(rawValue: "ParraFeedbackCardsDidChangeNotification")
+extension ParraFeedback {
+    static let cardsDidChangeNotification = NSNotification
+        .Name(rawValue: "ParraFeedbackCardsDidChangeNotification")
 }

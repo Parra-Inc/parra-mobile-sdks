@@ -9,22 +9,9 @@
 import SwiftUI
 
 public struct MenuContent {
-    public struct Option: Identifiable, Hashable {
-        public let id: String
-        public let title: String
-        public let value: String?
-    }
+    // MARK: Lifecycle
 
-    public let title: LabelContent?
-    public let placeholder: LabelContent?
-
-    /// A string which is displayed below the menu to supply suplemental information.
-    public let helper: LabelContent?
-
-    public let options: [Option]
-    public let optionSelectionChanged: ((Option?) -> Void)?
-
-    internal init(
+    init(
         title: LabelContent? = nil,
         placeholder: LabelContent? = nil,
         helper: LabelContent? = nil,
@@ -38,7 +25,7 @@ public struct MenuContent {
         self.optionSelectionChanged = optionSelectionChanged
     }
 
-    internal init(
+    init(
         title: String? = nil,
         placeholder: String? = nil,
         helper: String? = nil,
@@ -63,4 +50,21 @@ public struct MenuContent {
         self.options = options
         self.optionSelectionChanged = optionSelectionChanged
     }
+
+    // MARK: Public
+
+    public struct Option: Identifiable, Hashable {
+        public let id: String
+        public let title: String
+        public let value: String?
+    }
+
+    public let title: LabelContent?
+    public let placeholder: LabelContent?
+
+    /// A string which is displayed below the menu to supply suplemental information.
+    public let helper: LabelContent?
+
+    public let options: [Option]
+    public let optionSelectionChanged: ((Option?) -> Void)?
 }

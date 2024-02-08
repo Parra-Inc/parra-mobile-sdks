@@ -9,9 +9,11 @@
 import Foundation
 import UIKit
 
-internal extension UIDevice {
+extension UIDevice {
     static var modelCode: String {
-        if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] {
+        if let simulatorModelIdentifier = ProcessInfo()
+            .environment["SIMULATOR_MODEL_IDENTIFIER"]
+        {
             return "Simulator \(simulatorModelIdentifier)"
         }
         var systemInfo = utsname()
@@ -19,7 +21,11 @@ internal extension UIDevice {
         uname(&systemInfo)
 
         return withUnsafeMutablePointer(to: &systemInfo.machine) {
-            ptr in String(cString: UnsafeRawPointer(ptr).assumingMemoryBound(to: CChar.self))
+            ptr in
+            String(
+                cString: UnsafeRawPointer(ptr)
+                    .assumingMemoryBound(to: CChar.self)
+            )
         }
     }
 }

@@ -13,6 +13,8 @@ public enum ParraQuestionAppArea {
     case none
     case id(String)
 
+    // MARK: Public
+
     public var parameterized: String? {
         switch self {
         case .all:

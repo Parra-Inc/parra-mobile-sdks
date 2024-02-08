@@ -1,5 +1,5 @@
 //
-//  EdgeInsets+all.swift
+//  EdgeInsets+inits.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/30/24.

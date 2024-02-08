@@ -8,8 +8,8 @@
 
 import Foundation
 
-internal struct SessionStorageContext: Equatable {
-    internal private(set) var session: ParraSession
+struct SessionStorageContext: Equatable {
+    private(set) var session: ParraSession
     let sessionPath: URL
     let eventsPath: URL
 
@@ -17,4 +17,3 @@ internal struct SessionStorageContext: Equatable {
         session = newSession
     }
 }
-

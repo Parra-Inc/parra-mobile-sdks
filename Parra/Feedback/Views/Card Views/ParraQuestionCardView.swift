@@ -7,28 +7,10 @@
 
 import UIKit
 
-internal class ParraQuestionCardView: ParraCardItemView {
-    internal enum Constant {
-        static let bottomPadding: CGFloat = 8.0
-        static let horizontalPadding: CGFloat = 10.0
-        static let contentPadding: CGFloat = 6.0
-    }
+class ParraQuestionCardView: ParraCardItemView {
+    // MARK: Lifecycle
 
-    internal override var config: ParraCardViewConfig {
-        didSet {
-            applyConfig(config)
-        }
-    }
-
-    private let question: Question
-    private let answerHandler: ParraCardAnswerHandler
-    private let bucketId: String
-    private var questionTypeView: any (UIView & ParraQuestionKindView)
-
-    private let titleLabel: UILabel
-    private var subtitleLabel: UILabel?
-
-    internal required init(
+    required init(
         bucketId: String,
         question: Question,
         answerHandler: ParraCardAnswerHandler,
@@ -38,11 +20,11 @@ internal class ParraQuestionCardView: ParraCardItemView {
         self.answerHandler = answerHandler
         self.bucketId = bucketId
 
-        titleLabel = UILabel(frame: .zero)
+        self.titleLabel = UILabel(frame: .zero)
 
         switch question.data {
         case .booleanQuestionBody(let data):
-            questionTypeView = ParraBooleanKindView(
+            self.questionTypeView = ParraBooleanKindView(
                 bucketId: bucketId,
                 question: question,
                 data: data,
@@ -50,7 +32,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
                 answerHandler: answerHandler
             )
         case .checkboxQuestionBody(let data):
-            questionTypeView = ParraCheckboxKindView(
+            self.questionTypeView = ParraCheckboxKindView(
                 bucketId: bucketId,
                 question: question,
                 data: data,
@@ -58,7 +40,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
                 answerHandler: answerHandler
             )
         case .choiceQuestionBody(let data):
-            questionTypeView = ParraChoiceKindView(
+            self.questionTypeView = ParraChoiceKindView(
                 bucketId: bucketId,
                 question: question,
                 data: data,
@@ -66,7 +48,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
                 answerHandler: answerHandler
             )
         case .imageQuestionBody(let data):
-            questionTypeView = ParraImageKindView(
+            self.questionTypeView = ParraImageKindView(
                 bucketId: bucketId,
                 question: question,
                 data: data,
@@ -74,7 +56,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
                 answerHandler: answerHandler
             )
         case .longTextQuestionBody(let data):
-            questionTypeView = ParraLongTextKindView(
+            self.questionTypeView = ParraLongTextKindView(
                 bucketId: bucketId,
                 question: question,
                 data: data,
@@ -82,7 +64,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
                 answerHandler: answerHandler
             )
         case .ratingQuestionBody(let data):
-            questionTypeView = ParraRatingKindView(
+            self.questionTypeView = ParraRatingKindView(
                 bucketId: bucketId,
                 question: question,
                 data: data,
@@ -90,7 +72,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
                 answerHandler: answerHandler
             )
         case .shortTextQuestionBody(let data):
-            questionTypeView = ParraShortTextKindView(
+            self.questionTypeView = ParraShortTextKindView(
                 bucketId: bucketId,
                 question: question,
                 data: data,
@@ -98,7 +80,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
                 answerHandler: answerHandler
             )
         case .starQuestionBody(let data):
-            questionTypeView = ParraStarKindView(
+            self.questionTypeView = ParraStarKindView(
                 bucketId: bucketId,
                 question: question,
                 data: data,
@@ -158,7 +140,8 @@ internal class ParraQuestionCardView: ParraCardItemView {
             subtitleLabel.numberOfLines = 2
             subtitleLabel.font = UIFont.preferredFont(forTextStyle: .caption2)
             subtitleLabel.isUserInteractionEnabled = true
-            subtitleLabel.accessibilityIdentifier = "Parra Question Subtitle Label"
+            subtitleLabel
+                .accessibilityIdentifier = "Parra Question Subtitle Label"
 
             self.subtitleLabel = subtitleLabel
 
@@ -196,12 +179,27 @@ internal class ParraQuestionCardView: ParraCardItemView {
         applyConfig(config)
     }
 
-    internal required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal required init(config: ParraCardViewConfig) {
+    required init(config: ParraCardViewConfig) {
         fatalError("init(config:) has not been implemented")
+    }
+
+    // MARK: Internal
+
+    enum Constant {
+        static let bottomPadding: CGFloat = 8.0
+        static let horizontalPadding: CGFloat = 10.0
+        static let contentPadding: CGFloat = 6.0
+    }
+
+    override var config: ParraCardViewConfig {
+        didSet {
+            applyConfig(config)
+        }
     }
 
     override func commitToSelection() {
@@ -210,7 +208,7 @@ internal class ParraQuestionCardView: ParraCardItemView {
         }
     }
 
-    internal override func applyConfig(_ config: ParraCardViewConfig) {
+    override func applyConfig(_ config: ParraCardViewConfig) {
         titleLabel.font = config.title.font
         titleLabel.textColor = config.title.color
         titleLabel.layer.shadowColor = config.title.shadow.color.cgColor
@@ -218,10 +216,11 @@ internal class ParraQuestionCardView: ParraCardItemView {
         titleLabel.layer.shadowRadius = config.title.shadow.radius
         titleLabel.layer.shadowOpacity = config.title.shadow.opacity
 
-        if let subtitleLabel = subtitleLabel {
+        if let subtitleLabel {
             subtitleLabel.font = config.subtitle.font
             subtitleLabel.textColor = config.subtitle.color
-            subtitleLabel.layer.shadowColor = config.subtitle.shadow.color.cgColor
+            subtitleLabel.layer.shadowColor = config.subtitle.shadow.color
+                .cgColor
             subtitleLabel.layer.shadowOffset = config.subtitle.shadow.offset
             subtitleLabel.layer.shadowRadius = config.subtitle.shadow.radius
             subtitleLabel.layer.shadowOpacity = config.subtitle.shadow.opacity
@@ -229,5 +228,14 @@ internal class ParraQuestionCardView: ParraCardItemView {
 
         questionTypeView.applyConfig(config)
     }
-}
 
+    // MARK: Private
+
+    private let question: Question
+    private let answerHandler: ParraCardAnswerHandler
+    private let bucketId: String
+    private var questionTypeView: any (UIView & ParraQuestionKindView)
+
+    private let titleLabel: UILabel
+    private var subtitleLabel: UILabel?
+}

@@ -9,21 +9,9 @@
 import SwiftUI
 
 public struct TextEditorContent {
-    /// A string which is displayed in a label above the text editor to provide contextual information.
-    public let title: LabelContent?
+    // MARK: Lifecycle
 
-    /// A string which is displayed inside the text editor whenever the input string is empty.
-    public let placeholder: LabelContent?
-
-    /// A string which is displayed below the text editor to supply suplemental information. In the default
-    /// implementation, helper text and error message are displayed using the same label, and ``errorMessage``
-    /// takes precedance over ``helper``.
-    public let helper: LabelContent?
-    public let errorMessage: String?
-    public let textChanged: ((String?) -> Void)?
-
-
-    internal init(
+    init(
         title: LabelContent? = nil,
         placeholder: LabelContent? = nil,
         helper: LabelContent? = nil,
@@ -37,7 +25,7 @@ public struct TextEditorContent {
         self.textChanged = textChanged
     }
 
-    internal init(
+    init(
         title: String? = nil,
         placeholder: String? = nil,
         helper: String? = nil,
@@ -49,21 +37,35 @@ public struct TextEditorContent {
         } else {
             nil
         }
-        
+
         self.placeholder = if let placeholder {
             LabelContent(text: placeholder)
         } else {
             nil
         }
-        
+
         self.helper = if let helper {
             LabelContent(text: helper)
         } else {
             nil
         }
-        
+
         self.errorMessage = errorMessage
         self.textChanged = textChanged
     }
 
+    // MARK: Public
+
+    /// A string which is displayed in a label above the text editor to provide contextual information.
+    public let title: LabelContent?
+
+    /// A string which is displayed inside the text editor whenever the input string is empty.
+    public let placeholder: LabelContent?
+
+    /// A string which is displayed below the text editor to supply suplemental information. In the default
+    /// implementation, helper text and error message are displayed using the same label, and ``errorMessage``
+    /// takes precedance over ``helper``.
+    public let helper: LabelContent?
+    public let errorMessage: String?
+    public let textChanged: ((String?) -> Void)?
 }

@@ -10,18 +10,18 @@ import Foundation
 
 /// Events for a session are stored seperately and must be put together with the session
 /// object before uploading it.
-internal struct ParraSessionUpload: Encodable {
-    let session: ParraSession
-    let events: [ParraSessionEvent]
-
-    internal enum CodingKeys: String, CodingKey {
+struct ParraSessionUpload: Encodable {
+    enum CodingKeys: String, CodingKey {
         case events
         case userProperties
         case startedAt
         case endedAt
     }
 
-    internal func encode(to encoder: Encoder) throws {
+    let session: ParraSession
+    let events: [ParraSessionEvent]
+
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(events, forKey: .events)

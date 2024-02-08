@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import XCTest
 @testable import Parra
+import XCTest
 
 struct MockParra {
     let parra: Parra
@@ -36,7 +36,7 @@ struct MockParra {
 
     func tearDown() async throws {
         mockNetworkManager.urlSession.resetExpectations()
-        
+
         if await parra.state.isInitialized() {
             await parra.state.unregisterModule(module: parra)
         }

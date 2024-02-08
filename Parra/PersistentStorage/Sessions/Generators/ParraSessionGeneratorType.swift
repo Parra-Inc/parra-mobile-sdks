@@ -8,29 +8,29 @@
 
 import Foundation
 
-fileprivate let logger = Logger(
+private let logger = Logger(
     bypassEventCreation: true,
     category: "Session Generator Helpers"
 )
 
-internal enum ParraSessionGeneratorTypeElement {
+enum ParraSessionGeneratorTypeElement {
     case success(sessionDirectory: URL, sessionPath: URL, eventsUrl: URL)
     case error(sessionDirectory: URL, error: ParraError)
 }
 
-internal protocol ParraSessionGeneratorType {
+protocol ParraSessionGeneratorType {
     var sessionJsonDecoder: JSONDecoder { get }
     var eventJsonDecoder: JSONDecoder { get }
     var fileManager: FileManager { get }
 }
 
-internal extension ParraSessionGeneratorType where Self: AsyncSequence {
+extension ParraSessionGeneratorType where Self: AsyncSequence {
     func makeAsyncIterator() -> Self {
         self
     }
 }
 
-internal extension ParraSessionGeneratorType {
+extension ParraSessionGeneratorType {
     static func directoryEnumerator(
         forSessionsAt path: URL,
         with fileManager: FileManager
@@ -49,9 +49,9 @@ internal extension ParraSessionGeneratorType {
         return directoryEnumerator
     }
 
-    func produceNextSessionPaths<T>(
+    func produceNextSessionPaths(
         from directoryEnumerator: FileManager.DirectoryEnumerator,
-        type: T.Type
+        type: (some Any).Type
     ) -> ParraSessionGeneratorTypeElement? {
         return logger.withScope { logger in
             guard let nextSessionUrl = directoryEnumerator.nextObject() as? URL else {
@@ -61,7 +61,9 @@ internal extension ParraSessionGeneratorType {
             }
 
             let ext = ParraSession.Constant.packageExtension
-            if !nextSessionUrl.hasDirectoryPath || nextSessionUrl.pathExtension != ext {
+            if !nextSessionUrl.hasDirectoryPath || nextSessionUrl
+                .pathExtension != ext
+            {
                 logger.debug("session path was unexpected file type. skipping.")
 
                 // This is a case where we're indicating an invalid item was produced, and it is necessary to skip it.
@@ -74,7 +76,10 @@ internal extension ParraSessionGeneratorType {
                 )
             }
 
-            logger.trace("combining data for session: \(nextSessionUrl.lastPathComponent)")
+            logger
+                .trace(
+                    "combining data for session: \(nextSessionUrl.lastPathComponent)"
+                )
 
             let (sessionPath, eventsUrl) = SessionReader.sessionPaths(
                 in: nextSessionUrl
@@ -90,11 +95,11 @@ internal extension ParraSessionGeneratorType {
 
     func readSessionSync(at path: URL) throws -> ParraSession {
         let fileHandle = try FileHandle(forReadingFrom: path)
-        
+
         defer {
             do {
                 try fileHandle.close()
-            } catch let error {
+            } catch {
                 logger.error("Error closing session reader file handle", error)
             }
         }
@@ -104,7 +109,7 @@ internal extension ParraSessionGeneratorType {
         let sessionData: Data?
         do {
             sessionData = try fileHandle.readToEnd()
-        } catch let error {
+        } catch {
             throw ParraError.fileSystem(
                 path: path,
                 message: "Couldn't read session data. \(error.localizedDescription)"
@@ -127,11 +132,11 @@ internal extension ParraSessionGeneratorType {
     func readEvents(at path: URL) async throws -> [ParraSessionEvent] {
         var events = [ParraSessionEvent]()
         let fileHandle = try FileHandle(forReadingFrom: path)
-     
+
         defer {
             do {
                 try fileHandle.close()
-            } catch let error {
+            } catch {
                 logger.error("Error closing event reader file handle", error)
             }
         }
@@ -141,8 +146,8 @@ internal extension ParraSessionGeneratorType {
             // of every event in memory at the same time.
             try autoreleasepool {
                 if let eventData = eventString.data(using: .utf8) {
-                    events.append(
-                        try eventJsonDecoder.decode(
+                    try events.append(
+                        eventJsonDecoder.decode(
                             ParraSessionEvent.self,
                             from: eventData
                         )

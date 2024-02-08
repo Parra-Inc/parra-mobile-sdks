@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal extension Sequence {
+extension Sequence {
     func asyncMap<T>(
         _ transform: (Element) async throws -> T
     ) async rethrows -> [T] {

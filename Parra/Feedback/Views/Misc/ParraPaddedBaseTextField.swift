@@ -8,8 +8,8 @@
 
 import UIKit
 
-internal class ParraPaddedBaseTextField: UITextField {
-    private let forcedEdgeInsets: UIEdgeInsets
+class ParraPaddedBaseTextField: UITextField {
+    // MARK: Lifecycle
 
     required init(forcedEdgeInsets: UIEdgeInsets) {
         self.forcedEdgeInsets = forcedEdgeInsets
@@ -17,9 +17,12 @@ internal class ParraPaddedBaseTextField: UITextField {
         super.init(frame: .zero)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Internal
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return super.textRect(forBounds: bounds)
@@ -30,4 +33,8 @@ internal class ParraPaddedBaseTextField: UITextField {
         return super.editingRect(forBounds: bounds)
             .inset(by: forcedEdgeInsets)
     }
+
+    // MARK: Private
+
+    private let forcedEdgeInsets: UIEdgeInsets
 }

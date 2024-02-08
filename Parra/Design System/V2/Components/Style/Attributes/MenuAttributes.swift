@@ -9,28 +9,7 @@
 import SwiftUI
 
 public struct MenuAttributes: ParraStyleAttributes {
-    /// Attributes to use on the optional title label shown above the menu.
-    public let title: LabelAttributes
-
-    /// Attributes to use on the optional helper field shown below the menu.
-    public let helper: LabelAttributes
-
-    /// Attributes to use on the label shown when the menu is collapsed and a selection has not been made yet.
-    public let menuItem: LabelAttributes
-
-    /// Attributes to use on the label shown when the menu is collapsed and a selection has been made.
-    public let menuItemSelected: LabelAttributes
-
-    public let sortOrder: MenuOrder
-
-    public let tint: Color?
-
-    public let background: (any ShapeStyle)?
-    public let cornerRadius: ParraCornerRadiusSize?
-    public let padding: EdgeInsets?
-
-    internal let frame: FrameAttributes?
-    internal let borderWidth: CGFloat
+    // MARK: Lifecycle
 
     public init(
         title: LabelAttributes,
@@ -58,7 +37,7 @@ public struct MenuAttributes: ParraStyleAttributes {
         )
     }
 
-    internal init(
+    init(
         title: LabelAttributes,
         helper: LabelAttributes,
         menuItem: LabelAttributes,
@@ -83,4 +62,31 @@ public struct MenuAttributes: ParraStyleAttributes {
         self.frame = frame
         self.borderWidth = borderWidth
     }
+
+    // MARK: Public
+
+    /// Attributes to use on the optional title label shown above the menu.
+    public let title: LabelAttributes
+
+    /// Attributes to use on the optional helper field shown below the menu.
+    public let helper: LabelAttributes
+
+    /// Attributes to use on the label shown when the menu is collapsed and a selection has not been made yet.
+    public let menuItem: LabelAttributes
+
+    /// Attributes to use on the label shown when the menu is collapsed and a selection has been made.
+    public let menuItemSelected: LabelAttributes
+
+    public let sortOrder: MenuOrder
+
+    public let tint: Color?
+
+    public let background: (any ShapeStyle)?
+    public let cornerRadius: ParraCornerRadiusSize?
+    public let padding: EdgeInsets?
+
+    // MARK: Internal
+
+    let frame: FrameAttributes?
+    let borderWidth: CGFloat
 }

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal protocol ParraAttributedStyle {
+protocol ParraAttributedStyle {
     associatedtype Attributes
 
     var attributes: Attributes { get }

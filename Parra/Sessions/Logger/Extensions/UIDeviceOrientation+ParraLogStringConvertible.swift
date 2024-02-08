@@ -1,5 +1,5 @@
 //
-//  UIDeviceOrientation.swift
+//  UIDeviceOrientation+ParraLogStringConvertible.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 11/19/22.
@@ -8,7 +8,9 @@
 
 import UIKit
 
-extension UIDeviceOrientation: ParraLogStringConvertible, CustomStringConvertible {
+extension UIDeviceOrientation: ParraLogStringConvertible,
+    CustomStringConvertible
+{
     public var loggerDescription: String {
         switch self {
         case .portrait:

@@ -8,14 +8,11 @@
 
 import Foundation
 
-internal struct ParraSanitizedDictionary: ExpressibleByDictionaryLiteral {
-    typealias Key = String
-    typealias Value = Any
+struct ParraSanitizedDictionary: ExpressibleByDictionaryLiteral {
+    // MARK: Lifecycle
 
-    internal let dictionary: [Key : Value]
-
-    internal init(dictionaryLiteral elements: (Key, Value)...) {
-        dictionary = Dictionary(
+    init(dictionaryLiteral elements: (Key, Value)...) {
+        self.dictionary = Dictionary(
             uniqueKeysWithValues: elements.map { key, value in
                 switch value {
                 case let url as URL:
@@ -27,9 +24,18 @@ internal struct ParraSanitizedDictionary: ExpressibleByDictionaryLiteral {
         )
     }
 
-    internal init(dictionary: [String : Any]) {
+    init(dictionary: [String: Any]) {
         self.dictionary = dictionary
     }
+
+    // MARK: Internal
+
+    typealias Key = String
+    typealias Value = Any
+
+    let dictionary: [Key: Value]
+
+    // MARK: Private
 
     private static func sanitize(url: URL) -> URL {
         // TODO: This method and others like it...
@@ -37,6 +43,8 @@ internal struct ParraSanitizedDictionary: ExpressibleByDictionaryLiteral {
         return url
     }
 }
+
+// MARK: Encodable
 
 extension ParraSanitizedDictionary: Encodable {
     func encode(to encoder: Encoder) throws {

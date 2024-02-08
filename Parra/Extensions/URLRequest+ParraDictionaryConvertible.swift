@@ -10,7 +10,7 @@ import Foundation
 
 extension URLRequest: ParraSanitizedDictionaryConvertible {
     var sanitized: ParraSanitizedDictionary {
-        var params: [String : Any] = [
+        var params: [String: Any] = [
             "timeout_interval": timeoutInterval,
             "should_handle_cookies": httpShouldHandleCookies,
             "should_use_pipelining": httpShouldUsePipelining,
@@ -33,7 +33,8 @@ extension URLRequest: ParraSanitizedDictionaryConvertible {
         }
 
         if let httpBody {
-            params["body"] = String(data: httpBody, encoding: .utf8) ?? httpBody.base64EncodedString()
+            params["body"] = String(data: httpBody, encoding: .utf8) ?? httpBody
+                .base64EncodedString()
         }
 
         if let allHTTPHeaderFields {

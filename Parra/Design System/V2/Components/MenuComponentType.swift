@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal protocol MenuComponentType: View {
+protocol MenuComponentType: View {
     var config: MenuConfig { get }
     var content: MenuContent { get }
     var style: ParraAttributedMenuStyle { get }

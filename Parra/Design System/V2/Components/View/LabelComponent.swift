@@ -13,6 +13,15 @@ struct LabelComponent: LabelComponentType {
     var content: LabelContent
     var style: ParraAttributedLabelStyle
 
+    var body: some View {
+        Label(
+            // indended to be customized by the style object.
+            title: { EmptyView() },
+            icon: { EmptyView() }
+        )
+        .labelStyle(style)
+    }
+
     static func applyStandardCustomizations(
         onto inputAttributes: LabelAttributes?,
         theme: ParraTheme,
@@ -41,7 +50,8 @@ struct LabelComponent: LabelComponentType {
                 fontColor: base.fontColor ?? theme.palette.primaryText,
                 fontWeight: base.fontWeight ?? .bold
             )
-        case .callout, .caption, .footnote, .caption2, .largeTitle, .headline, .title2, .title3:
+        case .callout, .caption, .footnote, .caption2, .largeTitle, .headline,
+             .title2, .title3:
             nil
         @unknown default:
             nil
@@ -50,15 +60,6 @@ struct LabelComponent: LabelComponentType {
         return defaultAttributes.withUpdates(
             updates: styledAttributes
         )
-    }
-
-    var body: some View {
-        Label(
-            // indended to be customized by the style object.
-            title: { EmptyView() },
-            icon: { EmptyView() }
-        )
-        .labelStyle(style)
     }
 }
 
@@ -120,7 +121,12 @@ private func renderLabel(
                 background: Gradient(colors: [.pink, .purple]),
                 cornerRadius: .extraSmall,
                 fontColor: Color.white,
-                padding: EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10)
+                padding: EdgeInsets(
+                    top: 4,
+                    leading: 10,
+                    bottom: 4,
+                    trailing: 10
+                )
             )
         )
 
@@ -133,5 +139,5 @@ private func renderLabel(
                 padding: EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
             )
         )
-   }
+    }
 }

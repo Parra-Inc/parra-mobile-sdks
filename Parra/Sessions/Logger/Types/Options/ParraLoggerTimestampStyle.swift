@@ -11,10 +11,12 @@ import Foundation
 // TODO: Document samples of each
 
 public enum ParraLoggerTimestampStyle {
-    public static let `default` = ParraLoggerTimestampStyle.iso8601
-
     case custom(DateFormatter)
     case epoch
     case iso8601
     case rfc3339
+
+    // MARK: Public
+
+    public static let `default` = ParraLoggerTimestampStyle.iso8601
 }

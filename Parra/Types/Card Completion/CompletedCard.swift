@@ -8,12 +8,10 @@
 import Foundation
 
 // Completed card needs to be able to be converted to and from JSON for storage on disk.
-internal struct CompletedCard: Codable {
-    internal let bucketItemId: String
-    internal let questionId: String
-    internal let data: QuestionAnswer
+struct CompletedCard: Codable {
+    // MARK: Lifecycle
 
-    internal init(
+    init(
         bucketItemId: String,
         questionId: String,
         data: QuestionAnswer
@@ -22,22 +20,32 @@ internal struct CompletedCard: Codable {
         self.questionId = questionId
         self.data = data
     }
+
+    // MARK: Internal
+
+    let bucketItemId: String
+    let questionId: String
+    let data: QuestionAnswer
 }
 
 // A special wrapper around CompletedCard to convert it into JSON suitable to sending the Parra API.
 // This is a lossy operation, so must be a separate type from CompletedCard, which is used for local storage.
-internal struct CompletedCardUpload: Encodable {
+struct CompletedCardUpload: Encodable {
+    // MARK: Lifecycle
+
+    init(completedCard: CompletedCard) {
+        self.completedCard = completedCard
+    }
+
+    // MARK: Internal
+
     enum CodingKeys: String, CodingKey {
         case bucketItemId
         case questionId
         case data
     }
 
-    internal let completedCard: CompletedCard
-
-    init(completedCard: CompletedCard) {
-        self.completedCard = completedCard
-    }
+    let completedCard: CompletedCard
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)

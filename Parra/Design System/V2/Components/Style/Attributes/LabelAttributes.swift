@@ -1,5 +1,5 @@
 //
-//  TextAttributes.swift
+//  LabelAttributes.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -9,17 +9,7 @@
 import SwiftUI
 
 public struct LabelAttributes: ParraStyleAttributes {
-    public let background: (any ShapeStyle)?
-    public let cornerRadius: ParraCornerRadiusSize?
-    public let font: Font?
-    public let fontColor: Color?
-    public let fontDesign: Font.Design?
-    public let fontWeight: Font.Weight?
-    public let fontWidth: Font.Width?
-    public let padding: EdgeInsets?
-
-    internal let frame: FrameAttributes?
-    internal let borderWidth: CGFloat?
+    // MARK: Lifecycle
 
     public init(
         background: (any ShapeStyle)? = nil,
@@ -43,7 +33,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         self.borderWidth = nil
     }
 
-    internal init(
+    init(
         background: (any ShapeStyle)? = nil,
         cornerRadius: ParraCornerRadiusSize? = nil,
         font: Font? = nil,
@@ -67,24 +57,23 @@ public struct LabelAttributes: ParraStyleAttributes {
         self.borderWidth = borderWidth
     }
 
-    internal func withUpdates(
-        updates: LabelAttributes?
-    ) -> LabelAttributes {
-        return LabelAttributes(
-            background: updates?.background ?? background,
-            cornerRadius: updates?.cornerRadius ?? cornerRadius,
-            font: updates?.font ?? font,
-            fontColor: updates?.fontColor ?? fontColor,
-            fontDesign: updates?.fontDesign ?? fontDesign,
-            fontWeight: updates?.fontWeight ?? fontWeight,
-            fontWidth: updates?.fontWidth ?? fontWidth,
-            padding: updates?.padding ?? padding,
-            frame: updates?.frame ?? frame,
-            borderWidth: updates?.borderWidth ?? borderWidth
-        )
-    }
+    // MARK: Public
 
-    internal static func defaultFormTitle(
+    public let background: (any ShapeStyle)?
+    public let cornerRadius: ParraCornerRadiusSize?
+    public let font: Font?
+    public let fontColor: Color?
+    public let fontDesign: Font.Design?
+    public let fontWeight: Font.Weight?
+    public let fontWidth: Font.Width?
+    public let padding: EdgeInsets?
+
+    // MARK: Internal
+
+    let frame: FrameAttributes?
+    let borderWidth: CGFloat?
+
+    static func defaultFormTitle(
         in theme: ParraTheme,
         with config: LabelConfig
     ) -> LabelAttributes {
@@ -99,7 +88,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         )
     }
 
-    internal static func defaultFormHelper(
+    static func defaultFormHelper(
         in theme: ParraTheme,
         with config: LabelConfig
     ) -> LabelAttributes {
@@ -110,6 +99,23 @@ public struct LabelAttributes: ParraStyleAttributes {
             ),
             theme: theme,
             config: config
+        )
+    }
+
+    func withUpdates(
+        updates: LabelAttributes?
+    ) -> LabelAttributes {
+        return LabelAttributes(
+            background: updates?.background ?? background,
+            cornerRadius: updates?.cornerRadius ?? cornerRadius,
+            font: updates?.font ?? font,
+            fontColor: updates?.fontColor ?? fontColor,
+            fontDesign: updates?.fontDesign ?? fontDesign,
+            fontWeight: updates?.fontWeight ?? fontWeight,
+            fontWidth: updates?.fontWidth ?? fontWidth,
+            padding: updates?.padding ?? padding,
+            frame: updates?.frame ?? frame,
+            borderWidth: updates?.borderWidth ?? borderWidth
         )
     }
 }

@@ -7,19 +7,19 @@
 
 import UIKit
 
-internal protocol SelectableButtonDelegate: AnyObject {
+protocol SelectableButtonDelegate: AnyObject {
     func buttonDidSelect(button: SelectableButton)
     func buttonDidDeselect(button: SelectableButton)
 }
 
-internal protocol SelectableButton: ParraLegacyConfigurableView {
+protocol SelectableButton: ParraLegacyConfigurableView {
     var delegate: SelectableButtonDelegate? { get set }
     var buttonIsSelected: Bool { get set }
     var allowsDeselection: Bool { get set }
 }
 
 extension SelectableButton {
-    internal func applyBorderStyleForSelection(
+    func applyBorderStyleForSelection(
         animated: Bool,
         for view: UIView,
         selectedRadius: CGFloat = 1.5,

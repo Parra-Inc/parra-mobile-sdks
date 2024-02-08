@@ -8,20 +8,18 @@
 
 import Foundation
 
-internal struct ParraInstanceConfiguration {
-    internal let networkConfiguration: ParraInstanceNetworkConfiguration
-    internal let storageConfiguration: ParraInstanceStorageConfiguration
-
+struct ParraInstanceConfiguration {
     static let `default`: ParraInstanceConfiguration = {
         let diskCacheUrl = ParraDataManager.Path.networkCachesDirectory
         let baseStorageUrl = ParraDataManager.Path.parraDirectory
-        let storageDirectoryName = ParraDataManager.Directory.storageDirectoryName
+        let storageDirectoryName = ParraDataManager.Directory
+            .storageDirectoryName
 
         // Cache may reject image entries if they are greater than 10% of the cache's size
         // so these need to reflect that.
         let networkCache = URLCache(
-            memoryCapacity: 50 * 1024 * 1024,
-            diskCapacity: 300 * 1024 * 1024,
+            memoryCapacity: 50 * 1_024 * 1_024,
+            diskCapacity: 300 * 1_024 * 1_024,
             directory: diskCacheUrl
         )
 
@@ -47,4 +45,7 @@ internal struct ParraInstanceConfiguration {
             )
         )
     }()
+
+    let networkConfiguration: ParraInstanceNetworkConfiguration
+    let storageConfiguration: ParraInstanceStorageConfiguration
 }

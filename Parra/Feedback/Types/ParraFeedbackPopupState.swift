@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal actor ParraFeedbackPopupState {
+actor ParraFeedbackPopupState {
     static let shared = ParraFeedbackPopupState()
 
     var isPresented = false

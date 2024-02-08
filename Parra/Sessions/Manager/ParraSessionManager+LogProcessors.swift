@@ -18,12 +18,12 @@ import os
 
 extension ParraSessionManager {
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
-    internal func writeEventToConsoleSync(
+    func writeEventToConsoleSync(
         wrappedEvent: ParraWrappedEvent,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption],
         callSiteContext: ParraLoggerCallSiteContext
     ) {
-        if case let .logEvent(event) = wrappedEvent {
+        if case .logEvent(let event) = wrappedEvent {
             writeLogEventToConsoleSync(
                 processedLogData: event.logData,
                 with: consoleFormatOptions
@@ -46,7 +46,7 @@ extension ParraSessionManager {
     }
 
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
-    internal func writeLogEventToConsoleSync(
+    func writeLogEventToConsoleSync(
         processedLogData: ParraLogProcessedData,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {
@@ -64,7 +64,8 @@ extension ParraSessionManager {
         )
 
         if processedLogData.level.requiresStackTraceCapture {
-            let callstackSymbols = processedLogData.callSiteContext.threadInfo.callStackSymbols
+            let callstackSymbols = processedLogData.callSiteContext.threadInfo
+                .callStackSymbols
 
             if let formattedStackTrace = format(
                 callstackSymbols: callstackSymbols
@@ -89,7 +90,7 @@ extension ParraSessionManager {
     /// async system events, etc, but not logs.
     private func writeSessionEventToConsole(
         named name: String,
-        extra: [String : Any],
+        extra: [String: Any],
         isInternalEvent: Bool,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption],
         callSiteContext: ParraLoggerCallSiteContext
@@ -129,7 +130,7 @@ extension ParraSessionManager {
         message: String,
         timestamp: Date,
         level: ParraLogLevel?,
-        extra: [String : Any]?,
+        extra: [String: Any]?,
         callSiteContext: ParraLoggerCallSiteContext
     ) -> [String] {
         return consoleFormatOptions.compactMap { option in

@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct FeedbackFormWidget: Container {
+    // MARK: Internal
+
     typealias Factory = FeedbackFormWidgetComponentFactory
     typealias Config = FeedbackFormConfig
     typealias ContentObserver = FeedbackFormContentObserver
@@ -18,22 +20,9 @@ struct FeedbackFormWidget: Container {
 
     var config: Config
 
-    @StateObject
-    var contentObserver: FeedbackFormContentObserver
+    @StateObject var contentObserver: FeedbackFormContentObserver
 
-    @StateObject
-    var themeObserver: ParraThemeObserver
-
-    private func onFieldValueChanged(
-        field: FeedbackFormField,
-        value: String?
-    ) {
-        
-        contentObserver.onFieldValueChanged(
-            field: field,
-            value: value
-        )
-    }
+    @StateObject var themeObserver: ParraThemeObserver
 
     var header: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -72,7 +61,7 @@ struct FeedbackFormWidget: Container {
                             )
                         }
                     ) { option in
-                        self.onFieldValueChanged(
+                        onFieldValueChanged(
                             field: field,
                             value: option?.value
                         )
@@ -80,7 +69,8 @@ struct FeedbackFormWidget: Container {
 
                     componentFactory.buildMenu(
                         component: \.selectFields,
-                        config: config.selectFields, // no customization currently exists
+                        config: config.selectFields,
+                        // no customization currently exists
                         content: content,
                         localAttributes: nil
                     )
@@ -91,7 +81,7 @@ struct FeedbackFormWidget: Container {
                         helper: field.helperText,
                         errorMessage: fieldWithState.state.errorMessage
                     ) { newText in
-                        self.onFieldValueChanged(
+                        onFieldValueChanged(
                             field: field,
                             value: newText
                         )
@@ -99,7 +89,8 @@ struct FeedbackFormWidget: Container {
 
                     componentFactory.buildTextEditor(
                         component: \.textFields,
-                        config: TextEditorConfig(data: data).withDefaults(from: config.textFields),
+                        config: TextEditorConfig(data: data)
+                            .withDefaults(from: config.textFields),
                         content: content,
                         localAttributes: nil
                     )
@@ -123,7 +114,6 @@ struct FeedbackFormWidget: Container {
         }
     }
 
-
     var body: some View {
         withEnvironmentObjects {
             VStack(alignment: .leading) {
@@ -143,21 +133,33 @@ struct FeedbackFormWidget: Container {
             .safeAreaPadding()
         }
     }
+
+    // MARK: Private
+
+    private func onFieldValueChanged(
+        field: FeedbackFormField,
+        value: String?
+    ) {
+        contentObserver.onFieldValueChanged(
+            field: field,
+            value: value
+        )
+    }
 }
 
 #Preview {
     let global = GlobalComponentAttributes(
-        labelAttributeFactory: { config, content, defaultAttributes in
+        labelAttributeFactory: { _, _, defaultAttributes in
             return defaultAttributes ?? .init()
         },
-        buttonAttributeFactory: { config, content, defaultAttributes in
+        buttonAttributeFactory: { _, _, defaultAttributes in
             return defaultAttributes ?? .init()
         }
     )
 
     let local = FeedbackFormWidgetComponentFactory(
         titleBuilder: nil,
-        descriptionBuilder: { config, content, attributes in
+        descriptionBuilder: { _, content, _ in
             if let content {
                 Text(content.text)
                     .font(.subheadline)
@@ -214,7 +216,7 @@ struct FeedbackFormWidget: Container {
                                         title: "Other",
                                         value: "other",
                                         isOther: nil
-                                    ),
+                                    )
                                 ]
                             )
                         )

@@ -12,6 +12,6 @@ import Foundation
 /// but is intended to prevent the inadvertent changing of strings sent to the
 /// logger over time, since this shouldn't be used outside of the Logger
 /// unlike CustomStringConvertible.
-internal protocol ParraLogStringConvertible {
+protocol ParraLogStringConvertible {
     var loggerDescription: String { get }
 }

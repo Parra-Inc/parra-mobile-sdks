@@ -8,8 +8,10 @@
 
 import UIKit
 
-class ParraBorderedTextField: ParraPaddedBaseTextField, ParraLegacyConfigurableView {
-    private var config: ParraCardViewConfig
+class ParraBorderedTextField: ParraPaddedBaseTextField,
+    ParraLegacyConfigurableView
+{
+    // MARK: Lifecycle
 
     required init(config: ParraCardViewConfig) {
         self.config = config
@@ -26,6 +28,7 @@ class ParraBorderedTextField: ParraPaddedBaseTextField, ParraLegacyConfigurableV
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -33,6 +36,8 @@ class ParraBorderedTextField: ParraPaddedBaseTextField, ParraLegacyConfigurableV
     required init(forcedEdgeInsets: UIEdgeInsets) {
         fatalError("init(forcedEdgeInsets:) has not been implemented")
     }
+
+    // MARK: Internal
 
     override func becomeFirstResponder() -> Bool {
         let result = super.becomeFirstResponder()
@@ -62,5 +67,8 @@ class ParraBorderedTextField: ParraPaddedBaseTextField, ParraLegacyConfigurableV
         layer.borderColor = highlightColor?.cgColor
         tintColor = highlightColor
     }
-}
 
+    // MARK: Private
+
+    private var config: ParraCardViewConfig
+}

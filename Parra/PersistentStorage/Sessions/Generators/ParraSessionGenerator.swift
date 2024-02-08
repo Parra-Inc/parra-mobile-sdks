@@ -8,29 +8,22 @@
 
 import Foundation
 
-fileprivate let logger = Logger(
+private let logger = Logger(
     bypassEventCreation: true,
     category: "Session Generator"
 )
 
-internal enum ParraSessionGeneratorElement {
+enum ParraSessionGeneratorElement {
     case success(sessionDirectory: URL, session: ParraSession)
     case error(sessionDirectory: URL, error: ParraError)
 }
 
-internal struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence, IteratorProtocol {
-    // Type is optional. We have to be able to filter out elements while doing the lazy enumeration
-    // so we need a way to indicate to the caller that the item produced by a given iteration can
-    // be skipped, whichout returning nil and ending the Sequence. We use a double Optional for this.
-    typealias Element = ParraSessionGeneratorElement
+struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence,
+    IteratorProtocol
+{
+    // MARK: Lifecycle
 
-    private let directoryEnumerator: FileManager.DirectoryEnumerator
-
-    let sessionJsonDecoder: JSONDecoder
-    let eventJsonDecoder: JSONDecoder
-    let fileManager: FileManager
-
-    internal init(
+    init(
         forSessionsAt path: URL,
         sessionJsonDecoder: JSONDecoder,
         eventJsonDecoder: JSONDecoder,
@@ -45,8 +38,19 @@ internal struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence, Iter
         )
     }
 
+    // MARK: Internal
+
+    // Type is optional. We have to be able to filter out elements while doing the lazy enumeration
+    // so we need a way to indicate to the caller that the item produced by a given iteration can
+    // be skipped, whichout returning nil and ending the Sequence. We use a double Optional for this.
+    typealias Element = ParraSessionGeneratorElement
+
+    let sessionJsonDecoder: JSONDecoder
+    let eventJsonDecoder: JSONDecoder
+    let fileManager: FileManager
+
     mutating func next() -> ParraSessionGeneratorElement? {
-        return logger.withScope { (logger) -> ParraSessionGeneratorElement? in
+        return logger.withScope { _ -> ParraSessionGeneratorElement? in
             guard let element = produceNextSessionPaths(
                 from: directoryEnumerator,
                 type: ParraSession.self
@@ -57,11 +61,11 @@ internal struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence, Iter
             switch element {
             case .success(let sessionDirectory, let sessionPath, _):
                 do {
-                    return .success(
+                    return try .success(
                         sessionDirectory: sessionDirectory,
-                        session: try readSessionSync(at: sessionPath)
+                        session: readSessionSync(at: sessionPath)
                     )
-                } catch let error {
+                } catch {
                     return .error(
                         sessionDirectory: sessionDirectory,
                         error: .generic("Error reading session", error)
@@ -75,4 +79,8 @@ internal struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence, Iter
             }
         }
     }
+
+    // MARK: Private
+
+    private let directoryEnumerator: FileManager.DirectoryEnumerator
 }

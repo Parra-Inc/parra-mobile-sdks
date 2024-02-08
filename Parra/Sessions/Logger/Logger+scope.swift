@@ -9,7 +9,6 @@
 import Foundation
 
 public extension Logger {
-
     /// Creates a new scope with the provided name but does not immediately enter it. This scope can be used
     /// to group multiple logs relevant to a given action. You can also automatically encapsulate a block of code
     /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
@@ -26,14 +25,13 @@ public extension Logger {
     /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
     func scope(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ function: String = #function
     ) -> Logger {
-        let scopes: [ParraLoggerScopeType]
-        if let name {
-            scopes = [.customName(name), .function(function)]
+        let scopes: [ParraLoggerScopeType] = if let name {
+            [.customName(name), .function(function)]
         } else {
-            scopes = [.function(function)]
+            [.function(function)]
         }
 
         return Logger(
@@ -63,7 +61,7 @@ public extension Logger {
     /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ block: (_ logger: Logger) -> T,
         _ function: String = #function
     ) -> T {
@@ -90,7 +88,7 @@ public extension Logger {
     /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ block: (_ logger: Logger) throws -> T,
         _ function: String = #function
     ) rethrows -> T {
@@ -98,7 +96,7 @@ public extension Logger {
 
         do {
             return try block(scoped)
-        } catch let error {
+        } catch {
             scoped.error(error)
             throw error
         }
@@ -122,7 +120,7 @@ public extension Logger {
     /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ block: (_ logger: Logger) async throws -> T,
         _ function: String = #function
     ) async rethrows -> T {
@@ -130,7 +128,7 @@ public extension Logger {
 
         do {
             return try await block(scoped)
-        } catch let error {
+        } catch {
             scoped.error(error)
             throw error
         }
@@ -154,7 +152,7 @@ public extension Logger {
     /// will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ block: (_ logger: Logger) async -> T,
         _ function: String = #function
     ) async -> T {
@@ -179,7 +177,7 @@ public extension Logger {
     /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
     static func scope(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ function: String = #function
     ) -> Logger {
         return Logger(category: name, extra: extra)
@@ -204,7 +202,7 @@ public extension Logger {
     /// will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ block: (_ logger: Logger) -> T,
         _ function: String = #function
     ) -> T {
@@ -231,7 +229,7 @@ public extension Logger {
     /// will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ block: (_ logger: Logger) throws -> T,
         _ function: String = #function
     ) rethrows -> T {
@@ -239,7 +237,7 @@ public extension Logger {
 
         do {
             return try block(scoped)
-        } catch let error {
+        } catch {
             scoped.error(error)
             throw error
         }
@@ -263,7 +261,7 @@ public extension Logger {
     /// will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ block: (_ logger: Logger) async throws -> T,
         _ function: String = #function
     ) async rethrows -> T {
@@ -271,7 +269,7 @@ public extension Logger {
 
         do {
             return try await block(scoped)
-        } catch let error {
+        } catch {
             scoped.error(error)
             throw error
         }
@@ -295,7 +293,7 @@ public extension Logger {
     /// will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
-        _ extra: [String : Any]?,
+        _ extra: [String: Any]?,
         _ block: (_ logger: Logger) async -> T,
         _ function: String = #function
     ) async -> T {

@@ -12,12 +12,104 @@ import UIKit
 /// Call ``Parra/Parra/initialize(options:authProvider:)-8d8fx`` in your `AppDelegate.didFinishLaunchingWithOptions`
 /// method to configure the SDK.
 public class Parra: ParraModule, ParraModuleStateAccessor {
-    internal static private(set) var name = "Parra"
+    // MARK: Lifecycle
 
-    internal let state: ParraState
-    internal private(set) var configuration: ParraConfiguration
+    init(
+        state: ParraState,
+        configuration: ParraConfiguration,
+        dataManager: ParraDataManager,
+        syncManager: ParraSyncManager,
+        sessionManager: ParraSessionManager,
+        networkManager: ParraNetworkManager,
+        notificationCenter: NotificationCenterType
+    ) {
+        self.state = state
+        self.configuration = configuration
+        self.dataManager = dataManager
+        self.syncManager = syncManager
+        self.sessionManager = sessionManager
+        self.networkManager = networkManager
+        self.notificationCenter = notificationCenter
 
-    internal lazy var feedback: ParraFeedback = {
+        UIFont
+            .registerFontsIfNeeded() // Needs to be called before any UI is displayed.
+    }
+
+    deinit {
+        // This should only happen when the singleton is destroyed when the
+        // app is being killed, or during unit tests.
+        removeEventObservers()
+    }
+
+    // MARK: Public
+
+    // MARK: - Authentication
+
+    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
+    /// will be invoked the very next time the Parra API is accessed.
+    public static func logout(completion: (() -> Void)? = nil) {
+        getExistingInstance().logout(completion: completion)
+    }
+
+    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
+    /// will be invoked the very next time the Parra API is accessed.
+    public static func logout() async {
+        await getExistingInstance().logout()
+    }
+
+    // MARK: - Synchronization
+
+    /// Uploads any cached Parra data. This includes data like answers to questions.
+    public static func triggerSync(completion: (() -> Void)? = nil) {
+        getExistingInstance().triggerSync(completion: completion)
+    }
+
+    /// Parra data is syncrhonized automatically. Use this method if you wish to trigger a synchronization event manually.
+    /// This may be something you want to do in response to a significant event in your app, or in response to a low memory
+    /// warning, for example. Note that in order to prevent excessive network activity it may take up to 30 seconds for the sync
+    /// to complete after being initiated.
+    public static func triggerSync() async {
+        await getExistingInstance().triggerSync()
+    }
+
+    // MARK: - Theme
+
+    public static func updateTheme(to newTheme: ParraTheme) {
+        let parra = getExistingInstance()
+
+        let oldTheme = parra.configuration.theme
+        parra.configuration.theme = newTheme
+
+        parra.notificationCenter.post(
+            name: Parra.themeWillChangeNotification,
+            object: nil,
+            userInfo: [
+                "oldTheme": oldTheme,
+                "newTheme": newTheme
+            ]
+        )
+    }
+
+    // MARK: Internal
+
+    private(set) static var name = "Parra"
+
+    private(set) static var jsonCoding: (
+        jsonEncoder: JSONEncoder,
+        jsonDecoder: JSONDecoder
+    ) = (
+        jsonEncoder: JSONEncoder.parraEncoder,
+        jsonDecoder: JSONDecoder.parraDecoder
+    )
+
+    private(set) static var fileManager: FileManager = .default
+
+    static var _shared: Parra!
+
+    let state: ParraState
+    private(set) var configuration: ParraConfiguration
+
+    lazy var feedback: ParraFeedback = {
         let parraFeedback = ParraFeedback(
             parra: self,
             dataManager: ParraFeedbackDataManager(
@@ -35,30 +127,20 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         return parraFeedback
     }()
 
-    internal private(set) static var jsonCoding: (
-        jsonEncoder: JSONEncoder,
-        jsonDecoder: JSONDecoder
-    ) = {
-        return (
-            jsonEncoder: JSONEncoder.parraEncoder,
-            jsonDecoder: JSONDecoder.parraDecoder
-        )
-    }()
+    let dataManager: ParraDataManager
+    let syncManager: ParraSyncManager
 
-    internal private(set) static var fileManager: FileManager = {
-        return .default
-    }()
-
-    internal static var _shared: Parra!
-
+    @usableFromInline let sessionManager: ParraSessionManager
+    let networkManager: ParraNetworkManager
+    let notificationCenter: NotificationCenterType
 
     @usableFromInline
     /// Unsafe to use before previously calling ``Parra/Parra/createInitialInstance``
-    internal static func getExistingInstance() -> Parra {
+    static func getExistingInstance() -> Parra {
         return _shared
     }
 
-    internal static func createInitialInstance(
+    static func createInitialInstance(
         with configuration: ParraConfiguration
     ) -> Parra {
         if let _shared {
@@ -74,122 +156,13 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
     }
 
     /// Do NOT use this. This only exists to assist with automated tests. Absolutely never expose this publically.
-    internal static func setSharedInstance(parra: Parra) {
+    static func setSharedInstance(parra: Parra) {
         _shared = parra
-    }
-
-    internal let dataManager: ParraDataManager
-    internal let syncManager: ParraSyncManager
-
-    @usableFromInline
-    internal let sessionManager: ParraSessionManager
-    internal let networkManager: ParraNetworkManager
-    internal let notificationCenter: NotificationCenterType
-
-    internal init(
-        state: ParraState,
-        configuration: ParraConfiguration,
-        dataManager: ParraDataManager,
-        syncManager: ParraSyncManager,
-        sessionManager: ParraSessionManager,
-        networkManager: ParraNetworkManager,
-        notificationCenter: NotificationCenterType
-    ) {
-        self.state = state
-        self.configuration = configuration
-        self.dataManager = dataManager
-        self.syncManager = syncManager
-        self.sessionManager = sessionManager
-        self.networkManager = networkManager
-        self.notificationCenter = notificationCenter
-        
-        UIFont.registerFontsIfNeeded() // Needs to be called before any UI is displayed.
-    }
-    
-    deinit {
-        // This should only happen when the singleton is destroyed when the
-        // app is being killed, or during unit tests.
-        removeEventObservers()
-    }
-
-    // MARK: - Authentication
-
-    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
-    /// will be invoked the very next time the Parra API is accessed.
-    public static func logout(completion: (() -> Void)? = nil) {
-        getExistingInstance().logout(completion: completion)
-    }
-
-    internal func logout(completion: (() -> Void)? = nil) {
-        Task {
-            await logout()
-
-            DispatchQueue.main.async {
-                completion?()
-            }
-        }
-    }
-
-    /// Used to clear any cached credentials for the current user. After calling logout, the authentication provider you configured
-    /// will be invoked the very next time the Parra API is accessed.
-    public static func logout() async {
-        await getExistingInstance().logout()
-    }
-
-    internal func logout() async {
-        await syncManager.enqueueSync(with: .immediate)
-        await dataManager.updateCredential(credential: nil)
-        await syncManager.stopSyncTimer()
-    }
-
-    // MARK: - Synchronization
-
-    /// Uploads any cached Parra data. This includes data like answers to questions.
-    public static func triggerSync(completion: (() -> Void)? = nil) {
-        getExistingInstance().triggerSync(completion: completion)
-    }
-
-    internal func triggerSync(completion: (() -> Void)? = nil) {
-        Task {
-            await triggerSync()
-
-            completion?()
-        }
-    }
-
-    /// Parra data is syncrhonized automatically. Use this method if you wish to trigger a synchronization event manually.
-    /// This may be something you want to do in response to a significant event in your app, or in response to a low memory
-    /// warning, for example. Note that in order to prevent excessive network activity it may take up to 30 seconds for the sync
-    /// to complete after being initiated.
-    public static func triggerSync() async {
-        await getExistingInstance().triggerSync()
-    }
-
-    internal func triggerSync() async {
-        // Uploads any cached Parra data. This includes data like answers to questions.
-        // Don't expose sync mode publically.
-        await syncManager.enqueueSync(with: .eventual)
-    }
-
-    internal func hasDataToSync(since date: Date?) async -> Bool {
-        return await sessionManager.hasDataToSync(since: date)
-    }
-
-    internal func synchronizeData() async throws {
-        guard let response = try await sessionManager.synchronizeData() else {
-            return
-        }
-
-        for module in await state.getAllRegisteredModules() {
-            module.didReceiveSessionResponse(
-                sessionResponse: response
-            )
-        }
     }
 
     // MARK: Configuration
 
-    internal static func createParraInstance(
+    static func createParraInstance(
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration
     ) -> Parra {
@@ -198,18 +171,26 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
 
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
             dataStorageMedium: .fileSystem(
-                baseUrl: instanceConfiguration.storageConfiguration.baseDirectory,
-                folder: instanceConfiguration.storageConfiguration.storageDirectoryName,
+                baseUrl: instanceConfiguration.storageConfiguration
+                    .baseDirectory,
+                folder: instanceConfiguration.storageConfiguration
+                    .storageDirectoryName,
                 fileName: ParraDataManager.Key.userCredentialsKey,
                 storeItemsSeparately: false,
                 fileManager: fileManager
             ),
-            jsonEncoder: instanceConfiguration.storageConfiguration.sessionJsonEncoder,
-            jsonDecoder: instanceConfiguration.storageConfiguration.sessionJsonDecoder
+            jsonEncoder: instanceConfiguration.storageConfiguration
+                .sessionJsonEncoder,
+            jsonDecoder: instanceConfiguration.storageConfiguration
+                .sessionJsonDecoder
         )
 
-        let sessionStorageUrl = instanceConfiguration.storageConfiguration.baseDirectory
-            .appendDirectory(instanceConfiguration.storageConfiguration.storageDirectoryName)
+        let sessionStorageUrl = instanceConfiguration.storageConfiguration
+            .baseDirectory
+            .appendDirectory(
+                instanceConfiguration.storageConfiguration
+                    .storageDirectoryName
+            )
             .appendDirectory("sessions")
 
         let notificationCenter = ParraNotificationCenter()
@@ -230,7 +211,8 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         )
 
         let dataManager = ParraDataManager(
-            baseDirectory: instanceConfiguration.storageConfiguration.baseDirectory,
+            baseDirectory: instanceConfiguration.storageConfiguration
+                .baseDirectory,
             credentialStorage: credentialStorage,
             sessionStorage: sessionStorage
         )
@@ -270,21 +252,49 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         )
     }
 
-    // MARK: - Theme
+    func logout(completion: (() -> Void)? = nil) {
+        Task {
+            await logout()
 
-    public static func updateTheme(to newTheme: ParraTheme) {
-        let parra = getExistingInstance()
+            DispatchQueue.main.async {
+                completion?()
+            }
+        }
+    }
 
-        let oldTheme = parra.configuration.theme
-        parra.configuration.theme = newTheme
+    func logout() async {
+        await syncManager.enqueueSync(with: .immediate)
+        await dataManager.updateCredential(credential: nil)
+        await syncManager.stopSyncTimer()
+    }
 
-        parra.notificationCenter.post(
-            name: Parra.themeWillChangeNotification,
-            object: nil,
-            userInfo: [
-                "oldTheme": oldTheme,
-                "newTheme": newTheme,
-            ]
-        )
+    func triggerSync(completion: (() -> Void)? = nil) {
+        Task {
+            await triggerSync()
+
+            completion?()
+        }
+    }
+
+    func triggerSync() async {
+        // Uploads any cached Parra data. This includes data like answers to questions.
+        // Don't expose sync mode publically.
+        await syncManager.enqueueSync(with: .eventual)
+    }
+
+    func hasDataToSync(since date: Date?) async -> Bool {
+        return await sessionManager.hasDataToSync(since: date)
+    }
+
+    func synchronizeData() async throws {
+        guard let response = try await sessionManager.synchronizeData() else {
+            return
+        }
+
+        for module in await state.getAllRegisteredModules() {
+            module.didReceiveSessionResponse(
+                sessionResponse: response
+            )
+        }
     }
 }

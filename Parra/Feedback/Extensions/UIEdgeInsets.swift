@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal extension UIEdgeInsets {
+extension UIEdgeInsets {
     static let parraDefaultCardContentPadding = UIEdgeInsets(
         top: 8,
         left: 8,

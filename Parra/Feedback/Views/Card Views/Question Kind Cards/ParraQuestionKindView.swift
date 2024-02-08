@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal protocol ParraQuestionOption: Identifiable {
+protocol ParraQuestionOption: Identifiable {
     var id: String { get }
     var title: String { get }
     var value: String { get }
@@ -17,7 +17,7 @@ internal protocol ParraQuestionOption: Identifiable {
 // All ParraQuestionKindView's need to internally manage the selection/deselection of
 // whatever views they need to render while distilling state updates to those consumable
 // by the ParraAnswerHandler.
-internal protocol ParraQuestionKindView: ParraConfigurableCardView {
+protocol ParraQuestionKindView: ParraConfigurableCardView {
     associatedtype DataType
     associatedtype AnswerType
 

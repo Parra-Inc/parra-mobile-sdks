@@ -7,15 +7,10 @@
 
 import UIKit
 
-internal class ParraActionCardView: ParraCardItemView {
-    private let titleLabel = UILabel(frame: .zero)
-    private let subtitleLabel = UILabel(frame: .zero)
-    private var cta = UIButton(type: .system)
-    private let stackView = UIStackView(arrangedSubviews: [])
-    private var actionHandler: (() -> Void)?
-    
-    
-    internal required init(
+class ParraActionCardView: ParraCardItemView {
+    // MARK: Lifecycle
+
+    required init(
         config: ParraCardViewConfig,
         title: String,
         subtitle: String?,
@@ -23,13 +18,13 @@ internal class ParraActionCardView: ParraCardItemView {
         actionHandler: (() -> Void)?
     ) {
         super.init(config: config)
-        
+
         translatesAutoresizingMaskIntoConstraints = false
-        
+
         self.actionHandler = actionHandler
-        
+
         stackView.addArrangedSubview(titleLabel)
-        if let subtitle = subtitle {
+        if let subtitle {
             subtitleLabel.text = subtitle
             subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
             subtitleLabel.font = .preferredFont(forTextStyle: .callout)
@@ -40,15 +35,15 @@ internal class ParraActionCardView: ParraCardItemView {
             stackView.addArrangedSubview(subtitleLabel)
         }
         stackView.addArrangedSubview(cta)
-        
+
         stackView.distribution = .fill
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.spacing = 10
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         addSubview(stackView)
-        
+
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
@@ -70,17 +65,21 @@ internal class ParraActionCardView: ParraCardItemView {
             stackView.bottomAnchor.constraint(
                 lessThanOrEqualTo: bottomAnchor,
                 constant: 0
-            ),
+            )
         ])
-        
+
         titleLabel.text = title
         titleLabel.textAlignment = .center
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 3
         titleLabel.lineBreakMode = .byTruncatingTail
-        
-        cta.addTarget(self, action: #selector(ctaPressed(button:)), for: .touchUpInside)
+
+        cta.addTarget(
+            self,
+            action: #selector(ctaPressed(button:)),
+            for: .touchUpInside
+        )
 
         let attributedTitle = NSAttributedString(
             string: actionTitle,
@@ -90,17 +89,27 @@ internal class ParraActionCardView: ParraCardItemView {
         cta.translatesAutoresizingMaskIntoConstraints = false
         cta.setTitleColor(UIColor(hex: 0xBDBDBD), for: .normal)
     }
-    
-    internal required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    internal required init(config: ParraCardViewConfig) {
+
+    required init(config: ParraCardViewConfig) {
         fatalError("init(config:) has not been implemented")
     }
-    
-    @objc private func ctaPressed(button: UIButton) {
-        if let actionHandler = actionHandler {
+
+    // MARK: Private
+
+    private let titleLabel = UILabel(frame: .zero)
+    private let subtitleLabel = UILabel(frame: .zero)
+    private var cta = UIButton(type: .system)
+    private let stackView = UIStackView(arrangedSubviews: [])
+    private var actionHandler: (() -> Void)?
+
+    @objc
+    private func ctaPressed(button: UIButton) {
+        if let actionHandler {
             actionHandler()
         }
     }

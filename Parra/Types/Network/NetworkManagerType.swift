@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal protocol NetworkManagerType: ParraModuleStateAccessor {
+protocol NetworkManagerType: ParraModuleStateAccessor {
     init(
         state: ParraState,
         dataManager: ParraDataManager,
@@ -17,7 +17,10 @@ internal protocol NetworkManagerType: ParraModuleStateAccessor {
         jsonDecoder: JSONDecoder
     )
 
-    func updateAuthenticationProvider(_ provider: ParraAuthenticationProviderFunction?) async
-    func getAuthenticationProvider() async -> ParraAuthenticationProviderFunction?
+    func updateAuthenticationProvider(
+        _ provider: ParraAuthenticationProviderFunction?
+    ) async
+    func getAuthenticationProvider() async
+        -> ParraAuthenticationProviderFunction?
     func refreshAuthentication() async throws -> ParraCredential
 }

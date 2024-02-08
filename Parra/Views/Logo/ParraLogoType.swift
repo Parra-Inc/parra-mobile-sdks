@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum ParraLogoType {
+enum ParraLogoType {
     case logo
     case logoAndText
     case poweredBy

@@ -8,15 +8,8 @@
 
 import UIKit
 
-internal class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
-    internal var placeholder: String? {
-        didSet {
-            placeholderLabel.text = placeholder
-        }
-    }
-
-    private let placeholderLabel = UILabel(frame: .zero)
-    private var config: ParraCardViewConfig
+class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
+    // MARK: Lifecycle
 
     required init(config: ParraCardViewConfig) {
         self.config = config
@@ -24,7 +17,12 @@ internal class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
         super.init(frame: .zero, textContainer: nil)
 
         textStorage.delegate = self
-        scrollIndicatorInsets = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
+        scrollIndicatorInsets = UIEdgeInsets(
+            top: 5,
+            left: 0,
+            bottom: 5,
+            right: 0
+        )
         textContainerInset = UIEdgeInsets(
             top: 14,
             left: 10,
@@ -40,6 +38,7 @@ internal class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -48,12 +47,22 @@ internal class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
         fatalError("init(forcedEdgeInsets:) has not been implemented")
     }
 
+    // MARK: Internal
+
+    var placeholder: String? {
+        didSet {
+            placeholderLabel.text = placeholder
+        }
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
         placeholderLabel.sizeToFit()
 
-        let width = frame.width - textContainer.lineFragmentPadding * 2 - textContainerInset.left - textContainerInset.right
+        let width = frame.width - textContainer
+            .lineFragmentPadding * 2 - textContainerInset
+            .left - textContainerInset.right
         let height = placeholderLabel.frame.height
 
         placeholderLabel.frame = CGRect(
@@ -98,13 +107,22 @@ internal class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
         placeholderLabel.font = config.body.font
         placeholderLabel.textColor = config.accessoryDisabledTintColor
     }
+
+    // MARK: Private
+
+    private let placeholderLabel = UILabel(frame: .zero)
+    private var config: ParraCardViewConfig
 }
 
+// MARK: NSTextStorageDelegate
+
 extension ParraBorderedTextView: NSTextStorageDelegate {
-    func textStorage(_ textStorage: NSTextStorage,
-                     didProcessEditing editedMask: NSTextStorage.EditActions,
-                     range editedRange: NSRange,
-                     changeInLength delta: Int) {
+    func textStorage(
+        _ textStorage: NSTextStorage,
+        didProcessEditing editedMask: NSTextStorage.EditActions,
+        range editedRange: NSRange,
+        changeInLength delta: Int
+    ) {
         if editedMask.contains(.editedCharacters) {
             placeholderLabel.isHidden = !text.isEmpty
         }

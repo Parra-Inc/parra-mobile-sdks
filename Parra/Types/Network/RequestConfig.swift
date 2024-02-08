@@ -9,31 +9,36 @@
 import Foundation
 import UIKit
 
-internal struct RequestConfig {
-    internal private(set) var shouldReauthenticate: Bool
-    internal private(set) var remainingTries: Int
-    internal private(set) var allowedTries: Int
-    internal private(set) var attributes: AuthenticatedRequestAttributeOptions
-    
-    internal init(shouldReauthenticate: Bool,
-                  allowedTries: Int,
-                  attributes: AuthenticatedRequestAttributeOptions = []) {
+struct RequestConfig {
+    // MARK: Lifecycle
 
+    init(
+        shouldReauthenticate: Bool,
+        allowedTries: Int,
+        attributes: AuthenticatedRequestAttributeOptions = []
+    ) {
         self.shouldReauthenticate = shouldReauthenticate
         self.remainingTries = allowedTries
         self.allowedTries = allowedTries
         self.attributes = attributes
     }
 
+    // MARK: Internal
+
     static let `default` = RequestConfig(
         shouldReauthenticate: true,
         allowedTries: 1
     )
 
-    static let `defaultWithRetries` = RequestConfig(
+    static let defaultWithRetries = RequestConfig(
         shouldReauthenticate: true,
         allowedTries: 3
     )
+
+    private(set) var shouldReauthenticate: Bool
+    private(set) var remainingTries: Int
+    private(set) var allowedTries: Int
+    private(set) var attributes: AuthenticatedRequestAttributeOptions
 
     var shouldRetry: Bool {
         return remainingTries > 1
@@ -64,8 +69,10 @@ internal struct RequestConfig {
 
         return newConfig
     }
-    
-    func withAttribute(_ attribute: AuthenticatedRequestAttributeOptions) -> RequestConfig {
+
+    func withAttribute(_ attribute: AuthenticatedRequestAttributeOptions)
+        -> RequestConfig
+    {
         var newConfig = self
 
         newConfig.attributes.insert(attribute)

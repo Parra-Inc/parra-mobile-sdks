@@ -8,35 +8,47 @@
 
 import UIKit
 
-internal struct Edges: OptionSet {
+struct Edges: OptionSet {
+    static let top = Edges(rawValue: 1 << 0)
+    static let bottom = Edges(rawValue: 1 << 1)
+    static let leading = Edges(rawValue: 1 << 2)
+    static let trailing = Edges(rawValue: 1 << 3)
+
+    static let all: Edges = [.top, .bottom, .leading, .trailing]
+
     let rawValue: Int
-
-    static let top          = Edges(rawValue: 1 << 0)
-    static let bottom       = Edges(rawValue: 1 << 1)
-    static let leading      = Edges(rawValue: 1 << 2)
-    static let trailing     = Edges(rawValue: 1 << 3)
-
-    static let all: Edges   = [.top, .bottom, .leading, .trailing]
 }
 
-internal extension UIView {
-    func activateEdgeConstraints(to view: UIView,
-                                 with insets: UIEdgeInsets = .zero) {
+extension UIView {
+    func activateEdgeConstraints(
+        to view: UIView,
+        with insets: UIEdgeInsets = .zero
+    ) {
         NSLayoutConstraint.activate(
             constrainEdges(to: view, with: insets)
         )
     }
 
-    func activateEdgeConstraintsWithVerticalCenteringPreference(to view: UIView,
-                                                                with insets: UIEdgeInsets = .zero) {
+    func activateEdgeConstraintsWithVerticalCenteringPreference(
+        to view: UIView,
+        with insets: UIEdgeInsets =
+            .zero
+    ) {
         NSLayoutConstraint.activate(
-            constrainEdgesWithVerticalCenteringPreference(to: view, with: insets)
+            constrainEdgesWithVerticalCenteringPreference(
+                to: view,
+                with: insets
+            )
         )
     }
 
-    func constrainEdges(edges: Edges = .all,
-                        to view: UIView,
-                        with insets: UIEdgeInsets = .zero) -> [NSLayoutConstraint] {
+    func constrainEdges(
+        edges: Edges = .all,
+        to view: UIView,
+        with insets: UIEdgeInsets = .zero
+    )
+        -> [NSLayoutConstraint]
+    {
         var constraints = [NSLayoutConstraint]()
 
         if edges.contains(.leading) || edges.contains(.all) {
@@ -78,8 +90,10 @@ internal extension UIView {
         return constraints
     }
 
-    func constrainEdgesWithVerticalCenteringPreference(to view: UIView,
-                                                       with insets: UIEdgeInsets = .zero) -> [NSLayoutConstraint] {
+    func constrainEdgesWithVerticalCenteringPreference(
+        to view: UIView,
+        with insets: UIEdgeInsets = .zero
+    ) -> [NSLayoutConstraint] {
         return [
             leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,

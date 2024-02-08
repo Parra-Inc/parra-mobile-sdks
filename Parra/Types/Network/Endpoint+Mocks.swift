@@ -13,7 +13,7 @@ extension ParraEndpoint {
     func getMockResponseData(for status: Int = 200) throws -> Data {
         let object: Codable
         switch status {
-        case 200..<300:
+        case 200 ..< 300:
             switch self {
             case .getCards:
                 object = TestData.Cards.cardsResponse

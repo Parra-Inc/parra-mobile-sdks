@@ -11,15 +11,17 @@ import Foundation
 extension URL {
     static func currentDiskUsage() -> ParraDiskUsage? {
         do {
-            let resourceValues = try ParraDataManager.Base.documentDirectory.resourceValues(
-                forKeys: [
-                    .volumeTotalCapacityKey, .volumeAvailableCapacityKey,
-                        .volumeAvailableCapacityForImportantUsageKey, .volumeAvailableCapacityForOpportunisticUsageKey
-                ]
-            )
+            let resourceValues = try ParraDataManager.Base.documentDirectory
+                .resourceValues(
+                    forKeys: [
+                        .volumeTotalCapacityKey, .volumeAvailableCapacityKey,
+                        .volumeAvailableCapacityForImportantUsageKey,
+                        .volumeAvailableCapacityForOpportunisticUsageKey
+                    ]
+                )
 
             return ParraDiskUsage(resourceValues: resourceValues)
-        } catch let error {
+        } catch {
             Logger.error("Error fetching current disk usage", error)
 
             return nil

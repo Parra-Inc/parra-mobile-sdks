@@ -9,9 +9,15 @@
 import Foundation
 import UIKit
 
-internal class ParraRatingLabels: UIView, ParraLegacyConfigurableView {
-    required init?(leadingText: String?, centerText: String?, trailingText: String?) {
-        if leadingText == nil && centerText == nil && trailingText == nil {
+class ParraRatingLabels: UIView, ParraLegacyConfigurableView {
+    // MARK: Lifecycle
+
+    required init?(
+        leadingText: String?,
+        centerText: String?,
+        trailingText: String?
+    ) {
+        if leadingText == nil, centerText == nil, trailingText == nil {
             return nil
         }
 
@@ -35,31 +41,60 @@ internal class ParraRatingLabels: UIView, ParraLegacyConfigurableView {
 
         var constraints = [NSLayoutConstraint]()
         constraints.append(
-            contentsOf: leadingLabel.constrainEdges(edges: [.leading, .top, .bottom], to: self)
+            contentsOf: leadingLabel.constrainEdges(
+                edges: [.leading, .top, .bottom],
+                to: self
+            )
         )
         constraints.append(
-            contentsOf: centerLabel.constrainEdges(edges: [.top, .bottom], to: self)
+            contentsOf: centerLabel.constrainEdges(
+                edges: [.top, .bottom],
+                to: self
+            )
         )
         constraints.append(
-            contentsOf: trailingLabel.constrainEdges(edges: [.trailing, .top, .bottom], to: self)
+            contentsOf: trailingLabel.constrainEdges(
+                edges: [.trailing, .top, .bottom],
+                to: self
+            )
         )
         constraints.append(contentsOf: [
-            centerLabel.heightAnchor.constraint(equalTo: leadingLabel.heightAnchor),
-            trailingLabel.heightAnchor.constraint(equalTo: centerLabel.heightAnchor),
+            centerLabel.heightAnchor
+                .constraint(equalTo: leadingLabel.heightAnchor),
+            trailingLabel.heightAnchor
+                .constraint(equalTo: centerLabel.heightAnchor),
             centerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            leadingLabel.trailingAnchor.constraint(lessThanOrEqualTo: centerLabel.leadingAnchor, constant: -16),
-            trailingLabel.leadingAnchor.constraint(greaterThanOrEqualTo: centerLabel.trailingAnchor, constant: 16),
-            leadingLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.25),
-            centerLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.25),
-            trailingLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.25),
+            leadingLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: centerLabel.leadingAnchor,
+                constant: -16
+            ),
+            trailingLabel.leadingAnchor.constraint(
+                greaterThanOrEqualTo: centerLabel.trailingAnchor,
+                constant: 16
+            ),
+            leadingLabel.widthAnchor.constraint(
+                lessThanOrEqualTo: widthAnchor,
+                multiplier: 0.25
+            ),
+            centerLabel.widthAnchor.constraint(
+                lessThanOrEqualTo: widthAnchor,
+                multiplier: 0.25
+            ),
+            trailingLabel.widthAnchor.constraint(
+                lessThanOrEqualTo: widthAnchor,
+                multiplier: 0.25
+            )
         ])
 
         NSLayoutConstraint.activate(constraints)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Internal
 
     func applyConfig(_ config: ParraCardViewConfig) {
         for view in subviews {
@@ -72,9 +107,12 @@ internal class ParraRatingLabels: UIView, ParraLegacyConfigurableView {
         }
     }
 
-    private func applyCommonAttributes(to label: UILabel,
-                                       named name: String) {
+    // MARK: Private
 
+    private func applyCommonAttributes(
+        to label: UILabel,
+        named name: String
+    ) {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 2
         label.textAlignment = .center

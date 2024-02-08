@@ -9,17 +9,8 @@
 import UIKit
 
 // "checkbox" means multiple selection from a variable number of options
-internal class ParraCheckboxKindView: UIView, ParraQuestionKindView {
-    typealias DataType = CheckboxQuestionBody
-    typealias AnswerType = MultiOptionAnswer
-
-    private let contentContainer = UIStackView(frame: .zero)
-    private var optionViewMap = [ParraBorderedButton: CheckboxQuestionOption]()
-    private var selectedOptionIds = Set<String>()
-
-    private let question: Question
-    private let answerHandler: ParraAnswerHandler
-    private let bucketId: String
+class ParraCheckboxKindView: UIView, ParraQuestionKindView {
+    // MARK: Lifecycle
 
     required init(
         bucketId: String,
@@ -73,19 +64,37 @@ internal class ParraCheckboxKindView: UIView, ParraQuestionKindView {
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal func applyConfig(_ config: ParraCardViewConfig) {
+    // MARK: Internal
+
+    typealias DataType = CheckboxQuestionBody
+    typealias AnswerType = MultiOptionAnswer
+
+    func applyConfig(_ config: ParraCardViewConfig) {
         for optionView in optionViewMap.keys {
             optionView.applyConfig(config)
         }
     }
 
-    private func generateOptions(for data: DataType,
-                                 config: ParraCardViewConfig,
-                                 currentState: AnswerType?) {
+    // MARK: Private
+
+    private let contentContainer = UIStackView(frame: .zero)
+    private var optionViewMap = [ParraBorderedButton: CheckboxQuestionOption]()
+    private var selectedOptionIds = Set<String>()
+
+    private let question: Question
+    private let answerHandler: ParraAnswerHandler
+    private let bucketId: String
+
+    private func generateOptions(
+        for data: DataType,
+        config: ParraCardViewConfig,
+        currentState: AnswerType?
+    ) {
         optionViewMap.removeAll()
 
         for option in data.options {
@@ -106,15 +115,20 @@ internal class ParraCheckboxKindView: UIView, ParraQuestionKindView {
     }
 }
 
+// MARK: ParraBorderedButtonDelegate, ViewTimer
+
 extension ParraCheckboxKindView: ParraBorderedButtonDelegate, ViewTimer {
-    func buttonShouldSelect(button: ParraBorderedButton,
-                            optionId: String) -> Bool {
+    func buttonShouldSelect(
+        button: ParraBorderedButton,
+        optionId: String
+    ) -> Bool {
         return true
     }
 
-    func buttonDidSelect(button: ParraBorderedButton,
-                         optionId: String) {
-
+    func buttonDidSelect(
+        button: ParraBorderedButton,
+        optionId: String
+    ) {
         guard let option = optionViewMap[button], option.id == optionId else {
             return
         }
@@ -123,8 +137,10 @@ extension ParraCheckboxKindView: ParraBorderedButtonDelegate, ViewTimer {
         updateForSelectedOptions()
     }
 
-    func buttonDidDeselect(button: ParraBorderedButton,
-                           optionId: String) {
+    func buttonDidDeselect(
+        button: ParraBorderedButton,
+        optionId: String
+    ) {
         guard let option = optionViewMap[button], option.id == optionId else {
             return
         }
@@ -134,14 +150,14 @@ extension ParraCheckboxKindView: ParraBorderedButtonDelegate, ViewTimer {
     }
 
     private func updateForSelectedOptions() {
-        let answer: QuestionAnswer?
-        if selectedOptionIds.isEmpty {
-            answer = nil
+        let answer: QuestionAnswer? = if selectedOptionIds.isEmpty {
+            nil
         } else {
-            answer = QuestionAnswer(
+            QuestionAnswer(
                 kind: .checkbox,
                 data: MultiOptionAnswer(
-                    options: selectedOptionIds.map { MultiOptionIndividualOption(id: $0) }
+                    options: selectedOptionIds
+                        .map { MultiOptionIndividualOption(id: $0) }
                 )
             )
         }

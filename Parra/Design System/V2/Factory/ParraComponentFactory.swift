@@ -1,5 +1,5 @@
 //
-//  LocalComponentFactory.swift
+//  ParraComponentFactory.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ComponentBuilder {
+enum ComponentBuilder {
     // I don't know why, but these generic typealiases have to be nested within a type.
     // If they're top level, any callsite reports not finding them on the Parra module.
     typealias Factory<
@@ -26,9 +26,7 @@ struct ComponentBuilder {
 protocol ParraComponentFactory {}
 
 class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
-    private let local: Factory?
-    private let global: GlobalComponentAttributes?
-    private let theme: ParraTheme
+    // MARK: Lifecycle
 
     init(
         local: Factory?,
@@ -40,9 +38,19 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         self.theme = theme
     }
 
+    // MARK: Internal
+
     @ViewBuilder
     func buildLabel(
-        component componentKeyPath: KeyPath<Factory, ComponentBuilder.Factory<some View, LabelConfig, LabelContent, LabelAttributes>?>,
+        component componentKeyPath: KeyPath<
+            Factory,
+            ComponentBuilder.Factory<
+                some View,
+                LabelConfig,
+                LabelContent,
+                LabelAttributes
+            >?
+        >,
         config: LabelConfig,
         content: LabelContent?,
         localAttributes: LabelAttributes? = nil
@@ -63,8 +71,8 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
             // If a container level factory function was provided for this component,
             // use it and supply global attribute overrides instead of local, if provided.
             if let builder = local?[keyPath: componentKeyPath],
-               let view = builder(config, content, mergedAttributes) {
-
+               let view = builder(config, content, mergedAttributes)
+            {
                 view
             } else {
                 let style = ParraAttributedLabelStyle(
@@ -88,7 +96,15 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
     @ViewBuilder
     func buildButton(
         variant: ButtonVariant,
-        component componentKeyPath: KeyPath<Factory, ComponentBuilder.Factory<some View, ButtonConfig, ButtonContent, ButtonAttributes>?>,
+        component componentKeyPath: KeyPath<
+            Factory,
+            ComponentBuilder.Factory<
+                some View,
+                ButtonConfig,
+                ButtonContent,
+                ButtonAttributes
+            >?
+        >,
         config: ButtonConfig,
         content: ButtonContent?,
         localAttributes: ButtonAttributes
@@ -125,8 +141,8 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
             // If a container level factory function was provided for this component,
             // use it and supply global attribute overrides instead of local, if provided.
             if let builder = local?[keyPath: componentKeyPath],
-               let view = builder(config, content, mergedAttributes) {
-
+               let view = builder(config, content, mergedAttributes)
+            {
                 view
             } else {
                 let style = ParraAttributedButtonStyle(
@@ -164,7 +180,15 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
     @ViewBuilder
     func buildMenu(
-        component componentKeyPath: KeyPath<Factory, ComponentBuilder.Factory<some View, MenuConfig, MenuContent, MenuAttributes>?>,
+        component componentKeyPath: KeyPath<
+            Factory,
+            ComponentBuilder.Factory<
+                some View,
+                MenuConfig,
+                MenuContent,
+                MenuAttributes
+            >?
+        >,
         config: MenuConfig,
         content: MenuContent?,
         localAttributes: MenuAttributes? = nil
@@ -185,8 +209,8 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
             // If a container level factory function was provided for this component,
             // use it and supply global attribute overrides instead of local, if provided.
             if let builder = local?[keyPath: componentKeyPath],
-               let view = builder(config, content, mergedAttributes) {
-
+               let view = builder(config, content, mergedAttributes)
+            {
                 view
             } else {
                 let style = ParraAttributedMenuStyle(
@@ -209,29 +233,40 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
     @ViewBuilder
     func buildTextEditor(
-        component componentKeyPath: KeyPath<Factory, ComponentBuilder.Factory<some View, TextEditorConfig, TextEditorContent, TextEditorAttributes>?>,
+        component componentKeyPath: KeyPath<
+            Factory,
+            ComponentBuilder.Factory<
+                some View,
+                TextEditorConfig,
+                TextEditorContent,
+                TextEditorAttributes
+            >?
+        >,
         config: TextEditorConfig,
         content: TextEditorContent?,
         localAttributes: TextEditorAttributes? = nil
     ) -> some View {
         if let content {
-            let attributes = if let factory = global?.textEditorAttributeFactory {
+            let attributes = if let factory = global?
+                .textEditorAttributeFactory
+            {
                 factory(config, content, localAttributes)
             } else {
                 localAttributes
             }
 
-            let mergedAttributes = TextEditorComponent.applyStandardCustomizations(
-                onto: attributes,
-                theme: theme,
-                config: config
-            )
+            let mergedAttributes = TextEditorComponent
+                .applyStandardCustomizations(
+                    onto: attributes,
+                    theme: theme,
+                    config: config
+                )
 
             // If a container level factory function was provided for this component,
             // use it and supply global attribute overrides instead of local, if provided.
             if let builder = local?[keyPath: componentKeyPath],
-               let view = builder(config, content, mergedAttributes) {
-
+               let view = builder(config, content, mergedAttributes)
+            {
                 view
             } else {
                 let style = ParraAttributedTextEditorStyle(
@@ -251,4 +286,10 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
             EmptyView()
         }
     }
+
+    // MARK: Private
+
+    private let local: Factory?
+    private let global: GlobalComponentAttributes?
+    private let theme: ParraTheme
 }

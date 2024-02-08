@@ -6,12 +6,12 @@
 //  Copyright © 2023 Parra, Inc. All rights reserved.
 //
 
-import XCTest
 @testable import Parra
+import XCTest
 
 @MainActor
 class MockedParraTestCase: ParraBaseMock {
-    internal var mockParra: MockParra!
+    var mockParra: MockParra!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -31,12 +31,11 @@ class MockedParraTestCase: ParraBaseMock {
         try await super.tearDown()
     }
 
-    internal func createMockParra(
+    func createMockParra(
         state: ParraState = ParraState(),
         tenantId: String = UUID().uuidString,
         applicationId: String = UUID().uuidString
     ) async -> MockParra {
-
         await state.setTenantId(tenantId)
         await state.setApplicationId(applicationId)
 
@@ -102,8 +101,8 @@ class MockedParraTestCase: ParraBaseMock {
     }
 
     func createMockDataManager() -> ParraDataManager {
-
-        let storageDirectoryName = ParraDataManager.Directory.storageDirectoryName
+        let storageDirectoryName = ParraDataManager.Directory
+            .storageDirectoryName
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
             dataStorageMedium: .fileSystem(
                 baseUrl: baseStorageDirectory,

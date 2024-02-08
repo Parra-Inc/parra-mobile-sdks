@@ -15,7 +15,8 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
     let theme: ParraTheme
 
     func makeBody(configuration: Configuration) -> some View {
-        let fontColor = attributes.fontColor ?? theme.palette.primaryText.toParraColor()
+        let fontColor = attributes.fontColor ?? theme.palette.primaryText
+            .toParraColor()
 
         HStack {
             Text(content.text)
@@ -32,7 +33,8 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
                 .padding(attributes.padding ?? .zero)
                 .overlay(
                     UnevenRoundedRectangle(
-                        cornerRadii: theme.cornerRadius.value(for: attributes.cornerRadius)
+                        cornerRadii: theme.cornerRadius
+                            .value(for: attributes.cornerRadius)
                     )
                     .stroke(
                         fontColor,
@@ -48,7 +50,7 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
         }
     }
 
-    internal func withContent(content: LabelContent) -> ParraAttributedLabelStyle {
+    func withContent(content: LabelContent) -> ParraAttributedLabelStyle {
         return ParraAttributedLabelStyle(
             config: config,
             content: content,

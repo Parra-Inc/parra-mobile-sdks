@@ -7,8 +7,8 @@
 
 import Foundation
 
-internal extension ParraFeedback {
+extension ParraFeedback {
     enum Constant {
-        internal static let maxBulkAnswers = 25
+        static let maxBulkAnswers = 25
     }
 }

@@ -7,9 +7,9 @@
 
 import Foundation
 
-fileprivate let logger = Logger(category: "Extensions")
+private let logger = Logger(category: "Extensions")
 
-internal extension FileManager {
+extension FileManager {
     func safeCreateDirectory(at url: URL) throws {
         try logger.withScope { logger in
             let logName = url.lastComponents()
@@ -17,7 +17,7 @@ internal extension FileManager {
 
             let (exists, isDirectory) = safeFileExists(at: url)
 
-            if exists && !isDirectory {
+            if exists, !isDirectory {
                 throw ParraError.fileSystem(
                     path: url,
                     message: "Attempted to create a directory at a path that already contained a file."
@@ -25,7 +25,8 @@ internal extension FileManager {
             }
 
             if !exists {
-                logger.trace("Directory didn't exist at \(logName). Creating...")
+                logger
+                    .trace("Directory didn't exist at \(logName). Creating...")
                 try createDirectory(at: url, withIntermediateDirectories: true)
             } else {
                 logger.trace("Directory already exists at \(logName)")
@@ -37,7 +38,7 @@ internal extension FileManager {
         at url: URL,
         contents: Data? = nil,
         overrideExisting: Bool = false,
-        attributes: [FileAttributeKey : Any]? = nil
+        attributes: [FileAttributeKey: Any]? = nil
     ) throws {
         try logger.withScope { logger in
             let logName = url.lastComponents()
@@ -45,7 +46,7 @@ internal extension FileManager {
 
             let exists: Bool = try safeFileExists(at: url)
 
-            if exists && !overrideExisting {
+            if exists, !overrideExisting {
                 throw ParraError.fileSystem(
                     path: url,
                     message: "File already exists."
@@ -84,7 +85,7 @@ internal extension FileManager {
     func safeDirectoryExists(at url: URL) throws -> Bool {
         let (exists, isDirectory) = safeFileExists(at: url)
 
-        if exists && !isDirectory {
+        if exists, !isDirectory {
             throw ParraError.fileSystem(
                 path: url,
                 message: "File exists at a path that is expected to be a directory."
@@ -97,7 +98,7 @@ internal extension FileManager {
     func safeFileExists(at url: URL) throws -> Bool {
         let (exists, isDirectory) = safeFileExists(at: url)
 
-        if exists && isDirectory {
+        if exists, isDirectory {
             throw ParraError.fileSystem(
                 path: url,
                 message: "Directory exists at at a path that is expected to be a file."

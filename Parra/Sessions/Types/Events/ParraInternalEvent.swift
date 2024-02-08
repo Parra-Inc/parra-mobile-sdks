@@ -12,7 +12,7 @@ import UIKit
 /// Events that should only be generated from within the Parra SDK. Events that can be generated
 /// either in or outside of the SDK, should use the `ParraEvent` type.
 @usableFromInline
-internal enum ParraInternalEvent: ParraDataEvent {
+enum ParraInternalEvent: ParraDataEvent {
     case appStateChanged
     case batteryLevelChanged
     case batteryStateChanged
@@ -27,9 +27,10 @@ internal enum ParraInternalEvent: ParraDataEvent {
     case significantTimeChange
     case thermalStateChanged
 
+    // MARK: Internal
+
     // MUST all be snake_case. Internal events are allowed to skip automatic conversion.
-    @usableFromInline
-    var name: String {
+    @usableFromInline var name: String {
         switch self {
         case .appStateChanged:
             return "app_state_changed"
@@ -60,21 +61,19 @@ internal enum ParraInternalEvent: ParraDataEvent {
         }
     }
 
-    @usableFromInline
-    var extra: [String : Any] {
+    @usableFromInline var extra: [String: Any] {
         switch self {
         case .httpRequest(let request, let response):
             return [
                 "request": request.sanitized.dictionary,
-                "response": response.sanitized.dictionary,
+                "response": response.sanitized.dictionary
             ]
         default:
             return [:]
         }
     }
 
-    @usableFromInline
-    var displayName: String {
+    @usableFromInline var displayName: String {
         switch self {
         case .appStateChanged:
             return "app state changed to: \(UIApplication.shared.applicationState.loggerDescription)"
@@ -86,9 +85,9 @@ internal enum ParraInternalEvent: ParraDataEvent {
             return "disk space is low"
         case .httpRequest(let request, _):
             guard let method = request.httpMethod,
-                    let url = request.url,
-                    let scheme = url.scheme else {
-
+                  let url = request.url,
+                  let scheme = url.scheme else
+            {
                 return "HTTP request"
             }
 

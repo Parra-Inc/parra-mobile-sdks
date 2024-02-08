@@ -8,18 +8,8 @@
 
 import UIKit
 
-internal class ParraImageKindView: UIView, ParraQuestionKindView {
-    typealias DataType = ImageQuestionBody
-    typealias AnswerType = SingleOptionAnswer
-
-    private let question: Question
-    private let answerHandler: ParraAnswerHandler
-    private let bucketId: String
-    private let config: ParraCardViewConfig
-    private let contentContainer = UIStackView(frame: .zero)
-
-    private var buttonOptionMap = [ParraImageButton: ImageQuestionOption]()
-    private var labels = [UILabel]()
+class ParraImageKindView: UIView, ParraQuestionKindView {
+    // MARK: Lifecycle
 
     required init(
         bucketId: String,
@@ -48,7 +38,6 @@ internal class ParraImageKindView: UIView, ParraQuestionKindView {
         var constraints = [NSLayoutConstraint]()
 
         for option in data.options {
-
             let optionContainer = UIView(frame: .zero)
             optionContainer.translatesAutoresizingMaskIntoConstraints = false
 
@@ -129,11 +118,17 @@ internal class ParraImageKindView: UIView, ParraQuestionKindView {
         applyConfig(config)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal func applyConfig(_ config: ParraCardViewConfig) {
+    // MARK: Internal
+
+    typealias DataType = ImageQuestionBody
+    typealias AnswerType = SingleOptionAnswer
+
+    func applyConfig(_ config: ParraCardViewConfig) {
         for imageButton in buttonOptionMap.keys {
             imageButton.applyConfig(config)
         }
@@ -143,12 +138,26 @@ internal class ParraImageKindView: UIView, ParraQuestionKindView {
             label.textColor = config.title.color
         }
     }
+
+    // MARK: Private
+
+    private let question: Question
+    private let answerHandler: ParraAnswerHandler
+    private let bucketId: String
+    private let config: ParraCardViewConfig
+    private let contentContainer = UIStackView(frame: .zero)
+
+    private var buttonOptionMap = [ParraImageButton: ImageQuestionOption]()
+    private var labels = [UILabel]()
 }
+
+// MARK: SelectableButtonDelegate
 
 extension ParraImageKindView: SelectableButtonDelegate {
     func buttonDidSelect(button: SelectableButton) {
         guard let imageButton = button as? ParraImageButton,
-              let option = buttonOptionMap[imageButton] else {
+              let option = buttonOptionMap[imageButton] else
+        {
             return
         }
 
@@ -163,8 +172,5 @@ extension ParraImageKindView: SelectableButtonDelegate {
         answerHandler.commitAnswers(for: bucketId, question: question)
     }
 
-    func buttonDidDeselect(button: SelectableButton) {
-        
-    }
+    func buttonDidDeselect(button: SelectableButton) {}
 }
-

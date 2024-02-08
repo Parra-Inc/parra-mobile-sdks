@@ -8,24 +8,23 @@
 
 import Foundation
 
-internal struct ParraErrorWithExtra {
-    let message: String
-    let extra: [String : Any]?
+struct ParraErrorWithExtra {
+    // MARK: Lifecycle
 
-    internal init(
+    init(
         message: String,
-        extra: [String : Any]?
+        extra: [String: Any]?
     ) {
         self.message = message
         self.extra = extra
     }
 
-    internal init(parraError: ParraError) {
+    init(parraError: ParraError) {
         self.message = parraError.errorDescription
         self.extra = parraError.sanitized.dictionary
     }
 
-    internal init(error: Error) {
+    init(error: Error) {
         let (message, extra) = LoggerFormatters.extractMessage(
             from: error
         )
@@ -33,4 +32,9 @@ internal struct ParraErrorWithExtra {
         self.message = message
         self.extra = extra
     }
+
+    // MARK: Internal
+
+    let message: String
+    let extra: [String: Any]?
 }

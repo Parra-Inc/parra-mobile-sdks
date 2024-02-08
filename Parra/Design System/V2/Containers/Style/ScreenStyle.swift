@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal struct ScreenStyle: ContainerStyle {
+struct ScreenStyle: ContainerStyle {
     var background: (any ShapeStyle)?
     var contentPadding: EdgeInsets
 }

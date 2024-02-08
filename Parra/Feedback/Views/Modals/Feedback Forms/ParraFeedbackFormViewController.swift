@@ -8,13 +8,13 @@
 
 import Foundation
 
-import UIKit
 import SwiftUI
+import UIKit
 
-fileprivate let logger = Logger(category: "Feedback form")
+private let logger = Logger(category: "Feedback form")
 
-internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
-    private let form: ParraFeedbackFormResponse
+class ParraFeedbackFormViewController: UIViewController, ParraModal {
+    // MARK: Lifecycle
 
     required init(
         form: ParraFeedbackFormResponse,
@@ -55,15 +55,20 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
             rootView: formView
         )
 
-        formViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        formViewController.view
+            .translatesAutoresizingMaskIntoConstraints = false
         addChild(formViewController)
         view.addSubview(formViewController.view)
 
         NSLayoutConstraint.activate([
-            formViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            formViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            formViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            formViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            formViewController.view.leadingAnchor
+                .constraint(equalTo: view.leadingAnchor),
+            formViewController.view.trailingAnchor
+                .constraint(equalTo: view.trailingAnchor),
+            formViewController.view.topAnchor
+                .constraint(equalTo: view.topAnchor),
+            formViewController.view.bottomAnchor
+                .constraint(equalTo: view.bottomAnchor)
         ])
 
         formViewController.didMove(toParent: self)
@@ -73,13 +78,20 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
         ])
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Internal
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+
+    // MARK: Private
+
+    private let form: ParraFeedbackFormResponse
 
     private func onSubmit(
         data: [FeedbackFormField: String]
@@ -94,12 +106,16 @@ internal class ParraFeedbackFormViewController: UIViewController, ParraModal {
 
         Task {
             do {
-                try await Parra.getExistingInstance().networkManager.submitFeedbackForm(
-                    with: form.id,
-                    data: data
+                try await Parra.getExistingInstance().networkManager
+                    .submitFeedbackForm(
+                        with: form.id,
+                        data: data
+                    )
+            } catch {
+                logger.error(
+                    "Error submitting feedback form: \(form.id)",
+                    error
                 )
-            } catch let error {
-                logger.error("Error submitting feedback form: \(form.id)", error)
             }
         }
     }

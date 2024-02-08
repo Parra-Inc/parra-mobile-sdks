@@ -13,15 +13,17 @@ import Foundation
 // 4. Must invoke dataManager.completeCard(completedCard)
 
 /// Maps a question id to an answer for that question
-typealias AnswerStateMap = [String : QuestionAnswer]
+typealias AnswerStateMap = [String: QuestionAnswer]
 
-internal protocol ParraQuestionHandlerDelegate: AnyObject {
+protocol ParraQuestionHandlerDelegate: AnyObject {
     /// Not meant to be triggered during every selection event. Just when a new selection occurs that may be
     /// required to cause a transition or other side effects.
-    func questionHandlerDidMakeNewSelection(forQuestion question: Question) async
+    func questionHandlerDidMakeNewSelection(
+        forQuestion question: Question
+    ) async
 }
 
-internal protocol ParraAnswerHandler {
+protocol ParraAnswerHandler {
     func initialState<T: AnswerOption>(
         for bucketItemId: String
     ) -> T?
@@ -37,11 +39,14 @@ internal protocol ParraAnswerHandler {
     )
 }
 
-internal class ParraCardAnswerHandler: ParraAnswerHandler {
-    private var currentAnswerState: AnswerStateMap = [:]
-    weak var questionHandlerDelegate: ParraQuestionHandlerDelegate?
-    
+class ParraCardAnswerHandler: ParraAnswerHandler {
+    // MARK: Lifecycle
+
     required init() {}
+
+    // MARK: Internal
+
+    weak var questionHandlerDelegate: ParraQuestionHandlerDelegate?
 
     func initialState<T: AnswerOption>(
         for bucketItemId: String
@@ -85,4 +90,8 @@ internal class ParraCardAnswerHandler: ParraAnswerHandler {
             )
         }
     }
+
+    // MARK: Private
+
+    private var currentAnswerState: AnswerStateMap = [:]
 }

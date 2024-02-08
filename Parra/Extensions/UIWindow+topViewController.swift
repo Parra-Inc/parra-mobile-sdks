@@ -10,7 +10,7 @@ import UIKit
 
 extension UIWindow {
     func topViewController() -> UIViewController? {
-        var top = self.rootViewController
+        var top = rootViewController
 
         while true {
             if let presented = top?.presentedViewController {

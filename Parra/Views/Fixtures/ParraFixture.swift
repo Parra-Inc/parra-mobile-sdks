@@ -11,7 +11,7 @@ import SwiftUI
 
 /// Model objects should conform to this type and implement its methods to define high quality fixtures
 /// which can be used in the context of multiple SwiftUI views.
-internal protocol ParraFixture {
+protocol ParraFixture {
     static func validStates() -> [Self]
     static func invalidStates() -> [Self]
 }

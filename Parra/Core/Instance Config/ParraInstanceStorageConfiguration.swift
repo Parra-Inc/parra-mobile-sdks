@@ -8,11 +8,11 @@
 
 import Foundation
 
-internal struct ParraInstanceStorageConfiguration {
-    internal let baseDirectory: URL
-    internal let storageDirectoryName: String
-    internal let sessionJsonEncoder: JSONEncoder
-    internal let sessionJsonDecoder: JSONDecoder
-    internal let eventJsonEncoder: JSONEncoder
-    internal let eventJsonDecoder: JSONDecoder
+struct ParraInstanceStorageConfiguration {
+    let baseDirectory: URL
+    let storageDirectoryName: String
+    let sessionJsonEncoder: JSONEncoder
+    let sessionJsonDecoder: JSONDecoder
+    let eventJsonEncoder: JSONEncoder
+    let eventJsonDecoder: JSONDecoder
 }

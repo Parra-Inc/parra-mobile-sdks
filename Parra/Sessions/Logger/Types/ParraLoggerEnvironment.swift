@@ -19,38 +19,43 @@ import Foundation
 /// environmental variable is set, events will be written to both the console
 /// and the user's session regardless of this configuration.
 public enum ParraLoggerEnvironment {
-    public static let `default` = ParraLoggerEnvironment.automatic
-
     case debug
     case production
 
     case automatic
 
-    internal static var eventDebugLoggingOverrideEnabled: Bool = {
-        let envVar = ParraLoggerOptions.Environment.eventDebugLoggingEnabled
-        
-        if let rawDebugLoggingEnabled = ProcessInfo.processInfo.environment[envVar],
-           let debugLoggingEnabledNumber = Int(rawDebugLoggingEnabled),
-           debugLoggingEnabledNumber > 0 {
+    // MARK: Public
 
+    public static let `default` = ParraLoggerEnvironment.automatic
+
+    // MARK: Internal
+
+    static var eventDebugLoggingOverrideEnabled: Bool = {
+        let envVar = ParraLoggerOptions.Environment.eventDebugLoggingEnabled
+
+        if let rawDebugLoggingEnabled = ProcessInfo.processInfo
+            .environment[envVar],
+            let debugLoggingEnabledNumber = Int(rawDebugLoggingEnabled),
+            debugLoggingEnabledNumber > 0
+        {
             return true
         }
 
         return false
     }()
 
-    internal var hasConsoleBehavior: Bool {
+    var hasConsoleBehavior: Bool {
         switch self {
         case .debug:
             return true
         case .production:
             return false
         case .automatic:
-#if DEBUG
+            #if DEBUG
             return true
-#else
+            #else
             return false
-#endif
+            #endif
         }
     }
 }

@@ -8,15 +8,19 @@
 
 import Foundation
 
-internal struct AuthenticatedRequestResult<T: Decodable> {
-    internal let result: Result<T, Error>
-    internal let attributes: AuthenticatedRequestAttributeOptions
+struct AuthenticatedRequestResult<T: Decodable> {
+    // MARK: Lifecycle
 
-    internal init(
+    init(
         result: Result<T, Error>,
         responseAttributes: AuthenticatedRequestAttributeOptions = []
     ) {
         self.result = result
         self.attributes = responseAttributes
     }
+
+    // MARK: Internal
+
+    let result: Result<T, Error>
+    let attributes: AuthenticatedRequestAttributeOptions
 }

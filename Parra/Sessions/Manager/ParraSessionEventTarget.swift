@@ -8,11 +8,11 @@
 
 import Foundation
 
-internal enum ParraSessionEventTarget {
+enum ParraSessionEventTarget {
     /// Write to all event targets (console and session currently) with the exception of
     /// log events that explicitly bypass being written to sessions.
     case all
-    
+
     /// The indended default behavior. Scheme/user config dependent.
     case automatic
 

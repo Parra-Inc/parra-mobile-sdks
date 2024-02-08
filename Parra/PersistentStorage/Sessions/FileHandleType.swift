@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum FileHandleType {
+enum FileHandleType {
     case session
     case events
 }

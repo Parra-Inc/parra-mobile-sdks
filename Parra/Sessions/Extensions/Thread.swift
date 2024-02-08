@@ -9,7 +9,6 @@
 import Foundation
 
 extension Thread {
-
     /// Gets the name and number of the thread. It is possible that the number will change,
     /// but could potentially be useful tracing information used in combination with the pthread id.
     /// Name might only exist for the main thread but more testing is needed.
@@ -26,7 +25,9 @@ extension Thread {
         }
 
         let components = description.split(separator: "{")
-        guard let end = components.last?.dropLast(), components.count == 2 else {
+        guard let end = components.last?.dropLast(),
+              components.count == 2 else
+        {
             return nil
         }
 
@@ -51,7 +52,7 @@ extension Thread {
         let isNameFirst: Bool
         if numPrefixEndIdx < dividerRange.lowerBound {
             // number was first
-            let numberString = end[numPrefixEndIdx..<dividerRange.lowerBound]
+            let numberString = end[numPrefixEndIdx ..< dividerRange.lowerBound]
             threadNumber = UInt8(numberString)
             isNameFirst = false
         } else {
@@ -72,11 +73,10 @@ extension Thread {
             let namePrefix = "name = "
 
             if let namePrefixEndIdx = end.range(of: namePrefix)?.upperBound {
-                let foundName: String.SubSequence
-                if isNameFirst {
-                    foundName = end[namePrefixEndIdx..<dividerRange.lowerBound]
+                let foundName: String.SubSequence = if isNameFirst {
+                    end[namePrefixEndIdx ..< dividerRange.lowerBound]
                 } else {
-                    foundName = end[namePrefixEndIdx...]
+                    end[namePrefixEndIdx...]
                 }
 
                 threadName = foundName == "(null)" ? nil : String(foundName)
@@ -98,10 +98,13 @@ extension Thread {
         ) {
             return queueName
         } else if let operationQueueName = OperationQueue.current?.name,
-                    !operationQueueName.isEmpty {
+                  !operationQueueName.isEmpty
+        {
             return operationQueueName
-        } else if let dispatchQueueName = OperationQueue.current?.underlyingQueue?.label,
-                    !dispatchQueueName.isEmpty {
+        } else if let dispatchQueueName = OperationQueue.current?
+            .underlyingQueue?.label,
+            !dispatchQueueName.isEmpty
+        {
             return dispatchQueueName
         } else {
             return "n/a"

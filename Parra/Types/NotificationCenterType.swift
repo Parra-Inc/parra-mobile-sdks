@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal protocol NotificationCenterType {
+protocol NotificationCenterType {
     func post(
         name aName: NSNotification.Name,
         object anObject: Any?,
@@ -18,7 +18,7 @@ internal protocol NotificationCenterType {
     func postAsync(
         name aName: NSNotification.Name,
         object anObject: Any?,
-        userInfo aUserInfo: [AnyHashable : Any]?
+        userInfo aUserInfo: [AnyHashable: Any]?
     ) async
 
     func addObserver(

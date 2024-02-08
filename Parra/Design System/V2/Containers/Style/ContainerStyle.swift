@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-internal protocol ContainerStyle {
+protocol ContainerStyle {
     var background: (any ShapeStyle)? { get }
     var contentPadding: EdgeInsets { get }
 }

@@ -8,16 +8,17 @@
 import Foundation
 import UIKit
 
-internal class ParraEmptyCardView: ParraCardItemView {
-    internal init(innerView: UIView) {
+class ParraEmptyCardView: ParraCardItemView {
+    init(innerView: UIView) {
         super.init(config: .default)
     }
-    
-    internal required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    internal required init(config: ParraCardViewConfig) {
+
+    required init(config: ParraCardViewConfig) {
         fatalError("init(config:) has not been implemented")
     }
 }

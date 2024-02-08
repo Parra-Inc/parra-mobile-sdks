@@ -1,5 +1,5 @@
 //
-//  StackSymbols.swift
+//  ParraLoggerStackSymbols.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 9/3/23.
@@ -9,7 +9,7 @@
 import Foundation
 
 @usableFromInline
-internal enum ParraLoggerStackSymbols: Codable {
+enum ParraLoggerStackSymbols: Codable {
     case raw([String])
     case demangled([CallStackFrame])
     case none
