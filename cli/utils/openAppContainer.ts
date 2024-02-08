@@ -1,4 +1,4 @@
-import { runThrowingCommand } from './command.js';
+import { runCommand, runThrowingCommand } from './command.js';
 
 export type OpenAppContainerOptions = {
   bundleId: string;
@@ -22,4 +22,8 @@ export const openAppContainerForDemoApp = async () => {
 
 export const openAppContainerForTestRunnerApp = async () => {
   await openAppContainer({ bundleId: 'com.parra.ParraTests.Runner' });
+};
+
+export const runFormatter = async () => {
+  await runCommand('swiftformat --config .swiftformat --cache ignore .');
 };

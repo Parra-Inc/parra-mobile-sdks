@@ -3,6 +3,7 @@ import Logger from '../utils/logger/logger.js';
 import {
   openAppContainerForDemoApp,
   openAppContainerForTestRunnerApp,
+  runFormatter,
 } from '../utils/openAppContainer.js';
 
 export const command = (logger: Logger): Command => {
@@ -20,9 +21,15 @@ export const command = (logger: Logger): Command => {
         'Opens a new Finder window to the app data directory for the Parra Test Runner app in the currently booted simulator.'
       )
     )
+    .addOption(
+      new Option(
+        '-f --format',
+        'Reformats the entire project using SwiftFormat.'
+      )
+    )
     .action(async (options) => {
       Logger.setGlobalLogLevel(options.silent ? 'silent' : options.logLevel);
-      const { openAppData, openTestData } = options;
+      const { openAppData, openTestData, format } = options;
 
       try {
         if (openAppData) {
@@ -31,6 +38,10 @@ export const command = (logger: Logger): Command => {
 
         if (openTestData) {
           await openAppContainerForTestRunnerApp();
+        }
+
+        if (format) {
+          await runFormatter();
         }
 
         logger.success('Done!');

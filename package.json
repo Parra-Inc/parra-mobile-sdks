@@ -11,6 +11,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint . --ext .ts",
+    "format": "./cli.sh utils --format",
     "preinstall": "git config diff.lockb.textconv bun && git config diff.lockb.binary true"
   },
   "bin": {
