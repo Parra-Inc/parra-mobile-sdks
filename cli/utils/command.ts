@@ -13,6 +13,11 @@ export class CommandResult {
 }
 
 const execAsync = async (command: string, options: CommandOptions) => {
+  const localLogger = options.commandLogger || logger;
+  if (options.commandLogger) {
+    localLogger.debug(`Executing command: ${command}`);
+  }
+
   return new Promise<CommandResult>((resolve, reject) => {
     const childProcess = exec(command, options);
 
@@ -58,7 +63,7 @@ const execAsync = async (command: string, options: CommandOptions) => {
  */
 export const runCommand = async (
   command: string,
-  options: CommandOptions = DEFAULT_COMMAND_OPTIONS
+  options: Partial<CommandOptions> = DEFAULT_COMMAND_OPTIONS
 ): Promise<CommandResult> => {
   const { throwForStdErr, ...rest } = options;
 
@@ -74,7 +79,7 @@ export const runCommand = async (
  */
 export const runThrowingCommand = async (
   command: string,
-  options: CommandOptions = DEFAULT_COMMAND_OPTIONS
+  options: Partial<CommandOptions> = DEFAULT_COMMAND_OPTIONS
 ): Promise<string | undefined> => {
   const { stdout } = await runCommand(command, {
     ...DEFAULT_COMMAND_OPTIONS,
