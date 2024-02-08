@@ -3,8 +3,9 @@ import Logger from '../utils/logger/logger.js';
 import {
   openAppContainerForDemoApp,
   openAppContainerForTestRunnerApp,
-  runFormatter,
 } from '../utils/openAppContainer.js';
+import { runBootstrap } from '../utils/runBootstrap.js';
+import { runFormatter } from '../utils/runFormatter.js';
 
 export const command = (logger: Logger): Command => {
   return new Command('utils')
@@ -17,8 +18,8 @@ export const command = (logger: Logger): Command => {
     )
     .addOption(
       new Option(
-        '-t --open-test-data',
-        'Opens a new Finder window to the app data directory for the Parra Test Runner app in the currently booted simulator.'
+        '-b --bootstrap',
+        'Reformats the entire project using SwiftFormat.'
       )
     )
     .addOption(
@@ -27,21 +28,33 @@ export const command = (logger: Logger): Command => {
         'Reformats the entire project using SwiftFormat.'
       )
     )
+    .addOption(
+      new Option(
+        '-t --open-test-data',
+        'Opens a new Finder window to the app data directory for the Parra Test Runner app in the currently booted simulator.'
+      )
+    )
     .action(async (options) => {
       Logger.setGlobalLogLevel(options.silent ? 'silent' : options.logLevel);
-      const { openAppData, openTestData, format } = options;
+      const { openAppData, openTestData, format, bootstrap } = options;
 
       try {
-        if (openAppData) {
-          await openAppContainerForDemoApp();
-        }
+        if (bootstrap) {
+          await runBootstrap();
+        } else {
+          // bootstrap shouldn't run if any of the other options are set
 
-        if (openTestData) {
-          await openAppContainerForTestRunnerApp();
-        }
+          if (openAppData) {
+            await openAppContainerForDemoApp();
+          }
 
-        if (format) {
-          await runFormatter();
+          if (openTestData) {
+            await openAppContainerForTestRunnerApp();
+          }
+
+          if (format) {
+            await runFormatter();
+          }
         }
 
         logger.success('Done!');

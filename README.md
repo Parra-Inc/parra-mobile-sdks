@@ -14,16 +14,14 @@ If you're ready to install the Parra iOS SDK in your own project, check out the 
 
 ### Project Setup
 
-
+To setup the Parra iOS SDK for local development, invoke the bootstrap command with `./cli.sh utils --bootstrap`.
 
 #### CLI
 
 Instructions for setting up and running scripts can be found [here](cli/README.md).
 
-
-
 ## License
 
-- [Parra iOS SDK License](https://github.com/Parra-Inc/parra-ios-sdk/blob/main/LICENSE.md)
+* [Parra iOS SDK License](https://github.com/Parra-Inc/parra-ios-sdk/blob/main/LICENSE.md)
 
 <!-- ## Contributing -->
