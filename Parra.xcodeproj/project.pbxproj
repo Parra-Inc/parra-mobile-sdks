@@ -1192,7 +1192,9 @@
 		003622102B5D9594009EFE53 /* Design System */ = {
 			isa = PBXGroup;
 			children = (
-				00E76D022B66D05100B01DD8 /* V2 */,
+				00E76D032B66D05A00B01DD8 /* Components */,
+				00E76D042B66D05F00B01DD8 /* Containers */,
+				00E76D2B2B66D25A00B01DD8 /* Factory */,
 				003622192B5D9646009EFE53 /* Storybooks */,
 				003621EC2B5C7660009EFE53 /* Theme */,
 			);
@@ -1681,16 +1683,6 @@
 				00E26A022A53120F001A0F50 /* TestData.swift */,
 			);
 			path = Data;
-			sourceTree = "<group>";
-		};
-		00E76D022B66D05100B01DD8 /* V2 */ = {
-			isa = PBXGroup;
-			children = (
-				00E76D2B2B66D25A00B01DD8 /* Factory */,
-				00E76D042B66D05F00B01DD8 /* Containers */,
-				00E76D032B66D05A00B01DD8 /* Components */,
-			);
-			path = V2;
 			sourceTree = "<group>";
 		};
 		00E76D032B66D05A00B01DD8 /* Components */ = {
