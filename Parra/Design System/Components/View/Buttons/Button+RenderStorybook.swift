@@ -98,16 +98,16 @@ private func renderColumn(
 
             renderButtonComponent(
                 type: componentType,
-                config: .init(
+                config: ButtonConfig(
                     style: .primary,
                     size: size
                 ),
-                content: .init(title: .init(text: title))
+                content: ButtonContent(title: LabelContent(text: title))
             )
 
             renderButtonComponent(
                 type: componentType,
-                config: .init(
+                config: ButtonConfig(
                     style: .secondary,
                     size: size
                 ),
@@ -120,7 +120,7 @@ private func renderColumn(
 
             renderButtonComponent(
                 type: componentType,
-                config: .init(
+                config: ButtonConfig(
                     style: .primary,
                     size: size,
                     isMaxWidth: true
@@ -130,7 +130,7 @@ private func renderColumn(
 
             renderButtonComponent(
                 type: componentType,
-                config: .init(
+                config: ButtonConfig(
                     style: .secondary,
                     size: size,
                     isMaxWidth: true
@@ -144,7 +144,7 @@ private func renderColumn(
 
             renderButtonComponent(
                 type: componentType,
-                config: .init(
+                config: ButtonConfig(
                     style: .primary,
                     size: size
                 ),
@@ -153,7 +153,7 @@ private func renderColumn(
 
             renderButtonComponent(
                 type: componentType,
-                config: .init(
+                config: ButtonConfig(
                     style: .secondary,
                     size: size
                 ),

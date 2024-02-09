@@ -61,6 +61,15 @@ struct PlainButtonComponent: ButtonComponentType {
             theme.palette.secondary
         }
 
+        let fontStyle = switch config.size {
+        case .small:
+            Font.TextStyle.footnote
+        case .medium:
+            Font.TextStyle.subheadline
+        case .large:
+            Font.TextStyle.headline
+        }
+
         let titleAttributes = defaults.title.withUpdates(
             updates: LabelAttributes(
                 // If specific values for these properties weren't provided for
@@ -69,6 +78,7 @@ struct PlainButtonComponent: ButtonComponentType {
                 background: defaults.title.background ?? defaults.background,
                 cornerRadius: defaults.title.cornerRadius ?? defaults
                     .cornerRadius,
+                font: Font.system(fontStyle),
                 fontColor: fontColor,
                 // Frame is applied here to adjust width based on config. If users
                 // provide overrides for styles in different states, this will need
@@ -107,5 +117,7 @@ struct PlainButtonComponent: ButtonComponentType {
 }
 
 #Preview("Plain Button") {
-    renderStorybook(for: PlainButtonComponent.self)
+    ParraThemedPreviewWrapper {
+        renderStorybook(for: PlainButtonComponent.self)
+    }
 }

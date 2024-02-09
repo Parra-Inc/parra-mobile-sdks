@@ -25,10 +25,8 @@ struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
         }
 
         LabelComponent(
-            config: config.title,
             content: content.title,
             style: ParraAttributedLabelStyle(
-                config: config.title,
                 content: content.title,
                 attributes: currentTitleAttributes ?? .init(),
                 theme: theme

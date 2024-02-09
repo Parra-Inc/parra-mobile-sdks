@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
-    let config: LabelConfig
     let content: LabelContent
     let attributes: LabelAttributes
     let theme: ParraTheme
@@ -52,7 +51,6 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
 
     func withContent(content: LabelContent) -> ParraAttributedLabelStyle {
         return ParraAttributedLabelStyle(
-            config: config,
             content: content,
             attributes: attributes,
             theme: theme

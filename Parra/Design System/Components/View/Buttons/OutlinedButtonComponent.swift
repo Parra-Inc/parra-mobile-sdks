@@ -62,6 +62,15 @@ struct OutlinedButtonComponent: ButtonComponentType {
             palette.secondary
         }
 
+        let fontStyle = switch config.size {
+        case .small:
+            Font.TextStyle.footnote
+        case .medium:
+            Font.TextStyle.subheadline
+        case .large:
+            Font.TextStyle.headline
+        }
+
         let titleAttributes = defaults.title.withUpdates(
             updates: LabelAttributes(
                 // If specific values for these properties weren't provided for
@@ -70,6 +79,7 @@ struct OutlinedButtonComponent: ButtonComponentType {
                 background: defaults.title.background ?? defaults.background,
                 cornerRadius: defaults.title.cornerRadius ?? defaults
                     .cornerRadius,
+                font: Font.system(fontStyle),
                 fontColor: mainColor,
                 // Frame is applied here to adjust width based on config. If users
                 // provide overrides for styles in different states, this will need
@@ -109,5 +119,7 @@ struct OutlinedButtonComponent: ButtonComponentType {
 }
 
 #Preview("Outlined Button") {
-    renderStorybook(for: OutlinedButtonComponent.self)
+    ParraThemedPreviewWrapper {
+        renderStorybook(for: OutlinedButtonComponent.self)
+    }
 }

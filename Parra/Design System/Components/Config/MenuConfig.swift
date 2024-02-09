@@ -29,4 +29,13 @@ public struct MenuConfig {
     public let helper: LabelConfig
     public let menuOption: LabelConfig
     public let menuOptionSelected: LabelConfig
+
+    // MARK: - Internal
+
+    func withFormTextFieldData(_ data: FeedbackFormSelectFieldData)
+        -> MenuConfig
+    {
+        // There are currently no fields used in config from this data object
+        self
+    }
 }

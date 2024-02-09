@@ -18,12 +18,14 @@ struct FeedbackFormConfig: ContainerConfig {
             menuOption: LabelConfig(fontStyle: .body),
             menuOptionSelected: LabelConfig(fontStyle: .body)
         ),
-        textFields: TextEditorConfig(),
-        submitButton: .init(
+        textFields: TextEditorConfig(
+            title: LabelConfig(fontStyle: .subheadline),
+            helper: LabelConfig(fontStyle: .caption)
+        ),
+        submitButton: ButtonConfig(
             style: .primary,
             size: .large,
-            isMaxWidth: true,
-            title: LabelConfig(fontStyle: .subheadline)
+            isMaxWidth: true
         )
     )
 

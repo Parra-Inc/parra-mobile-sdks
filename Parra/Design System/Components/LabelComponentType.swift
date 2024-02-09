@@ -9,12 +9,14 @@
 import SwiftUI
 
 protocol LabelComponentType: View {
-    var config: LabelConfig { get }
+    // There is a notable exception made for labels in that they do not take a config
+    // object as input. There is no data in their config that is relevant to them.
+    // wrapper classes utilize their config to customize their style, which they render.
+
     var content: LabelContent { get }
     var style: ParraAttributedLabelStyle { get }
 
     init(
-        config: LabelConfig,
         content: LabelContent,
         style: ParraAttributedLabelStyle
     )

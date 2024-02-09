@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct FeedbackFormWidget: Container {
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias Factory = FeedbackFormWidgetComponentFactory
     typealias Config = FeedbackFormConfig
@@ -69,7 +69,7 @@ struct FeedbackFormWidget: Container {
 
                     componentFactory.buildMenu(
                         component: \.selectFields,
-                        config: config.selectFields,
+                        config: config.selectFields.withFormTextFieldData(data),
                         // no customization currently exists
                         content: content,
                         localAttributes: nil
@@ -89,8 +89,7 @@ struct FeedbackFormWidget: Container {
 
                     componentFactory.buildTextEditor(
                         component: \.textFields,
-                        config: TextEditorConfig(data: data)
-                            .withDefaults(from: config.textFields),
+                        config: config.textFields.withFormTextFieldData(data),
                         content: content,
                         localAttributes: nil
                     )
@@ -106,7 +105,7 @@ struct FeedbackFormWidget: Container {
                 component: \.submitButton,
                 config: config.submitButton,
                 content: contentObserver.content.submitButton,
-                localAttributes: .init()
+                localAttributes: nil
             )
             .disabled(!contentObserver.content.canSubmit)
 
@@ -134,7 +133,7 @@ struct FeedbackFormWidget: Container {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private func onFieldValueChanged(
         field: FeedbackFormField,
@@ -151,10 +150,10 @@ struct FeedbackFormWidget: Container {
     let global = GlobalComponentAttributes(
         labelAttributeFactory: { _, _, defaultAttributes in
             return defaultAttributes ?? .init()
-        },
-        buttonAttributeFactory: { _, _, defaultAttributes in
-            return defaultAttributes ?? .init()
         }
+//        buttonAttributeFactory: { _, _, defaultAttributes in
+//            return defaultAttributes ?? .init()
+//        }
     )
 
     let local = FeedbackFormWidgetComponentFactory(

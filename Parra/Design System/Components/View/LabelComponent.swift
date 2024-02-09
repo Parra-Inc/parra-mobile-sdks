@@ -9,9 +9,8 @@
 import SwiftUI
 
 struct LabelComponent: LabelComponentType {
-    var config: LabelConfig
-    var content: LabelContent
-    var style: ParraAttributedLabelStyle
+    let content: LabelContent
+    let style: ParraAttributedLabelStyle
 
     var body: some View {
         Label(
@@ -28,7 +27,7 @@ struct LabelComponent: LabelComponentType {
         config: LabelConfig
     ) -> LabelAttributes {
         let base = inputAttributes ?? LabelAttributes()
-        let defaultFontStyle: Font = .system(config.fontStyle)
+        let defaultFontStyle = Font.system(config.fontStyle)
 
         let defaultAttributes = base.withUpdates(
             updates: LabelAttributes(
@@ -76,10 +75,8 @@ private func renderLabel(
     )
 
     return LabelComponent(
-        config: config,
         content: content,
         style: ParraAttributedLabelStyle(
-            config: config,
             content: content,
             attributes: mergedAttributes,
             theme: theme

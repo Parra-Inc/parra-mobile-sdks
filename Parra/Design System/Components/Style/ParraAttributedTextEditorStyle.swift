@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ParraAttributedTextEditorStyle: TextEditorStyle, ParraAttributedStyle {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         config: TextEditorConfig,
@@ -24,7 +24,6 @@ struct ParraAttributedTextEditorStyle: TextEditorStyle, ParraAttributedStyle {
 
         self.titleStyle = if let title = content.title {
             ParraAttributedLabelStyle(
-                config: config.title,
                 content: title,
                 attributes: attributes.title,
                 theme: theme
@@ -34,7 +33,6 @@ struct ParraAttributedTextEditorStyle: TextEditorStyle, ParraAttributedStyle {
         }
         self.helperStyle = if let helper = content.helper {
             ParraAttributedLabelStyle(
-                config: config.helper,
                 content: helper,
                 attributes: attributes.helper,
                 theme: theme
@@ -44,7 +42,7 @@ struct ParraAttributedTextEditorStyle: TextEditorStyle, ParraAttributedStyle {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let config: TextEditorConfig
     let content: TextEditorContent

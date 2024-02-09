@@ -26,7 +26,7 @@ enum ComponentBuilder {
 protocol ParraComponentFactory {}
 
 class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         local: Factory?,
@@ -38,7 +38,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         self.theme = theme
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     @ViewBuilder
     func buildLabel(
@@ -76,14 +76,12 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
                 view
             } else {
                 let style = ParraAttributedLabelStyle(
-                    config: config,
                     content: content,
                     attributes: mergedAttributes,
                     theme: theme
                 )
 
                 LabelComponent(
-                    config: config,
                     content: content,
                     style: style
                 )
@@ -107,7 +105,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         >,
         config: ButtonConfig,
         content: ButtonContent?,
-        localAttributes: ButtonAttributes
+        localAttributes: ButtonAttributes? = nil
     ) -> some View {
         if let content {
             let attributes = if let factory = global?.buttonAttributeFactory {
@@ -287,7 +285,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let local: Factory?
     private let global: GlobalComponentAttributes?

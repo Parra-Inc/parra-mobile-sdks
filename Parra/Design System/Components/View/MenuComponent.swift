@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 struct MenuComponent: MenuComponentType {
-    // MARK: Internal
+    // MARK: - Internal
 
     var config: MenuConfig
     var content: MenuContent
@@ -21,7 +21,6 @@ struct MenuComponent: MenuComponentType {
             // spacing controlled by individual component padding.
             if let title = content.title, let titleStyle = style.titleStyle {
                 LabelComponent(
-                    config: config.title,
                     content: title,
                     style: titleStyle
                 )
@@ -50,7 +49,6 @@ struct MenuComponent: MenuComponentType {
                let helperStyle = style.helperStyle
             {
                 LabelComponent(
-                    config: config.helper,
                     content: helper,
                     style: helperStyle
                 )
@@ -109,7 +107,7 @@ struct MenuComponent: MenuComponentType {
         )
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     @State private var selectedOption: MenuContent.Option?
 
@@ -130,7 +128,6 @@ struct MenuComponent: MenuComponentType {
             let content = LabelContent(text: selectedOption.title)
 
             LabelComponent(
-                config: config.menuOptionSelected,
                 content: content,
                 style: style.menuOptionSelectedStyle.withContent(
                     content: content
@@ -149,7 +146,6 @@ struct MenuComponent: MenuComponentType {
 
             if let normalContent {
                 LabelComponent(
-                    config: config.menuOption,
                     content: normalContent,
                     style: style.menuOptionStyle.withContent(
                         content: normalContent

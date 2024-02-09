@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct TextEditorConfig {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         title: LabelConfig = LabelConfig(fontStyle: .body),
@@ -29,17 +29,7 @@ public struct TextEditorConfig {
         self.showStatusLabel = showStatusLabel
     }
 
-    init(data: FeedbackFormTextFieldData) {
-        self.title = TextEditorConfig.default.title
-        self.helper = TextEditorConfig.default.helper
-        self.minLines = data.lines
-        self.minCharacters = data.minCharacters
-        self.maxCharacters = data.maxCharacters
-        self.maxHeight = data.maxHeight
-        self.showStatusLabel = TextEditorConfig.default.showStatusLabel
-    }
-
-    // MARK: Public
+    // MARK: - Public
 
     public let title: LabelConfig
     public let helper: LabelConfig
@@ -52,7 +42,7 @@ public struct TextEditorConfig {
     /// Whether or not to show the status label that displays characters remaining/etc.
     public let showStatusLabel: Bool
 
-    // MARK: Internal
+    // MARK: - Internal
 
     static let `default` = TextEditorConfig(
         title: LabelConfig(fontStyle: .body),
@@ -74,6 +64,20 @@ public struct TextEditorConfig {
                 .maxCharacters ?? TextEditorConfig.default.maxCharacters,
             maxHeight: maxHeight ?? defaults.maxHeight ?? TextEditorConfig
                 .default.maxHeight,
+            showStatusLabel: showStatusLabel
+        )
+    }
+
+    func withFormTextFieldData(_ data: FeedbackFormTextFieldData)
+        -> TextEditorConfig
+    {
+        return TextEditorConfig(
+            title: title,
+            helper: helper,
+            minLines: data.lines,
+            minCharacters: data.minCharacters,
+            maxCharacters: data.maxCharacters,
+            maxHeight: data.maxHeight,
             showStatusLabel: showStatusLabel
         )
     }

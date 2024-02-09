@@ -62,10 +62,20 @@ struct ContainedButtonComponent: ButtonComponentType {
             palette.secondary
         }
 
+        let fontStyle = switch config.size {
+        case .small:
+            Font.TextStyle.footnote
+        case .medium:
+            Font.TextStyle.subheadline
+        case .large:
+            Font.TextStyle.headline
+        }
+
         let commonAttributes = defaults.title.withUpdates(
             updates: LabelAttributes(
                 cornerRadius: defaults.title.cornerRadius ?? defaults
                     .cornerRadius,
+                font: Font.system(fontStyle),
                 fontColor: ParraColorSwatch.neutral.shade50,
                 // Frame is applied here to adjust width based on config. If users
                 // provide overrides for styles in different states, this will need
@@ -110,5 +120,7 @@ struct ContainedButtonComponent: ButtonComponentType {
 }
 
 #Preview("Contained Button") {
-    renderStorybook(for: ContainedButtonComponent.self)
+    ParraThemedPreviewWrapper {
+        renderStorybook(for: ContainedButtonComponent.self)
+    }
 }
