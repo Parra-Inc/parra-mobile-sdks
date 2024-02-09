@@ -56,11 +56,15 @@ class FeedbackFormContentObserver: ContainerContentObserver {
             self.title = title
             self.description = description
             self.fields = fields
-            self.submitButton = submitButton
             // Additional call on init to handle the case where there none of the fields
             // are marked as required, so their default state is valid.
             self.canSubmit = Content.areAllFieldsValid(
                 fields: fields
+            )
+            self.submitButton = ButtonContent(
+                title: submitButton.title,
+                isDisabled: !canSubmit,
+                onPress: submitButton.onPress
             )
         }
 
@@ -97,6 +101,17 @@ class FeedbackFormContentObserver: ContainerContentObserver {
                 }
             }
         }
+
+        fileprivate func withUpdates(
+            to fields: [FormFieldWithState]
+        ) -> Content {
+            Content(
+                title: title,
+                description: description,
+                fields: fields,
+                submitButton: submitButton
+            )
+        }
     }
 
     @Published var content: Content
@@ -122,10 +137,8 @@ class FeedbackFormContentObserver: ContainerContentObserver {
         changedField.updateValue(value)
         updatedFields[updateIndex] = changedField
 
-        content.fields = updatedFields
-
-        content.canSubmit = Content.areAllFieldsValid(
-            fields: updatedFields
+        content = content.withUpdates(
+            to: updatedFields
         )
 
         print("Content changed. Is valid: \(content.canSubmit)")
