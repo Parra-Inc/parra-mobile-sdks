@@ -250,6 +250,11 @@
 		0087CAAD2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAAC2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift */; };
 		008878122979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008878112979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift */; };
 		00916A462B75A6C3009C87DC /* ParraThemedPreviewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A452B75A6C3009C87DC /* ParraThemedPreviewWrapper.swift */; };
+		00916A602B75C81A009C87DC /* SampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A5F2B75C81A009C87DC /* SampleApp.swift */; };
+		00916A622B75C81A009C87DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A612B75C81A009C87DC /* ContentView.swift */; };
+		00916A642B75C81B009C87DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00916A632B75C81B009C87DC /* Assets.xcassets */; };
+		00916A672B75C81B009C87DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00916A662B75C81B009C87DC /* Preview Assets.xcassets */; };
+		00916A712B75CCF8009C87DC /* FeedbackFormSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A702B75CCF8009C87DC /* FeedbackFormSample.swift */; };
 		00916DC02ACCEE7600B4856F /* MockedParraTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DBF2ACCEE7600B4856F /* MockedParraTestCase.swift */; };
 		00916DC22AD2EFCD00B4856F /* SignpostTestObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC12AD2EFCD00B4856F /* SignpostTestObserver.swift */; };
 		00916DC82AD35D8700B4856F /* ParraInstanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC72AD35D8700B4856F /* ParraInstanceConfiguration.swift */; };
@@ -380,6 +385,13 @@
 			remoteInfo = Parra;
 		};
 		00719DBA2AF69CAA00310E25 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
+			remoteInfo = Parra;
+		};
+		00916A6B2B75C841009C87DC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
 			proxyType = 1;
@@ -640,6 +652,12 @@
 		00901F372999ACC70071647F /* ParraLongTextKindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLongTextKindView.swift; sourceTree = "<group>"; };
 		00901F392999ACDF0071647F /* ParraQuestionKindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionKindView.swift; sourceTree = "<group>"; };
 		00916A452B75A6C3009C87DC /* ParraThemedPreviewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraThemedPreviewWrapper.swift; sourceTree = "<group>"; };
+		00916A5D2B75C819009C87DC /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00916A5F2B75C81A009C87DC /* SampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleApp.swift; sourceTree = "<group>"; };
+		00916A612B75C81A009C87DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		00916A632B75C81B009C87DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		00916A662B75C81B009C87DC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		00916A702B75CCF8009C87DC /* FeedbackFormSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormSample.swift; sourceTree = "<group>"; };
 		00916DBF2ACCEE7600B4856F /* MockedParraTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedParraTestCase.swift; sourceTree = "<group>"; };
 		00916DC12AD2EFCD00B4856F /* SignpostTestObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignpostTestObserver.swift; sourceTree = "<group>"; };
 		00916DC72AD35D8700B4856F /* ParraInstanceConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceConfiguration.swift; sourceTree = "<group>"; };
@@ -787,6 +805,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				001B7AFA27DE3A7600DEEECD /* Parra.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00916A5A2B75C819009C87DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1528,6 +1553,42 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		00916A5E2B75C81A009C87DC /* Sample */ = {
+			isa = PBXGroup;
+			children = (
+				00916A5F2B75C81A009C87DC /* SampleApp.swift */,
+				00916A612B75C81A009C87DC /* ContentView.swift */,
+				00916A6D2B75CCDA009C87DC /* Samples */,
+				00916A632B75C81B009C87DC /* Assets.xcassets */,
+				00916A652B75C81B009C87DC /* Preview Content */,
+			);
+			path = Sample;
+			sourceTree = "<group>";
+		};
+		00916A652B75C81B009C87DC /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				00916A662B75C81B009C87DC /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		00916A6D2B75CCDA009C87DC /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				00916A6F2B75CCEB009C87DC /* Feedback */,
+			);
+			path = Samples;
+			sourceTree = "<group>";
+		};
+		00916A6F2B75CCEB009C87DC /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				00916A702B75CCF8009C87DC /* FeedbackFormSample.swift */,
+			);
+			path = Feedback;
+			sourceTree = "<group>";
+		};
 		00916DC62AD35D7300B4856F /* Instance Config */ = {
 			isa = PBXGroup;
 			children = (
@@ -1624,6 +1685,7 @@
 			isa = PBXGroup;
 			children = (
 				001B7A0A27DD266500DEEECD /* Parra.podspec */,
+				00916A5E2B75C81A009C87DC /* Sample */,
 				00DECFF7274C69F800DAF301 /* LegacyDemo */,
 				001B7AF327DE3A7600DEEECD /* Parra */,
 				001B7AFF27DE3A7600DEEECD /* ParraTests */,
@@ -1641,6 +1703,7 @@
 				001B7AF227DE3A7600DEEECD /* Parra.framework */,
 				001B7AF927DE3A7600DEEECD /* ParraTests.xctest */,
 				00B42EAE2ADE1BCB00F365A5 /* TestRunner.app */,
+				00916A5D2B75C819009C87DC /* Sample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1995,6 +2058,24 @@
 			productReference = 001B7AF927DE3A7600DEEECD /* ParraTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		00916A5C2B75C819009C87DC /* Sample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00916A6A2B75C81B009C87DC /* Build configuration list for PBXNativeTarget "Sample" */;
+			buildPhases = (
+				00916A592B75C819009C87DC /* Sources */,
+				00916A5A2B75C819009C87DC /* Frameworks */,
+				00916A5B2B75C819009C87DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00916A6C2B75C841009C87DC /* PBXTargetDependency */,
+			);
+			name = Sample;
+			productName = Sample;
+			productReference = 00916A5D2B75C819009C87DC /* Sample.app */;
+			productType = "com.apple.product-type.application";
+		};
 		00B42EAD2ADE1BCB00F365A5 /* TestRunner */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00B42EBF2ADE1BCC00F365A5 /* Build configuration list for PBXNativeTarget "TestRunner" */;
@@ -2041,7 +2122,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				CLASSPREFIX = PAR;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1520;
 				LastUpgradeCheck = 1520;
 				ORGANIZATIONNAME = "Parra, Inc.";
 				TargetAttributes = {
@@ -2052,6 +2133,9 @@
 					001B7AF827DE3A7600DEEECD = {
 						CreatedOnToolsVersion = 13.2.1;
 						TestTargetID = 00B42EAD2ADE1BCB00F365A5;
+					};
+					00916A5C2B75C819009C87DC = {
+						CreatedOnToolsVersion = 15.2;
 					};
 					00B42EAD2ADE1BCB00F365A5 = {
 						CreatedOnToolsVersion = 15.0;
@@ -2079,6 +2163,7 @@
 				001B7AF127DE3A7600DEEECD /* Parra */,
 				001B7AF827DE3A7600DEEECD /* ParraTests */,
 				00B42EAD2ADE1BCB00F365A5 /* TestRunner */,
+				00916A5C2B75C819009C87DC /* Sample */,
 			);
 		};
 /* End PBXProject section */
@@ -2097,6 +2182,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				00B42EA72ADE176E00F365A5 /* Parra.xctestplan in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00916A5B2B75C819009C87DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00916A672B75C81B009C87DC /* Preview Assets.xcassets in Resources */,
+				00916A642B75C81B009C87DC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2469,6 +2563,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00916A592B75C819009C87DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00916A622B75C81A009C87DC /* ContentView.swift in Sources */,
+				00916A712B75CCF8009C87DC /* FeedbackFormSample.swift in Sources */,
+				00916A602B75C81A009C87DC /* SampleApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		00B42EAA2ADE1BCB00F365A5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2510,6 +2614,11 @@
 			isa = PBXTargetDependency;
 			target = 001B7AF127DE3A7600DEEECD /* Parra */;
 			targetProxy = 00719DBA2AF69CAA00310E25 /* PBXContainerItemProxy */;
+		};
+		00916A6C2B75C841009C87DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 001B7AF127DE3A7600DEEECD /* Parra */;
+			targetProxy = 00916A6B2B75C841009C87DC /* PBXContainerItemProxy */;
 		};
 		00BF36C12B56CC9B0097905C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2692,6 +2801,71 @@
 				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestRunner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TestRunner";
+			};
+			name = Release;
+		};
+		00916A682B75C81B009C87DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Sample/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parra.Sample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		00916A692B75C81B009C87DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Sample/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parra.Sample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -2905,13 +3079,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Demo/Demo.entitlements;
+				CODE_SIGN_ENTITLEMENTS = LegacyDemo/Demo.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 43225XRA2T;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Demo/Info.plist;
+				INFOPLIST_FILE = LegacyDemo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Parra Demo";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2931,7 +3105,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Demo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "LegacyDemo/Demo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2946,13 +3120,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Demo/Demo.entitlements;
+				CODE_SIGN_ENTITLEMENTS = LegacyDemo/Demo.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 43225XRA2T;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Demo/Info.plist;
+				INFOPLIST_FILE = LegacyDemo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Parra Demo";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2972,7 +3146,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Demo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "LegacyDemo/Demo-Bridging-Header.h";
 				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "";
@@ -2996,6 +3170,15 @@
 			buildConfigurations = (
 				001B7B0B27DE3A7600DEEECD /* Debug */,
 				001B7B0C27DE3A7600DEEECD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00916A6A2B75C81B009C87DC /* Build configuration list for PBXNativeTarget "Sample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00916A682B75C81B009C87DC /* Debug */,
+				00916A692B75C81B009C87DC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
