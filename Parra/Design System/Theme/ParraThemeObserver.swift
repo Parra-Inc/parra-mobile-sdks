@@ -14,7 +14,7 @@ private let logger = Logger(category: "Parra Theme Observer")
 /// Listens for changes to the configured ParraTheme and provides a @Published property ``palette``
 /// for SwiftUI views to use to respond to theme changes.
 class ParraThemeObserver: ObservableObject {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         theme: ParraTheme,
@@ -33,13 +33,13 @@ class ParraThemeObserver: ObservableObject {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     /// A color palette representative of the configured ``ParraTheme``. If a dark mode palette was provided,
     /// this will automatically update to provide those colors when the system appearance changes.
     @Published var theme: ParraTheme
 
-    // MARK: Private
+    // MARK: - Private
 
     private let notificationCenter: NotificationCenterType
 

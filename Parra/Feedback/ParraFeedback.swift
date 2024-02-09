@@ -13,7 +13,7 @@ private let logger = Logger(category: "Feedback module")
 /// it will be displayed automatically in any `ParraCardView`s that you add to your view hierarchy.
 /// To handle authentication, see the Parra module.
 public class ParraFeedback: ParraModule {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         parra: Parra,
@@ -27,7 +27,7 @@ public class ParraFeedback: ParraModule {
         parra.state.unregisterModule(module: self)
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static var shared: ParraFeedback {
         return Parra.getExistingInstance().feedback
@@ -158,7 +158,7 @@ public class ParraFeedback: ParraModule {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     private(set) static var name: String = "Feedback"
 
@@ -212,7 +212,7 @@ public class ParraFeedback: ParraModule {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     // Need to bubble up sync failures to attempt backoff in sync manager if uploads are failing.
     private func sendCardData() async throws {

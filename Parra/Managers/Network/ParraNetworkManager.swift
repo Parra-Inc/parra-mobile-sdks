@@ -13,7 +13,7 @@ private let logger = Logger(category: "Network Manager")
 typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
 actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         state: ParraState,
@@ -29,7 +29,7 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
         self.jsonDecoder = jsonDecoder
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let state: ParraState
 
@@ -296,7 +296,7 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
         return true
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let dataManager: ParraDataManager
 

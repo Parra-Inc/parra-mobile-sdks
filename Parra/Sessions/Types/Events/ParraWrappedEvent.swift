@@ -29,7 +29,7 @@ enum ParraWrappedEvent {
         event: ParraLogEvent
     )
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var isInternal: Bool {
         switch self {

@@ -10,7 +10,7 @@ import SwiftUI
 import UIKit
 
 struct ParraLogo: View {
-    // MARK: Internal
+    // MARK: - Internal
 
     var type: ParraLogoType
 
@@ -39,7 +39,7 @@ struct ParraLogo: View {
         logo
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var iconSize: Double {
         return switch type {

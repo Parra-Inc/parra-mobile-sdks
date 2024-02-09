@@ -9,7 +9,7 @@
 import UIKit
 
 public struct ParraShadowConfig {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         color: UIColor,
@@ -23,7 +23,7 @@ public struct ParraShadowConfig {
         self.offset = offset
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default` = ParraShadowConfig(
         color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.1),

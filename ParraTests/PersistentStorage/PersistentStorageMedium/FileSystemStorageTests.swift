@@ -9,7 +9,7 @@
 import XCTest
 
 class FileSystemStorageTests: ParraBaseMock {
-    // MARK: Internal
+    // MARK: - Internal
 
     override func setUp() async throws {
         try await super.setUp()
@@ -98,7 +98,7 @@ class FileSystemStorageTests: ParraBaseMock {
         XCTAssertFalse(fileManager.fileExists(atPath: filePath.path))
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let fileManager = FileManager.default
     private var fileSystemStorage: FileSystemStorage!

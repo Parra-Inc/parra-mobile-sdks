@@ -10,13 +10,13 @@ import Foundation
 
 @usableFromInline
 struct ParraLogEvent: ParraDataEvent {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(logData: ParraLogProcessedData) {
         self.logData = logData
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     @usableFromInline let name: String = "log"
 

@@ -18,7 +18,7 @@ enum HttpMethod: String {
     case options = "OPTIONS"
     case trace = "TRACE"
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var allowsBody: Bool {
         return [.put, .post, .patch].contains(self)

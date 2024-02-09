@@ -9,7 +9,7 @@
 import XCTest
 
 class UserDefaultsStorageTests: XCTestCase {
-    // MARK: Internal
+    // MARK: - Internal
 
     override func setUpWithError() throws {
         userDefaultsStorage = UserDefaultsStorage(
@@ -80,7 +80,7 @@ class UserDefaultsStorageTests: XCTestCase {
         XCTAssertNil(userDefaults.value(forKey: key))
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let userDefaults = UserDefaults.standard
     private var userDefaultsStorage: UserDefaultsStorage!

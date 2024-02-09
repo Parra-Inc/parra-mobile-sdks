@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct MenuAttributes: ParraStyleAttributes {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         title: LabelAttributes,
@@ -63,7 +63,7 @@ public struct MenuAttributes: ParraStyleAttributes {
         self.borderWidth = borderWidth
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     /// Attributes to use on the optional title label shown above the menu.
     public let title: LabelAttributes
@@ -85,7 +85,7 @@ public struct MenuAttributes: ParraStyleAttributes {
     public let cornerRadius: ParraCornerRadiusSize?
     public let padding: EdgeInsets?
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let frame: FrameAttributes?
     let borderWidth: CGFloat

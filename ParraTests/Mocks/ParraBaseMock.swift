@@ -16,13 +16,13 @@ private let logger = Logger(
 
 @MainActor
 class ParraBaseMock: XCTestCase {
-    // MARK: Public
+    // MARK: - Public
 
     public var baseStorageDirectory: URL {
         return directoryPath(for: testRun)
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     override func setUp() async throws {
         try await super.setUp()

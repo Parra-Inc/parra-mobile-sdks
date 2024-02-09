@@ -17,7 +17,7 @@ public enum ParraLogLevel: Int, Comparable, ParraLogStringConvertible {
     case error = 16
     case fatal = 32
 
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init?(name: String) {
         switch name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -40,7 +40,7 @@ public enum ParraLogLevel: Int, Comparable, ParraLogStringConvertible {
         }
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default` = ParraLogLevel.info
 
@@ -48,7 +48,7 @@ public enum ParraLogLevel: Int, Comparable, ParraLogStringConvertible {
         return lhs.rawValue < rhs.rawValue
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var requiresStackTraceCapture: Bool {
         return self >= .error

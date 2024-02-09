@@ -15,7 +15,7 @@ private let logger = Logger(
 )
 
 class SessionReader {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         basePath: URL,
@@ -46,7 +46,7 @@ class SessionReader {
         _eventsHandle = nil
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     /// The directory where sessions will be stored.
     let basePath: URL
@@ -291,7 +291,7 @@ class SessionReader {
             .appendDirectory("\(id).\(ParraSession.Constant.packageExtension)")
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let sessionJsonDecoder: JSONDecoder
     private let eventJsonDecoder: JSONDecoder

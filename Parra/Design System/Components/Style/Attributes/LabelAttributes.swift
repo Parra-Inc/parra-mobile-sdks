@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct LabelAttributes: ParraStyleAttributes {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         background: (any ShapeStyle)? = nil,
@@ -57,7 +57,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         self.borderWidth = borderWidth
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let background: (any ShapeStyle)?
     public let cornerRadius: ParraCornerRadiusSize?
@@ -68,7 +68,7 @@ public struct LabelAttributes: ParraStyleAttributes {
     public let fontWidth: Font.Width?
     public let padding: EdgeInsets?
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let frame: FrameAttributes?
     let borderWidth: CGFloat?

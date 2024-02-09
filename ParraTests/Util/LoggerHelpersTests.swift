@@ -15,7 +15,7 @@ private enum LoggerTestError: Error {
 }
 
 final class LoggerHelpersTests: XCTestCase {
-    // MARK: Internal
+    // MARK: - Internal
 
     // MARK: - extractMessage
 
@@ -146,7 +146,7 @@ final class LoggerHelpersTests: XCTestCase {
         XCTAssertEqual(slug, "Parra/LoggerHelpers.createFormattedLocation#69")
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private func splitAndAssertEqual(
         fileId: String,

@@ -9,7 +9,7 @@
 import Foundation
 
 struct ParraSession: Codable, Equatable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         sessionId: String,
@@ -24,7 +24,7 @@ struct ParraSession: Codable, Equatable {
         self.userProperties = [:]
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     enum Constant {
         static let packageExtension = "parsesh"

@@ -8,7 +8,7 @@
 import Foundation
 
 class ParraFeedbackDataManager {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         parra: Parra,
@@ -50,7 +50,7 @@ class ParraFeedbackDataManager {
         )
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     func completedCardData(forId id: String) async -> CompletedCard? {
         return await completedCardDataStorage.completedCardData(
@@ -138,7 +138,7 @@ class ParraFeedbackDataManager {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let completedCardDataStorage: CompletedCardDataStorage
     private let cardStorage: CardStorage

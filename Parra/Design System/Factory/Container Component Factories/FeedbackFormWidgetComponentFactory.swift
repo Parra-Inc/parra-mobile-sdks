@@ -9,7 +9,7 @@
 import SwiftUI
 
 public final class FeedbackFormWidgetComponentFactory: ParraComponentFactory {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         titleBuilder: ComponentBuilder.Factory<
@@ -50,7 +50,7 @@ public final class FeedbackFormWidgetComponentFactory: ParraComponentFactory {
         self.submitButton = submitButtonBuilder
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let title: ComponentBuilder.Factory<
         Text,

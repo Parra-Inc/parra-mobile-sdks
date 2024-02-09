@@ -20,7 +20,7 @@ enum ParraSyncMode: String {
 
 /// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
 actor ParraSyncManager {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         state: ParraState,
@@ -38,7 +38,7 @@ actor ParraSyncManager {
         self.syncDelay = syncDelay
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     /// Whether or not new attempts to sync occured while a sync was in progress. Many sync events could be received while a sync
     /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
@@ -160,7 +160,7 @@ actor ParraSyncManager {
         enqueuedSyncMode = nil
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let networkManager: ParraNetworkManager
     private let sessionManager: ParraSessionManager

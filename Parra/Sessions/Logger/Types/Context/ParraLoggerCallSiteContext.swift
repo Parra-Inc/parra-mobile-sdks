@@ -10,7 +10,7 @@ import Foundation
 
 @usableFromInline
 struct ParraLoggerCallSiteContext {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     @usableFromInline
     init(
@@ -27,7 +27,7 @@ struct ParraLoggerCallSiteContext {
         self.threadInfo = threadInfo
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     // fileId is used in place of Swift < 5.8 #file or #filePath to not
     // expose sensitive information from full file paths.

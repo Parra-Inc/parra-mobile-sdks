@@ -8,7 +8,7 @@
 import Foundation
 
 class ParraDataManager {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         baseDirectory: URL,
@@ -20,7 +20,7 @@ class ParraDataManager {
         self.sessionStorage = sessionStorage
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let baseDirectory: URL
     let credentialStorage: CredentialStorage

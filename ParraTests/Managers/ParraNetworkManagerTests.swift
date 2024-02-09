@@ -10,7 +10,7 @@ import XCTest
 
 @MainActor
 class ParraNetworkManagerTests: MockedParraTestCase {
-    // MARK: Internal
+    // MARK: - Internal
 
     override func setUp() async throws {
         try createBaseDirectory()
@@ -369,7 +369,7 @@ class ParraNetworkManagerTests: MockedParraTestCase {
         )
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var mockNetworkManager: MockParraNetworkManager!
 }

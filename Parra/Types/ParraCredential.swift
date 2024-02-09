@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 public struct ParraCredential: Codable, Equatable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(token: String) {
         self.token = token
@@ -27,7 +27,7 @@ public struct ParraCredential: Codable, Equatable {
         }
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let token: String
 
@@ -36,7 +36,7 @@ public struct ParraCredential: Codable, Equatable {
         try container.encode(token, forKey: .token)
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     enum CodingKeys: String, CodingKey {
         case token

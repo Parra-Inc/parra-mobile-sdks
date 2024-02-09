@@ -24,7 +24,7 @@ enum ParraEndpoint {
     // Push
     case postPushTokens(tenantId: String)
 
-    // MARK: Internal
+    // MARK: - Internal
 
     // All endpoints should use kebab case!
     var route: String {

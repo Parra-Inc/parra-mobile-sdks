@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct TextEditorContent {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         title: LabelContent? = nil,
@@ -54,7 +54,7 @@ public struct TextEditorContent {
         self.textChanged = textChanged
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     /// A string which is displayed in a label above the text editor to provide contextual information.
     public let title: LabelContent?

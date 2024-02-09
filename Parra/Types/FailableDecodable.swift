@@ -9,7 +9,7 @@
 import Foundation
 
 struct FailableDecodable<Base: Decodable>: Decodable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -23,7 +23,7 @@ struct FailableDecodable<Base: Decodable>: Decodable {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let result: Result<Base, DecodingError>
 }

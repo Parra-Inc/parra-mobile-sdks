@@ -22,7 +22,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     case jsonError(String)
     case unknown
 
-    // MARK: Public
+    // MARK: - Public
 
     /// A simple error description string for cases where we don't have more complete control
     /// over the output formatting. Interally, we want to always use `Parra/ParraErrorWithExtra`
@@ -55,7 +55,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var errorDescription: String {
         switch self {

@@ -9,7 +9,7 @@ import Parra
 import UIKit
 
 class ParraCardsInView: UIViewController {
-    // MARK: Internal
+    // MARK: - Internal
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +83,7 @@ class ParraCardsInView: UIViewController {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
     private let cardView = ParraCardView(config: .default)

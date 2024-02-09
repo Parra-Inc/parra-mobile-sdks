@@ -10,7 +10,7 @@ import Foundation
 
 /// Only static configuration that doesn't change after app initialization.
 public struct ParraConfiguration {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         loggerOptions: ParraLoggerOptions,
@@ -52,7 +52,7 @@ public struct ParraConfiguration {
         self.globalComponentAttributes = globalComponentAttributes
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default`: ParraConfiguration = .init(
         loggerOptions: applyLoggerOptionsOverrides(
@@ -68,11 +68,11 @@ public struct ParraConfiguration {
     public internal(set) var theme: ParraTheme
     public private(set) var globalComponentAttributes: GlobalComponentAttributes
 
-    // MARK: Internal
+    // MARK: - Internal
 
     private(set) static var current: ParraConfiguration = .default
 
-    // MARK: Private
+    // MARK: - Private
 
     private static func applyLoggerOptionsOverrides(
         loggerOptions initialOptions: ParraLoggerOptions

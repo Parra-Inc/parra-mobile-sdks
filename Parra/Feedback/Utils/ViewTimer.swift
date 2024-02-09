@@ -11,13 +11,13 @@ import UIKit
 
 typealias ViewTimerCallback = () -> Void
 class ViewTimerCallbackContainer {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(callback: @escaping ViewTimerCallback) {
         self.callback = callback
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let callback: ViewTimerCallback
 }

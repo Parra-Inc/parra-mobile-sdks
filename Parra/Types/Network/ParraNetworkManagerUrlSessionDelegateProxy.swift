@@ -11,13 +11,13 @@ import Foundation
 class ParraNetworkManagerUrlSessionDelegateProxy: NSObject,
     URLSessionTaskDelegate
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(delegate: ParraUrlSessionDelegate) {
         self.delegate = delegate
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     func urlSession(
         _ session: URLSession,
@@ -33,7 +33,7 @@ class ParraNetworkManagerUrlSessionDelegateProxy: NSObject,
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private weak var delegate: ParraUrlSessionDelegate?
 }

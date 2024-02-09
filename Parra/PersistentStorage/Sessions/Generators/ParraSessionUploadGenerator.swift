@@ -21,7 +21,7 @@ enum ParraSessionUploadGeneratorElement {
 struct ParraSessionUploadGenerator: ParraSessionGeneratorType, AsyncSequence,
     AsyncIteratorProtocol
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         forSessionsAt path: URL,
@@ -38,7 +38,7 @@ struct ParraSessionUploadGenerator: ParraSessionGeneratorType, AsyncSequence,
         )
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias Element = ParraSessionUploadGeneratorElement
 
@@ -96,7 +96,7 @@ struct ParraSessionUploadGenerator: ParraSessionGeneratorType, AsyncSequence,
             }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let directoryEnumerator: FileManager.DirectoryEnumerator
 }

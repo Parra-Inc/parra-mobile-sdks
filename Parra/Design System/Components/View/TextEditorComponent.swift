@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TextEditorComponent: TextEditorComponentType {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         config: TextEditorConfig,
@@ -21,7 +21,7 @@ struct TextEditorComponent: TextEditorComponentType {
         self.style = style
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var config: TextEditorConfig
     var content: TextEditorContent
@@ -34,7 +34,6 @@ struct TextEditorComponent: TextEditorComponentType {
             // spacing controlled by individual component padding.
             if let title = content.title, let titleStyle = style.titleStyle {
                 LabelComponent(
-                    config: config.title,
                     content: title,
                     style: titleStyle
                 )
@@ -157,7 +156,7 @@ struct TextEditorComponent: TextEditorComponentType {
             .lineLimit((config.minLines ?? 0)...)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     @State private var text = ""
     @State private var hasReceivedInput = false

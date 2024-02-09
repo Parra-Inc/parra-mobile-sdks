@@ -10,7 +10,7 @@ import UIKit
 
 // "choice" means single selection from a variable number of options
 class ParraChoiceKindView: UIView, ParraQuestionKindView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         bucketId: String,
@@ -71,7 +71,7 @@ class ParraChoiceKindView: UIView, ParraQuestionKindView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias DataType = ChoiceQuestionBody
     typealias AnswerType = SingleOptionAnswer
@@ -82,7 +82,7 @@ class ParraChoiceKindView: UIView, ParraQuestionKindView {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let contentContainer = UIStackView(frame: .zero)
     private var optionViewMap = [ParraBorderedButton: ChoiceQuestionOption]()

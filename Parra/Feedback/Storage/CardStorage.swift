@@ -8,13 +8,13 @@
 import Foundation
 
 actor CardStorage: ItemStorage {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(storageModule: ParraStorageModule<[ParraCardItem]>) {
         self.storageModule = storageModule
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias DataType = [ParraCardItem]
 
@@ -35,7 +35,7 @@ actor CardStorage: ItemStorage {
         ) ?? []
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private enum Constant {
         static let currentCardsKey = "current_cards"

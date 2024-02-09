@@ -12,7 +12,7 @@ private let logger = Logger()
 
 @MainActor
 class FeedbackFormContentObserver: ContainerContentObserver {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         formData: FeedbackFormData
@@ -41,11 +41,11 @@ class FeedbackFormContentObserver: ContainerContentObserver {
         content.submitButton.onPress = submit
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     @MainActor
     struct Content: ContainerContent {
-        // MARK: Lifecycle
+        // MARK: - Lifecycle
 
         init(
             title: LabelContent,
@@ -64,7 +64,7 @@ class FeedbackFormContentObserver: ContainerContentObserver {
             )
         }
 
-        // MARK: Internal
+        // MARK: - Internal
 
         let title: LabelContent
         let description: LabelContent?
@@ -75,7 +75,7 @@ class FeedbackFormContentObserver: ContainerContentObserver {
 
         fileprivate(set) var canSubmit: Bool
 
-        // MARK: Fileprivate
+        // MARK: - Fileprivate
 
         fileprivate static func areAllFieldsValid(
             fields: [FormFieldWithState]
@@ -131,7 +131,7 @@ class FeedbackFormContentObserver: ContainerContentObserver {
         print("Content changed. Is valid: \(content.canSubmit)")
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private func submit() {
         let data = content.fields

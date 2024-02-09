@@ -11,7 +11,7 @@ import Foundation
 /// A context object representative of the logger and the state that it's in at the
 /// time when a log is created.
 struct ParraLoggerContext {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         fiberId: String?,
@@ -82,7 +82,7 @@ struct ParraLoggerContext {
         self.extra = extra
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let fiberId: String?
 

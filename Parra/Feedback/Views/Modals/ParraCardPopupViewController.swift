@@ -11,7 +11,7 @@ import UIKit
 class ParraCardPopupViewController: ParraCardModalViewController,
     ParraCardModal
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     convenience init(
         cards: [ParraCardItem],
@@ -52,7 +52,7 @@ class ParraCardPopupViewController: ParraCardModalViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,7 +156,7 @@ class ParraCardPopupViewController: ParraCardModalViewController,
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var userDismissable = true
 

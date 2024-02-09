@@ -12,7 +12,7 @@ import UIKit
 /// to register the cell's class with your tableview. Note that using more than one instance of `ParraFeedbackTableViewCell` in a table
 /// is unsupported. Only one should ever be shown.
 public class ParraCardTableViewCell: UITableViewCell {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -26,7 +26,7 @@ public class ParraCardTableViewCell: UITableViewCell {
         commonInit()
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     /// A sample cell ID to use when registering this class with your `UITableView`. It is not required that you use this.
     public static let defaultCellId = "ParraFeedbackTableViewCell"
@@ -72,7 +72,7 @@ public class ParraCardTableViewCell: UITableViewCell {
         Parra.getExistingInstance().triggerSync()
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let parraCardView = ParraCardView(config: .default)
 

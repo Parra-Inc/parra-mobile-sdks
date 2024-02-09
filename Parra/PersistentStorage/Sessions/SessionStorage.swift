@@ -33,7 +33,7 @@ private let logger = Logger(
 /// of single events. All of the internal work done within this class requires the use of serial queues.
 /// async will only be used within this class to provide conveinence methods that are accessed externally.
 class SessionStorage {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         sessionReader: SessionReader,
@@ -55,7 +55,7 @@ class SessionStorage {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     func initializeSessions() async {
         logger
@@ -241,7 +241,7 @@ class SessionStorage {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private enum Constant {
         static let newlineCharData = "\n".data(using: .utf8)!

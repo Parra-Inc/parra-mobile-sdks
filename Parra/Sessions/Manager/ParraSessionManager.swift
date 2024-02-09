@@ -33,7 +33,7 @@ private let logger = Logger(
 ///    requirement for it to be called on a specific queue. Usually ``eventQueue``.
 @usableFromInline
 class ParraSessionManager {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         dataManager: ParraDataManager,
@@ -52,7 +52,7 @@ class ParraSessionManager {
         )
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     func initializeSessions() async {
         await sessionStorage.initializeSessions()
@@ -286,7 +286,7 @@ class ParraSessionManager {
         await sessionStorage.endSession()
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager

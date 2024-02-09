@@ -11,11 +11,11 @@ import Foundation
 private let logger = Logger(category: "Parra notification center")
 
 class ParraNotificationCenter: NotificationCenterType {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init() {}
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let underlyingNotificationCenter = NotificationCenter()
 

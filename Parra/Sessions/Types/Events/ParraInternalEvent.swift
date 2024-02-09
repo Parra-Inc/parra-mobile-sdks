@@ -27,7 +27,7 @@ enum ParraInternalEvent: ParraDataEvent {
     case significantTimeChange
     case thermalStateChanged
 
-    // MARK: Internal
+    // MARK: - Internal
 
     // MUST all be snake_case. Internal events are allowed to skip automatic conversion.
     @usableFromInline var name: String {

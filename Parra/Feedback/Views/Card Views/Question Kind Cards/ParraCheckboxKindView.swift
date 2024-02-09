@@ -10,7 +10,7 @@ import UIKit
 
 // "checkbox" means multiple selection from a variable number of options
 class ParraCheckboxKindView: UIView, ParraQuestionKindView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         bucketId: String,
@@ -69,7 +69,7 @@ class ParraCheckboxKindView: UIView, ParraQuestionKindView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias DataType = CheckboxQuestionBody
     typealias AnswerType = MultiOptionAnswer
@@ -80,7 +80,7 @@ class ParraCheckboxKindView: UIView, ParraQuestionKindView {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let contentContainer = UIStackView(frame: .zero)
     private var optionViewMap = [ParraBorderedButton: CheckboxQuestionOption]()

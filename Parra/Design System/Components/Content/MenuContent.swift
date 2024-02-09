@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct MenuContent {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         title: LabelContent? = nil,
@@ -51,7 +51,7 @@ public struct MenuContent {
         self.optionSelectionChanged = optionSelectionChanged
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public struct Option: Identifiable, Hashable {
         public let id: String

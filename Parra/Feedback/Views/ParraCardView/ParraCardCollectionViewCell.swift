@@ -13,7 +13,7 @@ import UIKit
 /// to register the cell's class with your collection view. Note that using more than one instance of `ParraFeedbackCollectionViewCell` in a collection view
 /// is unsupported. Only one should ever be shown.
 public class ParraCardCollectionViewCell: UICollectionViewCell {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,7 +27,7 @@ public class ParraCardCollectionViewCell: UICollectionViewCell {
         commonInit()
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     /// A sample cell ID to use when registering this class with your `UICollectionView`. It is not required that you use this.
     public static let defaultCellId = "ParraFeedbackCollectionViewCell"
@@ -65,7 +65,7 @@ public class ParraCardCollectionViewCell: UICollectionViewCell {
         Parra.getExistingInstance().triggerSync()
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let parraCardView = ParraCardView(config: .default)
 

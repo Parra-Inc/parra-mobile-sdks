@@ -9,7 +9,7 @@
 import Foundation
 
 actor ParraState {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init() {}
 
@@ -29,12 +29,12 @@ actor ParraState {
         }
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public internal(set) var tenantId: String?
     public internal(set) var applicationId: String?
 
-    // MARK: Internal
+    // MARK: - Internal
 
     // MARK: Init
 
@@ -118,16 +118,16 @@ actor ParraState {
         self.applicationId = applicationId
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private class ModuleObjectWrapper: NSObject {
-        // MARK: Lifecycle
+        // MARK: - Lifecycle
 
         init(module: ParraModule) {
             self.module = module
         }
 
-        // MARK: Fileprivate
+        // MARK: - Fileprivate
 
         fileprivate let module: ParraModule
     }

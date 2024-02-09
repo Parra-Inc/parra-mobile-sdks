@@ -9,7 +9,7 @@
 import Foundation
 
 actor ParraSyncState {
-    // MARK: Internal
+    // MARK: - Internal
 
     func isSyncing() -> Bool {
         return syncing
@@ -23,7 +23,7 @@ actor ParraSyncState {
         syncing = false
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     /// Whether or not a sync operation is in progress.
     private var syncing = false

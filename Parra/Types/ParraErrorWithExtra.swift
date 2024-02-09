@@ -9,7 +9,7 @@
 import Foundation
 
 struct ParraErrorWithExtra {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         message: String,
@@ -33,7 +33,7 @@ struct ParraErrorWithExtra {
         self.extra = extra
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let message: String
     let extra: [String: Any]?

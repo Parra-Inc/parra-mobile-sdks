@@ -10,7 +10,7 @@
 import XCTest
 
 final class SessionReaderTests: MockedParraTestCase {
-    // MARK: Internal
+    // MARK: - Internal
 
     override func setUp() async throws {
         sessionReader = SessionReader(
@@ -348,7 +348,7 @@ final class SessionReaderTests: MockedParraTestCase {
         XCTAssertTrue(try fileManager.safeDirectoryExists(at: newSessionDir))
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let fileManager = FileManager.default
     private var sessionReader: SessionReader!

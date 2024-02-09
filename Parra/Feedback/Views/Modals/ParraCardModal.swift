@@ -9,7 +9,7 @@
 import UIKit
 
 struct ParraCardModalViewedEvent: ParraDataEvent {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(modalType: ParraCardModalType) {
         self.name = modalType.eventName
@@ -18,7 +18,7 @@ struct ParraCardModalViewedEvent: ParraDataEvent {
         ]
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var name: String
     var extra: [String: Any]
@@ -29,7 +29,7 @@ enum ParraCardModalType: String {
     case popup
     case drawer
 
-    // MARK: Internal
+    // MARK: - Internal
 
     // To avoid these values changing unintentionally.
     var eventName: String {

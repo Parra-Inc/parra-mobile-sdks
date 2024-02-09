@@ -21,13 +21,13 @@ import Foundation
  */
 @frozen
 public struct AnyCodable: Codable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(_ value: (some Any)?) {
         self.value = value ?? ()
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let value: Any
 }

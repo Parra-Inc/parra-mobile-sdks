@@ -12,7 +12,7 @@ import UIKit
 /// Call ``Parra/Parra/initialize(options:authProvider:)-8d8fx`` in your `AppDelegate.didFinishLaunchingWithOptions`
 /// method to configure the SDK.
 public class Parra: ParraModule, ParraModuleStateAccessor {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         state: ParraState,
@@ -41,7 +41,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         removeEventObservers()
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     // MARK: - Authentication
 
@@ -90,7 +90,7 @@ public class Parra: ParraModule, ParraModuleStateAccessor {
         )
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     private(set) static var name = "Parra"
 

@@ -10,7 +10,7 @@ import ObjectiveC
 import UIKit
 
 final class ObjectAssociation<T: AnyObject> {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     /// - Parameter policy: An association policy that will be used when linking objects.
     public init(
@@ -19,7 +19,7 @@ final class ObjectAssociation<T: AnyObject> {
         self.policy = policy
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     /// Accesses associated object.
     /// - Parameter index: An object whose associated object is to be accessed.
@@ -41,7 +41,7 @@ final class ObjectAssociation<T: AnyObject> {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let policy: objc_AssociationPolicy
 }

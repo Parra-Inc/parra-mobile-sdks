@@ -13,7 +13,7 @@ enum ParraLazyLogParam {
     case string(() -> String)
     case error(() -> Error)
 
-    // MARK: Internal
+    // MARK: - Internal
 
     func produceLog() -> (String, [String: Any]?) {
         switch self {

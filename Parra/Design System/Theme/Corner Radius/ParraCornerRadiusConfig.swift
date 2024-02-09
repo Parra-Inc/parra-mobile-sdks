@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct ParraCornerRadiusConfig {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         extraSmall: RectangleCornerRadii,
@@ -25,7 +25,7 @@ public struct ParraCornerRadiusConfig {
         self.extraLarge = extraLarge
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default` = ParraCornerRadiusConfig(
         extraSmall: .init(allCorners: 4),

@@ -9,7 +9,7 @@
 import UIKit
 
 class ParraShortTextKindView: UIView, ParraQuestionKindView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         bucketId: String,
@@ -37,7 +37,7 @@ class ParraShortTextKindView: UIView, ParraQuestionKindView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias DataType = ShortTextQuestionBody
     typealias AnswerType = TextValueAnswer
@@ -51,7 +51,7 @@ class ParraShortTextKindView: UIView, ParraQuestionKindView {
         return validationError == .none
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let question: Question
     private let data: DataType

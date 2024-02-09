@@ -18,13 +18,13 @@ typealias DataTaskResponse = (
 typealias DataTaskResolver = (_ request: URLRequest) -> DataTaskResponse
 
 class MockURLSession: URLSessionType {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(testCase: XCTestCase) {
         self.testCase = testCase
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var configuration: URLSessionConfiguration = .default
 
@@ -98,7 +98,7 @@ class MockURLSession: URLSessionType {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let testCase: XCTestCase
 

@@ -9,7 +9,7 @@ import Parra
 import UIKit
 
 class ParraCardsInTableView: UITableViewController {
-    // MARK: Internal
+    // MARK: - Internal
 
     enum Constant {
         static let feedbackRow = 5
@@ -110,7 +110,7 @@ class ParraCardsInTableView: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var shouldShowFeedback = false {
         didSet {

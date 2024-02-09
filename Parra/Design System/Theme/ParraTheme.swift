@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 public struct ParraTheme {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         lightPalette: ParraColorPalette,
@@ -73,19 +73,19 @@ public struct ParraTheme {
         )
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default` = ParraTheme(
         color: .accentColor
     )
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let palette: ParraColorPalette
     let typography: ParraTypography
     let cornerRadius: ParraCornerRadiusConfig
 
-    // MARK: Private
+    // MARK: - Private
 
     // MARK: - Palette
 

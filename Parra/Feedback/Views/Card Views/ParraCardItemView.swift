@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class ParraCardItemView: UIView, ParraLegacyConfigurableView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(config: ParraCardViewConfig) {
         self.config = config
@@ -24,7 +24,7 @@ class ParraCardItemView: UIView, ParraLegacyConfigurableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var config: ParraCardViewConfig
 

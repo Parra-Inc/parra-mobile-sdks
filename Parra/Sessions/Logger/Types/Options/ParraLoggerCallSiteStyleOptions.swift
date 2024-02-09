@@ -9,13 +9,13 @@
 import Foundation
 
 public struct ParraLoggerCallSiteStyleOptions: OptionSet {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(rawValue: Int8) {
         self.rawValue = rawValue
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default`: ParraLoggerCallSiteStyleOptions = [
         .function, .line

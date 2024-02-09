@@ -133,7 +133,7 @@ public extension ParraCardViewDelegate {
 /// ready. Any cards that have been fetched in the `ParraFeedback` module will automatically be displayed by
 /// `ParraCardView`s when they are added to your view hierarchy.
 public class ParraCardView: UIView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     /// Creates a `ParraCardView`. If there are any `ParraCardItem`s available in hte `ParraFeedback` module,
     /// they will be displayed automatically when adding this view to your view hierarchy.
@@ -174,7 +174,7 @@ public class ParraCardView: UIView {
         Parra.getExistingInstance().triggerSync(completion: nil)
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum Dimensions {
         public static let minWidth: CGFloat = 320
@@ -228,7 +228,7 @@ public class ParraCardView: UIView {
         )
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let answerHandler = ParraCardAnswerHandler()
 
@@ -314,7 +314,7 @@ public class ParraCardView: UIView {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     @objc
     private func didReceiveCardChangeNotification(

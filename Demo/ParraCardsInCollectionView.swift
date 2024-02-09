@@ -12,7 +12,7 @@ import UIKit
 class ParraCardsInCollectionView: UICollectionViewController,
     UICollectionViewDelegateFlowLayout
 {
-    // MARK: Internal
+    // MARK: - Internal
 
     enum Constant {
         static let feedbackRow = 6
@@ -138,7 +138,7 @@ class ParraCardsInCollectionView: UICollectionViewController,
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var shouldShowFeedback = false {
         didSet {

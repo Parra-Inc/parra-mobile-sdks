@@ -16,7 +16,7 @@ public enum ParraLoggerTimestampStyle {
     case iso8601
     case rfc3339
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default` = ParraLoggerTimestampStyle.iso8601
 }

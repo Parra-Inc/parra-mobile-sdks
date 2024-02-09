@@ -11,7 +11,7 @@ import SwiftUI
 /// A place to provide global defaults for basic styles of Parra components, given contextual information about
 /// where they will be used.
 public class GlobalComponentAttributes {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         labelAttributeFactory: LabelAttributeFactory? = nil,
@@ -25,7 +25,7 @@ public class GlobalComponentAttributes {
         self.textEditorAttributeFactory = textEditorAttributeFactory
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public typealias LabelAttributeFactory = (
         _ config: LabelConfig,
@@ -51,7 +51,7 @@ public class GlobalComponentAttributes {
         _ defaultAttributes: TextEditorAttributes?
     ) -> TextEditorAttributes
 
-    // MARK: Internal
+    // MARK: - Internal
 
     private(set) var labelAttributeFactory: LabelAttributeFactory?
     private(set) var buttonAttributeFactory: ButtonAttributeFactory?

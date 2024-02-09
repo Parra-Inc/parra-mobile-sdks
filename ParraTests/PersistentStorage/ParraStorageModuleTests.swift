@@ -11,7 +11,7 @@ import XCTest
 private typealias TestDataType = [String: String]
 
 class ParraStorageModuleTests: ParraBaseMock {
-    // MARK: Internal
+    // MARK: - Internal
 
     var storageModules = [ParraStorageModule<String>]()
 
@@ -211,7 +211,7 @@ class ParraStorageModuleTests: ParraBaseMock {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     // need a helper since you can't use await in autoclosures to check actor fields
     // inline in an assertion.

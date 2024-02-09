@@ -9,13 +9,13 @@
 import Foundation
 
 struct AuthenticatedRequestAttributeOptions: OptionSet {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(rawValue: Int) {
         self.rawValue = rawValue
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     static let requiredReauthentication = AuthenticatedRequestAttributeOptions(
         rawValue: 1 << 0

@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct ButtonAttributes: ParraStyleAttributes {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         background: (any ShapeStyle)? = nil,
@@ -46,7 +46,7 @@ public struct ButtonAttributes: ParraStyleAttributes {
         self.frame = frame
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     /// Attributes to use for the button's title in the normal state (not disabled or selected).
     public let title: LabelAttributes
@@ -63,7 +63,7 @@ public struct ButtonAttributes: ParraStyleAttributes {
     public let cornerRadius: ParraCornerRadiusSize?
     public let padding: EdgeInsets?
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let frame: FrameAttributes?
 
@@ -111,7 +111,7 @@ public struct ButtonAttributes: ParraStyleAttributes {
         return ButtonAttributes(
             cornerRadius: cornerRadius,
             title: LabelAttributes(
-                font: .system(size: fontSize),
+                font: Font.system(size: fontSize),
                 padding: titlePadding
             )
         )

@@ -22,7 +22,7 @@ class FakeModule: ParraModule {
 
 @MainActor
 class ParraTests: MockedParraTestCase {
-    // MARK: Internal
+    // MARK: - Internal
 
     override func tearDown() async throws {
         if let fakeModule {
@@ -84,7 +84,7 @@ class ParraTests: MockedParraTestCase {
         XCTAssertNil(currentCredential)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var fakeModule: FakeModule?
 }

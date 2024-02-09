@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class ParraStar: UIView, ParraLegacyConfigurableView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         frame: CGRect,
@@ -35,7 +35,7 @@ class ParraStar: UIView, ParraLegacyConfigurableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var isHighlighted: Bool {
         didSet {
@@ -100,7 +100,7 @@ class ParraStar: UIView, ParraLegacyConfigurableView {
         setNeedsDisplay()
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var config: ParraCardViewConfig
 }

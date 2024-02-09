@@ -14,7 +14,7 @@ protocol ParraConfigurableCardView {
 /// A configuration object for how a `ParraCardView` should look. Use this to customize `ParraCardView`s
 /// so that they better blend in with your app's UI.
 public struct ParraCardViewConfig {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         backgroundColor: UIColor = Constant.defaultBackgroundColor,
@@ -46,7 +46,7 @@ public struct ParraCardViewConfig {
         self.label = label
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum Constant {
         public static let defaultBackgroundColor = UIColor(hex: 0xFAFAFA)

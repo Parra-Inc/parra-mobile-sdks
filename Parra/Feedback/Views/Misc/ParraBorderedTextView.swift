@@ -9,7 +9,7 @@
 import UIKit
 
 class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(config: ParraCardViewConfig) {
         self.config = config
@@ -47,7 +47,7 @@ class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
         fatalError("init(forcedEdgeInsets:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var placeholder: String? {
         didSet {
@@ -108,7 +108,7 @@ class ParraBorderedTextView: UITextView, ParraLegacyConfigurableView {
         placeholderLabel.textColor = config.accessoryDisabledTintColor
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let placeholderLabel = UILabel(frame: .zero)
     private var config: ParraCardViewConfig

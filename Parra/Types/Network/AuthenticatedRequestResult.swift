@@ -9,7 +9,7 @@
 import Foundation
 
 struct AuthenticatedRequestResult<T: Decodable> {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         result: Result<T, Error>,
@@ -19,7 +19,7 @@ struct AuthenticatedRequestResult<T: Decodable> {
         self.attributes = responseAttributes
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let result: Result<T, Error>
     let attributes: AuthenticatedRequestAttributeOptions

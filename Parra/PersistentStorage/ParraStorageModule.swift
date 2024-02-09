@@ -8,7 +8,7 @@
 import Foundation
 
 actor ParraStorageModule<DataType: Codable> {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         dataStorageMedium: DataStorageMedium,
@@ -51,7 +51,7 @@ actor ParraStorageModule<DataType: Codable> {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     // Whether or not data has previously been loaded from disk.
     private(set) var isLoaded = false
@@ -241,7 +241,7 @@ actor ParraStorageModule<DataType: Codable> {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var storeItemsSeparately: Bool {
         switch dataStorageMedium {

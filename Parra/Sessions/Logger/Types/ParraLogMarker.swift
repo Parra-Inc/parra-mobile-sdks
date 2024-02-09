@@ -9,7 +9,7 @@
 import Foundation
 
 public struct ParraLogMarker {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         timestamp: Date,
@@ -23,12 +23,12 @@ public struct ParraLogMarker {
         self.initialLogContext = initialLogContext
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let timestamp: Date
     public let initialLevel: ParraLogLevel
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let initialLogContext: ParraLogContext
     let message: ParraLazyLogParam

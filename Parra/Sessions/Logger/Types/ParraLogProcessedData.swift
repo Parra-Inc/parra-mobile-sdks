@@ -9,7 +9,7 @@
 import Foundation
 
 struct ParraLogProcessedData {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(logData: ParraLogData) {
         let message: String
@@ -62,7 +62,7 @@ struct ParraLogProcessedData {
         )
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let level: ParraLogLevel
     let extra: [String: Any]?
@@ -78,7 +78,7 @@ struct ParraLogProcessedData {
     let message: String
     let timestamp: Date
 
-    // MARK: Private
+    // MARK: - Private
 
     private static func mergeAllExtras(
         callSiteExtra: [String: Any]?,

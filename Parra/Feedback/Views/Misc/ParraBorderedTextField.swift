@@ -11,7 +11,7 @@ import UIKit
 class ParraBorderedTextField: ParraPaddedBaseTextField,
     ParraLegacyConfigurableView
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(config: ParraCardViewConfig) {
         self.config = config
@@ -37,7 +37,7 @@ class ParraBorderedTextField: ParraPaddedBaseTextField,
         fatalError("init(forcedEdgeInsets:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     override func becomeFirstResponder() -> Bool {
         let result = super.becomeFirstResponder()
@@ -68,7 +68,7 @@ class ParraBorderedTextField: ParraPaddedBaseTextField,
         tintColor = highlightColor
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var config: ParraCardViewConfig
 }

@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct TextEditorAttributes: ParraStyleAttributes {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         title: LabelAttributes,
@@ -68,7 +68,7 @@ public struct TextEditorAttributes: ParraStyleAttributes {
         self.borderColor = borderColor
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     /// Attributes to use on the optional title label shown above the menu.
     public let title: LabelAttributes
@@ -85,7 +85,7 @@ public struct TextEditorAttributes: ParraStyleAttributes {
     public let fontWidth: Font.Width?
     public let padding: EdgeInsets?
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let frame: FrameAttributes?
     let borderWidth: CGFloat

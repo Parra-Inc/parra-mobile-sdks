@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct OutlinedButtonComponent: ButtonComponentType {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         config: ButtonConfig,
@@ -21,7 +21,7 @@ struct OutlinedButtonComponent: ButtonComponentType {
         self.style = style
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let config: ButtonConfig
     let content: ButtonContent

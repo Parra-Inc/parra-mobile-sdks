@@ -9,7 +9,7 @@
 import UIKit
 
 class ParraPaddedBaseTextField: UITextField {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(forcedEdgeInsets: UIEdgeInsets) {
         self.forcedEdgeInsets = forcedEdgeInsets
@@ -22,7 +22,7 @@ class ParraPaddedBaseTextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return super.textRect(forBounds: bounds)
@@ -34,7 +34,7 @@ class ParraPaddedBaseTextField: UITextField {
             .inset(by: forcedEdgeInsets)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let forcedEdgeInsets: UIEdgeInsets
 }

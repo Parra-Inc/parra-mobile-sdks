@@ -12,7 +12,7 @@ enum FormFieldState {
     case valid
     case invalid(String)
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var errorMessage: String? {
         switch self {

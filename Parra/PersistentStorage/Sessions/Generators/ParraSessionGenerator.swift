@@ -21,7 +21,7 @@ enum ParraSessionGeneratorElement {
 struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence,
     IteratorProtocol
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         forSessionsAt path: URL,
@@ -38,7 +38,7 @@ struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence,
         )
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     // Type is optional. We have to be able to filter out elements while doing the lazy enumeration
     // so we need a way to indicate to the caller that the item produced by a given iteration can
@@ -80,7 +80,7 @@ struct ParraSessionGenerator: ParraSessionGeneratorType, Sequence,
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let directoryEnumerator: FileManager.DirectoryEnumerator
 }

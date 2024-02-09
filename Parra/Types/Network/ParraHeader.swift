@@ -26,7 +26,7 @@ enum ParraHeader {
     case platformSdkVersion
     case platformVersion
 
-    // MARK: Internal
+    // MARK: - Internal
 
     static let parraHeaderPrefix = "X-PARRA"
 
@@ -92,7 +92,7 @@ enum ParraHeader {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var name: String {
         switch self {

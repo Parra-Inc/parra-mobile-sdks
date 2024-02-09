@@ -13,7 +13,7 @@ enum ButtonVariant: CustomStringConvertible {
     case outlined
     case contained // filled
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var description: String {
         switch self {

@@ -20,7 +20,7 @@ public enum ParraStandardEvent: ParraDataEvent {
     case tap(element: String)
     case view(element: String)
 
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(name: String, extra: [String: Any]) {
         let components = name.split(separator: ":")
@@ -60,7 +60,7 @@ public enum ParraStandardEvent: ParraDataEvent {
         }
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public var name: String {
         switch self {

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class ParraCardModalViewController: UIViewController {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         cards: [ParraCardItem],
@@ -41,7 +41,7 @@ class ParraCardModalViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let cardView: ParraCardView
     let modalType: ParraCardModalType
@@ -64,7 +64,7 @@ class ParraCardModalViewController: UIViewController {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var onDismiss: (() -> Void)?
 }

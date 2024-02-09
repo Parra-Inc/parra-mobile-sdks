@@ -13,7 +13,7 @@ import UIKit
 // not try to make abstractions and share major elements between question kinds, since the UIs
 // for each will likely change.
 class ParraBooleanKindView: UIView, ParraQuestionKindView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         bucketId: String,
@@ -74,7 +74,7 @@ class ParraBooleanKindView: UIView, ParraQuestionKindView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias DataType = BooleanQuestionBody
     typealias AnswerType = SingleOptionAnswer
@@ -85,7 +85,7 @@ class ParraBooleanKindView: UIView, ParraQuestionKindView {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let contentContainer = UIStackView(frame: .zero)
     private var optionViewMap = [ParraBorderedButton: BooleanQuestionOption]()

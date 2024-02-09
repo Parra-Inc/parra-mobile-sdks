@@ -9,7 +9,7 @@
 import UIKit
 
 class ParraLongTextKindView: UIView, ParraQuestionKindView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         bucketId: String,
@@ -37,7 +37,7 @@ class ParraLongTextKindView: UIView, ParraQuestionKindView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias DataType = LongTextQuestionBody
     typealias AnswerType = TextValueAnswer
@@ -51,7 +51,7 @@ class ParraLongTextKindView: UIView, ParraQuestionKindView {
         return validationError == .none
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let answerHandler: ParraAnswerHandler
     private let textView: ParraBorderedTextView

@@ -22,7 +22,7 @@ protocol ParraStarControlDelegate: AnyObject {
 }
 
 class ParraStarControl: UIControl, ParraLegacyConfigurableView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         starCount: Int,
@@ -64,7 +64,7 @@ class ParraStarControl: UIControl, ParraLegacyConfigurableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     weak var delegate: ParraStarControlDelegate?
 
@@ -108,7 +108,7 @@ class ParraStarControl: UIControl, ParraLegacyConfigurableView {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let config: ParraCardViewConfig
     private let starStack = UIStackView(frame: .zero)

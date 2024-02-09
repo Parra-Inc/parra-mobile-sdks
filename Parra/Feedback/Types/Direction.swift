@@ -12,7 +12,7 @@ enum Direction {
     case left
     case right
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var swipeDirection: UISwipeGestureRecognizer.Direction {
         switch self {

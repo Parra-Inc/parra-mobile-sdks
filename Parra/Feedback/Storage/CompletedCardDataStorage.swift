@@ -8,13 +8,13 @@
 import Foundation
 
 actor CompletedCardDataStorage: ItemStorage {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(storageModule: ParraStorageModule<CompletedCard>) {
         self.storageModule = storageModule
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias DataType = CompletedCard
 
@@ -70,7 +70,7 @@ actor CompletedCardDataStorage: ItemStorage {
         return successfullSubmittedCompletedCardIds.contains(cardId)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     /// In memory cache of card ids that have been seen recently. This will be reset
     /// when the app is re-launched, but no reset when the cards are changed or cleared.

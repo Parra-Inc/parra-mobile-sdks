@@ -9,7 +9,7 @@
 import UIKit
 
 public struct ParraTextConfig {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         color: UIColor = .black,
@@ -21,7 +21,7 @@ public struct ParraTextConfig {
         self.shadow = shadow
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let titleDefault = ParraTextConfig(
         color: .init(red: 51, green: 51, blue: 51),

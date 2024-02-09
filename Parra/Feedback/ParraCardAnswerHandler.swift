@@ -40,11 +40,11 @@ protocol ParraAnswerHandler {
 }
 
 class ParraCardAnswerHandler: ParraAnswerHandler {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init() {}
 
-    // MARK: Internal
+    // MARK: - Internal
 
     weak var questionHandlerDelegate: ParraQuestionHandlerDelegate?
 
@@ -91,7 +91,7 @@ class ParraCardAnswerHandler: ParraAnswerHandler {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var currentAnswerState: AnswerStateMap = [:]
 }

@@ -30,7 +30,7 @@ private typealias Swift_Backtrace = @convention(c) (
 // https://developer.apple.com/documentation/xcode/adding-identifiable-symbol-names-to-a-crash-report/
 
 enum CallStackParser {
-    // MARK: Internal
+    // MARK: - Internal
 
     static func parse(
         frames: [String]
@@ -118,7 +118,7 @@ enum CallStackParser {
         }
     }
 
-    // MARK: Fileprivate
+    // MARK: - Fileprivate
 
     fileprivate enum Constant {
         /// In order by expected likelihood that they'll be encountered
@@ -143,7 +143,7 @@ enum CallStackParser {
         #endif
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private static func demangleSymbolIfNeeded(
         symbol: String

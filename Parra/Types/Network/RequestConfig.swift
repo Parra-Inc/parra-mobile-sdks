@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 struct RequestConfig {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         shouldReauthenticate: Bool,
@@ -23,7 +23,7 @@ struct RequestConfig {
         self.attributes = attributes
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     static let `default` = RequestConfig(
         shouldReauthenticate: true,

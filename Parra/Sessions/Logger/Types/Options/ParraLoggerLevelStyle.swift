@@ -13,7 +13,7 @@ public enum ParraLoggerLevelStyle {
     case word
     case both
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default` = ParraLoggerLevelStyle.both
 }

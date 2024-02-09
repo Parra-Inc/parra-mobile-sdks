@@ -9,7 +9,7 @@
 import Foundation
 
 struct ParraDiskUsage {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init?(resourceValues: URLResourceValues) {
         guard let totalCapacity = resourceValues.volumeTotalCapacity,
@@ -28,7 +28,7 @@ struct ParraDiskUsage {
         self.availableOpportunisticCapacity = availableOpportunisticCapacity
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let totalCapacity: Int
     let availableCapacity: Int

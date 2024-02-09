@@ -11,61 +11,61 @@ import Foundation
 protocol AnswerOption: Codable {}
 
 struct SingleOptionAnswer: AnswerOption {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(optionId: String) {
         self.optionId = optionId
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let optionId: String
 }
 
 struct MultiOptionIndividualOption: Codable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(id: String) {
         self.id = id
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let id: String
 }
 
 struct MultiOptionAnswer: AnswerOption {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(options: [MultiOptionIndividualOption]) {
         self.options = options
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let options: [MultiOptionIndividualOption]
 }
 
 struct TextValueAnswer: AnswerOption {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(value: String) {
         self.value = value
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let value: String
 }
 
 struct IntValueAnswer: AnswerOption {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(value: Int) {
         self.value = value
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let value: Int
 }
@@ -82,7 +82,7 @@ enum QuestionAnswerKind: Codable {
 }
 
 struct QuestionAnswer: Codable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(kind: QuestionKind, data: AnswerOption) {
         self.kind = kind
@@ -114,7 +114,7 @@ struct QuestionAnswer: Codable {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     enum CodingKeys: CodingKey {
         case kind

@@ -9,7 +9,7 @@
 import Foundation
 
 struct FormFieldWithState: Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         field: FeedbackFormField
@@ -19,7 +19,7 @@ struct FormFieldWithState: Identifiable {
         self.value = nil
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let field: FeedbackFormField
 
@@ -35,7 +35,7 @@ struct FormFieldWithState: Identifiable {
         state = Self.validateUpdate(value: value, for: field)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private static func validateUpdate(
         value: String?,

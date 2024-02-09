@@ -8,7 +8,7 @@
 import Foundation
 
 public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         name: String,
@@ -18,7 +18,7 @@ public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
         self.isTest = isTest
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case name
@@ -30,7 +30,7 @@ public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
 }
 
 public struct Tenant: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -48,7 +48,7 @@ public struct Tenant: Codable, Equatable, Hashable, Identifiable {
         self.isTest = isTest
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -68,7 +68,7 @@ public struct Tenant: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct TenantCollectionResponse: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         page: Int,
@@ -84,7 +84,7 @@ public struct TenantCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case page
@@ -102,7 +102,7 @@ public struct TenantCollectionResponse: Codable, Equatable, Hashable {
 }
 
 public struct CreateApiKeyRequestBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         name: String,
@@ -112,14 +112,14 @@ public struct CreateApiKeyRequestBody: Codable, Equatable, Hashable {
         self.description = description
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let name: String
     public let description: String?
 }
 
 public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -139,7 +139,7 @@ public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
         self.tenantId = tenantId
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -163,7 +163,7 @@ public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
 public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
     Identifiable
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -185,7 +185,7 @@ public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
         self.secret = secret
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -209,7 +209,7 @@ public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
 }
 
 public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         page: Int,
@@ -225,7 +225,7 @@ public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case page
@@ -243,7 +243,7 @@ public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
 }
 
 public struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -263,7 +263,7 @@ public struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -287,7 +287,7 @@ public struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
 public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
     Identifiable
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -303,7 +303,7 @@ public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -321,7 +321,7 @@ public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
 }
 
 public struct FeedbackFormData: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         title: String,
@@ -333,7 +333,7 @@ public struct FeedbackFormData: Codable, Equatable, Hashable {
         self.fields = fields
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let title: String
     public let description: String?
@@ -346,7 +346,7 @@ public enum FeedbackFormFieldType: String, Codable {
 }
 
 public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         name: String,
@@ -392,7 +392,7 @@ public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case name
@@ -425,7 +425,7 @@ public protocol FeedbackFormFieldDataType {}
 public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable,
     FeedbackFormFieldDataType
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         placeholder: String?,
@@ -444,7 +444,7 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable,
         self.maxHeight = maxHeight
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case placeholder
@@ -466,7 +466,7 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable,
 public struct FeedbackFormSelectFieldData: Codable, Equatable, Hashable,
     FeedbackFormFieldDataType
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         placeholder: String?,
@@ -476,7 +476,7 @@ public struct FeedbackFormSelectFieldData: Codable, Equatable, Hashable,
         self.options = options
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     /// If provided, the title for an empty option.
     public let placeholder: String?
@@ -486,7 +486,7 @@ public struct FeedbackFormSelectFieldData: Codable, Equatable, Hashable,
 public struct FeedbackFormSelectFieldOption: Codable, Equatable, Hashable,
     Identifiable
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         title: String,
@@ -498,7 +498,7 @@ public struct FeedbackFormSelectFieldOption: Codable, Equatable, Hashable,
         self.isOther = isOther
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case title
@@ -516,7 +516,7 @@ public struct FeedbackFormSelectFieldOption: Codable, Equatable, Hashable,
 }
 
 public struct FeedbackFormStub: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -534,7 +534,7 @@ public struct FeedbackFormStub: Codable, Equatable, Hashable, Identifiable {
         self.description = description
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -554,7 +554,7 @@ public struct FeedbackFormStub: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         page: Int,
@@ -570,7 +570,7 @@ public struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case page
@@ -588,7 +588,7 @@ public struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
 }
 
 public struct FeedbackMetrics: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         userCount: Int,
@@ -602,7 +602,7 @@ public struct FeedbackMetrics: Codable, Equatable, Hashable {
         self.questionsCreatedThisMonth = questionsCreatedThisMonth
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case userCount
@@ -623,7 +623,7 @@ public struct AnswerData: Codable, Equatable, Hashable {
 }
 
 public struct Answer: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -645,7 +645,7 @@ public struct Answer: Codable, Equatable, Hashable, Identifiable {
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -669,7 +669,7 @@ public struct Answer: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct AnswerQuestionBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         data: AnswerData
@@ -677,7 +677,7 @@ public struct AnswerQuestionBody: Codable, Equatable, Hashable {
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let data: AnswerData
 }
@@ -697,7 +697,7 @@ public enum CardItemType: String, Codable {
 }
 
 public struct ParraCardItem: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -743,7 +743,7 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
         }
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -784,7 +784,7 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
 }
 
 public struct CardsResponse: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         items: [ParraCardItem]
@@ -815,7 +815,7 @@ public struct CardsResponse: Codable, Equatable, Hashable {
         }
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let items: [ParraCardItem]
 }
@@ -839,7 +839,7 @@ public struct Asset: Codable, Equatable, Hashable, Identifiable {
 public struct CheckboxQuestionOption: Codable, Equatable, Hashable,
     Identifiable
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         title: String,
@@ -853,7 +853,7 @@ public struct CheckboxQuestionOption: Codable, Equatable, Hashable,
         self.id = id
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case title
@@ -869,7 +869,7 @@ public struct CheckboxQuestionOption: Codable, Equatable, Hashable,
 }
 
 public struct CheckboxQuestionBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         options: [CheckboxQuestionOption]
@@ -877,13 +877,13 @@ public struct CheckboxQuestionBody: Codable, Equatable, Hashable {
         self.options = options
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let options: [CheckboxQuestionOption]
 }
 
 public struct ImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         title: String?,
@@ -924,7 +924,7 @@ public struct ImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case imageAssetId
@@ -951,7 +951,7 @@ public struct ImageQuestionOption: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct ImageQuestionBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         options: [ImageQuestionOption]
@@ -959,13 +959,13 @@ public struct ImageQuestionBody: Codable, Equatable, Hashable {
         self.options = options
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let options: [ImageQuestionOption]
 }
 
 public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         title: String?,
@@ -979,7 +979,7 @@ public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
         self.id = id
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case title
@@ -995,7 +995,7 @@ public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct ChoiceQuestionBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         options: [ChoiceQuestionOption]
@@ -1003,13 +1003,13 @@ public struct ChoiceQuestionBody: Codable, Equatable, Hashable {
         self.options = options
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let options: [ChoiceQuestionOption]
 }
 
 public struct ShortTextQuestionBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         placeholder: String?,
@@ -1038,7 +1038,7 @@ public struct ShortTextQuestionBody: Codable, Equatable, Hashable {
         ) ?? Int.max
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case placeholder
@@ -1052,7 +1052,7 @@ public struct ShortTextQuestionBody: Codable, Equatable, Hashable {
 }
 
 public struct LongTextQuestionBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         placeholder: String?,
@@ -1081,7 +1081,7 @@ public struct LongTextQuestionBody: Codable, Equatable, Hashable {
         ) ?? .max
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case placeholder
@@ -1097,7 +1097,7 @@ public struct LongTextQuestionBody: Codable, Equatable, Hashable {
 public struct BooleanQuestionOption: Codable, Equatable, Hashable,
     Identifiable
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         title: String,
@@ -1109,7 +1109,7 @@ public struct BooleanQuestionOption: Codable, Equatable, Hashable,
         self.id = id
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let title: String
     public let value: String
@@ -1117,7 +1117,7 @@ public struct BooleanQuestionOption: Codable, Equatable, Hashable,
 }
 
 public struct BooleanQuestionBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         options: [BooleanQuestionOption]
@@ -1125,13 +1125,13 @@ public struct BooleanQuestionBody: Codable, Equatable, Hashable {
         self.options = options
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let options: [BooleanQuestionOption]
 }
 
 public struct StarQuestionBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         starCount: Int,
@@ -1163,7 +1163,7 @@ public struct StarQuestionBody: Codable, Equatable, Hashable {
         )
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let starCount: Int
     public let leadingLabel: String?
@@ -1172,7 +1172,7 @@ public struct StarQuestionBody: Codable, Equatable, Hashable {
 }
 
 public struct RatingQuestionOption: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         title: String,
@@ -1184,7 +1184,7 @@ public struct RatingQuestionOption: Codable, Equatable, Hashable, Identifiable {
         self.id = id
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let title: String
     public let value: Int
@@ -1192,7 +1192,7 @@ public struct RatingQuestionOption: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct RatingQuestionBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         options: [RatingQuestionOption],
@@ -1206,7 +1206,7 @@ public struct RatingQuestionBody: Codable, Equatable, Hashable {
         self.trailingLabel = trailingLabel
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case options
@@ -1233,7 +1233,7 @@ public enum QuestionData: Codable, Equatable, Hashable {
 }
 
 public struct Question: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -1339,7 +1339,7 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -1410,7 +1410,7 @@ public struct Question: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct QuestionCollectionResponse: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         page: Int,
@@ -1426,7 +1426,7 @@ public struct QuestionCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case page
@@ -1444,7 +1444,7 @@ public struct QuestionCollectionResponse: Codable, Equatable, Hashable {
 }
 
 public struct NotificationRecipient: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         userId: String?
@@ -1452,7 +1452,7 @@ public struct NotificationRecipient: Codable, Equatable, Hashable {
         self.userId = userId
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case userId
@@ -1462,7 +1462,7 @@ public struct NotificationRecipient: Codable, Equatable, Hashable {
 }
 
 public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         type: String?,
@@ -1496,7 +1496,7 @@ public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
         self.recipients = recipients
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case type
@@ -1532,7 +1532,7 @@ public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
 }
 
 public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         type: String?,
@@ -1578,7 +1578,7 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
         self.version = version
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case type
@@ -1626,7 +1626,7 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         page: Int,
@@ -1642,7 +1642,7 @@ public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case page
@@ -1660,7 +1660,7 @@ public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
 }
 
 public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         notificationIds: [String]
@@ -1668,7 +1668,7 @@ public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
         self.notificationIds = notificationIds
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case notificationIds
@@ -1678,7 +1678,7 @@ public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
 }
 
 public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         userId: String?,
@@ -1688,7 +1688,7 @@ public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
         self.apnsToken = apnsToken
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case userId
@@ -1700,7 +1700,7 @@ public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
 }
 
 public struct UserResponse: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -1730,7 +1730,7 @@ public struct UserResponse: Codable, Equatable, Hashable, Identifiable {
         self.type = type
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -1762,7 +1762,7 @@ public struct UserResponse: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         provider: String,
@@ -1772,7 +1772,7 @@ public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
         self.providerUserId = providerUserId
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case provider
@@ -1784,7 +1784,7 @@ public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
 }
 
 public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         id: String,
@@ -1804,7 +1804,7 @@ public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
         self.userId = userId
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case id
@@ -1826,7 +1826,7 @@ public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
 }
 
 public struct CreateUserRequestBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         firstName: String?,
@@ -1848,7 +1848,7 @@ public struct CreateUserRequestBody: Codable, Equatable, Hashable {
         self.identities = identities
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case firstName
@@ -1872,7 +1872,7 @@ public struct CreateUserRequestBody: Codable, Equatable, Hashable {
 }
 
 public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         firstName: String,
@@ -1884,7 +1884,7 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
         self.email = email
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case firstName
@@ -1898,7 +1898,7 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
 }
 
 public struct UserCollectionResponse: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         page: Int,
@@ -1914,7 +1914,7 @@ public struct UserCollectionResponse: Codable, Equatable, Hashable {
         self.data = data
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case page
@@ -1932,7 +1932,7 @@ public struct UserCollectionResponse: Codable, Equatable, Hashable {
 }
 
 public struct UserInfoResponse: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         user: UserResponse?
@@ -1940,13 +1940,13 @@ public struct UserInfoResponse: Codable, Equatable, Hashable {
         self.user = user
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let user: UserResponse?
 }
 
 public struct ListUsersQuery: Codable, Equatable, Hashable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         select: String?,
@@ -1966,7 +1966,7 @@ public struct ListUsersQuery: Codable, Equatable, Hashable {
         self.search = search
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
         case select = "$select"

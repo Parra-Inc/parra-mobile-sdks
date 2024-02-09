@@ -10,7 +10,7 @@
 import XCTest
 
 class GeneratedTypesTests: XCTestCase {
-    // MARK: Internal
+    // MARK: - Internal
 
     func testCodingChoiceCard() throws {
         try assertReencodedWithoutChange(
@@ -66,7 +66,7 @@ class GeneratedTypesTests: XCTestCase {
         )
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private func assertReencodedWithoutChange(
         object: some Codable & Equatable

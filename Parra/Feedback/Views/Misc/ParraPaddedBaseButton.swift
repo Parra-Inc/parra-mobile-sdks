@@ -9,7 +9,7 @@
 import UIKit
 
 class ParraPaddedBaseButton: UIButton {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(forcedEdgeInsets: UIEdgeInsets) {
         self.forcedEdgeInsets = forcedEdgeInsets
@@ -22,7 +22,7 @@ class ParraPaddedBaseButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     override var intrinsicContentSize: CGSize {
         let baseSize = super.intrinsicContentSize
@@ -42,7 +42,7 @@ class ParraPaddedBaseButton: UIButton {
         )
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let forcedEdgeInsets: UIEdgeInsets
 }

@@ -12,7 +12,7 @@ enum ParraLoggerScopeType: Equatable {
     case customName(String)
     case function(String)
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var name: String {
         switch self {

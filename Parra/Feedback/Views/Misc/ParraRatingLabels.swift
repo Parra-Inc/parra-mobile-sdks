@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class ParraRatingLabels: UIView, ParraLegacyConfigurableView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init?(
         leadingText: String?,
@@ -94,7 +94,7 @@ class ParraRatingLabels: UIView, ParraLegacyConfigurableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     func applyConfig(_ config: ParraCardViewConfig) {
         for view in subviews {
@@ -107,7 +107,7 @@ class ParraRatingLabels: UIView, ParraLegacyConfigurableView {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private func applyCommonAttributes(
         to label: UILabel,

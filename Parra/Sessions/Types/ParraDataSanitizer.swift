@@ -9,7 +9,7 @@
 import Foundation
 
 enum ParraDataSanitizer {
-    // MARK: Internal
+    // MARK: - Internal
 
     static func sanitize(httpHeaders: [String: String]) -> [String: String] {
         return httpHeaders.filter { name, _ in
@@ -17,7 +17,7 @@ enum ParraDataSanitizer {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private enum Constant {
         static let naughtyHeaders = Set(

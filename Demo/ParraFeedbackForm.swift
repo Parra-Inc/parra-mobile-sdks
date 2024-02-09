@@ -10,7 +10,7 @@ import Parra
 import UIKit
 
 class ParraFeedbackForm: UIViewController {
-    // MARK: Internal
+    // MARK: - Internal
 
     @IBOutlet var presentFormButton: UIButton!
     @IBOutlet var errorLabel: UILabel!
@@ -41,7 +41,7 @@ class ParraFeedbackForm: UIViewController {
         ParraFeedback.shared.presentFeedbackForm(with: formData, from: self)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var formData: ParraFeedbackFormResponse?
 }

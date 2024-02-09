@@ -22,7 +22,7 @@ protocol ParraBorderedRatingControlDelegate: AnyObject {
 }
 
 class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         options: [RatingQuestionOption],
@@ -86,7 +86,7 @@ class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     weak var delegate: ParraBorderedRatingControlDelegate?
 
@@ -143,7 +143,7 @@ class ParraBorderedRatingControl: UIControl, ParraLegacyConfigurableView {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let config: ParraCardViewConfig
     private let labelStack = UIStackView(frame: .zero)

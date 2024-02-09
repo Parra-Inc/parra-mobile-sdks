@@ -9,7 +9,7 @@
 import UIKit
 
 class ParraImageKindView: UIView, ParraQuestionKindView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         bucketId: String,
@@ -123,7 +123,7 @@ class ParraImageKindView: UIView, ParraQuestionKindView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias DataType = ImageQuestionBody
     typealias AnswerType = SingleOptionAnswer
@@ -139,7 +139,7 @@ class ParraImageKindView: UIView, ParraQuestionKindView {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let question: Question
     private let answerHandler: ParraAnswerHandler

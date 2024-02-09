@@ -12,7 +12,7 @@ import XCTest
 
 /// https://www.iosdev.recipes/os-signpost/
 class SignpostTestObserver: NSObject, XCTestObservation {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     override init() {
         super.init()
@@ -21,7 +21,7 @@ class SignpostTestObserver: NSObject, XCTestObservation {
         XCTestObservationCenter.shared.addTestObserver(self)
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     // Create a custom log subsystem and relevant category
     let log = OSLog(

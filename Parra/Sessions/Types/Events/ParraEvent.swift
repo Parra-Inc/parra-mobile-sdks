@@ -18,19 +18,19 @@ public protocol ParraDataEvent: ParraEvent {
 }
 
 public struct ParraBasicEvent: ParraEvent {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(name: String) {
         self.name = name
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public var name: String
 }
 
 public struct ParraBasicDataEvent: ParraDataEvent {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         name: String,
@@ -40,7 +40,7 @@ public struct ParraBasicDataEvent: ParraDataEvent {
         self.extra = extra
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public var name: String
     public var extra: [String: Any]

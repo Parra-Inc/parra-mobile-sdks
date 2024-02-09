@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct ButtonContent {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         title: LabelContent,
@@ -21,7 +21,7 @@ public struct ButtonContent {
         self.onPress = onPress
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let title: LabelContent
     public let isDisabled: Bool

@@ -11,7 +11,7 @@ import UIKit
 class ParraImageButton: UIControl, SelectableButton,
     ParraLegacyConfigurableView
 {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         initiallySelected: Bool,
@@ -32,7 +32,7 @@ class ParraImageButton: UIControl, SelectableButton,
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     weak var delegate: SelectableButtonDelegate?
     var buttonIsSelected: Bool
@@ -129,7 +129,7 @@ class ParraImageButton: UIControl, SelectableButton,
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let asset: Asset
     private var buttonImageView = UIImageView(frame: .zero)

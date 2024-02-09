@@ -10,7 +10,7 @@ import Foundation
 
 /// Contains ``ParraEvent`` data suitable for storage within a session.
 struct ParraSessionEvent: Codable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         createdAt: Date,
@@ -22,7 +22,7 @@ struct ParraSessionEvent: Codable {
         self.metadata = metadata
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let createdAt: Date
     let name: String

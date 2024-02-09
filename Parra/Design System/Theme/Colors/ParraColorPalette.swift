@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 public struct ParraColorPalette {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         primary: ParraColorSwatchConvertible = ParraColorPalette.defaultLight
@@ -94,7 +94,7 @@ public struct ParraColorPalette {
         )
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let defaultLight = ParraColorPalette(
         primary: ParraColorSwatch(primary: Color.accentColor, name: "Primary"),
@@ -154,7 +154,7 @@ public struct ParraColorPalette {
     public let info: ParraColorSwatch
     public let success: ParraColorSwatch
 
-    // MARK: Internal
+    // MARK: - Internal
 
     func darkened(to luminosity: CGFloat) -> ParraColorPalette {
         return ParraColorPalette(

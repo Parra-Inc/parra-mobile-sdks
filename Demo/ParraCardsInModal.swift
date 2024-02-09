@@ -15,7 +15,7 @@ private let logger = Logger(
 )
 
 class ParraCardsInModal: UIViewController {
-    // MARK: Internal
+    // MARK: - Internal
 
     @IBOutlet var popupButton: UIButton!
     @IBOutlet var errorLabel: UILabel!
@@ -85,7 +85,7 @@ class ParraCardsInModal: UIViewController {
         ParraFeedback.presentCardDrawer(with: cards, from: self)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private var cards: [ParraCardItem] = []
 }

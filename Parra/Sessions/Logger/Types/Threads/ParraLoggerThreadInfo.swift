@@ -10,7 +10,7 @@ import Foundation
 
 @usableFromInline
 struct ParraLoggerThreadInfo: Codable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     @usableFromInline
     init(
@@ -33,7 +33,7 @@ struct ParraLoggerThreadInfo: Codable {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let id: Int
     let queueName: String

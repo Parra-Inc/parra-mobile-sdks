@@ -107,7 +107,7 @@
 
 ### Declarations
 --markcategories true
-
+--categorymark MARK: - %c
 
 ### Others
 --commas inline

@@ -10,13 +10,13 @@ import Foundation
 private let logger = Logger(category: "Credential storage")
 
 actor CredentialStorage: ItemStorage {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(storageModule: ParraStorageModule<ParraCredential>) {
         self.storageModule = storageModule
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     enum Key {
         static let currentUser = "current_user_credential"

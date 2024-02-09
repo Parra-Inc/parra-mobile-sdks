@@ -9,7 +9,7 @@
 import Foundation
 
 public struct ParraColorSwatch: Hashable, Identifiable {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         shade50: ParraColorConvertible,
@@ -122,7 +122,7 @@ public struct ParraColorSwatch: Hashable, Identifiable {
         )
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let slate = ParraColorSwatch(
         shade50: 0xF8FAFC,
@@ -471,7 +471,7 @@ public struct ParraColorSwatch: Hashable, Identifiable {
         return String(hashValue)
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     static let standardSwatches: [ParraColorSwatch] = [
         slate, gray, zinc, neutral, stone, red, orange, amber,

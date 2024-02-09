@@ -10,7 +10,7 @@ import Foundation
 import os
 
 public class Logger {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     public init(
         category: String? = nil,
@@ -57,7 +57,7 @@ public class Logger {
         self.parent = parent
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     /// Whether or not logging is enabled on this logger instance. Logging is enabled
     /// by default. If you disable logging, logs are ignored until re-enabling. Changing this
@@ -76,7 +76,7 @@ public class Logger {
         isEnabled = false
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     /// A backend for all the methods for different verbosities provided by the Parra
     /// Logger. The logger backend is the place where log events should be written
@@ -188,7 +188,7 @@ public class Logger {
         )
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private enum Constant {
         /// The maximum number of logs that can be collected before a logging backend is configured.

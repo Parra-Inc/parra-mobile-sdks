@@ -9,7 +9,7 @@
 import Foundation
 
 struct ParraSanitizedDictionary: ExpressibleByDictionaryLiteral {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(dictionaryLiteral elements: (Key, Value)...) {
         self.dictionary = Dictionary(
@@ -28,14 +28,14 @@ struct ParraSanitizedDictionary: ExpressibleByDictionaryLiteral {
         self.dictionary = dictionary
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias Key = String
     typealias Value = Any
 
     let dictionary: [Key: Value]
 
-    // MARK: Private
+    // MARK: - Private
 
     private static func sanitize(url: URL) -> URL {
         // TODO: This method and others like it...

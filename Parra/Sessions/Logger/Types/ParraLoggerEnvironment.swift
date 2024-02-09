@@ -24,11 +24,11 @@ public enum ParraLoggerEnvironment {
 
     case automatic
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default` = ParraLoggerEnvironment.automatic
 
-    // MARK: Internal
+    // MARK: - Internal
 
     static var eventDebugLoggingOverrideEnabled: Bool = {
         let envVar = ParraLoggerOptions.Environment.eventDebugLoggingEnabled

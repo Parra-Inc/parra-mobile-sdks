@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct FrameAttributes {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         minWidth: CGFloat? = nil,
@@ -29,7 +29,7 @@ struct FrameAttributes {
         self.alignment = alignment
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     let minWidth: CGFloat?
     let idealWidth: CGFloat?

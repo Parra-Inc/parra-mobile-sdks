@@ -16,7 +16,7 @@ protocol ParraBorderedButtonDelegate: AnyObject {
 }
 
 class ParraBorderedButton: UIView, ParraLegacyConfigurableView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         title: String,
@@ -39,7 +39,7 @@ class ParraBorderedButton: UIView, ParraLegacyConfigurableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var config: ParraCardViewConfig
 
@@ -136,7 +136,7 @@ class ParraBorderedButton: UIView, ParraLegacyConfigurableView {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let innerButton = ParraPaddedBaseButton(
         forcedEdgeInsets: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)

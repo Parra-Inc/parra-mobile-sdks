@@ -8,7 +8,7 @@
 import UIKit
 
 class ParraActionCardView: ParraCardItemView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         config: ParraCardViewConfig,
@@ -99,7 +99,7 @@ class ParraActionCardView: ParraCardItemView {
         fatalError("init(config:) has not been implemented")
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let titleLabel = UILabel(frame: .zero)
     private let subtitleLabel = UILabel(frame: .zero)

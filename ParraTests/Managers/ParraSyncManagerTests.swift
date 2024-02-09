@@ -10,7 +10,7 @@ import XCTest
 
 @MainActor
 class ParraSyncManagerTests: MockedParraTestCase {
-    // MARK: Internal
+    // MARK: - Internal
 
     override func tearDown() async throws {
         mockParra.syncManager.stopSyncTimer()
@@ -375,7 +375,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
         )
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private func logEventToSession(
         named name: String,

@@ -9,7 +9,7 @@
 import UIKit
 
 class ParraStarKindView: UIView, ParraQuestionKindView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         bucketId: String,
@@ -64,7 +64,7 @@ class ParraStarKindView: UIView, ParraQuestionKindView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     typealias DataType = StarQuestionBody
     typealias AnswerType = IntValueAnswer
@@ -74,7 +74,7 @@ class ParraStarKindView: UIView, ParraQuestionKindView {
         ratingLabels?.applyConfig(config)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let question: Question
     private let answerHandler: ParraAnswerHandler

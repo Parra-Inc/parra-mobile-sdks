@@ -8,7 +8,7 @@
 import UIKit
 
 class ParraQuestionCardView: ParraCardItemView {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     required init(
         bucketId: String,
@@ -188,7 +188,7 @@ class ParraQuestionCardView: ParraCardItemView {
         fatalError("init(config:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     enum Constant {
         static let bottomPadding: CGFloat = 8.0
@@ -229,7 +229,7 @@ class ParraQuestionCardView: ParraCardItemView {
         questionTypeView.applyConfig(config)
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let question: Question
     private let answerHandler: ParraCardAnswerHandler

@@ -12,7 +12,7 @@ enum AuthorizationType {
     case basic(String)
     case bearer(String)
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var value: String {
         switch self {

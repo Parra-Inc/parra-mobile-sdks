@@ -18,7 +18,7 @@ public enum ParraLoggerExtraStyle {
     // Easy to read, lots of whitespace, and indentation between different levels.
     case pretty
 
-    // MARK: Public
+    // MARK: - Public
 
     public static let `default` = ParraLoggerExtraStyle.pretty
 }

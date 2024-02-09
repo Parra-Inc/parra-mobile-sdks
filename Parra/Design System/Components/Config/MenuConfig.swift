@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct MenuConfig {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         title: LabelConfig = LabelConfig(fontStyle: .body),
@@ -23,7 +23,7 @@ public struct MenuConfig {
         self.menuOptionSelected = menuOptionSelected
     }
 
-    // MARK: Public
+    // MARK: - Public
 
     public let title: LabelConfig
     public let helper: LabelConfig

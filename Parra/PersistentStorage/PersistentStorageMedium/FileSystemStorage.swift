@@ -10,7 +10,7 @@ import Foundation
 private let logger = Logger(category: "File system storage medium")
 
 actor FileSystemStorage: PersistentStorageMedium {
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
 
     init(
         baseUrl: URL,
@@ -38,7 +38,7 @@ actor FileSystemStorage: PersistentStorageMedium {
         }
     }
 
-    // MARK: Internal
+    // MARK: - Internal
 
     func read<T>(name: String) async throws -> T? where T: Codable {
         let file = baseUrl.appendFilename(name)
@@ -127,7 +127,7 @@ actor FileSystemStorage: PersistentStorageMedium {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private let baseUrl: URL
     private let jsonEncoder: JSONEncoder

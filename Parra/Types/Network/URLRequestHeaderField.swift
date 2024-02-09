@@ -13,7 +13,7 @@ enum URLRequestHeaderField {
     case accept(Mimetype)
     case contentType(Mimetype)
 
-    // MARK: Internal
+    // MARK: - Internal
 
     var name: String {
         switch self {
