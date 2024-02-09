@@ -66,8 +66,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "00DECFF4274C69F800DAF301"
-            BuildableName = "Demo.app"
-            BlueprintName = "Demo"
+            BuildableName = "LegacyDemo.app"
+            BlueprintName = "LegacyDemo"
             ReferencedContainer = "container:Parra.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -695,7 +695,7 @@
 		00DDBA182B61C21E00400761 /* EdgeInsets+hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+hashable.swift"; sourceTree = "<group>"; };
 		00DDBA1C2B61D99D00400761 /* EdgeInsets+zero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+zero.swift"; sourceTree = "<group>"; };
 		00DDBA252B63FBBC00400761 /* ParraThemeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraThemeObserver.swift; sourceTree = "<group>"; };
-		00DECFF5274C69F800DAF301 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00DECFF5274C69F800DAF301 /* LegacyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LegacyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00DECFF8274C69F800DAF301 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00DECFFF274C69F800DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		00DED004274C69FA00DAF301 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -1624,7 +1624,7 @@
 			isa = PBXGroup;
 			children = (
 				001B7A0A27DD266500DEEECD /* Parra.podspec */,
-				00DECFF7274C69F800DAF301 /* Demo */,
+				00DECFF7274C69F800DAF301 /* LegacyDemo */,
 				001B7AF327DE3A7600DEEECD /* Parra */,
 				001B7AFF27DE3A7600DEEECD /* ParraTests */,
 				00B42EAF2ADE1BCB00F365A5 /* TestRunner */,
@@ -1637,7 +1637,7 @@
 		00DECFF6274C69F800DAF301 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00DECFF5274C69F800DAF301 /* Demo.app */,
+				00DECFF5274C69F800DAF301 /* LegacyDemo.app */,
 				001B7AF227DE3A7600DEEECD /* Parra.framework */,
 				001B7AF927DE3A7600DEEECD /* ParraTests.xctest */,
 				00B42EAE2ADE1BCB00F365A5 /* TestRunner.app */,
@@ -1645,7 +1645,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00DECFF7274C69F800DAF301 /* Demo */ = {
+		00DECFF7274C69F800DAF301 /* LegacyDemo */ = {
 			isa = PBXGroup;
 			children = (
 				006DE9832A47332100521F5D /* Demo.entitlements */,
@@ -1662,7 +1662,7 @@
 				00DED006274C69FA00DAF301 /* Info.plist */,
 				003C216D27DEE77D001CAE03 /* Demo-Bridging-Header.h */,
 			);
-			path = Demo;
+			path = LegacyDemo;
 			sourceTree = "<group>";
 		};
 		00E15A2E293279770049C2C7 /* ParraCardView */ = {
@@ -2014,9 +2014,9 @@
 			productReference = 00B42EAE2ADE1BCB00F365A5 /* TestRunner.app */;
 			productType = "com.apple.product-type.application";
 		};
-		00DECFF4274C69F800DAF301 /* Demo */ = {
+		00DECFF4274C69F800DAF301 /* LegacyDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildConfigurationList = 00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "LegacyDemo" */;
 			buildPhases = (
 				00DECFF1274C69F800DAF301 /* Sources */,
 				00DECFF2274C69F800DAF301 /* Frameworks */,
@@ -2028,9 +2028,9 @@
 			dependencies = (
 				001B7B0427DE3A7600DEEECD /* PBXTargetDependency */,
 			);
-			name = Demo;
+			name = LegacyDemo;
 			productName = "Parra Feedback SDK";
-			productReference = 00DECFF5274C69F800DAF301 /* Demo.app */;
+			productReference = 00DECFF5274C69F800DAF301 /* LegacyDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2075,7 +2075,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				00DECFF4274C69F800DAF301 /* Demo */,
+				00DECFF4274C69F800DAF301 /* LegacyDemo */,
 				001B7AF127DE3A7600DEEECD /* Parra */,
 				001B7AF827DE3A7600DEEECD /* ParraTests */,
 				00B42EAD2ADE1BCB00F365A5 /* TestRunner */,
@@ -3018,7 +3018,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "Demo" */ = {
+		00DED009274C69FA00DAF301 /* Build configuration list for PBXNativeTarget "LegacyDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00DED00A274C69FA00DAF301 /* Debug */,
