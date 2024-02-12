@@ -69,7 +69,7 @@ public class ParraCardTableViewCell: UITableViewCell {
     ///        }
     ///    }
     public func endDisplaying() {
-        Parra.getExistingInstance().triggerSync()
+//        Parra.getExistingInstance().triggerSync()
     }
 
     // MARK: - Private

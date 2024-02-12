@@ -8,7 +8,6 @@
 
 import Foundation
 
-/// Only static configuration that doesn't change after app initialization.
 public struct ParraConfiguration {
     // MARK: - Lifecycle
 

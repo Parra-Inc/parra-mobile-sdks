@@ -13,7 +13,9 @@ struct ParraLogoButton: View {
 
     var body: some View {
         Button {
-            Parra.logEvent(.tap(element: "powered-by-parra"))
+            // TODO: SwiftUI hook into shared instance
+
+//            Parra.logEvent(.tap(element: "powered-by-parra"))
 
             UIApplication.shared.open(Parra.Constants.parraWebRoot)
         } label: {

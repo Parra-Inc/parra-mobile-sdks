@@ -26,7 +26,7 @@ class ParraCardModalViewController: UIViewController {
         // We count on the fact that we control when these modals are presented to know that
         // if one is instantiated, presentation is inevitable. This allows us to guarentee that
         // the impression event for the modal is submitted before the card view starts laying out cards.
-        Parra.logEvent(modalType.event)
+//        Parra.logEvent(modalType.event)
 
         self.cardView = ParraCardView(config: config)
 

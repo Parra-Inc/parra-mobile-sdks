@@ -12,25 +12,22 @@ private let logger = Logger(category: "Feedback module")
 /// The `ParraFeedback` module is used to fetch Parra Feedback data from the Parra API. Once data is fetched,
 /// it will be displayed automatically in any `ParraCardView`s that you add to your view hierarchy.
 /// To handle authentication, see the Parra module.
-public class ParraFeedback: ParraModule {
+public class ParraFeedback {
     // MARK: - Lifecycle
 
     init(
-        parra: Parra,
-        dataManager: ParraFeedbackDataManager
+        dataManager: ParraFeedbackDataManager,
+        networkManager: ParraNetworkManager
     ) {
-        self.parra = parra
         self.dataManager = dataManager
-    }
-
-    deinit {
-        parra.state.unregisterModule(module: self)
+        self.networkManager = networkManager
     }
 
     // MARK: - Public
 
-    public static var shared: ParraFeedback {
-        return Parra.getExistingInstance().feedback
+    public static var shared: ParraFeedback! {
+//        return Parra.getExistingInstance().feedback
+        return nil
     }
 
     /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
@@ -76,7 +73,7 @@ public class ParraFeedback: ParraModule {
                 completion(cards, nil)
             case .failure(let parraError):
                 let error = NSError(
-                    domain: ParraFeedback.errorDomain(),
+                    domain: Parra.errorDomain,
                     code: 20,
                     userInfo: [
                         NSLocalizedDescriptionKey: parraError
@@ -96,7 +93,7 @@ public class ParraFeedback: ParraModule {
     public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
-        let cards = try await parra.networkManager.getCards(
+        let cards = try await networkManager.getCards(
             appArea: appArea
         )
 
@@ -123,7 +120,7 @@ public class ParraFeedback: ParraModule {
     public func fetchFeedbackForm(
         formId: String
     ) async throws -> ParraFeedbackFormResponse {
-        return try await parra.networkManager.getFeedbackForm(with: formId)
+        return try await networkManager.getFeedbackForm(with: formId)
     }
 
     /// Fetches the feedback form with the provided ID from the Parra API. If a form is returned, it is up to the caller
@@ -162,26 +159,8 @@ public class ParraFeedback: ParraModule {
 
     private(set) static var name: String = "Feedback"
 
-    let parra: Parra
     let dataManager: ParraFeedbackDataManager
-
-    /// Whether the `ParraFeedback` module has data that has yet to be synced with the Parra API.
-    func hasDataToSync(since date: Date?) async -> Bool {
-        let answers = await dataManager.currentCompletedCardData()
-
-        return !answers.isEmpty
-    }
-
-    /// Triggers an immediate sync of any stored ParraFeedback data with the Parra API. Instead of using this method, you should prefer to call `Parra.triggerSync()`
-    /// on the Parra module, which can better handle enqueuing multiple sync requests. Sync calls will automatically happen when:
-    /// 1. Calling `Parra.logout()`
-    /// 2. The application transitions to or from the active state.
-    /// 3. There is a significant time change on the system clock.
-    /// 4. All cards for a `ParraCardView` are completed.
-    /// 5. A `ParraCardView` is deinitialized or removed from the view hierarchy.
-    func synchronizeData() async throws {
-        try await sendCardData()
-    }
+    let networkManager: ParraNetworkManager
 
     /// Checks whether the user has previously supplied input for the provided `ParraCardItem`.
     func hasCardBeenCompleted(
@@ -214,41 +193,6 @@ public class ParraFeedback: ParraModule {
 
     // MARK: - Private
 
-    // Need to bubble up sync failures to attempt backoff in sync manager if uploads are failing.
-    private func sendCardData() async throws {
-        let completedCardData = await dataManager.currentCompletedCardData()
-        let completedCards = Array(completedCardData.values)
-
-        let completedChunks = completedCards.chunked(
-            into: ParraFeedback.Constant.maxBulkAnswers
-        )
-
-        for chunk in completedChunks {
-            do {
-                try await uploadCompletedCards(chunk)
-                try await dataManager.clearCompletedCardData(
-                    completedCards: chunk
-                )
-                await dataManager.removeCardsForCompletedCards(
-                    completedCards: chunk
-                )
-            } catch {
-                logger.error(ParraError.generic(
-                    "Error uploading card data",
-                    error
-                ))
-
-                throw error
-            }
-        }
-    }
-
-    private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {
-        try await parra.networkManager.bulkAnswerQuestions(
-            cards: cards
-        )
-    }
-
     private func performAssetPrefetch(
         for cards: [ParraCardItem]
     ) {
@@ -271,7 +215,7 @@ public class ParraFeedback: ParraModule {
 
             logger.debug("\(assets.count) asset(s) available for prefetching")
 
-            await parra.networkManager.performBulkAssetCachingRequest(
+            await networkManager.performBulkAssetCachingRequest(
                 assets: assets
             )
 
@@ -370,7 +314,7 @@ public class ParraFeedback: ParraModule {
     }
 
     private func getCardsForPresentation() async throws -> [ParraCardItem] {
-        let cards = try await parra.networkManager.getCards(
+        let cards = try await networkManager.getCards(
             appArea: .none
         )
 

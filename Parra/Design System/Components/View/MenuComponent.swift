@@ -41,6 +41,11 @@ struct MenuComponent: MenuComponentType {
                         .padding(.vertical, 16)
                         .foregroundStyle(.primary.opacity(elementOpacity))
                         .frame(width: 24, height: 24)
+                        .padding(
+                            .trailing,
+                            style.menuOptionStyle.attributes.padding?
+                                .trailing ?? 0
+                        )
                 }
             }
             .menuStyle(style)
@@ -113,14 +118,6 @@ struct MenuComponent: MenuComponentType {
 
     private var elementOpacity: Double {
         return selectedOption != nil ? 1.0 : 0.6
-    }
-
-    private var currentStyle: ParraAttributedMenuStyle {
-        if selectedOption == nil {
-            style
-        } else {
-            style
-        }
     }
 
     @ViewBuilder private var menuLabel: some View {

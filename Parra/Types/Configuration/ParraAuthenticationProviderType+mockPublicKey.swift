@@ -1,5 +1,5 @@
 //
-//  ParraAuthenticationProviderType.swift
+//  ParraAuthenticationProviderType+mockPublicKey.swift
 //  ParraTests
 //
 //  Created by Mick MacCallum on 7/3/23.

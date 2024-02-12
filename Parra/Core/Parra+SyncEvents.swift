@@ -107,72 +107,68 @@ extension Parra {
     @MainActor
     @objc
     func applicationDidBecomeActive(notification: Notification) {
-        withInitializationCheck { [self] in
-            if let taskId = Parra.backgroundTaskId,
-               let app = notification.object as? UIApplication
-            {
-                app.endBackgroundTask(taskId)
-            }
-
-            logEvent(.appStateChanged, [
-                "state": UIApplication.State.active.loggerDescription
-            ])
-
-            triggerEventualSyncFromNotification(notification: notification)
+        if let taskId = Parra.backgroundTaskId,
+           let app = notification.object as? UIApplication
+        {
+            app.endBackgroundTask(taskId)
         }
+
+        logEvent(.appStateChanged, [
+            "state": UIApplication.State.active.loggerDescription
+        ])
+
+        triggerEventualSyncFromNotification(notification: notification)
     }
 
     @MainActor
     @objc
     func applicationWillResignActive(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.appStateChanged, [
-                "state": UIApplication.State.inactive.loggerDescription
-            ])
+        logEvent(.appStateChanged, [
+            "state": UIApplication.State.inactive.loggerDescription
+        ])
 
-            triggerSyncFromNotification(notification: notification)
+        triggerSyncFromNotification(notification: notification)
 
-            let endSession = { [self] in
-                guard let taskId = Parra.backgroundTaskId else {
-                    return
-                }
-
-                Parra.backgroundTaskId = nil
-
-                logger
-                    .debug("Background task: \(taskId) triggering session end")
-
-                await sessionManager.endSession()
-
-                UIApplication.shared.endBackgroundTask(taskId)
+        let endSession = { [self] in
+            guard let taskId = Parra.backgroundTaskId else {
+                return
             }
 
-            Parra.backgroundTaskId = UIApplication.shared.beginBackgroundTask(
-                withName: InternalConstants.backgroundTaskName
-            ) {
-                logger.debug("Background task expiration handler invoked")
+            Parra.backgroundTaskId = nil
 
-                Task { @MainActor in
-                    await endSession()
-                }
+            logger
+                .debug("Background task: \(taskId) triggering session end")
+
+            await sessionManager.endSession()
+
+            UIApplication.shared.endBackgroundTask(taskId)
+        }
+
+        Parra.backgroundTaskId = UIApplication.shared.beginBackgroundTask(
+            withName: InternalConstants.backgroundTaskName
+        ) {
+            logger.debug("Background task expiration handler invoked")
+
+            Task { @MainActor in
+                await endSession()
+            }
+        }
+
+        let startTime = Date()
+        Task(priority: .background) {
+            while Date().timeIntervalSince(startTime) < InternalConstants
+                .backgroundTaskDuration
+            {
+                try await Task.sleep(for: 0.1)
             }
 
-            let startTime = Date()
-            Task(priority: .background) {
-                while Date().timeIntervalSince(startTime) < InternalConstants
-                    .backgroundTaskDuration
-                {
-                    try await Task.sleep(for: 0.1)
-                }
+            logger
+                .debug(
+                    "Ending Parra background execution after \(InternalConstants.backgroundTaskDuration)s"
+                )
 
-                logger
-                    .debug(
-                        "Ending Parra background execution after \(InternalConstants.backgroundTaskDuration)s"
-                    )
-
-                Task { @MainActor in
-                    await endSession()
-                }
+            Task { @MainActor in
+                await endSession()
             }
         }
     }
@@ -180,105 +176,83 @@ extension Parra {
     @MainActor
     @objc
     func applicationDidEnterBackground(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.appStateChanged, [
-                "state": UIApplication.State.background.loggerDescription
-            ])
-        }
+        logEvent(.appStateChanged, [
+            "state": UIApplication.State.background.loggerDescription
+        ])
     }
 
     @MainActor
     @objc
     func significantTimeChange(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.significantTimeChange)
+        logEvent(.significantTimeChange)
 
-            await syncManager.enqueueSync(with: .immediate)
-        }
+        triggerSync(with: .immediate)
     }
 
     @MainActor
     @objc
     func didReceiveMemoryWarning(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.memoryWarning)
-        }
+        logEvent(.memoryWarning)
     }
 
     @MainActor
     @objc
     func didTakeScreenshot(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.screenshotTaken)
-        }
+        logEvent(.screenshotTaken)
     }
 
     @MainActor
     @objc
     func orientationDidChange(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.orientationChanged, [
-                "orientation": UIDevice.current.orientation.loggerDescription
-            ])
-        }
+        logEvent(.orientationChanged, [
+            "orientation": UIDevice.current.orientation.loggerDescription
+        ])
     }
 
     @MainActor
     @objc
     func batteryLevelChange(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.batteryLevelChanged, [
-                "battery_level": UIDevice.current.batteryLevel
-            ])
-        }
+        logEvent(.batteryLevelChanged, [
+            "battery_level": UIDevice.current.batteryLevel
+        ])
     }
 
     @MainActor
     @objc
     func batteryStateChange(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.batteryStateChanged, [
-                "battery_state": UIDevice.current.batteryState.loggerDescription
-            ])
-        }
+        logEvent(.batteryStateChanged, [
+            "battery_state": UIDevice.current.batteryState.loggerDescription
+        ])
     }
 
     @MainActor
     @objc
     func keyboardDidShow(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.keyboardDidShow, keyboardFrameParams(from: notification))
-        }
+        logEvent(.keyboardDidShow, keyboardFrameParams(from: notification))
     }
 
     @MainActor
     @objc
     func keyboardDidHide(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.keyboardDidHide, keyboardFrameParams(from: notification))
-        }
+        logEvent(.keyboardDidHide, keyboardFrameParams(from: notification))
     }
 
     @MainActor
     @objc
     func thermalStateDidChange(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.thermalStateChanged, [
-                "thermal_state": ProcessInfo.processInfo.thermalState
-                    .loggerDescription
-            ])
-        }
+        logEvent(.thermalStateChanged, [
+            "thermal_state": ProcessInfo.processInfo.thermalState
+                .loggerDescription
+        ])
     }
 
     @MainActor
     @objc
     func powerStateDidChange(notification: Notification) {
-        withInitializationCheck { [self] in
-            logEvent(.powerStateChanged, [
-                "power_state": ProcessInfo.processInfo.powerState
-                    .loggerDescription
-            ])
-        }
+        logEvent(.powerStateChanged, [
+            "power_state": ProcessInfo.processInfo.powerState
+                .loggerDescription
+        ])
     }
 
     @MainActor
@@ -286,10 +260,8 @@ extension Parra {
     func didRequestLowDiskSpace(
         notification: Notification
     ) {
-        withInitializationCheck { [self] in
-            let extra = URL.currentDiskUsage()?.sanitized.dictionary ?? [:]
-            logEvent(.diskSpaceLow, extra)
-        }
+        let extra = URL.currentDiskUsage()?.sanitized.dictionary ?? [:]
+        logEvent(.diskSpaceLow, extra)
     }
 
     @MainActor
@@ -297,9 +269,7 @@ extension Parra {
     private func triggerSyncFromNotification(
         notification: Notification
     ) {
-        withInitializationCheck { [self] in
-            await syncManager.enqueueSync(with: .immediate)
-        }
+        triggerSync(with: .immediate)
     }
 
     @MainActor
@@ -307,24 +277,7 @@ extension Parra {
     private func triggerEventualSyncFromNotification(
         notification: Notification
     ) {
-        withInitializationCheck { [self] in
-            await syncManager.enqueueSync(with: .eventual)
-        }
-    }
-
-    /// Prevent processing events if initialization hasn't occurred.
-    private func withInitializationCheck(
-        _ function: @escaping () async -> Void
-    ) {
-        Task {
-            guard await state.isInitialized() else {
-                return
-            }
-
-            Task { @MainActor in
-                await function()
-            }
-        }
+        triggerSync(with: .eventual)
     }
 
     private func addObserver(
@@ -366,5 +319,11 @@ extension Parra {
         }
 
         return params
+    }
+
+    private func triggerSync(with mode: ParraSyncMode) {
+        Task {
+            await syncManager.enqueueSync(with: mode)
+        }
     }
 }

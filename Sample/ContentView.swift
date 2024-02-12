@@ -26,64 +26,54 @@ struct ContentView: View {
             List {
                 Section("Feedback") {
                     NavigationLink {
-                        FeedbackFormSample()
+                        FeedbackFormByIdSample()
                     } label: {
                         SampleItemRow(
-                            title: "Forms",
-                            iconName: "list.clipboard.fill"
+                            title: "Forms by ID",
+                            iconName: "list.clipboard"
                         )
                     }
 
                     NavigationLink {
-                        FeedbackFormSample()
+                        FeedbackFormCustomLoadingSample()
+                    } label: {
+                        SampleItemRow(
+                            title: "Forms with custom loader",
+                            iconName: "list.clipboard"
+                        )
+                    }
+
+                    NavigationLink {
+                        FeedbackFormByIdSample()
                     } label: {
                         SampleItemRow(
                             title: "Cards",
-                            iconName: "greetingcard.fill"
+                            iconName: "greetingcard"
                         )
                     }
                 }
 
                 Section("Releases") {
                     NavigationLink {
-                        FeedbackFormSample()
+                        FeedbackFormByIdSample()
                     } label: {
-                        SampleItemRow(title: "Roadmap", iconName: "map.fill")
+                        SampleItemRow(title: "Roadmap", iconName: "map")
                     }
                 }
 
                 Section("Notifications") {
                     NavigationLink {
-                        FeedbackFormSample()
+                        FeedbackFormByIdSample()
                     } label: {
                         SampleItemRow(
                             title: "Roadmap",
-                            iconName: "app.badge.fill"
+                            iconName: "app.badge"
                         )
                     }
                 }
             }
             .navigationTitle("Parra")
             .listStyle(.automatic)
-//            Form {
-//                Section(header: Text("Notifications")) {
-            ////                    Picker("Notify Me About", selection: $notifyMeAbout) {
-            ////                        Text("Direct Messages").tag(NotifyMeAboutType.directMessages)
-            ////                        Text("Mentions").tag(NotifyMeAboutType.mentions)
-            ////                        Text("Anything").tag(NotifyMeAboutType.anything)
-            ////                    }
-            ////                    Toggle("Play notification sounds", isOn: $playNotificationSounds)
-            ////                    Toggle("Send read receipts", isOn: $sendReadReceipts)
-//                }
-//
-//            }
-//            VStack {
-//                Image(systemName: "globe")
-//                    .imageScale(.large)
-//                    .foregroundStyle(.tint)
-//                Text("Hello, world!")
-//            }
-//            .padding()
         } detail: {
             EmptyView()
         }

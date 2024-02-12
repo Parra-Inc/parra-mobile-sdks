@@ -80,7 +80,9 @@ class MockedParraTestCase: ParraBaseMock {
         // Reset the singleton. This is a bit of a problem because there are some
         // places internally within the SDK that may access it, but this will at least
         // prevent an uncontroller new instance from being lazily created on first access.
-        Parra.setSharedInstance(parra: parra)
+
+        // TODO: SwiftUI
+//        Parra.setSharedInstance(parra: parra)
 
         if await state.isInitialized() {
             await state.registerModule(module: parra)

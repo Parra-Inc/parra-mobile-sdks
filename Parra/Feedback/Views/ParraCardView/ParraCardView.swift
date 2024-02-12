@@ -171,7 +171,7 @@ public class ParraCardView: UIView {
     }
 
     deinit {
-        Parra.getExistingInstance().triggerSync(completion: nil)
+//        Parra.getExistingInstance().triggerSync(completion: nil)
     }
 
     // MARK: - Public
@@ -203,13 +203,13 @@ public class ParraCardView: UIView {
         super.willMove(toWindow: newWindow)
 
         if newWindow == nil {
-            Parra.getExistingInstance().notificationCenter.removeObserver(
-                self,
-                name: ParraFeedback.cardsDidChangeNotification,
-                object: nil
-            )
-
-            Parra.getExistingInstance().triggerSync(completion: nil)
+//            Parra.getExistingInstance().notificationCenter.removeObserver(
+//                self,
+//                name: ParraFeedback.cardsDidChangeNotification,
+//                object: nil
+//            )
+//
+//            Parra.getExistingInstance().triggerSync(completion: nil)
         } else {
             checkAndUpdateCards()
         }
@@ -218,14 +218,14 @@ public class ParraCardView: UIView {
     override public func didMoveToWindow() {
         super.didMoveToWindow()
 
-        Parra.getExistingInstance().notificationCenter.addObserver(
-            self,
-            selector: #selector(
-                didReceiveCardChangeNotification(notification:)
-            ),
-            name: ParraFeedback.cardsDidChangeNotification,
-            object: nil
-        )
+//        Parra.getExistingInstance().notificationCenter.addObserver(
+//            self,
+//            selector: #selector(
+//                didReceiveCardChangeNotification(notification:)
+//            ),
+//            name: ParraFeedback.cardsDidChangeNotification,
+//            object: nil
+//        )
     }
 
     // MARK: - Internal

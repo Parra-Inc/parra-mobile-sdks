@@ -8,19 +8,19 @@
 
 import Foundation
 
-protocol NetworkManagerType: ParraModuleStateAccessor {
+protocol NetworkManagerType {
     init(
-        state: ParraState,
+        appState: ParraAppState,
         dataManager: ParraDataManager,
-        urlSession: URLSessionType,
-        jsonEncoder: JSONEncoder,
-        jsonDecoder: JSONDecoder
+        configuration: ParraInstanceNetworkConfiguration
     )
 
     func updateAuthenticationProvider(
         _ provider: ParraAuthenticationProviderFunction?
     ) async
+
     func getAuthenticationProvider() async
         -> ParraAuthenticationProviderFunction?
+
     func refreshAuthentication() async throws -> ParraCredential
 }

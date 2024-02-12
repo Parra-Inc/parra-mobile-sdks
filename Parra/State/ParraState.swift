@@ -7,6 +7,32 @@
 //
 
 import Foundation
+import SwiftUI
+
+@MainActor
+class ParraAppState: ObservableObject {
+    // MARK: - Lifecycle
+
+    init(
+        tenantId: String,
+        applicationId: String
+    ) {
+        self.tenantId = tenantId
+        self.applicationId = applicationId
+        self.pushToken = nil
+    }
+
+    // MARK: - Public
+
+    public private(set) var tenantId: String
+    public private(set) var applicationId: String
+
+    /// A push notification token that is being temporarily cached. Caching
+    /// should only occur for short periods until the SDK is prepared to upload
+    /// it. Caching it longer term can lead to invalid tokens being held onto
+    /// for too long.
+    public private(set) var pushToken: Data?
+}
 
 actor ParraState {
     // MARK: - Lifecycle
@@ -15,18 +41,10 @@ actor ParraState {
 
     init(
         initialized: Bool = false,
-        pushToken: String? = nil,
-        registeredModules: [String: ParraModule] = [:]
+        pushToken: String? = nil
     ) {
         self.initialized = initialized
         self.pushToken = pushToken
-
-        for (key, value) in registeredModules {
-            self.registeredModules.setObject(
-                ModuleObjectWrapper(module: value),
-                forKey: key as NSString
-            )
-        }
     }
 
     // MARK: - Public
@@ -48,50 +66,6 @@ actor ParraState {
 
     func deinitialize() {
         initialized = false
-    }
-
-    // MARK: - Parra Modules
-
-    func getAllRegisteredModules() async -> [ParraModule] {
-        let modules = registeredModules.dictionaryRepresentation().values
-            .map { wrapper in
-                return wrapper.module
-            }
-
-        return modules
-    }
-
-    /// Registers the provided ParraModule with the Parra module. This exists for
-    /// usage by other Parra modules only. It is used to allow the Parra module
-    /// to identify which other Parra modules have been installed.
-    func registerModule(module: ParraModule) {
-        let key = type(of: module).name as NSString
-
-        registeredModules.setObject(
-            ModuleObjectWrapper(module: module),
-            forKey: key
-        )
-    }
-
-    func unregisterModule(module: ParraModule) async {
-        let key = type(of: module).name
-
-        unregisterModule(named: key)
-    }
-
-    nonisolated func unregisterModule(module: ParraModule) {
-        let key = type(of: module).name
-
-        Task {
-            await unregisterModule(named: key)
-        }
-    }
-
-    /// Checks whether the provided module has already been registered with Parra
-    func hasRegisteredModule(module: ParraModule) -> Bool {
-        let key = type(of: module).name as NSString
-
-        return registeredModules.object(forKey: key) != nil
     }
 
     // MARK: - Push
@@ -120,34 +94,8 @@ actor ParraState {
 
     // MARK: - Private
 
-    private class ModuleObjectWrapper: NSObject {
-        // MARK: - Lifecycle
-
-        init(module: ParraModule) {
-            self.module = module
-        }
-
-        // MARK: - Fileprivate
-
-        fileprivate let module: ParraModule
-    }
-
     /// Wether or not the SDK has been initialized by calling `Parra.initialize()`
     private var initialized = false
 
-    /// A push notification token that is being temporarily cached. Caching should only occur
-    /// for short periods until the SDK is prepared to upload it. Caching it longer term can
-    /// lead to invalid tokens being held onto for too long.
     private var pushToken: String?
-
-    private let registeredModules = NSMapTable<NSString, ModuleObjectWrapper>(
-        keyOptions: .copyIn,
-        valueOptions: .strongMemory
-    )
-
-    private func unregisterModule(named name: String) {
-        registeredModules.removeObject(
-            forKey: name as NSString
-        )
-    }
 }

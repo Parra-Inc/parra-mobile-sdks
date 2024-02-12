@@ -116,6 +116,7 @@ struct FeedbackFormWidget: Container {
     var body: some View {
         withEnvironmentObjects {
             VStack(alignment: .leading) {
+                // TODO: ScrollView
                 VStack(alignment: .leading, spacing: 20) {
                     header
 
@@ -129,6 +130,7 @@ struct FeedbackFormWidget: Container {
                 footer
             }
             .background(themeObserver.theme.palette.primaryBackground)
+            .padding(.top, 16)
             .safeAreaPadding()
         }
     }
@@ -151,9 +153,6 @@ struct FeedbackFormWidget: Container {
         labelAttributeFactory: { _, _, defaultAttributes in
             return defaultAttributes ?? .init()
         }
-//        buttonAttributeFactory: { _, _, defaultAttributes in
-//            return defaultAttributes ?? .init()
-//        }
     )
 
     let local = FeedbackFormWidgetComponentFactory(

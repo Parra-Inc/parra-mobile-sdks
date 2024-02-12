@@ -13,24 +13,17 @@ import UIKit
 
 private let logger = Logger(bypassEventCreation: true, category: "Sync Manager")
 
-enum ParraSyncMode: String {
-    case immediate
-    case eventual
-}
-
 /// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
-actor ParraSyncManager {
+class ParraSyncManager {
     // MARK: - Lifecycle
 
     init(
-        state: ParraState,
         syncState: ParraSyncState,
         networkManager: ParraNetworkManager,
         sessionManager: ParraSessionManager,
         notificationCenter: NotificationCenterType,
         syncDelay: TimeInterval = 30.0
     ) {
-        self.state = state
         self.syncState = syncState
         self.networkManager = networkManager
         self.sessionManager = sessionManager
@@ -40,12 +33,13 @@ actor ParraSyncManager {
 
     // MARK: - Internal
 
+    weak var delegate: SyncManagerDelegate?
+
     /// Whether or not new attempts to sync occured while a sync was in progress. Many sync events could be received while a sync
     /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
     /// is completed.
     private(set) var enqueuedSyncMode: ParraSyncMode?
 
-    let state: ParraState
     let syncState: ParraSyncState
     nonisolated let syncDelay: TimeInterval
 
@@ -201,23 +195,10 @@ actor ParraSyncManager {
         defer {
             lastSyncCompleted = .now
 
-            Task {
-                // Ensure that the notification that the current sync has ended is sent
-                // before the next sync begins.
-                await notificationCenter.postAsync(
-                    name: Parra.syncDidEndNotification,
-                    object: self,
-                    userInfo: [
-                        Parra.Constants.syncTokenKey: syncToken
-                    ]
-                )
-
-                if shouldRepeatSync {
-                    // Must be kept inside a Task block to avoid the current sync's
-                    // completion awaiting the next sync.
-                    await sync(isRepeat: true)
-                }
-            }
+            completeSync(
+                token: syncToken,
+                shouldRepeat: shouldRepeatSync
+            )
         }
 
         guard await hasDataToSync(since: lastSyncCompleted) else {
@@ -275,12 +256,27 @@ actor ParraSyncManager {
     private func performSync(
         with token: String
     ) async throws {
+        guard let targets = delegate?.getSyncTargets() else {
+            logger.debug("sync delegate unset while performing sync")
+
+            return
+        }
+
+        guard !targets.isEmpty else {
+            logger
+                .debug(
+                    "sync delegate produced no sync targets while performing sync"
+                )
+
+            return
+        }
+
         var syncError: Error?
 
         // Rethrow after receiving an error for throttling, but allow each module to attempt a sync once
-        for module in await state.getAllRegisteredModules() {
+        for target in targets {
             do {
-                try await module.synchronizeData()
+                try await target.synchronizeData()
             } catch {
                 syncError = error
             }
@@ -291,12 +287,51 @@ actor ParraSyncManager {
         }
     }
 
+    private func completeSync(
+        token: String,
+        shouldRepeat: Bool
+    ) {
+        lastSyncCompleted = .now
+
+        Task {
+            // Ensure that the notification that the current sync has ended is sent
+            // before the next sync begins.
+            await notificationCenter.postAsync(
+                name: Parra.syncDidEndNotification,
+                object: self,
+                userInfo: [
+                    Parra.Constants.syncTokenKey: token
+                ]
+            )
+
+            if shouldRepeat {
+                // Must be kept inside a Task block to avoid the current sync's
+                // completion awaiting the next sync.
+                await sync(isRepeat: true)
+            }
+        }
+    }
+
     private func hasDataToSync(since date: Date?) async -> Bool {
-        let allRegisteredModules = await state.getAllRegisteredModules()
+        guard let targets = delegate?.getSyncTargets() else {
+            logger.debug("sync delegate unset while checking for sync data")
+
+            return false
+        }
+
+        guard !targets.isEmpty else {
+            logger
+                .debug(
+                    "sync delegate produced no sync targets while checking for sync data"
+                )
+
+            return false
+        }
+
         var shouldSync = false
 
-        for module in allRegisteredModules {
-            if await module.hasDataToSync(since: date) {
+        for target in targets {
+            if await target.hasDataToSync(since: date) {
                 shouldSync = true
                 break
             }

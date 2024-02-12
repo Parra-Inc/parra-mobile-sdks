@@ -234,9 +234,11 @@ extension ParraCardView {
         delegate?.parraCardView(self, didDisplay: cardItem)
 
         if let cardItem {
-            Parra.logEvent(.view(element: "question"), [
-                "question_id": cardItem.id
-            ])
+            // TODO: SwiftUI hook into shared instance
+
+//            Parra.logEvent(.view(element: "question"), [
+//                "question_id": cardItem.id
+//            ])
         }
     }
 

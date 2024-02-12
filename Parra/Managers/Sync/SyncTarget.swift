@@ -1,5 +1,5 @@
 //
-//  Syncable.swift
+//  SyncTarget.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 12/28/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Syncable {
+protocol SyncTarget {
     func hasDataToSync(since date: Date?) async -> Bool
     func synchronizeData() async throws
 }

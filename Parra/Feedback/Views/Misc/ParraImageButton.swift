@@ -77,26 +77,26 @@ class ParraImageButton: UIControl, SelectableButton,
             ]
         )
 
-        Task {
-            let isCached = await Parra.getExistingInstance().networkManager
-                .isAssetCached(
-                    asset: asset
-                )
-
-            if !isCached {
-                self.activityIndicator.startAnimating()
-            }
-
-            let image = try? await Parra.getExistingInstance().networkManager
-                .fetchAsset(
-                    asset: asset
-                )
-
-            Task { @MainActor in
-                self.activityIndicator.stopAnimating()
-                buttonImageView.image = image
-            }
-        }
+//        Task {
+//            let isCached = await Parra.getExistingInstance().networkManager
+//                .isAssetCached(
+//                    asset: asset
+//                )
+//
+//            if !isCached {
+//                self.activityIndicator.startAnimating()
+//            }
+//
+//            let image = try? await Parra.getExistingInstance().networkManager
+//                .fetchAsset(
+//                    asset: asset
+//                )
+//
+//            Task { @MainActor in
+//                self.activityIndicator.stopAnimating()
+//                buttonImageView.image = image
+//            }
+//        }
 
         applyConfig(config)
     }

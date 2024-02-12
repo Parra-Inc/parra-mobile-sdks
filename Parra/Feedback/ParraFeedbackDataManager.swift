@@ -11,13 +11,13 @@ class ParraFeedbackDataManager {
     // MARK: - Lifecycle
 
     init(
-        parra: Parra,
+        dataManager: ParraDataManager,
+        syncManager: ParraSyncManager,
         jsonEncoder: JSONEncoder,
         jsonDecoder: JSONDecoder,
-        fileManager: FileManager
+        fileManager: FileManager,
+        notificationCenter: NotificationCenterType
     ) {
-        self.parra = parra
-
         let completedCardDataFolder = ParraDataManager.Directory
             .storageDirectoryName
         let completedCardDataFileName = ParraFeedbackDataManager.Key
@@ -25,7 +25,7 @@ class ParraFeedbackDataManager {
 
         let completedCardDataStorageModule = ParraStorageModule<CompletedCard>(
             dataStorageMedium: .fileSystem(
-                baseUrl: parra.dataManager.baseDirectory,
+                baseUrl: dataManager.baseDirectory,
                 folder: completedCardDataFolder,
                 fileName: completedCardDataFileName,
                 storeItemsSeparately: false,
@@ -48,6 +48,10 @@ class ParraFeedbackDataManager {
         self.cardStorage = CardStorage(
             storageModule: cardStorageModule
         )
+
+        self.dataManager = dataManager
+        self.syncManager = syncManager
+        self.notificationCenter = notificationCenter
     }
 
     // MARK: - Internal
@@ -90,7 +94,7 @@ class ParraFeedbackDataManager {
                 completedCards: completedCards
             )
 
-            await parra.triggerSync()
+            await syncManager.enqueueSync(with: .eventual)
         }
     }
 
@@ -130,7 +134,7 @@ class ParraFeedbackDataManager {
         Task {
             await cardStorage.setCards(cardItems: cards)
 
-            await parra.notificationCenter.postAsync(
+            await notificationCenter.postAsync(
                 name: ParraFeedback.cardsDidChangeNotification,
                 object: nil,
                 userInfo: nil
@@ -142,5 +146,7 @@ class ParraFeedbackDataManager {
 
     private let completedCardDataStorage: CompletedCardDataStorage
     private let cardStorage: CardStorage
-    private let parra: Parra
+    private let dataManager: ParraDataManager
+    private let syncManager: ParraSyncManager
+    private let notificationCenter: NotificationCenterType
 }

@@ -8,15 +8,13 @@
 
 import Foundation
 
-// event vs data event. event just has a name. data event has name and extra
-
 public extension Parra {
     // MARK: - Analytics Events
 
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
     /// campaigns configured in the Parra dashboard.
     @inlinable
-    static func logEvent(
+    func logEvent(
         _ event: ParraStandardEvent,
         _ extra: [String: Any]? = nil,
         _ fileId: String = #fileID,
@@ -28,7 +26,7 @@ public extension Parra {
             thread: .current
         )
 
-        getExistingInstance().sessionManager.writeEvent(
+        sessionManager.writeEvent(
             wrappedEvent: .dataEvent(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
@@ -43,7 +41,7 @@ public extension Parra {
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
     /// campaigns configured in the Parra dashboard.
     @inlinable
-    static func logEvent(
+    func logEvent(
         _ event: ParraDataEvent,
         _ extra: [String: Any]? = nil,
         _ fileId: String = #fileID,
@@ -55,7 +53,7 @@ public extension Parra {
             thread: .current
         )
 
-        getExistingInstance().sessionManager.writeEvent(
+        sessionManager.writeEvent(
             wrappedEvent: .dataEvent(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
@@ -70,7 +68,7 @@ public extension Parra {
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
     /// campaigns configured in the Parra dashboard.
     @inlinable
-    static func logEvent(
+    func logEvent(
         _ event: ParraEvent,
         _ extra: [String: Any]? = nil,
         _ fileId: String = #fileID,
@@ -82,7 +80,7 @@ public extension Parra {
             thread: .current
         )
 
-        getExistingInstance().sessionManager.writeEvent(
+        sessionManager.writeEvent(
             wrappedEvent: .event(event: event, extra: extra),
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
@@ -97,7 +95,7 @@ public extension Parra {
     /// Logs a new event to the user's current session in Parra Analytics. Events can be used to activate
     /// campaigns configured in the Parra dashboard.
     @inlinable
-    static func logEvent(
+    func logEvent(
         named eventName: String,
         _ extra: [String: Any]? = nil,
         _ fileId: String = #fileID,
@@ -124,7 +122,7 @@ public extension Parra {
             )
         }
 
-        getExistingInstance().sessionManager.writeEvent(
+        sessionManager.writeEvent(
             wrappedEvent: wrappedEvent,
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
@@ -140,7 +138,7 @@ public extension Parra {
 
     /// Attaches a property to the current user, as defined by the Parra authentication handler. User properties
     /// can be used to activate campaigns configured in the Parra dashboard.
-    static func setUserProperty(
+    func setUserProperty(
         _ value: Any,
         forKey key: some CustomStringConvertible
     ) {
@@ -149,7 +147,7 @@ public extension Parra {
 
     /// Attaches a property to the current user, as defined by the Parra authentication handler. User properties
     /// can be used to activate campaigns configured in the Parra dashboard.
-    static func setUserProperty<Key>(
+    func setUserProperty<Key>(
         _ value: Any,
         forKey key: Key
     ) where Key: RawRepresentable, Key.RawValue == String {
@@ -158,10 +156,10 @@ public extension Parra {
 
     /// Attaches a property to the current user, as defined by the Parra authentication handler. User properties
     /// can be used to activate campaigns configured in the Parra dashboard.
-    static func setUserProperty(
+    func setUserProperty(
         _ value: Any,
         forKey key: String
     ) {
-        getExistingInstance().sessionManager.setUserProperty(value, forKey: key)
+        sessionManager.setUserProperty(value, forKey: key)
     }
 }

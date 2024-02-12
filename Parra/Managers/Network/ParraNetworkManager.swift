@@ -12,26 +12,22 @@ private let logger = Logger(category: "Network Manager")
 
 typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
-actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
+actor ParraNetworkManager: NetworkManagerType {
     // MARK: - Lifecycle
 
     init(
-        state: ParraState,
+        appState: ParraAppState,
         dataManager: ParraDataManager,
-        urlSession: URLSessionType,
-        jsonEncoder: JSONEncoder,
-        jsonDecoder: JSONDecoder
+        configuration: ParraInstanceNetworkConfiguration
     ) {
-        self.state = state
+        self.appState = appState
         self.dataManager = dataManager
-        self.urlSession = urlSession
-        self.jsonEncoder = jsonEncoder
-        self.jsonDecoder = jsonDecoder
+        self.configuration = configuration
     }
 
     // MARK: - Internal
 
-    let state: ParraState
+    let appState: ParraAppState
 
     func getAuthenticationProvider() async
         -> ParraAuthenticationProviderFunction?
@@ -112,9 +108,7 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
             )
 
         do {
-            guard let applicationId = await state.applicationId else {
-                throw ParraError.notInitialized
-            }
+            let applicationId = await appState.applicationId
 
             let url = Parra.InternalConstants.parraApiRoot
                 .appendingPathComponent(route)
@@ -144,7 +138,7 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
 
             request.httpMethod = method.rawValue
             if method.allowsBody {
-                request.httpBody = try jsonEncoder.encode(body)
+                request.httpBody = try configuration.jsonEncoder.encode(body)
             }
             addHeaders(to: &request, endpoint: endpoint, for: applicationId)
 
@@ -160,7 +154,10 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
             case .success(let data):
                 logger.trace("Parra client received success response")
 
-                let response = try jsonDecoder.decode(T.self, from: data)
+                let response = try configuration.jsonDecoder.decode(
+                    T.self,
+                    from: data
+                )
 
                 return AuthenticatedRequestResult(
                     result: .success(response),
@@ -189,7 +186,8 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
         var request = URLRequest(url: url)
 
         request.httpMethod = endpoint.method.rawValue
-        request.httpBody = try jsonEncoder.encode(["user_id": userId])
+        request.httpBody = try configuration.jsonEncoder
+            .encode(["user_id": userId])
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
 
         guard let authToken = ("api_key:" + apiKeyId).data(using: .utf8)?
@@ -205,7 +203,7 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
 
         switch response.statusCode {
         case 200:
-            let credential = try jsonDecoder.decode(
+            let credential = try configuration.jsonDecoder.decode(
                 ParraCredential.self,
                 from: data
             )
@@ -237,10 +235,11 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
 
         let request = request(for: asset)
 
-        let (data, response) = try await urlSession.dataForRequest(
-            for: request,
-            delegate: nil
-        )
+        let (data, response) = try await configuration.urlSession
+            .dataForRequest(
+                for: request,
+                delegate: nil
+            )
         let httpResponse = response as! HTTPURLResponse
 
         defer {
@@ -252,10 +251,11 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
                 storagePolicy: .allowed
             )
 
-            urlSession.configuration.urlCache?.storeCachedResponse(
-                cacheResponse,
-                for: request
-            )
+            configuration.urlSession.configuration.urlCache?
+                .storeCachedResponse(
+                    cacheResponse,
+                    for: request
+                )
         }
 
         if httpResponse.statusCode < 300 {
@@ -272,7 +272,7 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
     func isAssetCached(asset: Asset) -> Bool {
         logger.trace("Checking if asset is cached: \(asset.id)")
 
-        guard let cache = urlSession.configuration.urlCache else {
+        guard let cache = configuration.urlSession.configuration.urlCache else {
             logger.trace("Cache is missing")
 
             return false
@@ -302,9 +302,7 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
 
     private var authenticationProvider: ParraAuthenticationProviderFunction?
 
-    private let urlSession: URLSessionType
-    private let jsonEncoder: JSONEncoder
-    private let jsonDecoder: JSONDecoder
+    private let configuration: ParraInstanceNetworkConfiguration
 
     private lazy var urlSessionDelegateProxy: ParraNetworkManagerUrlSessionDelegateProxy =
         .init(
@@ -417,10 +415,11 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
         }
         #endif
 
-        let (data, response) = try await urlSession.dataForRequest(
-            for: request,
-            delegate: urlSessionDelegateProxy
-        )
+        let (data, response) = try await configuration.urlSession
+            .dataForRequest(
+                for: request,
+                delegate: urlSessionDelegateProxy
+            )
 
         guard let httpResponse = response as? HTTPURLResponse else {
             // It is documented that for data tasks, response is always actually
@@ -431,12 +430,14 @@ actor ParraNetworkManager: NetworkManagerType, ParraModuleStateAccessor {
                 )
         }
 
-        Parra.logEvent(
-            .httpRequest(
-                request: request,
-                response: httpResponse
-            )
-        )
+        // TODO: SwiftUI hook into shared instance
+
+//        Parra.logEvent(
+//            .httpRequest(
+//                request: request,
+//                response: httpResponse
+//            )
+//        )
 
         return (data, httpResponse)
     }

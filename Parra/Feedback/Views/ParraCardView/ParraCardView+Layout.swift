@@ -202,7 +202,8 @@ extension ParraCardView {
 
     @objc
     private func openParraLink() {
-        Parra.logEvent(.tap(element: "powered-by-parra"))
+        // TODO: SwiftUI hook into shared instance
+//        Parra.logEvent(.tap(element: "powered-by-parra"))
 
         UIApplication.shared.open(Parra.Constants.parraWebRoot)
     }

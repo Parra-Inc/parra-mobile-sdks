@@ -107,41 +107,6 @@ public extension ParraFeedback {
         )
     }
 
-    // MARK: - Feedback Forms
-
-    func presentFeedbackForm(
-        with form: ParraFeedbackFormResponse,
-        from fromViewController: UIViewController? = nil,
-        localFactory: FeedbackFormWidgetComponentFactory? = nil
-    ) {
-        let parra = Parra.getExistingInstance()
-        let theme = parra.configuration.theme
-        let globalComponentAttributes = parra.configuration
-            .globalComponentAttributes
-        let notificationCenter = parra.notificationCenter
-
-        let formViewController = ParraFeedbackFormViewController(
-            form: form,
-            theme: theme,
-            globalComponentAttributes: globalComponentAttributes,
-            notificationCenter: notificationCenter,
-            localFactory: localFactory
-        )
-
-        if let sheetPresentationController = formViewController
-            .sheetPresentationController
-        {
-            sheetPresentationController.detents = [.large()]
-            sheetPresentationController.prefersGrabberVisible = true
-        }
-
-        presentModal(
-            modal: formViewController,
-            fromViewController: fromViewController,
-            transitionStyle: .slide
-        )
-    }
-
     // MARK: - Helpers
 
     private func presentModal(

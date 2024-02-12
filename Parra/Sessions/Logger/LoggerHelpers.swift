@@ -33,7 +33,7 @@ enum LoggerHelpers {
     static func isFileIdInternal(fileId: String) -> Bool {
         let (module, _) = splitFileId(fileId: fileId)
 
-        return module == Parra.name
+        return module == Parra.moduleName
     }
 
     /// Safely splits a file id (#fileID) into a module name, a file name and a file extension.

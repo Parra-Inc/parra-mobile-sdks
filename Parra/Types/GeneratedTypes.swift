@@ -289,7 +289,7 @@ public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
 {
     // MARK: - Lifecycle
 
-    public init(
+    init(
         id: String,
         createdAt: String,
         updatedAt: String,
@@ -323,7 +323,7 @@ public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
 public struct FeedbackFormData: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
-    public init(
+    init(
         title: String,
         description: String?,
         fields: [FeedbackFormField]
