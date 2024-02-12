@@ -44,10 +44,6 @@ extension Parra {
                 #selector(didTakeScreenshot)
             ),
             (
-                UIDevice.orientationDidChangeNotification,
-                #selector(orientationDidChange)
-            ),
-            (
                 UIDevice.batteryLevelDidChangeNotification,
                 #selector(batteryLevelChange)
             ),
@@ -57,11 +53,6 @@ extension Parra {
             ),
             (UIWindow.keyboardDidShowNotification, #selector(keyboardDidShow)),
             (UIWindow.keyboardDidHideNotification, #selector(keyboardDidHide)),
-            // TODO: Need to access `ProcessInfo.thermalState` BEFORE registering this notification to receive updates.
-            (
-                ProcessInfo.thermalStateDidChangeNotification,
-                #selector(thermalStateDidChange)
-            ),
             (.NSProcessInfoPowerStateDidChange, #selector(powerStateDidChange)),
             (
                 .NSBundleResourceRequestLowDiskSpace,
@@ -86,8 +77,6 @@ extension Parra {
             addObserver(for: notificationName, selector: selector)
         }
 
-        // TODO: Not receiving these. Maybe just a simulator issue?
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         UIDevice.current.isBatteryMonitoringEnabled = true
     }
 
@@ -100,7 +89,6 @@ extension Parra {
             removeObserver(for: notificationName)
         }
 
-        UIDevice.current.endGeneratingDeviceOrientationNotifications()
         UIDevice.current.isBatteryMonitoringEnabled = false
     }
 
@@ -203,14 +191,6 @@ extension Parra {
 
     @MainActor
     @objc
-    func orientationDidChange(notification: Notification) {
-        logEvent(.orientationChanged, [
-            "orientation": UIDevice.current.orientation.loggerDescription
-        ])
-    }
-
-    @MainActor
-    @objc
     func batteryLevelChange(notification: Notification) {
         logEvent(.batteryLevelChanged, [
             "battery_level": UIDevice.current.batteryLevel
@@ -235,15 +215,6 @@ extension Parra {
     @objc
     func keyboardDidHide(notification: Notification) {
         logEvent(.keyboardDidHide, keyboardFrameParams(from: notification))
-    }
-
-    @MainActor
-    @objc
-    func thermalStateDidChange(notification: Notification) {
-        logEvent(.thermalStateChanged, [
-            "thermal_state": ProcessInfo.processInfo.thermalState
-                .loggerDescription
-        ])
     }
 
     @MainActor
