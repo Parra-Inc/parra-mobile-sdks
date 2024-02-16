@@ -16,9 +16,7 @@ class MockedParraTestCase: ParraBaseMock {
     override func setUp() async throws {
         try await super.setUp()
 
-        mockParra = await createMockParra(
-            state: .initialized
-        )
+        mockParra = await createMockParra()
     }
 
     override func tearDown() async throws {
@@ -32,19 +30,17 @@ class MockedParraTestCase: ParraBaseMock {
     }
 
     func createMockParra(
-        state: ParraState = ParraState(),
         tenantId: String = UUID().uuidString,
         applicationId: String = UUID().uuidString
     ) async -> MockParra {
-        await state.setTenantId(tenantId)
-        await state.setApplicationId(applicationId)
+//        await state.setTenantId(tenantId)
+//        await state.setApplicationId(applicationId)
 
         let configuration = ParraConfiguration(options: [])
 
         let mockNetworkManager = await createMockNetworkManager(
-            state: state,
-            tenantId: tenantId,
-            applicationId: applicationId
+            appState: .init(tenantId: tenantId, applicationId: applicationId),
+            authenticationProvider: nil // TODO: TMP
         )
 
         let notificationCenter = ParraNotificationCenter()
@@ -57,7 +53,6 @@ class MockedParraTestCase: ParraBaseMock {
         )
 
         let syncManager = ParraSyncManager(
-            state: state,
             syncState: syncState,
             networkManager: mockNetworkManager.networkManager,
             sessionManager: sessionManager,
@@ -65,16 +60,28 @@ class MockedParraTestCase: ParraBaseMock {
             syncDelay: 0.25
         )
 
+        let feedback = ParraFeedback(
+            dataManager: ParraFeedbackDataManager(
+                dataManager: mockNetworkManager.dataManager,
+                syncManager: syncManager,
+                jsonEncoder: .parraEncoder,
+                jsonDecoder: .parraDecoder,
+                fileManager: .default,
+                notificationCenter: notificationCenter
+            ),
+            networkManager: mockNetworkManager.networkManager
+        )
+
         Logger.loggerBackend = sessionManager
 
         let parra = Parra(
-            state: state,
             configuration: configuration,
             dataManager: mockNetworkManager.dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
             networkManager: mockNetworkManager.networkManager,
-            notificationCenter: notificationCenter
+            notificationCenter: notificationCenter,
+            feedback: feedback
         )
 
         // Reset the singleton. This is a bit of a problem because there are some
@@ -84,10 +91,10 @@ class MockedParraTestCase: ParraBaseMock {
         // TODO: SwiftUI
 //        Parra.setSharedInstance(parra: parra)
 
-        if await state.isInitialized() {
-            await state.registerModule(module: parra)
-            await sessionManager.initializeSessions()
-        }
+//        if await state.isInitialized() {
+//            await state.registerModule(module: parra)
+//            await sessionManager.initializeSessions()
+//        }
 
         return MockParra(
             parra: parra,
@@ -144,40 +151,40 @@ class MockedParraTestCase: ParraBaseMock {
     }
 
     func createMockNetworkManager(
-        state: ParraState = .initialized,
-        tenantId: String = UUID().uuidString,
-        applicationId: String = UUID().uuidString,
+        appState: ParraAppState = ParraAppState(
+            tenantId: UUID().uuidString,
+            applicationId: UUID().uuidString
+        ),
         authenticationProvider: ParraAuthenticationProviderFunction? = nil
     ) async -> MockParraNetworkManager {
         let dataManager = createMockDataManager()
 
         let urlSession = MockURLSession(testCase: self)
-
-        await state.setTenantId(tenantId)
-        await state.setApplicationId(applicationId)
-
-        let networkManager = ParraNetworkManager(
-            state: state,
-            dataManager: dataManager,
+        let configuration = ParraInstanceNetworkConfiguration(
             urlSession: urlSession,
             jsonEncoder: .parraEncoder,
             jsonDecoder: .parraDecoder
         )
 
-        if await state.isInitialized() {
-            await networkManager.updateAuthenticationProvider(
-                authenticationProvider ?? {
-                    return UUID().uuidString
-                }
-            )
-        }
+        let networkManager = ParraNetworkManager(
+            appState: appState,
+            dataManager: dataManager,
+            configuration: configuration
+        )
+
+//        if await state.isInitialized() {
+//            await networkManager.updateAuthenticationProvider(
+//                authenticationProvider ?? {
+//                    return UUID().uuidString
+//                }
+//            )
+//        }
 
         return MockParraNetworkManager(
             networkManager: networkManager,
             dataManager: dataManager,
             urlSession: urlSession,
-            tenantId: tenantId,
-            applicationId: applicationId
+            appState: appState
         )
     }
 }

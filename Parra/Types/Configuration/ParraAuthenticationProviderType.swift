@@ -54,7 +54,7 @@ public enum ParraAuthenticationProviderType {
         onAuthenticationRefresh: @escaping (_ success: Bool) async -> Void
     ) -> ParraAuthenticationProviderFunction {
         switch self {
-        case .default(let tenantId, let applicationId, let authProvider):
+        case .default(_, _, let authProvider):
             return { () async throws -> String in
                 do {
                     let result = try await authProvider()

@@ -7,7 +7,7 @@
 
 import Foundation
 
-actor ParraStorageModule<DataType: Codable> {
+class ParraStorageModule<DataType: Codable> {
     // MARK: - Lifecycle
 
     init(

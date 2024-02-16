@@ -60,8 +60,16 @@ extension ParraSessionManager {
     ) -> String {
         var components = [String]()
 
+        if style.contains(.file) {
+            let (_, fileName, _) = LoggerHelpers.splitFileId(
+                fileId: callSite.fileId
+            )
+
+            components.append(fileName)
+        }
+
         if style.contains(.function) {
-            components.append(callSite.function)
+            components.append(callSite.simpleFunctionName)
         }
 
         if style.contains(.line) {

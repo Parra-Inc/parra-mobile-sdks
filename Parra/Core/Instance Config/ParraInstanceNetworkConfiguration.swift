@@ -9,7 +9,7 @@
 import Foundation
 
 struct ParraInstanceNetworkConfiguration {
-    let urlSession: URLSession
+    let urlSession: URLSessionType
     let jsonEncoder: JSONEncoder
     let jsonDecoder: JSONDecoder
 }

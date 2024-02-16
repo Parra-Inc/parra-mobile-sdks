@@ -13,6 +13,5 @@ struct MockParraNetworkManager {
     let networkManager: ParraNetworkManager
     let dataManager: ParraDataManager
     let urlSession: MockURLSession
-    let tenantId: String
-    let applicationId: String
+    let appState: ParraAppState
 }

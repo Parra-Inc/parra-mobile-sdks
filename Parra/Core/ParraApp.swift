@@ -74,14 +74,30 @@ import SwiftUI
 ///
 @MainActor
 public struct ParraApp<Content, DelegateType>: Scene
-    where Content: Scene, DelegateType: ParraAppDelegate
+    where Content: View, DelegateType: ParraAppDelegate
 {
     // MARK: - Lifecycle
 
+    /// <#Description#>
+    /// - Parameters:
+    ///   - authProvider: <#authProvider description#>
+    ///   - options: <#options description#>
+    ///   - appDelegateType: <#appDelegateType description#>
+    ///   - sceneContent: <#sceneContent description#>
+    ///   - launchScreenType: The type of launch screen that should be displayed
+    ///   while Parra is being initialized. This should match up exactly with
+    ///   the launch screen that you have configured in your project settings to
+    ///   avoid any sharp transitions. If nothing is provided, we will attempt
+    ///   to display the right launch screen automatically. This is done by
+    ///   checking for a `UILaunchScreen` key in your Info.plist file. If an
+    ///   entry is found, its child values will be used to layout the launch
+    ///   screen. Next we look for the `UILaunchStoryboardName` key. If this is
+    ///   not found, a blank white screen will be rendered.
     public init(
         authProvider: ParraAuthenticationProviderType,
         options: [ParraConfigurationOption] = [],
         appDelegateType: DelegateType.Type = ParraAppDelegate.self,
+        launchScreenConfig: ParraLaunchScreen.Config? = nil,
         sceneContent: @MainActor @escaping () -> Content
     ) {
         self.content = sceneContent
@@ -99,26 +115,135 @@ public struct ParraApp<Content, DelegateType>: Scene
         _parraAppState = StateObject(wrappedValue: appState)
 
         self.parra = parra
-
-        parra.initialize(
-            with: authProvider
+        self.authProvider = authProvider
+        self.launchScreenConfig = ParraApp.configureLaunchScreen(
+            with: launchScreenConfig
         )
     }
 
     // MARK: - Public
 
     public var body: some Scene {
-        content()
-            .environment(parra)
+        WindowGroup {
+            ZStack {
+                // Important: Seperate conditions determine when the launch
+                // screen and primary app content should be displayed. This
+                // allows the the launch screen to be removed without needing to
+                // trigger a re-render on the primary app content.
+
+                // During this phase, initialization has finished so the primary
+                // content view can be created, but the launch screen can not be
+                // destroyed until its animation off screen has completed.
+                if launchScreenState.state == LaunchScreenStateManager.State
+                    .transitioning
+                    || launchScreenState.state == LaunchScreenStateManager.State
+                    .complete
+                {
+                    renderPrimaryContent()
+                }
+
+                // When the app first launches, default to displaying the launch
+                // screen without rendering the main app content. This will
+                // prevent any logic within the app that may depend on Parra
+                // being initialized from running until we're ready.
+                if launchScreenState.state == LaunchScreenStateManager.State
+                    .initial
+                    || launchScreenState.state == LaunchScreenStateManager.State
+                    .transitioning
+                {
+                    renderLaunchScreen()
+                        .task(id: "parra-init", priority: .userInitiated) {
+                            guard launchScreenState.state == .initial else {
+                                return
+                            }
+
+                            // TODO: Is there a safe way to start this earlier?
+                            await parra.initialize(
+                                with: authProvider
+                            )
+
+                            Logger
+                                .debug(
+                                    "Completed initialization. Dismissing launch screen"
+                                )
+                            launchScreenState.dismiss()
+                        }
+                }
+            }
+        }
+        .environmentObject(launchScreenState)
+    }
+
+    public static func configureLaunchScreen(
+        with overrides: ParraLaunchScreen.Config?
+    ) -> ParraLaunchScreen.Config {
+        if let overrides {
+            // If an override is provided, check its type. The default type
+            // should only override Info.plist keys that are specified. Other
+            // types should be used outright.
+
+            if case .default(let config) = overrides.type {
+                let finalConfig = ParraDefaultLaunchScreen.Config
+                    .fromInfoDictionary(
+                        in: config.bundle
+                    )?.merging(overrides: config) ?? config
+
+                return ParraLaunchScreen.Config(
+                    type: .default(finalConfig),
+                    fadeDuration: overrides.fadeDuration
+                )
+            } else {
+                return overrides
+            }
+        }
+
+        // If overrides are not provided, look for a default configuration in
+        // the Info.plist, then look for a Storyboard configuration, then
+        // finally use a default empty configuration.
+
+        let bundle = Bundle.main // default
+        let type: LaunchScreenType = if let config = ParraDefaultLaunchScreen
+            .Config.fromInfoDictionary(
+                in: bundle
+            )
+        {
+            .default(config)
+        } else if let config = ParraStoryboardLaunchScreen.Config
+            .fromInfoDictionary(in: bundle)
+        {
+            .storyboard(config)
+        } else {
+            .default(ParraDefaultLaunchScreen.Config())
+        }
+
+        return ParraLaunchScreen.Config(
+            type: type,
+            fadeDuration: ParraLaunchScreen.Config.defaultFadeDuration
+        )
     }
 
     // MARK: - Internal
 
     @UIApplicationDelegateAdaptor(DelegateType.self) var appDelegate
-    @SceneBuilder var content: () -> Content
-    @StateObject var parraAppState: ParraAppState
 
     // MARK: - Private
 
+    @SceneBuilder private var content: () -> Content
+    @StateObject private var parraAppState: ParraAppState
+    @StateObject private var launchScreenState = LaunchScreenStateManager()
+
     private let parra: Parra
+    private let launchScreenConfig: ParraLaunchScreen.Config
+    private let authProvider: ParraAuthenticationProviderType
+
+    private func renderPrimaryContent() -> some View {
+        content()
+            .environment(parra)
+    }
+
+    private func renderLaunchScreen() -> some View {
+        ParraLaunchScreen(
+            config: launchScreenConfig
+        )
+    }
 }

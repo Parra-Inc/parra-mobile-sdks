@@ -26,12 +26,11 @@ struct SampleApp: App {
                 .logger(options: .default),
                 .pushNotifications,
                 .theme(ParraTheme(uiColor: .systemBlue))
-            ]
-        ) {
-            WindowGroup {
+            ],
+            sceneContent: {
                 ContentView()
             }
-        }
+        )
     }
 
     // MARK: - Private

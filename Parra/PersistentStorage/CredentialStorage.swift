@@ -9,10 +9,10 @@ import Foundation
 
 private let logger = Logger(category: "Credential storage")
 
-actor CredentialStorage: ItemStorage {
+final class CredentialStorage: ItemStorage {
     // MARK: - Lifecycle
 
-    init(storageModule: ParraStorageModule<ParraCredential>) {
+    required init(storageModule: ParraStorageModule<ParraCredential>) {
         self.storageModule = storageModule
     }
 

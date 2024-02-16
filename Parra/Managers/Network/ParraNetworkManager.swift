@@ -12,7 +12,7 @@ private let logger = Logger(category: "Network Manager")
 
 typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
-actor ParraNetworkManager: NetworkManagerType {
+final class ParraNetworkManager: NetworkManagerType {
     // MARK: - Lifecycle
 
     init(
@@ -27,6 +27,7 @@ actor ParraNetworkManager: NetworkManagerType {
 
     // MARK: - Internal
 
+    weak var delegate: ParraNetworkManagerDelegate?
     let appState: ParraAppState
 
     func getAuthenticationProvider() async
@@ -108,8 +109,6 @@ actor ParraNetworkManager: NetworkManagerType {
             )
 
         do {
-            let applicationId = await appState.applicationId
-
             let url = Parra.InternalConstants.parraApiRoot
                 .appendingPathComponent(route)
             guard var urlComponents = URLComponents(
@@ -140,7 +139,11 @@ actor ParraNetworkManager: NetworkManagerType {
             if method.allowsBody {
                 request.httpBody = try configuration.jsonEncoder.encode(body)
             }
-            addHeaders(to: &request, endpoint: endpoint, for: applicationId)
+            addHeaders(
+                to: &request,
+                endpoint: endpoint,
+                for: appState.applicationId
+            )
 
             let (result, attributes) = await performRequest(
                 request: request,
@@ -430,14 +433,11 @@ actor ParraNetworkManager: NetworkManagerType {
                 )
         }
 
-        // TODO: SwiftUI hook into shared instance
-
-//        Parra.logEvent(
-//            .httpRequest(
-//                request: request,
-//                response: httpResponse
-//            )
-//        )
+        delegate?.networkManager(
+            self,
+            didReceiveResponse: httpResponse,
+            for: request
+        )
 
         return (data, httpResponse)
     }

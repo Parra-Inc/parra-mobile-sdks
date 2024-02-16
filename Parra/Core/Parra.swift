@@ -121,44 +121,42 @@ public class Parra: Observable {
 
     func initialize(
         with authProvider: ParraAuthenticationProviderType
-    ) {
-        Task {
-            let authProviderFunction = await authProvider.getProviderFunction(
-                using: networkManager,
-                onAuthenticationRefresh: { [weak self] success in
-                    guard let self else {
-                        return
-                    }
-
-                    if success {
-                        addEventObservers()
-
-                        await syncManager.startSyncTimer()
-                    } else {
-                        removeEventObservers()
-
-                        await dataManager.updateCredential(credential: nil)
-                        await syncManager.stopSyncTimer()
-                    }
+    ) async {
+        let authProviderFunction = await authProvider.getProviderFunction(
+            using: networkManager,
+            onAuthenticationRefresh: { [weak self] success in
+                guard let self else {
+                    return
                 }
-            )
 
-            await sessionManager.initializeSessions()
-            await networkManager
-                .updateAuthenticationProvider(authProviderFunction)
+                if success {
+                    addEventObservers()
 
-            logger.info("Parra SDK Initialized")
+                    await syncManager.startSyncTimer()
+                } else {
+                    removeEventObservers()
 
-            do {
-                _ = try await networkManager.refreshAuthentication()
-
-                performPostAuthRefreshActions()
-            } catch {
-                logger.error(
-                    "Authentication handler in call to Parra.initialize failed",
-                    error
-                )
+                    await dataManager.updateCredential(credential: nil)
+                    await syncManager.stopSyncTimer()
+                }
             }
+        )
+
+        await sessionManager.initializeSessions()
+        networkManager
+            .updateAuthenticationProvider(authProviderFunction)
+
+        logger.info("Parra SDK Initialized")
+
+        do {
+            _ = try await networkManager.refreshAuthentication()
+
+            performPostAuthRefreshActions()
+        } catch {
+            logger.error(
+                "Authentication handler in call to Parra.initialize failed",
+                error
+            )
         }
     }
 

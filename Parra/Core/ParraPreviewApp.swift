@@ -70,9 +70,9 @@ public struct ParraPreviewApp<Content, DelegateType>: View
 
         self.parra = parra
 
-        parra.initialize(
-            with: authProvider
-        )
+//        parra.initialize(
+//            with: authProvider
+//        )
     }
 
     // MARK: - Public

@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct ParraLogoButton: View {
+    @Environment(Parra.self) var parra
+
     var type: ParraLogoType
 
     var body: some View {
         Button {
-            // TODO: SwiftUI hook into shared instance
-
-//            Parra.logEvent(.tap(element: "powered-by-parra"))
+            parra.logEvent(.tap(element: "powered-by-parra"))
 
             UIApplication.shared.open(Parra.Constants.parraWebRoot)
         } label: {

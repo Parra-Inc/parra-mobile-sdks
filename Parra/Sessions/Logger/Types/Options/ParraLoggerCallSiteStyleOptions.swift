@@ -18,14 +18,15 @@ public struct ParraLoggerCallSiteStyleOptions: OptionSet {
     // MARK: - Public
 
     public static let `default`: ParraLoggerCallSiteStyleOptions = [
-        .function, .line
+        .file, .function, .line
     ]
 
-    public static let thread = ParraLoggerCallSiteStyleOptions(rawValue: 1 << 0)
+    public static let file = ParraLoggerCallSiteStyleOptions(rawValue: 1 << 0)
+    public static let thread = ParraLoggerCallSiteStyleOptions(rawValue: 1 << 1)
     public static let function =
-        ParraLoggerCallSiteStyleOptions(rawValue: 1 << 1)
-    public static let line = ParraLoggerCallSiteStyleOptions(rawValue: 1 << 2)
-    public static let column = ParraLoggerCallSiteStyleOptions(rawValue: 1 << 3)
+        ParraLoggerCallSiteStyleOptions(rawValue: 1 << 2)
+    public static let line = ParraLoggerCallSiteStyleOptions(rawValue: 1 << 3)
+    public static let column = ParraLoggerCallSiteStyleOptions(rawValue: 1 << 4)
 
     public let rawValue: Int8
 }

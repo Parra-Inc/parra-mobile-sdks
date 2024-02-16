@@ -9,7 +9,7 @@ import Foundation
 
 private let logger = Logger(category: "File system storage medium")
 
-actor FileSystemStorage: PersistentStorageMedium {
+class FileSystemStorage: PersistentStorageMedium {
     // MARK: - Lifecycle
 
     init(

@@ -20,11 +20,13 @@ public class Logger {
     ) {
         self.bypassEventCreation = false
         self.fiberId = UUID().uuidString
-
         self.context = ParraLoggerContext(
             fiberId: fiberId,
             fileId: fileId,
-            category: category,
+            category: Logger.categoryOrDefault(
+                category: category,
+                fileId: fileId
+            ),
             scope: .function(function),
             extra: extra ?? [:]
         )
@@ -41,7 +43,10 @@ public class Logger {
         self.context = ParraLoggerContext(
             fiberId: fiberId,
             fileId: fileId,
-            category: category,
+            category: Logger.categoryOrDefault(
+                category: category,
+                fileId: fileId
+            ),
             scopes: [],
             extra: extra
         )
@@ -234,5 +239,20 @@ public class Logger {
                 cachedLogs = Array(cachedLogs.dropFirst(numToDrop))
             }
         }
+    }
+
+    private static func categoryOrDefault(
+        category: String?,
+        fileId: String
+    ) -> String {
+        if let category {
+            return category
+        }
+
+        let (_, fileName) = LoggerHelpers.splitFileId(
+            fileId: fileId
+        )
+
+        return fileName
     }
 }

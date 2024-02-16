@@ -114,6 +114,7 @@ extension Parra {
             feedback: feedback
         )
 
+        networkManager.delegate = parra
         syncManager.delegate = parra
 
         return (parra, appState)

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 extension EdgeInsets {
     init(_ allSides: CGFloat) {
@@ -27,6 +28,15 @@ extension EdgeInsets {
             leading: horizontal,
             bottom: vertical,
             trailing: horizontal
+        )
+    }
+
+    init(_ edgeInsets: UIEdgeInsets) {
+        self.init(
+            top: edgeInsets.top,
+            leading: edgeInsets.left,
+            bottom: edgeInsets.bottom,
+            trailing: edgeInsets.right
         )
     }
 }
