@@ -134,11 +134,7 @@ public struct ParraApp<Content, DelegateType>: Scene
                 // During this phase, initialization has finished so the primary
                 // content view can be created, but the launch screen can not be
                 // destroyed until its animation off screen has completed.
-                if launchScreenState.state == LaunchScreenStateManager.State
-                    .transitioning
-                    || launchScreenState.state == LaunchScreenStateManager.State
-                    .complete
-                {
+                if launchScreenState.state.shouldAppContent {
                     renderPrimaryContent()
                 }
 
@@ -146,14 +142,13 @@ public struct ParraApp<Content, DelegateType>: Scene
                 // screen without rendering the main app content. This will
                 // prevent any logic within the app that may depend on Parra
                 // being initialized from running until we're ready.
-                if launchScreenState.state == LaunchScreenStateManager.State
-                    .initial
-                    || launchScreenState.state == LaunchScreenStateManager.State
-                    .transitioning
-                {
+                if launchScreenState.state.showLaunchScreen {
                     renderLaunchScreen()
                         .task(id: "parra-init", priority: .userInitiated) {
-                            guard launchScreenState.state == .initial else {
+                            guard launchScreenState
+                                .state == LaunchScreenStateManager.State
+                                .initial else
+                            {
                                 return
                             }
 

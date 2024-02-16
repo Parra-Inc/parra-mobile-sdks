@@ -13,6 +13,16 @@ final class LaunchScreenStateManager: ObservableObject {
         case initial
         case transitioning
         case complete
+
+        // MARK: - Internal
+
+        var showLaunchScreen: Bool {
+            return self == State.initial || self == State.transitioning
+        }
+
+        var shouldAppContent: Bool {
+            return self == State.transitioning || self == State.complete
+        }
     }
 
     @MainActor @Published private(set) var state: State = .initial

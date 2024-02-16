@@ -69,6 +69,7 @@ extension Color {
             intent: .defaultIntent,
             options: nil
         )
+
         guard let components = RGBCGColor?.components else {
             return true
         }
@@ -88,13 +89,85 @@ extension Color {
 
     /// Return a UIColor with adjusted luminosity, returns self if unable to convert
     /// - Parameter newLuminosity: New luminosity, between 0 and 1 (percentage)
-    func withLuminosity(_ newLuminosity: CGFloat) -> Color {
+    func withLuminosity(
+        _ newLuminosity: CGFloat
+    ) -> Color {
+        let coreColour = CIColor(
+            color: UIColor(self)
+        )
+
+        let (hue, saturation) = getHS(
+            from: coreColour,
+            newLuminosity: newLuminosity
+        )
+
+        // Now we need to convert back to RGB
+
+        // 1 - If there is no Saturation it means that it’s a shade of grey. So in that case we just need to convert the Luminance and set R,G and B to that level.
+        if saturation == 0 {
+            return Color(
+                red: 1.0 * newLuminosity,
+                green: 1.0 * newLuminosity,
+                blue: 1.0 * newLuminosity,
+                opacity: coreColour.alpha
+            )
+        }
+
+        // 2 - If Luminance is smaller then 0.5 (50%) then temporary_1 = Luminance x (1.0+Saturation)
+        //     If Luminance is equal or larger then 0.5 (50%) then temporary_1 = Luminance + Saturation – Luminance x Saturation
+        let temporaryVariableOne: CGFloat = if newLuminosity < 0.5 {
+            newLuminosity * (1 + saturation)
+        } else {
+            newLuminosity + saturation - newLuminosity * saturation
+        }
+
+        // 3 - Final calculated temporary variable
+        let temporaryVariableTwo: CGFloat = 2 * newLuminosity -
+            temporaryVariableOne
+
+        // 4 - The next step is to convert the 360 degrees in a circle to 1 by dividing the angle by 360
+        let convertedHue: CGFloat = hue / 360
+
+        // 5 - Now we need a temporary variable for each colour channel
+        let tempRed: CGFloat = (convertedHue + 0.333).convertToColourChannel()
+        let tempGreen: CGFloat = convertedHue.convertToColourChannel()
+        let tempBlue: CGFloat = (convertedHue - 0.333).convertToColourChannel()
+
+        // 6 we must run up to 3 tests to select the correct formula for each colour channel, converting to RGB
+        let newRed: CGFloat = tempRed.convertToRGB(
+            temp1: temporaryVariableOne,
+            temp2: temporaryVariableTwo
+        )
+
+        let newGreen: CGFloat = tempGreen.convertToRGB(
+            temp1: temporaryVariableOne,
+            temp2: temporaryVariableTwo
+        )
+        let newBlue: CGFloat = tempBlue.convertToRGB(
+            temp1: temporaryVariableOne,
+            temp2: temporaryVariableTwo
+        )
+
+        guard newRed.isFinite, newGreen.isFinite, newBlue.isFinite else {
+            return self
+        }
+
+        return Color(
+            red: newRed,
+            green: newGreen,
+            blue: newBlue,
+            opacity: coreColour.alpha
+        )
+    }
+
+    private func getHS(
+        from color: CIColor,
+        newLuminosity: CGFloat
+    ) -> (CGFloat, CGFloat) {
         // 1 - Convert the RGB values to the range 0-1
-        let coreColour = CIColor(color: UIColor(self))
-        var red = coreColour.red
-        var green = coreColour.green
-        var blue = coreColour.blue
-        let opacity = coreColour.alpha
+        var red: CGFloat = color.red
+        var green: CGFloat = color.green
+        var blue: CGFloat = color.blue
 
         // 1a - Clamp these colours between 0 and 1 (combat sRGB colour space)
         red = red.clamp(min: 0, max: 1)
@@ -102,20 +175,15 @@ extension Color {
         blue = blue.clamp(min: 0, max: 1)
 
         // 2 - Find the minimum and maximum values of R, G and B.
-        guard let minRGB = [red, green, blue].min(), let maxRGB = [
-            red,
-            green,
-            blue
-        ].max() else {
-            return self
-        }
+        let minRGB: CGFloat = [red, green, blue].min()!
+        let maxRGB: CGFloat = [red, green, blue].max()!
 
         // 3 - Now calculate the Luminace value by adding the max and min values and divide by 2.
-        var luminosity = (minRGB + maxRGB) / 2
+        let luminosity: CGFloat = (minRGB + maxRGB) / 2
 
         if luminosity == 0, newLuminosity <= 0.5 {
             // The color is black. There's nothing we can do
-            return self
+            return (0, 0)
         }
 
         // 4 - The next step is to find the Saturation.
@@ -135,7 +203,7 @@ extension Color {
         }
 
         // 6 - The Hue formula is depending on what RGB color channel is the max value. The three different formulas are:
-        var hue: CGFloat = if red == maxRGB {
+        let hue: CGFloat = if red == maxRGB {
             // 6a - If Red is max, then Hue = (G-B)/(max-min)
             (green - blue) / (maxRGB - minRGB)
         } else if green == maxRGB {
@@ -151,70 +219,9 @@ extension Color {
         // 7 - The Hue value you get needs to be multiplied by 60 to convert it to degrees on the color circle
         //     If Hue becomes negative you need to add 360 to, because a circle has 360 degrees.
         if hue < 0 {
-            hue += 360
+            return (hue + 360, saturation)
         } else {
-            hue = hue * 60
+            return (hue * 60, saturation)
         }
-
-        // we want to convert the luminosity. So we will.
-        luminosity = newLuminosity
-
-        // Now we need to convert back to RGB
-
-        // 1 - If there is no Saturation it means that it’s a shade of grey. So in that case we just need to convert the Luminance and set R,G and B to that level.
-        if saturation == 0 {
-            return Color(
-                red: 1.0 * luminosity,
-                green: 1.0 * luminosity,
-                blue: 1.0 * luminosity,
-                opacity: opacity
-            )
-        }
-
-        // 2 - If Luminance is smaller then 0.5 (50%) then temporary_1 = Luminance x (1.0+Saturation)
-        //     If Luminance is equal or larger then 0.5 (50%) then temporary_1 = Luminance + Saturation – Luminance x Saturation
-        var temporaryVariableOne: CGFloat = 0
-        if luminosity < 0.5 {
-            temporaryVariableOne = luminosity * (1 + saturation)
-        } else {
-            temporaryVariableOne = luminosity + saturation - luminosity *
-                saturation
-        }
-
-        // 3 - Final calculated temporary variable
-        let temporaryVariableTwo = 2 * luminosity - temporaryVariableOne
-
-        // 4 - The next step is to convert the 360 degrees in a circle to 1 by dividing the angle by 360
-        let convertedHue = hue / 360
-
-        // 5 - Now we need a temporary variable for each colour channel
-        let tempRed = (convertedHue + 0.333).convertToColourChannel()
-        let tempGreen = convertedHue.convertToColourChannel()
-        let tempBlue = (convertedHue - 0.333).convertToColourChannel()
-
-        // 6 we must run up to 3 tests to select the correct formula for each colour channel, converting to RGB
-        let newRed = tempRed.convertToRGB(
-            temp1: temporaryVariableOne,
-            temp2: temporaryVariableTwo
-        )
-        let newGreen = tempGreen.convertToRGB(
-            temp1: temporaryVariableOne,
-            temp2: temporaryVariableTwo
-        )
-        let newBlue = tempBlue.convertToRGB(
-            temp1: temporaryVariableOne,
-            temp2: temporaryVariableTwo
-        )
-
-        guard newRed.isFinite, newGreen.isFinite, newBlue.isFinite else {
-            return self
-        }
-
-        return Color(
-            red: newRed,
-            green: newGreen,
-            blue: newBlue,
-            opacity: opacity
-        )
     }
 }
