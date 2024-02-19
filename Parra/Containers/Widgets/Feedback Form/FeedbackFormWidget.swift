@@ -168,80 +168,82 @@ struct FeedbackFormWidget: Container {
         submitButtonBuilder: nil
     )
 
-    return FeedbackFormWidget(
-        componentFactory: .init(
-            local: local,
-            global: global,
-            theme: ParraTheme.default
-        ),
-        config: FeedbackFormConfig.default,
-        contentObserver: .init(
-            formData: .init(
-                title: "Leave feedback",
-                description: "We'd love to hear from you. Your input helps us make our product better.",
-                fields: [
-                    .init(
-                        name: "type",
-                        title: "Type of Feedback",
-                        helperText: "Select one, please!",
-                        type: .select,
-                        required: true,
-                        data: .feedbackFormSelectFieldData(
-                            FeedbackFormSelectFieldData(
-                                placeholder: "Please select an option",
-                                options: [
-                                    FeedbackFormSelectFieldOption(
-                                        title: "General feedback",
-                                        value: "general-feedback",
-                                        isOther: nil
-                                    ),
-                                    FeedbackFormSelectFieldOption(
-                                        title: "Bug report",
-                                        value: "bug-report",
-                                        isOther: nil
-                                    ),
-                                    FeedbackFormSelectFieldOption(
-                                        title: "Feature request",
-                                        value: "feature-request",
-                                        isOther: nil
-                                    ),
-                                    FeedbackFormSelectFieldOption(
-                                        title: "Idea",
-                                        value: "idea",
-                                        isOther: nil
-                                    ),
-                                    FeedbackFormSelectFieldOption(
-                                        title: "Other",
-                                        value: "other",
-                                        isOther: nil
-                                    )
-                                ]
+    return ParraPreviewApp {
+        FeedbackFormWidget(
+            componentFactory: .init(
+                local: local,
+                global: global,
+                theme: ParraTheme.default
+            ),
+            config: FeedbackFormConfig.default,
+            contentObserver: .init(
+                formData: .init(
+                    title: "Leave feedback",
+                    description: "We'd love to hear from you. Your input helps us make our product better.",
+                    fields: [
+                        .init(
+                            name: "type",
+                            title: "Type of Feedback",
+                            helperText: "Select one, please!",
+                            type: .select,
+                            required: true,
+                            data: .feedbackFormSelectFieldData(
+                                FeedbackFormSelectFieldData(
+                                    placeholder: "Please select an option",
+                                    options: [
+                                        FeedbackFormSelectFieldOption(
+                                            title: "General feedback",
+                                            value: "general-feedback",
+                                            isOther: nil
+                                        ),
+                                        FeedbackFormSelectFieldOption(
+                                            title: "Bug report",
+                                            value: "bug-report",
+                                            isOther: nil
+                                        ),
+                                        FeedbackFormSelectFieldOption(
+                                            title: "Feature request",
+                                            value: "feature-request",
+                                            isOther: nil
+                                        ),
+                                        FeedbackFormSelectFieldOption(
+                                            title: "Idea",
+                                            value: "idea",
+                                            isOther: nil
+                                        ),
+                                        FeedbackFormSelectFieldOption(
+                                            title: "Other",
+                                            value: "other",
+                                            isOther: nil
+                                        )
+                                    ]
+                                )
+                            )
+                        ),
+                        .init(
+                            name: "response",
+                            title: "Your Feedback",
+                            helperText: nil,
+                            type: .text,
+                            required: true,
+                            data: .feedbackFormTextFieldData(
+                                FeedbackFormTextFieldData(
+                                    placeholder: "placeholder",
+                                    lines: 5,
+                                    maxLines: 10,
+                                    minCharacters: 20,
+                                    maxCharacters: 420,
+                                    maxHeight: 200
+                                )
                             )
                         )
-                    ),
-                    .init(
-                        name: "response",
-                        title: "Your Feedback",
-                        helperText: nil,
-                        type: .text,
-                        required: true,
-                        data: .feedbackFormTextFieldData(
-                            FeedbackFormTextFieldData(
-                                placeholder: "placeholder",
-                                lines: 5,
-                                maxLines: 10,
-                                minCharacters: 20,
-                                maxCharacters: 420,
-                                maxHeight: 200
-                            )
-                        )
-                    )
-                ]
+                    ]
+                )
+            ),
+            themeObserver: .init(
+                theme: .default,
+                notificationCenter: ParraNotificationCenter()
             )
-        ),
-        themeObserver: .init(
-            theme: .default,
-            notificationCenter: ParraNotificationCenter()
         )
-    )
+    }
 }

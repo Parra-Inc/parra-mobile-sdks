@@ -27,7 +27,7 @@ struct SampleApp: App {
                 .pushNotifications,
                 .theme(ParraTheme(uiColor: .systemBlue))
             ],
-            sceneContent: {
+            appContent: {
                 ContentView()
             }
         )
