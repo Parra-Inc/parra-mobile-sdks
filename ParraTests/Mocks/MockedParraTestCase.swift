@@ -30,17 +30,19 @@ class MockedParraTestCase: ParraBaseMock {
     }
 
     func createMockParra(
-        tenantId: String = UUID().uuidString,
-        applicationId: String = UUID().uuidString
+        appState: ParraAppState = ParraAppState(
+            tenantId: UUID().uuidString,
+            applicationId: UUID().uuidString
+        ),
+        authenticationProvider: ParraAuthenticationProviderFunction? = {
+            return UUID().uuidString
+        }
     ) async -> MockParra {
-//        await state.setTenantId(tenantId)
-//        await state.setApplicationId(applicationId)
-
         let configuration = ParraConfiguration(options: [])
 
         let mockNetworkManager = await createMockNetworkManager(
-            appState: .init(tenantId: tenantId, applicationId: applicationId),
-            authenticationProvider: nil // TODO: TMP
+            appState: appState,
+            authenticationProvider: authenticationProvider
         )
 
         let notificationCenter = ParraNotificationCenter()
@@ -84,17 +86,10 @@ class MockedParraTestCase: ParraBaseMock {
             feedback: feedback
         )
 
-        // Reset the singleton. This is a bit of a problem because there are some
-        // places internally within the SDK that may access it, but this will at least
-        // prevent an uncontroller new instance from being lazily created on first access.
+        mockNetworkManager.networkManager.delegate = parra
+        syncManager.delegate = parra
 
-        // TODO: SwiftUI
-//        Parra.setSharedInstance(parra: parra)
-
-//        if await state.isInitialized() {
-//            await state.registerModule(module: parra)
-//            await sessionManager.initializeSessions()
-//        }
+        await sessionManager.initializeSessions()
 
         return MockParra(
             parra: parra,
@@ -104,8 +99,7 @@ class MockedParraTestCase: ParraBaseMock {
             sessionManager: sessionManager,
             networkManager: mockNetworkManager.networkManager,
             notificationCenter: notificationCenter,
-            tenantId: tenantId,
-            applicationId: applicationId
+            appState: appState
         )
     }
 
@@ -155,7 +149,7 @@ class MockedParraTestCase: ParraBaseMock {
             tenantId: UUID().uuidString,
             applicationId: UUID().uuidString
         ),
-        authenticationProvider: ParraAuthenticationProviderFunction? = nil
+        authenticationProvider: ParraAuthenticationProviderFunction?
     ) async -> MockParraNetworkManager {
         let dataManager = createMockDataManager()
 
@@ -172,13 +166,7 @@ class MockedParraTestCase: ParraBaseMock {
             configuration: configuration
         )
 
-//        if await state.isInitialized() {
-//            await networkManager.updateAuthenticationProvider(
-//                authenticationProvider ?? {
-//                    return UUID().uuidString
-//                }
-//            )
-//        }
+        networkManager.updateAuthenticationProvider(authenticationProvider)
 
         return MockParraNetworkManager(
             networkManager: networkManager,

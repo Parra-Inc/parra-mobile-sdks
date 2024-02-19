@@ -273,6 +273,22 @@
 		00ABF1802B7D731100A054A2 /* ParraLaunchScreen+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF17F2B7D731100A054A2 /* ParraLaunchScreen+Config.swift */; };
 		00ABF1822B7E9BB000A054A2 /* Endpoint+Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269F42A526770001A0F50 /* Endpoint+Mocks.swift */; };
 		00ABF1852B7EAF2200A054A2 /* SafeAreaInsetsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1842B7EAF2200A054A2 /* SafeAreaInsetsKey.swift */; };
+		00ABF1882B83ABC700A054A2 /* ParraNetworkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559B427E7EAD9006450BE /* ParraNetworkManagerTests.swift */; };
+		00ABF1892B83AF3400A054A2 /* ParraStorageModuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559A927E41A8A006450BE /* ParraStorageModuleTests.swift */; };
+		00ABF18A2B83AFC100A054A2 /* CredentialStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559AE27E7E76C006450BE /* CredentialStorageTests.swift */; };
+		00ABF18B2B83AFCB00A054A2 /* FileSystemStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0015599B27E40B13006450BE /* FileSystemStorageTests.swift */; };
+		00ABF18C2B83AFD800A054A2 /* UserDefaultsStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559A327E412FD006450BE /* UserDefaultsStorageTests.swift */; };
+		00ABF18D2B83B00900A054A2 /* PersistentStorageTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559A127E40D56006450BE /* PersistentStorageTestHelpers.swift */; };
+		00ABF18E2B83B02600A054A2 /* GeneratedTypes+Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */; };
+		00ABF18F2B83B03000A054A2 /* ParraCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */; };
+		00ABF1902B83B03B00A054A2 /* LoggerHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0029AD2D2A48E11300E30CCD /* LoggerHelpersTests.swift */; };
+		00ABF1912B83B06D00A054A2 /* Parra+PushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */; };
+		00ABF1922B83B1A500A054A2 /* ParraAuthenticationProviderType+mockPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC82A538A5400E7A91D /* ParraAuthenticationProviderType+mockPublicKey.swift */; };
+		00ABF1932B83B2B200A054A2 /* Parra+AuthenticationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00320A5A27ED4EF0001EB323 /* Parra+AuthenticationTests.swift */; };
+		00ABF1942B83BA5000A054A2 /* ParraDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559B027E7EAC0006450BE /* ParraDataManagerTests.swift */; };
+		00ABF1952B83BA5B00A054A2 /* ParraSessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFCB2A53B6F100E7A91D /* ParraSessionManagerTests.swift */; };
+		00ABF1962B83BA6000A054A2 /* ParraSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559B227E7EACC006450BE /* ParraSyncManagerTests.swift */; };
+		00ABF1972B83C86400A054A2 /* SessionReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */; };
 		00B42EA72ADE176E00F365A5 /* Parra.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 00B42EA62ADE176E00F365A5 /* Parra.xctestplan */; };
 		00B42EB12ADE1BCB00F365A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B42EB02ADE1BCB00F365A5 /* AppDelegate.swift */; };
 		00B42EB32ADE1BCB00F365A5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B42EB22ADE1BCB00F365A5 /* SceneDelegate.swift */; };
@@ -885,6 +901,7 @@
 				001559B227E7EACC006450BE /* ParraSyncManagerTests.swift */,
 				001559B027E7EAC0006450BE /* ParraDataManagerTests.swift */,
 				0082DFCB2A53B6F100E7A91D /* ParraSessionManagerTests.swift */,
+				00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1302,7 +1319,6 @@
 			isa = PBXGroup;
 			children = (
 				00C00ABC2A8A6BD1003B21D3 /* SessionReader.swift */,
-				00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */,
 				00E15A22292AFB2B0049C2C7 /* SessionStorage.swift */,
 				00C00ABA2A8A6BC2003B21D3 /* SessionStorageContext.swift */,
 				00EAE2FC2AA0C888003FB41C /* Generators */,
@@ -2488,19 +2504,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00ABF1942B83BA5000A054A2 /* ParraDataManagerTests.swift in Sources */,
+				00ABF18B2B83AFCB00A054A2 /* FileSystemStorageTests.swift in Sources */,
+				00ABF18A2B83AFC100A054A2 /* CredentialStorageTests.swift in Sources */,
 				00ABF1672B7AB89500A054A2 /* MockURLSession.swift in Sources */,
 				00ABF1682B7AB89500A054A2 /* URLSessionDataTaskType.swift in Sources */,
 				0082DFBD2A535FDD00E7A91D /* Data.swift in Sources */,
 				00ABF1602B7AB83300A054A2 /* FileManagerTests.swift in Sources */,
 				00ABF1662B7AB89500A054A2 /* MockParraNetworkManager.swift in Sources */,
 				00ABF1822B7E9BB000A054A2 /* Endpoint+Mocks.swift in Sources */,
+				00ABF1952B83BA5B00A054A2 /* ParraSessionManagerTests.swift in Sources */,
 				00ABF1652B7AB88500A054A2 /* MockParra.swift in Sources */,
+				00ABF1972B83C86400A054A2 /* SessionReaderTests.swift in Sources */,
+				00ABF1882B83ABC700A054A2 /* ParraNetworkManagerTests.swift in Sources */,
 				00ABF1632B7AB84B00A054A2 /* XCTestCase.swift in Sources */,
+				00ABF18F2B83B03000A054A2 /* ParraCredentialTests.swift in Sources */,
+				00ABF1922B83B1A500A054A2 /* ParraAuthenticationProviderType+mockPublicKey.swift in Sources */,
 				00ABF1642B7AB88000A054A2 /* MockedParraTestCase.swift in Sources */,
+				00ABF1892B83AF3400A054A2 /* ParraStorageModuleTests.swift in Sources */,
 				001559A827E417D4006450BE /* ParraLoggerTests.swift in Sources */,
 				00916DC22AD2EFCD00B4856F /* SignpostTestObserver.swift in Sources */,
+				00ABF1962B83BA6000A054A2 /* ParraSyncManagerTests.swift in Sources */,
 				00ABF1622B7AB84500A054A2 /* String.swift in Sources */,
+				00ABF1932B83B2B200A054A2 /* Parra+AuthenticationTests.swift in Sources */,
+				00ABF1902B83B03B00A054A2 /* LoggerHelpersTests.swift in Sources */,
+				00ABF1912B83B06D00A054A2 /* Parra+PushTests.swift in Sources */,
+				00ABF18C2B83AFD800A054A2 /* UserDefaultsStorageTests.swift in Sources */,
+				00ABF18E2B83B02600A054A2 /* GeneratedTypes+Swift.swift in Sources */,
 				00ABF1612B7AB83800A054A2 /* ParraEndpoint+CaseIterable.swift in Sources */,
+				00ABF18D2B83B00900A054A2 /* PersistentStorageTestHelpers.swift in Sources */,
 				00ABF15F2B7AB81100A054A2 /* TestData.swift in Sources */,
 				00ABF1692B7AB8DF00A054A2 /* ParraBaseMock.swift in Sources */,
 			);

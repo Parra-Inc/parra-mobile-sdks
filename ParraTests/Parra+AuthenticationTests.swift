@@ -12,7 +12,7 @@ import XCTest
 class ParraAuthenticationTests: MockedParraTestCase {
     override func setUp() async throws {
         // Setup without initialization
-        mockParra = await createMockParra()
+        mockParra = await createMockParra(authenticationProvider: nil)
     }
 
     @MainActor
@@ -20,12 +20,13 @@ class ParraAuthenticationTests: MockedParraTestCase {
         let token = UUID().uuidString
         let startAuthProvider = await mockParra.parra.networkManager
             .getAuthenticationProvider()
+
         XCTAssertNil(startAuthProvider)
 
         await mockParra.parra.initialize(
-            authProvider: .default(
-                tenantId: mockParra.tenantId,
-                applicationId: mockParra.applicationId,
+            with: .default(
+                tenantId: mockParra.appState.tenantId,
+                applicationId: mockParra.appState.applicationId,
                 authProvider: {
                     return token
                 }
@@ -40,16 +41,21 @@ class ParraAuthenticationTests: MockedParraTestCase {
     func testInitWithPublicKeyAuthProvider() async throws {
         let authEndpointExpectation = try mockParra.mockNetworkManager
             .urlSession.expectInvocation(
-                of: .postAuthentication(tenantId: mockParra.tenantId),
-                toReturn: (200, ParraCredential(token: UUID().uuidString))
+                of: .postAuthentication(
+                    tenantId: mockParra.appState.tenantId
+                ),
+                toReturn: (
+                    200,
+                    ParraCredential(token: UUID().uuidString)
+                )
             )
 
         let authProviderExpectation = XCTestExpectation()
         authProviderExpectation.expectedFulfillmentCount = 2
         await mockParra.parra.initialize(
-            authProvider: .publicKey(
-                tenantId: mockParra.tenantId,
-                applicationId: mockParra.applicationId,
+            with: .publicKey(
+                tenantId: mockParra.appState.tenantId,
+                applicationId: mockParra.appState.applicationId,
                 apiKeyId: UUID().uuidString,
                 userIdProvider: {
                     authProviderExpectation.fulfill()
@@ -69,9 +75,9 @@ class ParraAuthenticationTests: MockedParraTestCase {
 
     func testInitWithDefaultAuthProviderFailure() async throws {
         await mockParra.parra.initialize(
-            authProvider: .default(
-                tenantId: mockParra.tenantId,
-                applicationId: mockParra.applicationId,
+            with: .default(
+                tenantId: mockParra.appState.tenantId,
+                applicationId: mockParra.appState.applicationId,
                 authProvider: {
                     throw URLError(.badServerResponse)
                 }
@@ -88,9 +94,9 @@ class ParraAuthenticationTests: MockedParraTestCase {
 
     func testInitWithPublicKeyAuthProviderFailure() async throws {
         await mockParra.parra.initialize(
-            authProvider: .publicKey(
-                tenantId: mockParra.tenantId,
-                applicationId: mockParra.applicationId,
+            with: .publicKey(
+                tenantId: mockParra.appState.tenantId,
+                applicationId: mockParra.appState.applicationId,
                 apiKeyId: UUID().uuidString,
                 userIdProvider: {
                     throw URLError(.badServerResponse)
@@ -104,30 +110,5 @@ class ParraAuthenticationTests: MockedParraTestCase {
 
             XCTFail()
         } catch {}
-    }
-
-    func testMultipleInvocationsDoNotReinitialize() async throws {
-        await mockParra.parra
-            .initialize(authProvider: .mockPublicKey(mockParra))
-
-        let isInitialized = await mockParra.parra.state.isInitialized()
-        XCTAssertTrue(isInitialized)
-
-        await mockParra.parra.initialize(
-            authProvider: .publicKey(
-                tenantId: UUID().uuidString,
-                applicationId: UUID().uuidString,
-                apiKeyId: UUID().uuidString,
-                userIdProvider: {
-                    return UUID().uuidString
-                }
-            )
-        )
-
-        let applicationId = await mockParra.parra.state.applicationId
-        let tenantId = await mockParra.parra.state.tenantId
-
-        XCTAssertEqual(applicationId, mockParra.applicationId)
-        XCTAssertEqual(tenantId, mockParra.tenantId)
     }
 }

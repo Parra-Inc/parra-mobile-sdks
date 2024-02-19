@@ -62,25 +62,25 @@ class ParraStorageModuleTests: ParraBaseMock {
         data[testKey] = testValue
 
         for storageModule in storageModules {
-            switch await storageModule.dataStorageMedium {
+            switch storageModule.dataStorageMedium {
             case .memory:
                 break
             case .userDefaults:
-                let (medium, key) = await storageModule.persistentStorage!
+                let (medium, key) = storageModule.persistentStorage!
                 try await medium.write(name: key, value: data)
                 await storageModule.loadData()
 
-                let cache = await storageModule.storageCache
+                let cache = storageModule.storageCache
                 XCTAssertEqual(data, cache)
 
                 let readData = await storageModule.read(name: testKey)
                 XCTAssertEqual(readData, testValue)
             case .fileSystem:
-                let (medium, key) = await storageModule.persistentStorage!
+                let (medium, key) = storageModule.persistentStorage!
                 try await medium.write(name: key, value: data)
                 await storageModule.loadData()
 
-                let cache = await storageModule.storageCache
+                let cache = storageModule.storageCache
                 XCTAssertEqual([:], cache)
             }
         }
@@ -90,8 +90,8 @@ class ParraStorageModuleTests: ParraBaseMock {
         for storageModule in storageModules {
             await storageModule.loadData()
 
-            let isLoaded = await storageModule.isLoaded
-            let medium = await storageModule.dataStorageMedium
+            let isLoaded = storageModule.isLoaded
+            let medium = storageModule.dataStorageMedium
             XCTAssertTrue(isLoaded, "isLoaded failed for \(medium)")
         }
     }
@@ -109,11 +109,11 @@ class ParraStorageModuleTests: ParraBaseMock {
                 isLoaded: false
             )
 
-            switch await storageModule.dataStorageMedium {
+            switch storageModule.dataStorageMedium {
             case .memory:
                 await storageModule.loadData()
             case .userDefaults:
-                let (medium, key) = await storageModule.persistentStorage!
+                let (medium, key) = storageModule.persistentStorage!
                 try await medium.write(name: key, value: testData)
 
                 await checkLoadedState(
@@ -124,11 +124,11 @@ class ParraStorageModuleTests: ParraBaseMock {
                 let value = await storageModule.read(name: testKey)
 
                 if value != testValue {
-                    let description = await storageModule.description
+                    let description = storageModule.description
                     XCTFail("load data not correct for \(description)")
                 }
             case .fileSystem:
-                let (medium, _) = await storageModule.persistentStorage!
+                let (medium, _) = storageModule.persistentStorage!
                 try await medium.write(name: testKey, value: testData)
 
                 await checkLoadedState(
@@ -139,7 +139,7 @@ class ParraStorageModuleTests: ParraBaseMock {
                 let value = await storageModule.read(name: testKey)
 
                 if value != testValue {
-                    let description = await storageModule.description
+                    let description = storageModule.description
                     XCTFail("load data not correct for \(description)")
                 }
             }
@@ -168,8 +168,7 @@ class ParraStorageModuleTests: ParraBaseMock {
 
         for storageModule in storageModules {
             let current1 = await storageModule.currentData()
-            let d = await storageModule.description
-            XCTAssertEqual(current1, [:], d)
+            XCTAssertEqual(current1, [:], storageModule.description)
 
             try await storageModule.write(name: testKey, value: testValue)
 
@@ -219,8 +218,8 @@ class ParraStorageModuleTests: ParraBaseMock {
         storageModule: ParraStorageModule<String>,
         isLoaded: Bool
     ) async {
-        let isLoadedCheck = await storageModule.isLoaded
-        let description = await storageModule.description
+        let isLoadedCheck = storageModule.isLoaded
+        let description = storageModule.description
 
         XCTAssertEqual(
             isLoadedCheck,

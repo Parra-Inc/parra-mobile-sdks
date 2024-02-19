@@ -20,8 +20,7 @@ struct MockParra {
     let networkManager: ParraNetworkManager
     let notificationCenter: ParraNotificationCenter
 
-    let tenantId: String
-    let applicationId: String
+    let appState: ParraAppState
 
     func notificationExpectation(
         name: Notification.Name,
@@ -36,9 +35,5 @@ struct MockParra {
 
     func tearDown() async throws {
         mockNetworkManager.urlSession.resetExpectations()
-
-//        if await parra.state.isInitialized() {
-//            await parra.state.unregisterModule(module: parra)
-//        }
     }
 }

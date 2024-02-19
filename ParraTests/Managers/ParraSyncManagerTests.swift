@@ -17,7 +17,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
 
         if await mockParra.syncManager.syncState.isSyncing() {
             // The test is over. Queued jobs should not be started.
-            await mockParra.syncManager.cancelEnqueuedSyncs()
+            mockParra.syncManager.cancelEnqueuedSyncs()
 
             // If there is still a sync in progress when the test ends, wait for it.
             let syncDidEndExpectation = mockParra.notificationExpectation(
@@ -44,19 +44,29 @@ class ParraSyncManagerTests: MockedParraTestCase {
         let syncTimerTickedExpectation = expectation(
             description: "Sync started"
         )
+        // Should fulfill exactly once after call to start sync timer. After
+        // that has been awaited, ignore subsequent repeat fulfillments as the
+        // timer keeps ticking.
+        syncTimerTickedExpectation.assertForOverFulfill = false
+
         mockParra.syncManager.startSyncTimer {
             syncTimerTickedExpectation.fulfill()
         }
 
-        logEventToSession(named: "test")
+        await fulfillment(
+            of: [syncTimerTickedExpectation],
+            timeout: mockParra.syncManager.syncDelay + 0.2
+        )
 
         let syncDidBeginExpectation = mockParra.notificationExpectation(
             name: Parra.syncDidBeginNotification,
             object: mockParra.syncManager
         )
 
+        logEventToSession(named: "test")
+
         await fulfillment(
-            of: [syncTimerTickedExpectation, syncDidBeginExpectation],
+            of: [syncDidBeginExpectation],
             timeout: mockParra.syncManager.syncDelay + 0.5
         )
     }
@@ -151,7 +161,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
     }
 
     func testEnqueuingSyncWithoutAuthStopsExistingTimer() async throws {
-        await mockParra.networkManager.updateAuthenticationProvider(nil)
+        mockParra.networkManager.updateAuthenticationProvider(nil)
 
         let syncTimerTickedExpectation = expectation(
             description: "Sync ticked"
@@ -174,7 +184,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
     }
 
     func testSyncEventsIgnoredWithoutAuthProviderSet() async throws {
-        await mockParra.networkManager.updateAuthenticationProvider(nil)
+        mockParra.networkManager.updateAuthenticationProvider(nil)
 
         let syncDidEnd = mockParra.notificationExpectation(
             name: Parra.syncDidEndNotification,
@@ -226,7 +236,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
 
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
-        let hasEnqueuedSyncJobs = await mockParra.syncManager
+        let hasEnqueuedSyncJobs = mockParra.syncManager
             .enqueuedSyncMode != nil
         XCTAssertTrue(hasEnqueuedSyncJobs)
 
@@ -264,6 +274,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
         let syncTimerTickedExpectation = expectation(
             description: "Sync timer ticked"
         )
+        syncTimerTickedExpectation.assertForOverFulfill = false
         let syncTimerNotTickedAfterFirstSyncExpectation = expectation(
             description: "Sync timer hasn't ticked after first sync complete"
         )
@@ -359,13 +370,13 @@ class ParraSyncManagerTests: MockedParraTestCase {
         )
         sync2DidBegin.isInverted = true
 
-        let hasEnqueuedSyncJobs = await mockParra.syncManager
+        let hasEnqueuedSyncJobs = mockParra.syncManager
             .enqueuedSyncMode != nil
         XCTAssertTrue(hasEnqueuedSyncJobs)
 
-        await mockParra.syncManager.cancelEnqueuedSyncs()
+        mockParra.syncManager.cancelEnqueuedSyncs()
 
-        let hasEnqueuedSyncJobsAfterCancel = await mockParra.syncManager
+        let hasEnqueuedSyncJobsAfterCancel = mockParra.syncManager
             .enqueuedSyncMode != nil
         XCTAssertFalse(hasEnqueuedSyncJobsAfterCancel)
 

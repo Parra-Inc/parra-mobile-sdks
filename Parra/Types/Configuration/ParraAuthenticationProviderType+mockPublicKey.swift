@@ -14,8 +14,8 @@ extension ParraAuthenticationProviderType {
         -> ParraAuthenticationProviderType
     {
         return .publicKey(
-            tenantId: mockParra.tenantId,
-            applicationId: mockParra.applicationId,
+            tenantId: mockParra.appState.tenantId,
+            applicationId: mockParra.appState.applicationId,
             apiKeyId: UUID().uuidString,
             userIdProvider: {
                 return UUID().uuidString
