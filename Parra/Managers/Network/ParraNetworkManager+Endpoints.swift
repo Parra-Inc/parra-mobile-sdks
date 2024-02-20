@@ -132,11 +132,11 @@ extension ParraNetworkManager {
     func submitSession(
         _ sessionUpload: ParraSessionUpload
     ) async throws -> AuthenticatedRequestResult<ParraSessionsResponse> {
-        let tenantId = await appState.tenantId
-
         let response: AuthenticatedRequestResult<ParraSessionsResponse> =
             await performAuthenticatedRequest(
-                endpoint: .postBulkSubmitSessions(tenantId: tenantId),
+                endpoint: .postBulkSubmitSessions(
+                    tenantId: appState.tenantId
+                ),
                 config: .defaultWithRetries,
                 body: sessionUpload
             )
@@ -147,8 +147,6 @@ extension ParraNetworkManager {
     // MARK: - Push
 
     func uploadPushToken(token: String) async throws {
-        let tenantId = await appState.tenantId
-
         let body: [String: String] = [
             "token": token,
             "type": "apns"
@@ -156,7 +154,7 @@ extension ParraNetworkManager {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await performAuthenticatedRequest(
-                endpoint: .postPushTokens(tenantId: tenantId),
+                endpoint: .postPushTokens(tenantId: appState.tenantId),
                 body: body
             )
 

@@ -32,12 +32,7 @@ struct TextEditorComponent: TextEditorComponentType {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // spacing controlled by individual component padding.
-            if let title = content.title, let titleStyle = style.titleStyle {
-                LabelComponent(
-                    content: title,
-                    style: titleStyle
-                )
-            }
+            titleLabel
 
             applyStyle(
                 to: TextEditor(text: $text)
@@ -48,7 +43,7 @@ struct TextEditorComponent: TextEditorComponentType {
                 content.textChanged?(newValue)
             }
 
-            inputMessage
+            helperLabel
         }
         .padding(style.attributes.padding ?? .zero)
         .applyBackground(style.attributes.background)
@@ -89,117 +84,175 @@ struct TextEditorComponent: TextEditorComponentType {
 
     @ViewBuilder
     func applyStyle(to view: some View) -> some View {
-        let theme = themeObserver.theme
-        let palette = themeObserver.theme.palette
-
-        let attributes = style.attributes
-        let fontColor = attributes.fontColor ?? palette.primaryText
-            .toParraColor()
-
-        let contentInsets = EdgeInsets(vertical: 4, horizontal: 8)
-
         view
-            .tint(theme.palette.primary.toParraColor())
+            .tint(themeObserver.theme.palette.primary.toParraColor())
             .background(.clear)
             .contentMargins(
                 .all,
-                contentInsets,
+                Constant.contentInsets,
                 for: .automatic
             )
             .frame(
-                minWidth: attributes.frame?.minWidth,
-                idealWidth: attributes.frame?.idealWidth,
-                maxWidth: attributes.frame?.maxWidth,
-                minHeight: attributes.frame?.minHeight,
-                idealHeight: attributes.frame?.idealHeight,
-                maxHeight: attributes.frame?.maxHeight,
-                alignment: attributes.frame?.alignment ?? .center
+                minWidth: style.attributes.frame?.minWidth,
+                idealWidth: style.attributes.frame?.idealWidth,
+                maxWidth: style.attributes.frame?.maxWidth,
+                minHeight: style.attributes.frame?.minHeight,
+                idealHeight: style.attributes.frame?.idealHeight,
+                maxHeight: style.attributes.frame?.maxHeight,
+                alignment: style.attributes.frame?.alignment ?? .center
             )
             .foregroundStyle(fontColor)
             .overlay(
                 UnevenRoundedRectangle(
-                    cornerRadii: theme.cornerRadius
-                        .value(for: attributes.cornerRadius)
+                    cornerRadii: themeObserver.theme.cornerRadius
+                        .value(for: style.attributes.cornerRadius)
                 )
                 .stroke(
-                    attributes.borderColor ?? palette.secondaryBackground,
-                    lineWidth: attributes.borderWidth
+                    style.attributes.borderColor
+                        ?? themeObserver.theme.palette.secondaryBackground,
+                    lineWidth: style.attributes.borderWidth
                 )
             )
             .overlay(alignment: .topLeading) {
-                if let placeholder = content.placeholder, text.isEmpty {
-                    Text(placeholder.text)
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity,
-                            alignment: .topLeading
-                        )
-                        .padding(EdgeInsets(
-                            vertical: contentInsets.top + 8,
-                            horizontal: contentInsets.leading + 6
-                        ))
-                        .foregroundStyle(fontColor.opacity(0.5))
-                        .font(attributes.font)
-                        .fontDesign(attributes.fontDesign)
-                        .fontWeight(attributes.fontWeight)
-                        .fontWidth(attributes.fontWidth)
-                        .allowsHitTesting(false)
-
-                } else {
-                    EmptyView()
-                }
+                placeholder
             }
-            .font(attributes.font)
-            .fontDesign(attributes.fontDesign)
-            .fontWeight(attributes.fontWeight)
-            .fontWidth(attributes.fontWidth)
+            .overlay(alignment: .bottomTrailing) {
+                characterCount
+            }
+            .font(style.attributes.font)
+            .fontDesign(style.attributes.fontDesign)
+            .fontWeight(style.attributes.fontWeight)
+            .fontWidth(style.attributes.fontWidth)
             .lineLimit((config.minLines ?? 0)...)
     }
 
     // MARK: - Private
 
+    private enum Constant {
+        static let contentInsets = EdgeInsets(
+            vertical: 4,
+            horizontal: 8
+        )
+
+        static let primaryTextPadding = EdgeInsets(
+            vertical: contentInsets.top + 8,
+            horizontal: contentInsets.leading + 6
+        )
+    }
+
     @State private var text = ""
     @State private var hasReceivedInput = false
 
-    @ViewBuilder private var inputMessage: some View {
-//        if let helper = content.helper, let helperStyle = style.helperStyle {
-//            LabelComponent(
-//                config: config.helper,
-//                content: helper,
-//                style: helperStyle
-//            )
-//            .frame(maxWidth: .infinity, alignment: .trailing)
-//        }
-        EmptyView()
-//        let (message, isError): (String?, Bool) = if let errorMessage = content.errorMessage {
-//            (errorMessage, true)
-//        } else if config.showStatusLabel {
-//            characterCountString(with: config.maxCharacters)
-//        } else {
-//            (nil, false)
-//        }
-//
-//        if let message {
-//            Text(message)
-//                .foregroundColor(
-//                    isError && hasReceivedInput
-//                        ? themeObserver.theme.palette.error.toParraColor()
-//                        : themeObserver.theme.palette.secondaryText.toParraColor()
-//                )
-//                .padding(.trailing, 4)
-//        } else {
-//            EmptyView()
-//        }
+    @ViewBuilder private var titleLabel: some View {
+        if let title = content.title, let titleStyle = style.titleStyle {
+            LabelComponent(
+                content: title,
+                style: titleStyle
+            )
+        }
     }
 
-    private func characterCountString(with max: Int?) -> (String, Bool) {
+    private var fontColor: Color {
+        return style.attributes.fontColor
+            ?? themeObserver.theme.palette.primaryText.toParraColor()
+    }
+
+    @ViewBuilder private var placeholder: some View {
+        let attributes = style.attributes
+
+        if let placeholder = content.placeholder, text.isEmpty {
+            Text(placeholder.text)
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity,
+                    alignment: .topLeading
+                )
+                .padding(Constant.primaryTextPadding)
+                .foregroundStyle(fontColor.opacity(0.5))
+                .font(attributes.font)
+                .fontDesign(attributes.fontDesign)
+                .fontWeight(attributes.fontWeight)
+                .fontWidth(attributes.fontWidth)
+                .allowsHitTesting(false)
+        }
+    }
+
+    @ViewBuilder private var characterCount: some View {
+        if config.showCharacterCountLabel {
+            let (count, allowed) = characterCountString(
+                with: config.maxCharacters
+            )
+
+            let content = LabelContent(text: count)
+
+            LabelComponent(
+                content: content,
+                style: ParraAttributedLabelStyle(
+                    content: content,
+                    attributes: .defaultFormCallout(
+                        in: themeObserver.theme,
+                        with: LabelConfig(fontStyle: .callout),
+                        erroring: !allowed
+                    ),
+                    theme: themeObserver.theme
+                )
+            )
+        }
+    }
+
+    @ViewBuilder private var helperLabel: some View {
+        let (message, baseStyle, isError): (
+            String?,
+            ParraAttributedLabelStyle?,
+            Bool
+        ) = if let errorMessage = style.content.errorMessage,
+               config.showValidationErrors
+        {
+            // Even though we're displaying the error message, we only want to
+            // render it as an error if input has already been received. This
+            // prevents errors from being as apparent before the user has had
+            // the chance to try to enter anything.
+            (errorMessage, nil, hasReceivedInput)
+        } else if let helperContent = content.helper,
+                  let helperStyle = style.helperStyle
+        {
+            (helperContent.text, helperStyle, false)
+        } else {
+            (nil, nil, false)
+        }
+
+        if let message {
+            let content = LabelContent(text: message)
+            let style = baseStyle?.withContent(
+                content: content
+            ) ?? ParraAttributedLabelStyle(
+                content: content,
+                attributes: .defaultFormHelper(
+                    in: themeObserver.theme,
+                    with: LabelConfig(fontStyle: .caption),
+                    erroring: isError
+                ),
+                theme: themeObserver.theme
+            )
+
+            LabelComponent(
+                content: content,
+                style: style
+            )
+            .padding(.trailing, 4)
+        }
+    }
+
+    private func characterCountString(
+        with max: Int?
+    ) -> (String, Bool) {
         let characterCount = text.count
 
         guard let max else {
             return (String(characterCount), false)
         }
 
-        return ("\(characterCount)/\(max)", characterCount > max)
+        return ("\(characterCount)/\(max)", characterCount <= max)
     }
 }
 
@@ -264,7 +317,7 @@ private func renderTextEditor(
                 title: "Some title",
                 placeholder: "temp placeholder",
                 helper: "helper text woo",
-                errorMessage: nil,
+                errorMessage: "That text isn't very good",
                 textChanged: nil
             )
         )

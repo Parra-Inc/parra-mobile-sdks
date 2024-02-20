@@ -19,46 +19,18 @@ struct MenuComponent: MenuComponentType {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // spacing controlled by individual component padding.
-            if let title = content.title, let titleStyle = style.titleStyle {
-                LabelComponent(
-                    content: title,
-                    style: titleStyle
-                )
-            }
+            titleLabel
 
             Menu {
                 ForEach(content.options.indices, id: \.self) { index in
                     menuItem(for: index)
                 }
             } label: {
-                HStack {
-                    // TODO: Use LabelComponent for this whole thing and support passing spacing/icon config to it
-                    menuLabel
-
-                    Spacer()
-
-                    Image(systemName: "chevron.up.chevron.down")
-                        .padding(.vertical, 16)
-                        .foregroundStyle(.primary.opacity(elementOpacity))
-                        .frame(width: 24, height: 24)
-                        .padding(
-                            .trailing,
-                            style.menuOptionStyle.attributes.padding?
-                                .trailing ?? 0
-                        )
-                }
+                menuLabel
             }
             .menuStyle(style)
 
-            if let helper = content.helper,
-               let helperStyle = style.helperStyle
-            {
-                LabelComponent(
-                    content: helper,
-                    style: helperStyle
-                )
-                .frame(maxWidth: .infinity, alignment: .trailing)
-            }
+            helperLabel
         }
         .padding(style.attributes.padding ?? .zero)
         .applyBackground(style.attributes.background)
@@ -120,7 +92,16 @@ struct MenuComponent: MenuComponentType {
         return selectedOption != nil ? 1.0 : 0.6
     }
 
-    @ViewBuilder private var menuLabel: some View {
+    @ViewBuilder private var titleLabel: some View {
+        if let title = content.title, let titleStyle = style.titleStyle {
+            LabelComponent(
+                content: title,
+                style: titleStyle
+            )
+        }
+    }
+
+    @ViewBuilder private var menuLabelText: some View {
         if let selectedOption {
             let content = LabelContent(text: selectedOption.title)
 
@@ -151,6 +132,36 @@ struct MenuComponent: MenuComponentType {
             } else {
                 EmptyView()
             }
+        }
+    }
+
+    @ViewBuilder private var menuLabel: some View {
+        HStack {
+            // TODO: Use LabelComponent for this whole thing and support passing spacing/icon config to it
+            menuLabelText
+
+            Spacer()
+
+            Image(systemName: "chevron.up.chevron.down")
+                .padding(.vertical, 16)
+                .foregroundStyle(.primary.opacity(elementOpacity))
+                .frame(width: 24, height: 24)
+                .padding(
+                    .trailing,
+                    style.menuOptionStyle.attributes.padding?
+                        .trailing ?? 0
+                )
+        }
+    }
+
+    @ViewBuilder private var helperLabel: some View {
+        if let helper = content.helper,
+           let helperStyle = style.helperStyle
+        {
+            LabelComponent(
+                content: helper,
+                style: helperStyle
+            )
         }
     }
 

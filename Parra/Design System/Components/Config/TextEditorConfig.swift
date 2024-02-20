@@ -18,7 +18,10 @@ public struct TextEditorConfig {
         minCharacters: Int? = nil,
         maxCharacters: Int? = nil,
         maxHeight: Int? = nil,
-        showStatusLabel: Bool = TextEditorConfig.default.showStatusLabel
+        showCharacterCountLabel: Bool = TextEditorConfig.default
+            .showCharacterCountLabel,
+        showValidationErrors: Bool = TextEditorConfig.default
+            .showValidationErrors
     ) {
         self.title = title
         self.helper = helper
@@ -26,7 +29,8 @@ public struct TextEditorConfig {
         self.minCharacters = minCharacters
         self.maxCharacters = maxCharacters
         self.maxHeight = maxHeight
-        self.showStatusLabel = showStatusLabel
+        self.showCharacterCountLabel = showCharacterCountLabel
+        self.showValidationErrors = showValidationErrors
     }
 
     // MARK: - Public
@@ -39,8 +43,15 @@ public struct TextEditorConfig {
     public let maxCharacters: Int?
     public let maxHeight: Int?
 
-    /// Whether or not to show the status label that displays characters remaining/etc.
-    public let showStatusLabel: Bool
+    /// Whether or not to show a label in the bottom trailing corner of the text
+    /// editor that displays the character count. If ``maxCharacters`` is set,
+    /// this displays "n/max" otherwise it just displays "n"
+    public let showCharacterCountLabel: Bool
+
+    /// Whether or not to show validation errors if any exist in place of the
+    /// helper text string. If you don't want to display anything below the text
+    /// editor, set this to false and leave ``helper`` unset.
+    public let showValidationErrors: Bool
 
     // MARK: - Internal
 
@@ -51,7 +62,8 @@ public struct TextEditorConfig {
         minCharacters: 0,
         maxCharacters: nil,
         maxHeight: 240,
-        showStatusLabel: true
+        showCharacterCountLabel: true,
+        showValidationErrors: true
     )
 
     func withDefaults(from defaults: TextEditorConfig) -> TextEditorConfig {
@@ -64,7 +76,8 @@ public struct TextEditorConfig {
                 .maxCharacters ?? TextEditorConfig.default.maxCharacters,
             maxHeight: maxHeight ?? defaults.maxHeight ?? TextEditorConfig
                 .default.maxHeight,
-            showStatusLabel: showStatusLabel
+            showCharacterCountLabel: showCharacterCountLabel,
+            showValidationErrors: showValidationErrors
         )
     }
 
@@ -78,7 +91,8 @@ public struct TextEditorConfig {
             minCharacters: data.minCharacters,
             maxCharacters: data.maxCharacters,
             maxHeight: data.maxHeight,
-            showStatusLabel: showStatusLabel
+            showCharacterCountLabel: showCharacterCountLabel,
+            showValidationErrors: showValidationErrors
         )
     }
 }

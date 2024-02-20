@@ -140,16 +140,15 @@ class FeedbackFormContentObserver: ContainerContentObserver {
         content = content.withUpdates(
             to: updatedFields
         )
-
-        print("Content changed. Is valid: \(content.canSubmit)")
     }
 
     // MARK: - Private
 
     private func submit() {
         let data = content.fields
-            .reduce([FeedbackFormField: String](
-            )) { accumulator, fieldWithState in
+            .reduce(
+                [FeedbackFormField: String]()
+            ) { accumulator, fieldWithState in
                 guard let value = fieldWithState.value else {
                     return accumulator
                 }

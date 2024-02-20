@@ -90,12 +90,40 @@ public struct LabelAttributes: ParraStyleAttributes {
 
     static func defaultFormHelper(
         in theme: ParraTheme,
-        with config: LabelConfig
+        with config: LabelConfig,
+        erroring: Bool = false
     ) -> LabelAttributes {
+        let fontColor = erroring
+            ? theme.palette.error.toParraColor()
+            : theme.palette.secondaryText.toParraColor()
+
         return LabelComponent.applyStandardCustomizations(
             onto: LabelAttributes(
-                fontColor: theme.palette.secondaryText.toParraColor(),
-                padding: EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 2)
+                fontColor: fontColor,
+                padding: EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 2),
+                frame: FrameAttributes(
+                    maxWidth: .infinity,
+                    alignment: .trailing
+                )
+            ),
+            theme: theme,
+            config: config
+        )
+    }
+
+    static func defaultFormCallout(
+        in theme: ParraTheme,
+        with config: LabelConfig,
+        erroring: Bool = false
+    ) -> LabelAttributes {
+        let fontColor = erroring
+            ? theme.palette.error.toParraColor()
+            : theme.palette.secondaryText.toParraColor()
+
+        return LabelComponent.applyStandardCustomizations(
+            onto: LabelAttributes(
+                fontColor: fontColor.opacity(0.8),
+                padding: EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 8)
             ),
             theme: theme,
             config: config

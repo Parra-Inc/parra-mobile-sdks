@@ -20,6 +20,11 @@ struct FeedbackFormConfig: ContainerConfig {
         ),
         textFields: TextEditorConfig(
             title: LabelConfig(fontStyle: .subheadline),
+            helper: LabelConfig(fontStyle: .caption),
+            maxCharacters: 30
+        ),
+        inputFields: TextEditorConfig(
+            title: LabelConfig(fontStyle: .subheadline),
             helper: LabelConfig(fontStyle: .caption)
         ),
         submitButton: ButtonConfig(
