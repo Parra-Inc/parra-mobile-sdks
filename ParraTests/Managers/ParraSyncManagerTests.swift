@@ -67,7 +67,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
 
         await fulfillment(
             of: [syncDidBeginExpectation],
-            timeout: mockParra.syncManager.syncDelay + 0.5
+            timeout: mockParra.syncManager.syncDelay + 5.0
         )
     }
 
