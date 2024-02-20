@@ -93,6 +93,25 @@ struct FeedbackFormWidget: Container {
                         content: content,
                         localAttributes: nil
                     )
+                case .feedbackFormInputFieldData(let data):
+                    let content = TextInputContent(
+                        title: field.title,
+                        placeholder: data.placeholder,
+                        helper: field.helperText,
+                        errorMessage: fieldWithState.state.errorMessage
+                    ) { newText in
+                        onFieldValueChanged(
+                            field: field,
+                            value: newText
+                        )
+                    }
+
+                    componentFactory.buildTextInput(
+                        component: \.inputFields,
+                        config: config.inputFields.withFormTextFieldData(data),
+                        content: content,
+                        localAttributes: nil
+                    )
                 }
             }
         }
@@ -181,7 +200,7 @@ struct FeedbackFormWidget: Container {
                     title: "Leave feedback",
                     description: "We'd love to hear from you. Your input helps us make our product better.",
                     fields: [
-                        .init(
+                        FeedbackFormField(
                             name: "type",
                             title: "Type of Feedback",
                             helperText: "Select one, please!",
@@ -220,8 +239,20 @@ struct FeedbackFormWidget: Container {
                                 )
                             )
                         ),
-                        .init(
-                            name: "response",
+                        FeedbackFormField(
+                            name: "response-input",
+                            title: "Your Feedback",
+                            helperText: nil,
+                            type: .input,
+                            required: true,
+                            data: .feedbackFormInputFieldData(
+                                FeedbackFormInputFieldData(
+                                    placeholder: "placeholder"
+                                )
+                            )
+                        ),
+                        FeedbackFormField(
+                            name: "response-text",
                             title: "Your Feedback",
                             helperText: nil,
                             type: .text,
@@ -230,7 +261,6 @@ struct FeedbackFormWidget: Container {
                                 FeedbackFormTextFieldData(
                                     placeholder: "placeholder",
                                     lines: 5,
-                                    maxLines: 10,
                                     minCharacters: 20,
                                     maxCharacters: 420,
                                     maxHeight: 200

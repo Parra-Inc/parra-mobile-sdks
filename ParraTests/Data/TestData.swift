@@ -390,7 +390,6 @@ enum TestData {
                                 FeedbackFormTextFieldData(
                                     placeholder: "placeholder",
                                     lines: 4,
-                                    maxLines: 69,
                                     minCharacters: 20,
                                     maxCharacters: 420,
                                     maxHeight: 200

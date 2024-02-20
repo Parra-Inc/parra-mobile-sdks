@@ -36,6 +36,12 @@ public final class FeedbackFormWidgetComponentFactory: ParraComponentFactory {
             TextEditorContent,
             TextEditorAttributes
         >? = nil,
+        inputFields: ComponentBuilder.Factory<
+            TextField<Text>,
+            TextInputConfig,
+            TextInputContent,
+            TextInputAttributes
+        >? = nil,
         submitButtonBuilder: ComponentBuilder.Factory<
             Button<Text>,
             ButtonConfig,
@@ -47,6 +53,7 @@ public final class FeedbackFormWidgetComponentFactory: ParraComponentFactory {
         self.description = descriptionBuilder
         self.selectFields = selectFields
         self.textFields = textFields
+        self.inputFields = inputFields
         self.submitButton = submitButtonBuilder
     }
 
@@ -75,6 +82,12 @@ public final class FeedbackFormWidgetComponentFactory: ParraComponentFactory {
         TextEditorConfig,
         TextEditorContent,
         TextEditorAttributes
+    >?
+    let inputFields: ComponentBuilder.Factory<
+        TextField<Text>,
+        TextInputConfig,
+        TextInputContent,
+        TextInputAttributes
     >?
     let submitButton: ComponentBuilder.Factory<
         Button<Text>,

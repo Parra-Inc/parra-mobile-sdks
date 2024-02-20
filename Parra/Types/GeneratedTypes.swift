@@ -341,6 +341,7 @@ public struct FeedbackFormData: Codable, Equatable, Hashable {
 }
 
 public enum FeedbackFormFieldType: String, Codable {
+    case input
     case text
     case select
 }
@@ -378,6 +379,13 @@ public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
         )
         self.required = try container.decode(Bool.self, forKey: .required)
         switch type {
+        case .input:
+            self.data = try .feedbackFormInputFieldData(
+                container.decode(
+                    FeedbackFormInputFieldData.self,
+                    forKey: .data
+                )
+            )
         case .text:
             self.data = try .feedbackFormTextFieldData(
                 container.decode(FeedbackFormTextFieldData.self, forKey: .data)
@@ -418,9 +426,26 @@ public struct FeedbackFormField: Codable, Equatable, Hashable, Identifiable {
 public enum FeedbackFormFieldData: Codable, Equatable, Hashable {
     case feedbackFormTextFieldData(FeedbackFormTextFieldData)
     case feedbackFormSelectFieldData(FeedbackFormSelectFieldData)
+    case feedbackFormInputFieldData(FeedbackFormInputFieldData)
 }
 
 public protocol FeedbackFormFieldDataType {}
+
+public struct FeedbackFormInputFieldData: Codable, Equatable, Hashable,
+    FeedbackFormFieldDataType
+{
+    // MARK: - Lifecycle
+
+    public init(
+        placeholder: String
+    ) {
+        self.placeholder = placeholder
+    }
+
+    // MARK: - Public
+
+    public let placeholder: String
+}
 
 public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable,
     FeedbackFormFieldDataType
@@ -429,16 +454,13 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable,
 
     public init(
         placeholder: String?,
-        // TODO: Remove lines/maxLines
         lines: Int?,
-        maxLines: Int?,
         minCharacters: Int?,
         maxCharacters: Int?,
         maxHeight: Int?
     ) {
         self.placeholder = placeholder
         self.lines = lines
-        self.maxLines = maxLines
         self.minCharacters = minCharacters
         self.maxCharacters = maxCharacters
         self.maxHeight = maxHeight
@@ -449,7 +471,6 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable,
     public enum CodingKeys: String, CodingKey {
         case placeholder
         case lines
-        case maxLines
         case minCharacters
         case maxCharacters
         case maxHeight
@@ -457,7 +478,6 @@ public struct FeedbackFormTextFieldData: Codable, Equatable, Hashable,
 
     public let placeholder: String?
     public let lines: Int?
-    public let maxLines: Int?
     public let minCharacters: Int?
     public let maxCharacters: Int?
     public let maxHeight: Int?

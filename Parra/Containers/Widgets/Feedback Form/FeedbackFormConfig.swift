@@ -23,7 +23,7 @@ struct FeedbackFormConfig: ContainerConfig {
             helper: LabelConfig(fontStyle: .caption),
             maxCharacters: 30
         ),
-        inputFields: TextEditorConfig(
+        inputFields: TextInputConfig(
             title: LabelConfig(fontStyle: .subheadline),
             helper: LabelConfig(fontStyle: .caption)
         ),
@@ -40,11 +40,11 @@ struct FeedbackFormConfig: ContainerConfig {
     /// Any dynamic "select" fields
     let selectFields: MenuConfig
 
-    /// Any dynamic "text" fields
+    /// Any dynamic multi-line "text" fields
     let textFields: TextEditorConfig
 
-    // TODO: Single line fields
-//    let inputFields: TextFieldConfig
+    /// Any dynamic single-line "input" fields
+    let inputFields: TextInputConfig
 
     let submitButton: ButtonConfig
 }

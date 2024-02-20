@@ -42,6 +42,12 @@ struct FormFieldWithState: Identifiable {
         for field: FeedbackFormField
     ) -> FormFieldState {
         switch field.data {
+        case .feedbackFormInputFieldData:
+            return if value == nil {
+                .invalid("No input has been provided.")
+            } else {
+                .valid
+            }
         case .feedbackFormTextFieldData(let data):
             var rules = [TextValidatorRule]()
 

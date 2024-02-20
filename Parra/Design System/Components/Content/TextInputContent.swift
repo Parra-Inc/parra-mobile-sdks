@@ -1,14 +1,14 @@
 //
-//  TextEditorContent.swift
+//  TextInputContent.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 2/5/24.
+//  Created by Mick MacCallum on 2/20/24.
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
 import SwiftUI
 
-public struct TextEditorContent {
+public struct TextInputContent {
     // MARK: - Lifecycle
 
     init(

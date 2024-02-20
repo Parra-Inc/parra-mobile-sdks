@@ -17,12 +17,14 @@ public class GlobalComponentAttributes {
         labelAttributeFactory: LabelAttributeFactory? = nil,
         buttonAttributeFactory: ButtonAttributeFactory? = nil,
         menuAttributeFactory: MenuAttributeFactory? = nil,
-        textEditorAttributeFactory: TextEditorAttributeFactory? = nil
+        textEditorAttributeFactory: TextEditorAttributeFactory? = nil,
+        textInputAttributeFactory: TextInputAttributeFactory? = nil
     ) {
         self.labelAttributeFactory = labelAttributeFactory
         self.buttonAttributeFactory = buttonAttributeFactory
         self.menuAttributeFactory = menuAttributeFactory
         self.textEditorAttributeFactory = textEditorAttributeFactory
+        self.textInputAttributeFactory = textInputAttributeFactory
     }
 
     // MARK: - Public
@@ -51,10 +53,17 @@ public class GlobalComponentAttributes {
         _ defaultAttributes: TextEditorAttributes?
     ) -> TextEditorAttributes
 
+    public typealias TextInputAttributeFactory = (
+        _ config: TextInputConfig,
+        _ content: TextInputContent,
+        _ defaultAttributes: TextInputAttributes?
+    ) -> TextInputAttributes
+
     // MARK: - Internal
 
     private(set) var labelAttributeFactory: LabelAttributeFactory?
     private(set) var buttonAttributeFactory: ButtonAttributeFactory?
     private(set) var menuAttributeFactory: MenuAttributeFactory?
     private(set) var textEditorAttributeFactory: TextEditorAttributeFactory?
+    private(set) var textInputAttributeFactory: TextInputAttributeFactory?
 }
