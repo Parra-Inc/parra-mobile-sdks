@@ -76,6 +76,8 @@ class ParraSyncManagerTests: MockedParraTestCase {
             description: "Sync ticked"
         )
         syncTimerTickedExpectation.isInverted = true
+        syncTimerTickedExpectation.assertForOverFulfill = false
+
         mockParra.syncManager.startSyncTimer {
             syncTimerTickedExpectation.fulfill()
         }
@@ -167,6 +169,8 @@ class ParraSyncManagerTests: MockedParraTestCase {
             description: "Sync ticked"
         )
         syncTimerTickedExpectation.isInverted = true
+        syncTimerTickedExpectation.assertForOverFulfill = false
+
         mockParra.syncManager.startSyncTimer {
             syncTimerTickedExpectation.fulfill()
         }
