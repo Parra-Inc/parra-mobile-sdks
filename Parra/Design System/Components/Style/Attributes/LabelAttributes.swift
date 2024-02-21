@@ -122,8 +122,7 @@ public struct LabelAttributes: ParraStyleAttributes {
 
         return LabelComponent.applyStandardCustomizations(
             onto: LabelAttributes(
-                fontColor: fontColor.opacity(0.8),
-                padding: EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 8)
+                fontColor: fontColor.opacity(0.8)
             ),
             theme: theme,
             config: config

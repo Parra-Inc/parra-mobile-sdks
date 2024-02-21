@@ -34,13 +34,29 @@ struct TextEditorComponent: TextEditorComponentType {
             // spacing controlled by individual component padding.
             titleLabel
 
-            applyStyle(
-                to: TextEditor(text: $text)
-            )
-            .onChange(of: text) { _, newValue in
-                hasReceivedInput = true
+            ZStack {
+                applyStyle(
+                    to: TextEditor(text: $text)
+                )
+                .onChange(of: text) { _, newValue in
+                    hasReceivedInput = true
 
-                content.textChanged?(newValue)
+                    content.textChanged?(newValue)
+                }
+
+                UnevenRoundedRectangle(
+                    cornerRadii: themeObserver.theme.cornerRadius
+                        .value(for: style.attributes.cornerRadius)
+                )
+                .stroke(
+                    style.attributes.borderColor
+                        ?? themeObserver.theme.palette.secondaryBackground,
+                    lineWidth: style.attributes.borderWidth
+                )
+
+                placeholder
+
+                characterCount
             }
 
             helperLabel
@@ -102,23 +118,6 @@ struct TextEditorComponent: TextEditorComponentType {
                 alignment: style.attributes.frame?.alignment ?? .center
             )
             .foregroundStyle(fontColor)
-            .overlay(
-                UnevenRoundedRectangle(
-                    cornerRadii: themeObserver.theme.cornerRadius
-                        .value(for: style.attributes.cornerRadius)
-                )
-                .stroke(
-                    style.attributes.borderColor
-                        ?? themeObserver.theme.palette.secondaryBackground,
-                    lineWidth: style.attributes.borderWidth
-                )
-            )
-            .overlay(alignment: .topLeading) {
-                placeholder
-            }
-            .overlay(alignment: .bottomTrailing) {
-                characterCount
-            }
             .font(style.attributes.font)
             .fontDesign(style.attributes.fontDesign)
             .fontWeight(style.attributes.fontWeight)
@@ -177,29 +176,6 @@ struct TextEditorComponent: TextEditorComponentType {
         }
     }
 
-    @ViewBuilder private var characterCount: some View {
-        if config.showCharacterCountLabel {
-            let (count, allowed) = characterCountString(
-                with: config.maxCharacters
-            )
-
-            let content = LabelContent(text: count)
-
-            LabelComponent(
-                content: content,
-                style: ParraAttributedLabelStyle(
-                    content: content,
-                    attributes: .defaultFormCallout(
-                        in: themeObserver.theme,
-                        with: LabelConfig(fontStyle: .callout),
-                        erroring: !allowed
-                    ),
-                    theme: themeObserver.theme
-                )
-            )
-        }
-    }
-
     @ViewBuilder private var helperLabel: some View {
         let (message, baseStyle, isError): (
             String?,
@@ -240,6 +216,39 @@ struct TextEditorComponent: TextEditorComponentType {
                 style: style
             )
             .padding(.trailing, 4)
+        }
+    }
+
+    @ViewBuilder private var characterCount: some View {
+        if config.showCharacterCountLabel {
+            let (count, allowed) = characterCountString(
+                with: config.maxCharacters
+            )
+
+            let content = LabelContent(text: count)
+
+            VStack {
+                LabelComponent(
+                    content: content,
+                    style: ParraAttributedLabelStyle(
+                        content: content,
+                        attributes: .defaultFormCallout(
+                            in: themeObserver.theme,
+                            with: LabelConfig(fontStyle: .callout),
+                            erroring: !allowed
+                        ),
+                        theme: themeObserver.theme
+                    )
+                )
+                .padding(
+                    EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 10)
+                )
+            }
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity,
+                alignment: .bottomTrailing
+            )
         }
     }
 
