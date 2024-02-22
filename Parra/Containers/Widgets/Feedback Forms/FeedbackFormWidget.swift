@@ -17,12 +17,9 @@ struct FeedbackFormWidget: Container {
     typealias Style = WidgetStyle
 
     var componentFactory: ComponentFactory<Factory>
-
-    var config: Config
-
-    @StateObject var contentObserver: FeedbackFormContentObserver
-
-    @StateObject var themeObserver: ParraThemeObserver
+    @StateObject var contentObserver: ContentObserver
+    var config: Config = .default
+    @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var header: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -133,25 +130,24 @@ struct FeedbackFormWidget: Container {
     }
 
     var body: some View {
-        withEnvironmentObjects {
-            VStack(alignment: .leading) {
-                // TODO: ScrollView
-                VStack(alignment: .leading, spacing: 20) {
-                    header
+        VStack(alignment: .leading) {
+            // TODO: ScrollView
+            VStack(alignment: .leading, spacing: 20) {
+                header
 
-                    fieldViews
-                }
-                .layoutPriority(100)
-
-                Spacer()
-                    .layoutPriority(0)
-
-                footer
+                fieldViews
             }
-            .background(themeObserver.theme.palette.primaryBackground)
-            .padding(.top, 16)
-            .safeAreaPadding()
+            .layoutPriority(100)
+
+            Spacer()
+                .layoutPriority(0)
+
+            footer
         }
+        .background(themeObserver.theme.palette.primaryBackground)
+        .padding(.top, 16)
+        .safeAreaPadding()
+        .environmentObject(contentObserver)
     }
 
     // MARK: - Private
@@ -168,111 +164,15 @@ struct FeedbackFormWidget: Container {
 }
 
 #Preview {
-    let global = GlobalComponentAttributes(
-        labelAttributeFactory: { _, _, defaultAttributes in
-            return defaultAttributes ?? .init()
-        }
-    )
-
-    let local = FeedbackFormWidgetComponentFactory(
-        titleBuilder: nil,
-        descriptionBuilder: { _, content, _ in
-            if let content {
-                Text(content.text)
-                    .font(.subheadline)
-            } else {
-                nil
-            }
-        },
-        submitButtonBuilder: nil
-    )
-
-    return ParraPreviewApp {
+    ParraContainerPreview { componentFactory in
         FeedbackFormWidget(
-            componentFactory: .init(
-                local: local,
-                global: global,
-                theme: ParraTheme.default
-            ),
-            config: FeedbackFormConfig.default,
+            componentFactory: componentFactory,
             contentObserver: .init(
                 formData: .init(
                     title: "Leave feedback",
                     description: "We'd love to hear from you. Your input helps us make our product better.",
-                    fields: [
-                        FeedbackFormField(
-                            name: "type",
-                            title: "Type of Feedback",
-                            helperText: "Select one, please!",
-                            type: .select,
-                            required: true,
-                            data: .feedbackFormSelectFieldData(
-                                FeedbackFormSelectFieldData(
-                                    placeholder: "Please select an option",
-                                    options: [
-                                        FeedbackFormSelectFieldOption(
-                                            title: "General feedback",
-                                            value: "general-feedback",
-                                            isOther: nil
-                                        ),
-                                        FeedbackFormSelectFieldOption(
-                                            title: "Bug report",
-                                            value: "bug-report",
-                                            isOther: nil
-                                        ),
-                                        FeedbackFormSelectFieldOption(
-                                            title: "Feature request",
-                                            value: "feature-request",
-                                            isOther: nil
-                                        ),
-                                        FeedbackFormSelectFieldOption(
-                                            title: "Idea",
-                                            value: "idea",
-                                            isOther: nil
-                                        ),
-                                        FeedbackFormSelectFieldOption(
-                                            title: "Other",
-                                            value: "other",
-                                            isOther: nil
-                                        )
-                                    ]
-                                )
-                            )
-                        ),
-                        FeedbackFormField(
-                            name: "response-input",
-                            title: "Your Feedback",
-                            helperText: nil,
-                            type: .input,
-                            required: true,
-                            data: .feedbackFormInputFieldData(
-                                FeedbackFormInputFieldData(
-                                    placeholder: "placeholder"
-                                )
-                            )
-                        ),
-                        FeedbackFormField(
-                            name: "response-text",
-                            title: "Your Feedback",
-                            helperText: nil,
-                            type: .text,
-                            required: true,
-                            data: .feedbackFormTextFieldData(
-                                FeedbackFormTextFieldData(
-                                    placeholder: "placeholder",
-                                    lines: 5,
-                                    minCharacters: 20,
-                                    maxCharacters: 420,
-                                    maxHeight: 200
-                                )
-                            )
-                        )
-                    ]
+                    fields: FeedbackFormField.validStates()
                 )
-            ),
-            themeObserver: .init(
-                theme: .default,
-                notificationCenter: ParraNotificationCenter()
             )
         )
     }

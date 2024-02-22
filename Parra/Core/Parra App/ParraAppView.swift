@@ -39,6 +39,12 @@ struct ParraAppView<Content, DelegateType>: View
         self.launchScreenConfig = ParraAppView.configureLaunchScreen(
             with: launchScreenConfig
         )
+        self._themeObserver = StateObject(
+            wrappedValue: ParraThemeObserver(
+                theme: parra.configuration.theme,
+                notificationCenter: parra.notificationCenter
+            )
+        )
     }
 
     // MARK: - Public
@@ -145,6 +151,8 @@ struct ParraAppView<Content, DelegateType>: View
     @StateObject private var parraAppState: ParraAppState
     @StateObject private var launchScreenState = LaunchScreenStateManager()
 
+    @StateObject private var themeObserver: ParraThemeObserver
+
     private let parra: Parra
     private let authProvider: ParraAuthenticationProviderType
     private let launchScreenConfig: ParraLaunchScreen.Config
@@ -152,6 +160,7 @@ struct ParraAppView<Content, DelegateType>: View
     private func renderPrimaryContent() -> some View {
         content()
             .environment(parra)
+            .environmentObject(themeObserver)
     }
 
     private func renderLaunchScreen() -> some View {

@@ -30,10 +30,14 @@ public class ParraFeedback {
         return nil
     }
 
-    /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
-    /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
-    /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
-    /// view the `ParraCardView` initializer if you'd like to only display certain cards.
+    /// Fetch any available cards from the Parra API. Once cards are
+    /// successfully fetched, they will automatically be cached by the
+    /// `ParraFeedback` module and will be automatically displayed in
+    /// `ParraCardView`s when they are added to your view hierarchy. The
+    /// completion handler for this method contains a list of the card items
+    /// that were recevied. If you'd like, you can filter them yourself and only
+    /// pass select card items view the `ParraCardView` initializer if you'd
+    /// like to only display certain cards.
     public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all,
         withCompletion completion: @escaping (Result<
@@ -156,8 +160,6 @@ public class ParraFeedback {
     }
 
     // MARK: - Internal
-
-    private(set) static var name: String = "Feedback"
 
     let dataManager: ParraFeedbackDataManager
     let networkManager: ParraNetworkManager
@@ -295,16 +297,16 @@ public class ParraFeedback {
                 await ParraFeedbackPopupState.shared.present()
             }
 
-            presentCardPopup(
-                with: cardItems,
-                from: nil,
-                config: .default,
-                transitionStyle: .slide,
-                // In this context the user isn't allowed to dismiss the modal manually. It will be auto-
-                // dismissed when they complete the cards.
-                userDismissable: false,
-                onDismiss: onDismiss
-            )
+//            presentCardPopup(
+//                with: cardItems,
+//                from: nil,
+//                config: .default,
+//                transitionStyle: .slide,
+//                // In this context the user isn't allowed to dismiss the modal manually. It will be auto-
+//                // dismissed when they complete the cards.
+//                userDismissable: false,
+//                onDismiss: onDismiss
+//            )
         default:
             logger
                 .trace(

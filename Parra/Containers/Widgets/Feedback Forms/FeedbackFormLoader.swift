@@ -38,6 +38,7 @@ struct FeedbackFormLoader: ViewModifier {
 
     @Environment(Parra.self) var parra
     @Binding var initialState: FormState
+
     var localFactory: FeedbackFormWidgetComponentFactory? = nil
     var onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
 
@@ -77,17 +78,9 @@ struct FeedbackFormLoader: ViewModifier {
                         contentObserver,
                         componentFactory
                     ) = createContentObserver() {
-                        let theme = parra.configuration.theme
-                        let notificationCenter = parra.notificationCenter
-
                         FeedbackFormWidget(
                             componentFactory: componentFactory,
-                            config: .default,
-                            contentObserver: contentObserver,
-                            themeObserver: ParraThemeObserver(
-                                theme: theme,
-                                notificationCenter: notificationCenter
-                            )
+                            contentObserver: contentObserver
                         )
                     } else {
                         EmptyView()

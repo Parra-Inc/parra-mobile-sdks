@@ -69,7 +69,7 @@ struct FeedbackFormCustomLoadingSample: View {
 }
 
 #Preview {
-    ParraPreviewApp {
+    ParraAppPreview {
         FeedbackFormCustomLoadingSample()
     }
 }

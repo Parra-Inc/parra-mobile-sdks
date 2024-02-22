@@ -16,7 +16,7 @@ extension ParraEndpoint {
         case 200 ..< 300:
             switch self {
             case .getCards:
-                object = TestData.Cards.cardsResponse
+                object = ParraCardItemFixtures.cardsResponse
             case .getFeedbackForm(let formId):
                 object = TestData.Forms.formResponse(formId: formId)
             case .postSubmitFeedbackForm:

@@ -66,7 +66,7 @@ public protocol ParraCardViewDelegate: AnyObject {
     )
 
     /// Asks the delegate whether or not it should automatically navigate to the provided `CardItem`. This occurs
-    /// when the user makes a selection on a card that marks is as complete for the first time and there is a next card
+    /// when the user makes a selection on a card that marks it as complete for the first time and there is a next card
     /// available to transition to.
     ///
     /// - Parameters:

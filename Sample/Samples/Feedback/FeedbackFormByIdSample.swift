@@ -35,7 +35,7 @@ struct FeedbackFormByIdSample: View {
 }
 
 #Preview {
-    ParraPreviewApp {
+    ParraAppPreview {
         FeedbackFormByIdSample()
     }
 }

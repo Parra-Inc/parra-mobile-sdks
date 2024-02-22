@@ -14,55 +14,55 @@ class GeneratedTypesTests: XCTestCase {
 
     func testCodingChoiceCard() throws {
         try assertReencodedWithoutChange(
-            object: TestData.Cards.choiceCard
+            object: ParraCardItemFixtures.choiceCard
         )
     }
 
     func testCodingCheckboxCard() throws {
         try assertReencodedWithoutChange(
-            object: TestData.Cards.checkboxCard
+            object: ParraCardItemFixtures.checkboxCard
         )
     }
 
     func testCodingBoolCard() throws {
         try assertReencodedWithoutChange(
-            object: TestData.Cards.boolCard
+            object: ParraCardItemFixtures.boolCard
         )
     }
 
     func testCodingStarCard() throws {
         try assertReencodedWithoutChange(
-            object: TestData.Cards.starCard
+            object: ParraCardItemFixtures.starCard
         )
     }
 
     func testCodingImageCard() throws {
         try assertReencodedWithoutChange(
-            object: TestData.Cards.imageCard
+            object: ParraCardItemFixtures.imageCard
         )
     }
 
     func testCodingRatingCard() throws {
         try assertReencodedWithoutChange(
-            object: TestData.Cards.ratingCard
+            object: ParraCardItemFixtures.ratingCard
         )
     }
 
     func testCodingShortTextCard() throws {
         try assertReencodedWithoutChange(
-            object: TestData.Cards.shortTextCard
+            object: ParraCardItemFixtures.shortTextCard
         )
     }
 
     func testCodingLongTextCard() throws {
         try assertReencodedWithoutChange(
-            object: TestData.Cards.longTextCard
+            object: ParraCardItemFixtures.longTextCard
         )
     }
 
     func testCodingFullCardResponse() throws {
         try assertReencodedWithoutChange(
-            object: TestData.Cards.cardsResponse
+            object: ParraCardItemFixtures.cardsResponse
         )
     }
 
