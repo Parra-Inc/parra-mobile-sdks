@@ -19,7 +19,8 @@ public struct LabelAttributes: ParraStyleAttributes {
         fontDesign: Font.Design? = nil,
         fontWeight: Font.Weight? = nil,
         fontWidth: Font.Width? = nil,
-        padding: EdgeInsets? = nil
+        padding: EdgeInsets? = nil,
+        layoutDirectionBehavior: LayoutDirectionBehavior? = nil
     ) {
         self.background = background
         self.cornerRadius = cornerRadius
@@ -29,6 +30,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         self.fontWeight = fontWeight
         self.fontWidth = fontWidth
         self.padding = padding
+        self.layoutDirectionBehavior = layoutDirectionBehavior
         self.frame = nil
         self.borderWidth = nil
     }
@@ -42,6 +44,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         fontWeight: Font.Weight? = nil,
         fontWidth: Font.Width? = nil,
         padding: EdgeInsets? = nil,
+        layoutDirectionBehavior: LayoutDirectionBehavior? = nil,
         frame: FrameAttributes? = nil,
         borderWidth: CGFloat? = nil
     ) {
@@ -53,6 +56,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         self.fontWeight = fontWeight
         self.fontWidth = fontWidth
         self.padding = padding
+        self.layoutDirectionBehavior = layoutDirectionBehavior
         self.frame = frame
         self.borderWidth = borderWidth
     }
@@ -67,6 +71,7 @@ public struct LabelAttributes: ParraStyleAttributes {
     public let fontWeight: Font.Weight?
     public let fontWidth: Font.Width?
     public let padding: EdgeInsets?
+    public let layoutDirectionBehavior: LayoutDirectionBehavior?
 
     // MARK: - Internal
 
@@ -141,6 +146,8 @@ public struct LabelAttributes: ParraStyleAttributes {
             fontWeight: updates?.fontWeight ?? fontWeight,
             fontWidth: updates?.fontWidth ?? fontWidth,
             padding: updates?.padding ?? padding,
+            layoutDirectionBehavior: updates?
+                .layoutDirectionBehavior ?? layoutDirectionBehavior,
             frame: updates?.frame ?? frame,
             borderWidth: updates?.borderWidth ?? borderWidth
         )

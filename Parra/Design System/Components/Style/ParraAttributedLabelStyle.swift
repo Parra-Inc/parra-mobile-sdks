@@ -17,36 +17,53 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
         let fontColor = attributes.fontColor ?? theme.palette.primaryText
             .toParraColor()
 
-        HStack {
-            Text(content.text)
-                .frame(
-                    minWidth: attributes.frame?.minWidth,
-                    idealWidth: attributes.frame?.idealWidth,
-                    maxWidth: attributes.frame?.maxWidth,
-                    minHeight: attributes.frame?.minHeight,
-                    idealHeight: attributes.frame?.idealHeight,
-                    maxHeight: attributes.frame?.maxHeight,
-                    alignment: attributes.frame?.alignment ?? .center
-                )
-                .foregroundStyle(fontColor)
-                .padding(attributes.padding ?? .zero)
-                .overlay(
-                    UnevenRoundedRectangle(
-                        cornerRadii: theme.cornerRadius
-                            .value(for: attributes.cornerRadius)
-                    )
-                    .stroke(
-                        fontColor,
-                        lineWidth: attributes.borderWidth ?? 0
-                    )
-                )
-                .applyBackground(attributes.background)
-                .applyCornerRadii(size: attributes.cornerRadius, from: theme)
-                .font(attributes.font)
-                .fontDesign(attributes.fontDesign)
-                .fontWeight(attributes.fontWeight)
-                .fontWidth(attributes.fontWidth)
+        let image: (some View)? = if let icon = content.icon {
+            Image(uiImage: icon)
+                .renderingMode(.template)
+                .tint(fontColor)
+        } else {
+            nil
         }
+
+        let text = Text(content.text)
+            .font(attributes.font)
+            .fontDesign(attributes.fontDesign)
+            .fontWeight(attributes.fontWeight)
+            .fontWidth(attributes.fontWidth)
+
+        HStack {
+            switch attributes.layoutDirectionBehavior {
+            case .mirrors:
+                text
+                image
+            default:
+                image
+                text
+            }
+        }
+        .frame(
+            minWidth: attributes.frame?.minWidth,
+            idealWidth: attributes.frame?.idealWidth,
+            maxWidth: attributes.frame?.maxWidth,
+            minHeight: attributes.frame?.minHeight,
+            idealHeight: attributes.frame?.idealHeight,
+            maxHeight: attributes.frame?.maxHeight,
+            alignment: attributes.frame?.alignment ?? .center
+        )
+        .foregroundStyle(fontColor)
+        .padding(attributes.padding ?? .zero)
+        .overlay(
+            UnevenRoundedRectangle(
+                cornerRadii: theme.cornerRadius
+                    .value(for: attributes.cornerRadius)
+            )
+            .stroke(
+                fontColor,
+                lineWidth: attributes.borderWidth ?? 0
+            )
+        )
+        .applyBackground(attributes.background)
+        .applyCornerRadii(size: attributes.cornerRadius, from: theme)
     }
 
     func withContent(content: LabelContent) -> ParraAttributedLabelStyle {

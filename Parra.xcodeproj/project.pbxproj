@@ -1647,8 +1647,6 @@
 				00916A742B769132009C87DC /* ParraApp.swift */,
 				00ABF1992B84112300A054A2 /* ParraAppView.swift */,
 				00ABF1C02B87AE7F00A054A2 /* Previews */,
-				00ABF19D2B8415A200A054A2 /* ParraLaunchScreen.Config+Preview.swift */,
-				00ABF19B2B84158E00A054A2 /* ParraAuthenticationProviderType+Preview.swift */,
 			);
 			path = "Parra App";
 			sourceTree = "<group>";
@@ -1681,6 +1679,8 @@
 				00ABF1562B79802400A054A2 /* ParraAppPreview.swift */,
 				00ABF1C12B87AEC000A054A2 /* ParraContainerPreview.swift */,
 				00ABF1C32B87AED000A054A2 /* ParraViewPreview.swift */,
+				00ABF19D2B8415A200A054A2 /* ParraLaunchScreen.Config+Preview.swift */,
+				00ABF19B2B84158E00A054A2 /* ParraAuthenticationProviderType+Preview.swift */,
 			);
 			path = Previews;
 			sourceTree = "<group>";

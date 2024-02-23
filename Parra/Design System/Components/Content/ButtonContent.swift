@@ -7,23 +7,27 @@
 //
 
 import SwiftUI
+import UIKit
 
 public struct ButtonContent {
     // MARK: - Lifecycle
 
     init(
-        title: LabelContent,
+        title: LabelContent?,
+        image: UIImage? = nil,
         isDisabled: Bool = false,
         onPress: (() -> Void)? = nil
     ) {
         self.title = title
+        self.image = image
         self.isDisabled = isDisabled
         self.onPress = onPress
     }
 
     // MARK: - Public
 
-    public let title: LabelContent
+    public let title: LabelContent?
+    public let image: UIImage?
     public let isDisabled: Bool
 
     public internal(set) var onPress: (() -> Void)?

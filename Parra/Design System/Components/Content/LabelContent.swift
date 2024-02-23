@@ -7,7 +7,21 @@
 //
 
 import SwiftUI
+import UIKit
 
 public struct LabelContent {
+    // MARK: - Lifecycle
+
+    init(
+        text: String,
+        icon: UIImage? = nil
+    ) {
+        self.text = text
+        self.icon = icon
+    }
+
+    // MARK: - Public
+
     public let text: String
+    public let icon: UIImage?
 }

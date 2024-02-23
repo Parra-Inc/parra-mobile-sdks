@@ -17,9 +17,9 @@ struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
     @ViewBuilder
     func makeBody(configuration: Configuration) -> some View {
         let currentTitleAttributes = if content.isDisabled {
-            attributes.titleDisabled
+            attributes.titleDisabled ?? attributes.title
         } else if configuration.isPressed {
-            attributes.titlePressed
+            attributes.titlePressed ?? attributes.title
         } else {
             attributes.title
         }
@@ -28,9 +28,9 @@ struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
             content: content.title,
             style: ParraAttributedLabelStyle(
                 content: content.title,
-                attributes: currentTitleAttributes ?? .init(),
                 theme: theme
             )
         )
+        attributes: currentTitleAttributes,
     }
 }

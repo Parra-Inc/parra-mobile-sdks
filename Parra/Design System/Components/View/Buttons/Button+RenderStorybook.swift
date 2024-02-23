@@ -92,73 +92,119 @@ private func renderColumn(
         "Large"
     }
 
-    return VStack(spacing: 24) {
-        Group {
-            renderRowTitle("Normal")
+    return ScrollView {
+        VStack(spacing: 24) {
+            Group {
+                renderRowTitle("Normal")
 
-            renderButtonComponent(
-                type: componentType,
-                config: ButtonConfig(
-                    style: .primary,
-                    size: size
-                ),
-                content: ButtonContent(title: LabelContent(text: title))
-            )
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .primary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        title: LabelContent(text: title),
+                        image: UIImage(
+                            systemName: "apple.terminal.on.rectangle"
+                        )
+                    )
+                )
 
-            renderButtonComponent(
-                type: componentType,
-                config: ButtonConfig(
-                    style: .secondary,
-                    size: size
-                ),
-                content: .init(title: .init(text: title))
-            )
-        }
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .secondary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        title: LabelContent(text: title),
+                        image: UIImage(systemName: "surfboard.fill")
+                    )
+                )
+            }
 
-        Group {
-            renderRowTitle("Max Width")
+            Group {
+                renderRowTitle("Normal")
 
-            renderButtonComponent(
-                type: componentType,
-                config: ButtonConfig(
-                    style: .primary,
-                    size: size,
-                    isMaxWidth: true
-                ),
-                content: .init(title: .init(text: title))
-            )
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .primary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        title: LabelContent(text: title)
+                    )
+                )
 
-            renderButtonComponent(
-                type: componentType,
-                config: ButtonConfig(
-                    style: .secondary,
-                    size: size,
-                    isMaxWidth: true
-                ),
-                content: .init(title: .init(text: title))
-            )
-        }
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .secondary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        title: LabelContent(text: title)
+                    )
+                )
+            }
 
-        Group {
-            renderRowTitle("Disabled")
+            Group {
+                renderRowTitle("Max Width")
 
-            renderButtonComponent(
-                type: componentType,
-                config: ButtonConfig(
-                    style: .primary,
-                    size: size
-                ),
-                content: .init(title: .init(text: title), isDisabled: true)
-            )
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .primary,
+                        size: size,
+                        isMaxWidth: true
+                    ),
+                    content: ButtonContent(
+                        title: LabelContent(text: title)
+                    )
+                )
 
-            renderButtonComponent(
-                type: componentType,
-                config: ButtonConfig(
-                    style: .secondary,
-                    size: size
-                ),
-                content: .init(title: .init(text: title), isDisabled: true)
-            )
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .secondary,
+                        size: size,
+                        isMaxWidth: true
+                    ),
+                    content: ButtonContent(
+                        title: LabelContent(text: title)
+                    )
+                )
+            }
+
+            Group {
+                renderRowTitle("Disabled")
+
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .primary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        title: LabelContent(text: title),
+                        isDisabled: true
+                    )
+                )
+
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .secondary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        title: LabelContent(text: title),
+                        isDisabled: true
+                    )
+                )
+            }
         }
     }
 }

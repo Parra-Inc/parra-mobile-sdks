@@ -108,6 +108,23 @@ private func renderLabel(
         )
 
         renderLabel(
+            config: LabelConfig(fontStyle: .subheadline),
+            content: LabelContent(
+                text: "A subheadline with icon",
+                icon: UIImage(systemName: "sun.rain.circle.fill")
+            )
+        )
+
+        renderLabel(
+            config: LabelConfig(fontStyle: .subheadline),
+            content: LabelContent(
+                text: "A reversed subheadline with icon",
+                icon: UIImage(systemName: "sun.rain.circle.fill")
+            ),
+            attributes: LabelAttributes(layoutDirectionBehavior: .mirrors)
+        )
+
+        renderLabel(
             config: LabelConfig(fontStyle: .body),
             content: LabelContent(text: "With a background"),
             attributes: LabelAttributes(
@@ -134,12 +151,31 @@ private func renderLabel(
         )
 
         renderLabel(
+            config: LabelConfig(fontStyle: .title),
+            content: LabelContent(
+                text: "BG gradient and icon",
+                icon: UIImage(systemName: "fireworks")
+            ),
+            attributes: LabelAttributes(
+                background: Gradient(colors: [.pink, .purple]),
+                cornerRadius: .extraSmall,
+                fontColor: Color.white,
+                padding: EdgeInsets(
+                    top: 4,
+                    leading: 10,
+                    bottom: 4,
+                    trailing: 10
+                )
+            )
+        )
+
+        renderLabel(
             config: LabelConfig(fontStyle: .subheadline),
             content: LabelContent(text: "With a corner radius"),
             attributes: LabelAttributes(
                 background: .green,
                 cornerRadius: .large,
-                padding: EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
+                padding: EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
             )
         )
     }
