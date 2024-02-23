@@ -26,7 +26,9 @@ class FeedbackFormContentObserver: ContainerContentObserver {
         }
 
         let submitButton = ButtonContent(
-            title: .init(text: "Submit"),
+            type: .text(
+                LabelContent(text: "Submit")
+            ),
             isDisabled: false,
             onPress: nil
         )
@@ -62,7 +64,7 @@ class FeedbackFormContentObserver: ContainerContentObserver {
                 fields: fields
             )
             self.submitButton = ButtonContent(
-                title: submitButton.title,
+                type: submitButton.type,
                 isDisabled: !canSubmit,
                 onPress: submitButton.onPress
             )

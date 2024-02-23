@@ -31,7 +31,7 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
             .fontWeight(attributes.fontWeight)
             .fontWidth(attributes.fontWidth)
 
-        HStack {
+        HStack(spacing: attributes.padding?.leading ?? 6) {
             switch attributes.layoutDirectionBehavior {
             case .mirrors:
                 text

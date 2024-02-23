@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
+    // MARK: - Internal
+
     let config: ButtonConfig
     let content: ButtonContent
     let attributes: ButtonAttributes
@@ -24,13 +26,58 @@ struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
             attributes.title
         }
 
-        LabelComponent(
-            content: content.title,
-            style: ParraAttributedLabelStyle(
-                content: content.title,
-                theme: theme
+        switch content.type {
+        case .text(let labelContent):
+            LabelComponent(
+                content: labelContent,
+                style: ParraAttributedLabelStyle(
+                    content: labelContent,
+                    attributes: currentTitleAttributes,
+                    theme: theme
+                )
             )
-        )
-        attributes: currentTitleAttributes,
+        case .image(let imageContent):
+            renderImage(content: imageContent)
+        }
+    }
+
+    // MARK: - Private
+
+    @ViewBuilder
+    private func renderImage(content: ImageContent) -> some View {
+        let (width, height): (CGFloat, CGFloat) = switch config.size {
+        case .small:
+            (24, 24)
+        case .medium:
+            (36, 36)
+        case .large:
+            (48, 48)
+        }
+
+        let imageView = switch content {
+        case .resource(let name, let templateRenderingMode):
+            Image(name)
+                .renderingMode(templateRenderingMode)
+        case .name(let name, let bundle, let templateRenderingMode):
+            Image(name, bundle: bundle)
+                .renderingMode(templateRenderingMode)
+        case .symbol(let systemName, let symbolRenderingMode):
+            Image(systemName: systemName)
+                .symbolRenderingMode(symbolRenderingMode)
+        case .image(let uIImage, let templateRenderingMode):
+            Image(uiImage: uIImage)
+                .renderingMode(templateRenderingMode)
+        }
+
+        imageView
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(
+                width: width,
+                height: height
+            )
+            .padding(attributes.padding ?? .zero)
+            .applyBackground(attributes.background)
+            .applyCornerRadii(size: attributes.cornerRadius, from: theme)
     }
 }

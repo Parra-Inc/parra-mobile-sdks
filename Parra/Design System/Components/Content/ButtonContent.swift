@@ -13,21 +13,23 @@ public struct ButtonContent {
     // MARK: - Lifecycle
 
     init(
-        title: LabelContent?,
-        image: UIImage? = nil,
+        type: ContentType,
         isDisabled: Bool = false,
         onPress: (() -> Void)? = nil
     ) {
-        self.title = title
-        self.image = image
+        self.type = type
         self.isDisabled = isDisabled
         self.onPress = onPress
     }
 
     // MARK: - Public
 
-    public let title: LabelContent?
-    public let image: UIImage?
+    public enum ContentType {
+        case text(LabelContent)
+        case image(ImageContent)
+    }
+
+    public let type: ContentType
     public let isDisabled: Bool
 
     public internal(set) var onPress: (() -> Void)?

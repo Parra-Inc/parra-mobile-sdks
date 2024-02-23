@@ -30,21 +30,24 @@ func renderStorybook(
 
         Divider()
 
-        HStack(alignment: .top) {
-            renderColumn(for: componentType, size: .small)
-                .frame(width: 70)
+        ScrollView(.horizontal) {
+            HStack(alignment: .top) {
+                renderColumn(for: componentType, size: .small)
+                    .frame(width: 110)
 
-            Divider()
+                Divider()
 
-            renderColumn(for: componentType, size: .medium)
-                .frame(width: 100)
+                renderColumn(for: componentType, size: .medium)
+                    .frame(width: 150)
 
-            Divider()
+                Divider()
 
-            renderColumn(for: componentType, size: .large)
+                renderColumn(for: componentType, size: .large)
+                    .frame(width: 200)
+            }
         }
     }
-    .padding()
+    .padding(4)
 }
 
 private func renderButtonComponent(
@@ -95,7 +98,7 @@ private func renderColumn(
     return ScrollView {
         VStack(spacing: 24) {
             Group {
-                renderRowTitle("Normal")
+                renderRowTitle("Image only")
 
                 renderButtonComponent(
                     type: componentType,
@@ -104,9 +107,8 @@ private func renderColumn(
                         size: size
                     ),
                     content: ButtonContent(
-                        title: LabelContent(text: title),
-                        image: UIImage(
-                            systemName: "apple.terminal.on.rectangle"
+                        type: .image(
+                            .symbol("laser.burst")
                         )
                     )
                 )
@@ -118,8 +120,12 @@ private func renderColumn(
                         size: size
                     ),
                     content: ButtonContent(
-                        title: LabelContent(text: title),
-                        image: UIImage(systemName: "surfboard.fill")
+                        type: .image(
+                            .symbol(
+                                "lightspectrum.horizontal",
+                                .multicolor
+                            )
+                        )
                     )
                 )
             }
@@ -134,7 +140,9 @@ private func renderColumn(
                         size: size
                     ),
                     content: ButtonContent(
-                        title: LabelContent(text: title)
+                        type: .text(
+                            LabelContent(text: title)
+                        )
                     )
                 )
 
@@ -145,7 +153,49 @@ private func renderColumn(
                         size: size
                     ),
                     content: ButtonContent(
-                        title: LabelContent(text: title)
+                        type: .text(
+                            LabelContent(text: title)
+                        )
+                    )
+                )
+            }
+
+            Group {
+                renderRowTitle("Normal w/icon")
+
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .primary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        type: .text(
+                            LabelContent(
+                                text: title,
+                                icon: UIImage(
+                                    systemName: "fireworks"
+                                )
+                            )
+                        )
+                    )
+                )
+
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .secondary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        type: .text(
+                            LabelContent(
+                                text: title,
+                                icon: UIImage(
+                                    systemName: "surfboard.fill"
+                                )
+                            )
+                        )
                     )
                 )
             }
@@ -161,7 +211,9 @@ private func renderColumn(
                         isMaxWidth: true
                     ),
                     content: ButtonContent(
-                        title: LabelContent(text: title)
+                        type: .text(
+                            LabelContent(text: title)
+                        )
                     )
                 )
 
@@ -173,7 +225,9 @@ private func renderColumn(
                         isMaxWidth: true
                     ),
                     content: ButtonContent(
-                        title: LabelContent(text: title)
+                        type: .text(
+                            LabelContent(text: title)
+                        )
                     )
                 )
             }
@@ -188,7 +242,9 @@ private func renderColumn(
                         size: size
                     ),
                     content: ButtonContent(
-                        title: LabelContent(text: title),
+                        type: .text(
+                            LabelContent(text: title)
+                        ),
                         isDisabled: true
                     )
                 )
@@ -200,11 +256,56 @@ private func renderColumn(
                         size: size
                     ),
                     content: ButtonContent(
-                        title: LabelContent(text: title),
+                        type: .text(
+                            LabelContent(text: title)
+                        ),
+                        isDisabled: true
+                    )
+                )
+            }
+
+            Group {
+                renderRowTitle("Disabled w/icon")
+
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .primary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        type: .text(
+                            LabelContent(
+                                text: title,
+                                icon: UIImage(
+                                    systemName: "fireworks"
+                                )
+                            )
+                        ),
+                        isDisabled: true
+                    )
+                )
+
+                renderButtonComponent(
+                    type: componentType,
+                    config: ButtonConfig(
+                        style: .secondary,
+                        size: size
+                    ),
+                    content: ButtonContent(
+                        type: .text(
+                            LabelContent(
+                                text: title,
+                                icon: UIImage(
+                                    systemName: "fireworks"
+                                )
+                            )
+                        ),
                         isDisabled: true
                     )
                 )
             }
         }
     }
+    .scrollIndicators(.never)
 }

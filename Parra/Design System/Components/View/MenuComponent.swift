@@ -137,7 +137,6 @@ struct MenuComponent: MenuComponentType {
 
     @ViewBuilder private var menuLabel: some View {
         HStack {
-            // TODO: Use LabelComponent for this whole thing and support passing spacing/icon config to it
             menuLabelText
 
             Spacer()
