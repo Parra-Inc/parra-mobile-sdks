@@ -25,6 +25,7 @@ enum ParraHeader {
     case platformAgent
     case platformSdkVersion
     case platformVersion
+    case tenantId(String)
 
     // MARK: - Internal
 
@@ -89,6 +90,8 @@ enum ParraHeader {
             return Parra.libraryVersion()
         case .platformVersion:
             return ProcessInfo.processInfo.operatingSystemVersionString
+        case .tenantId(let tenantId):
+            return tenantId
         }
     }
 
@@ -124,6 +127,8 @@ enum ParraHeader {
             return "PLATFORM-SDK-VERSION"
         case .platformVersion:
             return "PLATFORM-VERSION"
+        case .tenantId:
+            return "TENANT-ID"
         }
     }
 }

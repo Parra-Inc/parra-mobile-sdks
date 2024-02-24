@@ -139,10 +139,11 @@ final class ParraNetworkManager: NetworkManagerType {
             if method.allowsBody {
                 request.httpBody = try configuration.jsonEncoder.encode(body)
             }
+
             addHeaders(
                 to: &request,
                 endpoint: endpoint,
-                for: appState.applicationId
+                for: appState
             )
 
             let (result, attributes) = await performRequest(
@@ -199,7 +200,12 @@ final class ParraNetworkManager: NetworkManagerType {
             throw ParraError.generic("Unable to encode API key as NSData", nil)
         }
 
-        addHeaders(to: &request, endpoint: endpoint, for: applicationId)
+        addHeaders(
+            to: &request,
+            endpoint: endpoint,
+            for: appState
+        )
+
         request.setValue(for: .authorization(.basic(authToken)))
 
         let (data, response) = try await performAsyncDataDask(request: request)
@@ -445,10 +451,11 @@ final class ParraNetworkManager: NetworkManagerType {
     private func addHeaders(
         to request: inout URLRequest,
         endpoint: ParraEndpoint,
-        for applicationId: String
+        for appState: ParraAppState
     ) {
         request.setValue(for: .accept(.applicationJson))
-        request.setValue(for: .applicationId(applicationId))
+        request.setValue(for: .applicationId(appState.applicationId))
+        request.setValue(for: .tenantId(appState.tenantId))
 
         if endpoint.method.allowsBody {
             request.setValue(for: .contentType(.applicationJson))
