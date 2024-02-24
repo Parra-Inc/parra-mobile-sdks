@@ -12,6 +12,7 @@ enum ButtonVariant: CustomStringConvertible {
     case plain
     case outlined
     case contained // filled
+    case image
 
     // MARK: - Internal
 
@@ -23,6 +24,8 @@ enum ButtonVariant: CustomStringConvertible {
             return "outlined"
         case .contained:
             return "contained"
+        case .image:
+            return "image"
         }
     }
 }

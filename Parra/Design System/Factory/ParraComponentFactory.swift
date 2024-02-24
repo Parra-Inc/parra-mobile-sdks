@@ -118,7 +118,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
             // Dynamically get default attributes for different button types.
             let mergedAttributes = switch variant {
-            case .plain:
+            case .plain, .image:
                 PlainButtonComponent.applyStandardCustomizations(
                     onto: attributes,
                     theme: theme,
@@ -154,7 +154,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
                 )
 
                 switch variant {
-                case .plain:
+                case .plain, .image:
                     PlainButtonComponent(
                         config: config,
                         content: content,
