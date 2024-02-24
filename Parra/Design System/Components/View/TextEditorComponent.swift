@@ -299,7 +299,7 @@ private func renderTextEditor(
 #Preview {
     VStack {
         renderTextEditor(
-            config: FeedbackFormConfig.default.textFields,
+            config: FeedbackFormWidget.Config.default.textFields,
             content: TextEditorContent(
                 title: "Some title",
                 placeholder: "temp placeholder",
@@ -310,7 +310,7 @@ private func renderTextEditor(
         )
 
         renderTextEditor(
-            config: FeedbackFormConfig.default.textFields,
+            config: FeedbackFormWidget.Config.default.textFields,
             content: TextEditorContent(
                 title: "Some title",
                 placeholder: "temp placeholder",
@@ -321,7 +321,7 @@ private func renderTextEditor(
         )
 
         renderTextEditor(
-            config: FeedbackFormConfig.default.textFields,
+            config: FeedbackFormWidget.Config.default.textFields,
             content: TextEditorContent(
                 title: "Some title",
                 placeholder: "temp placeholder",
@@ -332,7 +332,7 @@ private func renderTextEditor(
         )
 
         renderTextEditor(
-            config: FeedbackFormConfig.default.textFields,
+            config: FeedbackFormWidget.Config.default.textFields,
             content: TextEditorContent(
                 title: "Some title",
                 placeholder: "temp placeholder",

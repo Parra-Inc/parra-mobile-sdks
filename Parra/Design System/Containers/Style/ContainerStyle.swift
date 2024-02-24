@@ -11,4 +11,6 @@ import SwiftUI
 protocol ContainerStyle {
     var background: (any ShapeStyle)? { get }
     var contentPadding: EdgeInsets { get }
+
+    static func `default`(with theme: ParraTheme) -> Self
 }

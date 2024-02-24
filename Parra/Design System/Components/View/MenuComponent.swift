@@ -213,7 +213,7 @@ private func renderMenu(
 #Preview {
     return VStack {
         renderMenu(
-            config: FeedbackFormConfig.default.selectFields,
+            config: FeedbackFormWidget.Config.default.selectFields,
             content: MenuContent(
                 title: "We want to hear from you",
                 placeholder: "Please select an option",

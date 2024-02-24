@@ -16,7 +16,7 @@ struct FeedbackFormLoader: ViewModifier {
 
     init(
         initialState: Binding<FormState>,
-        localFactory: FeedbackFormWidgetComponentFactory? = nil,
+        localFactory: FeedbackFormWidget.Factory? = nil,
         onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
     ) {
         self.localFactory = localFactory
@@ -39,7 +39,7 @@ struct FeedbackFormLoader: ViewModifier {
     @Environment(Parra.self) var parra
     @Binding var initialState: FormState
 
-    var localFactory: FeedbackFormWidgetComponentFactory? = nil
+    var localFactory: FeedbackFormWidget.Factory? = nil
     var onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
 
     func body(content: Content) -> some View {
@@ -74,14 +74,8 @@ struct FeedbackFormLoader: ViewModifier {
                     onDismiss?(hasSubmitted ? .submitted : .cancelled)
                 },
                 content: {
-                    if let (
-                        contentObserver,
-                        componentFactory
-                    ) = createContentObserver() {
-                        FeedbackFormWidget(
-                            componentFactory: componentFactory,
-                            contentObserver: contentObserver
-                        )
+                    if let widget = createFormWidget() {
+                        widget
                     } else {
                         EmptyView()
                     }
@@ -118,11 +112,8 @@ struct FeedbackFormLoader: ViewModifier {
         }
     }
 
-    private func createContentObserver()
-        -> (
-            FeedbackFormContentObserver,
-            ComponentFactory<FeedbackFormWidgetComponentFactory>
-        )?
+    private func createFormWidget()
+        -> FeedbackFormWidget?
     {
         guard case .form(let form) = formState else {
             return nil
@@ -138,7 +129,7 @@ struct FeedbackFormLoader: ViewModifier {
             theme: theme
         )
 
-        let contentObserver = FeedbackFormContentObserver(
+        let contentObserver = FeedbackFormWidget.ContentObserver(
             formData: form.data
         )
 
@@ -167,6 +158,13 @@ struct FeedbackFormLoader: ViewModifier {
             }
         }
 
-        return (contentObserver, componentFactory)
+        let style = FeedbackFormWidget.Style.default(with: theme)
+
+        return FeedbackFormWidget(
+            componentFactory: componentFactory,
+            contentObserver: contentObserver,
+            config: .default,
+            style: style
+        )
     }
 }

@@ -8,17 +8,39 @@
 
 import SwiftUI
 
-struct FeedbackFormWidget: Container {
+public struct FeedbackFormWidget: Container {
+    // MARK: - Public
+
+    public var body: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                // TODO: ScrollView
+                VStack(alignment: .leading, spacing: 20) {
+                    header
+
+                    fieldViews
+                }
+                .layoutPriority(100)
+
+                Spacer()
+                    .layoutPriority(0)
+
+                footer
+            }
+            .padding(style.contentPadding)
+            .applyBackground(style.background)
+            .environmentObject(contentObserver)
+        }
+        .padding(style.padding)
+    }
+
     // MARK: - Internal
 
-    typealias Factory = FeedbackFormWidgetComponentFactory
-    typealias Config = FeedbackFormConfig
-    typealias ContentObserver = FeedbackFormContentObserver
-    typealias Style = WidgetStyle
-
-    var componentFactory: ComponentFactory<Factory>
+    let componentFactory: ComponentFactory<Factory>
     @StateObject var contentObserver: ContentObserver
-    var config: Config = .default
+    let config: Config
+    let style: Style
+
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var header: some View {
@@ -129,27 +151,6 @@ struct FeedbackFormWidget: Container {
         }
     }
 
-    var body: some View {
-        VStack(alignment: .leading) {
-            // TODO: ScrollView
-            VStack(alignment: .leading, spacing: 20) {
-                header
-
-                fieldViews
-            }
-            .layoutPriority(100)
-
-            Spacer()
-                .layoutPriority(0)
-
-            footer
-        }
-        .background(themeObserver.theme.palette.primaryBackground)
-        .padding(.top, 16)
-        .safeAreaPadding()
-        .environmentObject(contentObserver)
-    }
-
     // MARK: - Private
 
     private func onFieldValueChanged(
@@ -173,7 +174,9 @@ struct FeedbackFormWidget: Container {
                     description: "We'd love to hear from you. Your input helps us make our product better.",
                     fields: FeedbackFormField.validStates()
                 )
-            )
+            ),
+            config: .default,
+            style: .default(with: .default)
         )
     }
 }

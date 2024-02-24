@@ -8,10 +8,8 @@
 
 import SwiftUI
 
-struct ToastStyle: ContainerStyle {
-    var background: (any ShapeStyle)?
-    var contentPadding: EdgeInsets
-    var cornerRadius: ParraCornerRadiusSize
+protocol ToastStyle: ContainerStyle {
+    var cornerRadius: ParraCornerRadiusSize { get }
 
     // TODO: Position enum
     // TODO: Animation and auto dismiss durations

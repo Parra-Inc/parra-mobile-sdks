@@ -11,27 +11,84 @@ import SwiftUI
 // TODO: How can the `Factory` type provided to this widget allow overriding
 // elements dynamically by card type?
 
-struct FeedbackCardWidget: Container {
-    typealias Factory = FeedbackFormWidgetComponentFactory
-    typealias Config = FeedbackCardConfig
-    typealias ContentObserver = FeedbackCardContentObserver
-    typealias Style = WidgetStyle
+public struct FeedbackCardWidget: Container {
+    // MARK: - Public
 
-    var componentFactory: ComponentFactory<Factory>
+    public var body: some View {
+        VStack {
+            // Extra wrapper used to support configuration of padding inside and
+            // outside of the content view
+            VStack {
+                navigation
+
+                content
+            }
+            .padding(style.contentPadding)
+            .applyBackground(style.background)
+            .applyCornerRadii(
+                size: style.cornerRadius,
+                from: themeObserver.theme
+            )
+        }
+        .padding(style.padding)
+    }
+
+    // MARK: - Internal
+
+    let componentFactory: ComponentFactory<Factory>
     @StateObject var contentObserver: ContentObserver
-    var config: Config = .default
+    let config: Config
+    let style: Style
+
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    @ViewBuilder var navigation: some View {
+        if contentObserver.content.showNavigation {
+            HStack(alignment: .center) {
+                componentFactory.buildButton(
+                    variant: .image,
+                    component: \.backButton,
+                    config: config.backButton,
+                    content: contentObserver.content.backButton
+                )
+
+                Spacer()
+
+                ParraLogo(type: .poweredBy)
+
+                Spacer()
+
+                componentFactory.buildButton(
+                    variant: .image,
+                    component: \.forwardButton,
+                    config: config.forwardButton,
+                    content: contentObserver.content.forwardButton
+                )
+            }
+        }
+    }
+
+    @ViewBuilder var content: some View {
+        TabView {
+            Text("First")
+            Text("Second")
+            Text("Third")
+            Text("Fourth")
+        }
+        .tabViewStyle(.page)
     }
 }
 
 #Preview {
-    ParraContainerPreview { componentFactory in
-        FeedbackCardWidget(
-            componentFactory: componentFactory,
-            contentObserver: FeedbackCardContentObserver()
-        )
+    VStack {
+        ParraContainerPreview { componentFactory in
+            FeedbackCardWidget(
+                componentFactory: componentFactory,
+                contentObserver: FeedbackCardWidget.ContentObserver(),
+                config: .default,
+                style: .default(with: .default)
+            )
+        }
     }
+    .padding()
 }

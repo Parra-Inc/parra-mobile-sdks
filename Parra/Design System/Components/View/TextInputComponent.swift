@@ -175,7 +175,7 @@ private func renderTextInput(
 #Preview {
     VStack {
         renderTextInput(
-            config: FeedbackFormConfig.default.inputFields,
+            config: FeedbackFormWidget.Config.default.inputFields,
             content: TextInputContent(
                 title: "Some title",
                 placeholder: "temp placeholder",
@@ -186,7 +186,7 @@ private func renderTextInput(
         )
 
         renderTextInput(
-            config: FeedbackFormConfig.default.inputFields,
+            config: FeedbackFormWidget.Config.default.inputFields,
             content: TextInputContent(
                 title: "Some title",
                 placeholder: "temp placeholder",
@@ -197,7 +197,7 @@ private func renderTextInput(
         )
 
         renderTextInput(
-            config: FeedbackFormConfig.default.inputFields,
+            config: FeedbackFormWidget.Config.default.inputFields,
             content: TextInputContent(
                 title: "Some title",
                 placeholder: "",
@@ -208,7 +208,7 @@ private func renderTextInput(
         )
 
         renderTextInput(
-            config: FeedbackFormConfig.default.inputFields,
+            config: FeedbackFormWidget.Config.default.inputFields,
             content: TextInputContent(
                 title: "Some title",
                 placeholder: nil,
