@@ -36,10 +36,10 @@ public struct FeedbackFormWidget: Container {
 
     // MARK: - Internal
 
-    let componentFactory: ComponentFactory<Factory>
+    let componentFactory: ComponentFactory<FeedbackFormWidgetFactory>
     @StateObject var contentObserver: ContentObserver
-    let config: Config
-    let style: Style
+    let config: FeedbackFormWidgetConfig
+    let style: FeedbackFormWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 

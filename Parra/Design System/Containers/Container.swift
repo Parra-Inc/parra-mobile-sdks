@@ -20,6 +20,7 @@ protocol Container: View {
     associatedtype Style: ContainerStyle
 
     var config: Config { get }
+    var style: Style { get }
     var componentFactory: ComponentFactory<Factory> { get }
 
     var contentObserver: ContentObserver { get }

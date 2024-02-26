@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ParraFeedbackCardView: View {
+public struct FeedbackCardView: View {
     // MARK: - Lifecycle
 
     public init(cards: [ParraCardItem]) {}
@@ -22,7 +22,7 @@ public struct ParraFeedbackCardView: View {
 
 #Preview {
     ParraViewPreview {
-        ParraFeedbackCardView(
+        FeedbackCardView(
             cards: ParraCardItem.validStates()
         )
     }

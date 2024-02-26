@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-enum ComponentBuilder {
+public enum ComponentBuilder {
     // I don't know why, but these generic typealiases have to be nested within
     // a type. If they're top level, any callsite reports not finding them on
     // the Parra module.
-    typealias Factory<
+    public typealias Factory<
         V: View,
         Config,
         Content,
@@ -40,6 +40,10 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
     }
 
     // MARK: - Internal
+
+    let local: Factory?
+    let global: GlobalComponentAttributes?
+    let theme: ParraTheme
 
     @ViewBuilder
     func buildLabel(
@@ -344,10 +348,4 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
             EmptyView()
         }
     }
-
-    // MARK: - Private
-
-    private let local: Factory?
-    private let global: GlobalComponentAttributes?
-    private let theme: ParraTheme
 }

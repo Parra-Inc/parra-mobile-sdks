@@ -220,6 +220,9 @@
 		00916DC82AD35D8700B4856F /* ParraInstanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC72AD35D8700B4856F /* ParraInstanceConfiguration.swift */; };
 		00916DCA2AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC92AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift */; };
 		00916DCC2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DCB2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift */; };
+		0099EB032B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099EB022B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift */; };
+		0099EB062B8D04C00053F366 /* ParraFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099EB052B8D04C00053F366 /* ParraFeedbackView.swift */; };
+		0099EB082B8D09200053F366 /* ParraPublicContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099EB072B8D09200053F366 /* ParraPublicContainer.swift */; };
 		00A2CEE52B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */; };
 		00A2CEE72B696AE600684DC0 /* ButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE62B696AE500684DC0 /* ButtonConfig.swift */; };
 		00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */; };
@@ -284,7 +287,7 @@
 		00ABF1A82B8528DF00A054A2 /* TextInputAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1A72B8528DF00A054A2 /* TextInputAttributes.swift */; };
 		00ABF1AA2B85291800A054A2 /* ParraAttributedTextInputStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1A92B85291800A054A2 /* ParraAttributedTextInputStyle.swift */; };
 		00ABF1AE2B865B8700A054A2 /* FeedbackCardWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1AD2B865B8700A054A2 /* FeedbackCardWidget.swift */; };
-		00ABF1B02B865BFE00A054A2 /* FeedbackCardWidget+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1AF2B865BFE00A054A2 /* FeedbackCardWidget+Config.swift */; };
+		00ABF1B02B865BFE00A054A2 /* FeedbackCardWidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1AF2B865BFE00A054A2 /* FeedbackCardWidgetConfig.swift */; };
 		00ABF1B22B865C5200A054A2 /* FeedbackCardWidget+ContentObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1B12B865C5200A054A2 /* FeedbackCardWidget+ContentObserver.swift */; };
 		00ABF1B42B86620900A054A2 /* View+FeedbackCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1B32B86620900A054A2 /* View+FeedbackCards.swift */; };
 		00ABF1B72B867BD000A054A2 /* ParraCardModalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1B62B867BD000A054A2 /* ParraCardModalType.swift */; };
@@ -296,9 +299,10 @@
 		00ABF1C42B87AED000A054A2 /* ParraViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1C32B87AED000A054A2 /* ParraViewPreview.swift */; };
 		00ABF1C62B87BC6F00A054A2 /* FeedbackFormField+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1C52B87BC6F00A054A2 /* FeedbackFormField+Fixtures.swift */; };
 		00ABF1C82B8905E900A054A2 /* ImageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1C72B8905E900A054A2 /* ImageContent.swift */; };
-		00ABF1CA2B8A6EC200A054A2 /* FeedbackCardWidget+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1C92B8A6EC200A054A2 /* FeedbackCardWidget+Factory.swift */; };
-		00ABF1CC2B8A785100A054A2 /* FeedbackFormWidget+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1CB2B8A785100A054A2 /* FeedbackFormWidget+Style.swift */; };
-		00ABF1CE2B8A789400A054A2 /* FeedbackCardWidget+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1CD2B8A789400A054A2 /* FeedbackCardWidget+Style.swift */; };
+		00ABF1CA2B8A6EC200A054A2 /* FeedbackCardWidgetFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1C92B8A6EC200A054A2 /* FeedbackCardWidgetFactory.swift */; };
+		00ABF1CC2B8A785100A054A2 /* FeedbackFormWidgetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1CB2B8A785100A054A2 /* FeedbackFormWidgetStyle.swift */; };
+		00ABF1CE2B8A789400A054A2 /* FeedbackCardWidgetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1CD2B8A789400A054A2 /* FeedbackCardWidgetStyle.swift */; };
+		00ABF1D02B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1CF2B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift */; };
 		00B42EA72ADE176E00F365A5 /* Parra.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 00B42EA62ADE176E00F365A5 /* Parra.xctestplan */; };
 		00B42EB12ADE1BCB00F365A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B42EB02ADE1BCB00F365A5 /* AppDelegate.swift */; };
 		00B42EB32ADE1BCB00F365A5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B42EB22ADE1BCB00F365A5 /* SceneDelegate.swift */; };
@@ -353,10 +357,10 @@
 		00E76D2D2B66D26300B01DD8 /* ParraComponentFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D2C2B66D26300B01DD8 /* ParraComponentFactory.swift */; };
 		00E76D342B66E3FD00B01DD8 /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D332B66E3FD00B01DD8 /* Container.swift */; };
 		00E76D362B66E42600B01DD8 /* LabelComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D352B66E42600B01DD8 /* LabelComponentType.swift */; };
-		00E76D382B66E49100B01DD8 /* FeedbackFormWidget+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D372B66E49100B01DD8 /* FeedbackFormWidget+Factory.swift */; };
+		00E76D382B66E49100B01DD8 /* FeedbackFormWidgetFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D372B66E49100B01DD8 /* FeedbackFormWidgetFactory.swift */; };
 		00E76D3B2B66E4E000B01DD8 /* FeedbackFormWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D3A2B66E4E000B01DD8 /* FeedbackFormWidget.swift */; };
 		00E76D3D2B66E6E100B01DD8 /* ContainerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D3C2B66E6E100B01DD8 /* ContainerConfig.swift */; };
-		00E76D442B66E83400B01DD8 /* FeedbackFormWidget+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D432B66E83400B01DD8 /* FeedbackFormWidget+Config.swift */; };
+		00E76D442B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D432B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift */; };
 		00E76D462B66E88300B01DD8 /* FeedbackFormWidget+ContentObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D452B66E88300B01DD8 /* FeedbackFormWidget+ContentObserver.swift */; };
 		00E76D482B66E89C00B01DD8 /* ContainerContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D472B66E89C00B01DD8 /* ContainerContent.swift */; };
 		00E76D4C2B66ED4300B01DD8 /* ContainerContentObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D4B2B66ED4300B01DD8 /* ContainerContentObserver.swift */; };
@@ -646,6 +650,9 @@
 		00916DC72AD35D8700B4856F /* ParraInstanceConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceConfiguration.swift; sourceTree = "<group>"; };
 		00916DC92AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceStorageConfiguration.swift; sourceTree = "<group>"; };
 		00916DCB2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceNetworkConfiguration.swift; sourceTree = "<group>"; };
+		0099EB022B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormWidget+ContentObserver+Content.swift"; sourceTree = "<group>"; };
+		0099EB052B8D04C00053F366 /* ParraFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackView.swift; sourceTree = "<group>"; };
+		0099EB072B8D09200053F366 /* ParraPublicContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPublicContainer.swift; sourceTree = "<group>"; };
 		00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraColorSwatch+ParraColorConvertible.swift"; sourceTree = "<group>"; };
 		00A2CEE62B696AE500684DC0 /* ButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfig.swift; sourceTree = "<group>"; };
 		00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+inits.swift"; sourceTree = "<group>"; };
@@ -683,7 +690,7 @@
 		00ABF1A72B8528DF00A054A2 /* TextInputAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputAttributes.swift; sourceTree = "<group>"; };
 		00ABF1A92B85291800A054A2 /* ParraAttributedTextInputStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAttributedTextInputStyle.swift; sourceTree = "<group>"; };
 		00ABF1AD2B865B8700A054A2 /* FeedbackCardWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCardWidget.swift; sourceTree = "<group>"; };
-		00ABF1AF2B865BFE00A054A2 /* FeedbackCardWidget+Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackCardWidget+Config.swift"; sourceTree = "<group>"; };
+		00ABF1AF2B865BFE00A054A2 /* FeedbackCardWidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCardWidgetConfig.swift; sourceTree = "<group>"; };
 		00ABF1B12B865C5200A054A2 /* FeedbackCardWidget+ContentObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackCardWidget+ContentObserver.swift"; sourceTree = "<group>"; };
 		00ABF1B32B86620900A054A2 /* View+FeedbackCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+FeedbackCards.swift"; sourceTree = "<group>"; };
 		00ABF1B62B867BD000A054A2 /* ParraCardModalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardModalType.swift; sourceTree = "<group>"; };
@@ -694,9 +701,10 @@
 		00ABF1C32B87AED000A054A2 /* ParraViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraViewPreview.swift; sourceTree = "<group>"; };
 		00ABF1C52B87BC6F00A054A2 /* FeedbackFormField+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormField+Fixtures.swift"; sourceTree = "<group>"; };
 		00ABF1C72B8905E900A054A2 /* ImageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContent.swift; sourceTree = "<group>"; };
-		00ABF1C92B8A6EC200A054A2 /* FeedbackCardWidget+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackCardWidget+Factory.swift"; sourceTree = "<group>"; };
-		00ABF1CB2B8A785100A054A2 /* FeedbackFormWidget+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormWidget+Style.swift"; sourceTree = "<group>"; };
-		00ABF1CD2B8A789400A054A2 /* FeedbackCardWidget+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackCardWidget+Style.swift"; sourceTree = "<group>"; };
+		00ABF1C92B8A6EC200A054A2 /* FeedbackCardWidgetFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCardWidgetFactory.swift; sourceTree = "<group>"; };
+		00ABF1CB2B8A785100A054A2 /* FeedbackFormWidgetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormWidgetStyle.swift; sourceTree = "<group>"; };
+		00ABF1CD2B8A789400A054A2 /* FeedbackCardWidgetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCardWidgetStyle.swift; sourceTree = "<group>"; };
+		00ABF1CF2B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCardViewDelegate.swift; sourceTree = "<group>"; };
 		00B42EA62ADE176E00F365A5 /* Parra.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Parra.xctestplan; sourceTree = "<group>"; };
 		00B42EAE2ADE1BCB00F365A5 /* TestRunner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestRunner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B42EB02ADE1BCB00F365A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -776,10 +784,10 @@
 		00E76D2C2B66D26300B01DD8 /* ParraComponentFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraComponentFactory.swift; sourceTree = "<group>"; };
 		00E76D332B66E3FD00B01DD8 /* Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
 		00E76D352B66E42600B01DD8 /* LabelComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelComponentType.swift; sourceTree = "<group>"; };
-		00E76D372B66E49100B01DD8 /* FeedbackFormWidget+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormWidget+Factory.swift"; sourceTree = "<group>"; };
+		00E76D372B66E49100B01DD8 /* FeedbackFormWidgetFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormWidgetFactory.swift; sourceTree = "<group>"; };
 		00E76D3A2B66E4E000B01DD8 /* FeedbackFormWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormWidget.swift; sourceTree = "<group>"; };
 		00E76D3C2B66E6E100B01DD8 /* ContainerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerConfig.swift; sourceTree = "<group>"; };
-		00E76D432B66E83400B01DD8 /* FeedbackFormWidget+Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormWidget+Config.swift"; sourceTree = "<group>"; };
+		00E76D432B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormWidgetConfig.swift; sourceTree = "<group>"; };
 		00E76D452B66E88300B01DD8 /* FeedbackFormWidget+ContentObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormWidget+ContentObserver.swift"; sourceTree = "<group>"; };
 		00E76D472B66E89C00B01DD8 /* ContainerContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerContent.swift; sourceTree = "<group>"; };
 		00E76D4B2B66ED4300B01DD8 /* ContainerContentObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerContentObserver.swift; sourceTree = "<group>"; };
@@ -1613,6 +1621,28 @@
 			path = "Instance Config";
 			sourceTree = "<group>";
 		};
+		0099EB042B8D04B40053F366 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				0099EB052B8D04C00053F366 /* ParraFeedbackView.swift */,
+				00ABF1AF2B865BFE00A054A2 /* FeedbackCardWidgetConfig.swift */,
+				00ABF1C92B8A6EC200A054A2 /* FeedbackCardWidgetFactory.swift */,
+				00ABF1CD2B8A789400A054A2 /* FeedbackCardWidgetStyle.swift */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
+		0099EB092B8D16270053F366 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				00E76D432B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift */,
+				00E76D372B66E49100B01DD8 /* FeedbackFormWidgetFactory.swift */,
+				00ABF1CB2B8A785100A054A2 /* FeedbackFormWidgetStyle.swift */,
+				00916A722B75CDC7009C87DC /* View+FeedbackForm.swift */,
+			);
+			name = Public;
+			sourceTree = "<group>";
+		};
 		00A60B972932D34F00B7168A /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -1660,12 +1690,11 @@
 		00ABF1AB2B865B2500A054A2 /* Feedback */ = {
 			isa = PBXGroup;
 			children = (
+				0099EB042B8D04B40053F366 /* Public */,
 				00ABF1AC2B865B6600A054A2 /* State */,
 				00ABF1AD2B865B8700A054A2 /* FeedbackCardWidget.swift */,
-				00ABF1AF2B865BFE00A054A2 /* FeedbackCardWidget+Config.swift */,
 				00ABF1B12B865C5200A054A2 /* FeedbackCardWidget+ContentObserver.swift */,
-				00ABF1C92B8A6EC200A054A2 /* FeedbackCardWidget+Factory.swift */,
-				00ABF1CD2B8A789400A054A2 /* FeedbackCardWidget+Style.swift */,
+				00ABF1CF2B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift */,
 				00ABF1BB2B867CE300A054A2 /* FeedbackCardView.swift */,
 				00ABF1B32B86620900A054A2 /* View+FeedbackCards.swift */,
 				00ABF1B62B867BD000A054A2 /* ParraCardModalType.swift */,
@@ -1835,6 +1864,7 @@
 			isa = PBXGroup;
 			children = (
 				00E76D332B66E3FD00B01DD8 /* Container.swift */,
+				0099EB072B8D09200053F366 /* ParraPublicContainer.swift */,
 				00E76D312B66E3E100B01DD8 /* Config */,
 				00E76D322B66E3E900B01DD8 /* Content */,
 				00E76D122B66D0EA00B01DD8 /* Style */,
@@ -1950,15 +1980,13 @@
 		00E76D422B66E80600B01DD8 /* Feedback Forms */ = {
 			isa = PBXGroup;
 			children = (
+				0099EB092B8D16270053F366 /* Public */,
 				00BF36CF2B5AC3E80097905C /* State */,
 				00ABF15D2B7AA9D400A054A2 /* FeedbackFormDismissType.swift */,
 				00ABF1592B7A9B0E00A054A2 /* FeedbackFormLoader.swift */,
 				00E76D3A2B66E4E000B01DD8 /* FeedbackFormWidget.swift */,
-				00E76D432B66E83400B01DD8 /* FeedbackFormWidget+Config.swift */,
 				00E76D452B66E88300B01DD8 /* FeedbackFormWidget+ContentObserver.swift */,
-				00E76D372B66E49100B01DD8 /* FeedbackFormWidget+Factory.swift */,
-				00ABF1CB2B8A785100A054A2 /* FeedbackFormWidget+Style.swift */,
-				00916A722B75CDC7009C87DC /* View+FeedbackForm.swift */,
+				0099EB022B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift */,
 			);
 			path = "Feedback Forms";
 			sourceTree = "<group>";
@@ -2306,9 +2334,10 @@
 				00EBCE142AA4D58F00887639 /* ParraLogLevel+ConsoleOutput.swift in Sources */,
 				0019CBC928FB37BC0015E703 /* Sequence+asyncMap.swift in Sources */,
 				00E76D2A2B66D23A00B01DD8 /* GlobalComponentAttributes.swift in Sources */,
-				00E76D442B66E83400B01DD8 /* FeedbackFormWidget+Config.swift in Sources */,
+				00E76D442B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift in Sources */,
 				001B7B1D27DE3ABC00DEEECD /* CredentialStorage.swift in Sources */,
 				001B7B2227DE3AC200DEEECD /* FileManager+safePaths.swift in Sources */,
+				0099EB082B8D09200053F366 /* ParraPublicContainer.swift in Sources */,
 				00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */,
 				001677652B6FE5F000674001 /* ButtonComponentType.swift in Sources */,
 				00DA7FF0295DD28700109081 /* Parra+PublicAnalytics.swift in Sources */,
@@ -2336,7 +2365,7 @@
 				00706B112B71409E00C28F66 /* MenuAttributes.swift in Sources */,
 				003962612A48B55300B8655F /* Direction.swift in Sources */,
 				00E15A29293269100049C2C7 /* UIViewController.swift in Sources */,
-				00ABF1B02B865BFE00A054A2 /* FeedbackCardWidget+Config.swift in Sources */,
+				00ABF1B02B865BFE00A054A2 /* FeedbackCardWidgetConfig.swift in Sources */,
 				0039626F2A48B5AE00B8655F /* ParraImageKindView.swift in Sources */,
 				001B7B8027DE60F600DEEECD /* ParraDataManager.swift in Sources */,
 				0039623F2A48B51100B8655F /* UIView.swift in Sources */,
@@ -2348,6 +2377,7 @@
 				001B7B8227DE618300DEEECD /* ParraDataManager+Keys.swift in Sources */,
 				003962422A48B51100B8655F /* UIEdgeInsets.swift in Sources */,
 				001B7B2327DE3AC200DEEECD /* Models.swift in Sources */,
+				00ABF1D02B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift in Sources */,
 				00ABF1762B7D344C00A054A2 /* ParraDefaultLaunchScreen.swift in Sources */,
 				0039623D2A48B51100B8655F /* CAShapeLayer.swift in Sources */,
 				0066540E2A7EBAAF00CD04E6 /* HTTPURLResponse+ParraDictionaryConvertible.swift in Sources */,
@@ -2357,7 +2387,7 @@
 				00E76D4C2B66ED4300B01DD8 /* ContainerContentObserver.swift in Sources */,
 				00E76D462B66E88300B01DD8 /* FeedbackFormWidget+ContentObserver.swift in Sources */,
 				001677592B6D5C5B00674001 /* ParraAttributedLabelStyle.swift in Sources */,
-				00ABF1CC2B8A785100A054A2 /* FeedbackFormWidget+Style.swift in Sources */,
+				00ABF1CC2B8A785100A054A2 /* FeedbackFormWidgetStyle.swift in Sources */,
 				001B7B1627DE3AA900DEEECD /* ParraCredential.swift in Sources */,
 				00E76D5E2B6940A500B01DD8 /* ButtonAttributes.swift in Sources */,
 				00BF36D52B5ACAD20097905C /* FormFieldState.swift in Sources */,
@@ -2403,6 +2433,7 @@
 				00706B132B719C2000C28F66 /* TextEditorAttributes.swift in Sources */,
 				0087CA9A2A59DFCC007D72FA /* ProcessInfoPowerState+ParraLogStringConvertible.swift in Sources */,
 				0066540C2A7EAEF000CD04E6 /* ParraErrorWithExtra.swift in Sources */,
+				0099EB062B8D04C00053F366 /* ParraFeedbackView.swift in Sources */,
 				003621DB2B5B569F009EFE53 /* ParraLogoType.swift in Sources */,
 				00E76D182B66D10E00B01DD8 /* ToastStyle.swift in Sources */,
 				00EBCE0A2AA4C1EE00887639 /* ParraLoggerScopeType.swift in Sources */,
@@ -2464,6 +2495,7 @@
 				00BD2FF62A47772A00B4BEB2 /* AuthenticatedRequestResult.swift in Sources */,
 				0087CA682A561F72007D72FA /* Logger+Levels.swift in Sources */,
 				00ABF14B2B786D9E00A054A2 /* Parra+Factory.swift in Sources */,
+				0099EB032B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift in Sources */,
 				0087CA852A59A046007D72FA /* QualityOfService+ParraLogDescription.swift in Sources */,
 				00E76D362B66E42600B01DD8 /* LabelComponentType.swift in Sources */,
 				005D31ED29A8561D001D0E0A /* QuestionAnswer.swift in Sources */,
@@ -2479,7 +2511,7 @@
 				0087CA6E2A57B308007D72FA /* ParraLogMarker.swift in Sources */,
 				003962402A48B51100B8655F /* Int.swift in Sources */,
 				001B7B2927DE3AC800DEEECD /* ParraSyncManager.swift in Sources */,
-				00ABF1CE2B8A789400A054A2 /* FeedbackCardWidget+Style.swift in Sources */,
+				00ABF1CE2B8A789400A054A2 /* FeedbackCardWidgetStyle.swift in Sources */,
 				0087CA8C2A59B408007D72FA /* ParraLoggerLevelStyle.swift in Sources */,
 				00ABF19C2B84158E00A054A2 /* ParraAuthenticationProviderType+Preview.swift in Sources */,
 				0039626C2A48B5AE00B8655F /* ParraCheckboxKindView.swift in Sources */,
@@ -2535,7 +2567,7 @@
 				0039624B2A48B52100B8655F /* SelectableButton.swift in Sources */,
 				003962472A48B52100B8655F /* ParraStar.swift in Sources */,
 				00706B272B72C28E00C28F66 /* ButtonVariant.swift in Sources */,
-				00E76D382B66E49100B01DD8 /* FeedbackFormWidget+Factory.swift in Sources */,
+				00E76D382B66E49100B01DD8 /* FeedbackFormWidgetFactory.swift in Sources */,
 				00EBCE0D2AA4CEEF00887639 /* ParraLoggerStackSymbols.swift in Sources */,
 				00706B0B2B713C9800C28F66 /* MenuContent.swift in Sources */,
 				0029AD3C2A49291200E30CCD /* StringManipulators.swift in Sources */,
@@ -2558,7 +2590,7 @@
 				00ABF1BC2B867CE300A054A2 /* FeedbackCardView.swift in Sources */,
 				0087CA922A59BA51007D72FA /* ParraLoggerEnvironment.swift in Sources */,
 				00ABF1782B7D346500A054A2 /* ParraStoryboardLaunchScreen.swift in Sources */,
-				00ABF1CA2B8A6EC200A054A2 /* FeedbackCardWidget+Factory.swift in Sources */,
+				00ABF1CA2B8A6EC200A054A2 /* FeedbackCardWidgetFactory.swift in Sources */,
 				001677532B6ABFB700674001 /* Button+RenderStorybook.swift in Sources */,
 				00E15A1F2929B7C10049C2C7 /* ParraSessionManager.swift in Sources */,
 				007ED46D2A6BFBF50077E446 /* ParraLogProcessedData.swift in Sources */,

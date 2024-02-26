@@ -93,23 +93,25 @@ struct ParraLogo: View {
 }
 
 #Preview("Parra Logos", traits: .sizeThatFitsLayout) {
-    VStack(alignment: .center, spacing: 100) {
-        VStack(alignment: .center, spacing: 40) {
-            ParraLogo(type: .logo)
-            ParraLogo(type: .logoAndText)
-            ParraLogo(type: .poweredBy)
-        }
-        .padding(30)
-        .environment(\.colorScheme, .light)
-        .background(.white)
+    ParraViewPreview {
+        VStack(alignment: .center, spacing: 100) {
+            VStack(alignment: .center, spacing: 40) {
+                ParraLogo(type: .logo)
+                ParraLogo(type: .logoAndText)
+                ParraLogo(type: .poweredBy)
+            }
+            .padding(30)
+            .environment(\.colorScheme, .light)
+            .background(.white)
 
-        VStack(alignment: .center, spacing: 40) {
-            ParraLogo(type: .logo)
-            ParraLogo(type: .logoAndText)
-            ParraLogo(type: .poweredBy)
+            VStack(alignment: .center, spacing: 40) {
+                ParraLogo(type: .logo)
+                ParraLogo(type: .logoAndText)
+                ParraLogo(type: .poweredBy)
+            }
+            .padding(30)
+            .environment(\.colorScheme, .dark)
+            .background(.black)
         }
-        .padding(30)
-        .environment(\.colorScheme, .dark)
-        .background(.black)
     }
 }

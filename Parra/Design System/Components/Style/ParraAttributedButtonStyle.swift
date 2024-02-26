@@ -37,14 +37,20 @@ struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
                 )
             )
         case .image(let imageContent):
-            renderImage(content: imageContent)
+            renderImage(
+                content: imageContent,
+                tintColor: currentTitleAttributes.fontColor
+            )
         }
     }
 
     // MARK: - Private
 
     @ViewBuilder
-    private func renderImage(content: ImageContent) -> some View {
+    private func renderImage(
+        content: ImageContent,
+        tintColor: Color?
+    ) -> some View {
         let (width, height): (CGFloat, CGFloat) = switch config.size {
         case .small:
             (24, 24)
@@ -72,6 +78,7 @@ struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
         imageView
             .resizable()
             .aspectRatio(contentMode: .fit)
+            .foregroundStyle(tintColor ?? .clear)
             .frame(
                 width: width,
                 height: height

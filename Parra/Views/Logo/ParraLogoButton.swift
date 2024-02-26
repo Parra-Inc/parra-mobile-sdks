@@ -25,5 +25,7 @@ struct ParraLogoButton: View {
 }
 
 #Preview {
-    ParraLogoButton(type: .poweredBy)
+    ParraViewPreview {
+        ParraLogoButton(type: .poweredBy)
+    }
 }

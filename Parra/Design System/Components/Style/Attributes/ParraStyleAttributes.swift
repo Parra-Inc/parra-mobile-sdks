@@ -8,4 +8,4 @@
 
 import SwiftUI
 
-protocol ParraStyleAttributes {}
+public protocol ParraStyleAttributes {}

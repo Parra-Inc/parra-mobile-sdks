@@ -17,7 +17,7 @@ public extension View {
         for appArea: ParraQuestionAppArea = .all,
         isPresented: Binding<Bool>,
         modalStyle: ParraCardModalType = .drawer,
-        localFactory: FeedbackCardWidget.Factory? = nil,
+        localFactory: FeedbackCardWidgetFactory? = nil,
         onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
     ) -> some View {
 //        modifier(
@@ -47,7 +47,7 @@ public extension View {
     func presentParraFeedbackCards(
         _ cards: Binding<[ParraCardItem]?>,
         modalStyle: ParraCardModalType = .drawer,
-        localFactory: FeedbackCardWidget.Factory? = nil,
+        localFactory: FeedbackCardWidgetFactory? = nil,
         onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
     ) -> some View {
 //        modifier(

@@ -22,7 +22,7 @@ struct ParraContainerPreview<Content>: View where Content: Container {
     ) {
         self.content = content
         self.options = [.theme(theme)]
-        self.localFactory = ComponentFactory<Content.Factory>(
+        self.factory = ComponentFactory<Content.Factory>(
             local: localFactory,
             global: GlobalComponentAttributes(),
             theme: theme
@@ -42,7 +42,7 @@ struct ParraContainerPreview<Content>: View where Content: Container {
             appDelegateType: ParraAppDelegate.self,
             launchScreenConfig: .preview,
             sceneContent: {
-                content(localFactory)
+                content(factory)
             }
         )
     }
@@ -53,6 +53,6 @@ struct ParraContainerPreview<Content>: View where Content: Container {
         Content
             .Factory
     >) -> Content
-    private let localFactory: ComponentFactory<Content.Factory>
+    private let factory: ComponentFactory<Content.Factory>
     private let options: [ParraConfigurationOption]
 }

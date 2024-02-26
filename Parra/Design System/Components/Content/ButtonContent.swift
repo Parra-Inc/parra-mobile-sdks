@@ -12,7 +12,7 @@ import UIKit
 public struct ButtonContent {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         type: ContentType,
         isDisabled: Bool = false,
         onPress: (() -> Void)? = nil

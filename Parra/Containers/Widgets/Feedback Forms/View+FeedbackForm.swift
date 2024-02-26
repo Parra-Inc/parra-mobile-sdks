@@ -15,7 +15,7 @@ public extension View {
     func presentParraFeedbackForm(
         by id: String,
         isPresented: Binding<Bool>,
-        localFactory: FeedbackFormWidget.Factory? = nil,
+        localFactory: FeedbackFormWidgetFactory? = nil,
         onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
     ) -> some View {
         modifier(
@@ -43,7 +43,7 @@ public extension View {
     @MainActor
     func presentParraFeedbackForm(
         with form: Binding<ParraFeedbackFormResponse?>,
-        localFactory: FeedbackFormWidget.Factory? = nil,
+        localFactory: FeedbackFormWidgetFactory? = nil,
         onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
     ) -> some View {
         modifier(

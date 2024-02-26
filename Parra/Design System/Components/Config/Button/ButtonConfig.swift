@@ -11,7 +11,7 @@ import SwiftUI
 public struct ButtonConfig {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         style: ButtonCategory = .primary,
         size: ButtonSize = .medium,
         isMaxWidth: Bool = false

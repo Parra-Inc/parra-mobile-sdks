@@ -22,7 +22,7 @@ extension ParraCardItem: ParraFixture {
 
 enum ParraCardItemFixtures {
     static let choiceCard = ParraCardItem(
-        id: "id",
+        id: "choiceCard",
         campaignId: "",
         campaignActionId: "",
         questionId: "qid",
@@ -67,7 +67,7 @@ enum ParraCardItemFixtures {
     )
 
     static let checkboxCard = ParraCardItem(
-        id: "id",
+        id: "checkboxCard",
         campaignId: "",
         campaignActionId: "",
         questionId: "qid",
@@ -111,7 +111,7 @@ enum ParraCardItemFixtures {
     )
 
     static let boolCard = ParraCardItem(
-        id: "id",
+        id: "boolCard",
         campaignId: "",
         campaignActionId: "",
         questionId: "qid",
@@ -151,7 +151,7 @@ enum ParraCardItemFixtures {
     )
 
     static let starCard = ParraCardItem(
-        id: "id",
+        id: "starCard",
         campaignId: "",
         campaignActionId: "",
         questionId: "qid",
@@ -185,7 +185,7 @@ enum ParraCardItemFixtures {
     )
 
     static let imageCard = ParraCardItem(
-        id: "id",
+        id: "imageCard",
         campaignId: "",
         campaignActionId: "",
         questionId: "qid",
@@ -235,7 +235,7 @@ enum ParraCardItemFixtures {
     )
 
     static let ratingCard = ParraCardItem(
-        id: "id",
+        id: "ratingCard",
         campaignId: "",
         campaignActionId: "",
         questionId: "qid",
@@ -295,7 +295,7 @@ enum ParraCardItemFixtures {
     )
 
     static let shortTextCard = ParraCardItem(
-        id: "id",
+        id: "shortTextCard",
         campaignId: "",
         campaignActionId: "",
         questionId: "qid",
@@ -327,7 +327,7 @@ enum ParraCardItemFixtures {
     )
 
     static let longTextCard = ParraCardItem(
-        id: "id",
+        id: "shortTextCard",
         campaignId: "",
         campaignActionId: "",
         questionId: "qid",

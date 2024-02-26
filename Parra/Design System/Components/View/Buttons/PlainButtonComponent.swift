@@ -79,11 +79,12 @@ struct PlainButtonComponent: ButtonComponentType {
                 cornerRadius: defaults.title.cornerRadius ?? defaults
                     .cornerRadius,
                 font: Font.system(fontStyle),
-                fontColor: fontColor,
+                fontColor: defaults.title.fontColor ?? fontColor,
                 // Frame is applied here to adjust width based on config. If users
                 // provide overrides for styles in different states, this will need
                 // to be re-created.
-                frame: .init(maxWidth: config.isMaxWidth ? .infinity : nil)
+                frame: defaults.title.frame
+                    ?? .init(maxWidth: config.isMaxWidth ? .infinity : nil)
             )
         )
 
