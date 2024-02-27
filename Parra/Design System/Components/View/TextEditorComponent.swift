@@ -48,7 +48,7 @@ struct TextEditorComponent: TextEditorComponentType {
                     cornerRadii: themeObserver.theme.cornerRadius
                         .value(for: style.attributes.cornerRadius)
                 )
-                .stroke(
+                .strokeBorder(
                     style.attributes.borderColor
                         ?? themeObserver.theme.palette.secondaryBackground,
                     lineWidth: style.attributes.borderWidth

@@ -78,7 +78,7 @@ struct ParraAttributedMenuStyle: MenuStyle, ParraAttributedStyle {
                     cornerRadii: theme.cornerRadius
                         .value(for: attributes.cornerRadius)
                 )
-                .stroke(
+                .strokeBorder(
                     tint,
                     lineWidth: attributes.borderWidth
                 )

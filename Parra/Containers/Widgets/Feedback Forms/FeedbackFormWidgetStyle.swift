@@ -21,7 +21,7 @@ public struct FeedbackFormWidgetStyle: WidgetStyle {
 
         return FeedbackFormWidgetStyle(
             background: palette.primaryBackground,
-            contentPadding: EdgeInsets(vertical: 12, horizontal: 12),
+            contentPadding: EdgeInsets(vertical: 12, horizontal: 20),
             cornerRadius: .zero,
             padding: EdgeInsets(top: 16, leading: 0, bottom: 0, trailing: 0)
         )

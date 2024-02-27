@@ -12,26 +12,26 @@ public struct FeedbackFormWidget: Container {
     // MARK: - Public
 
     public var body: some View {
-        VStack {
-            VStack(alignment: .leading) {
-                // TODO: ScrollView
+        VStack(spacing: 0) {
+            ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     header
 
                     fieldViews
                 }
-                .layoutPriority(100)
-
-                Spacer()
-                    .layoutPriority(0)
-
-                footer
             }
-            .padding(style.contentPadding)
-            .applyBackground(style.background)
-            .environmentObject(contentObserver)
+            .contentMargins(
+                [.top, .leading, .trailing],
+                style.contentPadding,
+                for: .scrollContent
+            )
+
+            footer
         }
+        .applyBackground(style.background)
         .padding(style.padding)
+        .environmentObject(contentObserver)
+        .environmentObject(componentFactory)
     }
 
     // MARK: - Internal
@@ -149,6 +149,16 @@ public struct FeedbackFormWidget: Container {
 
             ParraLogoButton(type: .poweredBy)
         }
+        .frame(maxWidth: .infinity)
+        .padding([.leading, .trailing, .bottom], from: style.contentPadding)
+        // Using the leading padding of the container as the footer's top
+        // padding to keep the button square with its container
+        .padding(.top, style.contentPadding.leading)
+        .border(
+            width: 1,
+            edges: .top,
+            color: themeObserver.theme.palette.secondaryBackground
+        )
     }
 
     // MARK: - Private

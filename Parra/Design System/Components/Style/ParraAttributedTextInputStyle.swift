@@ -93,7 +93,7 @@ struct ParraAttributedTextInputStyle: TextFieldStyle, ParraAttributedStyle {
                     cornerRadii: theme.cornerRadius
                         .value(for: attributes.cornerRadius)
                 )
-                .stroke(
+                .strokeBorder(
                     attributes.borderColor
                         ?? theme.palette.secondaryBackground,
                     lineWidth: attributes.borderWidth

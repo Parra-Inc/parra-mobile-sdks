@@ -29,7 +29,8 @@ public struct FeedbackFormWidgetConfig: ContainerConfig {
         ),
         submitButton: ButtonConfig(
             style: .primary,
-            size: .large
+            size: .large,
+            isMaxWidth: true
         )
     )
 

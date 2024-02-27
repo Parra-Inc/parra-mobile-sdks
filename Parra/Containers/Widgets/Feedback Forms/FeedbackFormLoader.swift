@@ -69,6 +69,9 @@ struct FeedbackFormLoader: ViewModifier {
             .sheet(
                 isPresented: $isPresented,
                 onDismiss: {
+                    // Reset the binding that was used to seed the state so that
+                    // the call site can receive the state reset.
+                    initialState = .initial
                     formState = .initial
 
                     onDismiss?(hasSubmitted ? .submitted : .cancelled)

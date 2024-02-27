@@ -57,7 +57,7 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
                 cornerRadii: theme.cornerRadius
                     .value(for: attributes.cornerRadius)
             )
-            .stroke(
+            .strokeBorder(
                 fontColor,
                 lineWidth: attributes.borderWidth ?? 0
             )
