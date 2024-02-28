@@ -23,10 +23,17 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
             ButtonConfig,
             ButtonContent,
             ButtonAttributes
+        >? = nil,
+        booleanOptionsBuilder: ComponentBuilder.Factory<
+            Button<Text>,
+            ButtonConfig,
+            ButtonContent,
+            ButtonAttributes
         >? = nil
     ) {
         self.backButton = backButtonBuilder
         self.forwardButton = forwardButtonBuilder
+        self.booleanOptions = booleanOptionsBuilder
     }
 
     // MARK: - Public
@@ -39,6 +46,13 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
     >?
 
     public let forwardButton: ComponentBuilder.Factory<
+        Button<Text>,
+        ButtonConfig,
+        ButtonContent,
+        ButtonAttributes
+    >?
+
+    public let booleanOptions: ComponentBuilder.Factory<
         Button<Text>,
         ButtonConfig,
         ButtonContent,

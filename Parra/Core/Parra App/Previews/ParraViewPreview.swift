@@ -30,7 +30,9 @@ struct ParraViewPreview<Content>: View where Content: View {
             options: options,
             appDelegateType: ParraAppDelegate.self,
             launchScreenConfig: .preview,
-            sceneContent: content
+            sceneContent: { _ in
+                content()
+            }
         )
     }
 

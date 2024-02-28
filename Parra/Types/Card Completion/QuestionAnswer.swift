@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol AnswerOption: Codable {}
+protocol AnswerOption: Codable, Equatable {}
 
 struct SingleOptionAnswer: AnswerOption {
     // MARK: - Lifecycle
@@ -22,7 +22,7 @@ struct SingleOptionAnswer: AnswerOption {
     let optionId: String
 }
 
-struct MultiOptionIndividualOption: Codable {
+struct MultiOptionIndividualOption: Codable, Equatable {
     // MARK: - Lifecycle
 
     init(id: String) {
@@ -70,7 +70,7 @@ struct IntValueAnswer: AnswerOption {
     let value: Int
 }
 
-enum QuestionAnswerKind: Codable {
+enum QuestionAnswerKind: Codable, Equatable {
     case checkbox(MultiOptionAnswer)
     case radio(SingleOptionAnswer)
     case boolean(SingleOptionAnswer)
@@ -81,10 +81,10 @@ enum QuestionAnswerKind: Codable {
     case textLong(TextValueAnswer)
 }
 
-struct QuestionAnswer: Codable {
+struct QuestionAnswer: Codable, Equatable {
     // MARK: - Lifecycle
 
-    init(kind: QuestionKind, data: AnswerOption) {
+    init(kind: QuestionKind, data: any AnswerOption) {
         self.kind = kind
         self.data = data
     }
@@ -123,6 +123,32 @@ struct QuestionAnswer: Codable {
 
     let kind: QuestionKind
     let data: any AnswerOption
+
+    static func == (lhs: QuestionAnswer, rhs: QuestionAnswer) -> Bool {
+        if lhs.kind != rhs.kind {
+            return false
+        }
+
+        // Kind is the same at this point, so compare by data
+        switch (lhs.data, rhs.data) {
+        case (
+            let lAnswer as SingleOptionAnswer,
+            let rAnswer as SingleOptionAnswer
+        ):
+            return lAnswer == rAnswer
+        case (
+            let lAnswer as MultiOptionAnswer,
+            let rAnswer as MultiOptionAnswer
+        ):
+            return lAnswer == rAnswer
+        case (let lAnswer as IntValueAnswer, let rAnswer as IntValueAnswer):
+            return lAnswer == rAnswer
+        case (let lAnswer as TextValueAnswer, let rAnswer as TextValueAnswer):
+            return lAnswer == rAnswer
+        default:
+            return false
+        }
+    }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)

@@ -131,14 +131,14 @@ enum ParraCardItemFixtures {
                 data: .booleanQuestionBody(
                     BooleanQuestionBody(options: [
                         BooleanQuestionOption(
-                            title: "title",
-                            value: "value",
-                            id: "id"
+                            title: "Yes",
+                            value: "yes",
+                            id: "id1"
                         ),
                         BooleanQuestionOption(
-                            title: "title",
-                            value: "value",
-                            id: "id"
+                            title: "No",
+                            value: "no",
+                            id: "id2"
                         )
                     ])
                 ),

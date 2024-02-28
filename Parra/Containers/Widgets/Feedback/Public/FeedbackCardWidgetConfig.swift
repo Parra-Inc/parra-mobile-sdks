@@ -8,12 +8,39 @@
 
 import SwiftUI
 
-public struct FeedbackCardWidgetConfig: ContainerConfig {
+public class FeedbackCardWidgetConfig: ContainerConfig, Observable {
+    // MARK: - Lifecycle
+
+    public init(
+        backButton: ButtonConfig,
+        forwardButton: ButtonConfig,
+        booleanOptions: ButtonConfig
+    ) {
+        self.backButton = backButton
+        self.forwardButton = forwardButton
+        self.booleanOptions = booleanOptions
+    }
+
+    // MARK: - Public
+
     public static let `default` = FeedbackCardWidgetConfig(
-        backButton: ButtonConfig(style: .primary, size: .small),
-        forwardButton: ButtonConfig(style: .primary, size: .small)
+        backButton: ButtonConfig(
+            style: .primary,
+            size: .small
+        ),
+        forwardButton: ButtonConfig(
+            style: .primary,
+            size: .small
+        ),
+        booleanOptions: ButtonConfig(
+            style: .primary,
+            size: .large,
+            isMaxWidth: true
+        )
     )
 
     public let backButton: ButtonConfig
     public let forwardButton: ButtonConfig
+
+    public let booleanOptions: ButtonConfig
 }

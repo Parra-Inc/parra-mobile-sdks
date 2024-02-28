@@ -15,6 +15,37 @@ protocol ParraBorderedButtonDelegate: AnyObject {
     func buttonDidDeselect(button: ParraBorderedButton, optionId: String)
 }
 
+#Preview {
+    let stack = UIStackView(
+        arrangedSubviews: [
+            ParraBorderedButton(
+                title: "Test Button 1",
+                optionId: "aaaa",
+                isInitiallySelected: false,
+                config: .default
+            ),
+            ParraBorderedButton(
+                title: "Test Button 2",
+                optionId: "bbbb",
+                isInitiallySelected: true,
+                config: .default
+            ),
+            ParraBorderedButton(
+                title: "Test Button 3",
+                optionId: "cccc",
+                isInitiallySelected: false,
+                config: .default
+            )
+        ]
+    )
+
+    stack.axis = .vertical
+    stack.spacing = 20
+    stack.distribution = .equalCentering
+
+    return stack
+}
+
 class ParraBorderedButton: UIView, ParraLegacyConfigurableView {
     // MARK: - Lifecycle
 

@@ -16,7 +16,7 @@ class ParraLongTextKindView: UIView, ParraQuestionKindView {
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
-        answerHandler: ParraAnswerHandler
+        answerHandler: ParraCardAnswerHandler
     ) {
         self.question = question
         self.answerHandler = answerHandler
@@ -53,7 +53,7 @@ class ParraLongTextKindView: UIView, ParraQuestionKindView {
 
     // MARK: - Private
 
-    private let answerHandler: ParraAnswerHandler
+    private let answerHandler: ParraCardAnswerHandler
     private let textView: ParraBorderedTextView
     private let question: Question
     private let data: DataType

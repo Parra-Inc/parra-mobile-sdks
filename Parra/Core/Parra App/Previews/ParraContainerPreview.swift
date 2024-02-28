@@ -15,8 +15,10 @@ struct ParraContainerPreview<Content>: View where Content: Container {
     // MARK: - Lifecycle
 
     init(
-        content: @escaping (_ factory: ComponentFactory<Content.Factory>)
-            -> Content,
+        content: @escaping (
+            _ parra: Parra,
+            _ factory: ComponentFactory<Content.Factory>
+        ) -> Content,
         localFactory: Content.Factory? = nil,
         theme: ParraTheme = .default
     ) {
@@ -41,18 +43,20 @@ struct ParraContainerPreview<Content>: View where Content: Container {
             options: options,
             appDelegateType: ParraAppDelegate.self,
             launchScreenConfig: .preview,
-            sceneContent: {
-                content(factory)
+            sceneContent: { parra in
+                content(parra, factory)
             }
         )
+        .environmentObject(factory)
     }
 
     // MARK: - Private
 
-    @ViewBuilder private var content: (_ factory: ComponentFactory<
-        Content
-            .Factory
-    >) -> Content
+    @ViewBuilder private var content: (
+        _ parra: Parra,
+        _ factory: ComponentFactory<Content.Factory>
+    ) -> Content
+
     private let factory: ComponentFactory<Content.Factory>
     private let options: [ParraConfigurationOption]
 }

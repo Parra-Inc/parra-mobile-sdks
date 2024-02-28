@@ -116,7 +116,9 @@ public struct ParraApp<Content, DelegateType>: Scene
                 options: options,
                 appDelegateType: appDelegateType,
                 launchScreenConfig: launchScreenConfig,
-                sceneContent: appContent
+                sceneContent: { _ in
+                    appContent()
+                }
             )
         }
     }

@@ -20,7 +20,7 @@ class ParraBooleanKindView: UIView, ParraQuestionKindView {
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
-        answerHandler: ParraAnswerHandler
+        answerHandler: ParraCardAnswerHandler
     ) {
         self.question = question
         self.answerHandler = answerHandler
@@ -39,7 +39,7 @@ class ParraBooleanKindView: UIView, ParraQuestionKindView {
         generateOptions(
             for: data,
             config: config,
-            currentState: answerHandler.initialState(
+            currentState: answerHandler.currentAnswer(
                 for: bucketId
             )
         )
@@ -91,7 +91,7 @@ class ParraBooleanKindView: UIView, ParraQuestionKindView {
     private var optionViewMap = [ParraBorderedButton: BooleanQuestionOption]()
 
     private let question: Question
-    private let answerHandler: ParraAnswerHandler
+    private let answerHandler: ParraCardAnswerHandler
     private let bucketId: String
 
     private func generateOptions(

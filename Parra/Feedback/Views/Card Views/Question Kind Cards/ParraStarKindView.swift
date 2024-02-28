@@ -16,7 +16,7 @@ class ParraStarKindView: UIView, ParraQuestionKindView {
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
-        answerHandler: ParraAnswerHandler
+        answerHandler: ParraCardAnswerHandler
     ) {
         self.question = question
         self.answerHandler = answerHandler
@@ -77,7 +77,7 @@ class ParraStarKindView: UIView, ParraQuestionKindView {
     // MARK: - Private
 
     private let question: Question
-    private let answerHandler: ParraAnswerHandler
+    private let answerHandler: ParraCardAnswerHandler
     private let config: ParraCardViewConfig
     private let starControl: ParraStarControl
     private let contentContainer = UIStackView(frame: .zero)

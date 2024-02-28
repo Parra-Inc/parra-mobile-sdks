@@ -17,7 +17,7 @@ class ParraCheckboxKindView: UIView, ParraQuestionKindView {
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
-        answerHandler: ParraAnswerHandler
+        answerHandler: ParraCardAnswerHandler
     ) {
         self.question = question
         self.answerHandler = answerHandler
@@ -36,7 +36,7 @@ class ParraCheckboxKindView: UIView, ParraQuestionKindView {
         generateOptions(
             for: data,
             config: config,
-            currentState: answerHandler.initialState(for: bucketId)
+            currentState: answerHandler.currentAnswer(for: bucketId)
         )
 
         NSLayoutConstraint.activate([
@@ -87,7 +87,7 @@ class ParraCheckboxKindView: UIView, ParraQuestionKindView {
     private var selectedOptionIds = Set<String>()
 
     private let question: Question
-    private let answerHandler: ParraAnswerHandler
+    private let answerHandler: ParraCardAnswerHandler
     private let bucketId: String
 
     private func generateOptions(

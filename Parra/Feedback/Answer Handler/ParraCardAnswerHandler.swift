@@ -15,42 +15,23 @@ import Foundation
 /// Maps a question id to an answer for that question
 typealias AnswerStateMap = [String: QuestionAnswer]
 
-protocol ParraQuestionHandlerDelegate: AnyObject {
-    /// Not meant to be triggered during every selection event. Just when a new selection occurs that may be
-    /// required to cause a transition or other side effects.
-    func questionHandlerDidMakeNewSelection(
-        forQuestion question: Question
-    ) async
-}
-
-protocol ParraAnswerHandler {
-    func initialState<T: AnswerOption>(
-        for bucketItemId: String
-    ) -> T?
-
-    func update(
-        answer: QuestionAnswer?,
-        for bucketItemId: String
-    )
-
-    func commitAnswers(
-        for bucketItemId: String,
-        question: Question
-    )
-}
-
-class ParraCardAnswerHandler: ParraAnswerHandler {
+class ParraCardAnswerHandler: ObservableObject {
     // MARK: - Lifecycle
 
-    required init() {}
+    required init(dataManager: ParraFeedbackDataManager) {
+        self.dataManager = dataManager
+    }
 
     // MARK: - Internal
 
     weak var questionHandlerDelegate: ParraQuestionHandlerDelegate?
 
-    func initialState<T: AnswerOption>(
+    @Published private(set) var currentAnswerState: AnswerStateMap = [:]
+
+    func currentAnswer<T: AnswerOption>(
         for bucketItemId: String
     ) -> T? {
+        print("Getting current answer...")
         guard let value = currentAnswerState[bucketItemId] else {
             return nil
         }
@@ -62,6 +43,7 @@ class ParraCardAnswerHandler: ParraAnswerHandler {
         answer: QuestionAnswer?,
         for bucketItemId: String
     ) {
+        print("Updating answer...")
         currentAnswerState[bucketItemId] = answer
     }
 
@@ -69,6 +51,7 @@ class ParraCardAnswerHandler: ParraAnswerHandler {
         for bucketItemId: String,
         question: Question
     ) {
+        print("Commiting answer...")
         guard let answer = currentAnswerState[bucketItemId] else {
             // This check is critical since it's possible that a card could commit a selection change
             // without any answers selected.
@@ -82,7 +65,7 @@ class ParraCardAnswerHandler: ParraAnswerHandler {
         )
 
         Task {
-            await ParraFeedback.shared.dataManager.completeCard(completedCard)
+            await dataManager.completeCard(completedCard)
 
             // This should only be invoked when a new selection is made, not when it changes
             await questionHandlerDelegate?.questionHandlerDidMakeNewSelection(
@@ -93,5 +76,5 @@ class ParraCardAnswerHandler: ParraAnswerHandler {
 
     // MARK: - Private
 
-    private var currentAnswerState: AnswerStateMap = [:]
+    private let dataManager: ParraFeedbackDataManager
 }

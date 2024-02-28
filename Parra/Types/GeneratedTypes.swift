@@ -840,7 +840,7 @@ public struct CardsResponse: Codable, Equatable, Hashable {
     public let items: [ParraCardItem]
 }
 
-public enum QuestionKind: String, Codable {
+public enum QuestionKind: String, Codable, Equatable {
     case radio
     case checkbox
     case rating

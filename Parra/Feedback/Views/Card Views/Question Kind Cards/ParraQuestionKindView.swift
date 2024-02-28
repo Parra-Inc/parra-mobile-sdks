@@ -16,7 +16,7 @@ protocol ParraQuestionOption: Identifiable {
 
 // All ParraQuestionKindView's need to internally manage the selection/deselection of
 // whatever views they need to render while distilling state updates to those consumable
-// by the ParraAnswerHandler.
+// by the ParraCardAnswerHandler.
 protocol ParraQuestionKindView: ParraConfigurableCardView {
     associatedtype DataType
     associatedtype AnswerType
@@ -26,7 +26,7 @@ protocol ParraQuestionKindView: ParraConfigurableCardView {
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
-        answerHandler: ParraAnswerHandler
+        answerHandler: ParraCardAnswerHandler
     )
 
     func shouldAllowCommittingSelection() -> Bool

@@ -16,7 +16,7 @@ class ParraShortTextKindView: UIView, ParraQuestionKindView {
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
-        answerHandler: ParraAnswerHandler
+        answerHandler: ParraCardAnswerHandler
     ) {
         self.question = question
         self.answerHandler = answerHandler
@@ -55,7 +55,7 @@ class ParraShortTextKindView: UIView, ParraQuestionKindView {
 
     private let question: Question
     private let data: DataType
-    private let answerHandler: ParraAnswerHandler
+    private let answerHandler: ParraCardAnswerHandler
     private let textField: ParraBorderedTextField
     private var validationError = TextValidationError.none
     private let validationLabel = UILabel(frame: .zero)

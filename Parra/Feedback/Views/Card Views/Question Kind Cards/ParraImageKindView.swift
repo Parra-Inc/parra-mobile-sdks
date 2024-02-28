@@ -16,7 +16,7 @@ class ParraImageKindView: UIView, ParraQuestionKindView {
         question: Question,
         data: DataType,
         config: ParraCardViewConfig,
-        answerHandler: ParraAnswerHandler
+        answerHandler: ParraCardAnswerHandler
     ) {
         assert(data.options.count <= 3)
 
@@ -142,7 +142,7 @@ class ParraImageKindView: UIView, ParraQuestionKindView {
     // MARK: - Private
 
     private let question: Question
-    private let answerHandler: ParraAnswerHandler
+    private let answerHandler: ParraCardAnswerHandler
     private let bucketId: String
     private let config: ParraCardViewConfig
     private let contentContainer = UIStackView(frame: .zero)

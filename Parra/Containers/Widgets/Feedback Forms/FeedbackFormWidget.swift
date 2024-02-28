@@ -21,10 +21,11 @@ public struct FeedbackFormWidget: Container {
                 }
             }
             .contentMargins(
-                [.top, .leading, .trailing],
+                .all,
                 style.contentPadding,
                 for: .scrollContent
             )
+            .scrollDismissesKeyboard(.interactively)
 
             footer
         }
@@ -175,7 +176,7 @@ public struct FeedbackFormWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview { componentFactory in
+    ParraContainerPreview { _, componentFactory in
         FeedbackFormWidget(
             componentFactory: componentFactory,
             contentObserver: .init(

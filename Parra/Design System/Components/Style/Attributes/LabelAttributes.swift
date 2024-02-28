@@ -33,6 +33,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         self.layoutDirectionBehavior = layoutDirectionBehavior
         self.frame = nil
         self.borderWidth = nil
+        self.borderColor = nil
     }
 
     init(
@@ -46,7 +47,8 @@ public struct LabelAttributes: ParraStyleAttributes {
         padding: EdgeInsets? = nil,
         layoutDirectionBehavior: LayoutDirectionBehavior? = nil,
         frame: FrameAttributes? = nil,
-        borderWidth: CGFloat? = nil
+        borderWidth: CGFloat? = nil,
+        borderColor: Color? = nil
     ) {
         self.background = background
         self.cornerRadius = cornerRadius
@@ -59,6 +61,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         self.layoutDirectionBehavior = layoutDirectionBehavior
         self.frame = frame
         self.borderWidth = borderWidth
+        self.borderColor = borderColor
     }
 
     // MARK: - Public
@@ -77,6 +80,7 @@ public struct LabelAttributes: ParraStyleAttributes {
 
     let frame: FrameAttributes?
     let borderWidth: CGFloat?
+    let borderColor: Color?
 
     static func defaultFormTitle(
         in theme: ParraTheme,
@@ -149,7 +153,8 @@ public struct LabelAttributes: ParraStyleAttributes {
             layoutDirectionBehavior: updates?
                 .layoutDirectionBehavior ?? layoutDirectionBehavior,
             frame: updates?.frame ?? frame,
-            borderWidth: updates?.borderWidth ?? borderWidth
+            borderWidth: updates?.borderWidth ?? borderWidth,
+            borderColor: updates?.borderColor ?? borderColor
         )
     }
 }

@@ -13,12 +13,12 @@ struct ParraAppView<Content, DelegateType>: View
 {
     // MARK: - Lifecycle
 
-    public init(
+    init(
         authProvider: ParraAuthenticationProviderType,
         options: [ParraConfigurationOption],
         appDelegateType: DelegateType.Type,
         launchScreenConfig: ParraLaunchScreen.Config?,
-        sceneContent: @MainActor @escaping () -> Content
+        sceneContent: @MainActor @escaping (_ parra: Parra) -> Content
     ) {
         self.content = sceneContent
 
@@ -47,9 +47,11 @@ struct ParraAppView<Content, DelegateType>: View
         )
     }
 
-    // MARK: - Public
+    // MARK: - Internal
 
-    public var body: some View {
+    @UIApplicationDelegateAdaptor(DelegateType.self) var appDelegate
+
+    var body: some View {
         ZStack {
             // Important: Seperate conditions determine when the launch
             // screen and primary app content should be displayed. This
@@ -93,7 +95,7 @@ struct ParraAppView<Content, DelegateType>: View
         .environmentObject(launchScreenState)
     }
 
-    public static func configureLaunchScreen(
+    static func configureLaunchScreen(
         with overrides: ParraLaunchScreen.Config?
     ) -> ParraLaunchScreen.Config {
         if let overrides {
@@ -141,13 +143,9 @@ struct ParraAppView<Content, DelegateType>: View
         )
     }
 
-    // MARK: - Internal
-
-    @UIApplicationDelegateAdaptor(DelegateType.self) var appDelegate
-
     // MARK: - Private
 
-    @ViewBuilder private var content: () -> Content
+    @ViewBuilder private var content: (_ parra: Parra) -> Content
     @StateObject private var parraAppState: ParraAppState
     @StateObject private var launchScreenState = LaunchScreenStateManager()
 
@@ -158,7 +156,7 @@ struct ParraAppView<Content, DelegateType>: View
     private let launchScreenConfig: ParraLaunchScreen.Config
 
     private func renderPrimaryContent() -> some View {
-        content()
+        content(parra)
             .environment(parra)
             .environmentObject(themeObserver)
     }

@@ -11,12 +11,14 @@ import SwiftUI
 public struct ParraFeedbackView: ParraPublicContainer {
     // MARK: - Lifecycle
 
-    init(
-        config: Wrapped.Config = .default,
-        style: Wrapped.Style? = nil,
-        factory localFactory: Wrapped.Factory? = nil,
+    public init(
+        cards: [ParraCardItem],
+        config: FeedbackCardWidgetConfig = .default,
+        style: FeedbackCardWidgetStyle? = nil,
+        factory localFactory: FeedbackCardWidgetFactory? = nil,
         cardDelegate: ParraCardViewDelegate? = nil
     ) {
+        self.cards = cards
         self.config = config
         self.style = style
         self.localFactory = localFactory
@@ -38,7 +40,10 @@ public struct ParraFeedbackView: ParraPublicContainer {
                 theme: theme
             ),
             contentObserver: Wrapped.ContentObserver(
+                cards: cards,
                 notificationCenter: parra.notificationCenter,
+                dataManager: parra.feedback.dataManager,
+                cardDelegate: cardDelegate,
                 syncHandler: {
                     Task {
                         await parra.triggerSync()
@@ -46,8 +51,7 @@ public struct ParraFeedbackView: ParraPublicContainer {
                 }
             ),
             config: config,
-            style: style,
-            cardDelegate: cardDelegate
+            style: style
         )
     }
 
@@ -60,8 +64,25 @@ public struct ParraFeedbackView: ParraPublicContainer {
 
     // MARK: - Private
 
+    private let cards: [ParraCardItem]
     private let config: Wrapped.Config
     private let style: Wrapped.Style?
     private let localFactory: Wrapped.Factory?
     private weak var cardDelegate: ParraCardViewDelegate?
+}
+
+#Preview {
+    GeometryReader { geometry in
+        ZStack {
+            Rectangle()
+                .ignoresSafeArea()
+                .foregroundStyle(ParraTheme.default.palette.secondaryBackground)
+                .frame(width: geometry.size.width, height: geometry.size.height)
+
+            ParraViewPreview {
+                ParraFeedbackView(cards: ParraCardItem.validStates())
+            }
+            .padding()
+        }
+    }
 }

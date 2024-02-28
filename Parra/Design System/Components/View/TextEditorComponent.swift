@@ -90,8 +90,8 @@ struct TextEditorComponent: TextEditorComponentType {
             padding: .zero,
             frame: FrameAttributes(
                 minHeight: 60,
-                idealHeight: 100,
-                maxHeight: 200
+                idealHeight: 150,
+                maxHeight: 240
             ),
             borderWidth: 1,
             borderColor: palette.secondaryText.toParraColor()
@@ -320,27 +320,27 @@ private func renderTextEditor(
             )
         )
 
-        renderTextEditor(
-            config: FeedbackFormWidget.Config.default.textFields,
-            content: TextEditorContent(
-                title: "Some title",
-                placeholder: "temp placeholder",
-                helper: "helper text woo",
-                errorMessage: "That text isn't very good",
-                textChanged: nil
-            )
-        )
-
-        renderTextEditor(
-            config: FeedbackFormWidget.Config.default.textFields,
-            content: TextEditorContent(
-                title: "Some title",
-                placeholder: "temp placeholder",
-                helper: "helper text woo",
-                errorMessage: nil,
-                textChanged: nil
-            )
-        )
+//        renderTextEditor(
+//            config: FeedbackFormWidget.Config.default.textFields,
+//            content: TextEditorContent(
+//                title: "Some title",
+//                placeholder: "temp placeholder",
+//                helper: "helper text woo",
+//                errorMessage: "That text isn't very good",
+//                textChanged: nil
+//            )
+//        )
+//
+//        renderTextEditor(
+//            config: FeedbackFormWidget.Config.default.textFields,
+//            content: TextEditorContent(
+//                title: "Some title",
+//                placeholder: "temp placeholder",
+//                helper: "helper text woo",
+//                errorMessage: nil,
+//                textChanged: nil
+//            )
+//        )
     }
     .padding()
 }
