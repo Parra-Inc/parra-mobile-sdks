@@ -63,9 +63,10 @@ private func renderButtonComponent(
             config: config,
             content: content,
             attributes: type.applyStandardCustomizations(
-                onto: .init(),
+                onto: ButtonAttributes(),
                 theme: theme,
-                config: config
+                config: config,
+                for: type
             ),
             theme: theme
         )

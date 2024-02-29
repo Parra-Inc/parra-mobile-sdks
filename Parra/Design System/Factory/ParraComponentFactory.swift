@@ -126,19 +126,22 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
                 PlainButtonComponent.applyStandardCustomizations(
                     onto: attributes,
                     theme: theme,
-                    config: config
+                    config: config,
+                    for: PlainButtonComponent.self
                 )
             case .outlined:
                 OutlinedButtonComponent.applyStandardCustomizations(
                     onto: attributes,
                     theme: theme,
-                    config: config
+                    config: config,
+                    for: OutlinedButtonComponent.self
                 )
             case .contained:
                 ContainedButtonComponent.applyStandardCustomizations(
                     onto: attributes,
                     theme: theme,
-                    config: config
+                    config: config,
+                    for: ContainedButtonComponent.self
                 )
             }
 
