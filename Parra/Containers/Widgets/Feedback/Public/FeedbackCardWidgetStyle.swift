@@ -21,7 +21,12 @@ public struct FeedbackCardWidgetStyle: WidgetStyle {
 
         return FeedbackCardWidgetStyle(
             background: palette.primaryBackground,
-            contentPadding: EdgeInsets(20),
+            contentPadding: EdgeInsets(
+                top: 12,
+                leading: 16,
+                bottom: 8,
+                trailing: 16
+            ),
             cornerRadius: ParraCornerRadiusSize.large,
             padding: .zero
         )

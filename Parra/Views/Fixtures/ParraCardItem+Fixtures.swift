@@ -38,8 +38,8 @@ enum ParraCardItemFixtures {
         updatedAt: .now,
         deletedAt: nil,
         tenantId: "24234234",
-        title: "Sample question 1",
-        subtitle: nil,
+        title: "Who would you prefer to see in concert?",
+        subtitle: "All these artists are performing on the same night. You can only pick 1!",
         kind: .radio,
         data: .choiceQuestionBody(choiceQuestionData),
         active: true,
@@ -52,16 +52,23 @@ enum ParraCardItemFixtures {
     static let choiceQuestionData = ChoiceQuestionBody(
         options: [
             ChoiceQuestionOption(
-                title: "option 1",
+                title: "Taylor Swift",
                 value: "",
                 isOther: nil,
-                id: "op1"
+                id: "taytay"
             ),
             ChoiceQuestionOption(
-                title: "option 2",
+                title: "Green Day",
                 value: "",
                 isOther: nil,
-                id: "op2"
+                id: "green-day"
+            ),
+
+            ChoiceQuestionOption(
+                title: "Post Malone",
+                value: "",
+                isOther: nil,
+                id: "post-malone"
             )
         ]
     )
@@ -83,8 +90,8 @@ enum ParraCardItemFixtures {
         updatedAt: .now,
         deletedAt: nil,
         tenantId: "24234234",
-        title: "Sample question 2",
-        subtitle: "this one has a subtitle",
+        title: "Which ice cream flavors are your favorites?",
+        subtitle: "The Parra team is partial to strawberry!",
         kind: .checkbox,
         data: .checkboxQuestionBody(checkboxQuestionData),
         active: false,
@@ -96,13 +103,19 @@ enum ParraCardItemFixtures {
     static let checkboxQuestionData = CheckboxQuestionBody(
         options: [
             CheckboxQuestionOption(
-                title: "option 1",
+                title: "Chocolate",
                 value: "",
                 isOther: nil,
                 id: "op1"
             ),
             CheckboxQuestionOption(
-                title: "option 2",
+                title: "Vanilla",
+                value: "",
+                isOther: nil,
+                id: "op2"
+            ),
+            CheckboxQuestionOption(
+                title: "Strawberry",
                 value: "",
                 isOther: nil,
                 id: "op2"
@@ -127,8 +140,8 @@ enum ParraCardItemFixtures {
         updatedAt: .now,
         deletedAt: nil,
         tenantId: "24234234",
-        title: "Sample question 2",
-        subtitle: "this one has a subtitle",
+        title: "Are you satisfied with Parra?",
+        subtitle: "We value your opinion and are always looking to improve.",
         kind: .boolean,
         data: .booleanQuestionBody(boolQuestionData),
         active: false,
@@ -169,8 +182,8 @@ enum ParraCardItemFixtures {
         updatedAt: .now,
         deletedAt: nil,
         tenantId: "24234234",
-        title: "Sample question 2",
-        subtitle: "this one has a subtitle",
+        title: "Rate your experience",
+        subtitle: "Let us know how we're doing by providing a rating.",
         kind: .star,
         data: .starQuestionBody(starQuestionData),
         active: false,
@@ -203,8 +216,8 @@ enum ParraCardItemFixtures {
         updatedAt: .now,
         deletedAt: nil,
         tenantId: "24234234",
-        title: "Sample question 2",
-        subtitle: "this one has a subtitle",
+        title: "Sample image question",
+        subtitle: "A choice but with images",
         kind: .image,
         data: .imageQuestionBody(imageQuestionData),
         active: false,
@@ -253,8 +266,8 @@ enum ParraCardItemFixtures {
         updatedAt: .now,
         deletedAt: nil,
         tenantId: "24234234",
-        title: "Sample question 2",
-        subtitle: "this one has a subtitle",
+        title: "Sample rating question",
+        subtitle: "Pick a number!",
         kind: .rating,
         data: .ratingQuestionBody(ratingQuestionData),
         active: false,
@@ -313,8 +326,8 @@ enum ParraCardItemFixtures {
         updatedAt: .now,
         deletedAt: nil,
         tenantId: "24234234",
-        title: "Sample question 2",
-        subtitle: "this one has a subtitle",
+        title: "Sample short text question",
+        subtitle: "Single line text input",
         kind: .textShort,
         data: .shortTextQuestionBody(shortTextQuestionData),
         active: false,
@@ -345,8 +358,8 @@ enum ParraCardItemFixtures {
         updatedAt: .now,
         deletedAt: nil,
         tenantId: "24234234",
-        title: "Sample question 2",
-        subtitle: "this one has a subtitle",
+        title: "Sample long text question",
+        subtitle: "Multi line extended response text input",
         kind: .textLong,
         data: .longTextQuestionBody(longTextQuestionData),
         active: false,

@@ -99,16 +99,8 @@ class ParraChoiceKindView: UIView, ParraQuestionKindView {
         optionViewMap.removeAll()
 
         for option in data.options {
-            guard let title = option.title else {
-                Logger
-                    .warn(
-                        "ParraChoiceKindView option: \(option.id) missing a title. Skipping."
-                    )
-                continue
-            }
-
             let button = ParraBorderedButton(
-                title: title,
+                title: option.title,
                 optionId: option.id,
                 isInitiallySelected: option.id == currentState?.optionId,
                 config: config

@@ -53,7 +53,7 @@ struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
     ) -> some View {
         let (width, height): (CGFloat, CGFloat) = switch config.size {
         case .small:
-            (24, 24)
+            (22, 22)
         case .medium:
             (36, 36)
         case .large:

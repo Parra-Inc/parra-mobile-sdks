@@ -391,6 +391,11 @@
 		00EBCE162AA4F0D100887639 /* ParraLoggerExtraStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EBCE152AA4F0D100887639 /* ParraLoggerExtraStyle.swift */; };
 		00EC6F7D2B61A55F00ABC8EC /* RectangleCornerRadii+shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EC6F7C2B61A55F00ABC8EC /* RectangleCornerRadii+shortcuts.swift */; };
 		00EC6F7F2B61A64B00ABC8EC /* RectangleCornerRadii+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EC6F7E2B61A64B00ABC8EC /* RectangleCornerRadii+Hashable.swift */; };
+		00FCB12F2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB12E2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift */; };
+		00FCB1322B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1312B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift */; };
+		00FCB1342B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1332B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift */; };
+		00FCB1362B90F71800635DC8 /* FeedbackQuestionViewKind+currentAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1352B90F71800635DC8 /* FeedbackQuestionViewKind+currentAnswer.swift */; };
+		00FCB1382B90F73700635DC8 /* FeedbackQuestionViewKind+MultiOptionAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1372B90F73700635DC8 /* FeedbackQuestionViewKind+MultiOptionAnswer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -829,6 +834,11 @@
 		00EC6F7C2B61A55F00ABC8EC /* RectangleCornerRadii+shortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RectangleCornerRadii+shortcuts.swift"; sourceTree = "<group>"; };
 		00EC6F7E2B61A64B00ABC8EC /* RectangleCornerRadii+Hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RectangleCornerRadii+Hashable.swift"; sourceTree = "<group>"; };
 		00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeneratedTypes+Swift.swift"; sourceTree = "<group>"; };
+		00FCB12E2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackChoiceQuestionCard.swift; sourceTree = "<group>"; };
+		00FCB1312B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackQuestionViewKind+SingleOptionAnswer.swift"; sourceTree = "<group>"; };
+		00FCB1332B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCheckboxQuestionCard.swift; sourceTree = "<group>"; };
+		00FCB1352B90F71800635DC8 /* FeedbackQuestionViewKind+currentAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackQuestionViewKind+currentAnswer.swift"; sourceTree = "<group>"; };
+		00FCB1372B90F73700635DC8 /* FeedbackQuestionViewKind+MultiOptionAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackQuestionViewKind+MultiOptionAnswer.swift"; sourceTree = "<group>"; };
 		00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1879,7 +1889,10 @@
 		00E201942B8F85BA00CF5A42 /* Question Kinds */ = {
 			isa = PBXGroup;
 			children = (
+				00FCB1302B902E2F00635DC8 /* Utils */,
 				00E201952B8F85C500CF5A42 /* FeedbackBooleanQuestionCard.swift */,
+				00FCB12E2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift */,
+				00FCB1332B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift */,
 			);
 			path = "Question Kinds";
 			sourceTree = "<group>";
@@ -2126,6 +2139,16 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
+		00FCB1302B902E2F00635DC8 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				00FCB1352B90F71800635DC8 /* FeedbackQuestionViewKind+currentAnswer.swift */,
+				00FCB1312B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift */,
+				00FCB1372B90F73700635DC8 /* FeedbackQuestionViewKind+MultiOptionAnswer.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		02A060188E5CD1963038AE8C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2362,19 +2385,23 @@
 				0029AD372A4925C000E30CCD /* ParraStandardEvent.swift in Sources */,
 				007ED4682A6BFBDC0077E446 /* ParraLoggerContext+ParraDictionaryConvertible.swift in Sources */,
 				00BD2FFC2A477D7700B4BEB2 /* ParraNotificationCenter.swift in Sources */,
+				00FCB1362B90F71800635DC8 /* FeedbackQuestionViewKind+currentAnswer.swift in Sources */,
 				00EAE2FE2AA0C8A2003FB41C /* ParraSessionGeneratorType.swift in Sources */,
 				0087CA722A57B343007D72FA /* ParraLoggerCallSiteContext.swift in Sources */,
 				006DE9882A47547900521F5D /* ParraLazyLogParam.swift in Sources */,
 				00ABF1BE2B87A79A00A054A2 /* ParraCardItem+Fixtures.swift in Sources */,
 				00214C6A2AB3E2BC001C5313 /* ParraSanitizedDictionary.swift in Sources */,
+				00FCB1342B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift in Sources */,
 				003621F92B5C92E4009EFE53 /* Color+Luminosity.swift in Sources */,
 				001677552B6AE7FD00674001 /* FrameAttributes.swift in Sources */,
 				00DDBA192B61C21E00400761 /* EdgeInsets+hashable.swift in Sources */,
 				00916DCC2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift in Sources */,
 				0087CAA42A59E51B007D72FA /* ParraDiskUsage+ParraSessionParamDictionaryConvertible.swift in Sources */,
 				0039624C2A48B52100B8655F /* ParraBorderedRatingControl.swift in Sources */,
+				00FCB1322B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift in Sources */,
 				001B7B0E27DE3A9B00DEEECD /* Parra.swift in Sources */,
 				00E76D542B68287400B01DD8 /* OutlinedButtonComponent.swift in Sources */,
+				00FCB1382B90F73700635DC8 /* FeedbackQuestionViewKind+MultiOptionAnswer.swift in Sources */,
 				0099EB142B8E89360053F366 /* ParraQuestionHandlerDelegate.swift in Sources */,
 				00E269EE2A5257DC001A0F50 /* AuthorizationType.swift in Sources */,
 				0029AD332A49256300E30CCD /* ParraEvent.swift in Sources */,
@@ -2438,6 +2465,7 @@
 				00E76D4C2B66ED4300B01DD8 /* ContainerContentObserver.swift in Sources */,
 				00E76D462B66E88300B01DD8 /* FeedbackFormWidget+ContentObserver.swift in Sources */,
 				001677592B6D5C5B00674001 /* ParraAttributedLabelStyle.swift in Sources */,
+				00FCB12F2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift in Sources */,
 				00ABF1CC2B8A785100A054A2 /* FeedbackFormWidgetStyle.swift in Sources */,
 				001B7B1627DE3AA900DEEECD /* ParraCredential.swift in Sources */,
 				00E2019A2B8F9B5C00CF5A42 /* FeedbackQuestionCard.swift in Sources */,

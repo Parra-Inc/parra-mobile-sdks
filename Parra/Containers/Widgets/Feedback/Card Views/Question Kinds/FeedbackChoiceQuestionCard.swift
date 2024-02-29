@@ -1,5 +1,5 @@
 //
-//  FeedbackBooleanQuestionCard.swift
+//  FeedbackChoiceQuestionCard.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/28/24.
@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
+struct FeedbackChoiceQuestionCard: FeedbackQuestionViewKind {
     // MARK: - Lifecycle
 
     init(
         bucketId: String,
         question: Question,
-        data: BooleanQuestionBody
+        data: ChoiceQuestionBody
     ) {
         self.bucketId = bucketId
         self.question = question
@@ -34,7 +34,7 @@ struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
 
     let bucketId: String
     let question: Question
-    let data: BooleanQuestionBody
+    let data: ChoiceQuestionBody
 
     @ViewBuilder var body: some View {
         VStack(spacing: 0) {
@@ -53,10 +53,10 @@ struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
 
 #Preview {
     ParraCardViewPreview {
-        FeedbackBooleanQuestionCard(
+        FeedbackChoiceQuestionCard(
             bucketId: UUID().uuidString,
-            question: ParraCardItemFixtures.boolQuestion,
-            data: ParraCardItemFixtures.boolQuestionData
+            question: ParraCardItemFixtures.choiceQuestion,
+            data: ParraCardItemFixtures.choiceQuestionData
         )
     }
 }

@@ -14,11 +14,19 @@ public class FeedbackCardWidgetConfig: ContainerConfig, Observable {
     public init(
         backButton: ButtonConfig,
         forwardButton: ButtonConfig,
-        booleanOptions: ButtonConfig
+        titleLabel: LabelConfig,
+        subtitleLabel: LabelConfig,
+        booleanOptions: ButtonConfig,
+        choiceOptions: ButtonConfig,
+        checkboxOptions: ButtonConfig
     ) {
         self.backButton = backButton
         self.forwardButton = forwardButton
+        self.titleLabel = titleLabel
+        self.subtitleLabel = subtitleLabel
         self.booleanOptions = booleanOptions
+        self.choiceOptions = choiceOptions
+        self.checkboxOptions = checkboxOptions
     }
 
     // MARK: - Public
@@ -32,7 +40,19 @@ public class FeedbackCardWidgetConfig: ContainerConfig, Observable {
             style: .primary,
             size: .small
         ),
+        titleLabel: LabelConfig(fontStyle: .headline),
+        subtitleLabel: LabelConfig(fontStyle: .subheadline),
         booleanOptions: ButtonConfig(
+            style: .primary,
+            size: .medium,
+            isMaxWidth: true
+        ),
+        choiceOptions: ButtonConfig(
+            style: .primary,
+            size: .medium,
+            isMaxWidth: true
+        ),
+        checkboxOptions: ButtonConfig(
             style: .primary,
             size: .medium,
             isMaxWidth: true
@@ -42,5 +62,10 @@ public class FeedbackCardWidgetConfig: ContainerConfig, Observable {
     public let backButton: ButtonConfig
     public let forwardButton: ButtonConfig
 
+    public let titleLabel: LabelConfig
+    public let subtitleLabel: LabelConfig
+
     public let booleanOptions: ButtonConfig
+    public let choiceOptions: ButtonConfig
+    public let checkboxOptions: ButtonConfig
 }

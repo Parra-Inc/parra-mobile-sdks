@@ -11,14 +11,50 @@ import SwiftUI
 struct FeedbackQuestionCard: View {
     // MARK: - Internal
 
+    @Environment(FeedbackCardWidgetConfig.self) var config
+    @EnvironmentObject var componentFactory: ComponentFactory<
+        FeedbackCardWidgetFactory
+    >
+
     let bucketId: String
     let question: Question
 
     var body: some View {
-        VStack {
-            Text(question.title)
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 2) {
+                componentFactory.buildLabel(
+                    component: \.title,
+                    config: config.titleLabel,
+                    content: LabelContent(text: question.title)
+                )
+                .minimumScaleFactor(0.8)
+                .lineLimit(2)
+                .truncationMode(.tail)
+                .fixedSize(horizontal: false, vertical: true)
+                .layoutPriority(100)
+
+                if let subtitle = question.subtitle {
+                    componentFactory.buildLabel(
+                        component: \.subtitle,
+                        config: config.subtitleLabel,
+                        content: LabelContent(text: subtitle)
+                    )
+                    .minimumScaleFactor(0.8)
+                    .lineLimit(2)
+                    .truncationMode(.tail)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .layoutPriority(90)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Spacer()
+                .layoutPriority(1)
 
             bodyByQuestionKind
+
+            Spacer()
+                .layoutPriority(1)
         }
     }
 
@@ -26,20 +62,26 @@ struct FeedbackQuestionCard: View {
 
     @ViewBuilder private var bodyByQuestionKind: some View {
         switch question.data {
-        case .choiceQuestionBody(let choiceQuestionBody):
-            Text(choiceQuestionBody.options.description)
-        case .checkboxQuestionBody(let checkboxQuestionBody):
-            Text(checkboxQuestionBody.options.description)
-        case .imageQuestionBody(let imageQuestionBody):
-            Text(imageQuestionBody.options.description)
-        case .ratingQuestionBody(let ratingQuestionBody):
-            Text(ratingQuestionBody.options.description)
-        case .starQuestionBody(let starQuestionBody):
-            Text(String(describing: starQuestionBody))
-        case .shortTextQuestionBody(let shortTextQuestionBody):
-            Text(String(describing: shortTextQuestionBody))
-        case .longTextQuestionBody(let longTextQuestionBody):
-            Text(String(describing: longTextQuestionBody))
+        case .choiceQuestionBody(let data):
+            composeCard(
+                with: FeedbackChoiceQuestionCard.self,
+                data: data
+            )
+        case .checkboxQuestionBody(let data):
+            composeCard(
+                with: FeedbackCheckboxQuestionCard.self,
+                data: data
+            )
+        case .imageQuestionBody(let data):
+            Text(data.options.first!.title!)
+        case .ratingQuestionBody(let data):
+            Text(data.options.first!.title)
+        case .starQuestionBody(let data):
+            Text(String(describing: data))
+        case .shortTextQuestionBody(let data):
+            Text(String(describing: data))
+        case .longTextQuestionBody(let data):
+            Text(String(describing: data))
         case .booleanQuestionBody(let data):
             composeCard(
                 with: FeedbackBooleanQuestionCard.self,

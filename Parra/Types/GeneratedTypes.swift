@@ -988,7 +988,7 @@ public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     public init(
-        title: String?,
+        title: String,
         value: String,
         isOther: Bool?,
         id: String
@@ -1008,7 +1008,7 @@ public struct ChoiceQuestionOption: Codable, Equatable, Hashable, Identifiable {
         case id
     }
 
-    public let title: String?
+    public let title: String
     public let value: String
     public let isOther: Bool?
     public let id: String

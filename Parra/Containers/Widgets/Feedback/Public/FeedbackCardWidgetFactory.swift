@@ -24,7 +24,31 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
             ButtonContent,
             ButtonAttributes
         >? = nil,
+        titleBuilder: ComponentBuilder.Factory<
+            Text,
+            LabelConfig,
+            LabelContent,
+            LabelAttributes
+        >? = nil,
+        subtitleBuilder: ComponentBuilder.Factory<
+            Text,
+            LabelConfig,
+            LabelContent,
+            LabelAttributes
+        >? = nil,
         booleanOptionsBuilder: ComponentBuilder.Factory<
+            Button<Text>,
+            ButtonConfig,
+            ButtonContent,
+            ButtonAttributes
+        >? = nil,
+        choiceOptionsBuilder: ComponentBuilder.Factory<
+            Button<Text>,
+            ButtonConfig,
+            ButtonContent,
+            ButtonAttributes
+        >? = nil,
+        checkboxOptionsBuilder: ComponentBuilder.Factory<
             Button<Text>,
             ButtonConfig,
             ButtonContent,
@@ -33,7 +57,11 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
     ) {
         self.backButton = backButtonBuilder
         self.forwardButton = forwardButtonBuilder
+        self.title = titleBuilder
+        self.subtitle = subtitleBuilder
         self.booleanOptions = booleanOptionsBuilder
+        self.choiceOptions = choiceOptionsBuilder
+        self.checkboxOptions = checkboxOptionsBuilder
     }
 
     // MARK: - Public
@@ -52,7 +80,35 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
         ButtonAttributes
     >?
 
+    public let title: ComponentBuilder.Factory<
+        Text,
+        LabelConfig,
+        LabelContent,
+        LabelAttributes
+    >?
+
+    public let subtitle: ComponentBuilder.Factory<
+        Text,
+        LabelConfig,
+        LabelContent,
+        LabelAttributes
+    >?
+
     public let booleanOptions: ComponentBuilder.Factory<
+        Button<Text>,
+        ButtonConfig,
+        ButtonContent,
+        ButtonAttributes
+    >?
+
+    public let choiceOptions: ComponentBuilder.Factory<
+        Button<Text>,
+        ButtonConfig,
+        ButtonContent,
+        ButtonAttributes
+    >?
+
+    public let checkboxOptions: ComponentBuilder.Factory<
         Button<Text>,
         ButtonConfig,
         ButtonContent,

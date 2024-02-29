@@ -1,20 +1,20 @@
 //
-//  FeedbackBooleanQuestionCard.swift
+//  FeedbackCheckboxQuestionCard.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 2/28/24.
+//  Created by Mick MacCallum on 2/29/24.
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
 import SwiftUI
 
-struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
+struct FeedbackCheckboxQuestionCard: FeedbackQuestionViewKind {
     // MARK: - Lifecycle
 
     init(
         bucketId: String,
         question: Question,
-        data: BooleanQuestionBody
+        data: CheckboxQuestionBody
     ) {
         self.bucketId = bucketId
         self.question = question
@@ -23,7 +23,7 @@ struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
 
     // MARK: - Internal
 
-    typealias AnswerType = SingleOptionAnswer
+    typealias AnswerType = MultiOptionAnswer
 
     @Environment(FeedbackCardWidgetConfig.self) var config
     @EnvironmentObject var componentFactory: ComponentFactory<
@@ -34,7 +34,7 @@ struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
 
     let bucketId: String
     let question: Question
-    let data: BooleanQuestionBody
+    let data: CheckboxQuestionBody
 
     @ViewBuilder var body: some View {
         VStack(spacing: 0) {
@@ -53,10 +53,10 @@ struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
 
 #Preview {
     ParraCardViewPreview {
-        FeedbackBooleanQuestionCard(
+        FeedbackCheckboxQuestionCard(
             bucketId: UUID().uuidString,
-            question: ParraCardItemFixtures.boolQuestion,
-            data: ParraCardItemFixtures.boolQuestionData
+            question: ParraCardItemFixtures.checkboxQuestion,
+            data: ParraCardItemFixtures.checkboxQuestionData
         )
     }
 }

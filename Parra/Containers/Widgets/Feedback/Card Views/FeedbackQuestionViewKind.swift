@@ -10,7 +10,16 @@ import SwiftUI
 
 protocol FeedbackQuestionViewKind: View {
     associatedtype DataType
-    associatedtype AnswerType
+    associatedtype AnswerType: AnswerOption
+
+    var bucketId: String { get }
+    var question: Question { get }
+    var themeObserver: ParraThemeObserver { get }
+    var contentObserver: FeedbackCardWidget.ContentObserver { get }
+    var componentFactory: ComponentFactory<
+        FeedbackCardWidgetFactory
+    > { get }
+    var config: FeedbackCardWidgetConfig { get }
 
     init(
         bucketId: String,

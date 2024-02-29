@@ -31,7 +31,7 @@ struct FeedbackCardWidget: Container {
 
     // MARK: - Internal
 
-    static let height: CGFloat = 254
+    static let height: CGFloat = 260
 
     let componentFactory: ComponentFactory<FeedbackCardWidgetFactory>
     @StateObject var contentObserver: ContentObserver
@@ -43,13 +43,12 @@ struct FeedbackCardWidget: Container {
 
     var body: some View {
         ScrollViewReader { scrollViewProxy in
-            VStack {
+            VStack(spacing: 0) {
                 // Extra wrapper used to support configuration of padding inside and
                 // outside of the content view
-                VStack {
+                VStack(spacing: 10) {
                     navigation
                         .padding(.horizontal, from: style.contentPadding)
-                        .padding(.bottom, 8)
 
                     // Leading and trailing content padding isn't applied to cards
                     // it will be grabbed later and applied to their content to keep
@@ -69,6 +68,7 @@ struct FeedbackCardWidget: Container {
                             }
                         }
                 }
+                .clipped()
                 .padding(.vertical, from: style.contentPadding)
                 .applyBackground(style.background)
                 .applyCornerRadii(
@@ -93,10 +93,12 @@ struct FeedbackCardWidget: Container {
         .environmentObject(contentObserver)
     }
 
-    @ViewBuilder var content: some View {
+    // MARK: - Private
+
+    @ViewBuilder private var content: some View {
         GeometryReader { geometry in
             ScrollView(.horizontal) {
-                LazyHStack(spacing: 0) {
+                LazyHStack(alignment: .top, spacing: 0) {
                     ForEach(
                         contentObserver.cards.indices,
                         id: \.self
