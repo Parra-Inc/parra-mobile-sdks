@@ -25,6 +25,10 @@ public struct ParraColorPalette {
             .defaultLight.primaryText,
         secondaryText: ParraColorSwatchConvertible = ParraColorPalette
             .defaultLight.secondaryText,
+        primarySeparator: ParraColorSwatch = ParraColorPalette
+            .defaultLight.primarySeparator,
+        secondarySeparator: ParraColorSwatch = ParraColorPalette
+            .defaultLight.secondarySeparator,
         error: ParraColorSwatchConvertible = ParraColorPalette.defaultLight
             .error,
         warning: ParraColorSwatchConvertible = ParraColorPalette.defaultLight
@@ -39,6 +43,8 @@ public struct ParraColorPalette {
         self.secondaryBackground = secondaryBackground
         self.primaryText = primaryText.toSwatch()
         self.secondaryText = secondaryText.toSwatch()
+        self.primarySeparator = primarySeparator.toSwatch()
+        self.secondarySeparator = secondarySeparator.toSwatch()
         self.error = error.toSwatch()
         self.warning = warning.toSwatch()
         self.info = info.toSwatch()
@@ -74,6 +80,14 @@ public struct ParraColorPalette {
             secondaryText: ParraColorSwatch(
                 lightSwatch: lightPalette.secondaryText,
                 darkSwatch: darkPalette.secondaryText
+            ),
+            primarySeparator: ParraColorSwatch(
+                lightSwatch: lightPalette.primarySeparator,
+                darkSwatch: darkPalette.primarySeparator
+            ),
+            secondarySeparator: ParraColorSwatch(
+                lightSwatch: lightPalette.secondarySeparator,
+                darkSwatch: darkPalette.secondarySeparator
             ),
             error: ParraColorSwatch(
                 lightSwatch: lightPalette.error,
@@ -112,6 +126,14 @@ public struct ParraColorPalette {
             primary: Color(hex: 0x3C3C43, opacity: 0.6),
             name: "Secondary Text"
         ),
+        primarySeparator: ParraColorSwatch(
+            primary: Color(hex: 0xC6C6C8, opacity: 1.0),
+            name: "Primary Separator"
+        ),
+        secondarySeparator: ParraColorSwatch(
+            primary: Color(hex: 0x3C3C43, opacity: 0.36),
+            name: "Secondary Separator"
+        ),
         error: ParraColorSwatch(primary: .red, name: "Error"),
         warning: ParraColorSwatch(primary: .yellow, name: "Warning"),
         info: ParraColorSwatch(primary: .blue, name: "Info"),
@@ -134,6 +156,14 @@ public struct ParraColorPalette {
             primary: Color(hex: 0xEBEBF5, opacity: 0.6),
             name: "Secondary Text"
         ),
+        primarySeparator: ParraColorSwatch(
+            primary: Color(hex: 0x38383A, opacity: 1.0),
+            name: "Primary Separator"
+        ),
+        secondarySeparator: ParraColorSwatch(
+            primary: Color(hex: 0x545458, opacity: 0.65),
+            name: "Secondary Separator"
+        ),
         error: ParraColorSwatch(primary: .red, name: "Error"),
         warning: ParraColorSwatch(primary: .yellow, name: "Warning"),
         info: ParraColorSwatch(primary: .blue, name: "Info"),
@@ -148,6 +178,9 @@ public struct ParraColorPalette {
 
     public let primaryText: ParraColorSwatch
     public let secondaryText: ParraColorSwatch
+
+    public let primarySeparator: ParraColorSwatch
+    public let secondarySeparator: ParraColorSwatch
 
     public let error: ParraColorSwatch
     public let warning: ParraColorSwatch
@@ -164,6 +197,8 @@ public struct ParraColorPalette {
             secondaryBackground: secondaryBackground.withLuminosity(luminosity),
             primaryText: primaryText.darkened(to: luminosity),
             secondaryText: secondaryText.darkened(to: luminosity),
+            primarySeparator: primarySeparator.darkened(to: luminosity),
+            secondarySeparator: secondarySeparator.darkened(to: luminosity),
             error: error.darkened(to: luminosity),
             warning: warning.darkened(to: luminosity),
             info: info.darkened(to: luminosity),

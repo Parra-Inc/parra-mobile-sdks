@@ -63,9 +63,10 @@ struct LabelComponent: LabelComponentType {
             nil
         }
 
-        return defaultAttributes.withUpdates(
-            updates: styledAttributes
-        )
+        return defaultAttributes
+            .withUpdates(
+                updates: styledAttributes
+            )
     }
 }
 

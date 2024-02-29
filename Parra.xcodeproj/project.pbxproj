@@ -345,6 +345,10 @@
 		00E15A29293269100049C2C7 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A28293269100049C2C7 /* UIViewController.swift */; };
 		00E15A2B29326FBE0049C2C7 /* UIWindow+topViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A2A29326FBE0049C2C7 /* UIWindow+topViewController.swift */; };
 		00E15A2D293276940049C2C7 /* Thread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A2C293276940049C2C7 /* Thread.swift */; };
+		00E201932B8F859900CF5A42 /* FeedbackQuestionViewKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E201922B8F859900CF5A42 /* FeedbackQuestionViewKind.swift */; };
+		00E201962B8F85C500CF5A42 /* FeedbackBooleanQuestionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E201952B8F85C500CF5A42 /* FeedbackBooleanQuestionCard.swift */; };
+		00E201982B8F897900CF5A42 /* ParraCardViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E201972B8F897900CF5A42 /* ParraCardViewPreview.swift */; };
+		00E2019A2B8F9B5C00CF5A42 /* FeedbackQuestionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E201992B8F9B5C00CF5A42 /* FeedbackQuestionCard.swift */; };
 		00E269E42A523000001A0F50 /* ParraFeedbackPopupState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269E32A523000001A0F50 /* ParraFeedbackPopupState.swift */; };
 		00E269E82A523CD5001A0F50 /* ParraConfigurationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269E72A523CD5001A0F50 /* ParraConfigurationOption.swift */; };
 		00E269EC2A5257C0001A0F50 /* URLRequestHeaderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269EB2A5257C0001A0F50 /* URLRequestHeaderField.swift */; };
@@ -769,6 +773,10 @@
 		00E15A30293279A20049C2C7 /* ParraCardPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardPopupViewController.swift; sourceTree = "<group>"; };
 		00E15A32293279B80049C2C7 /* ParraCardModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardModal.swift; sourceTree = "<group>"; };
 		00E15A342932971C0049C2C7 /* ParraCardDrawerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardDrawerViewController.swift; sourceTree = "<group>"; };
+		00E201922B8F859900CF5A42 /* FeedbackQuestionViewKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackQuestionViewKind.swift; sourceTree = "<group>"; };
+		00E201952B8F85C500CF5A42 /* FeedbackBooleanQuestionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackBooleanQuestionCard.swift; sourceTree = "<group>"; };
+		00E201972B8F897900CF5A42 /* ParraCardViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardViewPreview.swift; sourceTree = "<group>"; };
+		00E201992B8F9B5C00CF5A42 /* FeedbackQuestionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackQuestionCard.swift; sourceTree = "<group>"; };
 		00E269E32A523000001A0F50 /* ParraFeedbackPopupState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackPopupState.swift; sourceTree = "<group>"; };
 		00E269E72A523CD5001A0F50 /* ParraConfigurationOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraConfigurationOption.swift; sourceTree = "<group>"; };
 		00E269EB2A5257C0001A0F50 /* URLRequestHeaderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestHeaderField.swift; sourceTree = "<group>"; };
@@ -1715,7 +1723,7 @@
 				00ABF1B12B865C5200A054A2 /* FeedbackCardWidget+ContentObserver.swift */,
 				0099EB0A2B8D1FC40053F366 /* FeedbackCardWidget+Navigation.swift */,
 				00ABF1CF2B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift */,
-				00ABF1BB2B867CE300A054A2 /* FeedbackCardView.swift */,
+				00E201912B8F858700CF5A42 /* Card Views */,
 				00ABF1B32B86620900A054A2 /* View+FeedbackCards.swift */,
 				00ABF1B62B867BD000A054A2 /* ParraCardModalType.swift */,
 				00ABF1B82B867BE900A054A2 /* ParraCardModalViewedEvent.swift */,
@@ -1736,6 +1744,7 @@
 				00ABF1562B79802400A054A2 /* ParraAppPreview.swift */,
 				00ABF1C12B87AEC000A054A2 /* ParraContainerPreview.swift */,
 				00ABF1C32B87AED000A054A2 /* ParraViewPreview.swift */,
+				00E201972B8F897900CF5A42 /* ParraCardViewPreview.swift */,
 				00ABF19D2B8415A200A054A2 /* ParraLaunchScreen.Config+Preview.swift */,
 				00ABF19B2B84158E00A054A2 /* ParraAuthenticationProviderType+Preview.swift */,
 			);
@@ -1854,6 +1863,25 @@
 				00E15A342932971C0049C2C7 /* ParraCardDrawerViewController.swift */,
 			);
 			path = Modals;
+			sourceTree = "<group>";
+		};
+		00E201912B8F858700CF5A42 /* Card Views */ = {
+			isa = PBXGroup;
+			children = (
+				00ABF1BB2B867CE300A054A2 /* FeedbackCardView.swift */,
+				00E201992B8F9B5C00CF5A42 /* FeedbackQuestionCard.swift */,
+				00E201922B8F859900CF5A42 /* FeedbackQuestionViewKind.swift */,
+				00E201942B8F85BA00CF5A42 /* Question Kinds */,
+			);
+			path = "Card Views";
+			sourceTree = "<group>";
+		};
+		00E201942B8F85BA00CF5A42 /* Question Kinds */ = {
+			isa = PBXGroup;
+			children = (
+				00E201952B8F85C500CF5A42 /* FeedbackBooleanQuestionCard.swift */,
+			);
+			path = "Question Kinds";
 			sourceTree = "<group>";
 		};
 		00E26A012A5311F8001A0F50 /* Data */ = {
@@ -2301,6 +2329,7 @@
 				003622052B5C9D3D009EFE53 /* ParraColorSwatch+ParraColorSwatchConvertible.swift in Sources */,
 				0029AD302A490CDB00E30CCD /* Parra+InternalAnalytics.swift in Sources */,
 				008878122979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift in Sources */,
+				00E201932B8F859900CF5A42 /* FeedbackQuestionViewKind.swift in Sources */,
 				0039624E2A48B52100B8655F /* ParraRatingLabels.swift in Sources */,
 				00706B192B71A6E600C28F66 /* TextEditorConfig.swift in Sources */,
 				00ABF19A2B84112300A054A2 /* ParraAppView.swift in Sources */,
@@ -2411,6 +2440,7 @@
 				001677592B6D5C5B00674001 /* ParraAttributedLabelStyle.swift in Sources */,
 				00ABF1CC2B8A785100A054A2 /* FeedbackFormWidgetStyle.swift in Sources */,
 				001B7B1627DE3AA900DEEECD /* ParraCredential.swift in Sources */,
+				00E2019A2B8F9B5C00CF5A42 /* FeedbackQuestionCard.swift in Sources */,
 				00E76D5E2B6940A500B01DD8 /* ButtonAttributes.swift in Sources */,
 				00BF36D52B5ACAD20097905C /* FormFieldState.swift in Sources */,
 				0036222A2B5EB13B009EFE53 /* Int+ParraColorConvertible.swift in Sources */,
@@ -2485,6 +2515,7 @@
 				003962662A48B55300B8655F /* ParraTextConfig.swift in Sources */,
 				001B7B2727DE3AC200DEEECD /* JSONEncoder.swift in Sources */,
 				0036222E2B5EB6FC009EFE53 /* SwatchView.swift in Sources */,
+				00E201982B8F897900CF5A42 /* ParraCardViewPreview.swift in Sources */,
 				00DDBA1D2B61D99D00400761 /* EdgeInsets+zero.swift in Sources */,
 				0018A60E28D77FF2008CC97E /* URLComponents+queryItems.swift in Sources */,
 				0066543B2A8A5F0E00CD04E6 /* LoggerFormatters.swift in Sources */,
@@ -2504,6 +2535,7 @@
 				003621FB2B5C963B009EFE53 /* ParraColorPalette.swift in Sources */,
 				003621F02B5C77DC009EFE53 /* ParraCornerRadiusConfig.swift in Sources */,
 				00ABF15A2B7A9B0E00A054A2 /* FeedbackFormLoader.swift in Sources */,
+				00E201962B8F85C500CF5A42 /* FeedbackBooleanQuestionCard.swift in Sources */,
 				003962452A48B52100B8655F /* ParraBorderedButton.swift in Sources */,
 				003621F72B5C7C0A009EFE53 /* Color+hex.swift in Sources */,
 				003621D72B5B563C009EFE53 /* ParraLogo.swift in Sources */,
@@ -2742,7 +2774,7 @@
 				CURRENT_PROJECT_VERSION = 10;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43225XRA2T;
-				DOCC_EXTRACT_OBJC_INFO_FOR_SWIFT_SYMBOLS = YES;
+				DOCC_EXTRACT_OBJC_INFO_FOR_SWIFT_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2765,7 +2797,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.parra.Parra;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				RUN_DOCUMENTATION_COMPILER = YES;
+				RUN_DOCUMENTATION_COMPILER = NO;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2790,7 +2822,7 @@
 				CURRENT_PROJECT_VERSION = 10;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43225XRA2T;
-				DOCC_EXTRACT_OBJC_INFO_FOR_SWIFT_SYMBOLS = YES;
+				DOCC_EXTRACT_OBJC_INFO_FOR_SWIFT_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2813,7 +2845,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.parra.Parra;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				RUN_DOCUMENTATION_COMPILER = YES;
+				RUN_DOCUMENTATION_COMPILER = NO;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;

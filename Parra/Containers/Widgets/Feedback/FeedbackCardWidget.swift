@@ -31,6 +31,8 @@ struct FeedbackCardWidget: Container {
 
     // MARK: - Internal
 
+    static let height: CGFloat = 254
+
     let componentFactory: ComponentFactory<FeedbackCardWidgetFactory>
     @StateObject var contentObserver: ContentObserver
     let config: FeedbackCardWidgetConfig
@@ -74,7 +76,10 @@ struct FeedbackCardWidget: Container {
                     from: themeObserver.theme
                 )
             }
-            .frame(maxWidth: .infinity, maxHeight: 254)
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: FeedbackCardWidget.height
+            )
             .padding(style.padding)
         }
         .onAppear {
@@ -96,7 +101,6 @@ struct FeedbackCardWidget: Container {
                         contentObserver.cards.indices,
                         id: \.self
                     ) { index in
-
                         FeedbackCardView(
                             cardItem: contentObserver.cards[index],
                             contentPadding: style.contentPadding

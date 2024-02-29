@@ -29,41 +29,41 @@ enum ParraCardItemFixtures {
         type: .question,
         displayType: .drawer,
         version: "1",
-        data: .question(
-            Question(
-                id: "1",
-                createdAt: .now,
-                updatedAt: .now,
-                deletedAt: nil,
-                tenantId: "24234234",
-                title: "Sample question 1",
-                subtitle: nil,
-                kind: .radio,
-                data: .choiceQuestionBody(
-                    ChoiceQuestionBody(
-                        options: [
-                            ChoiceQuestionOption(
-                                title: "option 1",
-                                value: "",
-                                isOther: nil,
-                                id: "op1"
-                            ),
-                            ChoiceQuestionOption(
-                                title: "option 2",
-                                value: "",
-                                isOther: nil,
-                                id: "op2"
-                            )
-                        ]
-                    )
-                ),
-                active: true,
-                expiresAt: Date().addingTimeInterval(100_000)
-                    .ISO8601Format(),
-                answerQuota: nil,
-                answer: nil
+        data: .question(choiceQuestion)
+    )
+
+    static let choiceQuestion = Question(
+        id: "1",
+        createdAt: .now,
+        updatedAt: .now,
+        deletedAt: nil,
+        tenantId: "24234234",
+        title: "Sample question 1",
+        subtitle: nil,
+        kind: .radio,
+        data: .choiceQuestionBody(choiceQuestionData),
+        active: true,
+        expiresAt: Date().addingTimeInterval(100_000)
+            .ISO8601Format(),
+        answerQuota: nil,
+        answer: nil
+    )
+
+    static let choiceQuestionData = ChoiceQuestionBody(
+        options: [
+            ChoiceQuestionOption(
+                title: "option 1",
+                value: "",
+                isOther: nil,
+                id: "op1"
+            ),
+            ChoiceQuestionOption(
+                title: "option 2",
+                value: "",
+                isOther: nil,
+                id: "op2"
             )
-        )
+        ]
     )
 
     static let checkboxCard = ParraCardItem(
@@ -74,40 +74,40 @@ enum ParraCardItemFixtures {
         type: .question,
         displayType: .inline,
         version: "1",
-        data: .question(
-            Question(
-                id: "2",
-                createdAt: .now,
-                updatedAt: .now,
-                deletedAt: nil,
-                tenantId: "24234234",
-                title: "Sample question 2",
-                subtitle: "this one has a subtitle",
-                kind: .checkbox,
-                data: .checkboxQuestionBody(
-                    CheckboxQuestionBody(
-                        options: [
-                            CheckboxQuestionOption(
-                                title: "option 1",
-                                value: "",
-                                isOther: nil,
-                                id: "op1"
-                            ),
-                            CheckboxQuestionOption(
-                                title: "option 2",
-                                value: "",
-                                isOther: nil,
-                                id: "op2"
-                            )
-                        ]
-                    )
-                ),
-                active: false,
-                expiresAt: nil,
-                answerQuota: nil,
-                answer: nil
+        data: .question(checkboxQuestion)
+    )
+
+    static let checkboxQuestion = Question(
+        id: "2",
+        createdAt: .now,
+        updatedAt: .now,
+        deletedAt: nil,
+        tenantId: "24234234",
+        title: "Sample question 2",
+        subtitle: "this one has a subtitle",
+        kind: .checkbox,
+        data: .checkboxQuestionBody(checkboxQuestionData),
+        active: false,
+        expiresAt: nil,
+        answerQuota: nil,
+        answer: nil
+    )
+
+    static let checkboxQuestionData = CheckboxQuestionBody(
+        options: [
+            CheckboxQuestionOption(
+                title: "option 1",
+                value: "",
+                isOther: nil,
+                id: "op1"
+            ),
+            CheckboxQuestionOption(
+                title: "option 2",
+                value: "",
+                isOther: nil,
+                id: "op2"
             )
-        )
+        ]
     )
 
     static let boolCard = ParraCardItem(
@@ -118,36 +118,38 @@ enum ParraCardItemFixtures {
         type: .question,
         displayType: .popup,
         version: "1",
-        data: .question(
-            Question(
-                id: "3",
-                createdAt: .now,
-                updatedAt: .now,
-                deletedAt: nil,
-                tenantId: "24234234",
-                title: "Sample question 2",
-                subtitle: "this one has a subtitle",
-                kind: .boolean,
-                data: .booleanQuestionBody(
-                    BooleanQuestionBody(options: [
-                        BooleanQuestionOption(
-                            title: "Yes",
-                            value: "yes",
-                            id: "id1"
-                        ),
-                        BooleanQuestionOption(
-                            title: "No",
-                            value: "no",
-                            id: "id2"
-                        )
-                    ])
-                ),
-                active: false,
-                expiresAt: nil,
-                answerQuota: nil,
-                answer: nil
+        data: .question(boolQuestion)
+    )
+
+    static let boolQuestion = Question(
+        id: "3",
+        createdAt: .now,
+        updatedAt: .now,
+        deletedAt: nil,
+        tenantId: "24234234",
+        title: "Sample question 2",
+        subtitle: "this one has a subtitle",
+        kind: .boolean,
+        data: .booleanQuestionBody(boolQuestionData),
+        active: false,
+        expiresAt: nil,
+        answerQuota: nil,
+        answer: nil
+    )
+
+    static let boolQuestionData = BooleanQuestionBody(
+        options: [
+            BooleanQuestionOption(
+                title: "Yes",
+                value: "yes",
+                id: "id1"
+            ),
+            BooleanQuestionOption(
+                title: "No",
+                value: "no",
+                id: "id2"
             )
-        )
+        ]
     )
 
     static let starCard = ParraCardItem(
@@ -158,30 +160,30 @@ enum ParraCardItemFixtures {
         type: .question,
         displayType: .inline,
         version: "1",
-        data: .question(
-            Question(
-                id: "4",
-                createdAt: .now,
-                updatedAt: .now,
-                deletedAt: nil,
-                tenantId: "24234234",
-                title: "Sample question 2",
-                subtitle: "this one has a subtitle",
-                kind: .star,
-                data: .starQuestionBody(
-                    StarQuestionBody(
-                        starCount: 5,
-                        leadingLabel: "leading",
-                        centerLabel: "center",
-                        trailingLabel: "trailing"
-                    )
-                ),
-                active: false,
-                expiresAt: nil,
-                answerQuota: nil,
-                answer: nil
-            )
-        )
+        data: .question(starQuestion)
+    )
+
+    static let starQuestion = Question(
+        id: "4",
+        createdAt: .now,
+        updatedAt: .now,
+        deletedAt: nil,
+        tenantId: "24234234",
+        title: "Sample question 2",
+        subtitle: "this one has a subtitle",
+        kind: .star,
+        data: .starQuestionBody(starQuestionData),
+        active: false,
+        expiresAt: nil,
+        answerQuota: nil,
+        answer: nil
+    )
+
+    static let starQuestionData = StarQuestionBody(
+        starCount: 5,
+        leadingLabel: "leading",
+        centerLabel: "center",
+        trailingLabel: "trailing"
     )
 
     static let imageCard = ParraCardItem(
@@ -192,46 +194,46 @@ enum ParraCardItemFixtures {
         type: .question,
         displayType: .drawer,
         version: "1",
-        data: .question(
-            Question(
-                id: "5",
-                createdAt: .now,
-                updatedAt: .now,
-                deletedAt: nil,
-                tenantId: "24234234",
-                title: "Sample question 2",
-                subtitle: "this one has a subtitle",
-                kind: .image,
-                data: .imageQuestionBody(
-                    ImageQuestionBody(
-                        options: [
-                            ImageQuestionOption(
-                                title: "title",
-                                value: "val",
-                                id: "id",
-                                asset: Asset(
-                                    id: "id",
-                                    url: URL(string: "parra.io/image.png")!
-                                )
-                            ),
-                            ImageQuestionOption(
-                                title: "title2",
-                                value: "val2",
-                                id: "id2",
-                                asset: Asset(
-                                    id: "id2222",
-                                    url: URL(string: "parra.io/image2.png")!
-                                )
-                            )
-                        ]
-                    )
-                ),
-                active: false,
-                expiresAt: nil,
-                answerQuota: nil,
-                answer: nil
+        data: .question(imageQuestion)
+    )
+
+    static let imageQuestion = Question(
+        id: "5",
+        createdAt: .now,
+        updatedAt: .now,
+        deletedAt: nil,
+        tenantId: "24234234",
+        title: "Sample question 2",
+        subtitle: "this one has a subtitle",
+        kind: .image,
+        data: .imageQuestionBody(imageQuestionData),
+        active: false,
+        expiresAt: nil,
+        answerQuota: nil,
+        answer: nil
+    )
+
+    static let imageQuestionData = ImageQuestionBody(
+        options: [
+            ImageQuestionOption(
+                title: "title",
+                value: "val",
+                id: "id",
+                asset: Asset(
+                    id: "id",
+                    url: URL(string: "parra.io/image.png")!
+                )
+            ),
+            ImageQuestionOption(
+                title: "title2",
+                value: "val2",
+                id: "id2",
+                asset: Asset(
+                    id: "id2222",
+                    url: URL(string: "parra.io/image2.png")!
+                )
             )
-        )
+        ]
     )
 
     static let ratingCard = ParraCardItem(
@@ -242,56 +244,56 @@ enum ParraCardItemFixtures {
         type: .question,
         displayType: .popup,
         version: "1",
-        data: .question(
-            Question(
-                id: "6",
-                createdAt: .now,
-                updatedAt: .now,
-                deletedAt: nil,
-                tenantId: "24234234",
-                title: "Sample question 2",
-                subtitle: "this one has a subtitle",
-                kind: .rating,
-                data: .ratingQuestionBody(
-                    RatingQuestionBody(
-                        options: [
-                            RatingQuestionOption(
-                                title: "title1",
-                                value: 1,
-                                id: "1"
-                            ),
-                            RatingQuestionOption(
-                                title: "title2",
-                                value: 2,
-                                id: "2"
-                            ),
-                            RatingQuestionOption(
-                                title: "title3",
-                                value: 3,
-                                id: "3"
-                            ),
-                            RatingQuestionOption(
-                                title: "title4",
-                                value: 4,
-                                id: "4"
-                            ),
-                            RatingQuestionOption(
-                                title: "title5",
-                                value: 5,
-                                id: "5"
-                            )
-                        ],
-                        leadingLabel: "leading",
-                        centerLabel: "center",
-                        trailingLabel: "trailing"
-                    )
-                ),
-                active: false,
-                expiresAt: nil,
-                answerQuota: nil,
-                answer: nil
+        data: .question(ratingQuestion)
+    )
+
+    static let ratingQuestion = Question(
+        id: "6",
+        createdAt: .now,
+        updatedAt: .now,
+        deletedAt: nil,
+        tenantId: "24234234",
+        title: "Sample question 2",
+        subtitle: "this one has a subtitle",
+        kind: .rating,
+        data: .ratingQuestionBody(ratingQuestionData),
+        active: false,
+        expiresAt: nil,
+        answerQuota: nil,
+        answer: nil
+    )
+
+    static let ratingQuestionData = RatingQuestionBody(
+        options: [
+            RatingQuestionOption(
+                title: "title1",
+                value: 1,
+                id: "1"
+            ),
+            RatingQuestionOption(
+                title: "title2",
+                value: 2,
+                id: "2"
+            ),
+            RatingQuestionOption(
+                title: "title3",
+                value: 3,
+                id: "3"
+            ),
+            RatingQuestionOption(
+                title: "title4",
+                value: 4,
+                id: "4"
+            ),
+            RatingQuestionOption(
+                title: "title5",
+                value: 5,
+                id: "5"
             )
-        )
+        ],
+        leadingLabel: "leading",
+        centerLabel: "center",
+        trailingLabel: "trailing"
     )
 
     static let shortTextCard = ParraCardItem(
@@ -302,28 +304,28 @@ enum ParraCardItemFixtures {
         type: .question,
         displayType: .inline,
         version: "1",
-        data: .question(
-            Question(
-                id: "7",
-                createdAt: .now,
-                updatedAt: .now,
-                deletedAt: nil,
-                tenantId: "24234234",
-                title: "Sample question 2",
-                subtitle: "this one has a subtitle",
-                kind: .textShort,
-                data: .shortTextQuestionBody(
-                    ShortTextQuestionBody(
-                        placeholder: "placeholder",
-                        minLength: 50
-                    )
-                ),
-                active: false,
-                expiresAt: nil,
-                answerQuota: nil,
-                answer: nil
-            )
-        )
+        data: .question(shortTextQuestion)
+    )
+
+    static let shortTextQuestion = Question(
+        id: "7",
+        createdAt: .now,
+        updatedAt: .now,
+        deletedAt: nil,
+        tenantId: "24234234",
+        title: "Sample question 2",
+        subtitle: "this one has a subtitle",
+        kind: .textShort,
+        data: .shortTextQuestionBody(shortTextQuestionData),
+        active: false,
+        expiresAt: nil,
+        answerQuota: nil,
+        answer: nil
+    )
+
+    static let shortTextQuestionData = ShortTextQuestionBody(
+        placeholder: "placeholder",
+        minLength: 50
     )
 
     static let longTextCard = ParraCardItem(
@@ -334,29 +336,29 @@ enum ParraCardItemFixtures {
         type: .question,
         displayType: .popup,
         version: "1",
-        data: .question(
-            Question(
-                id: "7",
-                createdAt: .now,
-                updatedAt: .now,
-                deletedAt: nil,
-                tenantId: "24234234",
-                title: "Sample question 2",
-                subtitle: "this one has a subtitle",
-                kind: .textLong,
-                data: .longTextQuestionBody(
-                    LongTextQuestionBody(
-                        placeholder: "placeholder",
-                        minLength: 1,
-                        maxLength: 1_000
-                    )
-                ),
-                active: false,
-                expiresAt: nil,
-                answerQuota: nil,
-                answer: nil
-            )
-        )
+        data: .question(longTextQuestion)
+    )
+
+    static let longTextQuestion = Question(
+        id: "7",
+        createdAt: .now,
+        updatedAt: .now,
+        deletedAt: nil,
+        tenantId: "24234234",
+        title: "Sample question 2",
+        subtitle: "this one has a subtitle",
+        kind: .textLong,
+        data: .longTextQuestionBody(longTextQuestionData),
+        active: false,
+        expiresAt: nil,
+        answerQuota: nil,
+        answer: nil
+    )
+
+    static let longTextQuestionData = LongTextQuestionBody(
+        placeholder: "placeholder",
+        minLength: 1,
+        maxLength: 1_000
     )
 
     static let cardsResponse = CardsResponse(

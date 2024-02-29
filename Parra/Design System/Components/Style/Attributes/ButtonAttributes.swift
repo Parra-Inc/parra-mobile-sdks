@@ -120,15 +120,25 @@ public struct ButtonAttributes: ParraStyleAttributes {
 
 extension ButtonAttributes {
     func withUpdates(updates: Self?) -> Self {
+        let updatedTitlePressed: LabelAttributes? = if let titlePressed {
+            titlePressed.withUpdates(updates: updates?.titlePressed)
+        } else {
+            updates?.titlePressed
+        }
+
+        let updatedTitleDisabled: LabelAttributes? = if let titleDisabled {
+            titleDisabled.withUpdates(updates: updates?.titleDisabled)
+        } else {
+            updates?.titleDisabled
+        }
+
         return ButtonAttributes(
             background: updates?.background ?? background,
             cornerRadius: updates?.cornerRadius ?? cornerRadius,
             padding: updates?.padding ?? padding,
             title: title.withUpdates(updates: updates?.title),
-            titleDisabled: updates?.titleDisabled ?? titleDisabled?
-                .withUpdates(updates: updates?.titleDisabled),
-            titlePressed: updates?.titlePressed ?? titlePressed?
-                .withUpdates(updates: updates?.titlePressed),
+            titleDisabled: updatedTitleDisabled,
+            titlePressed: updatedTitlePressed,
             frame: updates?.frame ?? frame
         )
     }

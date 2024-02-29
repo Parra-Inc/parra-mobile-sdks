@@ -34,7 +34,7 @@ public class FeedbackCardWidgetConfig: ContainerConfig, Observable {
         ),
         booleanOptions: ButtonConfig(
             style: .primary,
-            size: .large,
+            size: .medium,
             isMaxWidth: true
         )
     )
