@@ -41,9 +41,9 @@ public struct ParraCornerRadiusConfig {
     public let large: RectangleCornerRadii
     public let extraLarge: RectangleCornerRadii
 
-    public func value(for size: ParraCornerRadiusSize?)
-        -> RectangleCornerRadii
-    {
+    public func value(
+        for size: ParraCornerRadiusSize?
+    ) -> RectangleCornerRadii {
         guard let size else {
             return .zero
         }

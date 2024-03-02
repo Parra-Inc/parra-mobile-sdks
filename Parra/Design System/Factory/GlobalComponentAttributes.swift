@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-/// A place to provide global defaults for basic styles of Parra components, given contextual information about
-/// where they will be used.
+/// A place to provide global defaults for basic styles of Parra components,
+/// given contextual information about where they will be used.
 public class GlobalComponentAttributes {
     // MARK: - Lifecycle
 
@@ -18,13 +18,15 @@ public class GlobalComponentAttributes {
         buttonAttributeFactory: ButtonAttributeFactory? = nil,
         menuAttributeFactory: MenuAttributeFactory? = nil,
         textEditorAttributeFactory: TextEditorAttributeFactory? = nil,
-        textInputAttributeFactory: TextInputAttributeFactory? = nil
+        textInputAttributeFactory: TextInputAttributeFactory? = nil,
+        segmentAttributeFactory: SegmentAttributeFactory? = nil
     ) {
         self.labelAttributeFactory = labelAttributeFactory
         self.buttonAttributeFactory = buttonAttributeFactory
         self.menuAttributeFactory = menuAttributeFactory
         self.textEditorAttributeFactory = textEditorAttributeFactory
         self.textInputAttributeFactory = textInputAttributeFactory
+        self.segmentAttributeFactory = segmentAttributeFactory
     }
 
     // MARK: - Public
@@ -59,6 +61,12 @@ public class GlobalComponentAttributes {
         _ defaultAttributes: TextInputAttributes?
     ) -> TextInputAttributes
 
+    public typealias SegmentAttributeFactory = (
+        _ config: SegmentConfig,
+        _ content: SegmentContent,
+        _ defaultAttributes: SegmentAttributes?
+    ) -> SegmentAttributes
+
     // MARK: - Internal
 
     private(set) var labelAttributeFactory: LabelAttributeFactory?
@@ -66,4 +74,5 @@ public class GlobalComponentAttributes {
     private(set) var menuAttributeFactory: MenuAttributeFactory?
     private(set) var textEditorAttributeFactory: TextEditorAttributeFactory?
     private(set) var textInputAttributeFactory: TextInputAttributeFactory?
+    private(set) var segmentAttributeFactory: SegmentAttributeFactory?
 }

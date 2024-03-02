@@ -11,7 +11,7 @@ import SwiftUI
 public struct TextInputConfig {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         title: LabelConfig = LabelConfig(fontStyle: .body),
         helper: LabelConfig = LabelConfig(fontStyle: .subheadline),
         showValidationErrors: Bool = TextEditorConfig.default

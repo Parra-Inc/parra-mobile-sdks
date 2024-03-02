@@ -11,7 +11,7 @@ import SwiftUI
 public struct LabelConfig {
     // MARK: - Lifecycle
 
-    init(fontStyle: Font.TextStyle) {
+    public init(fontStyle: Font.TextStyle) {
         self.fontStyle = fontStyle
     }
 

@@ -11,7 +11,7 @@ import SwiftUI
 public struct MenuContent {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         title: LabelContent? = nil,
         placeholder: LabelContent? = nil,
         helper: LabelContent? = nil,
@@ -25,7 +25,7 @@ public struct MenuContent {
         self.optionSelectionChanged = optionSelectionChanged
     }
 
-    init(
+    public init(
         title: String? = nil,
         placeholder: String? = nil,
         helper: String? = nil,

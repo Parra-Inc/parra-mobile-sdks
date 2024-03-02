@@ -11,7 +11,7 @@ import SwiftUI
 public struct TextEditorConfig {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         title: LabelConfig = LabelConfig(fontStyle: .body),
         helper: LabelConfig = LabelConfig(fontStyle: .subheadline),
         minLines: Int? = nil,
@@ -35,6 +35,17 @@ public struct TextEditorConfig {
 
     // MARK: - Public
 
+    public static let `default` = TextEditorConfig(
+        title: LabelConfig(fontStyle: .body),
+        helper: LabelConfig(fontStyle: .subheadline),
+        minLines: 3,
+        minCharacters: 0,
+        maxCharacters: nil,
+        maxHeight: 240,
+        showCharacterCountLabel: true,
+        showValidationErrors: true
+    )
+
     public let title: LabelConfig
     public let helper: LabelConfig
 
@@ -54,17 +65,6 @@ public struct TextEditorConfig {
     public let showValidationErrors: Bool
 
     // MARK: - Internal
-
-    static let `default` = TextEditorConfig(
-        title: LabelConfig(fontStyle: .body),
-        helper: LabelConfig(fontStyle: .subheadline),
-        minLines: 3,
-        minCharacters: 0,
-        maxCharacters: nil,
-        maxHeight: 240,
-        showCharacterCountLabel: true,
-        showValidationErrors: true
-    )
 
     func withDefaults(from defaults: TextEditorConfig) -> TextEditorConfig {
         return TextEditorConfig(

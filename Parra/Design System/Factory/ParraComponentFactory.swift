@@ -351,4 +351,60 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
             EmptyView()
         }
     }
+
+    @ViewBuilder
+    func buildSegment(
+        component componentKeyPath: KeyPath<
+            Factory,
+            ComponentBuilder.Factory<
+                some View,
+                SegmentConfig,
+                SegmentContent,
+                SegmentAttributes
+            >?
+        >,
+        config: SegmentConfig,
+        content: SegmentContent?,
+        localAttributes: SegmentAttributes? = nil
+    ) -> some View {
+        if let content {
+            let attributes = if let factory = global?
+                .segmentAttributeFactory
+            {
+                factory(config, content, localAttributes)
+            } else {
+                localAttributes
+            }
+
+            let mergedAttributes = SegmentComponent
+                .applyStandardCustomizations(
+                    onto: attributes,
+                    theme: theme,
+                    config: config
+                )
+
+            // If a container level factory function was provided for this component,
+            // use it and supply global attribute overrides instead of local, if provided.
+            if let builder = local?[keyPath: componentKeyPath],
+               let view = builder(config, content, mergedAttributes)
+            {
+                view
+            } else {
+                let style = ParraAttributedSegmentStyle(
+                    config: config,
+                    content: content,
+                    attributes: mergedAttributes,
+                    theme: theme
+                )
+
+                SegmentComponent(
+                    config: config,
+                    content: content,
+                    style: style
+                )
+            }
+        } else {
+            EmptyView()
+        }
+    }
 }

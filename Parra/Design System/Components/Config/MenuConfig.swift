@@ -11,7 +11,7 @@ import SwiftUI
 public struct MenuConfig {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         title: LabelConfig = LabelConfig(fontStyle: .body),
         helper: LabelConfig = LabelConfig(fontStyle: .subheadline),
         menuOption: LabelConfig = LabelConfig(fontStyle: .body),

@@ -12,7 +12,7 @@ import UIKit
 public struct LabelContent {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         text: String,
         icon: UIImage? = nil
     ) {

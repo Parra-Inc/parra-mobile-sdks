@@ -12,12 +12,13 @@ private let logger = Logger(category: "Endpoints")
 extension ParraNetworkManager {
     // MARK: - Feedback
 
-    func getCards(appArea: ParraQuestionAppArea) async throws
-        -> [ParraCardItem]
-    {
+    func getCards(
+        appArea: ParraQuestionAppArea
+    ) async throws -> [ParraCardItem] {
         var queryItems: [String: String] = [:]
-        // It is important that an app area name is only provided if a specific one is meant to be returned.
-        // If the app area type is `all` then there should not be a `app_area` key present in the request.
+        // It is important that an app area name is only provided if a specific
+        // one is meant to be returned. If the app area type is `all` then there
+        // should not be a `app_area` key present in the request.
         if let appAreaName = appArea.parameterized {
             queryItems["app_area_id"] = appAreaName
         }
@@ -39,7 +40,8 @@ extension ParraNetworkManager {
         }
     }
 
-    /// Submits the provided list of CompleteCards as answers to the cards linked to them.
+    /// Submits the provided list of CompleteCards as answers to the cards
+    /// linked to them.
     func bulkAnswerQuestions(cards: [CompletedCard]) async throws {
         if cards.isEmpty {
             return
@@ -63,9 +65,9 @@ extension ParraNetworkManager {
     }
 
     /// Fetches the feedback form with the provided id from the Parra API.
-    func getFeedbackForm(with formId: String) async throws
-        -> ParraFeedbackFormResponse
-    {
+    func getFeedbackForm(
+        with formId: String
+    ) async throws -> ParraFeedbackFormResponse {
         guard let escapedFormId = formId.addingPercentEncoding(
             withAllowedCharacters: .urlPathAllowed
         ) else {
