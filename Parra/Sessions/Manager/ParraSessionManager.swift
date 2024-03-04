@@ -155,8 +155,9 @@ class ParraSessionManager {
 
                     logger.debug("Uploading session: \(sessionId)")
 
-                    let response = try await networkManager
-                        .submitSession(sessionUpload)
+                    let response = await networkManager.submitSession(
+                        sessionUpload
+                    )
 
                     switch response.result {
                     case .success(let payload):

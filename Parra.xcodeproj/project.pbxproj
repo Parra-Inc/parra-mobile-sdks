@@ -415,6 +415,7 @@
 		00FCB1742B962D8700635DC8 /* FixedFrameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1732B962D8700635DC8 /* FixedFrameAttributes.swift */; };
 		00FCB1762B962DC400635DC8 /* FrameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1752B962DC400635DC8 /* FrameAttributes.swift */; };
 		00FCB1792B963DA800635DC8 /* ImageButton+RenderStorybook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1782B963DA800635DC8 /* ImageButton+RenderStorybook.swift */; };
+		00FCB17D2B9665EB00635DC8 /* TicketFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB17C2B9665EB00635DC8 /* TicketFilter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -886,6 +887,7 @@
 		00FCB1732B962D8700635DC8 /* FixedFrameAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedFrameAttributes.swift; sourceTree = "<group>"; };
 		00FCB1752B962DC400635DC8 /* FrameAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAttributes.swift; sourceTree = "<group>"; };
 		00FCB1782B963DA800635DC8 /* ImageButton+RenderStorybook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageButton+RenderStorybook.swift"; sourceTree = "<group>"; };
+		00FCB17C2B9665EB00635DC8 /* TicketFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketFilter.swift; sourceTree = "<group>"; };
 		00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2226,6 +2228,7 @@
 				00FCB15F2B93C3EA00635DC8 /* Views */,
 				00FCB1522B939C6100635DC8 /* RoadmapWidget+ContentObserver.swift */,
 				00FCB1542B939C9000635DC8 /* RoadmapWidget+ContentObserver+Content.swift */,
+				00FCB17C2B9665EB00635DC8 /* TicketFilter.swift */,
 			);
 			path = Roadmap;
 			sourceTree = "<group>";
@@ -2837,6 +2840,7 @@
 				005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */,
 				00ABF1A42B85271B00A054A2 /* TextInputConfig.swift in Sources */,
 				003621F42B5C79F7009EFE53 /* ParraColorSwatch.swift in Sources */,
+				00FCB17D2B9665EB00635DC8 /* TicketFilter.swift in Sources */,
 				00FCB16E2B96287F00635DC8 /* ParraAttributedImageButtonStyle.swift in Sources */,
 				00ABF1B22B865C5200A054A2 /* FeedbackCardWidget+ContentObserver.swift in Sources */,
 				00ABF1BC2B867CE300A054A2 /* FeedbackCardView.swift in Sources */,

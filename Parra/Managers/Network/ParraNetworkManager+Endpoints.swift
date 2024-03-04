@@ -14,7 +14,7 @@ extension ParraNetworkManager {
 
     func getCards(
         appArea: ParraQuestionAppArea
-    ) async throws -> [ParraCardItem] {
+    ) async throws -> CardsResponse {
         var queryItems: [String: String] = [:]
         // It is important that an app area name is only provided if a specific
         // one is meant to be returned. If the app area type is `all` then there
@@ -23,21 +23,11 @@ extension ParraNetworkManager {
             queryItems["app_area_id"] = appAreaName
         }
 
-        let response: AuthenticatedRequestResult<CardsResponse> =
-            await performAuthenticatedRequest(
-                endpoint: .getCards,
-                queryItems: queryItems,
-                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
-            )
-
-        switch response.result {
-        case .success(let cardsResponse):
-            return cardsResponse.items
-        case .failure(let error):
-            logger.error("Error fetching cards from Parra", error)
-
-            throw error
-        }
+        return try await hitEndpoint(
+            .getCards,
+            queryItems: queryItems,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
+        )
     }
 
     /// Submits the provided list of CompleteCards as answers to the cards
@@ -47,27 +37,17 @@ extension ParraNetworkManager {
             return
         }
 
-        let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await performAuthenticatedRequest(
-                endpoint: .postBulkAnswerQuestions,
-                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                body: cards.map { CompletedCardUpload(completedCard: $0) }
-            )
-
-        switch response.result {
-        case .success:
-            return
-        case .failure(let error):
-            logger.error("Error submitting card responses to Parra", error)
-
-            throw error
-        }
+        let _: EmptyResponseObject = try await hitEndpoint(
+            .postBulkAnswerQuestions,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+            body: cards.map { CompletedCardUpload(completedCard: $0) }
+        )
     }
 
     /// Fetches the feedback form with the provided id from the Parra API.
     func getFeedbackForm(
         with formId: String
-    ) async throws -> ParraFeedbackForm {
+    ) async throws -> ParraFeedbackFormResponse {
         guard let escapedFormId = formId.addingPercentEncoding(
             withAllowedCharacters: .urlPathAllowed
         ) else {
@@ -77,19 +57,9 @@ extension ParraNetworkManager {
                 )
         }
 
-        let response: AuthenticatedRequestResult<ParraFeedbackFormResponse> =
-            await performAuthenticatedRequest(
-                endpoint: .getFeedbackForm(formId: escapedFormId)
-            )
-
-        switch response.result {
-        case .success(let formResponse):
-            return ParraFeedbackForm(from: formResponse)
-        case .failure(let error):
-            logger.error("Error fetching feedback form from Parra", error)
-
-            throw error
-        }
+        return try await hitEndpoint(
+            .getFeedbackForm(formId: escapedFormId)
+        )
     }
 
     /// Submits the provided data as answers for the form with the provided id.
@@ -113,37 +83,26 @@ extension ParraNetworkManager {
                 )
         }
 
-        let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await performAuthenticatedRequest(
-                endpoint: .postSubmitFeedbackForm(formId: escapedFormId),
-                body: body
-            )
-
-        switch response.result {
-        case .success:
-            return
-        case .failure(let error):
-            logger.error("Error submitting form to Parra", error)
-
-            throw error
-        }
+        let _: EmptyResponseObject = try await hitEndpoint(
+            .postSubmitFeedbackForm(
+                formId: escapedFormId
+            ),
+            body: body
+        )
     }
 
     // MARK: - Sessions
 
     func submitSession(
         _ sessionUpload: ParraSessionUpload
-    ) async throws -> AuthenticatedRequestResult<ParraSessionsResponse> {
-        let response: AuthenticatedRequestResult<ParraSessionsResponse> =
-            await performAuthenticatedRequest(
-                endpoint: .postBulkSubmitSessions(
-                    tenantId: appState.tenantId
-                ),
-                config: .defaultWithRetries,
-                body: sessionUpload
-            )
-
-        return response
+    ) async -> AuthenticatedRequestResult<ParraSessionsResponse> {
+        return await performAuthenticatedRequest(
+            endpoint: .postBulkSubmitSessions(
+                tenantId: appState.tenantId
+            ),
+            config: .defaultWithRetries,
+            body: sessionUpload
+        )
     }
 
     // MARK: - Push
@@ -154,18 +113,61 @@ extension ParraNetworkManager {
             "type": "apns"
         ]
 
-        let response: AuthenticatedRequestResult<EmptyResponseObject> =
+        let _: EmptyResponseObject = try await hitEndpoint(
+            .postPushTokens(tenantId: appState.tenantId),
+            body: body
+        )
+    }
+
+    // MARK: - Roadmap
+
+    func getRoadmap() async throws -> AppRoadmapConfiguration {
+        return try await hitEndpoint(
+            .getRoadmap(
+                tenantId: appState.tenantId,
+                applicationId: appState.applicationId
+            )
+        )
+    }
+
+    func paginateTickets(
+        limit: Int,
+        offset: Int,
+        filter: TicketFilter
+    ) async throws -> UserTicketCollectionResponse {
+        let body: [String: String] = [
+            "limit": String(limit),
+            "offset": String(offset),
+            "filter": filter.paramName
+        ]
+
+        return try await hitEndpoint(
+            .getPaginateTickets(
+                tenantId: appState.tenantId,
+                applicationId: appState.applicationId
+            ),
+            body: body
+        )
+    }
+
+    private func hitEndpoint<Response>(
+        _ endpoint: ParraEndpoint,
+        queryItems: [String: String] = [:],
+        cachePolicy: URLRequest.CachePolicy? = nil,
+        body: some Encodable = EmptyRequestObject()
+    ) async throws -> Response where Response: Codable {
+        let response: AuthenticatedRequestResult<Response> =
             await performAuthenticatedRequest(
-                endpoint: .postPushTokens(tenantId: appState.tenantId),
+                endpoint: endpoint,
+                queryItems: queryItems,
+                cachePolicy: cachePolicy,
                 body: body
             )
 
         switch response.result {
-        case .success:
-            return
+        case .success(let response):
+            return response
         case .failure(let error):
-            logger.error("Error uploading device push token to Parra", error)
-
             throw error
         }
     }

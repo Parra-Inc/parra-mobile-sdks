@@ -97,9 +97,10 @@ public class ParraFeedback {
     public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
-        let cards = try await networkManager.getCards(
+        let cardsResponse = try await networkManager.getCards(
             appArea: appArea
         )
+        let cards = cardsResponse.items
 
         // Only keep cards that we don't already have an answer cached for. This isn't something that
         // should ever even happen, but in event that new cards are retreived that include cards we
@@ -124,7 +125,9 @@ public class ParraFeedback {
     public func fetchFeedbackForm(
         formId: String
     ) async throws -> ParraFeedbackForm {
-        return try await networkManager.getFeedbackForm(with: formId)
+        let response = try await networkManager.getFeedbackForm(with: formId)
+
+        return ParraFeedbackForm(from: response)
     }
 
     /// Fetches the feedback form with the provided ID from the Parra API. If a form is returned, it is up to the caller
@@ -316,9 +319,10 @@ public class ParraFeedback {
     }
 
     private func getCardsForPresentation() async throws -> [ParraCardItem] {
-        let cards = try await networkManager.getCards(
+        let cardsResponse = try await networkManager.getCards(
             appArea: .none
         )
+        let cards = cardsResponse.items
 
         var validCards = [ParraCardItem]()
         for card in cards {

@@ -27,5 +27,14 @@ extension RoadmapWidget {
         var id: String {
             return title
         }
+
+        var filter: TicketFilter {
+            switch self {
+            case .inProgress:
+                return .upcoming
+            case .requests:
+                return .requests
+            }
+        }
     }
 }

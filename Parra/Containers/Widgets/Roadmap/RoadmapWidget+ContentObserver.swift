@@ -19,7 +19,8 @@ extension RoadmapWidget {
 
         init(
             roadmapConfig: AppRoadmapConfiguration,
-            ticketResponse: UserTicketCollectionResponse
+            ticketResponse: UserTicketCollectionResponse,
+            networkManager: ParraNetworkManager
         ) {
             let addRequestButton = TextButtonContent(
                 text: LabelContent(text: "Add request"),
@@ -28,6 +29,7 @@ extension RoadmapWidget {
             )
 
             self.roadmapConfig = roadmapConfig
+            self.networkManager = networkManager
             self.content = Content(
                 title: "Roadmap",
                 addRequestButton: addRequestButton,
@@ -45,10 +47,18 @@ extension RoadmapWidget {
         @Published private(set) var content: Content
         @Published var addRequestForm: ParraFeedbackForm?
         @Published private(set) var canAddRequests: Bool
+        @Published var selectedTab: Tab = .inProgress
+
+        func fetchUpdatedRoadmap() {
+            // Refresh the data for all the tabs, but start with the currently
+            // selected one. Once it is finished all the others can begin
+            Tab.allCases
+        }
 
         // MARK: - Private
 
         private let roadmapConfig: AppRoadmapConfiguration
+        private let networkManager: ParraNetworkManager
 
         private func addRequest() {
             guard let form = roadmapConfig.form else {
@@ -59,5 +69,9 @@ extension RoadmapWidget {
         }
 
         private func onUpvote(_ ticket: UserTicket) {}
+
+        private func stuff() async {
+//            networkManager.getCards(appArea: <#T##ParraQuestionAppArea#>)
+        }
     }
 }

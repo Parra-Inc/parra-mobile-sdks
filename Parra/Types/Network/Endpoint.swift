@@ -24,6 +24,11 @@ enum ParraEndpoint {
     // Push
     case postPushTokens(tenantId: String)
 
+    // Roadmap
+
+    case getRoadmap(tenantId: String, applicationId: String)
+    case getPaginateTickets(tenantId: String, applicationId: String)
+
     // MARK: - Internal
 
     // All endpoints should use kebab case!
@@ -43,12 +48,16 @@ enum ParraEndpoint {
             return "tenants/\(tenantId)/push-tokens"
         case .postAuthentication(let tenantId):
             return "tenants/\(tenantId)/issuers/public/auth/token"
+        case .getRoadmap(let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/roadmap"
+        case .getPaginateTickets(let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/tickets"
         }
     }
 
     var method: HttpMethod {
         switch self {
-        case .getCards, .getFeedbackForm:
+        case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
@@ -86,6 +95,10 @@ enum ParraEndpoint {
             return "tenants/:tenantId/push-tokens"
         case .postAuthentication:
             return "tenants/:tenantId/issuers/public/auth/token"
+        case .getRoadmap:
+            return "tenants/:tenantId/applications/:applicationId/roadmap"
+        case .getPaginateTickets:
+            return "tenants/:tenantId/applications/:applicationId/tickets"
         }
     }
 }

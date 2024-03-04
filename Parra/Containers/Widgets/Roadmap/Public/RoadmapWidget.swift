@@ -11,8 +11,6 @@ import SwiftUI
 public struct RoadmapWidget: Container {
     // MARK: - Public
 
-    @State private var selectedTab: Tab = .inProgress
-
     public var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 20) {
@@ -23,7 +21,10 @@ public struct RoadmapWidget: Container {
                     localAttributes: nil
                 )
 
-                Picker("Select a tab", selection: $selectedTab) {
+                Picker(
+                    "Select a tab",
+                    selection: $contentObserver.selectedTab
+                ) {
                     ForEach(Tab.allCases) { tab in
                         Text(tab.title).tag(tab)
                     }
@@ -64,6 +65,9 @@ public struct RoadmapWidget: Container {
         .environment(config)
         .environmentObject(contentObserver)
         .environmentObject(componentFactory)
+        .onAppear {
+            contentObserver.fetchUpdatedRoadmap()
+        }
         .presentParraFeedbackForm(
             with: $contentObserver.addRequestForm,
             localFactory: nil,
@@ -82,7 +86,7 @@ public struct RoadmapWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview { _, componentFactory in
+    ParraContainerPreview { parra, componentFactory in
         RoadmapWidget(
             componentFactory: componentFactory,
             contentObserver: .init(
@@ -105,7 +109,8 @@ public struct RoadmapWidget: Container {
                     pageSize: 4,
                     totalCount: 10,
                     data: UserTicket.validStates()
-                )
+                ),
+                networkManager: parra.networkManager
             ),
             config: .default,
             style: .default(with: .default)
