@@ -67,7 +67,7 @@ extension ParraNetworkManager {
     /// Fetches the feedback form with the provided id from the Parra API.
     func getFeedbackForm(
         with formId: String
-    ) async throws -> ParraFeedbackFormResponse {
+    ) async throws -> ParraFeedbackForm {
         guard let escapedFormId = formId.addingPercentEncoding(
             withAllowedCharacters: .urlPathAllowed
         ) else {
@@ -84,7 +84,7 @@ extension ParraNetworkManager {
 
         switch response.result {
         case .success(let formResponse):
-            return formResponse
+            return ParraFeedbackForm(from: formResponse)
         case .failure(let error):
             logger.error("Error fetching feedback form from Parra", error)
 

@@ -35,6 +35,7 @@ public extension View {
                     }
                 }),
                 localFactory: localFactory,
+                submissionType: .default,
                 onDismiss: onDismiss
             )
         )
@@ -42,27 +43,45 @@ public extension View {
 
     @MainActor
     func presentParraFeedbackForm(
-        with form: Binding<ParraFeedbackFormResponse?>,
+        with formBinding: Binding<ParraFeedbackForm?>,
+        localFactory: FeedbackFormWidgetFactory? = nil,
+        onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
+    ) -> some View {
+        return presentParraFeedbackForm(
+            with: formBinding,
+            submissionType: .default,
+            localFactory: localFactory,
+            onDismiss: onDismiss
+        )
+    }
+
+    /// Should stay internal only. Allows changing submisson type to custom
+    /// submission handler, which is useful in places like
+    @MainActor
+    internal func presentParraFeedbackForm(
+        with formBinding: Binding<ParraFeedbackForm?>,
+        submissionType: FeedbackFormLoader.SubmissionType,
         localFactory: FeedbackFormWidgetFactory? = nil,
         onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
     ) -> some View {
         modifier(
             FeedbackFormLoader(
                 initialState: Binding<FeedbackFormLoader.FormState>(get: {
-                    if let data = form.wrappedValue {
-                        FeedbackFormLoader.FormState.form(data)
+                    if let form = formBinding.wrappedValue {
+                        FeedbackFormLoader.FormState.form(form)
                     } else {
                         FeedbackFormLoader.FormState.initial
                     }
                 }, set: { state in
                     switch state {
-                    case .form(let f):
-                        form.wrappedValue = f
+                    case .form(let form):
+                        formBinding.wrappedValue = form
                     case .formId, .initial, .loading, .error:
-                        form.wrappedValue = nil
+                        formBinding.wrappedValue = nil
                     }
                 }),
                 localFactory: localFactory,
+                submissionType: submissionType,
                 onDismiss: onDismiss
             )
         )

@@ -284,7 +284,27 @@ public struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
     public let data: FeedbackFormData
 }
 
-public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
+/// User facing
+public struct ParraFeedbackForm: Codable, Equatable, Identifiable {
+    // MARK: - Lifecycle
+
+    init(from response: ParraFeedbackFormResponse) {
+        self.id = response.id
+        self.data = response.data
+    }
+
+    init(from stub: FeedbackFormDataStub) {
+        self.id = stub.id
+        self.data = stub.data
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let data: FeedbackFormData
+}
+
+struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
     Identifiable
 {
     // MARK: - Lifecycle
@@ -303,9 +323,9 @@ public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
         self.data = data
     }
 
-    // MARK: - Public
+    // MARK: - Internal
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case createdAt
         case updatedAt
@@ -313,11 +333,11 @@ public struct ParraFeedbackFormResponse: Codable, Equatable, Hashable,
         case data
     }
 
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let data: FeedbackFormData
+    let id: String
+    let createdAt: String
+    let updatedAt: String
+    let deletedAt: String?
+    let data: FeedbackFormData
 }
 
 public struct FeedbackFormData: Codable, Equatable, Hashable {
@@ -338,6 +358,40 @@ public struct FeedbackFormData: Codable, Equatable, Hashable {
     public let title: String
     public let description: String?
     public let fields: [FeedbackFormField]
+}
+
+public struct FeedbackFormDataStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: String,
+        updatedAt: String,
+        deletedAt: String?,
+        data: FeedbackFormData
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.data = data
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+        case deletedAt = "deleted_at"
+        case data
+    }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let data: FeedbackFormData
 }
 
 public enum FeedbackFormFieldType: String, Codable {
@@ -1695,6 +1749,174 @@ public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
     }
 
     public let notificationIds: [String]
+}
+
+public enum TicketType: String, Codable {
+    case bug
+    case feature
+    case improvement
+}
+
+public enum TicketStatus: String, Codable {
+    case open
+    case planning
+    case inProgress = "in_progress"
+    case done
+    case live
+    case closed
+    case archived
+}
+
+public enum TicketDisplayStatus: String, Codable {
+    case pending
+    case upcoming
+    case inProgress = "in_progress"
+    case live
+    case rejected
+}
+
+public struct UserTicket: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: String,
+        updatedAt: String,
+        deletedAt: String?,
+        title: String,
+        type: TicketType,
+        description: String?,
+        status: TicketStatus,
+        displayStatus: TicketDisplayStatus,
+        displayStatusBadgeTitle: String,
+        voteCount: Int,
+        votingEnabled: Bool,
+        voted: Bool
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.title = title
+        self.type = type
+        self.description = description
+        self.status = status
+        self.displayStatus = displayStatus
+        self.displayStatusBadgeTitle = displayStatusBadgeTitle
+        self.voteCount = voteCount
+        self.votingEnabled = votingEnabled
+        self.voted = voted
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+        case deletedAt = "deleted_at"
+        case title
+        case type
+        case description
+        case status
+        case displayStatus = "display_status"
+        case displayStatusBadgeTitle = "display_status_badge_title"
+        case voteCount = "vote_count"
+        case votingEnabled = "voting_enabled"
+        case voted
+    }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let title: String
+    public let type: TicketType
+    public let description: String?
+    public let status: TicketStatus
+    public let displayStatus: TicketDisplayStatus
+    public let displayStatusBadgeTitle: String
+    public let voteCount: Int
+    public let votingEnabled: Bool
+    public let voted: Bool
+}
+
+public struct CollectionResponse: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        page: Int,
+        pageCount: Int,
+        pageSize: Int,
+        totalCount: Int
+    ) {
+        self.page = page
+        self.pageCount = pageCount
+        self.pageSize = pageSize
+        self.totalCount = totalCount
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case page
+        case pageCount = "page_count"
+        case pageSize = "page_size"
+        case totalCount = "total_count"
+    }
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+}
+
+public struct UserTicketCollectionResponse: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        page: Int,
+        pageCount: Int,
+        pageSize: Int,
+        totalCount: Int,
+        data: [UserTicket]
+    ) {
+        self.page = page
+        self.pageCount = pageCount
+        self.pageSize = pageSize
+        self.totalCount = totalCount
+        self.data = data
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case page
+        case pageCount = "page_count"
+        case pageSize = "page_size"
+        case totalCount = "total_count"
+        case data
+    }
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [UserTicket]
+}
+
+public struct AppRoadmapConfiguration: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        form: FeedbackFormDataStub?
+    ) {
+        self.form = form
+    }
+
+    // MARK: - Public
+
+    public let form: FeedbackFormDataStub?
 }
 
 public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {

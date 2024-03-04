@@ -15,33 +15,35 @@ enum TestData {
     enum Forms {
         static func formResponse(
             formId: String = UUID().uuidString
-        ) -> ParraFeedbackFormResponse {
-            return ParraFeedbackFormResponse(
-                id: formId,
-                createdAt: .now,
-                updatedAt: .now,
-                deletedAt: nil,
-                data: FeedbackFormData(
-                    title: "Feedback form",
-                    description: "some description",
-                    fields: [
-                        FeedbackFormField(
-                            name: "field 1",
-                            title: "Field 1",
-                            helperText: "fill this out",
-                            type: .text,
-                            required: true,
-                            data: .feedbackFormTextFieldData(
-                                FeedbackFormTextFieldData(
-                                    placeholder: "placeholder",
-                                    lines: 4,
-                                    minCharacters: 20,
-                                    maxCharacters: 420,
-                                    maxHeight: 200
+        ) -> ParraFeedbackForm {
+            return ParraFeedbackForm(
+                from: ParraFeedbackFormResponse(
+                    id: formId,
+                    createdAt: .now,
+                    updatedAt: .now,
+                    deletedAt: nil,
+                    data: FeedbackFormData(
+                        title: "Feedback form",
+                        description: "some description",
+                        fields: [
+                            FeedbackFormField(
+                                name: "field 1",
+                                title: "Field 1",
+                                helperText: "fill this out",
+                                type: .text,
+                                required: true,
+                                data: .feedbackFormTextFieldData(
+                                    FeedbackFormTextFieldData(
+                                        placeholder: "placeholder",
+                                        lines: 4,
+                                        minCharacters: 20,
+                                        maxCharacters: 420,
+                                        maxHeight: 200
+                                    )
                                 )
                             )
-                        )
-                    ]
+                        ]
+                    )
                 )
             )
         }

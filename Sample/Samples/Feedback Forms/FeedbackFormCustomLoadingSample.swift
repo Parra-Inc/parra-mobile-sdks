@@ -21,7 +21,7 @@ import SwiftUI
 struct FeedbackFormCustomLoadingSample: View {
     // MARK: - Internal
 
-    @State var formData: ParraFeedbackFormResponse? // #3
+    @State var formData: ParraFeedbackForm? // #3
     @State var errorMessage: String?
     @State var isLoading = false
 

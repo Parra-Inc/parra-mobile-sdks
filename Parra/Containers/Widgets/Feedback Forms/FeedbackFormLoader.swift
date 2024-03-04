@@ -17,9 +17,11 @@ struct FeedbackFormLoader: ViewModifier {
     init(
         initialState: Binding<FormState>,
         localFactory: FeedbackFormWidget.Factory? = nil,
+        submissionType: SubmissionType = .default,
         onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
     ) {
         self.localFactory = localFactory
+        self.submissionType = submissionType
         self.onDismiss = onDismiss
 
         _initialState = initialState
@@ -28,11 +30,16 @@ struct FeedbackFormLoader: ViewModifier {
 
     // MARK: - Internal
 
+    enum SubmissionType {
+        case `default`
+        case custom(([FeedbackFormField: String]) async -> Void)
+    }
+
     enum FormState: Equatable {
         case initial
         case formId(String)
         case loading
-        case form(ParraFeedbackFormResponse)
+        case form(ParraFeedbackForm)
         case error(String)
     }
 
@@ -40,6 +47,7 @@ struct FeedbackFormLoader: ViewModifier {
     @Binding var initialState: FormState
 
     var localFactory: FeedbackFormWidget.Factory? = nil
+    var submissionType: SubmissionType
     var onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
 
     func body(content: Content) -> some View {
@@ -123,7 +131,8 @@ struct FeedbackFormLoader: ViewModifier {
         }
 
         let theme = parra.configuration.theme
-        let globalComponentAttributes = parra.configuration
+        let globalComponentAttributes = parra
+            .configuration
             .globalComponentAttributes
 
         let componentFactory = ComponentFactory(
@@ -147,16 +156,21 @@ struct FeedbackFormLoader: ViewModifier {
             formState = .initial
 
             Task {
-                do {
-                    try await parra.networkManager.submitFeedbackForm(
-                        with: form.id,
-                        data: data
-                    )
-                } catch {
-                    logger.error(
-                        "Error submitting feedback form: \(form.id)",
-                        error
-                    )
+                switch submissionType {
+                case .default:
+                    do {
+                        try await parra.networkManager.submitFeedbackForm(
+                            with: form.id,
+                            data: data
+                        )
+                    } catch {
+                        logger.error(
+                            "Error submitting feedback form: \(form.id)",
+                            error
+                        )
+                    }
+                case .custom(let handler):
+                    await handler(data)
                 }
             }
         }

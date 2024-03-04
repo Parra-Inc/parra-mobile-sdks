@@ -27,7 +27,20 @@ public struct FeedbackFormWidget: Container {
             )
             .scrollDismissesKeyboard(.interactively)
 
-            footer
+            WidgetFooter(
+                primaryActionBuilder: {
+                    componentFactory.buildButton(
+                        variant: .contained,
+                        component: \.submitButton,
+                        config: config.submitButton,
+                        content: contentObserver.content.submitButton,
+                        localAttributes: nil
+                    )
+                    .disabled(!contentObserver.content.canSubmit)
+                },
+                secondaryActionBuilder: nil,
+                contentPadding: style.contentPadding
+            )
         }
         .applyBackground(style.background)
         .padding(style.padding)
@@ -135,31 +148,6 @@ public struct FeedbackFormWidget: Container {
                 }
             }
         }
-    }
-
-    var footer: some View {
-        VStack(alignment: .center, spacing: 16) {
-            componentFactory.buildButton(
-                variant: .contained,
-                component: \.submitButton,
-                config: config.submitButton,
-                content: contentObserver.content.submitButton,
-                localAttributes: nil
-            )
-            .disabled(!contentObserver.content.canSubmit)
-
-            ParraLogoButton(type: .poweredBy)
-        }
-        .frame(maxWidth: .infinity)
-        .padding([.leading, .trailing, .bottom], from: style.contentPadding)
-        // Using the leading padding of the container as the footer's top
-        // padding to keep the button square with its container
-        .padding(.top, style.contentPadding.leading)
-        .border(
-            width: 1,
-            edges: .top,
-            color: themeObserver.theme.palette.secondaryBackground
-        )
     }
 
     // MARK: - Private

@@ -123,7 +123,7 @@ public class ParraFeedback {
     /// form presentation in this way allows us to skip having to show loading indicators.
     public func fetchFeedbackForm(
         formId: String
-    ) async throws -> ParraFeedbackFormResponse {
+    ) async throws -> ParraFeedbackForm {
         return try await networkManager.getFeedbackForm(with: formId)
     }
 
@@ -133,7 +133,7 @@ public class ParraFeedback {
     public func fetchFeedbackForm(
         formId: String,
         withCompletion completion: @escaping (Result<
-            ParraFeedbackFormResponse,
+            ParraFeedbackForm,
             ParraError
         >) -> Void
     ) {
