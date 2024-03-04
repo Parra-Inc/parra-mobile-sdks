@@ -28,10 +28,8 @@ extension FeedbackFormWidget {
                 nil
             }
 
-            let submitButton = ButtonContent(
-                type: .text(
-                    LabelContent(text: "Submit")
-                ),
+            let submitButton = TextButtonContent(
+                text: LabelContent(text: "Submit"),
                 isDisabled: false,
                 onPress: nil
             )

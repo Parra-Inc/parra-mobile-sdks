@@ -17,7 +17,7 @@ extension FeedbackFormWidget.ContentObserver {
             title: LabelContent,
             description: LabelContent?,
             fields: [FormFieldWithState],
-            submitButton: ButtonContent
+            submitButton: TextButtonContent
         ) {
             self.title = title
             self.description = description
@@ -27,8 +27,8 @@ extension FeedbackFormWidget.ContentObserver {
             self.canSubmit = Content.areAllFieldsValid(
                 fields: fields
             )
-            self.submitButton = ButtonContent(
-                type: submitButton.type,
+            self.submitButton = TextButtonContent(
+                text: submitButton.text,
                 isDisabled: !canSubmit,
                 onPress: submitButton.onPress
             )
@@ -41,7 +41,7 @@ extension FeedbackFormWidget.ContentObserver {
 
         var fields: [FormFieldWithState]
 
-        var submitButton: ButtonContent
+        var submitButton: TextButtonContent
 
         var canSubmit: Bool
 

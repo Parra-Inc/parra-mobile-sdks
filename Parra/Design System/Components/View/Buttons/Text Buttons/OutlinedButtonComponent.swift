@@ -1,5 +1,5 @@
 //
-//  PlainButtonComponent.swift
+//  OutlinedButtonComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/29/24.
@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-struct PlainButtonComponent: ButtonComponentType {
+struct OutlinedButtonComponent: TextButtonComponentType {
     // MARK: - Lifecycle
 
     init(
-        config: ButtonConfig,
-        content: ButtonContent,
-        style: ParraAttributedButtonStyle
+        config: TextButtonConfig,
+        content: TextButtonContent,
+        style: ParraAttributedTextButtonStyle
     ) {
         self.config = config
         self.content = content
@@ -23,13 +23,14 @@ struct PlainButtonComponent: ButtonComponentType {
 
     // MARK: - Internal
 
-    let config: ButtonConfig
-    let content: ButtonContent
-    let style: ParraAttributedButtonStyle
+    let config: TextButtonConfig
+    let content: TextButtonContent
+    let style: ParraAttributedTextButtonStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
+        let _ = print("Rendering Outlined button")
         Button(action: {
             content.onPress?()
         }, label: {
@@ -45,8 +46,8 @@ struct PlainButtonComponent: ButtonComponentType {
     }
 }
 
-#Preview("Plain Button") {
+#Preview("Outlined Button") {
     ParraThemedPreviewWrapper {
-        renderStorybook(for: PlainButtonComponent.self)
+        renderStorybook(for: OutlinedButtonComponent.self)
     }
 }

@@ -12,8 +12,8 @@ extension FeedbackCardWidget {
     @ViewBuilder var navigation: some View {
         if contentObserver.showNavigation {
             HStack(alignment: .center) {
-                componentFactory.buildButton(
-                    variant: .image,
+                componentFactory.buildImageButton(
+                    variant: .plain,
                     component: \.backButton,
                     config: config.backButton,
                     content: contentObserver.content.backButton
@@ -25,8 +25,8 @@ extension FeedbackCardWidget {
 
                 Spacer()
 
-                componentFactory.buildButton(
-                    variant: .image,
+                componentFactory.buildImageButton(
+                    variant: .plain,
                     component: \.forwardButton,
                     config: config.forwardButton,
                     content: contentObserver.content.forwardButton

@@ -1,5 +1,5 @@
 //
-//  ContainedButtonComponent.swift
+//  PlainButtonComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/29/24.
@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-struct ContainedButtonComponent: ButtonComponentType {
+struct PlainButtonComponent: TextButtonComponentType {
     // MARK: - Lifecycle
 
     init(
-        config: ButtonConfig,
-        content: ButtonContent,
-        style: ParraAttributedButtonStyle
+        config: TextButtonConfig,
+        content: TextButtonContent,
+        style: ParraAttributedTextButtonStyle
     ) {
         self.config = config
         self.content = content
@@ -23,9 +23,9 @@ struct ContainedButtonComponent: ButtonComponentType {
 
     // MARK: - Internal
 
-    let config: ButtonConfig
-    let content: ButtonContent
-    let style: ParraAttributedButtonStyle
+    let config: TextButtonConfig
+    let content: TextButtonContent
+    let style: ParraAttributedTextButtonStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
@@ -45,8 +45,8 @@ struct ContainedButtonComponent: ButtonComponentType {
     }
 }
 
-#Preview("Contained Button") {
+#Preview("Plain Button") {
     ParraThemedPreviewWrapper {
-        renderStorybook(for: ContainedButtonComponent.self)
+        renderStorybook(for: PlainButtonComponent.self)
     }
 }

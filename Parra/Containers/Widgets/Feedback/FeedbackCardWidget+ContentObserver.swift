@@ -38,14 +38,14 @@ extension FeedbackCardWidget {
             self.cardDelegate = cardDelegate
             self.syncHandler = syncHandler
 
-            let backButton = ButtonContent(
-                type: .image(ImageContent.symbol("arrow.backward")),
+            let backButton = ImageButtonContent(
+                image: .symbol("arrow.backward"),
                 isDisabled: false,
                 onPress: nil
             )
 
-            let forwardButton = ButtonContent(
-                type: .image(ImageContent.symbol("arrow.forward")),
+            let forwardButton = ImageButtonContent(
+                image: .symbol("arrow.forward"),
                 isDisabled: false,
                 onPress: nil
             )
@@ -81,8 +81,8 @@ extension FeedbackCardWidget {
             // MARK: - Lifecycle
 
             init(
-                backButton: ButtonContent,
-                forwardButton: ButtonContent
+                backButton: ImageButtonContent,
+                forwardButton: ImageButtonContent
             ) {
                 self.backButton = backButton
                 self.forwardButton = forwardButton
@@ -90,8 +90,8 @@ extension FeedbackCardWidget {
 
             // MARK: - Internal
 
-            fileprivate(set) var backButton: ButtonContent
-            fileprivate(set) var forwardButton: ButtonContent
+            fileprivate(set) var backButton: ImageButtonContent
+            fileprivate(set) var forwardButton: ImageButtonContent
         }
 
         @Published private(set) var content: Content

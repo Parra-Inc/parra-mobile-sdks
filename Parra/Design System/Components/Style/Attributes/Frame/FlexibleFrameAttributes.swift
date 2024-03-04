@@ -1,5 +1,5 @@
 //
-//  FrameAttributes.swift
+//  FlexibleFrameAttributes.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/31/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct FrameAttributes {
+struct FlexibleFrameAttributes {
     // MARK: - Lifecycle
 
     init(

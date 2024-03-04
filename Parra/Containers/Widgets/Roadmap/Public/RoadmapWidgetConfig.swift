@@ -13,11 +13,11 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
 
     init(
         title: LabelConfig,
-        addRequestButton: ButtonConfig,
+        addRequestButton: TextButtonConfig,
         requestTitles: LabelConfig,
         requestDescriptions: LabelConfig,
         voteCount: LabelConfig,
-        requestUpvoteButtons: ButtonConfig
+        requestUpvoteButtons: ImageButtonConfig
     ) {
         self.title = title
         self.addRequestButton = addRequestButton
@@ -31,7 +31,7 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
 
     public static let `default` = RoadmapWidgetConfig(
         title: LabelConfig(fontStyle: .title),
-        addRequestButton: ButtonConfig(
+        addRequestButton: TextButtonConfig(
             style: .primary,
             size: .large,
             isMaxWidth: true
@@ -45,17 +45,17 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
         voteCount: LabelConfig(
             fontStyle: .callout
         ),
-        requestUpvoteButtons: ButtonConfig(
+        requestUpvoteButtons: ImageButtonConfig(
             style: .primary,
-            size: .small,
-            isMaxWidth: false
+            size: .custom(CGSize(width: 18, height: 18)),
+            variant: .plain
         )
     )
 
     public let title: LabelConfig
-    public let addRequestButton: ButtonConfig
+    public let addRequestButton: TextButtonConfig
     public let requestTitles: LabelConfig
     public let requestDescriptions: LabelConfig
     public let voteCount: LabelConfig
-    public let requestUpvoteButtons: ButtonConfig
+    public let requestUpvoteButtons: ImageButtonConfig
 }

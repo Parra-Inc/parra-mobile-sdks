@@ -29,7 +29,7 @@ public struct FeedbackFormWidget: Container {
 
             WidgetFooter(
                 primaryActionBuilder: {
-                    componentFactory.buildButton(
+                    componentFactory.buildTextButton(
                         variant: .contained,
                         component: \.submitButton,
                         config: config.submitButton,

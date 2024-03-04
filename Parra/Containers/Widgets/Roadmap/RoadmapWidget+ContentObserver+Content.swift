@@ -34,8 +34,8 @@ struct TicketContent: Identifiable {
         self.voteCount = LabelContent(
             text: userTicket.voteCount.formatted(.number.notation(.compactName))
         )
-        self.voteButton = ButtonContent(
-            type: .image(.symbol("triangleshape.fill", .monochrome)),
+        self.voteButton = ImageButtonContent(
+            image: .symbol("triangleshape.fill", .monochrome),
             isDisabled: !votingEnabled,
             onPress: nil
         )
@@ -53,7 +53,7 @@ struct TicketContent: Identifiable {
     let votingEnabled: Bool
     let voted: Bool
     let voteCount: LabelContent
-    var voteButton: ButtonContent
+    var voteButton: ImageButtonContent
 }
 
 // MARK: - RoadmapWidget.ContentObserver.Content
@@ -65,7 +65,7 @@ extension RoadmapWidget.ContentObserver {
 
         init(
             title: String,
-            addRequestButton: ButtonContent,
+            addRequestButton: TextButtonContent,
             tickets: [UserTicket]
         ) {
             self.title = LabelContent(text: title)
@@ -82,7 +82,7 @@ extension RoadmapWidget.ContentObserver {
         // MARK: - Internal
 
         let title: LabelContent
-        var addRequestButton: ButtonContent
+        var addRequestButton: TextButtonContent
         var onUpvote: ((UserTicket) -> Void)?
         let tickets: [TicketContent]
     }

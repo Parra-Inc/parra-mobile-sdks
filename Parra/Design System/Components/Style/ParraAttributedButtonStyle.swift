@@ -8,12 +8,12 @@
 
 import SwiftUI
 
-struct ParraAttributedButtonStyle: ButtonStyle, ParraAttributedStyle {
+struct ParraAttributedTextButtonStyle: ButtonStyle, ParraAttributedStyle {
     // MARK: - Internal
 
     let config: ButtonConfig
     let content: ButtonContent
-    let attributes: ButtonAttributes
+    let attributes: TextButtonAttributes
     let theme: ParraTheme
 
     @ViewBuilder

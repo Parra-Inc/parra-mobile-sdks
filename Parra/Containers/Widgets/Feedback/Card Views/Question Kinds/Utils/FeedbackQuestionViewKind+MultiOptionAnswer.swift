@@ -30,7 +30,7 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
             isSelected: isSelected
         )
 
-        componentFactory.buildButton(
+        componentFactory.buildTextButton(
             variant: .outlined,
             component: \.checkboxOptions,
             config: config.checkboxOptions,
@@ -45,13 +45,11 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
         id: String,
         title: String,
         isSelected: Bool
-    ) -> (ButtonContent, ButtonAttributes) {
+    ) -> (TextButtonContent, TextButtonAttributes) {
         let palette = themeObserver.theme.palette
 
-        let content = ButtonContent(
-            type: ButtonContent.ContentType.text(
-                LabelContent(text: title)
-            ),
+        let content = TextButtonContent(
+            text: LabelContent(text: title),
             isDisabled: false,
             onPress: {
                 var currentOptions = (currentAnswer?.options ?? []).map(\.id)
@@ -99,7 +97,7 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
             borderColor: borderColor
         )
 
-        let attributes = ButtonAttributes(
+        let attributes = TextButtonAttributes(
             padding: .zero,
             title: titleAttributes,
             titlePressed: titleAttributes.withUpdates(

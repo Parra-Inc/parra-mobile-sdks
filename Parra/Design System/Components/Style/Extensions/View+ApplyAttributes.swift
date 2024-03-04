@@ -34,4 +34,30 @@ extension View {
 
         self.background(style)
     }
+
+    @ViewBuilder
+    func applyFrame(
+        _ attributes: FrameAttributes?
+    ) -> some View {
+        switch attributes {
+        case .fixed(let frame):
+            self.frame(
+                width: frame.width,
+                height: frame.height,
+                alignment: frame.alignment
+            )
+        case .flexible(let frame):
+            self.frame(
+                minWidth: frame.minWidth,
+                idealWidth: frame.idealWidth,
+                maxWidth: frame.maxWidth,
+                minHeight: frame.minHeight,
+                idealHeight: frame.idealHeight,
+                maxHeight: frame.maxHeight,
+                alignment: frame.alignment
+            )
+        case nil:
+            self
+        }
+    }
 }

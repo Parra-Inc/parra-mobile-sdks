@@ -77,15 +77,7 @@ struct ParraAttributedTextInputStyle: TextFieldStyle, ParraAttributedStyle {
                 Constant.contentInsets,
                 for: .automatic
             )
-            .frame(
-                minWidth: attributes.frame?.minWidth,
-                idealWidth: attributes.frame?.idealWidth,
-                maxWidth: attributes.frame?.maxWidth,
-                minHeight: attributes.frame?.minHeight,
-                idealHeight: attributes.frame?.idealHeight,
-                maxHeight: attributes.frame?.maxHeight,
-                alignment: attributes.frame?.alignment ?? .center
-            )
+            .applyFrame(attributes.frame)
             .foregroundStyle(fontColor)
             .padding()
             .overlay(

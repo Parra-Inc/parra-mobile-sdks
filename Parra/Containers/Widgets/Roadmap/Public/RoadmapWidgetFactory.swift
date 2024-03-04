@@ -20,9 +20,9 @@ public struct RoadmapWidgetFactory: ParraComponentFactory {
         >? = nil,
         addRequestButtonBuilder: ComponentBuilder.Factory<
             Button<Text>,
-            ButtonConfig,
-            ButtonContent,
-            ButtonAttributes
+            TextButtonConfig,
+            TextButtonContent,
+            TextButtonAttributes
         >? = nil,
         requestTitleLabelBuilder: ComponentBuilder.Factory<
             Text,
@@ -44,9 +44,9 @@ public struct RoadmapWidgetFactory: ParraComponentFactory {
         >? = nil,
         requestUpvoteButtonBuilder: ComponentBuilder.Factory<
             Button<Text>,
-            ButtonConfig,
-            ButtonContent,
-            ButtonAttributes
+            ImageButtonConfig,
+            ImageButtonContent,
+            ImageButtonAttributes
         >? = nil
     ) {
         self.title = titleBuilder
@@ -67,9 +67,9 @@ public struct RoadmapWidgetFactory: ParraComponentFactory {
     >?
     public let addRequestButton: ComponentBuilder.Factory<
         Button<Text>,
-        ButtonConfig,
-        ButtonContent,
-        ButtonAttributes
+        TextButtonConfig,
+        TextButtonContent,
+        TextButtonAttributes
     >?
     public let requestTitleLabel: ComponentBuilder.Factory<
         Text,
@@ -91,8 +91,8 @@ public struct RoadmapWidgetFactory: ParraComponentFactory {
     >?
     public let requestUpvoteButton: ComponentBuilder.Factory<
         Button<Text>,
-        ButtonConfig,
-        ButtonContent,
-        ButtonAttributes
+        ImageButtonConfig,
+        ImageButtonContent,
+        ImageButtonAttributes
     >?
 }

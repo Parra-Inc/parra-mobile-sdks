@@ -13,16 +13,16 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
 
     public init(
         backButtonBuilder: ComponentBuilder.Factory<
-            Button<Text>,
-            ButtonConfig,
-            ButtonContent,
-            ButtonAttributes
+            Button<Image>,
+            ImageButtonConfig,
+            ImageButtonContent,
+            ImageButtonAttributes
         >? = nil,
         forwardButtonBuilder: ComponentBuilder.Factory<
-            Button<Text>,
-            ButtonConfig,
-            ButtonContent,
-            ButtonAttributes
+            Button<Image>,
+            ImageButtonConfig,
+            ImageButtonContent,
+            ImageButtonAttributes
         >? = nil,
         titleBuilder: ComponentBuilder.Factory<
             Text,
@@ -38,21 +38,21 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
         >? = nil,
         booleanOptionsBuilder: ComponentBuilder.Factory<
             Button<Text>,
-            ButtonConfig,
-            ButtonContent,
-            ButtonAttributes
+            TextButtonConfig,
+            TextButtonContent,
+            TextButtonAttributes
         >? = nil,
         choiceOptionsBuilder: ComponentBuilder.Factory<
             Button<Text>,
-            ButtonConfig,
-            ButtonContent,
-            ButtonAttributes
+            TextButtonConfig,
+            TextButtonContent,
+            TextButtonAttributes
         >? = nil,
         checkboxOptionsBuilder: ComponentBuilder.Factory<
             Button<Text>,
-            ButtonConfig,
-            ButtonContent,
-            ButtonAttributes
+            TextButtonConfig,
+            TextButtonContent,
+            TextButtonAttributes
         >? = nil
     ) {
         self.backButton = backButtonBuilder
@@ -67,17 +67,17 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
     // MARK: - Public
 
     public let backButton: ComponentBuilder.Factory<
-        Button<Text>,
-        ButtonConfig,
-        ButtonContent,
-        ButtonAttributes
+        Button<Image>,
+        ImageButtonConfig,
+        ImageButtonContent,
+        ImageButtonAttributes
     >?
 
     public let forwardButton: ComponentBuilder.Factory<
-        Button<Text>,
-        ButtonConfig,
-        ButtonContent,
-        ButtonAttributes
+        Button<Image>,
+        ImageButtonConfig,
+        ImageButtonContent,
+        ImageButtonAttributes
     >?
 
     public let title: ComponentBuilder.Factory<
@@ -96,22 +96,22 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
 
     public let booleanOptions: ComponentBuilder.Factory<
         Button<Text>,
-        ButtonConfig,
-        ButtonContent,
-        ButtonAttributes
+        TextButtonConfig,
+        TextButtonContent,
+        TextButtonAttributes
     >?
 
     public let choiceOptions: ComponentBuilder.Factory<
         Button<Text>,
-        ButtonConfig,
-        ButtonContent,
-        ButtonAttributes
+        TextButtonConfig,
+        TextButtonContent,
+        TextButtonAttributes
     >?
 
     public let checkboxOptions: ComponentBuilder.Factory<
         Button<Text>,
-        ButtonConfig,
-        ButtonContent,
-        ButtonAttributes
+        TextButtonConfig,
+        TextButtonContent,
+        TextButtonAttributes
     >?
 }

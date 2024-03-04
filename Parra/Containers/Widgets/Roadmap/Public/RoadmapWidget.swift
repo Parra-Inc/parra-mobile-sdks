@@ -33,7 +33,7 @@ public struct RoadmapWidget: Container {
             .padding([.top, .leading, .trailing], from: style.contentPadding)
 
             ScrollView {
-                LazyVStack(alignment: .leading) {
+                LazyVStack(alignment: .leading, spacing: 12) {
                     ForEach(contentObserver.content.tickets) { ticket in
                         RoadmapListItem(ticketContent: ticket)
                     }
@@ -47,7 +47,7 @@ public struct RoadmapWidget: Container {
 
             WidgetFooter {
                 if contentObserver.canAddRequests {
-                    componentFactory.buildButton(
+                    componentFactory.buildTextButton(
                         variant: .contained,
                         component: \.addRequestButton,
                         config: config.addRequestButton,

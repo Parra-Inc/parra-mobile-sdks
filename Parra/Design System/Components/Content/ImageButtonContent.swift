@@ -1,35 +1,29 @@
 //
-//  ButtonContent.swift
+//  ImageButtonContent.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 1/28/24.
+//  Created by Mick MacCallum on 3/4/24.
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
 import SwiftUI
-import UIKit
 
-public struct ButtonContent {
+public struct ImageButtonContent {
     // MARK: - Lifecycle
 
     public init(
-        type: ContentType,
+        image: ImageContent,
         isDisabled: Bool = false,
         onPress: (() -> Void)? = nil
     ) {
-        self.type = type
+        self.image = image
         self.isDisabled = isDisabled
         self.onPress = onPress
     }
 
     // MARK: - Public
 
-    public enum ContentType {
-        case text(LabelContent)
-        case image(ImageContent)
-    }
-
-    public let type: ContentType
+    public let image: ImageContent
     public let isDisabled: Bool
 
     public internal(set) var onPress: (() -> Void)?

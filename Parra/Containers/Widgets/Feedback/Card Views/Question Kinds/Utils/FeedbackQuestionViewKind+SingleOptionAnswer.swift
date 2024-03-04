@@ -26,7 +26,7 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
             isSelected: id == currentAnswer?.optionId
         )
 
-        componentFactory.buildButton(
+        componentFactory.buildTextButton(
             variant: .outlined,
             component: \.choiceOptions,
             config: config.choiceOptions,
@@ -41,13 +41,11 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
         id: String,
         title: String,
         isSelected: Bool
-    ) -> (ButtonContent, ButtonAttributes) {
+    ) -> (TextButtonContent, TextButtonAttributes) {
         let palette = themeObserver.theme.palette
 
-        let content = ButtonContent(
-            type: ButtonContent.ContentType.text(
-                LabelContent(text: title)
-            ),
+        let content = TextButtonContent(
+            text: LabelContent(text: title),
             isDisabled: false,
             onPress: {
                 if isSelected {
@@ -88,7 +86,7 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
             borderColor: borderColor
         )
 
-        let attributes = ButtonAttributes(
+        let attributes = TextButtonAttributes(
             padding: .zero,
             title: titleAttributes,
             titlePressed: titleAttributes.withUpdates(

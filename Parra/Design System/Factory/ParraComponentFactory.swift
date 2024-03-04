@@ -98,23 +98,25 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
     }
 
     @ViewBuilder
-    func buildButton(
+    func buildTextButton(
         variant: ButtonVariant,
         component componentKeyPath: KeyPath<
             Factory,
             ComponentBuilder.Factory<
                 some View,
-                ButtonConfig,
-                ButtonContent,
-                ButtonAttributes
+                TextButtonConfig,
+                TextButtonContent,
+                TextButtonAttributes
             >?
         >,
-        config: ButtonConfig,
-        content: ButtonContent?,
-        localAttributes: ButtonAttributes? = nil
+        config: TextButtonConfig,
+        content: TextButtonContent?,
+        localAttributes: TextButtonAttributes? = nil
     ) -> some View {
         if let content {
-            let attributes = if let factory = global?.buttonAttributeFactory {
+            let attributes = if let factory = global?
+                .textButtonAttributeFactory
+            {
                 factory(config, content, localAttributes)
             } else {
                 localAttributes
@@ -122,7 +124,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
             // Dynamically get default attributes for different button types.
             let mergedAttributes = switch variant {
-            case .plain, .image:
+            case .plain:
                 PlainButtonComponent.applyStandardCustomizations(
                     onto: attributes,
                     theme: theme,
@@ -153,7 +155,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
             {
                 view
             } else {
-                let style = ParraAttributedButtonStyle(
+                let style = ParraAttributedTextButtonStyle(
                     config: config,
                     content: content,
                     attributes: mergedAttributes,
@@ -161,7 +163,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
                 )
 
                 switch variant {
-                case .plain, .image:
+                case .plain:
                     PlainButtonComponent(
                         config: config,
                         content: content,
@@ -180,6 +182,64 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
                         style: style
                     )
                 }
+            }
+        } else {
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    func buildImageButton(
+        variant: ButtonVariant,
+        component componentKeyPath: KeyPath<
+            Factory,
+            ComponentBuilder.Factory<
+                some View,
+                ImageButtonConfig,
+                ImageButtonContent,
+                ImageButtonAttributes
+            >?
+        >,
+        config: ImageButtonConfig,
+        content: ImageButtonContent?,
+        localAttributes: ImageButtonAttributes? = nil
+    ) -> some View {
+        if let content {
+            let attributes = if let factory = global?
+                .imageButtonAttributeFactory
+            {
+                factory(config, content, localAttributes)
+            } else {
+                localAttributes
+            }
+
+            let mergedAttributes = ImageButtonComponent
+                .applyStandardCustomizations(
+                    onto: attributes,
+                    theme: theme,
+                    config: config
+                )
+
+            // If a container level factory function was provided for this
+            // component, use it and supply global attribute overrides instead
+            // of local, if provided.
+            if let builder = local?[keyPath: componentKeyPath],
+               let view = builder(config, content, mergedAttributes)
+            {
+                view
+            } else {
+                let style = ParraAttributedImageButtonStyle(
+                    config: config,
+                    content: content,
+                    attributes: mergedAttributes,
+                    theme: theme
+                )
+
+                ImageButtonComponent(
+                    config: config,
+                    content: content,
+                    style: style
+                )
             }
         } else {
             EmptyView()

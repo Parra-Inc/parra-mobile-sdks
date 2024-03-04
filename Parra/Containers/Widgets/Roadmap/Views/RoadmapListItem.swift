@@ -30,22 +30,25 @@ struct RoadmapListItem: View {
 
     var body: some View {
         let palette = themeObserver.theme.palette
-        let alignment: VerticalAlignment = if ticketContent.description == nil {
-            .center
+        let (alignment, topPadding): (
+            VerticalAlignment,
+            Double
+        ) = if ticketContent.description == nil {
+            (.center, 0)
         } else {
-            .top
+            (.top, 6)
         }
 
         HStack(alignment: alignment, spacing: 8) {
             VStack(alignment: .center) {
-                componentFactory.buildButton(
-                    variant: .image,
+                componentFactory.buildImageButton(
+                    variant: .plain,
                     component: \.requestUpvoteButton,
                     config: config.requestUpvoteButtons,
                     content: ticketContent.voteButton
                 )
                 // manual adjust ment to try to align better with the title text
-                .padding(.top, 4)
+                .padding(.top, topPadding)
 
                 componentFactory.buildLabel(
                     component: \.voteCountLabel,
@@ -55,7 +58,6 @@ struct RoadmapListItem: View {
                 .minimumScaleFactor(0.7)
             }
             .frame(width: 48)
-//            .background(.red)
 
             VStack(alignment: .leading) {
                 componentFactory.buildLabel(
@@ -75,7 +77,6 @@ struct RoadmapListItem: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-//            .background(.red)
         }
         .padding(.vertical, 16)
         .padding(.leading, 8)

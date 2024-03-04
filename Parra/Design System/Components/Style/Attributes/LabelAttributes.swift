@@ -110,9 +110,11 @@ public struct LabelAttributes: ParraStyleAttributes {
             onto: LabelAttributes(
                 fontColor: fontColor,
                 padding: EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 2),
-                frame: FrameAttributes(
-                    maxWidth: .infinity,
-                    alignment: .trailing
+                frame: .flexible(
+                    FlexibleFrameAttributes(
+                        maxWidth: .infinity,
+                        alignment: .trailing
+                    )
                 )
             ),
             theme: theme,

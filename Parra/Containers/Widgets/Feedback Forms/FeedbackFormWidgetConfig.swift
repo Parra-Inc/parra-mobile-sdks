@@ -27,7 +27,7 @@ public struct FeedbackFormWidgetConfig: ContainerConfig {
             title: LabelConfig(fontStyle: .subheadline),
             helper: LabelConfig(fontStyle: .caption)
         ),
-        submitButton: ButtonConfig(
+        submitButton: TextButtonConfig(
             style: .primary,
             size: .large,
             isMaxWidth: true
@@ -46,5 +46,5 @@ public struct FeedbackFormWidgetConfig: ContainerConfig {
     /// Any dynamic single-line "input" fields
     public let inputFields: TextInputConfig
 
-    public let submitButton: ButtonConfig
+    public let submitButton: TextButtonConfig
 }

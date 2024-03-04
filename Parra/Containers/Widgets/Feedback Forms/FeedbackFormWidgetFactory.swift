@@ -44,9 +44,9 @@ public struct FeedbackFormWidgetFactory: ParraComponentFactory {
         >? = nil,
         submitButtonBuilder: ComponentBuilder.Factory<
             Button<Text>,
-            ButtonConfig,
-            ButtonContent,
-            ButtonAttributes
+            TextButtonConfig,
+            TextButtonContent,
+            TextButtonAttributes
         >? = nil
     ) {
         self.title = titleBuilder
@@ -91,8 +91,8 @@ public struct FeedbackFormWidgetFactory: ParraComponentFactory {
     >?
     public let submitButton: ComponentBuilder.Factory<
         Button<Text>,
-        ButtonConfig,
-        ButtonContent,
-        ButtonAttributes
+        TextButtonConfig,
+        TextButtonContent,
+        TextButtonAttributes
     >?
 }

@@ -12,13 +12,13 @@ public class FeedbackCardWidgetConfig: ContainerConfig, Observable {
     // MARK: - Lifecycle
 
     public init(
-        backButton: ButtonConfig,
-        forwardButton: ButtonConfig,
+        backButton: ImageButtonConfig,
+        forwardButton: ImageButtonConfig,
         titleLabel: LabelConfig,
         subtitleLabel: LabelConfig,
-        booleanOptions: ButtonConfig,
-        choiceOptions: ButtonConfig,
-        checkboxOptions: ButtonConfig
+        booleanOptions: TextButtonConfig,
+        choiceOptions: TextButtonConfig,
+        checkboxOptions: TextButtonConfig
     ) {
         self.backButton = backButton
         self.forwardButton = forwardButton
@@ -32,40 +32,40 @@ public class FeedbackCardWidgetConfig: ContainerConfig, Observable {
     // MARK: - Public
 
     public static let `default` = FeedbackCardWidgetConfig(
-        backButton: ButtonConfig(
+        backButton: ImageButtonConfig(
             style: .primary,
-            size: .small
+            size: .smallSquare
         ),
-        forwardButton: ButtonConfig(
+        forwardButton: ImageButtonConfig(
             style: .primary,
-            size: .small
+            size: .smallSquare
         ),
         titleLabel: LabelConfig(fontStyle: .headline),
         subtitleLabel: LabelConfig(fontStyle: .subheadline),
-        booleanOptions: ButtonConfig(
+        booleanOptions: TextButtonConfig(
             style: .primary,
             size: .medium,
             isMaxWidth: true
         ),
-        choiceOptions: ButtonConfig(
+        choiceOptions: TextButtonConfig(
             style: .primary,
             size: .medium,
             isMaxWidth: true
         ),
-        checkboxOptions: ButtonConfig(
+        checkboxOptions: TextButtonConfig(
             style: .primary,
             size: .medium,
             isMaxWidth: true
         )
     )
 
-    public let backButton: ButtonConfig
-    public let forwardButton: ButtonConfig
+    public let backButton: ImageButtonConfig
+    public let forwardButton: ImageButtonConfig
 
     public let titleLabel: LabelConfig
     public let subtitleLabel: LabelConfig
 
-    public let booleanOptions: ButtonConfig
-    public let choiceOptions: ButtonConfig
-    public let checkboxOptions: ButtonConfig
+    public let booleanOptions: TextButtonConfig
+    public let choiceOptions: TextButtonConfig
+    public let checkboxOptions: TextButtonConfig
 }

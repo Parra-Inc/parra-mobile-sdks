@@ -1,5 +1,5 @@
 //
-//  ButtonComponentType.swift
+//  TextButtonComponentType.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/4/24.
@@ -8,27 +8,27 @@
 
 import SwiftUI
 
-protocol ButtonComponentType: View {
-    var config: ButtonConfig { get }
-    var content: ButtonContent { get }
-    var style: ParraAttributedButtonStyle { get }
+protocol TextButtonComponentType: View {
+    var config: TextButtonConfig { get }
+    var content: TextButtonContent { get }
+    var style: ParraAttributedTextButtonStyle { get }
 
     init(
-        config: ButtonConfig,
-        content: ButtonContent,
-        style: ParraAttributedButtonStyle
+        config: TextButtonConfig,
+        content: TextButtonContent,
+        style: ParraAttributedTextButtonStyle
     )
 }
 
-extension ButtonComponentType {
+extension TextButtonComponentType {
     static func applyStandardCustomizations(
-        onto inputAttributes: ButtonAttributes?,
+        onto inputAttributes: TextButtonAttributes?,
         theme: ParraTheme,
-        config: ButtonConfig,
-        for buttonType: (some ButtonComponentType).Type
-    ) -> ButtonAttributes {
+        config: TextButtonConfig,
+        for buttonType: (some TextButtonComponentType).Type
+    ) -> TextButtonAttributes {
         let palette = theme.palette
-        let defaults = ButtonAttributes.defaultAttributes(
+        let defaults = TextButtonAttributes.defaultAttributes(
             for: theme,
             with: config
         ).withUpdates(updates: inputAttributes)
@@ -111,8 +111,10 @@ extension ButtonComponentType {
                 // users provide overrides for styles in different states, this
                 // will need to be re-created.
                 fontColor: fontColor,
-                frame: defaults.title.frame ?? .init(
-                    maxWidth: config.isMaxWidth ? .infinity : nil
+                frame: defaults.title.frame ?? .flexible(
+                    .init(
+                        maxWidth: config.isMaxWidth ? .infinity : nil
+                    )
                 ),
                 borderWidth: inputAttributes?.title
                     .borderWidth ?? defaultBorderWidth,
@@ -150,7 +152,7 @@ extension ButtonComponentType {
         }
 
         return defaults.withUpdates(
-            updates: ButtonAttributes(
+            updates: TextButtonAttributes(
                 title: titleAttributes,
                 titleDisabled: titleAttributes.withUpdates(
                     updates: titleDisabledUpdates

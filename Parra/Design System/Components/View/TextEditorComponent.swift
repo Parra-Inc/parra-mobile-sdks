@@ -88,10 +88,12 @@ struct TextEditorComponent: TextEditorComponentType {
             font: .body,
             fontColor: palette.primaryText.toParraColor(),
             padding: .zero,
-            frame: FrameAttributes(
-                minHeight: 60,
-                idealHeight: 150,
-                maxHeight: 240
+            frame: .flexible(
+                FlexibleFrameAttributes(
+                    minHeight: 60,
+                    idealHeight: 150,
+                    maxHeight: 240
+                )
             ),
             borderWidth: 1,
             borderColor: palette.secondaryText.toParraColor()
@@ -108,15 +110,7 @@ struct TextEditorComponent: TextEditorComponentType {
                 Constant.contentInsets,
                 for: .automatic
             )
-            .frame(
-                minWidth: style.attributes.frame?.minWidth,
-                idealWidth: style.attributes.frame?.idealWidth,
-                maxWidth: style.attributes.frame?.maxWidth,
-                minHeight: style.attributes.frame?.minHeight,
-                idealHeight: style.attributes.frame?.idealHeight,
-                maxHeight: style.attributes.frame?.maxHeight,
-                alignment: style.attributes.frame?.alignment ?? .center
-            )
+            .applyFrame(style.attributes.frame)
             .foregroundStyle(fontColor)
             .font(style.attributes.font)
             .fontDesign(style.attributes.fontDesign)

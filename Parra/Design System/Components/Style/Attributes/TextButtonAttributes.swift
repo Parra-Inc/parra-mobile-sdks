@@ -1,5 +1,5 @@
 //
-//  ButtonAttributes.swift
+//  TextButtonAttributes.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/30/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ButtonAttributes: ParraStyleAttributes {
+public struct TextButtonAttributes: ParraStyleAttributes {
     // MARK: - Lifecycle
 
     public init(
@@ -69,8 +69,8 @@ public struct ButtonAttributes: ParraStyleAttributes {
 
     static func defaultAttributes(
         for theme: ParraTheme,
-        with config: ButtonConfig
-    ) -> ButtonAttributes {
+        with config: TextButtonConfig
+    ) -> TextButtonAttributes {
         let size = config.size
 
         let lineHeight: CGFloat = switch size {
@@ -108,7 +108,7 @@ public struct ButtonAttributes: ParraStyleAttributes {
             .medium
         }
 
-        return ButtonAttributes(
+        return TextButtonAttributes(
             cornerRadius: cornerRadius,
             title: LabelAttributes(
                 font: Font.system(size: fontSize),
@@ -118,7 +118,7 @@ public struct ButtonAttributes: ParraStyleAttributes {
     }
 }
 
-extension ButtonAttributes {
+extension TextButtonAttributes {
     func withUpdates(updates: Self?) -> Self {
         let updatedTitlePressed: LabelAttributes? = if let titlePressed {
             titlePressed.withUpdates(updates: updates?.titlePressed)
@@ -132,7 +132,7 @@ extension ButtonAttributes {
             updates?.titleDisabled
         }
 
-        return ButtonAttributes(
+        return TextButtonAttributes(
             background: updates?.background ?? background,
             cornerRadius: updates?.cornerRadius ?? cornerRadius,
             padding: updates?.padding ?? padding,

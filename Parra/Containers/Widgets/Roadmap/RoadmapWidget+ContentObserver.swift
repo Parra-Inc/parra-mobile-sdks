@@ -21,10 +21,8 @@ extension RoadmapWidget {
             roadmapConfig: AppRoadmapConfiguration,
             ticketResponse: UserTicketCollectionResponse
         ) {
-            let addRequestButton = ButtonContent(
-                type: .text(
-                    LabelContent(text: "Add request")
-                ),
+            let addRequestButton = TextButtonContent(
+                text: LabelContent(text: "Add request"),
                 isDisabled: false,
                 onPress: nil
             )

@@ -1,5 +1,5 @@
 //
-//  Button+RenderStorybook.swift
+//  TextButton+RenderStorybook.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/31/24.
@@ -9,7 +9,7 @@
 import SwiftUI
 
 func renderStorybook(
-    for componentType: (some ButtonComponentType).Type
+    for componentType: (some TextButtonComponentType).Type
 ) -> some View {
     return VStack {
         HStack {
@@ -51,19 +51,19 @@ func renderStorybook(
 }
 
 private func renderButtonComponent(
-    type: (some ButtonComponentType).Type,
-    config: ButtonConfig,
-    content: ButtonContent,
+    type: (some TextButtonComponentType).Type,
+    config: TextButtonConfig,
+    content: TextButtonContent,
     theme: ParraTheme = .default
 ) -> some View {
     return type.init(
         config: config,
         content: content,
-        style: ParraAttributedButtonStyle(
+        style: ParraAttributedTextButtonStyle(
             config: config,
             content: content,
             attributes: type.applyStandardCustomizations(
-                onto: ButtonAttributes(),
+                onto: TextButtonAttributes(),
                 theme: theme,
                 config: config,
                 for: type
@@ -84,8 +84,8 @@ private func renderRowTitle(_ title: String) -> some View {
 }
 
 private func renderColumn(
-    for componentType: (some ButtonComponentType).Type,
-    size: ButtonSize
+    for componentType: (some TextButtonComponentType).Type,
+    size: TextButtonConfig.Size
 ) -> some View {
     let title = switch size {
     case .small:
@@ -99,64 +99,27 @@ private func renderColumn(
     return ScrollView {
         VStack(spacing: 24) {
             Group {
-                renderRowTitle("Image only")
-
-                renderButtonComponent(
-                    type: componentType,
-                    config: ButtonConfig(
-                        style: .primary,
-                        size: size
-                    ),
-                    content: ButtonContent(
-                        type: .image(
-                            .symbol("laser.burst")
-                        )
-                    )
-                )
-
-                renderButtonComponent(
-                    type: componentType,
-                    config: ButtonConfig(
-                        style: .secondary,
-                        size: size
-                    ),
-                    content: ButtonContent(
-                        type: .image(
-                            .symbol(
-                                "lightspectrum.horizontal",
-                                .multicolor
-                            )
-                        )
-                    )
-                )
-            }
-
-            Group {
                 renderRowTitle("Normal")
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .primary,
                         size: size
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(text: title)
-                        )
+                    content: TextButtonContent(
+                        text: LabelContent(text: title)
                     )
                 )
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .secondary,
                         size: size
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(text: title)
-                        )
+                    content: TextButtonContent(
+                        text: LabelContent(text: title)
                     )
                 )
             }
@@ -166,17 +129,15 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .primary,
                         size: size
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(
-                                text: title,
-                                icon: UIImage(
-                                    systemName: "fireworks"
-                                )
+                    content: TextButtonContent(
+                        text: LabelContent(
+                            text: title,
+                            icon: UIImage(
+                                systemName: "fireworks"
                             )
                         )
                     )
@@ -184,17 +145,15 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .secondary,
                         size: size
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(
-                                text: title,
-                                icon: UIImage(
-                                    systemName: "surfboard.fill"
-                                )
+                    content: TextButtonContent(
+                        text: LabelContent(
+                            text: title,
+                            icon: UIImage(
+                                systemName: "surfboard.fill"
                             )
                         )
                     )
@@ -206,29 +165,25 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .primary,
                         size: size,
                         isMaxWidth: true
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(text: title)
-                        )
+                    content: TextButtonContent(
+                        text: LabelContent(text: title)
                     )
                 )
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .secondary,
                         size: size,
                         isMaxWidth: true
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(text: title)
-                        )
+                    content: TextButtonContent(
+                        text: LabelContent(text: title)
                     )
                 )
             }
@@ -238,28 +193,24 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .primary,
                         size: size
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(text: title)
-                        ),
+                    content: TextButtonContent(
+                        text: LabelContent(text: title),
                         isDisabled: true
                     )
                 )
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .secondary,
                         size: size
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(text: title)
-                        ),
+                    content: TextButtonContent(
+                        text: LabelContent(text: title),
                         isDisabled: true
                     )
                 )
@@ -270,17 +221,15 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .primary,
                         size: size
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(
-                                text: title,
-                                icon: UIImage(
-                                    systemName: "fireworks"
-                                )
+                    content: TextButtonContent(
+                        text: LabelContent(
+                            text: title,
+                            icon: UIImage(
+                                systemName: "fireworks"
                             )
                         ),
                         isDisabled: true
@@ -289,17 +238,15 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: ButtonConfig(
+                    config: TextButtonConfig(
                         style: .secondary,
                         size: size
                     ),
-                    content: ButtonContent(
-                        type: .text(
-                            LabelContent(
-                                text: title,
-                                icon: UIImage(
-                                    systemName: "fireworks"
-                                )
+                    content: TextButtonContent(
+                        text: LabelContent(
+                            text: title,
+                            icon: UIImage(
+                                systemName: "fireworks"
                             )
                         ),
                         isDisabled: true

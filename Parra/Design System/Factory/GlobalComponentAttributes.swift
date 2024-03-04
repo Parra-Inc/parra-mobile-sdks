@@ -15,14 +15,16 @@ public class GlobalComponentAttributes {
 
     public init(
         labelAttributeFactory: LabelAttributeFactory? = nil,
-        buttonAttributeFactory: ButtonAttributeFactory? = nil,
+        textButtonAttributeFactory: TextButtonAttributeFactory? = nil,
+        imageButtonAttributeFactory: ImageButtonAttributeFactory? = nil,
         menuAttributeFactory: MenuAttributeFactory? = nil,
         textEditorAttributeFactory: TextEditorAttributeFactory? = nil,
         textInputAttributeFactory: TextInputAttributeFactory? = nil,
         segmentAttributeFactory: SegmentAttributeFactory? = nil
     ) {
         self.labelAttributeFactory = labelAttributeFactory
-        self.buttonAttributeFactory = buttonAttributeFactory
+        self.textButtonAttributeFactory = textButtonAttributeFactory
+        self.imageButtonAttributeFactory = imageButtonAttributeFactory
         self.menuAttributeFactory = menuAttributeFactory
         self.textEditorAttributeFactory = textEditorAttributeFactory
         self.textInputAttributeFactory = textInputAttributeFactory
@@ -37,11 +39,17 @@ public class GlobalComponentAttributes {
         _ defaultAttributes: LabelAttributes?
     ) -> LabelAttributes
 
-    public typealias ButtonAttributeFactory = (
-        _ config: ButtonConfig,
-        _ content: ButtonContent,
-        _ defaultAttributes: ButtonAttributes?
-    ) -> ButtonAttributes
+    public typealias TextButtonAttributeFactory = (
+        _ config: TextButtonConfig,
+        _ content: TextButtonContent,
+        _ defaultAttributes: TextButtonAttributes?
+    ) -> TextButtonAttributes
+
+    public typealias ImageButtonAttributeFactory = (
+        _ config: ImageButtonConfig,
+        _ content: ImageButtonContent,
+        _ defaultAttributes: ImageButtonAttributes?
+    ) -> ImageButtonAttributes
 
     public typealias MenuAttributeFactory = (
         _ config: MenuConfig,
@@ -70,7 +78,8 @@ public class GlobalComponentAttributes {
     // MARK: - Internal
 
     private(set) var labelAttributeFactory: LabelAttributeFactory?
-    private(set) var buttonAttributeFactory: ButtonAttributeFactory?
+    private(set) var textButtonAttributeFactory: TextButtonAttributeFactory?
+    private(set) var imageButtonAttributeFactory: ImageButtonAttributeFactory?
     private(set) var menuAttributeFactory: MenuAttributeFactory?
     private(set) var textEditorAttributeFactory: TextEditorAttributeFactory?
     private(set) var textInputAttributeFactory: TextInputAttributeFactory?

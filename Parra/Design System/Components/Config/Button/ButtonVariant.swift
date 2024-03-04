@@ -8,15 +8,14 @@
 
 import Foundation
 
-enum ButtonVariant: CustomStringConvertible {
+public enum ButtonVariant: CustomStringConvertible {
     case plain
     case outlined
     case contained // filled
-    case image
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    var description: String {
+    public var description: String {
         switch self {
         case .plain:
             return "plain"
@@ -24,8 +23,6 @@ enum ButtonVariant: CustomStringConvertible {
             return "outlined"
         case .contained:
             return "contained"
-        case .image:
-            return "image"
         }
     }
 }
