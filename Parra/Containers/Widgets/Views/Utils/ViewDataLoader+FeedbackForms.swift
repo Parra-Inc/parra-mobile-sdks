@@ -43,7 +43,7 @@ extension ViewDataLoader {
                     formData: form.data
                 )
 
-                _ = contentObserver.submissionHandler = { data in
+                contentObserver.submissionHandler = { data in
                     logger.info("Submitting feedback form data")
 
                     parra.logEvent(.submit(form: "feedback_form"), [
@@ -77,7 +77,7 @@ extension ViewDataLoader {
                     with: theme
                 )
 
-                FeedbackFormWidget(
+                return FeedbackFormWidget(
                     componentFactory: componentFactory,
                     contentObserver: contentObserver,
                     config: config,
