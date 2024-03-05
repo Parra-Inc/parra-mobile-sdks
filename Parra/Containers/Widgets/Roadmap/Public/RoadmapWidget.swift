@@ -90,26 +90,8 @@ public struct RoadmapWidget: Container {
         RoadmapWidget(
             componentFactory: componentFactory,
             contentObserver: .init(
-                roadmapConfig: AppRoadmapConfiguration(
-                    form: .init(
-                        id: UUID().uuidString,
-                        createdAt: .now,
-                        updatedAt: .now,
-                        deletedAt: nil,
-                        data: .init(
-                            title: "Submit request",
-                            description: "We love hearing your suggestions. Let us know about new feature ideas, or if we have any bugs!",
-                            fields: FeedbackFormField.validStates()
-                        )
-                    )
-                ),
-                ticketResponse: UserTicketCollectionResponse(
-                    page: 1,
-                    pageCount: 3,
-                    pageSize: 4,
-                    totalCount: 10,
-                    data: UserTicket.validStates()
-                ),
+                roadmapConfig: AppRoadmapConfiguration.validStates()[0],
+                ticketResponse: UserTicketCollectionResponse.validStates()[0],
                 networkManager: parra.networkManager
             ),
             config: .default,

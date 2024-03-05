@@ -18,7 +18,7 @@ public extension View {
         isPresented: Binding<Bool>,
         modalStyle: ParraCardModalType = .drawer,
         localFactory: FeedbackCardWidgetFactory? = nil,
-        onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
+        onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
 //        modifier(
 //            FeedbackFormLoader(
@@ -48,7 +48,7 @@ public extension View {
         _ cards: Binding<[ParraCardItem]?>,
         modalStyle: ParraCardModalType = .drawer,
         localFactory: FeedbackCardWidgetFactory? = nil,
-        onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
+        onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
 //        modifier(
 //            FeedbackFormLoader(

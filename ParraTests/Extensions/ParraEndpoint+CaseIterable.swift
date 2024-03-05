@@ -14,6 +14,8 @@ extension ParraEndpoint: CaseIterable {
         let testCases: [ParraEndpoint] = [
             .getCards,
             .getFeedbackForm(formId: ""),
+            .getRoadmap(tenantId: "", applicationId: ""),
+            .getPaginateTickets(tenantId: "", applicationId: ""),
             .postAuthentication(tenantId: ""),
             .postBulkAnswerQuestions,
             .postBulkSubmitSessions(tenantId: ""),
@@ -29,19 +31,10 @@ extension ParraEndpoint: CaseIterable {
         var finalCases = [ParraEndpoint]()
         for testCase in testCases {
             switch testCase {
-            case .postAuthentication:
-                finalCases.append(testCase)
-            case .getCards:
-                finalCases.append(testCase)
-            case .getFeedbackForm:
-                finalCases.append(testCase)
-            case .postSubmitFeedbackForm:
-                finalCases.append(testCase)
-            case .postBulkAnswerQuestions:
-                finalCases.append(testCase)
-            case .postBulkSubmitSessions:
-                finalCases.append(testCase)
-            case .postPushTokens:
+            case .postAuthentication, .getCards, .getFeedbackForm,
+                 .postSubmitFeedbackForm, .postBulkAnswerQuestions,
+                 .postBulkSubmitSessions, .postPushTokens,
+                 .getRoadmap, .getPaginateTickets:
                 finalCases.append(testCase)
             }
         }

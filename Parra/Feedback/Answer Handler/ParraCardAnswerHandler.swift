@@ -31,7 +31,6 @@ class ParraCardAnswerHandler: ObservableObject {
     func currentAnswer<T: AnswerOption>(
         for bucketItemId: String
     ) -> T? {
-        print("Getting current answer...")
         guard let value = currentAnswerState[bucketItemId] else {
             return nil
         }
@@ -43,7 +42,6 @@ class ParraCardAnswerHandler: ObservableObject {
         answer: QuestionAnswer?,
         for bucketItemId: String
     ) {
-        print("Updating answer...")
         currentAnswerState[bucketItemId] = answer
     }
 
@@ -51,7 +49,6 @@ class ParraCardAnswerHandler: ObservableObject {
         for bucketItemId: String,
         question: Question
     ) {
-        print("Commiting answer...")
         guard let answer = currentAnswerState[bucketItemId] else {
             // This check is critical since it's possible that a card could commit a selection change
             // without any answers selected.

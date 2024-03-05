@@ -29,6 +29,10 @@ extension ParraEndpoint {
                 object = EmptyResponseObject()
             case .postAuthentication:
                 object = TestData.Auth.successResponse
+            case .getRoadmap:
+                object = AppRoadmapConfiguration.validStates()[0]
+            case .getPaginateTickets:
+                object = UserTicketCollectionResponse.validStates()[0]
             }
         default:
             throw ParraError.generic(

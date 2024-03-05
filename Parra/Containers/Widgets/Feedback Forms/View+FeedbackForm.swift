@@ -10,45 +10,51 @@ import SwiftUI
 
 public extension View {
     /// Automatically fetches the feedback form with the provided id and
-    /// presents it based on the value of `isPresented`.
+    /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
     func presentParraFeedbackForm(
-        by id: String,
+        by formId: String,
         isPresented: Binding<Bool>,
+        config: FeedbackFormWidgetConfig = .default,
         localFactory: FeedbackFormWidgetFactory? = nil,
-        onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
+        onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
-        modifier(
-            FeedbackFormLoader(
-                initialState: Binding<FeedbackFormLoader.FormState>(get: {
+        loadAndPresentSheet(
+            loadType: .init(
+                get: {
                     if isPresented.wrappedValue {
-                        FeedbackFormLoader.FormState.formId(id)
+                        return .id(formId)
                     } else {
-                        FeedbackFormLoader.FormState.initial
+                        return nil
                     }
-                }, set: { state in
-                    switch state {
-                    case .form, .loading, .error:
-                        isPresented.wrappedValue = true
-                    case .formId, .initial:
+                },
+                set: { type in
+                    if type == nil {
                         isPresented.wrappedValue = false
                     }
-                }),
+                }
+            ),
+            with: .feedbackFormLoader(
+                config: config,
                 localFactory: localFactory,
-                submissionType: .default,
-                onDismiss: onDismiss
-            )
+                submissionType: .default
+            ),
+            onDismiss: onDismiss
         )
     }
 
+    /// Automatically displays a Feedback Form in a sheet when the `formBinding`
+    /// parameter becomes non-nil.
     @MainActor
     func presentParraFeedbackForm(
         with formBinding: Binding<ParraFeedbackForm?>,
+        config: FeedbackFormWidgetConfig = .default,
         localFactory: FeedbackFormWidgetFactory? = nil,
-        onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
+        onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentParraFeedbackForm(
             with: formBinding,
+            config: config,
             submissionType: .default,
             localFactory: localFactory,
             onDismiss: onDismiss
@@ -60,30 +66,32 @@ public extension View {
     @MainActor
     internal func presentParraFeedbackForm(
         with formBinding: Binding<ParraFeedbackForm?>,
-        submissionType: FeedbackFormLoader.SubmissionType,
-        localFactory: FeedbackFormWidgetFactory? = nil,
-        onDismiss: ((FeedbackFormDismissType) -> Void)? = nil
+        config: FeedbackFormWidgetConfig,
+        submissionType: FeedbackFormSubmissionType,
+        localFactory: FeedbackFormWidgetFactory?,
+        onDismiss: ((SheetDismissType) -> Void)?
     ) -> some View {
-        modifier(
-            FeedbackFormLoader(
-                initialState: Binding<FeedbackFormLoader.FormState>(get: {
+        loadAndPresentSheet(
+            loadType: .init(
+                get: {
                     if let form = formBinding.wrappedValue {
-                        FeedbackFormLoader.FormState.form(form)
+                        return .data(form)
                     } else {
-                        FeedbackFormLoader.FormState.initial
+                        return nil
                     }
-                }, set: { state in
-                    switch state {
-                    case .form(let form):
-                        formBinding.wrappedValue = form
-                    case .formId, .initial, .loading, .error:
+                },
+                set: { type in
+                    if type == nil {
                         formBinding.wrappedValue = nil
                     }
-                }),
+                }
+            ),
+            with: .feedbackFormLoader(
+                config: config,
                 localFactory: localFactory,
-                submissionType: submissionType,
-                onDismiss: onDismiss
-            )
+                submissionType: .default
+            ),
+            onDismiss: onDismiss
         )
     }
 }

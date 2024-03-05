@@ -30,7 +30,6 @@ struct OutlinedButtonComponent: TextButtonComponentType {
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
-        let _ = print("Rendering Outlined button")
         Button(action: {
             content.onPress?()
         }, label: {

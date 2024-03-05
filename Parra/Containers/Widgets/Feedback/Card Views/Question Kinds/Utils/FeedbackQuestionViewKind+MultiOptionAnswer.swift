@@ -59,7 +59,6 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
                 } else if isSelected, currentOptions.contains(id) {
                     currentOptions.removeAll { $0 == id }
                 } else {
-                    print("Skipping update")
                     return
                 }
 
