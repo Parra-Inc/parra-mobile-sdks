@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ImageButtonContent {
+public struct ImageButtonContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(
@@ -27,4 +27,16 @@ public struct ImageButtonContent {
     public let isDisabled: Bool
 
     public internal(set) var onPress: (() -> Void)?
+
+    public static func == (
+        lhs: ImageButtonContent,
+        rhs: ImageButtonContent
+    ) -> Bool {
+        return lhs.hashValue == rhs.hashValue
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(image)
+        hasher.combine(isDisabled)
+    }
 }

@@ -16,6 +16,7 @@ struct RoadmapParams: Equatable {
 
 struct RoadmapLoaderResult: Equatable {
     let roadmapConfig: AppRoadmapConfiguration
+    let selectedTab: RoadmapWidget.Tab
     let ticketResponse: UserTicketCollectionResponse
 }
 
@@ -44,6 +45,7 @@ extension ViewDataLoader {
 
                 return RoadmapLoaderResult(
                     roadmapConfig: roadmapConfig,
+                    selectedTab: transformParams.filter.toTab,
                     ticketResponse: ticketResponse
                 )
             },
@@ -53,6 +55,7 @@ extension ViewDataLoader {
                     with: localFactory,
                     params: .init(
                         roadmapConfig: params.roadmapConfig,
+                        selectedTab: params.selectedTab,
                         ticketResponse: params.ticketResponse,
                         networkManager: parra.networkManager
                     ),

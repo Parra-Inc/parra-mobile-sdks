@@ -26,67 +26,80 @@ public struct RoadmapWidget: Container {
     // MARK: - Public
 
     public var body: some View {
-        VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 20) {
-                componentFactory.buildLabel(
-                    component: \.title,
-                    config: config.title,
-                    content: contentObserver.content.title,
-                    localAttributes: nil
-                )
-
-                Picker(
-                    "Select a tab",
-                    selection: $contentObserver.selectedTab
-                ) {
-                    ForEach(Tab.allCases) { tab in
-                        Text(tab.title).tag(tab)
-                    }
-                }
-                .pickerStyle(.segmented)
-            }
-            .padding([.top, .leading, .trailing], from: style.contentPadding)
-
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 12) {
-                    ForEach(contentObserver.content.tickets) { ticket in
-                        RoadmapListItem(ticketContent: ticket)
-                    }
-                }
-            }
-            .contentMargins(
-                .all,
-                style.contentPadding,
-                for: .scrollContent
-            )
-
-            WidgetFooter {
-                if contentObserver.canAddRequests {
-                    componentFactory.buildTextButton(
-                        variant: .contained,
-                        component: \.addRequestButton,
-                        config: config.addRequestButton,
-                        content: contentObserver.content.addRequestButton,
+        NavigationStack {
+            VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 20) {
+                    componentFactory.buildLabel(
+                        component: \.title,
+                        config: config.title,
+                        content: contentObserver.content.title,
                         localAttributes: nil
                     )
-                } else {
-                    EmptyView()
+
+                    Picker(
+                        "Select a tab",
+                        selection: $contentObserver.selectedTab
+                    ) {
+                        ForEach(Tab.allCases) { tab in
+                            Text(tab.title).tag(tab)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+                .padding(.all, from: style.contentPadding)
+
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 12) {
+                        ForEach(contentObserver.tickets) { ticket in
+                            NavigationLink(
+                                value: ticket,
+                                label: {
+                                    RoadmapListItem(ticketContent: ticket)
+                                }
+                            )
+                        }
+                    }
+                    .redacted(when: contentObserver.isLoading)
+                }
+                // A limited number of placeholder cells will be generated.
+                // Don't allow scrolling past them while loading.
+                .scrollDisabled(contentObserver.isLoading)
+                .contentMargins(
+                    [.bottom, .leading, .trailing],
+                    style.contentPadding,
+                    for: .scrollContent
+                )
+
+                WidgetFooter {
+                    if contentObserver.canAddRequests {
+                        componentFactory.buildTextButton(
+                            variant: .contained,
+                            component: \.addRequestButton,
+                            config: config.addRequestButton,
+                            content: contentObserver.content.addRequestButton,
+                            localAttributes: nil
+                        )
+                    } else {
+                        EmptyView()
+                    }
+                }
+            }
+            .applyBackground(style.background)
+            .padding(style.padding)
+            .environment(config)
+            .environmentObject(contentObserver)
+            .environmentObject(componentFactory)
+            .presentParraFeedbackForm(
+                with: $contentObserver.addRequestForm,
+                localFactory: nil,
+                onDismiss: nil
+            )
+            .navigationDestination(for: TicketContent.self) { ticket in
+                VStack {
+                    Text(ticket.title.text)
                 }
             }
         }
-        .applyBackground(style.background)
-        .padding(style.padding)
-        .environment(config)
-        .environmentObject(contentObserver)
-        .environmentObject(componentFactory)
-        .onAppear {
-            contentObserver.fetchUpdatedRoadmap()
-        }
-        .presentParraFeedbackForm(
-            with: $contentObserver.addRequestForm,
-            localFactory: nil,
-            onDismiss: nil
-        )
     }
 
     // MARK: - Internal
@@ -108,6 +121,7 @@ public struct RoadmapWidget: Container {
             contentObserver: .init(
                 initialParams: .init(
                     roadmapConfig: AppRoadmapConfiguration.validStates()[0],
+                    selectedTab: .inProgress,
                     ticketResponse: UserTicketCollectionResponse
                         .validStates()[0],
                     networkManager: parra.networkManager

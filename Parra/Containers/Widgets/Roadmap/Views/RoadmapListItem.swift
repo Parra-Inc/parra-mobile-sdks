@@ -65,6 +65,7 @@ struct RoadmapListItem: View {
                     config: config.requestTitles,
                     content: ticketContent.title
                 )
+                .multilineTextAlignment(.leading)
 
                 if let description = ticketContent.description {
                     componentFactory.buildLabel(
@@ -74,6 +75,7 @@ struct RoadmapListItem: View {
                     )
                     .lineLimit(3)
                     .truncationMode(.tail)
+                    .multilineTextAlignment(.leading)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)

@@ -9,7 +9,7 @@
 import SwiftUI
 import UIKit
 
-public struct LabelContent {
+public struct LabelContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(

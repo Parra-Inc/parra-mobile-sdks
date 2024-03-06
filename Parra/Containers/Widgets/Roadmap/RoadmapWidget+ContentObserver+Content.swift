@@ -8,54 +8,6 @@
 
 import Foundation
 
-struct TicketContent: Identifiable {
-    // MARK: - Lifecycle
-
-    init(
-        _ userTicket: UserTicket
-    ) {
-        self.id = userTicket.id
-        self.type = userTicket.type
-        self.title = LabelContent(text: userTicket.title)
-        self.description = if let description = userTicket.description {
-            LabelContent(text: description)
-        } else {
-            nil
-        }
-        self.status = userTicket.status
-        self.displayStatus = userTicket.displayStatus
-        self
-            .statusTitle = LabelContent(
-                text: userTicket
-                    .displayStatusBadgeTitle
-            )
-        self.votingEnabled = userTicket.votingEnabled
-        self.voted = userTicket.voted
-        self.voteCount = LabelContent(
-            text: userTicket.voteCount.formatted(.number.notation(.compactName))
-        )
-        self.voteButton = ImageButtonContent(
-            image: .symbol("triangleshape.fill", .monochrome),
-            isDisabled: !votingEnabled,
-            onPress: nil
-        )
-    }
-
-    // MARK: - Internal
-
-    let id: String
-    let type: TicketType
-    let title: LabelContent
-    let description: LabelContent?
-    let status: TicketStatus
-    let displayStatus: TicketDisplayStatus
-    let statusTitle: LabelContent
-    let votingEnabled: Bool
-    let voted: Bool
-    let voteCount: LabelContent
-    var voteButton: ImageButtonContent
-}
-
 // MARK: - RoadmapWidget.ContentObserver.Content
 
 extension RoadmapWidget.ContentObserver {
@@ -65,25 +17,15 @@ extension RoadmapWidget.ContentObserver {
 
         init(
             title: String,
-            addRequestButton: TextButtonContent,
-            tickets: [UserTicket]
+            addRequestButton: TextButtonContent
         ) {
             self.title = LabelContent(text: title)
             self.addRequestButton = addRequestButton
-            self.tickets = tickets.map {
-                let ticket = TicketContent($0)
-
-//                onUpvote?($0)
-
-                return ticket
-            }
         }
 
         // MARK: - Internal
 
         let title: LabelContent
         var addRequestButton: TextButtonContent
-        var onUpvote: ((UserTicket) -> Void)?
-        let tickets: [TicketContent]
     }
 }

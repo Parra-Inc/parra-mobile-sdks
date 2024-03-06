@@ -1751,13 +1751,13 @@ public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
     public let notificationIds: [String]
 }
 
-public enum TicketType: String, Codable {
+public enum TicketType: String, Codable, Equatable {
     case bug
     case feature
     case improvement
 }
 
-public enum TicketStatus: String, Codable {
+public enum TicketStatus: String, Codable, Equatable {
     case open
     case planning
     case inProgress = "in_progress"
@@ -1767,7 +1767,7 @@ public enum TicketStatus: String, Codable {
     case archived
 }
 
-public enum TicketDisplayStatus: String, Codable {
+public enum TicketDisplayStatus: String, Codable, Equatable {
     case pending
     case upcoming
     case inProgress = "in_progress"

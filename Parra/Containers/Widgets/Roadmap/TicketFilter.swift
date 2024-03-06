@@ -22,4 +22,13 @@ enum TicketFilter {
             return "requests"
         }
     }
+
+    var toTab: RoadmapWidget.Tab {
+        switch self {
+        case .upcoming:
+            return .inProgress
+        case .requests:
+            return .requests
+        }
+    }
 }
