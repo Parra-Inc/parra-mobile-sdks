@@ -24,19 +24,14 @@ extension FeedbackCardWidget {
     class ContentObserver: ContainerContentObserver {
         // MARK: - Lifecycle
 
-        init(
-            cards: [ParraCardItem],
-            notificationCenter: NotificationCenterType,
-            dataManager: ParraFeedbackDataManager,
-            cardDelegate: ParraCardViewDelegate? = nil,
-            questionHandlerDelegate: ParraQuestionHandlerDelegate? = nil,
-            syncHandler: (() -> Void)?
+        required init(
+            initialParams: InitialParams
         ) {
             self.showNavigation = true
-            self.notificationCenter = notificationCenter
-            self.dataManager = dataManager
-            self.cardDelegate = cardDelegate
-            self.syncHandler = syncHandler
+            self.notificationCenter = initialParams.notificationCenter
+            self.dataManager = initialParams.dataManager
+            self.cardDelegate = initialParams.cardDelegate
+            self.syncHandler = initialParams.syncHandler
 
             let backButton = ImageButtonContent(
                 image: .symbol("arrow.backward"),
@@ -55,7 +50,7 @@ extension FeedbackCardWidget {
                 forwardButton: forwardButton
             )
 
-            self.cards = cards
+            self.cards = initialParams.cards
             self.currentCardInfo = if let first = cards.first {
                 CurrentCardInfo(card: first, index: 0)
             } else {

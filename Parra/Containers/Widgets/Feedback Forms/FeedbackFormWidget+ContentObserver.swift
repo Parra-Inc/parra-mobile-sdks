@@ -17,9 +17,11 @@ extension FeedbackFormWidget {
     class ContentObserver: ContainerContentObserver {
         // MARK: - Lifecycle
 
-        init(
-            formData: FeedbackFormData
+        required init(
+            initialParams: InitialParams
         ) {
+            let formData = initialParams.formData
+
             let description: LabelContent? = if let formDescription = formData
                 .description
             {

@@ -15,10 +15,10 @@ struct FeedbackCardWidget: Container {
     // MARK: - Lifecycle
 
     init(
-        componentFactory: ComponentFactory<Factory>,
-        contentObserver: ContentObserver,
         config: FeedbackCardWidgetConfig,
-        style: Style
+        style: FeedbackCardWidgetStyle,
+        componentFactory: ComponentFactory<FeedbackCardWidgetFactory>,
+        contentObserver: ContentObserver
     ) {
         self.componentFactory = componentFactory
         self.config = config
@@ -133,15 +133,17 @@ struct FeedbackCardWidget: Container {
 
             ParraContainerPreview { parra, componentFactory in
                 FeedbackCardWidget(
-                    componentFactory: componentFactory,
-                    contentObserver: FeedbackCardWidget.ContentObserver(
-                        cards: ParraCardItem.validStates(),
-                        notificationCenter: ParraNotificationCenter(),
-                        dataManager: parra.feedback.dataManager,
-                        syncHandler: nil
-                    ),
                     config: .default,
-                    style: .default(with: componentFactory.theme)
+                    style: .default(with: componentFactory.theme),
+                    componentFactory: componentFactory,
+                    contentObserver: .init(
+                        initialParams: .init(
+                            cards: ParraCardItem.validStates(),
+                            notificationCenter: ParraNotificationCenter(),
+                            dataManager: parra.feedback.dataManager,
+                            syncHandler: nil
+                        )
+                    )
                 )
             }
             .padding()

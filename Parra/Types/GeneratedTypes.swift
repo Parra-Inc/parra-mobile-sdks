@@ -381,9 +381,9 @@ public struct FeedbackFormDataStub: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
+        case createdAt
+        case updatedAt
+        case deletedAt
         case data
     }
 
@@ -1812,17 +1812,17 @@ public struct UserTicket: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case deletedAt = "deleted_at"
+        case createdAt
+        case updatedAt
+        case deletedAt
         case title
         case type
         case description
         case status
-        case displayStatus = "display_status"
-        case displayStatusBadgeTitle = "display_status_badge_title"
-        case voteCount = "vote_count"
-        case votingEnabled = "voting_enabled"
+        case displayStatus
+        case displayStatusBadgeTitle
+        case voteCount
+        case votingEnabled
         case voted
     }
 
@@ -1860,9 +1860,9 @@ public struct CollectionResponse: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case page
-        case pageCount = "page_count"
-        case pageSize = "page_size"
-        case totalCount = "total_count"
+        case pageCount
+        case pageSize
+        case totalCount
     }
 
     public let page: Int
@@ -1892,9 +1892,9 @@ public struct UserTicketCollectionResponse: Codable, Equatable, Hashable {
 
     public enum CodingKeys: String, CodingKey {
         case page
-        case pageCount = "page_count"
-        case pageSize = "page_size"
-        case totalCount = "total_count"
+        case pageCount
+        case pageSize
+        case totalCount
         case data
     }
 

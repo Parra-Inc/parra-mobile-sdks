@@ -34,24 +34,26 @@ public struct ParraFeedbackView: ParraPublicContainer {
         let style = style ?? .default(with: theme)
 
         FeedbackCardWidget(
+            config: config,
+            style: style,
             componentFactory: ComponentFactory<Wrapped.Factory>(
                 local: localFactory,
                 global: globalComponentAttributes,
                 theme: theme
             ),
             contentObserver: Wrapped.ContentObserver(
-                cards: cards,
-                notificationCenter: parra.notificationCenter,
-                dataManager: parra.feedback.dataManager,
-                cardDelegate: cardDelegate,
-                syncHandler: {
-                    Task {
-                        await parra.triggerSync()
+                initialParams: .init(
+                    cards: cards,
+                    notificationCenter: parra.notificationCenter,
+                    dataManager: parra.feedback.dataManager,
+                    cardDelegate: cardDelegate,
+                    syncHandler: {
+                        Task {
+                            await parra.triggerSync()
+                        }
                     }
-                }
-            ),
-            config: config,
-            style: style
+                )
+            )
         )
     }
 

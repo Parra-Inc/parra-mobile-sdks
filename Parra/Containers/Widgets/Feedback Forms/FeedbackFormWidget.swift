@@ -9,6 +9,20 @@
 import SwiftUI
 
 public struct FeedbackFormWidget: Container {
+    // MARK: - Lifecycle
+
+    init(
+        config: FeedbackFormWidgetConfig,
+        style: FeedbackFormWidgetStyle,
+        componentFactory: ComponentFactory<FeedbackFormWidgetFactory>,
+        contentObserver: ContentObserver
+    ) {
+        self.config = config
+        self.style = style
+        self.componentFactory = componentFactory
+        self._contentObserver = StateObject(wrappedValue: contentObserver)
+    }
+
     // MARK: - Public
 
     public var body: some View {
@@ -166,16 +180,18 @@ public struct FeedbackFormWidget: Container {
 #Preview {
     ParraContainerPreview { _, componentFactory in
         FeedbackFormWidget(
+            config: .default,
+            style: .default(with: .default),
             componentFactory: componentFactory,
             contentObserver: .init(
-                formData: .init(
-                    title: "Leave feedback",
-                    description: "We'd love to hear from you. Your input helps us make our product better.",
-                    fields: FeedbackFormField.validStates()
+                initialParams: .init(
+                    formData: .init(
+                        title: "Leave feedback",
+                        description: "We'd love to hear from you. Your input helps us make our product better.",
+                        fields: FeedbackFormField.validStates()
+                    )
                 )
-            ),
-            config: .default,
-            style: .default(with: .default)
+            )
         )
     }
 }

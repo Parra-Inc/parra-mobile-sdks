@@ -8,10 +8,16 @@
 
 import SwiftUI
 
-extension RoadmapWidget {
+public extension RoadmapWidget {
     enum Tab: CaseIterable, Identifiable {
         case inProgress
         case requests
+
+        // MARK: - Public
+
+        public var id: String {
+            return title
+        }
 
         // MARK: - Internal
 
@@ -22,10 +28,6 @@ extension RoadmapWidget {
             case .requests:
                 return "Requests"
             }
-        }
-
-        var id: String {
-            return title
         }
 
         var filter: TicketFilter {

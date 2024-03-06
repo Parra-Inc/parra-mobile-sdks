@@ -35,7 +35,7 @@ enum CallStackParser {
     static func parse(
         frames: [String]
     ) -> [CallStackFrame] {
-        return frames.compactMap { frame in
+        return frames.compactMap { (frame: String) in
             let components = frame.split { char in
                 return char.isWhitespace || char.isNewline
             }

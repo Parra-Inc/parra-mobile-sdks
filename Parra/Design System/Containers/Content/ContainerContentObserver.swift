@@ -11,6 +11,9 @@ import SwiftUI
 @MainActor
 protocol ContainerContentObserver: ObservableObject {
     associatedtype Content: ContainerContent
+    associatedtype InitialParams
 
     var content: Content { get }
+
+    init(initialParams: InitialParams)
 }

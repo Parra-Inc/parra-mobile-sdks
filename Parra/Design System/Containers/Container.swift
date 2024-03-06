@@ -19,10 +19,19 @@ protocol Container: View {
     /// 3. ``Parra.WidgetStyle``
     associatedtype Style: ContainerStyle
 
+    // Expected via init
     var config: Config { get }
     var style: Style { get }
     var componentFactory: ComponentFactory<Factory> { get }
-
     var contentObserver: ContentObserver { get }
+
+    // Expected via @Environment
     var themeObserver: ParraThemeObserver { get }
+
+    init(
+        config: Config,
+        style: Style,
+        componentFactory: ComponentFactory<Factory>,
+        contentObserver: ContentObserver
+    )
 }

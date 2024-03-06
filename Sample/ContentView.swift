@@ -55,7 +55,7 @@ struct ContentView: View {
 
                 Section("Releases") {
                     NavigationLink {
-                        FeedbackFormByIdSample()
+                        RoadmapSample()
                     } label: {
                         SampleItemRow(title: "Roadmap", iconName: "map")
                     }

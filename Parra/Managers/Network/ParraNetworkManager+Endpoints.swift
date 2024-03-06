@@ -135,20 +135,20 @@ extension ParraNetworkManager {
         offset: Int,
         filter: TicketFilter
     ) async throws -> UserTicketCollectionResponse {
-        let body: [String: String] = [
-            "limit": String(limit),
-            "offset": String(offset),
-            "filter": filter.paramName
-        ]
-
         return try await hitEndpoint(
             .getPaginateTickets(
                 tenantId: appState.tenantId,
                 applicationId: appState.applicationId
             ),
-            body: body
+            queryItems: [
+                "limit": String(limit),
+                "offset": String(offset),
+                "filter": filter.paramName
+            ]
         )
     }
+
+    // MARK: - Private
 
     private func hitEndpoint<Response>(
         _ endpoint: ParraEndpoint,

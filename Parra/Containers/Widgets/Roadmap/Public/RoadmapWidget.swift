@@ -9,6 +9,20 @@
 import SwiftUI
 
 public struct RoadmapWidget: Container {
+    // MARK: - Lifecycle
+
+    init(
+        config: RoadmapWidgetConfig,
+        style: RoadmapWidgetStyle,
+        componentFactory: ComponentFactory<RoadmapWidgetFactory>,
+        contentObserver: ContentObserver
+    ) {
+        self.config = config
+        self.style = style
+        self.componentFactory = componentFactory
+        self._contentObserver = StateObject(wrappedValue: contentObserver)
+    }
+
     // MARK: - Public
 
     public var body: some View {
@@ -88,14 +102,17 @@ public struct RoadmapWidget: Container {
 #Preview {
     ParraContainerPreview { parra, componentFactory in
         RoadmapWidget(
+            config: .default,
+            style: .default(with: .default),
             componentFactory: componentFactory,
             contentObserver: .init(
-                roadmapConfig: AppRoadmapConfiguration.validStates()[0],
-                ticketResponse: UserTicketCollectionResponse.validStates()[0],
-                networkManager: parra.networkManager
-            ),
-            config: .default,
-            style: .default(with: .default)
+                initialParams: .init(
+                    roadmapConfig: AppRoadmapConfiguration.validStates()[0],
+                    ticketResponse: UserTicketCollectionResponse
+                        .validStates()[0],
+                    networkManager: parra.networkManager
+                )
+            )
         )
     }
 }

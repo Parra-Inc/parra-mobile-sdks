@@ -11,14 +11,17 @@ import SwiftUI
 /// Facilitates loading data asynchonously then presenting a sheet with a view
 /// rendered from the data.
 @MainActor
-struct SheetWithLoader<Data, SheetContent>: ViewModifier
-    where SheetContent: View, Data: Equatable
+struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
+    where SheetContent: View, Data: Equatable, TransformParams: Equatable
 {
     // MARK: - Lifecycle
 
     init(
-        loadType: Binding<ViewDataLoader<Data, SheetContent>.LoadType?>,
-        loader: ViewDataLoader<Data, SheetContent>,
+        loadType: Binding<
+            ViewDataLoader<TransformParams, Data, SheetContent>
+                .LoadType?
+        >,
+        loader: ViewDataLoader<TransformParams, Data, SheetContent>,
         onDismiss: ((SheetDismissType) -> Void)?
     ) {
         self._loadType = loadType
@@ -41,7 +44,8 @@ struct SheetWithLoader<Data, SheetContent>: ViewModifier
 
     // Externally controlled state to use to determine when to kick off
     // the loader and with what data
-    @Binding var loadType: ViewDataLoader<Data, SheetContent>.LoadType?
+    @Binding var loadType: ViewDataLoader<TransformParams, Data, SheetContent>
+        .LoadType?
 
     func body(content: Content) -> some View {
         content
@@ -92,7 +96,7 @@ struct SheetWithLoader<Data, SheetContent>: ViewModifier
 
     @State private var state: LoadState = .ready
 
-    private let loader: ViewDataLoader<Data, SheetContent>
+    private let loader: ViewDataLoader<TransformParams, Data, SheetContent>
     private let onDismiss: ((SheetDismissType) -> Void)?
 
     @MainActor
@@ -104,19 +108,28 @@ struct SheetWithLoader<Data, SheetContent>: ViewModifier
     }
 
     private func initiateLoad(
-        with type: ViewDataLoader<Data, SheetContent>.LoadType
+        with type: ViewDataLoader<TransformParams, Data, SheetContent>.LoadType
     ) {
-        Task {
-            do {
-                let result = try await loader.load(parra, type)
+        switch type {
+        case .transform(let transformParams):
+            Task {
+                await triggerTransform(with: transformParams)
+            }
+        case .raw(let data):
+            state = .complete(data)
+        }
+    }
 
-                await MainActor.run {
-                    state = .complete(result)
-                }
-            } catch {
-                await MainActor.run {
-                    state = .error(error)
-                }
+    private func triggerTransform(with params: TransformParams) async {
+        do {
+            let result = try await loader.load(parra, params)
+
+            await MainActor.run {
+                state = .complete(result)
+            }
+        } catch {
+            await MainActor.run {
+                state = .error(error)
             }
         }
     }

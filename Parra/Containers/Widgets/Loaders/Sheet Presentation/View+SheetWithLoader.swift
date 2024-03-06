@@ -10,9 +10,12 @@ import SwiftUI
 
 extension View {
     @MainActor
-    func loadAndPresentSheet<Data, SheetContent>(
-        loadType: Binding<ViewDataLoader<Data, SheetContent>.LoadType?>,
-        with loader: ViewDataLoader<Data, SheetContent>,
+    func loadAndPresentSheet<TransformParams, Data, SheetContent>(
+        loadType: Binding<
+            ViewDataLoader<TransformParams, Data, SheetContent>
+                .LoadType?
+        >,
+        with loader: ViewDataLoader<TransformParams, Data, SheetContent>,
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         modifier(

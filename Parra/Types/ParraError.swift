@@ -77,7 +77,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         case .authenticationFailed:
             return "Invoking the authentication provider passed to Parra.initialize() failed."
         case .networkError:
-            return "A network error occurred."
+            return "A network error occurred. URL params are omitted from output."
         case .jsonError(let string):
             return "JSON error occurred. Error: \(string)"
         case .fileSystem:

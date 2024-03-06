@@ -23,7 +23,7 @@ public extension View {
             loadType: .init(
                 get: {
                     if isPresented.wrappedValue {
-                        return .id(formId)
+                        return .transform(formId)
                     } else {
                         return nil
                     }
@@ -75,7 +75,7 @@ public extension View {
             loadType: .init(
                 get: {
                     if let form = formBinding.wrappedValue {
-                        return .data(form)
+                        return .raw(form)
                     } else {
                         return nil
                     }
