@@ -13,14 +13,14 @@ struct AuthenticatedRequestResult<T: Decodable> {
 
     init(
         result: Result<T, Error>,
-        responseAttributes: AuthenticatedRequestAttributeOptions = []
+        responseContext: AuthenticatedRequestResponseContext
     ) {
         self.result = result
-        self.attributes = responseAttributes
+        self.context = responseContext
     }
 
     // MARK: - Internal
 
     let result: Result<T, Error>
-    let attributes: AuthenticatedRequestAttributeOptions
+    let context: AuthenticatedRequestResponseContext
 }

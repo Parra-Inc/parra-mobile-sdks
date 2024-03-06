@@ -101,8 +101,6 @@ final class ParraNetworkManager: NetworkManagerType {
         let route = endpoint.route
         let method = endpoint.method
 
-        var responseAttributes: AuthenticatedRequestAttributeOptions = []
-
         logger
             .trace(
                 "Performing authenticated request to route: \(method.rawValue) \(route)"
@@ -146,13 +144,11 @@ final class ParraNetworkManager: NetworkManagerType {
                 for: appState
             )
 
-            let (result, attributes) = await performRequest(
+            let (result, responseContext) = await performRequest(
                 request: request,
                 credential: nextCredential,
                 config: config
             )
-
-            responseAttributes.insert(attributes)
 
             switch result {
             case .success(let data):
@@ -165,7 +161,7 @@ final class ParraNetworkManager: NetworkManagerType {
 
                 return AuthenticatedRequestResult(
                     result: .success(response),
-                    responseAttributes: responseAttributes
+                    responseContext: responseContext
                 )
             case .failure(let error):
                 throw error
@@ -173,7 +169,10 @@ final class ParraNetworkManager: NetworkManagerType {
         } catch {
             return AuthenticatedRequestResult(
                 result: .failure(error),
-                responseAttributes: responseAttributes
+                responseContext: AuthenticatedRequestResponseContext(
+                    attributes: [],
+                    statusCode: nil
+                )
             )
         }
     }
@@ -322,7 +321,7 @@ final class ParraNetworkManager: NetworkManagerType {
         request: URLRequest,
         credential: ParraCredential,
         config: RequestConfig = .default
-    ) async -> (Result<Data, Error>, AuthenticatedRequestAttributeOptions) {
+    ) async -> (Result<Data, Error>, AuthenticatedRequestResponseContext) {
         do {
             var request = request
             request.setValue(for: .authorization(.bearer(credential.token)))
@@ -339,7 +338,13 @@ final class ParraNetworkManager: NetworkManagerType {
 
             switch (response.statusCode, config.shouldReauthenticate) {
             case (204, _):
-                return (.success(EmptyJsonObjectData), config.attributes)
+                return (
+                    .success(EmptyJsonObjectData),
+                    AuthenticatedRequestResponseContext(
+                        attributes: config.attributes,
+                        statusCode: response.statusCode
+                    )
+                )
             case (401, true):
                 logger.trace("Request required reauthentication")
                 let newCredential = try await refreshAuthentication()
@@ -361,7 +366,10 @@ final class ParraNetworkManager: NetworkManagerType {
                         response: response,
                         responseData: data
                     )),
-                    config.attributes
+                    AuthenticatedRequestResponseContext(
+                        attributes: config.attributes,
+                        statusCode: response.statusCode
+                    )
                 )
             case (500 ... 599, _):
                 if config.shouldRetry {
@@ -391,13 +399,28 @@ final class ParraNetworkManager: NetworkManagerType {
                         response: response,
                         responseData: data
                     )),
-                    attributes
+                    AuthenticatedRequestResponseContext(
+                        attributes: attributes,
+                        statusCode: response.statusCode
+                    )
                 )
             default:
-                return (.success(data), config.attributes)
+                return (
+                    .success(data),
+                    AuthenticatedRequestResponseContext(
+                        attributes: config.attributes,
+                        statusCode: response.statusCode
+                    )
+                )
             }
         } catch {
-            return (.failure(error), config.attributes)
+            return (
+                .failure(error),
+                AuthenticatedRequestResponseContext(
+                    attributes: config.attributes,
+                    statusCode: nil
+                )
+            )
         }
     }
 

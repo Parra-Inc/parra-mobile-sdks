@@ -182,7 +182,9 @@ class ParraSessionManager {
 
                         // If any of the sessions fail to upload afty rerying, fail the entire operation
                         // returning the sessions that have been completed so far.
-                        if response.attributes.contains(.exceededRetryLimit) {
+                        if response.context.attributes
+                            .contains(.exceededRetryLimit)
+                        {
                             logger.debug(
                                 "Network retry limited exceeded. Will not attempt to sync additional sessions."
                             )
