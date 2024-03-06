@@ -28,6 +28,8 @@ enum ParraEndpoint {
 
     case getRoadmap(tenantId: String, applicationId: String)
     case getPaginateTickets(tenantId: String, applicationId: String)
+    case postVoteForTicket(tenantId: String, ticketId: String)
+    case deleteVoteForTicket(tenantId: String, ticketId: String)
 
     // MARK: - Internal
 
@@ -52,6 +54,10 @@ enum ParraEndpoint {
             return "tenants/\(tenantId)/applications/\(applicationId)/roadmap"
         case .getPaginateTickets(let tenantId, let applicationId):
             return "tenants/\(tenantId)/applications/\(applicationId)/tickets"
+        case .postVoteForTicket(let tenantId, let ticketId):
+            return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
+        case .deleteVoteForTicket(let tenantId, let ticketId):
+            return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
         }
     }
 
@@ -61,11 +67,15 @@ enum ParraEndpoint {
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
-             .postPushTokens, .postAuthentication:
+             .postPushTokens, .postAuthentication, .postVoteForTicket:
             return .post
+        case .deleteVoteForTicket:
+            return .delete
         }
     }
 
+    /// Whether extra session tracking information should be attached to the
+    /// request headers.
     var isTrackingEnabled: Bool {
         switch self {
         case .postAuthentication, .postBulkSubmitSessions, .postPushTokens:
@@ -99,6 +109,8 @@ enum ParraEndpoint {
             return "tenants/:tenantId/applications/:applicationId/roadmap"
         case .getPaginateTickets:
             return "tenants/:tenantId/applications/:applicationId/tickets"
+        case .postVoteForTicket, .deleteVoteForTicket:
+            return "tenants/:tenantId/tickets/:ticketId/vote"
         }
     }
 }

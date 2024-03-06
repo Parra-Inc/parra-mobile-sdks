@@ -148,6 +148,28 @@ extension ParraNetworkManager {
         )
     }
 
+    func voteForTicket(
+        with ticketId: String
+    ) async -> AuthenticatedRequestResult<UserTicket> {
+        return await performAuthenticatedRequest(
+            endpoint: .postVoteForTicket(
+                tenantId: appState.tenantId,
+                ticketId: ticketId
+            )
+        )
+    }
+
+    func removeVoteForTicket(
+        with ticketId: String
+    ) async -> AuthenticatedRequestResult<UserTicket> {
+        return await performAuthenticatedRequest(
+            endpoint: .deleteVoteForTicket(
+                tenantId: appState.tenantId,
+                ticketId: ticketId
+            )
+        )
+    }
+
     // MARK: - Private
 
     private func hitEndpoint<Response>(

@@ -33,6 +33,10 @@ extension ParraEndpoint {
                 object = AppRoadmapConfiguration.validStates()[0]
             case .getPaginateTickets:
                 object = UserTicketCollectionResponse.validStates()[0]
+            case .postVoteForTicket:
+                object = UserTicket.validStates()[0]
+            case .deleteVoteForTicket:
+                object = UserTicket.validStates()[0]
             }
         default:
             throw ParraError.generic(

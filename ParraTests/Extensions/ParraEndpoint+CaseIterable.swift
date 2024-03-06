@@ -20,7 +20,9 @@ extension ParraEndpoint: CaseIterable {
             .postBulkAnswerQuestions,
             .postBulkSubmitSessions(tenantId: ""),
             .postPushTokens(tenantId: ""),
-            .postSubmitFeedbackForm(formId: "")
+            .postSubmitFeedbackForm(formId: ""),
+            .postVoteForTicket(tenantId: "", ticketId: ""),
+            .deleteVoteForTicket(tenantId: "", ticketId: "")
         ]
 
         // We can't automatically synthesize CaseIterable conformance, so we're
@@ -34,7 +36,8 @@ extension ParraEndpoint: CaseIterable {
             case .postAuthentication, .getCards, .getFeedbackForm,
                  .postSubmitFeedbackForm, .postBulkAnswerQuestions,
                  .postBulkSubmitSessions, .postPushTokens,
-                 .getRoadmap, .getPaginateTickets:
+                 .getRoadmap, .getPaginateTickets, .postVoteForTicket,
+                 .deleteVoteForTicket:
                 finalCases.append(testCase)
             }
         }

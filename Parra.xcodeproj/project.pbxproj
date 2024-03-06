@@ -10,6 +10,8 @@
 		00057FA02B98162B0022B875 /* View+redacted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00057F9F2B98162B0022B875 /* View+redacted.swift */; };
 		00057FA42B9820BC0022B875 /* View+Roadmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00057FA32B9820BC0022B875 /* View+Roadmap.swift */; };
 		00057FA72B98BB270022B875 /* RoadmapSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00057FA62B98BB270022B875 /* RoadmapSample.swift */; };
+		00057FA92B98C96A0022B875 /* TicketContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00057FA82B98C96A0022B875 /* TicketContent.swift */; };
+		001230082B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001230072B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift */; };
 		001559A827E417D4006450BE /* ParraLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559A727E417D4006450BE /* ParraLoggerTests.swift */; };
 		001677532B6ABFB700674001 /* TextButton+RenderStorybook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677522B6ABFB600674001 /* TextButton+RenderStorybook.swift */; };
 		001677552B6AE7FD00674001 /* FlexibleFrameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677542B6AE7FD00674001 /* FlexibleFrameAttributes.swift */; };
@@ -466,6 +468,7 @@
 		00057F9F2B98162B0022B875 /* View+redacted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+redacted.swift"; sourceTree = "<group>"; };
 		00057FA32B9820BC0022B875 /* View+Roadmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Roadmap.swift"; sourceTree = "<group>"; };
 		00057FA62B98BB270022B875 /* RoadmapSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapSample.swift; sourceTree = "<group>"; };
+		00057FA82B98C96A0022B875 /* TicketContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketContent.swift; sourceTree = "<group>"; };
 		000AF4C2283AE6E7008A17A3 /* ParraShadowConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraShadowConfig.swift; sourceTree = "<group>"; };
 		000AF4C4283AE6FF008A17A3 /* ParraTextConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTextConfig.swift; sourceTree = "<group>"; };
 		00120EF2274D1EEE00CA3247 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -473,6 +476,7 @@
 		00120EFA274DC98400CA3247 /* ParraActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraActionCardView.swift; sourceTree = "<group>"; };
 		00120EFD2753E8BF00CA3247 /* ParraCardItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardItemView.swift; sourceTree = "<group>"; };
 		00120F002753E9A400CA3247 /* ParraCredential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCredential.swift; sourceTree = "<group>"; };
+		001230072B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedRequestResponseContext.swift; sourceTree = "<group>"; };
 		001286F3277D53AE0090CDB5 /* SelectableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableButton.swift; sourceTree = "<group>"; };
 		001286F5277D54480090CDB5 /* CAShapeLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAShapeLayer.swift; sourceTree = "<group>"; };
 		001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackDataManager.swift; sourceTree = "<group>"; };
@@ -1919,6 +1923,7 @@
 			isa = PBXGroup;
 			children = (
 				00BD2FF32A47771300B4BEB2 /* AuthenticatedRequestAttributeOptions.swift */,
+				001230072B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift */,
 				00BD2FF52A47772A00B4BEB2 /* AuthenticatedRequestResult.swift */,
 				00E269ED2A5257DC001A0F50 /* AuthorizationType.swift */,
 				006DE9812A472F9C00521F5D /* Endpoint.swift */,
@@ -2289,6 +2294,7 @@
 				00FCB1542B939C9000635DC8 /* RoadmapWidget+ContentObserver+Content.swift */,
 				00FCB1952B97B87F00635DC8 /* RoadmapWidget+ContentObserver+InitialParams.swift */,
 				00FCB17C2B9665EB00635DC8 /* TicketFilter.swift */,
+				00057FA82B98C96A0022B875 /* TicketContent.swift */,
 			);
 			path = Roadmap;
 			sourceTree = "<group>";
@@ -2776,6 +2782,7 @@
 				0087CA742A57B38E007D72FA /* ParraLogMeasurementFormat.swift in Sources */,
 				0087CA532A5466CF007D72FA /* ParraNetworkManager+ParraUrlSessionDelegate.swift in Sources */,
 				0087CA4F2A54668B007D72FA /* ParraUrlSessionDelegate.swift in Sources */,
+				001230082B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift in Sources */,
 				00ABF1432B78516A00A054A2 /* Parra+SyncTarget.swift in Sources */,
 				00706B1D2B71A76600C28F66 /* TextEditorComponent.swift in Sources */,
 				003962372A48B4EF00B8655F /* ParraFeedback.swift in Sources */,
@@ -2873,6 +2880,7 @@
 				003622302B5EBD2A009EFE53 /* ColorPaletteView.swift in Sources */,
 				0039623C2A48B51100B8655F /* UIColor.swift in Sources */,
 				00731EFB2A182639004010A3 /* Task+sleep.swift in Sources */,
+				00057FA92B98C96A0022B875 /* TicketContent.swift in Sources */,
 				0036225D2B601657009EFE53 /* ParraCornerRadiusSize.swift in Sources */,
 				00ABF1B92B867BE900A054A2 /* ParraCardModalViewedEvent.swift in Sources */,
 				0087CA702A57B331007D72FA /* ParraLoggerBackend.swift in Sources */,
