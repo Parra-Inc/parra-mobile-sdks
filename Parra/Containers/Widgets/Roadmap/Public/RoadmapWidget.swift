@@ -50,25 +50,41 @@ public struct RoadmapWidget: Container {
 
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 12) {
-                        ForEach(contentObserver.tickets) { ticket in
+                        ForEach(
+                            contentObserver.ticketPaginator
+                                .items
+                        ) { ticket in
                             NavigationLink(
                                 value: ticket,
                                 label: {
                                     RoadmapListItem(ticketContent: ticket)
                                 }
                             )
+                            .onAppear {
+                                contentObserver.ticketPaginator
+                                    .loadMore(after: ticket)
+                            }
                         }
                     }
-                    .redacted(when: contentObserver.isLoading)
+                    .redacted(when: contentObserver.ticketPaginator.isLoading)
                 }
                 // A limited number of placeholder cells will be generated.
                 // Don't allow scrolling past them while loading.
-                .scrollDisabled(contentObserver.isLoading)
+                .scrollDisabled(contentObserver.ticketPaginator.isLoading)
                 .contentMargins(
                     [.bottom, .leading, .trailing],
                     style.contentPadding,
                     for: .scrollContent
                 )
+                // TODO: Empy datasource case
+                .emptyPlaceholder(contentObserver.ticketPaginator.items) {
+                    ParraDefaultEmptyView(
+                        symbolName: "tray",
+                        title: "No tickets yet",
+                        description: "This is your opportunity to be the first 👀"
+                    )
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 WidgetFooter {
                     if contentObserver.canAddRequests {

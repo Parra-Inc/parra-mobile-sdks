@@ -27,7 +27,7 @@ public struct FeedbackCardWidgetStyle: WidgetStyle {
                 bottom: 8,
                 trailing: 16
             ),
-            cornerRadius: ParraCornerRadiusSize.large,
+            cornerRadius: ParraCornerRadiusSize.lg,
             padding: .zero
         )
     }
