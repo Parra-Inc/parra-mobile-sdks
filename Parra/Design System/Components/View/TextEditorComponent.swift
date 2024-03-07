@@ -84,7 +84,7 @@ struct TextEditorComponent: TextEditorComponentType {
         return inputAttributes ?? TextEditorAttributes(
             title: title,
             helper: helper,
-            cornerRadius: .medium,
+            cornerRadius: .md,
             font: .body,
             fontColor: palette.primaryText.toParraColor(),
             padding: .zero,

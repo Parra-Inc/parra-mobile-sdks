@@ -10,9 +10,9 @@ import Foundation
 
 public enum ParraCornerRadiusSize: Hashable {
     case zero // name "zero" is unambiguous with Optional.none in cases where this is nil
-    case extraSmall
-    case small
-    case medium
-    case large
-    case extraLarge
+    case xs
+    case sm
+    case md
+    case lg
+    case xl
 }

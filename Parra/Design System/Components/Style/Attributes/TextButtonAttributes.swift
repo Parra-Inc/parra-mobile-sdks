@@ -103,9 +103,9 @@ public struct TextButtonAttributes: ParraStyleAttributes {
 
         let cornerRadius: ParraCornerRadiusSize = switch size {
         case .small, .medium:
-            .small
+            .sm
         case .large:
-            .medium
+            .md
         }
 
         return TextButtonAttributes(

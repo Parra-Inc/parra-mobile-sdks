@@ -141,7 +141,7 @@ private func renderLabel(
             content: LabelContent(text: "With a gradient background"),
             attributes: LabelAttributes(
                 background: Gradient(colors: [.pink, .purple]),
-                cornerRadius: .extraSmall,
+                cornerRadius: .xs,
                 fontColor: Color.white,
                 padding: EdgeInsets(
                     top: 4,
@@ -160,7 +160,7 @@ private func renderLabel(
             ),
             attributes: LabelAttributes(
                 background: Gradient(colors: [.pink, .purple]),
-                cornerRadius: .extraSmall,
+                cornerRadius: .xs,
                 fontColor: Color.white,
                 padding: EdgeInsets(
                     top: 4,
@@ -176,7 +176,7 @@ private func renderLabel(
             content: LabelContent(text: "With a corner radius"),
             attributes: LabelAttributes(
                 background: .green,
-                cornerRadius: .large,
+                cornerRadius: .lg,
                 padding: EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
             )
         )

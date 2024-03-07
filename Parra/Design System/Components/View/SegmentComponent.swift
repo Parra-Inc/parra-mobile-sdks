@@ -45,7 +45,7 @@ struct SegmentComponent: SegmentComponentType {
             optionLabelBackgroundColor: palette.primaryBackground,
             optionLabelSelectedBackgroundColor: palette.primary.toParraColor(),
             optionLabelSelectedFontColor: palette.secondaryText.toParraColor(),
-            cornerRadius: .medium,
+            cornerRadius: .md,
             borderWidth: 1.5,
             borderColor: palette.primarySeparator.toParraColor()
         )

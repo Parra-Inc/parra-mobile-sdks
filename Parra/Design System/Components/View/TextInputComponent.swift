@@ -74,7 +74,7 @@ struct TextInputComponent: TextInputComponentType {
         return inputAttributes ?? TextInputAttributes(
             title: title,
             helper: helper,
-            cornerRadius: .medium,
+            cornerRadius: .md,
             font: .body,
             fontColor: palette.primaryText.toParraColor(),
             padding: .zero,

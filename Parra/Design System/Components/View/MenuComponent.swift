@@ -78,7 +78,7 @@ struct MenuComponent: MenuComponentType {
             menuItemSelected: menuItemSelected,
             sortOrder: .fixed,
             tint: theme.palette.secondaryText.toParraColor(),
-            cornerRadius: .medium,
+            cornerRadius: .md,
             padding: EdgeInsets(vertical: 0, horizontal: 0),
             borderWidth: 1
         )

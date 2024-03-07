@@ -96,9 +96,9 @@ public struct ImageButtonAttributes: ParraStyleAttributes {
 
         let cornerRadius: ParraCornerRadiusSize = switch config.size {
         case .smallSquare, .mediumSquare:
-            .small
+            .sm
         case .largeSquare:
-            .medium
+            .md
         case .custom:
             .zero
         }

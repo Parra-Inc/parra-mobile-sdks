@@ -18,11 +18,11 @@ public struct ParraCornerRadiusConfig {
         large: RectangleCornerRadii,
         extraLarge: RectangleCornerRadii
     ) {
-        self.extraSmall = extraSmall
-        self.small = small
-        self.medium = medium
-        self.large = large
-        self.extraLarge = extraLarge
+        self.xs = extraSmall
+        self.sm = small
+        self.md = medium
+        self.lg = large
+        self.xl = extraLarge
     }
 
     // MARK: - Public
@@ -35,11 +35,11 @@ public struct ParraCornerRadiusConfig {
         extraLarge: .init(allCorners: 16)
     )
 
-    public let extraSmall: RectangleCornerRadii
-    public let small: RectangleCornerRadii
-    public let medium: RectangleCornerRadii
-    public let large: RectangleCornerRadii
-    public let extraLarge: RectangleCornerRadii
+    public let xs: RectangleCornerRadii
+    public let sm: RectangleCornerRadii
+    public let md: RectangleCornerRadii
+    public let lg: RectangleCornerRadii
+    public let xl: RectangleCornerRadii
 
     public func value(
         for size: ParraCornerRadiusSize?
@@ -51,16 +51,16 @@ public struct ParraCornerRadiusConfig {
         switch size {
         case .zero:
             return .zero
-        case .extraSmall:
-            return extraSmall
-        case .small:
-            return small
-        case .medium:
-            return medium
-        case .large:
-            return large
-        case .extraLarge:
-            return extraLarge
+        case .xs:
+            return xs
+        case .sm:
+            return sm
+        case .md:
+            return md
+        case .lg:
+            return lg
+        case .xl:
+            return xl
         }
     }
 }
