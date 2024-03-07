@@ -41,7 +41,7 @@ struct ImageButtonComponent: ImageButtonComponentType {
 }
 
 #Preview("Image Button") {
-    ParraThemedPreviewWrapper {
+    ParraViewPreview { _ in
         renderImageButtonStorybook()
     }
 }

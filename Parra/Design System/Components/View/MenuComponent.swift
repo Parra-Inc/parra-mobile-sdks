@@ -186,33 +186,9 @@ struct MenuComponent: MenuComponentType {
     }
 }
 
-private func renderMenu(
-    config: MenuConfig,
-    content: MenuContent,
-    attributes: MenuAttributes? = nil,
-    theme: ParraTheme = .default
-) -> some View {
-    let mergedAttributes = MenuComponent.applyStandardCustomizations(
-        onto: attributes,
-        theme: theme,
-        config: config
-    )
-
-    return MenuComponent(
-        config: config,
-        content: content,
-        style: ParraAttributedMenuStyle(
-            config: config,
-            content: content,
-            attributes: mergedAttributes,
-            theme: theme
-        )
-    )
-}
-
 #Preview {
-    return VStack {
-        renderMenu(
+    ParraViewPreview { factory in
+        factory.buildMenu(
             config: FeedbackFormWidget.Config.default.selectFields,
             content: MenuContent(
                 title: "We want to hear from you",

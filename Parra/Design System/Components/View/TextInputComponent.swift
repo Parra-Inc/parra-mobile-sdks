@@ -141,82 +141,53 @@ struct TextInputComponent: TextInputComponentType {
     }
 }
 
-@MainActor
-private func renderTextInput(
-    config: TextInputConfig,
-    content: TextInputContent,
-    attributes: TextInputAttributes? = nil,
-    theme: ParraTheme = .default
-) -> some View {
-    let mergedAttributes = TextInputComponent.applyStandardCustomizations(
-        onto: attributes,
-        theme: theme,
-        config: config
-    )
-
-    return TextInputComponent(
-        config: config,
-        content: content,
-        style: ParraAttributedTextInputStyle(
-            config: config,
-            content: content,
-            attributes: mergedAttributes,
-            theme: theme
-        )
-    )
-    .environmentObject(
-        ParraThemeObserver(
-            theme: theme,
-            notificationCenter: ParraNotificationCenter()
-        )
-    )
-}
-
 #Preview {
-    VStack {
-        renderTextInput(
-            config: FeedbackFormWidget.Config.default.inputFields,
-            content: TextInputContent(
-                title: "Some title",
-                placeholder: "temp placeholder",
-                helper: "helper text woo",
-                errorMessage: nil,
-                textChanged: nil
+    ParraViewPreview { factory in
+        VStack {
+            factory.buildTextInput(
+                config: FeedbackFormWidget.Config.default.inputFields,
+                content: TextInputContent(
+                    title: "Some title",
+                    placeholder: "temp placeholder",
+                    helper: "helper text woo",
+                    errorMessage: nil,
+                    textChanged: nil
+                )
             )
-        )
 
-        renderTextInput(
-            config: FeedbackFormWidget.Config.default.inputFields,
-            content: TextInputContent(
-                title: "Some title",
-                placeholder: "temp placeholder",
-                helper: "helper text woo",
-                errorMessage: nil,
-                textChanged: nil
+            factory.buildTextInput(
+                config: FeedbackFormWidget.Config.default.inputFields,
+                content: TextInputContent(
+                    title: "Some title",
+                    placeholder: "temp placeholder",
+                    helper: "helper text woo",
+                    errorMessage: nil,
+                    textChanged: nil
+                )
             )
-        )
 
-        renderTextInput(
-            config: FeedbackFormWidget.Config.default.inputFields,
-            content: TextInputContent(
-                title: "Some title",
-                placeholder: "",
-                helper: "helper text woo",
-                errorMessage: "That text isn't very good",
-                textChanged: nil
+            factory.buildTextInput(
+                config: FeedbackFormWidget.Config.default.inputFields,
+                content: TextInputContent(
+                    title: "Some title",
+                    placeholder: "",
+                    helper: "helper text woo",
+                    errorMessage: "That text isn't very good",
+                    textChanged: nil
+                )
             )
-        )
 
-        renderTextInput(
-            config: FeedbackFormWidget.Config.default.inputFields,
-            content: TextInputContent(
-                title: "Some title",
-                placeholder: nil,
-                helper: "helper text woo",
-                errorMessage: nil,
-                textChanged: nil
+            factory.buildTextInput(
+                config: FeedbackFormWidget.Config.default.inputFields,
+                content: TextInputContent(
+                    title: "Some title",
+                    placeholder: nil,
+                    helper: "helper text woo",
+                    errorMessage: nil,
+                    textChanged: nil
+                )
             )
-        )
+        }
     }
     .padding()
 }

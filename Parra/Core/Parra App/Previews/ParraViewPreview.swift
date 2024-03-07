@@ -15,7 +15,7 @@ struct ParraViewPreview<Content>: View where Content: View {
     // MARK: - Lifecycle
 
     init(
-        content: @escaping () -> Content,
+        content: @escaping (_ factory: ComponentFactory) -> Content,
         theme: ParraTheme = .default
     ) {
         self.content = content
@@ -35,7 +35,7 @@ struct ParraViewPreview<Content>: View where Content: View {
             appDelegateType: ParraAppDelegate.self,
             launchScreenConfig: .preview,
             sceneContent: { _ in
-                content()
+                content(factory)
             }
         )
         .environmentObject(factory)
@@ -43,7 +43,7 @@ struct ParraViewPreview<Content>: View where Content: View {
 
     // MARK: - Private
 
-    @ViewBuilder private var content: () -> Content
+    @ViewBuilder private var content: (_ factory: ComponentFactory) -> Content
 
     private let factory: ComponentFactory
     private let options: [ParraConfigurationOption]

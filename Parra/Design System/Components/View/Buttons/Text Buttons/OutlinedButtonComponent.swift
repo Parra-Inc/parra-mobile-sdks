@@ -46,7 +46,7 @@ struct OutlinedButtonComponent: TextButtonComponentType {
 }
 
 #Preview("Outlined Button") {
-    ParraThemedPreviewWrapper {
+    ParraViewPreview { _ in
         renderStorybook(for: OutlinedButtonComponent.self)
     }
 }

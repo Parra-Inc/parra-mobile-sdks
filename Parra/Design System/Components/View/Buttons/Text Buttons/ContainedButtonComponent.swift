@@ -46,7 +46,7 @@ struct ContainedButtonComponent: TextButtonComponentType {
 }
 
 #Preview("Contained Button") {
-    ParraThemedPreviewWrapper {
+    ParraViewPreview { _ in
         renderStorybook(for: ContainedButtonComponent.self)
     }
 }

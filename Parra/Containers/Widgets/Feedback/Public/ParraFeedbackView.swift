@@ -81,7 +81,7 @@ public struct ParraFeedbackView: ParraPublicContainer {
                 .foregroundStyle(ParraTheme.default.palette.secondaryBackground)
                 .frame(width: geometry.size.width, height: geometry.size.height)
 
-            ParraViewPreview {
+            ParraViewPreview { _ in
                 ParraFeedbackView(cards: ParraCardItem.validStates())
             }
             .padding()

@@ -70,115 +70,102 @@ struct LabelComponent: LabelComponentType {
     }
 }
 
-private func renderLabel(
-    config: LabelConfig,
-    content: LabelContent,
-    attributes: LabelAttributes = .init(),
-    theme: ParraTheme = .default
-) -> some View {
-    let mergedAttributes = LabelComponent.applyStandardCustomizations(
-        onto: attributes,
-        theme: theme,
-        config: config
-    )
-
-    return LabelComponent(
-        content: content,
-        style: ParraAttributedLabelStyle(
-            content: content,
-            attributes: mergedAttributes,
-            theme: theme
-        )
-    )
-}
-
 #Preview {
-    return VStack(alignment: .leading, spacing: 16) {
-        renderLabel(
-            config: LabelConfig(fontStyle: .body),
-            content: LabelContent(text: "Default config")
-        )
-
-        renderLabel(
-            config: LabelConfig(fontStyle: .title),
-            content: LabelContent(text: "A large title")
-        )
-
-        renderLabel(
-            config: LabelConfig(fontStyle: .subheadline),
-            content: LabelContent(text: "A subheadline")
-        )
-
-        renderLabel(
-            config: LabelConfig(fontStyle: .subheadline),
-            content: LabelContent(
-                text: "A subheadline with icon",
-                icon: UIImage(systemName: "sun.rain.circle.fill")
+    ParraViewPreview { factory in
+        VStack(alignment: .leading, spacing: 16) {
+            factory.buildLabel(
+                config: LabelConfig(fontStyle: .body),
+                content: LabelContent(text: "Default config")
             )
-        )
 
-        renderLabel(
-            config: LabelConfig(fontStyle: .subheadline),
-            content: LabelContent(
-                text: "A reversed subheadline with icon",
-                icon: UIImage(systemName: "sun.rain.circle.fill")
-            ),
-            attributes: LabelAttributes(layoutDirectionBehavior: .mirrors)
-        )
-
-        renderLabel(
-            config: LabelConfig(fontStyle: .body),
-            content: LabelContent(text: "With a background"),
-            attributes: LabelAttributes(
-                background: .red,
-                font: .title,
-                fontColor: Color.green
+            factory.buildLabel(
+                config: LabelConfig(fontStyle: .title),
+                content: LabelContent(text: "A large title")
             )
-        )
 
-        renderLabel(
-            config: LabelConfig(fontStyle: .title),
-            content: LabelContent(text: "With a gradient background"),
-            attributes: LabelAttributes(
-                background: Gradient(colors: [.pink, .purple]),
-                cornerRadius: .xs,
-                fontColor: Color.white,
-                padding: EdgeInsets(
-                    top: 4,
-                    leading: 10,
-                    bottom: 4,
-                    trailing: 10
+            factory.buildLabel(
+                config: LabelConfig(fontStyle: .subheadline),
+                content: LabelContent(text: "A subheadline")
+            )
+
+            factory.buildLabel(
+                config: LabelConfig(fontStyle: .subheadline),
+                content: LabelContent(
+                    text: "A subheadline with icon",
+                    icon: UIImage(systemName: "sun.rain.circle.fill")
                 )
             )
-        )
 
-        renderLabel(
-            config: LabelConfig(fontStyle: .title),
-            content: LabelContent(
-                text: "BG gradient and icon",
-                icon: UIImage(systemName: "fireworks")
-            ),
-            attributes: LabelAttributes(
-                background: Gradient(colors: [.pink, .purple]),
-                cornerRadius: .xs,
-                fontColor: Color.white,
-                padding: EdgeInsets(
-                    top: 4,
-                    leading: 10,
-                    bottom: 4,
-                    trailing: 10
+            factory.buildLabel(
+                config: LabelConfig(fontStyle: .subheadline),
+                content: LabelContent(
+                    text: "A reversed subheadline with icon",
+                    icon: UIImage(systemName: "sun.rain.circle.fill")
+                ),
+                localAttributes: LabelAttributes(
+                    layoutDirectionBehavior: .mirrors
                 )
             )
-        )
 
-        renderLabel(
-            config: LabelConfig(fontStyle: .subheadline),
-            content: LabelContent(text: "With a corner radius"),
-            attributes: LabelAttributes(
-                background: .green,
-                cornerRadius: .lg,
-                padding: EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+            factory.buildLabel(
+                config: LabelConfig(fontStyle: .body),
+                content: LabelContent(text: "With a background"),
+                localAttributes: LabelAttributes(
+                    background: .red,
+                    font: .title,
+                    fontColor: Color.green
+                )
             )
-        )
+
+            factory.buildLabel(
+                config: LabelConfig(fontStyle: .title),
+                content: LabelContent(text: "With a gradient background"),
+                localAttributes: LabelAttributes(
+                    background: Gradient(colors: [.pink, .purple]),
+                    cornerRadius: .xs,
+                    fontColor: Color.white,
+                    padding: EdgeInsets(
+                        top: 4,
+                        leading: 10,
+                        bottom: 4,
+                        trailing: 10
+                    )
+                )
+            )
+
+            factory.buildLabel(
+                config: LabelConfig(fontStyle: .title),
+                content: LabelContent(
+                    text: "BG gradient and icon",
+                    icon: UIImage(systemName: "fireworks")
+                ),
+                localAttributes: LabelAttributes(
+                    background: Gradient(colors: [.pink, .purple]),
+                    cornerRadius: .xs,
+                    fontColor: Color.white,
+                    padding: EdgeInsets(
+                        top: 4,
+                        leading: 10,
+                        bottom: 4,
+                        trailing: 10
+                    )
+                )
+            )
+
+            factory.buildLabel(
+                config: LabelConfig(fontStyle: .subheadline),
+                content: LabelContent(text: "With a corner radius"),
+                localAttributes: LabelAttributes(
+                    background: .green,
+                    cornerRadius: .lg,
+                    padding: EdgeInsets(
+                        top: 8,
+                        leading: 8,
+                        bottom: 8,
+                        trailing: 8
+                    )
+                )
+            )
+        }
     }
 }

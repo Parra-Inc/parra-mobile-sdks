@@ -56,33 +56,9 @@ struct SegmentComponent: SegmentComponentType {
     }
 }
 
-private func renderSegment(
-    config: SegmentConfig,
-    content: SegmentContent,
-    attributes: SegmentAttributes = .init(),
-    theme: ParraTheme = .default
-) -> some View {
-    let mergedAttributes = SegmentComponent.applyStandardCustomizations(
-        onto: attributes,
-        theme: theme,
-        config: config
-    )
-
-    return SegmentComponent(
-        config: config,
-        content: content,
-        style: ParraAttributedSegmentStyle(
-            config: config,
-            content: content,
-            attributes: mergedAttributes,
-            theme: theme
-        )
-    )
-}
-
 #Preview {
-    return VStack(alignment: .leading, spacing: 16) {
-        renderSegment(
+    ParraViewPreview { factory in
+        factory.buildSegment(
             config: SegmentConfig(optionLabels: LabelConfig(fontStyle: .body)),
             content: SegmentContent(
                 options: ParraCardItemFixtures.ratingQuestionData.options.map {

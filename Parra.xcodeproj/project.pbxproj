@@ -206,7 +206,6 @@
 		0087CAAB2A59F3B4007D72FA /* ParraLogData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAAA2A59F3B4007D72FA /* ParraLogData.swift */; };
 		0087CAAD2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CAAC2A5A2B1A007D72FA /* ParraLogMarkerMeasurement.swift */; };
 		008878122979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008878112979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift */; };
-		00916A462B75A6C3009C87DC /* ParraThemedPreviewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A452B75A6C3009C87DC /* ParraThemedPreviewWrapper.swift */; };
 		00916A602B75C81A009C87DC /* SampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A5F2B75C81A009C87DC /* SampleApp.swift */; };
 		00916A622B75C81A009C87DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A612B75C81A009C87DC /* ContentView.swift */; };
 		00916A642B75C81B009C87DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00916A632B75C81B009C87DC /* Assets.xcassets */; };
@@ -701,7 +700,6 @@
 		00901F352999ACBE0071647F /* ParraRatingKindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraRatingKindView.swift; sourceTree = "<group>"; };
 		00901F372999ACC70071647F /* ParraLongTextKindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLongTextKindView.swift; sourceTree = "<group>"; };
 		00901F392999ACDF0071647F /* ParraQuestionKindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionKindView.swift; sourceTree = "<group>"; };
-		00916A452B75A6C3009C87DC /* ParraThemedPreviewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraThemedPreviewWrapper.swift; sourceTree = "<group>"; };
 		00916A5D2B75C819009C87DC /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00916A5F2B75C81A009C87DC /* SampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleApp.swift; sourceTree = "<group>"; };
 		00916A612B75C81A009C87DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -1409,7 +1407,6 @@
 				00E76D2B2B66D25A00B01DD8 /* Factory */,
 				003622192B5D9646009EFE53 /* Storybooks */,
 				003621EC2B5C7660009EFE53 /* Theme */,
-				00916A442B75A6BA009C87DC /* Util */,
 			);
 			path = "Design System";
 			sourceTree = "<group>";
@@ -1734,14 +1731,6 @@
 				007F30EE29A18A87005731C4 /* ParraStarKindView.swift */,
 			);
 			path = "Question Kind Cards";
-			sourceTree = "<group>";
-		};
-		00916A442B75A6BA009C87DC /* Util */ = {
-			isa = PBXGroup;
-			children = (
-				00916A452B75A6C3009C87DC /* ParraThemedPreviewWrapper.swift */,
-			);
-			path = Util;
 			sourceTree = "<group>";
 		};
 		00916A5E2B75C81A009C87DC /* Sample */ = {
@@ -2965,7 +2954,6 @@
 				00E76D222B66D1E800B01DD8 /* LabelConfig.swift in Sources */,
 				00DA7FE5295C95C400109081 /* SyncTarget.swift in Sources */,
 				00ABF1B72B867BD000A054A2 /* ParraCardModalType.swift in Sources */,
-				00916A462B75A6C3009C87DC /* ParraThemedPreviewWrapper.swift in Sources */,
 				007ED4762A6C8BDF0077E446 /* CallStackParser.swift in Sources */,
 				0087CA662A56114C007D72FA /* Logger.swift in Sources */,
 				001B7B1827DE3AA900DEEECD /* GeneratedTypes.swift in Sources */,

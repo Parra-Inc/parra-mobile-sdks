@@ -377,7 +377,7 @@ class ComponentFactory: ObservableObject {
         config: SegmentConfig,
         content: SegmentContent,
         suppliedBuilder: LocalComponentBuilder.Factory<
-            some View,
+            AnyView,
             SegmentConfig,
             SegmentContent,
             SegmentAttributes

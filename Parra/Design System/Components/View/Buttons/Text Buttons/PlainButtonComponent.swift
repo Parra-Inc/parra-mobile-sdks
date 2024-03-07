@@ -46,7 +46,7 @@ struct PlainButtonComponent: TextButtonComponentType {
 }
 
 #Preview("Plain Button") {
-    ParraThemedPreviewWrapper {
+    ParraViewPreview { _ in
         renderStorybook(for: PlainButtonComponent.self)
     }
 }

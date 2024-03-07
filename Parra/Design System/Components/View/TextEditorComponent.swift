@@ -259,82 +259,53 @@ struct TextEditorComponent: TextEditorComponentType {
     }
 }
 
-@MainActor
-private func renderTextEditor(
-    config: TextEditorConfig,
-    content: TextEditorContent,
-    attributes: TextEditorAttributes? = nil,
-    theme: ParraTheme = .default
-) -> some View {
-    let mergedAttributes = TextEditorComponent.applyStandardCustomizations(
-        onto: attributes,
-        theme: theme,
-        config: config
-    )
-
-    return TextEditorComponent(
-        config: config,
-        content: content,
-        style: ParraAttributedTextEditorStyle(
-            config: config,
-            content: content,
-            attributes: mergedAttributes,
-            theme: theme
-        )
-    )
-    .environmentObject(
-        ParraThemeObserver(
-            theme: theme,
-            notificationCenter: ParraNotificationCenter()
-        )
-    )
-}
-
 #Preview {
-    VStack {
-        renderTextEditor(
-            config: FeedbackFormWidget.Config.default.textFields,
-            content: TextEditorContent(
-                title: "Some title",
-                placeholder: "temp placeholder",
-                helper: "helper text woo",
-                errorMessage: nil,
-                textChanged: nil
+    ParraViewPreview { factory in
+        VStack {
+            factory.buildTextEditor(
+                config: FeedbackFormWidget.Config.default.textFields,
+                content: TextEditorContent(
+                    title: "Some title",
+                    placeholder: "temp placeholder",
+                    helper: "helper text woo",
+                    errorMessage: nil,
+                    textChanged: nil
+                )
             )
-        )
 
-        renderTextEditor(
-            config: FeedbackFormWidget.Config.default.textFields,
-            content: TextEditorContent(
-                title: "Some title",
-                placeholder: "temp placeholder",
-                helper: "helper text woo",
-                errorMessage: nil,
-                textChanged: nil
+            factory.buildTextEditor(
+                config: FeedbackFormWidget.Config.default.textFields,
+                content: TextEditorContent(
+                    title: "Some title",
+                    placeholder: "temp placeholder",
+                    helper: "helper text woo",
+                    errorMessage: nil,
+                    textChanged: nil
+                )
             )
-        )
 
-//        renderTextEditor(
-//            config: FeedbackFormWidget.Config.default.textFields,
-//            content: TextEditorContent(
-//                title: "Some title",
-//                placeholder: "temp placeholder",
-//                helper: "helper text woo",
-//                errorMessage: "That text isn't very good",
-//                textChanged: nil
-//            )
-//        )
-//
-//        renderTextEditor(
-//            config: FeedbackFormWidget.Config.default.textFields,
-//            content: TextEditorContent(
-//                title: "Some title",
-//                placeholder: "temp placeholder",
-//                helper: "helper text woo",
-//                errorMessage: nil,
-//                textChanged: nil
-//            )
-//        )
+            factory.buildTextEditor(
+                config: FeedbackFormWidget.Config.default.textFields,
+                content: TextEditorContent(
+                    title: "Some title",
+                    placeholder: "temp placeholder",
+                    helper: "helper text woo",
+                    errorMessage: "That text isn't very good",
+                    textChanged: nil
+                )
+            )
+
+            factory.buildTextEditor(
+                config: FeedbackFormWidget.Config.default.textFields,
+                content: TextEditorContent(
+                    title: "Some title",
+                    placeholder: "temp placeholder",
+                    helper: "helper text woo",
+                    errorMessage: nil,
+                    textChanged: nil
+                )
+            )
+        }
     }
     .padding()
 }

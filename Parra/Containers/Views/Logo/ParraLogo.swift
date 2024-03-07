@@ -93,7 +93,7 @@ struct ParraLogo: View {
 }
 
 #Preview("Parra Logos", traits: .sizeThatFitsLayout) {
-    ParraViewPreview {
+    ParraViewPreview { _ in
         VStack(alignment: .center, spacing: 100) {
             VStack(alignment: .center, spacing: 40) {
                 ParraLogo(type: .logo)
