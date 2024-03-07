@@ -9,7 +9,7 @@
 import SwiftUI
 
 protocol Container: View {
-    associatedtype Factory: ParraComponentFactory
+    associatedtype BuilderConfig: LocalComponentBuilderConfig
     associatedtype Config: ContainerConfig
     associatedtype ContentObserver: ContainerContentObserver
 
@@ -22,7 +22,8 @@ protocol Container: View {
     // Expected via init
     var config: Config { get }
     var style: Style { get }
-    var componentFactory: ComponentFactory<Factory> { get }
+    var localBuilderConfig: BuilderConfig { get }
+    var componentFactory: ComponentFactory { get }
     var contentObserver: ContentObserver { get }
 
     // Expected via @Environment
@@ -31,7 +32,8 @@ protocol Container: View {
     init(
         config: Config,
         style: Style,
-        componentFactory: ComponentFactory<Factory>,
+        localBuilderConfig: BuilderConfig,
+        componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     )
 }

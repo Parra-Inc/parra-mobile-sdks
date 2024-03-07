@@ -1,5 +1,5 @@
 //
-//  ParraComponentFactory.swift
+//  ComponentFactory.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public enum ComponentBuilder {
+public enum LocalComponentBuilder {
     // I don't know why, but these generic typealiases have to be nested within
     // a type. If they're top level, any callsite reports not finding them on
     // the Parra module.
@@ -24,24 +24,26 @@ public enum ComponentBuilder {
     ) -> V?
 }
 
-protocol ParraComponentFactory {}
+protocol LocalComponentBuilderConfig: AnyObject, Observable {
+    // All builder configs must be generically initable since we use them in
+    // environment objects that are required to be non-nil. So these builder
+    // configs exist for all containers but just have nil fields by default.
+    init()
+}
 
-class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
+class ComponentFactory: ObservableObject {
     // MARK: - Lifecycle
 
     init(
-        local: Factory?,
         global: GlobalComponentAttributes?,
         theme: ParraTheme
     ) {
-        self.local = local
         self.global = global
         self.theme = theme
     }
 
     // MARK: - Internal
 
-    let local: Factory?
     let global: GlobalComponentAttributes?
     let theme: ParraTheme
 
@@ -49,7 +51,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
     func buildLabel(
         config: LabelConfig,
         content: LabelContent,
-        suppliedFactory: ComponentBuilder.Factory<
+        suppliedBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
@@ -72,7 +74,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         // If a container level factory function was provided for this
         // component, use it and supply global attribute overrides instead
         // of local, if provided.
-        if let builder = suppliedFactory,
+        if let builder = suppliedBuilder,
            let view = builder(config, content, mergedAttributes)
         {
             view
@@ -95,7 +97,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         variant: ButtonVariant,
         config: TextButtonConfig,
         content: TextButtonContent,
-        suppliedFactory: ComponentBuilder.Factory<
+        suppliedBuilder: LocalComponentBuilder.Factory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
@@ -139,7 +141,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         // If a container level factory function was provided for this
         // component, use it and supply global attribute overrides instead
         // of local, if provided.
-        if let builder = suppliedFactory,
+        if let builder = suppliedBuilder,
            let view = builder(config, content, mergedAttributes)
         {
             view
@@ -179,7 +181,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         variant: ButtonVariant,
         config: ImageButtonConfig,
         content: ImageButtonContent,
-        suppliedFactory: ComponentBuilder.Factory<
+        suppliedBuilder: LocalComponentBuilder.Factory<
             Button<Image>,
             ImageButtonConfig,
             ImageButtonContent,
@@ -205,7 +207,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         // If a container level factory function was provided for this
         // component, use it and supply global attribute overrides instead
         // of local, if provided.
-        if let builder = suppliedFactory,
+        if let builder = suppliedBuilder,
            let view = builder(config, content, mergedAttributes)
         {
             view
@@ -229,7 +231,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
     func buildMenu(
         config: MenuConfig,
         content: MenuContent,
-        suppliedFactory: ComponentBuilder.Factory<
+        suppliedBuilder: LocalComponentBuilder.Factory<
             Menu<Text, Button<Text>>,
             MenuConfig,
             MenuContent,
@@ -252,7 +254,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
         // If a container level factory function was provided for this
         // component, use it and supply global attribute overrides instead
         // of local, if provided.
-        if let builder = suppliedFactory,
+        if let builder = suppliedBuilder,
            let view = builder(config, content, mergedAttributes)
         {
             view
@@ -276,7 +278,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
     func buildTextEditor(
         config: TextEditorConfig,
         content: TextEditorContent,
-        suppliedFactory: ComponentBuilder.Factory<
+        suppliedBuilder: LocalComponentBuilder.Factory<
             TextEditor,
             TextEditorConfig,
             TextEditorContent,
@@ -301,7 +303,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
         // If a container level factory function was provided for this component,
         // use it and supply global attribute overrides instead of local, if provided.
-        if let builder = suppliedFactory,
+        if let builder = suppliedBuilder,
            let view = builder(config, content, mergedAttributes)
         {
             view
@@ -325,7 +327,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
     func buildTextInput(
         config: TextInputConfig,
         content: TextInputContent,
-        suppliedFactory: ComponentBuilder.Factory<
+        suppliedBuilder: LocalComponentBuilder.Factory<
             TextField<Text>,
             TextInputConfig,
             TextInputContent,
@@ -350,7 +352,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
         // If a container level factory function was provided for this component,
         // use it and supply global attribute overrides instead of local, if provided.
-        if let builder = suppliedFactory,
+        if let builder = suppliedBuilder,
            let view = builder(config, content, mergedAttributes)
         {
             view
@@ -374,7 +376,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
     func buildSegment(
         config: SegmentConfig,
         content: SegmentContent,
-        suppliedFactory: ComponentBuilder.Factory<
+        suppliedBuilder: LocalComponentBuilder.Factory<
             some View,
             SegmentConfig,
             SegmentContent,
@@ -399,7 +401,7 @@ class ComponentFactory<Factory: ParraComponentFactory>: ObservableObject {
 
         // If a container level factory function was provided for this component,
         // use it and supply global attribute overrides instead of local, if provided.
-        if let builder = suppliedFactory,
+        if let builder = suppliedBuilder,
            let view = builder(config, content, mergedAttributes)
         {
             view

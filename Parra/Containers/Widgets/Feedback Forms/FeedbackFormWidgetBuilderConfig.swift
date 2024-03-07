@@ -1,5 +1,5 @@
 //
-//  FeedbackFormWidgetFactory.swift
+//  FeedbackFormWidgetBuilderConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,41 +8,50 @@
 
 import SwiftUI
 
-public struct FeedbackFormWidgetFactory: ParraComponentFactory {
+public class FeedbackFormWidgetBuilderConfig: LocalComponentBuilderConfig {
     // MARK: - Lifecycle
 
+    public required init() {
+        self.title = nil
+        self.description = nil
+        self.selectFields = nil
+        self.textFields = nil
+        self.inputFields = nil
+        self.submitButton = nil
+    }
+
     public init(
-        titleBuilder: ComponentBuilder.Factory<
+        titleBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        descriptionBuilder: ComponentBuilder.Factory<
+        descriptionBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        selectFields: ComponentBuilder.Factory<
+        selectFields: LocalComponentBuilder.Factory<
             Menu<Text, Button<Text>>,
             MenuConfig,
             MenuContent,
             MenuAttributes
         >? = nil,
-        textFields: ComponentBuilder.Factory<
+        textFields: LocalComponentBuilder.Factory<
             TextEditor,
             TextEditorConfig,
             TextEditorContent,
             TextEditorAttributes
         >? = nil,
-        inputFields: ComponentBuilder.Factory<
+        inputFields: LocalComponentBuilder.Factory<
             TextField<Text>,
             TextInputConfig,
             TextInputContent,
             TextInputAttributes
         >? = nil,
-        submitButtonBuilder: ComponentBuilder.Factory<
+        submitButtonBuilder: LocalComponentBuilder.Factory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
@@ -59,37 +68,37 @@ public struct FeedbackFormWidgetFactory: ParraComponentFactory {
 
     // MARK: - Public
 
-    public let title: ComponentBuilder.Factory<
+    public let title: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
-    public let description: ComponentBuilder.Factory<
+    public let description: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
-    public let selectFields: ComponentBuilder.Factory<
+    public let selectFields: LocalComponentBuilder.Factory<
         Menu<Text, Button<Text>>,
         MenuConfig,
         MenuContent,
         MenuAttributes
     >?
-    public let textFields: ComponentBuilder.Factory<
+    public let textFields: LocalComponentBuilder.Factory<
         TextEditor,
         TextEditorConfig,
         TextEditorContent,
         TextEditorAttributes
     >?
-    public let inputFields: ComponentBuilder.Factory<
+    public let inputFields: LocalComponentBuilder.Factory<
         TextField<Text>,
         TextInputConfig,
         TextInputContent,
         TextInputAttributes
     >?
-    public let submitButton: ComponentBuilder.Factory<
+    public let submitButton: LocalComponentBuilder.Factory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,

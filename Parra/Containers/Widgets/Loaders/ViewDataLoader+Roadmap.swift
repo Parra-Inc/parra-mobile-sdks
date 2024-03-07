@@ -23,7 +23,7 @@ struct RoadmapLoaderResult: Equatable {
 extension ViewDataLoader {
     static func roadmapLoader(
         config: RoadmapWidgetConfig,
-        localFactory: RoadmapWidget.Factory?
+        localBuilder: RoadmapWidget.BuilderConfig
     ) -> ViewDataLoader<RoadmapParams, RoadmapLoaderResult, RoadmapWidget> {
         return ViewDataLoader<
             RoadmapParams,
@@ -52,7 +52,7 @@ extension ViewDataLoader {
             renderer: { parra, params, _ in
                 let container: RoadmapWidget = renderContainer(
                     from: parra,
-                    with: localFactory,
+                    with: localBuilder,
                     params: .init(
                         roadmapConfig: params.roadmapConfig,
                         selectedTab: params.selectedTab,

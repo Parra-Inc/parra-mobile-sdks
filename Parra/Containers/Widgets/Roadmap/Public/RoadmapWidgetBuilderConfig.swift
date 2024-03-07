@@ -1,5 +1,5 @@
 //
-//  RoadmapWidgetFactory.swift
+//  RoadmapWidgetBuilderConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/2/24.
@@ -8,53 +8,64 @@
 
 import SwiftUI
 
-public struct RoadmapWidgetFactory: ParraComponentFactory {
+public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
     // MARK: - Lifecycle
 
+    public required init() {
+        self.title = nil
+        self.addRequestButton = nil
+        self.requestTitleLabel = nil
+        self.requestDescriptionLabel = nil
+        self.voteCountLabel = nil
+        self.requestUpvoteButton = nil
+        self.statusLabel = nil
+        self.createdAtLabel = nil
+    }
+
     public init(
-        titleBuilder: ComponentBuilder.Factory<
+        titleBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        addRequestButtonBuilder: ComponentBuilder.Factory<
+        addRequestButtonBuilder: LocalComponentBuilder.Factory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
             TextButtonAttributes
         >? = nil,
-        requestTitleLabelBuilder: ComponentBuilder.Factory<
+        requestTitleLabelBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        requestDescriptionLabelBuilder: ComponentBuilder.Factory<
+        requestDescriptionLabelBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        voteCountLabelBuilder: ComponentBuilder.Factory<
+        voteCountLabelBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        requestUpvoteButtonBuilder: ComponentBuilder.Factory<
+        requestUpvoteButtonBuilder: LocalComponentBuilder.Factory<
             Button<Image>,
             ImageButtonConfig,
             ImageButtonContent,
             ImageButtonAttributes
         >? = nil,
-        statusLabelBuilder: ComponentBuilder.Factory<
+        statusLabelBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        createdAtLabelBuilder: ComponentBuilder.Factory<
+        createdAtLabelBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
@@ -73,49 +84,49 @@ public struct RoadmapWidgetFactory: ParraComponentFactory {
 
     // MARK: - Public
 
-    public let title: ComponentBuilder.Factory<
+    public let title: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
-    public let addRequestButton: ComponentBuilder.Factory<
+    public let addRequestButton: LocalComponentBuilder.Factory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,
         TextButtonAttributes
     >?
-    public let requestTitleLabel: ComponentBuilder.Factory<
+    public let requestTitleLabel: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
-    public let requestDescriptionLabel: ComponentBuilder.Factory<
+    public let requestDescriptionLabel: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
-    public let voteCountLabel: ComponentBuilder.Factory<
+    public let voteCountLabel: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
-    public let requestUpvoteButton: ComponentBuilder.Factory<
+    public let requestUpvoteButton: LocalComponentBuilder.Factory<
         Button<Image>,
         ImageButtonConfig,
         ImageButtonContent,
         ImageButtonAttributes
     >?
-    public let statusLabel: ComponentBuilder.Factory<
+    public let statusLabel: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
-    public let createdAtLabel: ComponentBuilder.Factory<
+    public let createdAtLabel: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,

@@ -13,7 +13,7 @@ private let logger = Logger()
 extension ViewDataLoader {
     static func feedbackFormLoader(
         config: FeedbackFormWidgetConfig,
-        localFactory: FeedbackFormWidget.Factory?,
+        localBuilder: FeedbackFormWidget.BuilderConfig,
         submissionType: FeedbackFormSubmissionType
     ) -> ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget> {
         return ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget>(
@@ -25,7 +25,7 @@ extension ViewDataLoader {
             renderer: { parra, form, dismisser in
                 let container: FeedbackFormWidget = renderContainer(
                     from: parra,
-                    with: localFactory,
+                    with: localBuilder,
                     params: .init(
                         formData: form.data
                     ),

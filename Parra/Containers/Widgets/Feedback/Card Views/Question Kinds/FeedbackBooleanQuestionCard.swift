@@ -26,9 +26,8 @@ struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
     typealias AnswerType = SingleOptionAnswer
 
     @Environment(FeedbackCardWidgetConfig.self) var config
-    @EnvironmentObject var componentFactory: ComponentFactory<
-        FeedbackCardWidgetFactory
-    >
+    @Environment(FeedbackCardWidgetBuilderConfig.self) var localBuilderConfig
+    @EnvironmentObject var componentFactory: ComponentFactory
     @EnvironmentObject var themeObserver: ParraThemeObserver
     @EnvironmentObject var contentObserver: FeedbackCardWidget.ContentObserver
 

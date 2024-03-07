@@ -17,9 +17,11 @@ struct FeedbackCardWidget: Container {
     init(
         config: FeedbackCardWidgetConfig,
         style: FeedbackCardWidgetStyle,
-        componentFactory: ComponentFactory<FeedbackCardWidgetFactory>,
+        localBuilderConfig: FeedbackCardWidgetBuilderConfig,
+        componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
+        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self.config = config
         self.style = style
@@ -33,7 +35,8 @@ struct FeedbackCardWidget: Container {
 
     static let height: CGFloat = 260
 
-    let componentFactory: ComponentFactory<FeedbackCardWidgetFactory>
+    let localBuilderConfig: FeedbackCardWidgetBuilderConfig
+    let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: FeedbackCardWidgetConfig
     let style: FeedbackCardWidgetStyle
@@ -131,10 +134,11 @@ struct FeedbackCardWidget: Container {
                 .foregroundStyle(ParraTheme.default.palette.secondaryBackground)
                 .frame(width: geometry.size.width, height: geometry.size.height)
 
-            ParraContainerPreview { parra, componentFactory in
+            ParraContainerPreview { parra, componentFactory, builderConfig in
                 FeedbackCardWidget(
                     config: .default,
                     style: .default(with: componentFactory.theme),
+                    localBuilderConfig: builderConfig,
                     componentFactory: componentFactory,
                     contentObserver: .init(
                         initialParams: .init(

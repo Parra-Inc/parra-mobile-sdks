@@ -1,5 +1,5 @@
 //
-//  FeedbackCardWidgetFactory.swift
+//  FeedbackCardWidgetBuilderConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/24/24.
@@ -8,47 +8,57 @@
 
 import SwiftUI
 
-public struct FeedbackCardWidgetFactory: ParraComponentFactory {
+public class FeedbackCardWidgetBuilderConfig: LocalComponentBuilderConfig {
     // MARK: - Lifecycle
 
+    public required init() {
+        self.backButton = nil
+        self.forwardButton = nil
+        self.title = nil
+        self.subtitle = nil
+        self.booleanOptions = nil
+        self.choiceOptions = nil
+        self.checkboxOptions = nil
+    }
+
     public init(
-        backButtonBuilder: ComponentBuilder.Factory<
+        backButtonBuilder: LocalComponentBuilder.Factory<
             Button<Image>,
             ImageButtonConfig,
             ImageButtonContent,
             ImageButtonAttributes
         >? = nil,
-        forwardButtonBuilder: ComponentBuilder.Factory<
+        forwardButtonBuilder: LocalComponentBuilder.Factory<
             Button<Image>,
             ImageButtonConfig,
             ImageButtonContent,
             ImageButtonAttributes
         >? = nil,
-        titleBuilder: ComponentBuilder.Factory<
+        titleBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        subtitleBuilder: ComponentBuilder.Factory<
+        subtitleBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        booleanOptionsBuilder: ComponentBuilder.Factory<
+        booleanOptionsBuilder: LocalComponentBuilder.Factory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
             TextButtonAttributes
         >? = nil,
-        choiceOptionsBuilder: ComponentBuilder.Factory<
+        choiceOptionsBuilder: LocalComponentBuilder.Factory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
             TextButtonAttributes
         >? = nil,
-        checkboxOptionsBuilder: ComponentBuilder.Factory<
+        checkboxOptionsBuilder: LocalComponentBuilder.Factory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
@@ -66,49 +76,49 @@ public struct FeedbackCardWidgetFactory: ParraComponentFactory {
 
     // MARK: - Public
 
-    public let backButton: ComponentBuilder.Factory<
+    public let backButton: LocalComponentBuilder.Factory<
         Button<Image>,
         ImageButtonConfig,
         ImageButtonContent,
         ImageButtonAttributes
     >?
 
-    public let forwardButton: ComponentBuilder.Factory<
+    public let forwardButton: LocalComponentBuilder.Factory<
         Button<Image>,
         ImageButtonConfig,
         ImageButtonContent,
         ImageButtonAttributes
     >?
 
-    public let title: ComponentBuilder.Factory<
+    public let title: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
 
-    public let subtitle: ComponentBuilder.Factory<
+    public let subtitle: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
 
-    public let booleanOptions: ComponentBuilder.Factory<
+    public let booleanOptions: LocalComponentBuilder.Factory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,
         TextButtonAttributes
     >?
 
-    public let choiceOptions: ComponentBuilder.Factory<
+    public let choiceOptions: LocalComponentBuilder.Factory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,
         TextButtonAttributes
     >?
 
-    public let checkboxOptions: ComponentBuilder.Factory<
+    public let checkboxOptions: LocalComponentBuilder.Factory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,

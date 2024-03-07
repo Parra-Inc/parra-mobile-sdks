@@ -34,7 +34,7 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
             variant: .outlined,
             config: config.checkboxOptions,
             content: content,
-            suppliedFactory: componentFactory.local?.checkboxOptions,
+            suppliedBuilder: localBuilderConfig.checkboxOptions,
             localAttributes: attributes
         )
         .layoutPriority(100)

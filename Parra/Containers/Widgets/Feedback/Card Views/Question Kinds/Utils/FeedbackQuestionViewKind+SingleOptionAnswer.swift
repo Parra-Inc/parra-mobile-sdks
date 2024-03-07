@@ -30,7 +30,7 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
             variant: .outlined,
             config: config.choiceOptions,
             content: content,
-            suppliedFactory: componentFactory.local?.choiceOptions,
+            suppliedBuilder: localBuilderConfig.choiceOptions,
             localAttributes: attributes
         )
         .layoutPriority(100)

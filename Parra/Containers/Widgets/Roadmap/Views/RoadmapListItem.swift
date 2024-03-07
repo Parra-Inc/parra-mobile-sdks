@@ -22,10 +22,9 @@ struct RoadmapListItem: View {
     let ticketContent: TicketContent
 
     @Environment(RoadmapWidgetConfig.self) var config
+    @Environment(RoadmapWidgetBuilderConfig.self) var builderConfig
     @EnvironmentObject var contentObserver: RoadmapWidget.ContentObserver
-    @EnvironmentObject var componentFactory: ComponentFactory<
-        RoadmapWidgetFactory
-    >
+    @EnvironmentObject var componentFactory: ComponentFactory
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
@@ -46,8 +45,7 @@ struct RoadmapListItem: View {
                         variant: .plain,
                         config: config.requestUpvoteButtons,
                         content: ticketContent.voteButton,
-                        suppliedFactory: componentFactory.local?
-                            .requestUpvoteButton
+                        suppliedBuilder: builderConfig.requestUpvoteButton
                     )
                     // manual adjust ment to try to align better with the title text
                     .padding(.top, topPadding)
@@ -55,7 +53,7 @@ struct RoadmapListItem: View {
                     componentFactory.buildLabel(
                         config: config.voteCount,
                         content: ticketContent.voteCount,
-                        suppliedFactory: componentFactory.local?.voteCountLabel
+                        suppliedBuilder: builderConfig.voteCountLabel
                     )
                     .minimumScaleFactor(0.7)
                 }
@@ -65,8 +63,7 @@ struct RoadmapListItem: View {
                     componentFactory.buildLabel(
                         config: config.requestTitles,
                         content: ticketContent.title,
-                        suppliedFactory: componentFactory.local?
-                            .requestTitleLabel
+                        suppliedBuilder: builderConfig.requestTitleLabel
                     )
                     .multilineTextAlignment(.leading)
 
@@ -74,7 +71,7 @@ struct RoadmapListItem: View {
                         componentFactory.buildLabel(
                             config: config.requestDescriptions,
                             content: description,
-                            suppliedFactory: componentFactory.local?
+                            suppliedBuilder: builderConfig
                                 .requestDescriptionLabel
                         )
                         .lineLimit(3)
@@ -86,8 +83,7 @@ struct RoadmapListItem: View {
                         componentFactory.buildLabel(
                             config: config.status,
                             content: ticketContent.statusTitle,
-                            suppliedFactory: componentFactory.local?
-                                .statusLabel,
+                            suppliedBuilder: builderConfig.statusLabel,
                             localAttributes: LabelAttributes(
                                 cornerRadius: .sm,
                                 fontColor: palette.primary,
@@ -102,8 +98,7 @@ struct RoadmapListItem: View {
                         componentFactory.buildLabel(
                             config: config.createdAt,
                             content: ticketContent.createdAt,
-                            suppliedFactory: componentFactory.local?
-                                .createdAtLabel,
+                            suppliedBuilder: builderConfig.createdAtLabel,
                             localAttributes: LabelAttributes(
                                 fontColor: palette.secondaryText
                             )

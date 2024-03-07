@@ -16,7 +16,7 @@ public extension View {
         by formId: String,
         isPresented: Binding<Bool>,
         config: FeedbackFormWidgetConfig = .default,
-        localFactory: FeedbackFormWidgetFactory? = nil,
+        localBuilder: FeedbackFormWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         loadAndPresentSheet(
@@ -36,7 +36,7 @@ public extension View {
             ),
             with: .feedbackFormLoader(
                 config: config,
-                localFactory: localFactory,
+                localBuilder: localBuilder,
                 submissionType: .default
             ),
             onDismiss: onDismiss
@@ -49,14 +49,14 @@ public extension View {
     func presentParraFeedbackForm(
         with formBinding: Binding<ParraFeedbackForm?>,
         config: FeedbackFormWidgetConfig = .default,
-        localFactory: FeedbackFormWidgetFactory? = nil,
+        localBuilder: FeedbackFormWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentParraFeedbackForm(
             with: formBinding,
             config: config,
             submissionType: .default,
-            localFactory: localFactory,
+            localBuilder: localBuilder,
             onDismiss: onDismiss
         )
     }
@@ -68,7 +68,7 @@ public extension View {
         with formBinding: Binding<ParraFeedbackForm?>,
         config: FeedbackFormWidgetConfig,
         submissionType: FeedbackFormSubmissionType,
-        localFactory: FeedbackFormWidgetFactory?,
+        localBuilder: FeedbackFormWidgetBuilderConfig,
         onDismiss: ((SheetDismissType) -> Void)?
     ) -> some View {
         loadAndPresentSheet(
@@ -88,7 +88,7 @@ public extension View {
             ),
             with: .feedbackFormLoader(
                 config: config,
-                localFactory: localFactory,
+                localBuilder: localBuilder,
                 submissionType: .default
             ),
             onDismiss: onDismiss

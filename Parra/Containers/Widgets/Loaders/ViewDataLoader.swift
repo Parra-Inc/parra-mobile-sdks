@@ -43,7 +43,7 @@ public struct ViewDataLoader<TransformParams, Data, ViewContent>
 
     static func renderContainer<C: Container>(
         from parra: Parra,
-        with localFactory: C.Factory?,
+        with localBuilder: C.BuilderConfig,
         params: C.ContentObserver.InitialParams,
         config: C.Config,
         contentTransformer: ((C.ContentObserver) -> Void)? = nil
@@ -55,7 +55,6 @@ public struct ViewDataLoader<TransformParams, Data, ViewContent>
             .globalComponentAttributes
 
         let componentFactory = ComponentFactory(
-            local: localFactory,
             global: globalComponentAttributes,
             theme: theme
         )
@@ -73,6 +72,7 @@ public struct ViewDataLoader<TransformParams, Data, ViewContent>
         return C(
             config: config,
             style: style,
+            localBuilderConfig: localBuilder,
             componentFactory: componentFactory,
             contentObserver: contentObserver
         )

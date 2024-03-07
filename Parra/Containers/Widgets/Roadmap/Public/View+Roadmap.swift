@@ -15,7 +15,7 @@ public extension View {
     func presentParraRoadmap(
         isPresented: Binding<Bool>,
         config: RoadmapWidgetConfig = .default,
-        localFactory: RoadmapWidgetFactory? = nil,
+        localBuilder: RoadmapWidgetBuilderConfig = .init(),
         defaultTab: RoadmapWidget.Tab = .inProgress,
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
@@ -42,7 +42,7 @@ public extension View {
             ),
             with: .roadmapLoader(
                 config: config,
-                localFactory: localFactory
+                localBuilder: localBuilder
             ),
             onDismiss: onDismiss
         )

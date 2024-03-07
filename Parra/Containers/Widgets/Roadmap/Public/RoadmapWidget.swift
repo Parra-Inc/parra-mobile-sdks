@@ -14,11 +14,13 @@ public struct RoadmapWidget: Container {
     init(
         config: RoadmapWidgetConfig,
         style: RoadmapWidgetStyle,
-        componentFactory: ComponentFactory<RoadmapWidgetFactory>,
+        localBuilderConfig: RoadmapWidgetBuilderConfig,
+        componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
         self.style = style
+        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -32,7 +34,7 @@ public struct RoadmapWidget: Container {
                     componentFactory.buildLabel(
                         config: config.title,
                         content: contentObserver.content.title,
-                        suppliedFactory: componentFactory.local?.title
+                        suppliedBuilder: localBuilderConfig.title
                     )
 
                     Picker(
@@ -91,8 +93,7 @@ public struct RoadmapWidget: Container {
                             variant: .contained,
                             config: config.addRequestButton,
                             content: contentObserver.content.addRequestButton,
-                            suppliedFactory: componentFactory.local?
-                                .addRequestButton
+                            suppliedBuilder: localBuilderConfig.addRequestButton
                         )
                     }
                 }
@@ -100,12 +101,11 @@ public struct RoadmapWidget: Container {
             .applyBackground(style.background)
             .padding(style.padding)
             .environment(config)
+            .environment(localBuilderConfig)
             .environmentObject(contentObserver)
             .environmentObject(componentFactory)
             .presentParraFeedbackForm(
-                with: $contentObserver.addRequestForm,
-                localFactory: nil,
-                onDismiss: nil
+                with: $contentObserver.addRequestForm
             )
             .navigationDestination(for: TicketContent.self) { ticket in
                 VStack {
@@ -117,7 +117,8 @@ public struct RoadmapWidget: Container {
 
     // MARK: - Internal
 
-    let componentFactory: ComponentFactory<RoadmapWidgetFactory>
+    let localBuilderConfig: RoadmapWidgetBuilderConfig
+    let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: RoadmapWidgetConfig
     let style: RoadmapWidgetStyle
@@ -126,10 +127,11 @@ public struct RoadmapWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview { parra, componentFactory in
+    ParraContainerPreview { parra, componentFactory, builderConfig in
         RoadmapWidget(
             config: .default,
             style: .default(with: .default),
+            localBuilderConfig: builderConfig,
             componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: .init(

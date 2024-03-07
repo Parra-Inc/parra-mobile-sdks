@@ -28,9 +28,7 @@ struct FeedbackCardView: View {
 
     // MARK: - Internal
 
-    @EnvironmentObject var componentFactory: ComponentFactory<
-        FeedbackCardWidgetFactory
-    >
+    @EnvironmentObject var componentFactory: ComponentFactory
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     let cardItem: ParraCardItem

@@ -16,7 +16,7 @@ extension FeedbackCardWidget {
                     variant: .plain,
                     config: config.backButton,
                     content: contentObserver.content.backButton,
-                    suppliedFactory: componentFactory.local?.backButton
+                    suppliedBuilder: localBuilderConfig.backButton
                 )
 
                 Spacer()
@@ -29,7 +29,7 @@ extension FeedbackCardWidget {
                     variant: .plain,
                     config: config.forwardButton,
                     content: contentObserver.content.forwardButton,
-                    suppliedFactory: componentFactory.local?.forwardButton
+                    suppliedBuilder: localBuilderConfig.forwardButton
                 )
             }
         }

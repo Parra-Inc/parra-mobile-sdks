@@ -14,11 +14,13 @@ public struct FeedbackFormWidget: Container {
     init(
         config: FeedbackFormWidgetConfig,
         style: FeedbackFormWidgetStyle,
-        componentFactory: ComponentFactory<FeedbackFormWidgetFactory>,
+        localBuilderConfig: FeedbackFormWidgetBuilderConfig,
+        componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
         self.style = style
+        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -47,7 +49,7 @@ public struct FeedbackFormWidget: Container {
                         variant: .contained,
                         config: config.submitButton,
                         content: contentObserver.content.submitButton,
-                        suppliedFactory: componentFactory.local?.submitButton
+                        suppliedBuilder: localBuilderConfig.submitButton
                     )
                     .disabled(!contentObserver.content.canSubmit)
                 },
@@ -63,7 +65,8 @@ public struct FeedbackFormWidget: Container {
 
     // MARK: - Internal
 
-    let componentFactory: ComponentFactory<FeedbackFormWidgetFactory>
+    let localBuilderConfig: FeedbackFormWidgetBuilderConfig
+    let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: FeedbackFormWidgetConfig
     let style: FeedbackFormWidgetStyle
@@ -75,14 +78,14 @@ public struct FeedbackFormWidget: Container {
             componentFactory.buildLabel(
                 config: config.title,
                 content: contentObserver.content.title,
-                suppliedFactory: componentFactory.local?.title
+                suppliedBuilder: localBuilderConfig.title
             )
 
             if let descriptionContent = contentObserver.content.description {
                 componentFactory.buildLabel(
                     config: config.description,
                     content: descriptionContent,
-                    suppliedFactory: componentFactory.local?.description
+                    suppliedBuilder: localBuilderConfig.description
                 )
             }
         }
@@ -117,7 +120,7 @@ public struct FeedbackFormWidget: Container {
                         config: config.selectFields.withFormTextFieldData(data),
                         // no customization currently exists
                         content: content,
-                        suppliedFactory: componentFactory.local?.selectFields
+                        suppliedBuilder: localBuilderConfig.selectFields
                     )
                 case .feedbackFormTextFieldData(let data):
                     let content = TextEditorContent(
@@ -135,7 +138,7 @@ public struct FeedbackFormWidget: Container {
                     componentFactory.buildTextEditor(
                         config: config.textFields.withFormTextFieldData(data),
                         content: content,
-                        suppliedFactory: componentFactory.local?.textFields
+                        suppliedBuilder: localBuilderConfig.textFields
                     )
                 case .feedbackFormInputFieldData(let data):
                     let content = TextInputContent(
@@ -153,7 +156,7 @@ public struct FeedbackFormWidget: Container {
                     componentFactory.buildTextInput(
                         config: config.inputFields.withFormTextFieldData(data),
                         content: content,
-                        suppliedFactory: componentFactory.local?.inputFields
+                        suppliedBuilder: localBuilderConfig.inputFields
                     )
                 }
             }
@@ -174,10 +177,11 @@ public struct FeedbackFormWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview { _, componentFactory in
+    ParraContainerPreview { _, componentFactory, builderConfig in
         FeedbackFormWidget(
             config: .default,
             style: .default(with: .default),
+            localBuilderConfig: builderConfig,
             componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: .init(

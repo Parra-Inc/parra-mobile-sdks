@@ -20,6 +20,10 @@ struct ParraViewPreview<Content>: View where Content: View {
     ) {
         self.content = content
         self.options = [.theme(theme)]
+        self.factory = ComponentFactory(
+            global: GlobalComponentAttributes(),
+            theme: theme
+        )
     }
 
     // MARK: - Internal
@@ -34,10 +38,13 @@ struct ParraViewPreview<Content>: View where Content: View {
                 content()
             }
         )
+        .environmentObject(factory)
     }
 
     // MARK: - Private
 
     @ViewBuilder private var content: () -> Content
+
+    private let factory: ComponentFactory
     private let options: [ParraConfigurationOption]
 }
