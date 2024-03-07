@@ -17,7 +17,9 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
         requestTitles: LabelConfig,
         requestDescriptions: LabelConfig,
         voteCount: LabelConfig,
-        requestUpvoteButtons: ImageButtonConfig
+        requestUpvoteButtons: ImageButtonConfig,
+        status: LabelConfig,
+        createdAt: LabelConfig
     ) {
         self.title = title
         self.addRequestButton = addRequestButton
@@ -25,6 +27,8 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
         self.requestDescriptions = requestDescriptions
         self.voteCount = voteCount
         self.requestUpvoteButtons = requestUpvoteButtons
+        self.status = status
+        self.createdAt = createdAt
     }
 
     // MARK: - Public
@@ -49,7 +53,9 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
             style: .primary,
             size: .custom(CGSize(width: 18, height: 18)),
             variant: .plain
-        )
+        ),
+        status: LabelConfig(fontStyle: .caption2),
+        createdAt: LabelConfig(fontStyle: .caption)
     )
 
     public let title: LabelConfig
@@ -58,4 +64,6 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
     public let requestDescriptions: LabelConfig
     public let voteCount: LabelConfig
     public let requestUpvoteButtons: ImageButtonConfig
+    public let status: LabelConfig
+    public let createdAt: LabelConfig
 }

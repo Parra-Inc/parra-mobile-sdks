@@ -20,7 +20,7 @@ public extension View {
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         let params = RoadmapParams(
-            limit: 25,
+            limit: 15,
             offset: 0,
             filter: defaultTab.filter
         )

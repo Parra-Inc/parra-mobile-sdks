@@ -1780,9 +1780,9 @@ public struct UserTicket: Codable, Equatable, Hashable, Identifiable {
 
     public init(
         id: String,
-        createdAt: String,
-        updatedAt: String,
-        deletedAt: String?,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
         title: String,
         type: TicketType,
         description: String?,
@@ -1827,9 +1827,9 @@ public struct UserTicket: Codable, Equatable, Hashable, Identifiable {
     }
 
     public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
     public let title: String
     public let type: TicketType
     public let description: String?

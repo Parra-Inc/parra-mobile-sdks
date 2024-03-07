@@ -39,51 +39,80 @@ struct RoadmapListItem: View {
             (.top, 6)
         }
 
-        HStack(alignment: alignment, spacing: 8) {
-            VStack(alignment: .center) {
-                componentFactory.buildImageButton(
-                    variant: .plain,
-                    component: \.requestUpvoteButton,
-                    config: config.requestUpvoteButtons,
-                    content: ticketContent.voteButton
-                )
-                // manual adjust ment to try to align better with the title text
-                .padding(.top, topPadding)
-
-                componentFactory.buildLabel(
-                    component: \.voteCountLabel,
-                    config: config.voteCount,
-                    content: ticketContent.voteCount
-                )
-                .minimumScaleFactor(0.7)
-            }
-            .frame(width: 48)
-
-            VStack(alignment: .leading) {
-                componentFactory.buildLabel(
-                    component: \.requestTitleLabel,
-                    config: config.requestTitles,
-                    content: ticketContent.title
-                )
-                .multilineTextAlignment(.leading)
-
-                if let description = ticketContent.description {
-                    componentFactory.buildLabel(
-                        component: \.requestDescriptionLabel,
-                        config: config.requestDescriptions,
-                        content: description
+        VStack(spacing: 12) {
+            HStack(alignment: alignment, spacing: 8) {
+                VStack(alignment: .center) {
+                    componentFactory.buildImageButton(
+                        variant: .plain,
+                        component: \.requestUpvoteButton,
+                        config: config.requestUpvoteButtons,
+                        content: ticketContent.voteButton
                     )
-                    .lineLimit(3)
-                    .truncationMode(.tail)
-                    .multilineTextAlignment(.leading)
+                    // manual adjust ment to try to align better with the title text
+                    .padding(.top, topPadding)
+
+                    componentFactory.buildLabel(
+                        component: \.voteCountLabel,
+                        config: config.voteCount,
+                        content: ticketContent.voteCount
+                    )
+                    .minimumScaleFactor(0.7)
                 }
+                .frame(width: 48)
+
+                VStack(alignment: .leading) {
+                    componentFactory.buildLabel(
+                        component: \.requestTitleLabel,
+                        config: config.requestTitles,
+                        content: ticketContent.title
+                    )
+                    .multilineTextAlignment(.leading)
+
+                    if let description = ticketContent.description {
+                        componentFactory.buildLabel(
+                            component: \.requestDescriptionLabel,
+                            config: config.requestDescriptions,
+                            content: description
+                        )
+                        .lineLimit(3)
+                        .truncationMode(.tail)
+                        .multilineTextAlignment(.leading)
+                    }
+
+                    HStack(alignment: .center) {
+                        componentFactory.buildLabel(
+                            component: \.statusLabel,
+                            config: config.status,
+                            content: ticketContent.statusTitle,
+                            localAttributes: LabelAttributes(
+                                cornerRadius: .sm,
+                                fontColor: palette.primary,
+                                padding: .init(vertical: 4, horizontal: 8),
+                                borderWidth: 1,
+                                borderColor: palette.primary.toParraColor()
+                            )
+                        )
+
+                        Spacer()
+
+                        componentFactory.buildLabel(
+                            component: \.createdAtLabel,
+                            config: config.createdAt,
+                            content: ticketContent.createdAt,
+                            localAttributes: LabelAttributes(
+                                fontColor: palette.secondaryText
+                            )
+                        )
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.vertical, 16)
         .padding(.leading, 8)
         .padding(.trailing, 16)
         .applyBackground(palette.secondaryBackground)
-        .applyCornerRadii(size: .large, from: themeObserver.theme)
+        .applyCornerRadii(size: .lg, from: themeObserver.theme)
     }
 }

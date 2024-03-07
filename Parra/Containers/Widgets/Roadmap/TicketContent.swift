@@ -25,6 +25,11 @@ struct TicketContent: Identifiable, Hashable {
         delegate: TicketContentDelegate? = nil
     ) {
         self.id = userTicket.id
+        self.createdAt = LabelContent(
+            text: userTicket.createdAt.timeAgo(
+                dateTimeStyle: .numeric
+            )
+        )
         self.type = userTicket.type
         self.title = LabelContent(text: userTicket.title)
         self.description = if let description = userTicket.description {
@@ -62,26 +67,29 @@ struct TicketContent: Identifiable, Hashable {
     // MARK: - Internal
 
     /// Used in contexts where TicketContent is rendered with placeholder
-    /// redaction.
-    @MainActor static let redacted = TicketContent(
-        UserTicket(
-            id: "ticket",
-            createdAt: .now,
-            updatedAt: .now,
-            deletedAt: nil,
-            title: "Easter egg bug report",
-            type: .bug,
-            description: "I was messing around with the source for this app when I found this and I probably should stop.",
-            status: .inProgress,
-            displayStatus: .inProgress,
-            displayStatusBadgeTitle: "In progress",
-            voteCount: 100,
-            votingEnabled: false,
-            voted: true
+    /// redaction. Needs to be computed to have unique IDs for display in lists.
+    @MainActor static var redacted: TicketContent {
+        return TicketContent(
+            UserTicket(
+                id: UUID().uuidString,
+                createdAt: .now,
+                updatedAt: .now,
+                deletedAt: nil,
+                title: "Easter egg bug report",
+                type: .bug,
+                description: "I was messing around with the source for this app when I found this and I probably should stop.",
+                status: .inProgress,
+                displayStatus: .inProgress,
+                displayStatusBadgeTitle: "In progress",
+                voteCount: 100,
+                votingEnabled: false,
+                voted: true
+            )
         )
-    )
+    }
 
     let id: String
+    let createdAt: LabelContent
     let type: TicketType
     let title: LabelContent
     let description: LabelContent?
