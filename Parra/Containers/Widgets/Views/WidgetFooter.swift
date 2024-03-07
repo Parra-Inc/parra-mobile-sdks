@@ -12,7 +12,7 @@ struct WidgetFooter: View {
     // MARK: - Lifecycle
 
     init(
-        primaryActionBuilder: @escaping () -> any View,
+        @ViewBuilder primaryActionBuilder: @escaping () -> any View,
         secondaryActionBuilder: (() -> any View)? = nil,
         contentPadding: EdgeInsets = EdgeInsets(vertical: 12, horizontal: 20)
     ) {

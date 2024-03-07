@@ -14,9 +14,9 @@ extension FeedbackCardWidget {
             HStack(alignment: .center) {
                 componentFactory.buildImageButton(
                     variant: .plain,
-                    component: \.backButton,
                     config: config.backButton,
-                    content: contentObserver.content.backButton
+                    content: contentObserver.content.backButton,
+                    suppliedFactory: componentFactory.local?.backButton
                 )
 
                 Spacer()
@@ -27,9 +27,9 @@ extension FeedbackCardWidget {
 
                 componentFactory.buildImageButton(
                     variant: .plain,
-                    component: \.forwardButton,
                     config: config.forwardButton,
-                    content: contentObserver.content.forwardButton
+                    content: contentObserver.content.forwardButton,
+                    suppliedFactory: componentFactory.local?.forwardButton
                 )
             }
         }

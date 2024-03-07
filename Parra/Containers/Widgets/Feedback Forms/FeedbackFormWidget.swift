@@ -45,10 +45,9 @@ public struct FeedbackFormWidget: Container {
                 primaryActionBuilder: {
                     componentFactory.buildTextButton(
                         variant: .contained,
-                        component: \.submitButton,
                         config: config.submitButton,
                         content: contentObserver.content.submitButton,
-                        localAttributes: nil
+                        suppliedFactory: componentFactory.local?.submitButton
                     )
                     .disabled(!contentObserver.content.canSubmit)
                 },
@@ -74,18 +73,18 @@ public struct FeedbackFormWidget: Container {
     var header: some View {
         VStack(alignment: .leading, spacing: 10) {
             componentFactory.buildLabel(
-                component: \.title,
                 config: config.title,
                 content: contentObserver.content.title,
-                localAttributes: nil
+                suppliedFactory: componentFactory.local?.title
             )
 
-            componentFactory.buildLabel(
-                component: \.description,
-                config: config.description,
-                content: contentObserver.content.description,
-                localAttributes: nil
-            )
+            if let descriptionContent = contentObserver.content.description {
+                componentFactory.buildLabel(
+                    config: config.description,
+                    content: descriptionContent,
+                    suppliedFactory: componentFactory.local?.description
+                )
+            }
         }
     }
 
@@ -115,11 +114,10 @@ public struct FeedbackFormWidget: Container {
                     }
 
                     componentFactory.buildMenu(
-                        component: \.selectFields,
                         config: config.selectFields.withFormTextFieldData(data),
                         // no customization currently exists
                         content: content,
-                        localAttributes: nil
+                        suppliedFactory: componentFactory.local?.selectFields
                     )
                 case .feedbackFormTextFieldData(let data):
                     let content = TextEditorContent(
@@ -135,10 +133,9 @@ public struct FeedbackFormWidget: Container {
                     }
 
                     componentFactory.buildTextEditor(
-                        component: \.textFields,
                         config: config.textFields.withFormTextFieldData(data),
                         content: content,
-                        localAttributes: nil
+                        suppliedFactory: componentFactory.local?.textFields
                     )
                 case .feedbackFormInputFieldData(let data):
                     let content = TextInputContent(
@@ -154,10 +151,9 @@ public struct FeedbackFormWidget: Container {
                     }
 
                     componentFactory.buildTextInput(
-                        component: \.inputFields,
                         config: config.inputFields.withFormTextFieldData(data),
                         content: content,
-                        localAttributes: nil
+                        suppliedFactory: componentFactory.local?.inputFields
                     )
                 }
             }

@@ -30,10 +30,9 @@ public struct RoadmapWidget: Container {
             VStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 20) {
                     componentFactory.buildLabel(
-                        component: \.title,
                         config: config.title,
                         content: contentObserver.content.title,
-                        localAttributes: nil
+                        suppliedFactory: componentFactory.local?.title
                     )
 
                     Picker(
@@ -90,13 +89,11 @@ public struct RoadmapWidget: Container {
                     if contentObserver.canAddRequests {
                         componentFactory.buildTextButton(
                             variant: .contained,
-                            component: \.addRequestButton,
                             config: config.addRequestButton,
                             content: contentObserver.content.addRequestButton,
-                            localAttributes: nil
+                            suppliedFactory: componentFactory.local?
+                                .addRequestButton
                         )
-                    } else {
-                        EmptyView()
                     }
                 }
             }

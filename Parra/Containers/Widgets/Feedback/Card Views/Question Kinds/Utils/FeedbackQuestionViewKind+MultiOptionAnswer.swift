@@ -32,9 +32,9 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
 
         componentFactory.buildTextButton(
             variant: .outlined,
-            component: \.checkboxOptions,
             config: config.checkboxOptions,
             content: content,
+            suppliedFactory: componentFactory.local?.checkboxOptions,
             localAttributes: attributes
         )
         .layoutPriority(100)

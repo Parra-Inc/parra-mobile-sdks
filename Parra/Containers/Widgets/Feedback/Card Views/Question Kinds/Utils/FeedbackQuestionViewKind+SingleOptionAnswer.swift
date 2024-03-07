@@ -28,9 +28,9 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
 
         componentFactory.buildTextButton(
             variant: .outlined,
-            component: \.choiceOptions,
             config: config.choiceOptions,
             content: content,
+            suppliedFactory: componentFactory.local?.choiceOptions,
             localAttributes: attributes
         )
         .layoutPriority(100)

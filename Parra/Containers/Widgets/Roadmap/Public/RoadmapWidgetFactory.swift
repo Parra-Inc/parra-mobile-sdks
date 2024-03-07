@@ -43,7 +43,7 @@ public struct RoadmapWidgetFactory: ParraComponentFactory {
             LabelAttributes
         >? = nil,
         requestUpvoteButtonBuilder: ComponentBuilder.Factory<
-            Button<Text>,
+            Button<Image>,
             ImageButtonConfig,
             ImageButtonContent,
             ImageButtonAttributes
@@ -104,7 +104,7 @@ public struct RoadmapWidgetFactory: ParraComponentFactory {
         LabelAttributes
     >?
     public let requestUpvoteButton: ComponentBuilder.Factory<
-        Button<Text>,
+        Button<Image>,
         ImageButtonConfig,
         ImageButtonContent,
         ImageButtonAttributes

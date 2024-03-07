@@ -44,17 +44,18 @@ struct RoadmapListItem: View {
                 VStack(alignment: .center) {
                     componentFactory.buildImageButton(
                         variant: .plain,
-                        component: \.requestUpvoteButton,
                         config: config.requestUpvoteButtons,
-                        content: ticketContent.voteButton
+                        content: ticketContent.voteButton,
+                        suppliedFactory: componentFactory.local?
+                            .requestUpvoteButton
                     )
                     // manual adjust ment to try to align better with the title text
                     .padding(.top, topPadding)
 
                     componentFactory.buildLabel(
-                        component: \.voteCountLabel,
                         config: config.voteCount,
-                        content: ticketContent.voteCount
+                        content: ticketContent.voteCount,
+                        suppliedFactory: componentFactory.local?.voteCountLabel
                     )
                     .minimumScaleFactor(0.7)
                 }
@@ -62,17 +63,19 @@ struct RoadmapListItem: View {
 
                 VStack(alignment: .leading) {
                     componentFactory.buildLabel(
-                        component: \.requestTitleLabel,
                         config: config.requestTitles,
-                        content: ticketContent.title
+                        content: ticketContent.title,
+                        suppliedFactory: componentFactory.local?
+                            .requestTitleLabel
                     )
                     .multilineTextAlignment(.leading)
 
                     if let description = ticketContent.description {
                         componentFactory.buildLabel(
-                            component: \.requestDescriptionLabel,
                             config: config.requestDescriptions,
-                            content: description
+                            content: description,
+                            suppliedFactory: componentFactory.local?
+                                .requestDescriptionLabel
                         )
                         .lineLimit(3)
                         .truncationMode(.tail)
@@ -81,9 +84,10 @@ struct RoadmapListItem: View {
 
                     HStack(alignment: .center) {
                         componentFactory.buildLabel(
-                            component: \.statusLabel,
                             config: config.status,
                             content: ticketContent.statusTitle,
+                            suppliedFactory: componentFactory.local?
+                                .statusLabel,
                             localAttributes: LabelAttributes(
                                 cornerRadius: .sm,
                                 fontColor: palette.primary,
@@ -96,9 +100,10 @@ struct RoadmapListItem: View {
                         Spacer()
 
                         componentFactory.buildLabel(
-                            component: \.createdAtLabel,
                             config: config.createdAt,
                             content: ticketContent.createdAt,
+                            suppliedFactory: componentFactory.local?
+                                .createdAtLabel,
                             localAttributes: LabelAttributes(
                                 fontColor: palette.secondaryText
                             )

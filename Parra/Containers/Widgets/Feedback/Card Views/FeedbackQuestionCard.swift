@@ -23,9 +23,9 @@ struct FeedbackQuestionCard: View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 2) {
                 componentFactory.buildLabel(
-                    component: \.title,
                     config: config.titleLabel,
-                    content: LabelContent(text: question.title)
+                    content: LabelContent(text: question.title),
+                    suppliedFactory: componentFactory.local?.title
                 )
                 .minimumScaleFactor(0.8)
                 .lineLimit(2)
@@ -35,9 +35,9 @@ struct FeedbackQuestionCard: View {
 
                 if let subtitle = question.subtitle {
                     componentFactory.buildLabel(
-                        component: \.subtitle,
                         config: config.subtitleLabel,
-                        content: LabelContent(text: subtitle)
+                        content: LabelContent(text: subtitle),
+                        suppliedFactory: componentFactory.local?.subtitle
                     )
                     .minimumScaleFactor(0.8)
                     .lineLimit(2)
