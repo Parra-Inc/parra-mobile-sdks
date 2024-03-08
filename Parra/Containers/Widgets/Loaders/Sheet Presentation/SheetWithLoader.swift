@@ -128,6 +128,11 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 state = .complete(result)
             }
         } catch {
+            Logger.error(
+                "Error transforming data to present Parra sheet",
+                error
+            )
+
             await MainActor.run {
                 state = .error(error)
             }
