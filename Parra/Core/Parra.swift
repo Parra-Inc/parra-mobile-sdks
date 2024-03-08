@@ -131,10 +131,11 @@ public class Parra: Observable {
             "unknown"
     }
 
+    @MainActor
     func initialize(
         with authProvider: ParraAuthenticationProviderType
     ) async {
-        let authProviderFunction = await authProvider.getProviderFunction(
+        let authProviderFunction = authProvider.getProviderFunction(
             using: networkManager,
             onAuthenticationRefresh: { [weak self] success in
                 guard let self else {
@@ -144,12 +145,12 @@ public class Parra: Observable {
                 if success {
                     addEventObservers()
 
-                    await syncManager.startSyncTimer()
+                    syncManager.startSyncTimer()
                 } else {
                     removeEventObservers()
 
                     await dataManager.updateCredential(credential: nil)
-                    await syncManager.stopSyncTimer()
+                    syncManager.stopSyncTimer()
                 }
             }
         )
@@ -174,6 +175,7 @@ public class Parra: Observable {
 
     // MARK: - Private
 
+    @MainActor
     private func performPostAuthRefreshActions() {
         logger.debug("Performing push authentication refresh actions.")
 

@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 struct ParraAppView<Content, DelegateType>: View
     where Content: View, DelegateType: ParraAppDelegate
 {
