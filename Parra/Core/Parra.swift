@@ -33,6 +33,11 @@ public class Parra: Observable {
         self.networkManager = networkManager
         self.notificationCenter = notificationCenter
         self.feedback = feedback
+
+        self.globalComponentFactory = ComponentFactory(
+            global: configuration.globalComponentAttributes,
+            theme: configuration.theme
+        )
     }
 
     deinit {
@@ -77,6 +82,11 @@ public class Parra: Observable {
         let oldTheme = configuration.theme
         configuration.theme = newTheme
 
+        globalComponentFactory = ComponentFactory(
+            global: configuration.globalComponentAttributes,
+            theme: newTheme
+        )
+
         notificationCenter.post(
             name: Parra.themeWillChangeNotification,
             object: nil,
@@ -105,6 +115,8 @@ public class Parra: Observable {
     @usableFromInline let sessionManager: ParraSessionManager
     let networkManager: ParraNetworkManager
     let notificationCenter: NotificationCenterType
+
+    private(set) var globalComponentFactory: ComponentFactory
 
     private(set) nonisolated lazy var eventPrefix =
         "parra:\(Self.moduleName.lowercased())"

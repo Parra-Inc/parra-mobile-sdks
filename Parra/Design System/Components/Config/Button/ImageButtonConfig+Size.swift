@@ -9,7 +9,7 @@
 import Foundation
 
 public extension ImageButtonConfig {
-    enum Size {
+    enum Size: Equatable {
         case smallSquare
         case mediumSquare
         case largeSquare

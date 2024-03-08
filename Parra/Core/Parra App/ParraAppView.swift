@@ -40,9 +40,7 @@ struct ParraAppView<Content, DelegateType>: View
             with: launchScreenConfig
         )
 
-        self._alertManager = StateObject(
-            wrappedValue: AlertManager()
-        )
+        self._alertManager = StateObject(wrappedValue: AlertManager())
 
         self._themeObserver = StateObject(
             wrappedValue: ParraThemeObserver(
@@ -96,11 +94,11 @@ struct ParraAppView<Content, DelegateType>: View
                         launchScreenState.dismiss()
                     }
             }
-
-            renderAlerts()
         }
         .environmentObject(launchScreenState)
         .environmentObject(alertManager)
+        .environmentObject(themeObserver)
+        .environmentObject(parra.globalComponentFactory)
     }
 
     static func configureLaunchScreen(
@@ -167,16 +165,12 @@ struct ParraAppView<Content, DelegateType>: View
     private func renderPrimaryContent() -> some View {
         content(parra)
             .environment(parra)
-            .environmentObject(themeObserver)
+            .renderToast(toast: $alertManager.currentToast)
     }
 
     private func renderLaunchScreen() -> some View {
         ParraLaunchScreen(
             config: launchScreenConfig
         )
-    }
-
-    private func renderAlerts() -> some View {
-        EmptyView()
     }
 }

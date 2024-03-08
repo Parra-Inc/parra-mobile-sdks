@@ -8,34 +8,96 @@
 
 import SwiftUI
 
-struct InlineAlert: View {
-    var body: some View {
-        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text(
-            "Hello, world!"
-        )/*@END_MENU_TOKEN@*/
-    }
-}
-
-#Preview {
-    InlineAlert()
-}
-
 class AlertManager: ObservableObject {
-    // MARK: - Internal
-
-    struct Alert {
+    struct Alert: Equatable {
         let config: AlertConfig
         let content: AlertContent
         let attributes: AlertAttributes
+
+        let duration: TimeInterval
+        let animationDuration: TimeInterval
+        let location: AlertLocation
+
+        static func == (
+            lhs: AlertManager.Alert,
+            rhs: AlertManager.Alert
+        ) -> Bool {
+            return lhs.content == rhs.content
+        }
     }
 
+    /// Where the alert/toast should be presented on screen. Note that leading
+    /// and trailing alignments are only applicable to iPad. On iPhone all the
+    /// top alignments resolve to `topCenter` and all bottom alignments resolve
+    /// to `bottomCenter`.
+    enum AlertLocation {
+        case topCenter
+        case topLeading
+        case topTrailing
+        case bottomCenter
+        case bottomLeading
+        case bottomTrailing
+
+        // MARK: - Internal
+
+        var toViewAlignment: Alignment {
+            let isIpad = UIDevice.isIpad
+
+            switch self {
+            case .topCenter:
+                return .top
+            case .topLeading:
+                return isIpad ? .topLeading : .top
+            case .topTrailing:
+                return isIpad ? .topTrailing : .top
+            case .bottomCenter:
+                return .bottom
+            case .bottomLeading:
+                return isIpad ? .bottomLeading : .bottom
+            case .bottomTrailing:
+                return isIpad ? .bottomTrailing : .bottom
+            }
+        }
+
+        var isTop: Bool {
+            switch self {
+            case .topCenter, .topLeading, .topTrailing:
+                return true
+            case .bottomCenter, .bottomLeading, .bottomTrailing:
+                return false
+            }
+        }
+    }
+
+    @Published var currentToast: Alert?
+
     func showToast(
+        for duration: TimeInterval = 10.0,
+        animationDuration: TimeInterval = 0.25,
+        in location: AlertLocation = .topCenter,
         config: AlertConfig,
         content: AlertContent,
         attributes: AlertAttributes
-    ) {}
+    ) {
+        let defaultHandler = content.dismiss?.onPress
+        var contentWithDismisser = content
+        contentWithDismisser.updateDismissHandler {
+            self.dismissToast()
 
-    // MARK: - Private
+            defaultHandler?()
+        }
 
-    @State private var currentAlert: Alert? = nil
+        currentToast = Alert(
+            config: config,
+            content: contentWithDismisser,
+            attributes: attributes,
+            duration: duration,
+            animationDuration: animationDuration,
+            location: location
+        )
+    }
+
+    func dismissToast() {
+        currentToast = nil
+    }
 }

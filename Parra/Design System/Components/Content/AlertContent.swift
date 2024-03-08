@@ -28,11 +28,9 @@ public struct AlertContent: Hashable, Equatable {
     public let title: LabelContent
     public let subtitle: LabelContent?
     public let icon: ImageContent?
-    public let dismiss: ImageButtonContent?
+    public private(set) var dismiss: ImageButtonContent?
 
-    // MARK: - Internal
-
-    static func defaultIcon(
+    public static func defaultIcon(
         for style: AlertConfig.Style
     ) -> ImageContent {
         let symbolName = switch style {
@@ -49,7 +47,7 @@ public struct AlertContent: Hashable, Equatable {
         return ImageContent.symbol(symbolName, .monochrome)
     }
 
-    static func defaultDismiss(
+    public static func defaultDismiss(
         for style: AlertConfig.Style
     ) -> ImageButtonContent {
         return ImageButtonContent(
@@ -57,5 +55,13 @@ public struct AlertContent: Hashable, Equatable {
             isDisabled: false,
             onPress: nil
         )
+    }
+
+    // MARK: - Internal
+
+    mutating func updateDismissHandler(
+        _ handler: @escaping () -> Void
+    ) {
+        dismiss?.onPress = handler
     }
 }

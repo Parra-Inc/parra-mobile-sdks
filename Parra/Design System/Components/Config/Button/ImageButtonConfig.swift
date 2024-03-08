@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ImageButtonConfig {
+public struct ImageButtonConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(

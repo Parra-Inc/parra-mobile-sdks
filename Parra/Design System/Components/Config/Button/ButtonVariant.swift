@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ButtonVariant: CustomStringConvertible {
+public enum ButtonVariant: CustomStringConvertible, Equatable {
     case plain
     case outlined
     case contained // filled

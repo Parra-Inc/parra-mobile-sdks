@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct LabelConfig {
+public struct LabelConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(fontStyle: Font.TextStyle) {

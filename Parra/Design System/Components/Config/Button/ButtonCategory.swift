@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ButtonCategory {
+public enum ButtonCategory: Equatable {
     case primary
     case secondary
 }

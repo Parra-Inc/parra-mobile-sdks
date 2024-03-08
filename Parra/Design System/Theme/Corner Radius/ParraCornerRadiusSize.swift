@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ParraCornerRadiusSize: Hashable {
+public enum ParraCornerRadiusSize: Hashable, Equatable {
     case zero // name "zero" is unambiguous with Optional.none in cases where this is nil
     case xs
     case sm

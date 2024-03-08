@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct AlertConfig {
+public struct AlertConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(

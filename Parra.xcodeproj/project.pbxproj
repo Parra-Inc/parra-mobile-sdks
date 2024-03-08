@@ -11,6 +11,8 @@
 		00057FA42B9820BC0022B875 /* View+Roadmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00057FA32B9820BC0022B875 /* View+Roadmap.swift */; };
 		00057FA72B98BB270022B875 /* RoadmapSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00057FA62B98BB270022B875 /* RoadmapSample.swift */; };
 		00057FA92B98C96A0022B875 /* TicketContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00057FA82B98C96A0022B875 /* TicketContent.swift */; };
+		0011C7DC2B9B5A8E0095EAE8 /* ToastPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0011C7DB2B9B5A8E0095EAE8 /* ToastPresenter.swift */; };
+		0011C7DE2B9B7DCC0095EAE8 /* UIDevice++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0011C7DD2B9B7DCC0095EAE8 /* UIDevice++.swift */; };
 		001230082B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001230072B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift */; };
 		0012300B2B99029B007E5632 /* ParraDefaultEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012300A2B99029B007E5632 /* ParraDefaultEmptyView.swift */; };
 		0012300D2B990485007E5632 /* View+emptyPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012300C2B990485007E5632 /* View+emptyPlaceholder.swift */; };
@@ -492,6 +494,8 @@
 		00057FA82B98C96A0022B875 /* TicketContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketContent.swift; sourceTree = "<group>"; };
 		000AF4C2283AE6E7008A17A3 /* ParraShadowConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraShadowConfig.swift; sourceTree = "<group>"; };
 		000AF4C4283AE6FF008A17A3 /* ParraTextConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTextConfig.swift; sourceTree = "<group>"; };
+		0011C7DB2B9B5A8E0095EAE8 /* ToastPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastPresenter.swift; sourceTree = "<group>"; };
+		0011C7DD2B9B7DCC0095EAE8 /* UIDevice++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice++.swift"; sourceTree = "<group>"; };
 		00120EF2274D1EEE00CA3247 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		00120EF8274D9CFC00CA3247 /* ParraCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardView.swift; sourceTree = "<group>"; };
 		00120EFA274DC98400CA3247 /* ParraActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraActionCardView.swift; sourceTree = "<group>"; };
@@ -1050,6 +1054,7 @@
 				0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */,
 				00E8B32D27878C3400FC3FFD /* Models.swift */,
 				0019CBC828FB37BC0015E703 /* Sequence+asyncMap.swift */,
+				0011C7DD2B9B7DCC0095EAE8 /* UIDevice++.swift */,
 				00E15A28293269100049C2C7 /* UIViewController.swift */,
 				00E15A2A29326FBE0049C2C7 /* UIWindow+topViewController.swift */,
 				00DA7FF8295F2A1600109081 /* URL+safePaths.swift */,
@@ -2325,6 +2330,7 @@
 			isa = PBXGroup;
 			children = (
 				00F7C4912B9A0E8200DBDF5A /* AlertManager.swift */,
+				0011C7DB2B9B5A8E0095EAE8 /* ToastPresenter.swift */,
 			);
 			path = Alerts;
 			sourceTree = "<group>";
@@ -2744,9 +2750,11 @@
 				001B7B2227DE3AC200DEEECD /* FileManager+safePaths.swift in Sources */,
 				0099EB082B8D09200053F366 /* ParraPublicContainer.swift in Sources */,
 				00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */,
+				0011C7DE2B9B7DCC0095EAE8 /* UIDevice++.swift in Sources */,
 				001677652B6FE5F000674001 /* TextButtonComponentType.swift in Sources */,
 				00DA7FF0295DD28700109081 /* Parra+PublicAnalytics.swift in Sources */,
 				00E76D342B66E3FD00B01DD8 /* Container.swift in Sources */,
+				0011C7DC2B9B5A8E0095EAE8 /* ToastPresenter.swift in Sources */,
 				0029AD392A4925D000E30CCD /* ParraInternalEvent.swift in Sources */,
 				00FCB1962B97B87F00635DC8 /* RoadmapWidget+ContentObserver+InitialParams.swift in Sources */,
 				00F7C4922B9A0E8200DBDF5A /* AlertManager.swift in Sources */,
