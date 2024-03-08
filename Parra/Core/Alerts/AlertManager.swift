@@ -12,7 +12,7 @@ class AlertManager: ObservableObject {
     struct Alert: Equatable {
         let config: AlertConfig
         let content: AlertContent
-        let attributes: AlertAttributes
+        let attributes: AlertAttributes?
 
         let duration: TimeInterval
         let animationDuration: TimeInterval
@@ -72,12 +72,12 @@ class AlertManager: ObservableObject {
     @Published var currentToast: Alert?
 
     func showToast(
-        for duration: TimeInterval = 10.0,
+        for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25,
         in location: AlertLocation = .topCenter,
         config: AlertConfig,
         content: AlertContent,
-        attributes: AlertAttributes
+        attributes: AlertAttributes? = nil
     ) {
         let defaultHandler = content.dismiss?.onPress
         var contentWithDismisser = content
@@ -94,6 +94,26 @@ class AlertManager: ObservableObject {
             duration: duration,
             animationDuration: animationDuration,
             location: location
+        )
+    }
+
+    func showErrorToast(
+        title: String = "Error",
+        userFacingMessage: String,
+        underlyingError: ParraError
+    ) {
+        let style = AlertConfig.Style.error
+
+        showToast(
+            config: AlertConfig(
+                style: style
+            ),
+            content: AlertContent(
+                title: LabelContent(text: title),
+                subtitle: LabelContent(text: userFacingMessage),
+                icon: AlertContent.defaultIcon(for: style),
+                dismiss: AlertContent.defaultDismiss(for: style)
+            )
         )
     }
 

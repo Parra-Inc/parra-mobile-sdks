@@ -20,6 +20,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     )
     case fileSystem(path: URL, message: String)
     case jsonError(String)
+    case system(Error)
     case unknown
 
     // MARK: - Public
@@ -52,6 +53,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             #endif
         case .fileSystem(let path, let message):
             return "\(baseMessage)\nPath: \(path.relativeString)\nError: \(message)"
+        case .system(let error):
+            return "Error: \(error)"
         }
     }
 
@@ -84,6 +87,10 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return "A file system error occurred."
         case .unknown:
             return "An unknown error occurred."
+        case .system(let error):
+            let formattedError = LoggerFormatters.extractMessage(from: error)
+
+            return "\(formattedError)"
         }
     }
 }
@@ -130,7 +137,8 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
                 "error_description": message
             ]
         case .notInitialized, .missingAuthentication, .message, .jsonError,
-             .unknown:
+             .unknown, .system:
+
             return [:]
         }
     }

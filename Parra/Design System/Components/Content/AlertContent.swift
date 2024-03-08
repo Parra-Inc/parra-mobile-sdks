@@ -48,12 +48,13 @@ public struct AlertContent: Hashable, Equatable {
     }
 
     public static func defaultDismiss(
-        for style: AlertConfig.Style
+        for style: AlertConfig.Style,
+        onPress: (() -> Void)? = nil
     ) -> ImageButtonContent {
         return ImageButtonContent(
             image: ImageContent.symbol("xmark", .monochrome),
             isDisabled: false,
-            onPress: nil
+            onPress: onPress
         )
     }
 
