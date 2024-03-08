@@ -12,7 +12,7 @@ extension JSONDecoder {
         let decoder = JSONDecoder()
 
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        decoder.dateDecodingStrategy = .iso8601
+        decoder.dateDecodingStrategy = .custom(dateDecoder)
 
         return decoder
     }()
@@ -20,9 +20,30 @@ extension JSONDecoder {
     private(set) static var spaceOptimizedDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
 
-        decoder.dateDecodingStrategy = .iso8601
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .custom(dateDecoder)
 
         return decoder
     }()
+
+    private static func dateDecoder(
+        _ decoder: Decoder
+    ) throws -> Date {
+        // iso8601 date decoding strategy fails due to default configuration
+        // omitting support for fractional seconds.
+        // See: https://stackoverflow.com/a/46538423/716216
+
+        let container = try decoder.singleValueContainer()
+        let dateString = try container.decode(String.self)
+
+        let formatter = Parra.InternalConstants.Formatters.iso8601Formatter
+        if let date = formatter.date(from: dateString) {
+            return date
+        }
+
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "Date string \"\(dateString)\" couldn't be formatted by ISO8601DateFormatter."
+        )
+    }
 }

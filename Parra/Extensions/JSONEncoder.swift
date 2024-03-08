@@ -27,7 +27,7 @@ extension JSONEncoder {
         let encoder = JSONEncoder()
 
         encoder.keyEncodingStrategy = .convertToSnakeCase
-        encoder.dateEncodingStrategy = .iso8601
+        encoder.dateEncodingStrategy = .custom(dateEncoder)
 
         #if DEBUG
         // When debugging we may be looking at these lines in an events file manually
@@ -39,6 +39,21 @@ extension JSONEncoder {
 
         return encoder
     }()
+
+    private static func dateEncoder(
+        _ date: Date,
+        _ encoder: Encoder
+    ) throws {
+        // See dateDecoder function in JSONDecoder file. This is just meant to
+        // mirror the changes made there.
+
+        var container = encoder.singleValueContainer()
+        let formatter = Parra.InternalConstants.Formatters.iso8601Formatter
+
+        try container.encode(
+            formatter.string(from: date)
+        )
+    }
 
     private(set) static var parraPrettyConsoleEncoder: JSONEncoder = {
         let encoder = JSONEncoder()

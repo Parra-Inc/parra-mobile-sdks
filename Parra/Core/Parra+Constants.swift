@@ -27,7 +27,20 @@ public extension Parra {
 
     internal enum InternalConstants {
         enum Formatters {
-            static let iso8601Formatter = ISO8601DateFormatter()
+            /// Important! The exact settings of this formatter are critical for
+            /// decoding dates send from the Parra API. The default iso8601
+            /// formatter does not handle fractional seconds.
+            static let iso8601Formatter: ISO8601DateFormatter = {
+                // Format of dates from server: 2024-02-24T20:47:51.530Z
+
+                let formatter = ISO8601DateFormatter()
+                formatter.formatOptions = [
+                    .withInternetDateTime,
+                    .withFractionalSeconds
+                ]
+
+                return formatter
+            }()
 
             static let dateComponentsFormatter = DateComponentsFormatter()
             static let dateIntervalFormatter = DateIntervalFormatter()
