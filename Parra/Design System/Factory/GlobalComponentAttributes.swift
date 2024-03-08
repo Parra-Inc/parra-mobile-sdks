@@ -20,7 +20,8 @@ public class GlobalComponentAttributes {
         menuAttributeFactory: MenuAttributeFactory? = nil,
         textEditorAttributeFactory: TextEditorAttributeFactory? = nil,
         textInputAttributeFactory: TextInputAttributeFactory? = nil,
-        segmentAttributeFactory: SegmentAttributeFactory? = nil
+        segmentAttributeFactory: SegmentAttributeFactory? = nil,
+        alertAttributeFactory: AlertAttributeFactory? = nil
     ) {
         self.labelAttributeFactory = labelAttributeFactory
         self.textButtonAttributeFactory = textButtonAttributeFactory
@@ -29,6 +30,7 @@ public class GlobalComponentAttributes {
         self.textEditorAttributeFactory = textEditorAttributeFactory
         self.textInputAttributeFactory = textInputAttributeFactory
         self.segmentAttributeFactory = segmentAttributeFactory
+        self.alertAttributeFactory = alertAttributeFactory
     }
 
     // MARK: - Public
@@ -75,6 +77,12 @@ public class GlobalComponentAttributes {
         _ defaultAttributes: SegmentAttributes?
     ) -> SegmentAttributes
 
+    public typealias AlertAttributeFactory = (
+        _ config: AlertConfig,
+        _ content: AlertContent,
+        _ defaultAttributes: AlertAttributes?
+    ) -> AlertAttributes
+
     // MARK: - Internal
 
     private(set) var labelAttributeFactory: LabelAttributeFactory?
@@ -84,4 +92,5 @@ public class GlobalComponentAttributes {
     private(set) var textEditorAttributeFactory: TextEditorAttributeFactory?
     private(set) var textInputAttributeFactory: TextInputAttributeFactory?
     private(set) var segmentAttributeFactory: SegmentAttributeFactory?
+    private(set) var alertAttributeFactory: AlertAttributeFactory?
 }

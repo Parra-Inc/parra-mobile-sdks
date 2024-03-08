@@ -403,6 +403,9 @@
 		00F7C4A82B9A438500DBDF5A /* ComponentFactory+TextInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4A72B9A438500DBDF5A /* ComponentFactory+TextInputs.swift */; };
 		00F7C4AA2B9A439000DBDF5A /* ComponentFactory+Segments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4A92B9A439000DBDF5A /* ComponentFactory+Segments.swift */; };
 		00F7C4AC2B9A439700DBDF5A /* ComponentFactory+Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4AB2B9A439700DBDF5A /* ComponentFactory+Alerts.swift */; };
+		00F7C4AE2B9A5B6C00DBDF5A /* ToastAlertComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4AD2B9A5B6C00DBDF5A /* ToastAlertComponent.swift */; };
+		00F7C4B02B9A609D00DBDF5A /* ImageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4AF2B9A609D00DBDF5A /* ImageComponent.swift */; };
+		00F7C4B22B9A610200DBDF5A /* ImageComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4B12B9A610200DBDF5A /* ImageComponentType.swift */; };
 		00FCB12F2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB12E2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift */; };
 		00FCB1322B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1312B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift */; };
 		00FCB1342B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1332B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift */; };
@@ -908,6 +911,9 @@
 		00F7C4A72B9A438500DBDF5A /* ComponentFactory+TextInputs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComponentFactory+TextInputs.swift"; sourceTree = "<group>"; };
 		00F7C4A92B9A439000DBDF5A /* ComponentFactory+Segments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComponentFactory+Segments.swift"; sourceTree = "<group>"; };
 		00F7C4AB2B9A439700DBDF5A /* ComponentFactory+Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComponentFactory+Alerts.swift"; sourceTree = "<group>"; };
+		00F7C4AD2B9A5B6C00DBDF5A /* ToastAlertComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastAlertComponent.swift; sourceTree = "<group>"; };
+		00F7C4AF2B9A609D00DBDF5A /* ImageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageComponent.swift; sourceTree = "<group>"; };
+		00F7C4B12B9A610200DBDF5A /* ImageComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageComponentType.swift; sourceTree = "<group>"; };
 		00FCB12E2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackChoiceQuestionCard.swift; sourceTree = "<group>"; };
 		00FCB1312B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackQuestionViewKind+SingleOptionAnswer.swift"; sourceTree = "<group>"; };
 		00FCB1332B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCheckboxQuestionCard.swift; sourceTree = "<group>"; };
@@ -2066,6 +2072,7 @@
 			isa = PBXGroup;
 			children = (
 				00F7C4962B9A113900DBDF5A /* AlertComponentType.swift */,
+				00F7C4B12B9A610200DBDF5A /* ImageComponentType.swift */,
 				00FCB1652B961F9100635DC8 /* ImageButtonComponentType.swift */,
 				00E76D352B66E42600B01DD8 /* LabelComponentType.swift */,
 				00706B082B713BF800C28F66 /* MenuComponentType.swift */,
@@ -2167,6 +2174,7 @@
 			children = (
 				00F7C4932B9A110B00DBDF5A /* Alert */,
 				001677512B6ABFA500674001 /* Buttons */,
+				00F7C4AF2B9A609D00DBDF5A /* ImageComponent.swift */,
 				00E76D4F2B68286600B01DD8 /* LabelComponent.swift */,
 				00706B062B713BCA00C28F66 /* MenuComponent.swift */,
 				00FCB13C2B91363500635DC8 /* SegmentComponent.swift */,
@@ -2325,6 +2333,7 @@
 			isa = PBXGroup;
 			children = (
 				00F7C4942B9A111B00DBDF5A /* InlineAlertComponent.swift */,
+				00F7C4AD2B9A5B6C00DBDF5A /* ToastAlertComponent.swift */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -2693,6 +2702,7 @@
 				0016775E2B6FDEFB00674001 /* ParraAttributedStyle.swift in Sources */,
 				001677572B6AE8E400674001 /* ParraAttributedTextButtonStyle.swift in Sources */,
 				00DDBA262B63FBBC00400761 /* ParraThemeObserver.swift in Sources */,
+				00F7C4B02B9A609D00DBDF5A /* ImageComponent.swift in Sources */,
 				0087CA9C2A59E166007D72FA /* URL+diskUsage.swift in Sources */,
 				0029AD372A4925C000E30CCD /* ParraStandardEvent.swift in Sources */,
 				007ED4682A6BFBDC0077E446 /* ParraLoggerContext+ParraDictionaryConvertible.swift in Sources */,
@@ -2847,6 +2857,7 @@
 				00FCB1812B976D3300635DC8 /* UserTicketCollectionResponse+Fixtures.swift in Sources */,
 				006FA06A2B77D35800B60F5E /* ParraSyncMode.swift in Sources */,
 				00706B1F2B71D92600C28F66 /* ParraAttributedTextEditorStyle.swift in Sources */,
+				00F7C4B22B9A610200DBDF5A /* ImageComponentType.swift in Sources */,
 				0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */,
 				00EC6F7F2B61A64B00ABC8EC /* RectangleCornerRadii+Hashable.swift in Sources */,
 				00FCB13A2B91232B00635DC8 /* FeedbackRatingQuestionCard.swift in Sources */,
@@ -2878,6 +2889,7 @@
 				00706B1D2B71A76600C28F66 /* TextEditorComponent.swift in Sources */,
 				003962372A48B4EF00B8655F /* ParraFeedback.swift in Sources */,
 				0029AD2B2A48DCE100E30CCD /* LoggerHelpers.swift in Sources */,
+				00F7C4AE2B9A5B6C00DBDF5A /* ToastAlertComponent.swift in Sources */,
 				00ABF1C22B87AEC000A054A2 /* ParraContainerPreview.swift in Sources */,
 				00706B0F2B713F7000C28F66 /* ParraAttributedMenuStyle.swift in Sources */,
 				00F7C4AA2B9A439000DBDF5A /* ComponentFactory+Segments.swift in Sources */,

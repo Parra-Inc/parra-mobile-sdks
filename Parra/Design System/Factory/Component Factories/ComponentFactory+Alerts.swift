@@ -8,9 +8,15 @@
 
 import SwiftUI
 
+enum AlertComponentVariant {
+    case toast
+    case inline
+}
+
 extension ComponentFactory {
     @ViewBuilder
     func buildAlert(
+        variant: AlertComponentVariant,
         config: AlertConfig,
         content: AlertContent,
         suppliedBuilder: LocalComponentBuilder.Factory<
@@ -21,40 +27,58 @@ extension ComponentFactory {
         >? = nil,
         localAttributes: AlertAttributes? = nil
     ) -> some View {
-//        let attributes = if let factory = global?
-//            .segmentAttributeFactory
-//        {
-//            factory(config, content, localAttributes)
-//        } else {
-//            localAttributes
-//        }
-//
-//        let mergedAttributes = SegmentComponent
-//            .applyStandardCustomizations(
-//                onto: attributes,
-//                theme: theme,
-//                config: config
-//            )
-//
-//        // If a container level factory function was provided for this component,
-//        // use it and supply global attribute overrides instead of local, if provided.
-//        if let builder = suppliedBuilder,
-//           let view = builder(config, content, mergedAttributes)
-//        {
-//            view
-//        } else {
-//            let style = ParraAttributedSegmentStyle(
-//                config: config,
-//                content: content,
-//                attributes: mergedAttributes,
-//                theme: theme
-//            )
-//
-//            SegmentComponent(
-//                config: config,
-//                content: content,
-//                style: style
-//            )
-//        }
+        let attributes = if let factory = global?.alertAttributeFactory {
+            factory(config, content, localAttributes)
+        } else {
+            localAttributes
+        }
+
+        let mergedAttributes = switch variant {
+        case .inline:
+            InlineAlertComponent.applyStandardCustomizations(
+                onto: attributes,
+                theme: theme,
+                config: config,
+                for: InlineAlertComponent.self
+            )
+        case .toast:
+            ToastAlertComponent.applyStandardCustomizations(
+                onto: attributes,
+                theme: theme,
+                config: config,
+                for: ToastAlertComponent.self
+            )
+        }
+
+        // If a container level factory function was provided for this
+        // component, use it and supply global attribute overrides instead of
+        // local, if provided.
+        if let builder = suppliedBuilder,
+           let view = builder(config, content, mergedAttributes)
+        {
+            view
+        } else {
+            let style = ParraAttributedAlertStyle(
+                config: config,
+                content: content,
+                attributes: mergedAttributes,
+                theme: theme
+            )
+
+            switch variant {
+            case .inline:
+                InlineAlertComponent(
+                    config: config,
+                    content: content,
+                    style: style
+                )
+            case .toast:
+                ToastAlertComponent(
+                    config: config,
+                    content: content,
+                    style: style
+                )
+            }
+        }
     }
 }

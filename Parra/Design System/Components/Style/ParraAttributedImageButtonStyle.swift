@@ -18,53 +18,24 @@ struct ParraAttributedImageButtonStyle: ButtonStyle, ParraAttributedStyle {
     func makeBody(configuration: Configuration) -> some View {
         let primaryColor = theme.palette.primary.toParraColor()
 
+        let defaults = ImageAttributes(
+            tint: primaryColor,
+            borderColor: primaryColor
+        ).withUpdates(
+            updates: attributes.image
+        )
+
         let currentAttributes = if content.isDisabled {
-            attributes.imageDisabled ?? attributes.image
+            attributes.imageDisabled ?? defaults
         } else if configuration.isPressed {
-            attributes.imagePressed ?? attributes.image
+            attributes.imagePressed ?? defaults
         } else {
-            attributes.image
+            defaults
         }
 
-        let imageView = switch content.image {
-        case .resource(let name, let templateRenderingMode):
-            Image(name)
-                .renderingMode(templateRenderingMode ?? .original)
-        case .name(let name, let bundle, let templateRenderingMode):
-            Image(name, bundle: bundle)
-                .renderingMode(templateRenderingMode ?? .original)
-        case .symbol(let systemName, let symbolRenderingMode):
-            Image(systemName: systemName)
-                .symbolRenderingMode(
-                    symbolRenderingMode
-                        ?? (content.isDisabled ? .monochrome : .multicolor)
-                )
-        case .image(let uIImage, let templateRenderingMode):
-            Image(uiImage: uIImage)
-                .renderingMode(templateRenderingMode ?? .original)
-        }
-
-        imageView
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .opacity(currentAttributes.opacity ?? 1.0)
-            .foregroundStyle(currentAttributes.tint ?? primaryColor)
-            .applyFrame(currentAttributes.frame)
-            .padding(currentAttributes.padding ?? .zero)
-            .overlay(
-                UnevenRoundedRectangle(
-                    cornerRadii: theme.cornerRadius
-                        .value(for: currentAttributes.cornerRadius)
-                )
-                .strokeBorder(
-                    currentAttributes.borderColor ?? primaryColor,
-                    lineWidth: currentAttributes.borderWidth ?? 0
-                )
-            )
-            .applyBackground(currentAttributes.background)
-            .applyCornerRadii(
-                size: currentAttributes.cornerRadius,
-                from: theme
-            )
+        ImageComponent(
+            content: content.image,
+            attributes: currentAttributes
+        )
     }
 }
