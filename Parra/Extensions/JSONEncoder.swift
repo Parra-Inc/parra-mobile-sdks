@@ -12,7 +12,7 @@ extension JSONEncoder {
         let encoder = JSONEncoder()
 
         encoder.keyEncodingStrategy = .convertToSnakeCase
-        encoder.dateEncodingStrategy = .iso8601
+        encoder.dateEncodingStrategy = .custom(dateEncoder)
 
         #if DEBUG
         encoder.outputFormatting = .prettyPrinted
