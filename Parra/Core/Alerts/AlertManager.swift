@@ -97,14 +97,41 @@ class AlertManager: ObservableObject {
         )
     }
 
+    func showSuccessToast(
+        title: String = "Success!",
+        subtitle: String,
+        for duration: TimeInterval = 4.0,
+        animationDuration: TimeInterval = 0.25
+    ) {
+        let style = AlertConfig.Style.success
+
+        showToast(
+            for: duration,
+            animationDuration: animationDuration,
+            config: AlertConfig(
+                style: style
+            ),
+            content: AlertContent(
+                title: LabelContent(text: title),
+                subtitle: LabelContent(text: subtitle),
+                icon: AlertContent.defaultIcon(for: style),
+                dismiss: AlertContent.defaultDismiss(for: style)
+            )
+        )
+    }
+
     func showErrorToast(
         title: String = "Error",
         userFacingMessage: String,
-        underlyingError: ParraError
+        underlyingError: ParraError,
+        for duration: TimeInterval = 4.0,
+        animationDuration: TimeInterval = 0.25
     ) {
         let style = AlertConfig.Style.error
 
         showToast(
+            for: duration,
+            animationDuration: animationDuration,
             config: AlertConfig(
                 style: style
             ),

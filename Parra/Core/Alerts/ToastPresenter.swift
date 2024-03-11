@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+// TODO: Top presentation from modal views results in too much top padding.
+
 struct ToastPresenter: ViewModifier {
     @Environment(\.defaultSafeAreaInsets) private var defaultSafeAreaInsets
     @EnvironmentObject var themeObserver: ParraThemeObserver

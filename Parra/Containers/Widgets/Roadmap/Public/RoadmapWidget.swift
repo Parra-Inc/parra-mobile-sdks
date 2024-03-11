@@ -139,13 +139,20 @@ public struct RoadmapWidget: Container {
             .environmentObject(contentObserver)
             .environmentObject(componentFactory)
             .presentParraFeedbackForm(
-                with: $contentObserver.addRequestForm
+                with: $contentObserver.addRequestForm,
+                onDismiss: { dismissType in
+                    if dismissType == .completed {
+                        alertManager.showSuccessToast(
+                            title: config.addRequestSuccessToastTitle,
+                            subtitle: config.addRequestSuccessToastSubtitle
+                        )
+                    }
+                }
             )
             .navigationDestination(for: TicketContent.self) { ticket in
-                VStack {
-                    Text(ticket.title.text)
-                }
+                RoadmapDetailView(ticketContent: ticket)
             }
+            .renderToast(toast: $alertManager.currentToast)
         }
     }
 
@@ -158,6 +165,10 @@ public struct RoadmapWidget: Container {
     let style: RoadmapWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
+
+    // MARK: - Private
+
+    @StateObject private var alertManager = AlertManager()
 }
 
 #Preview {
