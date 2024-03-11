@@ -24,7 +24,7 @@ public struct ImageButtonContent: Hashable, Equatable {
     // MARK: - Public
 
     public let image: ImageContent
-    public let isDisabled: Bool
+    public internal(set) var isDisabled: Bool
 
     public internal(set) var onPress: (() -> Void)?
 

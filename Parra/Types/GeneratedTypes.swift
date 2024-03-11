@@ -1836,7 +1836,7 @@ public struct UserTicket: Codable, Equatable, Hashable, Identifiable {
     public let status: TicketStatus
     public let displayStatus: TicketDisplayStatus
     public let displayStatusBadgeTitle: String
-    public let voteCount: Int
+    public internal(set) var voteCount: Int
     /// Whether voting is enabled on an individual ticket. Behavior is to hide
     /// the vote button and vote count if this is set. Could be set per ticket
     /// or globally in dashboard config but will resolve to per ticket field

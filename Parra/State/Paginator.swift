@@ -122,6 +122,7 @@ class Paginator<Item, Context>: ObservableObject
     @Published private(set) var isLoading: Bool
     @Published private(set) var isShowingPlaceholders: Bool
 
+    @MainActor
     func refresh() async {
         guard let pageFetcher else {
             return
@@ -151,6 +152,7 @@ class Paginator<Item, Context>: ObservableObject
         }
     }
 
+    @MainActor
     func loadMore(
         after index: Int?
     ) {
@@ -219,6 +221,28 @@ class Paginator<Item, Context>: ObservableObject
         }
     }
 
+    @MainActor
+    func updateItem(
+        _ item: Item
+    ) {
+        // Must lookup by id instead of firstIndex(of:) because fields other
+        // than `id` will change during the update.
+        guard let index = items.firstIndex(where: { $0.id == item.id }) else {
+            logger.warn(
+                "Attempt to update item that did not previously exist.",
+                [
+                    "itemId": item.id,
+                    "context": String(describing: context)
+                ]
+            )
+
+            return
+        }
+
+        items[index] = item
+    }
+
+    @MainActor
     func currentData() -> Data {
         return Data(
             items: items,

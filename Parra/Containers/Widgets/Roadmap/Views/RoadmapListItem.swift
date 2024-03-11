@@ -39,6 +39,9 @@ struct RoadmapListItem: View {
             (.top, 6)
         }
 
+        let voteHightlightColor = ticketContent.voted
+            ? palette.primary : palette.secondary
+
         VStack(spacing: 12) {
             HStack(alignment: alignment, spacing: 8) {
                 if ticketContent.votingEnabled {
@@ -47,10 +50,20 @@ struct RoadmapListItem: View {
                             variant: .plain,
                             config: config.requestUpvoteButtons,
                             content: ticketContent.voteButton,
-                            suppliedBuilder: builderConfig.requestUpvoteButton
+                            suppliedBuilder: builderConfig.requestUpvoteButton,
+                            localAttributes: ImageButtonAttributes(
+                                image: ImageAttributes(
+                                    tint: voteHightlightColor.toParraColor()
+                                )
+                            )
                         )
                         // manual adjust ment to try to align better with the title text
                         .padding(.top, topPadding)
+                        .symbolEffect(
+                            .bounce.up,
+                            options: .speed(1.5),
+                            value: ticketContent.voted
+                        )
 
                         componentFactory.buildLabel(
                             config: config.voteCount,

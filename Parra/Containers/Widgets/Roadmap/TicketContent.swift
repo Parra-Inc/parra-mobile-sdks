@@ -9,11 +9,9 @@
 import Foundation
 
 protocol TicketContentDelegate {
-    @MainActor
-    func ticketContentDidReceiveVote(_ ticketContent: TicketContent)
-
-    @MainActor
-    func ticketContentDidRemoveVote(_ ticketContent: TicketContent)
+    func ticketContentDidPressVote(
+        _ ticketId: String
+    )
 }
 
 struct TicketContent: Identifiable, Hashable {
@@ -22,8 +20,11 @@ struct TicketContent: Identifiable, Hashable {
     @MainActor
     init(
         _ userTicket: UserTicket,
+        isVotingInProgress: Bool,
         delegate: TicketContentDelegate? = nil
     ) {
+        self.originalTicket = userTicket
+        self.isVotingInProgress = isVotingInProgress
         self.id = userTicket.id
         self.createdAt = LabelContent(
             text: userTicket.createdAt.timeAgo(
@@ -46,22 +47,48 @@ struct TicketContent: Identifiable, Hashable {
             )
         self.votingEnabled = userTicket.votingEnabled
         self.voted = userTicket.voted
-        self.voteCount = LabelContent(
-            text: userTicket.voteCount.formatted(.number.notation(.compactName))
-        )
+        self.voteCount = TicketContent.voteCountLabelContent(from: userTicket)
         self.voteButton = ImageButtonContent(
             image: .symbol("triangleshape.fill", .monochrome),
-            isDisabled: !votingEnabled,
+            isDisabled: isVotingInProgress,
             onPress: nil
         )
 
         voteButton.onPress = { [self] in
-            if voted {
-                delegate?.ticketContentDidRemoveVote(self)
-            } else {
-                delegate?.ticketContentDidReceiveVote(self)
-            }
+            delegate?.ticketContentDidPressVote(id)
         }
+    }
+
+    init(
+        originalTicket: UserTicket,
+        id: String,
+        createdAt: LabelContent,
+        type: TicketType,
+        title: LabelContent,
+        description: LabelContent?,
+        status: TicketStatus,
+        displayStatus: TicketDisplayStatus,
+        statusTitle: LabelContent,
+        votingEnabled: Bool,
+        voted: Bool,
+        voteCount: LabelContent,
+        voteButton: ImageButtonContent,
+        isVotingInProgress: Bool
+    ) {
+        self.originalTicket = originalTicket
+        self.id = id
+        self.createdAt = createdAt
+        self.type = type
+        self.title = title
+        self.description = description
+        self.status = status
+        self.displayStatus = displayStatus
+        self.statusTitle = statusTitle
+        self.votingEnabled = votingEnabled
+        self.voted = voted
+        self.voteCount = voteCount
+        self.voteButton = voteButton
+        self.isVotingInProgress = isVotingInProgress
     }
 
     // MARK: - Internal
@@ -84,10 +111,12 @@ struct TicketContent: Identifiable, Hashable {
                 voteCount: 100,
                 votingEnabled: false,
                 voted: true
-            )
+            ),
+            isVotingInProgress: false
         )
     }
 
+    let originalTicket: UserTicket
     let id: String
     let createdAt: LabelContent
     let type: TicketType
@@ -100,4 +129,47 @@ struct TicketContent: Identifiable, Hashable {
     let voted: Bool
     let voteCount: LabelContent
     var voteButton: ImageButtonContent
+    private(set) var isVotingInProgress: Bool
+
+    func withVoting(_ voting: Bool) -> TicketContent {
+        let voteModifier = voted ? -1 : 1
+
+        var ticket = originalTicket
+        if voting {
+            ticket.voteCount += voteModifier
+        }
+
+        let updatedVoteCount = TicketContent.voteCountLabelContent(
+            from: ticket
+        )
+
+        let voted = voting ? !voted : voted
+
+        return TicketContent(
+            originalTicket: originalTicket,
+            id: id,
+            createdAt: createdAt,
+            type: type,
+            title: title,
+            description: description,
+            status: status,
+            displayStatus: displayStatus,
+            statusTitle: statusTitle,
+            votingEnabled: votingEnabled,
+            voted: voted,
+            voteCount: updatedVoteCount,
+            voteButton: voteButton,
+            isVotingInProgress: voting
+        )
+    }
+
+    // MARK: - Private
+
+    private static func voteCountLabelContent(
+        from userTicket: UserTicket
+    ) -> LabelContent {
+        return LabelContent(
+            text: userTicket.voteCount.formatted(.number.notation(.compactName))
+        )
+    }
 }

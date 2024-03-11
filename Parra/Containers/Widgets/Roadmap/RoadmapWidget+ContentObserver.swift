@@ -15,7 +15,7 @@ private let logger = Logger()
 
 extension RoadmapWidget {
     @MainActor
-    class ContentObserver: ContainerContentObserver, TicketContentDelegate {
+    class ContentObserver: ContainerContentObserver {
         // MARK: - Lifecycle
 
         required init(
@@ -45,7 +45,11 @@ extension RoadmapWidget {
                 RoadmapWidget.Tab
             >.Data(
                 items: ticketResponse.data.map {
-                    TicketContent($0, delegate: self)
+                    TicketContent(
+                        $0,
+                        isVotingInProgress: false,
+                        delegate: self
+                    )
                 },
                 placeholderItems: [],
                 pageSize: ticketResponse.pageSize,
@@ -75,6 +79,8 @@ extension RoadmapWidget {
 
         @Published var addRequestForm: ParraFeedbackForm?
 
+        let networkManager: ParraNetworkManager
+
         @Published private(set) var ticketPaginator: Paginator<
             TicketContent,
             RoadmapWidget.Tab
@@ -103,57 +109,11 @@ extension RoadmapWidget {
             }
         }
 
-        // MARK: - TicketContentDelegate
-
-        @MainActor
-        func ticketContentDidReceiveVote(
-            _ ticketContent: TicketContent
-        ) {
-            Task {
-                let response = await networkManager.voteForTicket(
-                    with: ticketContent.id
-                )
-
-                if response.context.statusCode == 409 {
-                    // User had already voted for this ticket
-                }
-                switch response.result {
-                case .success(let response):
-                    print(response)
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-
-        @MainActor
-        func ticketContentDidRemoveVote(
-            _ ticketContent: TicketContent
-        ) {
-            Task {
-                let response = await networkManager.removeVoteForTicket(
-                    with: ticketContent.id
-                )
-
-                if response.context.statusCode == 409 {
-                    // User had already removed their vote for this ticket
-                }
-
-                switch response.result {
-                case .success(let response):
-                    print(response)
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-
         // MARK: - Private
 
         private var paginatorSink: AnyCancellable? = nil
 
         private let roadmapConfig: AppRoadmapConfiguration
-        private let networkManager: ParraNetworkManager
         private var ticketCache = [
             RoadmapWidget.Tab: Paginator<TicketContent, RoadmapWidget.Tab>.Data
         ]()
@@ -169,7 +129,7 @@ extension RoadmapWidget {
 
         private func tabWillChange(to newTab: Tab) {
             if let cachedData = ticketCache[newTab] {
-                print("tab will change to cached tab: \(newTab)")
+                logger.debug("tab will change to cached tab: \(newTab)")
 
                 ticketPaginator = Paginator<TicketContent, RoadmapWidget.Tab>(
                     context: newTab,
@@ -177,7 +137,7 @@ extension RoadmapWidget {
                     pageFetcher: loadMoreTickets
                 )
             } else {
-                print("tab will change to new tab: \(newTab)")
+                logger.debug("tab will change to new tab: \(newTab)")
 
                 let newPageData = Paginator<TicketContent, RoadmapWidget.Tab>
                     .Data(
@@ -206,7 +166,11 @@ extension RoadmapWidget {
             )
 
             return response.data.map {
-                TicketContent($0, delegate: self)
+                TicketContent(
+                    $0,
+                    isVotingInProgress: false,
+                    delegate: self
+                )
             }
         }
 
