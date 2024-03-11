@@ -43,7 +43,7 @@ extension UserTicket: ParraFixture {
                 displayStatus: .live,
                 displayStatusBadgeTitle: "Live",
                 voteCount: 100_423,
-                votingEnabled: true,
+                votingEnabled: false,
                 voted: false
             ),
             UserTicket(
@@ -59,7 +59,7 @@ extension UserTicket: ParraFixture {
                 displayStatusBadgeTitle: "Coming soon",
                 voteCount: 1_150,
                 votingEnabled: true,
-                voted: false
+                voted: true
             ),
             UserTicket(
                 id: UUID().uuidString,

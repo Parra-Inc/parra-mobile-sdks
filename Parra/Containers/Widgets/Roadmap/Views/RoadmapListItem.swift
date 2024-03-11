@@ -41,24 +41,26 @@ struct RoadmapListItem: View {
 
         VStack(spacing: 12) {
             HStack(alignment: alignment, spacing: 8) {
-                VStack(alignment: .center) {
-                    componentFactory.buildImageButton(
-                        variant: .plain,
-                        config: config.requestUpvoteButtons,
-                        content: ticketContent.voteButton,
-                        suppliedBuilder: builderConfig.requestUpvoteButton
-                    )
-                    // manual adjust ment to try to align better with the title text
-                    .padding(.top, topPadding)
+                if ticketContent.votingEnabled {
+                    VStack(alignment: .center) {
+                        componentFactory.buildImageButton(
+                            variant: .plain,
+                            config: config.requestUpvoteButtons,
+                            content: ticketContent.voteButton,
+                            suppliedBuilder: builderConfig.requestUpvoteButton
+                        )
+                        // manual adjust ment to try to align better with the title text
+                        .padding(.top, topPadding)
 
-                    componentFactory.buildLabel(
-                        config: config.voteCount,
-                        content: ticketContent.voteCount,
-                        suppliedBuilder: builderConfig.voteCountLabel
-                    )
-                    .minimumScaleFactor(0.7)
+                        componentFactory.buildLabel(
+                            config: config.voteCount,
+                            content: ticketContent.voteCount,
+                            suppliedBuilder: builderConfig.voteCountLabel
+                        )
+                        .minimumScaleFactor(0.7)
+                    }
+                    .frame(width: 48)
                 }
-                .frame(width: 48)
 
                 VStack(alignment: .leading) {
                     componentFactory.buildLabel(
@@ -112,7 +114,7 @@ struct RoadmapListItem: View {
             }
         }
         .padding(.vertical, 16)
-        .padding(.leading, 8)
+        .padding(.leading, ticketContent.votingEnabled ? 8 : 20)
         .padding(.trailing, 16)
         .applyBackground(palette.secondaryBackground)
         .applyCornerRadii(size: .lg, from: themeObserver.theme)
