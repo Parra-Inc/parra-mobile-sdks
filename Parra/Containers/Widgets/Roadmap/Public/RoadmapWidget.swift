@@ -62,7 +62,7 @@ public struct RoadmapWidget: Container {
 
                             ForEach(
                                 Array(items.enumerated()),
-                                id: \.element
+                                id: \.element.id
                             ) { index, ticket in
                                 NavigationLink(
                                     value: ticket,
