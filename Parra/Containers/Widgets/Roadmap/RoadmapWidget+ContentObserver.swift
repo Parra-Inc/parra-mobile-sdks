@@ -6,6 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import Combine
 import SwiftUI
 
 private let logger = Logger()
@@ -39,18 +40,27 @@ extension RoadmapWidget {
                 addRequestButton: addRequestButton
             )
 
-            let initialPaginator = Paginator<TicketContent, RoadmapWidget.Tab>(
-                initialItems: ticketResponse.data.map {
+            let initialPaginatorData = Paginator<
+                TicketContent,
+                RoadmapWidget.Tab
+            >.Data(
+                items: ticketResponse.data.map {
                     TicketContent($0, delegate: self)
                 },
+                placeholderItems: [],
                 pageSize: ticketResponse.pageSize,
-                totalCount: ticketResponse.totalCount,
+                knownCount: ticketResponse.totalCount
+            )
+
+            let initialPaginator = Paginator<TicketContent, RoadmapWidget.Tab>(
+                context: initialTab,
+                data: initialPaginatorData,
                 pageFetcher: loadMoreTickets
             )
 
             self.ticketPaginator = initialPaginator
             // Cache the initial tickets
-            ticketCache[initialTab] = initialPaginator
+            ticketCache[initialTab] = initialPaginatorData
 
             content.addRequestButton.onPress = addRequest
         }
@@ -62,16 +72,30 @@ extension RoadmapWidget {
         /// require multiple lists for storage.
         @Published private(set) var content: Content
         @Published private(set) var canAddRequests: Bool
+
+        @Published var addRequestForm: ParraFeedbackForm?
+
         @Published private(set) var ticketPaginator: Paginator<
             TicketContent,
             RoadmapWidget.Tab
-        > = .init(
-            initialItems: [],
-            totalCount: 0,
-            pageFetcher: nil
-        )
+                // Using IUO because this object requires referencing self in a closure
+                // in its init so we need all fields set. Post-init this should always
+                // be set.
+        >! {
+            willSet {
+                paginatorSink?.cancel()
+                paginatorSink = nil
+            }
 
-        @Published var addRequestForm: ParraFeedbackForm?
+            didSet {
+                paginatorSink = ticketPaginator
+                    .objectWillChange
+                    .sink { [weak self] _ in
+                        self?.objectWillChange.send()
+                        self?.updateCacheForCurrentPaginator()
+                    }
+            }
+        }
 
         @Published var selectedTab: Tab {
             willSet(newTab) {
@@ -126,21 +150,45 @@ extension RoadmapWidget {
 
         // MARK: - Private
 
+        private var paginatorSink: AnyCancellable? = nil
+
         private let roadmapConfig: AppRoadmapConfiguration
         private let networkManager: ParraNetworkManager
-        private var ticketCache = [RoadmapWidget.Tab: Paginator<
-            TicketContent,
-            RoadmapWidget.Tab
-        >]()
+        private var ticketCache = [
+            RoadmapWidget.Tab: Paginator<TicketContent, RoadmapWidget.Tab>.Data
+        ]()
+
+        private func updateCacheForCurrentPaginator() {
+            let tab = ticketPaginator.context
+
+            ticketCache[tab] = .init(
+                items: ticketPaginator.items,
+                knownCount: ticketPaginator.totalCount
+            )
+        }
 
         private func tabWillChange(to newTab: Tab) {
-            print("tab will change to: \(newTab)")
+            if let cachedData = ticketCache[newTab] {
+                print("tab will change to cached tab: \(newTab)")
 
-            if let cachedPaginator = ticketCache[newTab] {
-                ticketPaginator = cachedPaginator
-            } else {
                 ticketPaginator = Paginator<TicketContent, RoadmapWidget.Tab>(
-                    initialItems: [],
+                    context: newTab,
+                    data: cachedData,
+                    pageFetcher: loadMoreTickets
+                )
+            } else {
+                print("tab will change to new tab: \(newTab)")
+
+                let newPageData = Paginator<TicketContent, RoadmapWidget.Tab>
+                    .Data(
+                        items: [],
+                        placeholderItems: (0 ... 15)
+                            .map { _ in TicketContent.redacted }
+                    )
+
+                ticketPaginator = Paginator<TicketContent, RoadmapWidget.Tab>(
+                    context: newTab,
+                    data: newPageData,
                     pageFetcher: loadMoreTickets
                 )
             }
@@ -169,80 +217,5 @@ extension RoadmapWidget {
 
             addRequestForm = ParraFeedbackForm(from: form)
         }
-    }
-}
-
-class Paginator<Item, Context>: ObservableObject
-    where Item: Identifiable & Hashable
-{
-    // MARK: - Lifecycle
-
-    init(
-        initialItems: [Item],
-        pageSize: Int = 15,
-        loadMoreThreshold: Int = 2,
-        totalCount: Int? = nil,
-        pageFetcher: PageFetcher?
-    ) {
-        assert(loadMoreThreshold < pageSize)
-
-        self.items = initialItems
-        self.pageSize = pageSize
-        self.loadMoreThreshold = loadMoreThreshold
-        self.totalCount = totalCount
-        self.pageFetcher = pageFetcher
-
-        if !initialItems.isEmpty, pageFetcher != nil {
-            loadMore(after: nil)
-        }
-    }
-
-    // MARK: - Internal
-
-    typealias PageFetcher = (
-        _ pageSize: Int,
-        _ offset: Int,
-        _ context: Context
-    ) async throws -> [Item]
-
-    let loadMoreThreshold: Int
-    let pageSize: Int
-
-    // If we haven't made the first request for these items, we don't know
-    // this yet.
-    let totalCount: Int?
-
-    // If omitted, there will never be an attempt to load more content.
-    let pageFetcher: PageFetcher?
-
-    // TODO: Start task to refresh the tickets?
-
-    @Published private(set) var items: [Item]
-    @Published private(set) var isLoading: Bool = false
-
-    func loadMore(
-        after item: Item?
-    ) {
-        guard let pageFetcher else {
-            return
-        }
-
-//        let offset: Int =
-
-        let thresholdIndex = items.index(
-            items.endIndex,
-            offsetBy: -loadMoreThreshold
-        )
-
-//        items[thresholdIndex]
-
-        //                tickets = (0...15).map { _ in TicketContent.redacted }
-
-//        thresholdIndex
-
-//        if thresholdIndex == item.id, (page + 1) <= totalPages {
-//            //                page += 1
-//            //                getUsers()
-//        }
     }
 }

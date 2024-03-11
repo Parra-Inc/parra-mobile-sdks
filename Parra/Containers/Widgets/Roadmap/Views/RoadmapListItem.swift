@@ -26,6 +26,7 @@ struct RoadmapListItem: View {
     @EnvironmentObject var contentObserver: RoadmapWidget.ContentObserver
     @EnvironmentObject var componentFactory: ComponentFactory
     @EnvironmentObject var themeObserver: ParraThemeObserver
+    @Environment(\.redactionReasons) var redactionReasons
 
     var body: some View {
         let palette = themeObserver.theme.palette
@@ -88,7 +89,8 @@ struct RoadmapListItem: View {
                                 cornerRadius: .sm,
                                 fontColor: palette.primary,
                                 padding: .init(vertical: 4, horizontal: 8),
-                                borderWidth: 1,
+                                borderWidth: redactionReasons
+                                    .contains(.placeholder) ? 0 : 1,
                                 borderColor: palette.primary.toParraColor()
                             )
                         )

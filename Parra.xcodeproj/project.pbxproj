@@ -88,6 +88,7 @@
 		0036222E2B5EB6FC009EFE53 /* SwatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036222D2B5EB6FC009EFE53 /* SwatchView.swift */; };
 		003622302B5EBD2A009EFE53 /* ColorPaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036222F2B5EBD2A009EFE53 /* ColorPaletteView.swift */; };
 		0036225D2B601657009EFE53 /* ParraCornerRadiusSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036225C2B601657009EFE53 /* ParraCornerRadiusSize.swift */; };
+		00374CF52B9F4D2F0028EDA8 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CF42B9F4D2F0028EDA8 /* Paginator.swift */; };
 		003962332A48B4EF00B8655F /* ParraFeedbackDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */; };
 		003962342A48B4EF00B8655F /* ParraCardAnswerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraCardAnswerHandler.swift */; };
 		003962352A48B4EF00B8655F /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B8327DE6E2400DEEECD /* ParraFeedback+Constants.swift */; };
@@ -597,6 +598,7 @@
 		0036D60727D051060016DE97 /* ParraCardView+Transitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraCardView+Transitions.swift"; sourceTree = "<group>"; };
 		0036D60927D051B20016DE97 /* ParraCardView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraCardView+Layout.swift"; sourceTree = "<group>"; };
 		0036D60B27D053160016DE97 /* FileManager+safePaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+safePaths.swift"; sourceTree = "<group>"; };
+		00374CF42B9F4D2F0028EDA8 /* Paginator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
 		003C214627DE855A001CAE03 /* ItemStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStorage.swift; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* Parra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parra.swift; sourceTree = "<group>"; };
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
@@ -1563,6 +1565,7 @@
 			children = (
 				00BD2FED2A4771D700B4BEB2 /* ParraSyncState.swift */,
 				00ABF16A2B7AB90B00A054A2 /* ParraAppState.swift */,
+				00374CF42B9F4D2F0028EDA8 /* Paginator.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -2742,6 +2745,7 @@
 				00EBCE142AA4D58F00887639 /* ParraLogLevel+ConsoleOutput.swift in Sources */,
 				00FCB18A2B9780C900635DC8 /* ViewDataLoader.swift in Sources */,
 				00FCB1432B914DB000635DC8 /* SegmentAttributes.swift in Sources */,
+				00374CF52B9F4D2F0028EDA8 /* Paginator.swift in Sources */,
 				0019CBC928FB37BC0015E703 /* Sequence+asyncMap.swift in Sources */,
 				00E76D2A2B66D23A00B01DD8 /* GlobalComponentAttributes.swift in Sources */,
 				00E76D442B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift in Sources */,
