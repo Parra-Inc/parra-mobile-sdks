@@ -122,6 +122,35 @@ class Paginator<Item, Context>: ObservableObject
     @Published private(set) var isLoading: Bool
     @Published private(set) var isShowingPlaceholders: Bool
 
+    func refresh() async {
+        guard let pageFetcher else {
+            return
+        }
+
+        guard !isLoading else {
+            return
+        }
+
+        logger.trace("Beginning refresh for \(context)")
+
+        isLoading = true
+
+        do {
+            let nextPage = try await pageFetcher(pageSize, 0, context)
+
+            await MainActor.run {
+                lastFetchedOffset = 0
+                items = nextPage
+                isLoading = false
+                isShowingPlaceholders = false
+            }
+        } catch {
+            await MainActor.run {
+                isLoading = false
+            }
+        }
+    }
+
     func loadMore(
         after index: Int?
     ) {
@@ -182,6 +211,10 @@ class Paginator<Item, Context>: ObservableObject
                 }
             } catch {
                 logger.error("Pagination error fetching new record(s).", error)
+
+                await MainActor.run {
+                    isLoading = false
+                }
             }
         }
     }

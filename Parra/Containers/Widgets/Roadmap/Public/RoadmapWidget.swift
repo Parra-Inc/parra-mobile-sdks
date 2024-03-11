@@ -125,9 +125,7 @@ public struct RoadmapWidget: Container {
                         style.contentPadding,
                         for: .scrollContent
                     )
-                    .scrollIndicatorsFlash(
-                        trigger: contentObserver.ticketPaginator.items
-                    )
+                    .scrollIndicatorsFlash(trigger: contentObserver.selectedTab)
                     // TODO: Empy datasource case
                     .emptyPlaceholder(contentObserver.ticketPaginator.items) {
                         ParraDefaultEmptyView(
@@ -135,6 +133,9 @@ public struct RoadmapWidget: Container {
                             title: "No tickets yet",
                             description: "This is your opportunity to be the first 👀"
                         )
+                    }
+                    .refreshable {
+                        await contentObserver.ticketPaginator.refresh()
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
 
