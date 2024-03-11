@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ScrollerToTop<T>: View where T: Equatable {
+struct ScrollToTopView<T>: View where T: Equatable {
     let reader: ScrollViewProxy
     let animateChanges: Bool
 
@@ -75,7 +75,7 @@ public struct RoadmapWidget: Container {
                         LazyVStack(alignment: .leading, spacing: 12) {
                             let items = contentObserver.ticketPaginator.items
 
-                            ScrollerToTop(
+                            ScrollToTopView(
                                 reader: scrollViewProxy,
                                 animateChanges: false,
                                 scrollOnChange: $contentObserver.selectedTab
