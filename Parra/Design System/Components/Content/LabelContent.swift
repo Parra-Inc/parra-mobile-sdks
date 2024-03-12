@@ -14,7 +14,7 @@ public struct LabelContent: Hashable, Equatable {
 
     public init(
         text: String,
-        icon: UIImage? = nil
+        icon: ImageContent? = nil
     ) {
         self.text = text
         self.icon = icon
@@ -23,5 +23,5 @@ public struct LabelContent: Hashable, Equatable {
     // MARK: - Public
 
     public let text: String
-    public let icon: UIImage?
+    public let icon: ImageContent?
 }

@@ -138,9 +138,7 @@ private func renderColumn(
                     content: TextButtonContent(
                         text: LabelContent(
                             text: title,
-                            icon: UIImage(
-                                systemName: "fireworks"
-                            )
+                            icon: .symbol("fireworks")
                         )
                     )
                 )
@@ -154,9 +152,7 @@ private func renderColumn(
                     content: TextButtonContent(
                         text: LabelContent(
                             text: title,
-                            icon: UIImage(
-                                systemName: "surfboard.fill"
-                            )
+                            icon: .symbol("surfboard.fill")
                         )
                     )
                 )
@@ -230,9 +226,7 @@ private func renderColumn(
                     content: TextButtonContent(
                         text: LabelContent(
                             text: title,
-                            icon: UIImage(
-                                systemName: "fireworks"
-                            )
+                            icon: .symbol("fireworks")
                         ),
                         isDisabled: true
                     )
@@ -247,9 +241,7 @@ private func renderColumn(
                     content: TextButtonContent(
                         text: LabelContent(
                             text: title,
-                            icon: UIImage(
-                                systemName: "fireworks"
-                            )
+                            icon: .symbol("fireworks")
                         ),
                         isDisabled: true
                     )

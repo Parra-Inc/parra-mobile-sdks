@@ -18,9 +18,14 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
             .toParraColor()
 
         let image: (some View)? = if let icon = content.icon {
-            Image(uiImage: icon)
-                .renderingMode(.template)
-                .tint(fontColor)
+            ImageComponent(
+                content: icon,
+                attributes: ImageAttributes(
+                    tint: fontColor
+                )
+            )
+            // Need to override resizable modifier from general implementation.
+            .fixedSize()
         } else {
             nil
         }

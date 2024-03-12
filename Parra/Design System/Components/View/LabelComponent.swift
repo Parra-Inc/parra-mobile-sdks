@@ -92,7 +92,7 @@ struct LabelComponent: LabelComponentType {
                 config: LabelConfig(fontStyle: .subheadline),
                 content: LabelContent(
                     text: "A subheadline with icon",
-                    icon: UIImage(systemName: "sun.rain.circle.fill")
+                    icon: .symbol("sun.rain.circle.fill")
                 )
             )
 
@@ -100,7 +100,7 @@ struct LabelComponent: LabelComponentType {
                 config: LabelConfig(fontStyle: .subheadline),
                 content: LabelContent(
                     text: "A reversed subheadline with icon",
-                    icon: UIImage(systemName: "sun.rain.circle.fill")
+                    icon: .symbol("sun.rain.circle.fill")
                 ),
                 localAttributes: LabelAttributes(
                     layoutDirectionBehavior: .mirrors
@@ -137,7 +137,7 @@ struct LabelComponent: LabelComponentType {
                 config: LabelConfig(fontStyle: .title),
                 content: LabelContent(
                     text: "BG gradient and icon",
-                    icon: UIImage(systemName: "fireworks")
+                    icon: .symbol("fireworks")
                 ),
                 localAttributes: LabelAttributes(
                     background: Gradient(colors: [.pink, .purple]),
