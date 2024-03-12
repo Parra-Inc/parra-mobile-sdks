@@ -47,7 +47,6 @@ extension RoadmapWidget {
                 items: ticketResponse.data.map {
                     TicketContent(
                         $0,
-                        isVotingInProgress: false,
                         delegate: self
                     )
                 },
@@ -67,6 +66,16 @@ extension RoadmapWidget {
             ticketCache[initialTab] = initialPaginatorData
 
             content.addRequestButton.onPress = addRequest
+
+            $currentTicketToVote
+                .throttle(
+                    for: .seconds(2),
+                    scheduler: DispatchQueue.main,
+                    latest: true
+                )
+                .asyncMap(processVote)
+                .sink(receiveValue: { _ in })
+                .store(in: &voteBag)
         }
 
         // MARK: - Internal
@@ -80,6 +89,9 @@ extension RoadmapWidget {
         @Published var addRequestForm: ParraFeedbackForm?
 
         let networkManager: ParraNetworkManager
+
+        /// The identifier for a ticket to toggle the vote for.
+        @Published var currentTicketToVote: String?
 
         @Published private(set) var ticketPaginator: Paginator<
             TicketContent,
@@ -112,6 +124,8 @@ extension RoadmapWidget {
         // MARK: - Private
 
         private var paginatorSink: AnyCancellable? = nil
+
+        private var voteBag = Set<AnyCancellable>()
 
         private let roadmapConfig: AppRoadmapConfiguration
         private var ticketCache = [
@@ -168,7 +182,6 @@ extension RoadmapWidget {
             return response.data.map {
                 TicketContent(
                     $0,
-                    isVotingInProgress: false,
                     delegate: self
                 )
             }

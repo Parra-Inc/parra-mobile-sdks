@@ -20,11 +20,9 @@ struct TicketContent: Identifiable, Hashable {
     @MainActor
     init(
         _ userTicket: UserTicket,
-        isVotingInProgress: Bool,
         delegate: TicketContentDelegate? = nil
     ) {
         self.originalTicket = userTicket
-        self.isVotingInProgress = isVotingInProgress
         self.id = userTicket.id
         self.createdAt = LabelContent(
             text: userTicket.createdAt.timeAgo(
@@ -50,7 +48,7 @@ struct TicketContent: Identifiable, Hashable {
         self.voteCount = TicketContent.voteCountLabelContent(from: userTicket)
         self.voteButton = ImageButtonContent(
             image: .symbol("triangleshape.fill", .monochrome),
-            isDisabled: isVotingInProgress,
+            isDisabled: false,
             onPress: nil
         )
 
@@ -72,8 +70,7 @@ struct TicketContent: Identifiable, Hashable {
         votingEnabled: Bool,
         voted: Bool,
         voteCount: LabelContent,
-        voteButton: ImageButtonContent,
-        isVotingInProgress: Bool
+        voteButton: ImageButtonContent
     ) {
         self.originalTicket = originalTicket
         self.id = id
@@ -88,7 +85,6 @@ struct TicketContent: Identifiable, Hashable {
         self.voted = voted
         self.voteCount = voteCount
         self.voteButton = voteButton
-        self.isVotingInProgress = isVotingInProgress
     }
 
     // MARK: - Internal
@@ -111,8 +107,7 @@ struct TicketContent: Identifiable, Hashable {
                 voteCount: 100,
                 votingEnabled: false,
                 voted: true
-            ),
-            isVotingInProgress: false
+            )
         )
     }
 
@@ -129,7 +124,6 @@ struct TicketContent: Identifiable, Hashable {
     let voted: Bool
     let voteCount: LabelContent
     var voteButton: ImageButtonContent
-    private(set) var isVotingInProgress: Bool
 
     func withVoting(_ voting: Bool) -> TicketContent {
         let voteModifier = voted ? -1 : 1
@@ -158,8 +152,7 @@ struct TicketContent: Identifiable, Hashable {
             votingEnabled: votingEnabled,
             voted: voted,
             voteCount: updatedVoteCount,
-            voteButton: voteButton,
-            isVotingInProgress: voting
+            voteButton: voteButton
         )
     }
 

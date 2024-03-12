@@ -6,56 +6,52 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import Combine
 import SwiftUI
 
 extension RoadmapWidget.ContentObserver: TicketContentDelegate {
+    @MainActor
+    func processVote(for ticketId: String?) async {
+        guard let ticketId else {
+            return
+        }
+
+        // Fetch the most up to date version of the ticket.
+        guard let ticket = ticketPaginator.items.first(
+            where: { $0.id == ticketId }
+        ) else {
+            return
+        }
+
+        setVotingState(voting: true, for: ticket)
+
+        do {
+            // If these throw, voting state is reset in catch. If they don't
+            // the vote response handler will reset the state if there are
+            // other issues. If nothing goes wrong, the voting state will be
+            // resetto false when the updated ticket is received and
+            // replaces the old one.
+            if ticket.voted {
+                try await ticketContentDidRemoveVote(ticket)
+            } else {
+                try await ticketContentDidReceiveVote(ticket)
+            }
+        } catch {
+            Logger.error("Error toggling vote for ticket", error, [
+                "ticketId": ticket.id
+            ])
+
+            setVotingState(voting: false, for: ticket)
+        }
+    }
+
     // MARK: - TicketContentDelegate
 
     @MainActor
     func ticketContentDidPressVote(
         _ ticketId: String
     ) {
-        let data = ticketPaginator.currentData()
-
-        guard let ticket = data.items.first(
-            where: { $0.id == ticketId }
-        ) else {
-            return
-        }
-
-        guard !ticket.isVotingInProgress else {
-            Logger.warn(
-                "Tapped vote button when vote operation is already in progress",
-                [
-                    "ticketId": ticketId
-                ]
-            )
-
-            return
-        }
-
-        Task {
-            setVotingState(voting: true, for: ticket)
-
-            do {
-                // If these throw, voting state is reset in catch. If they don't
-                // the vote response handler will reset the state if there are
-                // other issues. If nothing goes wrong, the voting state will be
-                // resetto false when the updated ticket is received and
-                // replaces the old one.
-                if ticket.voted {
-                    try await ticketContentDidRemoveVote(ticket)
-                } else {
-                    try await ticketContentDidReceiveVote(ticket)
-                }
-            } catch {
-                Logger.error("Error toggling vote for ticket", error, [
-                    "ticketId": ticketId
-                ])
-
-                setVotingState(voting: false, for: ticket)
-            }
-        }
+        currentTicketToVote = ticketId
     }
 
     func ticketContentDidReceiveVote(
@@ -102,11 +98,8 @@ extension RoadmapWidget.ContentObserver: TicketContentDelegate {
 
         switch response.result {
         case .success(let response):
-            print(response)
-
             let updatedTicket = TicketContent(
                 response,
-                isVotingInProgress: false,
                 delegate: self
             )
 

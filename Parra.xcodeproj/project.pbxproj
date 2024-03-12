@@ -91,6 +91,8 @@
 		00374CF52B9F4D2F0028EDA8 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CF42B9F4D2F0028EDA8 /* Paginator.swift */; };
 		00374CF72B9F5CFA0028EDA8 /* RoadmapWidget+ContentObserver+Voting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CF62B9F5CFA0028EDA8 /* RoadmapWidget+ContentObserver+Voting.swift */; };
 		00374CF92B9F61440028EDA8 /* ScrollToTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CF82B9F61440028EDA8 /* ScrollToTopView.swift */; };
+		00374CFB2B9F97250028EDA8 /* RoadmapDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CFA2B9F97250028EDA8 /* RoadmapDetailView.swift */; };
+		00374CFD2B9FF5630028EDA8 /* Publisher+asyncMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CFC2B9FF5630028EDA8 /* Publisher+asyncMap.swift */; };
 		003962332A48B4EF00B8655F /* ParraFeedbackDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */; };
 		003962342A48B4EF00B8655F /* ParraCardAnswerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraCardAnswerHandler.swift */; };
 		003962352A48B4EF00B8655F /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B8327DE6E2400DEEECD /* ParraFeedback+Constants.swift */; };
@@ -603,6 +605,8 @@
 		00374CF42B9F4D2F0028EDA8 /* Paginator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
 		00374CF62B9F5CFA0028EDA8 /* RoadmapWidget+ContentObserver+Voting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoadmapWidget+ContentObserver+Voting.swift"; sourceTree = "<group>"; };
 		00374CF82B9F61440028EDA8 /* ScrollToTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToTopView.swift; sourceTree = "<group>"; };
+		00374CFA2B9F97250028EDA8 /* RoadmapDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapDetailView.swift; sourceTree = "<group>"; };
+		00374CFC2B9FF5630028EDA8 /* Publisher+asyncMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+asyncMap.swift"; sourceTree = "<group>"; };
 		003C214627DE855A001CAE03 /* ItemStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStorage.swift; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* Parra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parra.swift; sourceTree = "<group>"; };
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
@@ -1059,6 +1063,7 @@
 				0036D5E527CB0FBD0016DE97 /* JSONDecoder.swift */,
 				0036D5E327CB0EEA0016DE97 /* JSONEncoder.swift */,
 				00E8B32D27878C3400FC3FFD /* Models.swift */,
+				00374CFC2B9FF5630028EDA8 /* Publisher+asyncMap.swift */,
 				0019CBC828FB37BC0015E703 /* Sequence+asyncMap.swift */,
 				0011C7DD2B9B7DCC0095EAE8 /* UIDevice++.swift */,
 				00E15A28293269100049C2C7 /* UIViewController.swift */,
@@ -2427,6 +2432,7 @@
 			isa = PBXGroup;
 			children = (
 				00FCB15D2B93C34E00635DC8 /* RoadmapListItem.swift */,
+				00374CFA2B9F97250028EDA8 /* RoadmapDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2724,6 +2730,7 @@
 				007ED4682A6BFBDC0077E446 /* ParraLoggerContext+ParraDictionaryConvertible.swift in Sources */,
 				00BD2FFC2A477D7700B4BEB2 /* ParraNotificationCenter.swift in Sources */,
 				00FCB1362B90F71800635DC8 /* FeedbackQuestionViewKind+currentAnswer.swift in Sources */,
+				00374CFD2B9FF5630028EDA8 /* Publisher+asyncMap.swift in Sources */,
 				00EAE2FE2AA0C8A2003FB41C /* ParraSessionGeneratorType.swift in Sources */,
 				0087CA722A57B343007D72FA /* ParraLoggerCallSiteContext.swift in Sources */,
 				006DE9882A47547900521F5D /* ParraLazyLogParam.swift in Sources */,
@@ -2879,6 +2886,7 @@
 				00F7C4B22B9A610200DBDF5A /* ImageComponentType.swift in Sources */,
 				0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */,
 				00EC6F7F2B61A64B00ABC8EC /* RectangleCornerRadii+Hashable.swift in Sources */,
+				00374CFB2B9F97250028EDA8 /* RoadmapDetailView.swift in Sources */,
 				00FCB13A2B91232B00635DC8 /* FeedbackRatingQuestionCard.swift in Sources */,
 				00ABF1B42B86620900A054A2 /* View+FeedbackCards.swift in Sources */,
 				00706B292B72C32F00C28F66 /* ButtonCategory.swift in Sources */,
