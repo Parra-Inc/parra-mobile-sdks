@@ -17,11 +17,15 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
         let fontColor = attributes.fontColor ?? theme.palette.primaryText
             .toParraColor()
 
+        let defaultImageAttributes = ImageAttributes(
+            tint: attributes.iconAttributes?.tint ?? fontColor
+        )
+
         let image: (some View)? = if let icon = content.icon {
             ImageComponent(
                 content: icon,
-                attributes: ImageAttributes(
-                    tint: fontColor
+                attributes: defaultImageAttributes.withUpdates(
+                    updates: attributes.iconAttributes
                 )
             )
             // Need to override resizable modifier from general implementation.

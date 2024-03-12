@@ -20,7 +20,8 @@ public struct LabelAttributes: ParraStyleAttributes {
         fontWeight: Font.Weight? = nil,
         fontWidth: Font.Width? = nil,
         padding: EdgeInsets? = nil,
-        layoutDirectionBehavior: LayoutDirectionBehavior? = nil
+        layoutDirectionBehavior: LayoutDirectionBehavior? = nil,
+        iconAttributes: ImageAttributes? = nil
     ) {
         self.background = background
         self.cornerRadius = cornerRadius
@@ -31,6 +32,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         self.fontWidth = fontWidth
         self.padding = padding
         self.layoutDirectionBehavior = layoutDirectionBehavior
+        self.iconAttributes = iconAttributes
         self.frame = nil
         self.borderWidth = nil
         self.borderColor = nil
@@ -46,6 +48,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         fontWidth: Font.Width? = nil,
         padding: EdgeInsets? = nil,
         layoutDirectionBehavior: LayoutDirectionBehavior? = nil,
+        iconAttributes: ImageAttributes? = nil,
         frame: FrameAttributes? = nil,
         borderWidth: CGFloat? = nil,
         borderColor: Color? = nil
@@ -59,6 +62,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         self.fontWidth = fontWidth
         self.padding = padding
         self.layoutDirectionBehavior = layoutDirectionBehavior
+        self.iconAttributes = iconAttributes
         self.frame = frame
         self.borderWidth = borderWidth
         self.borderColor = borderColor
@@ -75,6 +79,7 @@ public struct LabelAttributes: ParraStyleAttributes {
     public let fontWidth: Font.Width?
     public let padding: EdgeInsets?
     public let layoutDirectionBehavior: LayoutDirectionBehavior?
+    public let iconAttributes: ImageAttributes?
 
     // MARK: - Internal
 
@@ -154,6 +159,9 @@ public struct LabelAttributes: ParraStyleAttributes {
             padding: updates?.padding ?? padding,
             layoutDirectionBehavior: updates?
                 .layoutDirectionBehavior ?? layoutDirectionBehavior,
+            iconAttributes: iconAttributes?.withUpdates(
+                updates: updates?.iconAttributes
+            ) ?? updates?.iconAttributes,
             frame: updates?.frame ?? frame,
             borderWidth: updates?.borderWidth ?? borderWidth,
             borderColor: updates?.borderColor ?? borderColor
