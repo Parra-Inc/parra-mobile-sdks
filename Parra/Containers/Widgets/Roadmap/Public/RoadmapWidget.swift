@@ -151,6 +151,8 @@ public struct RoadmapWidget: Container {
             )
             .navigationDestination(for: TicketContent.self) { ticket in
                 RoadmapDetailView(ticketContent: ticket)
+                    .environment(config)
+                    .environment(localBuilderConfig)
             }
             .renderToast(toast: $alertManager.currentToast)
         }
