@@ -24,6 +24,7 @@ struct TicketContent: Identifiable, Hashable {
     ) {
         self.originalTicket = userTicket
         self.id = userTicket.id
+        self.ticketNumber = userTicket.ticketNumber
         self.createdAt = LabelContent(
             text: userTicket.createdAt.timeAgo(
                 dateTimeStyle: .numeric
@@ -56,6 +57,7 @@ struct TicketContent: Identifiable, Hashable {
     init(
         originalTicket: UserTicket,
         id: String,
+        ticketNumber: String,
         createdAt: LabelContent,
         type: TicketType,
         title: LabelContent,
@@ -70,6 +72,7 @@ struct TicketContent: Identifiable, Hashable {
     ) {
         self.originalTicket = originalTicket
         self.id = id
+        self.ticketNumber = ticketNumber
         self.createdAt = createdAt
         self.type = type
         self.title = title
@@ -91,6 +94,7 @@ struct TicketContent: Identifiable, Hashable {
         return TicketContent(
             UserTicket(
                 id: UUID().uuidString,
+                ticketNumber: "23812",
                 createdAt: .now,
                 updatedAt: .now,
                 deletedAt: nil,
@@ -109,6 +113,7 @@ struct TicketContent: Identifiable, Hashable {
 
     let originalTicket: UserTicket
     let id: String
+    let ticketNumber: String
     let createdAt: LabelContent
     let type: TicketType
     let title: LabelContent
@@ -138,6 +143,7 @@ struct TicketContent: Identifiable, Hashable {
         return TicketContent(
             originalTicket: originalTicket,
             id: id,
+            ticketNumber: ticketNumber,
             createdAt: createdAt,
             type: type,
             title: title,

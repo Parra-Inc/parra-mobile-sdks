@@ -45,7 +45,7 @@ struct LabelComponent: LabelComponentType {
             LabelAttributes(
                 fontColor: base.fontColor ?? theme.palette.secondaryText
             )
-        case .title:
+        case .largeTitle, .title, .title2, .title3:
             LabelAttributes(
                 fontColor: base.fontColor ?? theme.palette.primaryText,
                 fontWeight: base.fontWeight ?? .bold
@@ -56,8 +56,7 @@ struct LabelComponent: LabelComponentType {
                     ?? theme.palette.secondaryText.toParraColor().opacity(0.8),
                 fontWeight: base.fontWeight ?? .medium
             )
-        case .caption, .footnote, .caption2, .largeTitle, .headline,
-             .title2, .title3:
+        case .caption, .footnote, .caption2, .headline:
             nil
         @unknown default:
             nil

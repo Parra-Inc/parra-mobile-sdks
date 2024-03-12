@@ -64,6 +64,5 @@ struct RoadmapVoteView: View {
             )
             .minimumScaleFactor(0.7)
         }
-        .frame(width: 48)
     }
 }

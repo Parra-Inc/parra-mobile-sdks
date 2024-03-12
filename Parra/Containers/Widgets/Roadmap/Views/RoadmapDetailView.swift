@@ -30,28 +30,71 @@ struct RoadmapDetailView: View {
     var body: some View {
         let palette = themeObserver.theme.palette
 
-        VStack(alignment: .leading) {
-            componentFactory.buildLabel(
-                config: config.requestTitlesDetail,
-                content: ticketContent.title,
-                suppliedBuilder: builderConfig.requestTitleLabelDetail
-            )
-            .multilineTextAlignment(.leading)
+        VStack(spacing: 10) {
+            HStack(alignment: .center, spacing: 16) {
+                if ticketContent.votingEnabled {
+                    RoadmapVoteView(ticketContent: ticketContent)
+                }
 
-            if let description = ticketContent.description {
                 componentFactory.buildLabel(
-                    config: config.requestDescriptionsDetail,
-                    content: description,
-                    suppliedBuilder: builderConfig
-                        .requestDescriptionLabelDetail
+                    config: LabelConfig(fontStyle: .title),
+                    content: ticketContent.title,
+                    suppliedBuilder: builderConfig.requestTitleLabel
                 )
                 .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity)
+
+            HStack {
+                RoadmapTicketTypeBadge(
+                    type: ticketContent.type,
+                    size: .md,
+                    educationAlerts: true
+                )
+
+                RoadmapTicketDisplayStatusBadge(
+                    displayStatus: ticketContent.displayStatus,
+                    title: ticketContent.statusTitle,
+                    size: .md,
+                    educationAlerts: true
+                )
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            componentFactory.buildLabel(
+                config: config.createdAt,
+                content: LabelContent(
+                    text: "Created \(ticketContent.createdAt.text)"
+                ),
+                suppliedBuilder: builderConfig.createdAtLabel,
+                localAttributes: LabelAttributes(
+                    fontColor: palette.secondaryText
+                )
+            )
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            if let description = ticketContent.description {
+                Divider()
+                    .padding(.vertical, 4)
+
+                componentFactory.buildLabel(
+                    config: LabelConfig(fontStyle: .body),
+                    content: description,
+                    suppliedBuilder: builderConfig
+                        .requestDescriptionLabel
+                )
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
 
             Spacer()
+
+            ParraLogo(type: .poweredBy)
         }
-        .safeAreaPadding([.leading, .trailing, .bottom])
+        .padding(20)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .applyBackground(palette.secondaryBackground)
+        .applyBackground(palette.primaryBackground)
+        .navigationTitle(ticketContent.ticketNumber)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

@@ -56,4 +56,26 @@ extension TicketType {
             return "improvement"
         }
     }
+
+    var navigationTitle: String {
+        switch self {
+        case .bug:
+            return "Bug report"
+        case .feature:
+            return "Feature request"
+        case .improvement:
+            return "Suggested improvement"
+        }
+    }
+
+    var explanation: String {
+        switch self {
+        case .bug:
+            return "When unexpected behavior occurs within the app, such as glitches or crashes."
+        case .feature:
+            return "When you envision new capabilities or enhancements that could make the app more useful or enjoyable."
+        case .improvement:
+            return "When you spot opportunities to refine existing features or the app's overall performance for a better experience."
+        }
+    }
 }

@@ -9,15 +9,15 @@
 import Foundation
 
 enum TicketFilter {
-    case upcoming
+    case inProgress
     case requests
 
     // MARK: - Internal
 
     var paramName: String {
         switch self {
-        case .upcoming:
-            return "upcoming"
+        case .inProgress:
+            return "in_progress"
         case .requests:
             return "requests"
         }
@@ -25,7 +25,7 @@ enum TicketFilter {
 
     var toTab: RoadmapWidget.Tab {
         switch self {
-        case .upcoming:
+        case .inProgress:
             return .inProgress
         case .requests:
             return .requests

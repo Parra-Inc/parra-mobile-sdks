@@ -33,7 +33,7 @@ public extension RoadmapWidget {
         var filter: TicketFilter {
             switch self {
             case .inProgress:
-                return .upcoming
+                return .inProgress
             case .requests:
                 return .requests
             }

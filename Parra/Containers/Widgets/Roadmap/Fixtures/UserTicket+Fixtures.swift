@@ -18,6 +18,7 @@ extension UserTicket: ParraFixture {
         return [
             UserTicket(
                 id: UUID().uuidString,
+                ticketNumber: "PAR-2349",
                 createdAt: now.addingTimeInterval(-(day * 1.5)),
                 updatedAt: now.addingTimeInterval(-(day * 1.3)),
                 deletedAt: nil,
@@ -33,6 +34,7 @@ extension UserTicket: ParraFixture {
             ),
             UserTicket(
                 id: UUID().uuidString,
+                ticketNumber: "PAR-4",
                 createdAt: now.addingTimeInterval(-(day * 8)),
                 updatedAt: now.addingTimeInterval(-(day * 6)),
                 deletedAt: nil,
@@ -48,6 +50,7 @@ extension UserTicket: ParraFixture {
             ),
             UserTicket(
                 id: UUID().uuidString,
+                ticketNumber: "PAR-991011",
                 createdAt: now.addingTimeInterval(-(day * 30)),
                 updatedAt: now.addingTimeInterval(-(day * 15)),
                 deletedAt: nil,
@@ -63,6 +66,7 @@ extension UserTicket: ParraFixture {
             ),
             UserTicket(
                 id: UUID().uuidString,
+                ticketNumber: "PAR-3493929892",
                 createdAt: now.addingTimeInterval(-(day * 100)),
                 updatedAt: now.addingTimeInterval(-(day * 75)),
                 deletedAt: nil,

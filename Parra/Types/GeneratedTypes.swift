@@ -1779,6 +1779,7 @@ public struct UserTicket: Codable, Equatable, Hashable, Identifiable {
 
     public init(
         id: String,
+        ticketNumber: String,
         createdAt: Date,
         updatedAt: Date,
         deletedAt: Date?,
@@ -1793,6 +1794,7 @@ public struct UserTicket: Codable, Equatable, Hashable, Identifiable {
         voted: Bool
     ) {
         self.id = id
+        self.ticketNumber = ticketNumber
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
@@ -1811,6 +1813,7 @@ public struct UserTicket: Codable, Equatable, Hashable, Identifiable {
 
     public enum CodingKeys: String, CodingKey {
         case id
+        case ticketNumber
         case createdAt
         case updatedAt
         case deletedAt
@@ -1826,6 +1829,7 @@ public struct UserTicket: Codable, Equatable, Hashable, Identifiable {
     }
 
     public let id: String
+    public let ticketNumber: String
     public let createdAt: Date
     public let updatedAt: Date
     public let deletedAt: Date?

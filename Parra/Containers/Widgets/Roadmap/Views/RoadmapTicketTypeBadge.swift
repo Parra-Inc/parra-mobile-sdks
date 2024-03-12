@@ -14,11 +14,13 @@ struct RoadmapTicketTypeBadge: View {
     init(
         type: TicketType,
         size: Badge.Size = .sm,
-        variant: Badge.Variant = .outlined
+        variant: Badge.Variant = .outlined,
+        educationAlerts: Bool = false
     ) {
         self.type = type
         self.size = size
         self.variant = variant
+        self.educationAlerts = educationAlerts
     }
 
     // MARK: - Internal
@@ -36,7 +38,23 @@ struct RoadmapTicketTypeBadge: View {
             icon: .symbol("circle.fill"),
             iconAttributes: nil
         )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if educationAlerts {
+                isAlertPresented = true
+            }
+        }
+        .alert(type.navigationTitle, isPresented: $isAlertPresented, actions: {
+            EmptyView()
+        }, message: {
+            Text(type.explanation)
+        })
     }
+
+    // MARK: - Private
+
+    @State private var isAlertPresented = false
+    private let educationAlerts: Bool
 }
 
 #Preview {

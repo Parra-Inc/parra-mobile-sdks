@@ -39,6 +39,7 @@ struct RoadmapListItem: View {
             HStack(alignment: alignment, spacing: 8) {
                 if ticketContent.votingEnabled {
                     RoadmapVoteView(ticketContent: ticketContent)
+                        .frame(width: 48)
                 }
 
                 VStack(alignment: .leading) {

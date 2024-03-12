@@ -15,12 +15,14 @@ struct RoadmapTicketDisplayStatusBadge: View {
         displayStatus: TicketDisplayStatus,
         title: String,
         size: Badge.Size = .sm,
-        variant: Badge.Variant = .outlined
+        variant: Badge.Variant = .outlined,
+        educationAlerts: Bool = false
     ) {
         self.displayStatus = displayStatus
         self.title = title
         self.size = size
         self.variant = variant
+        self.educationAlerts = educationAlerts
     }
 
     // MARK: - Internal
@@ -39,7 +41,28 @@ struct RoadmapTicketDisplayStatusBadge: View {
             icon: .symbol("circle.fill"),
             iconAttributes: nil
         )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if educationAlerts {
+                isAlertPresented = true
+            }
+        }
+        .alert(
+            displayStatus.navigationTitle,
+            isPresented: $isAlertPresented,
+            actions: {
+                EmptyView()
+            },
+            message: {
+                Text(displayStatus.explanation)
+            }
+        )
     }
+
+    // MARK: - Private
+
+    @State private var isAlertPresented = false
+    private let educationAlerts: Bool
 }
 
 #Preview {
