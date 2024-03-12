@@ -12,27 +12,36 @@ public struct ParraCornerRadiusConfig {
     // MARK: - Lifecycle
 
     public init(
-        extraSmall: RectangleCornerRadii,
-        small: RectangleCornerRadii,
-        medium: RectangleCornerRadii,
-        large: RectangleCornerRadii,
-        extraLarge: RectangleCornerRadii
+        xs: RectangleCornerRadii,
+        sm: RectangleCornerRadii,
+        md: RectangleCornerRadii,
+        lg: RectangleCornerRadii,
+        xl: RectangleCornerRadii,
+        xxl: RectangleCornerRadii,
+        xxxl: RectangleCornerRadii,
+        full: RectangleCornerRadii
     ) {
-        self.xs = extraSmall
-        self.sm = small
-        self.md = medium
-        self.lg = large
-        self.xl = extraLarge
+        self.xs = xs
+        self.sm = sm
+        self.md = md
+        self.lg = lg
+        self.xl = xl
+        self.xxl = xxl
+        self.xxxl = xxxl
+        self.full = full
     }
 
     // MARK: - Public
 
     public static let `default` = ParraCornerRadiusConfig(
-        extraSmall: .init(allCorners: 4),
-        small: .init(allCorners: 6),
-        medium: .init(allCorners: 8),
-        large: .init(allCorners: 12),
-        extraLarge: .init(allCorners: 16)
+        xs: .init(allCorners: 2),
+        sm: .init(allCorners: 4),
+        md: .init(allCorners: 6),
+        lg: .init(allCorners: 8),
+        xl: .init(allCorners: 12),
+        xxl: .init(allCorners: 16),
+        xxxl: .init(allCorners: 24),
+        full: .init(allCorners: 9_999)
     )
 
     public let xs: RectangleCornerRadii
@@ -40,6 +49,9 @@ public struct ParraCornerRadiusConfig {
     public let md: RectangleCornerRadii
     public let lg: RectangleCornerRadii
     public let xl: RectangleCornerRadii
+    public let xxl: RectangleCornerRadii
+    public let xxxl: RectangleCornerRadii
+    public let full: RectangleCornerRadii
 
     public func value(
         for size: ParraCornerRadiusSize?
@@ -61,6 +73,12 @@ public struct ParraCornerRadiusConfig {
             return lg
         case .xl:
             return xl
+        case .xxl:
+            return xxl
+        case .xxxl:
+            return xxxl
+        case .full:
+            return full
         }
     }
 }

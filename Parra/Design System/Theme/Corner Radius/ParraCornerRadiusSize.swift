@@ -15,4 +15,7 @@ public enum ParraCornerRadiusSize: Hashable, Equatable {
     case md
     case lg
     case xl
+    case xxl
+    case xxxl
+    case full
 }
