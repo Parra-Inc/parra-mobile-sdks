@@ -121,6 +121,17 @@ extension RoadmapWidget {
             }
         }
 
+        func updateTicketOnAllTabs(_ ticket: TicketContent) {
+            let keys = ticketCache.keys
+            for key in keys {
+                guard let new = ticketCache[key]?.replacingItem(ticket) else {
+                    continue
+                }
+
+                ticketCache.updateValue(new, forKey: key)
+            }
+        }
+
         // MARK: - Private
 
         private var paginatorSink: AnyCancellable? = nil

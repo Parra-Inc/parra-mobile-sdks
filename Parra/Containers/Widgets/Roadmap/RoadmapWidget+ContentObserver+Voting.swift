@@ -124,5 +124,7 @@ extension RoadmapWidget.ContentObserver: TicketContentDelegate {
         with content: TicketContent
     ) {
         ticketPaginator.updateItem(content)
+
+        updateTicketOnAllTabs(content)
     }
 }

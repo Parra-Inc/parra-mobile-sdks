@@ -83,7 +83,7 @@ class Paginator<Item, Context>: ObservableObject
 
         // MARK: - Internal
 
-        let items: [Item]
+        private(set) var items: [Item]
         let placeholderItems: [Item]
 
         let pageSize: Int
@@ -93,6 +93,20 @@ class Paginator<Item, Context>: ObservableObject
         /// yet with this data or the API didn't inform us how many of these
         /// records exist.
         let knownCount: Int?
+
+        mutating func replacingItem(_ item: Item) -> Data {
+            var next = self
+
+            guard let index = next.items.firstIndex(
+                where: { $0.id == item.id }
+            ) else {
+                return next
+            }
+
+            next.items[index] = item
+
+            return next
+        }
     }
 
     typealias PageFetcher = (
