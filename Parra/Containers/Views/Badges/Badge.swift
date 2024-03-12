@@ -39,6 +39,8 @@ struct Badge: View {
     @EnvironmentObject var componentFactory: ComponentFactory
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
+    @Environment(\.redactionReasons) var redactionReasons
+
     var body: some View {
         componentFactory.buildLabel(
             config: LabelConfig(fontStyle: .footnote),
@@ -51,7 +53,8 @@ struct Badge: View {
 
     private var attributes: LabelAttributes {
         let palette = themeObserver.theme.palette
-        let primaryColor = (color ?? palette.primary)
+        let primaryColor = redactionReasons.contains(.placeholder)
+            ? ParraColorSwatch.gray : (color ?? palette.primary)
 
         switch variant {
         case .outlined:
