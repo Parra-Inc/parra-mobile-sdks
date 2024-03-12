@@ -18,7 +18,6 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
         requestDescriptions: LabelConfig,
         voteCount: LabelConfig,
         requestUpvoteButtons: ImageButtonConfig,
-        status: LabelConfig,
         createdAt: LabelConfig,
         addRequestSuccessToastTitle: String,
         addRequestSuccessToastSubtitle: String
@@ -29,7 +28,6 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
         self.requestDescriptions = requestDescriptions
         self.voteCount = voteCount
         self.requestUpvoteButtons = requestUpvoteButtons
-        self.status = status
         self.createdAt = createdAt
         self.addRequestSuccessToastTitle = addRequestSuccessToastTitle
         self.addRequestSuccessToastSubtitle = addRequestSuccessToastSubtitle
@@ -58,7 +56,6 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
             size: .custom(CGSize(width: 18, height: 18)),
             variant: .plain
         ),
-        status: LabelConfig(fontStyle: .caption2),
         createdAt: LabelConfig(fontStyle: .caption),
         addRequestSuccessToastTitle: "Request confirmed!",
         addRequestSuccessToastSubtitle: "Thank you for your input! We've noted your suggestion and will consider it for our roadmap after a thorough review."
@@ -70,7 +67,6 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
     public let requestDescriptions: LabelConfig
     public let voteCount: LabelConfig
     public let requestUpvoteButtons: ImageButtonConfig
-    public let status: LabelConfig
     public let createdAt: LabelConfig
     public let addRequestSuccessToastTitle: String
     public let addRequestSuccessToastSubtitle: String

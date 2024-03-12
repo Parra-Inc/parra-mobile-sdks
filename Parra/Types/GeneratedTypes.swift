@@ -1769,7 +1769,6 @@ public enum TicketStatus: String, Codable, Equatable {
 
 public enum TicketDisplayStatus: String, Codable, Equatable {
     case pending
-    case upcoming
     case inProgress = "in_progress"
     case live
     case rejected

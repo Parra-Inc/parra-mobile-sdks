@@ -25,8 +25,8 @@ extension UserTicket: ParraFixture {
                 type: .bug,
                 description: "When I launch the app and get to the home screen the app crashes and I have to restart it. This keeps happening and kind of sucks.",
                 status: .open,
-                displayStatus: .upcoming,
-                displayStatusBadgeTitle: "Coming soon",
+                displayStatus: .inProgress,
+                displayStatusBadgeTitle: "in progress",
                 voteCount: 69,
                 votingEnabled: true,
                 voted: false
@@ -41,7 +41,7 @@ extension UserTicket: ParraFixture {
                 description: "Idk why but in a recent update the favotite button stopped working",
                 status: .open,
                 displayStatus: .live,
-                displayStatusBadgeTitle: "Live",
+                displayStatusBadgeTitle: "fixed",
                 voteCount: 100_423,
                 votingEnabled: false,
                 voted: false
@@ -55,8 +55,8 @@ extension UserTicket: ParraFixture {
                 type: .improvement,
                 description: nil,
                 status: .open,
-                displayStatus: .upcoming,
-                displayStatusBadgeTitle: "Coming soon",
+                displayStatus: .inProgress,
+                displayStatusBadgeTitle: "in progress",
                 voteCount: 1_150,
                 votingEnabled: true,
                 voted: true
@@ -71,7 +71,7 @@ extension UserTicket: ParraFixture {
                 description: "Hear me out... it would be sick if I could use an AI assistant to do my writing for me in this app like in others.",
                 status: .open,
                 displayStatus: .inProgress,
-                displayStatusBadgeTitle: "In progress",
+                displayStatusBadgeTitle: "in progress",
                 voteCount: 420,
                 votingEnabled: true,
                 voted: false

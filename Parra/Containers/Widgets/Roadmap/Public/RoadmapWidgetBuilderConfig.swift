@@ -18,7 +18,6 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.requestDescriptionLabel = nil
         self.voteCountLabel = nil
         self.requestUpvoteButton = nil
-        self.statusLabel = nil
         self.createdAtLabel = nil
     }
 
@@ -59,12 +58,6 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
             ImageButtonContent,
             ImageButtonAttributes
         >? = nil,
-        statusLabelBuilder: LocalComponentBuilder.Factory<
-            Text,
-            LabelConfig,
-            LabelContent,
-            LabelAttributes
-        >? = nil,
         createdAtLabelBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
@@ -78,7 +71,6 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.requestDescriptionLabel = requestDescriptionLabelBuilder
         self.voteCountLabel = voteCountLabelBuilder
         self.requestUpvoteButton = requestUpvoteButtonBuilder
-        self.statusLabel = statusLabelBuilder
         self.createdAtLabel = createdAtLabelBuilder
     }
 
@@ -119,12 +111,6 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
         ImageButtonConfig,
         ImageButtonContent,
         ImageButtonAttributes
-    >?
-    public let statusLabel: LocalComponentBuilder.Factory<
-        Text,
-        LabelConfig,
-        LabelContent,
-        LabelAttributes
     >?
     public let createdAtLabel: LocalComponentBuilder.Factory<
         Text,

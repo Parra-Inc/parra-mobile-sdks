@@ -26,53 +26,19 @@ struct RoadmapListItem: View {
     @EnvironmentObject var contentObserver: RoadmapWidget.ContentObserver
     @EnvironmentObject var componentFactory: ComponentFactory
     @EnvironmentObject var themeObserver: ParraThemeObserver
-    @Environment(\.redactionReasons) var redactionReasons
 
     var body: some View {
         let palette = themeObserver.theme.palette
-        let (alignment, topPadding): (
-            VerticalAlignment,
-            Double
-        ) = if ticketContent.description == nil {
-            (.center, 0)
+        let alignment: VerticalAlignment = if ticketContent.description == nil {
+            .center
         } else {
-            (.top, 6)
+            .top
         }
-
-        let voteHightlightColor = ticketContent.voted
-            ? palette.primary : palette.secondary
 
         VStack(spacing: 12) {
             HStack(alignment: alignment, spacing: 8) {
                 if ticketContent.votingEnabled {
-                    VStack(alignment: .center) {
-                        componentFactory.buildImageButton(
-                            variant: .plain,
-                            config: config.requestUpvoteButtons,
-                            content: ticketContent.voteButton,
-                            suppliedBuilder: builderConfig.requestUpvoteButton,
-                            localAttributes: ImageButtonAttributes(
-                                image: ImageAttributes(
-                                    tint: voteHightlightColor.toParraColor()
-                                )
-                            )
-                        )
-                        // manual adjust ment to try to align better with the title text
-                        .padding(.top, topPadding)
-                        .symbolEffect(
-                            .bounce.up,
-                            options: .speed(1.5),
-                            value: ticketContent.voted
-                        )
-
-                        componentFactory.buildLabel(
-                            config: config.voteCount,
-                            content: ticketContent.voteCount,
-                            suppliedBuilder: builderConfig.voteCountLabel
-                        )
-                        .minimumScaleFactor(0.7)
-                    }
-                    .frame(width: 48)
+                    RoadmapVoteView(ticketContent: ticketContent)
                 }
 
                 VStack(alignment: .leading) {
@@ -95,19 +61,12 @@ struct RoadmapListItem: View {
                         .multilineTextAlignment(.leading)
                     }
 
-                    HStack(alignment: .center) {
-                        componentFactory.buildLabel(
-                            config: config.status,
-                            content: ticketContent.statusTitle,
-                            suppliedBuilder: builderConfig.statusLabel,
-                            localAttributes: LabelAttributes(
-                                cornerRadius: .sm,
-                                fontColor: palette.primary,
-                                padding: .init(vertical: 4, horizontal: 8),
-                                borderWidth: redactionReasons
-                                    .contains(.placeholder) ? 0 : 1,
-                                borderColor: palette.primary.toParraColor()
-                            )
+                    HStack(alignment: .center, spacing: 4) {
+                        RoadmapTicketTypeBadge(type: ticketContent.type)
+
+                        RoadmapTicketDisplayStatusBadge(
+                            displayStatus: ticketContent.displayStatus,
+                            title: ticketContent.statusTitle
                         )
 
                         Spacer()

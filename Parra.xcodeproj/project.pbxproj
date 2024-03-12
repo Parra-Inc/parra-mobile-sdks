@@ -93,6 +93,16 @@
 		00374CF92B9F61440028EDA8 /* ScrollToTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CF82B9F61440028EDA8 /* ScrollToTopView.swift */; };
 		00374CFB2B9F97250028EDA8 /* RoadmapDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CFA2B9F97250028EDA8 /* RoadmapDetailView.swift */; };
 		00374CFD2B9FF5630028EDA8 /* Publisher+asyncMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CFC2B9FF5630028EDA8 /* Publisher+asyncMap.swift */; };
+		00374CFF2BA0108C0028EDA8 /* RoadmapVoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374CFE2BA0108C0028EDA8 /* RoadmapVoteView.swift */; };
+		00374D032BA0A63E0028EDA8 /* RoadmapTicketTypeIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D022BA0A63E0028EDA8 /* RoadmapTicketTypeIcon.swift */; };
+		00374D062BA0B1E20028EDA8 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D052BA0B1E20028EDA8 /* Badge.swift */; };
+		00374D082BA0BA500028EDA8 /* Badge+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D072BA0BA500028EDA8 /* Badge+Size.swift */; };
+		00374D0A2BA0BA550028EDA8 /* Badge+Variant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D092BA0BA550028EDA8 /* Badge+Variant.swift */; };
+		00374D0C2BA0C0A00028EDA8 /* ImageAttributes+BadgeDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D0B2BA0C0A00028EDA8 /* ImageAttributes+BadgeDefaults.swift */; };
+		00374D0E2BA0C69F0028EDA8 /* RoadmapTicketTypeBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D0D2BA0C69F0028EDA8 /* RoadmapTicketTypeBadge.swift */; };
+		00374D102BA0CA890028EDA8 /* RoadmapTicketDisplayStatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D0F2BA0CA890028EDA8 /* RoadmapTicketDisplayStatusBadge.swift */; };
+		00374D132BA0CAC90028EDA8 /* TicketType+badgeAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D122BA0CAC90028EDA8 /* TicketType+badgeAttributes.swift */; };
+		00374D152BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D142BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift */; };
 		003962332A48B4EF00B8655F /* ParraFeedbackDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */; };
 		003962342A48B4EF00B8655F /* ParraCardAnswerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraCardAnswerHandler.swift */; };
 		003962352A48B4EF00B8655F /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B8327DE6E2400DEEECD /* ParraFeedback+Constants.swift */; };
@@ -607,6 +617,16 @@
 		00374CF82B9F61440028EDA8 /* ScrollToTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToTopView.swift; sourceTree = "<group>"; };
 		00374CFA2B9F97250028EDA8 /* RoadmapDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapDetailView.swift; sourceTree = "<group>"; };
 		00374CFC2B9FF5630028EDA8 /* Publisher+asyncMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+asyncMap.swift"; sourceTree = "<group>"; };
+		00374CFE2BA0108C0028EDA8 /* RoadmapVoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapVoteView.swift; sourceTree = "<group>"; };
+		00374D022BA0A63E0028EDA8 /* RoadmapTicketTypeIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapTicketTypeIcon.swift; sourceTree = "<group>"; };
+		00374D052BA0B1E20028EDA8 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
+		00374D072BA0BA500028EDA8 /* Badge+Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Badge+Size.swift"; sourceTree = "<group>"; };
+		00374D092BA0BA550028EDA8 /* Badge+Variant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Badge+Variant.swift"; sourceTree = "<group>"; };
+		00374D0B2BA0C0A00028EDA8 /* ImageAttributes+BadgeDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageAttributes+BadgeDefaults.swift"; sourceTree = "<group>"; };
+		00374D0D2BA0C69F0028EDA8 /* RoadmapTicketTypeBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapTicketTypeBadge.swift; sourceTree = "<group>"; };
+		00374D0F2BA0CA890028EDA8 /* RoadmapTicketDisplayStatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapTicketDisplayStatusBadge.swift; sourceTree = "<group>"; };
+		00374D122BA0CAC90028EDA8 /* TicketType+badgeAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TicketType+badgeAttributes.swift"; sourceTree = "<group>"; };
+		00374D142BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TicketDisplayStatus+badgeAttributes.swift"; sourceTree = "<group>"; };
 		003C214627DE855A001CAE03 /* ItemStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStorage.swift; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* Parra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parra.swift; sourceTree = "<group>"; };
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
@@ -1363,6 +1383,7 @@
 		003621D12B5B55F2009EFE53 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				00374D042BA0B1D20028EDA8 /* Badges */,
 				001230092B990289007E5632 /* EmptyState */,
 				00ABF1832B7EAF1400A054A2 /* Environment */,
 				003621F52B5C7C01009EFE53 /* Extensions */,
@@ -1497,6 +1518,26 @@
 				0036D5F827CDB0170016DE97 /* UserDefaultsStorage.swift */,
 			);
 			path = PersistentStorageMedium;
+			sourceTree = "<group>";
+		};
+		00374D042BA0B1D20028EDA8 /* Badges */ = {
+			isa = PBXGroup;
+			children = (
+				00374D052BA0B1E20028EDA8 /* Badge.swift */,
+				00374D072BA0BA500028EDA8 /* Badge+Size.swift */,
+				00374D092BA0BA550028EDA8 /* Badge+Variant.swift */,
+				00374D0B2BA0C0A00028EDA8 /* ImageAttributes+BadgeDefaults.swift */,
+			);
+			path = Badges;
+			sourceTree = "<group>";
+		};
+		00374D112BA0CABA0028EDA8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				00374D142BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift */,
+				00374D122BA0CAC90028EDA8 /* TicketType+badgeAttributes.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		003962322A48B4AC00B8655F /* Feedback */ = {
@@ -2392,6 +2433,7 @@
 		00FCB1482B939B4C00635DC8 /* Roadmap */ = {
 			isa = PBXGroup;
 			children = (
+				00374D112BA0CABA0028EDA8 /* Extensions */,
 				00FCB1602B93C40000635DC8 /* Fixtures */,
 				00FCB1492B939B6100635DC8 /* Public */,
 				00FCB15F2B93C3EA00635DC8 /* Views */,
@@ -2433,6 +2475,10 @@
 			children = (
 				00FCB15D2B93C34E00635DC8 /* RoadmapListItem.swift */,
 				00374CFA2B9F97250028EDA8 /* RoadmapDetailView.swift */,
+				00374CFE2BA0108C0028EDA8 /* RoadmapVoteView.swift */,
+				00374D022BA0A63E0028EDA8 /* RoadmapTicketTypeIcon.swift */,
+				00374D0D2BA0C69F0028EDA8 /* RoadmapTicketTypeBadge.swift */,
+				00374D0F2BA0CA890028EDA8 /* RoadmapTicketDisplayStatusBadge.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2738,6 +2784,7 @@
 				00214C6A2AB3E2BC001C5313 /* ParraSanitizedDictionary.swift in Sources */,
 				00FCB1342B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift in Sources */,
 				003621F92B5C92E4009EFE53 /* Color+Luminosity.swift in Sources */,
+				00374D0E2BA0C69F0028EDA8 /* RoadmapTicketTypeBadge.swift in Sources */,
 				001677552B6AE7FD00674001 /* FlexibleFrameAttributes.swift in Sources */,
 				00DDBA192B61C21E00400761 /* EdgeInsets+hashable.swift in Sources */,
 				00916DCC2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift in Sources */,
@@ -2747,6 +2794,7 @@
 				001B7B0E27DE3A9B00DEEECD /* Parra.swift in Sources */,
 				00E76D542B68287400B01DD8 /* OutlinedButtonComponent.swift in Sources */,
 				00FCB1382B90F73700635DC8 /* FeedbackQuestionViewKind+MultiOptionAnswer.swift in Sources */,
+				00374D132BA0CAC90028EDA8 /* TicketType+badgeAttributes.swift in Sources */,
 				0099EB142B8E89360053F366 /* ParraQuestionHandlerDelegate.swift in Sources */,
 				00E269EE2A5257DC001A0F50 /* AuthorizationType.swift in Sources */,
 				0029AD332A49256300E30CCD /* ParraEvent.swift in Sources */,
@@ -2873,6 +2921,7 @@
 				00ABF1A62B85284900A054A2 /* TextInputContent.swift in Sources */,
 				00ABF17E2B7D42F600A054A2 /* ParraStoryboardLaunchScreen+Config.swift in Sources */,
 				00F7C48B2B99FD3100DBDF5A /* AlertConfig.swift in Sources */,
+				00374D152BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift in Sources */,
 				00E76D282B66D22000B01DD8 /* TextButtonContent.swift in Sources */,
 				00214C6E2AB62510001C5313 /* String+prefixes.swift in Sources */,
 				00A60B9B2932D37000B7168A /* ParraAuthenticationProviderType.swift in Sources */,
@@ -2880,6 +2929,7 @@
 				003621F22B5C77F1009EFE53 /* ParraTypography.swift in Sources */,
 				00E76D242B66D1FD00B01DD8 /* LabelContent.swift in Sources */,
 				00C00ABB2A8A6BC2003B21D3 /* SessionStorageContext.swift in Sources */,
+				00374D032BA0A63E0028EDA8 /* RoadmapTicketTypeIcon.swift in Sources */,
 				00FCB1812B976D3300635DC8 /* UserTicketCollectionResponse+Fixtures.swift in Sources */,
 				006FA06A2B77D35800B60F5E /* ParraSyncMode.swift in Sources */,
 				00706B1F2B71D92600C28F66 /* ParraAttributedTextEditorStyle.swift in Sources */,
@@ -2892,6 +2942,7 @@
 				00706B292B72C32F00C28F66 /* ButtonCategory.swift in Sources */,
 				00706B132B719C2000C28F66 /* TextEditorAttributes.swift in Sources */,
 				0087CA9A2A59DFCC007D72FA /* ProcessInfoPowerState+ParraLogStringConvertible.swift in Sources */,
+				00374D0C2BA0C0A00028EDA8 /* ImageAttributes+BadgeDefaults.swift in Sources */,
 				0066540C2A7EAEF000CD04E6 /* ParraErrorWithExtra.swift in Sources */,
 				0099EB062B8D04C00053F366 /* ParraFeedbackView.swift in Sources */,
 				003621DB2B5B569F009EFE53 /* ParraLogoType.swift in Sources */,
@@ -2953,6 +3004,8 @@
 				003621D72B5B563C009EFE53 /* ParraLogo.swift in Sources */,
 				003962352A48B4EF00B8655F /* ParraFeedback+Constants.swift in Sources */,
 				00EAE2F72A9BE71F003FB41C /* URL+helpers.swift in Sources */,
+				00374D062BA0B1E20028EDA8 /* Badge.swift in Sources */,
+				00374D102BA0CA890028EDA8 /* RoadmapTicketDisplayStatusBadge.swift in Sources */,
 				003962632A48B55300B8655F /* ParraCardViewConfig.swift in Sources */,
 				0087CA7A2A58FAA2007D72FA /* Logger+StaticLevels.swift in Sources */,
 				00ABF1452B7851BF00A054A2 /* Parra+SyncManagerDelegate.swift in Sources */,
@@ -2962,6 +3015,7 @@
 				0087CA682A561F72007D72FA /* Logger+Levels.swift in Sources */,
 				00ABF14B2B786D9E00A054A2 /* Parra+Factory.swift in Sources */,
 				0099EB032B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift in Sources */,
+				00374CFF2BA0108C0028EDA8 /* RoadmapVoteView.swift in Sources */,
 				0087CA852A59A046007D72FA /* QualityOfService+ParraLogDescription.swift in Sources */,
 				00E76D362B66E42600B01DD8 /* LabelComponentType.swift in Sources */,
 				005D31ED29A8561D001D0E0A /* QuestionAnswer.swift in Sources */,
@@ -2989,6 +3043,7 @@
 				00FCB1722B9629CF00635DC8 /* ImageAttributes.swift in Sources */,
 				00BD2FF42A47771300B4BEB2 /* AuthenticatedRequestAttributeOptions.swift in Sources */,
 				00FCB17F2B976D2300635DC8 /* AppRoadmapConfiguration+Fixtures.swift in Sources */,
+				00374D082BA0BA500028EDA8 /* Badge+Size.swift in Sources */,
 				003962492A48B52100B8655F /* ParraBorderedTextField.swift in Sources */,
 				0039624D2A48B52100B8655F /* ParraImageButton.swift in Sources */,
 				00FCB1862B9779F000635DC8 /* View+SheetWithLoader.swift in Sources */,
@@ -3014,6 +3069,7 @@
 				00731EFB2A182639004010A3 /* Task+sleep.swift in Sources */,
 				00057FA92B98C96A0022B875 /* TicketContent.swift in Sources */,
 				0036225D2B601657009EFE53 /* ParraCornerRadiusSize.swift in Sources */,
+				00374D0A2BA0BA550028EDA8 /* Badge+Variant.swift in Sources */,
 				00ABF1B92B867BE900A054A2 /* ParraCardModalViewedEvent.swift in Sources */,
 				0087CA702A57B331007D72FA /* ParraLoggerBackend.swift in Sources */,
 				00F7C4A02B9A42FA00DBDF5A /* ComponentFactory+Labels.swift in Sources */,

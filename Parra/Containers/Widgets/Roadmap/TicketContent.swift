@@ -38,11 +38,7 @@ struct TicketContent: Identifiable, Hashable {
         }
         self.status = userTicket.status
         self.displayStatus = userTicket.displayStatus
-        self
-            .statusTitle = LabelContent(
-                text: userTicket
-                    .displayStatusBadgeTitle
-            )
+        self.statusTitle = userTicket.displayStatusBadgeTitle
         self.votingEnabled = userTicket.votingEnabled
         self.voted = userTicket.voted
         self.voteCount = TicketContent.voteCountLabelContent(from: userTicket)
@@ -66,7 +62,7 @@ struct TicketContent: Identifiable, Hashable {
         description: LabelContent?,
         status: TicketStatus,
         displayStatus: TicketDisplayStatus,
-        statusTitle: LabelContent,
+        statusTitle: String,
         votingEnabled: Bool,
         voted: Bool,
         voteCount: LabelContent,
@@ -119,7 +115,7 @@ struct TicketContent: Identifiable, Hashable {
     let description: LabelContent?
     let status: TicketStatus
     let displayStatus: TicketDisplayStatus
-    let statusTitle: LabelContent
+    let statusTitle: String
     let votingEnabled: Bool
     let voted: Bool
     let voteCount: LabelContent
