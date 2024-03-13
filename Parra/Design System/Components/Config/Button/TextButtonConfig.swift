@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct TextButtonConfig {
+public struct TextButtonConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(

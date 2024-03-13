@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct TextButtonContent {
+public struct TextButtonContent: Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -27,4 +27,16 @@ public struct TextButtonContent {
     public let isDisabled: Bool
 
     public internal(set) var onPress: (() -> Void)?
+
+    public static func == (
+        lhs: TextButtonContent,
+        rhs: TextButtonContent
+    ) -> Bool {
+        return lhs.isDisabled == rhs.isDisabled && lhs.text == rhs.text
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(text)
+        hasher.combine(isDisabled)
+    }
 }
