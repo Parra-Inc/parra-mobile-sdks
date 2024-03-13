@@ -100,12 +100,3 @@ struct FeedbackQuestionCard: View {
         )
     }
 }
-
-#Preview {
-    ParraCardViewPreview {
-        FeedbackQuestionCard(
-            bucketId: UUID().uuidString,
-            question: ParraCardItemFixtures.boolQuestion
-        )
-    }
-}

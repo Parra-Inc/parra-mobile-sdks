@@ -53,7 +53,7 @@ struct FeedbackCheckboxQuestionCard: FeedbackQuestionViewKind {
 #Preview {
     ParraCardViewPreview {
         FeedbackCheckboxQuestionCard(
-            bucketId: UUID().uuidString,
+            bucketId: ParraCardItemFixtures.choiceBucketId,
             question: ParraCardItemFixtures.checkboxQuestion,
             data: ParraCardItemFixtures.checkboxQuestionData
         )

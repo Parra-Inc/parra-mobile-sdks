@@ -53,7 +53,7 @@ struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
 #Preview {
     ParraCardViewPreview {
         FeedbackBooleanQuestionCard(
-            bucketId: UUID().uuidString,
+            bucketId: ParraCardItemFixtures.boolBucketId,
             question: ParraCardItemFixtures.boolQuestion,
             data: ParraCardItemFixtures.boolQuestionData
         )
