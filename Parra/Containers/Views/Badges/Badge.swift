@@ -52,8 +52,9 @@ struct Badge: View {
     // MARK: - Private
 
     private var attributes: LabelAttributes {
+        let isPlaceholder = redactionReasons.contains(.placeholder)
         let palette = themeObserver.theme.palette
-        let primaryColor = redactionReasons.contains(.placeholder)
+        let primaryColor = isPlaceholder
             ? ParraColorSwatch.gray : (color ?? palette.primary)
 
         switch variant {
@@ -66,7 +67,7 @@ struct Badge: View {
                     with: size,
                     tintColor: primaryColor.toParraColor()
                 ),
-                borderWidth: 1,
+                borderWidth: isPlaceholder ? 0 : 1,
                 borderColor: palette.primarySeparator.toParraColor()
             )
         case .contained:
