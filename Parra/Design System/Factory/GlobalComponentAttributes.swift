@@ -21,7 +21,8 @@ public class GlobalComponentAttributes {
         textEditorAttributeFactory: TextEditorAttributeFactory? = nil,
         textInputAttributeFactory: TextInputAttributeFactory? = nil,
         segmentAttributeFactory: SegmentAttributeFactory? = nil,
-        alertAttributeFactory: AlertAttributeFactory? = nil
+        alertAttributeFactory: AlertAttributeFactory? = nil,
+        emptyStateAttributeFactory: EmptyStateAttributeFactory? = nil
     ) {
         self.labelAttributeFactory = labelAttributeFactory
         self.textButtonAttributeFactory = textButtonAttributeFactory
@@ -31,6 +32,7 @@ public class GlobalComponentAttributes {
         self.textInputAttributeFactory = textInputAttributeFactory
         self.segmentAttributeFactory = segmentAttributeFactory
         self.alertAttributeFactory = alertAttributeFactory
+        self.emptyStateAttributeFactory = emptyStateAttributeFactory
     }
 
     // MARK: - Public
@@ -83,6 +85,12 @@ public class GlobalComponentAttributes {
         _ defaultAttributes: AlertAttributes?
     ) -> AlertAttributes
 
+    public typealias EmptyStateAttributeFactory = (
+        _ config: EmptyStateConfig,
+        _ content: EmptyStateContent,
+        _ defaultAttributes: EmptyStateAttributes?
+    ) -> EmptyStateAttributes
+
     // MARK: - Internal
 
     private(set) var labelAttributeFactory: LabelAttributeFactory?
@@ -93,4 +101,5 @@ public class GlobalComponentAttributes {
     private(set) var textInputAttributeFactory: TextInputAttributeFactory?
     private(set) var segmentAttributeFactory: SegmentAttributeFactory?
     private(set) var alertAttributeFactory: AlertAttributeFactory?
+    private(set) var emptyStateAttributeFactory: EmptyStateAttributeFactory?
 }

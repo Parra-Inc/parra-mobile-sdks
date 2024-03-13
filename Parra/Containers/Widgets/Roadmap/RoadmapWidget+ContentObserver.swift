@@ -31,13 +31,23 @@ extension RoadmapWidget {
                 onPress: nil
             )
 
+            let emptyStateViewContent = EmptyStateContent(
+                title: LabelContent(
+                    text: "No tickets yet"
+                ),
+                subtitle: LabelContent(
+                    text: "This is your opportunity to be the first 👀"
+                )
+            )
+
             self.selectedTab = initialTab
             self.roadmapConfig = roadmapConfig
             self.canAddRequests = roadmapConfig.form != nil
             self.networkManager = initialParams.networkManager
             self.content = Content(
                 title: "Roadmap",
-                addRequestButton: addRequestButton
+                addRequestButton: addRequestButton,
+                emptyStateView: emptyStateViewContent
             )
 
             let initialPaginatorData = Paginator<

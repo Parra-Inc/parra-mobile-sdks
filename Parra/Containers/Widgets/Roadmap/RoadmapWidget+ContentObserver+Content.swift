@@ -17,15 +17,18 @@ extension RoadmapWidget.ContentObserver {
 
         init(
             title: String,
-            addRequestButton: TextButtonContent
+            addRequestButton: TextButtonContent,
+            emptyStateView: EmptyStateContent
         ) {
             self.title = LabelContent(text: title)
             self.addRequestButton = addRequestButton
+            self.emptyStateView = emptyStateView
         }
 
         // MARK: - Internal
 
         let title: LabelContent
         var addRequestButton: TextButtonContent
+        let emptyStateView: EmptyStateContent
     }
 }

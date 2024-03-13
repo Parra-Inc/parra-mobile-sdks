@@ -39,4 +39,18 @@ extension EdgeInsets {
             trailing: edgeInsets.right
         )
     }
+
+    static func padding(
+        top: CGFloat = 0.0,
+        leading: CGFloat = 0.0,
+        bottom: CGFloat = 0.0,
+        trailing: CGFloat = 0.0
+    ) -> EdgeInsets {
+        return EdgeInsets(
+            top: top,
+            leading: leading,
+            bottom: bottom,
+            trailing: trailing
+        )
+    }
 }

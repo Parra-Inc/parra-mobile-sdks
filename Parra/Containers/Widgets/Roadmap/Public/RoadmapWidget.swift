@@ -107,10 +107,10 @@ public struct RoadmapWidget: Container {
                     .scrollIndicatorsFlash(trigger: contentObserver.selectedTab)
                     // TODO: Empy datasource case
                     .emptyPlaceholder(contentObserver.ticketPaginator.items) {
-                        ParraDefaultEmptyView(
-                            symbolName: "tray",
-                            title: "No tickets yet",
-                            description: "This is your opportunity to be the first 👀"
+                        componentFactory.buildEmptyState(
+                            config: config.emptyStateView,
+                            content: contentObserver.content.emptyStateView,
+                            suppliedBuilder: localBuilderConfig.emptyStateView
                         )
                     }
                     .refreshable {

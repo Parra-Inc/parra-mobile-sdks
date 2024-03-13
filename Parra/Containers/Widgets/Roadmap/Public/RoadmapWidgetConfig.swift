@@ -20,7 +20,8 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
         requestUpvoteButtons: ImageButtonConfig,
         createdAt: LabelConfig,
         addRequestSuccessToastTitle: String,
-        addRequestSuccessToastSubtitle: String
+        addRequestSuccessToastSubtitle: String,
+        emptyStateView: EmptyStateConfig
     ) {
         self.title = title
         self.addRequestButton = addRequestButton
@@ -31,6 +32,7 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
         self.createdAt = createdAt
         self.addRequestSuccessToastTitle = addRequestSuccessToastTitle
         self.addRequestSuccessToastSubtitle = addRequestSuccessToastSubtitle
+        self.emptyStateView = emptyStateView
     }
 
     // MARK: - Public
@@ -58,7 +60,8 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
         ),
         createdAt: LabelConfig(fontStyle: .caption),
         addRequestSuccessToastTitle: "Request confirmed!",
-        addRequestSuccessToastSubtitle: "Thank you for your input! We've noted your suggestion and will consider it for our roadmap after a thorough review."
+        addRequestSuccessToastSubtitle: "Thank you for your input! We've noted your suggestion and will consider it for our roadmap after a thorough review.",
+        emptyStateView: EmptyStateConfig.default
     )
 
     public let title: LabelConfig
@@ -70,4 +73,5 @@ public class RoadmapWidgetConfig: ContainerConfig, Observable {
     public let createdAt: LabelConfig
     public let addRequestSuccessToastTitle: String
     public let addRequestSuccessToastSubtitle: String
+    public let emptyStateView: EmptyStateConfig
 }

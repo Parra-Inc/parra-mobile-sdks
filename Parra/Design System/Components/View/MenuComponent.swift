@@ -12,9 +12,9 @@ import SwiftUI
 struct MenuComponent: MenuComponentType {
     // MARK: - Internal
 
-    var config: MenuConfig
-    var content: MenuContent
-    var style: ParraAttributedMenuStyle
+    let config: MenuConfig
+    let content: MenuContent
+    let style: ParraAttributedMenuStyle
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

@@ -19,6 +19,7 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.voteCountLabel = nil
         self.requestUpvoteButton = nil
         self.createdAtLabel = nil
+        self.emptyStateView = nil
     }
 
     public init(
@@ -63,6 +64,12 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
             LabelConfig,
             LabelContent,
             LabelAttributes
+        >? = nil,
+        emptyStateViewBuilder: LocalComponentBuilder.Factory<
+            AnyView,
+            EmptyStateConfig,
+            EmptyStateContent,
+            EmptyStateAttributes
         >? = nil
     ) {
         self.title = titleBuilder
@@ -72,6 +79,7 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.voteCountLabel = voteCountLabelBuilder
         self.requestUpvoteButton = requestUpvoteButtonBuilder
         self.createdAtLabel = createdAtLabelBuilder
+        self.emptyStateView = emptyStateViewBuilder
     }
 
     // MARK: - Public
@@ -117,5 +125,11 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
         LabelConfig,
         LabelContent,
         LabelAttributes
+    >?
+    public let emptyStateView: LocalComponentBuilder.Factory<
+        AnyView,
+        EmptyStateConfig,
+        EmptyStateContent,
+        EmptyStateAttributes
     >?
 }
