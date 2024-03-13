@@ -43,10 +43,9 @@ struct RoadmapTicketDisplayStatusBadge: View {
         )
         .contentShape(Rectangle())
         .onTapGesture {
-            if educationAlerts {
-                isAlertPresented = true
-            }
+            isAlertPresented = true
         }
+        .allowsHitTesting(educationAlerts)
         .alert(
             displayStatus.navigationTitle,
             isPresented: $isAlertPresented,
