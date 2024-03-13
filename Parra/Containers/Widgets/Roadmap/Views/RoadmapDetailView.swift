@@ -9,17 +9,7 @@
 import SwiftUI
 
 struct RoadmapDetailView: View {
-    // MARK: - Lifecycle
-
-    init(
-        ticketContent: TicketContent
-    ) {
-        self.ticketContent = ticketContent
-    }
-
-    // MARK: - Internal
-
-    let ticketContent: TicketContent
+    @Binding var ticketContent: TicketContent
 
     @Environment(RoadmapWidgetConfig.self) var config
     @Environment(RoadmapWidgetBuilderConfig.self) var builderConfig

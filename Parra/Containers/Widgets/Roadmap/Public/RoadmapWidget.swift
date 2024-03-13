@@ -150,9 +150,17 @@ public struct RoadmapWidget: Container {
                 }
             )
             .navigationDestination(for: TicketContent.self) { ticket in
-                RoadmapDetailView(ticketContent: ticket)
-                    .environment(config)
-                    .environment(localBuilderConfig)
+                if let index = contentObserver.ticketPaginator.items.firstIndex(
+                    where: {
+                        $0.id == ticket.id
+                    }
+                ) {
+                    let binding = $contentObserver.ticketPaginator.items[index]
+
+                    RoadmapDetailView(ticketContent: binding)
+                        .environment(config)
+                        .environment(localBuilderConfig)
+                }
             }
             .renderToast(toast: $alertManager.currentToast)
         }

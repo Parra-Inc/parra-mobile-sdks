@@ -132,7 +132,7 @@ class Paginator<Item, Context>: ObservableObject
     // If omitted, there will never be an attempt to load more content.
     let pageFetcher: PageFetcher?
 
-    @Published private(set) var items: [Item]
+    @Published var items: [Item]
     @Published private(set) var isLoading: Bool
     @Published private(set) var isShowingPlaceholders: Bool
 

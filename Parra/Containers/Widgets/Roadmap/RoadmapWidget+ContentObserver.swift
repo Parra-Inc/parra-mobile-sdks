@@ -93,7 +93,7 @@ extension RoadmapWidget {
         /// The identifier for a ticket to toggle the vote for.
         @Published var currentTicketToVote: String?
 
-        @Published private(set) var ticketPaginator: Paginator<
+        @Published var ticketPaginator: Paginator<
             TicketContent,
             RoadmapWidget.Tab
                 // Using IUO because this object requires referencing self in a closure
