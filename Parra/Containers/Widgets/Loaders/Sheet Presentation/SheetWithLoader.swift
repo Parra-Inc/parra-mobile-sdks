@@ -22,10 +22,14 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 .LoadType?
         >,
         loader: ViewDataLoader<TransformParams, Data, SheetContent>,
+        detents: Set<PresentationDetent> = [.large],
+        visibility: Visibility = .visible,
         onDismiss: ((SheetDismissType) -> Void)?
     ) {
         self._loadType = loadType
         self.loader = loader
+        self.detents = detents
+        self.visibility = visibility
         self.onDismiss = onDismiss
     }
 
@@ -86,10 +90,11 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 content: {
                     if case .complete(let data) = state {
                         loader.render(parra, data, dismiss)
+                            .presentationDetents(detents)
+                            .presentationDragIndicator(visibility)
                     }
                 }
             )
-            .presentationDetents([.large])
     }
 
     // MARK: - Private
@@ -97,6 +102,8 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     @State private var state: LoadState = .ready
 
     private let loader: ViewDataLoader<TransformParams, Data, SheetContent>
+    private let detents: Set<PresentationDetent>
+    private let visibility: Visibility
     private let onDismiss: ((SheetDismissType) -> Void)?
 
     @MainActor
