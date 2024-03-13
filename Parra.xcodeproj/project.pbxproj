@@ -103,6 +103,12 @@
 		00374D102BA0CA890028EDA8 /* RoadmapTicketDisplayStatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D0F2BA0CA890028EDA8 /* RoadmapTicketDisplayStatusBadge.swift */; };
 		00374D132BA0CAC90028EDA8 /* TicketType+badgeAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D122BA0CAC90028EDA8 /* TicketType+badgeAttributes.swift */; };
 		00374D152BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D142BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift */; };
+		00374D6D2BA1413C0028EDA8 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00374D6C2BA1413C0028EDA8 /* SwiftUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		00374D6F2BA141400028EDA8 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00374D6E2BA141400028EDA8 /* Combine.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		00374D702BA1414C0028EDA8 /* Parra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; };
+		00374D712BA1414C0028EDA8 /* Parra.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		00374D732BA141550028EDA8 /* Parra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; };
+		00374D742BA141550028EDA8 /* Parra.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		003962332A48B4EF00B8655F /* ParraFeedbackDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001287002780C0C70090CDB5 /* ParraFeedbackDataManager.swift */; };
 		003962342A48B4EF00B8655F /* ParraCardAnswerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8B32B278730D500FC3FFD /* ParraCardAnswerHandler.swift */; };
 		003962352A48B4EF00B8655F /* ParraFeedback+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B8327DE6E2400DEEECD /* ParraFeedback+Constants.swift */; };
@@ -173,7 +179,6 @@
 		00706B272B72C28E00C28F66 /* ButtonVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B262B72C28E00C28F66 /* ButtonVariant.swift */; };
 		00706B292B72C32F00C28F66 /* ButtonCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B282B72C32F00C28F66 /* ButtonCategory.swift */; };
 		00707D1B27FA0A07004E9567 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00707D1A27FA0A07004E9567 /* URLSession.swift */; };
-		00719DB82AF69CAA00310E25 /* Parra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; };
 		00731EFB2A182639004010A3 /* Task+sleep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00731EFA2A182639004010A3 /* Task+sleep.swift */; };
 		007868992AAE4DE300864CFE /* ParraLogEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007868982AAE4DE300864CFE /* ParraLogEvent.swift */; };
 		0078689D2AAE54F800864CFE /* ParraSessionEventSyncPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0078689C2AAE54F800864CFE /* ParraSessionEventSyncPriority.swift */; };
@@ -479,6 +484,13 @@
 			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
 			remoteInfo = Parra;
 		};
+		00374D752BA141550028EDA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
+			remoteInfo = Parra;
+		};
 		00719DBA2AF69CAA00310E25 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
@@ -501,6 +513,31 @@
 			remoteInfo = ParraTests;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		00374D722BA1414C0028EDA8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				00374D712BA1414C0028EDA8 /* Parra.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00374D772BA141550028EDA8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				00374D742BA141550028EDA8 /* Parra.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00057F9F2B98162B0022B875 /* View+redacted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+redacted.swift"; sourceTree = "<group>"; };
@@ -627,6 +664,8 @@
 		00374D0F2BA0CA890028EDA8 /* RoadmapTicketDisplayStatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapTicketDisplayStatusBadge.swift; sourceTree = "<group>"; };
 		00374D122BA0CAC90028EDA8 /* TicketType+badgeAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TicketType+badgeAttributes.swift"; sourceTree = "<group>"; };
 		00374D142BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TicketDisplayStatus+badgeAttributes.swift"; sourceTree = "<group>"; };
+		00374D6C2BA1413C0028EDA8 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		00374D6E2BA141400028EDA8 /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
 		003C214627DE855A001CAE03 /* ItemStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStorage.swift; sourceTree = "<group>"; };
 		003D2A74274C77BD001E067E /* Parra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parra.swift; sourceTree = "<group>"; };
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
@@ -1002,6 +1041,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00374D6F2BA141400028EDA8 /* Combine.framework in Frameworks */,
+				00374D6D2BA1413C0028EDA8 /* SwiftUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1017,6 +1058,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00374D732BA141550028EDA8 /* Parra.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1024,7 +1066,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00719DB82AF69CAA00310E25 /* Parra.framework in Frameworks */,
+				00374D702BA1414C0028EDA8 /* Parra.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2540,6 +2582,8 @@
 		39DADA99F3B351D04A5CD522 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00374D6E2BA141400028EDA8 /* Combine.framework */,
+				00374D6C2BA1413C0028EDA8 /* SwiftUI.framework */,
 				007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */,
 			);
 			name = Frameworks;
@@ -2602,11 +2646,13 @@
 				00916A592B75C819009C87DC /* Sources */,
 				00916A5A2B75C819009C87DC /* Frameworks */,
 				00916A5B2B75C819009C87DC /* Resources */,
+				00374D772BA141550028EDA8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				00916A6C2B75C841009C87DC /* PBXTargetDependency */,
+				00374D762BA141550028EDA8 /* PBXTargetDependency */,
 			);
 			name = Sample;
 			productName = Sample;
@@ -2620,6 +2666,7 @@
 				00B42EAA2ADE1BCB00F365A5 /* Sources */,
 				00B42EAB2ADE1BCB00F365A5 /* Frameworks */,
 				00B42EAC2ADE1BCB00F365A5 /* Resources */,
+				00374D722BA1414C0028EDA8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3207,6 +3254,11 @@
 			isa = PBXTargetDependency;
 			target = 001B7AF127DE3A7600DEEECD /* Parra */;
 			targetProxy = 001B7AFB27DE3A7600DEEECD /* PBXContainerItemProxy */;
+		};
+		00374D762BA141550028EDA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 001B7AF127DE3A7600DEEECD /* Parra */;
+			targetProxy = 00374D752BA141550028EDA8 /* PBXContainerItemProxy */;
 		};
 		00719DBB2AF69CAA00310E25 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
