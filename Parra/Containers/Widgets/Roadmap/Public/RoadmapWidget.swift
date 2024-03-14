@@ -8,6 +8,16 @@
 
 import SwiftUI
 
+struct ViewOffsetKey: PreferenceKey {
+    typealias Value = CGFloat
+
+    static var defaultValue = CGFloat.zero
+
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value += nextValue()
+    }
+}
+
 public struct RoadmapWidget: Container {
     // MARK: - Lifecycle
 
@@ -98,6 +108,10 @@ public struct RoadmapWidget: Container {
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
+    var headerSpace: CGFloat {
+        return style.contentPadding.top
+    }
+
     var tabBar: some View {
         VStack(alignment: .leading, spacing: 20) {
             componentFactory.buildLabel(
@@ -116,7 +130,14 @@ public struct RoadmapWidget: Container {
             }
             .pickerStyle(.segmented)
         }
-        .padding(.all, from: style.contentPadding)
+        .padding([.leading, .trailing, .top], from: style.contentPadding)
+        .padding(.bottom, headerSpace)
+        .border(
+            width: 1,
+            edges: .bottom,
+            color: showNavigationDivider
+                ? themeObserver.theme.palette.secondaryBackground : .clear
+        )
     }
 
     func renderScrollView(with proxy: ScrollViewProxy) -> some View {
@@ -163,6 +184,15 @@ public struct RoadmapWidget: Container {
                 when: contentObserver.ticketPaginator
                     .isShowingPlaceholders
             )
+            .background(GeometryReader {
+                Color.clear.preference(
+                    key: ViewOffsetKey.self,
+                    value: -$0.frame(in: .named("scroll")).origin.y
+                )
+            })
+            .onPreferenceChange(ViewOffsetKey.self) { offset in
+                showNavigationDivider = offset > 0.0
+            }
         }
         // A limited number of placeholder cells will be generated.
         // Don't allow scrolling past them while loading.
@@ -170,7 +200,12 @@ public struct RoadmapWidget: Container {
             contentObserver.ticketPaginator.isShowingPlaceholders
         )
         .contentMargins(
-            [.bottom, .leading, .trailing],
+            .top,
+            headerSpace / 2,
+            for: .scrollContent
+        )
+        .contentMargins(
+            [.leading, .trailing, .bottom],
             style.contentPadding,
             for: .scrollContent
         )
@@ -186,9 +221,12 @@ public struct RoadmapWidget: Container {
             await contentObserver.ticketPaginator.refresh()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .coordinateSpace(name: "scroll")
     }
 
     // MARK: - Private
+
+    @State private var showNavigationDivider = false
 
     @StateObject private var alertManager = AlertManager()
 }
