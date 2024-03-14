@@ -8,19 +8,12 @@
 
 import Foundation
 
-protocol TicketContentDelegate {
-    func ticketContentDidPressVote(
-        _ ticketId: String
-    )
-}
-
 struct TicketContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
     @MainActor
     init(
-        _ userTicket: UserTicket,
-        delegate: TicketContentDelegate? = nil
+        _ userTicket: UserTicket
     ) {
         self.originalTicket = userTicket
         self.id = userTicket.id
@@ -45,13 +38,8 @@ struct TicketContent: Identifiable, Hashable {
         self.voteCount = TicketContent.voteCountLabelContent(from: userTicket)
         self.voteButton = ImageButtonContent(
             image: .symbol("triangleshape.fill", .monochrome),
-            isDisabled: false,
-            onPress: nil
+            isDisabled: false
         )
-
-        voteButton.onPress = { [self] in
-            delegate?.ticketContentDidPressVote(id)
-        }
     }
 
     init(
@@ -124,7 +112,7 @@ struct TicketContent: Identifiable, Hashable {
     let votingEnabled: Bool
     let voted: Bool
     let voteCount: LabelContent
-    var voteButton: ImageButtonContent
+    private(set) var voteButton: ImageButtonContent
 
     func withVoting(_ voting: Bool) -> TicketContent {
         let voteModifier = voted ? -1 : 1

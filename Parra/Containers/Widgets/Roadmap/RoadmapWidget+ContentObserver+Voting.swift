@@ -9,7 +9,7 @@
 import Combine
 import SwiftUI
 
-extension RoadmapWidget.ContentObserver: TicketContentDelegate {
+extension RoadmapWidget.ContentObserver {
     @MainActor
     func processVote(for ticketId: String?) async {
         guard let ticketId else {
@@ -43,15 +43,6 @@ extension RoadmapWidget.ContentObserver: TicketContentDelegate {
 
             setVotingState(voting: false, for: ticket)
         }
-    }
-
-    // MARK: - TicketContentDelegate
-
-    @MainActor
-    func ticketContentDidPressVote(
-        _ ticketId: String
-    ) {
-        currentTicketToVote = ticketId
     }
 
     func ticketContentDidReceiveVote(
@@ -98,12 +89,9 @@ extension RoadmapWidget.ContentObserver: TicketContentDelegate {
 
         switch response.result {
         case .success(let response):
-            let updatedTicket = TicketContent(
-                response,
-                delegate: self
+            replaceTicket(
+                with: TicketContent(response)
             )
-
-            replaceTicket(with: updatedTicket)
         case .failure(let error):
             throw error
         }

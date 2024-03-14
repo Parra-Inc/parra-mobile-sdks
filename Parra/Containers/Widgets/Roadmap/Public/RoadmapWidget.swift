@@ -31,92 +31,9 @@ public struct RoadmapWidget: Container {
         NavigationStack {
             ScrollViewReader { scrollViewProxy in
                 VStack(spacing: 0) {
-                    VStack(alignment: .leading, spacing: 20) {
-                        componentFactory.buildLabel(
-                            config: config.title,
-                            content: contentObserver.content.title,
-                            suppliedBuilder: localBuilderConfig.title
-                        )
+                    tabBar
 
-                        Picker(
-                            "Select a tab",
-                            selection: $contentObserver.selectedTab
-                        ) {
-                            ForEach(Tab.allCases) { tab in
-                                Text(tab.title).tag(tab)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                    }
-                    .padding(.all, from: style.contentPadding)
-
-                    ScrollView {
-                        LazyVStack(alignment: .leading, spacing: 12) {
-                            let items = contentObserver.ticketPaginator.items
-
-                            ScrollToTopView(
-                                reader: scrollViewProxy,
-                                animateChanges: false,
-                                scrollOnChange: $contentObserver.selectedTab
-                            )
-
-                            ForEach(
-                                Array(items.enumerated()),
-                                id: \.element.id
-                            ) { index, ticket in
-                                NavigationLink(
-                                    value: ticket,
-                                    label: {
-                                        RoadmapListItem(ticketContent: ticket)
-                                    }
-                                )
-                                .disabled(
-                                    contentObserver.ticketPaginator
-                                        .isShowingPlaceholders
-                                )
-                                .onAppear {
-                                    contentObserver.ticketPaginator
-                                        .loadMore(after: index)
-                                }
-                                .id(ticket.id)
-                            }
-
-                            if contentObserver.ticketPaginator.isLoading {
-                                VStack(alignment: .center) {
-                                    ProgressView()
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding(style.contentPadding)
-                            }
-                        }
-                        .redacted(
-                            when: contentObserver.ticketPaginator
-                                .isShowingPlaceholders
-                        )
-                    }
-                    // A limited number of placeholder cells will be generated.
-                    // Don't allow scrolling past them while loading.
-                    .scrollDisabled(
-                        contentObserver.ticketPaginator.isShowingPlaceholders
-                    )
-                    .contentMargins(
-                        [.bottom, .leading, .trailing],
-                        style.contentPadding,
-                        for: .scrollContent
-                    )
-                    .scrollIndicatorsFlash(trigger: contentObserver.selectedTab)
-                    // TODO: Empy datasource case
-                    .emptyPlaceholder(contentObserver.ticketPaginator.items) {
-                        componentFactory.buildEmptyState(
-                            config: config.emptyStateView,
-                            content: contentObserver.content.emptyStateView,
-                            suppliedBuilder: localBuilderConfig.emptyStateView
-                        )
-                    }
-                    .refreshable {
-                        await contentObserver.ticketPaginator.refresh()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    renderScrollView(with: scrollViewProxy)
 
                     WidgetFooter {
                         if contentObserver.canAddRequests {
@@ -160,6 +77,7 @@ public struct RoadmapWidget: Container {
                     RoadmapDetailView(ticketContent: binding)
                         .environment(config)
                         .environment(localBuilderConfig)
+                        .environmentObject(contentObserver)
                 }
             }
             .renderToast(toast: $alertManager.currentToast)
@@ -175,6 +93,96 @@ public struct RoadmapWidget: Container {
     let style: RoadmapWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
+
+    var tabBar: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            componentFactory.buildLabel(
+                config: config.title,
+                content: contentObserver.content.title,
+                suppliedBuilder: localBuilderConfig.title
+            )
+
+            Picker(
+                "Select a tab",
+                selection: $contentObserver.selectedTab
+            ) {
+                ForEach(Tab.allCases) { tab in
+                    Text(tab.title).tag(tab)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+        .padding(.all, from: style.contentPadding)
+    }
+
+    func renderScrollView(with proxy: ScrollViewProxy) -> some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 12) {
+                let items = contentObserver.ticketPaginator.items
+
+                ScrollToTopView(
+                    reader: proxy,
+                    animateChanges: false,
+                    scrollOnChange: $contentObserver.selectedTab
+                )
+
+                ForEach(
+                    Array(items.enumerated()),
+                    id: \.element
+                ) { index, ticket in
+                    NavigationLink(
+                        value: ticket,
+                        label: {
+                            RoadmapListItem(ticketContent: ticket)
+                        }
+                    )
+                    .disabled(
+                        contentObserver.ticketPaginator
+                            .isShowingPlaceholders
+                    )
+                    .onAppear {
+                        contentObserver.ticketPaginator
+                            .loadMore(after: index)
+                    }
+                    .id(ticket.id)
+                }
+
+                if contentObserver.ticketPaginator.isLoading {
+                    VStack(alignment: .center) {
+                        ProgressView()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(style.contentPadding)
+                }
+            }
+            .redacted(
+                when: contentObserver.ticketPaginator
+                    .isShowingPlaceholders
+            )
+        }
+        // A limited number of placeholder cells will be generated.
+        // Don't allow scrolling past them while loading.
+        .scrollDisabled(
+            contentObserver.ticketPaginator.isShowingPlaceholders
+        )
+        .contentMargins(
+            [.bottom, .leading, .trailing],
+            style.contentPadding,
+            for: .scrollContent
+        )
+        .scrollIndicatorsFlash(trigger: contentObserver.selectedTab)
+        .emptyPlaceholder(contentObserver.ticketPaginator.items) {
+            componentFactory.buildEmptyState(
+                config: config.emptyStateView,
+                content: contentObserver.content.emptyStateView,
+                suppliedBuilder: localBuilderConfig.emptyStateView
+            )
+        }
+        .refreshable {
+            await contentObserver.ticketPaginator.refresh()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
 
     // MARK: - Private
 

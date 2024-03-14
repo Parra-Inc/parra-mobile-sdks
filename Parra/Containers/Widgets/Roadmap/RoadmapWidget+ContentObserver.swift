@@ -54,12 +54,7 @@ extension RoadmapWidget {
                 TicketContent,
                 RoadmapWidget.Tab
             >.Data(
-                items: ticketResponse.data.map {
-                    TicketContent(
-                        $0,
-                        delegate: self
-                    )
-                },
+                items: ticketResponse.data.map { TicketContent($0) },
                 placeholderItems: [],
                 pageSize: ticketResponse.pageSize,
                 knownCount: ticketResponse.totalCount
@@ -79,7 +74,7 @@ extension RoadmapWidget {
 
             $currentTicketToVote
                 .throttle(
-                    for: .seconds(2),
+                    for: .seconds(1.5),
                     scheduler: DispatchQueue.main,
                     latest: true
                 )
@@ -102,6 +97,10 @@ extension RoadmapWidget {
 
         /// The identifier for a ticket to toggle the vote for.
         @Published var currentTicketToVote: String?
+
+        private(set) var ticketCache = [
+            RoadmapWidget.Tab: Paginator<TicketContent, RoadmapWidget.Tab>.Data
+        ]()
 
         @Published var ticketPaginator: Paginator<
             TicketContent,
@@ -149,9 +148,6 @@ extension RoadmapWidget {
         private var voteBag = Set<AnyCancellable>()
 
         private let roadmapConfig: AppRoadmapConfiguration
-        private var ticketCache = [
-            RoadmapWidget.Tab: Paginator<TicketContent, RoadmapWidget.Tab>.Data
-        ]()
 
         private func updateCacheForCurrentPaginator() {
             let tab = ticketPaginator.context
@@ -187,6 +183,8 @@ extension RoadmapWidget {
                     pageFetcher: loadMoreTickets
                 )
             }
+
+            objectWillChange.send()
         }
 
         private func loadMoreTickets(
@@ -200,12 +198,7 @@ extension RoadmapWidget {
                 filter: tab.filter
             )
 
-            return response.data.map {
-                TicketContent(
-                    $0,
-                    delegate: self
-                )
-            }
+            return response.data.map { TicketContent($0) }
         }
 
         private func addRequest() {

@@ -9,23 +9,9 @@
 import SwiftUI
 
 struct RoadmapListItem: View {
-    // MARK: - Lifecycle
-
-    init(
-        ticketContent: TicketContent
-    ) {
-        self.ticketContent = ticketContent
-    }
-
     // MARK: - Internal
 
     let ticketContent: TicketContent
-
-    @Environment(RoadmapWidgetConfig.self) var config
-    @Environment(RoadmapWidgetBuilderConfig.self) var builderConfig
-    @EnvironmentObject var contentObserver: RoadmapWidget.ContentObserver
-    @EnvironmentObject var componentFactory: ComponentFactory
-    @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
         let palette = themeObserver.theme.palette
@@ -92,4 +78,13 @@ struct RoadmapListItem: View {
         .applyBackground(palette.secondaryBackground)
         .applyCornerRadii(size: .lg, from: themeObserver.theme)
     }
+
+    // MARK: - Private
+
+    @Environment(RoadmapWidgetConfig.self) private var config
+    @Environment(RoadmapWidgetBuilderConfig.self) private var builderConfig
+    @EnvironmentObject private var contentObserver: RoadmapWidget
+        .ContentObserver
+    @EnvironmentObject private var componentFactory: ComponentFactory
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 }
