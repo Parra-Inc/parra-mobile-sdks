@@ -161,7 +161,7 @@ struct TextEditorComponent: TextEditorComponentType {
                     alignment: .topLeading
                 )
                 .padding(Constant.primaryTextPadding)
-                .foregroundStyle(fontColor.opacity(0.5))
+                .foregroundStyle(Color(UIColor.placeholderText))
                 .font(attributes.font)
                 .fontDesign(attributes.fontDesign)
                 .fontWeight(attributes.fontWeight)
