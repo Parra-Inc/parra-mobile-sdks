@@ -49,7 +49,10 @@ public struct FeedbackFormWidget: Container {
                         variant: .contained,
                         config: config.submitButton,
                         content: contentObserver.content.submitButton,
-                        suppliedBuilder: localBuilderConfig.submitButton
+                        suppliedBuilder: localBuilderConfig.submitButton,
+                        onPress: {
+                            contentObserver.submit()
+                        }
                     )
                     .disabled(!contentObserver.content.canSubmit)
                 },

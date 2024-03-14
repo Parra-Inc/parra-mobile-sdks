@@ -22,4 +22,16 @@ public enum LocalComponentBuilder {
         _ content: Content?,
         _ defaultAttributes: ParraStyleAttributes
     ) -> V?
+
+    public typealias ButtonFactory<
+        V: View,
+        Config,
+        Content,
+        Attributes
+    > = (
+        _ config: Config,
+        _ content: Content?,
+        _ defaultAttributes: ParraStyleAttributes,
+        _ onPress: () -> Void
+    ) -> V?
 }

@@ -27,8 +27,7 @@ extension RoadmapWidget {
 
             let addRequestButton = TextButtonContent(
                 text: LabelContent(text: "Add request"),
-                isDisabled: false,
-                onPress: nil
+                isDisabled: false
             )
 
             let emptyStateViewContent = EmptyStateContent(
@@ -70,11 +69,9 @@ extension RoadmapWidget {
             // Cache the initial tickets
             ticketCache[initialTab] = initialPaginatorData
 
-            content.addRequestButton.onPress = addRequest
-
             $currentTicketToVote
                 .throttle(
-                    for: .seconds(1.5),
+                    for: .seconds(1.0),
                     scheduler: DispatchQueue.main,
                     latest: true
                 )
@@ -141,6 +138,14 @@ extension RoadmapWidget {
             }
         }
 
+        func addRequest() {
+            guard let form = roadmapConfig.form else {
+                return
+            }
+
+            addRequestForm = ParraFeedbackForm(from: form)
+        }
+
         // MARK: - Private
 
         private var paginatorSink: AnyCancellable? = nil
@@ -199,14 +204,6 @@ extension RoadmapWidget {
             )
 
             return response.data.map { TicketContent($0) }
-        }
-
-        private func addRequest() {
-            guard let form = roadmapConfig.form else {
-                return
-            }
-
-            addRequestForm = ParraFeedbackForm(from: form)
         }
     }
 }

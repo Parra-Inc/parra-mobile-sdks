@@ -16,7 +16,8 @@ protocol TextButtonComponentType: View {
     init(
         config: TextButtonConfig,
         content: TextButtonContent,
-        style: ParraAttributedTextButtonStyle
+        style: ParraAttributedTextButtonStyle,
+        onPress: @escaping () -> Void
     )
 }
 

@@ -71,7 +71,8 @@ private func renderButtonComponent(
                 for: type
             ),
             theme: theme
-        )
+        ),
+        onPress: {}
     )
 }
 

@@ -14,13 +14,14 @@ extension ComponentFactory {
         variant: ButtonVariant,
         config: TextButtonConfig,
         content: TextButtonContent,
-        suppliedBuilder: LocalComponentBuilder.Factory<
+        suppliedBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
             TextButtonAttributes
         >? = nil,
-        localAttributes: TextButtonAttributes? = nil
+        localAttributes: TextButtonAttributes? = nil,
+        onPress: @escaping () -> Void
     ) -> some View {
         let attributes = if let factory = global?.textButtonAttributeFactory {
             factory(config, content, localAttributes)
@@ -57,7 +58,7 @@ extension ComponentFactory {
         // component, use it and supply global attribute overrides instead
         // of local, if provided.
         if let builder = suppliedBuilder,
-           let view = builder(config, content, mergedAttributes)
+           let view = builder(config, content, mergedAttributes, onPress)
         {
             view
         } else {
@@ -73,19 +74,22 @@ extension ComponentFactory {
                 PlainButtonComponent(
                     config: config,
                     content: content,
-                    style: style
+                    style: style,
+                    onPress: onPress
                 )
             case .outlined:
                 OutlinedButtonComponent(
                     config: config,
                     content: content,
-                    style: style
+                    style: style,
+                    onPress: onPress
                 )
             case .contained:
                 ContainedButtonComponent(
                     config: config,
                     content: content,
-                    style: style
+                    style: style,
+                    onPress: onPress
                 )
             }
         }
@@ -96,7 +100,7 @@ extension ComponentFactory {
         variant: ButtonVariant,
         config: ImageButtonConfig,
         content: ImageButtonContent,
-        suppliedBuilder: LocalComponentBuilder.Factory<
+        suppliedBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Image>,
             ImageButtonConfig,
             ImageButtonContent,
@@ -122,7 +126,7 @@ extension ComponentFactory {
         // component, use it and supply global attribute overrides instead
         // of local, if provided.
         if let builder = suppliedBuilder,
-           let view = builder(config, content, mergedAttributes)
+           let view = builder(config, content, mergedAttributes, onPress)
         {
             view
         } else {

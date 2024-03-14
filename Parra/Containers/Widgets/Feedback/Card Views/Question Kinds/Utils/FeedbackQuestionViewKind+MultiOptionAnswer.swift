@@ -35,7 +35,39 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
             config: config.checkboxOptions,
             content: content,
             suppliedBuilder: localBuilderConfig.checkboxOptions,
-            localAttributes: attributes
+            localAttributes: attributes,
+            onPress: {
+                var currentOptions = (currentAnswer?.options ?? []).map(\.id)
+
+                if !isSelected, !currentOptions.contains(id) {
+                    currentOptions.append(id)
+                } else if isSelected, currentOptions.contains(id) {
+                    currentOptions.removeAll { $0 == id }
+                } else {
+                    return
+                }
+
+                if currentOptions.isEmpty {
+                    contentObserver.update(
+                        answer: nil,
+                        for: bucketId
+                    )
+                } else {
+                    let answer = QuestionAnswer(
+                        kind: .checkbox,
+                        data: MultiOptionAnswer(
+                            options: currentOptions.map {
+                                MultiOptionIndividualOption(id: $0)
+                            }
+                        )
+                    )
+
+                    contentObserver.update(
+                        answer: answer,
+                        for: bucketId
+                    )
+                }
+            }
         )
         .layoutPriority(100)
     }
@@ -50,36 +82,7 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
 
         let content = TextButtonContent(
             text: LabelContent(text: title),
-            isDisabled: false,
-            onPress: {
-                var currentOptions = (currentAnswer?.options ?? []).map(\.id)
-
-                if !isSelected, !currentOptions.contains(id) {
-                    currentOptions.append(id)
-                } else if isSelected, currentOptions.contains(id) {
-                    currentOptions.removeAll { $0 == id }
-                } else {
-                    return
-                }
-
-                let answer: QuestionAnswer? = if currentOptions.isEmpty {
-                    nil
-                } else {
-                    QuestionAnswer(
-                        kind: .checkbox,
-                        data: MultiOptionAnswer(
-                            options: currentOptions.map {
-                                MultiOptionIndividualOption(id: $0)
-                            }
-                        )
-                    )
-                }
-
-                contentObserver.update(
-                    answer: answer,
-                    for: bucketId
-                )
-            }
+            isDisabled: false
         )
 
         let selectedColor = palette.primary.toParraColor()

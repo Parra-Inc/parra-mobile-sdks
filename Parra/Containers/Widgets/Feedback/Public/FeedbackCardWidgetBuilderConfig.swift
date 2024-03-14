@@ -22,13 +22,13 @@ public class FeedbackCardWidgetBuilderConfig: LocalComponentBuilderConfig {
     }
 
     public init(
-        backButtonBuilder: LocalComponentBuilder.Factory<
+        backButtonBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Image>,
             ImageButtonConfig,
             ImageButtonContent,
             ImageButtonAttributes
         >? = nil,
-        forwardButtonBuilder: LocalComponentBuilder.Factory<
+        forwardButtonBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Image>,
             ImageButtonConfig,
             ImageButtonContent,
@@ -46,19 +46,19 @@ public class FeedbackCardWidgetBuilderConfig: LocalComponentBuilderConfig {
             LabelContent,
             LabelAttributes
         >? = nil,
-        booleanOptionsBuilder: LocalComponentBuilder.Factory<
+        booleanOptionsBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
             TextButtonAttributes
         >? = nil,
-        choiceOptionsBuilder: LocalComponentBuilder.Factory<
+        choiceOptionsBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
             TextButtonAttributes
         >? = nil,
-        checkboxOptionsBuilder: LocalComponentBuilder.Factory<
+        checkboxOptionsBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
@@ -76,14 +76,14 @@ public class FeedbackCardWidgetBuilderConfig: LocalComponentBuilderConfig {
 
     // MARK: - Public
 
-    public let backButton: LocalComponentBuilder.Factory<
+    public let backButton: LocalComponentBuilder.ButtonFactory<
         Button<Image>,
         ImageButtonConfig,
         ImageButtonContent,
         ImageButtonAttributes
     >?
 
-    public let forwardButton: LocalComponentBuilder.Factory<
+    public let forwardButton: LocalComponentBuilder.ButtonFactory<
         Button<Image>,
         ImageButtonConfig,
         ImageButtonContent,
@@ -104,21 +104,21 @@ public class FeedbackCardWidgetBuilderConfig: LocalComponentBuilderConfig {
         LabelAttributes
     >?
 
-    public let booleanOptions: LocalComponentBuilder.Factory<
+    public let booleanOptions: LocalComponentBuilder.ButtonFactory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,
         TextButtonAttributes
     >?
 
-    public let choiceOptions: LocalComponentBuilder.Factory<
+    public let choiceOptions: LocalComponentBuilder.ButtonFactory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,
         TextButtonAttributes
     >?
 
-    public let checkboxOptions: LocalComponentBuilder.Factory<
+    public let checkboxOptions: LocalComponentBuilder.ButtonFactory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,

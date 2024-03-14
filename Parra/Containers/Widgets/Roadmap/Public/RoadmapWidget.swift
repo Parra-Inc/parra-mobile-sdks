@@ -43,7 +43,10 @@ public struct RoadmapWidget: Container {
                                 content: contentObserver.content
                                     .addRequestButton,
                                 suppliedBuilder: localBuilderConfig
-                                    .addRequestButton
+                                    .addRequestButton,
+                                onPress: {
+                                    contentObserver.addRequest()
+                                }
                             )
                         }
                     }

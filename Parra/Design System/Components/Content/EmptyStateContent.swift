@@ -43,13 +43,11 @@ public struct EmptyStateContent: Hashable, Equatable {
         icon: .symbol("tray"),
         primaryAction: TextButtonContent(
             text: LabelContent(text: "Create a ticket"),
-            isDisabled: false,
-            onPress: nil
+            isDisabled: false
         ),
         secondaryAction: TextButtonContent(
             text: LabelContent(text: "remind me later"),
-            isDisabled: false,
-            onPress: nil
+            isDisabled: false
         )
     )
 }

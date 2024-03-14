@@ -20,10 +20,11 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
                 .layoutPriority(2)
         }
 
+        let isSelected = id == currentAnswer?.optionId
         let (content, attributes) = getChoiceContent(
             id: id,
             title: title,
-            isSelected: id == currentAnswer?.optionId
+            isSelected: isSelected
         )
 
         componentFactory.buildTextButton(
@@ -31,22 +32,7 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
             config: config.choiceOptions,
             content: content,
             suppliedBuilder: localBuilderConfig.choiceOptions,
-            localAttributes: attributes
-        )
-        .layoutPriority(100)
-    }
-
-    @MainActor
-    func getChoiceContent(
-        id: String,
-        title: String,
-        isSelected: Bool
-    ) -> (TextButtonContent, TextButtonAttributes) {
-        let palette = themeObserver.theme.palette
-
-        let content = TextButtonContent(
-            text: LabelContent(text: title),
-            isDisabled: false,
+            localAttributes: attributes,
             onPress: {
                 if isSelected {
                     contentObserver.update(
@@ -70,6 +56,21 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
                     question: question
                 )
             }
+        )
+        .layoutPriority(100)
+    }
+
+    @MainActor
+    func getChoiceContent(
+        id: String,
+        title: String,
+        isSelected: Bool
+    ) -> (TextButtonContent, TextButtonAttributes) {
+        let palette = themeObserver.theme.palette
+
+        let content = TextButtonContent(
+            text: LabelContent(text: title),
+            isDisabled: false
         )
 
         let selectedColor = palette.primary.toParraColor()

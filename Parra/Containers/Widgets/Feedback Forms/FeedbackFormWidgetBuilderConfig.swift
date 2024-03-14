@@ -51,7 +51,7 @@ public class FeedbackFormWidgetBuilderConfig: LocalComponentBuilderConfig {
             TextInputContent,
             TextInputAttributes
         >? = nil,
-        submitButtonBuilder: LocalComponentBuilder.Factory<
+        submitButtonBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
@@ -98,7 +98,7 @@ public class FeedbackFormWidgetBuilderConfig: LocalComponentBuilderConfig {
         TextInputContent,
         TextInputAttributes
     >?
-    public let submitButton: LocalComponentBuilder.Factory<
+    public let submitButton: LocalComponentBuilder.ButtonFactory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,

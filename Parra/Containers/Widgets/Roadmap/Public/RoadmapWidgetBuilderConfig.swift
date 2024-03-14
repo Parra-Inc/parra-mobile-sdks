@@ -29,7 +29,7 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
             LabelContent,
             LabelAttributes
         >? = nil,
-        addRequestButtonBuilder: LocalComponentBuilder.Factory<
+        addRequestButtonBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Text>,
             TextButtonConfig,
             TextButtonContent,
@@ -53,7 +53,7 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
             LabelContent,
             LabelAttributes
         >? = nil,
-        requestUpvoteButtonBuilder: LocalComponentBuilder.Factory<
+        requestUpvoteButtonBuilder: LocalComponentBuilder.ButtonFactory<
             Button<Image>,
             ImageButtonConfig,
             ImageButtonContent,
@@ -90,7 +90,7 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
         LabelContent,
         LabelAttributes
     >?
-    public let addRequestButton: LocalComponentBuilder.Factory<
+    public let addRequestButton: LocalComponentBuilder.ButtonFactory<
         Button<Text>,
         TextButtonConfig,
         TextButtonContent,
@@ -114,7 +114,7 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
         LabelContent,
         LabelAttributes
     >?
-    public let requestUpvoteButton: LocalComponentBuilder.Factory<
+    public let requestUpvoteButton: LocalComponentBuilder.ButtonFactory<
         Button<Image>,
         ImageButtonConfig,
         ImageButtonContent,

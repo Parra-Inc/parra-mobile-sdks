@@ -9,11 +9,29 @@
 import SwiftUI
 
 struct EmptyStateComponent: EmptyStateComponentType {
+    // MARK: - Lifecycle
+
+    init(
+        config: EmptyStateConfig,
+        content: EmptyStateContent,
+        style: ParraAttributedEmptyStateStyle,
+        onPrimaryAction: (() -> Void)? = nil,
+        onSecondaryAction: (() -> Void)? = nil
+    ) {
+        self.config = config
+        self.content = content
+        self.style = style
+        self.onPrimaryAction = onPrimaryAction
+        self.onSecondaryAction = onSecondaryAction
+    }
+
     // MARK: - Internal
 
     let config: EmptyStateConfig
     let content: EmptyStateContent
     let style: ParraAttributedEmptyStateStyle
+    let onPrimaryAction: (() -> Void)?
+    let onSecondaryAction: (() -> Void)?
 
     var body: some View {
         let attributes = style.attributes
@@ -60,7 +78,10 @@ struct EmptyStateComponent: EmptyStateComponentType {
                             variant: .contained,
                             config: config.primaryAction,
                             content: content,
-                            localAttributes: style.attributes
+                            localAttributes: style.attributes,
+                            onPress: {
+                                onPrimaryAction?()
+                            }
                         )
                     }
 
@@ -72,7 +93,10 @@ struct EmptyStateComponent: EmptyStateComponentType {
                             variant: .plain,
                             config: config.secondaryAction,
                             content: content,
-                            localAttributes: style.attributes
+                            localAttributes: style.attributes,
+                            onPress: {
+                                onSecondaryAction?()
+                            }
                         )
                     }
                 }

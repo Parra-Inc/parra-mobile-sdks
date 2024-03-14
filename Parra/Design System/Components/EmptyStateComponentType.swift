@@ -16,7 +16,9 @@ protocol EmptyStateComponentType: View {
     init(
         config: EmptyStateConfig,
         content: EmptyStateContent,
-        style: ParraAttributedEmptyStateStyle
+        style: ParraAttributedEmptyStateStyle,
+        onPrimaryAction: (() -> Void)?,
+        onSecondaryAction: (() -> Void)?
     )
 
     static func applyStandardCustomizations(

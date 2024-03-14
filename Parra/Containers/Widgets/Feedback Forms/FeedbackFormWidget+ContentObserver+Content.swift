@@ -29,8 +29,7 @@ extension FeedbackFormWidget.ContentObserver {
             )
             self.submitButton = TextButtonContent(
                 text: submitButton.text,
-                isDisabled: !canSubmit,
-                onPress: submitButton.onPress
+                isDisabled: !canSubmit
             )
         }
 

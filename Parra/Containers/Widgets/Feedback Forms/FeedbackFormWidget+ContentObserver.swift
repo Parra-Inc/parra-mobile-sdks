@@ -32,8 +32,7 @@ extension FeedbackFormWidget {
 
             let submitButton = TextButtonContent(
                 text: LabelContent(text: "Submit"),
-                isDisabled: false,
-                onPress: nil
+                isDisabled: false
             )
 
             self.content = Content(
@@ -42,8 +41,6 @@ extension FeedbackFormWidget {
                 fields: formData.fields.map { FormFieldWithState(field: $0) },
                 submitButton: submitButton
             )
-
-            content.submitButton.onPress = submit
         }
 
         // MARK: - Internal
@@ -76,9 +73,7 @@ extension FeedbackFormWidget {
             )
         }
 
-        // MARK: - Private
-
-        private func submit() {
+        func submit() {
             let data = content.fields
                 .reduce(
                     [FeedbackFormField: String]()
