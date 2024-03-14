@@ -40,8 +40,6 @@ class Paginator<Item, Context>: ObservableObject
         totalCount: Int? = nil,
         pageFetcher: PageFetcher?
     ) {
-        logger.trace("Initializing Paginator for context: \(context)")
-
         assert(loadMoreThreshold < pageSize)
 
         self.context = context
@@ -171,14 +169,18 @@ class Paginator<Item, Context>: ObservableObject
         after index: Int?
     ) {
         guard let pageFetcher else {
+            logger.trace("pageFetcher unset. Skipping load.")
             return
         }
 
         guard !isLoading else {
+            logger.trace("Already loading. Skipping load.")
             return
         }
 
         guard let offset = getFetchOffset(for: index) else {
+            logger.trace("No next offset found. Skipping load.")
+
             return
         }
 
@@ -275,6 +277,14 @@ class Paginator<Item, Context>: ObservableObject
             // Not fetching for a specific item, so either fetch the next page
             // after the last one, or start at the beginning.
             return lastFetchedOffset ?? 0
+        }
+
+        let max = totalCount ?? Int.max
+
+        guard index < (max - 1) else {
+            logger.trace("Index has reached totalCount: \(max). Skipping fetch")
+
+            return nil
         }
 
         let last = lastFetchedOffset ?? -1
