@@ -56,7 +56,7 @@ struct ToastPresenter: ViewModifier {
         return toast.location.isTop ? topDefault : EdgeInsets(
             top: 0,
             leading: 0,
-            bottom: defaultSafeAreaInsets.bottom,
+            bottom: defaultSafeAreaInsets.bottom + 20,
             trailing: 0
         )
     }

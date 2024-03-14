@@ -64,7 +64,8 @@ public struct RoadmapWidget: Container {
                     if dismissType == .completed {
                         alertManager.showSuccessToast(
                             title: config.addRequestSuccessToastTitle,
-                            subtitle: config.addRequestSuccessToastSubtitle
+                            subtitle: config.addRequestSuccessToastSubtitle,
+                            in: .bottomCenter
                         )
                     }
                 }

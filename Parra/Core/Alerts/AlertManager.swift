@@ -94,6 +94,7 @@ class AlertManager: ObservableObject {
     func showSuccessToast(
         title: String = "Success!",
         subtitle: String,
+        in location: AlertLocation = .topCenter,
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25
     ) {
@@ -102,6 +103,7 @@ class AlertManager: ObservableObject {
         showToast(
             for: duration,
             animationDuration: animationDuration,
+            in: location,
             config: AlertConfig(
                 style: style
             ),
@@ -118,6 +120,7 @@ class AlertManager: ObservableObject {
         title: String = "Error",
         userFacingMessage: String,
         underlyingError: ParraError,
+        in location: AlertLocation = .topCenter,
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25
     ) {
@@ -126,6 +129,7 @@ class AlertManager: ObservableObject {
         showToast(
             for: duration,
             animationDuration: animationDuration,
+            in: location,
             config: AlertConfig(
                 style: style
             ),
