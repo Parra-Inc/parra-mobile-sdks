@@ -41,6 +41,7 @@ struct RoadmapVoteView: View {
             )
             // manual adjust ment to try to align better with the title text
             .padding(.top, topPadding)
+            .contentShape(.rect)
             .symbolEffect(
                 .bounce.up,
                 options: .speed(1.5),

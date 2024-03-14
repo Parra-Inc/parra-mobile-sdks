@@ -19,7 +19,7 @@ struct LabelComponent: LabelComponentType {
             icon: { EmptyView() }
         )
         .labelStyle(style)
-        .contentShape(Rectangle())
+        .contentShape(.rect)
     }
 
     static func applyStandardCustomizations(
