@@ -10,8 +10,25 @@ import Combine
 import SwiftUI
 
 extension RoadmapWidget.ContentObserver {
+    func toggleVote(for ticketId: String?) -> String? {
+        guard let ticketId else {
+            return nil
+        }
+
+        // Fetch the most up to date version of the ticket.
+        guard let ticket = ticketPaginator.items.first(
+            where: { $0.id == ticketId }
+        ) else {
+            return nil
+        }
+
+        toggleVote(for: ticket)
+
+        return ticketId
+    }
+
     @MainActor
-    func processVote(for ticketId: String?) async {
+    func submitUpdatedVote(for ticketId: String?) async {
         guard let ticketId else {
             return
         }
@@ -23,7 +40,12 @@ extension RoadmapWidget.ContentObserver {
             return
         }
 
-        setVotingState(voting: true, for: ticket)
+        // The user may have tapped the vote button an arbitrary number of times
+        // and we only want to make a request to update their vote if it ends
+        // different from where it started.
+        guard ticket.originalTicket.voted != ticket.voted else {
+            return
+        }
 
         do {
             // If these throw, voting state is reset in catch. If they don't
@@ -31,17 +53,19 @@ extension RoadmapWidget.ContentObserver {
             // other issues. If nothing goes wrong, the voting state will be
             // resetto false when the updated ticket is received and
             // replaces the old one.
+            // `voted` is what was toggled locally, so it is the state we want
+            // to be in.
             if ticket.voted {
-                try await ticketContentDidRemoveVote(ticket)
-            } else {
                 try await ticketContentDidReceiveVote(ticket)
+            } else {
+                try await ticketContentDidRemoveVote(ticket)
             }
         } catch {
             Logger.error("Error toggling vote for ticket", error, [
                 "ticketId": ticket.id
             ])
 
-            setVotingState(voting: false, for: ticket)
+            toggleVote(for: ticket)
         }
     }
 
@@ -98,13 +122,12 @@ extension RoadmapWidget.ContentObserver {
     }
 
     @MainActor
-    private func setVotingState(
-        voting: Bool,
+    private func toggleVote(
         for content: TicketContent
     ) {
-        let updated = content.withVoting(voting)
-
-        replaceTicket(with: updated)
+        replaceTicket(
+            with: content.withVoteToggled()
+        )
     }
 
     @MainActor

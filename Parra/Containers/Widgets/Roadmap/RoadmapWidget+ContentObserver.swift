@@ -70,12 +70,12 @@ extension RoadmapWidget {
             ticketCache[initialTab] = initialPaginatorData
 
             $currentTicketToVote
-                .throttle(
-                    for: .seconds(1.0),
-                    scheduler: DispatchQueue.main,
-                    latest: true
+                .map(toggleVote)
+                .debounce(
+                    for: .seconds(2.0),
+                    scheduler: DispatchQueue.main
                 )
-                .asyncMap(processVote)
+                .asyncMap(submitUpdatedVote)
                 .sink(receiveValue: { _ in })
                 .store(in: &voteBag)
         }
