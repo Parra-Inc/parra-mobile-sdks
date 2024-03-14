@@ -93,7 +93,7 @@ struct ToastPresenter: ViewModifier {
     func mainToastView() -> some View {
         if let toast {
             componentFactory.buildAlert(
-                variant: .toast,
+                variant: .toast(onDismiss: toast.onDismiss),
                 config: toast.config,
                 content: toast.content,
                 localAttributes: toast.attributes

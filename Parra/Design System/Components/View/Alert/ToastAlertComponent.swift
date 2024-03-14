@@ -9,26 +9,12 @@
 import SwiftUI
 
 struct ToastAlertComponent: AlertComponentType {
-    // MARK: - Lifecycle
-
-    init(
-        config: AlertConfig,
-        content: AlertContent,
-        style: ParraAttributedAlertStyle
-    ) {
-        self.config = config
-        self.content = content
-        self.style = style
-    }
-
     // MARK: - Internal
 
     let config: AlertConfig
     let content: AlertContent
     let style: ParraAttributedAlertStyle
-
-    @EnvironmentObject var themeObserver: ParraThemeObserver
-    @EnvironmentObject var componentFactory: ComponentFactory
+    let onDismiss: () -> Void
 
     var body: some View {
         let attributes = style.attributes
@@ -82,7 +68,8 @@ struct ToastAlertComponent: AlertComponentType {
                             variant: config.dismiss.variant,
                             config: config.dismiss,
                             content: dismissButtonContent,
-                            localAttributes: attributes.dismiss
+                            localAttributes: attributes.dismiss,
+                            onPress: onDismiss
                         )
                     }
                     .frame(
@@ -94,6 +81,11 @@ struct ToastAlertComponent: AlertComponentType {
             }
         )
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var componentFactory: ComponentFactory
 }
 
 #Preview {
@@ -104,7 +96,7 @@ struct ToastAlertComponent: AlertComponentType {
 
             ForEach(AlertConfig.Style.allCases, id: \.self) { style in
                 factory.buildAlert(
-                    variant: .toast,
+                    variant: .toast(onDismiss: {}),
                     config: AlertConfig(style: style),
                     content: AlertContent(
                         title: LabelContent(text: "The task was completed"),

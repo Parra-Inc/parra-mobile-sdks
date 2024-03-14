@@ -102,7 +102,8 @@ extension ComponentFactory {
             ImageButtonContent,
             ImageButtonAttributes
         >? = nil,
-        localAttributes: ImageButtonAttributes? = nil
+        localAttributes: ImageButtonAttributes? = nil,
+        onPress: @escaping () -> Void
     ) -> some View {
         let attributes = if let factory = global?.imageButtonAttributeFactory {
             factory(config, content, localAttributes)
@@ -135,7 +136,8 @@ extension ComponentFactory {
             ImageButtonComponent(
                 config: config,
                 content: content,
-                style: style
+                style: style,
+                onPress: onPress
             )
         }
     }

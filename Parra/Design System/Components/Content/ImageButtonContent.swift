@@ -13,30 +13,14 @@ public struct ImageButtonContent: Hashable, Equatable {
 
     public init(
         image: ImageContent,
-        isDisabled: Bool = false,
-        onPress: (() -> Void)? = nil
+        isDisabled: Bool = false
     ) {
         self.image = image
         self.isDisabled = isDisabled
-        self.onPress = onPress
     }
 
     // MARK: - Public
 
     public let image: ImageContent
     public internal(set) var isDisabled: Bool
-
-    public internal(set) var onPress: (() -> Void)?
-
-    public static func == (
-        lhs: ImageButtonContent,
-        rhs: ImageButtonContent
-    ) -> Bool {
-        return lhs.hashValue == rhs.hashValue
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(image)
-        hasher.combine(isDisabled)
-    }
 }

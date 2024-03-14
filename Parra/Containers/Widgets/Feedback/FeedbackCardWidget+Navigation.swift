@@ -17,7 +17,9 @@ extension FeedbackCardWidget {
                     config: config.backButton,
                     content: contentObserver.content.backButton,
                     suppliedBuilder: localBuilderConfig.backButton
-                )
+                ) {
+                    contentObserver.onPressBack()
+                }
 
                 Spacer()
 
@@ -30,7 +32,9 @@ extension FeedbackCardWidget {
                     config: config.forwardButton,
                     content: contentObserver.content.forwardButton,
                     suppliedBuilder: localBuilderConfig.forwardButton
-                )
+                ) {
+                    contentObserver.onPressForward()
+                }
             }
         }
     }

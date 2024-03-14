@@ -14,11 +14,13 @@ struct ImageButtonComponent: ImageButtonComponentType {
     init(
         config: ImageButtonConfig,
         content: ImageButtonContent,
-        style: ParraAttributedImageButtonStyle
+        style: ParraAttributedImageButtonStyle,
+        onPress: @escaping () -> Void
     ) {
         self.config = config
         self.content = content
         self.style = style
+        self.onPress = onPress
     }
 
     // MARK: - Internal
@@ -26,12 +28,13 @@ struct ImageButtonComponent: ImageButtonComponentType {
     let config: ImageButtonConfig
     let content: ImageButtonContent
     let style: ParraAttributedImageButtonStyle
+    let onPress: () -> Void
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
         Button(action: {
-            content.onPress?()
+            onPress()
         }, label: {
             EmptyView()
         })

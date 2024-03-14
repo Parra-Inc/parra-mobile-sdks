@@ -13,12 +13,6 @@ protocol AlertComponentType: View {
     var content: AlertContent { get }
     var style: ParraAttributedAlertStyle { get }
 
-    init(
-        config: AlertConfig,
-        content: AlertContent,
-        style: ParraAttributedAlertStyle
-    )
-
     static func applyStandardCustomizations(
         onto inputAttributes: AlertAttributes?,
         theme: ParraTheme,

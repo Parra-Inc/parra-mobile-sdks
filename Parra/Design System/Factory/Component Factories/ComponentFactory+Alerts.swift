@@ -9,7 +9,7 @@
 import SwiftUI
 
 enum AlertComponentVariant {
-    case toast
+    case toast(onDismiss: () -> Void)
     case inline
 }
 
@@ -72,11 +72,12 @@ extension ComponentFactory {
                     content: content,
                     style: style
                 )
-            case .toast:
+            case .toast(let onDismiss):
                 ToastAlertComponent(
                     config: config,
                     content: content,
-                    style: style
+                    style: style,
+                    onDismiss: onDismiss
                 )
             }
         }

@@ -81,7 +81,8 @@ private func renderButtonComponent(
                 config: config
             ),
             theme: theme
-        )
+        ),
+        onPress: {}
     )
 }
 

@@ -35,14 +35,12 @@ extension FeedbackCardWidget {
 
             let backButton = ImageButtonContent(
                 image: .symbol("arrow.backward"),
-                isDisabled: false,
-                onPress: nil
+                isDisabled: false
             )
 
             let forwardButton = ImageButtonContent(
                 image: .symbol("arrow.forward"),
-                isDisabled: false,
-                onPress: nil
+                isDisabled: false
             )
 
             self.content = Content(
@@ -56,9 +54,6 @@ extension FeedbackCardWidget {
             } else {
                 nil
             }
-
-            content.backButton.onPress = onPressBack
-            content.forwardButton.onPress = onPressForward
 
             checkAndUpdateCards()
         }
@@ -162,16 +157,7 @@ extension FeedbackCardWidget {
             )
         }
 
-        // MARK: - Private
-
-        private weak var cardDelegate: ParraCardViewDelegate?
-        private weak var questionHandlerDelegate: ParraQuestionHandlerDelegate?
-
-        private let notificationCenter: NotificationCenterType
-        private let dataManager: ParraFeedbackDataManager
-        private let syncHandler: (() -> Void)?
-
-        private func onPressBack() {
+        func onPressBack() {
             guard let currentCardInfo else {
                 return
             }
@@ -189,7 +175,7 @@ extension FeedbackCardWidget {
             //            suggestTransitionInDirection(.left, animated: true)
         }
 
-        private func onPressForward() {
+        func onPressForward() {
             guard let currentCardInfo else {
                 return
             }
@@ -209,6 +195,15 @@ extension FeedbackCardWidget {
             // shouldn't be manually commiting to the answer handler, since this action is taken here.
             //            currentCardInfo?.cardItemView.commitToSelection()
         }
+
+        // MARK: - Private
+
+        private weak var cardDelegate: ParraCardViewDelegate?
+        private weak var questionHandlerDelegate: ParraQuestionHandlerDelegate?
+
+        private let notificationCenter: NotificationCenterType
+        private let dataManager: ParraFeedbackDataManager
+        private let syncHandler: (() -> Void)?
 
         @objc
         private func didReceiveCardChangeNotification(

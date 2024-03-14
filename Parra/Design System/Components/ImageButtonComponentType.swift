@@ -16,7 +16,8 @@ protocol ImageButtonComponentType: View {
     init(
         config: ImageButtonConfig,
         content: ImageButtonContent,
-        style: ParraAttributedImageButtonStyle
+        style: ParraAttributedImageButtonStyle,
+        onPress: @escaping () -> Void
     )
 }
 

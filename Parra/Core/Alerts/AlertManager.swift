@@ -13,6 +13,7 @@ class AlertManager: ObservableObject {
         let config: AlertConfig
         let content: AlertContent
         let attributes: AlertAttributes?
+        let onDismiss: () -> Void
 
         let duration: TimeInterval
         let animationDuration: TimeInterval
@@ -79,18 +80,11 @@ class AlertManager: ObservableObject {
         content: AlertContent,
         attributes: AlertAttributes? = nil
     ) {
-        let defaultHandler = content.dismiss?.onPress
-        var contentWithDismisser = content
-        contentWithDismisser.updateDismissHandler {
-            self.dismissToast()
-
-            defaultHandler?()
-        }
-
         currentToast = Alert(
             config: config,
-            content: contentWithDismisser,
+            content: content,
             attributes: attributes,
+            onDismiss: dismissToast,
             duration: duration,
             animationDuration: animationDuration,
             location: location

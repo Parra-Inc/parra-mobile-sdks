@@ -9,26 +9,11 @@
 import SwiftUI
 
 struct InlineAlertComponent: AlertComponentType {
-    // MARK: - Lifecycle
-
-    init(
-        config: AlertConfig,
-        content: AlertContent,
-        style: ParraAttributedAlertStyle
-    ) {
-        self.config = config
-        self.content = content
-        self.style = style
-    }
-
     // MARK: - Internal
 
     let config: AlertConfig
     let content: AlertContent
     let style: ParraAttributedAlertStyle
-
-    @EnvironmentObject var themeObserver: ParraThemeObserver
-    @EnvironmentObject var componentFactory: ComponentFactory
 
     var body: some View {
         let attributes = style.attributes
@@ -78,6 +63,11 @@ struct InlineAlertComponent: AlertComponentType {
             }
         )
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var componentFactory: ComponentFactory
 }
 
 #Preview {

@@ -53,16 +53,7 @@ public struct AlertContent: Hashable, Equatable {
     ) -> ImageButtonContent {
         return ImageButtonContent(
             image: ImageContent.symbol("xmark", .monochrome),
-            isDisabled: false,
-            onPress: onPress
+            isDisabled: false
         )
-    }
-
-    // MARK: - Internal
-
-    mutating func updateDismissHandler(
-        _ handler: @escaping () -> Void
-    ) {
-        dismiss?.onPress = handler
     }
 }
