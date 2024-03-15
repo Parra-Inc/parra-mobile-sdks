@@ -23,7 +23,7 @@ enum TicketFilter {
         }
     }
 
-    var toTab: RoadmapWidget.Tab {
+    var toTab: ParraRoadmapTab {
         switch self {
         case .inProgress:
             return .inProgress

@@ -16,7 +16,7 @@ public extension View {
         isPresented: Binding<Bool>,
         config: RoadmapWidgetConfig = .default,
         localBuilder: RoadmapWidgetBuilderConfig = .init(),
-        defaultTab: RoadmapWidget.Tab = .inProgress,
+        defaultTab: ParraRoadmapTab = .inProgress,
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         let params = RoadmapParams(

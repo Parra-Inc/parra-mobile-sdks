@@ -8,35 +8,33 @@
 
 import SwiftUI
 
-public extension RoadmapWidget {
-    enum Tab: CaseIterable, Identifiable {
-        case inProgress
-        case requests
+public enum ParraRoadmapTab: CaseIterable, Identifiable {
+    case inProgress
+    case requests
 
-        // MARK: - Public
+    // MARK: - Public
 
-        public var id: String {
-            return title
+    public var id: String {
+        return title
+    }
+
+    // MARK: - Internal
+
+    var title: String {
+        switch self {
+        case .inProgress:
+            return "In progress"
+        case .requests:
+            return "Requests"
         }
+    }
 
-        // MARK: - Internal
-
-        var title: String {
-            switch self {
-            case .inProgress:
-                return "In progress"
-            case .requests:
-                return "Requests"
-            }
-        }
-
-        var filter: TicketFilter {
-            switch self {
-            case .inProgress:
-                return .inProgress
-            case .requests:
-                return .requests
-            }
+    var filter: TicketFilter {
+        switch self {
+        case .inProgress:
+            return .inProgress
+        case .requests:
+            return .requests
         }
     }
 }

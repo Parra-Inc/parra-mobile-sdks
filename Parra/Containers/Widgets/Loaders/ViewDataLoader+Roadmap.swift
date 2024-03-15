@@ -16,7 +16,7 @@ struct RoadmapParams: Equatable {
 
 struct RoadmapLoaderResult: Equatable {
     let roadmapConfig: AppRoadmapConfiguration
-    let selectedTab: RoadmapWidget.Tab
+    let selectedTab: ParraRoadmapTab
     let ticketResponse: UserTicketCollectionResponse
 }
 

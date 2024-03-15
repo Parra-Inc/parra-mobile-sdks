@@ -18,7 +18,7 @@ struct ViewOffsetKey: PreferenceKey {
     }
 }
 
-public struct RoadmapWidget: Container {
+struct RoadmapWidget: Container {
     // MARK: - Lifecycle
 
     init(
@@ -35,9 +35,17 @@ public struct RoadmapWidget: Container {
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
 
-    // MARK: - Public
+    // MARK: - Internal
 
-    public var body: some View {
+    let localBuilderConfig: RoadmapWidgetBuilderConfig
+    let componentFactory: ComponentFactory
+    @StateObject var contentObserver: ContentObserver
+    let config: RoadmapWidgetConfig
+    let style: RoadmapWidgetStyle
+
+    @EnvironmentObject var themeObserver: ParraThemeObserver
+
+    var body: some View {
         NavigationStack {
             ScrollViewReader { scrollViewProxy in
                 VStack(spacing: 0) {
@@ -98,16 +106,6 @@ public struct RoadmapWidget: Container {
         }
     }
 
-    // MARK: - Internal
-
-    let localBuilderConfig: RoadmapWidgetBuilderConfig
-    let componentFactory: ComponentFactory
-    @StateObject var contentObserver: ContentObserver
-    let config: RoadmapWidgetConfig
-    let style: RoadmapWidgetStyle
-
-    @EnvironmentObject var themeObserver: ParraThemeObserver
-
     var headerSpace: CGFloat {
         return style.contentPadding.top
     }
@@ -124,7 +122,7 @@ public struct RoadmapWidget: Container {
                 "Select a tab",
                 selection: $contentObserver.selectedTab
             ) {
-                ForEach(Tab.allCases) { tab in
+                ForEach(ParraRoadmapTab.allCases) { tab in
                     Text(tab.title).tag(tab)
                 }
             }
