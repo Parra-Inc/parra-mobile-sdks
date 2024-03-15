@@ -40,10 +40,9 @@ struct ParraContainerPreview<Content>: View where Content: Container {
         // wrapper won't have provided this object since it is specific to the
         // individual containers.
         ParraAppView(
-            authProvider: .preview,
+            target: .preview,
             options: options,
-            appDelegateType: ParraAppDelegate.self,
-            launchScreenConfig: .preview,
+            appDelegateType: ParraPreviewAppDelegate.self,
             sceneContent: { parra in
                 content(parra, factory, builderConfig)
             }

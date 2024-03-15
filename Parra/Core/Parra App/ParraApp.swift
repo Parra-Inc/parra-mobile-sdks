@@ -112,10 +112,9 @@ public struct ParraApp<Content, DelegateType>: Scene
     public var body: some Scene {
         WindowGroup {
             ParraAppView(
-                authProvider: authProvider,
+                target: .app(authProvider, launchScreenConfig),
                 options: options,
                 appDelegateType: appDelegateType,
-                launchScreenConfig: launchScreenConfig,
                 sceneContent: { _ in
                     appContent()
                 }

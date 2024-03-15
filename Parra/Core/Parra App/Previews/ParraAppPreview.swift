@@ -55,10 +55,9 @@ public struct ParraAppPreview<Content, DelegateType>: View
 
     public var body: some View {
         ParraAppView(
-            authProvider: .preview,
+            target: .preview,
             options: options,
-            appDelegateType: ParraAppDelegate.self,
-            launchScreenConfig: .preview,
+            appDelegateType: ParraPreviewAppDelegate.self,
             sceneContent: { _ in
                 previewContent()
             }

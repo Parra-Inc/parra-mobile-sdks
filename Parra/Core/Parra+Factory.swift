@@ -119,4 +119,120 @@ extension Parra {
 
         return (parra, appState)
     }
+
+    // Largely the same but disables sessions/sync/etc to prevent sending this
+    // often mocked data to our servers.
+    @MainActor
+    static func createParraSwiftUIPreviewsInstance(
+        authProvider: ParraAuthenticationProviderType,
+        configuration: ParraConfiguration,
+        instanceConfiguration: ParraInstanceConfiguration = .default
+    ) -> (Parra, ParraAppState) {
+        let appState = authProvider.initialAppState
+        let syncState = ParraSyncState()
+        let fileManager = FileManager.default
+
+        // Common
+
+        let credentialStorageModule = ParraStorageModule<ParraCredential>(
+            dataStorageMedium: .fileSystem(
+                baseUrl: instanceConfiguration.storageConfiguration
+                    .baseDirectory,
+                folder: instanceConfiguration.storageConfiguration
+                    .storageDirectoryName,
+                fileName: ParraDataManager.Key.userCredentialsKey,
+                storeItemsSeparately: false,
+                fileManager: fileManager
+            ),
+            jsonEncoder: instanceConfiguration.storageConfiguration
+                .sessionJsonEncoder,
+            jsonDecoder: instanceConfiguration.storageConfiguration
+                .sessionJsonDecoder
+        )
+
+        let sessionStorageUrl = instanceConfiguration.storageConfiguration
+            .baseDirectory
+            .appendDirectory(
+                instanceConfiguration.storageConfiguration
+                    .storageDirectoryName
+            )
+            .appendDirectory("sessions")
+
+        let notificationCenter = ParraNotificationCenter()
+
+        let credentialStorage = CredentialStorage(
+            storageModule: credentialStorageModule
+        )
+
+        let sessionStorage = SessionStorage(
+            forceDisabled: true,
+            sessionReader: SessionReader(
+                basePath: sessionStorageUrl,
+                sessionJsonDecoder: .parraDecoder,
+                eventJsonDecoder: .spaceOptimizedDecoder,
+                fileManager: fileManager
+            ),
+            sessionJsonEncoder: .parraEncoder,
+            eventJsonEncoder: .spaceOptimizedEncoder
+        )
+
+        let dataManager = ParraDataManager(
+            baseDirectory: instanceConfiguration.storageConfiguration
+                .baseDirectory,
+            credentialStorage: credentialStorage,
+            sessionStorage: sessionStorage
+        )
+
+        let networkManager = ParraNetworkManager(
+            appState: appState,
+            dataManager: dataManager,
+            configuration: instanceConfiguration.networkConfiguration
+        )
+
+        let sessionManager = ParraSessionManager(
+            forceDisabled: true,
+            dataManager: dataManager,
+            networkManager: networkManager,
+            loggerOptions: configuration.loggerOptions
+        )
+
+        let syncManager = ParraSyncManager(
+            forceDisabled: true,
+            syncState: syncState,
+            networkManager: networkManager,
+            sessionManager: sessionManager,
+            notificationCenter: notificationCenter
+        )
+
+        // Parra Modules
+
+        let feedback = ParraFeedback(
+            dataManager: ParraFeedbackDataManager(
+                dataManager: dataManager,
+                syncManager: syncManager,
+                jsonEncoder: JSONEncoder.parraEncoder,
+                jsonDecoder: JSONDecoder.parraDecoder,
+                fileManager: fileManager,
+                notificationCenter: notificationCenter
+            ),
+            networkManager: networkManager
+        )
+
+        Logger.loggerBackend = sessionManager
+
+        let parra = Parra(
+            configuration: configuration,
+            dataManager: dataManager,
+            syncManager: syncManager,
+            sessionManager: sessionManager,
+            networkManager: networkManager,
+            notificationCenter: notificationCenter,
+            feedback: feedback
+        )
+
+        networkManager.delegate = parra
+        syncManager.delegate = parra
+
+        return (parra, appState)
+    }
 }

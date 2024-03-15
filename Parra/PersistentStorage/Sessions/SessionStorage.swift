@@ -36,16 +36,22 @@ class SessionStorage {
     // MARK: - Lifecycle
 
     init(
+        forceDisabled: Bool = false,
         sessionReader: SessionReader,
         sessionJsonEncoder: JSONEncoder,
         eventJsonEncoder: JSONEncoder
     ) {
+        self.forceDisabled = forceDisabled
         self.sessionReader = sessionReader
         self.sessionJsonEncoder = sessionJsonEncoder
         self.eventJsonEncoder = eventJsonEncoder
     }
 
     deinit {
+        if forceDisabled {
+            return
+        }
+
         logger.trace("deinit")
 
         do {
@@ -58,6 +64,10 @@ class SessionStorage {
     // MARK: - Internal
 
     func initializeSessions() async {
+        if forceDisabled {
+            return
+        }
+
         logger
             .debug(
                 "initializing at path: \(sessionReader.basePath.lastComponents())"
@@ -88,6 +98,8 @@ class SessionStorage {
     }
 
     func getCurrentSession() async throws -> ParraSession {
+        // Only called from within disabled code path in Session Manager.
+
         return try await withCheckedThrowingContinuation { continuation in
             getCurrentSession { result in
                 continuation.resume(with: result)
@@ -101,6 +113,10 @@ class SessionStorage {
         key: String,
         value: Any?
     ) {
+        if forceDisabled {
+            return
+        }
+
         withCurrentSessionHandle(
             handler: { handle, session in
                 #if DEBUG
@@ -129,6 +145,10 @@ class SessionStorage {
         event: ParraSessionEvent,
         context: ParraSessionEventContext
     ) {
+        if forceDisabled {
+            return
+        }
+
         withHandles { _, eventsHandle, _ in
             self.storeEventContextUpdateSync(context: context)
 
@@ -150,6 +170,8 @@ class SessionStorage {
     // MARK: Retrieving Sessions
 
     func getAllSessions() async throws -> ParraSessionUploadGenerator {
+        // Only called from within disabled code path in Session Manager.
+
         return try await withCheckedThrowingContinuation { continuation in
             getAllSessions { result in
                 continuation.resume(with: result)
@@ -157,9 +179,14 @@ class SessionStorage {
         }
     }
 
-    /// Whether or not there are new events on the session since the last time a sync was completed.
-    /// Will also return true if it isn't previously been called for the current session.
+    /// Whether or not there are new events on the session since the last time a
+    /// sync was completed. Will also return true if it isn't previously been
+    /// called for the current session.
     func hasNewEvents() async -> Bool {
+        if forceDisabled {
+            return false
+        }
+
         do {
             return try await withCheckedThrowingContinuation { continuation in
                 hasNewEvents { result in
@@ -174,6 +201,10 @@ class SessionStorage {
     }
 
     func hasSessionUpdates(since date: Date?) async -> Bool {
+        if forceDisabled {
+            return false
+        }
+
         do {
             return try await withCheckedThrowingContinuation { continuation in
                 hasSessionUpdates(since: date) { result in
@@ -187,9 +218,14 @@ class SessionStorage {
         }
     }
 
-    /// Whether or not there are sessions stored that have already finished. This implies that
-    /// there is a session in progress that is not taken into consideration.
+    /// Whether or not there are sessions stored that have already finished.
+    /// This implies that there is a session in progress that is not taken into
+    /// consideration.
     func hasCompletedSessions() async -> Bool {
+        if forceDisabled {
+            return false
+        }
+
         return await withCheckedContinuation { continuation in
             hasCompletedSessions {
                 continuation.resume(returning: $0)
@@ -198,6 +234,10 @@ class SessionStorage {
     }
 
     func recordSyncBegan() async {
+        if forceDisabled {
+            return
+        }
+
         await withCheckedContinuation { continuation in
             recordSyncBegan { result in
                 switch result {
@@ -218,19 +258,28 @@ class SessionStorage {
     // MARK: Ending Sessions
 
     func endSession() async {
-        // TODO: Need to be consistent with deinit. Both should mark session as ended, write the update, then close the session reader
+        if forceDisabled {
+            return
+        }
+
+        // TODO: Need to be consistent with deinit. Both should mark session as
+        // ended, write the update, then close the session reader
 //        sessionReader.closeCurrentSessionSync()
     }
 
     // MARK: Deleting Sessions
 
-    /// Deletes any data associated with the sessions with the provided ids. This includes
-    /// caches in memory and on disk. The current in progress session will not be deleted,
-    /// even if its id is provided.
+    /// Deletes any data associated with the sessions with the provided ids.
+    /// This includes caches in memory and on disk. The current in progress
+    /// session will not be deleted, even if its id is provided.
     func deleteSessions(
         for sessionIds: Set<String>,
         erroredSessions erroredSessionIds: Set<String>
     ) async throws {
+        if forceDisabled {
+            return
+        }
+
         return try await withCheckedThrowingContinuation { continuation in
             deleteSessions(
                 for: sessionIds,
@@ -254,11 +303,12 @@ class SessionStorage {
 
     private var isInitialized = false
 
-    /// Whether or not, since the last time a sync occurred, session storage received
-    /// a new event with a context object that indicated that it was a high priority
-    /// event.
+    /// Whether or not, since the last time a sync occurred, session storage
+    /// received a new event with a context object that indicated that it was a
+    /// high priority event.
     private var hasReceivedImportantEvent = false
 
+    private let forceDisabled: Bool
     private let sessionReader: SessionReader
 
     private let sessionJsonEncoder: JSONEncoder
@@ -279,8 +329,8 @@ class SessionStorage {
         context: ParraSessionEventContext
     ) {
         if hasReceivedImportantEvent {
-            // It doesn't matter if multiple important events are recievd. The first one
-            // is enough to set the flag.
+            // It doesn't matter if multiple important events are recievd. The
+            // first one is enough to set the flag.
             return
         }
 
@@ -343,8 +393,9 @@ class SessionStorage {
                 let ext = ParraSession.Constant.packageExtension
                 let nonErroredSessions = sessionDirectories
                     .filter { directory in
-                        // Anything that is somehow in the sessions directory without the
-                        // appropriate path extension should be counted towards completed sessions.
+                        // Anything that is somehow in the sessions directory
+                        // without the appropriate path extension should be
+                        // counted towards completed sessions.
                         guard directory.pathExtension == ext else {
                             logger.trace(
                                 "Encountered session directory with invalid path extension",
@@ -359,10 +410,11 @@ class SessionStorage {
                         let sessionId = directory.deletingPathExtension()
                             .lastPathComponent
 
-                        // Sessions that have errored are marked with an underscore prefix to
-                        // their names. These sessions shouldn't count when checking if there
-                        // are new sessions to sync, but will be picked up when a new session
-                        // causes a sync to be necessary.
+                        // Sessions that have errored are marked with an
+                        // underscore prefix to their names. These sessions
+                        // shouldn't count when checking if there are new
+                        // sessions to sync, but will be picked up when a new
+                        // session causes a sync to be necessary.
                         return !sessionId
                             .hasPrefix(
                                 ParraSession.Constant
@@ -375,8 +427,9 @@ class SessionStorage {
                     "valid": nonErroredSessions.count
                 ])
 
-                // The current session counts for 1. If there are more that appear to
-                // be valid, use that as an indication that a sync should occur.
+                // The current session counts for 1. If there are more that
+                // appear to be valid, use that as an indication that a sync
+                // should occur.
                 completion(nonErroredSessions.count > 1)
             } catch {
                 logger.error("Error checking for completed sessions", error)
@@ -385,15 +438,16 @@ class SessionStorage {
         }
     }
 
-    /// Store a marker to indicate that a sync just took place, so that events before that point
-    /// can be purged.
+    /// Store a marker to indicate that a sync just took place, so that events
+    /// before that point can be purged.
     private func recordSyncBegan(
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         withHandles(
             handler: { [self] sessionHandle, eventsHandle, session in
-                // Store the current offset of the file handle that writes events on the session object.
-                // This will be used last to know if more events have been written since this point.
+                // Store the current offset of the file handle that writes
+                // events on the session object. This will be used last to know
+                // if more events have been written since this point.
                 let offset = try eventsHandle.offset()
 
                 hasReceivedImportantEvent = false
@@ -415,7 +469,8 @@ class SessionStorage {
     ) {
         withHandles(
             handler: { sessionHandle, eventsHandle, currentSession in
-                // Delete the directories for every session in sessionIds, except for the current session.
+                // Delete the directories for every session in sessionIds,
+                // except for the current session.
                 let sessionDirectories = try self.sessionReader
                     .getAllSessionDirectories()
 
@@ -531,7 +586,8 @@ class SessionStorage {
         session: ParraSession,
         with handle: FileHandle
     ) throws {
-        // Always update the in memory cache of the current session before writing to disk.
+        // Always update the in memory cache of the current session before
+        // writing to disk.
         sessionReader.updateCachedCurrentSessionSync(
             to: session
         )
@@ -635,7 +691,8 @@ extension SessionStorage {
         handler: @escaping (FileHandle, ParraSession) throws -> T
     ) {
         withStorageQueue { sessionReader in
-            // TODO: Needs logic to see if the error is related to the file handle being closed, and auto attempt to reopen it.
+            // TODO: Needs logic to see if the error is related to the file
+            // handle being closed, and auto attempt to reopen it.
             do {
                 let context = try sessionReader.loadOrCreateSessionSync()
                 let handle = try sessionReader.retreiveFileHandleForSessionSync(

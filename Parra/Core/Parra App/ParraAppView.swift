@@ -8,6 +8,11 @@
 
 import SwiftUI
 
+enum ParraAppViewTarget {
+    case app(ParraAuthenticationProviderType, ParraLaunchScreen.Config?)
+    case preview
+}
+
 @MainActor
 struct ParraAppView<Content, DelegateType>: View
     where Content: View, DelegateType: ParraAppDelegate
@@ -15,20 +20,41 @@ struct ParraAppView<Content, DelegateType>: View
     // MARK: - Lifecycle
 
     init(
-        authProvider: ParraAuthenticationProviderType,
+        target: ParraAppViewTarget,
         options: [ParraConfigurationOption],
         appDelegateType: DelegateType.Type,
-        launchScreenConfig: ParraLaunchScreen.Config?,
         sceneContent: @MainActor @escaping (_ parra: Parra) -> Content
     ) {
         self.content = sceneContent
 
-        let (parra, appState) = Parra.createParraInstance(
-            authProvider: authProvider,
-            configuration: ParraConfiguration(
-                options: options
+        let parra: Parra
+        let appState: ParraAppState
+        let launchScreenConfig: ParraLaunchScreen.Config?
+
+        switch target {
+        case .app(let parraAuthenticationProviderType, let config):
+
+            self.authProvider = parraAuthenticationProviderType
+            launchScreenConfig = config
+
+            (parra, appState) = Parra.createParraInstance(
+                authProvider: authProvider,
+                configuration: ParraConfiguration(
+                    options: options
+                )
             )
-        )
+        case .preview:
+
+            self.authProvider = .preview
+            launchScreenConfig = .preview
+
+            (parra, appState) = Parra.createParraSwiftUIPreviewsInstance(
+                authProvider: authProvider,
+                configuration: ParraConfiguration(
+                    options: options
+                )
+            )
+        }
 
         _appDelegate = UIApplicationDelegateAdaptor(appDelegateType)
         _appDelegate.wrappedValue.parra = parra
@@ -36,7 +62,6 @@ struct ParraAppView<Content, DelegateType>: View
         _parraAppState = StateObject(wrappedValue: appState)
 
         self.parra = parra
-        self.authProvider = authProvider
         self.launchScreenConfig = ParraAppView.configureLaunchScreen(
             with: launchScreenConfig
         )

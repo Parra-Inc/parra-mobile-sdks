@@ -34,10 +34,9 @@ struct ParraCardViewPreview<Content>: View where Content: View {
 
     var body: some View {
         ParraAppView(
-            authProvider: .preview,
+            target: .preview,
             options: options,
-            appDelegateType: ParraAppDelegate.self,
-            launchScreenConfig: .preview,
+            appDelegateType: ParraPreviewAppDelegate.self,
             sceneContent: { parra in
                 GeometryReader { geometry in
                     ZStack {

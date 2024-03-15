@@ -13,17 +13,20 @@ import UIKit
 
 private let logger = Logger(bypassEventCreation: true, category: "Sync Manager")
 
-/// Manager used to facilitate the synchronization of Parra data stored locally with the Parra API.
+/// Manager used to facilitate the synchronization of Parra data stored locally
+/// with the Parra API.
 class ParraSyncManager {
     // MARK: - Lifecycle
 
     init(
+        forceDisabled: Bool = false,
         syncState: ParraSyncState,
         networkManager: ParraNetworkManager,
         sessionManager: ParraSessionManager,
         notificationCenter: NotificationCenterType,
         syncDelay: TimeInterval = 30.0
     ) {
+        self.forceDisabled = forceDisabled
         self.syncState = syncState
         self.networkManager = networkManager
         self.sessionManager = sessionManager
@@ -35,16 +38,23 @@ class ParraSyncManager {
 
     weak var delegate: SyncManagerDelegate?
 
-    /// Whether or not new attempts to sync occured while a sync was in progress. Many sync events could be received while a sync
-    /// is in progress so we just track whether any happened. If any happen then we will perform a subsequent sync when the original
-    /// is completed.
+    /// Whether or not new attempts to sync occured while a sync was in
+    /// progress. Many sync events could be received while a sync is in progress
+    /// so we just track whether any happened. If any happen then we will
+    /// perform a subsequent sync when the original is completed.
     private(set) var enqueuedSyncMode: ParraSyncMode?
 
+    let forceDisabled: Bool
     let syncState: ParraSyncState
     nonisolated let syncDelay: TimeInterval
 
-    /// Used to send collected data to the Parra API. Invoked automatically internally, but can be invoked externally as necessary.
+    /// Used to send collected data to the Parra API. Invoked automatically
+    /// internally, but can be invoked externally as necessary.
     func enqueueSync(with mode: ParraSyncMode) async {
+        if forceDisabled {
+            return
+        }
+
         guard await networkManager.getAuthenticationProvider() != nil else {
             await stopSyncTimer()
             logger
@@ -76,7 +86,8 @@ class ParraSyncManager {
                 logger.debug("\(logPrefix) Marking enqued sync.")
 
                 if enqueuedSyncMode != .immediate {
-                    // An enqueued eventual sync shouldn't override an enqueued immediate sync.
+                    // An enqueued eventual sync shouldn't override an enqueued
+                    // immediate sync.
                     enqueuedSyncMode = .eventual
                 }
             }
@@ -89,8 +100,8 @@ class ParraSyncManager {
         case .immediate:
             logger.debug("\(logPrefix) Initiating immediate sync.")
             enqueuedSyncMode = nil
-            // Should not be awaited. enqueueSync returns when the sync job is added
-            // to the queue.
+            // Should not be awaited. enqueueSync returns when the sync job is
+            // added to the queue.
             Task {
                 await self.sync()
             }
@@ -108,6 +119,10 @@ class ParraSyncManager {
     func startSyncTimer(
         willSyncHandler: (() -> Void)? = nil
     ) {
+        if forceDisabled {
+            return
+        }
+
         stopSyncTimer()
         logger.trace("Starting sync timer")
 
@@ -131,6 +146,10 @@ class ParraSyncManager {
 
     @MainActor
     func stopSyncTimer() {
+        if forceDisabled {
+            return
+        }
+
         guard let syncTimer else {
             return
         }
@@ -143,6 +162,10 @@ class ParraSyncManager {
 
     @MainActor
     func isSyncTimerActive() -> Bool {
+        if forceDisabled {
+            return false
+        }
+
         guard let syncTimer else {
             return false
         }
@@ -151,6 +174,10 @@ class ParraSyncManager {
     }
 
     func cancelEnqueuedSyncs() {
+        if forceDisabled {
+            return
+        }
+
         enqueuedSyncMode = nil
     }
 
@@ -167,6 +194,10 @@ class ParraSyncManager {
     private func sync(
         isRepeat: Bool = false
     ) async {
+        if forceDisabled {
+            return
+        }
+
         if !isRepeat {
             if await syncState.isSyncing() {
                 logger
@@ -219,10 +250,10 @@ class ParraSyncManager {
             logger.error("Error performing sync", error)
 
             if enqueuedSyncMode == .immediate {
-                // Try to avoid the case there there might be something wrong with the data
-                // being synced that could cause it to fail again if synced immediately.
-                // This will at least keep us in a failure loop at the duration of the sync
-                // timer.
+                // Try to avoid the case there there might be something wrong
+                // with the data being synced that could cause it to fail again
+                // if synced immediately. This will at least keep us in a
+                // failure loop at the duration of the sync timer.
                 logger
                     .debug(
                         "Immediate sync was enqueued after error. Resetting to eventual."
@@ -273,7 +304,8 @@ class ParraSyncManager {
 
         var syncError: Error?
 
-        // Rethrow after receiving an error for throttling, but allow each module to attempt a sync once
+        // Rethrow after receiving an error for throttling, but allow each
+        // module to attempt a sync once
         for target in targets {
             do {
                 try await target.synchronizeData()
@@ -294,8 +326,8 @@ class ParraSyncManager {
         lastSyncCompleted = .now
 
         Task {
-            // Ensure that the notification that the current sync has ended is sent
-            // before the next sync begins.
+            // Ensure that the notification that the current sync has ended is
+            // sent before the next sync begins.
             await notificationCenter.postAsync(
                 name: Parra.syncDidEndNotification,
                 object: self,

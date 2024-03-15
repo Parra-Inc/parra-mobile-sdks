@@ -36,10 +36,12 @@ class ParraSessionManager {
     // MARK: - Lifecycle
 
     init(
+        forceDisabled: Bool = false,
         dataManager: ParraDataManager,
         networkManager: ParraNetworkManager,
         loggerOptions: ParraLoggerOptions
     ) {
+        self.forceDisabled = forceDisabled
         self.dataManager = dataManager
         self.networkManager = networkManager
         self.loggerOptions = loggerOptions
@@ -55,10 +57,18 @@ class ParraSessionManager {
     // MARK: - Internal
 
     func initializeSessions() async {
+        if forceDisabled {
+            return
+        }
+
         await sessionStorage.initializeSessions()
     }
 
     func hasDataToSync(since date: Date?) async -> Bool {
+        if forceDisabled {
+            return false
+        }
+
         // Checks made in order by least resources required to check them:
         // 1. The current session has been updated
         // 2. There are new events
@@ -91,6 +101,10 @@ class ParraSessionManager {
     }
 
     func synchronizeData() async throws -> ParraSessionsResponse? {
+        if forceDisabled {
+            return nil
+        }
+
         return try await logger.withScope { logger in
             let currentSession = try await sessionStorage.getCurrentSession()
             let sessionIterator = try await sessionStorage.getAllSessions()
@@ -215,6 +229,10 @@ class ParraSessionManager {
         wrappedEvent: ParraWrappedEvent,
         callSiteContext: ParraLoggerCallSiteContext
     ) {
+        if forceDisabled {
+            return
+        }
+
         eventQueue.async { [self] in
             writeEventSync(
                 wrappedEvent: wrappedEvent,
@@ -229,6 +247,10 @@ class ParraSessionManager {
         target: ParraSessionEventTarget,
         callSiteContext: ParraLoggerCallSiteContext
     ) {
+        if forceDisabled {
+            return
+        }
+
         let environment = loggerOptions.environment
         // When normal behavior isn't bypassed, debug behavior is to send logs to the console.
         // Production behavior is to write events.
@@ -279,6 +301,10 @@ class ParraSessionManager {
         _ value: Any?,
         forKey key: String
     ) {
+        if forceDisabled {
+            return
+        }
+
         sessionStorage.writeUserPropertyUpdate(
             key: key,
             value: value
@@ -286,11 +312,16 @@ class ParraSessionManager {
     }
 
     func endSession() async {
+        if forceDisabled {
+            return
+        }
+
         await sessionStorage.endSession()
     }
 
     // MARK: - Private
 
+    private let forceDisabled: Bool
     private let dataManager: ParraDataManager
     private let networkManager: ParraNetworkManager
     private let loggerOptions: ParraLoggerOptions
@@ -323,6 +354,10 @@ extension ParraSessionManager: ParraLoggerBackend {
     func log(
         data: ParraLogData
     ) {
+        if forceDisabled {
+            return
+        }
+
         eventQueue.async { [self] in
             logEventReceivedSync(
                 logData: data
@@ -333,6 +368,10 @@ extension ParraSessionManager: ParraLoggerBackend {
     func logMultiple(
         data: [ParraLogData]
     ) {
+        if forceDisabled {
+            return
+        }
+
         eventQueue.async { [self] in
             for logData in data {
                 logEventReceivedSync(

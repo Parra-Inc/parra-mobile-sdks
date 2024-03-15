@@ -30,10 +30,9 @@ struct ParraViewPreview<Content>: View where Content: View {
 
     var body: some View {
         ParraAppView(
-            authProvider: .preview,
+            target: .preview,
             options: options,
-            appDelegateType: ParraAppDelegate.self,
-            launchScreenConfig: .preview,
+            appDelegateType: ParraPreviewAppDelegate.self,
             sceneContent: { _ in
                 content(factory)
             }

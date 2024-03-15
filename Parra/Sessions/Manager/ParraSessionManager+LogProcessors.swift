@@ -46,7 +46,7 @@ extension ParraSessionManager {
     }
 
     /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
-    func writeLogEventToConsoleSync(
+    private func writeLogEventToConsoleSync(
         processedLogData: ParraLogProcessedData,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
     ) {

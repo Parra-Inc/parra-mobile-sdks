@@ -8,14 +8,15 @@
 
 import UIKit
 
-// IMPORTANT: Any UIApplicationDelegate methods that are implemented here must be
-//            explicitly declared open in order for end users to be able to
+// IMPORTANT: Any UIApplicationDelegate methods that are implemented here must
+//            be explicitly declared open in order for end users to be able to
 //            implement them.
 
-/// A base class that conforms to UIApplicationDelegate. This should be subclassed and its type should be
-/// supplied to the `appDelegateType` parameter on the ``Parra/ParraApp`` initializer. In order to avoid
-/// unintended behavior, be sure to invoke the super implementation of any delegate methods that require the
-/// `override` keyword.
+/// A base class that conforms to UIApplicationDelegate. This should be
+/// subclassed and its type should be supplied to the `appDelegateType`
+/// parameter on the ``Parra/ParraApp`` initializer. In order to avoid
+/// unintended behavior, be sure to invoke the super implementation of any
+/// delegate methods that require the `override` keyword.
 @MainActor
 open class ParraAppDelegate: NSObject, UIApplicationDelegate {
     // MARK: - Open
@@ -36,7 +37,8 @@ open class ParraAppDelegate: NSObject, UIApplicationDelegate {
 
     // MARK: - Internal
 
-    /// Not exposed publicly. Should only ever be set once from the ``Parra/ParraApp`` initializer
-    /// as a means of passing the Parra instance for the app to the app delegate.
+    /// Not exposed publicly. Should only ever be set once from the
+    /// ``Parra/ParraApp`` initializer as a means of passing the Parra instance
+    /// for the app to the app delegate.
     var parra: Parra!
 }
