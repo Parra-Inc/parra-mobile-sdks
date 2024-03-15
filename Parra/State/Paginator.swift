@@ -132,6 +132,7 @@ class Paginator<Item, Context>: ObservableObject
 
     @Published var items: [Item]
     @Published private(set) var isLoading: Bool
+    @Published private(set) var error: Error?
     @Published private(set) var isShowingPlaceholders: Bool
 
     @MainActor
@@ -147,6 +148,7 @@ class Paginator<Item, Context>: ObservableObject
         logger.trace("Beginning refresh for \(context)")
 
         isLoading = true
+        error = nil
 
         do {
             let nextPage = try await pageFetcher(pageSize, 0, context)
@@ -159,6 +161,9 @@ class Paginator<Item, Context>: ObservableObject
             }
         } catch {
             await MainActor.run {
+                self.error = error
+                items = []
+                isShowingPlaceholders = false
                 isLoading = false
             }
         }
@@ -187,6 +192,7 @@ class Paginator<Item, Context>: ObservableObject
         logger.trace("Beginning load for \(context)")
 
         isLoading = true
+        error = nil
 
         Task {
             // If we're loading more after an existing item, it implies that some
@@ -232,6 +238,15 @@ class Paginator<Item, Context>: ObservableObject
 
                 await MainActor.run {
                     isLoading = false
+
+                    // There was already some data, so don't hide it to show an
+                    // error view.
+                    if isShowingPlaceholders {
+                        isShowingPlaceholders = false
+                        items = []
+
+                        self.error = error
+                    }
                 }
             }
         }

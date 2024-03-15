@@ -40,6 +40,21 @@ public struct EmptyStateConfig: Equatable {
         )
     )
 
+    public static let errorDefault = EmptyStateConfig(
+        title: LabelConfig(fontStyle: .title2),
+        subtitle: LabelConfig(fontStyle: .body),
+        primaryAction: TextButtonConfig(
+            style: .primary,
+            size: .large,
+            isMaxWidth: true
+        ),
+        secondaryAction: TextButtonConfig(
+            style: .secondary,
+            size: .medium,
+            isMaxWidth: true
+        )
+    )
+
     public let title: LabelConfig
     public let subtitle: LabelConfig
     public let primaryAction: TextButtonConfig

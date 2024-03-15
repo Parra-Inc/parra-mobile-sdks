@@ -217,6 +217,13 @@ public struct RoadmapWidget: Container {
                 suppliedBuilder: localBuilderConfig.emptyStateView
             )
         }
+        .errorPlaceholder(contentObserver.ticketPaginator.error) {
+            componentFactory.buildEmptyState(
+                config: config.errorStateView,
+                content: contentObserver.content.errorStateView,
+                suppliedBuilder: localBuilderConfig.errorStateView
+            )
+        }
         .refreshable {
             await contentObserver.ticketPaginator.refresh()
         }

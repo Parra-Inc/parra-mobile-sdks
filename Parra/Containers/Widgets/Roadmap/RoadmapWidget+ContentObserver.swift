@@ -39,6 +39,14 @@ extension RoadmapWidget {
                 )
             )
 
+            let errorStateViewContent = EmptyStateContent(
+                title: EmptyStateContent.errorGeneric.title,
+                subtitle: LabelContent(
+                    text: "Failed to load roadmap. Please try again later."
+                ),
+                icon: .symbol("network.slash", .monochrome)
+            )
+
             self.selectedTab = initialTab
             self.roadmapConfig = roadmapConfig
             self.canAddRequests = roadmapConfig.form != nil
@@ -46,7 +54,8 @@ extension RoadmapWidget {
             self.content = Content(
                 title: "Roadmap",
                 addRequestButton: addRequestButton,
-                emptyStateView: emptyStateViewContent
+                emptyStateView: emptyStateViewContent,
+                errorStateView: errorStateViewContent
             )
 
             let initialPaginatorData = Paginator<

@@ -45,9 +45,9 @@ extension EmptyStateComponentType {
             ),
             icon: ImageAttributes(
                 tint: theme.palette.secondary.shade400.toParraColor(),
-                padding: .padding(bottom: 36),
+                padding: .padding(bottom: 24),
                 frame: .fixed(
-                    FixedFrameAttributes(width: 150)
+                    FixedFrameAttributes(width: 96)
                 )
             ),
             primaryAction: TextButtonAttributes(
@@ -62,7 +62,7 @@ extension EmptyStateComponentType {
                 )
             ),
             background: theme.palette.primaryBackground,
-            padding: EdgeInsets(20)
+            padding: EdgeInsets(vertical: 20, horizontal: 36)
         )
 
         return base.withUpdates(

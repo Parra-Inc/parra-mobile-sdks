@@ -50,4 +50,12 @@ public struct EmptyStateContent: Hashable, Equatable {
             isDisabled: false
         )
     )
+
+    static let errorGeneric = EmptyStateContent(
+        title: LabelContent(text: "Something Went Wrong"),
+        subtitle: LabelContent(
+            text: "An unexpected error occurred. Check your connection and try again later."
+        ),
+        icon: .symbol("exclamationmark.triangle")
+    )
 }
