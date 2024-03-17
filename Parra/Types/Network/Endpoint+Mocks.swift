@@ -37,6 +37,10 @@ extension ParraEndpoint {
                 object = UserTicket.validStates()[0]
             case .deleteVoteForTicket:
                 object = UserTicket.validStates()[0]
+            case .getRelease:
+                object = AppRelease.validStates()[0]
+            case .getPaginateReleases:
+                object = AppReleaseCollectionResponse.validStates()[0]
             }
         default:
             throw ParraError.generic(

@@ -1751,13 +1751,13 @@ public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
     public let notificationIds: [String]
 }
 
-public enum TicketType: String, Codable, Equatable {
+public enum TicketType: String, Codable, Equatable, CaseIterable {
     case bug
     case feature
     case improvement
 }
 
-public enum TicketStatus: String, Codable, Equatable {
+public enum TicketStatus: String, Codable, Equatable, CaseIterable {
     case open
     case planning
     case inProgress = "in_progress"
@@ -1767,7 +1767,7 @@ public enum TicketStatus: String, Codable, Equatable {
     case archived
 }
 
-public enum TicketDisplayStatus: String, Codable, Equatable {
+public enum TicketDisplayStatus: String, Codable, Equatable, CaseIterable {
     case pending
     case inProgress = "in_progress"
     case live
@@ -1924,6 +1924,391 @@ public struct AppRoadmapConfiguration: Codable, Equatable, Hashable {
     // MARK: - Public
 
     public let form: FeedbackFormDataStub?
+}
+
+public enum TicketPriority: String, Codable, CaseIterable {
+    case low
+    case medium
+    case high
+    case urgent
+}
+
+public struct Ticket: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        title: String,
+        shortTitle: String?,
+        type: TicketType,
+        status: TicketStatus,
+        priority: TicketPriority?,
+        description: String?,
+        votingEnabled: Bool,
+        isPublic: Bool,
+        userNoteId: String?,
+        estimatedStartDate: Date?,
+        estimatedCompletionDate: Date?,
+        ticketNumber: String,
+        tenantId: String,
+        voteCount: Int,
+        releasedAt: String?,
+        release: ReleaseStub
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.title = title
+        self.shortTitle = shortTitle
+        self.type = type
+        self.status = status
+        self.priority = priority
+        self.description = description
+        self.votingEnabled = votingEnabled
+        self.isPublic = isPublic
+        self.userNoteId = userNoteId
+        self.estimatedStartDate = estimatedStartDate
+        self.estimatedCompletionDate = estimatedCompletionDate
+        self.ticketNumber = ticketNumber
+        self.tenantId = tenantId
+        self.voteCount = voteCount
+        self.releasedAt = releasedAt
+        self.release = release
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case title
+        case shortTitle
+        case type
+        case status
+        case priority
+        case description
+        case votingEnabled
+        case isPublic
+        case userNoteId
+        case estimatedStartDate
+        case estimatedCompletionDate
+        case ticketNumber
+        case tenantId
+        case voteCount
+        case releasedAt
+        case release
+    }
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let title: String
+    public let shortTitle: String?
+    public let type: TicketType
+    public let status: TicketStatus
+    public let priority: TicketPriority?
+    public let description: String?
+    public let votingEnabled: Bool
+    public let isPublic: Bool
+    public let userNoteId: String?
+    public let estimatedStartDate: Date?
+    public let estimatedCompletionDate: Date?
+    public let ticketNumber: String
+    public let tenantId: String
+    public let voteCount: Int
+    public let releasedAt: String?
+    public let release: ReleaseStub
+}
+
+public struct AppReleaseItem: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        releaseId: String,
+        ticketId: String,
+        ticket: Ticket
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.releaseId = releaseId
+        self.ticketId = ticketId
+        self.ticket = ticket
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case releaseId
+        case ticketId
+        case ticket
+    }
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let releaseId: String
+    public let ticketId: String
+    public let ticket: Ticket
+}
+
+public struct AppReleaseSection: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        title: String,
+        items: [AppReleaseItem]
+    ) {
+        self.title = title
+        self.items = items
+    }
+
+    // MARK: - Public
+
+    public let title: String
+    public let items: [AppReleaseItem]
+}
+
+public struct AppRelease: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        name: String,
+        version: String,
+        description: String?,
+        type: ReleaseType,
+        tenantId: String,
+        releaseNumber: Int,
+        status: ReleaseStatus,
+        sections: [AppReleaseSection]
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.name = name
+        self.version = version
+        self.description = description
+        self.type = type
+        self.tenantId = tenantId
+        self.releaseNumber = releaseNumber
+        self.status = status
+        self.sections = sections
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case name
+        case version
+        case description
+        case type
+        case tenantId
+        case releaseNumber
+        case status
+        case sections
+    }
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let name: String
+    public let version: String
+    public let description: String?
+    public let type: ReleaseType
+    public let tenantId: String
+    public let releaseNumber: Int
+    public let status: ReleaseStatus
+    public let sections: [AppReleaseSection]
+}
+
+public enum ReleaseStatus: String, Codable, CaseIterable {
+    case pending
+    case scheduled
+    case released
+}
+
+public enum ReleaseType: String, Codable, CaseIterable {
+    case major
+    case minor
+    case patch
+    case launch
+}
+
+public struct ReleaseStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        name: String,
+        version: String,
+        description: String?,
+        type: ReleaseType,
+        tenantId: String,
+        releaseNumber: Int,
+        status: ReleaseStatus
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.name = name
+        self.version = version
+        self.description = description
+        self.type = type
+        self.tenantId = tenantId
+        self.releaseNumber = releaseNumber
+        self.status = status
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case name
+        case version
+        case description
+        case type
+        case tenantId
+        case releaseNumber
+        case status
+    }
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let name: String
+    public let version: String
+    public let description: String?
+    public let type: ReleaseType
+    public let tenantId: String
+    public let releaseNumber: Int
+    public let status: ReleaseStatus
+}
+
+public struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        name: String,
+        version: String,
+        description: String?,
+        type: ReleaseType,
+        tenantId: String,
+        releaseNumber: Int,
+        status: ReleaseStatus
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.name = name
+        self.version = version
+        self.description = description
+        self.type = type
+        self.tenantId = tenantId
+        self.releaseNumber = releaseNumber
+        self.status = status
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case name
+        case version
+        case description
+        case type
+        case tenantId
+        case releaseNumber
+        case status
+    }
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let name: String
+    public let version: String
+    public let description: String?
+    public let type: ReleaseType
+    public let tenantId: String
+    public let releaseNumber: Int
+    public let status: ReleaseStatus
+}
+
+public struct AppReleaseCollectionResponse: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        page: Int,
+        pageCount: Int,
+        pageSize: Int,
+        totalCount: Int,
+        data: [AppReleaseStub]
+    ) {
+        self.page = page
+        self.pageCount = pageCount
+        self.pageSize = pageSize
+        self.totalCount = totalCount
+        self.data = data
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case page
+        case pageCount
+        case pageSize
+        case totalCount
+        case data
+    }
+
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [AppReleaseStub]
 }
 
 public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {

@@ -14,9 +14,11 @@ enum ParraEndpoint {
 
     // Feedback
     case getCards
+    case postBulkAnswerQuestions
+
+    // Feedback Forms
     case getFeedbackForm(formId: String)
     case postSubmitFeedbackForm(formId: String)
-    case postBulkAnswerQuestions
 
     // Sessions
     case postBulkSubmitSessions(tenantId: String)
@@ -31,25 +33,41 @@ enum ParraEndpoint {
     case postVoteForTicket(tenantId: String, ticketId: String)
     case deleteVoteForTicket(tenantId: String, ticketId: String)
 
+    // Releases
+
+    case getRelease(releaseId: String, tenantId: String, applicationId: String)
+    case getPaginateReleases(tenantId: String, applicationId: String)
+
     // MARK: - Internal
 
     // All endpoints should use kebab case!
     var route: String {
         switch self {
+        // Auth
+        case .postAuthentication(let tenantId):
+            return "tenants/\(tenantId)/issuers/public/auth/token"
+
+        // Feedback
         case .getCards:
             return "cards"
+        case .postBulkAnswerQuestions:
+            return "bulk/questions/answer"
+
+        // Feedback Forms
         case .getFeedbackForm(let formId):
             return "feedback/forms/\(formId)"
         case .postSubmitFeedbackForm(let formId):
             return "feedback/forms/\(formId)/submit"
-        case .postBulkAnswerQuestions:
-            return "bulk/questions/answer"
+
+        // Sessions
         case .postBulkSubmitSessions(let tenantId):
             return "tenants/\(tenantId)/sessions"
+
+        // Push
         case .postPushTokens(let tenantId):
             return "tenants/\(tenantId)/push-tokens"
-        case .postAuthentication(let tenantId):
-            return "tenants/\(tenantId)/issuers/public/auth/token"
+
+        // Roadmap
         case .getRoadmap(let tenantId, let applicationId):
             return "tenants/\(tenantId)/applications/\(applicationId)/roadmap"
         case .getPaginateTickets(let tenantId, let applicationId):
@@ -58,12 +76,19 @@ enum ParraEndpoint {
             return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
         case .deleteVoteForTicket(let tenantId, let ticketId):
             return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
+
+        // Releases
+        case .getRelease(let releaseId, let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/releases/\(releaseId)"
+        case .getPaginateReleases(let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/releases"
         }
     }
 
     var method: HttpMethod {
         switch self {
-        case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets:
+        case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
+             .getRelease, .getPaginateReleases:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
@@ -111,6 +136,10 @@ enum ParraEndpoint {
             return "tenants/:tenantId/applications/:applicationId/tickets"
         case .postVoteForTicket, .deleteVoteForTicket:
             return "tenants/:tenantId/tickets/:ticketId/vote"
+        case .getRelease:
+            return "tenants/:tenantId/applications/:applicationId/releases/:releaseId"
+        case .getPaginateReleases:
+            return "tenants/:tenantId/applications/:applicationId/releases"
         }
     }
 }

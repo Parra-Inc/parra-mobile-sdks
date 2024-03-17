@@ -8,9 +8,6 @@
 
 import SwiftUI
 
-// TODO: How can the `Factory` type provided to this widget allow overriding
-// elements dynamically by card type?
-
 struct FeedbackCardWidget: Container {
     // MARK: - Lifecycle
 

@@ -142,6 +142,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
 
             await MainActor.run {
                 state = .error(error)
+                dismiss(.failed(error.localizedDescription))
             }
         }
     }

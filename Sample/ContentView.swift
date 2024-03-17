@@ -29,6 +29,17 @@ struct ContentView: View {
                         FeedbackFormByIdSample()
                     } label: {
                         SampleItemRow(
+                            title: "Cards",
+                            iconName: "greetingcard"
+                        )
+                    }
+                }
+
+                Section("Feedback Forms") {
+                    NavigationLink {
+                        FeedbackFormByIdSample()
+                    } label: {
+                        SampleItemRow(
                             title: "Forms by ID",
                             iconName: "list.clipboard"
                         )
@@ -39,16 +50,7 @@ struct ContentView: View {
                     } label: {
                         SampleItemRow(
                             title: "Forms with custom loader",
-                            iconName: "list.clipboard"
-                        )
-                    }
-
-                    NavigationLink {
-                        FeedbackFormByIdSample()
-                    } label: {
-                        SampleItemRow(
-                            title: "Cards",
-                            iconName: "greetingcard"
+                            iconName: "list.bullet.clipboard"
                         )
                     }
                 }
@@ -61,16 +63,27 @@ struct ContentView: View {
                     }
                 }
 
-                Section("Notifications") {
+                Section("Changelog") {
                     NavigationLink {
-                        FeedbackFormByIdSample()
+                        ChangelogSample()
                     } label: {
                         SampleItemRow(
-                            title: "Roadmap",
-                            iconName: "app.badge"
+                            title: "Changelog",
+                            iconName: "note.text"
                         )
                     }
                 }
+
+//                Section("Notifications") {
+//                    NavigationLink {
+//                        FeedbackFormByIdSample()
+//                    } label: {
+//                        SampleItemRow(
+//                            title: "Roadmap",
+//                            iconName: "app.badge"
+//                        )
+//                    }
+//                }
             }
             .navigationTitle("Parra")
             .listStyle(.automatic)

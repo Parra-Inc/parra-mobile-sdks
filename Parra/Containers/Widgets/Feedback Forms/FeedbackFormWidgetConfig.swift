@@ -9,6 +9,26 @@
 import SwiftUI
 
 public struct FeedbackFormWidgetConfig: ContainerConfig {
+    // MARK: - Lifecycle
+
+    public init(
+        title: LabelConfig,
+        description: LabelConfig,
+        selectFields: MenuConfig,
+        textFields: TextEditorConfig,
+        inputFields: TextInputConfig,
+        submitButton: TextButtonConfig
+    ) {
+        self.title = title
+        self.description = description
+        self.selectFields = selectFields
+        self.textFields = textFields
+        self.inputFields = inputFields
+        self.submitButton = submitButton
+    }
+
+    // MARK: - Public
+
     public static let `default` = FeedbackFormWidgetConfig(
         title: LabelConfig(fontStyle: .title),
         description: LabelConfig(fontStyle: .subheadline),

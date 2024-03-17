@@ -8,7 +8,8 @@
 
 import Foundation
 
-public enum SheetDismissType {
+public enum SheetDismissType: Equatable {
     case cancelled
     case completed
+    case failed(String)
 }

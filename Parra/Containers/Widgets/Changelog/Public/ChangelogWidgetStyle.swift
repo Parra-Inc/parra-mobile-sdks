@@ -1,14 +1,14 @@
 //
-//  FeedbackFormWidgetStyle.swift
+//  ChangelogWidgetStyle.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 2/24/24.
+//  Created by Mick MacCallum on 3/15/24.
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
 import SwiftUI
 
-public struct FeedbackFormWidgetStyle: WidgetStyle {
+public struct ChangelogWidgetStyle: WidgetStyle {
     // MARK: - Lifecycle
 
     public init(
@@ -32,14 +32,14 @@ public struct FeedbackFormWidgetStyle: WidgetStyle {
 
     public static func `default`(
         with theme: ParraTheme
-    ) -> FeedbackFormWidgetStyle {
+    ) -> ChangelogWidgetStyle {
         let palette = theme.palette
 
-        return FeedbackFormWidgetStyle(
+        return ChangelogWidgetStyle(
             background: palette.primaryBackground,
-            contentPadding: EdgeInsets(vertical: 12, horizontal: 20),
+            contentPadding: .padding(vertical: 12, horizontal: 20),
             cornerRadius: .zero,
-            padding: EdgeInsets(top: 16, leading: 0, bottom: 0, trailing: 0)
+            padding: .padding(top: 16)
         )
     }
 }

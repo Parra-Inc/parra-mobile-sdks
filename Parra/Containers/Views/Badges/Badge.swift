@@ -47,6 +47,9 @@ struct Badge: View {
             content: LabelContent(text: text, icon: icon),
             localAttributes: attributes
         )
+        .minimumScaleFactor(0.7)
+        .scaledToFill()
+        .contentShape(.rect)
     }
 
     // MARK: - Private

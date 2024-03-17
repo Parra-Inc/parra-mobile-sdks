@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct FeedbackFormWidget: Container {
+struct FeedbackFormWidget: Container {
     // MARK: - Lifecycle
 
     init(
@@ -25,9 +25,17 @@ public struct FeedbackFormWidget: Container {
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
 
-    // MARK: - Public
+    // MARK: - Internal
 
-    public var body: some View {
+    let localBuilderConfig: FeedbackFormWidgetBuilderConfig
+    let componentFactory: ComponentFactory
+    @StateObject var contentObserver: ContentObserver
+    let config: FeedbackFormWidgetConfig
+    let style: FeedbackFormWidgetStyle
+
+    @EnvironmentObject var themeObserver: ParraThemeObserver
+
+    var body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -65,16 +73,6 @@ public struct FeedbackFormWidget: Container {
         .environmentObject(contentObserver)
         .environmentObject(componentFactory)
     }
-
-    // MARK: - Internal
-
-    let localBuilderConfig: FeedbackFormWidgetBuilderConfig
-    let componentFactory: ComponentFactory
-    @StateObject var contentObserver: ContentObserver
-    let config: FeedbackFormWidgetConfig
-    let style: FeedbackFormWidgetStyle
-
-    @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var header: some View {
         VStack(alignment: .leading, spacing: 10) {

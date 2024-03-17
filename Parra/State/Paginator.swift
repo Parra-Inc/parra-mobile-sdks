@@ -321,6 +321,11 @@ class Paginator<Item, Context>: ObservableObject
         // end of the list, less some threshold. When requesting more items, we
         // add this threshold back to not have `loadMoreThreshold` overlapping
         // items per request.
-        return index + loadMoreThreshold
+        let next = index + loadMoreThreshold
+        if next >= max {
+            return nil
+        }
+
+        return next
     }
 }

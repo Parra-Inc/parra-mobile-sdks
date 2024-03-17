@@ -8,9 +8,6 @@
 
 import Foundation
 
-private let now = Date()
-private let day: TimeInterval = 60 * 60 * 24
-
 // MARK: - UserTicket + ParraFixture
 
 extension UserTicket: ParraFixture {
@@ -19,8 +16,8 @@ extension UserTicket: ParraFixture {
             UserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "PAR-2349",
-                createdAt: now.addingTimeInterval(-(day * 1.5)),
-                updatedAt: now.addingTimeInterval(-(day * 1.3)),
+                createdAt: .now,
+                updatedAt: .now.daysAgo(1.3),
                 deletedAt: nil,
                 title: "The app crashes on the home screen",
                 type: .bug,
@@ -35,8 +32,8 @@ extension UserTicket: ParraFixture {
             UserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "PAR-4",
-                createdAt: now.addingTimeInterval(-(day * 8)),
-                updatedAt: now.addingTimeInterval(-(day * 6)),
+                createdAt: .now.daysAgo(8),
+                updatedAt: .now.daysAgo(6),
                 deletedAt: nil,
                 title: "I can't add favorites",
                 type: .bug,
@@ -51,8 +48,8 @@ extension UserTicket: ParraFixture {
             UserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "PAR-991011",
-                createdAt: now.addingTimeInterval(-(day * 30)),
-                updatedAt: now.addingTimeInterval(-(day * 15)),
+                createdAt: .now.daysAgo(30),
+                updatedAt: .now.daysAgo(15),
                 deletedAt: nil,
                 title: "Add more sort options",
                 type: .improvement,
@@ -67,8 +64,8 @@ extension UserTicket: ParraFixture {
             UserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "PAR-3493929892",
-                createdAt: now.addingTimeInterval(-(day * 100)),
-                updatedAt: now.addingTimeInterval(-(day * 75)),
+                createdAt: .now.daysAgo(100),
+                updatedAt: .now.daysAgo(75),
                 deletedAt: nil,
                 title: "AI Copilot",
                 type: .feature,

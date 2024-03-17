@@ -8,16 +8,6 @@
 
 import SwiftUI
 
-struct ViewOffsetKey: PreferenceKey {
-    typealias Value = CGFloat
-
-    static var defaultValue = CGFloat.zero
-
-    static func reduce(value: inout Value, nextValue: () -> Value) {
-        value += nextValue()
-    }
-}
-
 struct RoadmapWidget: Container {
     // MARK: - Lifecycle
 
@@ -128,7 +118,7 @@ struct RoadmapWidget: Container {
             }
             .pickerStyle(.segmented)
         }
-        .padding([.leading, .trailing, .top], from: style.contentPadding)
+        .padding([.horizontal, .top], from: style.contentPadding)
         .padding(.bottom, headerSpace)
         .border(
             width: 1,

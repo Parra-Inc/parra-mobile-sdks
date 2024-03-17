@@ -8,6 +8,8 @@
 
 import Foundation
 
+private let day: TimeInterval = 60 * 60 * 24
+
 extension Date {
     func timeAgo(
         context: Formatter.Context = .standalone,
@@ -21,5 +23,13 @@ extension Date {
         formatter.unitsStyle = unitStyle
 
         return formatter.localizedString(for: self, relativeTo: Date())
+    }
+
+    func daysAgo(_ daysAgo: TimeInterval) -> Date {
+        return addingTimeInterval(-(day * daysAgo))
+    }
+
+    func daysFromNow(_ daysAgo: TimeInterval) -> Date {
+        return self.daysAgo(-daysAgo)
     }
 }

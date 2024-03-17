@@ -9,6 +9,22 @@
 import SwiftUI
 
 public struct RoadmapWidgetStyle: WidgetStyle {
+    // MARK: - Lifecycle
+
+    public init(
+        background: (any ShapeStyle)?,
+        contentPadding: EdgeInsets,
+        cornerRadius: ParraCornerRadiusSize,
+        padding: EdgeInsets
+    ) {
+        self.background = background
+        self.contentPadding = contentPadding
+        self.cornerRadius = cornerRadius
+        self.padding = padding
+    }
+
+    // MARK: - Public
+
     public let background: (any ShapeStyle)?
     public let contentPadding: EdgeInsets
     public let cornerRadius: ParraCornerRadiusSize
@@ -21,9 +37,9 @@ public struct RoadmapWidgetStyle: WidgetStyle {
 
         return RoadmapWidgetStyle(
             background: palette.primaryBackground,
-            contentPadding: EdgeInsets(vertical: 12, horizontal: 20),
+            contentPadding: .padding(vertical: 12, horizontal: 20),
             cornerRadius: .zero,
-            padding: EdgeInsets(top: 16, leading: 0, bottom: 0, trailing: 0)
+            padding: .padding(top: 16)
         )
     }
 }

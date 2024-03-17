@@ -49,11 +49,15 @@ struct RoadmapListItem: View {
                     }
 
                     HStack(alignment: .center, spacing: 4) {
-                        RoadmapTicketTypeBadge(type: ticketContent.type)
+                        RoadmapTicketTypeBadge(
+                            type: ticketContent.type,
+                            size: .md
+                        )
 
                         RoadmapTicketDisplayStatusBadge(
                             displayStatus: ticketContent.displayStatus,
-                            title: ticketContent.statusTitle
+                            title: ticketContent.statusTitle,
+                            size: .md
                         )
 
                         Spacer()

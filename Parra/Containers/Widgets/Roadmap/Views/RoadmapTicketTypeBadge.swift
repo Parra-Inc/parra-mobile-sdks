@@ -38,7 +38,6 @@ struct RoadmapTicketTypeBadge: View {
             icon: .symbol("circle.fill"),
             iconAttributes: nil
         )
-        .contentShape(.rect)
         .onTapGesture {
             isAlertPresented = true
         }

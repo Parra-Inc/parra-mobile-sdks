@@ -53,4 +53,14 @@ extension EdgeInsets {
             trailing: trailing
         )
     }
+
+    static func padding(
+        vertical: CGFloat = 0.0,
+        horizontal: CGFloat = 0.0
+    ) -> EdgeInsets {
+        return EdgeInsets(
+            vertical: vertical,
+            horizontal: horizontal
+        )
+    }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 public class RoadmapWidgetConfig: ContainerConfig, Observable {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         title: LabelConfig,
         addRequestButton: TextButtonConfig,
         requestTitles: LabelConfig,
