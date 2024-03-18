@@ -78,7 +78,7 @@ struct RoadmapWidget: Container {
                     }
                 }
             )
-            .navigationDestination(for: TicketContent.self) { ticket in
+            .navigationDestination(for: TicketUserContent.self) { ticket in
                 if let index = contentObserver.ticketPaginator.items.firstIndex(
                     where: {
                         $0.id == ticket.id

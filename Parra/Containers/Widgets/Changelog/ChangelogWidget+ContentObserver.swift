@@ -23,13 +23,14 @@ extension ReleaseType {
     }
 }
 
-struct AppReleaseContent: Identifiable, Hashable {
+struct AppReleaseStubContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
     @MainActor
     init(
         _ stub: AppReleaseStub
     ) {
+        self.originalStub = stub
         self.id = stub.id
         self.createdAt = LabelContent(
             text: stub.createdAt.timeAgo(
@@ -50,6 +51,7 @@ struct AppReleaseContent: Identifiable, Hashable {
 
     // MARK: - Internal
 
+    let originalStub: AppReleaseStub
     let id: String
     let createdAt: LabelContent
     let name: LabelContent
@@ -100,7 +102,7 @@ extension ChangelogWidget {
                 context: "",
                 data: .init(
                     items: appReleaseCollection.data
-                        .map { AppReleaseContent($0) },
+                        .map { AppReleaseStubContent($0) },
                     placeholderItems: [],
                     pageSize: appReleaseCollection.pageSize,
                     knownCount: appReleaseCollection.totalCount
@@ -116,7 +118,10 @@ extension ChangelogWidget {
         // Using IUO because this object requires referencing self in a closure
         // in its init so we need all fields set. Post-init this should always
         // be set.
-        @Published var releasePaginator: Paginator<AppReleaseContent, String>!
+        @Published var releasePaginator: Paginator<
+            AppReleaseStubContent,
+            String
+        >!
 
         let networkManager: ParraNetworkManager
 
@@ -126,13 +131,13 @@ extension ChangelogWidget {
             _ limit: Int,
             _ offset: Int,
             _ ctx: String
-        ) async throws -> [AppReleaseContent] {
+        ) async throws -> [AppReleaseStubContent] {
             let response = try await networkManager.paginateReleases(
                 limit: limit,
                 offset: offset
             )
 
-            return response.data.map { AppReleaseContent($0) }
+            return response.data.map { AppReleaseStubContent($0) }
         }
     }
 }

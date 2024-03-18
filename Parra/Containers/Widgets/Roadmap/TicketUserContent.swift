@@ -1,5 +1,5 @@
 //
-//  TicketContent.swift
+//  TicketUserContent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/6/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TicketContent: Identifiable, Hashable {
+struct TicketUserContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
     @MainActor
@@ -36,7 +36,7 @@ struct TicketContent: Identifiable, Hashable {
         self.votingEnabled = userTicket.votingEnabled
         self.voted = userTicket.voted
         self.voteCountRaw = userTicket.voteCount
-        self.voteCount = TicketContent.voteCountLabelContent(
+        self.voteCount = TicketUserContent.voteCountLabelContent(
             from: userTicket.voteCount
         )
         self.voteButton = ImageButtonContent(
@@ -49,8 +49,8 @@ struct TicketContent: Identifiable, Hashable {
 
     /// Used in contexts where TicketContent is rendered with placeholder
     /// redaction. Needs to be computed to have unique IDs for display in lists.
-    @MainActor static var redacted: TicketContent {
-        return TicketContent(
+    @MainActor static var redacted: TicketUserContent {
+        return TicketUserContent(
             UserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "23812",
@@ -85,7 +85,7 @@ struct TicketContent: Identifiable, Hashable {
     private(set) var voteCount: LabelContent
     let voteButton: ImageButtonContent
 
-    func withVoteToggled() -> TicketContent {
+    func withVoteToggled() -> TicketUserContent {
         let previouslyVoted = voted
         let previousVoteCount = voteCountRaw
 
@@ -95,7 +95,7 @@ struct TicketContent: Identifiable, Hashable {
         var next = self
 
         next.voted = !previouslyVoted
-        next.voteCount = TicketContent.voteCountLabelContent(
+        next.voteCount = TicketUserContent.voteCountLabelContent(
             from: newVoteCount
         )
         next.voteCountRaw = newVoteCount

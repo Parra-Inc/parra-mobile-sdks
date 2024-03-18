@@ -11,7 +11,7 @@ import SwiftUI
 struct RoadmapListItem: View {
     // MARK: - Internal
 
-    let ticketContent: TicketContent
+    let ticketContent: TicketUserContent
 
     var body: some View {
         let palette = themeObserver.theme.palette

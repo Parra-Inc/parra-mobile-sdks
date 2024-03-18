@@ -11,7 +11,7 @@ import SwiftUI
 struct ChangelogListItem: View {
     // MARK: - Internal
 
-    let content: AppReleaseContent
+    let content: AppReleaseStubContent
 
     var body: some View {
         let palette = themeObserver.theme.palette
@@ -36,30 +36,9 @@ struct ChangelogListItem: View {
                 .multilineTextAlignment(.leading)
             }
 
-            HStack(alignment: .center, spacing: 4) {
-                Badge(
-                    size: .md,
-                    text: content.version.text,
-                    color: palette.success,
-                    icon: .symbol("circle.fill")
-                )
-
-                Badge(
-                    size: .md,
-                    text: content.type.text
-                )
-
-                Spacer()
-
-                componentFactory.buildLabel(
-                    config: config.releasePreviewCreatedAts,
-                    content: content.createdAt,
-                    suppliedBuilder: builderConfig.releasePreviewCreatedAts,
-                    localAttributes: LabelAttributes(
-                        fontColor: palette.secondaryText
-                    )
-                )
-            }
+            ChangelogItemInfoView(
+                content: content
+            )
         }
         .frame(maxWidth: .infinity)
         .padding()

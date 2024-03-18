@@ -20,6 +20,15 @@ public struct LabelContent: Hashable, Equatable {
         self.icon = icon
     }
 
+    public init?(text: String?) {
+        guard let text else {
+            return nil
+        }
+
+        self.text = text
+        self.icon = nil
+    }
+
     // MARK: - Public
 
     public let text: String

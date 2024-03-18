@@ -1933,6 +1933,121 @@ public enum TicketPriority: String, Codable, CaseIterable {
     case urgent
 }
 
+public enum TicketIconType: String, Codable {
+    case emoji
+}
+
+public struct TicketIcon: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        type: TicketIconType,
+        value: String
+    ) {
+        self.type = type
+        self.value = value
+    }
+
+    // MARK: - Public
+
+    public let type: TicketIconType
+    public let value: String
+}
+
+public struct TicketStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        title: String,
+        shortTitle: String?,
+        type: TicketType,
+        status: TicketStatus,
+        priority: TicketPriority?,
+        description: String?,
+        votingEnabled: Bool,
+        isPublic: Bool,
+        userNoteId: String?,
+        estimatedStartDate: Date?,
+        estimatedCompletionDate: Date?,
+        icon: TicketIcon?,
+        ticketNumber: String,
+        tenantId: String,
+        voteCount: Int,
+        releasedAt: String?
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.title = title
+        self.shortTitle = shortTitle
+        self.type = type
+        self.status = status
+        self.priority = priority
+        self.description = description
+        self.votingEnabled = votingEnabled
+        self.isPublic = isPublic
+        self.userNoteId = userNoteId
+        self.estimatedStartDate = estimatedStartDate
+        self.estimatedCompletionDate = estimatedCompletionDate
+        self.icon = icon
+        self.ticketNumber = ticketNumber
+        self.tenantId = tenantId
+        self.voteCount = voteCount
+        self.releasedAt = releasedAt
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case title
+        case shortTitle
+        case type
+        case status
+        case priority
+        case description
+        case votingEnabled
+        case isPublic
+        case userNoteId
+        case estimatedStartDate
+        case estimatedCompletionDate
+        case icon
+        case ticketNumber
+        case tenantId
+        case voteCount
+        case releasedAt
+    }
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let title: String
+    public let shortTitle: String?
+    public let type: TicketType
+    public let status: TicketStatus
+    public let priority: TicketPriority?
+    public let description: String?
+    public let votingEnabled: Bool
+    public let isPublic: Bool
+    public let userNoteId: String?
+    public let estimatedStartDate: Date?
+    public let estimatedCompletionDate: Date?
+    public let icon: TicketIcon?
+    public let ticketNumber: String
+    public let tenantId: String
+    public let voteCount: Int
+    public let releasedAt: String?
+}
+
 public struct Ticket: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
@@ -2037,7 +2152,7 @@ public struct AppReleaseItem: Codable, Equatable, Hashable, Identifiable {
         deletedAt: Date?,
         releaseId: String,
         ticketId: String,
-        ticket: Ticket
+        ticket: TicketStub
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -2066,22 +2181,25 @@ public struct AppReleaseItem: Codable, Equatable, Hashable, Identifiable {
     public let deletedAt: Date?
     public let releaseId: String
     public let ticketId: String
-    public let ticket: Ticket
+    public let ticket: TicketStub
 }
 
-public struct AppReleaseSection: Codable, Equatable, Hashable {
+public struct AppReleaseSection: Codable, Identifiable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
+        id: String,
         title: String,
         items: [AppReleaseItem]
     ) {
+        self.id = id
         self.title = title
         self.items = items
     }
 
     // MARK: - Public
 
+    public let id: String
     public let title: String
     public let items: [AppReleaseItem]
 }

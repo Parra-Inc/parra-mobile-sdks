@@ -70,7 +70,7 @@ extension RoadmapWidget.ContentObserver {
     }
 
     func ticketContentDidReceiveVote(
-        _ ticketContent: TicketContent
+        _ ticketContent: TicketUserContent
     ) async throws {
         let response = await networkManager.voteForTicket(
             with: ticketContent.id
@@ -83,7 +83,7 @@ extension RoadmapWidget.ContentObserver {
     }
 
     func ticketContentDidRemoveVote(
-        _ ticketContent: TicketContent
+        _ ticketContent: TicketUserContent
     ) async throws {
         let response = await networkManager.removeVoteForTicket(
             with: ticketContent.id
@@ -96,7 +96,7 @@ extension RoadmapWidget.ContentObserver {
     }
 
     func handleVoteResponse(
-        for ticket: TicketContent,
+        for ticket: TicketUserContent,
         response: AuthenticatedRequestResult<UserTicket>
     ) throws {
         if response.context.statusCode == 409 {
@@ -114,7 +114,7 @@ extension RoadmapWidget.ContentObserver {
         switch response.result {
         case .success(let response):
             replaceTicket(
-                with: TicketContent(response)
+                with: TicketUserContent(response)
             )
         case .failure(let error):
             throw error
@@ -123,7 +123,7 @@ extension RoadmapWidget.ContentObserver {
 
     @MainActor
     private func toggleVote(
-        for content: TicketContent
+        for content: TicketUserContent
     ) {
         replaceTicket(
             with: content.withVoteToggled()
@@ -132,7 +132,7 @@ extension RoadmapWidget.ContentObserver {
 
     @MainActor
     private func replaceTicket(
-        with content: TicketContent
+        with content: TicketUserContent
     ) {
         ticketPaginator.updateItem(content)
 

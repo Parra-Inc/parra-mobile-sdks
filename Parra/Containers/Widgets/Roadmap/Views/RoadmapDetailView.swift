@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct RoadmapDetailView: View {
-    @Binding var ticketContent: TicketContent
+    @Binding var ticketContent: TicketUserContent
 
     @Environment(RoadmapWidgetConfig.self) var config
     @Environment(RoadmapWidgetBuilderConfig.self) var builderConfig

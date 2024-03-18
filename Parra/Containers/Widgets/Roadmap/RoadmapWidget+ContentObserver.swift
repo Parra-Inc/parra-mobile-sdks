@@ -59,16 +59,19 @@ extension RoadmapWidget {
             )
 
             let initialPaginatorData = Paginator<
-                TicketContent,
+                TicketUserContent,
                 ParraRoadmapTab
             >.Data(
-                items: ticketResponse.data.map { TicketContent($0) },
+                items: ticketResponse.data.map { TicketUserContent($0) },
                 placeholderItems: [],
                 pageSize: ticketResponse.pageSize,
                 knownCount: ticketResponse.totalCount
             )
 
-            let initialPaginator = Paginator<TicketContent, ParraRoadmapTab>(
+            let initialPaginator = Paginator<
+                TicketUserContent,
+                ParraRoadmapTab
+            >(
                 context: initialTab,
                 data: initialPaginatorData,
                 pageFetcher: loadMoreTickets
@@ -105,11 +108,11 @@ extension RoadmapWidget {
         @Published var currentTicketToVote: String?
 
         private(set) var ticketCache = [
-            ParraRoadmapTab: Paginator<TicketContent, ParraRoadmapTab>.Data
+            ParraRoadmapTab: Paginator<TicketUserContent, ParraRoadmapTab>.Data
         ]()
 
         @Published var ticketPaginator: Paginator<
-            TicketContent,
+            TicketUserContent,
             ParraRoadmapTab
                 // Using IUO because this object requires referencing self in a closure
                 // in its init so we need all fields set. Post-init this should always
@@ -136,7 +139,7 @@ extension RoadmapWidget {
             }
         }
 
-        func updateTicketOnAllTabs(_ ticket: TicketContent) {
+        func updateTicketOnAllTabs(_ ticket: TicketUserContent) {
             let keys = ticketCache.keys
             for key in keys {
                 guard let new = ticketCache[key]?.replacingItem(ticket) else {
@@ -176,7 +179,7 @@ extension RoadmapWidget {
             if let cachedData = ticketCache[newTab] {
                 logger.debug("tab will change to cached tab: \(newTab)")
 
-                ticketPaginator = Paginator<TicketContent, ParraRoadmapTab>(
+                ticketPaginator = Paginator<TicketUserContent, ParraRoadmapTab>(
                     context: newTab,
                     data: cachedData,
                     pageFetcher: loadMoreTickets
@@ -184,14 +187,14 @@ extension RoadmapWidget {
             } else {
                 logger.debug("tab will change to new tab: \(newTab)")
 
-                let newPageData = Paginator<TicketContent, ParraRoadmapTab>
+                let newPageData = Paginator<TicketUserContent, ParraRoadmapTab>
                     .Data(
                         items: [],
                         placeholderItems: (0 ... 15)
-                            .map { _ in TicketContent.redacted }
+                            .map { _ in TicketUserContent.redacted }
                     )
 
-                ticketPaginator = Paginator<TicketContent, ParraRoadmapTab>(
+                ticketPaginator = Paginator<TicketUserContent, ParraRoadmapTab>(
                     context: newTab,
                     data: newPageData,
                     pageFetcher: loadMoreTickets
@@ -205,14 +208,14 @@ extension RoadmapWidget {
             _ limit: Int,
             _ offset: Int,
             _ tab: ParraRoadmapTab
-        ) async throws -> [TicketContent] {
+        ) async throws -> [TicketUserContent] {
             let response = try await networkManager.paginateTickets(
                 limit: limit,
                 offset: offset,
                 filter: tab.filter
             )
 
-            return response.data.map { TicketContent($0) }
+            return response.data.map { TicketUserContent($0) }
         }
     }
 }

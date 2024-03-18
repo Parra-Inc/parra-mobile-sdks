@@ -62,10 +62,15 @@ struct ChangelogWidget: Container {
 
                 list
                     .navigationDestination(
-                        for: AppReleaseContent.self
+                        for: AppReleaseStubContent.self
                     ) { release in
                         AppReleaseDetailView(
-                            content: release
+                            standalone: false,
+                            contentObserver: AppReleaseContentObserver(
+                                stub: release.originalStub,
+                                networkManager: contentObserver.networkManager
+                            ),
+                            style: style
                         )
                         .environment(config)
                         .environment(localBuilderConfig)
@@ -73,7 +78,6 @@ struct ChangelogWidget: Container {
                     }
             }
         }
-        .background(.green)
         .padding(style.padding)
         .applyBackground(style.background)
         .environment(config)
@@ -171,7 +175,7 @@ struct ChangelogWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<ChangelogWidget> { parra, componentFactory, builderConfig in
+    ParraContainerPreview<ChangelogWidget> { parra, componentFactory, _, builderConfig in
         ChangelogWidget(
             config: .default,
             style: .default(with: .default),
