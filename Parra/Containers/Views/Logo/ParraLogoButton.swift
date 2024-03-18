@@ -15,9 +15,9 @@ struct ParraLogoButton: View {
 
     var body: some View {
         Button {
-            parra.logEvent(.tap(element: "powered-by-parra"))
-
-            UIApplication.shared.open(Parra.Constants.parraWebRoot)
+            parra.openTrackedSiteLink(
+                medium: type.utmMedium
+            )
         } label: {
             ParraLogo(type: type)
         }
