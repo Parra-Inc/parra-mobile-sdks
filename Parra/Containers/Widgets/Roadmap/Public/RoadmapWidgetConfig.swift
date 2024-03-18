@@ -8,8 +8,26 @@
 
 import SwiftUI
 
-public class RoadmapWidgetConfig: ContainerConfig, Observable {
+public class RoadmapWidgetConfig: ContainerConfig {
     // MARK: - Lifecycle
+
+    required init() {
+        self.title = RoadmapWidgetConfig.default.title
+        self.addRequestButton = RoadmapWidgetConfig.default.addRequestButton
+        self.requestTitles = RoadmapWidgetConfig.default.requestTitles
+        self.requestDescriptions = RoadmapWidgetConfig.default
+            .requestDescriptions
+        self.voteCount = RoadmapWidgetConfig.default.voteCount
+        self.requestUpvoteButtons = RoadmapWidgetConfig.default
+            .requestUpvoteButtons
+        self.createdAt = RoadmapWidgetConfig.default.createdAt
+        self.addRequestSuccessToastTitle = RoadmapWidgetConfig.default
+            .addRequestSuccessToastTitle
+        self.addRequestSuccessToastSubtitle = RoadmapWidgetConfig.default
+            .addRequestSuccessToastSubtitle
+        self.emptyStateView = RoadmapWidgetConfig.default.emptyStateView
+        self.errorStateView = RoadmapWidgetConfig.default.errorStateView
+    }
 
     public init(
         title: LabelConfig,

@@ -227,7 +227,7 @@ struct RoadmapWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview { parra, componentFactory, builderConfig in
+    ParraContainerPreview<RoadmapWidget> { parra, componentFactory, config, builderConfig in
         RoadmapWidget(
             config: .default,
             style: .default(with: .default),

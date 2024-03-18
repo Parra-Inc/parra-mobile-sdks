@@ -8,16 +8,29 @@
 
 import SwiftUI
 
-public struct FeedbackFormWidgetConfig: ContainerConfig {
+public class FeedbackFormWidgetConfig: ContainerConfig {
     // MARK: - Lifecycle
 
+    required init() {
+        self.title = FeedbackFormWidgetConfig.default.title
+        self.description = FeedbackFormWidgetConfig.default.description
+        self.selectFields = FeedbackFormWidgetConfig.default.selectFields
+        self.textFields = FeedbackFormWidgetConfig.default.textFields
+        self.inputFields = FeedbackFormWidgetConfig.default.inputFields
+        self.submitButton = FeedbackFormWidgetConfig.default.submitButton
+    }
+
     public init(
-        title: LabelConfig,
-        description: LabelConfig,
-        selectFields: MenuConfig,
-        textFields: TextEditorConfig,
-        inputFields: TextInputConfig,
-        submitButton: TextButtonConfig
+        title: LabelConfig = FeedbackFormWidgetConfig.default.title,
+        description: LabelConfig = FeedbackFormWidgetConfig.default.description,
+        selectFields: MenuConfig = FeedbackFormWidgetConfig.default
+            .selectFields,
+        textFields: TextEditorConfig = FeedbackFormWidgetConfig.default
+            .textFields,
+        inputFields: TextInputConfig = FeedbackFormWidgetConfig.default
+            .inputFields,
+        submitButton: TextButtonConfig = FeedbackFormWidgetConfig.default
+            .submitButton
     ) {
         self.title = title
         self.description = description

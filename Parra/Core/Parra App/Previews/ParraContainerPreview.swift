@@ -11,20 +11,25 @@ import SwiftUI
 /// To be used internally to provide Parra related context for an entire scene.
 /// If you're building a component view, use ``ParraViewPreview`` instead.
 @MainActor
-struct ParraContainerPreview<Content>: View where Content: Container {
+struct ParraContainerPreview<ContainerType>: View
+    where ContainerType: Container
+{
     // MARK: - Lifecycle
 
     init(
         content: @escaping (
             _ parra: Parra,
             _ factory: ComponentFactory,
-            _ builderConfig: Content.BuilderConfig
-        ) -> Content,
-        builderConfig: Content.BuilderConfig = .init(),
+            _ config: ContainerType.Config,
+            _ builderConfig: ContainerType.BuilderConfig
+        ) -> any View,
+        config: ContainerType.Config = .init(),
+        builderConfig: ContainerType.BuilderConfig = .init(),
         theme: ParraTheme = .default
     ) {
         self.content = content
         self.options = [.theme(theme)]
+        self.config = config
         self.builderConfig = builderConfig
         self.factory = ComponentFactory(
             global: GlobalComponentAttributes(),
@@ -44,10 +49,11 @@ struct ParraContainerPreview<Content>: View where Content: Container {
             options: options,
             appDelegateType: ParraPreviewAppDelegate.self,
             sceneContent: { parra in
-                content(parra, factory, builderConfig)
+                AnyView(content(parra, factory, config, builderConfig))
             }
         )
         .environment(builderConfig)
+        .environment(config)
         .environmentObject(factory)
     }
 
@@ -56,10 +62,12 @@ struct ParraContainerPreview<Content>: View where Content: Container {
     @ViewBuilder private var content: (
         _ parra: Parra,
         _ factory: ComponentFactory,
-        _ builderConfig: Content.BuilderConfig
-    ) -> Content
+        _ config: ContainerType.Config,
+        _ builderConfig: ContainerType.BuilderConfig
+    ) -> any View
 
     private let factory: ComponentFactory
-    private let builderConfig: Content.BuilderConfig
+    private let config: ContainerType.Config
+    private let builderConfig: ContainerType.BuilderConfig
     private let options: [ParraConfigurationOption]
 }

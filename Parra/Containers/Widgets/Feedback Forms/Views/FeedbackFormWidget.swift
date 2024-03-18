@@ -178,7 +178,7 @@ struct FeedbackFormWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview { _, componentFactory, builderConfig in
+    ParraContainerPreview<FeedbackFormWidget> { _, componentFactory, _, builderConfig in
         FeedbackFormWidget(
             config: .default,
             style: .default(with: .default),

@@ -131,7 +131,7 @@ struct FeedbackCardWidget: Container {
                 .foregroundStyle(ParraTheme.default.palette.secondaryBackground)
                 .frame(width: geometry.size.width, height: geometry.size.height)
 
-            ParraContainerPreview { parra, componentFactory, builderConfig in
+            ParraContainerPreview<FeedbackCardWidget> { parra, componentFactory, _, builderConfig in
                 FeedbackCardWidget(
                     config: .default,
                     style: .default(with: componentFactory.theme),

@@ -8,8 +8,18 @@
 
 import SwiftUI
 
-public class FeedbackCardWidgetConfig: ContainerConfig, Observable {
+public class FeedbackCardWidgetConfig: ContainerConfig {
     // MARK: - Lifecycle
+
+    required init() {
+        self.backButton = FeedbackCardWidgetConfig.default.backButton
+        self.forwardButton = FeedbackCardWidgetConfig.default.forwardButton
+        self.titleLabel = FeedbackCardWidgetConfig.default.titleLabel
+        self.subtitleLabel = FeedbackCardWidgetConfig.default.subtitleLabel
+        self.booleanOptions = FeedbackCardWidgetConfig.default.booleanOptions
+        self.choiceOptions = FeedbackCardWidgetConfig.default.choiceOptions
+        self.checkboxOptions = FeedbackCardWidgetConfig.default.checkboxOptions
+    }
 
     public init(
         backButton: ImageButtonConfig,

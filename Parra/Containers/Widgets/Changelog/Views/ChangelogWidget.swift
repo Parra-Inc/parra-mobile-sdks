@@ -171,7 +171,7 @@ struct ChangelogWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview { parra, componentFactory, builderConfig in
+    ParraContainerPreview<ChangelogWidget> { parra, componentFactory, builderConfig in
         ChangelogWidget(
             config: .default,
             style: .default(with: .default),

@@ -8,4 +8,6 @@
 
 import SwiftUI
 
-protocol ContainerConfig {}
+protocol ContainerConfig: AnyObject, Observable {
+    init()
+}
