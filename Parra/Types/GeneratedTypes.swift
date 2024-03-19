@@ -2429,6 +2429,67 @@ public struct AppReleaseCollectionResponse: Codable, Equatable, Hashable {
     public let data: [AppReleaseStub]
 }
 
+public struct AppReleaseConfiguration: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        title: String,
+        hasOtherReleases: Bool
+    ) {
+        self.title = title
+        self.hasOtherReleases = hasOtherReleases
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case title
+        case hasOtherReleases
+    }
+
+    public let title: String
+    public let hasOtherReleases: Bool
+}
+
+public struct NewInstalledVersionInfo: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        configuration: AppReleaseConfiguration,
+        release: AppRelease
+    ) {
+        self.configuration = configuration
+        self.release = release
+    }
+
+    // MARK: - Public
+
+    public let configuration: AppReleaseConfiguration
+    public let release: AppRelease
+}
+
+public struct AppInfo: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        versionToken: String,
+        newInstalledVersionInfo: NewInstalledVersionInfo?
+    ) {
+        self.versionToken = versionToken
+        self.newInstalledVersionInfo = newInstalledVersionInfo
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case versionToken
+        case newInstalledVersionInfo
+    }
+
+    public let versionToken: String
+    public let newInstalledVersionInfo: NewInstalledVersionInfo?
+}
+
 public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 

@@ -41,6 +41,8 @@ extension ParraEndpoint {
                 object = AppRelease.validStates()[0]
             case .getPaginateReleases:
                 object = AppReleaseCollectionResponse.validStates()[0]
+            case .getAppInfo:
+                object = AppInfo.validStates()[0]
             }
         default:
             throw ParraError.generic(

@@ -37,6 +37,7 @@ enum ParraEndpoint {
 
     case getRelease(releaseId: String, tenantId: String, applicationId: String)
     case getPaginateReleases(tenantId: String, applicationId: String)
+    case getAppInfo(tenantId: String, applicationId: String)
 
     // MARK: - Internal
 
@@ -82,13 +83,15 @@ enum ParraEndpoint {
             return "tenants/\(tenantId)/applications/\(applicationId)/releases/\(releaseId)"
         case .getPaginateReleases(let tenantId, let applicationId):
             return "tenants/\(tenantId)/applications/\(applicationId)/releases"
+        case .getAppInfo(let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/app-info"
         }
     }
 
     var method: HttpMethod {
         switch self {
         case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
-             .getRelease, .getPaginateReleases:
+             .getRelease, .getPaginateReleases, .getAppInfo:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
@@ -140,6 +143,8 @@ enum ParraEndpoint {
             return "tenants/:tenantId/applications/:applicationId/releases/:releaseId"
         case .getPaginateReleases:
             return "tenants/:tenantId/applications/:applicationId/releases"
+        case .getAppInfo:
+            return "tenants/:tenantId/applications/:applicationId/app-info"
         }
     }
 }

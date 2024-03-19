@@ -24,13 +24,16 @@ extension ParraEndpoint: CaseIterable {
             .postVoteForTicket(tenantId: "", ticketId: ""),
             .deleteVoteForTicket(tenantId: "", ticketId: ""),
             .getRelease(releaseId: "", tenantId: "", applicationId: ""),
-            .getPaginateReleases(tenantId: "", applicationId: "")
+            .getPaginateReleases(tenantId: "", applicationId: ""),
+            .getAppInfo(tenantId: "", applicationId: "")
         ]
 
-        // We can't automatically synthesize CaseIterable conformance, so we're
-        // providing the list manually. We hard code the list then iterate through
-        // it to ensure compiler errors here if new cases are added. Performance doesn't
-        // matter since this only runs once, and only when running tests.
+        // We can't automatically synthesize CaseIterable conformance, due to
+        // this enum's cases having associated values, so we're providing the
+        // list manually. We hard code the list then iterate through it to
+        // ensure compiler errors here if new cases are added. Performance
+        // doesn't matter since this only runs once, and only when
+        // running tests.
 
         var finalCases = [ParraEndpoint]()
         for testCase in testCases {
@@ -39,7 +42,8 @@ extension ParraEndpoint: CaseIterable {
                  .postSubmitFeedbackForm, .postBulkAnswerQuestions,
                  .postBulkSubmitSessions, .postPushTokens,
                  .getRoadmap, .getPaginateTickets, .postVoteForTicket,
-                 .deleteVoteForTicket, .getRelease, .getPaginateReleases:
+                 .deleteVoteForTicket, .getRelease, .getPaginateReleases,
+                 .getAppInfo:
                 finalCases.append(testCase)
             }
         }
