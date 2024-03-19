@@ -66,7 +66,7 @@ struct FeedbackFormCustomLoadingSample: View {
                     formId: formId
                 )
             } catch {
-                errorMessage = error.localizedDescription
+                errorMessage = String(describing: error)
                 showError = true
                 formData = nil
             }
