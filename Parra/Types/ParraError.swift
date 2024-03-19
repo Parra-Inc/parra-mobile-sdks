@@ -25,6 +25,10 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
 
     // MARK: - Public
 
+    public var localizedDescription: String {
+        return description
+    }
+
     /// A simple error description string for cases where we don't have more complete control
     /// over the output formatting. Interally, we want to always use `Parra/ParraErrorWithExtra`
     /// in combination with the `ParraError/errorDescription` and ``ParraError/description``
@@ -45,11 +49,23 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         case .authenticationFailed(let error):
             return "\(baseMessage) Error: \(error)"
         case .networkError(let request, let response, let data):
+            let serverMessage = extractErrorMessage(from: data)
+
+            let message = """
+                \(baseMessage) (Note: URL params are omitted from output)
+                Status: \(response.statusCode)
+                Request URL: \(request.url?.absoluteString ?? "unknown")
+                Message: \(serverMessage ?? "unknow")
+                Request: \(request)
+                Response: \(response)
+                """
+
             #if DEBUG
             let dataString = String(data: data, encoding: .utf8) ?? "unknown"
-            return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)\nData: \(dataString)"
+
+            return "\(message)\nData: \(dataString)"
             #else
-            return "\(baseMessage)\nRequest: \(request)\nResponse: \(response)\nData: \(data.count) byte(s)"
+            return "\(message)\nData: \(data.count) byte(s)"
             #endif
         case .fileSystem(let path, let message):
             return "\(baseMessage)\nPath: \(path.relativeString)\nError: \(message)"
@@ -80,7 +96,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         case .authenticationFailed:
             return "Invoking the authentication provider passed to Parra.initialize() failed."
         case .networkError:
-            return "A network error occurred. URL params are omitted from output."
+            return "A network error occurred."
         case .jsonError(let string):
             return "JSON error occurred. Error: \(string)"
         case .fileSystem:
@@ -92,6 +108,23 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
 
             return "\(formattedError)"
         }
+    }
+
+    // MARK: - Private
+
+    private func extractErrorMessage(from body: Data?) -> String? {
+        guard let body else {
+            return nil
+        }
+
+        guard let decoded = try? JSONDecoder.parraDecoder.decode(
+            [String: String].self,
+            from: body
+        ) else {
+            return nil
+        }
+
+        return decoded["message"]
     }
 }
 
