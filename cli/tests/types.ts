@@ -14,7 +14,7 @@ const DEFAULT_XCODE_BUILD_OPTIONS: XcodeBuildOptions = {
   configuration: 'Debug',
   scheme: 'Parra',
   project: 'Parra.xcodeproj',
-  destination: 'platform=iOS Simulator,name=iPhone 15,OS=17.2',
+  destination: 'platform=iOS Simulator,name=iPhone 15,OS=17.4',
   derivedDataPath: 'build/unit-tests/derivedData',
 };
 

@@ -6,7 +6,7 @@
 //  Copyright © 2022 Parra, Inc. All rights reserved.
 //
 
-import Parra
+@testable import Parra
 import XCTest
 
 final class ParraCredentialTests: XCTestCase {
@@ -18,7 +18,7 @@ final class ParraCredentialTests: XCTestCase {
     }
 
     func testDecodesFromAccessToken() throws {
-        let _ = try JSONDecoder().decode(
+        let _ = try JSONDecoder.parraDecoder.decode(
             ParraCredential.self,
             from: "{\"access_token\":\"something\"}".data(using: .utf8)!
         )
