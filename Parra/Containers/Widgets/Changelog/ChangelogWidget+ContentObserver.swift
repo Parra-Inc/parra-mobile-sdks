@@ -75,19 +75,20 @@ extension ChangelogWidget {
             self.networkManager = initialParams.networkManager
             let appReleaseCollection = initialParams.appReleaseCollection
 
-            let emptyStateViewContent = EmptyStateContent( // TODO: this
+            let emptyStateViewContent = EmptyStateContent(
                 title: LabelContent(
-                    text: "No tickets yet"
+                    text: "No new releases yet"
                 ),
                 subtitle: LabelContent(
-                    text: "This is your opportunity to be the first 👀"
-                )
+                    text: "Stay tuned for future updates!"
+                ),
+                icon: .symbol("text.append")
             )
 
-            let errorStateViewContent = EmptyStateContent( // TODO: this
+            let errorStateViewContent = EmptyStateContent(
                 title: EmptyStateContent.errorGeneric.title,
                 subtitle: LabelContent(
-                    text: "Failed to load roadmap. Please try again later."
+                    text: "Failed to load changelog. Please try again later."
                 ),
                 icon: .symbol("network.slash", .monochrome)
             )
