@@ -55,7 +55,7 @@ public extension Logger {
 
         // If the user provided a custom message, use it. Otherwise use the message that was attached to the
         // start marker
-        let messageProvider = createMessageProvider(
+        let messageProvider = createMessage(
             for: message ?? startMarker.message.produceLog().0,
             with: timeInterval,
             in: format
@@ -120,7 +120,7 @@ public extension Logger {
 
         // If the user provided a custom message, use it. Otherwise use the message that was attached to the
         // start marker
-        let messageProvider = Logger.createMessageProvider(
+        let messageProvider = Logger.createMessage(
             for: message ?? startMarker.message.produceLog().0,
             with: timeInterval,
             in: format
@@ -139,41 +139,39 @@ public extension Logger {
         )
     }
 
-    private static func createMessageProvider(
+    private static func createMessage(
         for eventName: String,
         with timeInterval: TimeInterval,
         in format: ParraLogMeasurementFormat
-    ) -> () -> String {
-        return {
-            if timeInterval < 60 {
-                let formatted = timeInterval
-                    .formatted(.number.precision(.fractionLength(4)))
-                return "\(formatted) second(s)"
-            }
-
-            var formatter = Parra.InternalConstants.Formatters
-                .dateComponentsFormatter
-
-            formatter.formattingContext = .middleOfSentence
-            formatter.includesApproximationPhrase = false
-            formatter.unitsStyle = .full
-            formatter.allowsFractionalUnits = true
-
-            switch format {
-            case .seconds:
-                formatter.allowedUnits = [.second]
-            case .pretty:
-                formatter.allowedUnits = [.second, .minute, .hour]
-                formatter.collapsesLargestUnit = true
-            case .custom(let customFormatter):
-                formatter = customFormatter
-            }
-
-            let formattedInterval = formatter.string(
-                from: timeInterval
-            ) ?? "\(timeInterval) second(s)"
-
-            return "\(eventName) took \(formattedInterval)"
+    ) -> String {
+        if timeInterval < 60 {
+            let formatted = timeInterval
+                .formatted(.number.precision(.fractionLength(4)))
+            return "\(formatted) second(s)"
         }
+
+        var formatter = Parra.InternalConstants.Formatters
+            .dateComponentsFormatter
+
+        formatter.formattingContext = .middleOfSentence
+        formatter.includesApproximationPhrase = false
+        formatter.unitsStyle = .full
+        formatter.allowsFractionalUnits = true
+
+        switch format {
+        case .seconds:
+            formatter.allowedUnits = [.second]
+        case .pretty:
+            formatter.allowedUnits = [.second, .minute, .hour]
+            formatter.collapsesLargestUnit = true
+        case .custom(let customFormatter):
+            formatter = customFormatter
+        }
+
+        let formattedInterval = formatter.string(
+            from: timeInterval
+        ) ?? "\(timeInterval) second(s)"
+
+        return "\(eventName) took \(formattedInterval)"
     }
 }

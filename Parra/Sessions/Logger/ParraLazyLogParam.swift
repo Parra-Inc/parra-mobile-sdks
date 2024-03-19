@@ -10,15 +10,15 @@ import Foundation
 
 @usableFromInline
 enum ParraLazyLogParam {
-    case string(() -> String)
+    case string(String)
     case error(() -> Error)
 
     // MARK: - Internal
 
     func produceLog() -> (String, [String: Any]?) {
         switch self {
-        case .string(let messageProvider):
-            return (messageProvider(), nil)
+        case .string(let message):
+            return (message, nil)
         case .error(let errorProvider):
             let errorWithExtra = LoggerHelpers.extractMessageAndExtra(
                 from: errorProvider()

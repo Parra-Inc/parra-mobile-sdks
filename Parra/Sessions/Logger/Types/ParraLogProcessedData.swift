@@ -16,8 +16,8 @@ struct ParraLogProcessedData {
         let errorWithExtra: ParraErrorWithExtra?
 
         switch logData.message {
-        case .string(let messageProvider):
-            message = messageProvider()
+        case .string(let m):
+            message = m
 
             // If a message string is provided, an extra error may be included as well.
             // This field is not present when the message type is error.
