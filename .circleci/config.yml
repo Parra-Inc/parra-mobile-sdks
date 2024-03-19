@@ -88,7 +88,7 @@ commands:
 executors:
   macos-m1-test-runner:
     macos:
-      xcode: 15.2.0
+      xcode: 15.3.0
     resource_class: macos.m1.medium.gen1
     environment:
       PARRA_TEST_DERIVED_DATA_DIRECTORY: build/unit-tests/derivedData

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -2867,7 +2867,7 @@
 				};
 			};
 			buildConfigurationList = 00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra" */;
-			compatibilityVersion = "Xcode 15.0";
+			compatibilityVersion = "Xcode 15.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -2875,6 +2875,7 @@
 				Base,
 			);
 			mainGroup = 00DECFEC274C69F800DAF301;
+			minimizedProjectReferenceProxies = 1;
 			productRefGroup = 00DECFF6274C69F800DAF301 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
