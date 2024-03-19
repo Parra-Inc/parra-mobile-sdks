@@ -25,6 +25,8 @@ struct FeedbackFormCustomLoadingSample: View {
     @State var errorMessage: String?
     @State var isLoading = false
 
+    @State var showError = false
+
     @Environment(Parra.self) var parra // #1
 
     var body: some View {
@@ -43,6 +45,11 @@ struct FeedbackFormCustomLoadingSample: View {
             .disabled(isLoading)
         }
         .presentParraFeedbackForm(with: $formData) // #4
+        .alert("Error", isPresented: $showError, actions: {
+            EmptyView()
+        }, message: {
+            Text(errorMessage ?? "no error set")
+        })
     }
 
     // MARK: - Private
@@ -60,6 +67,7 @@ struct FeedbackFormCustomLoadingSample: View {
                 )
             } catch {
                 errorMessage = error.localizedDescription
+                showError = true
                 formData = nil
             }
 
