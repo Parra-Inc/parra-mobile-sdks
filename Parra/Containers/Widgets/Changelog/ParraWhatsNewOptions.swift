@@ -9,8 +9,6 @@
 import Foundation
 
 public struct ParraWhatsNewOptions {
-    // MARK: - Public
-
     public enum PresentationStyle {
         case toast
 
@@ -33,13 +31,11 @@ public struct ParraWhatsNewOptions {
         case manual
     }
 
-    // MARK: - Internal
-
-    static let `default` = ParraWhatsNewOptions(
+    public static let `default` = ParraWhatsNewOptions(
         presentationStyle: .modal,
         presentationMode: .automatic
     )
 
-    let presentationStyle: PresentationStyle
-    let presentationMode: PresentationMode
+    public let presentationStyle: PresentationStyle
+    public let presentationMode: PresentationMode
 }
