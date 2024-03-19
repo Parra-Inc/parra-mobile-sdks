@@ -40,6 +40,6 @@ public struct ParraCredential: Codable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case token
-        case accessToken = "access_token"
+        case accessToken
     }
 }
