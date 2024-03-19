@@ -200,7 +200,7 @@ class Paginator<Item, Context>: ObservableObject
             // first page.
             do {
                 logger.trace(
-                    "Fetching page size: \(pageSize) from offset: \(offset)."
+                    "Fetching page size: \(self.pageSize) from offset: \(offset)."
                 )
 
                 let nextPage = try await pageFetcher(pageSize, offset, context)
