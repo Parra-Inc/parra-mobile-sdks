@@ -105,9 +105,9 @@
 		00374D6D2BA1413C0028EDA8 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00374D6C2BA1413C0028EDA8 /* SwiftUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		00374D6F2BA141400028EDA8 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00374D6E2BA141400028EDA8 /* Combine.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		00374D702BA1414C0028EDA8 /* Parra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; };
-		00374D712BA1414C0028EDA8 /* Parra.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		00374D712BA1414C0028EDA8 /* Parra.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		00374D732BA141550028EDA8 /* Parra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; };
-		00374D742BA141550028EDA8 /* Parra.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		00374D742BA141550028EDA8 /* Parra.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 001B7AF227DE3A7600DEEECD /* Parra.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		00374D792BA1E8540028EDA8 /* EmptyStateAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D782BA1E8540028EDA8 /* EmptyStateAttributes.swift */; };
 		00374D7B2BA1E9740028EDA8 /* EmptyStateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D7A2BA1E9740028EDA8 /* EmptyStateConfig.swift */; };
 		00374D7D2BA1EC3E0028EDA8 /* EmptyStateContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00374D7C2BA1EC3E0028EDA8 /* EmptyStateContent.swift */; };
@@ -2849,7 +2849,7 @@
 				BuildIndependentTargetsInParallel = 1;
 				CLASSPREFIX = PAR;
 				LastSwiftUpdateCheck = 1520;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1530;
 				ORGANIZATIONNAME = "Parra, Inc.";
 				TargetAttributes = {
 					001B7AF127DE3A7600DEEECD = {
@@ -3502,7 +3502,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_COMPLETION_HANDLER_MISUSE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 10;
 				DEFINES_MODULE = YES;
@@ -3550,7 +3550,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_COMPLETION_HANDLER_MISUSE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 10;
 				DEFINES_MODULE = YES;
