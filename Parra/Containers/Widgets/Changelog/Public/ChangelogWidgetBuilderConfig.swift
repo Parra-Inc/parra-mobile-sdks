@@ -19,9 +19,9 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.releasePreviewCreatedAts = nil
         self.releaseDetailWhatsNew = nil
         self.releaseDetailTitle = nil
-        self.releaseDetailVersion = nil
         self.releaseDetailDescription = nil
         self.releaseDetailSectionTitle = nil
+        self.releaseDetailSectionItem = nil
         self.emptyStateView = nil
         self.errorStateView = nil
     }
@@ -69,12 +69,6 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
             LabelContent,
             LabelAttributes
         >? = nil,
-        releaseDetailVersionBuilder: LocalComponentBuilder.Factory<
-            Text,
-            LabelConfig,
-            LabelContent,
-            LabelAttributes
-        >? = nil,
         releaseDetailDescriptionBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
@@ -82,6 +76,12 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
             LabelAttributes
         >? = nil,
         releaseDetailSectionTitleBuilder: LocalComponentBuilder.Factory<
+            Text,
+            LabelConfig,
+            LabelContent,
+            LabelAttributes
+        >? = nil,
+        releaseDetailSectionItemBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
@@ -107,9 +107,9 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.releasePreviewCreatedAts = releasePreviewCreatedAtsBuilder
         self.releaseDetailWhatsNew = releaseDetailWhatsNewBuilder
         self.releaseDetailTitle = releaseDetailTitleBuilder
-        self.releaseDetailVersion = releaseDetailVersionBuilder
         self.releaseDetailDescription = releaseDetailDescriptionBuilder
         self.releaseDetailSectionTitle = releaseDetailSectionTitleBuilder
+        self.releaseDetailSectionItem = releaseDetailSectionItemBuilder
         self.emptyStateView = emptyStateViewBuilder
         self.errorStateView = errorStateViewBuilder
     }
@@ -158,12 +158,6 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         LabelContent,
         LabelAttributes
     >?
-    public let releaseDetailVersion: LocalComponentBuilder.Factory<
-        Text,
-        LabelConfig,
-        LabelContent,
-        LabelAttributes
-    >?
     public let releaseDetailDescription: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
@@ -171,6 +165,12 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         LabelAttributes
     >?
     public let releaseDetailSectionTitle: LocalComponentBuilder.Factory<
+        Text,
+        LabelConfig,
+        LabelContent,
+        LabelAttributes
+    >?
+    public let releaseDetailSectionItem: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,

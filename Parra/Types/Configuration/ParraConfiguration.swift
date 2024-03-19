@@ -15,12 +15,14 @@ public struct ParraConfiguration {
         loggerOptions: ParraLoggerOptions,
         pushNotificationsEnabled: Bool,
         theme: ParraTheme,
-        globalComponentAttributes: GlobalComponentAttributes
+        globalComponentAttributes: GlobalComponentAttributes,
+        whatsNewOptions: ParraWhatsNewOptions
     ) {
         self.loggerOptions = loggerOptions
         self.pushNotificationsEnabled = pushNotificationsEnabled
         self.theme = theme
         self.globalComponentAttributes = globalComponentAttributes
+        self.whatsNewOptions = whatsNewOptions
     }
 
     init(options: [ParraConfigurationOption]) {
@@ -29,6 +31,7 @@ public struct ParraConfiguration {
             .pushNotificationsEnabled
         var theme = ParraTheme.default
         var globalComponentAttributes = GlobalComponentAttributes()
+        var whatsNewOptions = ParraWhatsNewOptions.default
 
         for option in options {
             switch option {
@@ -42,6 +45,8 @@ public struct ParraConfiguration {
                 theme = userTheme
             case .globalComponentAttributes(let attributes):
                 globalComponentAttributes = attributes
+            case .whatsNew(let whatsNew):
+                whatsNewOptions = whatsNew
             }
         }
 
@@ -49,6 +54,7 @@ public struct ParraConfiguration {
         self.pushNotificationsEnabled = pushNotificationsEnabled
         self.theme = theme
         self.globalComponentAttributes = globalComponentAttributes
+        self.whatsNewOptions = whatsNewOptions
     }
 
     // MARK: - Public
@@ -59,13 +65,15 @@ public struct ParraConfiguration {
         ),
         pushNotificationsEnabled: false,
         theme: .default,
-        globalComponentAttributes: GlobalComponentAttributes()
+        globalComponentAttributes: GlobalComponentAttributes(),
+        whatsNewOptions: .default
     )
 
     public let loggerOptions: ParraLoggerOptions
     public let pushNotificationsEnabled: Bool
     public internal(set) var theme: ParraTheme
     public private(set) var globalComponentAttributes: GlobalComponentAttributes
+    public let whatsNewOptions: ParraWhatsNewOptions
 
     // MARK: - Internal
 

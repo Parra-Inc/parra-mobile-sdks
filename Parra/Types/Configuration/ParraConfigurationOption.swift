@@ -22,7 +22,12 @@ public enum ParraConfigurationOption {
     /// The theme that will be used for an UI components rendered by Parra.
     case theme(_ theme: ParraTheme)
 
+    /// Global defaults to use for attributes for base Parra components. This
+    /// allows for broad customization of how buttons/labels/etc look which will
+    /// be built upon by builder factories for specific Widgets later.
     case globalComponentAttributes(
         _ globalComponentAttributes: GlobalComponentAttributes
     )
+
+    case whatsNew(ParraWhatsNewOptions)
 }

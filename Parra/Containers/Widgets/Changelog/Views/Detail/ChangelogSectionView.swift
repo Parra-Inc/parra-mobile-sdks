@@ -8,23 +8,6 @@
 
 import SwiftUI
 
-struct ChangelogItem: View {
-    let content: TicketStubContent
-
-    @Environment(ChangelogWidgetConfig.self) var config
-    @Environment(ChangelogWidgetBuilderConfig.self) var builderConfig
-    @EnvironmentObject var componentFactory: ComponentFactory
-
-    var body: some View {
-        HStack {
-//            Text(content.ticketNumber)
-            Text(content.title.text)
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-}
-
 struct ChangelogSectionView: View {
     let content: AppReleaseSectionContent
 
@@ -32,19 +15,27 @@ struct ChangelogSectionView: View {
     @Environment(ChangelogWidgetBuilderConfig.self) var builderConfig
     @EnvironmentObject var componentFactory: ComponentFactory
 
+    var combinedText: String {
+        content.items.map { item in
+            item.title.text
+        }.joined(separator: "\n")
+    }
+
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             componentFactory.buildLabel(
-                config: config.releaseDetailTitle,
+                config: config.releaseDetailSectionTitle,
                 content: content.title,
                 suppliedBuilder: builderConfig.releaseDetailSectionTitle
             )
 
-            ForEach(content.items) { item in
-                VStack {
-                    ChangelogItem(content: item)
-                }
-            }
+            componentFactory.buildLabel(
+                config: config.releaseDetailSectionItem,
+                content: LabelContent(text: combinedText),
+                suppliedBuilder: builderConfig.releaseDetailSectionItem
+            )
+            .multilineTextAlignment(.leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -52,10 +43,25 @@ struct ChangelogSectionView: View {
 
 #Preview {
     ParraContainerPreview<ChangelogWidget> { _, _, _, _ in
-        ChangelogSectionView(
-            content: AppReleaseSectionContent(
-                AppReleaseSection.validStates()[0]
+        VStack(spacing: 24) {
+            Spacer()
+            ChangelogSectionView(
+                content: AppReleaseSectionContent(
+                    AppReleaseSection.validStates()[0]
+                )
             )
-        )
+            ChangelogSectionView(
+                content: AppReleaseSectionContent(
+                    AppReleaseSection.validStates()[1]
+                )
+            )
+            ChangelogSectionView(
+                content: AppReleaseSectionContent(
+                    AppReleaseSection.validStates()[2]
+                )
+            )
+            Spacer()
+        }
+        .safeAreaPadding()
     }
 }

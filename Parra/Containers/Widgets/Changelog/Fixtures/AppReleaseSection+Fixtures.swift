@@ -66,10 +66,10 @@ private let fakeEnhancements = [
 
 extension AppReleaseSection: ParraFixture {
     static func validStates() -> [AppReleaseSection] {
-        let features = fakeFeatures.shuffled().prefix(Int.random(in: 0 ... 4))
-        let bugs = fakeBugs.shuffled().prefix(Int.random(in: 0 ... 4))
+        let features = fakeFeatures.shuffled().prefix(Int.random(in: 1 ... 5))
+        let bugs = fakeBugs.shuffled().prefix(Int.random(in: 1 ... 5))
         let enhancements = fakeEnhancements.shuffled()
-            .prefix(Int.random(in: 0 ... 4))
+            .prefix(Int.random(in: 1 ... 5))
 
         return [
             AppReleaseSection(
@@ -108,6 +108,15 @@ extension AppReleaseSection: ParraFixture {
         let ticketId = UUID().uuidString
         let tenantId = UUID().uuidString
 
+        let icon: TicketIcon? = if let emoji = String.randomEmoji() {
+            TicketIcon(
+                type: .emoji,
+                value: emoji
+            )
+        } else {
+            nil
+        }
+
         return AppReleaseItem(
             id: UUID().uuidString,
             createdAt: createdAt,
@@ -134,7 +143,7 @@ extension AppReleaseSection: ParraFixture {
                     .daysFromNow(TimeInterval(Int.random(in: 0 ... 100))),
                 estimatedCompletionDate: .now
                     .daysFromNow(TimeInterval(Int.random(in: 0 ... 100))),
-                icon: TicketIcon(type: .emoji, value: "🚀"),
+                icon: icon,
                 ticketNumber: "PAR-2349",
                 tenantId: tenantId,
                 voteCount: Int.random(in: 0 ... 12_345),

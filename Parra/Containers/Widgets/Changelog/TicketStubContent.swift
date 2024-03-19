@@ -15,20 +15,17 @@ struct TicketStubContent: Identifiable, Hashable {
         _ ticket: TicketStub
     ) {
         self.id = ticket.id
-        self.ticketNumber = ticket.ticketNumber
-        self.createdAt = LabelContent(
-            text: ticket.createdAt.timeAgo(
-                dateTimeStyle: .numeric
-            )
-        )
-        self.type = ticket.type
-        self.title = LabelContent(text: ticket.title)
-        self.description = if let description = ticket.description {
-            LabelContent(text: description)
+
+        let titleText = ticket.shortTitle ?? ticket.title
+        let fullTitleText: String = if let icon = ticket.icon,
+                                       case .emoji = icon.type
+        {
+            "\(icon.value) \(titleText)"
         } else {
-            nil
+            titleText
         }
-        self.status = ticket.status
+
+        self.title = LabelContent(text: "\u{2022} \(fullTitleText)")
     }
 
     // MARK: - Internal
@@ -63,10 +60,5 @@ struct TicketStubContent: Identifiable, Hashable {
     }
 
     let id: String
-    let ticketNumber: String
-    let createdAt: LabelContent
-    let type: TicketType
     let title: LabelContent
-    let description: LabelContent?
-    let status: TicketStatus
 }

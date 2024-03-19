@@ -21,12 +21,13 @@ struct AppReleaseDetailView: View {
     @EnvironmentObject var componentFactory: ComponentFactory
 
     var sections: some View {
-        LazyVStack(alignment: .leading, spacing: 12) {
+        LazyVStack(alignment: .leading, spacing: 24) {
             ForEach(contentObserver.content.sections) { section in
                 ChangelogSectionView(content: section)
             }
             .disabled(contentObserver.isLoading)
         }
+        .padding(.top, 6)
         .redacted(
             when: contentObserver.isLoading
         )
