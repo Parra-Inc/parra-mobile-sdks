@@ -25,14 +25,12 @@ struct FeedbackFormCustomLoadingSample: View {
     @State var errorMessage: String?
     @State var isLoading = false
 
-    @State var showError = false
-
     @Environment(Parra.self) var parra // #1
 
     var body: some View {
         VStack {
             Button(action: {
-                loadFeedbackForm(with: "c15256c2-d21d-4d9f-85ac-1d4655416a95")
+                loadFeedbackForm(with: "65e6186e-365c-40cf-99d8-dadde255f4f5")
             }, label: {
                 HStack(spacing: 12) {
                     Text("Fetch feedback form")
@@ -45,11 +43,6 @@ struct FeedbackFormCustomLoadingSample: View {
             .disabled(isLoading)
         }
         .presentParraFeedbackForm(with: $formData) // #4
-        .alert("Error", isPresented: $showError, actions: {
-            EmptyView()
-        }, message: {
-            Text(errorMessage ?? "no error set")
-        })
     }
 
     // MARK: - Private
@@ -57,9 +50,9 @@ struct FeedbackFormCustomLoadingSample: View {
     private func loadFeedbackForm(
         with formId: String
     ) {
-        Task {
-            isLoading = true
+        isLoading = true
 
+        Task {
             do {
                 errorMessage = nil
                 formData = try await parra.feedback.fetchFeedbackForm( // #2
@@ -67,7 +60,6 @@ struct FeedbackFormCustomLoadingSample: View {
                 )
             } catch {
                 errorMessage = String(describing: error)
-                showError = true
                 formData = nil
             }
 
