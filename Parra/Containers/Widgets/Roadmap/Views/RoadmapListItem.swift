@@ -13,8 +13,40 @@ struct RoadmapListItem: View {
 
     let ticketContent: TicketUserContent
 
-    var body: some View {
+    @ViewBuilder var info: some View {
         let palette = themeObserver.theme.palette
+
+        HStack(alignment: .center, spacing: 4) {
+            RoadmapTicketTypeBadge(
+                type: ticketContent.type,
+                size: .md
+            )
+
+            // Only display the status badge on the in progress tab.
+            if ticketContent.displayStatus == .inProgress {
+                RoadmapTicketDisplayStatusBadge(
+                    displayStatus: ticketContent.displayStatus,
+                    title: ticketContent.statusTitle,
+                    size: .md
+                )
+            }
+
+            Spacer()
+
+            componentFactory.buildLabel(
+                config: config.createdAt,
+                content: ticketContent.createdAt,
+                suppliedBuilder: builderConfig.createdAtLabel,
+                localAttributes: LabelAttributes(
+                    fontColor: palette.secondaryText
+                )
+            )
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    var body: some View {
+        let theme = themeObserver.theme
         let alignment: VerticalAlignment = if ticketContent.description == nil {
             .center
         } else {
@@ -48,30 +80,7 @@ struct RoadmapListItem: View {
                         .multilineTextAlignment(.leading)
                     }
 
-                    HStack(alignment: .center, spacing: 4) {
-                        RoadmapTicketTypeBadge(
-                            type: ticketContent.type,
-                            size: .md
-                        )
-
-                        RoadmapTicketDisplayStatusBadge(
-                            displayStatus: ticketContent.displayStatus,
-                            title: ticketContent.statusTitle,
-                            size: .md
-                        )
-
-                        Spacer()
-
-                        componentFactory.buildLabel(
-                            config: config.createdAt,
-                            content: ticketContent.createdAt,
-                            suppliedBuilder: builderConfig.createdAtLabel,
-                            localAttributes: LabelAttributes(
-                                fontColor: palette.secondaryText
-                            )
-                        )
-                    }
-                    .frame(maxWidth: .infinity)
+                    info
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -79,8 +88,8 @@ struct RoadmapListItem: View {
         .padding(.vertical, 16)
         .padding(.leading, ticketContent.votingEnabled ? 8 : 20)
         .padding(.trailing, 16)
-        .applyBackground(palette.secondaryBackground)
-        .applyCornerRadii(size: .lg, from: themeObserver.theme)
+        .applyBackground(theme.palette.secondaryBackground)
+        .applyCornerRadii(size: .lg, from: theme)
     }
 
     // MARK: - Private
