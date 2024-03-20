@@ -484,6 +484,9 @@ final class ParraNetworkManager: NetworkManagerType {
             request.setValue(for: .contentType(.applicationJson))
         }
 
+        // Important to be called for every HTTP request. All requests must
+        // include certain tracking headers, but only specific endpoints will be
+        // sent more extensive context about the device.
         addTrackingHeaders(toRequest: &request, for: endpoint)
 
         let headers = request.allHTTPHeaderFields ?? [:]
@@ -498,11 +501,11 @@ final class ParraNetworkManager: NetworkManagerType {
         toRequest request: inout URLRequest,
         for endpoint: ParraEndpoint
     ) {
-        guard endpoint.isTrackingEnabled else {
-            return
+        let headers = if endpoint.isTrackingEnabled {
+            ParraHeader.trackingHeaderDictionary
+        } else {
+            ParraHeader.commonHeaderDictionary
         }
-
-        let headers = ParraHeader.trackingHeaderDictionary
 
         logger
             .trace(

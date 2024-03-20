@@ -13,6 +13,8 @@ import UIKit
 enum ParraHeader {
     case applicationId(String)
     case applicationLocale
+    case applicationBundleVersion
+    case applicationBundleVersionShort
     case applicationBundleId
     case debug
     case device
@@ -29,27 +31,33 @@ enum ParraHeader {
 
     // MARK: - Internal
 
-    static let parraHeaderPrefix = "X-PARRA"
+    static let parraHeaderPrefix = "PARRA"
+
+    // Should be included on **every** HTTP request
+    static var commonHeaderDictionary: [String: String] {
+        return headerDictionary(
+            for: [
+                .applicationLocale, .applicationBundleId,
+                .applicationBundleVersion, .applicationBundleVersion, .debug,
+                .device, .deviceId, .deviceLocale,
+                .deviceManufacturer, .deviceTimeZoneAbbreviation,
+                .deviceTimeZoneOffset, .platform,
+                .platformAgent, .platformSdkVersion, .platformVersion
+            ]
+        )
+    }
 
     static var trackingHeaderDictionary: [String: String] {
-        let keys: [ParraHeader] = [
-            .applicationLocale, .applicationBundleId, .debug, .device,
-            .deviceId,
-            .deviceLocale,
-            .deviceManufacturer, .deviceTimeZoneAbbreviation,
-            .deviceTimeZoneOffset, .platform,
-            .platformAgent, .platformSdkVersion, .platformVersion
-        ]
-
-        var headers = [String: String]()
-
-        for key in keys {
-            if let value = key.currentValue {
-                headers[key.prefixedName] = value
-            }
-        }
-
-        return headers
+        return headerDictionary(
+            for: [
+                .applicationLocale, .applicationBundleId,
+                .applicationBundleVersion, .applicationBundleVersion, .debug,
+                .device, .deviceId, .deviceLocale,
+                .deviceManufacturer, .deviceTimeZoneAbbreviation,
+                .deviceTimeZoneOffset, .platform,
+                .platformAgent, .platformSdkVersion, .platformVersion
+            ]
+        )
     }
 
     var prefixedName: String {
@@ -64,6 +72,11 @@ enum ParraHeader {
             return Locale.preferredLanguages.first
         case .applicationBundleId:
             return Bundle.main.bundleIdentifier
+        case .applicationBundleVersion:
+            return Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+        case .applicationBundleVersionShort:
+            return Bundle.main
+                .infoDictionary?["CFBundleShortVersionString"] as? String
         case .debug:
             #if DEBUG
             return "1"
@@ -95,6 +108,20 @@ enum ParraHeader {
         }
     }
 
+    static func headerDictionary(
+        for headers: [ParraHeader]
+    ) -> [String: String] {
+        var headerDictionary = [String: String]()
+
+        for header in headers {
+            if let value = header.currentValue {
+                headerDictionary[header.prefixedName] = value
+            }
+        }
+
+        return headerDictionary
+    }
+
     // MARK: - Private
 
     private var name: String {
@@ -105,6 +132,10 @@ enum ParraHeader {
             return "APPLICATION-ID"
         case .applicationBundleId:
             return "APPLICATION-BUNDLE-ID"
+        case .applicationBundleVersion:
+            return "APPLICATION-BUNDLE-VERSION"
+        case .applicationBundleVersionShort:
+            return "APPLICATION-BUNDLE-VERSION-SHORT"
         case .debug:
             return "DEBUG"
         case .device:
