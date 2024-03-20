@@ -147,7 +147,7 @@ class ParraNetworkManagerTests: MockedParraTestCase {
 
                 return (request.allHTTPHeaderFields ?? [:]).keys
                     .contains { headerKey in
-                        return headerKey == "X-PARRA-PLATFORM-SDK-VERSION"
+                        return headerKey == "PARRA-PLATFORM-SDK-VERSION"
                     }
             }
 

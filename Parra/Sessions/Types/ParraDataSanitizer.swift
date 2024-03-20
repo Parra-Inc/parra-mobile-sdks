@@ -28,12 +28,12 @@ enum ParraDataSanitizer {
                 "PROXY-AUTHORIZATION",
                 "REMOTE-ADDR",
                 "SET-COOKIE",
-                "X-API-KEY",
-                "X-CSRF-TOKEN",
-                "X-CSRFTOKEN",
-                "X-FORWARDED-FOR",
-                "X-REAL-IP",
-                "X-XSRF-TOKEN"
+                "API-KEY",
+                "CSRF-TOKEN",
+                "CSRFTOKEN",
+                "FORWARDED-FOR",
+                "REAL-IP",
+                "XSRF-TOKEN"
             ]
         )
     }
