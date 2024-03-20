@@ -102,8 +102,8 @@ public class Parra: Observable {
     // MARK: - Statics
 
     /// Only change this if you change the module name in the Xcode project.
-    nonisolated static let moduleName = "Parra"
-    nonisolated static let errorDomain = "com.parra.error"
+    static let moduleName = "Parra"
+    static let errorDomain = "com.parra.error"
 
     private(set) var configuration: ParraConfiguration
 
@@ -118,14 +118,14 @@ public class Parra: Observable {
 
     private(set) var globalComponentFactory: ComponentFactory
 
-    private(set) nonisolated lazy var eventPrefix =
+    private(set) lazy var eventPrefix =
         "parra:\(Self.moduleName.lowercased())"
 
-    nonisolated static func bundle() -> Bundle {
+    static func bundle() -> Bundle {
         return Bundle(for: self as AnyClass)
     }
 
-    nonisolated static func libraryVersion() -> String {
+    static func libraryVersion() -> String {
         return bundle()
             .infoDictionary?["CFBundleShortVersionString"] as? String ??
             "unknown"

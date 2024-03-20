@@ -12,7 +12,7 @@ extension View {
     @ViewBuilder
     func withContent<Content>(
         content: Content?,
-        renderer: (_ content: Content) -> some View
+        @ViewBuilder renderer: (_ content: Content) -> some View
     ) -> some View {
         if let content {
             renderer(content)
@@ -23,7 +23,7 @@ extension View {
     func withContent<Content, Style>(
         content: Content?,
         style: Style?,
-        renderer: (
+        @ViewBuilder renderer: (
             _ content: Content,
             _ style: Style
         ) -> some View

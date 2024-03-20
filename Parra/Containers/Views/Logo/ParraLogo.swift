@@ -10,6 +10,12 @@ import SwiftUI
 import UIKit
 
 struct ParraLogo: View {
+    // MARK: - Lifecycle
+
+    init(type: ParraLogoType) {
+        self.type = type
+    }
+
     // MARK: - Internal
 
     var type: ParraLogoType

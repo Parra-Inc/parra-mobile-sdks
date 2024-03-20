@@ -58,33 +58,61 @@ struct AppReleaseDetailView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20.0) {
-                    header
+        let content = contentObserver.content
 
-                    withContent(
-                        content: contentObserver.content
-                            .description
-                    ) { content in
-                        componentFactory.buildLabel(
-                            config: config.releaseDetailDescription,
-                            content: content,
-                            suppliedBuilder: builderConfig
-                                .releaseDetailDescription
-                        )
+        GeometryReader { geometry in
+            let width = geometry.size.width
+                - style.contentPadding.leading
+                - style.contentPadding.trailing
+
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20.0) {
+                        header
+
+                        withContent(
+                            content: content.header
+                        ) { content in
+                            let aspectRatio = content.size.width / content.size
+                                .height
+
+                            AsyncImage(
+                                url: URL(string: content.url)
+                            ) { image in
+                                image.resizable()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .aspectRatio(aspectRatio, contentMode: .fill)
+                            .frame(
+                                width: width,
+                                height: width / aspectRatio
+                            )
+                        }
+
+                        withContent(
+                            content: content.description
+                        ) { content in
+                            componentFactory.buildLabel(
+                                config: config.releaseDetailDescription,
+                                content: content,
+                                suppliedBuilder: builderConfig
+                                    .releaseDetailDescription
+                            )
+                            .multilineTextAlignment(.leading)
+                        }
+
+                        sections
                     }
-
-                    sections
                 }
-            }
-            .contentMargins(
-                .all,
-                style.contentPadding,
-                for: .scrollContent
-            )
+                .contentMargins(
+                    .all,
+                    style.contentPadding,
+                    for: .scrollContent
+                )
 
-            WidgetFooter {}
+                WidgetFooter {}
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .applyBackground(style.background)

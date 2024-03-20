@@ -8,6 +8,38 @@
 
 import SwiftUI
 
+// MARK: - CGSize + Hashable
+
+extension CGSize: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(width)
+        hasher.combine(height)
+    }
+}
+
+struct ReleaseHeaderContent: Identifiable, Hashable {
+    // MARK: - Lifecycle
+
+    init?(_ releaseHeader: ReleaseHeader?) {
+        guard let releaseHeader else {
+            return nil
+        }
+
+        self.id = releaseHeader.id
+        self.size = CGSize(
+            width: releaseHeader.size.width,
+            height: releaseHeader.size.height
+        )
+        self.url = releaseHeader.url
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let size: CGSize
+    public let url: String
+}
+
 struct AppReleaseContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
@@ -24,6 +56,7 @@ struct AppReleaseContent: Identifiable, Hashable {
             )
         )
         self.sections = release.sections.map { AppReleaseSectionContent($0) }
+        self.header = ReleaseHeaderContent(release.header)
     }
 
     init(_ release: AppReleaseStub) {
@@ -38,9 +71,9 @@ struct AppReleaseContent: Identifiable, Hashable {
                 dateTimeStyle: .numeric
             )
         )
-
         self.sections = AppReleaseSection.validStates()
             .map { AppReleaseSectionContent($0) }
+        self.header = nil
     }
 
     // MARK: - Internal
@@ -52,6 +85,7 @@ struct AppReleaseContent: Identifiable, Hashable {
     let createdAt: LabelContent
     let description: LabelContent?
     let sections: [AppReleaseSectionContent]
+    let header: ReleaseHeaderContent?
 
     let whatsNewTitle: LabelContent
 }

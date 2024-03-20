@@ -7,6 +7,23 @@
 
 import Foundation
 
+public struct Size: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        width: Int,
+        height: Int
+    ) {
+        self.width = width
+        self.height = height
+    }
+
+    // MARK: - Public
+
+    public let width: Int
+    public let height: Int
+}
+
 public struct CreateTenantRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
@@ -2250,7 +2267,8 @@ public struct AppRelease: Codable, Equatable, Hashable, Identifiable {
         tenantId: String,
         releaseNumber: Int,
         status: ReleaseStatus,
-        sections: [AppReleaseSection]
+        sections: [AppReleaseSection],
+        header: ReleaseHeader?
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -2264,6 +2282,7 @@ public struct AppRelease: Codable, Equatable, Hashable, Identifiable {
         self.releaseNumber = releaseNumber
         self.status = status
         self.sections = sections
+        self.header = header
     }
 
     // MARK: - Public
@@ -2281,6 +2300,7 @@ public struct AppRelease: Codable, Equatable, Hashable, Identifiable {
         case releaseNumber
         case status
         case sections
+        case header
     }
 
     public let id: String
@@ -2295,6 +2315,27 @@ public struct AppRelease: Codable, Equatable, Hashable, Identifiable {
     public let releaseNumber: Int
     public let status: ReleaseStatus
     public let sections: [AppReleaseSection]
+    public let header: ReleaseHeader?
+}
+
+public struct ReleaseHeader: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        size: Size,
+        url: String
+    ) {
+        self.id = id
+        self.size = size
+        self.url = url
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let size: Size
+    public let url: String
 }
 
 public enum ReleaseStatus: String, Codable, CaseIterable {
