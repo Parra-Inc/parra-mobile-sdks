@@ -345,7 +345,12 @@ final class ParraNetworkManager: NetworkManagerType {
                         statusCode: response.statusCode
                     )
                 )
-            case (401, true):
+
+            // If unauthenticated, we need to refresh the auth token and try
+            // again to obtain a credential. If unauthorized, we want to do the
+            // same to purge a potentially invalid token and replace it with a
+            // new one.
+            case (401, true), (403, true):
                 logger.trace("Request required reauthentication")
                 let newCredential = try await refreshAuthentication()
 
