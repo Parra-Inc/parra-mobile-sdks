@@ -13,9 +13,11 @@ struct RoadmapListItem: View {
 
     let ticketContent: TicketUserContent
 
-    @ViewBuilder var info: some View {
-        let palette = themeObserver.theme.palette
+    var theme: ParraTheme {
+        return themeObserver.theme
+    }
 
+    @ViewBuilder var info: some View {
         HStack(alignment: .center, spacing: 4) {
             RoadmapTicketTypeBadge(
                 type: ticketContent.type,
@@ -38,7 +40,7 @@ struct RoadmapListItem: View {
                 content: ticketContent.createdAt,
                 suppliedBuilder: builderConfig.createdAtLabel,
                 localAttributes: LabelAttributes(
-                    fontColor: palette.secondaryText
+                    fontColor: theme.palette.secondaryText
                 )
             )
         }
@@ -46,7 +48,6 @@ struct RoadmapListItem: View {
     }
 
     var body: some View {
-        let theme = themeObserver.theme
         let alignment: VerticalAlignment = if ticketContent.description == nil {
             .center
         } else {
