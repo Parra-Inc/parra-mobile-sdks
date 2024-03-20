@@ -28,8 +28,7 @@ struct RoadmapSample: View {
             }
         }
         .presentParraRoadmap(
-            isPresented: $isPresented, // #2
-            defaultTab: .inProgress
+            isPresented: $isPresented // #2
         )
     }
 }

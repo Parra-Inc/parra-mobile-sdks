@@ -485,7 +485,6 @@
 		00FCB1532B939C6100635DC8 /* RoadmapWidget+ContentObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1522B939C6100635DC8 /* RoadmapWidget+ContentObserver.swift */; };
 		00FCB1552B939C9000635DC8 /* RoadmapWidget+ContentObserver+Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1542B939C9000635DC8 /* RoadmapWidget+ContentObserver+Content.swift */; };
 		00FCB1582B93A9B700635DC8 /* WidgetFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1572B93A9B700635DC8 /* WidgetFooter.swift */; };
-		00FCB15C2B93BB6300635DC8 /* RoadmapWidget+Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB15B2B93BB6300635DC8 /* RoadmapWidget+Tab.swift */; };
 		00FCB15E2B93C34E00635DC8 /* RoadmapListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB15D2B93C34E00635DC8 /* RoadmapListItem.swift */; };
 		00FCB1622B93C43400635DC8 /* UserTicket+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1612B93C43400635DC8 /* UserTicket+Fixtures.swift */; };
 		00FCB1642B961EE000635DC8 /* ImageButtonComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1632B961EE000635DC8 /* ImageButtonComponent.swift */; };
@@ -499,7 +498,6 @@
 		00FCB1742B962D8700635DC8 /* FixedFrameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1732B962D8700635DC8 /* FixedFrameAttributes.swift */; };
 		00FCB1762B962DC400635DC8 /* FrameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1752B962DC400635DC8 /* FrameAttributes.swift */; };
 		00FCB1792B963DA800635DC8 /* ImageButton+RenderStorybook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1782B963DA800635DC8 /* ImageButton+RenderStorybook.swift */; };
-		00FCB17D2B9665EB00635DC8 /* TicketFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB17C2B9665EB00635DC8 /* TicketFilter.swift */; };
 		00FCB17F2B976D2300635DC8 /* AppRoadmapConfiguration+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB17E2B976D2300635DC8 /* AppRoadmapConfiguration+Fixtures.swift */; };
 		00FCB1812B976D3300635DC8 /* UserTicketCollectionResponse+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1802B976D3300635DC8 /* UserTicketCollectionResponse+Fixtures.swift */; };
 		00FCB1842B9779D200635DC8 /* SheetWithLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1832B9779D200635DC8 /* SheetWithLoader.swift */; };
@@ -1082,7 +1080,6 @@
 		00FCB1522B939C6100635DC8 /* RoadmapWidget+ContentObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoadmapWidget+ContentObserver.swift"; sourceTree = "<group>"; };
 		00FCB1542B939C9000635DC8 /* RoadmapWidget+ContentObserver+Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoadmapWidget+ContentObserver+Content.swift"; sourceTree = "<group>"; };
 		00FCB1572B93A9B700635DC8 /* WidgetFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetFooter.swift; sourceTree = "<group>"; };
-		00FCB15B2B93BB6300635DC8 /* RoadmapWidget+Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoadmapWidget+Tab.swift"; sourceTree = "<group>"; };
 		00FCB15D2B93C34E00635DC8 /* RoadmapListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapListItem.swift; sourceTree = "<group>"; };
 		00FCB1612B93C43400635DC8 /* UserTicket+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserTicket+Fixtures.swift"; sourceTree = "<group>"; };
 		00FCB1632B961EE000635DC8 /* ImageButtonComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonComponent.swift; sourceTree = "<group>"; };
@@ -1096,7 +1093,6 @@
 		00FCB1732B962D8700635DC8 /* FixedFrameAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedFrameAttributes.swift; sourceTree = "<group>"; };
 		00FCB1752B962DC400635DC8 /* FrameAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAttributes.swift; sourceTree = "<group>"; };
 		00FCB1782B963DA800635DC8 /* ImageButton+RenderStorybook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageButton+RenderStorybook.swift"; sourceTree = "<group>"; };
-		00FCB17C2B9665EB00635DC8 /* TicketFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketFilter.swift; sourceTree = "<group>"; };
 		00FCB17E2B976D2300635DC8 /* AppRoadmapConfiguration+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppRoadmapConfiguration+Fixtures.swift"; sourceTree = "<group>"; };
 		00FCB1802B976D3300635DC8 /* UserTicketCollectionResponse+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserTicketCollectionResponse+Fixtures.swift"; sourceTree = "<group>"; };
 		00FCB1832B9779D200635DC8 /* SheetWithLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetWithLoader.swift; sourceTree = "<group>"; };
@@ -2680,7 +2676,6 @@
 				00FCB1542B939C9000635DC8 /* RoadmapWidget+ContentObserver+Content.swift */,
 				00374CF62B9F5CFA0028EDA8 /* RoadmapWidget+ContentObserver+Voting.swift */,
 				00FCB1952B97B87F00635DC8 /* RoadmapWidget+ContentObserver+InitialParams.swift */,
-				00FCB17C2B9665EB00635DC8 /* TicketFilter.swift */,
 				00057FA82B98C96A0022B875 /* TicketUserContent.swift */,
 			);
 			path = Roadmap;
@@ -2689,7 +2684,6 @@
 		00FCB1492B939B6100635DC8 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				00FCB15B2B93BB6300635DC8 /* RoadmapWidget+Tab.swift */,
 				00FCB14C2B939BC600635DC8 /* RoadmapWidgetConfig.swift */,
 				00FCB14E2B939BE400635DC8 /* RoadmapWidgetBuilderConfig.swift */,
 				00FCB1502B939C1900635DC8 /* RoadmapWidgetStyle.swift */,
@@ -3150,7 +3144,6 @@
 				00FCB1472B91537C00635DC8 /* ParraAttributedSegmentStyle.swift in Sources */,
 				00ABF1572B79802400A054A2 /* ParraAppPreview.swift in Sources */,
 				003622032B5C9D12009EFE53 /* ParraColorSwatchConvertible.swift in Sources */,
-				00FCB15C2B93BB6300635DC8 /* RoadmapWidget+Tab.swift in Sources */,
 				001B7B2C27DE3AC800DEEECD /* ParraNetworkManager.swift in Sources */,
 				006654122A80573400CD04E6 /* URLRequest.Attribution+CustomStringConvertible.swift in Sources */,
 				001B7B1F27DE3ABC00DEEECD /* PersistentStorageMedium.swift in Sources */,
@@ -3386,7 +3379,6 @@
 				00ABF1A42B85271B00A054A2 /* TextInputConfig.swift in Sources */,
 				004F3F092BA887A700424802 /* ChangelogSectionView.swift in Sources */,
 				003621F42B5C79F7009EFE53 /* ParraColorSwatch.swift in Sources */,
-				00FCB17D2B9665EB00635DC8 /* TicketFilter.swift in Sources */,
 				00FCB16E2B96287F00635DC8 /* ParraAttributedImageButtonStyle.swift in Sources */,
 				00ABF1B22B865C5200A054A2 /* FeedbackCardWidget+ContentObserver.swift in Sources */,
 				00ABF1BC2B867CE300A054A2 /* FeedbackCardView.swift in Sources */,

@@ -105,15 +105,15 @@ struct RoadmapWidget: Container {
                     when: contentObserver.ticketPaginator
                         .isShowingPlaceholders
                 )
-                //            .background(GeometryReader {
-                //                Color.clear.preference(
-                //                    key: ViewOffsetKey.self,
-                //                    value: -$0.frame(in: .named("scroll")).origin.y
-                //                )
-                //            })
-                //            .onPreferenceChange(ViewOffsetKey.self) { offset in
-                //                showNavigationDivider = offset > 0.0
-                //            }
+                .background(GeometryReader {
+                    Color.clear.preference(
+                        key: ViewOffsetKey.self,
+                        value: -$0.frame(in: .named("scroll")).origin.y
+                    )
+                })
+                .onPreferenceChange(ViewOffsetKey.self) { offset in
+                    showNavigationDivider = offset > 0.0
+                }
             }
             // A limited number of placeholder cells will be generated.
             // Don't allow scrolling past them while loading.
@@ -212,11 +212,22 @@ struct RoadmapWidget: Container {
                 "Select a tab",
                 selection: $contentObserver.selectedTab
             ) {
-                ForEach(ParraRoadmapTab.allCases) { tab in
-                    Text(tab.title).tag(tab)
+                ForEach(contentObserver.tabs) { tab in
+                    Text(tab.title)
+                        .tag(tab)
                 }
             }
             .pickerStyle(.segmented)
+
+            if let description = contentObserver.selectedTab.description {
+                componentFactory.buildLabel(
+                    config: config.tabDescription,
+                    content: LabelContent(text: description),
+                    suppliedBuilder: localBuilderConfig.tabDescription
+                )
+                .multilineTextAlignment(.leading)
+                .lineLimit(5)
+            }
         }
         .padding([.horizontal, .top], from: style.contentPadding)
         .padding(.bottom, headerSpace)
@@ -245,7 +256,8 @@ struct RoadmapWidget: Container {
             contentObserver: .init(
                 initialParams: .init(
                     roadmapConfig: AppRoadmapConfiguration.validStates()[0],
-                    selectedTab: .inProgress,
+                    selectedTab: AppRoadmapConfiguration.validStates()[0]
+                        .tabs[0],
                     ticketResponse: UserTicketCollectionResponse
                         .validStates()[0],
                     networkManager: parra.networkManager

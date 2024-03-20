@@ -13,6 +13,7 @@ public class RoadmapWidgetConfig: ContainerConfig {
 
     required init() {
         self.title = RoadmapWidgetConfig.default.title
+        self.tabDescription = RoadmapWidgetConfig.default.tabDescription
         self.addRequestButton = RoadmapWidgetConfig.default.addRequestButton
         self.requestTitles = RoadmapWidgetConfig.default.requestTitles
         self.requestDescriptions = RoadmapWidgetConfig.default
@@ -31,6 +32,7 @@ public class RoadmapWidgetConfig: ContainerConfig {
 
     public init(
         title: LabelConfig,
+        tabDescription: LabelConfig,
         addRequestButton: TextButtonConfig,
         requestTitles: LabelConfig,
         requestDescriptions: LabelConfig,
@@ -43,6 +45,7 @@ public class RoadmapWidgetConfig: ContainerConfig {
         errorStateView: EmptyStateConfig
     ) {
         self.title = title
+        self.tabDescription = tabDescription
         self.addRequestButton = addRequestButton
         self.requestTitles = requestTitles
         self.requestDescriptions = requestDescriptions
@@ -59,6 +62,7 @@ public class RoadmapWidgetConfig: ContainerConfig {
 
     public static let `default` = RoadmapWidgetConfig(
         title: LabelConfig(fontStyle: .title),
+        tabDescription: LabelConfig(fontStyle: .subheadline),
         addRequestButton: TextButtonConfig(
             style: .primary,
             size: .large,
@@ -86,6 +90,7 @@ public class RoadmapWidgetConfig: ContainerConfig {
     )
 
     public let title: LabelConfig
+    public let tabDescription: LabelConfig
     public let addRequestButton: TextButtonConfig
     public let requestTitles: LabelConfig
     public let requestDescriptions: LabelConfig

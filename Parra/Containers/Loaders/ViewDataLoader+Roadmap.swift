@@ -11,12 +11,11 @@ import SwiftUI
 struct RoadmapParams: Equatable {
     let limit: Int
     let offset: Int
-    let filter: TicketFilter
 }
 
 struct RoadmapLoaderResult: Equatable {
     let roadmapConfig: AppRoadmapConfiguration
-    let selectedTab: ParraRoadmapTab
+    let selectedTab: RoadmapConfigurationTab
     let ticketResponse: UserTicketCollectionResponse
 }
 
@@ -31,21 +30,24 @@ extension ViewDataLoader {
             RoadmapWidget
         >(
             loader: { parra, transformParams in
-                async let getRoadmap = parra.networkManager.getRoadmap()
-                async let getTickets = parra.networkManager.paginateTickets(
-                    limit: transformParams.limit,
-                    offset: transformParams.offset,
-                    filter: transformParams.filter
-                )
+                let roadmapConfig = try await parra.networkManager.getRoadmap()
 
-                let (roadmapConfig, ticketResponse) = try await (
-                    getRoadmap,
-                    getTickets
-                )
+                guard let tab = roadmapConfig.tabs.first else {
+                    throw ParraError.message(
+                        "Can not paginate tickets. Roadmap response has no tabs."
+                    )
+                }
+
+                let ticketResponse = try await parra.networkManager
+                    .paginateTickets(
+                        limit: transformParams.limit,
+                        offset: transformParams.offset,
+                        filter: tab.key
+                    )
 
                 return RoadmapLoaderResult(
                     roadmapConfig: roadmapConfig,
-                    selectedTab: transformParams.filter.toTab,
+                    selectedTab: tab,
                     ticketResponse: ticketResponse
                 )
             },

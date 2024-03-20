@@ -1912,18 +1912,49 @@ public struct UserTicketCollectionResponse: Codable, Equatable, Hashable {
     public let data: [UserTicket]
 }
 
+public struct RoadmapConfigurationTab: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        title: String,
+        key: String,
+        description: String?
+    ) {
+        self.id = id
+        self.title = title
+        self.key = key
+        self.description = description
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let title: String
+
+    // The filter param to use to fetch tickets for this tab from the paginate
+    // endpoint.
+    public let key: String
+    public let description: String?
+}
+
 public struct AppRoadmapConfiguration: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        form: FeedbackFormDataStub?
+        form: FeedbackFormDataStub?,
+        tabs: [RoadmapConfigurationTab]
     ) {
         self.form = form
+        self.tabs = tabs
     }
 
     // MARK: - Public
 
     public let form: FeedbackFormDataStub?
+    public let tabs: [RoadmapConfigurationTab]
 }
 
 public enum TicketPriority: String, Codable, CaseIterable {

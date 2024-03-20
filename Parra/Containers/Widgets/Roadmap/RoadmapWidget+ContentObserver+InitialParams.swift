@@ -11,7 +11,7 @@ import Foundation
 extension RoadmapWidget.ContentObserver {
     struct InitialParams {
         let roadmapConfig: AppRoadmapConfiguration
-        let selectedTab: ParraRoadmapTab
+        let selectedTab: RoadmapConfigurationTab
         let ticketResponse: UserTicketCollectionResponse
         let networkManager: ParraNetworkManager
     }

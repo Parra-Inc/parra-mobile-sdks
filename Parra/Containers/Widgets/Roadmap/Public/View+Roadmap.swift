@@ -16,13 +16,11 @@ public extension View {
         isPresented: Binding<Bool>,
         config: RoadmapWidgetConfig = .default,
         localBuilder: RoadmapWidgetBuilderConfig = .init(),
-        defaultTab: ParraRoadmapTab = .inProgress,
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         let params = RoadmapParams(
             limit: 15,
-            offset: 0,
-            filter: defaultTab.filter
+            offset: 0
         )
 
         return loadAndPresentSheet(

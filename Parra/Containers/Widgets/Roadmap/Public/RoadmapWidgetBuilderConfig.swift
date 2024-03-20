@@ -13,6 +13,7 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
 
     public required init() {
         self.title = nil
+        self.tabDescription = nil
         self.addRequestButton = nil
         self.requestTitleLabel = nil
         self.requestDescriptionLabel = nil
@@ -25,6 +26,12 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
 
     public init(
         titleBuilder: LocalComponentBuilder.Factory<
+            Text,
+            LabelConfig,
+            LabelContent,
+            LabelAttributes
+        >? = nil,
+        tabDescriptionBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
@@ -80,6 +87,7 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
         >? = nil
     ) {
         self.title = titleBuilder
+        self.tabDescription = tabDescriptionBuilder
         self.addRequestButton = addRequestButtonBuilder
         self.requestTitleLabel = requestTitleLabelBuilder
         self.requestDescriptionLabel = requestDescriptionLabelBuilder
@@ -93,6 +101,12 @@ public class RoadmapWidgetBuilderConfig: LocalComponentBuilderConfig {
     // MARK: - Public
 
     public let title: LocalComponentBuilder.Factory<
+        Text,
+        LabelConfig,
+        LabelContent,
+        LabelAttributes
+    >?
+    public let tabDescription: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,

@@ -133,7 +133,7 @@ extension ParraNetworkManager {
     func paginateTickets(
         limit: Int,
         offset: Int,
-        filter: TicketFilter
+        filter: String
     ) async throws -> UserTicketCollectionResponse {
         return try await hitEndpoint(
             .getPaginateTickets(
@@ -143,7 +143,7 @@ extension ParraNetworkManager {
             queryItems: [
                 "limit": String(limit),
                 "offset": String(offset),
-                "filter": filter.paramName
+                "filter": filter
             ]
         )
     }
