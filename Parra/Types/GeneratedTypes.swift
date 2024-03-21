@@ -2423,7 +2423,8 @@ public struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
         type: ReleaseType,
         tenantId: String,
         releaseNumber: Int,
-        status: ReleaseStatus
+        status: ReleaseStatus,
+        header: ReleaseHeader?
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -2436,6 +2437,7 @@ public struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
         self.tenantId = tenantId
         self.releaseNumber = releaseNumber
         self.status = status
+        self.header = header
     }
 
     // MARK: - Public
@@ -2452,6 +2454,7 @@ public struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
         case tenantId
         case releaseNumber
         case status
+        case header
     }
 
     public let id: String
@@ -2465,6 +2468,7 @@ public struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
     public let tenantId: String
     public let releaseNumber: Int
     public let status: ReleaseStatus
+    public let header: ReleaseHeader?
 }
 
 public struct AppReleaseCollectionResponse: Codable, Equatable, Hashable {

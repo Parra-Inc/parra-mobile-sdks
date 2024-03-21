@@ -65,8 +65,8 @@ struct ChangelogWidget: Container {
                         for: AppReleaseStubContent.self
                     ) { release in
                         AppReleaseDetailView(
-                            standalone: false,
                             contentObserver: AppReleaseContentObserver(
+                                standalone: false,
                                 stub: release.originalStub,
                                 networkManager: contentObserver.networkManager
                             ),
@@ -86,52 +86,59 @@ struct ChangelogWidget: Container {
         .environmentObject(componentFactory)
     }
 
+    var items: some View {
+        LazyVStack(alignment: .leading, spacing: 12) {
+            let items = contentObserver.releasePaginator.items
+
+            ForEach(
+                Array(items.enumerated()),
+                id: \.element
+            ) { index, release in
+                NavigationLink(
+                    value: release,
+                    label: {
+                        ChangelogListItem(
+                            content: release,
+                            style: style
+                        )
+                    }
+                )
+                .disabled(
+                    contentObserver.releasePaginator
+                        .isShowingPlaceholders
+                )
+                .onAppear {
+                    contentObserver.releasePaginator
+                        .loadMore(after: index)
+                }
+                .id(release.id)
+            }
+
+            if contentObserver.releasePaginator.isLoading {
+                VStack(alignment: .center) {
+                    ProgressView()
+                }
+                .frame(maxWidth: .infinity)
+                .padding(style.contentPadding)
+            }
+        }
+        .redacted(
+            when: contentObserver.releasePaginator.isShowingPlaceholders
+        )
+        .background(GeometryReader {
+            Color.clear.preference(
+                key: ViewOffsetKey.self,
+                value: -$0.frame(in: .named("scroll")).origin.y
+            )
+        })
+        .onPreferenceChange(ViewOffsetKey.self) { offset in
+            showNavigationDivider = offset > 0.0
+        }
+    }
+
     var list: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: 12) {
-                let items = contentObserver.releasePaginator.items
-
-                ForEach(
-                    Array(items.enumerated()),
-                    id: \.element
-                ) { index, release in
-                    NavigationLink(
-                        value: release,
-                        label: {
-                            ChangelogListItem(content: release)
-                        }
-                    )
-                    .disabled(
-                        contentObserver.releasePaginator
-                            .isShowingPlaceholders
-                    )
-                    .onAppear {
-                        contentObserver.releasePaginator
-                            .loadMore(after: index)
-                    }
-                    .id(release.id)
-                }
-
-                if contentObserver.releasePaginator.isLoading {
-                    VStack(alignment: .center) {
-                        ProgressView()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(style.contentPadding)
-                }
-            }
-            .redacted(
-                when: contentObserver.releasePaginator.isShowingPlaceholders
-            )
-            .background(GeometryReader {
-                Color.clear.preference(
-                    key: ViewOffsetKey.self,
-                    value: -$0.frame(in: .named("scroll")).origin.y
-                )
-            })
-            .onPreferenceChange(ViewOffsetKey.self) { offset in
-                showNavigationDivider = offset > 0.0
-            }
+            items
         }
         // A limited number of placeholder cells will be generated.
         // Don't allow scrolling past them while loading.
@@ -152,14 +159,16 @@ struct ChangelogWidget: Container {
             componentFactory.buildEmptyState(
                 config: config.emptyStateView,
                 content: contentObserver.content.emptyStateView,
-                suppliedBuilder: localBuilderConfig.emptyStateView
+                suppliedBuilder: localBuilderConfig.emptyStateView,
+                localAttributes: style.emptyState
             )
         }
         .errorPlaceholder(contentObserver.releasePaginator.error) {
             componentFactory.buildEmptyState(
                 config: config.errorStateView,
                 content: contentObserver.content.errorStateView,
-                suppliedBuilder: localBuilderConfig.errorStateView
+                suppliedBuilder: localBuilderConfig.errorStateView,
+                localAttributes: style.errorState
             )
         }
         .refreshable {

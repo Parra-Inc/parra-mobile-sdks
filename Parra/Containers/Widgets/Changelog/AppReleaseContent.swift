@@ -8,46 +8,23 @@
 
 import SwiftUI
 
-// MARK: - CGSize + Hashable
-
-extension CGSize: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(width)
-        hasher.combine(height)
-    }
-}
-
-struct ReleaseHeaderContent: Identifiable, Hashable {
-    // MARK: - Lifecycle
-
-    init?(_ releaseHeader: ReleaseHeader?) {
-        guard let releaseHeader else {
-            return nil
-        }
-
-        self.id = releaseHeader.id
-        self.size = CGSize(
-            width: releaseHeader.size.width,
-            height: releaseHeader.size.height
-        )
-        self.url = releaseHeader.url
-    }
-
-    // MARK: - Public
-
-    public let id: String
-    public let size: CGSize
-    public let url: String
-}
-
 struct AppReleaseContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
-    init(_ release: AppRelease) {
+    init(
+        _ release: AppRelease,
+        isStandalone: Bool
+    ) {
+        if isStandalone {
+            self.title = LabelContent(text: "What's new")
+            self.subtitle = LabelContent(text: release.name)
+        } else {
+            self.title = LabelContent(text: release.name)
+            self.subtitle = nil
+        }
+
         self.id = release.id
-        self.name = LabelContent(text: release.name)
         self.version = LabelContent(text: release.version)
-        self.whatsNewTitle = LabelContent(text: "What's new")
         self.description = LabelContent(text: release.description)
         self.type = LabelContent(text: release.type.userFacingString)
         self.createdAt = LabelContent(
@@ -59,11 +36,20 @@ struct AppReleaseContent: Identifiable, Hashable {
         self.header = ReleaseHeaderContent(release.header)
     }
 
-    init(_ release: AppReleaseStub) {
+    init(
+        _ release: AppReleaseStub,
+        isStandalone: Bool
+    ) {
+        if isStandalone {
+            self.title = LabelContent(text: "What's new")
+            self.subtitle = LabelContent(text: release.name)
+        } else {
+            self.title = LabelContent(text: release.name)
+            self.subtitle = nil
+        }
+
         self.id = release.id
-        self.name = LabelContent(text: release.name)
         self.version = LabelContent(text: release.version)
-        self.whatsNewTitle = LabelContent(text: "What's new")
         self.description = LabelContent(text: release.description)
         self.type = LabelContent(text: release.type.userFacingString)
         self.createdAt = LabelContent(
@@ -73,19 +59,18 @@ struct AppReleaseContent: Identifiable, Hashable {
         )
         self.sections = AppReleaseSection.validStates()
             .map { AppReleaseSectionContent($0) }
-        self.header = nil
+        self.header = ReleaseHeaderContent(release.header)
     }
 
     // MARK: - Internal
 
     let id: String
-    let name: LabelContent
+    let title: LabelContent
+    let subtitle: LabelContent?
     let version: LabelContent
     let type: LabelContent
     let createdAt: LabelContent
     let description: LabelContent?
     let sections: [AppReleaseSectionContent]
     let header: ReleaseHeaderContent?
-
-    let whatsNewTitle: LabelContent
 }

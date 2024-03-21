@@ -12,6 +12,7 @@ struct ChangelogListItem: View {
     // MARK: - Internal
 
     let content: AppReleaseStubContent
+    let style: ChangelogWidgetStyle
 
     var body: some View {
         let palette = themeObserver.theme.palette
@@ -20,7 +21,8 @@ struct ChangelogListItem: View {
             componentFactory.buildLabel(
                 config: config.releasePreviewNames,
                 content: content.name,
-                suppliedBuilder: builderConfig.releasePreviewNames
+                suppliedBuilder: builderConfig.releasePreviewNames,
+                localAttributes: style.releasePreviewNames
             )
             .frame(maxWidth: .infinity, alignment: .leading)
             .multilineTextAlignment(.leading)
@@ -29,7 +31,8 @@ struct ChangelogListItem: View {
                 componentFactory.buildLabel(
                     config: config.releasePreviewDescriptions,
                     content: content,
-                    suppliedBuilder: builderConfig.releasePreviewDescriptions
+                    suppliedBuilder: builderConfig.releasePreviewDescriptions,
+                    localAttributes: style.releasePreviewDescriptions
                 )
                 .lineLimit(3)
                 .truncationMode(.tail)

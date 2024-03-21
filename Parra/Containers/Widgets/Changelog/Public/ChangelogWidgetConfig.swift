@@ -19,10 +19,10 @@ public class ChangelogWidgetConfig: ContainerConfig {
             .releasePreviewDescriptions
         self.releasePreviewCreatedAts = ChangelogWidgetConfig.default
             .releasePreviewCreatedAts
-        self.releaseDetailWhatsNew = ChangelogWidgetConfig.default
-            .releaseDetailWhatsNew
         self.releaseDetailTitle = ChangelogWidgetConfig.default
             .releaseDetailTitle
+        self.releaseDetailSubtitle = ChangelogWidgetConfig.default
+            .releaseDetailSubtitle
         self.releaseDetailDescription = ChangelogWidgetConfig.default
             .releaseDetailDescription
         self.releaseDetailSectionTitle = ChangelogWidgetConfig.default
@@ -38,8 +38,8 @@ public class ChangelogWidgetConfig: ContainerConfig {
         releasePreviewNames: LabelConfig,
         releasePreviewDescriptions: LabelConfig,
         releasePreviewCreatedAts: LabelConfig,
-        releaseDetailWhatsNew: LabelConfig,
         releaseDetailTitle: LabelConfig,
+        releaseDetailSubtitle: LabelConfig,
         releaseDetailDescription: LabelConfig,
         releaseDetailSectionTitle: LabelConfig,
         releaseDetailSectionItem: LabelConfig,
@@ -50,8 +50,8 @@ public class ChangelogWidgetConfig: ContainerConfig {
         self.releasePreviewNames = releasePreviewNames
         self.releasePreviewDescriptions = releasePreviewDescriptions
         self.releasePreviewCreatedAts = releasePreviewCreatedAts
-        self.releaseDetailWhatsNew = releaseDetailWhatsNew
         self.releaseDetailTitle = releaseDetailTitle
+        self.releaseDetailSubtitle = releaseDetailSubtitle
         self.releaseDetailDescription = releaseDetailDescription
         self.releaseDetailSectionTitle = releaseDetailSectionTitle
         self.releaseDetailSectionItem = releaseDetailSectionItem
@@ -66,8 +66,8 @@ public class ChangelogWidgetConfig: ContainerConfig {
         releasePreviewNames: LabelConfig(fontStyle: .headline),
         releasePreviewDescriptions: LabelConfig(fontStyle: .body),
         releasePreviewCreatedAts: LabelConfig(fontStyle: .caption),
-        releaseDetailWhatsNew: LabelConfig(fontStyle: .largeTitle),
         releaseDetailTitle: LabelConfig(fontStyle: .title),
+        releaseDetailSubtitle: LabelConfig(fontStyle: .subheadline),
         releaseDetailDescription: LabelConfig(fontStyle: .body),
         releaseDetailSectionTitle: LabelConfig(fontStyle: .title2),
         releaseDetailSectionItem: LabelConfig(fontStyle: .body),
@@ -79,8 +79,8 @@ public class ChangelogWidgetConfig: ContainerConfig {
     public let releasePreviewNames: LabelConfig
     public let releasePreviewDescriptions: LabelConfig
     public let releasePreviewCreatedAts: LabelConfig
-    public let releaseDetailWhatsNew: LabelConfig
     public let releaseDetailTitle: LabelConfig
+    public let releaseDetailSubtitle: LabelConfig
     public let releaseDetailDescription: LabelConfig
     public let releaseDetailSectionTitle: LabelConfig
     public let releaseDetailSectionItem: LabelConfig

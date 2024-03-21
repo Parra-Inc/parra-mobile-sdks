@@ -12,14 +12,19 @@ class AppReleaseContentObserver: ObservableObject {
     // MARK: - Lifecycle
 
     init(
+        standalone: Bool,
         stub: AppReleaseStub,
         networkManager: ParraNetworkManager
     ) {
-        self.content = AppReleaseContent(stub)
+        self.standalone = standalone
+        self.content = AppReleaseContent(stub, isStandalone: standalone)
         self.networkManager = networkManager
     }
 
     // MARK: - Internal
+
+    /// Is being used on its own, aka the "What's New" view.
+    let standalone: Bool
 
     @Published private(set) var content: AppReleaseContent
     @Published private(set) var isLoading = false
@@ -37,7 +42,7 @@ class AppReleaseContentObserver: ObservableObject {
             )
 
             await MainActor.run {
-                content = AppReleaseContent(response)
+                content = AppReleaseContent(response, isStandalone: standalone)
             }
         } catch {
             Logger.error("Error loading sections for release", error, [

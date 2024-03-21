@@ -17,8 +17,8 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.releasePreviewVersions = nil
         self.releasePreviewDescriptions = nil
         self.releasePreviewCreatedAts = nil
-        self.releaseDetailWhatsNew = nil
         self.releaseDetailTitle = nil
+        self.releaseDetailSubtitle = nil
         self.releaseDetailDescription = nil
         self.releaseDetailSectionTitle = nil
         self.releaseDetailSectionItem = nil
@@ -57,13 +57,13 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
             LabelContent,
             LabelAttributes
         >? = nil,
-        releaseDetailWhatsNewBuilder: LocalComponentBuilder.Factory<
+        releaseDetailTitleBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
             LabelAttributes
         >? = nil,
-        releaseDetailTitleBuilder: LocalComponentBuilder.Factory<
+        releaseDetailSubtitleBuilder: LocalComponentBuilder.Factory<
             Text,
             LabelConfig,
             LabelContent,
@@ -105,8 +105,8 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.releasePreviewVersions = releasePreviewVersionsBuilder
         self.releasePreviewDescriptions = releasePreviewDescriptionsBuilder
         self.releasePreviewCreatedAts = releasePreviewCreatedAtsBuilder
-        self.releaseDetailWhatsNew = releaseDetailWhatsNewBuilder
         self.releaseDetailTitle = releaseDetailTitleBuilder
+        self.releaseDetailSubtitle = releaseDetailSubtitleBuilder
         self.releaseDetailDescription = releaseDetailDescriptionBuilder
         self.releaseDetailSectionTitle = releaseDetailSectionTitleBuilder
         self.releaseDetailSectionItem = releaseDetailSectionItemBuilder
@@ -146,13 +146,13 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         LabelContent,
         LabelAttributes
     >?
-    public let releaseDetailWhatsNew: LocalComponentBuilder.Factory<
+    public let releaseDetailTitle: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,
         LabelAttributes
     >?
-    public let releaseDetailTitle: LocalComponentBuilder.Factory<
+    public let releaseDetailSubtitle: LocalComponentBuilder.Factory<
         Text,
         LabelConfig,
         LabelContent,

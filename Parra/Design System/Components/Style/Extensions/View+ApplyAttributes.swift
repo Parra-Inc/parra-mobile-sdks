@@ -35,6 +35,10 @@ extension View {
         self.background(style)
     }
 
+    func applyOpacity(_ opacity: Double?) -> some View {
+        self.opacity(opacity ?? 1.0)
+    }
+
     @ViewBuilder
     func applyBorder(
         borderColor: Color?,

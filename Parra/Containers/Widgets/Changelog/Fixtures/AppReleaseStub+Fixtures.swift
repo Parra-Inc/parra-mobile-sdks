@@ -22,7 +22,12 @@ extension AppReleaseStub: ParraFixture {
                 type: .minor,
                 tenantId: UUID().uuidString,
                 releaseNumber: 6,
-                status: .released
+                status: .released,
+                header: ReleaseHeader(
+                    id: "release-rocket-1",
+                    size: Size(width: 1_242, height: 699),
+                    url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
+                )
             ),
             AppReleaseStub(
                 id: UUID().uuidString,
@@ -35,7 +40,12 @@ extension AppReleaseStub: ParraFixture {
                 type: .patch,
                 tenantId: UUID().uuidString,
                 releaseNumber: 5,
-                status: .released
+                status: .released,
+                header: ReleaseHeader(
+                    id: "release-rocket-1",
+                    size: Size(width: 1_242, height: 699),
+                    url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
+                )
             ),
             AppReleaseStub(
                 id: UUID().uuidString,
@@ -48,7 +58,12 @@ extension AppReleaseStub: ParraFixture {
                 type: .patch,
                 tenantId: UUID().uuidString,
                 releaseNumber: 4,
-                status: .released
+                status: .released,
+                header: ReleaseHeader(
+                    id: "release-rocket-1",
+                    size: Size(width: 1_242, height: 699),
+                    url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
+                )
             ),
             AppReleaseStub(
                 id: UUID().uuidString,
@@ -61,7 +76,12 @@ extension AppReleaseStub: ParraFixture {
                 type: .minor,
                 tenantId: UUID().uuidString,
                 releaseNumber: 3,
-                status: .released
+                status: .released,
+                header: ReleaseHeader(
+                    id: "release-rocket-1",
+                    size: Size(width: 1_242, height: 699),
+                    url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
+                )
             ),
             AppReleaseStub(
                 id: UUID().uuidString,
@@ -74,7 +94,12 @@ extension AppReleaseStub: ParraFixture {
                 type: .minor,
                 tenantId: UUID().uuidString,
                 releaseNumber: 2,
-                status: .released
+                status: .released,
+                header: ReleaseHeader(
+                    id: "release-rocket-1",
+                    size: Size(width: 1_242, height: 699),
+                    url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
+                )
             ),
             AppReleaseStub(
                 id: UUID().uuidString,
@@ -87,7 +112,12 @@ extension AppReleaseStub: ParraFixture {
                 type: .major,
                 tenantId: UUID().uuidString,
                 releaseNumber: 1,
-                status: .released
+                status: .released,
+                header: ReleaseHeader(
+                    id: "release-rocket-1",
+                    size: Size(width: 1_242, height: 699),
+                    url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
+                )
             ),
             AppReleaseStub(
                 id: UUID().uuidString,
@@ -100,7 +130,12 @@ extension AppReleaseStub: ParraFixture {
                 type: .launch,
                 tenantId: UUID().uuidString,
                 releaseNumber: 1,
-                status: .released
+                status: .released,
+                header: ReleaseHeader(
+                    id: "release-rocket-1",
+                    size: Size(width: 1_242, height: 699),
+                    url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
+                )
             )
         ]
     }

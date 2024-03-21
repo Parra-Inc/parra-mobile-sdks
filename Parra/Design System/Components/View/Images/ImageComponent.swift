@@ -9,22 +9,10 @@
 import SwiftUI
 
 struct ImageComponent: ImageComponentType {
-    // MARK: - Lifecycle
-
-    init(
-        content: ImageContent,
-        attributes: ImageAttributes
-    ) {
-        self.content = content
-        self.attributes = attributes
-    }
-
     // MARK: - Internal
 
     let content: ImageContent
     let attributes: ImageAttributes
-
-    @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
         let primaryColor = themeObserver.theme.palette.primary.toParraColor()
@@ -47,21 +35,17 @@ struct ImageComponent: ImageComponentType {
         image
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .opacity(attributes.opacity ?? 1.0)
+            .applyOpacity(attributes.opacity)
             .foregroundStyle(
                 attributes.tint ?? primaryColor
             )
             .applyFrame(attributes.frame)
             .padding(attributes.padding ?? .zero)
-            .overlay(
-                UnevenRoundedRectangle(
-                    cornerRadii: themeObserver.theme.cornerRadius
-                        .value(for: attributes.cornerRadius)
-                )
-                .strokeBorder(
-                    attributes.borderColor ?? primaryColor,
-                    lineWidth: attributes.borderWidth ?? 0
-                )
+            .applyBorder(
+                borderColor: attributes.borderColor ?? primaryColor,
+                borderWidth: attributes.borderWidth,
+                cornerRadius: attributes.cornerRadius,
+                from: themeObserver.theme
             )
             .applyBackground(attributes.background)
             .applyCornerRadii(
@@ -69,4 +53,8 @@ struct ImageComponent: ImageComponentType {
                 from: themeObserver.theme
             )
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 }

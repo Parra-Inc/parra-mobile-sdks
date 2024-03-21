@@ -9,9 +9,6 @@
 import SwiftUI
 
 struct AppReleaseDetailView: View {
-    /// Is being used on its own, aka the "What's New" view.
-    var standalone: Bool
-
     @StateObject var contentObserver: AppReleaseContentObserver
 
     let style: ChangelogWidgetStyle
@@ -35,21 +32,24 @@ struct AppReleaseDetailView: View {
 
     var header: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if standalone {
-                componentFactory.buildLabel(
-                    config: config.releaseDetailWhatsNew,
-                    content: contentObserver.content.whatsNewTitle,
-                    suppliedBuilder: builderConfig.releaseDetailWhatsNew
-                )
-            }
-
+            // What "What's new" case
             componentFactory.buildLabel(
                 config: config.releaseDetailTitle,
-                content: contentObserver.content.name,
-                suppliedBuilder: builderConfig.releaseDetailTitle
+                content: contentObserver.content.title,
+                suppliedBuilder: builderConfig.releaseDetailTitle,
+                localAttributes: style.releaseDetailTitle
             )
-            .multilineTextAlignment(.leading)
-            .frame(maxWidth: .infinity, alignment: .leading)
+
+            withContent(content: contentObserver.content.subtitle) { content in
+                componentFactory.buildLabel(
+                    config: config.releaseDetailSubtitle,
+                    content: content,
+                    suppliedBuilder: builderConfig.releaseDetailSubtitle,
+                    localAttributes: style.releaseDetailSubtitle
+                )
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
 
             ChangelogItemInfoView(
                 content: contentObserver.content
@@ -61,9 +61,12 @@ struct AppReleaseDetailView: View {
         let content = contentObserver.content
 
         GeometryReader { geometry in
-            let width = geometry.size.width
-                - style.contentPadding.leading
-                - style.contentPadding.trailing
+            let width = Double.maximum(
+                geometry.size.width
+                    - style.contentPadding.leading
+                    - style.contentPadding.trailing,
+                0.0
+            )
 
             VStack(spacing: 0) {
                 ScrollView {
@@ -76,17 +79,14 @@ struct AppReleaseDetailView: View {
                             let aspectRatio = content.size.width / content.size
                                 .height
 
-                            AsyncImage(
-                                url: URL(string: content.url)
-                            ) { image in
-                                image.resizable()
-                            } placeholder: {
-                                ProgressView()
-                            }
+                            AsyncImageComponent(
+                                content: content.image,
+                                attributes: style.releaseDetailHeaderImage
+                            )
                             .aspectRatio(aspectRatio, contentMode: .fill)
                             .frame(
                                 width: width,
-                                height: width / aspectRatio
+                                height: (width / aspectRatio).rounded()
                             )
                         }
 
@@ -97,7 +97,8 @@ struct AppReleaseDetailView: View {
                                 config: config.releaseDetailDescription,
                                 content: content,
                                 suppliedBuilder: builderConfig
-                                    .releaseDetailDescription
+                                    .releaseDetailDescription,
+                                localAttributes: style.releaseDetailDescription
                             )
                             .multilineTextAlignment(.leading)
                         }
