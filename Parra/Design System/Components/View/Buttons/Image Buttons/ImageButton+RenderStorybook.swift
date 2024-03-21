@@ -106,23 +106,23 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .primary,
+                        style: ButtonCategory.primary,
                         size: size,
-                        variant: .plain
+                        variant: ButtonVariant.plain
                     ),
                     content: ImageButtonContent(
-                        image: .symbol("laser.burst")
+                        image: ImageContent.symbol("laser.burst")
                     )
                 )
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .secondary,
+                        style: ButtonCategory.secondary,
                         size: size,
-                        variant: .plain
+                        variant: ButtonVariant.plain
                     ),
                     content: ImageButtonContent(
-                        image: .symbol(
+                        image: ImageContent.symbol(
                             "lightspectrum.horizontal"
                         )
                     )
@@ -134,24 +134,24 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .primary,
+                        style: ButtonCategory.primary,
                         size: size,
-                        variant: .plain
+                        variant: ButtonVariant.plain
                     ),
                     content: ImageButtonContent(
-                        image: .symbol("laser.burst"),
+                        image: ImageContent.symbol("laser.burst"),
                         isDisabled: true
                     )
                 )
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .secondary,
+                        style: ButtonCategory.secondary,
                         size: size,
-                        variant: .plain
+                        variant: ButtonVariant.plain
                     ),
                     content: ImageButtonContent(
-                        image: .symbol(
+                        image: ImageContent.symbol(
                             "lightspectrum.horizontal"
                         ),
                         isDisabled: true
@@ -164,23 +164,23 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .primary,
+                        style: ButtonCategory.primary,
                         size: size,
-                        variant: .outlined
+                        variant: ButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
-                        image: .symbol("laser.burst")
+                        image: ImageContent.symbol("laser.burst")
                     )
                 )
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .secondary,
+                        style: ButtonCategory.secondary,
                         size: size,
-                        variant: .outlined
+                        variant: ButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
-                        image: .symbol(
+                        image: ImageContent.symbol(
                             "lightspectrum.horizontal"
                         )
                     )
@@ -192,24 +192,24 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .primary,
+                        style: ButtonCategory.primary,
                         size: size,
-                        variant: .outlined
+                        variant: ButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
-                        image: .symbol("laser.burst"),
+                        image: ImageContent.symbol("laser.burst"),
                         isDisabled: true
                     )
                 )
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .secondary,
+                        style: ButtonCategory.secondary,
                         size: size,
-                        variant: .outlined
+                        variant: ButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
-                        image: .symbol(
+                        image: ImageContent.symbol(
                             "lightspectrum.horizontal"
                         ),
                         isDisabled: true
@@ -222,23 +222,23 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .primary,
+                        style: ButtonCategory.primary,
                         size: size,
-                        variant: .contained
+                        variant: ButtonVariant.contained
                     ),
                     content: ImageButtonContent(
-                        image: .symbol("laser.burst")
+                        image: ImageContent.symbol("laser.burst")
                     )
                 )
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .secondary,
+                        style: ButtonCategory.secondary,
                         size: size,
-                        variant: .contained
+                        variant: ButtonVariant.contained
                     ),
                     content: ImageButtonContent(
-                        image: .symbol(
+                        image: ImageContent.symbol(
                             "lightspectrum.horizontal"
                         )
                     )
@@ -250,24 +250,24 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .primary,
+                        style: ButtonCategory.primary,
                         size: size,
-                        variant: .contained
+                        variant: ButtonVariant.contained
                     ),
                     content: ImageButtonContent(
-                        image: .symbol("laser.burst"),
+                        image: ImageContent.symbol("laser.burst"),
                         isDisabled: true
                     )
                 )
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: .secondary,
+                        style: ButtonCategory.secondary,
                         size: size,
-                        variant: .contained
+                        variant: ButtonVariant.contained
                     ),
                     content: ImageButtonContent(
-                        image: .symbol(
+                        image: ImageContent.symbol(
                             "lightspectrum.horizontal"
                         ),
                         isDisabled: true
