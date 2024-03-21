@@ -73,15 +73,11 @@ struct ParraAttributedMenuStyle: MenuStyle, ParraAttributedStyle {
             .menuOrder(attributes.sortOrder)
             .tint(tint)
             .applyCornerRadii(size: attributes.cornerRadius, from: theme)
-            .overlay(
-                UnevenRoundedRectangle(
-                    cornerRadii: theme.cornerRadius
-                        .value(for: attributes.cornerRadius)
-                )
-                .strokeBorder(
-                    tint,
-                    lineWidth: attributes.borderWidth
-                )
+            .applyBorder(
+                borderColor: tint,
+                borderWidth: attributes.borderWidth,
+                cornerRadius: attributes.cornerRadius,
+                from: theme
             )
     }
 

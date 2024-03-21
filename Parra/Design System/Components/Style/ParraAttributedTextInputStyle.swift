@@ -80,16 +80,12 @@ struct ParraAttributedTextInputStyle: TextFieldStyle, ParraAttributedStyle {
             .applyFrame(attributes.frame)
             .foregroundStyle(fontColor)
             .padding()
-            .overlay(
-                UnevenRoundedRectangle(
-                    cornerRadii: theme.cornerRadius
-                        .value(for: attributes.cornerRadius)
-                )
-                .strokeBorder(
-                    attributes.borderColor
-                        ?? theme.palette.secondaryBackground,
-                    lineWidth: attributes.borderWidth
-                )
+            .applyBorder(
+                borderColor: attributes.borderColor
+                    ?? theme.palette.secondaryBackground,
+                borderWidth: attributes.borderWidth,
+                cornerRadius: attributes.cornerRadius,
+                from: theme
             )
             .font(attributes.font)
             .fontDesign(attributes.fontDesign)

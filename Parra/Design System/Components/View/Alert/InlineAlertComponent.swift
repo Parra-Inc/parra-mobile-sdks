@@ -50,17 +50,11 @@ struct InlineAlertComponent: AlertComponentType {
             size: attributes.cornerRadius,
             from: themeObserver.theme
         )
-        .overlay(
-            ZStack {
-                UnevenRoundedRectangle(
-                    cornerRadii: themeObserver.theme.cornerRadius
-                        .value(for: attributes.cornerRadius)
-                )
-                .strokeBorder(
-                    attributes.borderColor ?? .clear,
-                    lineWidth: attributes.borderWidth ?? 0
-                )
-            }
+        .applyBorder(
+            borderColor: attributes.borderColor ?? .clear,
+            borderWidth: attributes.borderWidth,
+            cornerRadius: attributes.cornerRadius,
+            from: themeObserver.theme
         )
     }
 

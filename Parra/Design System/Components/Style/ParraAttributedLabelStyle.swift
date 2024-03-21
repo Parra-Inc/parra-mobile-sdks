@@ -53,15 +53,11 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
         .applyFrame(attributes.frame)
         .foregroundStyle(fontColor)
         .padding(attributes.padding ?? .zero)
-        .overlay(
-            UnevenRoundedRectangle(
-                cornerRadii: theme.cornerRadius
-                    .value(for: attributes.cornerRadius)
-            )
-            .strokeBorder(
-                attributes.borderColor ?? fontColor,
-                lineWidth: attributes.borderWidth ?? 0
-            )
+        .applyBorder(
+            borderColor: attributes.borderColor ?? fontColor,
+            borderWidth: attributes.borderWidth,
+            cornerRadius: attributes.cornerRadius,
+            from: theme
         )
         .applyBackground(attributes.background)
         .applyCornerRadii(size: attributes.cornerRadius, from: theme)

@@ -36,6 +36,25 @@ extension View {
     }
 
     @ViewBuilder
+    func applyBorder(
+        borderColor: Color?,
+        borderWidth: CGFloat? = nil,
+        cornerRadius: ParraCornerRadiusSize? = nil,
+        from theme: ParraTheme
+    ) -> some View {
+        overlay(
+            UnevenRoundedRectangle(
+                cornerRadii: theme.cornerRadius
+                    .value(for: cornerRadius)
+            )
+            .strokeBorder(
+                borderColor ?? .black,
+                lineWidth: borderWidth ?? 0
+            )
+        )
+    }
+
+    @ViewBuilder
     func applyFrame(
         _ attributes: FrameAttributes?
     ) -> some View {
