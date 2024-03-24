@@ -226,6 +226,32 @@ final class ParraNetworkManager: NetworkManagerType {
         }
     }
 
+    /// URLs not controlled by Parra/external APIs/etc.
+    func performExternalRequest<T: Decodable>(
+        to url: URL,
+        method: HttpMethod = .get,
+        queryItems: [String: String] = [:],
+        cachePolicy: URLRequest.CachePolicy? = nil,
+        body: (some Encodable)? = nil
+    ) async throws -> T {
+        var request = URLRequest(
+            url: url,
+            cachePolicy: cachePolicy ?? .useProtocolCachePolicy
+        )
+
+        request.httpMethod = method.rawValue
+        if method.allowsBody {
+            request.httpBody = try configuration.jsonEncoder.encode(body)
+        }
+
+        let (data, _) = try await performAsyncDataDask(request: request)
+
+        return try configuration.jsonDecoder.decode(
+            T.self,
+            from: data
+        )
+    }
+
     func performBulkAssetCachingRequest(assets: [Asset]) async {
         logger
             .trace(

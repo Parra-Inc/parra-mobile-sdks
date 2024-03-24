@@ -45,4 +45,8 @@ public extension View {
             onDismiss: onDismiss
         )
     }
+
+    @MainActor
+    func presentParraReleaseNotes(
+    ) {}
 }

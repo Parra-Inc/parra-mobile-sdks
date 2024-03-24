@@ -55,7 +55,7 @@ struct ContentView: View {
                     }
                 }
 
-                Section("Releases") {
+                Section("Roadmap") {
                     NavigationLink {
                         RoadmapSample()
                     } label: {
@@ -63,13 +63,22 @@ struct ContentView: View {
                     }
                 }
 
-                Section("Changelog") {
+                Section("Releases") {
                     NavigationLink {
                         ChangelogSample()
                     } label: {
                         SampleItemRow(
                             title: "Changelog",
                             iconName: "note.text"
+                        )
+                    }
+
+                    NavigationLink {
+                        LatestReleaseSample()
+                    } label: {
+                        SampleItemRow(
+                            title: "What's new?",
+                            iconName: "megaphone"
                         )
                     }
                 }
