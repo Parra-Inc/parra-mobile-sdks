@@ -217,7 +217,7 @@ class MockURLSession: URLSessionType {
             return nil
         }
 
-        let apiRoot = Parra.InternalConstants.parraApiRoot
+        let apiRoot = ParraInternal.Constants.parraApiRoot
         let urlString = url.absoluteString
             .trimmingCharacters(in: .punctuationCharacters)
         let rootString = apiRoot.absoluteString
@@ -268,7 +268,7 @@ class MockURLSession: URLSessionType {
         statusCode: Int = 200,
         additionalHeaders: [String: String] = [:]
     ) -> HTTPURLResponse {
-        let url = Parra.InternalConstants.parraApiRoot
+        let url = ParraInternal.Constants.parraApiRoot
             .appendingPathComponent(route)
 
         return HTTPURLResponse(

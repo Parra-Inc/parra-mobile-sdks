@@ -18,13 +18,13 @@ extension ViewDataLoader {
     ) -> ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget> {
         return ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget>(
             loader: { parra, formId in
-                return try await parra.feedback.fetchFeedbackForm(
+                return try await parra.parraInternal.feedback.fetchFeedbackForm(
                     formId: formId
                 )
             },
             renderer: { parra, form, dismisser in
                 let container: FeedbackFormWidget = renderContainer(
-                    from: parra,
+                    from: parra.parraInternal,
                     with: localBuilder,
                     params: .init(
                         formData: form.data
@@ -44,7 +44,7 @@ extension ViewDataLoader {
                             switch submissionType {
                             case .default:
                                 do {
-                                    try await parra.networkManager
+                                    try await parra.parraInternal.networkManager
                                         .submitFeedbackForm(
                                             with: form.id,
                                             data: data

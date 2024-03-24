@@ -25,7 +25,7 @@ struct FeedbackFormCustomLoadingSample: View {
     @State var errorMessage: String?
     @State var isLoading = false
 
-    @Environment(Parra.self) var parra // #1
+    @Environment(\.parra) var parra // #1
 
     var body: some View {
         VStack {

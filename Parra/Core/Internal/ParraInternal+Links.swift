@@ -1,5 +1,5 @@
 //
-//  Parra+Links.swift
+//  ParraInternal+Links.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/18/24.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension Parra {
+extension ParraInternal {
     func openTrackedSiteLink(
         medium: String
     ) {

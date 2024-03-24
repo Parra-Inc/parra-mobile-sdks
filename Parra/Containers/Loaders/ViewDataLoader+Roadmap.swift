@@ -30,7 +30,8 @@ extension ViewDataLoader {
             RoadmapWidget
         >(
             loader: { parra, transformParams in
-                let roadmapConfig = try await parra.networkManager.getRoadmap()
+                let roadmapConfig = try await parra.parraInternal.networkManager
+                    .getRoadmap()
 
                 guard let tab = roadmapConfig.tabs.first else {
                     throw ParraError.message(
@@ -38,7 +39,8 @@ extension ViewDataLoader {
                     )
                 }
 
-                let ticketResponse = try await parra.networkManager
+                let ticketResponse = try await parra.parraInternal
+                    .networkManager
                     .paginateTickets(
                         limit: transformParams.limit,
                         offset: transformParams.offset,
@@ -53,13 +55,13 @@ extension ViewDataLoader {
             },
             renderer: { parra, params, _ in
                 let container: RoadmapWidget = renderContainer(
-                    from: parra,
+                    from: parra.parraInternal,
                     with: localBuilder,
                     params: .init(
                         roadmapConfig: params.roadmapConfig,
                         selectedTab: params.selectedTab,
                         ticketResponse: params.ticketResponse,
-                        networkManager: parra.networkManager
+                        networkManager: parra.parraInternal.networkManager
                     ),
                     config: config
                 ) { _ in

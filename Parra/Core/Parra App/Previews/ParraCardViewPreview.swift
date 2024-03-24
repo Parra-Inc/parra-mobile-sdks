@@ -64,8 +64,10 @@ struct ParraCardViewPreview<Content>: View where Content: View {
                     FeedbackCardWidget.ContentObserver(
                         initialParams: .init(
                             cards: cards,
-                            notificationCenter: parra.notificationCenter,
-                            dataManager: parra.feedback.dataManager,
+                            notificationCenter: parra.parraInternal
+                                .notificationCenter,
+                            dataManager: parra.parraInternal.feedback
+                                .dataManager,
                             syncHandler: nil
                         )
                     )

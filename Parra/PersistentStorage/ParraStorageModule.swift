@@ -37,7 +37,7 @@ class ParraStorageModule<DataType: Codable> {
             self.persistentStorage = (fileSystemStorage, fileName)
         case .userDefaults(key: let key):
             let userDefaults = UserDefaults(
-                suiteName: Parra.bundle()
+                suiteName: ParraInternal.bundle()
                     .bundleIdentifier
             ) ?? .standard
 

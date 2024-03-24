@@ -260,7 +260,7 @@ struct RoadmapWidget: Container {
                         .tabs[0],
                     ticketResponse: UserTicketCollectionResponse
                         .validStates()[0],
-                    networkManager: parra.networkManager
+                    networkManager: parra.parraInternal.networkManager
                 )
             )
         )

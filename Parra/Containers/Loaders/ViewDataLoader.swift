@@ -42,7 +42,7 @@ public struct ViewDataLoader<TransformParams, Data, ViewContent>
     let load: (Parra, TransformParams) async throws -> Data
 
     static func renderContainer<C: Container>(
-        from parra: Parra,
+        from parra: ParraInternal,
         with localBuilder: C.BuilderConfig,
         params: C.ContentObserver.InitialParams,
         config: C.Config,

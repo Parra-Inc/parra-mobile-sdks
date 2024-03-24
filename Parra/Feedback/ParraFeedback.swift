@@ -9,9 +9,10 @@ import Foundation
 
 private let logger = Logger(category: "Feedback module")
 
-/// The `ParraFeedback` module is used to fetch Parra Feedback data from the Parra API. Once data is fetched,
-/// it will be displayed automatically in any `ParraCardView`s that you add to your view hierarchy.
-/// To handle authentication, see the Parra module.
+/// The `ParraFeedback` module is used to fetch Parra Feedback data from the
+/// Parra API. Once data is fetched, it will be displayed automatically in any
+/// `ParraCardView`s that you add to your view hierarchy. To handle
+/// authentication, see the Parra module.
 public class ParraFeedback {
     // MARK: - Lifecycle
 
@@ -63,10 +64,14 @@ public class ParraFeedback {
         }
     }
 
-    /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
-    /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
-    /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
-    /// view the `ParraCardView` initializer if you'd like to only display certain cards.
+    /// Fetch any available cards from the Parra API. Once cards are
+    /// successfully fetched, they will automatically be cached by the
+    /// `ParraFeedback` module and will be automatically displayed in
+    /// `ParraCardView`s when they are added to your view hierarchy. The
+    /// completion handler for this method contains a list of the card items
+    /// that were recevied. If you'd like, you can filter them yourself and only
+    /// pass select card items view the `ParraCardView` initializer if you'd
+    ///  like to only display certain cards.
     public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all,
         withCompletion completion: @escaping ([ParraCardItem], Error?) -> Void
@@ -77,7 +82,7 @@ public class ParraFeedback {
                 completion(cards, nil)
             case .failure(let parraError):
                 let error = NSError(
-                    domain: Parra.errorDomain,
+                    domain: ParraInternal.errorDomain,
                     code: 20,
                     userInfo: [
                         NSLocalizedDescriptionKey: parraError
@@ -90,10 +95,14 @@ public class ParraFeedback {
         }
     }
 
-    /// Fetch any available cards from the Parra API. Once cards are successfully fetched, they will automatically be cached by the `ParraFeedback`
-    /// module and will be automatically displayed in `ParraCardView`s when they are added to your view hierarchy. The completion handler
-    /// for this method contains a list of the card items that were recevied. If you'd like, you can filter them yourself and only pass select card items
-    /// view the `ParraCardView` initializer if you'd like to only display certain cards.
+    /// Fetch any available cards from the Parra API. Once cards are
+    /// successfully fetched, they will automatically be cached by the
+    /// `ParraFeedback` module and will be automatically displayed in
+    /// `ParraCardView`s when they are added to your view hierarchy. The
+    /// completion handler for this method contains a list of the card items
+    /// that were recevied. If you'd like, you can filter them yourself and only
+    /// pass select card items view the `ParraCardView` initializer if you'd
+    /// like to only display certain cards.
     public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
@@ -102,10 +111,11 @@ public class ParraFeedback {
         )
         let cards = cardsResponse.items
 
-        // Only keep cards that we don't already have an answer cached for. This isn't something that
-        // should ever even happen, but in event that new cards are retreived that include cards we
-        // already have an answer for, we'll keep the answered cards hidden and they'll be flushed
-        // the next time a sync is triggered.
+        // Only keep cards that we don't already have an answer cached for. This
+        // isn't something that should ever even happen, but in event that new
+        // cards are retreived that include cards we already have an answer for,
+        // we'll keep the answered cards hidden and they'll be flushed the next
+        // time a sync is triggered.
         var cardsToKeep = [ParraCardItem]()
 
         for card in cards {
@@ -119,9 +129,11 @@ public class ParraFeedback {
         return cardsToKeep
     }
 
-    /// Fetches the feedback form with the provided ID from the Parra API. If a form is returned, it is up to the caller
-    /// to pass this response to `ParraFeedback.presentFeedbackForm` to present the feedback form. Splitting up feedback
-    /// form presentation in this way allows us to skip having to show loading indicators.
+    /// Fetches the feedback form with the provided ID from the Parra API.
+    /// If a form is returned, it is up to the caller to pass this response to
+    /// `ParraFeedback.presentFeedbackForm` to present the feedback form.
+    /// Splitting up feedback form presentation in this way allows us to skip
+    /// having to show loading indicators.
     public func fetchFeedbackForm(
         formId: String
     ) async throws -> ParraFeedbackForm {
@@ -130,9 +142,11 @@ public class ParraFeedback {
         return ParraFeedbackForm(from: response)
     }
 
-    /// Fetches the feedback form with the provided ID from the Parra API. If a form is returned, it is up to the caller
-    /// to pass this response to `ParraFeedback.presentFeedbackForm` to present the feedback form. Splitting up feedback
-    /// form presentation in this way allows us to skip having to show loading indicators.
+    /// Fetches the feedback form with the provided ID from the Parra API. If a
+    /// form is returned, it is up to the caller to pass this response to
+    /// `ParraFeedback.presentFeedbackForm` to present the feedback form.
+    /// Splitting up feedback form presentation in this way allows us to skip
+    /// having to show loading indicators.
     public func fetchFeedbackForm(
         formId: String,
         withCompletion completion: @escaping (Result<
@@ -167,7 +181,8 @@ public class ParraFeedback {
     let dataManager: ParraFeedbackDataManager
     let networkManager: ParraNetworkManager
 
-    /// Checks whether the user has previously supplied input for the provided `ParraCardItem`.
+    /// Checks whether the user has previously supplied input for the provided
+    /// `ParraCardItem`.
     func hasCardBeenCompleted(
         _ cardItem: ParraCardItem
     ) async -> Bool {
@@ -238,7 +253,8 @@ public class ParraFeedback {
             return
         }
 
-        // Success means the request didn't fail and there are cards in the response that have a display type popup or drawer
+        // Success means the request didn't fail and there are cards in the
+        // response that have a display type popup or drawer
         for attempt in 0 ... context.retryTimes {
             do {
                 logger.trace("Fetching cards. Attempt #\(attempt + 1)")
@@ -278,8 +294,10 @@ public class ParraFeedback {
             return
         }
 
-        // Take the display type of the first card that has one set as the display type to use for this set of cards.
-        // It is unlikely there will ever be a case where this isn't found on the first element.
+        // Take the display type of the first card that has one set as the
+        // display type to use for this set of cards.
+        // It is unlikely there will ever be a case where this isn't found on
+        // the first element.
         guard let displayType = cardItems.first(
             where: { $0.displayType != nil }
         )?.displayType else {
@@ -288,11 +306,11 @@ public class ParraFeedback {
             return
         }
 
-        let onDismiss: () -> Void = {
-            Task {
-                await ParraFeedbackPopupState.shared.dismiss()
-            }
-        }
+//        let onDismiss: () -> Void = {
+//            Task {
+//                await ParraFeedbackPopupState.shared.dismiss()
+//            }
+//        }
 
         switch displayType {
         case .popup:

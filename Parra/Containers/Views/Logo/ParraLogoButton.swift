@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct ParraLogoButton: View {
-    @Environment(Parra.self) var parra
+    @Environment(\.parra) var parra
 
     var type: ParraLogoType
 
     var body: some View {
         Button {
-            parra.openTrackedSiteLink(
+            parra.parraInternal.openTrackedSiteLink(
                 medium: type.utmMedium
             )
         } label: {

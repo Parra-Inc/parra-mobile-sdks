@@ -40,5 +40,5 @@ open class ParraAppDelegate: NSObject, UIApplicationDelegate {
     /// Not exposed publicly. Should only ever be set once from the
     /// ``Parra/ParraApp`` initializer as a means of passing the Parra instance
     /// for the app to the app delegate.
-    var parra: Parra!
+    let parra: Parra = .default
 }

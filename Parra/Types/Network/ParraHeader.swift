@@ -100,7 +100,7 @@ enum ParraHeader {
         case .platformAgent:
             return "parra-ios-swift"
         case .platformSdkVersion:
-            return Parra.libraryVersion()
+            return ParraInternal.libraryVersion()
         case .platformVersion:
             return ProcessInfo.processInfo.operatingSystemVersionString
         case .tenantId(let tenantId):

@@ -1,5 +1,5 @@
 //
-//  Parra+SyncEvents.swift
+//  ParraInternal+SyncEvents.swift
 //  Parra
 //
 //  Created by Michael MacCallum on 3/5/22.
@@ -13,7 +13,7 @@ import UIKit
 
 private let logger = Logger(category: "Sync Event Extensions")
 
-extension Parra {
+extension ParraInternal {
     private static var backgroundTaskId: UIBackgroundTaskIdentifier?
     private static var hasStartedEventObservers = false
 
@@ -63,12 +63,12 @@ extension Parra {
 
     func addEventObservers() {
         guard NSClassFromString("XCTestCase") == nil,
-              !Parra.hasStartedEventObservers else
+              !ParraInternal.hasStartedEventObservers else
         {
             return
         }
 
-        Parra.hasStartedEventObservers = true
+        ParraInternal.hasStartedEventObservers = true
 
         // TODO: Before adding observer, should we read the current values of everything and
         // store them in user state?
@@ -95,7 +95,7 @@ extension Parra {
     @MainActor
     @objc
     func applicationDidBecomeActive(notification: Notification) {
-        if let taskId = Parra.backgroundTaskId,
+        if let taskId = ParraInternal.backgroundTaskId,
            let app = notification.object as? UIApplication
         {
             app.endBackgroundTask(taskId)
@@ -118,11 +118,11 @@ extension Parra {
         triggerSyncFromNotification(notification: notification)
 
         let endSession = { [self] in
-            guard let taskId = Parra.backgroundTaskId else {
+            guard let taskId = ParraInternal.backgroundTaskId else {
                 return
             }
 
-            Parra.backgroundTaskId = nil
+            ParraInternal.backgroundTaskId = nil
 
             logger
                 .debug("Background task: \(taskId) triggering session end")
@@ -132,19 +132,20 @@ extension Parra {
             UIApplication.shared.endBackgroundTask(taskId)
         }
 
-        Parra.backgroundTaskId = UIApplication.shared.beginBackgroundTask(
-            withName: InternalConstants.backgroundTaskName
-        ) {
-            logger.debug("Background task expiration handler invoked")
+        ParraInternal.backgroundTaskId = UIApplication.shared
+            .beginBackgroundTask(
+                withName: Constants.backgroundTaskName
+            ) {
+                logger.debug("Background task expiration handler invoked")
 
-            Task { @MainActor in
-                await endSession()
+                Task { @MainActor in
+                    await endSession()
+                }
             }
-        }
 
         let startTime = Date()
         Task(priority: .background) {
-            while Date().timeIntervalSince(startTime) < InternalConstants
+            while Date().timeIntervalSince(startTime) < Constants
                 .backgroundTaskDuration
             {
                 try await Task.sleep(for: 0.1)
@@ -152,7 +153,7 @@ extension Parra {
 
             logger
                 .debug(
-                    "Ending Parra background execution after \(InternalConstants.backgroundTaskDuration)s"
+                    "Ending Parra background execution after \(Constants.backgroundTaskDuration)s"
                 )
 
             Task { @MainActor in

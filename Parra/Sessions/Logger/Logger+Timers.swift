@@ -150,7 +150,7 @@ public extension Logger {
             return "\(formatted) second(s)"
         }
 
-        var formatter = Parra.InternalConstants.Formatters
+        var formatter = ParraInternal.Constants.Formatters
             .dateComponentsFormatter
 
         formatter.formattingContext = .middleOfSentence

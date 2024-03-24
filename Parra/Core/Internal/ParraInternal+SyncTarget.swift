@@ -1,5 +1,5 @@
 //
-//  Parra+SyncTarget.swift
+//  ParraInternal+SyncTarget.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/10/24.
@@ -10,7 +10,7 @@ import Foundation
 
 // Parra is itself a sync target. The top level manager will facilitate syncs
 // that transfer state between its children.
-extension Parra: SyncTarget {
+extension ParraInternal: SyncTarget {
     func hasDataToSync(since date: Date?) async -> Bool {
         await sessionManager.hasDataToSync(since: date)
     }

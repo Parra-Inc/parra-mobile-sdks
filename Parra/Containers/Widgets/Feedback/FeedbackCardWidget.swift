@@ -38,7 +38,7 @@ struct FeedbackCardWidget: Container {
     let config: FeedbackCardWidgetConfig
     let style: FeedbackCardWidgetStyle
 
-    @Environment(Parra.self) var parra
+    @Environment(\.parra) var parra
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
@@ -141,7 +141,8 @@ struct FeedbackCardWidget: Container {
                         initialParams: .init(
                             cards: ParraCardItem.validStates(),
                             notificationCenter: ParraNotificationCenter(),
-                            dataManager: parra.feedback.dataManager,
+                            dataManager: parra.parraInternal.feedback
+                                .dataManager,
                             syncHandler: nil
                         )
                     )

@@ -28,8 +28,10 @@ public struct ParraFeedbackView: ParraPublicContainer {
     // MARK: - Public
 
     public var body: some View {
-        let theme = parra.configuration.theme
-        let globalComponentAttributes = parra.configuration
+        let parraInstance = parra.parraInternal!
+
+        let theme = parraInstance.configuration.theme
+        let globalComponentAttributes = parraInstance.configuration
             .globalComponentAttributes
         let style = style ?? .default(with: theme)
 
@@ -44,12 +46,12 @@ public struct ParraFeedbackView: ParraPublicContainer {
             contentObserver: Wrapped.ContentObserver(
                 initialParams: .init(
                     cards: cards,
-                    notificationCenter: parra.notificationCenter,
-                    dataManager: parra.feedback.dataManager,
+                    notificationCenter: parraInstance.notificationCenter,
+                    dataManager: parraInstance.feedback.dataManager,
                     cardDelegate: cardDelegate,
                     syncHandler: {
                         Task {
-                            await parra.triggerSync()
+                            await parraInstance.triggerSync()
                         }
                     }
                 )
@@ -61,7 +63,7 @@ public struct ParraFeedbackView: ParraPublicContainer {
 
     typealias Wrapped = FeedbackCardWidget
 
-    @Environment(Parra.self) var parra
+    @Environment(\.parra) var parra
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     // MARK: - Private

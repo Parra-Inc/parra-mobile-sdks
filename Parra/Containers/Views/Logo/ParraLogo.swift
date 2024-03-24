@@ -92,7 +92,7 @@ struct ParraLogo: View {
 
         return UIImage(
             named: name,
-            in: Parra.bundle(),
+            in: ParraInternal.bundle(),
             with: nil
         )
     }

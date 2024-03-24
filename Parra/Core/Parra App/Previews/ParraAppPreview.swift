@@ -18,7 +18,7 @@ import SwiftUI
 ///
 /// ```
 /// struct ExampleView: View {
-///     @Environment(Parra.self) var parra
+///     @Environment(\.parra) var parra
 ///
 ///     var body: some View {
 ///         Button("Fetch cards") {

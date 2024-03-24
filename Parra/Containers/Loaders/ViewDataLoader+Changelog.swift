@@ -34,10 +34,11 @@ extension ViewDataLoader {
             ChangelogWidget
         >(
             loader: { parra, transformParams in
-                let response = try await parra.networkManager.paginateReleases(
-                    limit: transformParams.limit,
-                    offset: transformParams.offset
-                )
+                let response = try await parra.parraInternal.networkManager
+                    .paginateReleases(
+                        limit: transformParams.limit,
+                        offset: transformParams.offset
+                    )
 
                 return ChangelogLoaderResult(
                     appReleaseCollection: response
@@ -45,11 +46,11 @@ extension ViewDataLoader {
             },
             renderer: { parra, params, _ in
                 let container: ChangelogWidget = renderContainer(
-                    from: parra,
+                    from: parra.parraInternal,
                     with: localBuilder,
                     params: .init(
                         appReleaseCollection: params.appReleaseCollection,
-                        networkManager: parra.networkManager
+                        networkManager: parra.parraInternal.networkManager
                     ),
                     config: config
                 ) { _ in

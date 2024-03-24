@@ -107,7 +107,7 @@ final class ParraNetworkManager: NetworkManagerType {
             )
 
         do {
-            let url = Parra.InternalConstants.parraApiRoot
+            let url = ParraInternal.Constants.parraApiRoot
                 .appendingPathComponent(route)
             guard var urlComponents = URLComponents(
                 url: url,
@@ -184,7 +184,7 @@ final class ParraNetworkManager: NetworkManagerType {
         userId: String
     ) async throws -> String {
         let endpoint = ParraEndpoint.postAuthentication(tenantId: tenantId)
-        let url = Parra.InternalConstants.parraApiRoot
+        let url = ParraInternal.Constants.parraApiRoot
             .appendingPathComponent(endpoint.route)
         var request = URLRequest(url: url)
 

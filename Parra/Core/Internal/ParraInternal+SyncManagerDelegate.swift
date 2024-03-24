@@ -1,5 +1,5 @@
 //
-//  Parra+SyncManagerDelegate.swift
+//  ParraInternal+SyncManagerDelegate.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/10/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Parra: SyncManagerDelegate {
+extension ParraInternal: SyncManagerDelegate {
     func getSyncTargets() -> [SyncTarget] {
         return [
             // These should be in order of importance of the sync tasks.

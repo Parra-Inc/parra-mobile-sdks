@@ -44,7 +44,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
         case error(Error)
     }
 
-    @Environment(Parra.self) var parra
+    @Environment(\.parra) var parra
 
     // Externally controlled state to use to determine when to kick off
     // the loader and with what data

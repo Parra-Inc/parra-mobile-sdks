@@ -194,7 +194,7 @@ struct ChangelogWidget: Container {
                 initialParams: .init(
                     appReleaseCollection: AppReleaseCollectionResponse
                         .validStates()[0],
-                    networkManager: parra.networkManager
+                    networkManager: parra.parraInternal.networkManager
                 )
             )
         )

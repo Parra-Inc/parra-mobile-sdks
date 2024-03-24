@@ -27,7 +27,7 @@ struct ParraAppView<Content, DelegateType>: View
     ) {
         self.content = sceneContent
 
-        let parra: Parra
+        let parra: ParraInternal
         let appState: ParraAppState
         let launchScreenConfig: ParraLaunchScreen.Config?
 
@@ -37,7 +37,7 @@ struct ParraAppView<Content, DelegateType>: View
             self.authProvider = parraAuthenticationProviderType
             launchScreenConfig = config
 
-            (parra, appState) = Parra.createParraInstance(
+            (parra, appState) = ParraInternal.createParraInstance(
                 authProvider: authProvider,
                 configuration: ParraConfiguration(
                     options: options
@@ -48,17 +48,20 @@ struct ParraAppView<Content, DelegateType>: View
             self.authProvider = .preview
             launchScreenConfig = .preview
 
-            (parra, appState) = Parra.createParraSwiftUIPreviewsInstance(
-                authProvider: authProvider,
-                configuration: ParraConfiguration(
-                    options: options
+            (parra, appState) = ParraInternal
+                .createParraSwiftUIPreviewsInstance(
+                    authProvider: authProvider,
+                    configuration: ParraConfiguration(
+                        options: options
+                    )
                 )
-            )
         }
 
-        _appDelegate = UIApplicationDelegateAdaptor(appDelegateType)
-        _appDelegate.wrappedValue.parra = parra
+        // Must be set before initializing app delegate instances, which rely
+        // on it.
+        Parra.default.parraInternal = parra
 
+        _appDelegate = UIApplicationDelegateAdaptor(appDelegateType)
         _parraAppState = StateObject(wrappedValue: appState)
 
         self.parra = parra
@@ -90,7 +93,7 @@ struct ParraAppView<Content, DelegateType>: View
             // During this phase, initialization has finished so the primary
             // content view can be created, but the launch screen can not be
             // destroyed until its animation off screen has completed.
-            if launchScreenState.state.shouldAppContent {
+            if launchScreenState.state.showAppContent {
                 renderPrimaryContent()
             }
 
@@ -184,13 +187,13 @@ struct ParraAppView<Content, DelegateType>: View
     @StateObject private var themeObserver: ParraThemeObserver
     @StateObject private var alertManager: AlertManager
 
-    private let parra: Parra
+    private let parra: ParraInternal
     private let authProvider: ParraAuthenticationProviderType
     private let launchScreenConfig: ParraLaunchScreen.Config
 
     private func renderPrimaryContent() -> some View {
-        content(parra)
-            .environment(parra)
+        content(Parra.default)
+            .environment(\.parra, Parra.default)
             .renderToast(toast: $alertManager.currentToast)
     }
 

@@ -1,5 +1,5 @@
 //
-//  Parra+Factory.swift
+//  ParraInternal+Factory.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/10/24.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-extension Parra {
+extension ParraInternal {
     @MainActor
     static func createParraInstance(
         authProvider: ParraAuthenticationProviderType,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
-    ) -> (Parra, ParraAppState) {
+    ) -> (ParraInternal, ParraAppState) {
         let appState = authProvider.initialAppState
         let syncState = ParraSyncState()
         let fileManager = FileManager.default
@@ -104,7 +104,7 @@ extension Parra {
 
         Logger.loggerBackend = sessionManager
 
-        let parra = Parra(
+        let parra = ParraInternal(
             configuration: configuration,
             dataManager: dataManager,
             syncManager: syncManager,
@@ -127,7 +127,7 @@ extension Parra {
         authProvider: ParraAuthenticationProviderType,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
-    ) -> (Parra, ParraAppState) {
+    ) -> (ParraInternal, ParraAppState) {
         let appState = authProvider.initialAppState
         let syncState = ParraSyncState()
         let fileManager = FileManager.default
@@ -220,7 +220,7 @@ extension Parra {
 
         Logger.loggerBackend = sessionManager
 
-        let parra = Parra(
+        let parra = ParraInternal(
             configuration: configuration,
             dataManager: dataManager,
             syncManager: syncManager,

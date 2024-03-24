@@ -48,7 +48,7 @@ extension JSONEncoder {
         // mirror the changes made there.
 
         var container = encoder.singleValueContainer()
-        let formatter = Parra.InternalConstants.Formatters.iso8601Formatter
+        let formatter = ParraInternal.Constants.Formatters.iso8601Formatter
 
         try container.encode(
             formatter.string(from: date)

@@ -1,8 +1,9 @@
 //
-//  Parra.swift
+//  ParraInternal.swift
 //  Parra
 //
-//  Created by Michael MacCallum on 11/22/21.
+//  Created by Mick MacCallum on 3/23/24.
+//  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
 import Foundation
@@ -10,11 +11,11 @@ import UIKit
 
 private let logger = Logger(category: "Parra")
 
-/// The primary module used to interact with the Parra SDK.
-/// Access this module via the `parra` `@Environment` object in SwiftUI after wrapping your `Scene`
-/// in the ``ParraApp`` View.
-
-public class Parra: Observable {
+/// The internal Parra instance containing any top level references/functions
+/// that need to be used from within the SDK. Nothing on this class should be
+/// public.
+@usableFromInline
+class ParraInternal {
     // MARK: - Lifecycle
 
     init(

@@ -20,7 +20,7 @@ final class LaunchScreenStateManager: ObservableObject {
             return self == State.initial || self == State.transitioning
         }
 
-        var shouldAppContent: Bool {
+        var showAppContent: Bool {
             return self == State.transitioning || self == State.complete
         }
     }

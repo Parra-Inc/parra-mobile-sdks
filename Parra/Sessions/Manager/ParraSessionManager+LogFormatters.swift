@@ -28,11 +28,11 @@ extension ParraSessionManager {
         case .epoch:
             "\(timestamp.timeIntervalSince1970)"
         case .iso8601:
-            Parra.InternalConstants.Formatters.iso8601Formatter.string(
+            ParraInternal.Constants.Formatters.iso8601Formatter.string(
                 from: timestamp
             )
         case .rfc3339:
-            Parra.InternalConstants.Formatters.rfc3339DateFormatter.string(
+            ParraInternal.Constants.Formatters.rfc3339DateFormatter.string(
                 from: timestamp
             )
         }
