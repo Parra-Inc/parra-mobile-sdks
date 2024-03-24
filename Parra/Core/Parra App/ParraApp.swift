@@ -95,13 +95,13 @@ public struct ParraApp<Content, DelegateType>: Scene
     ///   not found, a blank white screen will be rendered.
     public init(
         authProvider: ParraAuthenticationProviderType,
-        options: [ParraConfigurationOption] = [],
+        configuration: ParraConfiguration = .init(),
         appDelegateType: DelegateType.Type = ParraAppDelegate.self,
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
         appContent: @MainActor @escaping () -> Content
     ) {
         self.authProvider = authProvider
-        self.options = options
+        self.configuration = configuration
         self.appDelegateType = appDelegateType
         self.launchScreenConfig = launchScreenConfig
         self.appContent = appContent
@@ -113,7 +113,7 @@ public struct ParraApp<Content, DelegateType>: Scene
         WindowGroup {
             ParraAppView(
                 target: .app(authProvider, launchScreenConfig),
-                options: options,
+                configuration: configuration,
                 appDelegateType: appDelegateType,
                 sceneContent: { _ in
                     appContent()
@@ -125,7 +125,7 @@ public struct ParraApp<Content, DelegateType>: Scene
     // MARK: - Private
 
     private let authProvider: ParraAuthenticationProviderType
-    private let options: [ParraConfigurationOption]
+    private let configuration: ParraConfiguration
     private let appDelegateType: DelegateType.Type
     private let launchScreenConfig: ParraLaunchScreen.Config?
     private let appContent: () -> Content

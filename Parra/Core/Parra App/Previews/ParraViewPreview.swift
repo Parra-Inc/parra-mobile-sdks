@@ -19,7 +19,7 @@ struct ParraViewPreview<Content>: View where Content: View {
         theme: ParraTheme = .default
     ) {
         self.content = content
-        self.options = [.theme(theme)]
+        self.configuration = .init(themeOptions: theme)
         self.factory = ComponentFactory(
             global: GlobalComponentAttributes(),
             theme: theme
@@ -31,7 +31,7 @@ struct ParraViewPreview<Content>: View where Content: View {
     var body: some View {
         ParraAppView(
             target: .preview,
-            options: options,
+            configuration: configuration,
             appDelegateType: ParraPreviewAppDelegate.self,
             sceneContent: { _ in
                 content(factory)
@@ -45,5 +45,5 @@ struct ParraViewPreview<Content>: View where Content: View {
     @ViewBuilder private var content: (_ factory: ComponentFactory) -> Content
 
     private let factory: ComponentFactory
-    private let options: [ParraConfigurationOption]
+    private let configuration: ParraConfiguration
 }

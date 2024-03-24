@@ -10,7 +10,7 @@ import SwiftUI
 
 /// A place to provide global defaults for basic styles of Parra components,
 /// given contextual information about where they will be used.
-public class GlobalComponentAttributes {
+public final class GlobalComponentAttributes: ParraConfigurationOptionType {
     // MARK: - Lifecycle
 
     public init(
@@ -90,6 +90,8 @@ public class GlobalComponentAttributes {
         _ content: EmptyStateContent,
         _ defaultAttributes: EmptyStateAttributes?
     ) -> EmptyStateAttributes
+
+    public static var `default`: GlobalComponentAttributes = .init()
 
     // MARK: - Internal
 

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-public struct ParraTheme {
+public struct ParraTheme: ParraConfigurationOptionType {
     // MARK: - Lifecycle
 
     public init(

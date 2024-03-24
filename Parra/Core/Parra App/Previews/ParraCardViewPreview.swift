@@ -22,7 +22,9 @@ struct ParraCardViewPreview<Content>: View where Content: View {
         self.content = content
         self.cards = cards
         self.config = config
-        self.options = [.theme(theme)]
+        self.configuration = ParraConfiguration(
+            themeOptions: theme
+        )
         self.localBuilder = localBuilder
         self.factory = ComponentFactory(
             global: GlobalComponentAttributes(),
@@ -35,7 +37,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
     var body: some View {
         ParraAppView(
             target: .preview,
-            options: options,
+            configuration: configuration,
             appDelegateType: ParraPreviewAppDelegate.self,
             sceneContent: { parra in
                 GeometryReader { geometry in
@@ -87,5 +89,5 @@ struct ParraCardViewPreview<Content>: View where Content: View {
     private let config: FeedbackCardWidgetConfig
     private let localBuilder: FeedbackCardWidgetBuilderConfig
     private let factory: ComponentFactory
-    private let options: [ParraConfigurationOption]
+    private let configuration: ParraConfiguration
 }

@@ -180,7 +180,7 @@ class ParraInternal {
     private func performPostAuthRefreshActions() {
         logger.debug("Performing push authentication refresh actions.")
 
-        if configuration.pushNotificationsEnabled {
+        if configuration.pushNotificationOptions.enabled {
             UIApplication.shared.registerForRemoteNotifications()
         }
     }

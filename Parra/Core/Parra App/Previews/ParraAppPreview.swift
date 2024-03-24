@@ -44,10 +44,10 @@ public struct ParraAppPreview<Content, DelegateType>: View
     // MARK: - Lifecycle
 
     public init(
-        options: [ParraConfigurationOption] = [],
+        configuration: ParraConfiguration = .init(),
         previewContent: @MainActor @escaping () -> Content
     ) {
-        self.options = options
+        self.configuration = configuration
         self.previewContent = previewContent
     }
 
@@ -56,7 +56,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
     public var body: some View {
         ParraAppView(
             target: .preview,
-            options: options,
+            configuration: configuration,
             appDelegateType: ParraPreviewAppDelegate.self,
             sceneContent: { _ in
                 previewContent()
@@ -66,6 +66,6 @@ public struct ParraAppPreview<Content, DelegateType>: View
 
     // MARK: - Private
 
-    private let options: [ParraConfigurationOption]
+    private let configuration: ParraConfiguration
     private let previewContent: () -> Content
 }

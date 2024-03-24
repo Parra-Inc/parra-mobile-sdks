@@ -21,7 +21,7 @@ struct ParraAppView<Content, DelegateType>: View
 
     init(
         target: ParraAppViewTarget,
-        options: [ParraConfigurationOption],
+        configuration: ParraConfiguration,
         appDelegateType: DelegateType.Type,
         sceneContent: @MainActor @escaping (_ parra: Parra) -> Content
     ) {
@@ -39,9 +39,7 @@ struct ParraAppView<Content, DelegateType>: View
 
             (parra, appState) = ParraInternal.createParraInstance(
                 authProvider: authProvider,
-                configuration: ParraConfiguration(
-                    options: options
-                )
+                configuration: configuration
             )
         case .preview:
 
@@ -51,9 +49,7 @@ struct ParraAppView<Content, DelegateType>: View
             (parra, appState) = ParraInternal
                 .createParraSwiftUIPreviewsInstance(
                     authProvider: authProvider,
-                    configuration: ParraConfiguration(
-                        options: options
-                    )
+                    configuration: configuration
                 )
         }
 

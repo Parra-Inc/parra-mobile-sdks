@@ -28,7 +28,7 @@ struct ParraContainerPreview<ContainerType>: View
         theme: ParraTheme = .default
     ) {
         self.content = content
-        self.options = [.theme(theme)]
+        self.configuration = .init(themeOptions: theme)
         self.config = config
         self.builderConfig = builderConfig
         self.factory = ComponentFactory(
@@ -46,7 +46,7 @@ struct ParraContainerPreview<ContainerType>: View
         // individual containers.
         ParraAppView(
             target: .preview,
-            options: options,
+            configuration: configuration,
             appDelegateType: ParraPreviewAppDelegate.self,
             sceneContent: { parra in
                 AnyView(content(parra, factory, config, builderConfig))
@@ -69,5 +69,5 @@ struct ParraContainerPreview<ContainerType>: View
     private let factory: ComponentFactory
     private let config: ContainerType.Config
     private let builderConfig: ContainerType.BuilderConfig
-    private let options: [ParraConfigurationOption]
+    private let configuration: ParraConfiguration
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ParraWhatsNewOptions {
+public struct ParraWhatsNewOptions: ParraConfigurationOptionType {
     public enum PresentationStyle {
         case toast
 

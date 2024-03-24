@@ -38,7 +38,7 @@ class MockedParraTestCase: ParraBaseMock {
             return UUID().uuidString
         }
     ) async -> MockParra {
-        let configuration = ParraConfiguration(options: [])
+        let configuration = ParraConfiguration()
 
         let mockNetworkManager = await createMockNetworkManager(
             appState: appState,
@@ -76,7 +76,7 @@ class MockedParraTestCase: ParraBaseMock {
 
         Logger.loggerBackend = sessionManager
 
-        let parra = Parra(
+        let parra = ParraInternal(
             configuration: configuration,
             dataManager: mockNetworkManager.dataManager,
             syncManager: syncManager,

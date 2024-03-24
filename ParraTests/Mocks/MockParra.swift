@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 
 struct MockParra {
-    let parra: Parra
+    let parra: ParraInternal
     let mockNetworkManager: MockParraNetworkManager
 
     let dataManager: ParraDataManager

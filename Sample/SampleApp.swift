@@ -14,12 +14,13 @@ struct SampleApp: App {
     var body: some Scene {
         ParraApp(
             authProvider: authenticationProvider(),
-            options: [
-                .logger(options: .default),
-                .pushNotifications,
-                .theme(ParraTheme(uiColor: .systemBlue)),
-                .whatsNew(.default)
-            ],
+            configuration: ParraConfiguration(
+                globalComponentAttributes: .default,
+                loggerOptions: .default,
+                pushNotificationOptions: .default,
+                themeOptions: ParraTheme(uiColor: .systemBlue),
+                whatsNewOptions: .default
+            ),
             appContent: {
                 ContentView()
             }
