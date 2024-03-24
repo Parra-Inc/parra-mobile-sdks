@@ -12,12 +12,14 @@ public struct ParraConfiguration {
     // MARK: - Lifecycle
 
     public init(
+        appInfoOptions: ParraAppInfoOptions = .default,
         globalComponentAttributes: GlobalComponentAttributes = .default,
         loggerOptions: ParraLoggerOptions = .default,
         pushNotificationOptions: ParraPushNotificationOptions = .default,
         themeOptions: ParraTheme = .default,
         whatsNewOptions: ParraWhatsNewOptions = .default
     ) {
+        self.appInfoOptions = appInfoOptions
         self.globalComponentAttributes = globalComponentAttributes
         self.pushNotificationOptions = pushNotificationOptions
         self.theme = themeOptions
@@ -30,6 +32,7 @@ public struct ParraConfiguration {
 
     // MARK: - Public
 
+    public let appInfoOptions: ParraAppInfoOptions
     public let loggerOptions: ParraLoggerOptions
     public let pushNotificationOptions: ParraPushNotificationOptions
     public internal(set) var theme: ParraTheme

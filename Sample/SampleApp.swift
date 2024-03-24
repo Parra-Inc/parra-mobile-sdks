@@ -15,6 +15,7 @@ struct SampleApp: App {
         ParraApp(
             authProvider: authenticationProvider(),
             configuration: ParraConfiguration(
+                appInfoOptions: .default,
                 globalComponentAttributes: .default,
                 loggerOptions: .default,
                 pushNotificationOptions: .default,

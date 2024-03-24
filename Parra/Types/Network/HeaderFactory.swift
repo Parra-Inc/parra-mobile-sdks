@@ -1,5 +1,5 @@
 //
-//  ParraHeader.swift
+//  HeaderFactory.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/2/23.
@@ -10,68 +10,58 @@ import AdSupport
 import Foundation
 import UIKit
 
-enum ParraHeader {
-    case applicationId(String)
-    case applicationLocale
-    case applicationBundleVersion
-    case applicationBundleVersionShort
-    case applicationBundleId
-    case debug
-    case device
-    case deviceId
-    case deviceLocale
-    case deviceManufacturer
-    case deviceTimeZoneAbbreviation
-    case deviceTimeZoneOffset
-    case platform
-    case platformAgent
-    case platformSdkVersion
-    case platformVersion
-    case tenantId(String)
+struct HeaderFactory {
+    // MARK: - Lifecycle
+
+    init(
+        headerPrefix: String = "PARRA"
+    ) {
+        self.headerPrefix = headerPrefix
+    }
 
     // MARK: - Internal
 
-    static let parraHeaderPrefix = "PARRA"
+    let headerPrefix: String
 
     // Should be included on **every** HTTP request
-    static var commonHeaderDictionary: [String: String] {
+    var commonHeaderDictionary: [String: String] {
         return headerDictionary(
             for: [
-                .applicationLocale, .applicationBundleId,
-                .applicationBundleVersion, .applicationBundleVersion, .debug,
-                .device, .deviceId, .deviceLocale,
-                .deviceManufacturer, .deviceTimeZoneAbbreviation,
-                .deviceTimeZoneOffset, .platform,
-                .platformAgent, .platformSdkVersion, .platformVersion
+                .applicationLocale, .applicationBundleVersion,
+                .applicationBundleVersion, .debug, .device, .deviceId,
+                .deviceLocale, .deviceManufacturer, .deviceTimeZoneAbbreviation,
+                .deviceTimeZoneOffset, .platform, .platformAgent,
+                .platformSdkVersion, .platformVersion
             ]
         )
     }
 
-    static var trackingHeaderDictionary: [String: String] {
+    var trackingHeaderDictionary: [String: String] {
         return headerDictionary(
             for: [
-                .applicationLocale, .applicationBundleId,
-                .applicationBundleVersion, .applicationBundleVersion, .debug,
-                .device, .deviceId, .deviceLocale,
-                .deviceManufacturer, .deviceTimeZoneAbbreviation,
-                .deviceTimeZoneOffset, .platform,
-                .platformAgent, .platformSdkVersion, .platformVersion
+                .applicationLocale, .applicationBundleVersion,
+                .applicationBundleVersion, .debug, .device, .deviceId,
+                .deviceLocale, .deviceManufacturer, .deviceTimeZoneAbbreviation,
+                .deviceTimeZoneOffset, .platform, .platformAgent,
+                .platformSdkVersion, .platformVersion
             ]
         )
     }
 
-    var prefixedName: String {
-        "\(ParraHeader.parraHeaderPrefix)-\(name)"
+    func prefixedName(for header: TrackingHeader) -> String {
+        return "\(headerPrefix)-\(header.name)"
     }
 
-    var currentValue: String? {
-        switch self {
+    func currentValue(
+        for header: TrackingHeader
+    ) -> String? {
+        switch header {
         case .applicationId(let applicationId):
             return applicationId
         case .applicationLocale:
             return Locale.preferredLanguages.first
-        case .applicationBundleId:
-            return Bundle.main.bundleIdentifier
+        case .applicationBundleId(let bundleId):
+            return bundleId
         case .applicationBundleVersion:
             return Bundle.main.infoDictionary?["CFBundleVersion"] as? String
         case .applicationBundleVersionShort:
@@ -108,23 +98,45 @@ enum ParraHeader {
         }
     }
 
-    static func headerDictionary(
-        for headers: [ParraHeader]
+    func headerDictionary(
+        for headers: [TrackingHeader]
     ) -> [String: String] {
         var headerDictionary = [String: String]()
 
         for header in headers {
-            if let value = header.currentValue {
-                headerDictionary[header.prefixedName] = value
+            if let value = currentValue(for: header) {
+                let name = prefixedName(for: header)
+
+                headerDictionary[name] = value
             }
         }
 
         return headerDictionary
     }
+}
 
-    // MARK: - Private
+enum TrackingHeader {
+    case applicationId(String)
+    case applicationLocale
+    case applicationBundleVersion
+    case applicationBundleVersionShort
+    case applicationBundleId(String)
+    case debug
+    case device
+    case deviceId
+    case deviceLocale
+    case deviceManufacturer
+    case deviceTimeZoneAbbreviation
+    case deviceTimeZoneOffset
+    case platform
+    case platformAgent
+    case platformSdkVersion
+    case platformVersion
+    case tenantId(String)
 
-    private var name: String {
+    // MARK: - Internal
+
+    var name: String {
         switch self {
         case .applicationLocale:
             return "APPLICATION-LOCALE"

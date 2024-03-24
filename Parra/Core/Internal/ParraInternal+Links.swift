@@ -18,7 +18,7 @@ extension ParraInternal {
             "medium": medium
         ])
 
-        let bundleId = Bundle.main.bundleIdentifier
+        let bundleId = configuration.appInfoOptions.bundleId
 
         guard var components = URLComponents(
             url: Parra.Constants.parraWebRoot,
@@ -29,23 +29,16 @@ extension ParraInternal {
             return
         }
 
-        var queryItems: [URLQueryItem] = [
+        components.queryItems = [
             URLQueryItem(
                 name: "utm_medium",
                 value: medium
+            ),
+            URLQueryItem(
+                name: "utm_source",
+                value: "parra_ios_\(bundleId)"
             )
         ]
-
-        if let bundleId {
-            queryItems.append(
-                URLQueryItem(
-                    name: "utm_source",
-                    value: "parra_ios_\(bundleId)"
-                )
-            )
-        }
-
-        components.queryItems = queryItems
 
         guard let url = components.url else {
             Logger.warn("Failed to create link to open site")

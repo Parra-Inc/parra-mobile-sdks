@@ -17,10 +17,12 @@ final class ParraNetworkManager: NetworkManagerType {
 
     init(
         appState: ParraAppState,
+        appConfig: ParraConfiguration,
         dataManager: ParraDataManager,
         configuration: ParraInstanceNetworkConfiguration
     ) {
         self.appState = appState
+        self.appConfig = appConfig
         self.dataManager = dataManager
         self.configuration = configuration
     }
@@ -29,6 +31,7 @@ final class ParraNetworkManager: NetworkManagerType {
 
     weak var delegate: ParraNetworkManagerDelegate?
     let appState: ParraAppState
+    let appConfig: ParraConfiguration
 
     func getAuthenticationProvider() async
         -> ParraAuthenticationProviderFunction?
@@ -107,6 +110,8 @@ final class ParraNetworkManager: NetworkManagerType {
             )
 
         do {
+            let headerFactory = HeaderFactory()
+
             let url = ParraInternal.Constants.parraApiRoot
                 .appendingPathComponent(route)
             guard var urlComponents = URLComponents(
@@ -141,7 +146,8 @@ final class ParraNetworkManager: NetworkManagerType {
             addHeaders(
                 to: &request,
                 endpoint: endpoint,
-                for: appState
+                for: appState,
+                with: headerFactory
             )
 
             let (result, responseContext) = await performRequest(
@@ -188,6 +194,8 @@ final class ParraNetworkManager: NetworkManagerType {
             .appendingPathComponent(endpoint.route)
         var request = URLRequest(url: url)
 
+        let headerFactory = HeaderFactory()
+
         request.httpMethod = endpoint.method.rawValue
         request.httpBody = try configuration.jsonEncoder
             .encode(["user_id": userId])
@@ -202,7 +210,8 @@ final class ParraNetworkManager: NetworkManagerType {
         addHeaders(
             to: &request,
             endpoint: endpoint,
-            for: appState
+            for: appState,
+            with: headerFactory
         )
 
         request.setValue(for: .authorization(.basic(authToken)))
@@ -505,11 +514,24 @@ final class ParraNetworkManager: NetworkManagerType {
     private func addHeaders(
         to request: inout URLRequest,
         endpoint: ParraEndpoint,
-        for appState: ParraAppState
+        for appState: ParraAppState,
+        with headerFactory: HeaderFactory
     ) {
+        let bundleId = appConfig.appInfoOptions.bundleId
+
         request.setValue(for: .accept(.applicationJson))
-        request.setValue(for: .applicationId(appState.applicationId))
-        request.setValue(for: .tenantId(appState.tenantId))
+        request.setValue(
+            for: .applicationId(appState.applicationId),
+            with: headerFactory
+        )
+        request.setValue(
+            for: .tenantId(appState.tenantId),
+            with: headerFactory
+        )
+        request.setValue(
+            for: .applicationBundleId(bundleId),
+            with: headerFactory
+        )
 
         if endpoint.method.allowsBody {
             request.setValue(for: .contentType(.applicationJson))
@@ -518,7 +540,11 @@ final class ParraNetworkManager: NetworkManagerType {
         // Important to be called for every HTTP request. All requests must
         // include certain tracking headers, but only specific endpoints will be
         // sent more extensive context about the device.
-        addTrackingHeaders(toRequest: &request, for: endpoint)
+        addTrackingHeaders(
+            toRequest: &request,
+            for: endpoint,
+            with: headerFactory
+        )
 
         let headers = request.allHTTPHeaderFields ?? [:]
 
@@ -530,12 +556,13 @@ final class ParraNetworkManager: NetworkManagerType {
 
     private func addTrackingHeaders(
         toRequest request: inout URLRequest,
-        for endpoint: ParraEndpoint
+        for endpoint: ParraEndpoint,
+        with headerFactory: HeaderFactory
     ) {
         let headers = if endpoint.isTrackingEnabled {
-            ParraHeader.trackingHeaderDictionary
+            headerFactory.trackingHeaderDictionary
         } else {
-            ParraHeader.commonHeaderDictionary
+            headerFactory.commonHeaderDictionary
         }
 
         logger

@@ -14,16 +14,12 @@ extension URLRequest {
     }
 
     mutating func setValue(
-        _ value: String?,
-        forHTTPHeaderField field: ParraHeader
+        for header: TrackingHeader,
+        with headerFactory: HeaderFactory
     ) {
-        setValue(value, forHTTPHeaderField: field.prefixedName)
-    }
-
-    mutating func setValue(for parraHeader: ParraHeader) {
         setValue(
-            parraHeader.currentValue,
-            forHTTPHeaderField: parraHeader.prefixedName
+            headerFactory.currentValue(for: header),
+            forHTTPHeaderField: headerFactory.prefixedName(for: header)
         )
     }
 }

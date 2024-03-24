@@ -11,6 +11,7 @@ import Foundation
 protocol NetworkManagerType {
     init(
         appState: ParraAppState,
+        appConfig: ParraConfiguration,
         dataManager: ParraDataManager,
         configuration: ParraInstanceNetworkConfiguration
     )

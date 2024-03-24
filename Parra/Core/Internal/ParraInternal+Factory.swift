@@ -71,6 +71,7 @@ extension ParraInternal {
 
         let networkManager = ParraNetworkManager(
             appState: appState,
+            appConfig: configuration,
             dataManager: dataManager,
             configuration: instanceConfiguration.networkConfiguration
         )
@@ -185,6 +186,7 @@ extension ParraInternal {
 
         let networkManager = ParraNetworkManager(
             appState: appState,
+            appConfig: configuration,
             dataManager: dataManager,
             configuration: instanceConfiguration.networkConfiguration
         )
