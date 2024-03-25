@@ -9,7 +9,6 @@
 @testable import Parra
 import XCTest
 
-@MainActor
 final class ParraSessionManagerTests: MockedParraTestCase {
     func testSessionStartsOnInit() async throws {
 //        let currentSession = mockParra.sessionManager..currentSession

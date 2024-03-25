@@ -8,7 +8,6 @@
 @testable import Parra
 import XCTest
 
-@MainActor
 class ParraDataManagerTests: MockedParraTestCase {
     var parraDataManager: ParraDataManager!
 

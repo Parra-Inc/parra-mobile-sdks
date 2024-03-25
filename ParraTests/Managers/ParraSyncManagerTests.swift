@@ -8,12 +8,11 @@
 @testable import Parra
 import XCTest
 
-@MainActor
 class ParraSyncManagerTests: MockedParraTestCase {
     // MARK: - Internal
 
     override func tearDown() async throws {
-        mockParra.syncManager.stopSyncTimer()
+        await mockParra.syncManager.stopSyncTimer()
 
         if await mockParra.syncManager.syncState.isSyncing() {
             // The test is over. Queued jobs should not be started.
@@ -35,9 +34,11 @@ class ParraSyncManagerTests: MockedParraTestCase {
     }
 
     func testStartingSyncTimerActivatesTimer() async throws {
-        mockParra.syncManager.startSyncTimer()
+        await mockParra.syncManager.startSyncTimer()
 
-        XCTAssertTrue(mockParra.syncManager.isSyncTimerActive())
+        let isActive = await mockParra.syncManager.isSyncTimerActive()
+
+        XCTAssertTrue(isActive)
     }
 
     func testStartingSyncTimerTriggersSync() async throws {
@@ -49,7 +50,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
         // timer keeps ticking.
         syncTimerTickedExpectation.assertForOverFulfill = false
 
-        mockParra.syncManager.startSyncTimer {
+        await mockParra.syncManager.startSyncTimer {
             syncTimerTickedExpectation.fulfill()
         }
 
@@ -78,15 +79,16 @@ class ParraSyncManagerTests: MockedParraTestCase {
         syncTimerTickedExpectation.isInverted = true
         syncTimerTickedExpectation.assertForOverFulfill = false
 
-        mockParra.syncManager.startSyncTimer {
+        await mockParra.syncManager.startSyncTimer {
             syncTimerTickedExpectation.fulfill()
         }
 
         try await Task.sleep(for: 0.05)
 
-        mockParra.syncManager.stopSyncTimer()
+        await mockParra.syncManager.stopSyncTimer()
+        let isActive = await mockParra.syncManager.isSyncTimerActive()
 
-        XCTAssertFalse(mockParra.syncManager.isSyncTimerActive())
+        XCTAssertFalse(isActive)
 
         // Make sure the timer doesn't still end up firing.
         await fulfillment(
@@ -154,12 +156,16 @@ class ParraSyncManagerTests: MockedParraTestCase {
     }
 
     func testEnqueuingSyncStartsStoppedSyncTimer() async throws {
-        XCTAssertFalse(mockParra.syncManager.isSyncTimerActive())
+        let isActive = await mockParra.syncManager.isSyncTimerActive()
+
+        XCTAssertFalse(isActive)
 
         logEventToSession(named: "test")
         await mockParra.syncManager.enqueueSync(with: .eventual)
 
-        XCTAssertTrue(mockParra.syncManager.isSyncTimerActive())
+        let isActive2 = await mockParra.syncManager.isSyncTimerActive()
+
+        XCTAssertTrue(isActive2)
     }
 
     func testEnqueuingSyncWithoutAuthStopsExistingTimer() async throws {
@@ -171,15 +177,19 @@ class ParraSyncManagerTests: MockedParraTestCase {
         syncTimerTickedExpectation.isInverted = true
         syncTimerTickedExpectation.assertForOverFulfill = false
 
-        mockParra.syncManager.startSyncTimer {
+        await mockParra.syncManager.startSyncTimer {
             syncTimerTickedExpectation.fulfill()
         }
 
-        XCTAssertTrue(mockParra.syncManager.isSyncTimerActive())
+        let isActive = await mockParra.syncManager.isSyncTimerActive()
+
+        XCTAssertTrue(isActive)
 
         await mockParra.syncManager.enqueueSync(with: .immediate)
 
-        XCTAssertFalse(mockParra.syncManager.isSyncTimerActive())
+        let isActive2 = await mockParra.syncManager.isSyncTimerActive()
+
+        XCTAssertFalse(isActive2)
 
         await fulfillment(
             of: [syncTimerTickedExpectation],
@@ -289,7 +299,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
         )
         syncTimerNotTickedAfterSecondSyncExpectation.isInverted = true
 
-        mockParra.syncManager.startSyncTimer {
+        await mockParra.syncManager.startSyncTimer {
             syncTimerTickedExpectation.fulfill()
             syncTimerNotTickedAfterFirstSyncExpectation.fulfill()
             syncTimerNotTickedAfterSecondSyncExpectation.fulfill()

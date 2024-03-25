@@ -14,7 +14,6 @@ private let logger = Logger(
     category: "Parra Mock Base"
 )
 
-@MainActor
 class ParraBaseMock: XCTestCase {
     // MARK: - Public
 

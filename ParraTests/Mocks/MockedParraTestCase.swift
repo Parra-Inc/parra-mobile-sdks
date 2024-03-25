@@ -9,7 +9,6 @@
 @testable import Parra
 import XCTest
 
-@MainActor
 class MockedParraTestCase: ParraBaseMock {
     var mockParra: MockParra!
 
@@ -42,6 +41,7 @@ class MockedParraTestCase: ParraBaseMock {
 
         let mockNetworkManager = await createMockNetworkManager(
             appState: appState,
+            appConfig: configuration,
             authenticationProvider: authenticationProvider
         )
 
@@ -76,7 +76,7 @@ class MockedParraTestCase: ParraBaseMock {
 
         Logger.loggerBackend = sessionManager
 
-        let parra = ParraInternal(
+        let parraInternal = ParraInternal(
             configuration: configuration,
             dataManager: mockNetworkManager.dataManager,
             syncManager: syncManager,
@@ -86,8 +86,10 @@ class MockedParraTestCase: ParraBaseMock {
             feedback: feedback
         )
 
-        mockNetworkManager.networkManager.delegate = parra
-        syncManager.delegate = parra
+        let parra = Parra(parraInternal: parraInternal)
+
+        mockNetworkManager.networkManager.delegate = parraInternal
+        syncManager.delegate = parraInternal
 
         await sessionManager.initializeSessions()
 
@@ -149,6 +151,7 @@ class MockedParraTestCase: ParraBaseMock {
             tenantId: UUID().uuidString,
             applicationId: UUID().uuidString
         ),
+        appConfig: ParraConfiguration = .init(),
         authenticationProvider: ParraAuthenticationProviderFunction?
     ) async -> MockParraNetworkManager {
         let dataManager = createMockDataManager()
@@ -162,6 +165,7 @@ class MockedParraTestCase: ParraBaseMock {
 
         let networkManager = ParraNetworkManager(
             appState: appState,
+            appConfig: appConfig,
             dataManager: dataManager,
             configuration: configuration
         )

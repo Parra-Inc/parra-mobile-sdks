@@ -8,7 +8,6 @@
 @testable import Parra
 import XCTest
 
-@MainActor
 class ParraAuthenticationTests: MockedParraTestCase {
     override func setUp() async throws {
         // Setup without initialization
@@ -18,12 +17,13 @@ class ParraAuthenticationTests: MockedParraTestCase {
     @MainActor
     func testInitWithDefaultAuthProvider() async throws {
         let token = UUID().uuidString
-        let startAuthProvider = await mockParra.parra.networkManager
+        let startAuthProvider = await mockParra.parra.parraInternal
+            .networkManager
             .getAuthenticationProvider()
 
         XCTAssertNil(startAuthProvider)
 
-        await mockParra.parra.initialize(
+        await mockParra.parra.parraInternal.initialize(
             with: .default(
                 tenantId: mockParra.appState.tenantId,
                 applicationId: mockParra.appState.applicationId,
@@ -33,7 +33,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
             )
         )
 
-        let endAuthProvider = await mockParra.parra.networkManager
+        let endAuthProvider = await mockParra.parra.parraInternal.networkManager
             .getAuthenticationProvider()
         XCTAssertNotNil(endAuthProvider)
     }
@@ -52,7 +52,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
 
         let authProviderExpectation = XCTestExpectation()
         authProviderExpectation.expectedFulfillmentCount = 2
-        await mockParra.parra.initialize(
+        await mockParra.parra.parraInternal.initialize(
             with: .publicKey(
                 tenantId: mockParra.appState.tenantId,
                 applicationId: mockParra.appState.applicationId,
@@ -74,7 +74,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
     }
 
     func testInitWithDefaultAuthProviderFailure() async throws {
-        await mockParra.parra.initialize(
+        await mockParra.parra.parraInternal.initialize(
             with: .default(
                 tenantId: mockParra.appState.tenantId,
                 applicationId: mockParra.appState.applicationId,
@@ -93,7 +93,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
     }
 
     func testInitWithPublicKeyAuthProviderFailure() async throws {
-        await mockParra.parra.initialize(
+        await mockParra.parra.parraInternal.initialize(
             with: .publicKey(
                 tenantId: mockParra.appState.tenantId,
                 applicationId: mockParra.appState.applicationId,

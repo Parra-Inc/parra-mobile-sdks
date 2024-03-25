@@ -18,7 +18,7 @@ private let testTokenString = testToken.map { String(format: "%02.2hhx", $0) }
 
 class ParraPushTests: MockedParraTestCase {
     func testRegisterDataTriggersUpdate() async {
-        await mockParra.parra
+        await mockParra.parra.parraInternal
             .initialize(with: .mockPublicKey(mockParra))
 
         let pushUploadExpectation = mockParra.mockNetworkManager.urlSession
@@ -26,7 +26,7 @@ class ParraPushTests: MockedParraTestCase {
                 of: .postPushTokens(tenantId: mockParra.appState.tenantId)
             )
 
-        mockParra.parra.registerDevicePushToken(testToken)
+        await mockParra.parra.registerDevicePushToken(testToken)
 
         await fulfillment(of: [pushUploadExpectation])
     }
@@ -34,7 +34,7 @@ class ParraPushTests: MockedParraTestCase {
     func testAcceptsRegistrationFailure() async throws {
         let error = ParraError.generic("made up error", nil)
         // no op for now
-        mockParra.parra
+        await mockParra.parra
             .didFailToRegisterForRemoteNotifications(with: error)
 
         XCTAssertTrue(true)

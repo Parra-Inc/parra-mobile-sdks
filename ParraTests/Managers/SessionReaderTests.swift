@@ -296,7 +296,7 @@ final class SessionReaderTests: MockedParraTestCase {
         let newSession = ParraSession(
             sessionId: UUID().uuidString,
             createdAt: Date(),
-            sdkVersion: Parra.libraryVersion()
+            sdkVersion: ParraInternal.libraryVersion()
         )
 
         XCTAssertNotNil(sessionReader._currentSessionContext)
@@ -387,7 +387,7 @@ final class SessionReaderTests: MockedParraTestCase {
             session: ParraSession(
                 sessionId: id,
                 createdAt: Date(),
-                sdkVersion: Parra.libraryVersion()
+                sdkVersion: ParraInternal.libraryVersion()
             ),
             sessionPath: sessionPath,
             eventsPath: eventsPath
@@ -414,7 +414,7 @@ final class SessionReaderTests: MockedParraTestCase {
         let session = ParraSession(
             sessionId: sessionId,
             createdAt: Date(),
-            sdkVersion: Parra.libraryVersion()
+            sdkVersion: ParraInternal.libraryVersion()
         )
 
         let handle = try FileHandle(forWritingTo: path)
