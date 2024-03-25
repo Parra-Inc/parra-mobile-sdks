@@ -394,6 +394,7 @@
 		00C119172BAFAE170013FD03 /* ParraPushNotificationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C119162BAFAE170013FD03 /* ParraPushNotificationOptions.swift */; };
 		00C119192BAFAE250013FD03 /* ParraConfigurationOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C119182BAFAE250013FD03 /* ParraConfigurationOptionType.swift */; };
 		00C1191B2BB05D550013FD03 /* ParraAppInfoOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C1191A2BB05D550013FD03 /* ParraAppInfoOptions.swift */; };
+		00D143BD2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */; };
 		00DA7FE5295C95C400109081 /* SyncTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE4295C95C400109081 /* SyncTarget.swift */; };
 		00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE7295CAB8F00109081 /* AnyCodable.swift */; };
 		00DA7FEA295CAB9700109081 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE9295CAB9700109081 /* AnyEncodable.swift */; };
@@ -981,6 +982,7 @@
 		00CAD73529CFAE910093599E /* TextValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextValidationError.swift; sourceTree = "<group>"; };
 		00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionReaderTests.swift; sourceTree = "<group>"; };
 		00D04C602AD437850024CA4E /* ParraBaseMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraBaseMock.swift; sourceTree = "<group>"; };
+		00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+fromIso8601String.swift"; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Constants.swift"; sourceTree = "<group>"; };
 		00D5156427D4376500C4F2CC /* ParraSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManager.swift; sourceTree = "<group>"; };
 		00D5156627D4506B00C4F2CC /* ParraInternal+SyncEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+SyncEvents.swift"; sourceTree = "<group>"; };
@@ -1215,6 +1217,7 @@
 			children = (
 				0082DFCD2A53BA6700E7A91D /* Date+now.swift */,
 				0012300E2B994CD4007E5632 /* Date+timeAgo.swift */,
+				00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */,
 				00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */,
 				00DDBA182B61C21E00400761 /* EdgeInsets+hashable.swift */,
 				00DDBA1C2B61D99D00400761 /* EdgeInsets+zero.swift */,
@@ -3076,6 +3079,7 @@
 				00C119102BAF206A0013FD03 /* ParraInternal+Constants.swift in Sources */,
 				00F7C4A62B9A437A00DBDF5A /* ComponentFactory+TextEditors.swift in Sources */,
 				00706B252B72C25600C28F66 /* TextButtonConfig+Size.swift in Sources */,
+				00D143BD2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift in Sources */,
 				00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */,
 				003962432A48B51800B8655F /* ParraLegacyConfigurableView.swift in Sources */,
 				0039623A2A48B50900B8655F /* ViewTimer.swift in Sources */,

@@ -240,8 +240,24 @@ final class ParraNetworkManager: NetworkManagerType {
         to url: URL,
         method: HttpMethod = .get,
         queryItems: [String: String] = [:],
+        cachePolicy: URLRequest.CachePolicy? = nil
+    ) async throws -> T {
+        return try await performExternalRequest(
+            to: url,
+            method: method,
+            queryItems: queryItems,
+            cachePolicy: cachePolicy,
+            body: EmptyRequestObject()
+        )
+    }
+
+    /// URLs not controlled by Parra/external APIs/etc.
+    func performExternalRequest<T: Decodable>(
+        to url: URL,
+        method: HttpMethod = .get,
+        queryItems: [String: String] = [:],
         cachePolicy: URLRequest.CachePolicy? = nil,
-        body: (some Encodable)? = nil
+        body: some Encodable
     ) async throws -> T {
         var request = URLRequest(
             url: url,
@@ -250,12 +266,12 @@ final class ParraNetworkManager: NetworkManagerType {
 
         request.httpMethod = method.rawValue
         if method.allowsBody {
-            request.httpBody = try configuration.jsonEncoder.encode(body)
+            request.httpBody = try JSONEncoder().encode(body)
         }
 
         let (data, _) = try await performAsyncDataDask(request: request)
 
-        return try configuration.jsonDecoder.decode(
+        return try JSONDecoder().decode(
             T.self,
             from: data
         )

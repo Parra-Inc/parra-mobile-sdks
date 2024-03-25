@@ -36,8 +36,7 @@ extension JSONDecoder {
         let container = try decoder.singleValueContainer()
         let dateString = try container.decode(String.self)
 
-        let formatter = ParraInternal.Constants.Formatters.iso8601Formatter
-        if let date = formatter.date(from: dateString) {
+        if let date = Date.fromIso8601String(dateString) {
             return date
         }
 

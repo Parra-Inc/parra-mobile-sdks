@@ -11,38 +11,37 @@ import Foundation
 
 extension ParraEndpoint {
     func getMockResponseData(for status: Int = 200) throws -> Data {
-        let object: Codable
-        switch status {
+        let object: Codable = switch status {
         case 200 ..< 300:
             switch self {
             case .getCards:
-                object = ParraCardItemFixtures.cardsResponse
+                ParraCardItemFixtures.cardsResponse
             case .getFeedbackForm(let formId):
-                object = TestData.Forms.formResponse(formId: formId)
+                TestData.Forms.formResponse(formId: formId)
             case .postSubmitFeedbackForm:
-                object = EmptyResponseObject()
+                EmptyResponseObject()
             case .postBulkAnswerQuestions:
-                object = EmptyResponseObject()
+                EmptyResponseObject()
             case .postBulkSubmitSessions:
-                object = TestData.Sessions.successResponse
+                TestData.Sessions.successResponse
             case .postPushTokens:
-                object = EmptyResponseObject()
+                EmptyResponseObject()
             case .postAuthentication:
-                object = TestData.Auth.successResponse
+                TestData.Auth.successResponse
             case .getRoadmap:
-                object = AppRoadmapConfiguration.validStates()[0]
+                AppRoadmapConfiguration.validStates()[0]
             case .getPaginateTickets:
-                object = UserTicketCollectionResponse.validStates()[0]
+                UserTicketCollectionResponse.validStates()[0]
             case .postVoteForTicket:
-                object = UserTicket.validStates()[0]
+                UserTicket.validStates()[0]
             case .deleteVoteForTicket:
-                object = UserTicket.validStates()[0]
+                UserTicket.validStates()[0]
             case .getRelease:
-                object = AppRelease.validStates()[0]
+                AppRelease.validStates()[0]
             case .getPaginateReleases:
-                object = AppReleaseCollectionResponse.validStates()[0]
+                AppReleaseCollectionResponse.validStates()[0]
             case .getAppInfo:
-                object = AppInfo.validStates()[0]
+                AppInfo.validStates()[0]
             }
         default:
             throw ParraError.generic(
@@ -52,5 +51,26 @@ extension ParraEndpoint {
         }
 
         return try JSONEncoder.parraEncoder.encode(object)
+    }
+
+    /// For 3rd party or non Parra endpoint URLs.
+    static func getMock3rdPartyResponseData(
+        for url: URL,
+        status: Int = 200
+    ) throws -> Data {
+        let absoluteUrl = url.absoluteString
+
+        let object: Codable = if absoluteUrl
+            .contains("itunes.apple.com/us/lookup")
+        {
+            LatestVersionManager.AppStoreResponse.validStates()[0]
+        } else {
+            throw ParraError.generic(
+                "getMockResponseData has no implemented return for status: \(status) for url: \(absoluteUrl)",
+                nil
+            )
+        }
+
+        return try JSONEncoder().encode(object)
     }
 }
