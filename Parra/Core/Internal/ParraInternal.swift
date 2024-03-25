@@ -127,9 +127,9 @@ class ParraInternal {
     }
 
     static func libraryVersion() -> String {
-        return bundle()
-            .infoDictionary?["CFBundleShortVersionString"] as? String ??
-            "unknown"
+        return ParraInternal.appBundleVersionShort(
+            bundle: bundle()
+        ) ?? "unknown"
     }
 
     @MainActor

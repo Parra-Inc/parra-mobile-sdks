@@ -63,10 +63,9 @@ struct HeaderFactory {
         case .applicationBundleId(let bundleId):
             return bundleId
         case .applicationBundleVersion:
-            return Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+            return ParraInternal.appBundleVersion()
         case .applicationBundleVersionShort:
-            return Bundle.main
-                .infoDictionary?["CFBundleShortVersionString"] as? String
+            return ParraInternal.appBundleVersionShort()
         case .debug:
             #if DEBUG
             return "1"
