@@ -56,45 +56,14 @@ extension TextButtonComponentType {
             defaultBorderWidth,
             fontColor,
             backgroundColor
-        ) = switch buttonType {
-        case is OutlinedButtonComponent.Type:
-            (
-                0.6,
-                0.6,
-                1.0,
-                defaults.title.fontColor ?? mainColor,
-                defaults.title.background ?? defaults.background
-            )
-        case is ContainedButtonComponent.Type:
-            (
-                0.8,
-                0.6,
-                0.0,
-                defaults.title.fontColor ?? ParraColorSwatch.neutral.shade50,
-                defaults.background ?? inputAttributes?
-                    .background ??
-                    (
-                        config.style == .primary ? palette.primary : palette
-                            .secondary
-                    ).toParraColor()
-            )
-        case is PlainButtonComponent.Type:
-            (
-                0.6,
-                0.6,
-                0.0,
-                defaults.title.fontColor ?? mainColor,
-                defaults.title.background ?? defaults.background
-            )
-        default:
-            (
-                0.6,
-                0.6,
-                0.0,
-                defaults.title.fontColor ?? mainColor,
-                defaults.title.background ?? defaults.background
-            )
-        }
+        ) = primaryAttributes(
+            for: buttonType,
+            defaults: defaults,
+            inputAttributes: inputAttributes,
+            mainColor: mainColor,
+            theme: theme,
+            config: config
+        )
 
         let titleAttributes = defaults.title.withUpdates(
             updates: LabelAttributes(
@@ -162,6 +131,71 @@ extension TextButtonComponentType {
                     updates: titlePressedUpdates
                 )
             )
+        )
+    }
+
+    static func primaryAttributes(
+        for buttonType: (some TextButtonComponentType).Type,
+        defaults: TextButtonAttributes,
+        inputAttributes: TextButtonAttributes?,
+        mainColor: Color,
+        theme: ParraTheme,
+        config: TextButtonConfig
+    ) -> (Double, Double, Double, Color, (any ShapeStyle)?) {
+        let palette = theme.palette
+
+        let (
+            pressedOpacity,
+            disabledOpacity,
+            defaultBorderWidth,
+            fontColor,
+            backgroundColor
+        ) = switch buttonType {
+        case is OutlinedButtonComponent.Type:
+            (
+                0.6,
+                0.6,
+                1.0,
+                defaults.title.fontColor ?? mainColor,
+                defaults.title.background ?? defaults.background
+            )
+        case is ContainedButtonComponent.Type:
+            (
+                0.8,
+                0.6,
+                0.0,
+                defaults.title.fontColor ?? ParraColorSwatch.neutral.shade50,
+                defaults.background ?? inputAttributes?
+                    .background ??
+                    (
+                        config.style == .primary ? palette.primary : palette
+                            .secondary
+                    ).toParraColor()
+            )
+        case is PlainButtonComponent.Type:
+            (
+                0.6,
+                0.6,
+                0.0,
+                defaults.title.fontColor ?? mainColor,
+                defaults.title.background ?? defaults.background
+            )
+        default:
+            (
+                0.6,
+                0.6,
+                0.0,
+                defaults.title.fontColor ?? mainColor,
+                defaults.title.background ?? defaults.background
+            )
+        }
+
+        return (
+            pressedOpacity,
+            disabledOpacity,
+            defaultBorderWidth,
+            fontColor,
+            backgroundColor
         )
     }
 }
