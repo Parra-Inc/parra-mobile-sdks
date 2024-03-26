@@ -18,8 +18,18 @@ import UIKit
 /// unintended behavior, be sure to invoke the super implementation of any
 /// delegate methods that require the `override` keyword.
 @MainActor
-open class ParraAppDelegate: NSObject, UIApplicationDelegate {
+open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
     // MARK: - Open
+
+    open func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [
+            UIApplication
+                .LaunchOptionsKey: Any
+        ]? = nil
+    ) -> Bool {
+        return true
+    }
 
     open func application(
         _ application: UIApplication,

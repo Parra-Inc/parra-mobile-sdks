@@ -10,7 +10,9 @@ import SwiftUI
 import UIKit
 
 @MainActor
-open class ParraSceneDelegate: NSObject, UIWindowSceneDelegate {
+open class ParraSceneDelegate: NSObject, ObservableObject,
+    UIWindowSceneDelegate
+{
     // MARK: - Open
 
     open func scene(

@@ -10,9 +10,13 @@ import Parra
 import SwiftUI
 
 @main
-struct SampleApp: App {
-    var body: some Scene {
-        ParraApp(
+final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
+    // MARK: - Lifecycle
+
+    required init() {
+        super.init()
+
+        configureParra(
             authProvider: authenticationProvider(),
             configuration: ParraConfiguration(
                 appInfoOptions: .default,
@@ -27,6 +31,8 @@ struct SampleApp: App {
             }
         )
     }
+
+    // MARK: - Internal
 
     /// An authentication provider to use when running in DEBUG mode. If you're
     /// working on integrating Parra into your app, this is generally the auth

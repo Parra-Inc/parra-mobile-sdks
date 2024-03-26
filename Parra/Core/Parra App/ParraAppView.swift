@@ -14,20 +14,15 @@ enum ParraAppViewTarget {
 }
 
 @MainActor
-struct ParraAppView<Content, AppDelegateType, SceneDelegateType>: View
-    where Content: View, AppDelegateType: ParraAppDelegate,
-    SceneDelegateType: ParraSceneDelegate
-{
+struct ParraAppView<Content>: View where Content: View {
     // MARK: - Lifecycle
 
     init(
         target: ParraAppViewTarget,
         configuration: ParraConfiguration,
-        appDelegateType: AppDelegateType.Type,
-        sceneDelegateType: SceneDelegateType.Type,
-        sceneContent: @MainActor @escaping (_ parra: Parra) -> Content
+        viewContent: @MainActor @escaping (_ parra: Parra) -> Content
     ) {
-        self.content = sceneContent
+        self.content = viewContent
 
         let parra: ParraInternal
         let appState: ParraAppState
@@ -59,9 +54,6 @@ struct ParraAppView<Content, AppDelegateType, SceneDelegateType>: View
         // on it.
         Parra.default.parraInternal = parra
 
-        _appDelegate = UIApplicationDelegateAdaptor(appDelegateType)
-        _appDelegate.wrappedValue.sceneDelegateClass = sceneDelegateType
-
         _parraAppState = StateObject(wrappedValue: appState)
 
         self.parra = parra
@@ -80,8 +72,6 @@ struct ParraAppView<Content, AppDelegateType, SceneDelegateType>: View
     }
 
     // MARK: - Internal
-
-    @UIApplicationDelegateAdaptor(AppDelegateType.self) var appDelegate
 
     var body: some View {
         ZStack {
