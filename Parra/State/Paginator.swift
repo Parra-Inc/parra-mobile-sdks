@@ -135,36 +135,37 @@ class Paginator<Item, Context>: ObservableObject
     @Published private(set) var error: Error?
     @Published private(set) var isShowingPlaceholders: Bool
 
-    @MainActor
-    func refresh() async {
-        guard let pageFetcher else {
-            return
-        }
-
-        guard !isLoading else {
-            return
-        }
-
-        logger.trace("Beginning refresh for \(context)")
-
-        isLoading = true
-        error = nil
-
-        do {
-            let nextPage = try await pageFetcher(pageSize, 0, context)
-
-            await MainActor.run {
-                lastFetchedOffset = 0
-                items = nextPage
-                isLoading = false
-                isShowingPlaceholders = false
+    func refresh() {
+        Task { @MainActor in
+            guard let pageFetcher else {
+                return
             }
-        } catch {
-            await MainActor.run {
-                self.error = error
-                items = []
-                isShowingPlaceholders = false
-                isLoading = false
+
+            guard !isLoading else {
+                return
+            }
+
+            logger.trace("Beginning refresh for \(context)")
+
+            isLoading = true
+            error = nil
+
+            do {
+                let nextPage = try await pageFetcher(pageSize, 0, context)
+
+                await MainActor.run {
+                    lastFetchedOffset = 0
+                    items = nextPage
+                    isLoading = false
+                    isShowingPlaceholders = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.error = error
+                    items = []
+                    isShowingPlaceholders = false
+                    isLoading = false
+                }
             }
         }
     }

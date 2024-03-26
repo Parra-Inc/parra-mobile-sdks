@@ -172,7 +172,7 @@ struct ChangelogWidget: Container {
             )
         }
         .refreshable {
-            await contentObserver.releasePaginator.refresh()
+            contentObserver.releasePaginator.refresh()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .coordinateSpace(name: "scroll")

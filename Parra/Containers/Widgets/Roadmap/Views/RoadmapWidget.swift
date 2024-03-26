@@ -146,7 +146,7 @@ struct RoadmapWidget: Container {
                 )
             }
             .refreshable {
-                await contentObserver.ticketPaginator.refresh()
+                contentObserver.ticketPaginator.refresh()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .coordinateSpace(name: "scroll")
