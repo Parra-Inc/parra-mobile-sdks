@@ -89,6 +89,10 @@ extension ParraInternal {
             notificationCenter: notificationCenter
         )
 
+        let latestVersionManager = LatestVersionManager(
+            networkManager: networkManager
+        )
+
         // Parra Modules
 
         let feedback = ParraFeedback(
@@ -112,7 +116,8 @@ extension ParraInternal {
             sessionManager: sessionManager,
             networkManager: networkManager,
             notificationCenter: notificationCenter,
-            feedback: feedback
+            feedback: feedback,
+            latestVersionManager: latestVersionManager
         )
 
         networkManager.delegate = parra
@@ -206,6 +211,10 @@ extension ParraInternal {
             notificationCenter: notificationCenter
         )
 
+        let latestVersionManager = LatestVersionManager(
+            networkManager: networkManager
+        )
+
         // Parra Modules
 
         let feedback = ParraFeedback(
@@ -229,7 +238,8 @@ extension ParraInternal {
             sessionManager: sessionManager,
             networkManager: networkManager,
             notificationCenter: notificationCenter,
-            feedback: feedback
+            feedback: feedback,
+            latestVersionManager: latestVersionManager
         )
 
         networkManager.delegate = parra

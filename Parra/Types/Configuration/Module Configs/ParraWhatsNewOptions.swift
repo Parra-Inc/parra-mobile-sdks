@@ -9,14 +9,14 @@
 import Foundation
 
 public struct ParraWhatsNewOptions: ParraConfigurationOptionType {
-    public enum PresentationStyle {
+    public enum PresentationStyle: Equatable {
         case toast
 
         /// Default
         case modal
     }
 
-    public enum PresentationMode {
+    public enum PresentationMode: Equatable {
         /// Default. Automatically check if there have been new updates and
         /// present the What's New popup right away.
         case automatic
@@ -29,6 +29,19 @@ public struct ParraWhatsNewOptions: ParraConfigurationOptionType {
         /// What's new popup. When desired, use the ``presentParraRelease``
         /// instance method on a SwiftUI view to present the What's New screen.
         case manual
+
+        // MARK: - Internal
+
+        var delay: TimeInterval {
+            switch self {
+            case .automatic:
+                return 0
+            case .delayed(let timeInterval):
+                return timeInterval
+            case .manual:
+                return .greatestFiniteMagnitude
+            }
+        }
     }
 
     public static let `default` = ParraWhatsNewOptions(

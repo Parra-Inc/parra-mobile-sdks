@@ -62,6 +62,10 @@ class MockedParraTestCase: ParraBaseMock {
             syncDelay: 0.25
         )
 
+        let latestVersionManager = LatestVersionManager(
+            networkManager: mockNetworkManager.networkManager
+        )
+
         let feedback = ParraFeedback(
             dataManager: ParraFeedbackDataManager(
                 dataManager: mockNetworkManager.dataManager,
@@ -83,7 +87,8 @@ class MockedParraTestCase: ParraBaseMock {
             sessionManager: sessionManager,
             networkManager: mockNetworkManager.networkManager,
             notificationCenter: notificationCenter,
-            feedback: feedback
+            feedback: feedback,
+            latestVersionManager: latestVersionManager
         )
 
         let parra = Parra(parraInternal: parraInternal)

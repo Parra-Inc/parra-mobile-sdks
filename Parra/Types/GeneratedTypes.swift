@@ -2523,7 +2523,13 @@ public struct AppReleaseConfiguration: Codable, Equatable, Hashable {
         case hasOtherReleases
     }
 
+    /// Contextual title for full screen presentation "What's new" for example.
+    /// When this is present, the name of the release will be displayed as the
+    /// subtitle in the release details screen.
     public let title: String
+
+    /// Indicates that releases other than the current one are present. Can be
+    /// used to determine whether or not to show a button to push to a changelog
     public let hasOtherReleases: Bool
 }
 

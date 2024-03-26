@@ -25,7 +25,7 @@ struct LatestReleaseSample: View {
 
     var body: some View {
         VStack {
-            Button("Fetch and present changelog") {
+            Button("Fetch and present latest release") {
                 Task {
                     try await parra.fetchLatestRelease()
                 }

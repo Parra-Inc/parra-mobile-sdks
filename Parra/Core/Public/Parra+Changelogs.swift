@@ -9,19 +9,11 @@
 import Foundation
 
 public extension Parra {
-    func fetchLatestRelease() async throws -> NewInstalledVersionInfo? {
-        let versionManager = LatestVersionManager(
-            networkManager: parraInternal.networkManager
-        )
-
-        let latestVersionToken = await versionManager.latestVersionToken()
-
-        let response = try await parraInternal.networkManager.getAppInfo(
-            versionToken: latestVersionToken
-        )
-
-        await versionManager.updateLatestSeenVersionToken(response.versionToken)
-
-        return response.newInstalledVersionInfo
+    /// Fetches information about the most recent release of your app from
+    /// Parra. This information can be used to render custom UI, or with Parra's
+    /// ``presentParraRelease`` View modifier to present a sheet showing off the
+    /// details of the release.
+    func fetchLatestRelease() async throws -> AppInfo {
+        return try await parraInternal.latestVersionManager.fetchLatestAppInfo()
     }
 }

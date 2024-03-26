@@ -25,7 +25,8 @@ class ParraInternal {
         sessionManager: ParraSessionManager,
         networkManager: ParraNetworkManager,
         notificationCenter: NotificationCenterType,
-        feedback: ParraFeedback
+        feedback: ParraFeedback,
+        latestVersionManager: LatestVersionManager
     ) {
         self.configuration = configuration
         self.dataManager = dataManager
@@ -34,7 +35,7 @@ class ParraInternal {
         self.networkManager = networkManager
         self.notificationCenter = notificationCenter
         self.feedback = feedback
-
+        self.latestVersionManager = latestVersionManager
         self.globalComponentFactory = ComponentFactory(
             global: configuration.globalComponentAttributes,
             theme: configuration.theme
@@ -46,10 +47,6 @@ class ParraInternal {
     }
 
     // MARK: - Public
-
-    // MARK: - Parra Modules
-
-    public let feedback: ParraFeedback
 
     // MARK: - Authentication
 
@@ -106,6 +103,10 @@ class ParraInternal {
     static let moduleName = "Parra"
     static let errorDomain = "com.parra.error"
 
+    // MARK: - Parra Modules
+
+    let feedback: ParraFeedback
+
     private(set) var configuration: ParraConfiguration
 
     // MARK: - Managers
@@ -116,19 +117,16 @@ class ParraInternal {
     @usableFromInline let sessionManager: ParraSessionManager
     let networkManager: ParraNetworkManager
     let notificationCenter: NotificationCenterType
+    let latestVersionManager: LatestVersionManager
 
     private(set) var globalComponentFactory: ComponentFactory
 
     private(set) lazy var eventPrefix =
         "parra:\(Self.moduleName.lowercased())"
 
-    static func bundle() -> Bundle {
-        return Bundle(for: self as AnyClass)
-    }
-
     static func libraryVersion() -> String {
         return ParraInternal.appBundleVersionShort(
-            bundle: bundle()
+            bundle: .parraBundle
         ) ?? "unknown"
     }
 
@@ -182,6 +180,19 @@ class ParraInternal {
 
         if configuration.pushNotificationOptions.enabled {
             UIApplication.shared.registerForRemoteNotifications()
+        }
+
+        let whatsNewOptions = configuration.whatsNewOptions
+
+        switch whatsNewOptions.presentationMode {
+        case .automatic, .delayed:
+            Task {
+                await latestVersionManager.fetchAndPresentWhatsNew(
+                    with: whatsNewOptions
+                )
+            }
+        case .manual:
+            break
         }
     }
 }
