@@ -14,15 +14,17 @@ enum ParraAppViewTarget {
 }
 
 @MainActor
-struct ParraAppView<Content, DelegateType>: View
-    where Content: View, DelegateType: ParraAppDelegate
+struct ParraAppView<Content, AppDelegateType, SceneDelegateType>: View
+    where Content: View, AppDelegateType: ParraAppDelegate,
+    SceneDelegateType: ParraSceneDelegate
 {
     // MARK: - Lifecycle
 
     init(
         target: ParraAppViewTarget,
         configuration: ParraConfiguration,
-        appDelegateType: DelegateType.Type,
+        appDelegateType: AppDelegateType.Type,
+        sceneDelegateType: SceneDelegateType.Type,
         sceneContent: @MainActor @escaping (_ parra: Parra) -> Content
     ) {
         self.content = sceneContent
@@ -33,8 +35,8 @@ struct ParraAppView<Content, DelegateType>: View
 
         switch target {
         case .app(let parraAuthenticationProviderType, let config):
-
             self.authProvider = parraAuthenticationProviderType
+
             launchScreenConfig = config
 
             (parra, appState) = ParraInternal.createParraInstance(
@@ -42,8 +44,8 @@ struct ParraAppView<Content, DelegateType>: View
                 configuration: configuration
             )
         case .preview:
-
             self.authProvider = .preview
+
             launchScreenConfig = .preview
 
             (parra, appState) = ParraInternal
@@ -58,6 +60,8 @@ struct ParraAppView<Content, DelegateType>: View
         Parra.default.parraInternal = parra
 
         _appDelegate = UIApplicationDelegateAdaptor(appDelegateType)
+        _appDelegate.wrappedValue.sceneDelegateClass = sceneDelegateType
+
         _parraAppState = StateObject(wrappedValue: appState)
 
         self.parra = parra
@@ -77,7 +81,7 @@ struct ParraAppView<Content, DelegateType>: View
 
     // MARK: - Internal
 
-    @UIApplicationDelegateAdaptor(DelegateType.self) var appDelegate
+    @UIApplicationDelegateAdaptor(AppDelegateType.self) var appDelegate
 
     var body: some View {
         ZStack {

@@ -35,6 +35,27 @@ open class ParraAppDelegate: NSObject, UIApplicationDelegate {
         parra.didFailToRegisterForRemoteNotifications(with: error)
     }
 
+    open func application(
+        _ application: UIApplication,
+        configurationForConnecting connectingSceneSession: UISceneSession,
+        options: UIScene.ConnectionOptions
+    ) -> UISceneConfiguration {
+        let configuration = UISceneConfiguration(
+            name: nil,
+            sessionRole: connectingSceneSession.role
+        )
+
+        if connectingSceneSession.role == .windowApplication {
+            configuration.delegateClass = sceneDelegateClass
+        }
+
+        return configuration
+    }
+
+    // MARK: - Public
+
+    public internal(set) var sceneDelegateClass: ParraSceneDelegate.Type!
+
     // MARK: - Internal
 
     /// Not exposed publicly. Should only ever be set once from the

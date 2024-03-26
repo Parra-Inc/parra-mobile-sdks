@@ -48,6 +48,7 @@ struct ParraContainerPreview<ContainerType>: View
             target: .preview,
             configuration: configuration,
             appDelegateType: ParraPreviewAppDelegate.self,
+            sceneDelegateType: ParraSceneDelegate.self,
             sceneContent: { parra in
                 AnyView(content(parra, factory, config, builderConfig))
             }

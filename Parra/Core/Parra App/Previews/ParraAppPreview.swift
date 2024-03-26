@@ -58,6 +58,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
             target: .preview,
             configuration: configuration,
             appDelegateType: ParraPreviewAppDelegate.self,
+            sceneDelegateType: ParraSceneDelegate.self,
             sceneContent: { _ in
                 previewContent()
             }

@@ -73,8 +73,9 @@ import SwiftUI
 /// ```
 ///
 @MainActor
-public struct ParraApp<Content, DelegateType>: Scene
-    where Content: View, DelegateType: ParraAppDelegate
+public struct ParraApp<Content, AppDelegateType, SceneDelegateType>: Scene
+    where Content: View, AppDelegateType: ParraAppDelegate,
+    SceneDelegateType: ParraSceneDelegate
 {
     // MARK: - Lifecycle
 
@@ -96,13 +97,15 @@ public struct ParraApp<Content, DelegateType>: Scene
     public init(
         authProvider: ParraAuthenticationProviderType,
         configuration: ParraConfiguration = .init(),
-        appDelegateType: DelegateType.Type = ParraAppDelegate.self,
+        appDelegateType: AppDelegateType.Type = ParraAppDelegate.self,
+        sceneDelegateType: SceneDelegateType.Type = ParraSceneDelegate.self,
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
         appContent: @MainActor @escaping () -> Content
     ) {
         self.authProvider = authProvider
         self.configuration = configuration
         self.appDelegateType = appDelegateType
+        self.sceneDelegateType = sceneDelegateType
         self.launchScreenConfig = launchScreenConfig
         self.appContent = appContent
     }
@@ -115,6 +118,7 @@ public struct ParraApp<Content, DelegateType>: Scene
                 target: .app(authProvider, launchScreenConfig),
                 configuration: configuration,
                 appDelegateType: appDelegateType,
+                sceneDelegateType: sceneDelegateType,
                 sceneContent: { _ in
                     appContent()
                 }
@@ -126,7 +130,8 @@ public struct ParraApp<Content, DelegateType>: Scene
 
     private let authProvider: ParraAuthenticationProviderType
     private let configuration: ParraConfiguration
-    private let appDelegateType: DelegateType.Type
+    private let appDelegateType: AppDelegateType.Type
+    private let sceneDelegateType: SceneDelegateType.Type
     private let launchScreenConfig: ParraLaunchScreen.Config?
     private let appContent: () -> Content
 }

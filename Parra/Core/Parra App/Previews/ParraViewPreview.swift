@@ -33,6 +33,7 @@ struct ParraViewPreview<Content>: View where Content: View {
             target: .preview,
             configuration: configuration,
             appDelegateType: ParraPreviewAppDelegate.self,
+            sceneDelegateType: ParraSceneDelegate.self,
             sceneContent: { _ in
                 content(factory)
             }
