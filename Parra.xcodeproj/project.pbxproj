@@ -278,6 +278,7 @@
 		00916DC82AD35D8700B4856F /* ParraInstanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC72AD35D8700B4856F /* ParraInstanceConfiguration.swift */; };
 		00916DCA2AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DC92AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift */; };
 		00916DCC2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DCB2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift */; };
+		00995BE62BB333BF00384D94 /* Dictionary+queryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00995BE52BB333BF00384D94 /* Dictionary+queryItems.swift */; };
 		0099EB032B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099EB022B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift */; };
 		0099EB062B8D04C00053F366 /* ParraFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099EB052B8D04C00053F366 /* ParraFeedbackView.swift */; };
 		0099EB082B8D09200053F366 /* ParraPublicContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099EB072B8D09200053F366 /* ParraPublicContainer.swift */; };
@@ -896,6 +897,7 @@
 		00916DC72AD35D8700B4856F /* ParraInstanceConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceConfiguration.swift; sourceTree = "<group>"; };
 		00916DC92AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceStorageConfiguration.swift; sourceTree = "<group>"; };
 		00916DCB2AD35D9D00B4856F /* ParraInstanceNetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInstanceNetworkConfiguration.swift; sourceTree = "<group>"; };
+		00995BE52BB333BF00384D94 /* Dictionary+queryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+queryItems.swift"; sourceTree = "<group>"; };
 		0099EB022B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormWidget+ContentObserver+Content.swift"; sourceTree = "<group>"; };
 		0099EB052B8D04C00053F366 /* ParraFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackView.swift; sourceTree = "<group>"; };
 		0099EB072B8D09200053F366 /* ParraPublicContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPublicContainer.swift; sourceTree = "<group>"; };
@@ -1241,6 +1243,7 @@
 				0082DFCD2A53BA6700E7A91D /* Date+now.swift */,
 				0012300E2B994CD4007E5632 /* Date+timeAgo.swift */,
 				00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */,
+				00995BE52BB333BF00384D94 /* Dictionary+queryItems.swift */,
 				00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */,
 				00DDBA182B61C21E00400761 /* EdgeInsets+hashable.swift */,
 				00DDBA1C2B61D99D00400761 /* EdgeInsets+zero.swift */,
@@ -3471,6 +3474,7 @@
 				003962412A48B51100B8655F /* Array.swift in Sources */,
 				00FCB1942B97B84000635DC8 /* FeedbackFormWidget+ContentObserver+InitialParams.swift in Sources */,
 				00E76D222B66D1E800B01DD8 /* LabelConfig.swift in Sources */,
+				00995BE62BB333BF00384D94 /* Dictionary+queryItems.swift in Sources */,
 				004F3F072BA8857200424802 /* ChangelogItemInfoView.swift in Sources */,
 				00DA7FE5295C95C400109081 /* SyncTarget.swift in Sources */,
 				00ABF1B72B867BD000A054A2 /* ParraCardModalType.swift in Sources */,

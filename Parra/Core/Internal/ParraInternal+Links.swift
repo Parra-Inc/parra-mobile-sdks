@@ -13,12 +13,16 @@ extension ParraInternal {
         medium: String
     ) {
         let app = UIApplication.shared
-
-        logEvent(.tap(element: "powered-by-parra"), [
-            "medium": medium
-        ])
-
         let bundleId = configuration.appInfoOptions.bundleId
+
+        let params: [String: String] = [
+            "utm_medium": medium,
+            "utm_source": "parra_ios_\(bundleId)",
+            "tenant_id": appState.tenantId,
+            "application_id": appState.applicationId
+        ]
+
+        logEvent(.tap(element: "powered-by-parra"), params)
 
         guard var components = URLComponents(
             url: Parra.Constants.parraWebRoot,
@@ -29,16 +33,7 @@ extension ParraInternal {
             return
         }
 
-        components.queryItems = [
-            URLQueryItem(
-                name: "utm_medium",
-                value: medium
-            ),
-            URLQueryItem(
-                name: "utm_source",
-                value: "parra_ios_\(bundleId)"
-            )
-        ]
+        components.queryItems = params.queryItems
 
         guard let url = components.url else {
             Logger.warn("Failed to create link to open site")

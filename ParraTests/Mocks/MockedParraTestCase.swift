@@ -82,6 +82,7 @@ class MockedParraTestCase: ParraBaseMock {
 
         let parraInternal = ParraInternal(
             configuration: configuration,
+            appState: appState,
             dataManager: mockNetworkManager.dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,

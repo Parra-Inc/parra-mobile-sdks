@@ -20,6 +20,7 @@ class ParraInternal {
 
     init(
         configuration: ParraConfiguration,
+        appState: ParraAppState,
         dataManager: ParraDataManager,
         syncManager: ParraSyncManager,
         sessionManager: ParraSessionManager,
@@ -29,6 +30,7 @@ class ParraInternal {
         latestVersionManager: LatestVersionManager
     ) {
         self.configuration = configuration
+        self.appState = appState
         self.dataManager = dataManager
         self.syncManager = syncManager
         self.sessionManager = sessionManager
@@ -108,6 +110,7 @@ class ParraInternal {
     let feedback: ParraFeedback
 
     private(set) var configuration: ParraConfiguration
+    let appState: ParraAppState
 
     // MARK: - Managers
 
@@ -187,9 +190,10 @@ class ParraInternal {
         switch whatsNewOptions.presentationMode {
         case .automatic, .delayed:
             Task {
-                await latestVersionManager.fetchAndPresentWhatsNew(
-                    with: whatsNewOptions
-                )
+//                await latestVersionManager.fetchAndPresentWhatsNew(
+//                    with: whatsNewOptions,
+//                    using: self.
+//                )
             }
         case .manual:
             break

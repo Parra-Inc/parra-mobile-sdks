@@ -111,6 +111,7 @@ extension ParraInternal {
 
         let parra = ParraInternal(
             configuration: configuration,
+            appState: appState,
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
@@ -233,6 +234,7 @@ extension ParraInternal {
 
         let parra = ParraInternal(
             configuration: configuration,
+            appState: appState,
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
