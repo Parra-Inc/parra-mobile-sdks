@@ -394,7 +394,17 @@
 		00C119172BAFAE170013FD03 /* ParraPushNotificationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C119162BAFAE170013FD03 /* ParraPushNotificationOptions.swift */; };
 		00C119192BAFAE250013FD03 /* ParraConfigurationOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C119182BAFAE250013FD03 /* ParraConfigurationOptionType.swift */; };
 		00C1191B2BB05D550013FD03 /* ParraAppInfoOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C1191A2BB05D550013FD03 /* ParraAppInfoOptions.swift */; };
+		00D143B72BB1C96900BDB8C4 /* LatestVersionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143B62BB1C96900BDB8C4 /* LatestVersionManagerTests.swift */; };
+		00D143B92BB1D27300BDB8C4 /* LatestVersionManager+AppStoreResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143B82BB1D27300BDB8C4 /* LatestVersionManager+AppStoreResponse.swift */; };
+		00D143BB2BB1D28E00BDB8C4 /* LatestVersionManager+AppStoreResponse+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143BA2BB1D28E00BDB8C4 /* LatestVersionManager+AppStoreResponse+Fixtures.swift */; };
 		00D143BD2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */; };
+		00D143BF2BB1E5E900BDB8C4 /* ParraInternal+AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143BE2BB1E5E900BDB8C4 /* ParraInternal+AppInfo.swift */; };
+		00D143C12BB1F89500BDB8C4 /* View+Release.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143C02BB1F89500BDB8C4 /* View+Release.swift */; };
+		00D143C32BB2106E00BDB8C4 /* Bundle+Parra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143C22BB2106E00BDB8C4 /* Bundle+Parra.swift */; };
+		00D143C52BB21BF400BDB8C4 /* ParraSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143C42BB21BF400BDB8C4 /* ParraSceneDelegate.swift */; };
+		00D143C72BB22E1500BDB8C4 /* NoTouchEventWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143C62BB22E1500BDB8C4 /* NoTouchEventWindow.swift */; };
+		00D143C92BB25B8E00BDB8C4 /* Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143C82BB25B8E00BDB8C4 /* Sheet.swift */; };
+		00D143CB2BB25BA300BDB8C4 /* View+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143CA2BB25BA300BDB8C4 /* View+Sheet.swift */; };
 		00DA7FE5295C95C400109081 /* SyncTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE4295C95C400109081 /* SyncTarget.swift */; };
 		00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE7295CAB8F00109081 /* AnyCodable.swift */; };
 		00DA7FEA295CAB9700109081 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE9295CAB9700109081 /* AnyEncodable.swift */; };
@@ -982,7 +992,17 @@
 		00CAD73529CFAE910093599E /* TextValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextValidationError.swift; sourceTree = "<group>"; };
 		00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionReaderTests.swift; sourceTree = "<group>"; };
 		00D04C602AD437850024CA4E /* ParraBaseMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraBaseMock.swift; sourceTree = "<group>"; };
+		00D143B62BB1C96900BDB8C4 /* LatestVersionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestVersionManagerTests.swift; sourceTree = "<group>"; };
+		00D143B82BB1D27300BDB8C4 /* LatestVersionManager+AppStoreResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LatestVersionManager+AppStoreResponse.swift"; sourceTree = "<group>"; };
+		00D143BA2BB1D28E00BDB8C4 /* LatestVersionManager+AppStoreResponse+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LatestVersionManager+AppStoreResponse+Fixtures.swift"; sourceTree = "<group>"; };
 		00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+fromIso8601String.swift"; sourceTree = "<group>"; };
+		00D143BE2BB1E5E900BDB8C4 /* ParraInternal+AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+AppInfo.swift"; sourceTree = "<group>"; };
+		00D143C02BB1F89500BDB8C4 /* View+Release.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Release.swift"; sourceTree = "<group>"; };
+		00D143C22BB2106E00BDB8C4 /* Bundle+Parra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Parra.swift"; sourceTree = "<group>"; };
+		00D143C42BB21BF400BDB8C4 /* ParraSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSceneDelegate.swift; sourceTree = "<group>"; };
+		00D143C62BB22E1500BDB8C4 /* NoTouchEventWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoTouchEventWindow.swift; sourceTree = "<group>"; };
+		00D143C82BB25B8E00BDB8C4 /* Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sheet.swift; sourceTree = "<group>"; };
+		00D143CA2BB25BA300BDB8C4 /* View+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Sheet.swift"; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Constants.swift"; sourceTree = "<group>"; };
 		00D5156427D4376500C4F2CC /* ParraSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManager.swift; sourceTree = "<group>"; };
 		00D5156627D4506B00C4F2CC /* ParraInternal+SyncEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+SyncEvents.swift"; sourceTree = "<group>"; };
@@ -1188,7 +1208,9 @@
 			isa = PBXGroup;
 			children = (
 				00FCB1872B977CBC00635DC8 /* SheetDismissType.swift */,
+				00D143C82BB25B8E00BDB8C4 /* Sheet.swift */,
 				00FCB1832B9779D200635DC8 /* SheetWithLoader.swift */,
+				00D143CA2BB25BA300BDB8C4 /* View+Sheet.swift */,
 				00FCB1852B9779F000635DC8 /* View+SheetWithLoader.swift */,
 			);
 			path = "Sheet Presentation";
@@ -1215,6 +1237,7 @@
 		00120EF1274D1ECA00CA3247 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				00D143C22BB2106E00BDB8C4 /* Bundle+Parra.swift */,
 				0082DFCD2A53BA6700E7A91D /* Date+now.swift */,
 				0012300E2B994CD4007E5632 /* Date+timeAgo.swift */,
 				00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */,
@@ -1278,7 +1301,6 @@
 		001286F7277F50A20090CDB5 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				00C119002BACD0400013FD03 /* App Info */,
 				0029AD242A48DA2200E30CCD /* Data */,
 				0029AD252A48DA2D00E30CCD /* Network */,
 				00DA7FE3295C95AF00109081 /* Sync */,
@@ -1295,6 +1317,7 @@
 				001559B027E7EAC0006450BE /* ParraDataManagerTests.swift */,
 				0082DFCB2A53B6F100E7A91D /* ParraSessionManagerTests.swift */,
 				00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */,
+				00D143B62BB1C96900BDB8C4 /* LatestVersionManagerTests.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1512,7 +1535,11 @@
 		002C77162BAA2E9500DCEBD8 /* Release */ = {
 			isa = PBXGroup;
 			children = (
+				00C119012BACD04E0013FD03 /* LatestVersionManager.swift */,
+				00D143B82BB1D27300BDB8C4 /* LatestVersionManager+AppStoreResponse.swift */,
+				00D143BA2BB1D28E00BDB8C4 /* LatestVersionManager+AppStoreResponse+Fixtures.swift */,
 				002C77172BAA2E9C00DCEBD8 /* Fixtures */,
+				00D143C02BB1F89500BDB8C4 /* View+Release.swift */,
 			);
 			path = Release;
 			sourceTree = "<group>";
@@ -1817,6 +1844,8 @@
 			children = (
 				00916A762B76C483009C87DC /* ParraAppDelegate.swift */,
 				004F3ED92BA49D2D00424802 /* ParraPreviewAppDelegate.swift */,
+				00D143C42BB21BF400BDB8C4 /* ParraSceneDelegate.swift */,
+				00D143C62BB22E1500BDB8C4 /* NoTouchEventWindow.swift */,
 			);
 			path = "App Delegate";
 			sourceTree = "<group>";
@@ -2257,14 +2286,6 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
-		00C119002BACD0400013FD03 /* App Info */ = {
-			isa = PBXGroup;
-			children = (
-				00C119012BACD04E0013FD03 /* LatestVersionManager.swift */,
-			);
-			path = "App Info";
-			sourceTree = "<group>";
-		};
 		00C119062BAF114B0013FD03 /* Releases */ = {
 			isa = PBXGroup;
 			children = (
@@ -2291,6 +2312,7 @@
 			isa = PBXGroup;
 			children = (
 				00C1190B2BAF1E7C0013FD03 /* ParraInternal.swift */,
+				00D143BE2BB1E5E900BDB8C4 /* ParraInternal+AppInfo.swift */,
 				0029AD2F2A490CDB00E30CCD /* ParraInternal+Analytics.swift */,
 				00C1190F2BAF206A0013FD03 /* ParraInternal+Constants.swift */,
 				00ABF14A2B786D9E00A054A2 /* ParraInternal+Factory.swift */,
@@ -3052,6 +3074,7 @@
 				00706B192B71A6E600C28F66 /* TextEditorConfig.swift in Sources */,
 				00ABF19A2B84112300A054A2 /* ParraAppView.swift in Sources */,
 				00C119172BAFAE170013FD03 /* ParraPushNotificationOptions.swift in Sources */,
+				00D143C12BB1F89500BDB8C4 /* View+Release.swift in Sources */,
 				00FCB18C2B9791C000635DC8 /* ViewDataLoader+FeedbackForms.swift in Sources */,
 				00BF36C72B59AB000097905C /* ParraFixture.swift in Sources */,
 				00C118F72BAC731A0013FD03 /* AsyncImageComponentType.swift in Sources */,
@@ -3097,6 +3120,7 @@
 				00EAE2FE2AA0C8A2003FB41C /* ParraSessionGeneratorType.swift in Sources */,
 				0087CA722A57B343007D72FA /* ParraLoggerCallSiteContext.swift in Sources */,
 				006DE9882A47547900521F5D /* ParraLazyLogParam.swift in Sources */,
+				00D143C72BB22E1500BDB8C4 /* NoTouchEventWindow.swift in Sources */,
 				00ABF1BE2B87A79A00A054A2 /* ParraCardItem+Fixtures.swift in Sources */,
 				00214C6A2AB3E2BC001C5313 /* ParraSanitizedDictionary.swift in Sources */,
 				00FCB1342B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift in Sources */,
@@ -3157,9 +3181,11 @@
 				004F3EF12BA4D66700424802 /* ChangelogWidgetStyle.swift in Sources */,
 				004F3EFA2BA4DECC00424802 /* ViewDataLoader+Changelog.swift in Sources */,
 				00EAE2F92A9F7D42003FB41C /* ParraSessionEventTarget.swift in Sources */,
+				00D143BF2BB1E5E900BDB8C4 /* ParraInternal+AppInfo.swift in Sources */,
 				001B7B1227DE3A9B00DEEECD /* ParraError.swift in Sources */,
 				00ABF1492B7852FC00A054A2 /* ParraFeedback+SyncTarget.swift in Sources */,
 				003622012B5C9CFD009EFE53 /* ParraColorConvertible.swift in Sources */,
+				00D143CB2BB25BA300BDB8C4 /* View+Sheet.swift in Sources */,
 				0082DFCE2A53BA6700E7A91D /* Date+now.swift in Sources */,
 				00C118FA2BAC73900013FD03 /* AsyncImageContent.swift in Sources */,
 				001B7B0D27DE3A9B00DEEECD /* Parra+Constants.swift in Sources */,
@@ -3193,6 +3219,7 @@
 				00FCB1532B939C6100635DC8 /* RoadmapWidget+ContentObserver.swift in Sources */,
 				00F7C4952B9A111B00DBDF5A /* InlineAlertComponent.swift in Sources */,
 				00FCB18E2B97AF0D00635DC8 /* FeedbackFormSubmissionType.swift in Sources */,
+				00D143C32BB2106E00BDB8C4 /* Bundle+Parra.swift in Sources */,
 				003962422A48B51100B8655F /* UIEdgeInsets.swift in Sources */,
 				001B7B2327DE3AC200DEEECD /* Models.swift in Sources */,
 				00ABF1D02B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift in Sources */,
@@ -3255,6 +3282,7 @@
 				00214C6E2AB62510001C5313 /* String+prefixes.swift in Sources */,
 				00A60B9B2932D37000B7168A /* ParraAuthenticationProviderType.swift in Sources */,
 				006DE9822A472F9C00521F5D /* Endpoint.swift in Sources */,
+				00D143C52BB21BF400BDB8C4 /* ParraSceneDelegate.swift in Sources */,
 				003621F22B5C77F1009EFE53 /* ParraTypography.swift in Sources */,
 				00E76D242B66D1FD00B01DD8 /* LabelContent.swift in Sources */,
 				00C00ABB2A8A6BC2003B21D3 /* SessionStorageContext.swift in Sources */,
@@ -3348,6 +3376,7 @@
 				00C1191B2BB05D550013FD03 /* ParraAppInfoOptions.swift in Sources */,
 				0087CA7A2A58FAA2007D72FA /* Logger+StaticLevels.swift in Sources */,
 				00ABF1452B7851BF00A054A2 /* ParraInternal+SyncManagerDelegate.swift in Sources */,
+				00D143BB2BB1D28E00BDB8C4 /* LatestVersionManager+AppStoreResponse+Fixtures.swift in Sources */,
 				00E15A2B29326FBE0049C2C7 /* UIWindow+topViewController.swift in Sources */,
 				004F3EEF2BA4BFAD00424802 /* ChangelogWidget+ContentObserver+InitialParams.swift in Sources */,
 				003621E92B5C2784009EFE53 /* ParraLogoButton.swift in Sources */,
@@ -3370,6 +3399,7 @@
 				00C118FD2BAC89270013FD03 /* AsyncImageComponent.swift in Sources */,
 				003962652A48B55300B8655F /* TextValidationError.swift in Sources */,
 				003962362A48B4EF00B8655F /* ParraFeedback+Notifications.swift in Sources */,
+				00D143B92BB1D27300BDB8C4 /* LatestVersionManager+AppStoreResponse.swift in Sources */,
 				00DA7FF3295DD2D500109081 /* ParraSession.swift in Sources */,
 				00E15A2D293276940049C2C7 /* Thread.swift in Sources */,
 				0087CA6E2A57B308007D72FA /* ParraLogMarker.swift in Sources */,
@@ -3403,6 +3433,7 @@
 				00BDB2B128BD822700C16649 /* URLRequest+headers.swift in Sources */,
 				00E7957E29A05CD6003FE68D /* ParraLogLevel.swift in Sources */,
 				0099EB0F2B8E5BFD0053F366 /* View+border.swift in Sources */,
+				00D143C92BB25B8E00BDB8C4 /* Sheet.swift in Sources */,
 				0087CAAB2A59F3B4007D72FA /* ParraLogData.swift in Sources */,
 				004F3EFF2BA53A2E00424802 /* AppRelease+Fixtures.swift in Sources */,
 				00E76D142B66D0F100B01DD8 /* ContainerStyle.swift in Sources */,
@@ -3528,6 +3559,7 @@
 				00ABF1912B83B06D00A054A2 /* Parra+PushTests.swift in Sources */,
 				00ABF18C2B83AFD800A054A2 /* UserDefaultsStorageTests.swift in Sources */,
 				00ABF18E2B83B02600A054A2 /* GeneratedTypes+Swift.swift in Sources */,
+				00D143B72BB1C96900BDB8C4 /* LatestVersionManagerTests.swift in Sources */,
 				00ABF1612B7AB83800A054A2 /* ParraEndpoint+CaseIterable.swift in Sources */,
 				00ABF18D2B83B00900A054A2 /* PersistentStorageTestHelpers.swift in Sources */,
 				00ABF15F2B7AB81100A054A2 /* TestData.swift in Sources */,
