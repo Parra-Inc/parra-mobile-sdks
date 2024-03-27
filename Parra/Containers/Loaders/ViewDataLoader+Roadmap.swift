@@ -54,19 +54,19 @@ extension ViewDataLoader {
                 )
             },
             renderer: { parra, params, _ in
-                let container: RoadmapWidget = renderContainer(
-                    from: parra.parraInternal,
-                    with: localBuilder,
-                    params: .init(
-                        roadmapConfig: params.roadmapConfig,
-                        selectedTab: params.selectedTab,
-                        ticketResponse: params.ticketResponse,
-                        networkManager: parra.parraInternal.networkManager
-                    ),
-                    config: config
-                ) { _ in
-                    // TODO: Dismisser set on container.contentObserver?
-                }
+                let container: RoadmapWidget = parra.parraInternal
+                    .containerRenderer.renderContainer(
+                        with: localBuilder,
+                        params: .init(
+                            roadmapConfig: params.roadmapConfig,
+                            selectedTab: params.selectedTab,
+                            ticketResponse: params.ticketResponse,
+                            networkManager: parra.parraInternal.networkManager
+                        ),
+                        config: config
+                    ) { _ in
+                        // TODO: Dismisser set on container.contentObserver?
+                    }
 
                 return container
             }

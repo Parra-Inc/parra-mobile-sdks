@@ -54,14 +54,18 @@ struct ParraAppView<Content>: View where Content: View {
         // on it.
         Parra.default.parraInternal = parra
 
-        _parraAppState = StateObject(wrappedValue: appState)
-
         self.parra = parra
         self.launchScreenConfig = ParraAppView.configureLaunchScreen(
             with: launchScreenConfig
         )
 
-        self._alertManager = StateObject(wrappedValue: AlertManager())
+        self._alertManager = StateObject(
+            wrappedValue: AlertManager()
+        )
+
+        self._parraAppState = StateObject(
+            wrappedValue: appState
+        )
 
         self._themeObserver = StateObject(
             wrappedValue: ParraThemeObserver(

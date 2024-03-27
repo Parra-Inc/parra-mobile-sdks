@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@MainActor
 protocol ContainerContentObserver: ObservableObject {
     associatedtype Content: ContainerContent
     associatedtype InitialParams

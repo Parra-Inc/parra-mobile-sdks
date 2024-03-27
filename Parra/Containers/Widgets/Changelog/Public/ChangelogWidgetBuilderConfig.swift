@@ -22,6 +22,7 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.releaseDetailDescription = nil
         self.releaseDetailSectionTitle = nil
         self.releaseDetailSectionItem = nil
+        self.releaseDetailShowOtherReleasesButton = nil
         self.emptyStateView = nil
         self.errorStateView = nil
     }
@@ -87,6 +88,13 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
             LabelContent,
             LabelAttributes
         >? = nil,
+        releaseDetailShowOtherReleasesButtonBuilder: LocalComponentBuilder
+            .ButtonFactory<
+                Button<Text>,
+                TextButtonConfig,
+                TextButtonContent,
+                TextButtonAttributes
+            >? = nil,
         emptyStateViewBuilder: LocalComponentBuilder.Factory<
             AnyView,
             EmptyStateConfig,
@@ -110,6 +118,9 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         self.releaseDetailDescription = releaseDetailDescriptionBuilder
         self.releaseDetailSectionTitle = releaseDetailSectionTitleBuilder
         self.releaseDetailSectionItem = releaseDetailSectionItemBuilder
+        self
+            .releaseDetailShowOtherReleasesButton =
+            releaseDetailShowOtherReleasesButtonBuilder
         self.emptyStateView = emptyStateViewBuilder
         self.errorStateView = errorStateViewBuilder
     }
@@ -176,6 +187,13 @@ public class ChangelogWidgetBuilderConfig: LocalComponentBuilderConfig {
         LabelContent,
         LabelAttributes
     >?
+    public let releaseDetailShowOtherReleasesButton: LocalComponentBuilder
+        .ButtonFactory<
+            Button<Text>,
+            TextButtonConfig,
+            TextButtonContent,
+            TextButtonAttributes
+        >?
     public let emptyStateView: LocalComponentBuilder.Factory<
         AnyView,
         EmptyStateConfig,

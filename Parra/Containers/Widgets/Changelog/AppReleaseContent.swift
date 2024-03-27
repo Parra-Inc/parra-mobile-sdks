@@ -8,22 +8,59 @@
 
 import SwiftUI
 
-struct AppReleaseContent: Identifiable, Hashable {
+struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        _ release: AppRelease,
-        isStandalone: Bool
+        _ newInstalledAppVersion: NewInstalledVersionInfo
     ) {
-        if isStandalone {
-            self.title = LabelContent(text: "What's new")
-            self.subtitle = LabelContent(text: release.name)
-        } else {
-            self.title = LabelContent(text: release.name)
-            self.subtitle = nil
+        self.id = newInstalledAppVersion.release.id
+        self.title = LabelContent(
+            text: newInstalledAppVersion.configuration.title
+        )
+        self.subtitle = LabelContent(
+            text: newInstalledAppVersion.release.name
+        )
+        self.version = LabelContent(
+            text: newInstalledAppVersion.release.version
+        )
+        self.description = LabelContent(
+            text: newInstalledAppVersion.release.description
+        )
+        self.type = LabelContent(
+            text: newInstalledAppVersion.release.type.userFacingString
+        )
+        self.createdAt = LabelContent(
+            text: newInstalledAppVersion.release.createdAt.timeAgo(
+                dateTimeStyle: .numeric
+            )
+        )
+        self.sections = newInstalledAppVersion.release.sections.map {
+            AppReleaseSectionContent($0)
         }
+        self.header = ReleaseHeaderContent(
+            newInstalledAppVersion.release.header
+        )
 
+        self.otherReleasesButton = if newInstalledAppVersion.configuration
+            .hasOtherReleases
+        {
+            TextButtonContent(
+                text: LabelContent(
+                    text: "Other Releases"
+                )
+            )
+        } else {
+            nil
+        }
+    }
+
+    init(
+        _ release: AppRelease
+    ) {
         self.id = release.id
+        self.title = LabelContent(text: release.name)
+        self.subtitle = nil
         self.version = LabelContent(text: release.version)
         self.description = LabelContent(text: release.description)
         self.type = LabelContent(text: release.type.userFacingString)
@@ -34,21 +71,15 @@ struct AppReleaseContent: Identifiable, Hashable {
         )
         self.sections = release.sections.map { AppReleaseSectionContent($0) }
         self.header = ReleaseHeaderContent(release.header)
+        self.otherReleasesButton = nil
     }
 
     init(
-        _ release: AppReleaseStub,
-        isStandalone: Bool
+        _ release: AppReleaseStub
     ) {
-        if isStandalone {
-            self.title = LabelContent(text: "What's new")
-            self.subtitle = LabelContent(text: release.name)
-        } else {
-            self.title = LabelContent(text: release.name)
-            self.subtitle = nil
-        }
-
         self.id = release.id
+        self.title = LabelContent(text: release.name)
+        self.subtitle = nil
         self.version = LabelContent(text: release.version)
         self.description = LabelContent(text: release.description)
         self.type = LabelContent(text: release.type.userFacingString)
@@ -60,6 +91,7 @@ struct AppReleaseContent: Identifiable, Hashable {
         self.sections = AppReleaseSection.validStates()
             .map { AppReleaseSectionContent($0) }
         self.header = ReleaseHeaderContent(release.header)
+        self.otherReleasesButton = nil
     }
 
     // MARK: - Internal
@@ -73,4 +105,5 @@ struct AppReleaseContent: Identifiable, Hashable {
     let description: LabelContent?
     let sections: [AppReleaseSectionContent]
     let header: ReleaseHeaderContent?
+    let otherReleasesButton: TextButtonContent?
 }

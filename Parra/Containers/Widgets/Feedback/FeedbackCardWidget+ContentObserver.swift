@@ -20,7 +20,6 @@ struct CurrentCardInfo: Equatable {
 // MARK: - FeedbackCardWidget.ContentObserver
 
 extension FeedbackCardWidget {
-    @MainActor
     class ContentObserver: ContainerContentObserver {
         // MARK: - Lifecycle
 
@@ -66,7 +65,6 @@ extension FeedbackCardWidget {
 
         // MARK: - Internal
 
-        @MainActor
         struct Content: ContainerContent {
             // MARK: - Lifecycle
 

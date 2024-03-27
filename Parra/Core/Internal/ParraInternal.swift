@@ -27,7 +27,9 @@ class ParraInternal {
         networkManager: ParraNetworkManager,
         notificationCenter: NotificationCenterType,
         feedback: ParraFeedback,
-        latestVersionManager: LatestVersionManager
+        latestVersionManager: LatestVersionManager,
+        containerRenderer: ContainerRenderer,
+        modalScreenManager: ModalScreenManager
     ) {
         self.configuration = configuration
         self.appState = appState
@@ -38,6 +40,8 @@ class ParraInternal {
         self.notificationCenter = notificationCenter
         self.feedback = feedback
         self.latestVersionManager = latestVersionManager
+        self.containerRenderer = containerRenderer
+        self.modalScreenManager = modalScreenManager
         self.globalComponentFactory = ComponentFactory(
             global: configuration.globalComponentAttributes,
             theme: configuration.theme
@@ -121,6 +125,8 @@ class ParraInternal {
     let networkManager: ParraNetworkManager
     let notificationCenter: NotificationCenterType
     let latestVersionManager: LatestVersionManager
+    let containerRenderer: ContainerRenderer
+    let modalScreenManager: ModalScreenManager
 
     private(set) var globalComponentFactory: ComponentFactory
 
@@ -189,11 +195,12 @@ class ParraInternal {
 
         switch whatsNewOptions.presentationMode {
         case .automatic, .delayed:
+
             Task {
-//                await latestVersionManager.fetchAndPresentWhatsNew(
-//                    with: whatsNewOptions,
-//                    using: self.
-//                )
+                await latestVersionManager.fetchAndPresentWhatsNew(
+                    with: whatsNewOptions,
+                    using: modalScreenManager
+                )
             }
         case .manual:
             break

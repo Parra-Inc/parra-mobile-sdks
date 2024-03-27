@@ -1,5 +1,5 @@
 //
-//  AppReleaseDetailView.swift
+//  ReleaseWidget.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/17/24.
@@ -8,19 +8,37 @@
 
 import SwiftUI
 
-struct AppReleaseDetailView: View {
-    @StateObject var contentObserver: AppReleaseContentObserver
+struct ReleaseWidget: Container {
+    // MARK: - Lifecycle
 
+    init(
+        config: ChangelogWidgetConfig,
+        style: ChangelogWidgetStyle,
+        localBuilderConfig: ChangelogWidgetBuilderConfig,
+        componentFactory: ComponentFactory,
+        contentObserver: ReleaseContentObserver
+    ) {
+        self.config = config
+        self.style = style
+        self.localBuilderConfig = localBuilderConfig
+        self.componentFactory = componentFactory
+        self._contentObserver = StateObject(wrappedValue: contentObserver)
+    }
+
+    // MARK: - Internal
+
+    let localBuilderConfig: ChangelogWidgetBuilderConfig
+    let componentFactory: ComponentFactory
+    @StateObject var contentObserver: ReleaseContentObserver
+    let config: ChangelogWidgetConfig
     let style: ChangelogWidgetStyle
 
-    @Environment(ChangelogWidgetConfig.self) var config
-    @Environment(ChangelogWidgetBuilderConfig.self) var builderConfig
-    @EnvironmentObject var componentFactory: ComponentFactory
+    @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var sections: some View {
         LazyVStack(alignment: .leading, spacing: 24) {
             ForEach(contentObserver.content.sections) { section in
-                ChangelogSectionView(content: section)
+                ReleaseChangelogSectionView(content: section)
             }
             .disabled(contentObserver.isLoading)
         }
@@ -31,12 +49,11 @@ struct AppReleaseDetailView: View {
     }
 
     var header: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // What "What's new" case
+        VStack(alignment: .leading, spacing: 4) {
             componentFactory.buildLabel(
                 config: config.releaseDetailTitle,
                 content: contentObserver.content.title,
-                suppliedBuilder: builderConfig.releaseDetailTitle,
+                suppliedBuilder: localBuilderConfig.releaseDetailTitle,
                 localAttributes: style.releaseDetailTitle
             )
 
@@ -44,7 +61,7 @@ struct AppReleaseDetailView: View {
                 componentFactory.buildLabel(
                     config: config.releaseDetailSubtitle,
                     content: content,
-                    suppliedBuilder: builderConfig.releaseDetailSubtitle,
+                    suppliedBuilder: localBuilderConfig.releaseDetailSubtitle,
                     localAttributes: style.releaseDetailSubtitle
                 )
                 .multilineTextAlignment(.leading)
@@ -54,6 +71,7 @@ struct AppReleaseDetailView: View {
             ChangelogItemInfoView(
                 content: contentObserver.content
             )
+            .padding(.top, 8)
         }
     }
 
@@ -96,7 +114,7 @@ struct AppReleaseDetailView: View {
                             componentFactory.buildLabel(
                                 config: config.releaseDetailDescription,
                                 content: content,
-                                suppliedBuilder: builderConfig
+                                suppliedBuilder: localBuilderConfig
                                     .releaseDetailDescription,
                                 localAttributes: style.releaseDetailDescription
                             )
@@ -112,7 +130,44 @@ struct AppReleaseDetailView: View {
                     for: .scrollContent
                 )
 
-                WidgetFooter {}
+                WidgetFooter {
+                    withContent(
+                        content: contentObserver.content.otherReleasesButton
+                    ) { _ in
+                        // TODO: Need:
+                        // 1. A way to use our button component as a navigation link
+                        // 2. A loader for push transitions, not modals.
+
+//                        NavigationLink(value: "ShowOtherReleases") {
+//                            componentFactory.buildTextButton(
+//                                variant: .contained,
+//                                config: config.releaseDetailShowOtherReleasesButton,
+//                                content: content,
+//                                suppliedBuilder: localBuilderConfig
+//                                    .releaseDetailShowOtherReleasesButton,
+//                                onPress: {
+//                                    //                                contentObserver.addRequest()
+//                                }
+//                            )
+//                        }
+//                        .navigationDestination(for: String.self) { view in
+//                            if view == "ShowOtherReleases" {
+//                                ChangelogWidget(
+//                                    config: config,
+//                                    style: style,
+//                                    localBuilderConfig: localBuilderConfig,
+//                                    componentFactory: componentFactory,
+//                                    contentObserver: ChangelogWidget.ContentObserver(
+//                                        initialParams: ChangelogWidget.ContentObserver.InitialParams(
+//                                            appReleaseCollection: <#T##AppReleaseCollectionResponse#>,
+//                                            networkManager: <#T##ParraNetworkManager#>
+//                                        )
+//                                    )
+//                                )
+//                            }
+//                        }
+                    }
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -120,5 +175,9 @@ struct AppReleaseDetailView: View {
         .task {
             await contentObserver.loadSections()
         }
+        .environment(config)
+        .environment(localBuilderConfig)
+        .environmentObject(contentObserver)
+        .environmentObject(componentFactory)
     }
 }

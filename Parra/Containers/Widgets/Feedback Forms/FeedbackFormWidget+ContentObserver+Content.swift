@@ -9,7 +9,6 @@
 import Foundation
 
 extension FeedbackFormWidget.ContentObserver {
-    @MainActor
     struct Content: ContainerContent {
         // MARK: - Lifecycle
 

@@ -6,7 +6,8 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
+import UIKit
 
 // TODO: Disable in SwiftUI previews?
 
@@ -32,8 +33,10 @@ final actor LatestVersionManager {
     // MARK: - Lifecycle
 
     init(
+        configuration: ParraConfiguration,
         networkManager: ParraNetworkManager
     ) {
+        self.configuration = configuration
         self.networkManager = networkManager
     }
 
@@ -41,7 +44,7 @@ final actor LatestVersionManager {
 
     enum Constant {
         static let appVersionKey = "app_version_info"
-        static let versionTokenKey = "app_version_info"
+        static let versionTokenKey = "version_token_info"
 
         static let currentVersionKey = "current_version"
     }
@@ -58,7 +61,8 @@ final actor LatestVersionManager {
     }
 
     func fetchAndPresentWhatsNew(
-        with options: ParraWhatsNewOptions
+        with options: ParraWhatsNewOptions,
+        using modalScreenManager: ModalScreenManager
     ) async {
         if options.presentationMode == .manual {
             logger.debug(
@@ -81,8 +85,15 @@ final actor LatestVersionManager {
             }
 
             let currentAppVersion = await cachedAppVersion()
-
             let current = currentAppVersion?.version
+
+            // Cache the current app version since we've launched once without
+            // it being set. This will allow the next launch to proceed further.
+            try await updateLatestAppVersion(
+                bundleVersion,
+                versionShort: bundleVersionShort
+            )
+
             // 1. If there is no cached app version it indicates the first time
             // the app is launched. Don't check for updates.
             if current == nil {
@@ -92,13 +103,6 @@ final actor LatestVersionManager {
 
                 return
             }
-
-            // Cache the current app version since we've launched once without
-            // it being set. This will allow the next launch to proceed further.
-            try await updateLatestAppVersion(
-                bundleVersion,
-                versionShort: bundleVersionShort
-            )
 
             let since = currentAppVersion?.date ?? .distantPast
             guard let nextRelease = try await fetchLatestAppStoreUpdate(
@@ -133,19 +137,38 @@ final actor LatestVersionManager {
                 return
             }
 
+            guard let newInstalledVersionInfo = latestAppInfo
+                .newInstalledVersionInfo else
+            {
+                logger.debug(
+                    "No new version info available."
+                )
+
+                return
+            }
+
             // Found a new version token, so cache it so we don't present the
             // what's new screen twice for the same release.
+            #if !DEBUG
             try await updateLatestSeenVersionToken(latestAppInfo.versionToken)
+            #endif
 
-            latestAppInfo.versionToken
+            let contentObserver = ReleaseContentObserver(
+                initialParams: ReleaseContentObserver.InitialParams(
+                    contentType: .newInstalledVersion(newInstalledVersionInfo),
+                    networkManager: networkManager
+                )
+            )
 
-//            latestAppInfo!.configuration.title // "what's new" text
-//            latestAppInfo!.configuration.hasOtherReleases // should push to changelog
-//            latestAppInfo!.release.name
+            try await Task.sleep(for: options.presentationMode.delay)
 
-            //        let delay = options.presentationMode.delay
-            //        options.presentationStyle == .modal
-
+            modalScreenManager.presentModalView(
+                of: ReleaseWidget.self,
+                with: .default,
+                localBuilder: .init(),
+                contentObserver: contentObserver,
+                onDismiss: nil
+            )
         } catch {
             logger.error("Fetch and present what's new error", error)
         }
@@ -187,12 +210,18 @@ final actor LatestVersionManager {
                 cachePolicy: .reloadRevalidatingCacheData
             )
 
+        #if DEBUG
+        return LatestVersionManager.AppStoreResponse.validStates().first?
+            .results.first
+        #else
         return response.results.first
+        #endif
     }
 
     // MARK: - Private
 
     private let networkManager: ParraNetworkManager
+    private let configuration: ParraConfiguration
 
     private let appVersionCache = ParraStorageModule<AppVersionInfo>(
         dataStorageMedium: .userDefaults(key: Constant.appVersionKey),
@@ -250,10 +279,3 @@ final actor LatestVersionManager {
         )
     }
 }
-
-/**
-
- - [ ]  for automatic presentations:
- 1. cached app version string was previously set and has changed
- 2. HTTP request to apple API shows that the app version is not the latest
- */

@@ -40,41 +40,4 @@ public struct ViewDataLoader<TransformParams, Data, ViewContent>
     @ViewBuilder let render: @MainActor (Parra, Data, Dismisser?) -> ViewContent
 
     let load: (Parra, TransformParams) async throws -> Data
-
-    static func renderContainer<C: Container>(
-        from parra: ParraInternal,
-        with localBuilder: C.BuilderConfig,
-        params: C.ContentObserver.InitialParams,
-        config: C.Config,
-        contentTransformer: ((C.ContentObserver) -> Void)? = nil
-    ) -> C {
-        let theme = parra.configuration.theme
-
-        let globalComponentAttributes = parra
-            .configuration
-            .globalComponentAttributes
-
-        let componentFactory = ComponentFactory(
-            global: globalComponentAttributes,
-            theme: theme
-        )
-
-        let contentObserver = C.ContentObserver(
-            initialParams: params
-        )
-
-        contentTransformer?(contentObserver)
-
-        let style = C.Style.default(
-            with: theme
-        )
-
-        return C(
-            config: config,
-            style: style,
-            localBuilderConfig: localBuilder,
-            componentFactory: componentFactory,
-            contentObserver: contentObserver
-        )
-    }
 }

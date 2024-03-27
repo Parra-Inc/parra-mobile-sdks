@@ -9,7 +9,6 @@
 import SwiftUI
 
 extension ChangelogWidget.ContentObserver {
-    @MainActor
     struct Content: ContainerContent {
         // MARK: - Lifecycle
 

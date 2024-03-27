@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO: Majorly needs deduplicated
+
 extension ParraInternal {
     @MainActor
     static func createParraInstance(
@@ -89,8 +91,20 @@ extension ParraInternal {
             notificationCenter: notificationCenter
         )
 
+        let containerRenderer = ContainerRenderer(
+            configuration: configuration
+        )
+
         let latestVersionManager = LatestVersionManager(
+            configuration: configuration,
             networkManager: networkManager
+        )
+
+        let modalScreenManager = ModalScreenManager(
+            containerRenderer: containerRenderer,
+            networkManager: networkManager,
+            configuration: configuration,
+            notificationCenter: notificationCenter
         )
 
         // Parra Modules
@@ -118,7 +132,9 @@ extension ParraInternal {
             networkManager: networkManager,
             notificationCenter: notificationCenter,
             feedback: feedback,
-            latestVersionManager: latestVersionManager
+            latestVersionManager: latestVersionManager,
+            containerRenderer: containerRenderer,
+            modalScreenManager: modalScreenManager
         )
 
         networkManager.delegate = parra
@@ -212,8 +228,20 @@ extension ParraInternal {
             notificationCenter: notificationCenter
         )
 
+        let containerRenderer = ContainerRenderer(
+            configuration: configuration
+        )
+
         let latestVersionManager = LatestVersionManager(
+            configuration: configuration,
             networkManager: networkManager
+        )
+
+        let modalScreenManager = ModalScreenManager(
+            containerRenderer: containerRenderer,
+            networkManager: networkManager,
+            configuration: configuration,
+            notificationCenter: notificationCenter
         )
 
         // Parra Modules
@@ -241,7 +269,9 @@ extension ParraInternal {
             networkManager: networkManager,
             notificationCenter: notificationCenter,
             feedback: feedback,
-            latestVersionManager: latestVersionManager
+            latestVersionManager: latestVersionManager,
+            containerRenderer: containerRenderer,
+            modalScreenManager: modalScreenManager
         )
 
         networkManager.delegate = parra

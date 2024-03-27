@@ -121,7 +121,6 @@ extension RoadmapWidget.ContentObserver {
         }
     }
 
-    @MainActor
     private func toggleVote(
         for content: TicketUserContent
     ) {
@@ -130,7 +129,6 @@ extension RoadmapWidget.ContentObserver {
         )
     }
 
-    @MainActor
     private func replaceTicket(
         with content: TicketUserContent
     ) {

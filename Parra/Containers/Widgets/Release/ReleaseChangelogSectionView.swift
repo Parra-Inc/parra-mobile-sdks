@@ -1,5 +1,5 @@
 //
-//  ChangelogSectionView.swift
+//  ReleaseChangelogSectionView.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/18/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ChangelogSectionView: View {
+struct ReleaseChangelogSectionView: View {
     let content: AppReleaseSectionContent
 
     @Environment(ChangelogWidgetConfig.self) var config
@@ -45,17 +45,17 @@ struct ChangelogSectionView: View {
     ParraContainerPreview<ChangelogWidget> { _, _, _, _ in
         VStack(spacing: 24) {
             Spacer()
-            ChangelogSectionView(
+            ReleaseChangelogSectionView(
                 content: AppReleaseSectionContent(
                     AppReleaseSection.validStates()[0]
                 )
             )
-            ChangelogSectionView(
+            ReleaseChangelogSectionView(
                 content: AppReleaseSectionContent(
                     AppReleaseSection.validStates()[1]
                 )
             )
-            ChangelogSectionView(
+            ReleaseChangelogSectionView(
                 content: AppReleaseSectionContent(
                     AppReleaseSection.validStates()[2]
                 )

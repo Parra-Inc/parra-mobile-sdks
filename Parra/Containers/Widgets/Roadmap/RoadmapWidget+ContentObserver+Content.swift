@@ -11,7 +11,6 @@ import Foundation
 // MARK: - RoadmapWidget.ContentObserver.Content
 
 extension RoadmapWidget.ContentObserver {
-    @MainActor
     struct Content: ContainerContent {
         // MARK: - Lifecycle
 

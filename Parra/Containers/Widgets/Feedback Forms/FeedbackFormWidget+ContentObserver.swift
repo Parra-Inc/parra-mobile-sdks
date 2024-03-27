@@ -13,7 +13,6 @@ private let logger = Logger()
 // MARK: - FeedbackFormWidget.ContentObserver
 
 extension FeedbackFormWidget {
-    @MainActor
     class ContentObserver: ContainerContentObserver {
         // MARK: - Lifecycle
 

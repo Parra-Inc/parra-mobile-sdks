@@ -62,8 +62,20 @@ class MockedParraTestCase: ParraBaseMock {
             syncDelay: 0.25
         )
 
+        let containerRenderer = ContainerRenderer(
+            configuration: configuration
+        )
+
         let latestVersionManager = LatestVersionManager(
+            configuration: configuration,
             networkManager: mockNetworkManager.networkManager
+        )
+
+        let modalScreenManager = ModalScreenManager(
+            containerRenderer: containerRenderer,
+            networkManager: mockNetworkManager.networkManager,
+            configuration: configuration,
+            notificationCenter: notificationCenter
         )
 
         let feedback = ParraFeedback(
@@ -89,7 +101,9 @@ class MockedParraTestCase: ParraBaseMock {
             networkManager: mockNetworkManager.networkManager,
             notificationCenter: notificationCenter,
             feedback: feedback,
-            latestVersionManager: latestVersionManager
+            latestVersionManager: latestVersionManager,
+            containerRenderer: containerRenderer,
+            modalScreenManager: modalScreenManager
         )
 
         let parra = Parra(parraInternal: parraInternal)

@@ -26,7 +26,6 @@ extension ReleaseType {
 struct AppReleaseStubContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
-    @MainActor
     init(
         _ stub: AppReleaseStub
     ) {
@@ -65,7 +64,6 @@ struct AppReleaseStubContent: Identifiable, Hashable {
 // MARK: - ChangelogWidget.ContentObserver
 
 extension ChangelogWidget {
-    @MainActor
     class ContentObserver: ContainerContentObserver {
         // MARK: - Lifecycle
 

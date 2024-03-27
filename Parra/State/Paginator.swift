@@ -10,7 +10,6 @@ import SwiftUI
 
 private let logger = Logger()
 
-@MainActor
 class Paginator<Item, Context>: ObservableObject
     where Item: Identifiable & Hashable
 {
@@ -170,7 +169,6 @@ class Paginator<Item, Context>: ObservableObject
         }
     }
 
-    @MainActor
     func loadMore(
         after index: Int?
     ) {
@@ -253,7 +251,6 @@ class Paginator<Item, Context>: ObservableObject
         }
     }
 
-    @MainActor
     func updateItem(
         _ item: Item
     ) {
@@ -274,7 +271,6 @@ class Paginator<Item, Context>: ObservableObject
         items[index] = item
     }
 
-    @MainActor
     func currentData() -> Data {
         return Data(
             items: items,

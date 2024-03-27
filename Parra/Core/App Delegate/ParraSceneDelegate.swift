@@ -10,9 +10,14 @@ import SwiftUI
 import UIKit
 
 @MainActor
-open class ParraSceneDelegate: NSObject, ObservableObject,
-    UIWindowSceneDelegate
+open class ParraSceneDelegate: NSObject, ObservableObject, UIWindowSceneDelegate
 {
+    // MARK: - Lifecycle
+
+    override public init() {
+        super.init()
+    }
+
     // MARK: - Open
 
     open func scene(
@@ -24,16 +29,18 @@ open class ParraSceneDelegate: NSObject, ObservableObject,
             return
         }
 
-        let modalOverlayViewController = UIViewController()
-        modalOverlayViewController.view.backgroundColor = .clear
+        modalOverlayWindow = {
+            let overlay = UIViewController()
+            overlay.view.backgroundColor = .clear
 
-        let modalOverlayWindow = NoTouchEventWindow(
-            windowScene: windowScene
-        )
-        modalOverlayWindow.rootViewController = modalOverlayViewController
-        modalOverlayWindow.isHidden = false
+            let overlayWindow = NoTouchEventWindow(
+                windowScene: windowScene
+            )
+            overlayWindow.rootViewController = overlay
+            overlayWindow.isHidden = false
 
-        self.modalOverlayWindow = modalOverlayWindow
+            return overlayWindow
+        }()
     }
 
     // MARK: - Internal
@@ -41,35 +48,4 @@ open class ParraSceneDelegate: NSObject, ObservableObject,
     /// Used to allow presentation of modals over top of the current app content
     /// regardless of the user's navigation state.
     var modalOverlayWindow: UIWindow?
-
-    func presentModalView(
-        @ViewBuilder with content: @escaping () -> some View,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
-    ) {
-        guard let rootViewController = modalOverlayWindow?.rootViewController else {
-            onDismiss?(
-                .failed(
-                    "Could not establish root view controller to present modal."
-                )
-            )
-
-            return
-        }
-
-        let modalViewController = UIHostingController(
-            rootView:
-            EmptyView()
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity
-                )
-                .presentSheet(
-                    isPresented: .constant(true),
-                    content: content,
-                    onDismiss: onDismiss
-                )
-        )
-
-        rootViewController.present(modalViewController, animated: true)
-    }
 }

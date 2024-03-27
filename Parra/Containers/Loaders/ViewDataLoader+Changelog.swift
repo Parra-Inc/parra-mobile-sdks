@@ -45,17 +45,17 @@ extension ViewDataLoader {
                 )
             },
             renderer: { parra, params, _ in
-                let container: ChangelogWidget = renderContainer(
-                    from: parra.parraInternal,
-                    with: localBuilder,
-                    params: .init(
-                        appReleaseCollection: params.appReleaseCollection,
-                        networkManager: parra.parraInternal.networkManager
-                    ),
-                    config: config
-                ) { _ in
-                    // TODO: Dismisser set on container.contentObserver?
-                }
+                let container: ChangelogWidget = parra.parraInternal
+                    .containerRenderer.renderContainer(
+                        with: localBuilder,
+                        params: .init(
+                            appReleaseCollection: params.appReleaseCollection,
+                            networkManager: parra.parraInternal.networkManager
+                        ),
+                        config: config
+                    ) { _ in
+                        // TODO: Dismisser set on container.contentObserver?
+                    }
 
                 return container
             }

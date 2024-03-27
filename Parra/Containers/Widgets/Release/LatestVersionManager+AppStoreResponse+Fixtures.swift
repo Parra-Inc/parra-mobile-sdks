@@ -18,8 +18,7 @@ extension LatestVersionManager.AppStoreResponse: ParraFixture {
                         bundleId: "com.humblebots.onlyrecipes",
                         trackName: "Only Recipes",
                         currentVersionReleaseDate: Date.fromIso8601String(
-                            "2022-06-12T22:33:24Z",
-                            formatter: .init() // need default without ms
+                            "2022-06-12T22:33:24.000Z"
                         )!,
                         releaseNotes: "* Added support for editing your recipes\n* Added a warning when scanning a recipe that's already saved\n* Show prep and cook times when applicable\n* Show descriptions of recipes on the recipe screen\n* Improved the reliability of our recipe scanner\n* Support for scanning new recipe websites",
                         version: "1.4.1"

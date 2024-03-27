@@ -14,7 +14,6 @@ private let logger = Logger()
 // MARK: - RoadmapWidget.ContentObserver
 
 extension RoadmapWidget {
-    @MainActor
     class ContentObserver: ContainerContentObserver {
         // MARK: - Lifecycle
 

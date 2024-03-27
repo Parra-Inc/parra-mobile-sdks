@@ -11,7 +11,6 @@ import Foundation
 struct TicketUserContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
-    @MainActor
     init(
         _ userTicket: UserTicket
     ) {
@@ -49,7 +48,7 @@ struct TicketUserContent: Identifiable, Hashable {
 
     /// Used in contexts where TicketContent is rendered with placeholder
     /// redaction. Needs to be computed to have unique IDs for display in lists.
-    @MainActor static var redacted: TicketUserContent {
+    static var redacted: TicketUserContent {
         return TicketUserContent(
             UserTicket(
                 id: UUID().uuidString,
