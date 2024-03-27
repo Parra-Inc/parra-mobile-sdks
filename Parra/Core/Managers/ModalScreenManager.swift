@@ -34,17 +34,17 @@ final class ModalScreenManager {
         prefersGrabberVisible: Bool = true,
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) where ContainerType: Container {
-        guard let viewController = UIViewController.topMostViewController() else {
-            onDismiss?(
-                .failed(
-                    "Could not establish root view controller to present modal."
-                )
-            )
-
-            return
-        }
-
         Task { @MainActor in
+            guard let viewController = UIViewController.topMostViewController() else {
+                onDismiss?(
+                    .failed(
+                        "Could not establish root view controller to present modal."
+                    )
+                )
+
+                return
+            }
+
             let container: ContainerType = containerRenderer.renderContainer(
                 with: localBuilder,
                 contentObserver: contentObserver,

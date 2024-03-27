@@ -9,10 +9,12 @@
 import UIKit
 
 extension UIViewController {
+    @MainActor
     static func topMostViewController() -> UIViewController? {
         return safeGetKeyWindow()?.topViewController()
     }
 
+    @MainActor
     static func safeGetKeyWindow() -> UIWindow? {
         let app = UIApplication.shared
 

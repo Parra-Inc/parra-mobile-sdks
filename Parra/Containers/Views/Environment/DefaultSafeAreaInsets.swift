@@ -9,7 +9,7 @@
 import SwiftUI
 
 private struct SafeAreaInsetsKey: EnvironmentKey {
-    static var defaultValue: EdgeInsets {
+    @MainActor static var defaultValue: EdgeInsets {
         guard let window = UIViewController.safeGetKeyWindow() else {
             return .zero
         }

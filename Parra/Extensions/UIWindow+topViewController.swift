@@ -9,6 +9,7 @@
 import UIKit
 
 extension UIWindow {
+    @MainActor
     func topViewController() -> UIViewController? {
         var top = rootViewController
 
