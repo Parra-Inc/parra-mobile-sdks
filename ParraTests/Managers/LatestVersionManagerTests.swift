@@ -16,6 +16,7 @@ final class LatestVersionManagerTests: MockedParraTestCase {
         try await super.setUp()
 
         manager = LatestVersionManager(
+            configuration: .init(),
             networkManager: mockParra.networkManager
         )
     }
