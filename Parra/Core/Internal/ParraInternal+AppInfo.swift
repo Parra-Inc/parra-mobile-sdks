@@ -26,4 +26,8 @@ extension ParraInternal {
     ) -> String? {
         return bundle.bundleIdentifier
     }
+
+    static func isBundleIdDemoApp() -> Bool {
+        return appBundleIdentifier() == Constants.betaAppBundleId
+    }
 }

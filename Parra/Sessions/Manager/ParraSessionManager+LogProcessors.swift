@@ -80,6 +80,8 @@ extension ParraSessionManager {
             category: processedLogData.category
         )
 
+        writeMessageToDebugView(message)
+
         systemLogger.log(
             level: processedLogData.level.osLogType,
             "\(message)"
@@ -117,12 +119,24 @@ extension ParraSessionManager {
             category: category
         )
 
+        let finalMessage = "\(prefix)\(message)"
+
+        writeMessageToDebugView(finalMessage)
+
         systemLogger.log(
             level: .default,
-            """
-            \(prefix)\(message)
-            """
+            "\(finalMessage)"
         )
+    }
+
+    private func writeMessageToDebugView(_ message: String) {
+        if !AppEnvironment.isParraDemoBeta {
+            return
+        }
+
+        Task { @MainActor in
+            DebugLogStore.shared.write(message)
+        }
     }
 
     private func createMessageSegments(

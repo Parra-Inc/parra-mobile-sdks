@@ -51,5 +51,6 @@ extension ParraInternal {
         static let parraApiRoot = URL(string: "https://api.parra.io/v1/")!
         static let backgroundTaskName = "com.parra.session.backgroundtask"
         static let backgroundTaskDuration: TimeInterval = 25.0
+        static let betaAppBundleId = "com.parra.parra-ios-client"
     }
 }

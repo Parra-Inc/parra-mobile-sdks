@@ -185,10 +185,22 @@ struct ParraAppView<Content>: View where Content: View {
     private let authProvider: ParraAuthenticationProviderType
     private let launchScreenConfig: ParraLaunchScreen.Config
 
+    @State private var showLogs = false
+
     private func renderPrimaryContent() -> some View {
         content(Parra.default)
             .environment(\.parra, Parra.default)
             .renderToast(toast: $alertManager.currentToast)
+            .onShake {
+                if AppEnvironment.isParraDemoBeta {
+                    showLogs = true
+                }
+            }
+            .sheet(isPresented: $showLogs) {
+                RecentLogViewer()
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
     }
 
     private func renderLaunchScreen() -> some View {
