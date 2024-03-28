@@ -222,8 +222,8 @@ class ParraSessionManager {
     }
 
     /// Logs the supplied event on the user's session.
-    /// Do not interact with this method directly. Logging events should be done through the
-    /// Parra.logEvent helpers.
+    /// Do not interact with this method directly. Logging events should be done
+    /// through the ``Parra/Parra/logEvent(named:_:_:_:_:_:)`` helpers.
     @usableFromInline
     func writeEvent(
         wrappedEvent: ParraWrappedEvent,
