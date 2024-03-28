@@ -18,16 +18,45 @@ public extension View {
         localBuilder: RoadmapWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
-        let params = RoadmapParams(
+        let transformParams = RoadmapParams(
             limit: 15,
             offset: 0
         )
+
+        let transformer: ViewDataLoader<
+            RoadmapParams,
+            RoadmapLoaderResult,
+            RoadmapWidget
+        >.Transformer = { parra, transformParams in
+            let roadmapConfig = try await parra.parraInternal.networkManager
+                .getRoadmap()
+
+            guard let tab = roadmapConfig.tabs.first else {
+                throw ParraError.message(
+                    "Can not paginate tickets. Roadmap response has no tabs."
+                )
+            }
+
+            let ticketResponse = try await parra.parraInternal
+                .networkManager
+                .paginateTickets(
+                    limit: transformParams.limit,
+                    offset: transformParams.offset,
+                    filter: tab.key
+                )
+
+            return RoadmapLoaderResult(
+                roadmapConfig: roadmapConfig,
+                selectedTab: tab,
+                ticketResponse: ticketResponse
+            )
+        }
 
         return loadAndPresentSheet(
             loadType: .init(
                 get: {
                     if isPresented.wrappedValue {
-                        return .transform(params)
+                        return .transform(transformParams, transformer)
                     } else {
                         return nil
                     }

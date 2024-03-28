@@ -29,30 +29,6 @@ extension ViewDataLoader {
             RoadmapLoaderResult,
             RoadmapWidget
         >(
-            loader: { parra, transformParams in
-                let roadmapConfig = try await parra.parraInternal.networkManager
-                    .getRoadmap()
-
-                guard let tab = roadmapConfig.tabs.first else {
-                    throw ParraError.message(
-                        "Can not paginate tickets. Roadmap response has no tabs."
-                    )
-                }
-
-                let ticketResponse = try await parra.parraInternal
-                    .networkManager
-                    .paginateTickets(
-                        limit: transformParams.limit,
-                        offset: transformParams.offset,
-                        filter: tab.key
-                    )
-
-                return RoadmapLoaderResult(
-                    roadmapConfig: roadmapConfig,
-                    selectedTab: tab,
-                    ticketResponse: ticketResponse
-                )
-            },
             renderer: { parra, params, _ in
                 let container: RoadmapWidget = parra.parraInternal
                     .containerRenderer.renderContainer(

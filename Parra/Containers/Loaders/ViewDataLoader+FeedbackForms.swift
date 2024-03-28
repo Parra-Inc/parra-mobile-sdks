@@ -17,11 +17,6 @@ extension ViewDataLoader {
         submissionType: FeedbackFormSubmissionType
     ) -> ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget> {
         return ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget>(
-            loader: { parra, formId in
-                return try await parra.parraInternal.feedback.fetchFeedbackForm(
-                    formId: formId
-                )
-            },
             renderer: { parra, form, dismisser in
                 let container: FeedbackFormWidget = parra.parraInternal
                     .containerRenderer.renderContainer(

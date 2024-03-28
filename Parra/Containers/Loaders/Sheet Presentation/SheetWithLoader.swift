@@ -118,18 +118,24 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
         with type: ViewDataLoader<TransformParams, Data, SheetContent>.LoadType
     ) {
         switch type {
-        case .transform(let transformParams):
+        case .transform(let transformParams, let transformer):
             Task {
-                await triggerTransform(with: transformParams)
+                await triggerTransform(
+                    with: transformParams,
+                    via: transformer
+                )
             }
         case .raw(let data):
             state = .complete(data)
         }
     }
 
-    private func triggerTransform(with params: TransformParams) async {
+    private func triggerTransform(
+        with params: TransformParams,
+        via transformer: (Parra, TransformParams) async throws -> Data
+    ) async {
         do {
-            let result = try await loader.load(parra, params)
+            let result = try await transformer(parra, params)
 
             await MainActor.run {
                 state = .complete(result)

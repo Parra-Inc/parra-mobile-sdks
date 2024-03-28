@@ -19,11 +19,23 @@ public extension View {
         localBuilder: FeedbackFormWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
-        loadAndPresentSheet(
+        let transformParams = formId
+
+        let transformer: ViewDataLoader<
+            String,
+            ParraFeedbackForm,
+            FeedbackFormWidget
+        >.Transformer = { parra, formId in
+            return try await parra.parraInternal.feedback.fetchFeedbackForm(
+                formId: formId
+            )
+        }
+
+        return loadAndPresentSheet(
             loadType: .init(
                 get: {
                     if isPresented.wrappedValue {
-                        return .transform(formId)
+                        return .transform(transformParams, transformer)
                     } else {
                         return nil
                     }

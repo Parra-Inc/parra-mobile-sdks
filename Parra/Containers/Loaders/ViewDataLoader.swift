@@ -15,29 +15,48 @@ public struct ViewDataLoader<TransformParams, Data, ViewContent>
     // MARK: - Lifecycle
 
     init(
-        loader: @escaping (Parra, TransformParams) async throws -> Data,
         @ViewBuilder renderer: @MainActor @escaping (Parra, Data, Dismisser?)
             -> ViewContent
     ) {
-        self.load = loader
         self.render = renderer
     }
 
     // MARK: - Internal
 
+    typealias Transformer = (Parra, TransformParams) async throws -> Data
+
     enum LoadType: Equatable {
-        // The input data requires transformation before use. Per container type
-        // this should just be an ID string or a more complex type.
-        case transform(TransformParams)
+        // A function that allows for transformation of the data as long as it
+        // results in the content that the widget expects to display. Usually
+        // this is used for fetching data from the network.
+        // Note: The Transform Params passed here are basically just passed
+        // right back to the transformer function at the call site but we needed
+        // a way for LoadType to be Equatable, and the TransformParams are
+        // being different indicates the function is different.
+        case transform(TransformParams, Transformer)
 
         // The data we want to display already exists at the call site so it can
         // be used directly.
         case raw(Data)
+
+        // MARK: - Internal
+
+        static func == (
+            lhs: ViewDataLoader<TransformParams, Data, ViewContent>.LoadType,
+            rhs: ViewDataLoader<TransformParams, Data, ViewContent>.LoadType
+        ) -> Bool {
+            switch (lhs, rhs) {
+            case (.transform(let lhsParams, _), .transform(let rhsParams, _)):
+                return lhsParams == rhsParams
+            case (.raw(let lData), .raw(let rData)):
+                return lData == rData
+            default:
+                return false
+            }
+        }
     }
 
     typealias Dismisser = @MainActor (SheetDismissType) -> Void
 
     @ViewBuilder let render: @MainActor (Parra, Data, Dismisser?) -> ViewContent
-
-    let load: (Parra, TransformParams) async throws -> Data
 }

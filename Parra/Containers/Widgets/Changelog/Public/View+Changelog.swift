@@ -23,11 +23,27 @@ public extension View {
             offset: 0
         )
 
+        let transformer: ViewDataLoader<
+            ChangelogParams,
+            ChangelogLoaderResult,
+            ChangelogWidget
+        >.Transformer = { parra, transformParams in
+            let response = try await parra.parraInternal.networkManager
+                .paginateReleases(
+                    limit: transformParams.limit,
+                    offset: transformParams.offset
+                )
+
+            return ChangelogLoaderResult(
+                appReleaseCollection: response
+            )
+        }
+
         return loadAndPresentSheet(
             loadType: .init(
                 get: {
                     if isPresented.wrappedValue {
-                        return .transform(params)
+                        return .transform(params, transformer)
                     } else {
                         return nil
                     }
