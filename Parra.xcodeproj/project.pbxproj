@@ -288,6 +288,8 @@
 		00995BF82BB5CF9100384D94 /* LatestVersionManager+presentationFlows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00995BF72BB5CF9100384D94 /* LatestVersionManager+presentationFlows.swift */; };
 		00995BFA2BB5FD9F00384D94 /* View+shakeGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00995BF92BB5FD9F00384D94 /* View+shakeGesture.swift */; };
 		00995BFD2BB5FEB300384D94 /* RecentLogViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00995BFC2BB5FEB300384D94 /* RecentLogViewer.swift */; };
+		00995BFF2BB609D900384D94 /* DebugLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00995BFE2BB609D900384D94 /* DebugLogStore.swift */; };
+		00995C012BB609F700384D94 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00995C002BB609F700384D94 /* LogView.swift */; };
 		0099EB032B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099EB022B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift */; };
 		0099EB062B8D04C00053F366 /* ParraFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099EB052B8D04C00053F366 /* ParraFeedbackView.swift */; };
 		0099EB082B8D09200053F366 /* ParraPublicContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099EB072B8D09200053F366 /* ParraPublicContainer.swift */; };
@@ -916,6 +918,8 @@
 		00995BF72BB5CF9100384D94 /* LatestVersionManager+presentationFlows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LatestVersionManager+presentationFlows.swift"; sourceTree = "<group>"; };
 		00995BF92BB5FD9F00384D94 /* View+shakeGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+shakeGesture.swift"; sourceTree = "<group>"; };
 		00995BFC2BB5FEB300384D94 /* RecentLogViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentLogViewer.swift; sourceTree = "<group>"; };
+		00995BFE2BB609D900384D94 /* DebugLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogStore.swift; sourceTree = "<group>"; };
+		00995C002BB609F700384D94 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		0099EB022B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormWidget+ContentObserver+Content.swift"; sourceTree = "<group>"; };
 		0099EB052B8D04C00053F366 /* ParraFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedbackView.swift; sourceTree = "<group>"; };
 		0099EB072B8D09200053F366 /* ParraPublicContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPublicContainer.swift; sourceTree = "<group>"; };
@@ -2161,6 +2165,8 @@
 			isa = PBXGroup;
 			children = (
 				00995BFC2BB5FEB300384D94 /* RecentLogViewer.swift */,
+				00995C002BB609F700384D94 /* LogView.swift */,
+				00995BFE2BB609D900384D94 /* DebugLogStore.swift */,
 			);
 			path = "Debug Menu";
 			sourceTree = "<group>";
@@ -3162,6 +3168,7 @@
 				007ED4682A6BFBDC0077E446 /* ParraLoggerContext+ParraDictionaryConvertible.swift in Sources */,
 				00BD2FFC2A477D7700B4BEB2 /* ParraNotificationCenter.swift in Sources */,
 				00FCB1362B90F71800635DC8 /* FeedbackQuestionViewKind+currentAnswer.swift in Sources */,
+				00995BFF2BB609D900384D94 /* DebugLogStore.swift in Sources */,
 				00374CFD2B9FF5630028EDA8 /* Publisher+asyncMap.swift in Sources */,
 				00995BF62BB5C97900384D94 /* AppEnvironment.swift in Sources */,
 				00EAE2FE2AA0C8A2003FB41C /* ParraSessionGeneratorType.swift in Sources */,
@@ -3345,6 +3352,7 @@
 				00F7C4B22B9A610200DBDF5A /* ImageComponentType.swift in Sources */,
 				004F3EE32BA4B1F100424802 /* ViewOffsetKey.swift in Sources */,
 				0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */,
+				00995C012BB609F700384D94 /* LogView.swift in Sources */,
 				00EC6F7F2B61A64B00ABC8EC /* RectangleCornerRadii+Hashable.swift in Sources */,
 				00374CFB2B9F97250028EDA8 /* RoadmapDetailView.swift in Sources */,
 				00FCB13A2B91232B00635DC8 /* FeedbackRatingQuestionCard.swift in Sources */,
