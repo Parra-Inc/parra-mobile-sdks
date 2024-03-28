@@ -66,16 +66,20 @@ class MockedParraTestCase: ParraBaseMock {
             configuration: configuration
         )
 
-        let latestVersionManager = LatestVersionManager(
-            configuration: configuration,
-            networkManager: mockNetworkManager.networkManager
-        )
+        let alertManager = AlertManager()
 
         let modalScreenManager = ModalScreenManager(
             containerRenderer: containerRenderer,
             networkManager: mockNetworkManager.networkManager,
             configuration: configuration,
             notificationCenter: notificationCenter
+        )
+
+        let latestVersionManager = LatestVersionManager(
+            configuration: configuration,
+            modalScreenManager: modalScreenManager,
+            alertManager: alertManager,
+            networkManager: mockNetworkManager.networkManager
         )
 
         let feedback = ParraFeedback(
@@ -103,6 +107,7 @@ class MockedParraTestCase: ParraBaseMock {
             feedback: feedback,
             latestVersionManager: latestVersionManager,
             containerRenderer: containerRenderer,
+            alertManager: alertManager,
             modalScreenManager: modalScreenManager
         )
 
@@ -197,6 +202,44 @@ class MockedParraTestCase: ParraBaseMock {
             dataManager: dataManager,
             urlSession: urlSession,
             appState: appState
+        )
+    }
+
+    func createLatestVersionManagerMock(
+        appState: ParraAppState = ParraAppState(
+            tenantId: UUID().uuidString,
+            applicationId: UUID().uuidString
+        ),
+        appConfig: ParraConfiguration = .init(),
+        authenticationProvider: ParraAuthenticationProviderFunction?
+    ) async -> LatestVersionManager {
+        let configuration = ParraConfiguration()
+        let notificationCenter = ParraNotificationCenter()
+
+        let mockNetworkManager = await createMockNetworkManager(
+            appState: appState,
+            appConfig: configuration,
+            authenticationProvider: authenticationProvider
+        )
+
+        let containerRenderer = ContainerRenderer(
+            configuration: configuration
+        )
+
+        let alertManager = AlertManager()
+
+        let modalScreenManager = ModalScreenManager(
+            containerRenderer: containerRenderer,
+            networkManager: mockNetworkManager.networkManager,
+            configuration: configuration,
+            notificationCenter: notificationCenter
+        )
+
+        return LatestVersionManager(
+            configuration: configuration,
+            modalScreenManager: modalScreenManager,
+            alertManager: alertManager,
+            networkManager: mockNetworkManager.networkManager
         )
     }
 }

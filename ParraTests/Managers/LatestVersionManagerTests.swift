@@ -15,9 +15,8 @@ final class LatestVersionManagerTests: MockedParraTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        manager = LatestVersionManager(
-            configuration: .init(),
-            networkManager: mockParra.networkManager
+        manager = await createLatestVersionManagerMock(
+            authenticationProvider: nil
         )
     }
 

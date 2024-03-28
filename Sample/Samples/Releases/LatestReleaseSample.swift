@@ -44,7 +44,7 @@ struct LatestReleaseSample: View {
             })
             .disabled(isLoading)
         }
-        .presentParraRelease(with: $appVersionInfo)
+        .presentParraReleaseModal(with: $appVersionInfo)
     }
 
     // MARK: - Private
