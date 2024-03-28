@@ -43,6 +43,17 @@ public struct AlertConfig: Equatable {
         )
     )
 
+    public static let defaultWhatsNew = AlertConfig(
+        style: .info,
+        title: LabelConfig(fontStyle: .headline),
+        subtitle: LabelConfig(fontStyle: .subheadline),
+        dismiss: ImageButtonConfig(
+            style: .secondary,
+            size: .custom(defaultDismissButtonSize),
+            variant: .plain
+        )
+    )
+
     public let style: Style
     public let title: LabelConfig
     public let subtitle: LabelConfig

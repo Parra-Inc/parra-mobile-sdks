@@ -8,18 +8,6 @@
 
 import SwiftUI
 
-extension ReleaseContentObserver {
-    enum ReleaseContentType {
-        case newInstalledVersion(NewInstalledVersionInfo)
-        case stub(AppReleaseStub)
-    }
-
-    struct InitialParams {
-        let contentType: ReleaseContentType
-        let networkManager: ParraNetworkManager
-    }
-}
-
 class ReleaseContentObserver: ContainerContentObserver {
     // MARK: - Lifecycle
 

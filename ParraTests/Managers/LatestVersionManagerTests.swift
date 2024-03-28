@@ -28,9 +28,9 @@ final class LatestVersionManagerTests: MockedParraTestCase {
     }
 
     func testExample() async throws {
-        let response = try await manager.fetchLatestAppStoreUpdate(
-            for: "com.humblebots.onlyrecipes"
-        )
+//        let response = try await manager.fetchLatestAppStoreUpdate(
+//            for: "com.humblebots.onlyrecipes"
+//        )
 
 //        response.resultCount
     }

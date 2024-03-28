@@ -142,6 +142,33 @@ class AlertManager: ObservableObject {
         )
     }
 
+    func showWhatsNewToast(
+        for newInstalledVersionInfo: NewInstalledVersionInfo,
+        in location: AlertLocation = .topCenter,
+        for duration: TimeInterval = 8.0,
+        animationDuration: TimeInterval = 0.25,
+        primaryAction: (() -> Void)? = nil
+    ) {
+        let style = AlertConfig.Style.info
+
+        showToast(
+            for: duration,
+            in: location,
+            config: .defaultWhatsNew,
+            content: AlertContent(
+                title: LabelContent(
+                    text: "New Version Available!"
+                ),
+                subtitle: LabelContent(
+                    text: "Version \(newInstalledVersionInfo.release.version) is now available."
+                ),
+                icon: AlertContent.defaultIcon(for: style),
+                dismiss: AlertContent.defaultDismiss(for: style)
+            ),
+            attributes: AlertAttributes()
+        )
+    }
+
     func dismissToast() {
         currentToast = nil
     }

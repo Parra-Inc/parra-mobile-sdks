@@ -9,24 +9,6 @@
 import SwiftUI
 import UIKit
 
-// TODO: Disable in SwiftUI previews?
-
-// What is the version token and is it different than just the version string?
-// Store
-
-// If automatic or delayed, on app launch
-// 1. Apple API, fetch latest version
-// 2. If cached apple version != nil and != new version from api
-// 3. Cache apple version
-// 4. hit GET app-info
-// 5. If app info has release, present modal with or without delay
-// 6. Cache version token from app info
-//
-// If manual, support fetch and auto present, or fetch and manual present
-// 1. Fetch should hit GET app-info
-// 2. Cache token
-// 3. If auto present, auto present
-
 private let logger = Logger()
 
 final actor LatestVersionManager {
@@ -34,9 +16,13 @@ final actor LatestVersionManager {
 
     init(
         configuration: ParraConfiguration,
+        modalScreenManager: ModalScreenManager,
+        alertManager: AlertManager,
         networkManager: ParraNetworkManager
     ) {
         self.configuration = configuration
+        self.modalScreenManager = modalScreenManager
+        self.alertManager = alertManager
         self.networkManager = networkManager
     }
 
@@ -60,115 +46,49 @@ final actor LatestVersionManager {
         let date: Date
     }
 
+    let networkManager: ParraNetworkManager
+    let modalScreenManager: ModalScreenManager
+    let alertManager: AlertManager
+    let configuration: ParraConfiguration
+
+    let appVersionCache = ParraStorageModule<AppVersionInfo>(
+        dataStorageMedium: .userDefaults(key: Constant.appVersionKey),
+        jsonEncoder: .parraEncoder,
+        jsonDecoder: .parraDecoder
+    )
+
+    let versionTokenCache = ParraStorageModule<VersionTokenInfo>(
+        dataStorageMedium: .userDefaults(key: Constant.versionTokenKey),
+        jsonEncoder: .parraEncoder,
+        jsonDecoder: .parraDecoder
+    )
+
     func fetchAndPresentWhatsNew(
-        with options: ParraWhatsNewOptions,
+        with options: ParraReleaseOptions,
         using modalScreenManager: ModalScreenManager
     ) async {
-        if options.presentationMode == .manual {
-            logger.debug(
-                "ParraWhatsNewOptions.presentationMode is manual. Skipping check for new app versions."
-            )
-
-            return
-        }
-
         do {
-            guard
-                let bundleIdentifier = ParraInternal.appBundleIdentifier() else {
-                throw ParraError.message("Could not load bundle id for app")
-            }
-
-            guard
-                let bundleVersion = ParraInternal.appBundleVersion(),
-                let bundleVersionShort = ParraInternal.appBundleVersionShort() else {
-                throw ParraError.message("Could not load app version for app")
-            }
-
-            let currentAppVersion = await cachedAppVersion()
-            let current = currentAppVersion?.version
-
-            // Cache the current app version since we've launched once without
-            // it being set. This will allow the next launch to proceed further.
-            try await updateLatestAppVersion(
-                bundleVersion,
-                versionShort: bundleVersionShort
-            )
-
-            // 1. If there is no cached app version it indicates the first time
-            // the app is launched. Don't check for updates.
-            if current == nil {
+            switch options.presentationMode {
+            case .automatic(let behavior):
+                try await handleWhatsNewFlow(
+                    with: behavior,
+                    style: options.presentationStyle
+                )
+            case .delayed(let behavior, let delay):
+                try await handleWhatsNewFlow(
+                    with: behavior,
+                    style: options.presentationStyle,
+                    after: delay
+                )
+            case .manual:
                 logger.debug(
-                    "App is being launch for first time after install. Skipping update check."
+                    "ParraWhatsNewOptions.presentationMode is manual. Skipping check for new app versions."
                 )
 
                 return
             }
 
-            let since = currentAppVersion?.date ?? .distantPast
-            guard let nextRelease = try await fetchLatestAppStoreUpdate(
-                for: bundleIdentifier,
-                since: since
-            ) else {
-                logger.debug(
-                    "App Store API did not indicate new version is available."
-                )
-
-                return
-            }
-
-            // 2. If there is a cached app version, but it's the same as the
-            // version from the App Store, don't check for updates.
-            if current == nextRelease.version {
-                logger.debug(
-                    "Current app version is same as latest on the App Store. Skipping update check."
-                )
-
-                return
-            }
-
-            let latestAppInfo = try await fetchLatestAppInfo()
-            let currentVersionInfo = await cachedVersionToken()
-
-            guard latestAppInfo.versionToken != currentVersionInfo?.token else {
-                logger.debug(
-                    "Version token has not changed in fetched release."
-                )
-
-                return
-            }
-
-            guard let newInstalledVersionInfo = latestAppInfo
-                .newInstalledVersionInfo else
-            {
-                logger.debug(
-                    "No new version info available."
-                )
-
-                return
-            }
-
-            // Found a new version token, so cache it so we don't present the
-            // what's new screen twice for the same release.
-            #if !DEBUG
-            try await updateLatestSeenVersionToken(latestAppInfo.versionToken)
-            #endif
-
-            let contentObserver = ReleaseContentObserver(
-                initialParams: ReleaseContentObserver.InitialParams(
-                    contentType: .newInstalledVersion(newInstalledVersionInfo),
-                    networkManager: networkManager
-                )
-            )
-
-            try await Task.sleep(for: options.presentationMode.delay)
-
-            modalScreenManager.presentModalView(
-                of: ReleaseWidget.self,
-                with: .default,
-                localBuilder: .init(),
-                contentObserver: contentObserver,
-                onDismiss: nil
-            )
+            logger.info("Finished fetching and presenting What's New.")
         } catch {
             logger.error("Fetch and present what's new error", error)
         }
@@ -210,32 +130,10 @@ final actor LatestVersionManager {
                 cachePolicy: .reloadRevalidatingCacheData
             )
 
-        #if DEBUG
-        return LatestVersionManager.AppStoreResponse.validStates().first?
-            .results.first
-        #else
         return response.results.first
-        #endif
     }
 
-    // MARK: - Private
-
-    private let networkManager: ParraNetworkManager
-    private let configuration: ParraConfiguration
-
-    private let appVersionCache = ParraStorageModule<AppVersionInfo>(
-        dataStorageMedium: .userDefaults(key: Constant.appVersionKey),
-        jsonEncoder: .parraEncoder,
-        jsonDecoder: .parraDecoder
-    )
-
-    private let versionTokenCache = ParraStorageModule<VersionTokenInfo>(
-        dataStorageMedium: .userDefaults(key: Constant.versionTokenKey),
-        jsonEncoder: .parraEncoder,
-        jsonDecoder: .parraDecoder
-    )
-
-    private func cachedAppVersion() async -> AppVersionInfo? {
+    func cachedAppVersion() async -> AppVersionInfo? {
         guard let cached = await appVersionCache.read(
             name: Constant.currentVersionKey
         ) else {
@@ -245,7 +143,7 @@ final actor LatestVersionManager {
         return cached
     }
 
-    private func cachedVersionToken() async -> VersionTokenInfo? {
+    func cachedVersionToken() async -> VersionTokenInfo? {
         guard let cached = await versionTokenCache.read(
             name: Constant.currentVersionKey
         ) else {
@@ -255,7 +153,7 @@ final actor LatestVersionManager {
         return cached
     }
 
-    private func updateLatestAppVersion(
+    func updateLatestAppVersion(
         _ version: String,
         versionShort: String
     ) async throws {
@@ -269,7 +167,7 @@ final actor LatestVersionManager {
         )
     }
 
-    private func updateLatestSeenVersionToken(_ token: String) async throws {
+    func updateLatestSeenVersionToken(_ token: String) async throws {
         try await versionTokenCache.write(
             name: Constant.currentVersionKey,
             value: VersionTokenInfo(

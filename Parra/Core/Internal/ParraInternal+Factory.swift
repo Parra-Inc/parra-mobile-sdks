@@ -95,16 +95,20 @@ extension ParraInternal {
             configuration: configuration
         )
 
-        let latestVersionManager = LatestVersionManager(
-            configuration: configuration,
-            networkManager: networkManager
-        )
-
         let modalScreenManager = ModalScreenManager(
             containerRenderer: containerRenderer,
             networkManager: networkManager,
             configuration: configuration,
             notificationCenter: notificationCenter
+        )
+
+        let alertManager = AlertManager()
+
+        let latestVersionManager = LatestVersionManager(
+            configuration: configuration,
+            modalScreenManager: modalScreenManager,
+            alertManager: alertManager,
+            networkManager: networkManager
         )
 
         // Parra Modules
@@ -134,6 +138,7 @@ extension ParraInternal {
             feedback: feedback,
             latestVersionManager: latestVersionManager,
             containerRenderer: containerRenderer,
+            alertManager: alertManager,
             modalScreenManager: modalScreenManager
         )
 
@@ -232,16 +237,20 @@ extension ParraInternal {
             configuration: configuration
         )
 
-        let latestVersionManager = LatestVersionManager(
-            configuration: configuration,
-            networkManager: networkManager
-        )
-
         let modalScreenManager = ModalScreenManager(
             containerRenderer: containerRenderer,
             networkManager: networkManager,
             configuration: configuration,
             notificationCenter: notificationCenter
+        )
+
+        let alertManager = AlertManager()
+
+        let latestVersionManager = LatestVersionManager(
+            configuration: configuration,
+            modalScreenManager: modalScreenManager,
+            alertManager: alertManager,
+            networkManager: networkManager
         )
 
         // Parra Modules
@@ -271,6 +280,7 @@ extension ParraInternal {
             feedback: feedback,
             latestVersionManager: latestVersionManager,
             containerRenderer: containerRenderer,
+            alertManager: alertManager,
             modalScreenManager: modalScreenManager
         )
 

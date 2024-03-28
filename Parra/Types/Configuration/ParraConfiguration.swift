@@ -17,7 +17,7 @@ public struct ParraConfiguration {
         loggerOptions: ParraLoggerOptions = .default,
         pushNotificationOptions: ParraPushNotificationOptions = .default,
         themeOptions: ParraTheme = .default,
-        whatsNewOptions: ParraWhatsNewOptions = .default
+        whatsNewOptions: ParraReleaseOptions = .default
     ) {
         self.appInfoOptions = appInfoOptions
         self.globalComponentAttributes = globalComponentAttributes
@@ -37,7 +37,7 @@ public struct ParraConfiguration {
     public let pushNotificationOptions: ParraPushNotificationOptions
     public internal(set) var theme: ParraTheme
     public private(set) var globalComponentAttributes: GlobalComponentAttributes
-    public let whatsNewOptions: ParraWhatsNewOptions
+    public let whatsNewOptions: ParraReleaseOptions
 
     // MARK: - Private
 

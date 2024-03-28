@@ -27,7 +27,7 @@ public enum ParraConfigurationOption: CaseIterable {
     /// be built upon by builder factories for specific Widgets later.
     case globalComponentAttributes(GlobalComponentAttributes)
 
-    case whatsNew(ParraWhatsNewOptions)
+    case whatsNew(ParraReleaseOptions)
 
     // MARK: - Public
 

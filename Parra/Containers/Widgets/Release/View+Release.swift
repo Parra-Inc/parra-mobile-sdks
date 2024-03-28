@@ -12,37 +12,63 @@ public extension View {
     /// Automatically fetches the feedback form with the provided id and
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
-    func presentParraRelease(
-        isPresented: Binding<Bool>,
-        config: RoadmapWidgetConfig = .default,
-        localBuilder: RoadmapWidgetBuilderConfig = .init(),
+    func presentParraReleaseModal(
+        with appVersionInfoBinding: Binding<NewInstalledVersionInfo?>,
+        config: ChangelogWidgetConfig = .default,
+        localBuilder: ChangelogWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
-        let params = RoadmapParams(
-            limit: 15,
-            offset: 0
-        )
-
         return loadAndPresentSheet(
             loadType: .init(
                 get: {
-                    if isPresented.wrappedValue {
-                        return .transform(params)
+                    if let appVersionInfo = appVersionInfoBinding.wrappedValue {
+                        return .raw(.newInstalledVersion(appVersionInfo))
                     } else {
                         return nil
                     }
                 },
                 set: { type in
                     if type == nil {
-                        isPresented.wrappedValue = false
+                        appVersionInfoBinding.wrappedValue = nil
                     }
                 }
             ),
-            with: .roadmapLoader(
+            with: .releaseLoader(
                 config: config,
                 localBuilder: localBuilder
             ),
             onDismiss: onDismiss
         )
     }
+
+    // TODO: support this
+//    @MainActor
+//    func presentParraReleaseToast(
+//        with appVersionInfoBinding: Binding<NewInstalledVersionInfo?>,
+//        config: ChangelogWidgetConfig = .default,
+//        localBuilder: ChangelogWidgetBuilderConfig = .init(),
+//        onDismiss: ((SheetDismissType) -> Void)? = nil
+//    ) -> some View {
+//        return loadAndPresentSheet(
+//            loadType: .init(
+//                get: {
+//                    if let appVersionInfo = appVersionInfoBinding.wrappedValue {
+//                        return .raw(.newInstalledVersion(appVersionInfo))
+//                    } else {
+//                        return nil
+//                    }
+//                },
+//                set: { type in
+//                    if type == nil {
+//                        appVersionInfoBinding.wrappedValue = nil
+//                    }
+//                }
+//            ),
+//            with: .releaseLoader(
+//                config: config,
+//                localBuilder: localBuilder
+//            ),
+//            onDismiss: onDismiss
+//        )
+//    }
 }

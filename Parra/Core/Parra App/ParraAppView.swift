@@ -60,7 +60,7 @@ struct ParraAppView<Content>: View where Content: View {
         )
 
         self._alertManager = StateObject(
-            wrappedValue: AlertManager()
+            wrappedValue: parra.alertManager
         )
 
         self._parraAppState = StateObject(

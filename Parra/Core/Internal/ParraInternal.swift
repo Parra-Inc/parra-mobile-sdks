@@ -29,6 +29,7 @@ class ParraInternal {
         feedback: ParraFeedback,
         latestVersionManager: LatestVersionManager,
         containerRenderer: ContainerRenderer,
+        alertManager: AlertManager,
         modalScreenManager: ModalScreenManager
     ) {
         self.configuration = configuration
@@ -41,6 +42,7 @@ class ParraInternal {
         self.feedback = feedback
         self.latestVersionManager = latestVersionManager
         self.containerRenderer = containerRenderer
+        self.alertManager = alertManager
         self.modalScreenManager = modalScreenManager
         self.globalComponentFactory = ComponentFactory(
             global: configuration.globalComponentAttributes,
@@ -126,6 +128,7 @@ class ParraInternal {
     let notificationCenter: NotificationCenterType
     let latestVersionManager: LatestVersionManager
     let containerRenderer: ContainerRenderer
+    let alertManager: AlertManager
     let modalScreenManager: ModalScreenManager
 
     private(set) var globalComponentFactory: ComponentFactory
