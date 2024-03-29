@@ -252,7 +252,7 @@ struct TextEditorComponent: TextEditorComponentType {
         let characterCount = text.count
 
         guard let max else {
-            return (String(characterCount), false)
+            return (String(characterCount), true)
         }
 
         return ("\(characterCount)/\(max)", characterCount <= max)
