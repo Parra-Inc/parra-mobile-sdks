@@ -196,10 +196,13 @@ struct ParraAppView<Content>: View where Content: View {
                     showLogs = true
                 }
             }
-            .sheet(isPresented: $showLogs) {
-                RecentLogViewer()
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
+            .background {
+                EmptyView()
+                    .sheet(isPresented: $showLogs) {
+                        RecentLogViewer()
+                            .presentationDetents([.medium, .large])
+                            .presentationDragIndicator(.visible)
+                    }
             }
     }
 
