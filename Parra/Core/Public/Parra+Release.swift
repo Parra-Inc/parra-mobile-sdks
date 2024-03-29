@@ -15,7 +15,9 @@ public extension Parra {
     /// modifier to present a sheet showing off the details of the release.
     func fetchLatestRelease() async throws -> NewInstalledVersionInfo? {
         let appInfo = try await parraInternal.latestVersionManager
-            .fetchLatestAppInfo()
+            .fetchLatestAppInfo(
+                force: true
+            )
 
         return appInfo.newInstalledVersionInfo
     }

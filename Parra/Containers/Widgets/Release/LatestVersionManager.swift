@@ -94,18 +94,26 @@ final actor LatestVersionManager {
         }
     }
 
-    func fetchLatestAppInfo() async throws -> AppInfo {
-        let versionToken = await cachedVersionToken()
+    /// - Parameter force: Don't send the last version token with the request,
+    ///                    meaning the latest release will always be fetched.
+    func fetchLatestAppInfo(
+        force: Bool = false
+    ) async throws -> AppInfo {
+        let versionToken: String? = if force {
+            nil
+        } else {
+            await cachedVersionToken()?.token
+        }
 
         let response = try await networkManager.getAppInfo(
-            versionToken: versionToken?.token
+            versionToken: versionToken
         )
 
         let newVersionToken = response.versionToken
 
         // Only update the token if it changed, since updating will bump the
         // updated date field on the version info.
-        if let versionToken, versionToken.token != newVersionToken {
+        if let versionToken, versionToken != newVersionToken {
             try await updateLatestSeenVersionToken(response.versionToken)
         }
 

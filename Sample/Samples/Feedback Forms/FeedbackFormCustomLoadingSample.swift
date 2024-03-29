@@ -61,6 +61,8 @@ struct FeedbackFormCustomLoadingSample: View {
             } catch {
                 errorMessage = String(describing: error)
                 formData = nil
+
+                Logger.error(error)
             }
 
             isLoading = false
