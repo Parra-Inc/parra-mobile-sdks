@@ -25,12 +25,6 @@ extension LatestVersionManager {
         after delay: TimeInterval
     ) async throws {
         guard
-            let bundleIdentifier = ParraInternal.appBundleIdentifier() else
-        {
-            throw ParraError.message("Could not load bundle id for app")
-        }
-
-        guard
             let bundleVersion = ParraInternal.appBundleVersion(),
             let bundleVersionShort = ParraInternal.appBundleVersionShort() else {
             throw ParraError.message("Could not load app version for app")
@@ -59,7 +53,10 @@ extension LatestVersionManager {
             return
         }
 
+        let latestAppInfo = try await fetchLatestAppInfo()
+
         try await displayReleaseIfExists(
+            latestAppInfo: latestAppInfo,
             with: style,
             after: delay
         )
@@ -126,7 +123,19 @@ extension LatestVersionManager {
             return
         }
 
+        let latestAppInfo = try await fetchLatestAppInfo()
+        let currentVersionInfo = await cachedVersionToken()
+
+        guard latestAppInfo.versionToken != currentVersionInfo?.token else {
+            logger.debug(
+                "Version token has not changed in fetched release."
+            )
+
+            return
+        }
+
         try await displayReleaseIfExists(
+            latestAppInfo: latestAppInfo,
             with: style,
             after: delay
         )
@@ -154,20 +163,10 @@ extension LatestVersionManager {
     }
 
     private func displayReleaseIfExists(
+        latestAppInfo: AppInfo,
         with style: ParraReleaseOptions.PresentationStyle,
         after delay: TimeInterval
     ) async throws {
-        let latestAppInfo = try await fetchLatestAppInfo()
-        let currentVersionInfo = await cachedVersionToken()
-
-        guard latestAppInfo.versionToken != currentVersionInfo?.token else {
-            logger.debug(
-                "Version token has not changed in fetched release."
-            )
-
-            return
-        }
-
         guard let newInstalledVersionInfo = latestAppInfo
             .newInstalledVersionInfo else
         {
