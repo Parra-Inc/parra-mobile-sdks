@@ -28,9 +28,9 @@ struct HeaderFactory {
         return headerDictionary(
             for: [
                 .applicationLocale, .applicationBundleVersion,
-                .applicationBundleVersion, .debug, .device, .deviceId,
-                .deviceLocale, .deviceManufacturer, .deviceTimeZoneAbbreviation,
-                .deviceTimeZoneOffset, .platform, .platformAgent,
+                .applicationBundleVersion, .device, .deviceId, .deviceLocale,
+                .deviceManufacturer, .deviceTimeZoneAbbreviation,
+                .deviceTimeZoneOffset, .environment, .platform, .platformAgent,
                 .platformSdkVersion, .platformVersion
             ]
         )
@@ -40,9 +40,9 @@ struct HeaderFactory {
         return headerDictionary(
             for: [
                 .applicationLocale, .applicationBundleVersion,
-                .applicationBundleVersion, .debug, .device, .deviceId,
-                .deviceLocale, .deviceManufacturer, .deviceTimeZoneAbbreviation,
-                .deviceTimeZoneOffset, .platform, .platformAgent,
+                .applicationBundleVersion, .device, .deviceId, .deviceLocale,
+                .deviceManufacturer, .deviceTimeZoneAbbreviation,
+                .deviceTimeZoneOffset, .environment, .platform, .platformAgent,
                 .platformSdkVersion, .platformVersion
             ]
         )
@@ -66,12 +66,6 @@ struct HeaderFactory {
             return ParraInternal.appBundleVersion()
         case .applicationBundleVersionShort:
             return ParraInternal.appBundleVersionShort()
-        case .debug:
-            #if DEBUG
-            return "1"
-            #else
-            return nil
-            #endif
         case .device:
             return UIDevice.modelCode
         case .deviceId:
@@ -84,6 +78,8 @@ struct HeaderFactory {
             return TimeZone.current.abbreviation()
         case .deviceTimeZoneOffset:
             return String(TimeZone.current.secondsFromGMT())
+        case .environment:
+            return AppEnvironment.appConfiguration.headerName
         case .platform:
             return UIDevice.current.systemName
         case .platformAgent:
@@ -120,13 +116,13 @@ enum TrackingHeader {
     case applicationBundleVersion
     case applicationBundleVersionShort
     case applicationBundleId(String)
-    case debug
     case device
     case deviceId
     case deviceLocale
     case deviceManufacturer
     case deviceTimeZoneAbbreviation
     case deviceTimeZoneOffset
+    case environment
     case platform
     case platformAgent
     case platformSdkVersion
@@ -147,8 +143,6 @@ enum TrackingHeader {
             return "APPLICATION-BUNDLE-VERSION"
         case .applicationBundleVersionShort:
             return "APPLICATION-BUNDLE-VERSION-SHORT"
-        case .debug:
-            return "DEBUG"
         case .device:
             return "DEVICE"
         case .deviceId:
@@ -161,6 +155,8 @@ enum TrackingHeader {
             return "DEVICE-TIMEZONE-OFFSET"
         case .deviceManufacturer:
             return "DEVICE-MANUFACTURER"
+        case .environment:
+            return "ENVIRONMENT"
         case .platform:
             return "PLATFORM"
         case .platformAgent:

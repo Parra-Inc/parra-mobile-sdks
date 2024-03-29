@@ -13,6 +13,20 @@ enum AppEnvironment {
         case production
         case beta
         case debug
+
+        // MARK: - Internal
+
+        var headerName: String {
+            // Used in API which should be considered before changing!
+            switch self {
+            case .production:
+                return "production"
+            case .beta:
+                return "beta"
+            case .debug:
+                return "debug"
+            }
+        }
     }
 
     static let isDebug: Bool = {
