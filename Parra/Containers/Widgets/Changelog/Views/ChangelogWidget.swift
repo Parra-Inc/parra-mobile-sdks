@@ -64,21 +64,22 @@ struct ChangelogWidget: Container {
                     .navigationDestination(
                         for: AppReleaseStubContent.self
                     ) { release in
+                        let contentObserver = ReleaseContentObserver(
+                            initialParams: .init(
+                                contentType: .stub(
+                                    release.originalStub
+                                ),
+                                networkManager: contentObserver
+                                    .networkManager
+                            )
+                        )
+
                         ReleaseWidget(
                             config: config,
                             style: style,
                             localBuilderConfig: localBuilderConfig,
                             componentFactory: componentFactory,
-                            contentObserver: ReleaseContentObserver(
-                                initialParams: ReleaseContentObserver
-                                    .InitialParams(
-                                        contentType: .stub(
-                                            release.originalStub
-                                        ),
-                                        networkManager: contentObserver
-                                            .networkManager
-                                    )
-                            )
+                            contentObserver: contentObserver
                         )
                     }
             }

@@ -92,6 +92,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                         loader.render(parra, data, dismiss)
                             .presentationDetents(detents)
                             .presentationDragIndicator(visibility)
+                            .padding(.top, 30)
                     }
                 }
             )

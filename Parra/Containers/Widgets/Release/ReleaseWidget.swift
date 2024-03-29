@@ -75,7 +75,48 @@ struct ReleaseWidget: Container {
         }
     }
 
-    var body: some View {
+    var footer: some View {
+        WidgetFooter {
+            withContent(
+                content: contentObserver.content.otherReleasesButton
+            ) { _ in
+                // TODO: Need:
+                // 1. A way to use our button component as a navigation link
+                // 2. A loader for push transitions, not modals.
+
+                //                        NavigationLink(value: "ShowOtherReleases") {
+                //                            componentFactory.buildTextButton(
+                //                                variant: .contained,
+                //                                config: config.releaseDetailShowOtherReleasesButton,
+                //                                content: content,
+                //                                suppliedBuilder: localBuilderConfig
+                //                                    .releaseDetailShowOtherReleasesButton,
+                //                                onPress: {
+                //                                    //                                contentObserver.addRequest()
+                //                                }
+                //                            )
+                //                        }
+                //                        .navigationDestination(for: String.self) { view in
+                //                            if view == "ShowOtherReleases" {
+                //                                ChangelogWidget(
+                //                                    config: config,
+                //                                    style: style,
+                //                                    localBuilderConfig: localBuilderConfig,
+                //                                    componentFactory: componentFactory,
+                //                                    contentObserver: ChangelogWidget.ContentObserver(
+                //                                        initialParams: ChangelogWidget.ContentObserver.InitialParams(
+                //                                            appReleaseCollection: <#T##AppReleaseCollectionResponse#>,
+                //                                            networkManager: <#T##ParraNetworkManager#>
+                //                                        )
+                //                                    )
+                //                                )
+                //                            }
+                //                        }
+            }
+        }
+    }
+
+    @ViewBuilder var primaryContent: some View {
         let content = contentObserver.content
 
         GeometryReader { geometry in
@@ -86,89 +127,57 @@ struct ReleaseWidget: Container {
                 0.0
             )
 
-            VStack(spacing: 0) {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 20.0) {
-                        header
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20.0) {
+                    header
 
-                        withContent(
-                            content: content.header
-                        ) { content in
-                            let aspectRatio = content.size.width / content.size
-                                .height
-
-                            AsyncImageComponent(
-                                content: content.image,
-                                attributes: style.releaseDetailHeaderImage
-                            )
-                            .aspectRatio(aspectRatio, contentMode: .fill)
-                            .frame(
-                                width: width,
-                                height: (width / aspectRatio).rounded()
-                            )
-                        }
-
-                        withContent(
-                            content: content.description
-                        ) { content in
-                            componentFactory.buildLabel(
-                                config: config.releaseDetailDescription,
-                                content: content,
-                                suppliedBuilder: localBuilderConfig
-                                    .releaseDetailDescription,
-                                localAttributes: style.releaseDetailDescription
-                            )
-                            .multilineTextAlignment(.leading)
-                        }
-
-                        sections
-                    }
-                }
-                .contentMargins(
-                    .all,
-                    style.contentPadding,
-                    for: .scrollContent
-                )
-
-                WidgetFooter {
                     withContent(
-                        content: contentObserver.content.otherReleasesButton
-                    ) { _ in
-                        // TODO: Need:
-                        // 1. A way to use our button component as a navigation link
-                        // 2. A loader for push transitions, not modals.
+                        content: content.header
+                    ) { content in
+                        let aspectRatio = content.size.width / content.size
+                            .height
 
-//                        NavigationLink(value: "ShowOtherReleases") {
-//                            componentFactory.buildTextButton(
-//                                variant: .contained,
-//                                config: config.releaseDetailShowOtherReleasesButton,
-//                                content: content,
-//                                suppliedBuilder: localBuilderConfig
-//                                    .releaseDetailShowOtherReleasesButton,
-//                                onPress: {
-//                                    //                                contentObserver.addRequest()
-//                                }
-//                            )
-//                        }
-//                        .navigationDestination(for: String.self) { view in
-//                            if view == "ShowOtherReleases" {
-//                                ChangelogWidget(
-//                                    config: config,
-//                                    style: style,
-//                                    localBuilderConfig: localBuilderConfig,
-//                                    componentFactory: componentFactory,
-//                                    contentObserver: ChangelogWidget.ContentObserver(
-//                                        initialParams: ChangelogWidget.ContentObserver.InitialParams(
-//                                            appReleaseCollection: <#T##AppReleaseCollectionResponse#>,
-//                                            networkManager: <#T##ParraNetworkManager#>
-//                                        )
-//                                    )
-//                                )
-//                            }
-//                        }
+                        AsyncImageComponent(
+                            content: content.image,
+                            attributes: style.releaseDetailHeaderImage
+                        )
+                        .aspectRatio(aspectRatio, contentMode: .fill)
+                        .frame(
+                            width: width,
+                            height: (width / aspectRatio).rounded()
+                        )
                     }
+
+                    withContent(
+                        content: content.description
+                    ) { content in
+                        componentFactory.buildLabel(
+                            config: config.releaseDetailDescription,
+                            content: content,
+                            suppliedBuilder: localBuilderConfig
+                                .releaseDetailDescription,
+                            localAttributes: style.releaseDetailDescription
+                        )
+                        .multilineTextAlignment(.leading)
+                    }
+
+                    sections
                 }
             }
+        }
+        .clipped()
+        .contentMargins(
+            [.horizontal, .bottom],
+            style.contentPadding,
+            for: .scrollContent
+        )
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            primaryContent
+
+            footer
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .applyBackground(style.background)
@@ -179,5 +188,7 @@ struct ReleaseWidget: Container {
         .environment(localBuilderConfig)
         .environmentObject(contentObserver)
         .environmentObject(componentFactory)
+        // required to prevent navigation bar from changing colors when scrolled
+        .toolbarBackground(.hidden, for: .navigationBar)
     }
 }
