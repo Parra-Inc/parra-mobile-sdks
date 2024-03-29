@@ -45,6 +45,8 @@ final class ModalScreenManager {
                 return
             }
 
+            let navigationState = NavigationState()
+
             let container: ContainerType = containerRenderer.renderContainer(
                 with: localBuilder,
                 contentObserver: contentObserver,
@@ -56,9 +58,18 @@ final class ModalScreenManager {
                 notificationCenter: notificationCenter
             )
 
-            let rootView = NavigationStack {
+            let rootView = NavigationStack(
+                path: Binding<NavigationPath>(
+                    get: {
+                        navigationState.navigationPath
+                    },
+                    set: { path in
+                        navigationState.navigationPath = path
+                    }
+                )
+            ) {
                 container
-                    .padding(.top, 20)
+                    .padding(.top, 30)
             }
             .environmentObject(themeObserver)
 

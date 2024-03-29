@@ -47,7 +47,7 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
         {
             TextButtonContent(
                 text: LabelContent(
-                    text: "Other Releases"
+                    text: "Previous Releases"
                 )
             )
         } else {

@@ -23,12 +23,36 @@ struct ReleaseWidget: Container {
         self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
+
+        let collection: AppReleaseCollectionResponse? = if let releaseStub =
+            contentObserver.releaseStub
+        {
+            AppReleaseCollectionResponse(
+                page: 0,
+                pageCount: .max,
+                pageSize: 15,
+                totalCount: .max,
+                data: [releaseStub]
+            )
+        } else {
+            nil
+        }
+
+        self._changelogContentObserver = StateObject(
+            wrappedValue: ChangelogWidget.ContentObserver(
+                initialParams: .init(
+                    appReleaseCollection: collection,
+                    networkManager: contentObserver.networkManager
+                )
+            )
+        )
     }
 
     // MARK: - Internal
 
     let localBuilderConfig: ChangelogWidgetBuilderConfig
     let componentFactory: ComponentFactory
+
     @StateObject var contentObserver: ReleaseContentObserver
     let config: ChangelogWidgetConfig
     let style: ChangelogWidgetStyle
@@ -75,43 +99,21 @@ struct ReleaseWidget: Container {
         }
     }
 
-    var footer: some View {
+    @ViewBuilder var footer: some View {
         WidgetFooter {
             withContent(
                 content: contentObserver.content.otherReleasesButton
-            ) { _ in
-                // TODO: Need:
-                // 1. A way to use our button component as a navigation link
-                // 2. A loader for push transitions, not modals.
-
-                //                        NavigationLink(value: "ShowOtherReleases") {
-                //                            componentFactory.buildTextButton(
-                //                                variant: .contained,
-                //                                config: config.releaseDetailShowOtherReleasesButton,
-                //                                content: content,
-                //                                suppliedBuilder: localBuilderConfig
-                //                                    .releaseDetailShowOtherReleasesButton,
-                //                                onPress: {
-                //                                    //                                contentObserver.addRequest()
-                //                                }
-                //                            )
-                //                        }
-                //                        .navigationDestination(for: String.self) { view in
-                //                            if view == "ShowOtherReleases" {
-                //                                ChangelogWidget(
-                //                                    config: config,
-                //                                    style: style,
-                //                                    localBuilderConfig: localBuilderConfig,
-                //                                    componentFactory: componentFactory,
-                //                                    contentObserver: ChangelogWidget.ContentObserver(
-                //                                        initialParams: ChangelogWidget.ContentObserver.InitialParams(
-                //                                            appReleaseCollection: <#T##AppReleaseCollectionResponse#>,
-                //                                            networkManager: <#T##ParraNetworkManager#>
-                //                                        )
-                //                                    )
-                //                                )
-                //                            }
-                //                        }
+            ) { content in
+                componentFactory.buildTextButton(
+                    variant: .contained,
+                    config: config.releaseDetailShowOtherReleasesButton,
+                    content: content,
+                    suppliedBuilder: localBuilderConfig
+                        .releaseDetailShowOtherReleasesButton,
+                    onPress: {
+                        navigationState.navigationPath.append("changelog")
+                    }
+                )
             }
         }
     }
@@ -190,5 +192,26 @@ struct ReleaseWidget: Container {
         .environmentObject(componentFactory)
         // required to prevent navigation bar from changing colors when scrolled
         .toolbarBackground(.hidden, for: .navigationBar)
+        .navigationDestination(for: String.self) { destination in
+            if destination == "changelog" {
+                ChangelogWidget(
+                    config: config,
+                    style: style,
+                    localBuilderConfig: localBuilderConfig,
+                    componentFactory: componentFactory,
+                    contentObserver: changelogContentObserver
+                )
+                .padding(.top, 40)
+                .edgesIgnoringSafeArea([.top])
+                .environmentObject(navigationState)
+            }
+        }
     }
+
+    // MARK: - Private
+
+    @StateObject private var changelogContentObserver: ChangelogWidget
+        .ContentObserver
+
+    @EnvironmentObject private var navigationState: NavigationState
 }

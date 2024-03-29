@@ -50,6 +50,10 @@ struct AppReleaseStubContent: Identifiable, Hashable {
 
     // MARK: - Internal
 
+    static var redacted: AppReleaseStubContent {
+        return AppReleaseStubContent(AppReleaseStub.validStates()[0])
+    }
+
     let originalStub: AppReleaseStub
     let id: String
     let createdAt: LabelContent
@@ -97,17 +101,29 @@ extension ChangelogWidget {
                 errorStateView: errorStateViewContent
             )
 
-            self.releasePaginator = .init(
-                context: "",
-                data: .init(
-                    items: appReleaseCollection.data
-                        .map { AppReleaseStubContent($0) },
-                    placeholderItems: [],
-                    pageSize: appReleaseCollection.pageSize,
-                    knownCount: appReleaseCollection.totalCount
-                ),
-                pageFetcher: loadMoreReleases
-            )
+            self.releasePaginator = if let appReleaseCollection {
+                .init(
+                    context: "",
+                    data: .init(
+                        items: appReleaseCollection.data
+                            .map { AppReleaseStubContent($0) },
+                        placeholderItems: [],
+                        pageSize: appReleaseCollection.pageSize,
+                        knownCount: appReleaseCollection.totalCount
+                    ),
+                    pageFetcher: loadMoreReleases
+                )
+            } else {
+                .init(
+                    context: "",
+                    data: .init(
+                        items: [],
+                        placeholderItems: (0 ... 15)
+                            .map { _ in AppReleaseStubContent.redacted }
+                    ),
+                    pageFetcher: loadMoreReleases
+                )
+            }
         }
 
         // MARK: - Internal

@@ -8,6 +8,10 @@
 
 import SwiftUI
 
+final class NavigationState: ObservableObject {
+    @Published var navigationPath = NavigationPath()
+}
+
 /// Facilitates loading data asynchonously then presenting a sheet with a view
 /// rendered from the data.
 @MainActor
@@ -89,10 +93,14 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 },
                 content: {
                     if case .complete(let data) = state {
-                        loader.render(parra, data, dismiss)
-                            .presentationDetents(detents)
-                            .presentationDragIndicator(visibility)
-                            .padding(.top, 30)
+                        NavigationStack(path: $navigationState.navigationPath) {
+                            loader.render(parra, data, dismiss)
+                                .environmentObject(navigationState)
+                                .padding(.top, 30)
+                        }
+                        .presentationDetents(detents)
+                        .presentationDragIndicator(visibility)
+                        .navigationBarTitleDisplayMode(.inline)
                     }
                 }
             )
@@ -101,6 +109,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     // MARK: - Private
 
     @State private var state: LoadState = .ready
+    @StateObject private var navigationState = NavigationState()
 
     private let loader: ViewDataLoader<TransformParams, Data, SheetContent>
     private let detents: Set<PresentationDetent>

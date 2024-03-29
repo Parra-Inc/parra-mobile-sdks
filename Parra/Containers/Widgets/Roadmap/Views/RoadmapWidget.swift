@@ -154,46 +154,44 @@ struct RoadmapWidget: Container {
     }
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                tabBar
-                scrollView
-                footer
-            }
-            .applyBackground(style.background)
-            .padding(style.padding)
-            .environment(config)
-            .environment(localBuilderConfig)
-            .environmentObject(contentObserver)
-            .environmentObject(componentFactory)
-            .presentParraFeedbackForm(
-                with: $contentObserver.addRequestForm,
-                onDismiss: { dismissType in
-                    if dismissType == .completed {
-                        alertManager.showSuccessToast(
-                            title: config.addRequestSuccessToastTitle,
-                            subtitle: config.addRequestSuccessToastSubtitle,
-                            in: .bottomCenter
-                        )
-                    }
-                }
-            )
-            .navigationDestination(for: TicketUserContent.self) { ticket in
-                if let index = items.firstIndex(
-                    where: {
-                        $0.id == ticket.id
-                    }
-                ) {
-                    let binding = items[index]
-
-                    RoadmapDetailView(ticketContent: binding)
-                        .environment(config)
-                        .environment(localBuilderConfig)
-                        .environmentObject(contentObserver)
-                }
-            }
-            .renderToast(toast: $alertManager.currentToast)
+        VStack(spacing: 0) {
+            tabBar
+            scrollView
+            footer
         }
+        .applyBackground(style.background)
+        .padding(style.padding)
+        .environment(config)
+        .environment(localBuilderConfig)
+        .environmentObject(contentObserver)
+        .environmentObject(componentFactory)
+        .presentParraFeedbackForm(
+            with: $contentObserver.addRequestForm,
+            onDismiss: { dismissType in
+                if dismissType == .completed {
+                    alertManager.showSuccessToast(
+                        title: config.addRequestSuccessToastTitle,
+                        subtitle: config.addRequestSuccessToastSubtitle,
+                        in: .bottomCenter
+                    )
+                }
+            }
+        )
+        .navigationDestination(for: TicketUserContent.self) { ticket in
+            if let index = items.firstIndex(
+                where: {
+                    $0.id == ticket.id
+                }
+            ) {
+                let binding = items[index]
+
+                RoadmapDetailView(ticketContent: binding)
+                    .environment(config)
+                    .environment(localBuilderConfig)
+                    .environmentObject(contentObserver)
+            }
+        }
+        .renderToast(toast: $alertManager.currentToast)
     }
 
     var headerSpace: CGFloat {

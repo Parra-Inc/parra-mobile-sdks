@@ -40,56 +40,55 @@ struct ChangelogWidget: Container {
     }
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                VStack(alignment: .leading) {
-                    componentFactory.buildLabel(
-                        config: config.title,
-                        content: contentObserver.content.title,
-                        suppliedBuilder: localBuilderConfig.title
-                    )
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding([.horizontal, .top], from: style.contentPadding)
-                .padding(.bottom, headerSpace)
-                .border(
-                    width: 1,
-                    edges: .bottom,
-                    color: showNavigationDivider
-                        ? themeObserver.theme.palette
-                        .secondaryBackground : .clear
+        VStack(spacing: 0) {
+            VStack(alignment: .leading) {
+                componentFactory.buildLabel(
+                    config: config.title,
+                    content: contentObserver.content.title,
+                    suppliedBuilder: localBuilderConfig.title
                 )
-
-                list
-                    .navigationDestination(
-                        for: AppReleaseStubContent.self
-                    ) { release in
-                        let contentObserver = ReleaseContentObserver(
-                            initialParams: .init(
-                                contentType: .stub(
-                                    release.originalStub
-                                ),
-                                networkManager: contentObserver
-                                    .networkManager
-                            )
-                        )
-
-                        ReleaseWidget(
-                            config: config,
-                            style: style,
-                            localBuilderConfig: localBuilderConfig,
-                            componentFactory: componentFactory,
-                            contentObserver: contentObserver
-                        )
-                    }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .padding([.horizontal, .top], from: style.contentPadding)
+            .padding(.bottom, headerSpace)
+            .border(
+                width: 1,
+                edges: .bottom,
+                color: showNavigationDivider
+                    ? themeObserver.theme.palette
+                    .secondaryBackground : .clear
+            )
+
+            list
+                .environment(config)
+                .environment(localBuilderConfig)
+                .environmentObject(contentObserver)
+                .environmentObject(componentFactory)
+                .navigationDestination(
+                    for: AppReleaseStubContent.self
+                ) { release in
+                    let contentObserver = ReleaseContentObserver(
+                        initialParams: .init(
+                            contentType: .stub(
+                                release.originalStub
+                            ),
+                            networkManager: contentObserver
+                                .networkManager
+                        )
+                    )
+
+                    ReleaseWidget(
+                        config: config,
+                        style: style,
+                        localBuilderConfig: localBuilderConfig,
+                        componentFactory: componentFactory,
+                        contentObserver: contentObserver
+                    )
+                    .environmentObject(navigationState)
+                }
         }
-        .padding(style.padding)
+        .padding([.horizontal, .bottom], from: style.padding)
         .applyBackground(style.background)
-        .environment(config)
-        .environment(localBuilderConfig)
-        .environmentObject(contentObserver)
-        .environmentObject(componentFactory)
     }
 
     var items: some View {
@@ -185,6 +184,8 @@ struct ChangelogWidget: Container {
     }
 
     // MARK: - Private
+
+    @EnvironmentObject private var navigationState: NavigationState
 
     @State private var showNavigationDivider = false
 }

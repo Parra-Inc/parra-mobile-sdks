@@ -12,6 +12,8 @@ class ReleaseContentObserver: ContainerContentObserver {
     // MARK: - Lifecycle
 
     required init(initialParams: InitialParams) {
+        self.initialParams = initialParams
+
         switch initialParams.contentType {
         case .newInstalledVersion(let newInstalledVersionInfo):
             self.content = AppReleaseContent(newInstalledVersionInfo)
@@ -28,6 +30,15 @@ class ReleaseContentObserver: ContainerContentObserver {
     @Published private(set) var isLoading = false
 
     let networkManager: ParraNetworkManager
+
+    var releaseStub: AppReleaseStub? {
+        switch initialParams.contentType {
+        case .stub(let appReleaseStub):
+            return appReleaseStub
+        default:
+            return nil
+        }
+    }
 
     func loadSections() async {
         guard content.sections.isEmpty else {
@@ -56,4 +67,8 @@ class ReleaseContentObserver: ContainerContentObserver {
             isLoading = false
         }
     }
+
+    // MARK: - Private
+
+    private let initialParams: InitialParams
 }
