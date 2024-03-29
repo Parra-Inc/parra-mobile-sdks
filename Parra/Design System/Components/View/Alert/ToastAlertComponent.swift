@@ -16,33 +16,40 @@ struct ToastAlertComponent: AlertComponentType {
     let style: ParraAttributedAlertStyle
     let onDismiss: () -> Void
 
+    let primaryAction: (() -> Void)?
+
     var body: some View {
         let attributes = style.attributes
 
-        VStack {
-            HStack(spacing: 11) {
-                if let icon = content.icon {
-                    ImageComponent(
-                        content: icon,
-                        attributes: attributes.icon
+        Button {
+            onDismiss()
+            primaryAction?()
+        } label: {
+            VStack {
+                HStack(spacing: 11) {
+                    if let icon = content.icon {
+                        ImageComponent(
+                            content: icon,
+                            attributes: attributes.icon
+                        )
+                    }
+
+                    componentFactory.buildLabel(
+                        config: config.title,
+                        content: content.title,
+                        localAttributes: style.attributes.title
                     )
+                    .multilineTextAlignment(.leading)
                 }
 
-                componentFactory.buildLabel(
-                    config: config.title,
-                    content: content.title,
-                    localAttributes: style.attributes.title
-                )
-                .multilineTextAlignment(.leading)
-            }
-
-            if let subtitleContent = content.subtitle {
-                componentFactory.buildLabel(
-                    config: config.subtitle,
-                    content: subtitleContent,
-                    localAttributes: style.attributes.subtitle
-                )
-                .multilineTextAlignment(.leading)
+                if let subtitleContent = content.subtitle {
+                    componentFactory.buildLabel(
+                        config: config.subtitle,
+                        content: subtitleContent,
+                        localAttributes: style.attributes.subtitle
+                    )
+                    .multilineTextAlignment(.leading)
+                }
             }
         }
         .padding(.all, from: attributes.padding ?? .zero)
@@ -105,7 +112,8 @@ struct ToastAlertComponent: AlertComponentType {
                         ),
                         icon: AlertContent.defaultIcon(for: style),
                         dismiss: AlertContent.defaultDismiss(for: style)
-                    )
+                    ),
+                    primaryAction: nil
                 )
 
                 Spacer()

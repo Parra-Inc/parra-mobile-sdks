@@ -19,6 +19,8 @@ class AlertManager: ObservableObject {
         let animationDuration: TimeInterval
         let location: AlertLocation
 
+        let primaryAction: (() -> Void)?
+
         static func == (
             lhs: AlertManager.Alert,
             rhs: AlertManager.Alert
@@ -78,7 +80,8 @@ class AlertManager: ObservableObject {
         in location: AlertLocation = .topCenter,
         config: AlertConfig,
         content: AlertContent,
-        attributes: AlertAttributes? = nil
+        attributes: AlertAttributes? = nil,
+        primaryAction: (() -> Void)? = nil
     ) {
         currentToast = Alert(
             config: config,
@@ -87,7 +90,8 @@ class AlertManager: ObservableObject {
             onDismiss: dismissToast,
             duration: duration,
             animationDuration: animationDuration,
-            location: location
+            location: location,
+            primaryAction: primaryAction
         )
     }
 
@@ -96,7 +100,8 @@ class AlertManager: ObservableObject {
         subtitle: String,
         in location: AlertLocation = .topCenter,
         for duration: TimeInterval = 4.0,
-        animationDuration: TimeInterval = 0.25
+        animationDuration: TimeInterval = 0.25,
+        primaryAction: (() -> Void)? = nil
     ) {
         let style = AlertConfig.Style.success
 
@@ -112,7 +117,8 @@ class AlertManager: ObservableObject {
                 subtitle: LabelContent(text: subtitle),
                 icon: AlertContent.defaultIcon(for: style),
                 dismiss: AlertContent.defaultDismiss(for: style)
-            )
+            ),
+            primaryAction: primaryAction
         )
     }
 
@@ -122,7 +128,8 @@ class AlertManager: ObservableObject {
         underlyingError: ParraError,
         in location: AlertLocation = .topCenter,
         for duration: TimeInterval = 4.0,
-        animationDuration: TimeInterval = 0.25
+        animationDuration: TimeInterval = 0.25,
+        primaryAction: (() -> Void)? = nil
     ) {
         let style = AlertConfig.Style.error
 
@@ -138,13 +145,14 @@ class AlertManager: ObservableObject {
                 subtitle: LabelContent(text: userFacingMessage),
                 icon: AlertContent.defaultIcon(for: style),
                 dismiss: AlertContent.defaultDismiss(for: style)
-            )
+            ),
+            primaryAction: primaryAction
         )
     }
 
     func showWhatsNewToast(
         for newInstalledVersionInfo: NewInstalledVersionInfo,
-        in location: AlertLocation = .topCenter,
+        in location: AlertLocation = .bottomCenter,
         for duration: TimeInterval = 8.0,
         animationDuration: TimeInterval = 0.25,
         primaryAction: (() -> Void)? = nil
@@ -165,7 +173,8 @@ class AlertManager: ObservableObject {
                 icon: AlertContent.defaultIcon(for: style),
                 dismiss: AlertContent.defaultDismiss(for: style)
             ),
-            attributes: AlertAttributes()
+            attributes: AlertAttributes(),
+            primaryAction: primaryAction
         )
     }
 

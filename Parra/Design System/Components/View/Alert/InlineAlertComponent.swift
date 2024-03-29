@@ -81,7 +81,8 @@ struct InlineAlertComponent: AlertComponentType {
                         ),
                         icon: AlertContent.defaultIcon(for: style),
                         dismiss: AlertContent.defaultDismiss(for: style)
-                    )
+                    ),
+                    primaryAction: nil
                 )
 
                 Spacer()

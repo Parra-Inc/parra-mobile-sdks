@@ -190,24 +190,26 @@ extension LatestVersionManager {
 
         try await Task.sleep(for: delay)
 
-        let displayModal = {
-            self.modalScreenManager.presentModalView(
-                of: ReleaseWidget.self,
-                with: .default,
-                localBuilder: .init(),
-                contentObserver: contentObserver,
-                onDismiss: nil
-            )
-        }
+        Task { @MainActor in
+            let displayModal = {
+                self.modalScreenManager.presentModalView(
+                    of: ReleaseWidget.self,
+                    with: .default,
+                    localBuilder: .init(),
+                    contentObserver: contentObserver,
+                    onDismiss: nil
+                )
+            }
 
-        switch style {
-        case .toast:
-            alertManager.showWhatsNewToast(
-                for: newInstalledVersionInfo,
-                primaryAction: displayModal
-            )
-        case .modal:
-            displayModal()
+            switch style {
+            case .toast:
+                alertManager.showWhatsNewToast(
+                    for: newInstalledVersionInfo,
+                    primaryAction: displayModal
+                )
+            case .modal:
+                displayModal()
+            }
         }
     }
 }

@@ -96,7 +96,8 @@ struct ToastPresenter: ViewModifier {
                 variant: .toast(onDismiss: toast.onDismiss),
                 config: toast.config,
                 content: toast.content,
-                localAttributes: toast.attributes
+                localAttributes: toast.attributes,
+                primaryAction: toast.primaryAction
             )
             .transition(transition)
         }

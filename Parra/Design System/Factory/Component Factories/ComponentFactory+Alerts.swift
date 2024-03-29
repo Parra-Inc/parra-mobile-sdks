@@ -25,7 +25,8 @@ extension ComponentFactory {
             AlertContent,
             AlertAttributes
         >? = nil,
-        localAttributes: AlertAttributes? = nil
+        localAttributes: AlertAttributes? = nil,
+        primaryAction: (() -> Void)?
     ) -> some View {
         let attributes = if let factory = global?.alertAttributeFactory {
             factory(config, content, localAttributes)
@@ -77,7 +78,8 @@ extension ComponentFactory {
                     config: config,
                     content: content,
                     style: style,
-                    onDismiss: onDismiss
+                    onDismiss: onDismiss,
+                    primaryAction: primaryAction
                 )
             }
         }
