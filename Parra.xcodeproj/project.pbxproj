@@ -3762,7 +3762,7 @@
 				MARKETING_VERSION = 1.2.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++17";
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=35 -Xfrontend -warn-long-expression-type-checking=40";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=40 -Xfrontend -warn-long-expression-type-checking=40";
 				PRODUCT_BUNDLE_IDENTIFIER = com.parra.Parra;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
