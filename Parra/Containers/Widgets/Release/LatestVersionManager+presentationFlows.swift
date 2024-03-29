@@ -37,7 +37,8 @@ extension LatestVersionManager {
         }
 
         let currentAppVersion = await cachedAppVersion()
-        let currentBuild = currentAppVersion?.versionShort
+        // The internal build/longform version string.
+        let currentBuild = currentAppVersion?.version
 
         // Cache the current app version since we've launched once without
         // it being set. This will allow the next launch to proceed further.
@@ -83,7 +84,8 @@ extension LatestVersionManager {
         }
 
         let currentAppVersion = await cachedAppVersion()
-        let currentVersion = currentAppVersion?.version
+        // The user-facing version string
+        let currentVersion = currentAppVersion?.versionShort
 
         // Cache the current app version since we've launched once without
         // it being set. This will allow the next launch to proceed further.
