@@ -52,23 +52,39 @@ class ParraStar: UIView, ParraLegacyConfigurableView {
     override func draw(_ rect: CGRect) {
         let insetRect = rect.inset(by: edgeInsets).integral
         let path = UIBezierPath()
-        path.lineWidth = 4
-        let center = CGPoint(x: rect.width / 2, y: rect.height / 2)
-        let radius = insetRect.width / 2
-        let tipRadius = isHighlighted ? radius * 0.90 : radius * 0.80
-        let innerRadius = isHighlighted ? radius * 0.43 : radius * 0.38
+        path.lineWidth = 4.0
 
-        var cangle: CGFloat = 18
+        let center = CGPoint(x: rect.width / 2.0, y: rect.height / 2.0)
+        let radius: CGFloat = insetRect.width / 2.0
+
+        let tipRadius: CGFloat = if isHighlighted {
+            radius * 0.90
+        } else {
+            radius * 0.80
+        }
+
+        let innerRadius: CGFloat = if isHighlighted {
+            radius * 0.43
+        } else {
+            radius * 0.38
+        }
+
+        var cangle: CGFloat = 18.0
         for i in 1 ... 10 {
-            let rad = i % 2 == 0 ? tipRadius : innerRadius
+            let rad: CGFloat = if i % 2 == 0 {
+                tipRadius
+            } else {
+                innerRadius
+            }
+
             let cc = CGPoint(
-                x: center.x + rad * cos(cangle * .pi / 180),
-                y: center.y + rad * sin(cangle * .pi / 180)
+                x: center.x + rad * cos(cangle * CGFloat.pi / 180.0),
+                y: center.y + rad * sin(cangle * CGFloat.pi / 180.0)
             )
 
             let p = CGPoint(
-                x: cc.x + cos((cangle - 72) * .pi / 180),
-                y: cc.y + sin((cangle - 72) * .pi / 180)
+                x: cc.x + cos((cangle - 72) * CGFloat.pi / 180.0),
+                y: cc.y + sin((cangle - 72) * CGFloat.pi / 180.0)
             )
 
             if i == 1 {
@@ -77,7 +93,7 @@ class ParraStar: UIView, ParraLegacyConfigurableView {
                 path.addLine(to: p)
             }
 
-            cangle += 36
+            cangle += 36.0
         }
 
         path.close()
