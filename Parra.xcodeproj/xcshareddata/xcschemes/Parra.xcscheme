@@ -57,7 +57,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:ParraTests/Parra.xctestplan"
+            reference = "container:Tests/Parra/Parra.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

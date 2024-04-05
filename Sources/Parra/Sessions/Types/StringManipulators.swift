@@ -1,6 +1,6 @@
 //
 //  StringManipulators.swift
-//  ParraTests
+//  Tests
 //
 //  Created by Mick MacCallum on 6/25/23.
 //  Copyright © 2023 Parra, Inc. All rights reserved.

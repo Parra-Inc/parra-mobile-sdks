@@ -21,5 +21,5 @@ export const openAppContainerForDemoApp = async () => {
 };
 
 export const openAppContainerForTestRunnerApp = async () => {
-  await openAppContainer({ bundleId: 'com.parra.ParraTests.Runner' });
+  await openAppContainer({ bundleId: 'com.parra.Tests.Runner' });
 };
