@@ -1259,6 +1259,25 @@
 			path = Roadmap;
 			sourceTree = "<group>";
 		};
+		0009B7CB2BC080AF0074C179 /* Parra */ = {
+			isa = PBXGroup;
+			children = (
+				00E76D402B66E7F500B01DD8 /* Containers */,
+				0087CAA92A59E927007D72FA /* Core */,
+				003622102B5D9594009EFE53 /* Design System */,
+				00120EF1274D1ECA00CA3247 /* Extensions */,
+				003962322A48B4AC00B8655F /* Feedback */,
+				001286F7277F50A20090CDB5 /* Managers */,
+				0036D5EF27CD9BC90016DE97 /* PersistentStorage */,
+				0087CA9D2A59E4DE007D72FA /* Sessions */,
+				006DE9842A4738F000521F5D /* State */,
+				001B7A9A27DE34F200DEEECD /* Supporting Files */,
+				001B7A8A27DD881300DEEECD /* Types */,
+				00995BF42BB5C96A00384D94 /* Utils */,
+			);
+			path = Parra;
+			sourceTree = "<group>";
+		};
 		000AF4C1283AE6D8008A17A3 /* Config */ = {
 			isa = PBXGroup;
 			children = (
@@ -1467,23 +1486,12 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		001B7AF327DE3A7600DEEECD /* Parra */ = {
+		001B7AF327DE3A7600DEEECD /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				00E76D402B66E7F500B01DD8 /* Containers */,
-				0087CAA92A59E927007D72FA /* Core */,
-				003622102B5D9594009EFE53 /* Design System */,
-				00120EF1274D1ECA00CA3247 /* Extensions */,
-				003962322A48B4AC00B8655F /* Feedback */,
-				001286F7277F50A20090CDB5 /* Managers */,
-				0036D5EF27CD9BC90016DE97 /* PersistentStorage */,
-				0087CA9D2A59E4DE007D72FA /* Sessions */,
-				006DE9842A4738F000521F5D /* State */,
-				001B7A9A27DE34F200DEEECD /* Supporting Files */,
-				001B7A8A27DD881300DEEECD /* Types */,
-				00995BF42BB5C96A00384D94 /* Utils */,
+				0009B7CB2BC080AF0074C179 /* Parra */,
 			);
-			path = Parra;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		001B7AFF27DE3A7600DEEECD /* ParraTests */ = {
@@ -2462,7 +2470,7 @@
 			children = (
 				001B7A0A27DD266500DEEECD /* Parra.podspec */,
 				00916A5E2B75C81A009C87DC /* Sample */,
-				001B7AF327DE3A7600DEEECD /* Parra */,
+				001B7AF327DE3A7600DEEECD /* Sources */,
 				001B7AFF27DE3A7600DEEECD /* ParraTests */,
 				00B42EAF2ADE1BCB00F365A5 /* TestRunner */,
 				00DECFF6274C69F800DAF301 /* Products */,
