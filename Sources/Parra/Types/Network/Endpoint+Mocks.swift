@@ -17,17 +17,17 @@ extension ParraEndpoint {
             case .getCards:
                 ParraCardItemFixtures.cardsResponse
             case .getFeedbackForm(let formId):
-                TestData.Forms.formResponse(formId: formId)
+                ParraFeedbackForm.testForm(with: formId)
             case .postSubmitFeedbackForm:
                 EmptyResponseObject()
             case .postBulkAnswerQuestions:
                 EmptyResponseObject()
             case .postBulkSubmitSessions:
-                TestData.Sessions.successResponse
+                ParraSessionsResponse.successResponse
             case .postPushTokens:
                 EmptyResponseObject()
             case .postAuthentication:
-                TestData.Auth.successResponse
+                ParraCredential.successResponse
             case .getRoadmap:
                 AppRoadmapConfiguration.validStates()[0]
             case .getPaginateTickets:
