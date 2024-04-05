@@ -4,10 +4,8 @@ import PackageDescription
 
 let package = Package(
     name: "Parra",
-    defaultLocalization: [.init("en-US")],
-    swiftLanguageVersions: [.version(5.9)],
     platforms: [
-        .iOS(.v17.0)
+        .iOS("17.0")
     ],
     products: [
         .library(name: "Parra", targets: ["Parra"]) // type: .static, .dynamic
@@ -21,5 +19,6 @@ let package = Package(
             name: "ParraTests",
             dependencies: ["Parra"]
         )
-    ]
+    ],
+    swiftLanguageVersions: [.version("5.9")]
 )
