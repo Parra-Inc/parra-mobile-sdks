@@ -9,12 +9,12 @@ import Foundation
 @testable import Parra
 
 func clearParraUserDefaultsSuite() {
-    if let bundleIdentifier = ParraInternal.appBundleIdentifier(
+    let suiteName = ParraInternal.appUserDefaultsSuite(
         bundle: .parraBundle
-    ) {
-        UserDefaults.standard.removePersistentDomain(
-            forName: bundleIdentifier
-        )
-        UserDefaults.standard.synchronize()
-    }
+    )
+
+    UserDefaults.standard.removePersistentDomain(
+        forName: suiteName
+    )
+    UserDefaults.standard.synchronize()
 }
