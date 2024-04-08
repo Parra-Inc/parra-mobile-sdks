@@ -41,7 +41,7 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
     /// your backend to create a Parra access token for a given user.
     func debugAuthenticationProvider() -> ParraAuthenticationProviderType {
         return .default(
-            tenantId: Parra.Demo.tenantId,
+            workspaceId: Parra.Demo.workspaceId,
             applicationId: Parra.Demo.applicationId
         ) {
             let myAppAccessToken = Parra.Demo.demoUserId
@@ -76,7 +76,7 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
     /// app from requiring a backend to authenticate with.
     func betaAuthenticationProvider() -> ParraAuthenticationProviderType {
         return .publicKey(
-            tenantId: Parra.Demo.tenantId,
+            workspaceId: Parra.Demo.workspaceId,
             applicationId: Parra.Demo.applicationId,
             apiKeyId: Parra.Demo.apiKeyId
         ) {

@@ -25,7 +25,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
 
         await mockParra.parra.parraInternal.initialize(
             with: .default(
-                tenantId: mockParra.appState.tenantId,
+                workspaceId: mockParra.appState.tenantId,
                 applicationId: mockParra.appState.applicationId,
                 authProvider: {
                     return token
@@ -54,7 +54,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
         authProviderExpectation.expectedFulfillmentCount = 2
         await mockParra.parra.parraInternal.initialize(
             with: .publicKey(
-                tenantId: mockParra.appState.tenantId,
+                workspaceId: mockParra.appState.tenantId,
                 applicationId: mockParra.appState.applicationId,
                 apiKeyId: UUID().uuidString,
                 userIdProvider: {
@@ -76,7 +76,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
     func testInitWithDefaultAuthProviderFailure() async throws {
         await mockParra.parra.parraInternal.initialize(
             with: .default(
-                tenantId: mockParra.appState.tenantId,
+                workspaceId: mockParra.appState.tenantId,
                 applicationId: mockParra.appState.applicationId,
                 authProvider: {
                     throw URLError(.badServerResponse)
@@ -95,7 +95,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
     func testInitWithPublicKeyAuthProviderFailure() async throws {
         await mockParra.parra.parraInternal.initialize(
             with: .publicKey(
-                tenantId: mockParra.appState.tenantId,
+                workspaceId: mockParra.appState.tenantId,
                 applicationId: mockParra.appState.applicationId,
                 apiKeyId: UUID().uuidString,
                 userIdProvider: {

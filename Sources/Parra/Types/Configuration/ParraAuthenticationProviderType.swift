@@ -16,17 +16,17 @@ public enum ParraAuthenticationProviderType {
     /// function that interacts with your API to return a signed access token
     /// for your user.
     case `default`(
-        tenantId: String,
+        workspaceId: String,
         applicationId: String,
         authProvider: ParraAuthenticationProviderFunction
     )
 
     /// Uses public API key authentication to authenticate with the Parra API.
-    /// A tenant ID and API key ID are both provided up front and a user
+    /// A workspace ID and API key ID are both provided up front and a user
     /// provider function is used to allow the Parra SDK to request information
     /// about the current user when authentication is needed.
     case publicKey(
-        tenantId: String,
+        workspaceId: String,
         applicationId: String,
         apiKeyId: String,
         userIdProvider: ParraAuthenticationProviderFunction
@@ -36,14 +36,14 @@ public enum ParraAuthenticationProviderType {
 
     var initialAppState: ParraAppState {
         switch self {
-        case .default(let tenantId, let applicationId, _):
+        case .default(let workspaceId, let applicationId, _):
             return ParraAppState(
-                tenantId: tenantId,
+                tenantId: workspaceId,
                 applicationId: applicationId
             )
-        case .publicKey(let tenantId, let applicationId, _, _):
+        case .publicKey(let workspaceId, let applicationId, _, _):
             return ParraAppState(
-                tenantId: tenantId,
+                tenantId: workspaceId,
                 applicationId: applicationId
             )
         }
@@ -69,7 +69,7 @@ public enum ParraAuthenticationProviderType {
                 }
             }
         case .publicKey(
-            let tenantId,
+            let workspaceId,
             let applicationId,
             let apiKeyId,
             let userIdProvider
@@ -80,7 +80,7 @@ public enum ParraAuthenticationProviderType {
 
                     let result = try await networkManager
                         .performPublicApiKeyAuthenticationRequest(
-                            forTentant: tenantId,
+                            forTentant: workspaceId,
                             applicationId: applicationId,
                             apiKeyId: apiKeyId,
                             userId: userId

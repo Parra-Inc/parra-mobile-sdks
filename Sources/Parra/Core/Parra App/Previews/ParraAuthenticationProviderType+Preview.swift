@@ -10,7 +10,7 @@ import SwiftUI
 
 extension ParraAuthenticationProviderType {
     nonisolated static let preview = ParraAuthenticationProviderType.default(
-        tenantId: Parra.Demo.tenantId,
+        workspaceId: Parra.Demo.workspaceId,
         applicationId: Parra.Demo.applicationId,
         authProvider: {
             var request = URLRequest(

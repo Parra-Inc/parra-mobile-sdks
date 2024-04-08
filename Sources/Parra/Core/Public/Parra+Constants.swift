@@ -10,9 +10,9 @@ import UIKit
 
 public extension Parra {
     enum Demo {
-        /// The Parra sample app's tenant ID. You should not use this. Instead,
-        /// grab your tenant ID from https://parra.io/dashboard/settings
-        public static let tenantId = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4"
+        /// The Parra sample app's workspace ID. You should not use this. Instead,
+        /// grab your workspace ID from https://parra.io/dashboard/settings
+        public static let workspaceId = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4"
 
         /// The Parra sample app's application ID. You should not use this.
         /// Instead, grab your application ID from
@@ -21,7 +21,7 @@ public extension Parra {
 
         /// The Parra sample app's API key. You should not use this. It is best
         /// practice to use the
-        /// ``ParraAuthenticationProviderType/default(tenantId:applicationId:authProvider:)``
+        /// ``ParraAuthenticationProviderType/default(workspaceId:applicationId:authProvider:)``
         /// authentication provider method, which does not expose your API keys
         /// to end users that have access to your application bundle. If you
         /// still need to use API key based authentication, you can generate
