@@ -134,9 +134,6 @@ class ParraInternal {
 
     private(set) var globalComponentFactory: ComponentFactory
 
-    private(set) lazy var eventPrefix =
-        "\(Constants.eventPrefix):\(Self.moduleName.lowercased())"
-
     static func libraryVersion() -> String {
         return ParraInternal.appBundleVersionShort(
             bundle: .parraBundle
