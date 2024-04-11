@@ -32,13 +32,15 @@ struct ParraSessionEvent: Codable {
 
     static func normalizedEventData(
         from wrappedEvent: ParraWrappedEvent
-    ) -> (name: String, extra: [String: Any]) {
+    ) -> (name: String, displayName: String, extra: [String: Any]) {
         let name: String
+        let displayName: String
         let combinedExtra: [String: Any]
 
         switch wrappedEvent {
         case .event(let event, let extra):
             name = event.name
+            displayName = event.name
 
             if let extra {
                 combinedExtra = extra
@@ -47,6 +49,7 @@ struct ParraSessionEvent: Codable {
             }
         case .dataEvent(let event, let extra):
             name = event.name
+            displayName = event.name
 
             if let extra {
                 combinedExtra = event.extra.merging(extra) { $1 }
@@ -54,7 +57,8 @@ struct ParraSessionEvent: Codable {
                 combinedExtra = event.extra
             }
         case .internalEvent(let event, let extra):
-            name = event.displayName
+            name = event.name
+            displayName = event.name
 
             var merged = if let extra {
                 event.extra.merging(extra) { $1 }
@@ -62,15 +66,16 @@ struct ParraSessionEvent: Codable {
                 event.extra
             }
 
-            merged["name"] = event.name
+            merged["name"] = event.displayName
 
             combinedExtra = merged
         case .logEvent(let event):
             name = event.name
+            displayName = event.name
             combinedExtra = event.extra
         }
 
-        return (name, combinedExtra)
+        return (name, displayName, combinedExtra)
     }
 
     static func normalizedEventContextData(
@@ -114,7 +119,7 @@ struct ParraSessionEvent: Codable {
         event: ParraSessionEvent,
         context: ParraSessionEventContext
     ) {
-        let (name, combinedExtra) = normalizedEventData(from: wrappedEvent)
+        let (name, _, combinedExtra) = normalizedEventData(from: wrappedEvent)
         let (
             isClientGenerated,
             syncPriority

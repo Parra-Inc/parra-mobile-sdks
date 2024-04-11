@@ -32,12 +32,13 @@ extension ParraSessionManager {
             return
         }
 
-        let (name, combinedExtra) = ParraSessionEvent.normalizedEventData(
-            from: wrappedEvent
-        )
+        let (_, displayName, combinedExtra) = ParraSessionEvent
+            .normalizedEventData(
+                from: wrappedEvent
+            )
 
         writeSessionEventToConsole(
-            named: name,
+            named: displayName,
             extra: combinedExtra,
             isInternalEvent: wrappedEvent.isInternal,
             with: consoleFormatOptions,

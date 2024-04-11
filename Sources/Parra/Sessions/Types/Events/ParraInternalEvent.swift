@@ -33,34 +33,36 @@ enum ParraInternalEvent: ParraDataEvent {
     // MUST all be snake_case. Internal events are allowed to skip automatic
     // conversion.
     @usableFromInline var name: String {
-        switch self {
+        let baseName = switch self {
         case .appStateChanged:
-            return "app_state_changed"
+            "app_state_changed"
         case .batteryLevelChanged:
-            return "battery_level_changed"
+            "battery_level_changed"
         case .batteryStateChanged:
-            return "battery_state_changed"
+            "battery_state_changed"
         case .diskSpaceLow:
-            return "disk_space_low"
+            "disk_space_low"
         case .httpRequest:
-            return "http_request"
+            "http_request"
         case .keyboardDidHide:
-            return "keyboard_did_hide"
+            "keyboard_did_hide"
         case .keyboardDidShow:
-            return "keyboard_did_show"
+            "keyboard_did_show"
         case .memoryWarning:
-            return "memory_warning"
+            "memory_warning"
         case .orientationChanged:
-            return "orientation_changed"
+            "orientation_changed"
         case .powerStateChanged:
-            return "power_state_changed"
+            "power_state_changed"
         case .screenshotTaken:
-            return "screenshot_taken"
+            "screenshot_taken"
         case .significantTimeChange:
-            return "significant_time_change"
+            "significant_time_change"
         case .thermalStateChanged:
-            return "thermal_state_changed"
+            "thermal_state_changed"
         }
+
+        return "\(ParraInternal.Constants.eventPrefix)\(baseName)"
     }
 
     @usableFromInline var extra: [String: Any] {
