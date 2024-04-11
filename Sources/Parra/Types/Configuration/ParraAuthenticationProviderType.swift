@@ -50,7 +50,7 @@ public enum ParraAuthenticationProviderType {
     }
 
     func getProviderFunction(
-        using networkManager: ParraNetworkManager,
+        using apiResourceServer: ApiResourceServer,
         onAuthenticationRefresh: @escaping (_ success: Bool) async -> Void
     ) -> ParraAuthenticationProviderFunction {
         switch self {
@@ -78,9 +78,9 @@ public enum ParraAuthenticationProviderType {
                 do {
                     let userId = try await userIdProvider()
 
-                    let result = try await networkManager
+                    let result = try await apiResourceServer
                         .performPublicApiKeyAuthenticationRequest(
-                            forTentant: workspaceId,
+                            forTenant: workspaceId,
                             applicationId: applicationId,
                             apiKeyId: apiKeyId,
                             userId: userId

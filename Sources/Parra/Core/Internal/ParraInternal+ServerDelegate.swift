@@ -1,5 +1,5 @@
 //
-//  ParraInternal+NetworkManagerDelegate.swift
+//  ParraInternal+ServerDelegate.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/12/24.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension ParraInternal: ParraNetworkManagerDelegate {
-    func networkManager(
-        _ networkManager: ParraNetworkManager,
+extension ParraInternal: ServerDelegate {
+    func server(
+        _ server: any Server,
         didReceiveResponse response: HTTPURLResponse,
         for request: URLRequest
     ) {

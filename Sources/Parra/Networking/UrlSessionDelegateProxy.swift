@@ -1,5 +1,5 @@
 //
-//  ParraNetworkManagerUrlSessionDelegateProxy.swift
+//  UrlSessionDelegateProxy.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/4/23.
@@ -8,12 +8,10 @@
 
 import Foundation
 
-class ParraNetworkManagerUrlSessionDelegateProxy: NSObject,
-    URLSessionTaskDelegate
-{
+class UrlSessionDelegateProxy: NSObject, URLSessionTaskDelegate {
     // MARK: - Lifecycle
 
-    init(delegate: ParraUrlSessionDelegate) {
+    init(delegate: UrlSessionDelegate) {
         self.delegate = delegate
     }
 
@@ -35,5 +33,5 @@ class ParraNetworkManagerUrlSessionDelegateProxy: NSObject,
 
     // MARK: - Private
 
-    private weak var delegate: ParraUrlSessionDelegate?
+    private weak var delegate: UrlSessionDelegate?
 }

@@ -169,7 +169,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
     }
 
     func testEnqueuingSyncWithoutAuthStopsExistingTimer() async throws {
-        mockParra.networkManager.updateAuthenticationProvider(nil)
+        mockParra.apiResourceServer.updateAuthenticationProvider(nil)
 
         let syncTimerTickedExpectation = expectation(
             description: "Sync ticked"
@@ -198,7 +198,7 @@ class ParraSyncManagerTests: MockedParraTestCase {
     }
 
     func testSyncEventsIgnoredWithoutAuthProviderSet() async throws {
-        mockParra.networkManager.updateAuthenticationProvider(nil)
+        mockParra.apiResourceServer.updateAuthenticationProvider(nil)
 
         let syncDidEnd = mockParra.notificationExpectation(
             name: Parra.syncDidEndNotification,

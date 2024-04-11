@@ -258,7 +258,7 @@ struct RoadmapWidget: Container {
                         .tabs[0],
                     ticketResponse: UserTicketCollectionResponse
                         .validStates()[0],
-                    networkManager: parra.parraInternal.networkManager
+                    apiResourceServer: parra.parraInternal.apiResourceServer
                 )
             )
         )

@@ -18,12 +18,12 @@ final actor LatestVersionManager {
         configuration: ParraConfiguration,
         modalScreenManager: ModalScreenManager,
         alertManager: AlertManager,
-        networkManager: ParraNetworkManager
+        apiResourceServer: ApiResourceServer
     ) {
         self.configuration = configuration
         self.modalScreenManager = modalScreenManager
         self.alertManager = alertManager
-        self.networkManager = networkManager
+        self.apiResourceServer = apiResourceServer
     }
 
     // MARK: - Internal
@@ -46,7 +46,7 @@ final actor LatestVersionManager {
         let date: Date
     }
 
-    let networkManager: ParraNetworkManager
+    let apiResourceServer: ApiResourceServer
     let modalScreenManager: ModalScreenManager
     let alertManager: AlertManager
     let configuration: ParraConfiguration
@@ -105,7 +105,7 @@ final actor LatestVersionManager {
             await cachedVersionToken()?.token
         }
 
-        let response = try await networkManager.getAppInfo(
+        let response = try await apiResourceServer.getAppInfo(
             versionToken: versionToken
         )
 
@@ -126,7 +126,7 @@ final actor LatestVersionManager {
     ) async throws -> AppStoreResponse.Result? {
         let regionCode = Locale.current.region?.identifier.lowercased() ?? "us"
 
-        let response: AppStoreResponse = try await networkManager
+        let response: AppStoreResponse = try await apiResourceServer
             .performExternalRequest(
                 to: URL(
                     string: "https://itunes.apple.com/\(regionCode)/lookup"

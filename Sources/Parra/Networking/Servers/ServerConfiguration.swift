@@ -1,5 +1,5 @@
 //
-//  ParraInstanceNetworkConfiguration.swift
+//  ServerConfiguration.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 10/8/23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ParraInstanceNetworkConfiguration {
+struct ServerConfiguration {
     let urlSession: URLSessionType
     let jsonEncoder: JSONEncoder
     let jsonDecoder: JSONDecoder

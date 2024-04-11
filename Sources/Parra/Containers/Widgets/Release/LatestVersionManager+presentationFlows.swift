@@ -184,7 +184,7 @@ extension LatestVersionManager {
         let contentObserver = ReleaseContentObserver(
             initialParams: ReleaseContentObserver.InitialParams(
                 contentType: .newInstalledVersion(newInstalledVersionInfo),
-                networkManager: networkManager
+                apiResourceServer: apiResourceServer
             )
         )
 

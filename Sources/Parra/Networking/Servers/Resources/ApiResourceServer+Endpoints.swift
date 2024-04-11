@@ -1,5 +1,5 @@
 //
-//  ParraNetworkManager+Endpoints.swift
+//  ApiResourceServer+Endpoints.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/12/22.
@@ -9,7 +9,7 @@ import UIKit
 
 private let logger = Logger(category: "Endpoints")
 
-extension ParraNetworkManager {
+extension ApiResourceServer {
     // MARK: - Feedback
 
     func getCards(

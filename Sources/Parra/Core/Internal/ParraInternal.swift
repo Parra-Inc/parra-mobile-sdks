@@ -25,7 +25,7 @@ class ParraInternal {
         dataManager: ParraDataManager,
         syncManager: ParraSyncManager,
         sessionManager: ParraSessionManager,
-        networkManager: ParraNetworkManager,
+        apiResourceServer: ApiResourceServer,
         notificationCenter: NotificationCenterType,
         feedback: ParraFeedback,
         latestVersionManager: LatestVersionManager,
@@ -38,7 +38,7 @@ class ParraInternal {
         self.dataManager = dataManager
         self.syncManager = syncManager
         self.sessionManager = sessionManager
-        self.networkManager = networkManager
+        self.apiResourceServer = apiResourceServer
         self.notificationCenter = notificationCenter
         self.feedback = feedback
         self.latestVersionManager = latestVersionManager
@@ -125,7 +125,7 @@ class ParraInternal {
     let syncManager: ParraSyncManager
 
     @usableFromInline let sessionManager: ParraSessionManager
-    let networkManager: ParraNetworkManager
+    let apiResourceServer: ApiResourceServer
     let notificationCenter: NotificationCenterType
     let latestVersionManager: LatestVersionManager
     let containerRenderer: ContainerRenderer
@@ -145,7 +145,7 @@ class ParraInternal {
         with authProvider: ParraAuthenticationProviderType
     ) async {
         let authProviderFunction = authProvider.getProviderFunction(
-            using: networkManager,
+            using: apiResourceServer,
             onAuthenticationRefresh: { [weak self] success in
                 guard let self else {
                     return
@@ -155,11 +155,11 @@ class ParraInternal {
             }
         )
 
-        networkManager
+        apiResourceServer
             .updateAuthenticationProvider(authProviderFunction)
 
         do {
-            _ = try await networkManager.refreshAuthentication()
+            _ = try await apiResourceServer.refreshAuthentication()
 
             logger.info("Parra SDK Initialized")
         } catch {

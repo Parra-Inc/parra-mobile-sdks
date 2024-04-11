@@ -72,8 +72,8 @@ struct ChangelogWidget: Container {
                             contentType: .stub(
                                 release.originalStub
                             ),
-                            networkManager: contentObserver
-                                .networkManager
+                            apiResourceServer: contentObserver
+                                .apiResourceServer
                         )
                     )
 
@@ -201,7 +201,7 @@ struct ChangelogWidget: Container {
                 initialParams: .init(
                     appReleaseCollection: AppReleaseCollectionResponse
                         .validStates()[0],
-                    networkManager: parra.parraInternal.networkManager
+                    apiResourceServer: parra.parraInternal.apiResourceServer
                 )
             )
         )

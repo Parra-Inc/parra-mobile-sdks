@@ -1,5 +1,5 @@
 //
-//  ParraNetworkManagerTests.swift
+//  ApiResourceServerTests.swift
 //  Tests
 //
 //  Created by Mick MacCallum on 3/20/22.
@@ -8,40 +8,41 @@
 @testable import Parra
 import XCTest
 
-class ParraNetworkManagerTests: MockedParraTestCase {
+class ApiResourceServerTests: MockedParraTestCase {
     // MARK: - Internal
 
     override func setUp() async throws {
         try createBaseDirectory()
 
-        mockNetworkManager = await createMockNetworkManager {
+        mockApiResourceServer = await createMockApiResourceServer {
             return UUID().uuidString
         }
     }
 
     override func tearDown() async throws {
-        mockNetworkManager = nil
+        mockApiResourceServer = nil
 
         deleteBaseDirectory()
     }
 
     func testAuthenticatedRequestFailsWithoutAuthProvider() async throws {
-        mockNetworkManager.networkManager
+        mockApiResourceServer.apiResourceServer
             .updateAuthenticationProvider(nil)
 
         let endpoint = ParraEndpoint.postAuthentication(
-            tenantId: mockNetworkManager.appState.tenantId
+            tenantId: mockApiResourceServer.appState.tenantId
         )
-        let expectation = mockNetworkManager.urlSession.expectInvocation(
+        let expectation = mockApiResourceServer.urlSession.expectInvocation(
             of: endpoint
         )
         expectation.isInverted = true
 
         // Can't expect throw with async func
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: endpoint
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: endpoint
+                )
 
         switch response.result {
         case .success:
@@ -56,15 +57,15 @@ class ParraNetworkManagerTests: MockedParraTestCase {
     func testAuthenticatedRequestInvokesAuthProvider() async throws {
         let token = UUID().uuidString
         let endpoint = ParraEndpoint.postAuthentication(
-            tenantId: mockNetworkManager.appState.tenantId
+            tenantId: mockApiResourceServer.appState.tenantId
         )
-        let authEndpointExpectation = mockNetworkManager.urlSession
+        let authEndpointExpectation = mockApiResourceServer.urlSession
             .expectInvocation(
                 of: endpoint
             )
 
         let authProviderExpectation = XCTestExpectation()
-        mockNetworkManager.networkManager
+        mockApiResourceServer.apiResourceServer
             .updateAuthenticationProvider { () async throws -> String in
                 authProviderExpectation.fulfill()
 
@@ -72,31 +73,33 @@ class ParraNetworkManagerTests: MockedParraTestCase {
             }
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: endpoint
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: endpoint
+                )
 
         await fulfillment(
             of: [authProviderExpectation, authEndpointExpectation],
             timeout: 0.2
         )
 
-        let persistedCredential = await mockNetworkManager.dataManager
+        let persistedCredential = await mockApiResourceServer.dataManager
             .getCurrentCredential()
         XCTAssertEqual(token, persistedCredential?.token)
     }
 
     func testThrowingAuthenticationHandlerFailsRequest() async throws {
-        mockNetworkManager.networkManager
+        mockApiResourceServer.apiResourceServer
             .updateAuthenticationProvider { () async throws -> String in
                 throw URLError(.cannotLoadFromNetwork)
             }
 
         // Can't expect throw with async func
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: .getCards
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: .getCards
+                )
 
         switch response.result {
         case .success:
@@ -110,12 +113,12 @@ class ParraNetworkManagerTests: MockedParraTestCase {
         let token = UUID().uuidString
         let credential = ParraCredential(token: token)
 
-        await mockNetworkManager.dataManager
+        await mockApiResourceServer.dataManager
             .updateCredential(credential: credential)
 
         let authProviderExpectation = XCTestExpectation()
         authProviderExpectation.isInverted = true
-        mockNetworkManager.networkManager
+        mockApiResourceServer.apiResourceServer
             .updateAuthenticationProvider { () async throws -> String in
                 authProviderExpectation.fulfill()
 
@@ -123,9 +126,10 @@ class ParraNetworkManagerTests: MockedParraTestCase {
             }
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: .getCards
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: .getCards
+                )
 
         switch response.result {
         case .success:
@@ -138,10 +142,10 @@ class ParraNetworkManagerTests: MockedParraTestCase {
     func testSendsLibraryVersionHeader() async throws {
         let endpoint = ParraEndpoint
             .postBulkSubmitSessions(
-                tenantId: mockNetworkManager.appState.tenantId
+                tenantId: mockApiResourceServer.appState.tenantId
             )
 
-        let endpointExpectation = mockNetworkManager.urlSession
+        let endpointExpectation = mockApiResourceServer.urlSession
             .expectInvocation(of: endpoint) { request in
 
                 return (request.allHTTPHeaderFields ?? [:]).keys
@@ -151,9 +155,10 @@ class ParraNetworkManagerTests: MockedParraTestCase {
             }
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: endpoint
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: endpoint
+                )
 
         switch response.result {
         case .success:
@@ -165,26 +170,27 @@ class ParraNetworkManagerTests: MockedParraTestCase {
 
     func testSendsNoBodyWithGetRequests() async throws {
         let endpoint = ParraEndpoint.getCards
-        let endpointExpectation = mockNetworkManager.urlSession
+        let endpointExpectation = mockApiResourceServer.urlSession
             .expectInvocation(of: endpoint) { request in
 
                 return request.httpBody == nil
             }
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: endpoint
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: endpoint
+                )
 
         await fulfillment(of: [endpointExpectation], timeout: 0.1)
     }
 
     func testSendsBodyWithNonGetRequests() async throws {
         let endpoint = ParraEndpoint.postBulkSubmitSessions(
-            tenantId: mockNetworkManager.appState.tenantId
+            tenantId: mockApiResourceServer.appState.tenantId
         )
 
-        let endpointExpectation = mockNetworkManager.urlSession
+        let endpointExpectation = mockApiResourceServer.urlSession
             .expectInvocation(of: endpoint) { request in
 
                 let encoded = try JSONEncoder.parraEncoder
@@ -194,16 +200,17 @@ class ParraNetworkManagerTests: MockedParraTestCase {
             }
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: endpoint
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: endpoint
+                )
 
         await fulfillment(of: [endpointExpectation], timeout: 0.1)
     }
 
     func testHandlesNoContentHeader() async throws {
         let endpoint = ParraEndpoint.getCards
-        let endpointExpectation = mockNetworkManager.urlSession
+        let endpointExpectation = mockApiResourceServer.urlSession
             .expectInvocation(
                 of: endpoint,
                 toReturn: {
@@ -212,9 +219,10 @@ class ParraNetworkManagerTests: MockedParraTestCase {
             )
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: endpoint
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: endpoint
+                )
 
         await fulfillment(of: [endpointExpectation], timeout: 0.1)
 
@@ -231,7 +239,7 @@ class ParraNetworkManagerTests: MockedParraTestCase {
 
     func testClientErrorsFailRequests() async throws {
         let endpoint = ParraEndpoint.getCards
-        let endpointExpectation = mockNetworkManager.urlSession
+        let endpointExpectation = mockApiResourceServer.urlSession
             .expectInvocation(
                 of: endpoint,
                 toReturn: {
@@ -240,9 +248,10 @@ class ParraNetworkManagerTests: MockedParraTestCase {
             )
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: endpoint
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: endpoint
+                )
 
         await fulfillment(of: [endpointExpectation], timeout: 0.1)
 
@@ -256,7 +265,7 @@ class ParraNetworkManagerTests: MockedParraTestCase {
 
     func testServerErrorsFailRequests() async throws {
         let endpoint = ParraEndpoint.getCards
-        let endpointExpectation = mockNetworkManager.urlSession
+        let endpointExpectation = mockApiResourceServer.urlSession
             .expectInvocation(
                 of: endpoint,
                 toReturn: {
@@ -265,9 +274,10 @@ class ParraNetworkManagerTests: MockedParraTestCase {
             )
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: endpoint
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: endpoint
+                )
 
         await fulfillment(of: [endpointExpectation], timeout: 0.1)
 
@@ -282,7 +292,7 @@ class ParraNetworkManagerTests: MockedParraTestCase {
     func testReauthenticationSuccess() async throws {
         var isFirstRequest = true
         let endpoint = ParraEndpoint.getCards
-        let endpointExpectation = mockNetworkManager.urlSession
+        let endpointExpectation = mockApiResourceServer.urlSession
             .expectInvocation(
                 of: endpoint,
                 times: 2,
@@ -297,7 +307,7 @@ class ParraNetworkManagerTests: MockedParraTestCase {
             )
 
         let authProviderExpectation = XCTestExpectation()
-        mockNetworkManager.networkManager
+        mockApiResourceServer.apiResourceServer
             .updateAuthenticationProvider { () async throws -> String in
                 authProviderExpectation.fulfill()
 
@@ -305,9 +315,10 @@ class ParraNetworkManagerTests: MockedParraTestCase {
             }
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: endpoint
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: endpoint
+                )
 
         await fulfillment(
             of: [endpointExpectation, authProviderExpectation],
@@ -323,15 +334,16 @@ class ParraNetworkManagerTests: MockedParraTestCase {
     }
 
     func testReauthenticationFailure() async throws {
-        mockNetworkManager.networkManager
+        mockApiResourceServer.apiResourceServer
             .updateAuthenticationProvider { () async throws -> String in
                 throw URLError(.networkConnectionLost)
             }
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
-            await mockNetworkManager.networkManager.performAuthenticatedRequest(
-                endpoint: .getCards
-            )
+            await mockApiResourceServer.apiResourceServer
+                .performAuthenticatedRequest(
+                    endpoint: .getCards
+                )
 
         switch response.result {
         case .success:
@@ -343,9 +355,9 @@ class ParraNetworkManagerTests: MockedParraTestCase {
 
     func testPublicApiKeyAuthentication() async throws {
         let endpoint = ParraEndpoint.postAuthentication(
-            tenantId: mockNetworkManager.appState.tenantId
+            tenantId: mockApiResourceServer.appState.tenantId
         )
-        let endpointExpectation = mockNetworkManager.urlSession
+        let endpointExpectation = mockApiResourceServer.urlSession
             .expectInvocation(
                 of: endpoint,
                 toReturn: {
@@ -357,10 +369,10 @@ class ParraNetworkManagerTests: MockedParraTestCase {
                 }
             )
 
-        let _ = try await mockNetworkManager.networkManager
+        let _ = try await mockApiResourceServer.apiResourceServer
             .performPublicApiKeyAuthenticationRequest(
-                forTentant: mockNetworkManager.appState.tenantId,
-                applicationId: mockNetworkManager.appState.applicationId,
+                forTenant: mockApiResourceServer.appState.tenantId,
+                applicationId: mockApiResourceServer.appState.applicationId,
                 apiKeyId: UUID().uuidString,
                 userId: UUID().uuidString
             )
@@ -373,5 +385,5 @@ class ParraNetworkManagerTests: MockedParraTestCase {
 
     // MARK: - Private
 
-    private var mockNetworkManager: MockParraNetworkManager!
+    private var mockApiResourceServer: MockApiResourceServer!
 }

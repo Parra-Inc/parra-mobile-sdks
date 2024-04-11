@@ -1,5 +1,5 @@
 //
-//  ParraNetworkManager+ParraUrlSessionDelegate.swift
+//  ApiResourceServer+UrlSessionDelegate.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/4/23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension ParraNetworkManager: ParraUrlSessionDelegate {
+extension ApiResourceServer: UrlSessionDelegate {
     func urlSession(
         _ session: URLSession,
         task: URLSessionTask,

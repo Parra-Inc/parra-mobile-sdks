@@ -38,12 +38,12 @@ class ParraSessionManager {
     init(
         forceDisabled: Bool = false,
         dataManager: ParraDataManager,
-        networkManager: ParraNetworkManager,
+        apiResourceServer: ApiResourceServer,
         loggerOptions: ParraLoggerOptions
     ) {
         self.forceDisabled = forceDisabled
         self.dataManager = dataManager
-        self.networkManager = networkManager
+        self.apiResourceServer = apiResourceServer
         self.loggerOptions = loggerOptions
 
         // Set this in init after assigning the loggerOptions to ensure reads from the event queue couldn't
@@ -169,7 +169,7 @@ class ParraSessionManager {
 
                     logger.debug("Uploading session: \(sessionId)")
 
-                    let response = await networkManager.submitSession(
+                    let response = await apiResourceServer.submitSession(
                         sessionUpload
                     )
 
@@ -323,7 +323,7 @@ class ParraSessionManager {
 
     private let forceDisabled: Bool
     private let dataManager: ParraDataManager
-    private let networkManager: ParraNetworkManager
+    private let apiResourceServer: ApiResourceServer
     private let loggerOptions: ParraLoggerOptions
 
     private let eventQueue: DispatchQueue

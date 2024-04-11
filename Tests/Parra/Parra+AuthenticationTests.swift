@@ -18,7 +18,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
     func testInitWithDefaultAuthProvider() async throws {
         let token = UUID().uuidString
         let startAuthProvider = await mockParra.parra.parraInternal
-            .networkManager
+            .apiResourceServer
             .getAuthenticationProvider()
 
         XCTAssertNil(startAuthProvider)
@@ -33,13 +33,14 @@ class ParraAuthenticationTests: MockedParraTestCase {
             )
         )
 
-        let endAuthProvider = await mockParra.parra.parraInternal.networkManager
+        let endAuthProvider = await mockParra.parra.parraInternal
+            .apiResourceServer
             .getAuthenticationProvider()
         XCTAssertNotNil(endAuthProvider)
     }
 
     func testInitWithPublicKeyAuthProvider() async throws {
-        let authEndpointExpectation = try mockParra.mockNetworkManager
+        let authEndpointExpectation = try mockParra.mockApiResourceServer
             .urlSession.expectInvocation(
                 of: .postAuthentication(
                     tenantId: mockParra.appState.tenantId
@@ -64,7 +65,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
             )
         )
 
-        let _ = try await mockParra.mockNetworkManager.networkManager
+        let _ = try await mockParra.mockApiResourceServer.apiResourceServer
             .getAuthenticationProvider()!()
 
         await fulfillment(
@@ -85,7 +86,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
         )
 
         do {
-            let _ = try await mockParra.mockNetworkManager.networkManager
+            let _ = try await mockParra.mockApiResourceServer.apiResourceServer
                 .getAuthenticationProvider()!()
 
             XCTFail()
@@ -105,7 +106,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
         )
 
         do {
-            let _ = try await mockParra.mockNetworkManager.networkManager
+            let _ = try await mockParra.mockApiResourceServer.apiResourceServer
                 .getAuthenticationProvider()!()
 
             XCTFail()

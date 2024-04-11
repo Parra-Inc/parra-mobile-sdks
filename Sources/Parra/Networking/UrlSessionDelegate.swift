@@ -1,5 +1,5 @@
 //
-//  ParraUrlSessionDelegate.swift
+//  UrlSessionDelegate.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/4/23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ParraUrlSessionDelegate: AnyObject {
+protocol UrlSessionDelegate: AnyObject {
     func urlSession(
         _ session: URLSession,
         task: URLSessionTask,

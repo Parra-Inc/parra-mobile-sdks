@@ -21,7 +21,7 @@ class ParraPushTests: MockedParraTestCase {
         await mockParra.parra.parraInternal
             .initialize(with: .mockPublicKey(mockParra))
 
-        let pushUploadExpectation = mockParra.mockNetworkManager.urlSession
+        let pushUploadExpectation = mockParra.mockApiResourceServer.urlSession
             .expectInvocation(
                 of: .postPushTokens(tenantId: mockParra.appState.tenantId)
             )

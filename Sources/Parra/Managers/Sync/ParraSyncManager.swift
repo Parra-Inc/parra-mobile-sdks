@@ -21,14 +21,14 @@ class ParraSyncManager {
     init(
         forceDisabled: Bool = false,
         syncState: ParraSyncState,
-        networkManager: ParraNetworkManager,
+        apiResourceServer: ApiResourceServer,
         sessionManager: ParraSessionManager,
         notificationCenter: NotificationCenterType,
         syncDelay: TimeInterval = 30.0
     ) {
         self.forceDisabled = forceDisabled
         self.syncState = syncState
-        self.networkManager = networkManager
+        self.apiResourceServer = apiResourceServer
         self.sessionManager = sessionManager
         self.notificationCenter = notificationCenter
         self.syncDelay = syncDelay
@@ -55,7 +55,7 @@ class ParraSyncManager {
             return
         }
 
-        guard await networkManager.getAuthenticationProvider() != nil else {
+        guard await apiResourceServer.getAuthenticationProvider() != nil else {
             await stopSyncTimer()
             logger
                 .trace(
@@ -183,7 +183,7 @@ class ParraSyncManager {
 
     // MARK: - Private
 
-    private let networkManager: ParraNetworkManager
+    private let apiResourceServer: ApiResourceServer
     private let sessionManager: ParraSessionManager
     private let notificationCenter: NotificationCenterType
 

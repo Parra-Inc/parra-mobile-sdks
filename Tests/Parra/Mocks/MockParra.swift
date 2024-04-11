@@ -12,12 +12,12 @@ import XCTest
 
 struct MockParra {
     let parra: Parra
-    let mockNetworkManager: MockParraNetworkManager
+    let mockApiResourceServer: MockApiResourceServer
 
     let dataManager: ParraDataManager
     let syncManager: ParraSyncManager
     let sessionManager: ParraSessionManager
-    let networkManager: ParraNetworkManager
+    let apiResourceServer: ApiResourceServer
     let notificationCenter: ParraNotificationCenter
 
     let appState: ParraAppState
@@ -34,6 +34,6 @@ struct MockParra {
     }
 
     func tearDown() async throws {
-        mockNetworkManager.urlSession.resetExpectations()
+        mockApiResourceServer.urlSession.resetExpectations()
     }
 }

@@ -37,7 +37,8 @@ extension ViewDataLoader {
                             roadmapConfig: params.roadmapConfig,
                             selectedTab: params.selectedTab,
                             ticketResponse: params.ticketResponse,
-                            networkManager: parra.parraInternal.networkManager
+                            apiResourceServer: parra.parraInternal
+                                .apiResourceServer
                         ),
                         config: config
                     ) { _ in

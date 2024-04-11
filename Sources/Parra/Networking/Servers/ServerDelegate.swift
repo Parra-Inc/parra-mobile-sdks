@@ -1,5 +1,5 @@
 //
-//  ParraNetworkManagerDelegate.swift
+//  ServerDelegate.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/12/24.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-protocol ParraNetworkManagerDelegate: AnyObject {
-    func networkManager(
-        _ networkManager: ParraNetworkManager,
+protocol ServerDelegate: AnyObject {
+    func server(
+        _ server: any Server,
         didReceiveResponse response: HTTPURLResponse,
         for request: URLRequest
     )

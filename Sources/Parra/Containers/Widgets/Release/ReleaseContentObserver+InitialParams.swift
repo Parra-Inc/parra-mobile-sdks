@@ -11,6 +11,6 @@ import SwiftUI
 extension ReleaseContentObserver {
     struct InitialParams {
         let contentType: ReleaseContentType
-        let networkManager: ParraNetworkManager
+        let apiResourceServer: ApiResourceServer
     }
 }

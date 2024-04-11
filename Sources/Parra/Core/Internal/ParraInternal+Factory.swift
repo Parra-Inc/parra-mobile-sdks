@@ -71,7 +71,7 @@ extension ParraInternal {
             sessionStorage: sessionStorage
         )
 
-        let networkManager = ParraNetworkManager(
+        let apiResourceServer = ApiResourceServer(
             appState: appState,
             appConfig: configuration,
             dataManager: dataManager,
@@ -80,13 +80,13 @@ extension ParraInternal {
 
         let sessionManager = ParraSessionManager(
             dataManager: dataManager,
-            networkManager: networkManager,
+            apiResourceServer: apiResourceServer,
             loggerOptions: configuration.loggerOptions
         )
 
         let syncManager = ParraSyncManager(
             syncState: syncState,
-            networkManager: networkManager,
+            apiResourceServer: apiResourceServer,
             sessionManager: sessionManager,
             notificationCenter: notificationCenter
         )
@@ -97,7 +97,7 @@ extension ParraInternal {
 
         let modalScreenManager = ModalScreenManager(
             containerRenderer: containerRenderer,
-            networkManager: networkManager,
+            apiResourceServer: apiResourceServer,
             configuration: configuration,
             notificationCenter: notificationCenter
         )
@@ -108,7 +108,7 @@ extension ParraInternal {
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
-            networkManager: networkManager
+            apiResourceServer: apiResourceServer
         )
 
         // Parra Modules
@@ -122,7 +122,7 @@ extension ParraInternal {
                 fileManager: fileManager,
                 notificationCenter: notificationCenter
             ),
-            networkManager: networkManager
+            apiResourceServer: apiResourceServer
         )
 
         Logger.loggerBackend = sessionManager
@@ -133,7 +133,7 @@ extension ParraInternal {
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
-            networkManager: networkManager,
+            apiResourceServer: apiResourceServer,
             notificationCenter: notificationCenter,
             feedback: feedback,
             latestVersionManager: latestVersionManager,
@@ -142,7 +142,7 @@ extension ParraInternal {
             modalScreenManager: modalScreenManager
         )
 
-        networkManager.delegate = parra
+        apiResourceServer.delegate = parra
         syncManager.delegate = parra
 
         return (parra, appState)
@@ -211,7 +211,7 @@ extension ParraInternal {
             sessionStorage: sessionStorage
         )
 
-        let networkManager = ParraNetworkManager(
+        let apiResourceServer = ApiResourceServer(
             appState: appState,
             appConfig: configuration,
             dataManager: dataManager,
@@ -221,14 +221,14 @@ extension ParraInternal {
         let sessionManager = ParraSessionManager(
             forceDisabled: true,
             dataManager: dataManager,
-            networkManager: networkManager,
+            apiResourceServer: apiResourceServer,
             loggerOptions: configuration.loggerOptions
         )
 
         let syncManager = ParraSyncManager(
             forceDisabled: true,
             syncState: syncState,
-            networkManager: networkManager,
+            apiResourceServer: apiResourceServer,
             sessionManager: sessionManager,
             notificationCenter: notificationCenter
         )
@@ -239,7 +239,7 @@ extension ParraInternal {
 
         let modalScreenManager = ModalScreenManager(
             containerRenderer: containerRenderer,
-            networkManager: networkManager,
+            apiResourceServer: apiResourceServer,
             configuration: configuration,
             notificationCenter: notificationCenter
         )
@@ -250,7 +250,7 @@ extension ParraInternal {
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
-            networkManager: networkManager
+            apiResourceServer: apiResourceServer
         )
 
         // Parra Modules
@@ -264,7 +264,7 @@ extension ParraInternal {
                 fileManager: fileManager,
                 notificationCenter: notificationCenter
             ),
-            networkManager: networkManager
+            apiResourceServer: apiResourceServer
         )
 
         Logger.loggerBackend = sessionManager
@@ -275,7 +275,7 @@ extension ParraInternal {
             dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
-            networkManager: networkManager,
+            apiResourceServer: apiResourceServer,
             notificationCenter: notificationCenter,
             feedback: feedback,
             latestVersionManager: latestVersionManager,
@@ -284,7 +284,7 @@ extension ParraInternal {
             modalScreenManager: modalScreenManager
         )
 
-        networkManager.delegate = parra
+        apiResourceServer.delegate = parra
         syncManager.delegate = parra
 
         return (parra, appState)

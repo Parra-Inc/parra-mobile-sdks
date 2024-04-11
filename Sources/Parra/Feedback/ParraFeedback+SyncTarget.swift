@@ -61,7 +61,7 @@ extension ParraFeedback: SyncTarget {
     }
 
     private func uploadCompletedCards(_ cards: [CompletedCard]) async throws {
-        try await networkManager.bulkAnswerQuestions(
+        try await apiResourceServer.bulkAnswerQuestions(
             cards: cards
         )
     }

@@ -1,5 +1,5 @@
 //
-//  ParraNetworkManager.swift
+//  ApiResourceServer.swift
 //  Parra Feedback
 //
 //  Created by Michael MacCallum on 3/5/22.
@@ -8,18 +8,18 @@
 import Foundation
 import UIKit
 
-private let logger = Logger(category: "Network Manager")
+private let logger = Logger(category: "ApiResourceServer")
 
 typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
-final class ParraNetworkManager: NetworkManagerType {
+final class ApiResourceServer: Server {
     // MARK: - Lifecycle
 
     init(
         appState: ParraAppState,
         appConfig: ParraConfiguration,
         dataManager: ParraDataManager,
-        configuration: ParraInstanceNetworkConfiguration
+        configuration: ServerConfiguration
     ) {
         self.appState = appState
         self.appConfig = appConfig
@@ -29,9 +29,11 @@ final class ParraNetworkManager: NetworkManagerType {
 
     // MARK: - Internal
 
-    weak var delegate: ParraNetworkManagerDelegate?
+    weak var delegate: ServerDelegate?
     let appState: ParraAppState
     let appConfig: ParraConfiguration
+
+    let configuration: ServerConfiguration
 
     func getAuthenticationProvider() async
         -> ParraAuthenticationProviderFunction?
@@ -178,7 +180,7 @@ final class ParraNetworkManager: NetworkManagerType {
     }
 
     func performPublicApiKeyAuthenticationRequest(
-        forTentant tenantId: String,
+        forTenant tenantId: String,
         applicationId: String,
         apiKeyId: String,
         userId: String
@@ -210,7 +212,7 @@ final class ParraNetworkManager: NetworkManagerType {
 
         request.setValue(for: .authorization(.basic(authToken)))
 
-        let (data, response) = try await performAsyncDataDask(request: request)
+        let (data, response) = try await performAsyncDataTask(request: request)
 
         switch response.statusCode {
         case 200:
@@ -263,7 +265,7 @@ final class ParraNetworkManager: NetworkManagerType {
             request.httpBody = try JSONEncoder().encode(body)
         }
 
-        let (data, _) = try await performAsyncDataDask(request: request)
+        let (data, _) = try await performAsyncDataTask(request: request)
 
         return try JSONDecoder().decode(
             T.self,
@@ -355,9 +357,7 @@ final class ParraNetworkManager: NetworkManagerType {
 
     private var authenticationProvider: ParraAuthenticationProviderFunction?
 
-    private let configuration: ParraInstanceNetworkConfiguration
-
-    private lazy var urlSessionDelegateProxy: ParraNetworkManagerUrlSessionDelegateProxy =
+    private lazy var urlSessionDelegateProxy: UrlSessionDelegateProxy =
         .init(
             delegate: self
         )
@@ -374,7 +374,7 @@ final class ParraNetworkManager: NetworkManagerType {
             let (
                 data,
                 response
-            ) = try await performAsyncDataDask(request: request)
+            ) = try await performAsyncDataTask(request: request)
 
             logger
                 .trace(
@@ -500,7 +500,7 @@ final class ParraNetworkManager: NetworkManagerType {
         return request
     }
 
-    private func performAsyncDataDask(request: URLRequest) async throws
+    private func performAsyncDataTask(request: URLRequest) async throws
         -> (Data, HTTPURLResponse)
     {
         #if DEBUG
@@ -527,7 +527,7 @@ final class ParraNetworkManager: NetworkManagerType {
                 )
         }
 
-        delegate?.networkManager(
+        delegate?.server(
             self,
             didReceiveResponse: httpResponse,
             for: request

@@ -13,6 +13,6 @@ extension RoadmapWidget.ContentObserver {
         let roadmapConfig: AppRoadmapConfiguration
         let selectedTab: RoadmapConfigurationTab
         let ticketResponse: UserTicketCollectionResponse
-        let networkManager: ParraNetworkManager
+        let apiResourceServer: ApiResourceServer
     }
 }

@@ -1,5 +1,5 @@
 //
-//  MockParraNetworkManager.swift
+//  MockApiResourceServer.swift
 //  Tests
 //
 //  Created by Mick MacCallum on 7/3/23.
@@ -9,8 +9,8 @@
 import Foundation
 @testable import Parra
 
-struct MockParraNetworkManager {
-    let networkManager: ParraNetworkManager
+struct MockApiResourceServer {
+    let apiResourceServer: ApiResourceServer
     let dataManager: ParraDataManager
     let urlSession: MockURLSession
     let appState: ParraAppState
