@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os
 import UIKit
 
 private let logger = Logger(category: "Parra")
@@ -153,42 +154,58 @@ class ParraInternal {
                     return
                 }
 
-                if success {
-                    addEventObservers()
-
-                    syncManager.startSyncTimer()
-                } else {
-                    removeEventObservers()
-
-                    await dataManager.updateCredential(credential: nil)
-                    syncManager.stopSyncTimer()
-                }
+                await performPostAuthActions(success)
             }
         )
 
-        await sessionManager.initializeSessions()
         networkManager
             .updateAuthenticationProvider(authProviderFunction)
-
-        logger.info("Parra SDK Initialized")
 
         do {
             _ = try await networkManager.refreshAuthentication()
 
-            performPostAuthRefreshActions()
+            logger.info("Parra SDK Initialized")
         } catch {
-            logger.error(
-                "Authentication handler in call to Parra.initialize failed",
-                error
-            )
+            printInvalidAuth(error: error)
         }
     }
 
     // MARK: - Private
 
+    /// Not exactly the same as "is initialized." We need to handle the case
+    /// where an authentication handler may fail. So actions that need to only
+    /// be performed once, per invocation of auth handler refresh should take
+    /// place when this is false.
+    private var hasPerformedSingleInitActions = false
+
     @MainActor
-    private func performPostAuthRefreshActions() {
+    private func performPostAuthActions(
+        _ success: Bool
+    ) async {
+        // These actions should be completed before the success conditional ones
+        if !hasPerformedSingleInitActions {
+            hasPerformedSingleInitActions = true
+
+            await performPostInitialAuthActions()
+        }
+
+        if success {
+            addEventObservers()
+
+            syncManager.startSyncTimer()
+        } else {
+            removeEventObservers()
+
+            await dataManager.updateCredential(credential: nil)
+            syncManager.stopSyncTimer()
+        }
+    }
+
+    @MainActor
+    private func performPostInitialAuthActions() async {
         logger.debug("Performing push authentication refresh actions.")
+
+        await sessionManager.initializeSessions()
 
         if configuration.pushNotificationOptions.enabled {
             UIApplication.shared.registerForRemoteNotifications()
@@ -207,6 +224,40 @@ class ParraInternal {
             }
         case .manual:
             break
+        }
+    }
+
+    private func printInvalidAuth(error: Error) {
+        let printDefaultError: () -> Void = {
+            logger.error(
+                "Authentication handler in call to Parra.initialize failed",
+                error
+            )
+        }
+
+        guard let parraError = error as? ParraError else {
+            printDefaultError()
+
+            return
+        }
+
+        switch parraError {
+        case .authenticationFailed(let underlying):
+            let systemLogger = os.Logger(
+                subsystem: "Parra",
+                category: "initialization"
+            )
+
+            // Bypassing main logger here because we won't want to include the
+            // normal formatting/backtrace/etc. We want to display as clear of
+            // a message as is possible. Note the exclamations prevent
+            // whitespace trimming from removing the padding newlines.
+            systemLogger.log(
+                level: .fault,
+                "!\n\n\n\n\n\n\nERROR INITIALIZING PARRA!\nThe authentication provider passed to ParraApp returned an error. The user was unable to be verified.\n\nUnderlying error:\n\(underlying)\n\n\n\n\n\n\n!"
+            )
+        default:
+            printDefaultError()
         }
     }
 }

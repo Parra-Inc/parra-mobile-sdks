@@ -152,7 +152,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
             }
         } catch {
             Logger.error(
-                "Error transforming data to present Parra sheet",
+                "Error preparing data for Parra sheet presentation.",
                 error
             )
 

@@ -46,36 +46,30 @@ final class ParraNetworkManager: NetworkManagerType {
     }
 
     func refreshAuthentication() async throws -> ParraCredential {
-        return try await logger.withScope { logger in
-            logger.debug("Performing reauthentication for Parra")
+        logger.debug("Performing reauthentication for Parra")
 
-            guard let authenticationProvider else {
-                throw ParraError.missingAuthentication
-            }
+        guard let authenticationProvider else {
+            throw ParraError.missingAuthentication
+        }
 
-            do {
-                logger.info("Invoking Parra authentication provider")
+        do {
+            logger.debug("Invoking authentication provider")
 
-                let token = try await authenticationProvider()
-                let credential = ParraCredential(token: token)
+            let token = try await authenticationProvider()
+            let credential = ParraCredential(token: token)
 
-                await dataManager.updateCredential(
-                    credential: credential
-                )
+            await dataManager.updateCredential(
+                credential: credential
+            )
 
-                logger.info("Reauthentication with Parra succeeded")
+            logger.debug(
+                "Authentication provider returned token successfully"
+            )
 
-                return credential
-            } catch {
-                let framing =
-                    "╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍"
-                logger
-                    .error(
-                        "\n\(framing)\n\nReauthentication with Parra failed.\nInvoking the authProvider passed to Parra.initialize failed with error: \(error.localizedDescription)\n\n\(framing)"
-                    )
-                throw ParraError
-                    .authenticationFailed(error.localizedDescription)
-            }
+            return credential
+        } catch {
+            throw ParraError
+                .authenticationFailed(error.localizedDescription)
         }
     }
 
@@ -415,13 +409,28 @@ final class ParraNetworkManager: NetworkManagerType {
                         .withoutReauthenticating()
                         .withAttribute(.requiredReauthentication)
                 )
+            case (401, false):
+                let message =
+                    "Failed to authenticate with the Parra API after a retry. The token returned by your authentication provider is likely invalid. Please check your authentication provider and try again."
+
+                return (
+                    .failure(
+                        ParraError.authenticationFailed(message)
+                    ),
+                    AuthenticatedRequestResponseContext(
+                        attributes: config.attributes,
+                        statusCode: response.statusCode
+                    )
+                )
             case (400 ... 499, _):
                 return (
-                    .failure(ParraError.networkError(
-                        request: request,
-                        response: response,
-                        responseData: data
-                    )),
+                    .failure(
+                        ParraError.networkError(
+                            request: request,
+                            response: response,
+                            responseData: data
+                        )
+                    ),
                     AuthenticatedRequestResponseContext(
                         attributes: config.attributes,
                         statusCode: response.statusCode

@@ -9,8 +9,9 @@
 import Foundation
 import UIKit
 
-/// Events that should only be generated from within the Parra SDK. Events that can be generated
-/// either in or outside of the SDK, should use the `ParraEvent` type.
+/// Events that should only be generated from within the Parra SDK. Events that
+///  can be generated either in or outside of the SDK, should use the
+///  ``ParraEvent`` type.
 @usableFromInline
 enum ParraInternalEvent: ParraDataEvent {
     case appStateChanged
@@ -29,7 +30,8 @@ enum ParraInternalEvent: ParraDataEvent {
 
     // MARK: - Internal
 
-    // MUST all be snake_case. Internal events are allowed to skip automatic conversion.
+    // MUST all be snake_case. Internal events are allowed to skip automatic
+    // conversion.
     @usableFromInline var name: String {
         switch self {
         case .appStateChanged:

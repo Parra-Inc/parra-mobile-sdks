@@ -301,8 +301,6 @@ class SessionStorage {
         qos: .utility
     )
 
-    private var isInitialized = false
-
     /// Whether or not, since the last time a sync occurred, session storage
     /// received a new event with a context object that indicated that it was a
     /// high priority event.
