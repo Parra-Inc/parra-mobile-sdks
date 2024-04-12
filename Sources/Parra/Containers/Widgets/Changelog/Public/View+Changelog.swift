@@ -28,7 +28,7 @@ public extension View {
             ChangelogLoaderResult,
             ChangelogWidget
         >.Transformer = { parra, transformParams in
-            let response = try await parra.parraInternal.apiResourceServer
+            let response = try await parra.parraInternal.api
                 .paginateReleases(
                     limit: transformParams.limit,
                     offset: transformParams.offset

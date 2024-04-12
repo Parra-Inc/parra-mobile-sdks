@@ -252,13 +252,13 @@ struct RoadmapWidget: Container {
             localBuilderConfig: builderConfig,
             componentFactory: componentFactory,
             contentObserver: .init(
-                initialParams: .init(
+                initialParams: RoadmapWidget.ContentObserver.InitialParams(
                     roadmapConfig: AppRoadmapConfiguration.validStates()[0],
                     selectedTab: AppRoadmapConfiguration.validStates()[0]
                         .tabs[0],
                     ticketResponse: UserTicketCollectionResponse
                         .validStates()[0],
-                    apiResourceServer: parra.parraInternal.apiResourceServer
+                    api: parra.parraInternal.api
                 )
             )
         )

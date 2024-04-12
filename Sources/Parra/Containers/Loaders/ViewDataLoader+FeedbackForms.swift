@@ -40,7 +40,7 @@ extension ViewDataLoader {
                                 case .default:
                                     do {
                                         try await parra.parraInternal
-                                            .apiResourceServer
+                                            .api
                                             .submitFeedbackForm(
                                                 with: form.id,
                                                 data: data

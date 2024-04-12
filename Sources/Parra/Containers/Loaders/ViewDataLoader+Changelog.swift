@@ -39,8 +39,7 @@ extension ViewDataLoader {
                         with: localBuilder,
                         params: .init(
                             appReleaseCollection: params.appReleaseCollection,
-                            apiResourceServer: parra.parraInternal
-                                .apiResourceServer
+                            api: parra.parraInternal.api
                         ),
                         config: config
                     ) { _ in

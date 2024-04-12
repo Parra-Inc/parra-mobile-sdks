@@ -1,5 +1,5 @@
 //
-//  ParraAuthenticationProviderType+Preview.swift
+//  ParraAuthenticationConfiguration+Preview.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/19/24.
@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-extension ParraAuthenticationProviderType {
-    nonisolated static let preview = ParraAuthenticationProviderType.default(
+extension ParraAuthenticationConfiguration {
+    nonisolated static let preview = ParraAuthenticationConfiguration(
         workspaceId: Parra.Demo.workspaceId,
         applicationId: Parra.Demo.applicationId,
-        authProvider: {
+        authenticationMethod: .custom {
             var request = URLRequest(
                 // Replace this with your Parra access token generation endpoint
                 url: URL(

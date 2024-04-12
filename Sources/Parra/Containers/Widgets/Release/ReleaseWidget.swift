@@ -42,7 +42,7 @@ struct ReleaseWidget: Container {
             wrappedValue: ChangelogWidget.ContentObserver(
                 initialParams: .init(
                     appReleaseCollection: collection,
-                    apiResourceServer: contentObserver.apiResourceServer
+                    api: contentObserver.api
                 )
             )
         )

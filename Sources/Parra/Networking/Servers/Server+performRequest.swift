@@ -9,6 +9,32 @@
 import Foundation
 
 extension Server {
+    func performFormPostRequest<T: Decodable>(
+        to url: URL,
+        data: [String: String],
+        cachePolicy: URLRequest.CachePolicy? = nil,
+        delegate: URLSessionTaskDelegate? = nil
+    ) async throws -> T {
+        var components = URLComponents()
+        components.queryItems = data.queryItems
+
+        var request = URLRequest(
+            url: url,
+            cachePolicy: cachePolicy ?? .useProtocolCachePolicy
+        )
+
+        request.httpMethod = HttpMethod.post.rawValue
+        request.httpBody = components.query?.data(using: .utf8)
+
+        request.setValue(for: .accept(.applicationJson))
+        request.setValue(for: .contentType(.applicationFormUrlEncoded))
+
+        return try await performRequest(
+            request: request,
+            delegate: delegate
+        )
+    }
+
     func performRequest<T: Decodable>(
         to url: URL,
         method: HttpMethod = .get,
@@ -45,6 +71,16 @@ extension Server {
             request.httpBody = try JSONEncoder().encode(body)
         }
 
+        return try await performRequest(
+            request: request,
+            delegate: delegate
+        )
+    }
+
+    private func performRequest<T: Decodable>(
+        request: URLRequest,
+        delegate: URLSessionTaskDelegate? = nil
+    ) async throws -> T {
         let (data, _) = try await performAsyncDataTask(
             request: request,
             delegate: delegate
@@ -56,7 +92,7 @@ extension Server {
         )
     }
 
-    private func performAsyncDataTask(
+    func performAsyncDataTask(
         request: URLRequest,
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> (Data, HTTPURLResponse) {

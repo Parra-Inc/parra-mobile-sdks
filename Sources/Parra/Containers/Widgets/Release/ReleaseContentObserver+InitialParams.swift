@@ -11,6 +11,6 @@ import SwiftUI
 extension ReleaseContentObserver {
     struct InitialParams {
         let contentType: ReleaseContentType
-        let apiResourceServer: ApiResourceServer
+        let api: API
     }
 }

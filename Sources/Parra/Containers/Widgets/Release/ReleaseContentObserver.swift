@@ -21,7 +21,7 @@ class ReleaseContentObserver: ContainerContentObserver {
             self.content = AppReleaseContent(appReleaseStub)
         }
 
-        self.apiResourceServer = initialParams.apiResourceServer
+        self.api = initialParams.api
     }
 
     // MARK: - Internal
@@ -29,7 +29,7 @@ class ReleaseContentObserver: ContainerContentObserver {
     @Published private(set) var content: AppReleaseContent
     @Published private(set) var isLoading = false
 
-    let apiResourceServer: ApiResourceServer
+    let api: API
 
     var releaseStub: AppReleaseStub? {
         switch initialParams.contentType {
@@ -50,7 +50,7 @@ class ReleaseContentObserver: ContainerContentObserver {
                 isLoading = true
             }
 
-            let response = try await apiResourceServer.getRelease(
+            let response = try await api.getRelease(
                 with: content.id
             )
 

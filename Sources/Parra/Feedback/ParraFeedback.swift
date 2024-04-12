@@ -18,9 +18,11 @@ public class ParraFeedback {
 
     init(
         dataManager: ParraFeedbackDataManager,
+        api: API,
         apiResourceServer: ApiResourceServer
     ) {
         self.dataManager = dataManager
+        self.api = api
         self.apiResourceServer = apiResourceServer
     }
 
@@ -106,7 +108,7 @@ public class ParraFeedback {
     public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
-        let cardsResponse = try await apiResourceServer.getCards(
+        let cardsResponse = try await api.getCards(
             appArea: appArea
         )
         let cards = cardsResponse.items
@@ -137,7 +139,7 @@ public class ParraFeedback {
     public func fetchFeedbackForm(
         formId: String
     ) async throws -> ParraFeedbackForm {
-        let response = try await apiResourceServer.getFeedbackForm(with: formId)
+        let response = try await api.getFeedbackForm(with: formId)
 
         return ParraFeedbackForm(from: response)
     }
@@ -179,6 +181,7 @@ public class ParraFeedback {
     // MARK: - Internal
 
     let dataManager: ParraFeedbackDataManager
+    let api: API
     let apiResourceServer: ApiResourceServer
 
     /// Checks whether the user has previously supplied input for the provided
@@ -337,7 +340,7 @@ public class ParraFeedback {
     }
 
     private func getCardsForPresentation() async throws -> [ParraCardItem] {
-        let cardsResponse = try await apiResourceServer.getCards(
+        let cardsResponse = try await api.getCards(
             appArea: .none
         )
         let cards = cardsResponse.items

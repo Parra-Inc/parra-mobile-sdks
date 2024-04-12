@@ -16,72 +16,34 @@ final class ApiResourceServer: Server {
     // MARK: - Lifecycle
 
     init(
+        authService: AuthService,
         appState: ParraAppState,
         appConfig: ParraConfiguration,
         dataManager: ParraDataManager,
         configuration: ServerConfiguration
     ) {
+        self.authService = authService
         self.appState = appState
         self.appConfig = appConfig
-        self.dataManager = dataManager
         self.configuration = configuration
     }
 
     // MARK: - Internal
 
     weak var delegate: ServerDelegate?
+    let authService: AuthService
     let appState: ParraAppState
     let appConfig: ParraConfiguration
 
     let configuration: ServerConfiguration
 
-    func getAuthenticationProvider() async
-        -> ParraAuthenticationProviderFunction?
-    {
-        return authenticationProvider
-    }
-
-    func updateAuthenticationProvider(
-        _ provider: ParraAuthenticationProviderFunction?
-    ) {
-        authenticationProvider = provider
-    }
-
-    func refreshAuthentication() async throws -> ParraCredential {
-        logger.debug("Performing reauthentication for Parra")
-
-        guard let authenticationProvider else {
-            throw ParraError.missingAuthentication
-        }
-
-        do {
-            logger.debug("Invoking authentication provider")
-
-            let token = try await authenticationProvider()
-            let credential = ParraCredential(token: token)
-
-            await dataManager.updateCredential(
-                credential: credential
-            )
-
-            logger.debug(
-                "Authentication provider returned token successfully"
-            )
-
-            return credential
-        } catch {
-            throw ParraError
-                .authenticationFailed(error.localizedDescription)
-        }
-    }
-
-    func performAuthenticatedRequest<T: Decodable>(
+    func performRequest<T: Decodable>(
         endpoint: ParraEndpoint,
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
         cachePolicy: URLRequest.CachePolicy? = nil
     ) async -> AuthenticatedRequestResult<T> {
-        return await performAuthenticatedRequest(
+        return await performRequest(
             endpoint: endpoint,
             queryItems: queryItems,
             config: config,
@@ -90,7 +52,7 @@ final class ApiResourceServer: Server {
         )
     }
 
-    func performAuthenticatedRequest<T: Decodable>(
+    func performRequest<T: Decodable>(
         endpoint: ParraEndpoint,
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
@@ -121,12 +83,12 @@ final class ApiResourceServer: Server {
             }
 
             urlComponents.setQueryItems(with: queryItems)
-            let credential = await dataManager.getCurrentCredential()
+            let credential = await authService.getCurrentCredential()
 
             let nextCredential: ParraCredential = if let credential {
                 credential
             } else {
-                try await refreshAuthentication()
+                try await authService.refreshAuthentication()
             }
 
             var request = URLRequest(
@@ -175,58 +137,6 @@ final class ApiResourceServer: Server {
                     attributes: [],
                     statusCode: nil
                 )
-            )
-        }
-    }
-
-    func performPublicApiKeyAuthenticationRequest(
-        forTenant tenantId: String,
-        applicationId: String,
-        apiKeyId: String,
-        userId: String
-    ) async throws -> String {
-        let endpoint = ParraEndpoint.postAuthentication(tenantId: tenantId)
-        let url = ParraInternal.Constants.parraApiRoot
-            .appendingPathComponent(endpoint.route)
-        var request = URLRequest(url: url)
-
-        let headerFactory = HeaderFactory()
-
-        request.httpMethod = endpoint.method.rawValue
-        request.httpBody = try configuration.jsonEncoder
-            .encode(["user_id": userId])
-        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-
-        guard let authToken = ("api_key:" + apiKeyId).data(using: .utf8)?
-            .base64EncodedString() else
-        {
-            throw ParraError.generic("Unable to encode API key as NSData", nil)
-        }
-
-        addHeaders(
-            to: &request,
-            endpoint: endpoint,
-            for: appState,
-            with: headerFactory
-        )
-
-        request.setValue(for: .authorization(.basic(authToken)))
-
-        let (data, response) = try await performAsyncDataTask(request: request)
-
-        switch response.statusCode {
-        case 200:
-            let credential = try configuration.jsonDecoder.decode(
-                ParraCredential.self,
-                from: data
-            )
-
-            return credential.token
-        default:
-            throw ParraError.networkError(
-                request: request,
-                response: response,
-                responseData: data
             )
         }
     }
@@ -353,10 +263,6 @@ final class ApiResourceServer: Server {
 
     // MARK: - Private
 
-    private let dataManager: ParraDataManager
-
-    private var authenticationProvider: ParraAuthenticationProviderFunction?
-
     private lazy var urlSessionDelegateProxy: UrlSessionDelegateProxy =
         .init(
             delegate: self
@@ -397,7 +303,9 @@ final class ApiResourceServer: Server {
             // new one.
             case (401, true), (403, true):
                 logger.trace("Request required reauthentication")
-                let newCredential = try await refreshAuthentication()
+
+                let newCredential = try await authService
+                    .refreshAuthentication()
 
                 request
                     .setValue(for: .authorization(.bearer(newCredential.token)))

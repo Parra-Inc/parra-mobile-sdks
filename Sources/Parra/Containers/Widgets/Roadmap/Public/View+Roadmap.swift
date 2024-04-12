@@ -28,8 +28,7 @@ public extension View {
             RoadmapLoaderResult,
             RoadmapWidget
         >.Transformer = { parra, transformParams in
-            let roadmapConfig = try await parra.parraInternal.apiResourceServer
-                .getRoadmap()
+            let roadmapConfig = try await parra.parraInternal.api.getRoadmap()
 
             guard let tab = roadmapConfig.tabs.first else {
                 throw ParraError.message(
@@ -38,7 +37,7 @@ public extension View {
             }
 
             let ticketResponse = try await parra.parraInternal
-                .apiResourceServer
+                .api
                 .paginateTickets(
                     limit: transformParams.limit,
                     offset: transformParams.offset,

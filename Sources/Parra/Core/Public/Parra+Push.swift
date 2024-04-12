@@ -38,8 +38,7 @@ public extension Parra {
         _ token: String
     ) async {
         do {
-            try await parraInternal.apiResourceServer
-                .uploadPushToken(token: token)
+            try await parraInternal.api.uploadPushToken(token: token)
 
             logger.trace("Device push token successfully uploaded.")
         } catch {

@@ -33,7 +33,7 @@ import SwiftUI
 ///         super.init()
 ///
 ///         self.configureParra(
-///             authProvider: // ...,
+///             authConfiguration: // ...,
 ///             appContent: {
 ///                 ContentView()
 ///             }
@@ -50,7 +50,7 @@ open class ParraApp<
     // MARK: - Lifecycle
 
     /// This initializer must be overriden and used to invoke the
-    /// ``configureParra(authProvider:configuration:launchScreenConfig:appContent:)``
+    /// ``configureParra(authConfiguration:configuration:launchScreenConfig:appContent:)``
     /// method.
     public required init() {}
 
@@ -77,7 +77,7 @@ open class ParraApp<
 
     /// <#Description#>
     /// - Parameters:
-    ///   - authProvider: <#authProvider description#>
+    ///   - authConfiguration: <#authProvider description#>
     ///   - options: <#options description#>
     ///   - launchScreenType: The type of launch screen that should be displayed
     ///   while Parra is being initialized. This should match up exactly with
@@ -89,7 +89,7 @@ open class ParraApp<
     ///   screen. Next we look for the `UILaunchStoryboardName` key. If this is
     ///   not found, a blank white screen will be rendered.
     public func configureParra(
-        authProvider: ParraAuthenticationProviderType,
+        authConfiguration: ParraAuthenticationConfiguration,
         configuration: ParraConfiguration = .init(),
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
         appContent: @MainActor @escaping () -> some View
@@ -99,7 +99,7 @@ open class ParraApp<
         }
 
         self.appContent = ParraAppView(
-            target: .app(authProvider, launchScreenConfig),
+            target: .app(authConfiguration, launchScreenConfig),
             configuration: configuration,
             viewContent: { _ in
                 appContent()

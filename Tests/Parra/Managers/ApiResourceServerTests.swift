@@ -40,7 +40,7 @@ class ApiResourceServerTests: MockedParraTestCase {
         // Can't expect throw with async func
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: endpoint
                 )
 
@@ -74,7 +74,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: endpoint
                 )
 
@@ -97,7 +97,7 @@ class ApiResourceServerTests: MockedParraTestCase {
         // Can't expect throw with async func
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: .getCards
                 )
 
@@ -127,7 +127,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: .getCards
                 )
 
@@ -156,7 +156,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: endpoint
                 )
 
@@ -178,7 +178,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: endpoint
                 )
 
@@ -201,7 +201,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: endpoint
                 )
 
@@ -220,7 +220,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: endpoint
                 )
 
@@ -249,7 +249,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: endpoint
                 )
 
@@ -275,7 +275,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: endpoint
                 )
 
@@ -316,7 +316,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: endpoint
                 )
 
@@ -341,7 +341,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.apiResourceServer
-                .performAuthenticatedRequest(
+                .performRequest(
                     endpoint: .getCards
                 )
 

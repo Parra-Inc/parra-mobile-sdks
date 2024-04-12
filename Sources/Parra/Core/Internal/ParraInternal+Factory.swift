@@ -13,11 +13,11 @@ import Foundation
 extension ParraInternal {
     @MainActor
     static func createParraInstance(
-        authProvider: ParraAuthenticationProviderType,
+        authenticationConfiguration: ParraAuthenticationConfiguration,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
     ) -> (ParraInternal, ParraAppState) {
-        let appState = authProvider.initialAppState
+        let appState = authenticationConfiguration.initialAppState
         let syncState = ParraSyncState()
         let fileManager = FileManager.default
 
@@ -71,22 +71,45 @@ extension ParraInternal {
             sessionStorage: sessionStorage
         )
 
+        let authServer = AuthServer(
+            configuration: instanceConfiguration.serverConfiguration
+        )
+
+        let externalResourceServer = ExternalResourceServer(
+            configuration: instanceConfiguration.serverConfiguration
+        )
+
+        let oauth2Service = OAuth2Service(
+            clientId: appState.applicationId,
+            authServer: authServer
+        )
+
+        let authService = AuthService(
+            oauth2Service: oauth2Service,
+            authServer: authServer,
+            authenticationConfiguration: authenticationConfiguration
+        )
+
         let apiResourceServer = ApiResourceServer(
+            authService: authService,
             appState: appState,
             appConfig: configuration,
             dataManager: dataManager,
-            configuration: instanceConfiguration.networkConfiguration
+            configuration: instanceConfiguration.serverConfiguration
+        )
+
+        let api = API(
+            appState: appState, apiResourceServer: apiResourceServer
         )
 
         let sessionManager = ParraSessionManager(
             dataManager: dataManager,
-            apiResourceServer: apiResourceServer,
+            api: api,
             loggerOptions: configuration.loggerOptions
         )
 
         let syncManager = ParraSyncManager(
             syncState: syncState,
-            apiResourceServer: apiResourceServer,
             sessionManager: sessionManager,
             notificationCenter: notificationCenter
         )
@@ -108,7 +131,8 @@ extension ParraInternal {
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
-            apiResourceServer: apiResourceServer
+            api: api,
+            externalResourceServer: externalResourceServer
         )
 
         // Parra Modules
@@ -122,18 +146,21 @@ extension ParraInternal {
                 fileManager: fileManager,
                 notificationCenter: notificationCenter
             ),
+            api: api,
             apiResourceServer: apiResourceServer
         )
 
         Logger.loggerBackend = sessionManager
 
         let parra = ParraInternal(
+            authenticationConfiguration: authenticationConfiguration,
             configuration: configuration,
             appState: appState,
             dataManager: dataManager,
             syncManager: syncManager,
+            authService: authService,
             sessionManager: sessionManager,
-            apiResourceServer: apiResourceServer,
+            api: api,
             notificationCenter: notificationCenter,
             feedback: feedback,
             latestVersionManager: latestVersionManager,
@@ -152,11 +179,11 @@ extension ParraInternal {
     // often mocked data to our servers.
     @MainActor
     static func createParraSwiftUIPreviewsInstance(
-        authProvider: ParraAuthenticationProviderType,
+        authenticationConfiguration: ParraAuthenticationConfiguration,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
     ) -> (ParraInternal, ParraAppState) {
-        let appState = authProvider.initialAppState
+        let appState = authenticationConfiguration.initialAppState
         let syncState = ParraSyncState()
         let fileManager = FileManager.default
 
@@ -211,24 +238,47 @@ extension ParraInternal {
             sessionStorage: sessionStorage
         )
 
+        let authServer = AuthServer(
+            configuration: instanceConfiguration.serverConfiguration
+        )
+
+        let externalResourceServer = ExternalResourceServer(
+            configuration: instanceConfiguration.serverConfiguration
+        )
+
+        let oauth2Service = OAuth2Service(
+            clientId: appState.applicationId,
+            authServer: authServer
+        )
+
+        let authService = AuthService(
+            oauth2Service: oauth2Service,
+            authServer: authServer,
+            authenticationConfiguration: authenticationConfiguration
+        )
+
         let apiResourceServer = ApiResourceServer(
+            authService: authService,
             appState: appState,
             appConfig: configuration,
             dataManager: dataManager,
-            configuration: instanceConfiguration.networkConfiguration
+            configuration: instanceConfiguration.serverConfiguration
+        )
+
+        let api = API(
+            appState: appState, apiResourceServer: apiResourceServer
         )
 
         let sessionManager = ParraSessionManager(
             forceDisabled: true,
             dataManager: dataManager,
-            apiResourceServer: apiResourceServer,
+            api: api,
             loggerOptions: configuration.loggerOptions
         )
 
         let syncManager = ParraSyncManager(
             forceDisabled: true,
             syncState: syncState,
-            apiResourceServer: apiResourceServer,
             sessionManager: sessionManager,
             notificationCenter: notificationCenter
         )
@@ -250,7 +300,8 @@ extension ParraInternal {
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
-            apiResourceServer: apiResourceServer
+            api: api,
+            externalResourceServer: externalResourceServer
         )
 
         // Parra Modules
@@ -264,18 +315,21 @@ extension ParraInternal {
                 fileManager: fileManager,
                 notificationCenter: notificationCenter
             ),
+            api: api,
             apiResourceServer: apiResourceServer
         )
 
         Logger.loggerBackend = sessionManager
 
         let parra = ParraInternal(
+            authenticationConfiguration: authenticationConfiguration,
             configuration: configuration,
             appState: appState,
             dataManager: dataManager,
             syncManager: syncManager,
+            authService: authService,
             sessionManager: sessionManager,
-            apiResourceServer: apiResourceServer,
+            api: api,
             notificationCenter: notificationCenter,
             feedback: feedback,
             latestVersionManager: latestVersionManager,

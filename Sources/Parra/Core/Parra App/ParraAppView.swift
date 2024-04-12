@@ -8,8 +8,12 @@
 
 import SwiftUI
 
+// Splash screen
+// Loading state and determining if previously auth'd
+// after splash, either show login screen
+
 enum ParraAppViewTarget {
-    case app(ParraAuthenticationProviderType, ParraLaunchScreen.Config?)
+    case app(ParraAuthenticationConfiguration, ParraLaunchScreen.Config?)
     case preview
 }
 
@@ -29,23 +33,23 @@ struct ParraAppView<Content>: View where Content: View {
         let launchScreenConfig: ParraLaunchScreen.Config?
 
         switch target {
-        case .app(let parraAuthenticationProviderType, let config):
-            self.authProvider = parraAuthenticationProviderType
+        case .app(let authenticationConfiguration, let config):
+            self.authenticationConfiguration = authenticationConfiguration
 
             launchScreenConfig = config
 
             (parra, appState) = ParraInternal.createParraInstance(
-                authProvider: authProvider,
+                authenticationConfiguration: authenticationConfiguration,
                 configuration: configuration
             )
         case .preview:
-            self.authProvider = .preview
+            self.authenticationConfiguration = .preview
 
             launchScreenConfig = .preview
 
             (parra, appState) = ParraInternal
                 .createParraSwiftUIPreviewsInstance(
-                    authProvider: authProvider,
+                    authenticationConfiguration: authenticationConfiguration,
                     configuration: configuration
                 )
         }
@@ -105,10 +109,7 @@ struct ParraAppView<Content>: View where Content: View {
                             return
                         }
 
-                        // TODO: Is there a safe way to start this earlier?
-                        await parra.initialize(
-                            with: authProvider
-                        )
+                        await parra.initialize()
 
                         Logger
                             .debug(
@@ -182,7 +183,7 @@ struct ParraAppView<Content>: View where Content: View {
     @StateObject private var alertManager: AlertManager
 
     private let parra: ParraInternal
-    private let authProvider: ParraAuthenticationProviderType
+    private let authenticationConfiguration: ParraAuthenticationConfiguration
     private let launchScreenConfig: ParraLaunchScreen.Config
 
     @State private var showLogs = false

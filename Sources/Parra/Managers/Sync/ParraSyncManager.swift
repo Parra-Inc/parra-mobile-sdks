@@ -21,14 +21,12 @@ class ParraSyncManager {
     init(
         forceDisabled: Bool = false,
         syncState: ParraSyncState,
-        apiResourceServer: ApiResourceServer,
         sessionManager: ParraSessionManager,
         notificationCenter: NotificationCenterType,
         syncDelay: TimeInterval = 30.0
     ) {
         self.forceDisabled = forceDisabled
         self.syncState = syncState
-        self.apiResourceServer = apiResourceServer
         self.sessionManager = sessionManager
         self.notificationCenter = notificationCenter
         self.syncDelay = syncDelay
@@ -52,16 +50,6 @@ class ParraSyncManager {
     /// internally, but can be invoked externally as necessary.
     func enqueueSync(with mode: ParraSyncMode) async {
         if forceDisabled {
-            return
-        }
-
-        guard await apiResourceServer.getAuthenticationProvider() != nil else {
-            await stopSyncTimer()
-            logger
-                .trace(
-                    "Skipping \(mode) sync. Authentication provider is unset."
-                )
-
             return
         }
 
@@ -183,7 +171,6 @@ class ParraSyncManager {
 
     // MARK: - Private
 
-    private let apiResourceServer: ApiResourceServer
     private let sessionManager: ParraSessionManager
     private let notificationCenter: NotificationCenterType
 

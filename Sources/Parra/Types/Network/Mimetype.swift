@@ -10,4 +10,5 @@ import Foundation
 
 enum Mimetype: String {
     case applicationJson = "application/json"
+    case applicationFormUrlEncoded = "application/x-www-form-urlencoded"
 }

@@ -30,7 +30,7 @@ struct ParraInstanceConfiguration {
         let urlSession = URLSession(configuration: sessionConfig)
 
         return ParraInstanceConfiguration(
-            networkConfiguration: ServerConfiguration(
+            serverConfiguration: ServerConfiguration(
                 urlSession: urlSession,
                 jsonEncoder: .parraEncoder,
                 jsonDecoder: .parraDecoder
@@ -46,6 +46,6 @@ struct ParraInstanceConfiguration {
         )
     }()
 
-    let networkConfiguration: ServerConfiguration
+    let serverConfiguration: ServerConfiguration
     let storageConfiguration: ParraInstanceStorageConfiguration
 }

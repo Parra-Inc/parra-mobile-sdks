@@ -74,7 +74,7 @@ extension ChangelogWidget {
         required init(
             initialParams: InitialParams
         ) {
-            self.apiResourceServer = initialParams.apiResourceServer
+            self.api = initialParams.api
             let appReleaseCollection = initialParams.appReleaseCollection
 
             let emptyStateViewContent = EmptyStateContent(
@@ -138,7 +138,7 @@ extension ChangelogWidget {
             String
         >!
 
-        let apiResourceServer: ApiResourceServer
+        let api: API
 
         // MARK: - Private
 
@@ -147,7 +147,7 @@ extension ChangelogWidget {
             _ offset: Int,
             _ ctx: String
         ) async throws -> [AppReleaseStubContent] {
-            let response = try await apiResourceServer.paginateReleases(
+            let response = try await api.paginateReleases(
                 limit: limit,
                 offset: offset
             )

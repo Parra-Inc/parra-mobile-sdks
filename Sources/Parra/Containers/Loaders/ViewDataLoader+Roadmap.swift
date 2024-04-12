@@ -33,12 +33,11 @@ extension ViewDataLoader {
                 let container: RoadmapWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
                         with: localBuilder,
-                        params: .init(
+                        params: RoadmapWidget.ContentObserver.InitialParams(
                             roadmapConfig: params.roadmapConfig,
                             selectedTab: params.selectedTab,
                             ticketResponse: params.ticketResponse,
-                            apiResourceServer: parra.parraInternal
-                                .apiResourceServer
+                            api: parra.parraInternal.api
                         ),
                         config: config
                     ) { _ in

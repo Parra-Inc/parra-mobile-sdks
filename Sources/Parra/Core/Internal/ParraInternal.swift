@@ -20,12 +20,14 @@ class ParraInternal {
     // MARK: - Lifecycle
 
     init(
+        authenticationConfiguration: ParraAuthenticationConfiguration,
         configuration: ParraConfiguration,
         appState: ParraAppState,
         dataManager: ParraDataManager,
         syncManager: ParraSyncManager,
+        authService: AuthService,
         sessionManager: ParraSessionManager,
-        apiResourceServer: ApiResourceServer,
+        api: API,
         notificationCenter: NotificationCenterType,
         feedback: ParraFeedback,
         latestVersionManager: LatestVersionManager,
@@ -33,12 +35,14 @@ class ParraInternal {
         alertManager: AlertManager,
         modalScreenManager: ModalScreenManager
     ) {
+        self.authenticationConfiguration = authenticationConfiguration
         self.configuration = configuration
         self.appState = appState
         self.dataManager = dataManager
         self.syncManager = syncManager
+        self.authService = authService
         self.sessionManager = sessionManager
-        self.apiResourceServer = apiResourceServer
+        self.api = api
         self.notificationCenter = notificationCenter
         self.feedback = feedback
         self.latestVersionManager = latestVersionManager
@@ -117,15 +121,17 @@ class ParraInternal {
     let feedback: ParraFeedback
 
     private(set) var configuration: ParraConfiguration
+    let authenticationConfiguration: ParraAuthenticationConfiguration
     let appState: ParraAppState
 
     // MARK: - Managers
 
     let dataManager: ParraDataManager
     let syncManager: ParraSyncManager
+    let authService: AuthService
 
     @usableFromInline let sessionManager: ParraSessionManager
-    let apiResourceServer: ApiResourceServer
+    let api: API
     let notificationCenter: NotificationCenterType
     let latestVersionManager: LatestVersionManager
     let containerRenderer: ContainerRenderer
@@ -141,25 +147,18 @@ class ParraInternal {
     }
 
     @MainActor
-    func initialize(
-        with authProvider: ParraAuthenticationProviderType
-    ) async {
-        let authProviderFunction = authProvider.getProviderFunction(
-            using: apiResourceServer,
-            onAuthenticationRefresh: { [weak self] success in
-                guard let self else {
-                    return
+    func initialize() async {
+        authService.addAuthObserver(
+            for: "parra",
+            observer: { success in
+                Task { @MainActor in
+                    await self.onAuthChange(success)
                 }
-
-                await performPostAuthActions(success)
             }
         )
 
-        apiResourceServer
-            .updateAuthenticationProvider(authProviderFunction)
-
         do {
-            _ = try await apiResourceServer.refreshAuthentication()
+            try await authService.refreshAuthentication()
 
             logger.info("Parra SDK Initialized")
         } catch {
@@ -167,17 +166,9 @@ class ParraInternal {
         }
     }
 
-    // MARK: - Private
-
-    /// Not exactly the same as "is initialized." We need to handle the case
-    /// where an authentication handler may fail. So actions that need to only
-    /// be performed once, per invocation of auth handler refresh should take
-    /// place when this is false.
-    private var hasPerformedSingleInitActions = false
-
     @MainActor
-    private func performPostAuthActions(
-        _ success: Bool
+    func onAuthChange(
+        _ authed: Bool
     ) async {
         // These actions should be completed before the success conditional ones
         if !hasPerformedSingleInitActions {
@@ -186,7 +177,7 @@ class ParraInternal {
             await performPostInitialAuthActions()
         }
 
-        if success {
+        if authed {
             addEventObservers()
 
             syncManager.startSyncTimer()
@@ -197,6 +188,14 @@ class ParraInternal {
             syncManager.stopSyncTimer()
         }
     }
+
+    // MARK: - Private
+
+    /// Not exactly the same as "is initialized." We need to handle the case
+    /// where an authentication handler may fail. So actions that need to only
+    /// be performed once, per invocation of auth handler refresh should take
+    /// place when this is false.
+    private var hasPerformedSingleInitActions = false
 
     @MainActor
     private func performPostInitialAuthActions() async {
