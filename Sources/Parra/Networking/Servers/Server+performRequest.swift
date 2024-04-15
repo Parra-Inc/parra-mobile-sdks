@@ -16,7 +16,7 @@ extension Server {
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> T {
         var components = URLComponents()
-        components.queryItems = data.queryItems
+        components.percentEncodedQueryItems = data.queryItems
 
         var request = URLRequest(
             url: url,
@@ -24,7 +24,7 @@ extension Server {
         )
 
         request.httpMethod = HttpMethod.post.rawValue
-        request.httpBody = components.query?.data(using: .utf8)
+        request.httpBody = components.percentEncodedQuery?.data(using: .utf8)
 
         request.setValue(for: .accept(.applicationJson))
         request.setValue(for: .contentType(.applicationFormUrlEncoded))
@@ -68,7 +68,7 @@ extension Server {
 
         request.httpMethod = method.rawValue
         if method.allowsBody {
-            request.httpBody = try JSONEncoder().encode(body)
+            request.httpBody = try configuration.jsonEncoder.encode(body)
         }
 
         return try await performRequest(
@@ -86,7 +86,7 @@ extension Server {
             delegate: delegate
         )
 
-        return try JSONDecoder().decode(
+        return try configuration.jsonDecoder.decode(
             T.self,
             from: data
         )
