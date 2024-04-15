@@ -89,7 +89,9 @@ open class ParraApp<
     ///   screen. Next we look for the `UILaunchStoryboardName` key. If this is
     ///   not found, a blank white screen will be rendered.
     public func configureParra(
-        authConfiguration: ParraAuthenticationConfiguration,
+        workspaceId: String,
+        applicationId: String,
+        authenticationMethod: ParraAuthenticationMethod,
         configuration: ParraConfiguration = .init(),
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
         appContent: @MainActor @escaping () -> some View
@@ -98,8 +100,17 @@ open class ParraApp<
             fatalError("ParraApp content has already been set")
         }
 
+        let appState = ParraAppState(
+            tenantId: workspaceId,
+            applicationId: applicationId
+        )
+
         self.appContent = ParraAppView(
-            target: .app(authConfiguration, launchScreenConfig),
+            target: .app(
+                authenticationMethod,
+                appState,
+                launchScreenConfig
+            ),
             configuration: configuration,
             viewContent: { _ in
                 appContent()

@@ -20,10 +20,10 @@ class ParraInternal {
     // MARK: - Lifecycle
 
     init(
-        authenticationConfiguration: ParraAuthenticationConfiguration,
+        authenticationMethod: ParraAuthenticationMethod,
         configuration: ParraConfiguration,
         appState: ParraAppState,
-        dataManager: ParraDataManager,
+        dataManager: DataManager,
         syncManager: ParraSyncManager,
         authService: AuthService,
         sessionManager: ParraSessionManager,
@@ -35,7 +35,7 @@ class ParraInternal {
         alertManager: AlertManager,
         modalScreenManager: ModalScreenManager
     ) {
-        self.authenticationConfiguration = authenticationConfiguration
+        self.authenticationMethod = authenticationMethod
         self.configuration = configuration
         self.appState = appState
         self.dataManager = dataManager
@@ -69,8 +69,8 @@ class ParraInternal {
     public func logout() async {
         await syncManager.enqueueSync(with: .immediate)
         await dataManager.updateCredential(credential: nil)
-
         await syncManager.stopSyncTimer()
+        await authService.logout()
     }
 
     // MARK: - Synchronization
@@ -116,17 +116,19 @@ class ParraInternal {
     static let moduleName = "Parra"
     static let errorDomain = "com.parra.error"
 
+    var currentUser: ParraUser?
+
     // MARK: - Parra Modules
 
     let feedback: ParraFeedback
 
     private(set) var configuration: ParraConfiguration
-    let authenticationConfiguration: ParraAuthenticationConfiguration
+    let authenticationMethod: ParraAuthenticationMethod
     let appState: ParraAppState
 
     // MARK: - Managers
 
-    let dataManager: ParraDataManager
+    let dataManager: DataManager
     let syncManager: ParraSyncManager
     let authService: AuthService
 
@@ -147,28 +149,8 @@ class ParraInternal {
     }
 
     @MainActor
-    func initialize() async {
-        authService.addAuthObserver(
-            for: "parra",
-            observer: { success in
-                Task { @MainActor in
-                    await self.onAuthChange(success)
-                }
-            }
-        )
-
-        do {
-            try await authService.refreshAuthentication()
-
-            logger.info("Parra SDK Initialized")
-        } catch {
-            printInvalidAuth(error: error)
-        }
-    }
-
-    @MainActor
-    func onAuthChange(
-        _ authed: Bool
+    func currentUserDidChange(
+        to user: ParraUser?
     ) async {
         // These actions should be completed before the success conditional ones
         if !hasPerformedSingleInitActions {
@@ -177,7 +159,7 @@ class ParraInternal {
             await performPostInitialAuthActions()
         }
 
-        if authed {
+        if user != nil {
             addEventObservers()
 
             syncManager.startSyncTimer()
@@ -220,40 +202,6 @@ class ParraInternal {
             }
         case .manual:
             break
-        }
-    }
-
-    private func printInvalidAuth(error: Error) {
-        let printDefaultError: () -> Void = {
-            logger.error(
-                "Authentication handler in call to Parra.initialize failed",
-                error
-            )
-        }
-
-        guard let parraError = error as? ParraError else {
-            printDefaultError()
-
-            return
-        }
-
-        switch parraError {
-        case .authenticationFailed(let underlying):
-            let systemLogger = os.Logger(
-                subsystem: "Parra",
-                category: "initialization"
-            )
-
-            // Bypassing main logger here because we won't want to include the
-            // normal formatting/backtrace/etc. We want to display as clear of
-            // a message as is possible. Note the exclamations prevent
-            // whitespace trimming from removing the padding newlines.
-            systemLogger.log(
-                level: .fault,
-                "!\n\n\n\n\n\n\nERROR INITIALIZING PARRA!\nThe authentication provider passed to ParraApp returned an error. The user was unable to be verified.\n\nUnderlying error:\n\(underlying)\n\n\n\n\n\n\n!"
-            )
-        default:
-            printDefaultError()
         }
     }
 }

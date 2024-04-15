@@ -33,7 +33,7 @@ class MockedParraTestCase: ParraBaseMock {
             tenantId: UUID().uuidString,
             applicationId: UUID().uuidString
         ),
-        authenticationProvider: ParraAuthenticationProviderFunction? = {
+        authenticationProvider: ParraTokenProvider? = {
             return UUID().uuidString
         }
     ) async -> MockParra {
@@ -130,14 +130,14 @@ class MockedParraTestCase: ParraBaseMock {
         )
     }
 
-    func createMockDataManager() -> ParraDataManager {
-        let storageDirectoryName = ParraDataManager.Directory
+    func createMockDataManager() -> DataManager {
+        let storageDirectoryName = DataManager.Directory
             .storageDirectoryName
         let credentialStorageModule = ParraStorageModule<ParraCredential>(
             dataStorageMedium: .fileSystem(
                 baseUrl: baseStorageDirectory,
                 folder: storageDirectoryName,
-                fileName: ParraDataManager.Key.userCredentialsKey,
+                fileName: DataManager.Key.userCredentialsKey,
                 storeItemsSeparately: false,
                 fileManager: .default
             ),
@@ -164,7 +164,7 @@ class MockedParraTestCase: ParraBaseMock {
             eventJsonEncoder: .spaceOptimizedEncoder
         )
 
-        return ParraDataManager(
+        return DataManager(
             baseDirectory: baseStorageDirectory,
             credentialStorage: credentialStorage,
             sessionStorage: sessionStorage
@@ -177,7 +177,7 @@ class MockedParraTestCase: ParraBaseMock {
             applicationId: UUID().uuidString
         ),
         appConfig: ParraConfiguration = .init(),
-        authenticationProvider: ParraAuthenticationProviderFunction?
+        authenticationProvider: ParraTokenProvider?
     ) async -> MockApiResourceServer {
         let dataManager = createMockDataManager()
 
@@ -211,7 +211,7 @@ class MockedParraTestCase: ParraBaseMock {
             applicationId: UUID().uuidString
         ),
         appConfig: ParraConfiguration = .init(),
-        authenticationProvider: ParraAuthenticationProviderFunction?
+        authenticationProvider: ParraTokenProvider?
     ) async -> LatestVersionManager {
         let configuration = ParraConfiguration()
         let notificationCenter = ParraNotificationCenter()

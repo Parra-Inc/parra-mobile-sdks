@@ -11,14 +11,14 @@ class ParraFeedbackDataManager {
     // MARK: - Lifecycle
 
     init(
-        dataManager: ParraDataManager,
+        dataManager: DataManager,
         syncManager: ParraSyncManager,
         jsonEncoder: JSONEncoder,
         jsonDecoder: JSONDecoder,
         fileManager: FileManager,
         notificationCenter: NotificationCenterType
     ) {
-        let completedCardDataFolder = ParraDataManager.Directory
+        let completedCardDataFolder = DataManager.Directory
             .storageDirectoryName
         let completedCardDataFileName = ParraFeedbackDataManager.Key
             .completedCardsKey
@@ -146,7 +146,7 @@ class ParraFeedbackDataManager {
 
     private let completedCardDataStorage: CompletedCardDataStorage
     private let cardStorage: CardStorage
-    private let dataManager: ParraDataManager
+    private let dataManager: DataManager
     private let syncManager: ParraSyncManager
     private let notificationCenter: NotificationCenterType
 }

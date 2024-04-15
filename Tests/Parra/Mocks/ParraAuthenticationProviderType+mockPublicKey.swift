@@ -9,19 +9,15 @@
 import Foundation
 @testable import Parra
 
-extension ParraAuthenticationConfiguration {
+extension ParraAuthenticationMethod {
     static func mockPublicKey(_ mockParra: MockParra)
-        -> ParraAuthenticationConfiguration
+        -> ParraAuthenticationMethod
     {
-        return ParraAuthenticationConfiguration(
-            workspaceId: mockParra.appState.tenantId,
-            applicationId: mockParra.appState.applicationId,
-            authenticationMethod: .publicKey(
-                apiKeyId: UUID().uuidString,
-                userIdProvider: {
-                    return UUID().uuidString
-                }
-            )
+        return .public(
+            apiKeyId: UUID().uuidString,
+            userIdProvider: {
+                return UUID().uuidString
+            }
         )
     }
 }

@@ -8,14 +8,21 @@
 
 import SwiftUI
 
-// Splash screen
-// Loading state and determining if previously auth'd
-// after splash, either show login screen
+// App launches
+// Show launch while loading state
+// when state loads, check if auth'd
+// if auth'd show app and refresh auth
+// if refresh fails, stay logged in unless 401, then logout
 
-enum ParraAppViewTarget {
-    case app(ParraAuthenticationConfiguration, ParraLaunchScreen.Config?)
-    case preview
-}
+// parra auth ->
+
+// public key -> 401 -> retry -> 401 -> logout
+// public key -> user id provider fails -> logout after retry (any error)
+
+// custom -> 401 -> logout
+// custom -> other error -> retry logout if failed
+
+private let logger = Logger()
 
 @MainActor
 struct ParraAppView<Content>: View where Content: View {
@@ -29,27 +36,32 @@ struct ParraAppView<Content>: View where Content: View {
         self.content = viewContent
 
         let parra: ParraInternal
-        let appState: ParraAppState
+        let parraAppState: ParraAppState
         let launchScreenConfig: ParraLaunchScreen.Config?
 
         switch target {
-        case .app(let authenticationConfiguration, let config):
-            self.authenticationConfiguration = authenticationConfiguration
+        case .app(let authenticationMethod, let appState, let config):
+            self.authenticationMethod = authenticationMethod
 
             launchScreenConfig = config
-
-            (parra, appState) = ParraInternal.createParraInstance(
-                authenticationConfiguration: authenticationConfiguration,
+            parraAppState = appState
+            parra = ParraInternal.createParraInstance(
+                appState: appState,
+                authenticationMethod: authenticationMethod,
                 configuration: configuration
             )
         case .preview:
-            self.authenticationConfiguration = .preview
+            self.authenticationMethod = .preview
 
             launchScreenConfig = .preview
-
-            (parra, appState) = ParraInternal
+            parraAppState = ParraAppState(
+                tenantId: Parra.Demo.workspaceId,
+                applicationId: Parra.Demo.applicationId
+            )
+            parra = ParraInternal
                 .createParraSwiftUIPreviewsInstance(
-                    authenticationConfiguration: authenticationConfiguration,
+                    appState: parraAppState,
+                    authenticationMethod: authenticationMethod,
                     configuration: configuration
                 )
         }
@@ -68,7 +80,7 @@ struct ParraAppView<Content>: View where Content: View {
         )
 
         self._parraAppState = StateObject(
-            wrappedValue: appState
+            wrappedValue: parraAppState
         )
 
         self._themeObserver = StateObject(
@@ -109,12 +121,13 @@ struct ParraAppView<Content>: View where Content: View {
                             return
                         }
 
-                        await parra.initialize()
+                        // After the splash screen
+                        await parraAppState.performInitialAuthCheck(
+                            using: parra.authService
+                        )
 
-                        Logger
-                            .debug(
-                                "Completed initialization. Dismissing launch screen"
-                            )
+                        logger.info("Parra SDK Initialized")
+
                         launchScreenState.dismiss()
                     }
             }
@@ -123,6 +136,11 @@ struct ParraAppView<Content>: View where Content: View {
         .environmentObject(alertManager)
         .environmentObject(themeObserver)
         .environmentObject(parra.globalComponentFactory)
+        .onChange(of: parraAppState.user) { _, newValue in
+            Task { @MainActor in
+                await parra.currentUserDidChange(to: newValue)
+            }
+        }
     }
 
     static func configureLaunchScreen(
@@ -183,7 +201,7 @@ struct ParraAppView<Content>: View where Content: View {
     @StateObject private var alertManager: AlertManager
 
     private let parra: ParraInternal
-    private let authenticationConfiguration: ParraAuthenticationConfiguration
+    private let authenticationMethod: ParraAuthenticationMethod
     private let launchScreenConfig: ParraLaunchScreen.Config
 
     @State private var showLogs = false
@@ -191,6 +209,7 @@ struct ParraAppView<Content>: View where Content: View {
     private func renderPrimaryContent() -> some View {
         content(Parra.default)
             .environment(\.parra, Parra.default)
+            .environment(\.parraAppState, parraAppState)
             .renderToast(toast: $alertManager.currentToast)
             .onShake {
                 if AppEnvironment.isParraDemoBeta {

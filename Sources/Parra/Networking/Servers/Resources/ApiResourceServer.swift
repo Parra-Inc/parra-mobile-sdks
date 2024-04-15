@@ -19,7 +19,7 @@ final class ApiResourceServer: Server {
         authService: AuthService,
         appState: ParraAppState,
         appConfig: ParraConfiguration,
-        dataManager: ParraDataManager,
+        dataManager: DataManager,
         configuration: ServerConfiguration
     ) {
         self.authService = authService

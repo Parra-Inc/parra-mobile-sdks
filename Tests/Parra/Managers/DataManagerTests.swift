@@ -1,5 +1,5 @@
 //
-//  ParraDataManagerTests.swift
+//  DataManagerTests.swift
 //  Tests
 //
 //  Created by Mick MacCallum on 3/20/22.
@@ -8,19 +8,19 @@
 @testable import Parra
 import XCTest
 
-class ParraDataManagerTests: MockedParraTestCase {
-    var parraDataManager: ParraDataManager!
+class DataManagerTests: MockedParraTestCase {
+    var dataManager: DataManager!
 
     override func setUp() async throws {
         try createBaseDirectory()
 
-        parraDataManager = createMockDataManager()
+        dataManager = createMockDataManager()
     }
 
     override func tearDown() async throws {
         deleteBaseDirectory()
 
-        parraDataManager = nil
+        dataManager = nil
     }
 
     func testCanRetreiveCredentialAfterUpdatingIt() async throws {
@@ -28,11 +28,11 @@ class ParraDataManagerTests: MockedParraTestCase {
             token: UUID().uuidString
         )
 
-        await parraDataManager.updateCredential(
+        await dataManager.updateCredential(
             credential: credential
         )
 
-        let retreived = await parraDataManager.getCurrentCredential()
+        let retreived = await dataManager.getCurrentCredential()
 
         XCTAssertEqual(retreived, credential)
     }

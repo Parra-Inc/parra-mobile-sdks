@@ -13,4 +13,11 @@ extension OAuth2Service {
         let username: String
         let password: String
     }
+
+    struct Token {
+        let accessToken: String
+        let tokenType: String
+        let expiresIn: TimeInterval
+        let refreshToken: String
+    }
 }

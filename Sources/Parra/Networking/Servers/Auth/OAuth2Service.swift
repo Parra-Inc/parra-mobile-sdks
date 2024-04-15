@@ -8,22 +8,26 @@
 
 import Foundation
 
-private let tokenUrl = URL(string: "https://auth.parra.io/oauth/token")!
-
 final class OAuth2Service {
     // MARK: - Lifecycle
 
     init(
         clientId: String,
+        tenantId: String,
         authServer: AuthServer
     ) {
         self.clientId = clientId
         self.authServer = authServer
+        self.tokenUrl = URL(
+            //            string: "https://tenant-\(tenantId).parra.io/oauth/token"
+            string: "https://auth.parra.io/oauth/token"
+        )!
     }
 
     // MARK: - Internal
 
     let clientId: String
+    let tokenUrl: URL
     let authServer: AuthServer
 
     func getToken(

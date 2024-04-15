@@ -17,7 +17,9 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
         super.init()
 
         configureParra(
-            authConfiguration: authConfiguration(),
+            workspaceId: Parra.Demo.workspaceId,
+            applicationId: Parra.Demo.applicationId,
+            authenticationMethod: authenticationMethod(),
             configuration: ParraConfiguration(
                 appInfoOptions: .default,
                 globalComponentAttributes: .default,
@@ -39,60 +41,52 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
     /// flow that you should be implementing for both DEBUG and RELEASE
     /// environments. This authentication method relies on an OAuth flow with
     /// your backend to create a Parra access token for a given user.
-    func debugAuthConfiguration() -> ParraAuthenticationConfiguration {
-        return ParraAuthenticationConfiguration(
-            workspaceId: Parra.Demo.workspaceId,
-            applicationId: Parra.Demo.applicationId,
-            authenticationMethod: .custom {
-                let myAppAccessToken = Parra.Demo.demoUserId
+    func debugAuthenticationMethod() -> ParraAuthenticationMethod {
+        return .custom {
+            let myAppAccessToken = Parra.Demo.demoUserId
 
-                var request = URLRequest(
-                    // Replace this with your Parra access token generation endpoint
-                    url: URL(
-                        string: "http://localhost:8080/v1/parra/auth/token"
-                    )!
-                )
+            var request = URLRequest(
+                // Replace this with your Parra access token generation endpoint
+                url: URL(
+                    string: "http://localhost:8080/v1/parra/auth/token"
+                )!
+            )
 
-                request.httpMethod = "POST"
-                // Replace this with your app's way of authenticating users
-                request.setValue(
-                    "Bearer \(myAppAccessToken)",
-                    forHTTPHeaderField: "Authorization"
-                )
+            request.httpMethod = "POST"
+            // Replace this with your app's way of authenticating users
+            request.setValue(
+                "Bearer \(myAppAccessToken)",
+                forHTTPHeaderField: "Authorization"
+            )
 
-                let (data, _) = try await URLSession.shared.data(for: request)
-                let response = try JSONDecoder().decode(
-                    [String: String].self,
-                    from: data
-                )
+            let (data, _) = try await URLSession.shared.data(for: request)
+            let response = try JSONDecoder().decode(
+                [String: String].self,
+                from: data
+            )
 
-                return response["access_token"]!
-            }
-        )
+            return response["access_token"]!
+        }
     }
 
     /// An authentication provider used for the beta app for the Parra iOS SDK
     /// Demo. This app uses public key authentication, which is not preferred
     /// but provides an example of how it can be achieved and prevents the demo
     /// app from requiring a backend to authenticate with.
-    func betaAuthConfiguration() -> ParraAuthenticationConfiguration {
-        return ParraAuthenticationConfiguration(
-            workspaceId: Parra.Demo.workspaceId,
-            applicationId: Parra.Demo.applicationId,
-            authenticationMethod: .public(
-                apiKeyId: Parra.Demo.apiKeyId,
-                userIdProvider: {
-                    return Parra.Demo.demoUserId
-                }
-            )
+    func betaAuthenticationMethod() -> ParraAuthenticationMethod {
+        return .public(
+            apiKeyId: Parra.Demo.apiKeyId,
+            userIdProvider: {
+                return Parra.Demo.demoUserId
+            }
         )
     }
 
-    func authConfiguration() -> ParraAuthenticationConfiguration {
+    func authenticationMethod() -> ParraAuthenticationMethod {
         #if DEBUG
-        return debugAuthConfiguration()
+        return debugAuthenticationMethod()
         #else
-        return betaAuthConfiguration()
+        return betaAuthenticationMethod()
         #endif
     }
 }

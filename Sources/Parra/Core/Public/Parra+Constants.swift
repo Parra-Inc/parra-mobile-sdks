@@ -21,8 +21,9 @@ public extension Parra {
 
         /// The Parra sample app's API key. You should not use this. It is best
         /// practice to use the
-        /// ``ParraAuthenticationConfiguration/AuthenticationMethod-swift.enum/default(_:)``
-        /// authentication provider method, which does not expose your API keys
+        /// ``ParraAuthenticationMethod/custom(_:)`` or
+        /// ``ParraAuthenticationMethod/parraAuth``
+        /// authentication provider methods, which do not expose your API keys
         /// to end users that have access to your application bundle. If you
         /// still need to use API key based authentication, you can generate
         /// your own key at https://parra.io/dashboard/developer/api-keys

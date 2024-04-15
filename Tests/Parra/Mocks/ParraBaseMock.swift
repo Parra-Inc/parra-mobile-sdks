@@ -47,7 +47,7 @@ class ParraBaseMock: XCTestCase {
             "test-run-\(UUID().uuidString)"
         }
 
-        return ParraDataManager.Base.applicationSupportDirectory
+        return DataManager.Base.applicationSupportDirectory
             .appendDirectory(testDirectory)
     }
 

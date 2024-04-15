@@ -31,24 +31,25 @@ final class AuthServer: Server {
         let endpoint = ParraEndpoint.postAuthentication(tenantId: tenantId)
         let url = ParraInternal.Constants.parraApiRoot
             .appendingPathComponent(endpoint.route)
-        var request = URLRequest(url: url)
 
-        let headerFactory = HeaderFactory()
+        var request = URLRequest(url: url)
 
         request.httpMethod = endpoint.method.rawValue
         request.httpBody = try configuration.jsonEncoder
             .encode(["user_id": userId])
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
 
-        guard let authToken = ("api_key:" + apiKeyId).data(using: .utf8)?
-            .base64EncodedString() else
-        {
+        guard let authToken = ("api_key:" + apiKeyId).data(
+            using: .utf8
+        )?.base64EncodedString() else {
             throw ParraError.generic("Unable to encode API key as NSData", nil)
         }
 
         request.setValue(for: .authorization(.basic(authToken)))
 
-        let (data, response) = try await performAsyncDataTask(request: request)
+        let (data, response) = try await performAsyncDataTask(
+            request: request
+        )
 
         switch response.statusCode {
         case 200:

@@ -11,7 +11,7 @@ import Foundation
 
 struct MockApiResourceServer {
     let apiResourceServer: ApiResourceServer
-    let dataManager: ParraDataManager
+    let dataManager: DataManager
     let urlSession: MockURLSession
     let appState: ParraAppState
 }

@@ -1,5 +1,5 @@
 //
-//  ParraDataManager+Keys.swift
+//  DataManager+Keys.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/13/22.
@@ -8,7 +8,7 @@
 import Foundation
 
 // !!! Think really before changing anything here!
-extension ParraDataManager {
+extension DataManager {
     enum Base {
         static let applicationSupportDirectory = FileManager.default.urls(
             for: .applicationSupportDirectory,

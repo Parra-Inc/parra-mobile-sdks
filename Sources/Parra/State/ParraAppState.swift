@@ -6,9 +6,12 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import os
 import SwiftUI
 
-class ParraAppState: ObservableObject, Equatable {
+private let logger = Logger()
+
+public class ParraAppState: ObservableObject, Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -22,8 +25,7 @@ class ParraAppState: ObservableObject, Equatable {
 
     // MARK: - Public
 
-    public private(set) var tenantId: String
-    public private(set) var applicationId: String
+    public private(set) var user: ParraUser?
 
     /// A push notification token that is being temporarily cached. Caching
     /// should only occur for short periods until the SDK is prepared to upload
@@ -31,11 +33,66 @@ class ParraAppState: ObservableObject, Equatable {
     /// for too long.
     public private(set) var pushToken: Data?
 
-    // MARK: - Internal
-
-    static func == (lhs: ParraAppState, rhs: ParraAppState) -> Bool {
+    public static func == (
+        lhs: ParraAppState,
+        rhs: ParraAppState
+    ) -> Bool {
         return lhs.applicationId == rhs.applicationId
             && lhs.tenantId == rhs.tenantId
             && lhs.pushToken == rhs.pushToken
+    }
+
+    // MARK: - Internal
+
+    private(set) var tenantId: String
+    private(set) var applicationId: String
+
+    func performInitialAuthCheck(
+        using authService: AuthService
+    ) async {
+        let cachedCredential = await authService.loadPersistedCredential()
+
+        do {
+            //            try await authService.refreshAuthentication()
+
+        } catch {
+            printInvalidAuth(error: error)
+        }
+    }
+
+    // MARK: - Private
+
+    private func printInvalidAuth(error: Error) {
+        let printDefaultError: () -> Void = {
+            logger.error(
+                "Authentication handler in call to Parra.initialize failed",
+                error
+            )
+        }
+
+        guard let parraError = error as? ParraError else {
+            printDefaultError()
+
+            return
+        }
+
+        switch parraError {
+        case .authenticationFailed(let underlying):
+            let systemLogger = os.Logger(
+                subsystem: "Parra",
+                category: "initialization"
+            )
+
+            // Bypassing main logger here because we won't want to include the
+            // normal formatting/backtrace/etc. We want to display as clear of
+            // a message as is possible. Note the exclamations prevent
+            // whitespace trimming from removing the padding newlines.
+            systemLogger.log(
+                level: .fault,
+                "!\n\n\n\n\n\n\nERROR INITIALIZING PARRA!\nThe authentication provider passed to ParraApp returned an error. The user was unable to be verified.\n\nUnderlying error:\n\(underlying)\n\n\n\n\n\n\n!"
+            )
+        default:
+            printDefaultError()
+        }
     }
 }

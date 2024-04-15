@@ -35,7 +35,7 @@ extension URL {
             return absoluteString
         }
 
-        let prefix = ParraDataManager.Base.homeUrl.nonEncodedPath()
+        let prefix = DataManager.Base.homeUrl.nonEncodedPath()
         let base = nonEncodedPath()
         let path = String(base.trimmingPrefix(prefix))
 

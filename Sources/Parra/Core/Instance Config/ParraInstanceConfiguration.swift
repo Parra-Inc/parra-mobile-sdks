@@ -10,9 +10,9 @@ import Foundation
 
 struct ParraInstanceConfiguration {
     static let `default`: ParraInstanceConfiguration = {
-        let diskCacheUrl = ParraDataManager.Path.networkCachesDirectory
-        let baseStorageUrl = ParraDataManager.Path.parraDirectory
-        let storageDirectoryName = ParraDataManager.Directory
+        let diskCacheUrl = DataManager.Path.networkCachesDirectory
+        let baseStorageUrl = DataManager.Path.parraDirectory
+        let storageDirectoryName = DataManager.Directory
             .storageDirectoryName
 
         // Cache may reject image entries if they are greater than 10% of the cache's size

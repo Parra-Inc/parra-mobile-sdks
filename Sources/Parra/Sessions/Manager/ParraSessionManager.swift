@@ -37,7 +37,7 @@ class ParraSessionManager {
 
     init(
         forceDisabled: Bool = false,
-        dataManager: ParraDataManager,
+        dataManager: DataManager,
         api: API,
         loggerOptions: ParraLoggerOptions
     ) {
@@ -322,7 +322,7 @@ class ParraSessionManager {
     // MARK: - Private
 
     private let forceDisabled: Bool
-    private let dataManager: ParraDataManager
+    private let dataManager: DataManager
     private let api: API
     private let loggerOptions: ParraLoggerOptions
 

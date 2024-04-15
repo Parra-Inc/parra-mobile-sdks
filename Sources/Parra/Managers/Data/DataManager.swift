@@ -1,5 +1,5 @@
 //
-//  ParraDataManager.swift
+//  DataManager.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/13/22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ParraDataManager {
+class DataManager {
     // MARK: - Lifecycle
 
     init(
@@ -26,11 +26,13 @@ class ParraDataManager {
     let credentialStorage: CredentialStorage
     let sessionStorage: SessionStorage
 
-    func getCurrentCredential() async -> ParraCredential? {
-        return await credentialStorage.currentCredential()
+    func getCurrentUser() async -> ParraUser? {
+        return await credentialStorage.currentUser()
     }
 
-    func updateCredential(credential: ParraCredential?) async {
-        await credentialStorage.updateCredential(credential: credential)
+    func updateCredential(credential: ParraUser?) async {
+        await credentialStorage.updateCredential(
+            credential: credential
+        )
     }
 }
