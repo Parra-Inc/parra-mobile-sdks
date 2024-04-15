@@ -140,7 +140,7 @@ struct FeedbackCardWidget: Container {
                     contentObserver: .init(
                         initialParams: .init(
                             cards: ParraCardItem.validStates(),
-                            notificationCenter: ParraNotificationCenter(),
+                            notificationCenter: ParraNotificationCenter.default,
                             dataManager: parra.parraInternal.feedback
                                 .dataManager,
                             syncHandler: nil

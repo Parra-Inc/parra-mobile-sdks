@@ -45,7 +45,7 @@ class MockedParraTestCase: ParraBaseMock {
             authenticationProvider: authenticationProvider
         )
 
-        let notificationCenter = ParraNotificationCenter()
+        let notificationCenter = ParraNotificationCenter.default
         let syncState = ParraSyncState()
 
         let sessionManager = ParraSessionManager(
