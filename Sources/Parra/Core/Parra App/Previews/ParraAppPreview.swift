@@ -58,7 +58,9 @@ public struct ParraAppPreview<Content, DelegateType>: View
             target: .preview,
             configuration: configuration,
             viewContent: { _ in
-                previewContent()
+                ParraOptionalAuthView { _ in
+                    previewContent()
+                }
             }
         )
     }

@@ -122,7 +122,10 @@ class ParraStorageModule<DataType: Codable> {
         return storageCache
     }
 
-    func read(name: String) async -> DataType? {
+    func read(
+        name: String,
+        deleteOnError: Bool = false
+    ) async -> DataType? {
         if !isLoaded {
             await loadData()
         }
@@ -145,9 +148,14 @@ class ParraStorageModule<DataType: Codable> {
                     "Error reading data from persistent storage",
                     error,
                     [
-                        "key": persistentStorage.key
+                        "key": persistentStorage.key,
+                        "willDelete": "\(deleteOnError)"
                     ]
                 )
+
+                if deleteOnError {
+                    await delete(name: name)
+                }
             }
         }
 

@@ -111,7 +111,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
     func testDoesNotRefreshCredentialWhenOneIsPresent() async throws {
         let token = UUID().uuidString
-        let credential = ParraCredential(token: token)
+        let credential = ParraUser.Credential(token: token)
 
         await mockApiResourceServer.dataManager
             .updateCredential(credential: credential)
@@ -362,7 +362,7 @@ class ApiResourceServerTests: MockedParraTestCase {
                 of: endpoint,
                 toReturn: {
                     let data = try JSONEncoder.parraEncoder.encode(
-                        ParraCredential(token: UUID().uuidString)
+                        ParraUser.Credential(token: UUID().uuidString)
                     )
 
                     return (200, data)

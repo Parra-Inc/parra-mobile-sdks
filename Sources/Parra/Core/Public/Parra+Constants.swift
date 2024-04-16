@@ -10,8 +10,9 @@ import UIKit
 
 public extension Parra {
     enum Demo {
-        /// The Parra sample app's workspace ID. You should not use this. Instead,
-        /// grab your workspace ID from https://parra.io/dashboard/settings
+        /// The Parra sample app's workspace ID. You should not use this.
+        /// Instead, grab your workspace ID from
+        /// https://parra.io/dashboard/settings
         public static let workspaceId = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4"
 
         /// The Parra sample app's application ID. You should not use this.

@@ -30,8 +30,8 @@ final class OAuth2Service {
     let tokenUrl: URL
     let authServer: AuthServer
 
-    func getToken(
-        with passwordCredential: PasswordCredential
+    func authenticate(
+        using passwordCredential: PasswordCredential
     ) async throws -> TokenResponse {
         let data: [String: String] = [
             "grant_type": "password",

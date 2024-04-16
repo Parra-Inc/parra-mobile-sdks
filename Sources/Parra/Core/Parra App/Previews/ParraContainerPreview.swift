@@ -48,7 +48,9 @@ struct ParraContainerPreview<ContainerType>: View
             target: .preview,
             configuration: configuration,
             viewContent: { parra in
-                AnyView(content(parra, factory, config, builderConfig))
+                ParraOptionalAuthView { _ in
+                    AnyView(content(parra, factory, config, builderConfig))
+                }
             }
         )
         .environment(builderConfig)

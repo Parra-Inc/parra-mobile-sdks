@@ -9,11 +9,11 @@
 import XCTest
 
 class CredentialStorageTests: XCTestCase {
-    var storageModule: ParraStorageModule<ParraCredential>!
+    var storageModule: ParraStorageModule<ParraUser.Credential>!
     var credentialStorage: CredentialStorage!
 
     override func setUpWithError() throws {
-        storageModule = ParraStorageModule<ParraCredential>(
+        storageModule = ParraStorageModule<ParraUser.Credential>(
             dataStorageMedium: .memory,
             jsonEncoder: .parraEncoder,
             jsonDecoder: .parraDecoder
@@ -30,7 +30,7 @@ class CredentialStorageTests: XCTestCase {
     }
 
     func testCanUpdateCredential() async throws {
-        let credential = ParraCredential(
+        let credential = ParraUser.Credential(
             token: UUID().uuidString
         )
 
@@ -43,7 +43,7 @@ class CredentialStorageTests: XCTestCase {
     }
 
     func testCanRetreiveCurrentCredential() async throws {
-        let credential = ParraCredential(
+        let credential = ParraUser.Credential(
             token: UUID().uuidString
         )
 

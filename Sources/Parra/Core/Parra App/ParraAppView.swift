@@ -25,7 +25,7 @@ import SwiftUI
 private let logger = Logger()
 
 @MainActor
-struct ParraAppView<Content>: View where Content: View {
+struct ParraAppView<Content>: View where Content: ParraAppContent {
     // MARK: - Lifecycle
 
     init(
@@ -36,17 +36,26 @@ struct ParraAppView<Content>: View where Content: View {
         self.content = viewContent
 
         let parra: ParraInternal
-        let parraAppState: ParraAppState
+        let appState: ParraAppState
+        let authState: ParraAuthState
         let launchScreenConfig: ParraLaunchScreen.Config?
 
         switch target {
-        case .app(let authenticationMethod, let appState, let config):
+        case .app(
+            let authenticationMethod,
+            let targetAppState,
+            let targetAuthState,
+            let config
+        ):
             self.authenticationMethod = authenticationMethod
 
             launchScreenConfig = config
-            parraAppState = appState
+            appState = targetAppState
+            authState = targetAuthState
+
             parra = ParraInternal.createParraInstance(
                 appState: appState,
+                authState: authState,
                 authenticationMethod: authenticationMethod,
                 configuration: configuration
             )
@@ -54,13 +63,16 @@ struct ParraAppView<Content>: View where Content: View {
             self.authenticationMethod = .preview
 
             launchScreenConfig = .preview
-            parraAppState = ParraAppState(
+            appState = ParraAppState(
                 tenantId: Parra.Demo.workspaceId,
                 applicationId: Parra.Demo.applicationId
             )
+            authState = ParraAuthState()
+
             parra = ParraInternal
                 .createParraSwiftUIPreviewsInstance(
-                    appState: parraAppState,
+                    appState: appState,
+                    authState: authState,
                     authenticationMethod: authenticationMethod,
                     configuration: configuration
                 )
@@ -80,7 +92,11 @@ struct ParraAppView<Content>: View where Content: View {
         )
 
         self._parraAppState = StateObject(
-            wrappedValue: parraAppState
+            wrappedValue: appState
+        )
+
+        self._parraAuthState = StateObject(
+            wrappedValue: authState
         )
 
         self._themeObserver = StateObject(
@@ -122,7 +138,7 @@ struct ParraAppView<Content>: View where Content: View {
                         }
 
                         // After the splash screen
-                        await parraAppState.performInitialAuthCheck(
+                        await parraAuthState.performInitialAuthCheck(
                             using: parra.authService
                         )
 
@@ -136,9 +152,9 @@ struct ParraAppView<Content>: View where Content: View {
         .environmentObject(alertManager)
         .environmentObject(themeObserver)
         .environmentObject(parra.globalComponentFactory)
-        .onChange(of: parraAppState.user) { _, newValue in
+        .onChange(of: parraAuthState.current) { _, newValue in
             Task { @MainActor in
-                await parra.currentUserDidChange(to: newValue)
+                await parra.authStateDidChange(to: newValue)
             }
         }
     }
@@ -195,6 +211,7 @@ struct ParraAppView<Content>: View where Content: View {
 
     @ViewBuilder private var content: (_ parra: Parra) -> Content
     @StateObject private var parraAppState: ParraAppState
+    @StateObject private var parraAuthState: ParraAuthState
     @StateObject private var launchScreenState = LaunchScreenStateManager()
 
     @StateObject private var themeObserver: ParraThemeObserver
@@ -209,7 +226,7 @@ struct ParraAppView<Content>: View where Content: View {
     private func renderPrimaryContent() -> some View {
         content(Parra.default)
             .environment(\.parra, Parra.default)
-            .environment(\.parraAppState, parraAppState)
+            .environment(\.parraAuthState, parraAuthState)
             .renderToast(toast: $alertManager.currentToast)
             .onShake {
                 if AppEnvironment.isParraDemoBeta {

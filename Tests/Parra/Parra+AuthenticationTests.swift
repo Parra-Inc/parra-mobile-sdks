@@ -47,7 +47,7 @@ class ParraAuthenticationTests: MockedParraTestCase {
                 ),
                 toReturn: (
                     200,
-                    ParraCredential(token: UUID().uuidString)
+                    ParraUser.Credential(token: UUID().uuidString)
                 )
             )
 

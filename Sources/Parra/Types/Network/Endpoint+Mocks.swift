@@ -27,7 +27,7 @@ extension ParraEndpoint {
             case .postPushTokens:
                 EmptyResponseObject()
             case .postAuthentication:
-                ParraCredential.successResponse
+                ParraUser.Credential.successResponse
             case .getRoadmap:
                 AppRoadmapConfiguration.validStates()[0]
             case .getPaginateTickets:

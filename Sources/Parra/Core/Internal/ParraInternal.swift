@@ -23,6 +23,7 @@ class ParraInternal {
         authenticationMethod: ParraAuthenticationMethod,
         configuration: ParraConfiguration,
         appState: ParraAppState,
+        authState: ParraAuthState,
         dataManager: DataManager,
         syncManager: ParraSyncManager,
         authService: AuthService,
@@ -38,6 +39,7 @@ class ParraInternal {
         self.authenticationMethod = authenticationMethod
         self.configuration = configuration
         self.appState = appState
+        self.authState = authState
         self.dataManager = dataManager
         self.syncManager = syncManager
         self.authService = authService
@@ -68,7 +70,6 @@ class ParraInternal {
     /// will be invoked the very next time the Parra API is accessed.
     public func logout() async {
         await syncManager.enqueueSync(with: .immediate)
-        await dataManager.updateCredential(credential: nil)
         await syncManager.stopSyncTimer()
         await authService.logout()
     }
@@ -125,6 +126,7 @@ class ParraInternal {
     private(set) var configuration: ParraConfiguration
     let authenticationMethod: ParraAuthenticationMethod
     let appState: ParraAppState
+    let authState: ParraAuthState
 
     // MARK: - Managers
 
@@ -149,8 +151,8 @@ class ParraInternal {
     }
 
     @MainActor
-    func currentUserDidChange(
-        to user: ParraUser?
+    func authStateDidChange(
+        to result: ParraAuthResult
     ) async {
         // These actions should be completed before the success conditional ones
         if !hasPerformedSingleInitActions {
@@ -159,14 +161,14 @@ class ParraInternal {
             await performPostInitialAuthActions()
         }
 
-        if user != nil {
+        switch result {
+        case .authenticated:
             addEventObservers()
 
             syncManager.startSyncTimer()
-        } else {
+        case .unauthenticated:
             removeEventObservers()
 
-            await dataManager.updateCredential(credential: nil)
             syncManager.stopSyncTimer()
         }
     }

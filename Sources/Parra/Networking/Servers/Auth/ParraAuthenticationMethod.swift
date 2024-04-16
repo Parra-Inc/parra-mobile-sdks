@@ -8,21 +8,24 @@
 
 import Foundation
 
-public typealias ParraTokenProvider = () async throws -> String
+public typealias ParraTokenProvider = () async throws -> String?
+public typealias ParraUserIdProvider = () async throws -> String?
 
 public enum ParraAuthenticationMethod {
     /// The standard way of authenticating with Parra. You provide a provider
     /// function that interacts with your API to return a signed access token
     /// for your user.
-    case custom(ParraTokenProvider)
+    case custom(
+        tokenProvider: ParraTokenProvider
+    )
 
     /// Uses public API key authentication to authenticate with the Parra API.
-    /// A workspace ID and API key ID are both provided up front and a user
-    /// provider function is used to allow the Parra SDK to request information
-    /// about the current user when authentication is needed.
+    /// An API key ID is provided up front and a user provider function is used
+    /// to allow the Parra SDK to request information about the current user
+    /// when authentication is needed.
     case `public`(
         apiKeyId: String,
-        userIdProvider: ParraTokenProvider
+        userIdProvider: ParraUserIdProvider
     )
 
     case parraAuth

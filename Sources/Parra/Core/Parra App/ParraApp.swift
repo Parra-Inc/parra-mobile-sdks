@@ -61,24 +61,17 @@ open class ParraApp<
             if let appContent {
                 AnyView(appContent)
             } else {
-                VStack {
-                    Spacer()
-
-                    Text("ParraApp has not been initialized")
-                    Text(
-                        "You need to call `configureParra` on your ParraApp instance to initialize Parra."
-                    )
-
-                    Spacer()
-                }
+                fatalError()
             }
         }
     }
 
     /// <#Description#>
     /// - Parameters:
-    ///   - authConfiguration: <#authProvider description#>
-    ///   - options: <#options description#>
+    ///   - workspaceId: <#workspaceId description#>
+    ///   - applicationId: <#applicationId description#>
+    ///   - authenticationMethod: <#authenticationMethod description#>
+    ///   - configuration: <#configuration description#>
     ///   - launchScreenType: The type of launch screen that should be displayed
     ///   while Parra is being initialized. This should match up exactly with
     ///   the launch screen that you have configured in your project settings to
@@ -88,13 +81,14 @@ open class ParraApp<
     ///   entry is found, its child values will be used to layout the launch
     ///   screen. Next we look for the `UILaunchStoryboardName` key. If this is
     ///   not found, a blank white screen will be rendered.
+    ///   - appContent: <#appContent description#>
     public func configureParra(
         workspaceId: String,
         applicationId: String,
         authenticationMethod: ParraAuthenticationMethod,
         configuration: ParraConfiguration = .init(),
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
-        appContent: @MainActor @escaping () -> some View
+        appContent: @MainActor @escaping () -> some ParraAppContent
     ) {
         guard self.appContent == nil else {
             fatalError("ParraApp content has already been set")
@@ -105,10 +99,13 @@ open class ParraApp<
             applicationId: applicationId
         )
 
+        let authState = ParraAuthState()
+
         self.appContent = ParraAppView(
             target: .app(
                 authenticationMethod,
                 appState,
+                authState,
                 launchScreenConfig
             ),
             configuration: configuration,

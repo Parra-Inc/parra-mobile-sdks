@@ -29,7 +29,9 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
                 whatsNewOptions: .default
             ),
             appContent: {
-                ContentView()
+                ParraRequiredAuthView { _ in
+                    ContentView()
+                }
             }
         )
     }

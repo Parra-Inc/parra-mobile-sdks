@@ -14,13 +14,16 @@ final class AuthServer: Server {
     // MARK: - Lifecycle
 
     init(
+        appState: ParraAppState,
         configuration: ServerConfiguration
     ) {
+        self.appState = appState
         self.configuration = configuration
     }
 
     // MARK: - Internal
 
+    let appState: ParraAppState
     let configuration: ServerConfiguration
 
     func performPublicApiKeyAuthenticationRequest(
@@ -54,7 +57,7 @@ final class AuthServer: Server {
         switch response.statusCode {
         case 200:
             let credential = try configuration.jsonDecoder.decode(
-                ParraCredential.self,
+                ParraUser.Credential.self,
                 from: data
             )
 
@@ -66,5 +69,39 @@ final class AuthServer: Server {
                 responseData: data
             )
         }
+    }
+
+    func getUserInformation(
+        token: String
+    ) async throws -> ParraUser.Info {
+        let endpoint = ParraEndpoint.getUserInfo
+        let url = ParraInternal.Constants.parraApiRoot
+            .appendingPathComponent(endpoint.route)
+
+        var request = URLRequest(url: url)
+
+        request.httpMethod = endpoint.method.rawValue
+        request.cachePolicy = .reloadRevalidatingCacheData
+        request.setValue(for: .authorization(.bearer(token)))
+
+        let (data, response) = try await performAsyncDataTask(
+            request: request
+        )
+
+        // TODO: Response object will be something with tenant_user key
+        return ParraUser.Info()
+//        switch response.statusCode {
+//        case 200:
+//            return try configuration.jsonDecoder.decode(
+//                ParraUser.Info.self,
+//                from: data
+//            )
+//        default:
+//            throw ParraError.networkError(
+//                request: request,
+//                response: response,
+//                responseData: data
+//            )
+//        }
     }
 }

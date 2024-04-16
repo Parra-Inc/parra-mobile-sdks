@@ -12,6 +12,7 @@ extension ParraInternal {
     @MainActor
     static func createParraInstance(
         appState: ParraAppState,
+        authState: ParraAuthState,
         authenticationMethod: ParraAuthenticationMethod,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
@@ -19,6 +20,7 @@ extension ParraInternal {
         return _createParraInstance(
             forceDisabled: false,
             appState: appState,
+            authState: authState,
             authenticationMethod: authenticationMethod,
             configuration: configuration,
             instanceConfiguration: instanceConfiguration
@@ -30,6 +32,7 @@ extension ParraInternal {
     @MainActor
     static func createParraSwiftUIPreviewsInstance(
         appState: ParraAppState,
+        authState: ParraAuthState,
         authenticationMethod: ParraAuthenticationMethod,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
@@ -37,6 +40,7 @@ extension ParraInternal {
         return _createParraInstance(
             forceDisabled: true,
             appState: appState,
+            authState: authState,
             authenticationMethod: authenticationMethod,
             configuration: configuration,
             instanceConfiguration: instanceConfiguration
@@ -51,6 +55,7 @@ extension ParraInternal {
     private static func _createParraInstance(
         forceDisabled: Bool,
         appState: ParraAppState,
+        authState: ParraAuthState,
         authenticationMethod: ParraAuthenticationMethod,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
@@ -84,7 +89,7 @@ extension ParraInternal {
             )
             .appendDirectory("sessions")
 
-        let notificationCenter = ParraNotificationCenter()
+        let notificationCenter = ParraNotificationCenter.default
 
         let credentialStorage = CredentialStorage(
             storageModule: credentialStorageModule
@@ -110,6 +115,7 @@ extension ParraInternal {
         )
 
         let authServer = AuthServer(
+            appState: appState,
             configuration: instanceConfiguration.serverConfiguration
         )
 
@@ -199,6 +205,7 @@ extension ParraInternal {
             authenticationMethod: authenticationMethod,
             configuration: configuration,
             appState: appState,
+            authState: authState,
             dataManager: dataManager,
             syncManager: syncManager,
             authService: authService,

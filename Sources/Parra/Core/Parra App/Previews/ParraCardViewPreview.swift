@@ -39,40 +39,43 @@ struct ParraCardViewPreview<Content>: View where Content: View {
             target: .preview,
             configuration: configuration,
             viewContent: { parra in
-                GeometryReader { geometry in
-                    ZStack {
-                        Rectangle()
-                            .ignoresSafeArea()
-                            .foregroundStyle(
-                                ParraTheme.default.palette.secondaryBackground
-                            )
-                            .frame(
-                                width: geometry.size.width,
-                                height: geometry.size.height
-                            )
+                ParraOptionalAuthView { _ in
+                    GeometryReader { geometry in
+                        ZStack {
+                            Rectangle()
+                                .ignoresSafeArea()
+                                .foregroundStyle(
+                                    ParraTheme.default.palette
+                                        .secondaryBackground
+                                )
+                                .frame(
+                                    width: geometry.size.width,
+                                    height: geometry.size.height
+                                )
 
-                        VStack {
-                            Spacer()
+                            VStack {
+                                Spacer()
 
-                            content()
-                                .padding()
+                                content()
+                                    .padding()
 
-                            Spacer()
+                                Spacer()
+                            }
                         }
                     }
-                }
-                .environmentObject(
-                    FeedbackCardWidget.ContentObserver(
-                        initialParams: .init(
-                            cards: cards,
-                            notificationCenter: parra.parraInternal
-                                .notificationCenter,
-                            dataManager: parra.parraInternal.feedback
-                                .dataManager,
-                            syncHandler: nil
+                    .environmentObject(
+                        FeedbackCardWidget.ContentObserver(
+                            initialParams: .init(
+                                cards: cards,
+                                notificationCenter: parra.parraInternal
+                                    .notificationCenter,
+                                dataManager: parra.parraInternal.feedback
+                                    .dataManager,
+                                syncHandler: nil
+                            )
                         )
                     )
-                )
+                }
             }
         )
         .environmentObject(factory)

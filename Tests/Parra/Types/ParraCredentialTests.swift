@@ -9,23 +9,24 @@
 @testable import Parra
 import XCTest
 
-final class ParraCredentialTests: XCTestCase {
+final class ParraUser.CredentialTests: XCTestCase {
     func testDecodesFromToken() throws {
         let _ = try JSONDecoder().decode(
-            ParraCredential.self,
+            ParraUser.Credential.self,
             from: "{\"token\":\"something\"}".data(using: .utf8)!
         )
     }
 
     func testDecodesFromAccessToken() throws {
         let _ = try JSONDecoder.parraDecoder.decode(
-            ParraCredential.self,
+            ParraUser.Credential.self,
             from: "{\"access_token\":\"something\"}".data(using: .utf8)!
         )
     }
 
     func testEncodesToToken() throws {
-        let data = try JSONEncoder().encode(ParraCredential(token: "something"))
+        let data = try JSONEncoder()
+            .encode(ParraUser.Credential(token: "something"))
         let decoded = try JSONDecoder().decode(
             [String: String].self,
             from: data

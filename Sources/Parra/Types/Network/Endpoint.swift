@@ -11,6 +11,7 @@ import Foundation
 enum ParraEndpoint {
     // Auth
     case postAuthentication(tenantId: String)
+    case getUserInfo
 
     // Feedback
     case getCards
@@ -47,6 +48,8 @@ enum ParraEndpoint {
         // Auth
         case .postAuthentication(let tenantId):
             return "tenants/\(tenantId)/issuers/public/auth/token"
+        case .getUserInfo:
+            return "user-info"
 
         // Feedback
         case .getCards:
@@ -91,7 +94,7 @@ enum ParraEndpoint {
     var method: HttpMethod {
         switch self {
         case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
-             .getRelease, .getPaginateReleases, .getAppInfo:
+             .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
@@ -119,6 +122,8 @@ enum ParraEndpoint {
 
     var slug: String {
         switch self {
+        case .getUserInfo:
+            return "user-info"
         case .getCards:
             return "cards"
         case .getFeedbackForm:

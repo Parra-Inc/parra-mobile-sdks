@@ -8,18 +8,18 @@
 
 import Foundation
 
-extension ParraCredential: ParraFixture {
-    static func validStates() -> [ParraCredential] {
+extension ParraUser.Credential: ParraFixture {
+    static func validStates() -> [ParraUser.Credential] {
         return [
             successResponse
         ]
     }
 
-    static func invalidStates() -> [ParraCredential] {
+    static func invalidStates() -> [ParraUser.Credential] {
         return []
     }
 
-    static let successResponse = ParraCredential(
+    static let successResponse = ParraUser.Credential(
         token: UUID().uuidString
     )
 }

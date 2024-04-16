@@ -25,17 +25,15 @@ final class AuthService {
         self.dataManager = dataManager
         self.authServer = authServer
         self.authenticationMethod = authenticationMethod
-        self.authTokenProvider = AuthService.buildProviderFunction(
-            from: authenticationMethod,
-            appState: appState,
-            using: authServer,
-            oauth2Service: oauth2Service
-        )
     }
 
     // MARK: - Internal
 
-    typealias MultiTokenProvider = () async throws -> TokenType
+    typealias MultiTokenProvider = () async throws -> TokenType?
+    typealias AuthProvider = () async throws -> ParraAuthResult
+
+    // 1. Function to convert an authentication method to a token provider.
+    // 2. Function to invoke a token provider and get an auth result.
 
     enum TokenType {
         case basic(String)
@@ -47,43 +45,109 @@ final class AuthService {
     let dataManager: DataManager
     let authServer: AuthServer
     let authenticationMethod: ParraAuthenticationMethod
-    let authTokenProvider: MultiTokenProvider
 
-    static func buildProviderFunction(
-        from authenticationMethod: ParraAuthenticationMethod,
-        appState: ParraAppState,
-        using authServer: AuthServer,
-        oauth2Service: OAuth2Service
-    ) -> MultiTokenProvider {
-        switch authenticationMethod {
-        case .parraAuth:
-            return {
-                let result = try await oauth2Service.getToken(
-                    with: OAuth2Service.PasswordCredential(
-                        username: "",
-                        password: " "
+    // https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow
+
+    @discardableResult
+    func login(
+        username: String,
+        password: String
+    ) async throws -> ParraAuthResult {
+        let result: ParraAuthResult
+
+        do {
+            let response: OAuth2Service.TokenResponse = try await oauth2Service
+                .authenticate(
+                    using: OAuth2Service.PasswordCredential(
+                        username: username,
+                        password: password
                     )
                 )
 
-                let token = OAuth2Service.Token(
-                    accessToken: result.accessToken,
-                    tokenType: result.tokenType,
-                    expiresIn: result.expiresIn,
-                    refreshToken: result.refreshToken
+            let userInfo = try await authServer.getUserInformation(
+                token: response.accessToken
+            )
+
+            let user = ParraUser(
+                credential: ParraUser.Credential(
+                    token: response.accessToken
+                ),
+                info: userInfo
+            )
+
+            result = .authenticated(user)
+        } catch {
+            result = .unauthenticated(error)
+        }
+
+        await applyUserUpdate(result)
+
+        return result
+    }
+
+    @discardableResult
+    func logout() async -> ParraAuthResult {
+        let result = ParraAuthResult.unauthenticated(nil)
+
+        await applyUserUpdate(result)
+
+        return result
+    }
+
+    func getCurrentUser() async -> ParraUser? {
+        return await dataManager.getCurrentUser()
+    }
+
+    @discardableResult
+    func refreshExistingToken() async throws -> String {
+        // TODO: Need to bake in logic for allowing retries before propagating
+        // the error.
+
+        logger.debug("Performing reauthentication for Parra")
+
+        let refresh: () async throws -> TokenType? = { [self] in
+            logger.debug("Invoking authentication provider")
+
+            switch authenticationMethod {
+            case .parraAuth:
+
+                // If a token already exists, attempt to refresh it. If no token
+                // exists, then we need to reauthenticate but lack the
+                // credentials to handle this here.
+                guard let cachedToken,
+                      case .oauth2(let oauthToken) = cachedToken else
+                {
+                    return nil
+                }
+
+                let result = try await oauth2Service.refreshToken(
+                    with: oauthToken.accessToken
                 )
 
-                return .oauth2(token)
-            }
-        case .custom(let tokenProvider):
-            return {
-                return try await .basic(tokenProvider())
-            }
-        case .public(
-            let apiKeyId,
-            let userIdProvider
-        ):
-            return {
-                let userId = try await userIdProvider()
+                return .oauth2(
+                    OAuth2Service.Token(
+                        accessToken: result.accessToken,
+                        tokenType: result.tokenType,
+                        expiresIn: result.expiresIn,
+                        refreshToken: oauthToken.refreshToken
+                    )
+                )
+            case .custom(let tokenProvider):
+                // Does not support refreshing. Must just reinvoke and use the
+                // new token.
+
+                guard let accessToken = try await tokenProvider() else {
+                    return nil
+                }
+
+                return .basic(accessToken)
+            case .public(let apiKeyId, let userIdProvider):
+                // Does not support refreshing. Must just reinvoke and use the
+                // new token.
+
+                guard let userId = try await userIdProvider() else {
+                    return nil
+                }
 
                 let token = try await authServer
                     .performPublicApiKeyAuthenticationRequest(
@@ -95,51 +159,48 @@ final class AuthService {
                 return .basic(token)
             }
         }
-    }
 
-    // https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow
+        guard let token = try await refresh() else {
+            // The refresh token provider returning nil indicates that a
+            // logout should take place.
 
-    func authenticate(
-        with passwordCredential: OAuth2Service.PasswordCredential
-    ) async throws {
-        let response: OAuth2Service.TokenResponse = try await oauth2Service
-            .getToken(
-                with: passwordCredential
+            Task {
+                await logout()
+            }
+
+            throw ParraError.authenticationFailed(
+                "Failed to refresh token"
             )
-    }
-
-    func logout() async {}
-
-    func loadPersistedCredential() async -> ParraUser? {
-        return await dataManager.getCurrentUser()
-    }
-
-    func getCurrentCredential() async -> ParraCredential? {
-        return ParraCredential(token: "token")
-    }
-
-    @discardableResult
-    func refreshAuthentication() async throws -> ParraCredential {
-        logger.debug("Performing reauthentication for Parra")
-        logger.debug("Invoking authentication provider")
-
-        let tokenType = try await authTokenProvider()
-
-        let credential = switch tokenType {
-        case .basic(let string):
-            ParraCredential(token: string)
-        case .oauth2(let token):
-            ParraCredential(token: token.accessToken)
         }
 
-        //            await dataManager.updateCredential(
-        //                credential: credential
-        //            )
+        switch token {
+        case .basic(let accessToken):
+            return accessToken
+        case .oauth2(let token):
+            return token.accessToken
+        }
+    }
 
-        logger.debug(
-            "Authentication provider returned token successfully"
+    // MARK: - Private
+
+    private var cachedToken: TokenType?
+
+    private func applyUserUpdate(
+        _ authResult: ParraAuthResult
+    ) async {
+        switch authResult {
+        case .authenticated(let parraUser):
+            await dataManager.updateCurrentUser(parraUser)
+        case .unauthenticated:
+            await dataManager.removeCurrentUser()
+        }
+
+        ParraNotificationCenter.default.post(
+            name: Parra.authenticationStateDidChangeNotification,
+            object: nil,
+            userInfo: [
+                Parra.authenticationStateKey: authResult
+            ]
         )
-
-        return credential
     }
 }

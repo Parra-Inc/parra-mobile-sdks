@@ -83,12 +83,12 @@ final class ApiResourceServer: Server {
             }
 
             urlComponents.setQueryItems(with: queryItems)
-            let credential = await authService.getCurrentCredential()
+            let user = await authService.getCurrentUser()
 
-            let nextCredential: ParraCredential = if let credential {
-                credential
+            let token: String = if let user {
+                user.credential.token
             } else {
-                try await authService.refreshAuthentication()
+                try await authService.refreshExistingToken()
             }
 
             var request = URLRequest(
@@ -110,7 +110,7 @@ final class ApiResourceServer: Server {
 
             let (result, responseContext) = await performRequest(
                 request: request,
-                credential: nextCredential,
+                with: token,
                 config: config
             )
 
@@ -270,12 +270,12 @@ final class ApiResourceServer: Server {
 
     private func performRequest(
         request: URLRequest,
-        credential: ParraCredential,
+        with token: String,
         config: RequestConfig = .default
     ) async -> (Result<Data, Error>, AuthenticatedRequestResponseContext) {
         do {
             var request = request
-            request.setValue(for: .authorization(.bearer(credential.token)))
+            request.setValue(for: .authorization(.bearer(token)))
 
             let (
                 data,
@@ -304,15 +304,14 @@ final class ApiResourceServer: Server {
             case (401, true), (403, true):
                 logger.trace("Request required reauthentication")
 
-                let newCredential = try await authService
-                    .refreshAuthentication()
+                let newToken = try await authService.refreshExistingToken()
 
                 request
-                    .setValue(for: .authorization(.bearer(newCredential.token)))
+                    .setValue(for: .authorization(.bearer(newToken)))
 
                 return await performRequest(
                     request: request,
-                    credential: newCredential,
+                    with: token,
                     config: config
                         .withoutReauthenticating()
                         .withAttribute(.requiredReauthentication)
@@ -356,7 +355,7 @@ final class ApiResourceServer: Server {
 
                     return await performRequest(
                         request: request,
-                        credential: credential,
+                        with: token,
                         config: nextConfig
                     )
                 }

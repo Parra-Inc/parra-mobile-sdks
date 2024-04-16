@@ -133,7 +133,7 @@ class MockedParraTestCase: ParraBaseMock {
     func createMockDataManager() -> DataManager {
         let storageDirectoryName = DataManager.Directory
             .storageDirectoryName
-        let credentialStorageModule = ParraStorageModule<ParraCredential>(
+        let credentialStorageModule = ParraStorageModule<ParraUser.Credential>(
             dataStorageMedium: .fileSystem(
                 baseUrl: baseStorageDirectory,
                 folder: storageDirectoryName,
