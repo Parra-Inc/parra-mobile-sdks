@@ -169,7 +169,6 @@ extension ParraInternal {
 
         let modalScreenManager = ModalScreenManager(
             containerRenderer: containerRenderer,
-            apiResourceServer: apiResourceServer,
             configuration: configuration,
             notificationCenter: notificationCenter
         )

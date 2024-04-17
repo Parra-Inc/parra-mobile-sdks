@@ -19,7 +19,7 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
         configureParra(
             workspaceId: Parra.Demo.workspaceId,
             applicationId: Parra.Demo.applicationId,
-            authenticationMethod: authenticationMethod(),
+            authenticationMethod: .parraAuth,
             configuration: ParraConfiguration(
                 appInfoOptions: .default,
                 globalComponentAttributes: .default,

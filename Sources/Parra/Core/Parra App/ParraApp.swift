@@ -85,7 +85,7 @@ open class ParraApp<
     public func configureParra(
         workspaceId: String,
         applicationId: String,
-        authenticationMethod: ParraAuthenticationMethod,
+        authenticationMethod: ParraAuthenticationMethod = .parraAuth,
         configuration: ParraConfiguration = .init(),
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
         appContent: @MainActor @escaping () -> some ParraAppContent

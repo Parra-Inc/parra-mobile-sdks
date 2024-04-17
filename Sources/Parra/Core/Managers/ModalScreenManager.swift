@@ -13,12 +13,10 @@ final class ModalScreenManager {
 
     init(
         containerRenderer: ContainerRenderer,
-        apiResourceServer: ApiResourceServer,
         configuration: ParraConfiguration,
         notificationCenter: ParraNotificationCenter
     ) {
         self.containerRenderer = containerRenderer
-        self.apiResourceServer = apiResourceServer
         self.configuration = configuration
         self.notificationCenter = notificationCenter
     }
@@ -92,7 +90,6 @@ final class ModalScreenManager {
     // MARK: - Private
 
     private let containerRenderer: ContainerRenderer
-    private let apiResourceServer: ApiResourceServer
     private let configuration: ParraConfiguration
     private let notificationCenter: ParraNotificationCenter
 }

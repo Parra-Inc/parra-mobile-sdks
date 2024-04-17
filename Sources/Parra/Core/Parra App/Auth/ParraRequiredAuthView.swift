@@ -8,6 +8,44 @@
 
 import SwiftUI
 
+public struct ParraDefaultAuthenticationView: View {
+    // MARK: - Lifecycle
+
+    public init(error: Error? = nil) {
+        self.error = error
+    }
+
+    // MARK: - Public
+
+    public var error: Error?
+
+    public var body: some View {
+        let authService = parra.parraInternal.authService
+        if !authService.authenticationMethod.supportsParraLoginScreen {
+            fatalError(
+                "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
+            )
+        }
+
+        AuthenticationWidget(
+            config: .default,
+            style: .default(with: .default),
+            localBuilderConfig: .init(),
+            componentFactory: .init(global: .default, theme: .default),
+            contentObserver: .init(
+                initialParams: .init(
+                    error: nil,
+                    authService: parra.parraInternal.authService
+                )
+            )
+        )
+    }
+
+    // MARK: - Private
+
+    @Environment(\.parra) private var parra
+}
+
 public struct ParraRequiredAuthView<
     AuthenticatedContent, UnauthenticatedContent
 >: ParraAppContent where AuthenticatedContent: View,
@@ -20,7 +58,7 @@ public struct ParraRequiredAuthView<
             -> AuthenticatedContent,
         unauthenticatedContent: @escaping (_ error: Error?)
             -> UnauthenticatedContent = { error in
-                ParraAuthenticationView(error: error)
+                ParraDefaultAuthenticationView(error: nil)
             }
     ) {
         self.authenticatedContent = authenticatedContent

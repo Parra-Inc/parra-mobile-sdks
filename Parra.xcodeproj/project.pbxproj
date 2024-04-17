@@ -67,7 +67,6 @@
 		00285D972BCA0AAA00508DC8 /* ParraAuthStateEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285D962BCA0AAA00508DC8 /* ParraAuthStateEnvironmentKey.swift */; };
 		00285D992BCA0F6F00508DC8 /* ParraAppViewTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285D982BCA0F6F00508DC8 /* ParraAppViewTarget.swift */; };
 		00285D9B2BCD73C000508DC8 /* ParraAuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285D9A2BCD73C000508DC8 /* ParraAuthState.swift */; };
-		00285D9E2BCD7BF400508DC8 /* ParraAuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285D9D2BCD7BF400508DC8 /* ParraAuthenticationView.swift */; };
 		00285DA22BCDF1FD00508DC8 /* ParraRequiredAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285DA12BCDF1FD00508DC8 /* ParraRequiredAuthView.swift */; };
 		00285DA42BCDF20700508DC8 /* ParraOptionalAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285DA32BCDF20700508DC8 /* ParraOptionalAuthView.swift */; };
 		00285DA62BCDF22200508DC8 /* ParraAppContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285DA52BCDF22200508DC8 /* ParraAppContent.swift */; };
@@ -79,6 +78,10 @@
 		0029AD372A4925C000E30CCD /* ParraStandardEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0029AD362A4925C000E30CCD /* ParraStandardEvent.swift */; };
 		0029AD392A4925D000E30CCD /* ParraInternalEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0029AD382A4925D000E30CCD /* ParraInternalEvent.swift */; };
 		0029AD3C2A49291200E30CCD /* StringManipulators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0029AD3A2A49290A00E30CCD /* StringManipulators.swift */; };
+		002A9FE12BCF553E00B88394 /* AuthenticationWidget+ContentObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF15FB2BCF531100E4ECDB /* AuthenticationWidget+ContentObserver.swift */; };
+		002A9FE22BCF553E00B88394 /* AuthenticationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285D9D2BCD7BF400508DC8 /* AuthenticationWidget.swift */; };
+		002A9FE32BCF553E00B88394 /* AuthenticationWidget+ContentObserver+InitialParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF15FF2BCF542F00E4ECDB /* AuthenticationWidget+ContentObserver+InitialParams.swift */; };
+		002A9FE42BCF553E00B88394 /* AuthenticationWidget+ContentObserver+Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF15FD2BCF53F800E4ECDB /* AuthenticationWidget+ContentObserver+Content.swift */; };
 		002C77192BAA2EA700DCEBD8 /* AppInfo+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002C77182BAA2EA700DCEBD8 /* AppInfo+Fixtures.swift */; };
 		003621D72B5B563C009EFE53 /* ParraLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621D62B5B563C009EFE53 /* ParraLogo.swift */; };
 		003621DB2B5B569F009EFE53 /* ParraLogoType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003621DA2B5B569F009EFE53 /* ParraLogoType.swift */; };
@@ -154,6 +157,10 @@
 		003C214727DE855A001CAE03 /* ItemStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003C214627DE855A001CAE03 /* ItemStorage.swift */; };
 		0040DEAD2AA226A3007E2190 /* UIViewController+defaultLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0040DEAC2AA226A3007E2190 /* UIViewController+defaultLogger.swift */; };
 		00497D7929F88CC4004EF5AB /* ParraSessionsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00497D7829F88CC4004EF5AB /* ParraSessionsResponse.swift */; };
+		004E04682BCEE8C500301617 /* AuthServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004E04672BCEE8C500301617 /* AuthServerTests.swift */; };
+		004E046D2BCF512700301617 /* AuthenticationWidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004E046B2BCF511900301617 /* AuthenticationWidgetConfig.swift */; };
+		004E04702BCF518400301617 /* AuthenticationWidgetBuilderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004E046E2BCF517400301617 /* AuthenticationWidgetBuilderConfig.swift */; };
+		004E04732BCF51BA00301617 /* AuthenticationWidgetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004E04712BCF51AF00301617 /* AuthenticationWidgetStyle.swift */; };
 		004F3EDA2BA49D2D00424802 /* ParraPreviewAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F3ED92BA49D2D00424802 /* ParraPreviewAppDelegate.swift */; };
 		004F3EDE2BA4B0CC00424802 /* View+InternalFeedbackForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F3EDD2BA4B0CC00424802 /* View+InternalFeedbackForm.swift */; };
 		004F3EE32BA4B1F100424802 /* ViewOffsetKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F3EE22BA4B1F100424802 /* ViewOffsetKey.swift */; };
@@ -322,7 +329,7 @@
 		00ABF1632B7AB84B00A054A2 /* XCTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269F72A530771001A0F50 /* XCTestCase.swift */; };
 		00ABF1642B7AB88000A054A2 /* MockedParraTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DBF2ACCEE7600B4856F /* MockedParraTestCase.swift */; };
 		00ABF1652B7AB88500A054A2 /* MockParra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC52A5374BD00E7A91D /* MockParra.swift */; };
-		00ABF1662B7AB89500A054A2 /* MockApiResourceServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC02A53736F00E7A91D /* MockApiResourceServer.swift */; };
+		00ABF1662B7AB89500A054A2 /* MockResourceServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC02A53736F00E7A91D /* MockResourceServer.swift */; };
 		00ABF1672B7AB89500A054A2 /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269FF2A53110F001A0F50 /* MockURLSession.swift */; };
 		00ABF1682B7AB89500A054A2 /* URLSessionDataTaskType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269FD2A5310D5001A0F50 /* URLSessionDataTaskType.swift */; };
 		00ABF1692B7AB8DF00A054A2 /* ParraBaseMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D04C602AD437850024CA4E /* ParraBaseMock.swift */; };
@@ -348,9 +355,7 @@
 		00ABF18E2B83B02600A054A2 /* GeneratedTypes+Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */; };
 		00ABF18F2B83B03000A054A2 /* ParraCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */; };
 		00ABF1902B83B03B00A054A2 /* LoggerHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0029AD2D2A48E11300E30CCD /* LoggerHelpersTests.swift */; };
-		00ABF1912B83B06D00A054A2 /* Parra+PushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */; };
 		00ABF1922B83B1A500A054A2 /* ParraAuthenticationProviderType+mockPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFC82A538A5400E7A91D /* ParraAuthenticationProviderType+mockPublicKey.swift */; };
-		00ABF1932B83B2B200A054A2 /* Parra+AuthenticationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00320A5A27ED4EF0001EB323 /* Parra+AuthenticationTests.swift */; };
 		00ABF1942B83BA5000A054A2 /* DataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559B027E7EAC0006450BE /* DataManagerTests.swift */; };
 		00ABF1952B83BA5B00A054A2 /* ParraSessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFCB2A53B6F100E7A91D /* ParraSessionManagerTests.swift */; };
 		00ABF1962B83BA6000A054A2 /* ParraSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001559B227E7EACC006450BE /* ParraSyncManagerTests.swift */; };
@@ -410,7 +415,6 @@
 		00C119172BAFAE170013FD03 /* ParraPushNotificationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C119162BAFAE170013FD03 /* ParraPushNotificationOptions.swift */; };
 		00C119192BAFAE250013FD03 /* ParraConfigurationOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C119182BAFAE250013FD03 /* ParraConfigurationOptionType.swift */; };
 		00C1191B2BB05D550013FD03 /* ParraAppInfoOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C1191A2BB05D550013FD03 /* ParraAppInfoOptions.swift */; };
-		00D143B72BB1C96900BDB8C4 /* LatestVersionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143B62BB1C96900BDB8C4 /* LatestVersionManagerTests.swift */; };
 		00D143B92BB1D27300BDB8C4 /* LatestVersionManager+AppStoreResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143B82BB1D27300BDB8C4 /* LatestVersionManager+AppStoreResponse.swift */; };
 		00D143BB2BB1D28E00BDB8C4 /* LatestVersionManager+AppStoreResponse+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143BA2BB1D28E00BDB8C4 /* LatestVersionManager+AppStoreResponse+Fixtures.swift */; };
 		00D143BD2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */; };
@@ -684,7 +688,7 @@
 		00285D962BCA0AAA00508DC8 /* ParraAuthStateEnvironmentKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAuthStateEnvironmentKey.swift; sourceTree = "<group>"; };
 		00285D982BCA0F6F00508DC8 /* ParraAppViewTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAppViewTarget.swift; sourceTree = "<group>"; };
 		00285D9A2BCD73C000508DC8 /* ParraAuthState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAuthState.swift; sourceTree = "<group>"; };
-		00285D9D2BCD7BF400508DC8 /* ParraAuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAuthenticationView.swift; sourceTree = "<group>"; };
+		00285D9D2BCD7BF400508DC8 /* AuthenticationWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationWidget.swift; sourceTree = "<group>"; };
 		00285DA12BCDF1FD00508DC8 /* ParraRequiredAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraRequiredAuthView.swift; sourceTree = "<group>"; };
 		00285DA32BCDF20700508DC8 /* ParraOptionalAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraOptionalAuthView.swift; sourceTree = "<group>"; };
 		00285DA52BCDF22200508DC8 /* ParraAppContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAppContent.swift; sourceTree = "<group>"; };
@@ -698,7 +702,6 @@
 		0029AD382A4925D000E30CCD /* ParraInternalEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInternalEvent.swift; sourceTree = "<group>"; };
 		0029AD3A2A49290A00E30CCD /* StringManipulators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringManipulators.swift; sourceTree = "<group>"; };
 		002C77182BAA2EA700DCEBD8 /* AppInfo+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppInfo+Fixtures.swift"; sourceTree = "<group>"; };
-		00320A5A27ED4EF0001EB323 /* Parra+AuthenticationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+AuthenticationTests.swift"; sourceTree = "<group>"; };
 		003621D62B5B563C009EFE53 /* ParraLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogo.swift; sourceTree = "<group>"; };
 		003621DA2B5B569F009EFE53 /* ParraLogoType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogoType.swift; sourceTree = "<group>"; };
 		003621DC2B5B592D009EFE53 /* ParraAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ParraAssets.xcassets; sourceTree = "<group>"; };
@@ -768,6 +771,10 @@
 		003D2A76274C84A3001E067E /* ParraQuestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionCardView.swift; sourceTree = "<group>"; };
 		0040DEAC2AA226A3007E2190 /* UIViewController+defaultLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+defaultLogger.swift"; sourceTree = "<group>"; };
 		00497D7829F88CC4004EF5AB /* ParraSessionsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionsResponse.swift; sourceTree = "<group>"; };
+		004E04672BCEE8C500301617 /* AuthServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServerTests.swift; sourceTree = "<group>"; };
+		004E046B2BCF511900301617 /* AuthenticationWidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationWidgetConfig.swift; sourceTree = "<group>"; };
+		004E046E2BCF517400301617 /* AuthenticationWidgetBuilderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationWidgetBuilderConfig.swift; sourceTree = "<group>"; };
+		004E04712BCF51AF00301617 /* AuthenticationWidgetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationWidgetStyle.swift; sourceTree = "<group>"; };
 		004F3ED92BA49D2D00424802 /* ParraPreviewAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPreviewAppDelegate.swift; sourceTree = "<group>"; };
 		004F3EDD2BA4B0CC00424802 /* View+InternalFeedbackForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+InternalFeedbackForm.swift"; sourceTree = "<group>"; };
 		004F3EE22BA4B1F100424802 /* ViewOffsetKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOffsetKey.swift; sourceTree = "<group>"; };
@@ -866,7 +873,7 @@
 		007FBEF3277A34C700BD9E37 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		0082DFBC2A535FDD00E7A91D /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
-		0082DFC02A53736F00E7A91D /* MockApiResourceServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockApiResourceServer.swift; sourceTree = "<group>"; };
+		0082DFC02A53736F00E7A91D /* MockResourceServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockResourceServer.swift; sourceTree = "<group>"; };
 		0082DFC52A5374BD00E7A91D /* MockParra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParra.swift; sourceTree = "<group>"; };
 		0082DFC82A538A5400E7A91D /* ParraAuthenticationProviderType+mockPublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAuthenticationProviderType+mockPublicKey.swift"; sourceTree = "<group>"; };
 		0082DFCB2A53B6F100E7A91D /* ParraSessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionManagerTests.swift; sourceTree = "<group>"; };
@@ -1019,7 +1026,6 @@
 		00BD2FF72A47774300B4BEB2 /* URLSessionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionType.swift; sourceTree = "<group>"; };
 		00BD2FF92A47778E00B4BEB2 /* NotificationCenterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterType.swift; sourceTree = "<group>"; };
 		00BD2FFB2A477D7700B4BEB2 /* ParraNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraNotificationCenter.swift; sourceTree = "<group>"; };
-		00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+PushTests.swift"; sourceTree = "<group>"; };
 		00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCredentialTests.swift; sourceTree = "<group>"; };
 		00BDB2B028BD822700C16649 /* URLRequest+headers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+headers.swift"; sourceTree = "<group>"; };
 		00BF36C62B59AB000097905C /* ParraFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFixture.swift; sourceTree = "<group>"; };
@@ -1043,7 +1049,6 @@
 		00CAD73529CFAE910093599E /* TextValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextValidationError.swift; sourceTree = "<group>"; };
 		00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionReaderTests.swift; sourceTree = "<group>"; };
 		00D04C602AD437850024CA4E /* ParraBaseMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraBaseMock.swift; sourceTree = "<group>"; };
-		00D143B62BB1C96900BDB8C4 /* LatestVersionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestVersionManagerTests.swift; sourceTree = "<group>"; };
 		00D143B82BB1D27300BDB8C4 /* LatestVersionManager+AppStoreResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LatestVersionManager+AppStoreResponse.swift"; sourceTree = "<group>"; };
 		00D143BA2BB1D28E00BDB8C4 /* LatestVersionManager+AppStoreResponse+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LatestVersionManager+AppStoreResponse+Fixtures.swift"; sourceTree = "<group>"; };
 		00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+fromIso8601String.swift"; sourceTree = "<group>"; };
@@ -1136,6 +1141,9 @@
 		00EBCE152AA4F0D100887639 /* ParraLoggerExtraStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLoggerExtraStyle.swift; sourceTree = "<group>"; };
 		00EC6F7C2B61A55F00ABC8EC /* RectangleCornerRadii+shortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RectangleCornerRadii+shortcuts.swift"; sourceTree = "<group>"; };
 		00EC6F7E2B61A64B00ABC8EC /* RectangleCornerRadii+Hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RectangleCornerRadii+Hashable.swift"; sourceTree = "<group>"; };
+		00EF15FB2BCF531100E4ECDB /* AuthenticationWidget+ContentObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationWidget+ContentObserver.swift"; sourceTree = "<group>"; };
+		00EF15FD2BCF53F800E4ECDB /* AuthenticationWidget+ContentObserver+Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationWidget+ContentObserver+Content.swift"; sourceTree = "<group>"; };
+		00EF15FF2BCF542F00E4ECDB /* AuthenticationWidget+ContentObserver+InitialParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationWidget+ContentObserver+InitialParams.swift"; sourceTree = "<group>"; };
 		00F5AAF328023EF300A94C85 /* GeneratedTypes+Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeneratedTypes+Swift.swift"; sourceTree = "<group>"; };
 		00F7C48A2B99FD3100DBDF5A /* AlertConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertConfig.swift; sourceTree = "<group>"; };
 		00F7C48C2B99FE8200DBDF5A /* AlertContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertContent.swift; sourceTree = "<group>"; };
@@ -1384,11 +1392,11 @@
 			children = (
 				0015599E27E40B71006450BE /* FileManagerTests.swift */,
 				001559B427E7EAD9006450BE /* ApiResourceServerTests.swift */,
+				004E04672BCEE8C500301617 /* AuthServerTests.swift */,
 				001559B227E7EACC006450BE /* ParraSyncManagerTests.swift */,
 				001559B027E7EAC0006450BE /* DataManagerTests.swift */,
 				0082DFCB2A53B6F100E7A91D /* ParraSessionManagerTests.swift */,
 				00D04C5E2AD429620024CA4E /* SessionReaderTests.swift */,
-				00D143B62BB1C96900BDB8C4 /* LatestVersionManagerTests.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1462,8 +1470,6 @@
 			isa = PBXGroup;
 			children = (
 				00B42EA62ADE176E00F365A5 /* Parra.xctestplan */,
-				00320A5A27ED4EF0001EB323 /* Parra+AuthenticationTests.swift */,
-				00BD2FFF2A47A70800B4BEB2 /* Parra+PushTests.swift */,
 				001559A727E417D4006450BE /* ParraLoggerTests.swift */,
 				0015599D27E40B64006450BE /* Extensions */,
 				0015599827E40AC7006450BE /* Managers */,
@@ -1617,7 +1623,6 @@
 			isa = PBXGroup;
 			children = (
 				00285DA52BCDF22200508DC8 /* ParraAppContent.swift */,
-				00285D9D2BCD7BF400508DC8 /* ParraAuthenticationView.swift */,
 				00285DA72BCDF24800508DC8 /* ParraAuthResult.swift */,
 				00285DA32BCDF20700508DC8 /* ParraOptionalAuthView.swift */,
 				00285DA12BCDF1FD00508DC8 /* ParraRequiredAuthView.swift */,
@@ -1880,6 +1885,28 @@
 			path = Public;
 			sourceTree = "<group>";
 		};
+		004E04692BCF50D200301617 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				00EF15FA2BCF52F900E4ECDB /* Views */,
+				004E046A2BCF50FB00301617 /* Public */,
+				00EF15FB2BCF531100E4ECDB /* AuthenticationWidget+ContentObserver.swift */,
+				00EF15FD2BCF53F800E4ECDB /* AuthenticationWidget+ContentObserver+Content.swift */,
+				00EF15FF2BCF542F00E4ECDB /* AuthenticationWidget+ContentObserver+InitialParams.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		004E046A2BCF50FB00301617 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				004E046B2BCF511900301617 /* AuthenticationWidgetConfig.swift */,
+				004E046E2BCF517400301617 /* AuthenticationWidgetBuilderConfig.swift */,
+				004E04712BCF51AF00301617 /* AuthenticationWidgetStyle.swift */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
 		004F3EDB2BA4AF6000424802 /* Changelog */ = {
 			isa = PBXGroup;
 			children = (
@@ -2045,7 +2072,7 @@
 			children = (
 				00E269FF2A53110F001A0F50 /* MockURLSession.swift */,
 				00E269FD2A5310D5001A0F50 /* URLSessionDataTaskType.swift */,
-				0082DFC02A53736F00E7A91D /* MockApiResourceServer.swift */,
+				0082DFC02A53736F00E7A91D /* MockResourceServer.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -2799,6 +2826,7 @@
 		00E76D412B66E7FE00B01DD8 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
+				004E04692BCF50D200301617 /* Auth */,
 				002C77162BAA2E9500DCEBD8 /* Release */,
 				004F3EDB2BA4AF6000424802 /* Changelog */,
 				00ABF1AB2B865B2500A054A2 /* Feedback */,
@@ -2898,6 +2926,14 @@
 				003621F12B5C77F1009EFE53 /* ParraTypography.swift */,
 			);
 			path = Typography;
+			sourceTree = "<group>";
+		};
+		00EF15FA2BCF52F900E4ECDB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				00285D9D2BCD7BF400508DC8 /* AuthenticationWidget.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		00F5AAF228023EDB00A94C85 /* Types */ = {
@@ -3292,6 +3328,7 @@
 				00D143BD2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift in Sources */,
 				00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */,
 				0016775E2B6FDEFB00674001 /* ParraAttributedStyle.swift in Sources */,
+				004E046D2BCF512700301617 /* AuthenticationWidgetConfig.swift in Sources */,
 				001677572B6AE8E400674001 /* ParraAttributedTextButtonStyle.swift in Sources */,
 				004F3EDE2BA4B0CC00424802 /* View+InternalFeedbackForm.swift in Sources */,
 				00DDBA262B63FBBC00400761 /* ParraThemeObserver.swift in Sources */,
@@ -3319,10 +3356,13 @@
 				00DDBA192B61C21E00400761 /* EdgeInsets+hashable.swift in Sources */,
 				00916DCC2AD35D9D00B4856F /* ServerConfiguration.swift in Sources */,
 				0087CAA42A59E51B007D72FA /* ParraDiskUsage+ParraSessionParamDictionaryConvertible.swift in Sources */,
-				00285D9E2BCD7BF400508DC8 /* ParraAuthenticationView.swift in Sources */,
 				0039624C2A48B52100B8655F /* SegmentView.swift in Sources */,
 				00FCB1322B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift in Sources */,
 				001B7B0E27DE3A9B00DEEECD /* Parra.swift in Sources */,
+				002A9FE12BCF553E00B88394 /* AuthenticationWidget+ContentObserver.swift in Sources */,
+				002A9FE22BCF553E00B88394 /* AuthenticationWidget.swift in Sources */,
+				002A9FE32BCF553E00B88394 /* AuthenticationWidget+ContentObserver+InitialParams.swift in Sources */,
+				002A9FE42BCF553E00B88394 /* AuthenticationWidget+ContentObserver+Content.swift in Sources */,
 				00E76D542B68287400B01DD8 /* OutlinedButtonComponent.swift in Sources */,
 				00374D892BA38BA00028EDA8 /* View+errorPlaceholder.swift in Sources */,
 				00FCB1382B90F73700635DC8 /* FeedbackQuestionViewKind+MultiOptionAnswer.swift in Sources */,
@@ -3420,6 +3460,7 @@
 				00ABF1D02B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift in Sources */,
 				004F3EEB2BA4BF4F00424802 /* ChangelogWidget+ContentObserver.swift in Sources */,
 				00ABF1762B7D344C00A054A2 /* ParraDefaultLaunchScreen.swift in Sources */,
+				004E04732BCF51BA00301617 /* AuthenticationWidgetStyle.swift in Sources */,
 				0039623D2A48B51100B8655F /* CAShapeLayer.swift in Sources */,
 				00FCB1682B96271700635DC8 /* ImageButtonContent.swift in Sources */,
 				0066540E2A7EBAAF00CD04E6 /* HTTPURLResponse+ParraDictionaryConvertible.swift in Sources */,
@@ -3654,6 +3695,7 @@
 				003622272B5EB103009EFE53 /* ParraColor+ParraColorConvertible.swift in Sources */,
 				00EC6F7D2B61A55F00ABC8EC /* RectangleCornerRadii+shortcuts.swift in Sources */,
 				00E76D522B68286E00B01DD8 /* PlainButtonComponent.swift in Sources */,
+				004E04702BCF518400301617 /* AuthenticationWidgetBuilderConfig.swift in Sources */,
 				00C1190C2BAF1E7C0013FD03 /* ParraInternal.swift in Sources */,
 				00706B1B2B71A70A00C28F66 /* TextEditorComponentType.swift in Sources */,
 				00E15A212929BC790049C2C7 /* UIDeviceOrientation+ParraLogStringConvertible.swift in Sources */,
@@ -3743,7 +3785,7 @@
 				00ABF1682B7AB89500A054A2 /* URLSessionDataTaskType.swift in Sources */,
 				0082DFBD2A535FDD00E7A91D /* Data.swift in Sources */,
 				00ABF1602B7AB83300A054A2 /* FileManagerTests.swift in Sources */,
-				00ABF1662B7AB89500A054A2 /* MockApiResourceServer.swift in Sources */,
+				00ABF1662B7AB89500A054A2 /* MockResourceServer.swift in Sources */,
 				00ABF1822B7E9BB000A054A2 /* Endpoint+Mocks.swift in Sources */,
 				00ABF1952B83BA5B00A054A2 /* ParraSessionManagerTests.swift in Sources */,
 				00ABF1652B7AB88500A054A2 /* MockParra.swift in Sources */,
@@ -3757,12 +3799,10 @@
 				001559A827E417D4006450BE /* ParraLoggerTests.swift in Sources */,
 				00916DC22AD2EFCD00B4856F /* SignpostTestObserver.swift in Sources */,
 				00ABF1962B83BA6000A054A2 /* ParraSyncManagerTests.swift in Sources */,
-				00ABF1932B83B2B200A054A2 /* Parra+AuthenticationTests.swift in Sources */,
 				00ABF1902B83B03B00A054A2 /* LoggerHelpersTests.swift in Sources */,
-				00ABF1912B83B06D00A054A2 /* Parra+PushTests.swift in Sources */,
 				00ABF18C2B83AFD800A054A2 /* UserDefaultsStorageTests.swift in Sources */,
 				00ABF18E2B83B02600A054A2 /* GeneratedTypes+Swift.swift in Sources */,
-				00D143B72BB1C96900BDB8C4 /* LatestVersionManagerTests.swift in Sources */,
+				004E04682BCEE8C500301617 /* AuthServerTests.swift in Sources */,
 				00ABF1612B7AB83800A054A2 /* ParraEndpoint+CaseIterable.swift in Sources */,
 				00ABF18D2B83B00900A054A2 /* PersistentStorageTestHelpers.swift in Sources */,
 				00ABF1692B7AB8DF00A054A2 /* ParraBaseMock.swift in Sources */,

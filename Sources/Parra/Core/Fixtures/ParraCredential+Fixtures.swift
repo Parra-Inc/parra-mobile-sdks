@@ -19,7 +19,7 @@ extension ParraUser.Credential: ParraFixture {
         return []
     }
 
-    static let successResponse = ParraUser.Credential(
-        token: UUID().uuidString
+    static let successResponse = ParraUser.Credential.basic(
+        UUID().uuidString
     )
 }

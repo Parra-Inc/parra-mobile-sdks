@@ -86,7 +86,7 @@ final class ApiResourceServer: Server {
             let user = await authService.getCurrentUser()
 
             let token: String = if let user {
-                user.credential.token
+                user.credential.accessToken
             } else {
                 try await authService.refreshExistingToken()
             }

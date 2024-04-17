@@ -14,6 +14,8 @@ extension ParraEndpoint {
         let object: Codable = switch status {
         case 200 ..< 300:
             switch self {
+            case .getUserInfo:
+                fatalError()
             case .getCards:
                 ParraCardItemFixtures.cardsResponse
             case .getFeedbackForm(let formId):

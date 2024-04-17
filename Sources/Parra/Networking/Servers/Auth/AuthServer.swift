@@ -23,6 +23,10 @@ final class AuthServer: Server {
 
     // MARK: - Internal
 
+    struct PublicAuthResponse: Codable {
+        let accessToken: String
+    }
+
     let appState: ParraAppState
     let configuration: ServerConfiguration
 
@@ -57,11 +61,11 @@ final class AuthServer: Server {
         switch response.statusCode {
         case 200:
             let credential = try configuration.jsonDecoder.decode(
-                ParraUser.Credential.self,
+                PublicAuthResponse.self,
                 from: data
             )
 
-            return credential.token
+            return credential.accessToken
         default:
             throw ParraError.networkError(
                 request: request,

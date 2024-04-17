@@ -29,4 +29,15 @@ public enum ParraAuthenticationMethod {
     )
 
     case parraAuth
+
+    // MARK: - Internal
+
+    var supportsParraLoginScreen: Bool {
+        switch self {
+        case .parraAuth:
+            return true
+        default:
+            return false
+        }
+    }
 }

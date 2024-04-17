@@ -81,10 +81,18 @@ extension Server {
         request: URLRequest,
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> T {
-        let (data, _) = try await performAsyncDataTask(
+        let (data, response) = try await performAsyncDataTask(
             request: request,
             delegate: delegate
         )
+
+        guard response.statusCode == 200 else {
+            throw ParraError.networkError(
+                request: request,
+                response: response,
+                responseData: data
+            )
+        }
 
         return try configuration.jsonDecoder.decode(
             T.self,

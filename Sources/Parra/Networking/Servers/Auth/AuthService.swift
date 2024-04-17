@@ -29,16 +29,11 @@ final class AuthService {
 
     // MARK: - Internal
 
-    typealias MultiTokenProvider = () async throws -> TokenType?
+    typealias MultiTokenProvider = () async throws -> ParraUser.Credential?
     typealias AuthProvider = () async throws -> ParraAuthResult
 
     // 1. Function to convert an authentication method to a token provider.
     // 2. Function to invoke a token provider and get an auth result.
-
-    enum TokenType {
-        case basic(String)
-        case oauth2(OAuth2Service.Token)
-    }
 
     let appState: ParraAppState
     let oauth2Service: OAuth2Service
@@ -53,6 +48,8 @@ final class AuthService {
         username: String,
         password: String
     ) async throws -> ParraAuthResult {
+        logger.debug("Logging in with username/password")
+
         let result: ParraAuthResult
 
         do {
@@ -69,9 +66,7 @@ final class AuthService {
             )
 
             let user = ParraUser(
-                credential: ParraUser.Credential(
-                    token: response.accessToken
-                ),
+                credential: .basic(response.accessToken),
                 info: userInfo
             )
 
@@ -87,6 +82,8 @@ final class AuthService {
 
     @discardableResult
     func logout() async -> ParraAuthResult {
+        logger.debug("Logging out")
+
         let result = ParraAuthResult.unauthenticated(nil)
 
         await applyUserUpdate(result)
@@ -105,7 +102,7 @@ final class AuthService {
 
         logger.debug("Performing reauthentication for Parra")
 
-        let refresh: () async throws -> TokenType? = { [self] in
+        let refresh: () async throws -> ParraUser.Credential? = { [self] in
             logger.debug("Invoking authentication provider")
 
             switch authenticationMethod {
@@ -160,7 +157,7 @@ final class AuthService {
             }
         }
 
-        guard let token = try await refresh() else {
+        guard let credential = try await refresh() else {
             // The refresh token provider returning nil indicates that a
             // logout should take place.
 
@@ -173,25 +170,37 @@ final class AuthService {
             )
         }
 
-        switch token {
-        case .basic(let accessToken):
-            return accessToken
-        case .oauth2(let token):
-            return token.accessToken
-        }
+        let accessToken = credential.accessToken
+
+        let userInfo = try await authServer.getUserInformation(
+            token: accessToken
+        )
+
+        let user = ParraUser(
+            credential: credential,
+            info: userInfo
+        )
+
+        await dataManager.updateCurrentUser(user)
+
+        return accessToken
     }
 
     // MARK: - Private
 
-    private var cachedToken: TokenType?
+    private var cachedToken: ParraUser.Credential?
 
     private func applyUserUpdate(
         _ authResult: ParraAuthResult
     ) async {
         switch authResult {
         case .authenticated(let parraUser):
+            logger.debug("User authenticated: \(parraUser)")
+
             await dataManager.updateCurrentUser(parraUser)
-        case .unauthenticated:
+        case .unauthenticated(let error):
+            logger.debug("User unauthenticated: \(String(describing: error))")
+
             await dataManager.removeCurrentUser()
         }
 

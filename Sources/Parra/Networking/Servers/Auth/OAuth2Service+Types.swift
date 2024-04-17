@@ -9,12 +9,12 @@
 import Foundation
 
 extension OAuth2Service {
-    struct PasswordCredential: Codable {
+    struct PasswordCredential: Codable, Equatable {
         let username: String
         let password: String
     }
 
-    struct Token {
+    struct Token: Codable, Equatable {
         let accessToken: String
         let tokenType: String
         let expiresIn: TimeInterval

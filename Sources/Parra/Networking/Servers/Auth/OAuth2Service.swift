@@ -19,8 +19,7 @@ final class OAuth2Service {
         self.clientId = clientId
         self.authServer = authServer
         self.tokenUrl = URL(
-            //            string: "https://tenant-\(tenantId).parra.io/oauth/token"
-            string: "https://auth.parra.io/oauth/token"
+            string: "https://tenant-\(tenantId).parra.io/auth/token"
         )!
     }
 
