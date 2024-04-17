@@ -18,7 +18,7 @@ final class AuthService {
         oauth2Service: OAuth2Service,
         dataManager: DataManager,
         authServer: AuthServer,
-        authenticationMethod: ParraAuthenticationMethod
+        authenticationMethod: ParraAuthType
     ) {
         self.appState = appState
         self.oauth2Service = oauth2Service
@@ -39,7 +39,7 @@ final class AuthService {
     let oauth2Service: OAuth2Service
     let dataManager: DataManager
     let authServer: AuthServer
-    let authenticationMethod: ParraAuthenticationMethod
+    let authenticationMethod: ParraAuthType
 
     // https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow
 
@@ -181,7 +181,7 @@ final class AuthService {
             info: userInfo
         )
 
-        await dataManager.updateCurrentUser(user)
+        await applyUserUpdate(.authenticated(user))
 
         return accessToken
     }

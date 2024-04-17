@@ -13,7 +13,7 @@ extension ParraInternal {
     static func createParraInstance(
         appState: ParraAppState,
         authState: ParraAuthState,
-        authenticationMethod: ParraAuthenticationMethod,
+        authenticationMethod: ParraAuthType,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
     ) -> ParraInternal {
@@ -33,7 +33,7 @@ extension ParraInternal {
     static func createParraSwiftUIPreviewsInstance(
         appState: ParraAppState,
         authState: ParraAuthState,
-        authenticationMethod: ParraAuthenticationMethod,
+        authenticationMethod: ParraAuthType,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
     ) -> ParraInternal {
@@ -56,7 +56,7 @@ extension ParraInternal {
         forceDisabled: Bool,
         appState: ParraAppState,
         authState: ParraAuthState,
-        authenticationMethod: ParraAuthenticationMethod,
+        authenticationMethod: ParraAuthType,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
     ) -> ParraInternal {

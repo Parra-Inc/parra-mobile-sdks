@@ -38,24 +38,25 @@ public class ParraAuthState: ObservableObject, Equatable {
     func performInitialAuthCheck(
         using authService: AuthService
     ) async {
+        beginObservingAuth()
+
         let cachedUser = await authService.getCurrentUser()
 
         if let cachedUser {
             logger.debug("Found cached user")
 
             current = .authenticated(cachedUser)
+
+            do {
+                // Only try to refresh if auth state actually existed.
+                try await authService.refreshExistingToken()
+            } catch {
+                printInvalidAuth(error: error)
+            }
         } else {
             logger.debug("No cached user found")
 
             current = .unauthenticated(nil)
-        }
-
-        beginObservingAuth()
-
-        do {
-            try await authService.refreshExistingToken()
-        } catch {
-            printInvalidAuth(error: error)
         }
     }
 

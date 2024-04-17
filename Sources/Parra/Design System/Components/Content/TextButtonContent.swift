@@ -13,14 +13,17 @@ public struct TextButtonContent: Equatable, Hashable {
 
     public init(
         text: LabelContent,
-        isDisabled: Bool = false
+        isDisabled: Bool = false,
+        isLoading: Bool = false
     ) {
         self.text = text
         self.isDisabled = isDisabled
+        self.isLoading = isLoading
     }
 
     // MARK: - Public
 
-    public let text: LabelContent
-    public let isDisabled: Bool
+    public var text: LabelContent
+    public var isDisabled: Bool
+    public var isLoading: Bool
 }

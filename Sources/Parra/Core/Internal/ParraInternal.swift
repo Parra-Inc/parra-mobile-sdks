@@ -20,7 +20,7 @@ class ParraInternal {
     // MARK: - Lifecycle
 
     init(
-        authenticationMethod: ParraAuthenticationMethod,
+        authenticationMethod: ParraAuthType,
         configuration: ParraConfiguration,
         appState: ParraAppState,
         authState: ParraAuthState,
@@ -124,7 +124,7 @@ class ParraInternal {
     let feedback: ParraFeedback
 
     private(set) var configuration: ParraConfiguration
-    let authenticationMethod: ParraAuthenticationMethod
+    let authenticationMethod: ParraAuthType
     let appState: ParraAppState
     let authState: ParraAuthState
 

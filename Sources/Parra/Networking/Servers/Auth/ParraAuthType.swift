@@ -1,5 +1,5 @@
 //
-//  ParraAuthenticationMethod.swift
+//  ParraAuthType.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 11/26/22.
@@ -11,7 +11,7 @@ import Foundation
 public typealias ParraTokenProvider = () async throws -> String?
 public typealias ParraUserIdProvider = () async throws -> String?
 
-public enum ParraAuthenticationMethod {
+public enum ParraAuthType {
     /// The standard way of authenticating with Parra. You provide a provider
     /// function that interacts with your API to return a signed access token
     /// for your user.
@@ -28,7 +28,13 @@ public enum ParraAuthenticationMethod {
         userIdProvider: ParraUserIdProvider
     )
 
-    case parraAuth
+    case parraAuth(methods: [ParraAuthMethod])
+
+    // MARK: - Public
+
+    public enum ParraAuthMethod {
+        case emailPassword
+    }
 
     // MARK: - Internal
 

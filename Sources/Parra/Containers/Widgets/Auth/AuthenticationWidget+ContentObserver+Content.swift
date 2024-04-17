@@ -17,21 +17,24 @@ extension AuthenticationWidget.ContentObserver {
             subtitle: LabelContent?,
             emailField: TextInputContent,
             passwordField: TextInputContent,
-            loginButton: TextButtonContent
+            loginButton: TextButtonContent,
+            signupButton: TextButtonContent
         ) {
             self.title = title
             self.subtitle = subtitle
             self.emailField = emailField
             self.passwordField = passwordField
             self.loginButton = loginButton
+            self.signupButton = signupButton
         }
 
         // MARK: - Internal
 
         let title: LabelContent
         let subtitle: LabelContent?
-        let emailField: TextInputContent
-        let passwordField: TextInputContent
-        let loginButton: TextButtonContent
+        var emailField: TextInputContent
+        var passwordField: TextInputContent
+        var loginButton: TextButtonContent
+        var signupButton: TextButtonContent
     }
 }

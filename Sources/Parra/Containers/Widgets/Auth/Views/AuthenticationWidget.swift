@@ -66,6 +66,14 @@ public struct AuthenticationWidget: Container {
                 contentObserver.loginTapped()
             }
 
+            componentFactory.buildTextButton(
+                variant: .plain,
+                config: config.signupButton,
+                content: content.signupButton
+            ) {
+                contentObserver.loginTapped()
+            }
+
             Spacer()
         }
         .safeAreaPadding()
@@ -80,10 +88,6 @@ public struct AuthenticationWidget: Container {
     let style: AuthenticationWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
-
-//    public init(error: Error? = nil) {
-//        self.error = error
-//    }
 
     // MARK: - Private
 

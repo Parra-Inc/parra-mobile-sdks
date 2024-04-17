@@ -85,13 +85,22 @@ open class ParraApp<
     public func configureParra(
         workspaceId: String,
         applicationId: String,
-        authenticationMethod: ParraAuthenticationMethod = .parraAuth,
+        authenticationMethod: ParraAuthType =
+            .parraAuth(methods: [.emailPassword]),
         configuration: ParraConfiguration = .init(),
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
         appContent: @MainActor @escaping () -> some ParraAppContent
     ) {
         guard self.appContent == nil else {
             fatalError("ParraApp content has already been set")
+        }
+
+        if case .parraAuth(let methods) = authenticationMethod,
+           methods.isEmpty
+        {
+            fatalError(
+                "ParraAuthType.parraAuth must have at least one authentication method specified."
+            )
         }
 
         let appState = ParraAppState(

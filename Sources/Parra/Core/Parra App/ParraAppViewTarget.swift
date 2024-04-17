@@ -10,7 +10,7 @@ import Foundation
 
 enum ParraAppViewTarget {
     case app(
-        ParraAuthenticationMethod,
+        ParraAuthType,
         ParraAppState,
         ParraAuthState,
         ParraLaunchScreen.Config?

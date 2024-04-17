@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-extension ParraAuthenticationMethod {
-    nonisolated static let preview: ParraAuthenticationMethod = .custom {
+extension ParraAuthType {
+    nonisolated static let preview: ParraAuthType = .custom {
         var request = URLRequest(
             // Replace this with your Parra access token generation endpoint
             url: URL(

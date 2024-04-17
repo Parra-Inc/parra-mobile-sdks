@@ -22,12 +22,20 @@ extension AuthenticationWidget {
             self.authService = initialParams.authService
 
             self.content = Content(
-                title: LabelContent(text: "title"),
+                title: LabelContent(
+                    text: ParraInternal
+                        .appBundleName() ?? "Welcome"
+                ),
                 subtitle: LabelContent(text: "subtitle"),
                 emailField: TextInputContent(placeholder: "Email address"),
                 passwordField: TextInputContent(placeholder: "Password"),
                 loginButton: TextButtonContent(
                     text: LabelContent(text: "Log in")
+                ),
+                signupButton: TextButtonContent(
+                    text: LabelContent(
+                        text: "Don't have an account? Sign up"
+                    )
                 )
             )
         }
@@ -36,16 +44,29 @@ extension AuthenticationWidget {
 
         @Published var content: Content
         @Published var error: Error?
-        @Published var isLoading = false
         @Published var loginButtonIsEnabled = false
 
         func loginTapped() {
+            if content.loginButton.isLoading {
+                return
+            }
+
+            withAnimation {
+                content.loginButton.isLoading = true
+            }
+
             Task {
                 do {
                     try await authService.login(
                     )
                 } catch {
                     Logger.error(error)
+                }
+
+                Task { @MainActor in
+                    withAnimation {
+                        content.loginButton.isLoading = false
+                    }
                 }
             }
         }

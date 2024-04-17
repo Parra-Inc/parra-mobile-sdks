@@ -16,6 +16,8 @@ public class AuthenticationWidgetConfig: ContainerConfig {
         self.subtitle = AuthenticationWidgetConfig.default.subtitle
         self.emailField = AuthenticationWidgetConfig.default.emailField
         self.passwordField = AuthenticationWidgetConfig.default.passwordField
+        self.loginButton = AuthenticationWidgetConfig.default.loginButton
+        self.signupButton = AuthenticationWidgetConfig.default.signupButton
     }
 
     public init(
@@ -24,12 +26,18 @@ public class AuthenticationWidgetConfig: ContainerConfig {
         emailField: TextInputConfig = AuthenticationWidgetConfig.default
             .emailField,
         passwordField: TextInputConfig = AuthenticationWidgetConfig.default
-            .passwordField
+            .passwordField,
+        loginButton: TextButtonConfig = AuthenticationWidgetConfig.default
+            .loginButton,
+        signupButton: TextButtonConfig = AuthenticationWidgetConfig.default
+            .signupButton
     ) {
         self.title = title
         self.subtitle = subtitle
         self.emailField = emailField
         self.passwordField = passwordField
+        self.loginButton = loginButton
+        self.signupButton = signupButton
     }
 
     // MARK: - Public
@@ -44,6 +52,12 @@ public class AuthenticationWidgetConfig: ContainerConfig {
         passwordField: TextInputConfig(
             title: LabelConfig(fontStyle: .subheadline),
             helper: LabelConfig(fontStyle: .caption)
+        ),
+        loginButton: TextButtonConfig(
+            style: .primary, size: .large, isMaxWidth: true
+        ),
+        signupButton: TextButtonConfig(
+            style: .primary, size: .small, isMaxWidth: false
         )
     )
 
@@ -53,7 +67,6 @@ public class AuthenticationWidgetConfig: ContainerConfig {
     public let emailField: TextInputConfig
     public let passwordField: TextInputConfig
 
-    public let loginButton = TextButtonConfig(
-        style: .primary, size: .large, isMaxWidth: true
-    )
+    public let loginButton: TextButtonConfig
+    public let signupButton: TextButtonConfig
 }

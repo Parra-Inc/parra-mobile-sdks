@@ -19,7 +19,7 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
         configureParra(
             workspaceId: Parra.Demo.workspaceId,
             applicationId: Parra.Demo.applicationId,
-            authenticationMethod: .parraAuth,
+            authenticationMethod: .parraAuth(methods: [.emailPassword]),
             configuration: ParraConfiguration(
                 appInfoOptions: .default,
                 globalComponentAttributes: .default,
@@ -43,7 +43,7 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
     /// flow that you should be implementing for both DEBUG and RELEASE
     /// environments. This authentication method relies on an OAuth flow with
     /// your backend to create a Parra access token for a given user.
-    func debugAuthenticationMethod() -> ParraAuthenticationMethod {
+    func debugAuthenticationMethod() -> ParraAuthType {
         return .custom {
             let myAppAccessToken = Parra.Demo.demoUserId
 
@@ -75,7 +75,7 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
     /// Demo. This app uses public key authentication, which is not preferred
     /// but provides an example of how it can be achieved and prevents the demo
     /// app from requiring a backend to authenticate with.
-    func betaAuthenticationMethod() -> ParraAuthenticationMethod {
+    func betaAuthenticationMethod() -> ParraAuthType {
         return .public(
             apiKeyId: Parra.Demo.apiKeyId,
             userIdProvider: {
@@ -84,7 +84,7 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
         )
     }
 
-    func authenticationMethod() -> ParraAuthenticationMethod {
+    func authenticationMethod() -> ParraAuthType {
         #if DEBUG
         return debugAuthenticationMethod()
         #else

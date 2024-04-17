@@ -218,7 +218,7 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
     @StateObject private var alertManager: AlertManager
 
     private let parra: ParraInternal
-    private let authenticationMethod: ParraAuthenticationMethod
+    private let authenticationMethod: ParraAuthType
     private let launchScreenConfig: ParraLaunchScreen.Config
 
     @State private var showLogs = false
