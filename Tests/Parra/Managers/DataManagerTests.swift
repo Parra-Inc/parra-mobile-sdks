@@ -24,16 +24,15 @@ class DataManagerTests: MockedParraTestCase {
     }
 
     func testCanRetreiveCredentialAfterUpdatingIt() async throws {
-        let credential = ParraUser.Credential(
-            token: UUID().uuidString
+        let user = ParraUser(
+            credential: ParraUser.Credential.basic(UUID().uuidString),
+            info: ParraUser.Info()
         )
 
-        await dataManager.updateCredential(
-            credential: credential
-        )
+        await dataManager.updateCurrentUser(user)
 
-        let retreived = await dataManager.getCurrentCredential()
+        let retreived = await dataManager.getCurrentUser()
 
-        XCTAssertEqual(retreived, credential)
+        XCTAssertEqual(retreived, user)
     }
 }

@@ -9,7 +9,7 @@
 @testable import Parra
 import XCTest
 
-final class ParraUser.CredentialTests: XCTestCase {
+final class ParraCredentialTests: XCTestCase {
     func testDecodesFromToken() throws {
         let _ = try JSONDecoder().decode(
             ParraUser.Credential.self,
@@ -26,7 +26,7 @@ final class ParraUser.CredentialTests: XCTestCase {
 
     func testEncodesToToken() throws {
         let data = try JSONEncoder()
-            .encode(ParraUser.Credential(token: "something"))
+            .encode(ParraUser.Credential.basic("something"))
         let decoded = try JSONDecoder().decode(
             [String: String].self,
             from: data

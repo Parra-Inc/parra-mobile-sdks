@@ -12,6 +12,7 @@ import Foundation
 extension ParraEndpoint: CaseIterable {
     public static var allCases: [ParraEndpoint] = {
         let testCases: [ParraEndpoint] = [
+            .getUserInfo,
             .getCards,
             .getFeedbackForm(formId: ""),
             .getRoadmap(tenantId: "", applicationId: ""),
@@ -38,7 +39,7 @@ extension ParraEndpoint: CaseIterable {
         var finalCases = [ParraEndpoint]()
         for testCase in testCases {
             switch testCase {
-            case .postAuthentication, .getCards, .getFeedbackForm,
+            case .postAuthentication, .getUserInfo, .getCards, .getFeedbackForm,
                  .postSubmitFeedbackForm, .postBulkAnswerQuestions,
                  .postBulkSubmitSessions, .postPushTokens,
                  .getRoadmap, .getPaginateTickets, .postVoteForTicket,

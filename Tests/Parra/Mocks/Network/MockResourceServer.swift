@@ -1,5 +1,5 @@
 //
-//  MockApiResourceServer.swift
+//  MockResourceServer.swift
 //  Tests
 //
 //  Created by Mick MacCallum on 7/3/23.
@@ -9,8 +9,8 @@
 import Foundation
 @testable import Parra
 
-struct MockApiResourceServer {
-    let apiResourceServer: ApiResourceServer
+struct MockResourceServer<S> where S: Server {
+    let resourceServer: S
     let dataManager: DataManager
     let urlSession: MockURLSession
     let appState: ParraAppState

@@ -33,33 +33,43 @@ class MockedParraTestCase: ParraBaseMock {
             tenantId: UUID().uuidString,
             applicationId: UUID().uuidString
         ),
-        authenticationProvider: ParraTokenProvider? = {
+        authState: ParraAuthState = .init(),
+        authenticationProvider: @escaping ParraTokenProvider = {
             return UUID().uuidString
         }
     ) async -> MockParra {
         let configuration = ParraConfiguration()
+        let dataManager = createMockDataManager()
 
-        let mockApiResourceServer = await createMockApiResourceServer(
+        let (
+            mockApiResourceServer,
+            mockAuthServer,
+            mockExternalResourceServer
+        ) = await createMockResourceServers(
             appState: appState,
             appConfig: configuration,
-            authenticationProvider: authenticationProvider
+            authenticationProvider: authenticationProvider,
+            dataManager: dataManager
         )
 
         let notificationCenter = ParraNotificationCenter.default
         let syncState = ParraSyncState()
 
+        let api = API(
+            appState: appState,
+            apiResourceServer: mockApiResourceServer.resourceServer
+        )
+
         let sessionManager = ParraSessionManager(
-            dataManager: mockApiResourceServer.dataManager,
-            apiResourceServer: mockApiResourceServer.apiResourceServer,
+            dataManager: dataManager,
+            api: api,
             loggerOptions: configuration.loggerOptions
         )
 
         let syncManager = ParraSyncManager(
             syncState: syncState,
-            apiResourceServer: mockApiResourceServer.apiResourceServer,
             sessionManager: sessionManager,
-            notificationCenter: notificationCenter,
-            syncDelay: 0.25
+            notificationCenter: notificationCenter
         )
 
         let containerRenderer = ContainerRenderer(
@@ -70,7 +80,6 @@ class MockedParraTestCase: ParraBaseMock {
 
         let modalScreenManager = ModalScreenManager(
             containerRenderer: containerRenderer,
-            apiResourceServer: mockApiResourceServer.apiResourceServer,
             configuration: configuration,
             notificationCenter: notificationCenter
         )
@@ -79,30 +88,49 @@ class MockedParraTestCase: ParraBaseMock {
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
-            apiResourceServer: mockApiResourceServer.apiResourceServer
+            api: api,
+            externalResourceServer: mockExternalResourceServer.resourceServer
+        )
+
+        let authService = AuthService(
+            appState: appState,
+            oauth2Service: OAuth2Service(
+                clientId: appState.applicationId,
+                tenantId: appState.tenantId,
+                authServer: mockAuthServer.resourceServer
+            ),
+            dataManager: dataManager,
+            authServer: mockAuthServer.resourceServer,
+            authenticationMethod: .custom(tokenProvider: authenticationProvider)
         )
 
         let feedback = ParraFeedback(
             dataManager: ParraFeedbackDataManager(
-                dataManager: mockApiResourceServer.dataManager,
+                dataManager: dataManager,
                 syncManager: syncManager,
                 jsonEncoder: .parraEncoder,
                 jsonDecoder: .parraDecoder,
                 fileManager: .default,
                 notificationCenter: notificationCenter
             ),
-            apiResourceServer: mockApiResourceServer.apiResourceServer
+            api: api,
+            apiResourceServer: mockApiResourceServer.resourceServer
         )
 
         Logger.loggerBackend = sessionManager
 
         let parraInternal = ParraInternal(
+            authenticationMethod: .custom(
+                tokenProvider: authenticationProvider
+            ),
             configuration: configuration,
             appState: appState,
-            dataManager: mockApiResourceServer.dataManager,
+            authState: authState,
+            dataManager: dataManager,
             syncManager: syncManager,
+            authService: authService,
             sessionManager: sessionManager,
-            apiResourceServer: mockApiResourceServer.apiResourceServer,
+            api: api,
             notificationCenter: notificationCenter,
             feedback: feedback,
             latestVersionManager: latestVersionManager,
@@ -113,18 +141,18 @@ class MockedParraTestCase: ParraBaseMock {
 
         let parra = Parra(parraInternal: parraInternal)
 
-        mockApiResourceServer.apiResourceServer.delegate = parraInternal
+        mockApiResourceServer.resourceServer.delegate = parraInternal
         syncManager.delegate = parraInternal
-
-        await sessionManager.initializeSessions()
 
         return MockParra(
             parra: parra,
             mockApiResourceServer: mockApiResourceServer,
-            dataManager: mockApiResourceServer.dataManager,
+            mockAuthServer: mockAuthServer,
+            mockExternalResource: mockExternalResourceServer,
+            dataManager: dataManager,
             syncManager: syncManager,
             sessionManager: sessionManager,
-            apiResourceServer: mockApiResourceServer.apiResourceServer,
+            apiResourceServer: mockApiResourceServer.resourceServer,
             notificationCenter: notificationCenter,
             appState: appState
         )
@@ -133,7 +161,7 @@ class MockedParraTestCase: ParraBaseMock {
     func createMockDataManager() -> DataManager {
         let storageDirectoryName = DataManager.Directory
             .storageDirectoryName
-        let credentialStorageModule = ParraStorageModule<ParraUser.Credential>(
+        let credentialStorageModule = ParraStorageModule<ParraUser>(
             dataStorageMedium: .fileSystem(
                 baseUrl: baseStorageDirectory,
                 folder: storageDirectoryName,
@@ -171,16 +199,19 @@ class MockedParraTestCase: ParraBaseMock {
         )
     }
 
-    func createMockApiResourceServer(
+    func createMockResourceServers(
         appState: ParraAppState = ParraAppState(
             tenantId: UUID().uuidString,
             applicationId: UUID().uuidString
         ),
         appConfig: ParraConfiguration = .init(),
-        authenticationProvider: ParraTokenProvider?
-    ) async -> MockApiResourceServer {
-        let dataManager = createMockDataManager()
-
+        authenticationProvider: @escaping ParraTokenProvider,
+        dataManager: DataManager
+    ) async -> (
+        api: MockResourceServer<ApiResourceServer>,
+        auth: MockResourceServer<AuthServer>,
+        external: MockResourceServer<ExternalResourceServer>
+    ) {
         let urlSession = MockURLSession(testCase: self)
         let configuration = ServerConfiguration(
             urlSession: urlSession,
@@ -188,20 +219,54 @@ class MockedParraTestCase: ParraBaseMock {
             jsonDecoder: .parraDecoder
         )
 
+        let authServer = AuthServer(
+            appState: appState,
+            configuration: configuration
+        )
+
+        let authService = AuthService(
+            appState: appState,
+            oauth2Service: OAuth2Service(
+                clientId: appState.applicationId,
+                tenantId: appState.tenantId,
+                authServer: authServer
+            ),
+            dataManager: dataManager,
+            authServer: authServer,
+            authenticationMethod: .custom(tokenProvider: authenticationProvider)
+        )
+
         let apiResourceServer = ApiResourceServer(
+            authService: authService,
             appState: appState,
             appConfig: appConfig,
             dataManager: dataManager,
             configuration: configuration
         )
 
-        apiResourceServer.updateAuthenticationProvider(authenticationProvider)
+        let externalResourceServer = ExternalResourceServer(
+            configuration: configuration
+        )
 
-        return MockApiResourceServer(
-            apiResourceServer: apiResourceServer,
-            dataManager: dataManager,
-            urlSession: urlSession,
-            appState: appState
+        return (
+            MockResourceServer(
+                resourceServer: apiResourceServer,
+                dataManager: dataManager,
+                urlSession: urlSession,
+                appState: appState
+            ),
+            MockResourceServer(
+                resourceServer: authServer,
+                dataManager: dataManager,
+                urlSession: urlSession,
+                appState: appState
+            ),
+            MockResourceServer(
+                resourceServer: externalResourceServer,
+                dataManager: dataManager,
+                urlSession: urlSession,
+                appState: appState
+            )
         )
     }
 
@@ -211,15 +276,21 @@ class MockedParraTestCase: ParraBaseMock {
             applicationId: UUID().uuidString
         ),
         appConfig: ParraConfiguration = .init(),
-        authenticationProvider: ParraTokenProvider?
+        authenticationProvider: @escaping ParraTokenProvider
     ) async -> LatestVersionManager {
         let configuration = ParraConfiguration()
         let notificationCenter = ParraNotificationCenter()
+        let dataManager = createMockDataManager()
 
-        let mockApiResourceServer = await createMockApiResourceServer(
+        let (
+            mockApiResourceServer,
+            _,
+            mockExternalResourceServer
+        ) = await createMockResourceServers(
             appState: appState,
             appConfig: configuration,
-            authenticationProvider: authenticationProvider
+            authenticationProvider: authenticationProvider,
+            dataManager: dataManager
         )
 
         let containerRenderer = ContainerRenderer(
@@ -230,16 +301,21 @@ class MockedParraTestCase: ParraBaseMock {
 
         let modalScreenManager = ModalScreenManager(
             containerRenderer: containerRenderer,
-            apiResourceServer: mockApiResourceServer.apiResourceServer,
             configuration: configuration,
             notificationCenter: notificationCenter
+        )
+
+        let api = API(
+            appState: appState,
+            apiResourceServer: mockApiResourceServer.resourceServer
         )
 
         return LatestVersionManager(
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
-            apiResourceServer: mockApiResourceServer.apiResourceServer
+            api: api,
+            externalResourceServer: mockExternalResourceServer.resourceServer
         )
     }
 }
