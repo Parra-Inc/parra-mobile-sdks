@@ -10,8 +10,28 @@ import Foundation
 
 extension AuthenticationWidget.ContentObserver {
     struct InitialParams {
-        let error: Error?
+        // MARK: - Lifecycle
+
+        init(
+            config: AuthenticationWidgetConfig,
+            authService: AuthService,
+            alertManager: AlertManager,
+            methods: [ParraAuthMethod],
+            initialError: Error? = nil
+        ) {
+            self.config = config
+            self.authService = authService
+            self.alertManager = alertManager
+            self.methods = methods
+            self.initialError = initialError
+        }
+
+        // MARK: - Internal
+
+        let config: AuthenticationWidgetConfig
         let authService: AuthService
+        let alertManager: AlertManager
         let methods: [ParraAuthMethod]
+        let initialError: Error?
     }
 }

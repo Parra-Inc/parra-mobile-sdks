@@ -1,5 +1,5 @@
 //
-//  FormFieldState.swift
+//  FieldState.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/19/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum FormFieldState {
+enum FieldState {
     case valid
     case invalid(String)
 

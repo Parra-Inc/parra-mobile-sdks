@@ -47,11 +47,24 @@ public class AuthenticationWidgetConfig: ContainerConfig {
         subtitle: LabelConfig(fontStyle: .subheadline),
         emailField: TextInputConfig(
             title: LabelConfig(fontStyle: .subheadline),
-            helper: LabelConfig(fontStyle: .caption)
+            helper: LabelConfig(fontStyle: .caption),
+            validationRules: [
+                .minLength(5),
+                .maxLength(128),
+                .email
+            ],
+            preferValidationErrorsToHelperMessage: true
         ),
         passwordField: TextInputConfig(
             title: LabelConfig(fontStyle: .subheadline),
-            helper: LabelConfig(fontStyle: .caption)
+            helper: LabelConfig(fontStyle: .caption),
+            validationRules: [
+                .minLength(8),
+                .maxLength(256),
+                .hasLowercase,
+                .hasUppercase
+            ],
+            preferValidationErrorsToHelperMessage: true
         ),
         loginButton: TextButtonConfig(
             style: .primary, size: .large, isMaxWidth: true

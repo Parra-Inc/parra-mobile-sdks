@@ -113,9 +113,11 @@ public struct AuthenticationWidget: Container {
             componentFactory: factory,
             contentObserver: AuthenticationWidget.ContentObserver(
                 initialParams: .init(
-                    error: nil,
+                    config: .default,
                     authService: parra.parraInternal.authService,
-                    methods: [.emailPassword]
+                    alertManager: parra.parraInternal.alertManager,
+                    methods: [.emailPassword],
+                    initialError: nil
                 )
             )
         )

@@ -36,6 +36,7 @@ public struct MenuConfig {
         -> MenuConfig
     {
         // There are currently no fields used in config from this data object
+        // but this keeps with a pattern used for other field types.
         self
     }
 }

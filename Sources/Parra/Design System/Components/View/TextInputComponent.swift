@@ -103,7 +103,7 @@ struct TextInputComponent: TextInputComponentType {
             ParraAttributedLabelStyle?,
             Bool
         ) = if let errorMessage = style.content.errorMessage,
-               config.showValidationErrors
+               config.preferValidationErrorsToHelperMessage
         {
             // Even though we're displaying the error message, we only want to
             // render it as an error if input has already been received. This

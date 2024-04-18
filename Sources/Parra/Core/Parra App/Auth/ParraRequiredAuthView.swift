@@ -39,8 +39,9 @@ public struct ParraDefaultAuthenticationView: View {
             componentFactory: .init(global: .default, theme: .default),
             contentObserver: .init(
                 initialParams: .init(
-                    error: nil,
+                    config: .default,
                     authService: parra.parraInternal.authService,
+                    alertManager: parra.parraInternal.alertManager,
                     methods: methods
                 )
             )
