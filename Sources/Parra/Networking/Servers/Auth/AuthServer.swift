@@ -15,10 +15,15 @@ final class AuthServer: Server {
 
     init(
         appState: ParraAppState,
+        appConfig: ParraConfiguration,
         configuration: ServerConfiguration
     ) {
         self.appState = appState
         self.configuration = configuration
+        self.headerFactory = HeaderFactory(
+            appState: appState,
+            appConfig: appConfig
+        )
     }
 
     // MARK: - Internal
@@ -29,13 +34,15 @@ final class AuthServer: Server {
 
     let appState: ParraAppState
     let configuration: ServerConfiguration
+    let headerFactory: HeaderFactory
 
     func performPublicApiKeyAuthenticationRequest(
-        forTenant tenantId: String,
         apiKeyId: String,
         userId: String
     ) async throws -> String {
-        let endpoint = ParraEndpoint.postAuthentication(tenantId: tenantId)
+        let endpoint = ParraEndpoint.postAuthentication(
+            tenantId: appState.tenantId
+        )
         let url = ParraInternal.Constants.parraApiRoot
             .appendingPathComponent(endpoint.route)
 
@@ -75,10 +82,45 @@ final class AuthServer: Server {
         }
     }
 
-    func getUserInformation(
-        token: String
+    func postLogin(
+        accessToken: String
     ) async throws -> UserInfoResponse {
-        let endpoint = ParraEndpoint.getUserInfo
+        return try await performAuthRequest(
+            to: .postLogin(
+                tenantId: appState.tenantId
+            ),
+            with: accessToken
+        )
+    }
+
+    func postLogout(
+        accessToken: String
+    ) async throws -> EmptyResponseObject {
+        return try await performAuthRequest(
+            to: .postLogout(
+                tenantId: appState.tenantId
+            ),
+            with: accessToken
+        )
+    }
+
+    func getUserInformation(
+        accessToken: String
+    ) async throws -> UserInfoResponse {
+        return try await performAuthRequest(
+            to: .getUserInfo(
+                tenantId: appState.tenantId
+            ),
+            with: accessToken
+        )
+    }
+
+    // MARK: - Private
+
+    private func performAuthRequest<T>(
+        to endpoint: ParraEndpoint,
+        with accessToken: String
+    ) async throws -> T where T: Codable {
         let url = ParraInternal.Constants.parraApiRoot
             .appendingPathComponent(endpoint.route)
 
@@ -86,7 +128,14 @@ final class AuthServer: Server {
 
         request.httpMethod = endpoint.method.rawValue
         request.cachePolicy = .reloadRevalidatingCacheData
-        request.setValue(for: .authorization(.bearer(token)))
+        request.setValue(for: .authorization(.bearer(accessToken)))
+
+        addHeaders(
+            to: &request,
+            endpoint: endpoint,
+            for: appState,
+            with: headerFactory
+        )
 
         let (data, response) = try await performAsyncDataTask(
             request: request
@@ -95,7 +144,7 @@ final class AuthServer: Server {
         switch response.statusCode {
         case 200:
             return try configuration.jsonDecoder.decode(
-                UserInfoResponse.self,
+                T.self,
                 from: data
             )
         default:

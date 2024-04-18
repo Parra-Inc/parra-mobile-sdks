@@ -68,7 +68,10 @@ final class ApiResourceServer: Server {
             )
 
         do {
-            let headerFactory = HeaderFactory()
+            let headerFactory = HeaderFactory(
+                appState: appState,
+                appConfig: appConfig
+            )
 
             let url = ParraInternal.Constants.parraApiRoot
                 .appendingPathComponent(route)
@@ -441,69 +444,5 @@ final class ApiResourceServer: Server {
         )
 
         return (data, httpResponse)
-    }
-
-    private func addHeaders(
-        to request: inout URLRequest,
-        endpoint: ParraEndpoint,
-        for appState: ParraAppState,
-        with headerFactory: HeaderFactory
-    ) {
-        let bundleId = appConfig.appInfoOptions.bundleId
-
-        request.setValue(for: .accept(.applicationJson))
-        request.setValue(
-            for: .applicationId(appState.applicationId),
-            with: headerFactory
-        )
-        request.setValue(
-            for: .tenantId(appState.tenantId),
-            with: headerFactory
-        )
-        request.setValue(
-            for: .applicationBundleId(bundleId),
-            with: headerFactory
-        )
-
-        if endpoint.method.allowsBody {
-            request.setValue(for: .contentType(.applicationJson))
-        }
-
-        // Important to be called for every HTTP request. All requests must
-        // include certain tracking headers, but only specific endpoints will be
-        // sent more extensive context about the device.
-        addTrackingHeaders(
-            toRequest: &request,
-            for: endpoint,
-            with: headerFactory
-        )
-
-        let headers = request.allHTTPHeaderFields ?? [:]
-
-        logger.trace(
-            "Finished attaching request headers for endpoint: \(endpoint.displayName)",
-            headers
-        )
-    }
-
-    private func addTrackingHeaders(
-        toRequest request: inout URLRequest,
-        for endpoint: ParraEndpoint,
-        with headerFactory: HeaderFactory
-    ) {
-        let headers = if endpoint.isTrackingEnabled {
-            headerFactory.trackingHeaderDictionary
-        } else {
-            headerFactory.commonHeaderDictionary
-        }
-
-        logger
-            .trace(
-                "Adding extra tracking headers to tracking enabled endpoint: \(endpoint.displayName)"
-            )
-
-        for (header, value) in headers {
-            request.setValue(value, forHTTPHeaderField: header)
-        }
     }
 }
