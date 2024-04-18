@@ -19,15 +19,6 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
         configureParra(
             workspaceId: Parra.Demo.workspaceId,
             applicationId: Parra.Demo.applicationId,
-            authenticationMethod: .parraAuth(methods: [.emailPassword]),
-            configuration: ParraConfiguration(
-                appInfoOptions: .default,
-                globalComponentAttributes: .default,
-                loggerOptions: .default,
-                pushNotificationOptions: .default,
-                themeOptions: ParraTheme(uiColor: .systemBlue),
-                whatsNewOptions: .default
-            ),
             appContent: {
                 ParraRequiredAuthView { _ in
                     ContentView()

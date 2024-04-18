@@ -12,6 +12,7 @@ enum ParraEndpoint {
     // Auth
     case postAuthentication(tenantId: String)
     case getUserInfo
+    case postCreateUser(tenantId: String)
 
     // Feedback
     case getCards
@@ -50,6 +51,8 @@ enum ParraEndpoint {
             return "tenants/\(tenantId)/issuers/public/auth/token"
         case .getUserInfo:
             return "user-info"
+        case .postCreateUser(let tenantId):
+            return "tenants/\(tenantId)/users"
 
         // Feedback
         case .getCards:
@@ -97,7 +100,7 @@ enum ParraEndpoint {
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
-             .postBulkSubmitSessions,
+             .postBulkSubmitSessions, .postCreateUser,
              .postPushTokens, .postAuthentication, .postVoteForTicket:
             return .post
         case .deleteVoteForTicket:
@@ -138,6 +141,8 @@ enum ParraEndpoint {
             return "tenants/:tenantId/push-tokens"
         case .postAuthentication:
             return "tenants/:tenantId/issuers/public/auth/token"
+        case .postCreateUser:
+            return "tenants/:tenantId/users"
         case .getRoadmap:
             return "tenants/:tenantId/applications/:applicationId/roadmap"
         case .getPaginateTickets:

@@ -53,7 +53,7 @@ final class AuthService {
         let result: ParraAuthResult
 
         do {
-            let response: OAuth2Service.TokenResponse = try await oauth2Service
+            let oauthToken = try await oauth2Service
                 .authenticate(
                     using: OAuth2Service.PasswordCredential(
                         username: username,
@@ -62,11 +62,48 @@ final class AuthService {
                 )
 
             let userInfo = try await authServer.getUserInformation(
-                token: response.accessToken
+                token: oauthToken.accessToken
             )
 
             let user = ParraUser(
-                credential: .basic(response.accessToken),
+                credential: .oauth2(oauthToken),
+                info: userInfo
+            )
+
+            result = .authenticated(user)
+        } catch {
+            result = .unauthenticated(error)
+        }
+
+        await applyUserUpdate(result)
+
+        return result
+    }
+
+    @discardableResult
+    func signUp(
+        username: String,
+        password: String
+    ) async throws -> ParraAuthResult {
+        logger.debug("Signing up with username/password")
+
+        let result: ParraAuthResult
+
+        do {
+            let oauthToken = try await oauth2Service
+                .authenticate(
+                    using: OAuth2Service.PasswordCredential(
+                        username: username,
+                        password: password
+                    )
+                )
+
+            let userInfo = try await authServer.getUserInformation(
+                token: oauthToken.accessToken
+            )
+
+            let user = ParraUser(
+                credential: .oauth2(oauthToken),
                 info: userInfo
             )
 
@@ -121,14 +158,7 @@ final class AuthService {
                     with: oauthToken.accessToken
                 )
 
-                return .oauth2(
-                    OAuth2Service.Token(
-                        accessToken: result.accessToken,
-                        tokenType: result.tokenType,
-                        expiresIn: result.expiresIn,
-                        refreshToken: oauthToken.refreshToken
-                    )
-                )
+                return .oauth2(result)
             case .custom(let tokenProvider):
                 // Does not support refreshing. Must just reinvoke and use the
                 // new token.

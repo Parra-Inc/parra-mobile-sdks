@@ -16,6 +16,8 @@ extension ParraEndpoint {
             switch self {
             case .getUserInfo:
                 fatalError()
+            case .postCreateUser:
+                UserInfoResponse.validStates()[0]
             case .getCards:
                 ParraCardItemFixtures.cardsResponse
             case .getFeedbackForm(let formId):

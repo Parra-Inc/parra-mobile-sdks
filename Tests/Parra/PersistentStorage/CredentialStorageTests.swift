@@ -32,7 +32,7 @@ class CredentialStorageTests: XCTestCase {
     func testCanUpdateCredential() async throws {
         let user = ParraUser(
             credential: ParraUser.Credential.basic(UUID().uuidString),
-            info: ParraUser.Info()
+            info: UserInfoResponse.validStates()[0]
         )
 
         await credentialStorage.updateCredential(credential: user)
@@ -46,7 +46,7 @@ class CredentialStorageTests: XCTestCase {
     func testCanRetreiveCurrentCredential() async throws {
         let user = ParraUser(
             credential: ParraUser.Credential.basic(UUID().uuidString),
-            info: ParraUser.Info()
+            info: UserInfoResponse.validStates()[0]
         )
 
         await credentialStorage.updateCredential(credential: user)

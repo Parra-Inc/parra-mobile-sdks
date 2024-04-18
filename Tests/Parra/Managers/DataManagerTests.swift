@@ -26,7 +26,7 @@ class DataManagerTests: MockedParraTestCase {
     func testCanRetreiveCredentialAfterUpdatingIt() async throws {
         let user = ParraUser(
             credential: ParraUser.Credential.basic(UUID().uuidString),
-            info: ParraUser.Info()
+            info: UserInfoResponse.validStates()[0]
         )
 
         await dataManager.updateCurrentUser(user)

@@ -30,12 +30,6 @@ public enum ParraAuthType {
 
     case parraAuth(methods: [ParraAuthMethod])
 
-    // MARK: - Public
-
-    public enum ParraAuthMethod {
-        case emailPassword
-    }
-
     // MARK: - Internal
 
     var supportsParraLoginScreen: Bool {

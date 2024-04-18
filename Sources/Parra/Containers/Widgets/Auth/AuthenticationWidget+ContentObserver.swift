@@ -20,6 +20,7 @@ extension AuthenticationWidget {
             initialParams: InitialParams
         ) {
             self.authService = initialParams.authService
+            self.methods = initialParams.methods
 
             self.content = Content(
                 title: LabelContent(
@@ -41,6 +42,9 @@ extension AuthenticationWidget {
         }
 
         // MARK: - Internal
+
+        let authService: AuthService
+        let methods: [ParraAuthMethod]
 
         @Published var content: Content
         @Published var error: Error?
@@ -70,9 +74,5 @@ extension AuthenticationWidget {
                 }
             }
         }
-
-        // MARK: - Private
-
-        private let authService: AuthService
     }
 }

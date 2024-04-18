@@ -77,7 +77,7 @@ final class AuthServer: Server {
 
     func getUserInformation(
         token: String
-    ) async throws -> ParraUser.Info {
+    ) async throws -> UserInfoResponse {
         let endpoint = ParraEndpoint.getUserInfo
         let url = ParraInternal.Constants.parraApiRoot
             .appendingPathComponent(endpoint.route)
@@ -92,20 +92,18 @@ final class AuthServer: Server {
             request: request
         )
 
-        // TODO: Response object will be something with tenant_user key
-        return ParraUser.Info()
-//        switch response.statusCode {
-//        case 200:
-//            return try configuration.jsonDecoder.decode(
-//                ParraUser.Info.self,
-//                from: data
-//            )
-//        default:
-//            throw ParraError.networkError(
-//                request: request,
-//                response: response,
-//                responseData: data
-//            )
-//        }
+        switch response.statusCode {
+        case 200:
+            return try configuration.jsonDecoder.decode(
+                UserInfoResponse.self,
+                from: data
+            )
+        default:
+            throw ParraError.networkError(
+                request: request,
+                response: response,
+                responseData: data
+            )
+        }
     }
 }

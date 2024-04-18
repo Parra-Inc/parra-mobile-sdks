@@ -243,14 +243,26 @@ public struct UserInfoResponse: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        user: UserResponse?
+        roles: [String],
+        user: UserResponse?,
+        tenantUser: TenantUser?
     ) {
+        self.roles = roles
         self.user = user
+        self.tenantUser = tenantUser
     }
 
     // MARK: - Public
 
+    public enum CodingKeys: String, CodingKey {
+        case roles
+        case user
+        case tenantUser
+    }
+
+    public let roles: [String]
     public let user: UserResponse?
+    public let tenantUser: TenantUser?
 }
 
 public struct ListUsersQuery: Codable, Equatable, Hashable {

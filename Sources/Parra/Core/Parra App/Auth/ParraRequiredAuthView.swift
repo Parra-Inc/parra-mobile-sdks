@@ -21,7 +21,12 @@ public struct ParraDefaultAuthenticationView: View {
 
     public var body: some View {
         let authService = parra.parraInternal.authService
-        if !authService.authenticationMethod.supportsParraLoginScreen {
+
+        let methods: [ParraAuthMethod] = if case .parraAuth(let methods) =
+            authService.authenticationMethod
+        {
+            methods
+        } else {
             fatalError(
                 "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
             )
@@ -35,7 +40,8 @@ public struct ParraDefaultAuthenticationView: View {
             contentObserver: .init(
                 initialParams: .init(
                     error: nil,
-                    authService: parra.parraInternal.authService
+                    authService: parra.parraInternal.authService,
+                    methods: methods
                 )
             )
         )

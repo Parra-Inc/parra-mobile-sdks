@@ -9,14 +9,6 @@
 import SwiftUI
 
 public struct ParraUser: Equatable, Codable {
-    // MARK: - Public
-
-    public struct Info: Equatable, Codable {
-        // TODO: this
-    }
-
-    // MARK: - Internal
-
     enum Credential: Codable, Equatable {
         case basic(String)
         case oauth2(OAuth2Service.Token)
@@ -34,5 +26,5 @@ public struct ParraUser: Equatable, Codable {
     }
 
     let credential: Credential
-    let info: Info
+    let info: UserInfoResponse
 }

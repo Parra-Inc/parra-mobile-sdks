@@ -31,7 +31,7 @@ final class OAuth2Service {
 
     func authenticate(
         using passwordCredential: PasswordCredential
-    ) async throws -> TokenResponse {
+    ) async throws -> Token {
         let data: [String: String] = [
             "grant_type": "password",
             "username": passwordCredential.username,
@@ -41,28 +41,48 @@ final class OAuth2Service {
             "client_id": clientId
         ]
 
-        return try await authServer.performFormPostRequest(
-            to: tokenUrl,
-            data: data,
-            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-            delegate: nil
+        let response: TokenResponse = try await authServer
+            .performFormPostRequest(
+                to: tokenUrl,
+                data: data,
+                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+                delegate: nil
+            )
+
+        return OAuth2Service.Token(
+            accessToken: response.accessToken,
+            tokenType: response.tokenType,
+            expiresIn: response.expiresIn,
+            refreshToken: response.refreshToken
         )
     }
 
+//    func signUp() -> TenantUser {
+//        return TenantUser()
+//    }
+
     func refreshToken(
         with refreshToken: String
-    ) async throws -> RefreshResponse {
+    ) async throws -> Token {
         let data: [String: String] = [
             "grant_type": "refresh_token",
             "refresh_token": refreshToken,
             "client_id": clientId
         ]
 
-        return try await authServer.performFormPostRequest(
-            to: tokenUrl,
-            data: data,
-            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-            delegate: nil
+        let response: RefreshResponse = try await authServer
+            .performFormPostRequest(
+                to: tokenUrl,
+                data: data,
+                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+                delegate: nil
+            )
+
+        return OAuth2Service.Token(
+            accessToken: response.accessToken,
+            tokenType: response.tokenType,
+            expiresIn: response.expiresIn,
+            refreshToken: refreshToken
         )
     }
 }

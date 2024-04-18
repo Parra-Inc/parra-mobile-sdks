@@ -101,3 +101,175 @@ public struct TenantCollectionResponse: Codable, Equatable, Hashable {
     public let totalCount: Int
     public let data: [Tenant]
 }
+
+public struct ImageAssetStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        size: Size,
+        url: String
+    ) {
+        self.id = id
+        self.size = size
+        self.url = url
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let size: Size
+    public let url: String
+}
+
+public struct Identity: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        type: String,
+        provider: String?,
+        providerUserId: String?,
+        email: String?,
+        emailVerified: Bool?,
+        phoneNumber: String?,
+        phoneNumberVerified: Bool?
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.type = type
+        self.provider = provider
+        self.providerUserId = providerUserId
+        self.email = email
+        self.emailVerified = emailVerified
+        self.phoneNumber = phoneNumber
+        self.phoneNumberVerified = phoneNumberVerified
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case type
+        case provider
+        case providerUserId
+        case email
+        case emailVerified
+        case phoneNumber
+        case phoneNumberVerified
+    }
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let type: String
+    public let provider: String?
+    public let providerUserId: String?
+    public let email: String?
+    public let emailVerified: Bool?
+    public let phoneNumber: String?
+    public let phoneNumberVerified: Bool?
+}
+
+public struct TenantUser: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        tenantId: String,
+        name: String?,
+        avatar: ImageAssetStub?,
+        identity: String?,
+        email: String?,
+        emailVerified: Bool?,
+        phoneNumber: String?,
+        phoneNumberVerified: Bool,
+        firstName: String?,
+        lastName: String?,
+        locale: String?,
+        signedUpAt: Date?,
+        lastUpdatedAt: Date?,
+        lastSeenAt: Date?,
+        properties: [String: AnyCodable],
+        identities: [Identity]?
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.tenantId = tenantId
+        self.name = name
+        self.avatar = avatar
+        self.identity = identity
+        self.email = email
+        self.emailVerified = emailVerified
+        self.phoneNumber = phoneNumber
+        self.phoneNumberVerified = phoneNumberVerified
+        self.firstName = firstName
+        self.lastName = lastName
+        self.locale = locale
+        self.signedUpAt = signedUpAt
+        self.lastUpdatedAt = lastUpdatedAt
+        self.lastSeenAt = lastSeenAt
+        self.properties = properties
+        self.identities = identities
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case tenantId
+        case name
+        case avatar
+        case identity
+        case email
+        case emailVerified
+        case phoneNumber
+        case phoneNumberVerified
+        case firstName
+        case lastName
+        case locale
+        case signedUpAt
+        case lastUpdatedAt
+        case lastSeenAt
+        case properties
+        case identities
+    }
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let tenantId: String
+    public let name: String?
+    public let avatar: ImageAssetStub?
+    public let identity: String?
+    public let email: String?
+    public let emailVerified: Bool?
+    public let phoneNumber: String?
+    public let phoneNumberVerified: Bool
+    public let firstName: String?
+    public let lastName: String?
+    public let locale: String?
+    public let signedUpAt: Date?
+    public let lastUpdatedAt: Date?
+    public let lastSeenAt: Date?
+    public let properties: [String: AnyCodable]
+    public let identities: [Identity]?
+}

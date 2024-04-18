@@ -12,5 +12,6 @@ extension AuthenticationWidget.ContentObserver {
     struct InitialParams {
         let error: Error?
         let authService: AuthService
+        let methods: [ParraAuthMethod]
     }
 }

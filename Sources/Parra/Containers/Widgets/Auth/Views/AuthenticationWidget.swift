@@ -48,6 +48,29 @@ public struct AuthenticationWidget: Container {
                 )
             }
 
+            if contentObserver.methods.contains(.emailPassword) {
+                emailPassword
+            }
+
+            Spacer()
+        }
+        .safeAreaPadding()
+    }
+
+    // MARK: - Internal
+
+    let localBuilderConfig: AuthenticationWidgetBuilderConfig
+    let componentFactory: ComponentFactory
+    @StateObject var contentObserver: ContentObserver
+    let config: AuthenticationWidgetConfig
+    let style: AuthenticationWidgetStyle
+
+    @EnvironmentObject var themeObserver: ParraThemeObserver
+
+    @ViewBuilder var emailPassword: some View {
+        let content = contentObserver.content
+
+        VStack {
             componentFactory.buildTextInput(
                 config: config.emailField,
                 content: content.emailField
@@ -73,21 +96,8 @@ public struct AuthenticationWidget: Container {
             ) {
                 contentObserver.loginTapped()
             }
-
-            Spacer()
         }
-        .safeAreaPadding()
     }
-
-    // MARK: - Internal
-
-    let localBuilderConfig: AuthenticationWidgetBuilderConfig
-    let componentFactory: ComponentFactory
-    @StateObject var contentObserver: ContentObserver
-    let config: AuthenticationWidgetConfig
-    let style: AuthenticationWidgetStyle
-
-    @EnvironmentObject var themeObserver: ParraThemeObserver
 
     // MARK: - Private
 
@@ -104,7 +114,8 @@ public struct AuthenticationWidget: Container {
             contentObserver: AuthenticationWidget.ContentObserver(
                 initialParams: .init(
                     error: nil,
-                    authService: parra.parraInternal.authService
+                    authService: parra.parraInternal.authService,
+                    methods: [.emailPassword]
                 )
             )
         )
