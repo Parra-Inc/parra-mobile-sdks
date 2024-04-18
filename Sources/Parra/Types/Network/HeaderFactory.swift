@@ -14,37 +14,34 @@ struct HeaderFactory {
     // MARK: - Lifecycle
 
     init(
+        appState: ParraAppState,
+        appConfig: ParraConfiguration,
         headerPrefix: String = "PARRA"
     ) {
+        self.appState = appState
+        self.appConfig = appConfig
         self.headerPrefix = headerPrefix
     }
 
     // MARK: - Internal
 
+    let appState: ParraAppState
+    let appConfig: ParraConfiguration
     let headerPrefix: String
 
     // Should be included on **every** HTTP request
     var commonHeaderDictionary: [String: String] {
         return headerDictionary(
             for: [
-                .applicationLocale, .applicationBundleVersion,
-                .applicationBundleVersion, .device, .deviceId, .deviceLocale,
-                .deviceManufacturer, .deviceTimeZoneAbbreviation,
-                .deviceTimeZoneOffset, .environment, .platform, .platformAgent,
-                .platformSdkVersion, .platformVersion
+                .environment, .applicationId, .applicationBundleId, .tenantId,
+                .platform, .platformAgent
             ]
         )
     }
 
     var trackingHeaderDictionary: [String: String] {
         return headerDictionary(
-            for: [
-                .applicationLocale, .applicationBundleVersion,
-                .applicationBundleVersion, .device, .deviceId, .deviceLocale,
-                .deviceManufacturer, .deviceTimeZoneAbbreviation,
-                .deviceTimeZoneOffset, .environment, .platform, .platformAgent,
-                .platformSdkVersion, .platformVersion
-            ]
+            for: TrackingHeader.allCases
         )
     }
 
@@ -56,12 +53,12 @@ struct HeaderFactory {
         for header: TrackingHeader
     ) -> String? {
         switch header {
-        case .applicationId(let applicationId):
-            return applicationId
+        case .applicationId:
+            return appState.applicationId
         case .applicationLocale:
             return Locale.preferredLanguages.first
-        case .applicationBundleId(let bundleId):
-            return bundleId
+        case .applicationBundleId:
+            return appConfig.appInfoOptions.bundleId
         case .applicationBundleVersion:
             return ParraInternal.appBundleVersion()
         case .applicationBundleVersionShort:
@@ -88,8 +85,8 @@ struct HeaderFactory {
             return ParraInternal.libraryVersion()
         case .platformVersion:
             return ProcessInfo.processInfo.operatingSystemVersionString
-        case .tenantId(let tenantId):
-            return tenantId
+        case .tenantId:
+            return appState.tenantId
         }
     }
 
@@ -107,66 +104,5 @@ struct HeaderFactory {
         }
 
         return headerDictionary
-    }
-}
-
-enum TrackingHeader {
-    case applicationId(String)
-    case applicationLocale
-    case applicationBundleVersion
-    case applicationBundleVersionShort
-    case applicationBundleId(String)
-    case device
-    case deviceId
-    case deviceLocale
-    case deviceManufacturer
-    case deviceTimeZoneAbbreviation
-    case deviceTimeZoneOffset
-    case environment
-    case platform
-    case platformAgent
-    case platformSdkVersion
-    case platformVersion
-    case tenantId(String)
-
-    // MARK: - Internal
-
-    var name: String {
-        switch self {
-        case .applicationLocale:
-            return "APPLICATION-LOCALE"
-        case .applicationId:
-            return "APPLICATION-ID"
-        case .applicationBundleId:
-            return "APPLICATION-BUNDLE-ID"
-        case .applicationBundleVersion:
-            return "APPLICATION-BUNDLE-VERSION"
-        case .applicationBundleVersionShort:
-            return "APPLICATION-BUNDLE-VERSION-SHORT"
-        case .device:
-            return "DEVICE"
-        case .deviceId:
-            return "DEVICE-ID"
-        case .deviceLocale:
-            return "DEVICE-LOCALE"
-        case .deviceTimeZoneAbbreviation:
-            return "DEVICE-TIMEZONE-ABBREVIATION"
-        case .deviceTimeZoneOffset:
-            return "DEVICE-TIMEZONE-OFFSET"
-        case .deviceManufacturer:
-            return "DEVICE-MANUFACTURER"
-        case .environment:
-            return "ENVIRONMENT"
-        case .platform:
-            return "PLATFORM"
-        case .platformAgent:
-            return "PLATFORM-AGENT"
-        case .platformSdkVersion:
-            return "PLATFORM-SDK-VERSION"
-        case .platformVersion:
-            return "PLATFORM-VERSION"
-        case .tenantId:
-            return "TENANT-ID"
-        }
     }
 }
