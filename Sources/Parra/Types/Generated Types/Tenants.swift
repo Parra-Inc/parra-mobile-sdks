@@ -180,7 +180,7 @@ public struct Identity: Codable, Equatable, Hashable, Identifiable {
     public let phoneNumberVerified: Bool?
 }
 
-public struct TenantUser: Codable, Equatable, Hashable, Identifiable {
+public struct User: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     public init(
@@ -195,7 +195,7 @@ public struct TenantUser: Codable, Equatable, Hashable, Identifiable {
         email: String?,
         emailVerified: Bool?,
         phoneNumber: String?,
-        phoneNumberVerified: Bool,
+        phoneNumberVerified: Bool?,
         firstName: String?,
         lastName: String?,
         locale: String?,
@@ -263,7 +263,7 @@ public struct TenantUser: Codable, Equatable, Hashable, Identifiable {
     public let email: String?
     public let emailVerified: Bool?
     public let phoneNumber: String?
-    public let phoneNumberVerified: Bool
+    public let phoneNumberVerified: Bool?
     public let firstName: String?
     public let lastName: String?
     public let locale: String?

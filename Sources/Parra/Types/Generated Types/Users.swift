@@ -7,68 +7,6 @@
 
 import Foundation
 
-public struct UserResponse: Codable, Equatable, Hashable, Identifiable {
-    // MARK: - Lifecycle
-
-    public init(
-        id: String,
-        createdAt: String,
-        updatedAt: String,
-        deletedAt: String?,
-        name: String,
-        firstName: String?,
-        lastName: String?,
-        email: String?,
-        emailVerified: Bool?,
-        avatarUrl: String?,
-        locale: String?,
-        type: String
-    ) {
-        self.id = id
-        self.createdAt = createdAt
-        self.updatedAt = updatedAt
-        self.deletedAt = deletedAt
-        self.name = name
-        self.firstName = firstName
-        self.lastName = lastName
-        self.email = email
-        self.emailVerified = emailVerified
-        self.avatarUrl = avatarUrl
-        self.locale = locale
-        self.type = type
-    }
-
-    // MARK: - Public
-
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt
-        case updatedAt
-        case deletedAt
-        case name
-        case firstName
-        case lastName
-        case email
-        case emailVerified
-        case avatarUrl
-        case locale
-        case type
-    }
-
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let name: String
-    public let firstName: String?
-    public let lastName: String?
-    public let email: String?
-    public let emailVerified: Bool?
-    public let avatarUrl: String?
-    public let locale: String?
-    public let type: String
-}
-
 public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
@@ -205,51 +143,15 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     public let email: String
 }
 
-public struct UserCollectionResponse: Codable, Equatable, Hashable {
-    // MARK: - Lifecycle
-
-    public init(
-        page: Int,
-        pageCount: Int,
-        pageSize: Int,
-        totalCount: Int,
-        data: [UserResponse]
-    ) {
-        self.page = page
-        self.pageCount = pageCount
-        self.pageSize = pageSize
-        self.totalCount = totalCount
-        self.data = data
-    }
-
-    // MARK: - Public
-
-    public enum CodingKeys: String, CodingKey {
-        case page
-        case pageCount
-        case pageSize
-        case totalCount
-        case data
-    }
-
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: [UserResponse]
-}
-
 public struct UserInfoResponse: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
         roles: [String],
-        user: UserResponse?,
-        tenantUser: TenantUser?
+        user: User?
     ) {
         self.roles = roles
         self.user = user
-        self.tenantUser = tenantUser
     }
 
     // MARK: - Public
@@ -257,12 +159,10 @@ public struct UserInfoResponse: Codable, Equatable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case roles
         case user
-        case tenantUser
     }
 
     public let roles: [String]
-    public let user: UserResponse?
-    public let tenantUser: TenantUser?
+    public let user: User?
 }
 
 public struct ListUsersQuery: Codable, Equatable, Hashable {
