@@ -8,20 +8,6 @@
 
 import SwiftUI
 
-// App launches
-// Show launch while loading state
-// when state loads, check if auth'd
-// if auth'd show app and refresh auth
-// if refresh fails, stay logged in unless 401, then logout
-
-// parra auth ->
-
-// public key -> 401 -> retry -> 401 -> logout
-// public key -> user id provider fails -> logout after retry (any error)
-
-// custom -> 401 -> logout
-// custom -> other error -> retry logout if failed
-
 private let logger = Logger()
 
 @MainActor

@@ -21,6 +21,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     case fileSystem(path: URL, message: String)
     case jsonError(String)
     case system(Error)
+    case validationFailed(failures: [String: String])
     case unknown
 
     // MARK: - Public
@@ -71,6 +72,10 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return "\(baseMessage)\nPath: \(path.relativeString)\nError: \(message)"
         case .system(let error):
             return "Error: \(error)"
+        case .validationFailed(let failures):
+            return failures.reduce(baseMessage) { partialResult, next in
+                return "\(partialResult)\n\(next.key): \(next.value)"
+            }
         }
     }
 
@@ -107,6 +112,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             let formattedError = LoggerFormatters.extractMessage(from: error)
 
             return "\(formattedError)"
+        case .validationFailed:
+            return "Validation failed."
         }
     }
 
@@ -173,6 +180,8 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
              .unknown, .system:
 
             return [:]
+        case .validationFailed(let failures):
+            return ParraSanitizedDictionary(dictionary: failures)
         }
     }
 }

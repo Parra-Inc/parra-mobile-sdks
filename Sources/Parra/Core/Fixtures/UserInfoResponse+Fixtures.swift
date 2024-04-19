@@ -12,9 +12,8 @@ extension UserInfoResponse: ParraFixture {
     static func validStates() -> [UserInfoResponse] {
         return [
             UserInfoResponse(
-                roles: ["admin"],
-                user: nil,
-                tenantUser: TenantUser(
+                roles: ["user"],
+                user: User(
                     id: .uuid,
                     createdAt: .now,
                     updatedAt: .now,

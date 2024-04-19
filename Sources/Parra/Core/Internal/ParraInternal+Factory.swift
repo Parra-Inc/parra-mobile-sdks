@@ -116,6 +116,7 @@ extension ParraInternal {
 
         let authServer = AuthServer(
             appState: appState,
+            appConfig: configuration,
             configuration: instanceConfiguration.serverConfiguration
         )
 
@@ -130,7 +131,6 @@ extension ParraInternal {
         )
 
         let authService = AuthService(
-            appState: appState,
             oauth2Service: oauth2Service,
             dataManager: dataManager,
             authServer: authServer,

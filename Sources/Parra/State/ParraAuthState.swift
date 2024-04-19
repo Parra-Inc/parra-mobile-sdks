@@ -48,8 +48,11 @@ public class ParraAuthState: ObservableObject, Equatable {
             current = .authenticated(cachedUser)
 
             do {
-                // Only try to refresh if auth state actually existed.
-                try await authService.refreshExistingToken()
+                // Only try to refresh if auth state actually existed. We also
+                // only want to refresh the token if it's needed but always pull
+                // the user info so this is kept reasonably up to date.
+                try await authService
+                    .refreshTokenIfNeededAlwaysRefreshUserInfo()
             } catch {
                 printInvalidAuth(error: error)
             }

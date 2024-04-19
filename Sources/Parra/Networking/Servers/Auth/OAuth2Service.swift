@@ -8,6 +8,8 @@
 
 import Foundation
 
+private let logger = Logger()
+
 final class OAuth2Service {
     // MARK: - Lifecycle
 
@@ -57,13 +59,11 @@ final class OAuth2Service {
         )
     }
 
-//    func signUp() -> TenantUser {
-//        return TenantUser()
-//    }
-
     func refreshToken(
-        with refreshToken: String
+        _ token: Token
     ) async throws -> Token {
+        let refreshToken = token.refreshToken
+
         let data: [String: String] = [
             "grant_type": "refresh_token",
             "refresh_token": refreshToken,
@@ -85,4 +85,27 @@ final class OAuth2Service {
             refreshToken: refreshToken
         )
     }
+
+    func refreshTokenIfNeeded(
+        _ token: Token
+    ) async throws -> Token {
+        if token.isNearlyExpired {
+            if token.isExpired {
+                logger.trace("Token is expired, refreshing")
+            } else {
+                logger.trace("Token is nearly expired, refreshing")
+            }
+
+            return try await refreshToken(token)
+        }
+
+        logger.trace("Token is still valid, skipping refresh")
+
+        return token
+    }
+
+    // Only refresh on launch if about to expire
+    // also update the api resource refresh logic to check
+    // if it is expired and trigger a refresh before relying on
+    // a 401 to indicate that the refresh should be performed.
 }

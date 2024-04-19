@@ -14,13 +14,11 @@ final class AuthService {
     // MARK: - Lifecycle
 
     init(
-        appState: ParraAppState,
         oauth2Service: OAuth2Service,
         dataManager: DataManager,
         authServer: AuthServer,
         authenticationMethod: ParraAuthType
     ) {
-        self.appState = appState
         self.oauth2Service = oauth2Service
         self.dataManager = dataManager
         self.authServer = authServer
@@ -35,7 +33,6 @@ final class AuthService {
     // 1. Function to convert an authentication method to a token provider.
     // 2. Function to invoke a token provider and get an auth result.
 
-    let appState: ParraAppState
     let oauth2Service: OAuth2Service
     let dataManager: DataManager
     let authServer: AuthServer
@@ -61,8 +58,9 @@ final class AuthService {
                     )
                 )
 
-            let userInfo = try await authServer.getUserInformation(
-                token: oauthToken.accessToken
+            // On login, get user info via login route instead of GET user-info
+            let userInfo = try await authServer.postLogin(
+                accessToken: oauthToken.accessToken
             )
 
             let user = ParraUser(
@@ -98,8 +96,8 @@ final class AuthService {
                     )
                 )
 
-            let userInfo = try await authServer.getUserInformation(
-                token: oauthToken.accessToken
+            let userInfo = try await authServer.postLogin(
+                accessToken: oauthToken.accessToken
             )
 
             let user = ParraUser(
@@ -117,48 +115,170 @@ final class AuthService {
         return result
     }
 
-    @discardableResult
-    func logout() async -> ParraAuthResult {
+    func logout() async {
         logger.debug("Logging out")
 
-        let result = ParraAuthResult.unauthenticated(nil)
+        guard let credential = await getCachedCredential() else {
+            return
+        }
 
-        await applyUserUpdate(result)
+        Task.detached {
+            do {
+                try await self.authServer.postLogout(
+                    accessToken: credential.accessToken
+                )
+            } catch {
+                logger.error("Error sending logout request", error)
+            }
+        }
 
-        return result
+        await applyUserUpdate(.unauthenticated(nil))
     }
 
     func getCurrentUser() async -> ParraUser? {
         return await dataManager.getCurrentUser()
     }
 
-    @discardableResult
-    func refreshExistingToken() async throws -> String {
-        // TODO: Need to bake in logic for allowing retries before propagating
-        // the error.
+    // App launches
+    // Show launch while loading state
+    // when state loads, check if auth'd
+    // if auth'd show app and refresh auth
+    // if refresh fails, stay logged in unless 401, then logout
 
+    // parra auth ->
+
+    // public key -> 401 -> retry -> 401 -> logout
+    // public key -> user id provider fails -> logout after retry (any error)
+
+    // custom -> 401 -> logout
+    // custom -> other error -> retry logout if failed
+
+    /// Fetches the cached token, or refreshes the cached token and returns the
+    /// result if the current token is expired. Does **not** refresh user info
+    func getAccessTokenRefreshingIfNeeded() async throws -> String {
+        guard await getCachedCredential() != nil else {
+            return try await getRefreshedToken()
+        }
+
+        guard let newCredential = try await performCredentialRefresh(
+            forceRefresh: false
+        ) else {
+            throw ParraError.authenticationFailed(
+                "Failed to refresh token"
+            )
+        }
+
+        return newCredential.accessToken
+    }
+
+    /// Forces a refresh of the current token, if one exists and returns the
+    /// result. Does **not** refresh user info.
+    func getRefreshedToken() async throws -> String {
+        guard let newCredential = try await performCredentialRefresh(
+            forceRefresh: true
+        ) else {
+            throw ParraError.authenticationFailed(
+                "Failed to refresh token"
+            )
+        }
+
+        return newCredential.accessToken
+    }
+
+    @discardableResult
+    func refreshTokenIfNeededAlwaysRefreshUserInfo() async throws -> String {
         logger.debug("Performing reauthentication for Parra")
 
-        let refresh: () async throws -> ParraUser.Credential? = { [self] in
-            logger.debug("Invoking authentication provider")
+        guard let credential = try await performCredentialRefresh(
+            forceRefresh: false
+        ) else {
+            // The refresh token provider returning nil indicates that a
+            // logout should take place.
 
+            Task {
+                await logout()
+            }
+
+            throw ParraError.authenticationFailed(
+                "Failed to refresh token"
+            )
+        }
+
+        let accessToken = credential.accessToken
+
+        let userInfo = try await authServer.getUserInformation(
+            accessToken: accessToken
+        )
+
+        let user = ParraUser(
+            credential: credential,
+            info: userInfo
+        )
+
+        await applyUserUpdate(.authenticated(user))
+
+        return accessToken
+    }
+
+    // MARK: - Private
+
+    // The actual cached token.
+    private var _cachedToken: ParraUser.Credential?
+
+    // Lazy wrapper around the cached token that will access it or try to load
+    // it from disk.
+    private func getCachedCredential() async -> ParraUser.Credential? {
+        if let _cachedToken {
+            return _cachedToken
+        }
+
+        if let user = await dataManager.getCurrentUser() {
+            _cachedToken = user.credential
+
+            return _cachedToken
+        }
+
+        return nil
+    }
+
+    /// - Parameter forceRefresh: Only relevant to the OAuth flow. All others
+    /// refresh every time anyway.
+    private func performCredentialRefresh(
+        forceRefresh: Bool
+    ) async throws -> ParraUser.Credential? {
+        logger.debug("Invoking authentication provider")
+
+        let performRefresh = { [self] () -> ParraUser.Credential? in
             switch authenticationMethod {
             case .parraAuth:
 
                 // If a token already exists, attempt to refresh it. If no token
                 // exists, then we need to reauthenticate but lack the
                 // credentials to handle this here.
-                guard let cachedToken,
-                      case .oauth2(let oauthToken) = cachedToken else
-                {
+                guard let cachedToken = await getCachedCredential() else {
                     return nil
                 }
 
-                let result = try await oauth2Service.refreshToken(
-                    with: oauthToken.accessToken
-                )
+                switch cachedToken {
+                case .basic:
+                    // The cached token is not an OAuth2 token, so we cannot
+                    // refresh it. This shouldn't happen, but returning nil
+                    // will trigger a logout.
 
-                return .oauth2(result)
+                    return nil
+                case .oauth2(let token):
+                    let result: OAuth2Service.Token = if forceRefresh {
+                        try await oauth2Service.refreshToken(
+                            token
+                        )
+                    } else {
+                        try await oauth2Service.refreshTokenIfNeeded(
+                            token
+                        )
+                    }
+
+                    return .oauth2(result)
+                }
             case .custom(let tokenProvider):
                 // Does not support refreshing. Must just reinvoke and use the
                 // new token.
@@ -178,7 +298,6 @@ final class AuthService {
 
                 let token = try await authServer
                     .performPublicApiKeyAuthenticationRequest(
-                        forTenant: appState.tenantId,
                         apiKeyId: apiKeyId,
                         userId: userId
                     )
@@ -187,38 +306,31 @@ final class AuthService {
             }
         }
 
-        guard let credential = try await refresh() else {
-            // The refresh token provider returning nil indicates that a
-            // logout should take place.
+        let newCredential = try await performRefresh()
 
-            Task {
-                await logout()
-            }
+        await applyCredentialUpdate(newCredential)
 
-            throw ParraError.authenticationFailed(
-                "Failed to refresh token"
-            )
-        }
-
-        let accessToken = credential.accessToken
-
-        let userInfo = try await authServer.getUserInformation(
-            token: accessToken
-        )
-
-        let user = ParraUser(
-            credential: credential,
-            info: userInfo
-        )
-
-        await applyUserUpdate(.authenticated(user))
-
-        return accessToken
+        return newCredential
     }
 
-    // MARK: - Private
+    private func applyCredentialUpdate(
+        _ credential: ParraUser.Credential?
+    ) async {
+        guard let credential else {
+            _cachedToken = nil
 
-    private var cachedToken: ParraUser.Credential?
+            return
+        }
+
+        switch credential {
+        case .basic(let token):
+            _cachedToken = .basic(token)
+        case .oauth2(let token):
+            _cachedToken = .oauth2(token)
+        }
+
+        await dataManager.updateCurrentUserCredential(credential)
+    }
 
     private func applyUserUpdate(
         _ authResult: ParraAuthResult
@@ -228,10 +340,14 @@ final class AuthService {
             logger.debug("User authenticated: \(parraUser)")
 
             await dataManager.updateCurrentUser(parraUser)
+
+            _cachedToken = parraUser.credential
         case .unauthenticated(let error):
             logger.debug("User unauthenticated: \(String(describing: error))")
 
             await dataManager.removeCurrentUser()
+
+            _cachedToken = nil
         }
 
         ParraNotificationCenter.default.post(

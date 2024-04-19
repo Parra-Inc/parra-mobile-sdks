@@ -86,13 +86,8 @@ final class ApiResourceServer: Server {
             }
 
             urlComponents.setQueryItems(with: queryItems)
-            let user = await authService.getCurrentUser()
-
-            let token: String = if let user {
-                user.credential.accessToken
-            } else {
-                try await authService.refreshExistingToken()
-            }
+            let accessToken = try await authService
+                .getAccessTokenRefreshingIfNeeded()
 
             var request = URLRequest(
                 url: urlComponents.url!,
@@ -113,7 +108,7 @@ final class ApiResourceServer: Server {
 
             let (result, responseContext) = await performRequest(
                 request: request,
-                with: token,
+                with: accessToken,
                 config: config
             )
 
@@ -285,10 +280,9 @@ final class ApiResourceServer: Server {
                 response
             ) = try await performAsyncDataTask(request: request)
 
-            logger
-                .trace(
-                    "Parra client received response. Status: \(response.statusCode)"
-                )
+            logger.trace(
+                "Parra client received response. Status: \(response.statusCode)"
+            )
 
             switch (response.statusCode, config.shouldReauthenticate) {
             case (204, _):
@@ -307,14 +301,13 @@ final class ApiResourceServer: Server {
             case (401, true), (403, true):
                 logger.trace("Request required reauthentication")
 
-                let newToken = try await authService.refreshExistingToken()
-
-                request
-                    .setValue(for: .authorization(.bearer(newToken)))
+                // The cached token clearly isn't valid, so force a refresh
+                // before retrying the request.
+                let newToken = try await authService.getRefreshedToken()
 
                 return await performRequest(
                     request: request,
-                    with: token,
+                    with: newToken,
                     config: config
                         .withoutReauthenticating()
                         .withAttribute(.requiredReauthentication)
@@ -431,10 +424,9 @@ final class ApiResourceServer: Server {
         guard let httpResponse = response as? HTTPURLResponse else {
             // It is documented that for data tasks, response is always actually
             // HTTPURLResponse, so this should never happen.
-            throw ParraError
-                .message(
-                    "Unexpected networking error. HTTP response was unexpected class"
-                )
+            throw ParraError.message(
+                "Unexpected networking error. HTTP response was unexpected class"
+            )
         }
 
         delegate?.server(

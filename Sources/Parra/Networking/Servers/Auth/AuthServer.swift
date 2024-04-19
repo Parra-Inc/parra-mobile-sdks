@@ -95,8 +95,8 @@ final class AuthServer: Server {
 
     func postLogout(
         accessToken: String
-    ) async throws -> EmptyResponseObject {
-        return try await performAuthRequest(
+    ) async throws {
+        let _: EmptyResponseObject = try await performAuthRequest(
             to: .postLogout(
                 tenantId: appState.tenantId
             ),
