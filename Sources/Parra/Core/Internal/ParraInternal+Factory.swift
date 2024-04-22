@@ -117,11 +117,11 @@ extension ParraInternal {
         let authServer = AuthServer(
             appState: appState,
             appConfig: configuration,
-            configuration: instanceConfiguration.serverConfiguration
+            configuration: instanceConfiguration.authServerConfiguration
         )
 
         let externalResourceServer = ExternalResourceServer(
-            configuration: instanceConfiguration.serverConfiguration
+            configuration: instanceConfiguration.externalServerConfiguration
         )
 
         let oauth2Service = OAuth2Service(
@@ -142,7 +142,7 @@ extension ParraInternal {
             appState: appState,
             appConfig: configuration,
             dataManager: dataManager,
-            configuration: instanceConfiguration.serverConfiguration
+            configuration: instanceConfiguration.apiServerConfiguration
         )
 
         let api = API(
