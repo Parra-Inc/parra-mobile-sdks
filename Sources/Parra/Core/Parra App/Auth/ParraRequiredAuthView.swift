@@ -8,51 +8,6 @@
 
 import SwiftUI
 
-public struct ParraDefaultAuthenticationView: View {
-    // MARK: - Lifecycle
-
-    public init(error: Error? = nil) {
-        self.error = error
-    }
-
-    // MARK: - Public
-
-    public var error: Error?
-
-    public var body: some View {
-        let authService = parra.parraInternal.authService
-
-        let methods: [ParraAuthMethod] = if case .parraAuth(let methods) =
-            authService.authenticationMethod
-        {
-            methods
-        } else {
-            fatalError(
-                "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
-            )
-        }
-
-        AuthenticationWidget(
-            config: .default,
-            style: .default(with: .default),
-            localBuilderConfig: .init(),
-            componentFactory: .init(global: .default, theme: .default),
-            contentObserver: .init(
-                initialParams: .init(
-                    config: .default,
-                    authService: parra.parraInternal.authService,
-                    alertManager: parra.parraInternal.alertManager,
-                    methods: methods
-                )
-            )
-        )
-    }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-}
-
 public struct ParraRequiredAuthView<
     AuthenticatedContent, UnauthenticatedContent
 >: ParraAppContent where AuthenticatedContent: View,
@@ -64,8 +19,8 @@ public struct ParraRequiredAuthView<
         authenticatedContent: @escaping (_ user: ParraUser)
             -> AuthenticatedContent,
         unauthenticatedContent: @escaping (_ error: Error?)
-            -> UnauthenticatedContent = { error in
-                ParraDefaultAuthenticationView(error: nil)
+            -> UnauthenticatedContent = { _ in
+                ParraDefaultAuthenticationView()
             }
     ) {
         self.authenticatedContent = authenticatedContent

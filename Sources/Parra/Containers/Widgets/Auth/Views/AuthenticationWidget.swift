@@ -13,7 +13,7 @@ public struct AuthenticationWidget: Container {
     // MARK: - Lifecycle
 
     init(
-        config: AuthenticationWidgetConfig,
+        config: ParraAuthConfig,
         style: AuthenticationWidgetStyle,
         localBuilderConfig: AuthenticationWidgetBuilderConfig,
         componentFactory: ComponentFactory,
@@ -31,30 +31,40 @@ public struct AuthenticationWidget: Container {
     public var body: some View {
         let content = contentObserver.content
 
-        VStack(spacing: 12) {
-            Spacer()
+        VStack(spacing: 0) {
+            VStack(spacing: 0) {
+                Spacer()
 
-            componentFactory.buildLabel(
-                config: config.title,
-                content: content.title,
-                suppliedBuilder: localBuilderConfig.title
+                VStack(spacing: 0) {
+                    componentFactory.buildLabel(
+                        config: config.title,
+                        content: content.title,
+                        suppliedBuilder: localBuilderConfig.title
+                    )
+
+                    withContent(content: content.subtitle) { content in
+                        componentFactory.buildLabel(
+                            config: config.subtitle,
+                            content: content,
+                            suppliedBuilder: localBuilderConfig.subtitle
+                        )
+                    }
+                }
+
+                Spacer()
+
+                if usingEmail {
+                    emailPasswordViews
+                }
+            }
+            .padding(style.contentPadding)
+            .applyCornerRadii(
+                size: style.cornerRadius,
+                from: themeObserver.theme
             )
-
-            withContent(content: content.subtitle) { content in
-                componentFactory.buildLabel(
-                    config: config.subtitle,
-                    content: content,
-                    suppliedBuilder: localBuilderConfig.subtitle
-                )
-            }
-
-            if contentObserver.methods.contains(.emailPassword) {
-                emailPassword
-            }
-
-            Spacer()
         }
-        .safeAreaPadding()
+        .applyBackground(style.background)
+        .padding(style.padding)
     }
 
     // MARK: - Internal
@@ -62,39 +72,45 @@ public struct AuthenticationWidget: Container {
     let localBuilderConfig: AuthenticationWidgetBuilderConfig
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
-    let config: AuthenticationWidgetConfig
+    let config: ParraAuthConfig
     let style: AuthenticationWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
-    @ViewBuilder var emailPassword: some View {
-        let content = contentObserver.content
+    var usingEmail: Bool {
+        contentObserver.content.emailContent != nil
+    }
 
-        VStack {
-            componentFactory.buildTextInput(
-                config: config.emailField,
-                content: content.emailField
-            )
+    @ViewBuilder var emailPasswordViews: some View {
+        if let content = contentObserver.content.emailContent {
+            VStack {
+                componentFactory.buildTextInput(
+                    config: config.emailField,
+                    content: content.emailField
+                )
 
-            componentFactory.buildTextInput(
-                config: config.passwordField,
-                content: content.passwordField
-            )
+                componentFactory.buildTextInput(
+                    config: config.passwordField,
+                    content: content.passwordField
+                )
 
-            componentFactory.buildTextButton(
-                variant: .contained,
-                config: config.loginButton,
-                content: content.loginButton
-            ) {
-                contentObserver.loginTapped()
+                componentFactory.buildTextButton(
+                    variant: .contained,
+                    config: config.loginButton,
+                    content: content.loginButton
+                ) {
+                    contentObserver.loginTapped()
+                }
             }
+
+            Spacer()
 
             componentFactory.buildTextButton(
                 variant: .plain,
                 config: config.signupButton,
                 content: content.signupButton
             ) {
-                contentObserver.loginTapped()
+                contentObserver.signupTapped()
             }
         }
     }
@@ -114,9 +130,9 @@ public struct AuthenticationWidget: Container {
             contentObserver: AuthenticationWidget.ContentObserver(
                 initialParams: .init(
                     config: .default,
+                    content: .default,
                     authService: parra.parraInternal.authService,
                     alertManager: parra.parraInternal.alertManager,
-                    methods: [.emailPassword],
                     initialError: nil
                 )
             )

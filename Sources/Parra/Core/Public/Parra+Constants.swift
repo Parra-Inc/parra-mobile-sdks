@@ -54,4 +54,10 @@ public extension Parra {
 
         public static let parraWebRoot = URL(string: "https://parra.io/")!
     }
+
+    static func appBundleName(
+        bundle: Bundle = Bundle.main
+    ) -> String? {
+        return bundle.infoDictionary?["CFBundleName"] as? String
+    }
 }

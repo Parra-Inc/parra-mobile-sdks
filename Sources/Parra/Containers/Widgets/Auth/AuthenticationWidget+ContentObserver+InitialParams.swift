@@ -13,25 +13,25 @@ extension AuthenticationWidget.ContentObserver {
         // MARK: - Lifecycle
 
         init(
-            config: AuthenticationWidgetConfig,
+            config: ParraAuthConfig,
+            content: ParraAuthContent,
             authService: AuthService,
             alertManager: AlertManager,
-            methods: [ParraAuthMethod],
             initialError: Error? = nil
         ) {
             self.config = config
+            self.content = content
             self.authService = authService
             self.alertManager = alertManager
-            self.methods = methods
             self.initialError = initialError
         }
 
         // MARK: - Internal
 
-        let config: AuthenticationWidgetConfig
+        let config: ParraAuthConfig
+        let content: ParraAuthContent
         let authService: AuthService
         let alertManager: AlertManager
-        let methods: [ParraAuthMethod]
         let initialError: Error?
     }
 }

@@ -8,28 +8,28 @@
 
 import SwiftUI
 
-public class AuthenticationWidgetConfig: ContainerConfig {
+public class ParraAuthConfig: ContainerConfig {
     // MARK: - Lifecycle
 
     required init() {
-        self.title = AuthenticationWidgetConfig.default.title
-        self.subtitle = AuthenticationWidgetConfig.default.subtitle
-        self.emailField = AuthenticationWidgetConfig.default.emailField
-        self.passwordField = AuthenticationWidgetConfig.default.passwordField
-        self.loginButton = AuthenticationWidgetConfig.default.loginButton
-        self.signupButton = AuthenticationWidgetConfig.default.signupButton
+        self.title = ParraAuthConfig.default.title
+        self.subtitle = ParraAuthConfig.default.subtitle
+        self.emailField = ParraAuthConfig.default.emailField
+        self.passwordField = ParraAuthConfig.default.passwordField
+        self.loginButton = ParraAuthConfig.default.loginButton
+        self.signupButton = ParraAuthConfig.default.signupButton
     }
 
     public init(
-        title: LabelConfig = AuthenticationWidgetConfig.default.title,
-        subtitle: LabelConfig = AuthenticationWidgetConfig.default.subtitle,
-        emailField: TextInputConfig = AuthenticationWidgetConfig.default
+        title: LabelConfig = ParraAuthConfig.default.title,
+        subtitle: LabelConfig = ParraAuthConfig.default.subtitle,
+        emailField: TextInputConfig = ParraAuthConfig.default
             .emailField,
-        passwordField: TextInputConfig = AuthenticationWidgetConfig.default
+        passwordField: TextInputConfig = ParraAuthConfig.default
             .passwordField,
-        loginButton: TextButtonConfig = AuthenticationWidgetConfig.default
+        loginButton: TextButtonConfig = ParraAuthConfig.default
             .loginButton,
-        signupButton: TextButtonConfig = AuthenticationWidgetConfig.default
+        signupButton: TextButtonConfig = ParraAuthConfig.default
             .signupButton
     ) {
         self.title = title
@@ -42,7 +42,7 @@ public class AuthenticationWidgetConfig: ContainerConfig {
 
     // MARK: - Public
 
-    public static let `default` = AuthenticationWidgetConfig(
+    public static let `default` = ParraAuthConfig(
         title: LabelConfig(fontStyle: .title),
         subtitle: LabelConfig(fontStyle: .subheadline),
         emailField: TextInputConfig(

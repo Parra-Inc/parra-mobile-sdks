@@ -9,19 +9,15 @@
 import Foundation
 
 extension AuthenticationWidget.ContentObserver {
-    struct Content: ContainerContent {
+    struct EmailContent {
         // MARK: - Lifecycle
 
         init(
-            title: LabelContent,
-            subtitle: LabelContent?,
             emailField: TextInputContent,
             passwordField: TextInputContent,
             loginButton: TextButtonContent,
             signupButton: TextButtonContent
         ) {
-            self.title = title
-            self.subtitle = subtitle
             self.emailField = emailField
             self.passwordField = passwordField
             self.loginButton = loginButton
@@ -30,11 +26,74 @@ extension AuthenticationWidget.ContentObserver {
 
         // MARK: - Internal
 
-        let title: LabelContent
-        let subtitle: LabelContent?
         var emailField: TextInputContent
         var passwordField: TextInputContent
         var loginButton: TextButtonContent
         var signupButton: TextButtonContent
+    }
+
+    struct Content: ContainerContent {
+        // MARK: - Lifecycle
+
+        init(content: ParraAuthContent) {
+            let subtitle: LabelContent? = if let subtitle = content.subtitle {
+                LabelContent(
+                    text: subtitle
+                )
+            } else {
+                nil
+            }
+
+            let emailContent: EmailContent? = if let emailPassword = content
+                .emailPassword
+            {
+                EmailContent(
+                    emailField: TextInputContent(
+                        placeholder: emailPassword.emailPlaceholder
+                    ),
+                    passwordField: TextInputContent(
+                        placeholder: emailPassword.passwordPlaceholder
+                    ),
+                    loginButton: TextButtonContent(
+                        text: LabelContent(
+                            text: emailPassword.loginButtonTitle ?? "Log in"
+                        )
+                    ),
+                    signupButton: TextButtonContent(
+                        text: LabelContent(
+                            text: emailPassword
+                                .signupButtonTitle ??
+                                "Don't have an account? Sign up"
+                        )
+                    )
+                )
+            } else {
+                nil
+            }
+
+            self.init(
+                title: LabelContent(
+                    text: content.title
+                ),
+                subtitle: subtitle,
+                emailContent: emailContent
+            )
+        }
+
+        init(
+            title: LabelContent,
+            subtitle: LabelContent?,
+            emailContent: EmailContent?
+        ) {
+            self.title = title
+            self.subtitle = subtitle
+            self.emailContent = emailContent
+        }
+
+        // MARK: - Internal
+
+        let title: LabelContent
+        let subtitle: LabelContent?
+        var emailContent: EmailContent?
     }
 }

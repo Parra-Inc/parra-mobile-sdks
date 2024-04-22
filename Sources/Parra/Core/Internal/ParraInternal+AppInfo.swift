@@ -24,12 +24,6 @@ extension ParraInternal {
         return bundle.infoDictionary?["CFBundleShortVersionString"] as? String
     }
 
-    static func appBundleName(
-        bundle: Bundle = Bundle.main
-    ) -> String? {
-        return bundle.infoDictionary?["CFBundleName"] as? String
-    }
-
     static func appBundleIdentifier(
         bundle: Bundle = Bundle.main
     ) -> String? {

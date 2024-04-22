@@ -22,49 +22,33 @@ extension AuthenticationWidget {
             self.authWidgetConfig = initialParams.config
             self.authService = initialParams.authService
             self.alertManager = initialParams.alertManager
-            self.methods = initialParams.methods
-            self.content = Content(
-                title: LabelContent(
-                    text: ParraInternal
-                        .appBundleName() ?? "Welcome"
-                ),
-                subtitle: LabelContent(text: "subtitle"),
-                emailField: TextInputContent(
-                    placeholder: "Email address"
-                ),
-                passwordField: TextInputContent(placeholder: "Password"),
-                loginButton: TextButtonContent(
-                    text: LabelContent(text: "Log in")
-                ),
-                signupButton: TextButtonContent(
-                    text: LabelContent(
-                        text: "Don't have an account? Sign up"
-                    )
-                )
-            )
+            self.content = Content(content: initialParams.content)
 
-            content.emailField.textChanged = onEmailChanged
-            content.passwordField.textChanged = onPasswordChanged
+            content.emailContent?.emailField.textChanged = onEmailChanged
+            content.emailContent?.passwordField.textChanged = onPasswordChanged
         }
 
         // MARK: - Internal
 
-        let authWidgetConfig: AuthenticationWidgetConfig
+        let authWidgetConfig: ParraAuthConfig
         let authService: AuthService
         let alertManager: AlertManager
-        let methods: [ParraAuthMethod]
 
         @Published var content: Content
         @Published var error: Error?
         @Published var loginButtonIsEnabled = false
 
         func loginTapped() {
-            if content.loginButton.isLoading {
+            guard let emailContent = content.emailContent else {
                 return
             }
 
-            let email = content.emailField.title?.text ?? ""
-            let password = content.passwordField.title?.text ?? ""
+            if emailContent.loginButton.isLoading {
+                return
+            }
+
+            let email = emailContent.emailField.title?.text ?? ""
+            let password = emailContent.passwordField.title?.text ?? ""
 
             let emailError = TextValidator.validate(
                 text: email,
@@ -123,7 +107,8 @@ extension AuthenticationWidget {
                 against: authWidgetConfig.emailField.validationRules
             )
 
-            content.emailField.errorMessage = emailValidationMessage
+            content.emailContent?.emailField
+                .errorMessage = emailValidationMessage
         }
 
         func onPasswordChanged(_ password: String?) {
@@ -132,7 +117,8 @@ extension AuthenticationWidget {
                 against: authWidgetConfig.passwordField.validationRules
             )
 
-            content.passwordField.errorMessage = passwordValidationMessage
+            content.emailContent?.passwordField
+                .errorMessage = passwordValidationMessage
         }
 
         // MARK: - Private
@@ -140,7 +126,7 @@ extension AuthenticationWidget {
         private func setLoading(_ isLoading: Bool) {
             Task { @MainActor in
                 withAnimation {
-                    content.loginButton.isLoading = isLoading
+                    content.emailContent?.loginButton.isLoading = isLoading
                 }
             }
         }

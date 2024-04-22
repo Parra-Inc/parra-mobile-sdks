@@ -39,7 +39,7 @@ public struct AuthenticationWidgetStyle: WidgetStyle {
             background: palette.primaryBackground,
             contentPadding: EdgeInsets(vertical: 12, horizontal: 20),
             cornerRadius: .zero,
-            padding: EdgeInsets(top: 16, leading: 0, bottom: 0, trailing: 0)
+            padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         )
     }
 }
