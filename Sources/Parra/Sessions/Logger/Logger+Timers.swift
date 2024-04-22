@@ -47,20 +47,44 @@ public extension Logger {
         _ line: Int = #line,
         _ column: Int = #column
     ) -> ParraLogMarkerMeasurement {
-        let messageProvider: ((TimeInterval) -> String)? = if let message {
-            { _ in return message }
-        } else {
-            nil
-        }
+        let endDate = Date.now // Should be the very first line.
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
 
-        return measureTime(
-            since: startMarker,
-            messageProvider: messageProvider,
-            format: format,
-            fileId,
-            function,
-            line,
-            column
+        let callSiteContext = ParraLoggerCallSiteContext(
+            fileId: fileId,
+            function: function,
+            line: line,
+            column: column,
+            threadInfo: threadInfo
+        )
+
+        let timeInterval = endDate.timeIntervalSince(startMarker.timestamp)
+
+        // If the user provided a custom message, use it. Otherwise use the
+        // message that was attached to the start marker
+        let messageProvider = createMessage(
+            for: message ?? startMarker.message.produceLog().0,
+            with: timeInterval,
+            in: format
+        )
+
+        let lazyMessage = ParraLazyLogParam.string(messageProvider)
+
+        // Context is tricky here, because there is a case where a marker
+        // created by a logger instance with more context is passed to the
+        // static time measurement method, which lacks the same context.
+
+        let nextMarker = logToBackend(
+            level: .info,
+            message: lazyMessage,
+            callSiteContext: callSiteContext
+        )
+
+        return ParraLogMarkerMeasurement(
+            timeInterval: timeInterval,
+            nextMarker: nextMarker
         )
     }
 
@@ -90,52 +114,23 @@ public extension Logger {
     @discardableResult
     static func measureTime(
         since startMarker: ParraLogMarker,
-        messageProvider: ((_ duration: TimeInterval) -> String)? = nil,
+        messageProvider: (_ duration: TimeInterval) -> String,
         format: ParraLogMeasurementFormat = .pretty,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
         _ column: Int = #column
     ) -> ParraLogMarkerMeasurement {
-        let endDate = Date.now // Should be the very first line.
-        let threadInfo = ParraLoggerThreadInfo(
-            thread: .current
-        )
+        let timeInterval = Date.now.timeIntervalSince(startMarker.timestamp)
 
-        let callSiteContext = ParraLoggerCallSiteContext(
-            fileId: fileId,
-            function: function,
-            line: line,
-            column: column,
-            threadInfo: threadInfo
-        )
-
-        let timeInterval = endDate.timeIntervalSince(startMarker.timestamp)
-
-        // If the user provided a custom message, use it. Otherwise use the
-        // message that was attached to the start marker
-        let messageProvider = createMessage(
-            for: messageProvider?(timeInterval)
-                ?? startMarker.message.produceLog().0,
-            with: timeInterval,
-            in: format
-        )
-
-        let lazyMessage = ParraLazyLogParam.string(messageProvider)
-
-        // Context is tricky here, because there is a case where a marker
-        // created by a logger instance with more context is passed to the
-        // static time measurement method, which lacks the same context.
-
-        let nextMarker = logToBackend(
-            level: .info,
-            message: lazyMessage,
-            callSiteContext: callSiteContext
-        )
-
-        return ParraLogMarkerMeasurement(
-            timeInterval: timeInterval,
-            nextMarker: nextMarker
+        return measureTime(
+            since: startMarker,
+            message: messageProvider(timeInterval),
+            format: format,
+            fileId,
+            function,
+            line,
+            column
         )
     }
 
@@ -171,20 +166,39 @@ public extension Logger {
         _ line: Int = #line,
         _ column: Int = #column
     ) -> ParraLogMarkerMeasurement {
-        let messageProvider: ((TimeInterval) -> String)? = if let message {
-            { _ in return message }
-        } else {
-            nil
-        }
+        let endDate = Date.now
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
 
-        return measureTime(
-            since: startMarker,
-            messageProvider: messageProvider,
-            format: format,
-            fileId,
-            function,
-            line,
-            column
+        let callSiteContext = ParraLoggerCallSiteContext(
+            fileId: fileId,
+            function: function,
+            line: line,
+            column: column,
+            threadInfo: threadInfo
+        )
+
+        let timeInterval = endDate.timeIntervalSince(startMarker.timestamp)
+
+        // If the user provided a custom message, use it. Otherwise use the
+        // message that was attached to the start marker
+        let finalMessage = Logger.createMessage(
+            for: message ?? startMarker.message.produceLog().0,
+            with: timeInterval,
+            in: format
+        )
+
+        let lazyMessage = ParraLazyLogParam.string(finalMessage)
+        let nextMarker = logToBackend(
+            level: .info,
+            message: lazyMessage,
+            callSiteContext: callSiteContext
+        )
+
+        return ParraLogMarkerMeasurement(
+            timeInterval: timeInterval,
+            nextMarker: nextMarker
         )
     }
 
@@ -214,47 +228,23 @@ public extension Logger {
     @discardableResult
     func measureTime(
         since startMarker: ParraLogMarker,
-        messageProvider: ((_ duration: TimeInterval) -> String)? = nil,
+        messageProvider: (_ duration: TimeInterval) -> String,
         format: ParraLogMeasurementFormat = .pretty,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
         _ column: Int = #column
     ) -> ParraLogMarkerMeasurement {
-        let endDate = Date.now
-        let threadInfo = ParraLoggerThreadInfo(
-            thread: .current
-        )
+        let timeInterval = Date.now.timeIntervalSince(startMarker.timestamp)
 
-        let callSiteContext = ParraLoggerCallSiteContext(
-            fileId: fileId,
-            function: function,
-            line: line,
-            column: column,
-            threadInfo: threadInfo
-        )
-
-        let timeInterval = endDate.timeIntervalSince(startMarker.timestamp)
-
-        // If the user provided a custom message, use it. Otherwise use the
-        // message that was attached to the start marker
-        let finalMessage = Logger.createMessage(
-            for: messageProvider?(timeInterval)
-                ?? startMarker.message.produceLog().0,
-            with: timeInterval,
-            in: format
-        )
-
-        let lazyMessage = ParraLazyLogParam.string(finalMessage)
-        let nextMarker = logToBackend(
-            level: .info,
-            message: lazyMessage,
-            callSiteContext: callSiteContext
-        )
-
-        return ParraLogMarkerMeasurement(
-            timeInterval: timeInterval,
-            nextMarker: nextMarker
+        return measureTime(
+            since: startMarker,
+            message: messageProvider(timeInterval),
+            format: format,
+            fileId,
+            function,
+            line,
+            column
         )
     }
 
