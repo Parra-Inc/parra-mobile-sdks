@@ -185,12 +185,19 @@ final class AuthService {
         return newCredential.accessToken
     }
 
-    @discardableResult
-    func refreshTokenIfNeededAlwaysRefreshUserInfo() async throws -> String {
+    /// Meant specifically for the case where the app is launching and we want
+    /// to refresh credentials before proceeding. Very short timeouts are used
+    /// for network requests so they can fail quickly and all the user to
+    /// proceed into the app.
+    func performAppLaunchTokenAndUserRefresh() async throws {
         logger.debug("Performing reauthentication for Parra")
 
+        // Using a short timeout since these requests are made on app launch
+        let timeout: TimeInterval = 5.0
+
         guard let credential = try await performCredentialRefresh(
-            forceRefresh: false
+            forceRefresh: false,
+            timeout: timeout
         ) else {
             // The refresh token provider returning nil indicates that a
             // logout should take place.
@@ -204,10 +211,9 @@ final class AuthService {
             )
         }
 
-        let accessToken = credential.accessToken
-
-        let userInfo = try await authServer.getUserInformation(
-            accessToken: accessToken
+        let userInfo = try await authServer.getUserInfo(
+            accessToken: credential.accessToken,
+            timeout: timeout
         )
 
         let user = ParraUser(
@@ -216,8 +222,6 @@ final class AuthService {
         )
 
         await applyUserUpdate(.authenticated(user))
-
-        return accessToken
     }
 
     // MARK: - Private
@@ -244,7 +248,8 @@ final class AuthService {
     /// - Parameter forceRefresh: Only relevant to the OAuth flow. All others
     /// refresh every time anyway.
     private func performCredentialRefresh(
-        forceRefresh: Bool
+        forceRefresh: Bool,
+        timeout: TimeInterval = 10.0
     ) async throws -> ParraUser.Credential? {
         logger.debug("Invoking authentication provider")
 
@@ -269,11 +274,13 @@ final class AuthService {
                 case .oauth2(let token):
                     let result: OAuth2Service.Token = if forceRefresh {
                         try await oauth2Service.refreshToken(
-                            token
+                            token,
+                            timeout: timeout
                         )
                     } else {
                         try await oauth2Service.refreshTokenIfNeeded(
-                            token
+                            token,
+                            timeout: timeout
                         )
                     }
 
@@ -299,7 +306,8 @@ final class AuthService {
                 let token = try await authServer
                     .performPublicApiKeyAuthenticationRequest(
                         apiKeyId: apiKeyId,
-                        userId: userId
+                        userId: userId,
+                        timeout: timeout
                     )
 
                 return .basic(token)

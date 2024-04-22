@@ -60,7 +60,8 @@ final class OAuth2Service {
     }
 
     func refreshToken(
-        _ token: Token
+        _ token: Token,
+        timeout: TimeInterval
     ) async throws -> Token {
         let refreshToken = token.refreshToken
 
@@ -87,7 +88,8 @@ final class OAuth2Service {
     }
 
     func refreshTokenIfNeeded(
-        _ token: Token
+        _ token: Token,
+        timeout: TimeInterval
     ) async throws -> Token {
         if token.isNearlyExpired {
             if token.isExpired {
@@ -96,7 +98,7 @@ final class OAuth2Service {
                 logger.trace("Token is nearly expired, refreshing")
             }
 
-            return try await refreshToken(token)
+            return try await refreshToken(token, timeout: timeout)
         }
 
         logger.trace("Token is still valid, skipping refresh")

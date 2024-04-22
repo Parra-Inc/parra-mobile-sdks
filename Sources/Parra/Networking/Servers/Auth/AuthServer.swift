@@ -8,6 +8,8 @@
 
 import Foundation
 
+private let logger = Logger()
+
 /// Intentionally separated from ``ApiResourceServer`` to avoid any of the auto
 /// inclusion of headers/etc from interferring with authentication standards.
 final class AuthServer: Server {
@@ -38,7 +40,8 @@ final class AuthServer: Server {
 
     func performPublicApiKeyAuthenticationRequest(
         apiKeyId: String,
-        userId: String
+        userId: String,
+        timeout: TimeInterval? = nil
     ) async throws -> String {
         let endpoint = ParraEndpoint.postAuthentication(
             tenantId: appState.tenantId
@@ -52,6 +55,8 @@ final class AuthServer: Server {
         request.httpBody = try configuration.jsonEncoder
             .encode(["user_id": userId])
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        request.timeoutInterval = timeout ?? configuration.urlSession
+            .configuration.timeoutIntervalForRequest
 
         guard let authToken = ("api_key:" + apiKeyId).data(
             using: .utf8
@@ -104,14 +109,16 @@ final class AuthServer: Server {
         )
     }
 
-    func getUserInformation(
-        accessToken: String
+    func getUserInfo(
+        accessToken: String,
+        timeout: TimeInterval? = nil
     ) async throws -> UserInfoResponse {
         return try await performAuthRequest(
             to: .getUserInfo(
                 tenantId: appState.tenantId
             ),
-            with: accessToken
+            with: accessToken,
+            timeout: timeout
         )
     }
 
@@ -119,16 +126,26 @@ final class AuthServer: Server {
 
     private func performAuthRequest<T>(
         to endpoint: ParraEndpoint,
-        with accessToken: String
+        with accessToken: String,
+        timeout: TimeInterval? = nil
     ) async throws -> T where T: Codable {
         let url = ParraInternal.Constants.parraApiRoot
             .appendingPathComponent(endpoint.route)
+
+        let start = logger.debug(
+            "Performing auth request with timeout: \(String(describing: timeout))",
+            [
+                "url": url.absoluteString
+            ]
+        )
 
         var request = URLRequest(url: url)
 
         request.httpMethod = endpoint.method.rawValue
         request.cachePolicy = .reloadRevalidatingCacheData
         request.setValue(for: .authorization(.bearer(accessToken)))
+        request.timeoutInterval = timeout ?? configuration.urlSession
+            .configuration.timeoutIntervalForRequest
 
         addHeaders(
             to: &request,

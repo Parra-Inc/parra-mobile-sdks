@@ -13,6 +13,7 @@ extension Server {
         to url: URL,
         data: [String: String],
         cachePolicy: URLRequest.CachePolicy? = nil,
+        timeout: TimeInterval? = nil,
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> T {
         var components = URLComponents()
@@ -25,6 +26,8 @@ extension Server {
 
         request.httpMethod = HttpMethod.post.rawValue
         request.httpBody = components.percentEncodedQuery?.data(using: .utf8)
+        request.timeoutInterval = timeout ?? configuration.urlSession
+            .configuration.timeoutIntervalForRequest
 
         request.setValue(for: .accept(.applicationJson))
         request.setValue(for: .contentType(.applicationFormUrlEncoded))
@@ -40,6 +43,7 @@ extension Server {
         method: HttpMethod = .get,
         queryItems: [String: String] = [:],
         cachePolicy: URLRequest.CachePolicy? = nil,
+        timeout: TimeInterval? = nil,
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> T {
         return try await performRequest(
@@ -48,6 +52,7 @@ extension Server {
             queryItems: queryItems,
             cachePolicy: cachePolicy,
             body: EmptyRequestObject(),
+            timeout: timeout,
             delegate: delegate
         )
     }
@@ -59,6 +64,7 @@ extension Server {
         queryItems: [String: String] = [:],
         cachePolicy: URLRequest.CachePolicy? = nil,
         body: some Encodable,
+        timeout: TimeInterval?,
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> T {
         var request = URLRequest(
@@ -67,6 +73,8 @@ extension Server {
         )
 
         request.httpMethod = method.rawValue
+        request.timeoutInterval = timeout ?? configuration.urlSession
+            .configuration.timeoutIntervalForRequest
         if method.allowsBody {
             request.httpBody = try configuration.jsonEncoder.encode(body)
         }
