@@ -93,7 +93,6 @@ class MockedParraTestCase: ParraBaseMock {
         )
 
         let authService = AuthService(
-            appState: appState,
             oauth2Service: OAuth2Service(
                 clientId: appState.applicationId,
                 tenantId: appState.tenantId,
@@ -221,11 +220,11 @@ class MockedParraTestCase: ParraBaseMock {
 
         let authServer = AuthServer(
             appState: appState,
+            appConfig: appConfig,
             configuration: configuration
         )
 
         let authService = AuthService(
-            appState: appState,
             oauth2Service: OAuth2Service(
                 clientId: appState.applicationId,
                 tenantId: appState.tenantId,
