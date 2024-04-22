@@ -29,25 +29,38 @@ struct TextInputComponent: TextInputComponentType {
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // spacing controlled by individual component padding.
-            titleLabel
-
+    @ViewBuilder var baseView: some View {
+        if config.isSecure {
+            SecureField(
+                text: $text,
+                prompt: Text(content.placeholder?.text ?? "")
+            ) {
+                EmptyView()
+            }
+        } else {
             TextField(
                 text: $text,
                 prompt: Text(content.placeholder?.text ?? "")
             ) {
                 EmptyView()
             }
-            .textInputAutocapitalization(.never)
-            .disableAutocorrection(true)
-            .textFieldStyle(style)
-            .onChange(of: text) { _, newValue in
-                hasReceivedInput = true
+        }
+    }
 
-                content.textChanged?(newValue)
-            }
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // spacing controlled by individual component padding.
+            titleLabel
+
+            baseView
+                .textInputAutocapitalization(.never)
+                .disableAutocorrection(true)
+                .textFieldStyle(style)
+                .onChange(of: text) { _, newValue in
+                    hasReceivedInput = true
+
+                    content.textChanged?(newValue)
+                }
 
             helperLabel
         }
@@ -179,6 +192,22 @@ struct TextInputComponent: TextInputComponentType {
 
             factory.buildTextInput(
                 config: FeedbackFormWidget.Config.default.inputFields,
+                content: TextInputContent(
+                    title: "Some title",
+                    placeholder: nil,
+                    helper: "helper text woo",
+                    errorMessage: nil,
+                    textChanged: nil
+                )
+            )
+
+            factory.buildTextInput(
+                config: TextInputConfig(
+                    title: LabelConfig(fontStyle: .body),
+                    helper: LabelConfig(fontStyle: .caption),
+                    validationRules: [.hasLowercase, .hasUppercase],
+                    isSecure: true
+                ),
                 content: TextInputContent(
                     title: "Some title",
                     placeholder: nil,

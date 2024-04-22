@@ -17,13 +17,15 @@ public struct TextInputConfig {
         validationRules: [TextValidatorRule] = TextInputConfig.default
             .validationRules,
         preferValidationErrorsToHelperMessage: Bool = TextInputConfig.default
-            .preferValidationErrorsToHelperMessage
+            .preferValidationErrorsToHelperMessage,
+        isSecure: Bool = false
     ) {
         self.title = title
         self.helper = helper
         self.validationRules = validationRules
         self.preferValidationErrorsToHelperMessage
             = preferValidationErrorsToHelperMessage
+        self.isSecure = isSecure
     }
 
     // MARK: - Public
@@ -44,6 +46,10 @@ public struct TextInputConfig {
     /// helper text string. If you don't want to display anything below the text
     /// field, set this to false and leave ``helper`` unset.
     public let preferValidationErrorsToHelperMessage: Bool
+
+    /// Whether or not the text field should be secure. Defaults to false.
+    /// If true, the text field will display a secure entry view for passwords.
+    public let isSecure: Bool
 
     // MARK: - Internal
 
