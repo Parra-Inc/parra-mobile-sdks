@@ -230,6 +230,7 @@
 		007868992AAE4DE300864CFE /* ParraLogEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007868982AAE4DE300864CFE /* ParraLogEvent.swift */; };
 		0078689D2AAE54F800864CFE /* ParraSessionEventSyncPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0078689C2AAE54F800864CFE /* ParraSessionEventSyncPriority.swift */; };
 		007868A32AAE84CA00864CFE /* ParraSessionEventContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007868A22AAE84CA00864CFE /* ParraSessionEventContext.swift */; };
+		0079EDC62BD7EC180045EEE5 /* View+focusNextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0079EDC52BD7EC180045EEE5 /* View+focusNextField.swift */; };
 		007ED4672A6BFBDC0077E446 /* ParraLoggerContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007ED4652A6BFBDC0077E446 /* ParraLoggerContext.swift */; };
 		007ED4682A6BFBDC0077E446 /* ParraLoggerContext+ParraDictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007ED4662A6BFBDC0077E446 /* ParraLoggerContext+ParraDictionaryConvertible.swift */; };
 		007ED46A2A6BFBEA0077E446 /* ParraLoggerThreadInfo+ParraDictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007ED4692A6BFBEA0077E446 /* ParraLoggerThreadInfo+ParraDictionaryConvertible.swift */; };
@@ -870,6 +871,7 @@
 		007868982AAE4DE300864CFE /* ParraLogEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLogEvent.swift; sourceTree = "<group>"; };
 		0078689C2AAE54F800864CFE /* ParraSessionEventSyncPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionEventSyncPriority.swift; sourceTree = "<group>"; };
 		007868A22AAE84CA00864CFE /* ParraSessionEventContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionEventContext.swift; sourceTree = "<group>"; };
+		0079EDC52BD7EC180045EEE5 /* View+focusNextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+focusNextField.swift"; sourceTree = "<group>"; };
 		007ED4652A6BFBDC0077E446 /* ParraLoggerContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParraLoggerContext.swift; sourceTree = "<group>"; };
 		007ED4662A6BFBDC0077E446 /* ParraLoggerContext+ParraDictionaryConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParraLoggerContext+ParraDictionaryConvertible.swift"; sourceTree = "<group>"; };
 		007ED4692A6BFBEA0077E446 /* ParraLoggerThreadInfo+ParraDictionaryConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParraLoggerThreadInfo+ParraDictionaryConvertible.swift"; sourceTree = "<group>"; };
@@ -1771,6 +1773,7 @@
 				0099EB0C2B8E46370053F366 /* View+padding.swift */,
 				00057F9F2B98162B0022B875 /* View+redacted.swift */,
 				00995BF92BB5FD9F00384D94 /* View+shakeGesture.swift */,
+				0079EDC52BD7EC180045EEE5 /* View+focusNextField.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3621,6 +3624,7 @@
 				007868992AAE4DE300864CFE /* ParraLogEvent.swift in Sources */,
 				001B7B2027DE3ABC00DEEECD /* UserDefaultsStorage.swift in Sources */,
 				007ED4802A6C9D370077E446 /* CallStackFrame.swift in Sources */,
+				0079EDC62BD7EC180045EEE5 /* View+focusNextField.swift in Sources */,
 				004F3F102BA88FA900424802 /* AppReleaseSectionContent.swift in Sources */,
 				001B7B2727DE3AC200DEEECD /* JSONEncoder.swift in Sources */,
 				0036222E2B5EB6FC009EFE53 /* SwatchView.swift in Sources */,
