@@ -35,8 +35,7 @@ extension AuthenticationWidget {
         let alertManager: AlertManager
 
         @Published var content: Content
-        @Published var error: Error?
-        @Published var loginButtonIsEnabled = false
+        @Published var error: String?
 
         func loginTapped() {
             guard let emailContent = content.emailContent else {
@@ -47,54 +46,86 @@ extension AuthenticationWidget {
                 return
             }
 
-            let email = emailContent.emailField.title?.text ?? ""
-            let password = emailContent.passwordField.title?.text ?? ""
+            validateEmailFields(alwaysShowErrors: true)
 
-            let emailError = TextValidator.validate(
-                text: email,
-                against: authWidgetConfig.emailField.validationRules
-            )
+            // double optionals from dictionary access
+            guard
+                let e = values[.email], let email = e,
+                let p = values[.password], let password = p else
+            {
+                error = "Email and password are required."
 
-            let passwordError = TextValidator.validate(
-                text: password,
-                against: authWidgetConfig.passwordField.validationRules
-            )
-
-//            guard emailError == nil && passwordError == nil else {
-//                var validationErrors = [String : String]()
-//
-//                if let emailError {
-//                    validationErrors["Email address"] = emailError
-//                }
-//
-//                if let passwordError {
-//                    validationErrors["Password"] = passwordError
-//                }
-//
-//                alertManager.showErrorToast(
-//                    userFacingMessage: "Login fields are invalid.",
-//                    underlyingError: .validationFailed(
-//                        failures: validationErrors
-//                    )
-//                )
-//
-//                return
-//            }
+                return
+            }
 
             setLoading(true)
 
             Task {
-                do {
-                    try await authService.login(
-                        username: "mickm@hey.com",
-                        password: "efhG5wefy"
-                    )
-                } catch {
-                    Logger.error(error)
-                }
+                let authResult = await self.authService.login(
+                    username: email,
+                    password: password
+                )
 
                 setLoading(false)
+
+                Task { @MainActor in
+                    switch authResult {
+                    case .authenticated(let parraUser):
+                        logger.info("Login successful", [
+                            "user_id": parraUser.info.user?.id ?? ""
+                        ])
+                    case .unauthenticated(let error):
+                        logger.error("Login failed", error)
+
+                        self
+                            .error =
+                            "Login failed. Ensure your email and password are correct."
+                    }
+                }
             }
+        }
+
+        func validateEmailFields(
+            fields: [AuthenticationWidget.Field] = AuthenticationWidget.Field
+                .allCases,
+            alwaysShowErrors: Bool = false
+        ) {
+            var areAllValid = true
+
+            for field in fields {
+                let text = values[field] ?? nil
+
+                // Only render error fields if text is non-nil or if the flag
+                // to always show errors is set to true. We do this to avoid
+                // showing error messages before the user has entered anything,
+                // until they submit the form, then we want to show all errors.
+                switch field {
+                case .email:
+                    let error = TextValidator.validate(
+                        text: text,
+                        against: authWidgetConfig.emailField.validationRules
+                    )
+
+                    areAllValid = areAllValid && error == nil
+
+                    if text != nil || alwaysShowErrors {
+                        content.emailContent?.emailField.errorMessage = error
+                    }
+                case .password:
+                    let error = TextValidator.validate(
+                        text: text,
+                        against: authWidgetConfig.passwordField.validationRules
+                    )
+
+                    areAllValid = areAllValid && error == nil
+
+                    if text != nil || alwaysShowErrors {
+                        content.emailContent?.passwordField.errorMessage = error
+                    }
+                }
+            }
+
+            content.emailContent?.loginButton.isDisabled = !areAllValid
         }
 
         func signupTapped() {
@@ -102,26 +133,20 @@ extension AuthenticationWidget {
         }
 
         func onEmailChanged(_ email: String?) {
-            let emailValidationMessage = TextValidator.validate(
-                text: email,
-                against: authWidgetConfig.emailField.validationRules
-            )
+            values[.email] = email
 
-            content.emailContent?.emailField
-                .errorMessage = emailValidationMessage
+            validateEmailFields()
         }
 
         func onPasswordChanged(_ password: String?) {
-            let passwordValidationMessage = TextValidator.validate(
-                text: password,
-                against: authWidgetConfig.passwordField.validationRules
-            )
+            values[.password] = password
 
-            content.emailContent?.passwordField
-                .errorMessage = passwordValidationMessage
+            validateEmailFields()
         }
 
         // MARK: - Private
+
+        private var values: [AuthenticationWidget.Field: String?] = [:]
 
         private func setLoading(_ isLoading: Bool) {
             Task { @MainActor in

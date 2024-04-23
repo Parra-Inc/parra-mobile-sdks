@@ -132,13 +132,6 @@ final class AuthServer: Server {
         let url = ParraInternal.Constants.parraApiRoot
             .appendingPathComponent(endpoint.route)
 
-        let start = logger.debug(
-            "Performing auth request with timeout: \(String(describing: timeout))",
-            [
-                "url": url.absoluteString
-            ]
-        )
-
         var request = URLRequest(url: url)
 
         request.httpMethod = endpoint.method.rawValue

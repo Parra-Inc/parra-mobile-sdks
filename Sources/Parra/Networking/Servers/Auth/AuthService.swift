@@ -44,7 +44,7 @@ final class AuthService {
     func login(
         username: String,
         password: String
-    ) async throws -> ParraAuthResult {
+    ) async -> ParraAuthResult {
         logger.debug("Logging in with username/password")
 
         let result: ParraAuthResult
@@ -82,7 +82,7 @@ final class AuthService {
     func signUp(
         username: String,
         password: String
-    ) async throws -> ParraAuthResult {
+    ) async -> ParraAuthResult {
         logger.debug("Signing up with username/password")
 
         let result: ParraAuthResult

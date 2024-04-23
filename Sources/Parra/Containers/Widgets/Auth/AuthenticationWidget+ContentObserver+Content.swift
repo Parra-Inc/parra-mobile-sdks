@@ -57,7 +57,8 @@ extension AuthenticationWidget.ContentObserver {
                     loginButton: TextButtonContent(
                         text: LabelContent(
                             text: emailPassword.loginButtonTitle ?? "Log in"
-                        )
+                        ),
+                        isDisabled: true
                     ),
                     signupButton: TextButtonContent(
                         text: LabelContent(

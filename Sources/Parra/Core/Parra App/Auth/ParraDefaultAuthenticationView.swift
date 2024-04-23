@@ -11,15 +11,7 @@ import SwiftUI
 public struct ParraDefaultAuthenticationView: View {
     // MARK: - Lifecycle
 
-    public init() {
-        let authService = parra.parraInternal.authService
-
-        guard case .parraAuth = authService.authenticationMethod else {
-            fatalError(
-                "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
-            )
-        }
-    }
+    public init() {}
 
     // MARK: - Public
 
@@ -38,6 +30,15 @@ public struct ParraDefaultAuthenticationView: View {
                 )
             )
         )
+        .onAppear {
+            let authService = parra.parraInternal.authService
+
+            guard case .parraAuth = authService.authenticationMethod else {
+                fatalError(
+                    "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
+                )
+            }
+        }
     }
 
     // MARK: - Private

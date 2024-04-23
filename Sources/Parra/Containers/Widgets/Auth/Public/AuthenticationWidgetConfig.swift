@@ -18,6 +18,7 @@ public class ParraAuthConfig: ContainerConfig {
         self.passwordField = ParraAuthConfig.default.passwordField
         self.loginButton = ParraAuthConfig.default.loginButton
         self.signupButton = ParraAuthConfig.default.signupButton
+        self.loginErrorLabel = ParraAuthConfig.default.loginErrorLabel
     }
 
     public init(
@@ -30,7 +31,8 @@ public class ParraAuthConfig: ContainerConfig {
         loginButton: TextButtonConfig = ParraAuthConfig.default
             .loginButton,
         signupButton: TextButtonConfig = ParraAuthConfig.default
-            .signupButton
+            .signupButton,
+        loginErrorLabel: LabelConfig = ParraAuthConfig.default.loginErrorLabel
     ) {
         self.title = title
         self.subtitle = subtitle
@@ -38,12 +40,13 @@ public class ParraAuthConfig: ContainerConfig {
         self.passwordField = passwordField
         self.loginButton = loginButton
         self.signupButton = signupButton
+        self.loginErrorLabel = loginErrorLabel
     }
 
     // MARK: - Public
 
     public static let `default` = ParraAuthConfig(
-        title: LabelConfig(fontStyle: .title),
+        title: LabelConfig(fontStyle: .largeTitle),
         subtitle: LabelConfig(fontStyle: .subheadline),
         emailField: TextInputConfig(
             title: LabelConfig(fontStyle: .subheadline),
@@ -71,6 +74,9 @@ public class ParraAuthConfig: ContainerConfig {
         ),
         signupButton: TextButtonConfig(
             style: .primary, size: .small, isMaxWidth: false
+        ),
+        loginErrorLabel: LabelConfig(
+            fontStyle: .caption
         )
     )
 
@@ -82,4 +88,6 @@ public class ParraAuthConfig: ContainerConfig {
 
     public let loginButton: TextButtonConfig
     public let signupButton: TextButtonConfig
+
+    public let loginErrorLabel: LabelConfig
 }

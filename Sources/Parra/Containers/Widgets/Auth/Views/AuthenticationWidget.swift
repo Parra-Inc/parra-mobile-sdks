@@ -36,10 +36,36 @@ public struct AuthenticationWidget: Container {
                 Spacer()
 
                 VStack(spacing: 0) {
-                    componentFactory.buildLabel(
-                        config: config.title,
-                        content: content.title,
-                        suppliedBuilder: localBuilderConfig.title
+                    HStack(spacing: 0) {
+                        withContent(content: content.icon) { content in
+                            ImageComponent(
+                                content: content,
+                                attributes: ImageAttributes(
+                                    frame: .fixed(
+                                        FixedFrameAttributes(
+                                            width: 60,
+                                            height: 60
+                                        )
+                                    )
+                                )
+                            )
+                        }
+
+                        componentFactory.buildLabel(
+                            config: config.title,
+                            content: content.title,
+                            suppliedBuilder: localBuilderConfig.title,
+                            localAttributes: LabelAttributes(
+                                padding: .padding(
+                                    leading: content.icon == nil ? 0 : 6
+                                )
+                            )
+                        )
+                    }
+                    .padding(
+                        .padding(
+                            bottom: content.subtitle == nil ? 20 : 0
+                        )
                     )
 
                     withContent(content: content.subtitle) { content in
@@ -50,8 +76,6 @@ public struct AuthenticationWidget: Container {
                         )
                     }
                 }
-
-                Spacer()
 
                 if usingEmail {
                     emailPasswordViews
@@ -65,6 +89,11 @@ public struct AuthenticationWidget: Container {
         }
         .applyBackground(style.background)
         .padding(style.padding)
+        .onAppear {
+            // When the view appears/reappears trigger a re-validation so that
+            // any changes in field values are reflected in the UI.
+            contentObserver.validateEmailFields()
+        }
     }
 
     // MARK: - Internal
@@ -91,7 +120,13 @@ public struct AuthenticationWidget: Container {
             VStack {
                 componentFactory.buildTextInput(
                     config: config.emailField,
-                    content: content.emailField
+                    content: content.emailField,
+                    localAttributes: TextInputAttributes(
+                        padding: .padding(
+                            top: 50,
+                            bottom: 6
+                        )
+                    )
                 )
                 .submitLabel(.next)
                 .focused($focusedField, equals: .email)
@@ -112,9 +147,28 @@ public struct AuthenticationWidget: Container {
                 componentFactory.buildTextButton(
                     variant: .contained,
                     config: config.loginButton,
-                    content: content.loginButton
+                    content: content.loginButton,
+                    localAttributes: TextButtonAttributes(
+                        padding: .padding(top: 16)
+                    )
                 ) {
                     contentObserver.loginTapped()
+                }
+
+                if let error = contentObserver.error {
+                    componentFactory.buildLabel(
+                        config: config.loginErrorLabel,
+                        content: LabelContent(text: error),
+                        localAttributes: .defaultFormCallout(
+                            in: themeObserver.theme,
+                            with: config.loginErrorLabel,
+                            erroring: true
+                        ).withUpdates(
+                            updates: LabelAttributes(
+                                padding: .padding(top: 4)
+                            )
+                        )
+                    )
                 }
             }
 
