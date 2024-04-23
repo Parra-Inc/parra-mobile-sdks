@@ -10,10 +10,10 @@ import SwiftUI
 
 public enum ImageContent: Hashable, Equatable {
     /// Assets libraries
-    case resource(String, Image.TemplateRenderingMode? = nil)
+    case resource(String, Bundle? = .main, Image.TemplateRenderingMode? = nil)
 
     /// Name of image in app bundle
-    case name(String, Bundle?, Image.TemplateRenderingMode? = nil)
+    case name(String, Bundle? = .main, Image.TemplateRenderingMode? = nil)
 
     /// SFSymbol name
     case symbol(String, SymbolRenderingMode? = nil)
@@ -32,9 +32,10 @@ public enum ImageContent: Hashable, Equatable {
 
     public func hash(into hasher: inout Hasher) {
         switch self {
-        case .resource(let string, let templateRenderingMode):
+        case .resource(let string, let bundle, let templateRenderingMode):
             hasher.combine("resource")
             hasher.combine(string)
+            hasher.combine(bundle)
             hasher.combine(templateRenderingMode)
         case .name(let string, let bundle, let templateRenderingMode):
             hasher.combine("name")

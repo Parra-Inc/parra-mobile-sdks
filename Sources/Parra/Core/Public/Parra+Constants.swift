@@ -60,4 +60,48 @@ public extension Parra {
     ) -> String? {
         return bundle.infoDictionary?["CFBundleName"] as? String
     }
+
+    static func appIconFilePath(
+        bundle: Bundle = Bundle.main
+    ) -> URL? {
+        guard let icons = bundle.object(
+            forInfoDictionaryKey: "CFBundleIcons"
+        ) as? [String: Any],
+            let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any] else {
+            return nil
+        }
+
+        var allIconNames = [String]()
+
+        if let iconFileName = primaryIcon["CFBundleIconName"] as? String {
+            allIconNames.append(iconFileName)
+        }
+
+        if let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+           let iconFileName = iconFiles.last
+        {
+            allIconNames.append(iconFileName)
+        }
+
+        let resourceUrls = bundle.urls(
+            forResourcesWithExtension: nil,
+            subdirectory: nil
+        ) ?? []
+
+        for url in resourceUrls {
+            let fileName = url.deletingPathExtension().lastPathComponent
+
+            let components = fileName.split(separator: "@")
+
+            if let first = components.first {
+                for iconName in allIconNames {
+                    if iconName == String(first) {
+                        return url
+                    }
+                }
+            }
+        }
+
+        return nil
+    }
 }

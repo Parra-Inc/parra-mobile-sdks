@@ -18,8 +18,8 @@ struct ImageComponent: ImageComponentType {
         let primaryColor = themeObserver.theme.palette.primary.toParraColor()
 
         let image = switch content {
-        case .resource(let name, let templateRenderingMode):
-            Image(name)
+        case .resource(let name, let bundle, let templateRenderingMode):
+            Image(name, bundle: bundle)
                 .renderingMode(templateRenderingMode ?? .original)
         case .name(let name, let bundle, let templateRenderingMode):
             Image(name, bundle: bundle)

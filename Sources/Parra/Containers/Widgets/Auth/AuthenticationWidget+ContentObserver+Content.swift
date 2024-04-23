@@ -72,6 +72,7 @@ extension AuthenticationWidget.ContentObserver {
             }
 
             self.init(
+                icon: content.icon,
                 title: LabelContent(
                     text: content.title
                 ),
@@ -81,10 +82,12 @@ extension AuthenticationWidget.ContentObserver {
         }
 
         init(
+            icon: ImageContent?,
             title: LabelContent,
             subtitle: LabelContent?,
             emailContent: EmailContent?
         ) {
+            self.icon = icon
             self.title = title
             self.subtitle = subtitle
             self.emailContent = emailContent
@@ -92,6 +95,7 @@ extension AuthenticationWidget.ContentObserver {
 
         // MARK: - Internal
 
+        let icon: ImageContent?
         let title: LabelContent
         let subtitle: LabelContent?
         var emailContent: EmailContent?

@@ -6,16 +6,18 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 public struct ParraAuthContent: ContainerContent {
     // MARK: - Lifecycle
 
     public init(
+        icon: ImageContent? = ParraAuthContent.appIconImageContent(),
         title: String = Parra.appBundleName() ?? "Welcome",
         subtitle: String? = nil,
         emailPassword: AuthenticationEmailPasswordContent?
     ) {
+        self.icon = icon
         self.title = title
         self.subtitle = subtitle
         self.emailPassword = emailPassword
@@ -39,7 +41,20 @@ public struct ParraAuthContent: ContainerContent {
 
     public static let `default` = ParraAuthContent(emailPassword: .default)
 
+    public let icon: ImageContent?
     public let title: String
     public let subtitle: String?
     public let emailPassword: AuthenticationEmailPasswordContent?
+
+    public static func appIconImageContent() -> ImageContent? {
+        guard let appIcon = Parra.appIconFilePath() else {
+            return nil
+        }
+
+        guard let image = UIImage(contentsOfFile: appIcon.path) else {
+            return nil
+        }
+
+        return ImageContent.image(image, .original)
+    }
 }
