@@ -61,54 +61,6 @@ class ParraInternal {
         removeEventObservers()
     }
 
-    // MARK: - Public
-
-    // MARK: - Authentication
-
-    /// Used to clear any cached credentials for the current user. After calling
-    /// ``Parra/Parra/logout()``, the authentication provider you configured
-    /// will be invoked the very next time the Parra API is accessed.
-    public func logout() async {
-        await syncManager.enqueueSync(with: .immediate)
-        await syncManager.stopSyncTimer()
-        await authService.logout()
-    }
-
-    // MARK: - Synchronization
-
-    /// Parra data is syncrhonized automatically. Use this method if you wish to
-    /// trigger a synchronization event manually. This may be something you want
-    /// to do in response to a significant event in your app, or in response to
-    /// a low memory warning, for example. Note that in order to prevent
-    /// excessive network activity it may take up to 30 seconds for the sync to
-    /// complete after being initiated.
-    public func triggerSync() async {
-        // Uploads any cached Parra data. This includes data like answers to
-        // questions. Don't expose sync mode publically.
-        await syncManager.enqueueSync(with: .eventual)
-    }
-
-    // MARK: - Theme
-
-    public func updateTheme(to newTheme: ParraTheme) {
-        let oldTheme = configuration.theme
-        configuration.theme = newTheme
-
-        globalComponentFactory = ComponentFactory(
-            global: configuration.globalComponentAttributes,
-            theme: newTheme
-        )
-
-        notificationCenter.post(
-            name: Parra.themeWillChangeNotification,
-            object: nil,
-            userInfo: [
-                "oldTheme": oldTheme,
-                "newTheme": newTheme
-            ]
-        )
-    }
-
     // MARK: - Internal
 
     // MARK: - Statics
@@ -123,7 +75,7 @@ class ParraInternal {
 
     let feedback: ParraFeedback
 
-    private(set) var configuration: ParraConfiguration
+    var configuration: ParraConfiguration
     let authenticationMethod: ParraAuthType
     let appState: ParraAppState
     let authState: ParraAuthState
@@ -142,7 +94,7 @@ class ParraInternal {
     let alertManager: AlertManager
     let modalScreenManager: ModalScreenManager
 
-    private(set) var globalComponentFactory: ComponentFactory
+    var globalComponentFactory: ComponentFactory
 
     static func libraryVersion() -> String {
         return ParraInternal.appBundleVersionShort(
