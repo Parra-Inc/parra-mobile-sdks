@@ -48,7 +48,10 @@ class ParraSyncManager {
 
     /// Used to send collected data to the Parra API. Invoked automatically
     /// internally, but can be invoked externally as necessary.
-    func enqueueSync(with mode: ParraSyncMode) async {
+    func enqueueSync(
+        with mode: ParraSyncMode,
+        waitUntilSyncCompletes: Bool = false
+    ) async {
         if forceDisabled {
             return
         }
@@ -88,10 +91,15 @@ class ParraSyncManager {
         case .immediate:
             logger.debug("\(logPrefix) Initiating immediate sync.")
             enqueuedSyncMode = nil
-            // Should not be awaited. enqueueSync returns when the sync job is
-            // added to the queue.
-            Task {
-                await self.sync()
+
+            if waitUntilSyncCompletes {
+                await sync()
+            } else {
+                // Should not be awaited. enqueueSync returns when the sync job
+                // is added to the queue.
+                Task {
+                    await self.sync()
+                }
             }
         case .eventual:
             enqueuedSyncMode = .eventual

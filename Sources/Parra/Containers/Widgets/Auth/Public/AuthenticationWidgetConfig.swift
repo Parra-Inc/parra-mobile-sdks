@@ -67,7 +67,8 @@ public class ParraAuthConfig: ContainerConfig {
                 .hasLowercase,
                 .hasUppercase
             ],
-            preferValidationErrorsToHelperMessage: true
+            preferValidationErrorsToHelperMessage: true,
+            isSecure: true
         ),
         loginButton: TextButtonConfig(
             style: .primary, size: .large, isMaxWidth: true

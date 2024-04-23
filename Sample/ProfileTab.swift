@@ -6,11 +6,20 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import Parra
 import SwiftUI
 
 struct ProfileTab: View {
+    @Environment(\.parra) var parra
+
     var body: some View {
-        Text("Profile")
+        VStack {
+            Text("Profile")
+
+            Button("Logout") {
+                parra.logout()
+            }
+        }
     }
 }
 

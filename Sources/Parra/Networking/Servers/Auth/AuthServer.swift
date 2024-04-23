@@ -152,7 +152,12 @@ final class AuthServer: Server {
         )
 
         switch response.statusCode {
-        case 200:
+        case 204:
+            return try configuration.jsonDecoder.decode(
+                T.self,
+                from: EmptyJsonObjectData
+            )
+        case 200 ..< 300:
             return try configuration.jsonDecoder.decode(
                 T.self,
                 from: data
