@@ -69,6 +69,11 @@ public struct AuthenticationWidget: Container {
 
     // MARK: - Internal
 
+    enum Field: Int, Hashable, CaseIterable {
+        case email
+        case password
+    }
+
     let localBuilderConfig: AuthenticationWidgetBuilderConfig
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
@@ -88,11 +93,21 @@ public struct AuthenticationWidget: Container {
                     config: config.emailField,
                     content: content.emailField
                 )
+                .submitLabel(.next)
+                .focused($focusedField, equals: .email)
+                .onSubmit {
+                    focusNextField($focusedField)
+                }
 
                 componentFactory.buildTextInput(
                     config: config.passwordField,
                     content: content.passwordField
                 )
+                .submitLabel(.return)
+                .focused($focusedField, equals: .password)
+                .onSubmit {
+                    contentObserver.loginTapped()
+                }
 
                 componentFactory.buildTextButton(
                     variant: .contained,
@@ -116,6 +131,8 @@ public struct AuthenticationWidget: Container {
     }
 
     // MARK: - Private
+
+    @FocusState private var focusedField: Field?
 
     @Environment(\.parra) private var parra
 }
