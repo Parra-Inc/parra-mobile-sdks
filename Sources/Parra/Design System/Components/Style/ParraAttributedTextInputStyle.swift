@@ -25,7 +25,7 @@ struct ParraAttributedTextInputStyle: TextFieldStyle, ParraAttributedStyle {
         self.titleStyle = if let title = content.title {
             ParraAttributedLabelStyle(
                 content: title,
-                attributes: attributes.title,
+                attributes: attributes.title ?? .init(),
                 theme: theme
             )
         } else {
@@ -34,7 +34,7 @@ struct ParraAttributedTextInputStyle: TextFieldStyle, ParraAttributedStyle {
         self.helperStyle = if let helper = content.helper {
             ParraAttributedLabelStyle(
                 content: helper,
-                attributes: attributes.helper,
+                attributes: attributes.helper ?? .init(),
                 theme: theme
             )
         } else {

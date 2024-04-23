@@ -12,8 +12,8 @@ public struct TextInputAttributes: ParraStyleAttributes {
     // MARK: - Lifecycle
 
     public init(
-        title: LabelAttributes,
-        helper: LabelAttributes,
+        title: LabelAttributes? = nil,
+        helper: LabelAttributes? = nil,
         background: (any ShapeStyle)? = nil,
         cornerRadius: ParraCornerRadiusSize? = nil,
         font: Font? = nil,
@@ -44,13 +44,13 @@ public struct TextInputAttributes: ParraStyleAttributes {
         self.textInputAutocapitalization = textInputAutocapitalization
         self.autocorrectionDisabled = autocorrectionDisabled
         self.frame = nil
-        self.borderWidth = 0
+        self.borderWidth = nil
         self.borderColor = nil
     }
 
     init(
-        title: LabelAttributes,
-        helper: LabelAttributes,
+        title: LabelAttributes? = nil,
+        helper: LabelAttributes? = nil,
         background: (any ShapeStyle)? = nil,
         cornerRadius: ParraCornerRadiusSize? = nil,
         font: Font? = nil,
@@ -65,7 +65,7 @@ public struct TextInputAttributes: ParraStyleAttributes {
         textInputAutocapitalization: TextInputAutocapitalization? = nil,
         autocorrectionDisabled: Bool = true,
         frame: FrameAttributes? = nil,
-        borderWidth: CGFloat = 0,
+        borderWidth: CGFloat? = nil,
         borderColor: Color? = nil
     ) {
         self.title = title
@@ -91,10 +91,10 @@ public struct TextInputAttributes: ParraStyleAttributes {
     // MARK: - Public
 
     /// Attributes to use on the optional title label shown above the menu.
-    public let title: LabelAttributes
+    public let title: LabelAttributes?
 
     /// Attributes to use on the optional helper field shown below the menu.
-    public let helper: LabelAttributes
+    public let helper: LabelAttributes?
 
     public let background: (any ShapeStyle)?
     public let cornerRadius: ParraCornerRadiusSize?
@@ -114,7 +114,7 @@ public struct TextInputAttributes: ParraStyleAttributes {
     // MARK: - Internal
 
     let frame: FrameAttributes?
-    let borderWidth: CGFloat
+    let borderWidth: CGFloat?
     let borderColor: Color?
 
     func withUpdates(

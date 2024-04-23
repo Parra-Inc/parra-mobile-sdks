@@ -84,7 +84,7 @@ struct TextInputComponent: TextInputComponentType {
             with: config.helper
         )
 
-        return inputAttributes ?? TextInputAttributes(
+        return TextInputAttributes(
             title: title,
             helper: helper,
             cornerRadius: .md,
@@ -93,7 +93,7 @@ struct TextInputComponent: TextInputComponentType {
             padding: .zero,
             borderWidth: 1,
             borderColor: palette.secondaryText.toParraColor()
-        )
+        ).withUpdates(updates: inputAttributes)
     }
 
     // MARK: - Private
