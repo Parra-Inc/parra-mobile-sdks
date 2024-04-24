@@ -27,6 +27,8 @@ public final class Parra: Observable {
     public private(set) lazy var feedback: ParraFeedback = parraInternal
         .feedback
 
+    @Published public internal(set) var user: ParraUser?
+
     // MARK: - Internal
 
     /// Need a common instance that will never be nil to provide as an

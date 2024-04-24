@@ -54,7 +54,7 @@ public extension Parra {
         }
     }
 
-    func confirmLogout() async -> Bool {
+    private func confirmLogout() async -> Bool {
         await withCheckedContinuation { continuation in
             Task { @MainActor in
                 let alertView = UIAlertController(

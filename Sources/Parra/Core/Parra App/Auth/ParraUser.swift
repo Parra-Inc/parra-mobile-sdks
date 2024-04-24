@@ -9,6 +9,14 @@
 import SwiftUI
 
 public struct ParraUser: Equatable, Codable {
+    // MARK: - Public
+
+    public var userInfo: User? {
+        return info.user
+    }
+
+    // MARK: - Internal
+
     enum Credential: Codable, Equatable {
         case basic(String)
         case oauth2(OAuth2Service.Token)

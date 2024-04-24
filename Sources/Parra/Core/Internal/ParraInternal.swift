@@ -69,8 +69,6 @@ class ParraInternal {
     static let moduleName = "Parra"
     static let errorDomain = "com.parra.error"
 
-    var currentUser: ParraUser?
-
     // MARK: - Parra Modules
 
     let feedback: ParraFeedback
