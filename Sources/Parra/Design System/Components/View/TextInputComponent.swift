@@ -53,6 +53,7 @@ struct TextInputComponent: TextInputComponentType {
             titleLabel
 
             baseView
+                .textContentType(config.contentType)
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
                 .textFieldStyle(style)

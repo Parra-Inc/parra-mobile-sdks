@@ -18,7 +18,8 @@ public struct TextInputConfig {
             .validationRules,
         preferValidationErrorsToHelperMessage: Bool = TextInputConfig.default
             .preferValidationErrorsToHelperMessage,
-        isSecure: Bool = false
+        isSecure: Bool = false,
+        contentType: UITextContentType? = nil
     ) {
         self.title = title
         self.helper = helper
@@ -26,6 +27,7 @@ public struct TextInputConfig {
         self.preferValidationErrorsToHelperMessage
             = preferValidationErrorsToHelperMessage
         self.isSecure = isSecure
+        self.contentType = contentType
     }
 
     // MARK: - Public
@@ -50,6 +52,10 @@ public struct TextInputConfig {
     /// Whether or not the text field should be secure. Defaults to false.
     /// If true, the text field will display a secure entry view for passwords.
     public let isSecure: Bool
+
+    /// The content type applied to the text field for determining which
+    /// information to autofill/etc.
+    public let contentType: UITextContentType?
 
     // MARK: - Internal
 
