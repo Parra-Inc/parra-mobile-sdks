@@ -79,7 +79,7 @@ struct ParraAttributedTextInputStyle: TextFieldStyle, ParraAttributedStyle {
             )
             .applyFrame(attributes.frame)
             .foregroundStyle(fontColor)
-            .padding()
+            .padding(.horizontal, 12)
             .applyBorder(
                 borderColor: attributes.borderColor
                     ?? theme.palette.secondaryBackground,

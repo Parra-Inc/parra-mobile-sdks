@@ -117,15 +117,16 @@ public struct AuthenticationWidget: Container {
 
     @ViewBuilder var emailPasswordViews: some View {
         if let content = contentObserver.content.emailContent {
-            VStack {
+            VStack(spacing: 0) {
                 componentFactory.buildTextInput(
                     config: config.emailField,
                     content: content.emailField,
                     localAttributes: TextInputAttributes(
                         padding: .padding(
                             top: 50,
-                            bottom: 6
-                        )
+                            bottom: 5
+                        ),
+                        textContentType: .emailAddress
                     )
                 )
                 .submitLabel(.next)
@@ -136,21 +137,22 @@ public struct AuthenticationWidget: Container {
 
                 componentFactory.buildTextInput(
                     config: config.passwordField,
-                    content: content.passwordField
+                    content: content.passwordField,
+                    localAttributes: TextInputAttributes(
+                        padding: .padding(bottom: 16),
+                        textContentType: .password
+                    )
                 )
-                .submitLabel(.return)
+                .submitLabel(.next)
                 .focused($focusedField, equals: .password)
-                .onSubmit {
+                .onSubmit(of: .text) {
                     contentObserver.loginTapped()
                 }
 
                 componentFactory.buildTextButton(
                     variant: .contained,
                     config: config.loginButton,
-                    content: content.loginButton,
-                    localAttributes: TextButtonAttributes(
-                        padding: .padding(top: 16)
-                    )
+                    content: content.loginButton
                 ) {
                     contentObserver.loginTapped()
                 }
@@ -185,6 +187,8 @@ public struct AuthenticationWidget: Container {
     }
 
     // MARK: - Private
+
+    @State private var password: String = ""
 
     @FocusState private var focusedField: Field?
 

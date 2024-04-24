@@ -30,17 +30,19 @@ struct TextInputComponent: TextInputComponentType {
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     @ViewBuilder var baseView: some View {
+        let prompt = Text(content.placeholder?.text ?? "")
+
         if config.isSecure {
             SecureField(
                 text: $text,
-                prompt: Text(content.placeholder?.text ?? "")
+                prompt: prompt
             ) {
                 EmptyView()
             }
         } else {
             TextField(
                 text: $text,
-                prompt: Text(content.placeholder?.text ?? "")
+                prompt: prompt
             ) {
                 EmptyView()
             }
@@ -53,7 +55,6 @@ struct TextInputComponent: TextInputComponentType {
             titleLabel
 
             baseView
-                .textContentType(config.contentType)
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
                 .textFieldStyle(style)
@@ -92,6 +93,7 @@ struct TextInputComponent: TextInputComponentType {
             font: .body,
             fontColor: palette.primaryText.toParraColor(),
             padding: .zero,
+            frame: .fixed(.init(height: 52)),
             borderWidth: 1,
             borderColor: palette.secondaryText.toParraColor()
         ).withUpdates(updates: inputAttributes)
@@ -132,26 +134,29 @@ struct TextInputComponent: TextInputComponentType {
             (nil, nil, false)
         }
 
-        if let message {
-            let content = LabelContent(text: message)
-            let style = baseStyle?.withContent(
-                content: content
-            ) ?? ParraAttributedLabelStyle(
-                content: content,
-                attributes: .defaultFormHelper(
-                    in: themeObserver.theme,
-                    with: LabelConfig(fontStyle: .caption),
-                    erroring: isError
-                ),
-                theme: themeObserver.theme
-            )
-
-            LabelComponent(
-                content: content,
-                style: style
-            )
-            .padding(.trailing, 4)
+        let content = if let message {
+            LabelContent(text: message)
+        } else {
+            LabelContent(text: "")
         }
+
+        let style = baseStyle?.withContent(
+            content: content
+        ) ?? ParraAttributedLabelStyle(
+            content: content,
+            attributes: .defaultFormHelper(
+                in: themeObserver.theme,
+                with: LabelConfig(fontStyle: .caption),
+                erroring: isError
+            ),
+            theme: themeObserver.theme
+        )
+
+        LabelComponent(
+            content: content,
+            style: style
+        )
+        .lineLimit(1)
     }
 }
 

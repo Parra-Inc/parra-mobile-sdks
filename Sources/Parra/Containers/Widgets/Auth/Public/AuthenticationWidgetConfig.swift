@@ -56,8 +56,7 @@ public class ParraAuthConfig: ContainerConfig {
                 .maxLength(128),
                 .email
             ],
-            preferValidationErrorsToHelperMessage: true,
-            contentType: .emailAddress
+            preferValidationErrorsToHelperMessage: true
         ),
         passwordField: TextInputConfig(
             title: LabelConfig(fontStyle: .subheadline),
@@ -69,8 +68,7 @@ public class ParraAuthConfig: ContainerConfig {
                 .hasUppercase
             ],
             preferValidationErrorsToHelperMessage: true,
-            isSecure: true,
-            contentType: .password
+            isSecure: true
         ),
         loginButton: TextButtonConfig(
             style: .primary, size: .large, isMaxWidth: true
