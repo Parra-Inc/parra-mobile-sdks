@@ -32,16 +32,20 @@ final class OAuth2Service {
     let authServer: AuthServer
 
     func authenticate(
-        using passwordCredential: PasswordCredential
+        using signupType: AuthType
     ) async throws -> Token {
-        let data: [String: String] = [
+        var data: [String: String] = [
             "grant_type": "password",
-            "username": passwordCredential.username,
-            "password": passwordCredential.password,
             "audience": "api.parra.io",
             "scope": "offline_access",
             "client_id": clientId
         ]
+
+        switch signupType {
+        case .emailPassword(let email, let password):
+            data["username"] = email
+            data["password"] = password
+        }
 
         let response: TokenResponse = try await authServer
             .performFormPostRequest(

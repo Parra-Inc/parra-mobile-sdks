@@ -11,11 +11,22 @@ import Foundation
 final class ExternalResourceServer: Server {
     // MARK: - Lifecycle
 
-    init(configuration: ServerConfiguration) {
+    init(
+        configuration: ServerConfiguration,
+        appState: ParraAppState,
+        appConfig: ParraConfiguration
+
+    ) {
         self.configuration = configuration
+        self.appState = appState
+        self.appConfig = appConfig
     }
 
     // MARK: - Internal
 
     let configuration: ServerConfiguration
+    let appState: ParraAppState
+    let appConfig: ParraConfiguration
+
+    weak var delegate: ServerDelegate?
 }

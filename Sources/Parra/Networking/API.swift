@@ -6,7 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 private let logger = Logger(category: "Endpoints")
 
@@ -114,7 +114,7 @@ extension API {
     func submitSession(
         _ sessionUpload: ParraSessionUpload
     ) async -> AuthenticatedRequestResult<ParraSessionsResponse> {
-        return await apiResourceServer.performRequest(
+        return await apiResourceServer.hitApiEndpoint(
             endpoint: .postBulkSubmitSessions(
                 tenantId: appState.tenantId
             ),
@@ -169,7 +169,7 @@ extension API {
     func voteForTicket(
         with ticketId: String
     ) async -> AuthenticatedRequestResult<UserTicket> {
-        return await apiResourceServer.performRequest(
+        return await apiResourceServer.hitApiEndpoint(
             endpoint: .postVoteForTicket(
                 tenantId: appState.tenantId,
                 ticketId: ticketId
@@ -180,7 +180,7 @@ extension API {
     func removeVoteForTicket(
         with ticketId: String
     ) async -> AuthenticatedRequestResult<UserTicket> {
-        return await apiResourceServer.performRequest(
+        return await apiResourceServer.hitApiEndpoint(
             endpoint: .deleteVoteForTicket(
                 tenantId: appState.tenantId,
                 ticketId: ticketId
@@ -237,6 +237,25 @@ extension API {
         )
     }
 
+    // Users
+
+    func uploadAvatar(
+        image: UIImage
+    ) async throws -> ImageAssetStub {
+        let imageField = try MultipartFormField(
+            name: "Avatar",
+            image: image
+        )
+
+        return try await hitUploadEndpoint(
+            .postUpdateAvatar(
+                tenantId: appState.tenantId
+            ),
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+            formFields: [imageField]
+        )
+    }
+
     // MARK: - Private
 
     private func hitEndpoint<Response>(
@@ -246,11 +265,33 @@ extension API {
         body: some Encodable = EmptyRequestObject()
     ) async throws -> Response where Response: Codable {
         let response: AuthenticatedRequestResult<Response> =
-            await apiResourceServer.performRequest(
+            await apiResourceServer.hitApiEndpoint(
                 endpoint: endpoint,
                 queryItems: queryItems,
                 cachePolicy: cachePolicy,
                 body: body
+            )
+
+        switch response.result {
+        case .success(let response):
+            return response
+        case .failure(let error):
+            throw error
+        }
+    }
+
+    private func hitUploadEndpoint<Response>(
+        _ endpoint: ParraEndpoint,
+        queryItems: [String: String] = [:],
+        cachePolicy: URLRequest.CachePolicy? = nil,
+        formFields: [MultipartFormField]
+    ) async throws -> Response where Response: Codable {
+        let response: AuthenticatedRequestResult<Response> =
+            await apiResourceServer.hitUploadEndpoint(
+                endpoint: endpoint,
+                formFields: formFields,
+                queryItems: queryItems,
+                cachePolicy: cachePolicy
             )
 
         switch response.result {

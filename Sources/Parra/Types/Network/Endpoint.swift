@@ -11,7 +11,6 @@ import Foundation
 enum ParraEndpoint {
     // Auth
     case postAuthentication(tenantId: String)
-    case getUserInfo(tenantId: String)
     case postCreateUser(tenantId: String)
     case postLogin(tenantId: String)
     case postLogout(tenantId: String)
@@ -43,6 +42,10 @@ enum ParraEndpoint {
     case getPaginateReleases(tenantId: String, applicationId: String)
     case getAppInfo(tenantId: String, applicationId: String)
 
+    // Users
+    case getUserInfo(tenantId: String)
+    case postUpdateAvatar(tenantId: String)
+
     // MARK: - Internal
 
     // All endpoints should use kebab case!
@@ -51,8 +54,6 @@ enum ParraEndpoint {
         // Auth
         case .postAuthentication(let tenantId):
             return "tenants/\(tenantId)/issuers/public/auth/token"
-        case .getUserInfo(let tenantId):
-            return "tenants/\(tenantId)/auth/user-info"
         case .postCreateUser(let tenantId):
             return "tenants/\(tenantId)/users"
         case .postLogin(let tenantId):
@@ -97,6 +98,12 @@ enum ParraEndpoint {
             return "tenants/\(tenantId)/applications/\(applicationId)/releases"
         case .getAppInfo(let tenantId, let applicationId):
             return "tenants/\(tenantId)/applications/\(applicationId)/app-info"
+
+        // Users
+        case .getUserInfo(let tenantId):
+            return "tenants/\(tenantId)/auth/user-info"
+        case .postUpdateAvatar(let tenantId):
+            return "tenants/\(tenantId)/users/avatar"
         }
     }
 
@@ -108,7 +115,7 @@ enum ParraEndpoint {
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions, .postCreateUser,
              .postPushTokens, .postAuthentication, .postVoteForTicket,
-             .postLogin, .postLogout:
+             .postLogin, .postLogout, .postUpdateAvatar:
             return .post
         case .deleteVoteForTicket:
             return .delete
@@ -156,6 +163,8 @@ enum ParraEndpoint {
             return "tenants/:tenantId/auth/login"
         case .postLogout:
             return "tenants/:tenantId/auth/logout"
+        case .postUpdateAvatar:
+            return "tenants/:tenantId/users/avatar"
         case .getRoadmap:
             return "tenants/:tenantId/applications/:applicationId/roadmap"
         case .getPaginateTickets:

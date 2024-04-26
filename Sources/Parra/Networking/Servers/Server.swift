@@ -10,4 +10,8 @@ import Foundation
 
 protocol Server {
     var configuration: ServerConfiguration { get }
+    var appState: ParraAppState { get }
+    var appConfig: ParraConfiguration { get }
+
+    var delegate: ServerDelegate? { get }
 }

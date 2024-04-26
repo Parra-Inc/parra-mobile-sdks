@@ -42,21 +42,16 @@ final class AuthService {
 
     @discardableResult
     func login(
-        username: String,
-        password: String
+        authType: OAuth2Service.AuthType
     ) async -> ParraAuthResult {
         logger.debug("Logging in with username/password")
 
         let result: ParraAuthResult
 
         do {
-            let oauthToken = try await oauth2Service
-                .authenticate(
-                    using: OAuth2Service.PasswordCredential(
-                        username: username,
-                        password: password
-                    )
-                )
+            let oauthToken = try await oauth2Service.authenticate(
+                using: authType
+            )
 
             // On login, get user info via login route instead of GET user-info
             let userInfo = try await authServer.postLogin(
@@ -80,24 +75,20 @@ final class AuthService {
 
     @discardableResult
     func signUp(
-        username: String,
-        password: String
+        authType: OAuth2Service.AuthType
     ) async -> ParraAuthResult {
         logger.debug("Signing up with username/password")
 
         let result: ParraAuthResult
 
         do {
-            let oauthToken = try await oauth2Service
-                .authenticate(
-                    using: OAuth2Service.PasswordCredential(
-                        username: username,
-                        password: password
-                    )
-                )
+            let oauthToken = try await oauth2Service.authenticate(
+                using: authType
+            )
 
-            let userInfo = try await authServer.postLogin(
-                accessToken: oauthToken.accessToken
+            let userInfo = try await authServer.postSignup(
+                accessToken: oauthToken.accessToken,
+                requestData: authType.requestPayload
             )
 
             let user = ParraUser(

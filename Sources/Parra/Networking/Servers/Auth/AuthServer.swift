@@ -21,6 +21,7 @@ final class AuthServer: Server {
         configuration: ServerConfiguration
     ) {
         self.appState = appState
+        self.appConfig = appConfig
         self.configuration = configuration
         self.headerFactory = HeaderFactory(
             appState: appState,
@@ -35,8 +36,10 @@ final class AuthServer: Server {
     }
 
     let appState: ParraAppState
+    let appConfig: ParraConfiguration
     let configuration: ServerConfiguration
     let headerFactory: HeaderFactory
+    weak var delegate: ServerDelegate?
 
     func performPublicApiKeyAuthenticationRequest(
         apiKeyId: String,
@@ -87,6 +90,21 @@ final class AuthServer: Server {
         }
     }
 
+    func postSignup(
+        accessToken: String,
+        requestData: CreateUserRequestBody
+    ) async throws -> UserInfoResponse {
+        let body = try configuration.jsonEncoder.encode(requestData)
+
+        return try await performAuthRequest(
+            to: .postCreateUser(
+                tenantId: appState.tenantId
+            ),
+            with: accessToken,
+            body: body
+        )
+    }
+
     func postLogin(
         accessToken: String
     ) async throws -> UserInfoResponse {
@@ -127,6 +145,7 @@ final class AuthServer: Server {
     private func performAuthRequest<T>(
         to endpoint: ParraEndpoint,
         with accessToken: String,
+        body: Data? = nil,
         timeout: TimeInterval? = nil
     ) async throws -> T where T: Codable {
         let url = ParraInternal.Constants.parraApiRoot
@@ -139,6 +158,10 @@ final class AuthServer: Server {
         request.setValue(for: .authorization(.bearer(accessToken)))
         request.timeoutInterval = timeout ?? configuration.urlSession
             .configuration.timeoutIntervalForRequest
+
+        if let body {
+            request.httpBody = body
+        }
 
         addHeaders(
             to: &request,

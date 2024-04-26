@@ -121,7 +121,9 @@ extension ParraInternal {
         )
 
         let externalResourceServer = ExternalResourceServer(
-            configuration: instanceConfiguration.externalServerConfiguration
+            configuration: instanceConfiguration.externalServerConfiguration,
+            appState: appState,
+            appConfig: configuration
         )
 
         let oauth2Service = OAuth2Service(
