@@ -14,7 +14,7 @@ extension ParraEndpoint {
         let object: Codable = switch status {
         case 200 ..< 300:
             switch self {
-            case .getUserInfo, .postLogin, .postLogout:
+            case .getUserInfo, .postLogin, .postLogout, .postUpdateAvatar:
                 fatalError()
             case .postCreateUser:
                 UserInfoResponse.validStates()[0]

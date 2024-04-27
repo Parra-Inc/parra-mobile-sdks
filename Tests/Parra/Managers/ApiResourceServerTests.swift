@@ -40,7 +40,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: endpoint
                 )
 
@@ -64,7 +64,7 @@ class ApiResourceServerTests: MockedParraTestCase {
         // Can't expect throw with async func
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: .getCards
                 )
 
@@ -95,7 +95,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: .getCards
                 )
 
@@ -126,7 +126,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: endpoint
                 )
 
@@ -150,7 +150,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: endpoint
                 )
 
@@ -175,7 +175,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let _: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: endpoint
                 )
 
@@ -196,7 +196,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: endpoint
                 )
 
@@ -227,7 +227,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: endpoint
                 )
 
@@ -255,7 +255,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: endpoint
                 )
 
@@ -295,7 +295,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: endpoint
                 )
 
@@ -319,7 +319,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let response: AuthenticatedRequestResult<EmptyResponseObject> =
             await mockApiResourceServer.resourceServer
-                .performRequest(
+                .hitApiEndpoint(
                     endpoint: .getCards
                 )
 

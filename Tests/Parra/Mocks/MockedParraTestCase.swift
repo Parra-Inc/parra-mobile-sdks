@@ -244,7 +244,9 @@ class MockedParraTestCase: ParraBaseMock {
         )
 
         let externalResourceServer = ExternalResourceServer(
-            configuration: configuration
+            configuration: configuration,
+            appState: appState,
+            appConfig: appConfig
         )
 
         return (

@@ -47,7 +47,8 @@ extension ParraEndpoint: CaseIterable {
                  .postBulkSubmitSessions, .postPushTokens,
                  .getRoadmap, .getPaginateTickets, .postVoteForTicket,
                  .deleteVoteForTicket, .getRelease, .getPaginateReleases,
-                 .getAppInfo, .postCreateUser, .postLogin, .postLogout:
+                 .getAppInfo, .postCreateUser, .postLogin, .postLogout,
+                 .postUpdateAvatar:
                 finalCases.append(testCase)
             }
         }
