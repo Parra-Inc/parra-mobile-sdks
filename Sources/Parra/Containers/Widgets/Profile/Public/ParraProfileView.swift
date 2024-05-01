@@ -25,7 +25,9 @@ public struct ParraProfileView: View {
         let container: ProfileWidget = parra.parraInternal
             .containerRenderer.renderContainer(
                 with: builderConfig,
-                params: .init(),
+                params: .init(
+                    api: parra.parraInternal.api
+                ),
                 config: config
             )
 

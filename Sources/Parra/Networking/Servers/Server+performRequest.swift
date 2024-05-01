@@ -192,12 +192,12 @@ extension Server {
         var urlRequest = request
 
         assert(
-            request.httpMethod?.uppercased() == "POST",
+            urlRequest.httpMethod?.uppercased() == "POST",
             "Multipart form upload only supports POST requests"
         )
 
         assert(
-            request.httpBody == nil,
+            urlRequest.httpBody == nil,
             "Multipart form upload does not support setting the httpBody property. It will be overridden."
         )
 

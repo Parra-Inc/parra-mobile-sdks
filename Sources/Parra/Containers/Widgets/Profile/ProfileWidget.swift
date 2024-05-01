@@ -41,7 +41,11 @@ struct ProfileWidget: Container {
 
             switch authState.current {
             case .authenticated(let user):
-                PhotoWell(url: user.userInfo?.avatar?.url)
+                PhotoWell(url: user.userInfo?.avatar?.url) { newAvatar in
+                    await contentObserver.onAvatarSelectionChange(
+                        image: newAvatar
+                    )
+                }
 
 //                Text("User: \(user.userInfo)")
 //                Text(user.userInfo?.name ?? "unknown")
@@ -65,13 +69,17 @@ struct ProfileWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<ProfileWidget> { _, factory, config, builderConfig in
+    ParraContainerPreview<ProfileWidget> { parra, factory, config, builderConfig in
         ProfileWidget(
             config: .default,
             style: .default(with: .default),
             localBuilderConfig: builderConfig,
             componentFactory: factory,
-            contentObserver: .init(initialParams: .init())
+            contentObserver: .init(
+                initialParams: .init(
+                    api: parra.parraInternal.api
+                )
+            )
         )
     }
 }

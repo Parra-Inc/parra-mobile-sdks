@@ -12,16 +12,6 @@ import UIKit
 private let logger = Logger()
 
 extension ApiResourceServer {
-    func performBulkAssetCachingRequest(assets: [Asset]) async {
-        logger
-            .trace(
-                "Performing bulk asset caching request for \(assets.count) asset(s)"
-            )
-        _ = await assets.asyncMap { asset in
-            return try? await fetchAsset(asset: asset)
-        }
-    }
-
     func fetchAsset(asset: Asset) async throws -> UIImage? {
         logger.trace("Fetching asset: \(asset.id)", [
             "url": asset.url

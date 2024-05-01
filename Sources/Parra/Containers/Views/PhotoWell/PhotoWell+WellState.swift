@@ -14,13 +14,14 @@ extension PhotoWell {
         case url(URL)
         case loadingFromLibrary
         case loaded(UIImage)
+        case processing(UIImage)
         case error(Error)
 
         // MARK: - Internal
 
         var isLoading: Bool {
             switch self {
-            case .loadingFromLibrary:
+            case .loadingFromLibrary, .processing:
                 return true
             default:
                 return false

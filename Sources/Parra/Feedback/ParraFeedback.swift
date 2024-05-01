@@ -238,7 +238,7 @@ public class ParraFeedback {
 
             logger.debug("\(assets.count) asset(s) available for prefetching")
 
-            await apiResourceServer.performBulkAssetCachingRequest(
+            await api.performBulkAssetCachingRequest(
                 assets: assets
             )
 
