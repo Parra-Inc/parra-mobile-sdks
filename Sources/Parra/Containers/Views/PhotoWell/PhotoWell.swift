@@ -110,6 +110,7 @@ struct PhotoWell: View {
             }
             Button("Take a photo") {
                 showingConfirmation = false
+                showingCamera = true
             }
         }
         .photosPicker(
@@ -130,6 +131,9 @@ struct PhotoWell: View {
             ),
             preferredItemEncoding: .compatible
         )
+        .sheet(isPresented: $showingCamera) {
+            CameraView()
+        }
         .onChange(of: selectedPhoto) {
             Task {
                 guard let selectedPhoto else {
@@ -166,6 +170,7 @@ struct PhotoWell: View {
     @State private var state: WellState
     @State private var showingConfirmation = false
     @State private var showingPhotoPicker = false
+    @State private var showingCamera = false
     @State private var selectedPhoto: PhotosPickerItem?
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
