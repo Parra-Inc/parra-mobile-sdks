@@ -11,37 +11,51 @@ import SwiftUI
 public struct ParraDefaultAuthenticationView: View {
     // MARK: - Lifecycle
 
-    public init() {}
+    public init(
+        config: ParraAuthConfig = .default,
+        builderConfig: AuthenticationWidgetBuilderConfig = .init()
+    ) {
+        self.config = config
+        self.builderConfig = builderConfig
+    }
 
     // MARK: - Public
 
     public var body: some View {
-        AuthenticationWidget(
-            config: .default,
-            style: .default(with: .default),
-            localBuilderConfig: .init(),
-            componentFactory: .init(global: .default, theme: .default),
-            contentObserver: .init(
-                initialParams: .init(
+        container
+            .onAppear {
+                let authService = parra.parraInternal.authService
+
+                guard case .parraAuth = authService.authenticationMethod else {
+                    fatalError(
+                        "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
+                    )
+                }
+            }
+    }
+
+    // MARK: - Internal
+
+    @MainActor var container: some View {
+        let container: AuthenticationWidget = parra.parraInternal
+            .containerRenderer.renderContainer(
+                with: builderConfig,
+                params: .init(
                     config: .default,
                     content: .default,
                     authService: parra.parraInternal.authService,
                     alertManager: parra.parraInternal.alertManager
-                )
+                ),
+                config: config
             )
-        )
-        .onAppear {
-            let authService = parra.parraInternal.authService
 
-            guard case .parraAuth = authService.authenticationMethod else {
-                fatalError(
-                    "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
-                )
-            }
-        }
+        return container
     }
 
     // MARK: - Private
+
+    private let config: ParraAuthConfig
+    private let builderConfig: AuthenticationWidgetBuilderConfig
 
     @Environment(\.parra) private var parra
 }

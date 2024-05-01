@@ -338,6 +338,10 @@
 		00A2CEE52B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */; };
 		00A2CEE72B696AE600684DC0 /* TextButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE62B696AE500684DC0 /* TextButtonConfig.swift */; };
 		00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */; };
+		00A413D32BE2A9F1003E4E56 /* ProfileWidget+ContentObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A413D22BE2A9F1003E4E56 /* ProfileWidget+ContentObserver.swift */; };
+		00A413D52BE2AB43003E4E56 /* ProfileWidgetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A413D42BE2AB43003E4E56 /* ProfileWidgetStyle.swift */; };
+		00A413D72BE2AB7F003E4E56 /* ProfileWidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A413D62BE2AB7F003E4E56 /* ProfileWidgetConfig.swift */; };
+		00A413D92BE2ABDA003E4E56 /* ProfileWidgetBuilderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A413D82BE2ABDA003E4E56 /* ProfileWidgetBuilderConfig.swift */; };
 		00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B982932D35E00B7168A /* ParraConfiguration.swift */; };
 		00A60B9B2932D37000B7168A /* ParraAuthType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B9A2932D37000B7168A /* ParraAuthType.swift */; };
 		00ABF1432B78516A00A054A2 /* ParraInternal+SyncTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1422B78516A00A054A2 /* ParraInternal+SyncTarget.swift */; };
@@ -1017,6 +1021,10 @@
 		00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraColorSwatch+ParraColorConvertible.swift"; sourceTree = "<group>"; };
 		00A2CEE62B696AE500684DC0 /* TextButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextButtonConfig.swift; sourceTree = "<group>"; };
 		00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+inits.swift"; sourceTree = "<group>"; };
+		00A413D22BE2A9F1003E4E56 /* ProfileWidget+ContentObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileWidget+ContentObserver.swift"; sourceTree = "<group>"; };
+		00A413D42BE2AB43003E4E56 /* ProfileWidgetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWidgetStyle.swift; sourceTree = "<group>"; };
+		00A413D62BE2AB7F003E4E56 /* ProfileWidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWidgetConfig.swift; sourceTree = "<group>"; };
+		00A413D82BE2ABDA003E4E56 /* ProfileWidgetBuilderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWidgetBuilderConfig.swift; sourceTree = "<group>"; };
 		00A60B982932D35E00B7168A /* ParraConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraConfiguration.swift; sourceTree = "<group>"; };
 		00A60B9A2932D37000B7168A /* ParraAuthType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAuthType.swift; sourceTree = "<group>"; };
 		00ABF1422B78516A00A054A2 /* ParraInternal+SyncTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+SyncTarget.swift"; sourceTree = "<group>"; };
@@ -2177,6 +2185,7 @@
 			children = (
 				008434672BE15A3000700881 /* Public */,
 				008434632BE159ED00700881 /* ProfileWidget.swift */,
+				00A413D22BE2A9F1003E4E56 /* ProfileWidget+ContentObserver.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -2185,6 +2194,9 @@
 			isa = PBXGroup;
 			children = (
 				008434652BE15A2700700881 /* ParraProfileView.swift */,
+				00A413D82BE2ABDA003E4E56 /* ProfileWidgetBuilderConfig.swift */,
+				00A413D62BE2AB7F003E4E56 /* ProfileWidgetConfig.swift */,
+				00A413D42BE2AB43003E4E56 /* ProfileWidgetStyle.swift */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -3619,6 +3631,7 @@
 				00FCB1512B939C1900635DC8 /* RoadmapWidgetStyle.swift in Sources */,
 				00FCB12F2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift in Sources */,
 				00ABF1CC2B8A785100A054A2 /* FeedbackFormWidgetStyle.swift in Sources */,
+				00A413D72BE2AB7F003E4E56 /* ProfileWidgetConfig.swift in Sources */,
 				00F7C48D2B99FE8200DBDF5A /* AlertContent.swift in Sources */,
 				00E2019A2B8F9B5C00CF5A42 /* FeedbackQuestionCard.swift in Sources */,
 				00E76D5E2B6940A500B01DD8 /* TextButtonAttributes.swift in Sources */,
@@ -3662,6 +3675,7 @@
 				00F7C48B2B99FD3100DBDF5A /* AlertConfig.swift in Sources */,
 				00374D152BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift in Sources */,
 				00E76D282B66D22000B01DD8 /* TextButtonContent.swift in Sources */,
+				00A413D52BE2AB43003E4E56 /* ProfileWidgetStyle.swift in Sources */,
 				00214C6E2AB62510001C5313 /* String+prefixes.swift in Sources */,
 				00A60B9B2932D37000B7168A /* ParraAuthType.swift in Sources */,
 				006DE9822A472F9C00521F5D /* Endpoint.swift in Sources */,
@@ -3810,6 +3824,7 @@
 				00FCB1722B9629CF00635DC8 /* ImageAttributes.swift in Sources */,
 				00BD2FF42A47771300B4BEB2 /* AuthenticatedRequestAttributeOptions.swift in Sources */,
 				00FCB17F2B976D2300635DC8 /* AppRoadmapConfiguration+Fixtures.swift in Sources */,
+				00A413D32BE2A9F1003E4E56 /* ProfileWidget+ContentObserver.swift in Sources */,
 				00374D082BA0BA500028EDA8 /* Badge+Size.swift in Sources */,
 				00FCB1862B9779F000635DC8 /* View+SheetWithLoader.swift in Sources */,
 				00FCB1842B9779D200635DC8 /* SheetWithLoader.swift in Sources */,
@@ -3908,6 +3923,7 @@
 				00FCB1662B961F9100635DC8 /* ImageButtonComponentType.swift in Sources */,
 				003621EE2B5C769A009EFE53 /* ParraTheme.swift in Sources */,
 				004F3EE92BA4B44100424802 /* ChangelogWidgetBuilderConfig.swift in Sources */,
+				00A413D92BE2ABDA003E4E56 /* ProfileWidgetBuilderConfig.swift in Sources */,
 				004F3F202BA8D51F00424802 /* ParraReleaseOptions.swift in Sources */,
 				007ED4672A6BFBDC0077E446 /* ParraLoggerContext.swift in Sources */,
 				005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */,
