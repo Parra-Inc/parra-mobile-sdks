@@ -19,7 +19,9 @@ extension AppInfo: ParraFixture {
                         hasOtherReleases: false
                     ),
                     release: AppRelease.validStates()[0]
-                )
+                ),
+                termsOfUse: URL(string: "https://parra.io/tos"),
+                privacyPolicy: URL(string: "https://parra.io/privacy")
             )
         ]
     }
