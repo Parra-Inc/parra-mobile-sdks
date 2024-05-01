@@ -108,7 +108,7 @@ public struct ImageAssetStub: Codable, Equatable, Hashable, Identifiable {
     public init(
         id: String,
         size: Size,
-        url: String
+        url: URL
     ) {
         self.id = id
         self.size = size
@@ -119,7 +119,7 @@ public struct ImageAssetStub: Codable, Equatable, Hashable, Identifiable {
 
     public let id: String
     public let size: Size
-    public let url: String
+    public let url: URL
 }
 
 public struct Identity: Codable, Equatable, Hashable, Identifiable {
