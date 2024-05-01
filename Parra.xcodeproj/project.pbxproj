@@ -194,6 +194,14 @@
 		004F3F1E2BA8BFEF00424802 /* String+randomEmoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F3F1D2BA8BFEF00424802 /* String+randomEmoji.swift */; };
 		004F3F202BA8D51F00424802 /* ParraReleaseOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F3F1F2BA8D51F00424802 /* ParraReleaseOptions.swift */; };
 		004F3F232BA9083000424802 /* Parra+Release.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F3F222BA9083000424802 /* Parra+Release.swift */; };
+		005AFE282BE2BC1C00B0C29A /* UIImage+resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE272BE2BC1C00B0C29A /* UIImage+resize.swift */; };
+		005AFE2A2BE2F22A00B0C29A /* API+assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE292BE2F22A00B0C29A /* API+assets.swift */; };
+		005AFE2C2BE2F2EA00B0C29A /* API+feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE2B2BE2F2EA00B0C29A /* API+feedback.swift */; };
+		005AFE2F2BE2F32F00B0C29A /* API+sessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE2E2BE2F32F00B0C29A /* API+sessions.swift */; };
+		005AFE312BE2F33600B0C29A /* API+push.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE302BE2F33600B0C29A /* API+push.swift */; };
+		005AFE332BE2F36800B0C29A /* API+roadmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE322BE2F36800B0C29A /* API+roadmap.swift */; };
+		005AFE352BE2F38200B0C29A /* API+releases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE342BE2F38200B0C29A /* API+releases.swift */; };
+		005AFE372BE2F39800B0C29A /* API+users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE362BE2F39800B0C29A /* API+users.swift */; };
 		005D31EB29A83EC5001D0E0A /* CompletedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B7B7927DE3D1C00DEEECD /* CompletedCard.swift */; };
 		005D31ED29A8561D001D0E0A /* QuestionAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D31EC29A8561D001D0E0A /* QuestionAnswer.swift */; };
 		005E38A727FA3A8700F32F96 /* Parra+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */; };
@@ -841,6 +849,14 @@
 		004F3F1D2BA8BFEF00424802 /* String+randomEmoji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+randomEmoji.swift"; sourceTree = "<group>"; };
 		004F3F1F2BA8D51F00424802 /* ParraReleaseOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraReleaseOptions.swift; sourceTree = "<group>"; };
 		004F3F222BA9083000424802 /* Parra+Release.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Release.swift"; sourceTree = "<group>"; };
+		005AFE272BE2BC1C00B0C29A /* UIImage+resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+resize.swift"; sourceTree = "<group>"; };
+		005AFE292BE2F22A00B0C29A /* API+assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+assets.swift"; sourceTree = "<group>"; };
+		005AFE2B2BE2F2EA00B0C29A /* API+feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+feedback.swift"; sourceTree = "<group>"; };
+		005AFE2E2BE2F32F00B0C29A /* API+sessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+sessions.swift"; sourceTree = "<group>"; };
+		005AFE302BE2F33600B0C29A /* API+push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+push.swift"; sourceTree = "<group>"; };
+		005AFE322BE2F36800B0C29A /* API+roadmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+roadmap.swift"; sourceTree = "<group>"; };
+		005AFE342BE2F38200B0C29A /* API+releases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+releases.swift"; sourceTree = "<group>"; };
+		005AFE362BE2F39800B0C29A /* API+users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+users.swift"; sourceTree = "<group>"; };
 		005D31E729A301DB001D0E0A /* ParraLegacyConfigurableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLegacyConfigurableView.swift; sourceTree = "<group>"; };
 		005D31EC29A8561D001D0E0A /* QuestionAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionAnswer.swift; sourceTree = "<group>"; };
 		005D31F329AADF4E001D0E0A /* ParraBorderedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraBorderedButton.swift; sourceTree = "<group>"; };
@@ -1397,6 +1413,7 @@
 				00374CFC2B9FF5630028EDA8 /* Publisher+asyncMap.swift */,
 				0019CBC828FB37BC0015E703 /* Sequence+asyncMap.swift */,
 				0011C7DD2B9B7DCC0095EAE8 /* UIDevice++.swift */,
+				005AFE272BE2BC1C00B0C29A /* UIImage+resize.swift */,
 				00E15A28293269100049C2C7 /* UIViewController.swift */,
 				00E15A2A29326FBE0049C2C7 /* UIWindow+topViewController.swift */,
 				00DA7FF8295F2A1600109081 /* URL+safePaths.swift */,
@@ -2057,6 +2074,21 @@
 			path = "App Delegate";
 			sourceTree = "<group>";
 		};
+		005AFE2D2BE2F32700B0C29A /* API */ = {
+			isa = PBXGroup;
+			children = (
+				009538942BC869E700420316 /* API.swift */,
+				005AFE292BE2F22A00B0C29A /* API+assets.swift */,
+				005AFE2B2BE2F2EA00B0C29A /* API+feedback.swift */,
+				005AFE302BE2F33600B0C29A /* API+push.swift */,
+				005AFE342BE2F38200B0C29A /* API+releases.swift */,
+				005AFE322BE2F36800B0C29A /* API+roadmap.swift */,
+				005AFE2E2BE2F32F00B0C29A /* API+sessions.swift */,
+				005AFE362BE2F39800B0C29A /* API+users.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
 		005D31FB29B39960001D0E0A /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -2388,7 +2420,7 @@
 				0095389E2BC875D200420316 /* Servers */,
 				0087CA4E2A54668B007D72FA /* UrlSessionDelegate.swift */,
 				0087CA502A5466A6007D72FA /* UrlSessionDelegateProxy.swift */,
-				009538942BC869E700420316 /* API.swift */,
+				005AFE2D2BE2F32700B0C29A /* API */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -3442,6 +3474,7 @@
 				00FCB1642B961EE000635DC8 /* ImageButtonComponent.swift in Sources */,
 				004F3F1E2BA8BFEF00424802 /* String+randomEmoji.swift in Sources */,
 				00706B192B71A6E600C28F66 /* TextEditorConfig.swift in Sources */,
+				005AFE352BE2F38200B0C29A /* API+releases.swift in Sources */,
 				00ABF19A2B84112300A054A2 /* ParraAppView.swift in Sources */,
 				00C119172BAFAE170013FD03 /* ParraPushNotificationOptions.swift in Sources */,
 				00D143C12BB1F89500BDB8C4 /* View+Release.swift in Sources */,
@@ -3482,6 +3515,7 @@
 				001677572B6AE8E400674001 /* ParraAttributedTextButtonStyle.swift in Sources */,
 				004F3EDE2BA4B0CC00424802 /* View+InternalFeedbackForm.swift in Sources */,
 				00DDBA262B63FBBC00400761 /* ParraThemeObserver.swift in Sources */,
+				005AFE2F2BE2F32F00B0C29A /* API+sessions.swift in Sources */,
 				00F7C4B02B9A609D00DBDF5A /* ImageComponent.swift in Sources */,
 				0087CA9C2A59E166007D72FA /* URL+diskUsage.swift in Sources */,
 				0029AD372A4925C000E30CCD /* ParraStandardEvent.swift in Sources */,
@@ -3536,6 +3570,7 @@
 				0019CBC928FB37BC0015E703 /* Sequence+asyncMap.swift in Sources */,
 				00E76D2A2B66D23A00B01DD8 /* GlobalComponentAttributes.swift in Sources */,
 				00374D812BA1F0E70028EDA8 /* ParraAttributedEmptyStateStyle.swift in Sources */,
+				005AFE372BE2F39800B0C29A /* API+users.swift in Sources */,
 				00E76D442B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift in Sources */,
 				001B7B1D27DE3ABC00DEEECD /* CredentialStorage.swift in Sources */,
 				004F3EF42BA4D73B00424802 /* AppReleaseCollectionResponse+Fixtures.swift in Sources */,
@@ -3592,6 +3627,7 @@
 				003622202B5D966F009EFE53 /* TextComponents.swift in Sources */,
 				00E269EC2A5257C0001A0F50 /* URLRequestHeaderField.swift in Sources */,
 				009538952BC869E700420316 /* API.swift in Sources */,
+				005AFE2A2BE2F22A00B0C29A /* API+assets.swift in Sources */,
 				00ABF16D2B7ABAD200A054A2 /* ServerDelegate.swift in Sources */,
 				00706B112B71409E00C28F66 /* MenuAttributes.swift in Sources */,
 				00E15A29293269100049C2C7 /* UIViewController.swift in Sources */,
@@ -3664,6 +3700,7 @@
 				006654122A80573400CD04E6 /* URLRequest.Attribution+CustomStringConvertible.swift in Sources */,
 				001B7B1F27DE3ABC00DEEECD /* PersistentStorageMedium.swift in Sources */,
 				0079EDDB2BDAA7360045EEE5 /* ApiResourceServer+Assets.swift in Sources */,
+				005AFE282BE2BC1C00B0C29A /* UIImage+resize.swift in Sources */,
 				00214C6C2AB3E3A1001C5313 /* ParraDataSanitizer.swift in Sources */,
 				00F7C4992B9A117E00DBDF5A /* ParraAttributedAlertStyle.swift in Sources */,
 				00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */,
@@ -3787,6 +3824,7 @@
 				003621E92B5C2784009EFE53 /* ParraLogoButton.swift in Sources */,
 				00BD2FF62A47772A00B4BEB2 /* AuthenticatedRequestResult.swift in Sources */,
 				0087CA682A561F72007D72FA /* Logger+Levels.swift in Sources */,
+				005AFE332BE2F36800B0C29A /* API+roadmap.swift in Sources */,
 				00ABF14B2B786D9E00A054A2 /* ParraInternal+Factory.swift in Sources */,
 				0099EB032B8C02860053F366 /* FeedbackFormWidget+ContentObserver+Content.swift in Sources */,
 				004F3F012BA5EDDE00424802 /* ChangelogListItem.swift in Sources */,
@@ -3845,6 +3883,7 @@
 				00995C0C2BB6FA6000384D94 /* Releases.swift in Sources */,
 				00D143C92BB25B8E00BDB8C4 /* Sheet.swift in Sources */,
 				0087CAAB2A59F3B4007D72FA /* ParraLogData.swift in Sources */,
+				005AFE312BE2F33600B0C29A /* API+push.swift in Sources */,
 				00D5DD952BD19864002E09B7 /* TrackingHeader.swift in Sources */,
 				004F3EFF2BA53A2E00424802 /* AppRelease+Fixtures.swift in Sources */,
 				00D5DD932BD16D27002E09B7 /* TextValidatorRule.swift in Sources */,
@@ -3877,6 +3916,7 @@
 				00995BED2BB4650D00384D94 /* ContainerRenderer.swift in Sources */,
 				00374CF92B9F61440028EDA8 /* ScrollToTopView.swift in Sources */,
 				0087CA8A2A59B3F9007D72FA /* ParraLoggerTimestampStyle.swift in Sources */,
+				005AFE2C2BE2F2EA00B0C29A /* API+feedback.swift in Sources */,
 				00ABF1C42B87AED000A054A2 /* ParraViewPreview.swift in Sources */,
 				0012300D2B990485007E5632 /* View+emptyPlaceholder.swift in Sources */,
 				00F7C4A42B9A436F00DBDF5A /* ComponentFactory+Menus.swift in Sources */,
