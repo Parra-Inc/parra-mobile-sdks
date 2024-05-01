@@ -10,5 +10,7 @@
 	<false/>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We use the camera to take profile pictures and other user controlled actions.</string>
 </dict>
 </plist>
