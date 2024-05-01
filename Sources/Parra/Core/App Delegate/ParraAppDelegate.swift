@@ -62,11 +62,20 @@ open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
         return configuration
     }
 
+    open func application(
+        _ application: UIApplication,
+        supportedInterfaceOrientationsFor window: UIWindow?
+    ) -> UIInterfaceOrientationMask {
+        return ParraAppDelegate.orientationLock
+    }
+
     // MARK: - Public
 
     public internal(set) var sceneDelegateClass: ParraSceneDelegate.Type!
 
     // MARK: - Internal
+
+    static var orientationLock = UIInterfaceOrientationMask.all
 
     /// Not exposed publicly. Should only ever be set once from the
     /// ``Parra/ParraApp`` initializer as a means of passing the Parra instance
