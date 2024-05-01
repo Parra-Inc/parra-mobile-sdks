@@ -261,7 +261,6 @@
 		008434612BE1595900700881 /* AuthenticationEmailPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008434602BE1595900700881 /* AuthenticationEmailPasswordView.swift */; };
 		008434642BE159ED00700881 /* ProfileWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008434632BE159ED00700881 /* ProfileWidget.swift */; };
 		008434662BE15A2700700881 /* ParraProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008434652BE15A2700700881 /* ParraProfileView.swift */; };
-		008434692BE27B2C00700881 /* PhotoWell+SelectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008434682BE27B2C00700881 /* PhotoWell+SelectionState.swift */; };
 		0087CA4F2A54668B007D72FA /* UrlSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA4E2A54668B007D72FA /* UrlSessionDelegate.swift */; };
 		0087CA512A5466A6007D72FA /* UrlSessionDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA502A5466A6007D72FA /* UrlSessionDelegateProxy.swift */; };
 		0087CA532A5466CF007D72FA /* ApiResourceServer+UrlSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0087CA522A5466CF007D72FA /* ApiResourceServer+UrlSessionDelegate.swift */; };
@@ -933,7 +932,6 @@
 		008434602BE1595900700881 /* AuthenticationEmailPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationEmailPasswordView.swift; sourceTree = "<group>"; };
 		008434632BE159ED00700881 /* ProfileWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWidget.swift; sourceTree = "<group>"; };
 		008434652BE15A2700700881 /* ParraProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraProfileView.swift; sourceTree = "<group>"; };
-		008434682BE27B2C00700881 /* PhotoWell+SelectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoWell+SelectionState.swift"; sourceTree = "<group>"; };
 		0087CA4E2A54668B007D72FA /* UrlSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlSessionDelegate.swift; sourceTree = "<group>"; };
 		0087CA502A5466A6007D72FA /* UrlSessionDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlSessionDelegateProxy.swift; sourceTree = "<group>"; };
 		0087CA522A5466CF007D72FA /* ApiResourceServer+UrlSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ApiResourceServer+UrlSessionDelegate.swift"; sourceTree = "<group>"; };
@@ -2120,7 +2118,6 @@
 			children = (
 				0079EDD52BD987C50045EEE5 /* PhotoWell.swift */,
 				0079EDD82BDA9CC80045EEE5 /* PhotoWell+WellState.swift */,
-				008434682BE27B2C00700881 /* PhotoWell+SelectionState.swift */,
 			);
 			path = PhotoWell;
 			sourceTree = "<group>";
@@ -3726,7 +3723,6 @@
 				00706B0F2B713F7000C28F66 /* ParraAttributedMenuStyle.swift in Sources */,
 				00F7C4AA2B9A439000DBDF5A /* ComponentFactory+Segments.swift in Sources */,
 				002C77192BAA2EA700DCEBD8 /* AppInfo+Fixtures.swift in Sources */,
-				008434692BE27B2C00700881 /* PhotoWell+SelectionState.swift in Sources */,
 				00374D7D2BA1EC3E0028EDA8 /* EmptyStateContent.swift in Sources */,
 				00DA7FF9295F2A1600109081 /* URL+safePaths.swift in Sources */,
 				007868992AAE4DE300864CFE /* ParraLogEvent.swift in Sources */,
