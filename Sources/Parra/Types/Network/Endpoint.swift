@@ -48,62 +48,21 @@ enum ParraEndpoint {
 
     // MARK: - Internal
 
-    // All endpoints should use kebab case!
-    var route: String {
+    enum EndpointType {
+        case auth
+    }
+
+    var url: URL {
         switch self {
-        // Auth
-        case .postAuthentication(let tenantId):
-            return "tenants/\(tenantId)/issuers/public/auth/token"
         case .postCreateUser(let tenantId):
-            return "tenants/\(tenantId)/users"
-        case .postLogin(let tenantId):
-            return "tenants/\(tenantId)/auth/login"
-        case .postLogout(let tenantId):
-            return "tenants/\(tenantId)/auth/logout"
 
-        // Feedback
-        case .getCards:
-            return "cards"
-        case .postBulkAnswerQuestions:
-            return "bulk/questions/answer"
+            let baseHost = ParraInternal.Constants.parraApiHost
+            let host = "tenant-\(tenantId).\(baseHost)"
 
-        // Feedback Forms
-        case .getFeedbackForm(let formId):
-            return "feedback/forms/\(formId)"
-        case .postSubmitFeedbackForm(let formId):
-            return "feedback/forms/\(formId)/submit"
-
-        // Sessions
-        case .postBulkSubmitSessions(let tenantId):
-            return "tenants/\(tenantId)/sessions"
-
-        // Push
-        case .postPushTokens(let tenantId):
-            return "tenants/\(tenantId)/push-tokens"
-
-        // Roadmap
-        case .getRoadmap(let tenantId, let applicationId):
-            return "tenants/\(tenantId)/applications/\(applicationId)/roadmap"
-        case .getPaginateTickets(let tenantId, let applicationId):
-            return "tenants/\(tenantId)/applications/\(applicationId)/tickets"
-        case .postVoteForTicket(let tenantId, let ticketId):
-            return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
-        case .deleteVoteForTicket(let tenantId, let ticketId):
-            return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
-
-        // Releases
-        case .getRelease(let releaseId, let tenantId, let applicationId):
-            return "tenants/\(tenantId)/applications/\(applicationId)/releases/\(releaseId)"
-        case .getPaginateReleases(let tenantId, let applicationId):
-            return "tenants/\(tenantId)/applications/\(applicationId)/releases"
-        case .getAppInfo(let tenantId, let applicationId):
-            return "tenants/\(tenantId)/applications/\(applicationId)/app-info"
-
-        // Users
-        case .getUserInfo(let tenantId):
-            return "tenants/\(tenantId)/auth/user-info"
-        case .postUpdateAvatar(let tenantId):
-            return "tenants/\(tenantId)/users/avatar"
+            return URL(string: "https://\(host)/\(route)")!
+        default:
+            return ParraInternal.Constants.parraApiRoot
+                .appendingPathComponent(route)
         }
     }
 
@@ -158,7 +117,7 @@ enum ParraEndpoint {
         case .postAuthentication:
             return "tenants/:tenantId/issuers/public/auth/token"
         case .postCreateUser:
-            return "tenants/:tenantId/users"
+            return "auth/signup"
         case .postLogin:
             return "tenants/:tenantId/auth/login"
         case .postLogout:
@@ -177,6 +136,67 @@ enum ParraEndpoint {
             return "tenants/:tenantId/applications/:applicationId/releases"
         case .getAppInfo:
             return "tenants/:tenantId/applications/:applicationId/app-info"
+        }
+    }
+
+    // MARK: - Private
+
+    // All endpoints should use kebab case!
+    private var route: String {
+        switch self {
+        // Auth
+        case .postAuthentication(let tenantId):
+            return "tenants/\(tenantId)/issuers/public/auth/token"
+        case .postCreateUser:
+            return "auth/signup"
+        case .postLogin(let tenantId):
+            return "tenants/\(tenantId)/auth/login"
+        case .postLogout(let tenantId):
+            return "tenants/\(tenantId)/auth/logout"
+
+        // Feedback
+        case .getCards:
+            return "cards"
+        case .postBulkAnswerQuestions:
+            return "bulk/questions/answer"
+
+        // Feedback Forms
+        case .getFeedbackForm(let formId):
+            return "feedback/forms/\(formId)"
+        case .postSubmitFeedbackForm(let formId):
+            return "feedback/forms/\(formId)/submit"
+
+        // Sessions
+        case .postBulkSubmitSessions(let tenantId):
+            return "tenants/\(tenantId)/sessions"
+
+        // Push
+        case .postPushTokens(let tenantId):
+            return "tenants/\(tenantId)/push-tokens"
+
+        // Roadmap
+        case .getRoadmap(let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/roadmap"
+        case .getPaginateTickets(let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/tickets"
+        case .postVoteForTicket(let tenantId, let ticketId):
+            return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
+        case .deleteVoteForTicket(let tenantId, let ticketId):
+            return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
+
+        // Releases
+        case .getRelease(let releaseId, let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/releases/\(releaseId)"
+        case .getPaginateReleases(let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/releases"
+        case .getAppInfo(let tenantId, let applicationId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/app-info"
+
+        // Users
+        case .getUserInfo(let tenantId):
+            return "tenants/\(tenantId)/auth/user-info"
+        case .postUpdateAvatar(let tenantId):
+            return "tenants/\(tenantId)/users/avatar"
         }
     }
 }
