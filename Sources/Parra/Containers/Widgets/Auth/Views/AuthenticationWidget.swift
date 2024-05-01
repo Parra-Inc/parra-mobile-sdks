@@ -9,7 +9,7 @@
 import SwiftUI
 
 /// The login screen for the Parra app.
-public struct AuthenticationWidget: Container {
+struct AuthenticationWidget: Container {
     // MARK: - Lifecycle
 
     init(

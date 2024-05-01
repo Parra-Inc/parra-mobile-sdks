@@ -9,6 +9,26 @@
 import Foundation
 
 extension AuthenticationWidget.ContentObserver {
+    struct SignupContent {
+        // MARK: - Lifecycle
+
+        init(
+            emailField: TextInputContent,
+            passwordField: TextInputContent,
+            signupButton: TextButtonContent
+        ) {
+            self.emailField = emailField
+            self.passwordField = passwordField
+            self.signupButton = signupButton
+        }
+
+        // MARK: - Internal
+
+        var emailField: TextInputContent
+        var passwordField: TextInputContent
+        var signupButton: TextButtonContent
+    }
+
     struct EmailContent {
         // MARK: - Lifecycle
 
@@ -72,13 +92,30 @@ extension AuthenticationWidget.ContentObserver {
                 nil
             }
 
+            let signupContent = SignupContent(
+                emailField: TextInputContent(
+                    placeholder: content.emailPassword?
+                        .emailPlaceholder ?? "email address"
+                ),
+                passwordField: TextInputContent(
+                    placeholder: content.emailPassword?
+                        .passwordPlaceholder ?? "password"
+                ),
+                signupButton: TextButtonContent(
+                    text: LabelContent(
+                        text: "Sign up"
+                    )
+                )
+            )
+
             self.init(
                 icon: content.icon,
                 title: LabelContent(
                     text: content.title
                 ),
                 subtitle: subtitle,
-                emailContent: emailContent
+                emailContent: emailContent,
+                signupContent: signupContent
             )
         }
 
@@ -86,12 +123,14 @@ extension AuthenticationWidget.ContentObserver {
             icon: ImageContent?,
             title: LabelContent,
             subtitle: LabelContent?,
-            emailContent: EmailContent?
+            emailContent: EmailContent?,
+            signupContent: SignupContent
         ) {
             self.icon = icon
             self.title = title
             self.subtitle = subtitle
             self.emailContent = emailContent
+            self.signupContent = signupContent
         }
 
         // MARK: - Internal
@@ -100,5 +139,6 @@ extension AuthenticationWidget.ContentObserver {
         let title: LabelContent
         let subtitle: LabelContent?
         var emailContent: EmailContent?
+        var signupContent: SignupContent
     }
 }

@@ -26,6 +26,9 @@ extension AuthenticationWidget {
 
             content.emailContent?.emailField.textChanged = onEmailChanged
             content.emailContent?.passwordField.textChanged = onPasswordChanged
+
+            content.signupContent.emailField.textChanged = onEmailChanged
+            content.signupContent.passwordField.textChanged = onPasswordChanged
         }
 
         // MARK: - Internal
@@ -36,6 +39,50 @@ extension AuthenticationWidget {
 
         @Published var content: Content
         @Published var error: String?
+
+        func signupTapped() {
+            if content.signupContent.signupButton.isLoading {
+                return
+            }
+
+            validateEmailFields(alwaysShowErrors: true)
+
+            // double optionals from dictionary access
+            guard
+                let e = values[.email], let email = e,
+                let p = values[.password], let password = p else
+            {
+                error = "Email and password are required."
+
+                return
+            }
+
+            setLoading(true)
+
+            Task {
+                let authResult = await authService.signUp(
+                    authType: .emailPassword(
+                        email: email,
+                        password: password
+                    )
+                )
+
+                setLoading(false)
+
+                Task { @MainActor in
+                    switch authResult {
+                    case .authenticated(let parraUser):
+                        logger.info("Signup successful", [
+                            "user_id": parraUser.info.user?.id ?? ""
+                        ])
+                    case .unauthenticated(let error):
+                        logger.error("Signup failed", error)
+
+                        self.error = "Signup failed. Please try again."
+                    }
+                }
+            }
+        }
 
         func loginTapped() {
             guard let emailContent = content.emailContent else {
@@ -61,9 +108,8 @@ extension AuthenticationWidget {
             setLoading(true)
 
             Task {
-                let authResult = await self.authService.login(
-                    username: email,
-                    password: password
+                let authResult = await authService.login(
+                    authType: .emailPassword(email: email, password: password)
                 )
 
                 setLoading(false)
@@ -86,8 +132,9 @@ extension AuthenticationWidget {
         }
 
         func validateEmailFields(
-            fields: [AuthenticationWidget.Field] = AuthenticationWidget.Field
-                .allCases,
+            fields: [AuthenticationEmailPasswordView.Field] =
+                AuthenticationEmailPasswordView.Field
+                    .allCases,
             alwaysShowErrors: Bool = false
         ) {
             var areAllValid = true
@@ -128,10 +175,6 @@ extension AuthenticationWidget {
             content.emailContent?.loginButton.isDisabled = !areAllValid
         }
 
-        func signupTapped() {
-            logger.info("Signup tapped")
-        }
-
         func onEmailChanged(_ email: String?) {
             values[.email] = email
 
@@ -146,12 +189,14 @@ extension AuthenticationWidget {
 
         // MARK: - Private
 
-        private var values: [AuthenticationWidget.Field: String?] = [:]
+        private var values: [AuthenticationEmailPasswordView.Field: String?] =
+            [:]
 
         private func setLoading(_ isLoading: Bool) {
             Task { @MainActor in
                 withAnimation {
                     content.emailContent?.loginButton.isLoading = isLoading
+                    content.signupContent.signupButton.isLoading = isLoading
                 }
             }
         }
