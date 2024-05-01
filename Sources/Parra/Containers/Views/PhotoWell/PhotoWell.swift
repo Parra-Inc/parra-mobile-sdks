@@ -12,23 +12,32 @@ import SwiftUI
 struct PhotoWell: View {
     // MARK: - Lifecycle
 
-    init(url: URL? = nil) {
+    init(
+        url: URL? = nil,
+        onSelectionChanged: ((UIImage) async -> Void)? = nil
+    ) {
         if let url {
             self.state = .url(url)
         } else {
             self.state = .empty
         }
+
+        self.onSelectionChanged = onSelectionChanged
     }
 
-    init(image: UIImage) {
+    init(
+        image: UIImage,
+        onSelectionChanged: ((UIImage) async -> Void)? = nil
+    ) {
         self.state = .loaded(image)
+        self.onSelectionChanged = onSelectionChanged
     }
 
     // MARK: - Internal
 
     // Invoked when user action changes the photo. So not when a pre-provided
     // url finishes loading, or when an image is provided initially.
-    var onSelectionChanged: ((UIImage?) -> Void)?
+    var onSelectionChanged: ((UIImage) async -> Void)?
 
     var failureImage: some View {
         Image(systemName: "person.crop.circle.badge.exclamationmark.fill")
@@ -59,7 +68,7 @@ struct PhotoWell: View {
                 ),
                 content: imageContent
             )
-        case .loaded(let image):
+        case .loaded(let image), .processing(let image):
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
@@ -103,6 +112,7 @@ struct PhotoWell: View {
                 loadingView
             }
         }
+        .disabled(onSelectionChanged == nil)
         .confirmationDialog("Choose", isPresented: $showingConfirmation) {
             Button("Choose from library") {
                 showingConfirmation = false
@@ -137,8 +147,6 @@ struct PhotoWell: View {
         .onChange(of: selectedPhoto) {
             Task {
                 guard let selectedPhoto else {
-                    onSelectionChanged?(nil)
-
                     return
                 }
 
@@ -152,14 +160,15 @@ struct PhotoWell: View {
                     if let data, let image = UIImage(data: data) {
                         state = .loaded(image)
 
-                        onSelectionChanged?(image)
+                        if let onSelectionChanged {
+                            await onSelectionChanged(image)
+                        }
+
                     } else {
                         throw ParraError.message("Failed to decode image data")
                     }
                 } catch {
                     state = .error(error)
-
-                    onSelectionChanged?(nil)
                 }
             }
         }

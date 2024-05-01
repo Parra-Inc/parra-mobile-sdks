@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+private let logger = Logger()
+
 // MARK: - ProfileWidget.ContentObserver
 
 extension ProfileWidget {
@@ -16,11 +18,29 @@ extension ProfileWidget {
 
         required init(initialParams: InitialParams) {
             self.content = Content()
+            self.api = initialParams.api
         }
 
         // MARK: - Internal
 
         var content: Content
+
+        func onAvatarSelectionChange(image: UIImage) async {
+            do {
+                let resized = image.resized()
+                let asset = try await api.uploadAvatar(
+                    image: resized
+                )
+
+                await api.cacheAsset(asset)
+            } catch {
+                logger.error("Error uploading avatar", error)
+            }
+        }
+
+        // MARK: - Private
+
+        private let api: API
     }
 }
 
@@ -33,5 +53,7 @@ extension ProfileWidget.ContentObserver {
 // MARK: - ProfileWidget.ContentObserver.InitialParams
 
 extension ProfileWidget.ContentObserver {
-    struct InitialParams {}
+    struct InitialParams {
+        let api: API
+    }
 }
