@@ -18,7 +18,6 @@ extension Server {
         cachePolicy: URLRequest.CachePolicy? = nil,
         body: Data? = nil
     ) throws -> URLRequest {
-        let route = endpoint.route
         let method = endpoint.method
 
         let headerFactory = HeaderFactory(
@@ -26,8 +25,8 @@ extension Server {
             appConfig: appConfig
         )
 
-        let url = ParraInternal.Constants.parraApiRoot
-            .appendingPathComponent(route)
+        let url = endpoint.url
+
         guard var urlComponents = URLComponents(
             url: url,
             resolvingAgainstBaseURL: false

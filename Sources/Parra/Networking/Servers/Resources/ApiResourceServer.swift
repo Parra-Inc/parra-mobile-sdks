@@ -61,7 +61,7 @@ final class ApiResourceServer: Server {
     ) async -> AuthenticatedRequestResult<T> {
         logger
             .trace(
-                "Performing authenticated request to route: \(endpoint.method.rawValue) \(endpoint.route)"
+                "Performing authenticated request to route: \(endpoint.method.rawValue) \(endpoint.slug)"
             )
 
         do {
@@ -127,7 +127,7 @@ final class ApiResourceServer: Server {
     ) async -> AuthenticatedRequestResult<T> {
         logger
             .trace(
-                "Performing authenticated upload to route: \(endpoint.method.rawValue) \(endpoint.route)"
+                "Performing authenticated upload to route: \(endpoint.method.rawValue) \(endpoint.slug)"
             )
 
         do {

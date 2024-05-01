@@ -82,13 +82,21 @@ final class AuthService {
         let result: ParraAuthResult
 
         do {
+            logger
+                .debug(
+                    "About to sign up with: \(String(describing: authType.requestPayload))"
+                )
+            try await authServer.postSignup(
+                requestData: authType.requestPayload
+            )
+            logger.debug("finished sign up endpoint... authenticating...")
             let oauthToken = try await oauth2Service.authenticate(
                 using: authType
             )
+            logger.debug("Finished auth endpoint")
 
-            let userInfo = try await authServer.postSignup(
-                accessToken: oauthToken.accessToken,
-                requestData: authType.requestPayload
+            let userInfo = try await authServer.postLogin(
+                accessToken: oauthToken.accessToken
             )
 
             let user = ParraUser(

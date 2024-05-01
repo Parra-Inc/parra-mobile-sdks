@@ -49,10 +49,8 @@ final class AuthServer: Server {
         let endpoint = ParraEndpoint.postAuthentication(
             tenantId: appState.tenantId
         )
-        let url = ParraInternal.Constants.parraApiRoot
-            .appendingPathComponent(endpoint.route)
 
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: endpoint.url)
 
         request.httpMethod = endpoint.method.rawValue
         request.httpBody = try configuration.jsonEncoder
@@ -90,17 +88,17 @@ final class AuthServer: Server {
         }
     }
 
+    @discardableResult
     func postSignup(
-        accessToken: String,
         requestData: CreateUserRequestBody
-    ) async throws -> UserInfoResponse {
+    ) async throws -> User {
         let body = try configuration.jsonEncoder.encode(requestData)
 
         return try await performAuthRequest(
             to: .postCreateUser(
                 tenantId: appState.tenantId
             ),
-            with: accessToken,
+            with: nil,
             body: body
         )
     }
@@ -144,20 +142,20 @@ final class AuthServer: Server {
 
     private func performAuthRequest<T>(
         to endpoint: ParraEndpoint,
-        with accessToken: String,
+        with accessToken: String?,
         body: Data? = nil,
         timeout: TimeInterval? = nil
     ) async throws -> T where T: Codable {
-        let url = ParraInternal.Constants.parraApiRoot
-            .appendingPathComponent(endpoint.route)
-
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: endpoint.url)
 
         request.httpMethod = endpoint.method.rawValue
-        request.cachePolicy = .reloadRevalidatingCacheData
-        request.setValue(for: .authorization(.bearer(accessToken)))
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         request.timeoutInterval = timeout ?? configuration.urlSession
             .configuration.timeoutIntervalForRequest
+
+        if let accessToken {
+            request.setValue(for: .authorization(.bearer(accessToken)))
+        }
 
         if let body {
             request.httpBody = body
@@ -170,6 +168,16 @@ final class AuthServer: Server {
             with: headerFactory
         )
 
+        return try await performRequest(
+            request: request,
+            timeout: timeout
+        )
+    }
+
+    private func performRequest<T>(
+        request: URLRequest,
+        timeout: TimeInterval? = nil
+    ) async throws -> T where T: Codable {
         let (data, response) = try await performAsyncDataTask(
             request: request
         )
