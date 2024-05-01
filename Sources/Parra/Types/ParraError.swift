@@ -52,10 +52,15 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         case .networkError(let request, let response, let data):
             let serverMessage = extractErrorMessage(from: data)
 
+            let method = request.httpMethod?.uppercased() ?? "UNKNOWN"
+
             let message = """
                 \(baseMessage) (Note: URL params are omitted from output)
                 Status: \(response.statusCode)
-                Request URL: \(request.url?.absoluteString ?? "unknown")
+                Request URL: \(method) \(
+                request.url?
+                .absoluteString ?? "unknown"
+                )
                 Message: \(serverMessage ?? "unknow")
                 Request: \(request)
                 Response: \(response)
