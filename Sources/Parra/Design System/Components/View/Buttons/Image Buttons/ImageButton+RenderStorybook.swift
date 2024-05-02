@@ -106,9 +106,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.primary,
+                        style: ParraButtonCategory.primary,
                         size: size,
-                        variant: ButtonVariant.plain
+                        variant: ParraButtonVariant.plain
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol("laser.burst")
@@ -117,9 +117,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.secondary,
+                        style: ParraButtonCategory.secondary,
                         size: size,
-                        variant: ButtonVariant.plain
+                        variant: ParraButtonVariant.plain
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol(
@@ -134,9 +134,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.primary,
+                        style: ParraButtonCategory.primary,
                         size: size,
-                        variant: ButtonVariant.plain
+                        variant: ParraButtonVariant.plain
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol("laser.burst"),
@@ -146,9 +146,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.secondary,
+                        style: ParraButtonCategory.secondary,
                         size: size,
-                        variant: ButtonVariant.plain
+                        variant: ParraButtonVariant.plain
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol(
@@ -164,9 +164,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.primary,
+                        style: ParraButtonCategory.primary,
                         size: size,
-                        variant: ButtonVariant.outlined
+                        variant: ParraButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol("laser.burst")
@@ -175,9 +175,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.secondary,
+                        style: ParraButtonCategory.secondary,
                         size: size,
-                        variant: ButtonVariant.outlined
+                        variant: ParraButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol(
@@ -192,9 +192,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.primary,
+                        style: ParraButtonCategory.primary,
                         size: size,
-                        variant: ButtonVariant.outlined
+                        variant: ParraButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol("laser.burst"),
@@ -204,9 +204,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.secondary,
+                        style: ParraButtonCategory.secondary,
                         size: size,
-                        variant: ButtonVariant.outlined
+                        variant: ParraButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol(
@@ -222,9 +222,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.primary,
+                        style: ParraButtonCategory.primary,
                         size: size,
-                        variant: ButtonVariant.contained
+                        variant: ParraButtonVariant.contained
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol("laser.burst")
@@ -233,9 +233,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.secondary,
+                        style: ParraButtonCategory.secondary,
                         size: size,
-                        variant: ButtonVariant.contained
+                        variant: ParraButtonVariant.contained
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol(
@@ -250,9 +250,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.primary,
+                        style: ParraButtonCategory.primary,
                         size: size,
-                        variant: ButtonVariant.contained
+                        variant: ParraButtonVariant.contained
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol("laser.burst"),
@@ -262,9 +262,9 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ButtonCategory.secondary,
+                        style: ParraButtonCategory.secondary,
                         size: size,
-                        variant: ButtonVariant.contained
+                        variant: ParraButtonVariant.contained
                     ),
                     content: ImageButtonContent(
                         image: ImageContent.symbol(

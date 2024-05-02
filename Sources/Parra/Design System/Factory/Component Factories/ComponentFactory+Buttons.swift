@@ -11,7 +11,7 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildTextButton(
-        variant: ButtonVariant,
+        variant: ParraButtonVariant,
         config: TextButtonConfig,
         content: TextButtonContent,
         suppliedBuilder: LocalComponentBuilder.ButtonFactory<
@@ -97,7 +97,7 @@ extension ComponentFactory {
 
     @ViewBuilder
     func buildImageButton(
-        variant: ButtonVariant,
+        variant: ParraButtonVariant,
         config: ImageButtonConfig,
         content: ImageButtonContent,
         suppliedBuilder: LocalComponentBuilder.ButtonFactory<

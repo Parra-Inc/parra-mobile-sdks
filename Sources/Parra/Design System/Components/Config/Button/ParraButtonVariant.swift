@@ -1,5 +1,5 @@
 //
-//  ButtonVariant.swift
+//  ParraButtonVariant.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/6/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ButtonVariant: CustomStringConvertible, Equatable {
+public enum ParraButtonVariant: CustomStringConvertible, Equatable {
     case plain
     case outlined
     case contained // filled

@@ -88,7 +88,7 @@ private func renderRowTitle(_ title: String) -> some View {
 
 private func renderColumn(
     for componentType: (some TextButtonComponentType).Type,
-    size: TextButtonConfig.Size
+    size: ParraButtonSize
 ) -> some View {
     let title = switch size {
     case .small:
