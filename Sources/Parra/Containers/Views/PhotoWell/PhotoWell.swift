@@ -13,11 +13,30 @@ struct PhotoWell: View {
     // MARK: - Lifecycle
 
     init(
-        url: URL? = nil,
+        stub: ImageAssetStub? = nil,
         onSelectionChanged: ((UIImage) async -> Void)? = nil
     ) {
-        if let url {
-            self.state = .url(url)
+        let asset: Asset? = if let id = stub?.id, let url = stub?.url {
+            Asset(
+                id: id,
+                url: url
+            )
+        } else {
+            nil
+        }
+
+        self.init(
+            asset: asset,
+            onSelectionChanged: onSelectionChanged
+        )
+    }
+
+    init(
+        asset: Asset? = nil,
+        onSelectionChanged: ((UIImage) async -> Void)? = nil
+    ) {
+        if let asset {
+            self.state = .asset(asset)
         } else {
             self.state = .empty
         }
@@ -60,9 +79,11 @@ struct PhotoWell: View {
         case .empty, .loadingFromLibrary:
             Image(systemName: "person.crop.circle.fill")
                 .resizable()
-        case .url(let url):
-            AsyncImage(
-                url: url,
+        case .asset(let asset):
+            CachedAsyncImage(
+                url: asset.url,
+                urlCache: URLSessionConfiguration.apiConfiguration
+                    .urlCache ?? .shared,
                 transaction: Transaction(
                     animation: .easeIn(duration: 0.35)
                 ),
@@ -212,9 +233,14 @@ struct PhotoWell: View {
 #Preview {
     ParraViewPreview { _ in
         VStack {
-            PhotoWell()
+            PhotoWell(asset: nil)
 
-            PhotoWell(url: URL(string: "https://i.imgur.com/bA8JXya.png")!)
+            PhotoWell(
+                asset: Asset(
+                    id: UUID().uuidString,
+                    url: URL(string: "https://i.imgur.com/bA8JXya.png")!
+                )
+            )
 
             PhotoWell(image: UIImage(systemName: "swift")!)
         }

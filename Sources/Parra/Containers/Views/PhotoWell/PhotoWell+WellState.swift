@@ -11,7 +11,7 @@ import SwiftUI
 extension PhotoWell {
     enum WellState: Equatable {
         case empty
-        case url(URL)
+        case asset(Asset)
         case loadingFromLibrary
         case loaded(UIImage)
         case processing(UIImage)
@@ -37,8 +37,8 @@ extension PhotoWell {
                 return true
             case (.loadingFromLibrary, .loadingFromLibrary):
                 return true
-            case (.url(let lhsUrl), .url(let rhsUrl)):
-                return lhsUrl == rhsUrl
+            case (.asset(let lhsAsset), .asset(let rhsAsset)):
+                return lhsAsset == rhsAsset
             case (.loaded, .loaded):
                 return true
             case (.error(let lhsError), .error(let rhsError)):

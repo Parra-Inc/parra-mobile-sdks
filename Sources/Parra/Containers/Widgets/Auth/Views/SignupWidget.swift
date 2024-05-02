@@ -64,8 +64,6 @@ struct SignupWidget: Container {
         let content = contentObserver.content.signupContent
 
         VStack {
-            PhotoWell()
-
             componentFactory.buildTextInput(
                 config: config.emailField,
                 content: content.emailField,

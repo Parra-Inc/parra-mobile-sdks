@@ -41,7 +41,7 @@ struct ProfileWidget: Container {
 
             switch authState.current {
             case .authenticated(let user):
-                PhotoWell(url: user.userInfo?.avatar?.url) { newAvatar in
+                PhotoWell(stub: user.userInfo?.avatar) { newAvatar in
                     await contentObserver.onAvatarSelectionChange(
                         image: newAvatar
                     )

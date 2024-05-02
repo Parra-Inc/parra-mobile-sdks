@@ -22,6 +22,19 @@ public struct ParraProfileView: View {
     // MARK: - Public
 
     public var body: some View {
+        NavigationStack {
+            profileContainer
+        }
+        .toolbar {
+            Button {} label: {
+                Image(systemName: "gear")
+            }
+        }
+    }
+
+    // MARK: - Internal
+
+    @MainActor var profileContainer: some View {
         let container: ProfileWidget = parra.parraInternal
             .containerRenderer.renderContainer(
                 with: builderConfig,
