@@ -147,7 +147,7 @@ struct PhotoWell: View {
         .photosPicker(
             isPresented: $showingPhotoPicker,
             selection: $selectedPhoto,
-            matching: .any(
+            matching: .all(
                 of: [
                     .images,
                     .not(
