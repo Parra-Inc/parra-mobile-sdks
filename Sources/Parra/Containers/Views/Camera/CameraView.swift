@@ -30,25 +30,6 @@ struct CameraView: View {
             renderPreview(with: previewImage)
         } else {
             renderCamera
-                .task {
-                    await model.camera.start()
-
-                    for await photo in model.camera.photoStream {
-                        guard let data = photo.fileDataRepresentation() else {
-                            continue
-                        }
-
-                        guard let image = UIImage(data: data) else {
-                            continue
-                        }
-
-                        Task { @MainActor in
-                            withAnimation {
-                                previewImage = image
-                            }
-                        }
-                    }
-                }
         }
     }
 
@@ -97,6 +78,25 @@ struct CameraView: View {
         }
         .ignoresSafeArea()
         .statusBar(hidden: true)
+        .task {
+            await model.camera.start()
+
+            for await photo in model.camera.photoStream {
+                guard let data = photo.fileDataRepresentation() else {
+                    continue
+                }
+
+                guard let image = UIImage(data: data) else {
+                    continue
+                }
+
+                Task { @MainActor in
+                    withAnimation {
+                        previewImage = image
+                    }
+                }
+            }
+        }
     }
 
     @ViewBuilder
@@ -140,6 +140,7 @@ struct CameraView: View {
         Spacer()
 
         Button {
+            print("TAKE PHOTO TAPPED +++++++++++++")
             model.camera.takePhoto()
         } label: {
             Label {
@@ -162,6 +163,7 @@ struct CameraView: View {
         .simultaneousGesture(
             LongPressGesture(minimumDuration: 0)
                 .onChanged { pressing in
+                    print("LONG PRESSED +++++++++++++: \(pressing)")
                     withAnimation {
                         if pressing {
                             captureButtonScale = 0.9

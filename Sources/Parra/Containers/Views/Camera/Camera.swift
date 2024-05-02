@@ -110,7 +110,9 @@ class Camera: NSObject {
         }
     }
 
-    func takePhoto() {
+    func takePhoto(
+        flashMode: AVCaptureDevice.FlashMode = .auto
+    ) {
         guard let photoOutput else {
             return
         }
@@ -122,8 +124,7 @@ class Camera: NSObject {
                 photoSettings =
                     AVCapturePhotoSettings(
                         format: [
-                            AVVideoCodecKey: AVVideoCodecType
-                                .hevc
+                            AVVideoCodecKey: AVVideoCodecType.hevc
                         ]
                     )
             }
@@ -131,7 +132,7 @@ class Camera: NSObject {
             let isFlashAvailable = self.deviceInput?.device
                 .isFlashAvailable ?? false
 
-            photoSettings.flashMode = isFlashAvailable ? .auto : .off
+            photoSettings.flashMode = isFlashAvailable ? flashMode : .off
 
             if let previewPhotoPixelFormatType = photoSettings
                 .availablePreviewPhotoPixelFormatTypes.first
@@ -218,7 +219,9 @@ class Camera: NSObject {
             guard let captureDevice else {
                 return
             }
+
             logger.debug("Using capture device: \(captureDevice.localizedName)")
+
             sessionQueue.async {
                 self.updateSessionForCaptureDevice(captureDevice)
             }
