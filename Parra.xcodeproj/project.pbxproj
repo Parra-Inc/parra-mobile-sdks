@@ -1779,17 +1779,17 @@
 		003621D12B5B55F2009EFE53 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				008434542BDC067B00700881 /* Camera */,
-				004F3EE12BA4B1E900424802 /* PreferenceKeys */,
-				00FCB1572B93A9B700635DC8 /* WidgetFooter.swift */,
-				00374CF82B9F61440028EDA8 /* ScrollToTopView.swift */,
-				0079EDD72BDA9CB40045EEE5 /* PhotoWell */,
 				00374D042BA0B1D20028EDA8 /* Badges */,
+				005AFE382BE3059A00B0C29A /* CachedAsyncImage.swift */,
+				008434542BDC067B00700881 /* Camera */,
 				00ABF1832B7EAF1400A054A2 /* Environment */,
 				003621F52B5C7C01009EFE53 /* Extensions */,
 				003621D82B5B565A009EFE53 /* Fixtures */,
 				003621D92B5B5694009EFE53 /* Logo */,
-				005AFE382BE3059A00B0C29A /* CachedAsyncImage.swift */,
+				0079EDD72BDA9CB40045EEE5 /* PhotoWell */,
+				004F3EE12BA4B1E900424802 /* PreferenceKeys */,
+				00374CF82B9F61440028EDA8 /* ScrollToTopView.swift */,
+				00FCB1572B93A9B700635DC8 /* WidgetFooter.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
