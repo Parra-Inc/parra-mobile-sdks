@@ -47,6 +47,7 @@ class Camera: NSObject {
         guard let captureDevice else {
             return false
         }
+
         return frontCaptureDevices.contains(captureDevice)
     }
 
@@ -54,6 +55,7 @@ class Camera: NSObject {
         guard let captureDevice else {
             return false
         }
+
         return backCaptureDevices.contains(captureDevice)
     }
 
@@ -70,6 +72,7 @@ class Camera: NSObject {
                     captureSession.startRunning()
                 }
             }
+
             return
         }
 
@@ -191,11 +194,14 @@ class Camera: NSObject {
         #if os(macOS) || (os(iOS) && targetEnvironment(macCatalyst))
         devices += allCaptureDevices
         #else
-        if let backDevice = backCaptureDevices.first {
-            devices += [backDevice]
-        }
+        // Front devices first so that the front camera will be chosen by
+        // default, if it is available.
         if let frontDevice = frontCaptureDevices.first {
             devices += [frontDevice]
+        }
+
+        if let backDevice = backCaptureDevices.first {
+            devices += [backDevice]
         }
         #endif
         return devices
