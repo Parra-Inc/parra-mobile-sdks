@@ -29,8 +29,6 @@ final class CameraDataModel: ObservableObject {
     @Published var viewfinderImage: Image?
     @Published var thumbnailImage: Image?
 
-    var isPhotosLoaded = false
-
     func handleCameraPreviews() async {
         let imageStream = camera.previewStream
             .map(\.image)
@@ -50,7 +48,6 @@ final class CameraDataModel: ObservableObject {
             Task { @MainActor in
                 thumbnailImage = photoData.thumbnailImage
             }
-//            savePhoto(imageData: photoData.imageData)
         }
     }
 

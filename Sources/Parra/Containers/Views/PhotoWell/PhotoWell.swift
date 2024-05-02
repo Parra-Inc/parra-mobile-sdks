@@ -162,8 +162,14 @@ struct PhotoWell: View {
             ),
             preferredItemEncoding: .compatible
         )
-        .sheet(isPresented: $showingCamera) {
-            CameraView()
+        .fullScreenCover(isPresented: $showingCamera) {
+            CameraView { image in
+                if let image {
+                    applyNewImage(image)
+                }
+
+                showingCamera = false
+            }
         }
         .onChange(of: selectedPhoto) {
             Task {
@@ -179,12 +185,7 @@ struct PhotoWell: View {
                     )
 
                     if let data, let image = UIImage(data: data) {
-                        state = .loaded(image)
-
-                        if let onSelectionChanged {
-                            await onSelectionChanged(image)
-                        }
-
+                        applyNewImage(image)
                     } else {
                         throw ParraError.message("Failed to decode image data")
                     }
@@ -204,6 +205,20 @@ struct PhotoWell: View {
     @State private var selectedPhoto: PhotosPickerItem?
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
+
+    private func applyNewImage(_ image: UIImage) {
+        state = .processing(image)
+
+        Task {
+            if let onSelectionChanged {
+                await onSelectionChanged(image)
+            }
+
+            Task { @MainActor in
+                state = .loaded(image)
+            }
+        }
+    }
 
     @ViewBuilder
     private func imageContent(

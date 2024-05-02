@@ -9,11 +9,52 @@
 import SwiftUI
 
 struct CameraView: View {
+    // MARK: - Lifecycle
+
+    init(
+        onComplete: @escaping (UIImage?) -> Void
+    ) {
+        self.onComplete = onComplete
+    }
+
     // MARK: - Internal
+
+    let onComplete: (UIImage?) -> Void
+
+    @ViewBuilder var renderCamera: some View {
+        ViewfinderView(image: $model.viewfinderImage)
+    }
+
+    @ViewBuilder var main: some View {
+        if let previewImage {
+            renderPreview(with: previewImage)
+        } else {
+            renderCamera
+                .task {
+                    await model.camera.start()
+
+                    for await photo in model.camera.photoStream {
+                        guard let data = photo.fileDataRepresentation() else {
+                            continue
+                        }
+
+                        guard let image = UIImage(data: data) else {
+                            continue
+                        }
+
+                        Task { @MainActor in
+                            withAnimation {
+                                previewImage = image
+                            }
+                        }
+                    }
+                }
+        }
+    }
 
     var body: some View {
         GeometryReader { geometry in
-            ViewfinderView(image: $model.viewfinderImage)
+            main
                 .overlay(alignment: .top) {
                     Color.black
                         .opacity(0.75)
@@ -24,11 +65,8 @@ struct CameraView: View {
                 }
                 .overlay(alignment: .bottom) {
                     buttonsView()
-                        .frame(
-                            height: geometry.size.height * Self
-                                .barHeightFactor
-                        )
                         .background(.black.opacity(0.75))
+                        .safeAreaPadding(.bottom)
                 }
                 .overlay(alignment: .center) {
                     Color.clear
@@ -41,9 +79,6 @@ struct CameraView: View {
                         .accessibilityAddTraits([.isImage])
                 }
                 .background(.black)
-        }
-        .task {
-            await model.camera.start()
         }
         .onAppear {
             UIDevice.current.setValue(
@@ -64,64 +99,105 @@ struct CameraView: View {
         .statusBar(hidden: true)
     }
 
+    @ViewBuilder
+    func renderPreview(with image: UIImage) -> some View {
+        ViewfinderView(
+            image: .constant(Image(uiImage: image))
+        )
+    }
+
     // MARK: - Private
 
     private static let barHeightFactor = 0.15
 
+    @State private var previewImage: UIImage?
+
     @StateObject private var model = CameraDataModel()
+    @State private var captureButtonScale = 1.0
 
+    @ViewBuilder
     private func buttonsView() -> some View {
-        HStack(spacing: 60) {
-            Spacer()
-
-//            NavigationLink {
-//                PhotoCollectionView(photoCollection: model.photoCollection)
-//                    .onAppear {
-//                        model.camera.isPreviewPaused = true
-//                    }
-//                    .onDisappear {
-//                        model.camera.isPreviewPaused = false
-//                    }
-//            } label: {
-//                Label {
-//                    Text("Gallery")
-//                } icon: {
-//                    ThumbnailView(image: model.thumbnailImage)
-//                }
-//            }
-
-            Button {
-                model.camera.takePhoto()
-            } label: {
-                Label {
-                    Text("Take Photo")
-                } icon: {
-                    ZStack {
-                        Circle()
-                            .strokeBorder(.white, lineWidth: 3)
-                            .frame(width: 62, height: 62)
-                        Circle()
-                            .fill(.white)
-                            .frame(width: 50, height: 50)
-                    }
-                }
+        HStack {
+            if previewImage == nil {
+                captureButtonsView()
+            } else {
+                previewButtonsView()
             }
+        }
+        .frame(maxWidth: .infinity)
+        .buttonStyle(.plain)
+        .labelStyle(.iconOnly)
+        .padding(.vertical, 24)
+        .padding(.horizontal, 24)
+    }
 
-            HStack {
-                Button {
-                    model.camera.switchCaptureDevice()
-                } label: {
-                    Label(
-                        "Switch Camera",
-                        systemImage: "arrow.triangle.2.circlepath"
-                    )
-                    .font(.system(size: 36, weight: .bold))
-                    .foregroundColor(.white)
+    @ViewBuilder
+    private func captureButtonsView() -> some View {
+        Button("Cancel") {
+            onComplete(nil)
+        }
+
+        Spacer()
+
+        Button {
+            model.camera.takePhoto()
+        } label: {
+            Label {
+                Text("Take Photo")
+            } icon: {
+                ZStack {
+                    Circle()
+                        .strokeBorder(.white, lineWidth: 3)
+                        .frame(width: 62, height: 62)
+                    Circle()
+                        .fill(.white)
+                        .frame(width: 50, height: 50)
+                        .scaleEffect(captureButtonScale)
+                        .animation(
+                            .linear(duration: 0.1), value: captureButtonScale
+                        )
                 }
             }
         }
-        .buttonStyle(.plain)
-        .labelStyle(.iconOnly)
-        .padding()
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0)
+                .onChanged { pressing in
+                    withAnimation {
+                        if pressing {
+                            captureButtonScale = 0.9
+                        } else {
+                            captureButtonScale = 1.0
+                        }
+                    }
+                }
+        )
+
+        Spacer()
+
+        Button {
+            model.camera.switchCaptureDevice()
+        } label: {
+            Label(
+                "Switch Camera",
+                systemImage: "arrow.triangle.2.circlepath"
+            )
+            .font(.system(size: 30))
+            .foregroundColor(.white)
+        }
+    }
+
+    @ViewBuilder
+    private func previewButtonsView() -> some View {
+        Button("Retake") {
+            withAnimation {
+                previewImage = nil
+            }
+        }
+
+        Spacer()
+
+        Button("Use photo") {
+            onComplete(previewImage)
+        }
     }
 }
