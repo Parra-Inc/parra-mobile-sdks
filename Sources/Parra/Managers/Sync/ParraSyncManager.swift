@@ -21,14 +21,12 @@ class ParraSyncManager {
     init(
         forceDisabled: Bool = false,
         syncState: ParraSyncState,
-        networkManager: ParraNetworkManager,
         sessionManager: ParraSessionManager,
         notificationCenter: NotificationCenterType,
         syncDelay: TimeInterval = 30.0
     ) {
         self.forceDisabled = forceDisabled
         self.syncState = syncState
-        self.networkManager = networkManager
         self.sessionManager = sessionManager
         self.notificationCenter = notificationCenter
         self.syncDelay = syncDelay
@@ -50,18 +48,11 @@ class ParraSyncManager {
 
     /// Used to send collected data to the Parra API. Invoked automatically
     /// internally, but can be invoked externally as necessary.
-    func enqueueSync(with mode: ParraSyncMode) async {
+    func enqueueSync(
+        with mode: ParraSyncMode,
+        waitUntilSyncCompletes: Bool = false
+    ) async {
         if forceDisabled {
-            return
-        }
-
-        guard await networkManager.getAuthenticationProvider() != nil else {
-            await stopSyncTimer()
-            logger
-                .trace(
-                    "Skipping \(mode) sync. Authentication provider is unset."
-                )
-
             return
         }
 
@@ -100,10 +91,15 @@ class ParraSyncManager {
         case .immediate:
             logger.debug("\(logPrefix) Initiating immediate sync.")
             enqueuedSyncMode = nil
-            // Should not be awaited. enqueueSync returns when the sync job is
-            // added to the queue.
-            Task {
-                await self.sync()
+
+            if waitUntilSyncCompletes {
+                await sync()
+            } else {
+                // Should not be awaited. enqueueSync returns when the sync job
+                // is added to the queue.
+                Task {
+                    await self.sync()
+                }
             }
         case .eventual:
             enqueuedSyncMode = .eventual
@@ -183,7 +179,6 @@ class ParraSyncManager {
 
     // MARK: - Private
 
-    private let networkManager: ParraNetworkManager
     private let sessionManager: ParraSessionManager
     private let notificationCenter: NotificationCenterType
 

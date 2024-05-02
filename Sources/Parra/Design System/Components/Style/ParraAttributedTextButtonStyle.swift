@@ -29,7 +29,8 @@ struct ParraAttributedTextButtonStyle: ButtonStyle, ParraAttributedStyle {
             style: ParraAttributedLabelStyle(
                 content: content.text,
                 attributes: currentTitleAttributes,
-                theme: theme
+                theme: theme,
+                isLoading: content.isLoading
             )
         )
     }

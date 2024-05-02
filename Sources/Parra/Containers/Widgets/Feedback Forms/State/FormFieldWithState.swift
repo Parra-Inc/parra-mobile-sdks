@@ -23,7 +23,7 @@ struct FormFieldWithState: Identifiable {
 
     let field: FeedbackFormField
 
-    private(set) var state: FormFieldState
+    private(set) var state: FieldState
     private(set) var value: String?
 
     var id: String {
@@ -40,7 +40,7 @@ struct FormFieldWithState: Identifiable {
     private static func validateUpdate(
         value: String?,
         for field: FeedbackFormField
-    ) -> FormFieldState {
+    ) -> FieldState {
         switch field.data {
         case .feedbackFormInputFieldData:
             return if value == nil {

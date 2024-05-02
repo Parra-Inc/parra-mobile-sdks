@@ -9,16 +9,30 @@
 import SwiftUI
 
 struct AsyncImageComponent: AsyncImageComponentType {
+    // MARK: - Lifecycle
+
+    init(
+        content: AsyncImageContent,
+        attributes: ImageAttributes
+    ) {
+        self.content = content
+        self.attributes = attributes
+    }
+
     // MARK: - Internal
 
     let content: AsyncImageContent
     let attributes: ImageAttributes
 
+    @Environment(\.parra) var parra
+
     var body: some View {
         let theme = themeObserver.theme
 
-        AsyncImage(
+        CachedAsyncImage(
             url: content.url,
+            urlCache: URLSessionConfiguration.apiConfiguration
+                .urlCache ?? .shared,
             transaction: Transaction(animation: .easeIn(duration: 0.35)),
             content: imageContent
         )

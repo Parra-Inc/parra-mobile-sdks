@@ -812,10 +812,14 @@ public struct AppInfo: Codable, Equatable, Hashable {
 
     public init(
         versionToken: String,
-        newInstalledVersionInfo: NewInstalledVersionInfo?
+        newInstalledVersionInfo: NewInstalledVersionInfo?,
+        termsOfUse: URL?,
+        privacyPolicy: URL?
     ) {
         self.versionToken = versionToken
         self.newInstalledVersionInfo = newInstalledVersionInfo
+        self.termsOfUse = termsOfUse
+        self.privacyPolicy = privacyPolicy
     }
 
     // MARK: - Public
@@ -823,8 +827,12 @@ public struct AppInfo: Codable, Equatable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case versionToken
         case newInstalledVersionInfo
+        case termsOfUse
+        case privacyPolicy
     }
 
     public let versionToken: String
     public let newInstalledVersionInfo: NewInstalledVersionInfo?
+    public let termsOfUse: URL?
+    public let privacyPolicy: URL?
 }

@@ -78,7 +78,7 @@ class ParraImageButton: UIControl, SelectableButton,
         )
 
 //        Task {
-//            let isCached = await Parra.getExistingInstance().networkManager
+//            let isCached = await Parra.getExistingInstance().apiResourceServer
 //                .isAssetCached(
 //                    asset: asset
 //                )
@@ -87,7 +87,7 @@ class ParraImageButton: UIControl, SelectableButton,
 //                self.activityIndicator.startAnimating()
 //            }
 //
-//            let image = try? await Parra.getExistingInstance().networkManager
+//            let image = try? await Parra.getExistingInstance().apiResourceServer
 //                .fetchAsset(
 //                    asset: asset
 //                )

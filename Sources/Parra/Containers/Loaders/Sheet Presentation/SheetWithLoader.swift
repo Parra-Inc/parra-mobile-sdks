@@ -8,10 +8,6 @@
 
 import SwiftUI
 
-final class NavigationState: ObservableObject {
-    @Published var navigationPath = NavigationPath()
-}
-
 /// Facilitates loading data asynchonously then presenting a sheet with a view
 /// rendered from the data.
 @MainActor

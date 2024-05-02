@@ -17,6 +17,8 @@ class ParraNotificationCenter: NotificationCenterType {
 
     // MARK: - Internal
 
+    static let `default` = ParraNotificationCenter()
+
     let underlyingNotificationCenter = NotificationCenter()
 
     func post(

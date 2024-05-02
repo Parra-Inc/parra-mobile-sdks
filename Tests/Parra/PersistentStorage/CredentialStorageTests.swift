@@ -9,11 +9,11 @@
 import XCTest
 
 class CredentialStorageTests: XCTestCase {
-    var storageModule: ParraStorageModule<ParraCredential>!
+    var storageModule: ParraStorageModule<ParraUser>!
     var credentialStorage: CredentialStorage!
 
     override func setUpWithError() throws {
-        storageModule = ParraStorageModule<ParraCredential>(
+        storageModule = ParraStorageModule<ParraUser>(
             dataStorageMedium: .memory,
             jsonEncoder: .parraEncoder,
             jsonDecoder: .parraDecoder
@@ -30,27 +30,29 @@ class CredentialStorageTests: XCTestCase {
     }
 
     func testCanUpdateCredential() async throws {
-        let credential = ParraCredential(
-            token: UUID().uuidString
+        let user = ParraUser(
+            credential: ParraUser.Credential.basic(UUID().uuidString),
+            info: UserInfoResponse.validStates()[0]
         )
 
-        await credentialStorage.updateCredential(credential: credential)
+        await credentialStorage.updateCredential(credential: user)
 
         let value = await storageModule
             .read(name: CredentialStorage.Key.currentUser)
 
-        XCTAssertEqual(value, credential)
+        XCTAssertEqual(value, user)
     }
 
     func testCanRetreiveCurrentCredential() async throws {
-        let credential = ParraCredential(
-            token: UUID().uuidString
+        let user = ParraUser(
+            credential: ParraUser.Credential.basic(UUID().uuidString),
+            info: UserInfoResponse.validStates()[0]
         )
 
-        await credentialStorage.updateCredential(credential: credential)
+        await credentialStorage.updateCredential(credential: user)
 
-        let value = await credentialStorage.currentCredential()
+        let value = await credentialStorage.currentUser()
 
-        XCTAssertEqual(value, credential)
+        XCTAssertEqual(value, user)
     }
 }

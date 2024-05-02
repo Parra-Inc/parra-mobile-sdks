@@ -72,7 +72,7 @@ extension RoadmapWidget.ContentObserver {
     func ticketContentDidReceiveVote(
         _ ticketContent: TicketUserContent
     ) async throws {
-        let response = await networkManager.voteForTicket(
+        let response = await api.voteForTicket(
             with: ticketContent.id
         )
 
@@ -85,7 +85,7 @@ extension RoadmapWidget.ContentObserver {
     func ticketContentDidRemoveVote(
         _ ticketContent: TicketUserContent
     ) async throws {
-        let response = await networkManager.removeVoteForTicket(
+        let response = await api.removeVoteForTicket(
             with: ticketContent.id
         )
 

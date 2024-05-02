@@ -10,8 +10,9 @@ import UIKit
 
 public extension Parra {
     enum Demo {
-        /// The Parra sample app's workspace ID. You should not use this. Instead,
-        /// grab your workspace ID from https://parra.io/dashboard/settings
+        /// The Parra sample app's workspace ID. You should not use this.
+        /// Instead, grab your workspace ID from
+        /// https://parra.io/dashboard/settings
         public static let workspaceId = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4"
 
         /// The Parra sample app's application ID. You should not use this.
@@ -21,8 +22,9 @@ public extension Parra {
 
         /// The Parra sample app's API key. You should not use this. It is best
         /// practice to use the
-        /// ``ParraAuthenticationProviderType/default(workspaceId:applicationId:authProvider:)``
-        /// authentication provider method, which does not expose your API keys
+        /// ``ParraAuthenticationMethod/custom(_:)`` or
+        /// ``ParraAuthenticationMethod/parraAuth``
+        /// authentication provider methods, which do not expose your API keys
         /// to end users that have access to your application bundle. If you
         /// still need to use API key based authentication, you can generate
         /// your own key at https://parra.io/dashboard/developer/api-keys
@@ -51,5 +53,55 @@ public extension Parra {
         )
 
         public static let parraWebRoot = URL(string: "https://parra.io/")!
+    }
+
+    static func appBundleName(
+        bundle: Bundle = Bundle.main
+    ) -> String? {
+        return bundle.infoDictionary?["CFBundleName"] as? String
+    }
+
+    static func appIconFilePath(
+        bundle: Bundle = Bundle.main
+    ) -> URL? {
+        guard let icons = bundle.object(
+            forInfoDictionaryKey: "CFBundleIcons"
+        ) as? [String: Any],
+            let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any] else {
+            return nil
+        }
+
+        var allIconNames = [String]()
+
+        if let iconFileName = primaryIcon["CFBundleIconName"] as? String {
+            allIconNames.append(iconFileName)
+        }
+
+        if let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+           let iconFileName = iconFiles.last
+        {
+            allIconNames.append(iconFileName)
+        }
+
+        let resourceUrls = bundle.urls(
+            forResourcesWithExtension: nil,
+            subdirectory: nil
+        ) ?? []
+
+        for url in resourceUrls {
+            let fileName = url.deletingPathExtension().lastPathComponent
+
+            let components = fileName.split(separator: "@")
+
+            if let first = components.first {
+                for iconName in allIconNames {
+                    if iconName == String(first) {
+                        return url
+                    }
+                }
+            }
+        }
+
+        return nil
     }
 }

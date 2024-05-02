@@ -11,6 +11,9 @@ import Foundation
 enum ParraEndpoint {
     // Auth
     case postAuthentication(tenantId: String)
+    case postCreateUser(tenantId: String)
+    case postLogin(tenantId: String)
+    case postLogout(tenantId: String)
 
     // Feedback
     case getCards
@@ -39,14 +42,117 @@ enum ParraEndpoint {
     case getPaginateReleases(tenantId: String, applicationId: String)
     case getAppInfo(tenantId: String, applicationId: String)
 
+    // Users
+    case getUserInfo(tenantId: String)
+    case postUpdateAvatar(tenantId: String)
+
     // MARK: - Internal
 
+    enum EndpointType {
+        case auth
+    }
+
+    var url: URL {
+        switch self {
+        case .postCreateUser(let tenantId):
+
+            let baseHost = ParraInternal.Constants.parraApiHost
+            let host = "tenant-\(tenantId).\(baseHost)"
+
+            return URL(string: "https://\(host)/\(route)")!
+        default:
+            return ParraInternal.Constants.parraApiRoot
+                .appendingPathComponent(route)
+        }
+    }
+
+    var method: HttpMethod {
+        switch self {
+        case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
+             .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo:
+            return .get
+        case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
+             .postBulkSubmitSessions, .postCreateUser,
+             .postPushTokens, .postAuthentication, .postVoteForTicket,
+             .postLogin, .postLogout, .postUpdateAvatar:
+            return .post
+        case .deleteVoteForTicket:
+            return .delete
+        }
+    }
+
+    /// Whether extra session tracking information should be attached to the
+    /// request headers.
+    var isTrackingEnabled: Bool {
+        switch self {
+        // MUST check backend before removing any from this list
+        case .postAuthentication, .postBulkSubmitSessions, .postPushTokens,
+             .postLogin, .postLogout, .getUserInfo:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var displayName: String {
+        return "\(method.rawValue.uppercased()) \(slug)"
+    }
+
+    var slug: String {
+        switch self {
+        case .getUserInfo:
+            return "tenants/:tenantId/auth/user-info"
+        case .getCards:
+            return "cards"
+        case .getFeedbackForm:
+            return "feedback/forms/:formId"
+        case .postSubmitFeedbackForm:
+            return "feedback/forms/:formId/submit"
+        case .postBulkAnswerQuestions:
+            return "bulk/questions/answer"
+        case .postBulkSubmitSessions:
+            return "tenants/:tenantId/sessions"
+        case .postPushTokens:
+            return "tenants/:tenantId/push-tokens"
+        case .postAuthentication:
+            return "tenants/:tenantId/issuers/public/auth/token"
+        case .postCreateUser:
+            return "auth/signup"
+        case .postLogin:
+            return "tenants/:tenantId/auth/login"
+        case .postLogout:
+            return "tenants/:tenantId/auth/logout"
+        case .postUpdateAvatar:
+            return "tenants/:tenantId/users/avatar"
+        case .getRoadmap:
+            return "tenants/:tenantId/applications/:applicationId/roadmap"
+        case .getPaginateTickets:
+            return "tenants/:tenantId/applications/:applicationId/tickets"
+        case .postVoteForTicket, .deleteVoteForTicket:
+            return "tenants/:tenantId/tickets/:ticketId/vote"
+        case .getRelease:
+            return "tenants/:tenantId/applications/:applicationId/releases/:releaseId"
+        case .getPaginateReleases:
+            return "tenants/:tenantId/applications/:applicationId/releases"
+        case .getAppInfo:
+            return "tenants/:tenantId/applications/:applicationId/app-info"
+        }
+    }
+
+    // MARK: - Private
+
     // All endpoints should use kebab case!
-    var route: String {
+    private var route: String {
         switch self {
         // Auth
         case .postAuthentication(let tenantId):
             return "tenants/\(tenantId)/issuers/public/auth/token"
+        case .postCreateUser:
+            return "auth/signup"
+        case .postLogin(let tenantId):
+            return "tenants/\(tenantId)/auth/login"
+        case .postLogout(let tenantId):
+            return "tenants/\(tenantId)/auth/logout"
 
         // Feedback
         case .getCards:
@@ -85,66 +191,12 @@ enum ParraEndpoint {
             return "tenants/\(tenantId)/applications/\(applicationId)/releases"
         case .getAppInfo(let tenantId, let applicationId):
             return "tenants/\(tenantId)/applications/\(applicationId)/app-info"
-        }
-    }
 
-    var method: HttpMethod {
-        switch self {
-        case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
-             .getRelease, .getPaginateReleases, .getAppInfo:
-            return .get
-        case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
-             .postBulkSubmitSessions,
-             .postPushTokens, .postAuthentication, .postVoteForTicket:
-            return .post
-        case .deleteVoteForTicket:
-            return .delete
-        }
-    }
-
-    /// Whether extra session tracking information should be attached to the
-    /// request headers.
-    var isTrackingEnabled: Bool {
-        switch self {
-        case .postAuthentication, .postBulkSubmitSessions, .postPushTokens:
-            return true
-        default:
-            return false
-        }
-    }
-
-    var displayName: String {
-        return "\(method.rawValue.uppercased()) \(slug)"
-    }
-
-    var slug: String {
-        switch self {
-        case .getCards:
-            return "cards"
-        case .getFeedbackForm:
-            return "feedback/forms/:formId"
-        case .postSubmitFeedbackForm:
-            return "feedback/forms/:formId/submit"
-        case .postBulkAnswerQuestions:
-            return "bulk/questions/answer"
-        case .postBulkSubmitSessions:
-            return "tenants/:tenantId/sessions"
-        case .postPushTokens:
-            return "tenants/:tenantId/push-tokens"
-        case .postAuthentication:
-            return "tenants/:tenantId/issuers/public/auth/token"
-        case .getRoadmap:
-            return "tenants/:tenantId/applications/:applicationId/roadmap"
-        case .getPaginateTickets:
-            return "tenants/:tenantId/applications/:applicationId/tickets"
-        case .postVoteForTicket, .deleteVoteForTicket:
-            return "tenants/:tenantId/tickets/:ticketId/vote"
-        case .getRelease:
-            return "tenants/:tenantId/applications/:applicationId/releases/:releaseId"
-        case .getPaginateReleases:
-            return "tenants/:tenantId/applications/:applicationId/releases"
-        case .getAppInfo:
-            return "tenants/:tenantId/applications/:applicationId/app-info"
+        // Users
+        case .getUserInfo(let tenantId):
+            return "tenants/\(tenantId)/auth/user-info"
+        case .postUpdateAvatar(let tenantId):
+            return "tenants/\(tenantId)/users/avatar"
         }
     }
 }

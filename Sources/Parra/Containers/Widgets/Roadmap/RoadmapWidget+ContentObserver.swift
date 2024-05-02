@@ -49,7 +49,7 @@ extension RoadmapWidget {
             self.selectedTab = initialTab
             self.roadmapConfig = roadmapConfig
             self.canAddRequests = roadmapConfig.form != nil
-            self.networkManager = initialParams.networkManager
+            self.api = initialParams.api
             self.tabs = roadmapConfig.tabs
             self.content = Content(
                 title: "Roadmap",
@@ -102,7 +102,7 @@ extension RoadmapWidget {
 
         @Published var addRequestForm: ParraFeedbackForm?
 
-        let networkManager: ParraNetworkManager
+        let api: API
 
         /// The identifier for a ticket to toggle the vote for.
         @Published var currentTicketToVote: String?
@@ -223,7 +223,7 @@ extension RoadmapWidget {
             _ offset: Int,
             _ tab: RoadmapConfigurationTab
         ) async throws -> [TicketUserContent] {
-            let response = try await networkManager.paginateTickets(
+            let response = try await api.paginateTickets(
                 limit: limit,
                 offset: offset,
                 filter: tab.key

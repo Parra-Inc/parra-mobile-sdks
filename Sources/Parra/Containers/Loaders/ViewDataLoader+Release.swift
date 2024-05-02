@@ -32,7 +32,7 @@ extension ViewDataLoader {
                         with: localBuilder,
                         params: ReleaseContentObserver.InitialParams(
                             contentType: releaseContent,
-                            networkManager: parra.parraInternal.networkManager
+                            api: parra.parraInternal.api
                         ),
                         config: config,
                         contentTransformer: nil

@@ -8,6 +8,24 @@
 
 import Foundation
 
-enum Mimetype: String {
-    case applicationJson = "application/json"
+enum Mimetype {
+    case applicationJson
+    case applicationFormUrlEncoded
+    case multipartFormData(boundary: String)
+    case imagePng
+
+    // MARK: - Internal
+
+    var rawValue: String {
+        switch self {
+        case .applicationJson:
+            return "application/json"
+        case .applicationFormUrlEncoded:
+            return "application/x-www-form-urlencoded"
+        case .multipartFormData(let boundary):
+            return "multipart/form-data; boundary=\(boundary)"
+        case .imagePng:
+            return "image/png"
+        }
+    }
 }

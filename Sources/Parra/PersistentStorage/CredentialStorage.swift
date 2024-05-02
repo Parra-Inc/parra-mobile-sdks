@@ -12,7 +12,7 @@ private let logger = Logger(category: "Credential storage")
 final class CredentialStorage: ItemStorage {
     // MARK: - Lifecycle
 
-    required init(storageModule: ParraStorageModule<ParraCredential>) {
+    required init(storageModule: ParraStorageModule<ParraUser>) {
         self.storageModule = storageModule
     }
 
@@ -22,11 +22,9 @@ final class CredentialStorage: ItemStorage {
         static let currentUser = "current_user_credential"
     }
 
-    typealias DataType = ParraCredential
+    let storageModule: ParraStorageModule<ParraUser>
 
-    let storageModule: ParraStorageModule<ParraCredential>
-
-    func updateCredential(credential: ParraCredential?) async {
+    func updateCredential(credential: ParraUser?) async {
         do {
             try await storageModule.write(
                 name: Key.currentUser,
@@ -37,7 +35,10 @@ final class CredentialStorage: ItemStorage {
         }
     }
 
-    func currentCredential() async -> ParraCredential? {
-        return await storageModule.read(name: Key.currentUser)
+    func currentUser() async -> ParraUser? {
+        return await storageModule.read(
+            name: Key.currentUser,
+            deleteOnError: true
+        )
     }
 }

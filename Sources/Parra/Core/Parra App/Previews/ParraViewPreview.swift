@@ -33,7 +33,9 @@ struct ParraViewPreview<Content>: View where Content: View {
             target: .preview,
             configuration: configuration,
             viewContent: { _ in
-                content(factory)
+                ParraOptionalAuthView { _ in
+                    content(factory)
+                }
             }
         )
         .environmentObject(factory)

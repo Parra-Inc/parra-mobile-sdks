@@ -29,4 +29,9 @@ public extension Parra {
     /// reflect the new theme.
     static let themeDidChangeNotification = NSNotification
         .Name("ParraThemeDidChangeNotification")
+
+    static let authenticationStateDidChangeNotification = NSNotification
+        .Name("ParraAuthenticationStateDidChangeNotification")
+
+    static let authenticationStateKey = "ParraAuthenticationState"
 }

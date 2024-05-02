@@ -12,33 +12,46 @@ public struct TextInputConfig {
     // MARK: - Lifecycle
 
     public init(
-        title: LabelConfig = LabelConfig(fontStyle: .body),
-        helper: LabelConfig = LabelConfig(fontStyle: .subheadline),
-        showValidationErrors: Bool = TextEditorConfig.default
-            .showValidationErrors
+        title: LabelConfig = TextInputConfig.default.title,
+        helper: LabelConfig = TextInputConfig.default.helper,
+        validationRules: [TextValidatorRule] = TextInputConfig.default
+            .validationRules,
+        preferValidationErrorsToHelperMessage: Bool = TextInputConfig.default
+            .preferValidationErrorsToHelperMessage,
+        isSecure: Bool = false
     ) {
         self.title = title
         self.helper = helper
-        self.showValidationErrors = showValidationErrors
+        self.validationRules = validationRules
+        self.preferValidationErrorsToHelperMessage
+            = preferValidationErrorsToHelperMessage
+        self.isSecure = isSecure
     }
 
     // MARK: - Public
 
+    public static let `default` = TextInputConfig(
+        title: LabelConfig(fontStyle: .body),
+        helper: LabelConfig(fontStyle: .subheadline),
+        validationRules: [],
+        preferValidationErrorsToHelperMessage: true
+    )
+
     public let title: LabelConfig
     public let helper: LabelConfig
 
+    public let validationRules: [TextValidatorRule]
+
     /// Whether or not to show validation errors if any exist in place of the
     /// helper text string. If you don't want to display anything below the text
-    /// editor, set this to false and leave ``helper`` unset.
-    public let showValidationErrors: Bool
+    /// field, set this to false and leave ``helper`` unset.
+    public let preferValidationErrorsToHelperMessage: Bool
+
+    /// Whether or not the text field should be secure. Defaults to false.
+    /// If true, the text field will display a secure entry view for passwords.
+    public let isSecure: Bool
 
     // MARK: - Internal
-
-    static let `default` = TextEditorConfig(
-        title: LabelConfig(fontStyle: .body),
-        helper: LabelConfig(fontStyle: .subheadline),
-        showValidationErrors: true
-    )
 
     func withFormTextFieldData(
         _ data: FeedbackFormInputFieldData

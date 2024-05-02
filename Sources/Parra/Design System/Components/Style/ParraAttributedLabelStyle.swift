@@ -9,9 +9,26 @@
 import SwiftUI
 
 struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
+    // MARK: - Lifecycle
+
+    init(
+        content: LabelContent,
+        attributes: LabelAttributes,
+        theme: ParraTheme,
+        isLoading: Bool = false
+    ) {
+        self.content = content
+        self.attributes = attributes
+        self.theme = theme
+        self.isLoading = isLoading
+    }
+
+    // MARK: - Internal
+
     let content: LabelContent
     let attributes: LabelAttributes
     let theme: ParraTheme
+    let isLoading: Bool
 
     func makeBody(configuration: Configuration) -> some View {
         let fontColor = attributes.fontColor ?? theme.palette.primaryText
@@ -20,6 +37,13 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
         let defaultImageAttributes = ImageAttributes(
             tint: attributes.iconAttributes?.tint ?? fontColor
         )
+
+        let progressView: (some View)? = if isLoading {
+            ProgressView()
+                .tint(fontColor)
+        } else {
+            nil
+        }
 
         let image: (some View)? = if let icon = content.icon {
             ImageComponent(
@@ -43,11 +67,13 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
         HStack(spacing: attributes.padding?.leading ?? 6) {
             switch attributes.layoutDirectionBehavior {
             case .mirrors:
+                progressView
                 text
                 image
             default:
                 image
                 text
+                progressView
             }
         }
         .applyFrame(attributes.frame)
@@ -67,7 +93,8 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
         return ParraAttributedLabelStyle(
             content: content,
             attributes: attributes,
-            theme: theme
+            theme: theme,
+            isLoading: false
         )
     }
 }

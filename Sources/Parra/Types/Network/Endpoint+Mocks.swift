@@ -14,6 +14,10 @@ extension ParraEndpoint {
         let object: Codable = switch status {
         case 200 ..< 300:
             switch self {
+            case .getUserInfo, .postLogin, .postLogout, .postUpdateAvatar:
+                fatalError()
+            case .postCreateUser:
+                UserInfoResponse.validStates()[0]
             case .getCards:
                 ParraCardItemFixtures.cardsResponse
             case .getFeedbackForm(let formId):
@@ -27,7 +31,7 @@ extension ParraEndpoint {
             case .postPushTokens:
                 EmptyResponseObject()
             case .postAuthentication:
-                ParraCredential.successResponse
+                ParraUser.Credential.successResponse
             case .getRoadmap:
                 AppRoadmapConfiguration.validStates()[0]
             case .getPaginateTickets:

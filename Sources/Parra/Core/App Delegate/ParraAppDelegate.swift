@@ -62,11 +62,38 @@ open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
         return configuration
     }
 
+    open func application(
+        _ application: UIApplication,
+        supportedInterfaceOrientationsFor window: UIWindow?
+    ) -> UIInterfaceOrientationMask {
+        return ParraAppDelegate.orientationLock
+    }
+
     // MARK: - Public
 
     public internal(set) var sceneDelegateClass: ParraSceneDelegate.Type!
 
     // MARK: - Internal
+
+    static var orientationLock = UIInterfaceOrientationMask.all {
+        didSet {
+            let isSingleOrientation = orientationLock == .portrait
+                || orientationLock == .landscapeLeft
+                || orientationLock == .landscapeRight
+                || orientationLock == .portraitUpsideDown
+
+            if isSingleOrientation, let windowScene =
+                UIApplication.shared.connectedScenes.first as? UIWindowScene
+            {
+                windowScene.requestGeometryUpdate(
+                    .iOS(interfaceOrientations: orientationLock)
+                )
+            }
+
+            UIViewController.topMostViewController()?
+                .setNeedsUpdateOfSupportedInterfaceOrientations()
+        }
+    }
 
     /// Not exposed publicly. Should only ever be set once from the
     /// ``Parra/ParraApp`` initializer as a means of passing the Parra instance

@@ -14,4 +14,16 @@ extension URLSession: URLSessionType {
     ) async throws -> (Data, URLResponse) {
         return try await data(for: request, delegate: delegate)
     }
+
+    func dataForUploadRequest(
+        for request: URLRequest,
+        from data: Data,
+        delegate: URLSessionTaskDelegate?
+    ) async throws -> (Data, URLResponse) {
+        return try await upload(
+            for: request,
+            from: data,
+            delegate: delegate
+        )
+    }
 }

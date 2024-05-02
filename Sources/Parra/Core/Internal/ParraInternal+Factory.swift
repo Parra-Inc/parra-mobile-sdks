@@ -8,167 +8,70 @@
 
 import Foundation
 
-// TODO: Majorly needs deduplicated
-
 extension ParraInternal {
     @MainActor
     static func createParraInstance(
-        authProvider: ParraAuthenticationProviderType,
+        appState: ParraAppState,
+        authState: ParraAuthState,
+        authenticationMethod: ParraAuthType,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
-    ) -> (ParraInternal, ParraAppState) {
-        let appState = authProvider.initialAppState
-        let syncState = ParraSyncState()
-        let fileManager = FileManager.default
-
-        // Common
-
-        let credentialStorageModule = ParraStorageModule<ParraCredential>(
-            dataStorageMedium: .fileSystem(
-                baseUrl: instanceConfiguration.storageConfiguration
-                    .baseDirectory,
-                folder: instanceConfiguration.storageConfiguration
-                    .storageDirectoryName,
-                fileName: ParraDataManager.Key.userCredentialsKey,
-                storeItemsSeparately: false,
-                fileManager: fileManager
-            ),
-            jsonEncoder: instanceConfiguration.storageConfiguration
-                .sessionJsonEncoder,
-            jsonDecoder: instanceConfiguration.storageConfiguration
-                .sessionJsonDecoder
-        )
-
-        let sessionStorageUrl = instanceConfiguration.storageConfiguration
-            .baseDirectory
-            .appendDirectory(
-                instanceConfiguration.storageConfiguration
-                    .storageDirectoryName
-            )
-            .appendDirectory("sessions")
-
-        let notificationCenter = ParraNotificationCenter()
-
-        let credentialStorage = CredentialStorage(
-            storageModule: credentialStorageModule
-        )
-
-        let sessionStorage = SessionStorage(
-            sessionReader: SessionReader(
-                basePath: sessionStorageUrl,
-                sessionJsonDecoder: .parraDecoder,
-                eventJsonDecoder: .spaceOptimizedDecoder,
-                fileManager: fileManager
-            ),
-            sessionJsonEncoder: .parraEncoder,
-            eventJsonEncoder: .spaceOptimizedEncoder
-        )
-
-        let dataManager = ParraDataManager(
-            baseDirectory: instanceConfiguration.storageConfiguration
-                .baseDirectory,
-            credentialStorage: credentialStorage,
-            sessionStorage: sessionStorage
-        )
-
-        let networkManager = ParraNetworkManager(
+    ) -> ParraInternal {
+        return _createParraInstance(
+            forceDisabled: false,
             appState: appState,
-            appConfig: configuration,
-            dataManager: dataManager,
-            configuration: instanceConfiguration.networkConfiguration
-        )
-
-        let sessionManager = ParraSessionManager(
-            dataManager: dataManager,
-            networkManager: networkManager,
-            loggerOptions: configuration.loggerOptions
-        )
-
-        let syncManager = ParraSyncManager(
-            syncState: syncState,
-            networkManager: networkManager,
-            sessionManager: sessionManager,
-            notificationCenter: notificationCenter
-        )
-
-        let containerRenderer = ContainerRenderer(
-            configuration: configuration
-        )
-
-        let modalScreenManager = ModalScreenManager(
-            containerRenderer: containerRenderer,
-            networkManager: networkManager,
+            authState: authState,
+            authenticationMethod: authenticationMethod,
             configuration: configuration,
-            notificationCenter: notificationCenter
+            instanceConfiguration: instanceConfiguration
         )
-
-        let alertManager = AlertManager()
-
-        let latestVersionManager = LatestVersionManager(
-            configuration: configuration,
-            modalScreenManager: modalScreenManager,
-            alertManager: alertManager,
-            networkManager: networkManager
-        )
-
-        // Parra Modules
-
-        let feedback = ParraFeedback(
-            dataManager: ParraFeedbackDataManager(
-                dataManager: dataManager,
-                syncManager: syncManager,
-                jsonEncoder: JSONEncoder.parraEncoder,
-                jsonDecoder: JSONDecoder.parraDecoder,
-                fileManager: fileManager,
-                notificationCenter: notificationCenter
-            ),
-            networkManager: networkManager
-        )
-
-        Logger.loggerBackend = sessionManager
-
-        let parra = ParraInternal(
-            configuration: configuration,
-            appState: appState,
-            dataManager: dataManager,
-            syncManager: syncManager,
-            sessionManager: sessionManager,
-            networkManager: networkManager,
-            notificationCenter: notificationCenter,
-            feedback: feedback,
-            latestVersionManager: latestVersionManager,
-            containerRenderer: containerRenderer,
-            alertManager: alertManager,
-            modalScreenManager: modalScreenManager
-        )
-
-        networkManager.delegate = parra
-        syncManager.delegate = parra
-
-        return (parra, appState)
     }
 
     // Largely the same but disables sessions/sync/etc to prevent sending this
     // often mocked data to our servers.
     @MainActor
     static func createParraSwiftUIPreviewsInstance(
-        authProvider: ParraAuthenticationProviderType,
+        appState: ParraAppState,
+        authState: ParraAuthState,
+        authenticationMethod: ParraAuthType,
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
-    ) -> (ParraInternal, ParraAppState) {
-        let appState = authProvider.initialAppState
+    ) -> ParraInternal {
+        return _createParraInstance(
+            forceDisabled: true,
+            appState: appState,
+            authState: authState,
+            authenticationMethod: authenticationMethod,
+            configuration: configuration,
+            instanceConfiguration: instanceConfiguration
+        )
+    }
+
+    @MainActor
+    /// Creates a Parra instance with the given configuration.
+    /// - Parameters:
+    ///   - forceDisabled: Whether functions that we won't want to run in
+    ///   SwiftUI previews should be disabled.
+    private static func _createParraInstance(
+        forceDisabled: Bool,
+        appState: ParraAppState,
+        authState: ParraAuthState,
+        authenticationMethod: ParraAuthType,
+        configuration: ParraConfiguration,
+        instanceConfiguration: ParraInstanceConfiguration = .default
+    ) -> ParraInternal {
         let syncState = ParraSyncState()
         let fileManager = FileManager.default
 
         // Common
 
-        let credentialStorageModule = ParraStorageModule<ParraCredential>(
+        let credentialStorageModule = ParraStorageModule<ParraUser>(
             dataStorageMedium: .fileSystem(
                 baseUrl: instanceConfiguration.storageConfiguration
                     .baseDirectory,
                 folder: instanceConfiguration.storageConfiguration
                     .storageDirectoryName,
-                fileName: ParraDataManager.Key.userCredentialsKey,
+                fileName: DataManager.Key.userCredentialsKey,
                 storeItemsSeparately: false,
                 fileManager: fileManager
             ),
@@ -186,14 +89,14 @@ extension ParraInternal {
             )
             .appendDirectory("sessions")
 
-        let notificationCenter = ParraNotificationCenter()
+        let notificationCenter = ParraNotificationCenter.default
 
         let credentialStorage = CredentialStorage(
             storageModule: credentialStorageModule
         )
 
         let sessionStorage = SessionStorage(
-            forceDisabled: true,
+            forceDisabled: forceDisabled,
             sessionReader: SessionReader(
                 basePath: sessionStorageUrl,
                 sessionJsonDecoder: .parraDecoder,
@@ -204,31 +107,60 @@ extension ParraInternal {
             eventJsonEncoder: .spaceOptimizedEncoder
         )
 
-        let dataManager = ParraDataManager(
+        let dataManager = DataManager(
             baseDirectory: instanceConfiguration.storageConfiguration
                 .baseDirectory,
             credentialStorage: credentialStorage,
             sessionStorage: sessionStorage
         )
 
-        let networkManager = ParraNetworkManager(
+        let authServer = AuthServer(
+            appState: appState,
+            appConfig: configuration,
+            configuration: instanceConfiguration.authServerConfiguration
+        )
+
+        let externalResourceServer = ExternalResourceServer(
+            configuration: instanceConfiguration.externalServerConfiguration,
+            appState: appState,
+            appConfig: configuration
+        )
+
+        let oauth2Service = OAuth2Service(
+            clientId: appState.applicationId,
+            tenantId: appState.tenantId,
+            authServer: authServer
+        )
+
+        let authService = AuthService(
+            oauth2Service: oauth2Service,
+            dataManager: dataManager,
+            authServer: authServer,
+            authenticationMethod: authenticationMethod
+        )
+
+        let apiResourceServer = ApiResourceServer(
+            authService: authService,
             appState: appState,
             appConfig: configuration,
             dataManager: dataManager,
-            configuration: instanceConfiguration.networkConfiguration
+            configuration: instanceConfiguration.apiServerConfiguration
+        )
+
+        let api = API(
+            appState: appState, apiResourceServer: apiResourceServer
         )
 
         let sessionManager = ParraSessionManager(
-            forceDisabled: true,
+            forceDisabled: forceDisabled,
             dataManager: dataManager,
-            networkManager: networkManager,
+            api: api,
             loggerOptions: configuration.loggerOptions
         )
 
         let syncManager = ParraSyncManager(
-            forceDisabled: true,
+            forceDisabled: forceDisabled,
             syncState: syncState,
-            networkManager: networkManager,
             sessionManager: sessionManager,
             notificationCenter: notificationCenter
         )
@@ -239,7 +171,6 @@ extension ParraInternal {
 
         let modalScreenManager = ModalScreenManager(
             containerRenderer: containerRenderer,
-            networkManager: networkManager,
             configuration: configuration,
             notificationCenter: notificationCenter
         )
@@ -250,7 +181,8 @@ extension ParraInternal {
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
-            networkManager: networkManager
+            api: api,
+            externalResourceServer: externalResourceServer
         )
 
         // Parra Modules
@@ -264,18 +196,22 @@ extension ParraInternal {
                 fileManager: fileManager,
                 notificationCenter: notificationCenter
             ),
-            networkManager: networkManager
+            api: api,
+            apiResourceServer: apiResourceServer
         )
 
         Logger.loggerBackend = sessionManager
 
         let parra = ParraInternal(
+            authenticationMethod: authenticationMethod,
             configuration: configuration,
             appState: appState,
+            authState: authState,
             dataManager: dataManager,
             syncManager: syncManager,
+            authService: authService,
             sessionManager: sessionManager,
-            networkManager: networkManager,
+            api: api,
             notificationCenter: notificationCenter,
             feedback: feedback,
             latestVersionManager: latestVersionManager,
@@ -284,9 +220,9 @@ extension ParraInternal {
             modalScreenManager: modalScreenManager
         )
 
-        networkManager.delegate = parra
+        apiResourceServer.delegate = parra
         syncManager.delegate = parra
 
-        return (parra, appState)
+        return parra
     }
 }

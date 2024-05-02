@@ -14,5 +14,11 @@ protocol URLSessionType {
         delegate: URLSessionTaskDelegate?
     ) async throws -> (Data, URLResponse)
 
+    func dataForUploadRequest(
+        for request: URLRequest,
+        from data: Data,
+        delegate: URLSessionTaskDelegate?
+    ) async throws -> (Data, URLResponse)
+
     var configuration: URLSessionConfiguration { get }
 }

@@ -119,7 +119,6 @@ struct FeedbackFormWidget: Container {
 
                     componentFactory.buildMenu(
                         config: config.selectFields.withFormTextFieldData(data),
-                        // no customization currently exists
                         content: content,
                         suppliedBuilder: localBuilderConfig.selectFields
                     )

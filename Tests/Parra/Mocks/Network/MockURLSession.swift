@@ -58,6 +58,23 @@ class MockURLSession: URLSessionType {
         return (data!, response!)
     }
 
+    func dataForUploadRequest(
+        for request: URLRequest,
+        from data: Data,
+        delegate: (any URLSessionTaskDelegate)?
+    ) async throws -> (Data, URLResponse) {
+        // Changing this value may break time sensitive tests.
+        try await Task.sleep(for: 0.1)
+
+        let (data, response, error) = resolve(request)
+
+        if let error {
+            throw error
+        }
+
+        return (data!, response!)
+    }
+
     func expectInvocation(
         of endpoint: ParraEndpoint,
         times: Int = 1,

@@ -18,10 +18,12 @@ public class ParraFeedback {
 
     init(
         dataManager: ParraFeedbackDataManager,
-        networkManager: ParraNetworkManager
+        api: API,
+        apiResourceServer: ApiResourceServer
     ) {
         self.dataManager = dataManager
-        self.networkManager = networkManager
+        self.api = api
+        self.apiResourceServer = apiResourceServer
     }
 
     // MARK: - Public
@@ -106,7 +108,7 @@ public class ParraFeedback {
     public func fetchFeedbackCards(
         appArea: ParraQuestionAppArea = .all
     ) async throws -> [ParraCardItem] {
-        let cardsResponse = try await networkManager.getCards(
+        let cardsResponse = try await api.getCards(
             appArea: appArea
         )
         let cards = cardsResponse.items
@@ -137,7 +139,7 @@ public class ParraFeedback {
     public func fetchFeedbackForm(
         formId: String
     ) async throws -> ParraFeedbackForm {
-        let response = try await networkManager.getFeedbackForm(with: formId)
+        let response = try await api.getFeedbackForm(with: formId)
 
         return ParraFeedbackForm(from: response)
     }
@@ -179,7 +181,8 @@ public class ParraFeedback {
     // MARK: - Internal
 
     let dataManager: ParraFeedbackDataManager
-    let networkManager: ParraNetworkManager
+    let api: API
+    let apiResourceServer: ApiResourceServer
 
     /// Checks whether the user has previously supplied input for the provided
     /// `ParraCardItem`.
@@ -235,7 +238,7 @@ public class ParraFeedback {
 
             logger.debug("\(assets.count) asset(s) available for prefetching")
 
-            await networkManager.performBulkAssetCachingRequest(
+            await api.performBulkAssetCachingRequest(
                 assets: assets
             )
 
@@ -337,7 +340,7 @@ public class ParraFeedback {
     }
 
     private func getCardsForPresentation() async throws -> [ParraCardItem] {
-        let cardsResponse = try await networkManager.getCards(
+        let cardsResponse = try await api.getCards(
             appArea: .none
         )
         let cards = cardsResponse.items

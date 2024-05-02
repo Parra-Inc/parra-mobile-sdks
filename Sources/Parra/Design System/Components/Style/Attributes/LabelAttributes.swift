@@ -114,10 +114,13 @@ public struct LabelAttributes: ParraStyleAttributes {
         return LabelComponent.applyStandardCustomizations(
             onto: LabelAttributes(
                 fontColor: fontColor,
-                padding: EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 2),
+                padding: EdgeInsets(top: 3, leading: 0, bottom: 0, trailing: 2),
                 frame: .flexible(
                     FlexibleFrameAttributes(
                         maxWidth: .infinity,
+                        minHeight: 12,
+                        idealHeight: 12,
+                        maxHeight: 12,
                         alignment: .trailing
                     )
                 )

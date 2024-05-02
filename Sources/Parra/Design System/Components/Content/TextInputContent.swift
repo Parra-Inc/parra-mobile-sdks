@@ -69,6 +69,6 @@ public struct TextInputContent {
     /// message are displayed using the same label, and ``errorMessage`` takes
     /// precedance over ``helper``.
     public let helper: LabelContent?
-    public let errorMessage: String?
-    public let textChanged: ((String?) -> Void)?
+    public internal(set) var errorMessage: String?
+    public internal(set) var textChanged: ((String?) -> Void)?
 }

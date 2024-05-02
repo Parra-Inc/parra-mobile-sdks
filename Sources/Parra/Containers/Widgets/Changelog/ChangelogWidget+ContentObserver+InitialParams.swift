@@ -11,6 +11,6 @@ import Foundation
 extension ChangelogWidget.ContentObserver {
     struct InitialParams {
         let appReleaseCollection: AppReleaseCollectionResponse?
-        let networkManager: ParraNetworkManager
+        let api: API
     }
 }

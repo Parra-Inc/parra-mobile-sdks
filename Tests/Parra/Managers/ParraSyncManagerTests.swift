@@ -168,49 +168,6 @@ class ParraSyncManagerTests: MockedParraTestCase {
         XCTAssertTrue(isActive2)
     }
 
-    func testEnqueuingSyncWithoutAuthStopsExistingTimer() async throws {
-        mockParra.networkManager.updateAuthenticationProvider(nil)
-
-        let syncTimerTickedExpectation = expectation(
-            description: "Sync ticked"
-        )
-        syncTimerTickedExpectation.isInverted = true
-        syncTimerTickedExpectation.assertForOverFulfill = false
-
-        await mockParra.syncManager.startSyncTimer {
-            syncTimerTickedExpectation.fulfill()
-        }
-
-        let isActive = await mockParra.syncManager.isSyncTimerActive()
-
-        XCTAssertTrue(isActive)
-
-        await mockParra.syncManager.enqueueSync(with: .immediate)
-
-        let isActive2 = await mockParra.syncManager.isSyncTimerActive()
-
-        XCTAssertFalse(isActive2)
-
-        await fulfillment(
-            of: [syncTimerTickedExpectation],
-            timeout: mockParra.syncManager.syncDelay
-        )
-    }
-
-    func testSyncEventsIgnoredWithoutAuthProviderSet() async throws {
-        mockParra.networkManager.updateAuthenticationProvider(nil)
-
-        let syncDidEnd = mockParra.notificationExpectation(
-            name: Parra.syncDidEndNotification,
-            object: mockParra.syncManager
-        )
-        syncDidEnd.isInverted = true
-
-        await mockParra.syncManager.enqueueSync(with: .immediate)
-
-        await fulfillment(of: [syncDidEnd], timeout: 0.1)
-    }
-
     func testEnqueueSyncSkippedWithoutEvents() async throws {
         let syncDidEnd = mockParra.notificationExpectation(
             name: Parra.syncDidEndNotification,
