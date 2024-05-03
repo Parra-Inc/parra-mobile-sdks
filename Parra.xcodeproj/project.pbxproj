@@ -1045,6 +1045,7 @@
 		00A413D82BE2ABDA003E4E56 /* ProfileWidgetBuilderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWidgetBuilderConfig.swift; sourceTree = "<group>"; };
 		00A60B982932D35E00B7168A /* ParraConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraConfiguration.swift; sourceTree = "<group>"; };
 		00A60B9A2932D37000B7168A /* ParraAuthType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAuthType.swift; sourceTree = "<group>"; };
+		00AB95AD2BE4735200B27091 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		00ABF1422B78516A00A054A2 /* ParraInternal+SyncTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+SyncTarget.swift"; sourceTree = "<group>"; };
 		00ABF1442B7851BF00A054A2 /* ParraInternal+SyncManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+SyncManagerDelegate.swift"; sourceTree = "<group>"; };
 		00ABF1462B7852D700A054A2 /* SyncManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManagerDelegate.swift; sourceTree = "<group>"; };
@@ -1369,6 +1370,7 @@
 		0009B7CB2BC080AF0074C179 /* Parra */ = {
 			isa = PBXGroup;
 			children = (
+				00AB95AD2BE4735200B27091 /* PrivacyInfo.xcprivacy */,
 				00E76D402B66E7F500B01DD8 /* Containers */,
 				0087CAA92A59E927007D72FA /* Core */,
 				003622102B5D9594009EFE53 /* Design System */,

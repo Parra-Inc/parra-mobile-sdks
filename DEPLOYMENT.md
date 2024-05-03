@@ -2,6 +2,7 @@
 
 ### Swift Package Manager
 
+0. If you make changes to the Package.swift file, run `swift package dump-package` to verify its syntax.
 1. Merge your changes into the `main` branch.
 2. Create a new tag on the `main` branch with the version number you want to release. For example, if you want to release version `1.0.0`, create a tag named `1.0.0`.
 3. Push the tag to the remote repository with `git push origin --tags`.
