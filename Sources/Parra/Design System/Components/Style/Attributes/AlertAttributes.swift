@@ -14,7 +14,7 @@ public struct AlertAttributes: ParraStyleAttributes {
     public init(
         title: LabelAttributes = .init(),
         subtitle: LabelAttributes = .init(),
-        icon: ImageAttributes = .init(),
+        icon: ParraAttributes.Image = .init(),
         dismiss: ImageButtonAttributes = .init(image: .init()),
         background: (any ShapeStyle)? = nil,
         cornerRadius: ParraCornerRadiusSize? = nil,
@@ -37,7 +37,7 @@ public struct AlertAttributes: ParraStyleAttributes {
 
     public let title: LabelAttributes
     public let subtitle: LabelAttributes
-    public let icon: ImageAttributes
+    public let icon: ParraAttributes.Image
     public let dismiss: ImageButtonAttributes
 
     public let background: (any ShapeStyle)?

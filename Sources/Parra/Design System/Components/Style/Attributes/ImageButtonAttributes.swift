@@ -12,9 +12,9 @@ public struct ImageButtonAttributes: ParraStyleAttributes {
     // MARK: - Lifecycle
 
     public init(
-        image: ImageAttributes,
-        imageDisabled: ImageAttributes? = nil,
-        imagePressed: ImageAttributes? = nil
+        image: ParraAttributes.Image,
+        imageDisabled: ParraAttributes.Image? = nil,
+        imagePressed: ParraAttributes.Image? = nil
     ) {
         self.image = image
         self.imageDisabled = imageDisabled
@@ -25,17 +25,17 @@ public struct ImageButtonAttributes: ParraStyleAttributes {
 
     /// Attributes to use for the button's image in the normal state
     /// (not disabled or selected).
-    public let image: ImageAttributes
+    public let image: ParraAttributes.Image
 
     /// Attributes to use for the button's image in cases where the button is in
     /// a disabled state. If omitted, defaults based on the
     /// ``ImageButtonAttributes/image`` will be applied.
-    public let imageDisabled: ImageAttributes?
+    public let imageDisabled: ParraAttributes.Image?
 
     /// Attributes to use for the button's image in cases where the button is in
     /// a pressed state. If omitted, defaults based on the
     /// ``ImageButtonAttributes/image`` will be applied.
-    public let imagePressed: ImageAttributes?
+    public let imagePressed: ParraAttributes.Image?
 
     // MARK: - Internal
 
@@ -109,20 +109,19 @@ public struct ImageButtonAttributes: ParraStyleAttributes {
         )
 
         return ImageButtonAttributes(
-            image: ImageAttributes(
-                background: backgroundColor,
-                cornerRadius: cornerRadius,
+            image: ParraAttributes.Image(
                 tint: tint,
-                opacity: 1.0,
-                padding: padding,
-                frame: .fixed(
-                    FixedFrameAttributes(
-                        width: size.width,
-                        height: size.height
-                    )
+                size: CGSize(
+                    width: size.width,
+                    height: size.height
                 ),
-                borderWidth: borderWidth,
-                borderColor: borderColor
+                border: ParraAttributes.Border(
+                    width: borderWidth,
+                    color: borderColor
+                ),
+                cornerRadius: cornerRadius,
+                padding: .custom(padding),
+                background: backgroundColor
             )
         )
     }

@@ -1,5 +1,5 @@
 //
-//  Badge+Variant.swift
+//  ParraBadgeVariant.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/12/24.
@@ -8,9 +8,7 @@
 
 import SwiftUI
 
-extension Badge {
-    enum Variant {
-        case outlined
-        case contained
-    }
+public enum ParraBadgeVariant {
+    case outlined
+    case contained
 }

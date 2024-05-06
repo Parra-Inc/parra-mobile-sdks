@@ -13,7 +13,7 @@ public struct ImageButtonConfig: Equatable {
 
     public init(
         style: ParraButtonType = .primary,
-        size: Size = .smallSquare,
+        size: ParraImageButtonSize = .smallSquare,
         variant: ParraButtonVariant = .plain
     ) {
         self.style = style
@@ -24,6 +24,6 @@ public struct ImageButtonConfig: Equatable {
     // MARK: - Public
 
     public let style: ParraButtonType
-    public let size: Size
+    public let size: ParraImageButtonSize
     public let variant: ParraButtonVariant
 }

@@ -20,7 +20,7 @@ public struct ChangelogWidgetStyle: WidgetStyle {
         releasePreviewDescriptions: LabelAttributes = .init(),
         releaseDetailTitle: LabelAttributes = .init(),
         releaseDetailSubtitle: LabelAttributes = .init(),
-        releaseDetailHeaderImage: ImageAttributes = .init(),
+        releaseDetailHeaderImage: ParraAttributes.Image = .init(),
         releaseDetailDescription: LabelAttributes = .init(),
         emptyState: EmptyStateAttributes = .init(),
         errorState: EmptyStateAttributes = .init()
@@ -51,7 +51,7 @@ public struct ChangelogWidgetStyle: WidgetStyle {
 
     public let releaseDetailTitle: LabelAttributes
     public let releaseDetailSubtitle: LabelAttributes
-    public let releaseDetailHeaderImage: ImageAttributes
+    public let releaseDetailHeaderImage: ParraAttributes.Image
     public let releaseDetailDescription: LabelAttributes
 
     public let emptyState: EmptyStateAttributes
@@ -67,7 +67,7 @@ public struct ChangelogWidgetStyle: WidgetStyle {
             contentPadding: .padding(vertical: 12, horizontal: 20),
             cornerRadius: .zero,
             padding: .padding(top: 16),
-            releaseDetailHeaderImage: ImageAttributes(
+            releaseDetailHeaderImage: ParraAttributes.Image(
                 cornerRadius: .sm
             )
         )

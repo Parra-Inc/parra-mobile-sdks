@@ -14,8 +14,8 @@ struct RoadmapTicketDisplayStatusBadge: View {
     init(
         displayStatus: TicketDisplayStatus,
         title: String,
-        size: Badge.Size = .sm,
-        variant: Badge.Variant = .outlined,
+        size: ParraBadgeSize = .sm,
+        variant: ParraBadgeVariant = .outlined,
         educationAlerts: Bool = false
     ) {
         self.displayStatus = displayStatus
@@ -29,17 +29,16 @@ struct RoadmapTicketDisplayStatusBadge: View {
 
     let displayStatus: TicketDisplayStatus
     let title: String
-    let size: Badge.Size
-    let variant: Badge.Variant
+    let size: ParraBadgeSize
+    let variant: ParraBadgeVariant
 
     var body: some View {
-        Badge(
+        componentFactory.buildBadge(
             size: size,
             variant: variant,
             text: title,
-            color: displayStatus.color.toSwatch(),
-            icon: .symbol("circle.fill"),
-            iconAttributes: nil
+            swatch: displayStatus.color.toSwatch(),
+            iconSymbol: "circle.fill"
         )
         .onTapGesture {
             isAlertPresented = true
@@ -61,6 +60,8 @@ struct RoadmapTicketDisplayStatusBadge: View {
 
     @State private var isAlertPresented = false
     private let educationAlerts: Bool
+
+    @EnvironmentObject private var componentFactory: ComponentFactory
 }
 
 #Preview {

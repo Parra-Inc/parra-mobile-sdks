@@ -34,7 +34,7 @@ struct RoadmapVoteView: View {
                 ),
                 content: ticketContent.voteButton,
                 localAttributes: ImageButtonAttributes(
-                    image: ImageAttributes(
+                    image: ParraAttributes.Image(
                         tint: voteHightlightColor.toParraColor()
                     )
                 ),

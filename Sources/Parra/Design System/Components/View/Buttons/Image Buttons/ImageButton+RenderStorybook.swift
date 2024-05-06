@@ -98,7 +98,7 @@ private func renderRowTitle(_ title: String) -> some View {
 }
 
 private func renderColumn(
-    size: ImageButtonConfig.Size
+    size: ParraImageButtonSize
 ) -> some View {
     return ScrollView {
         VStack(spacing: 24) {

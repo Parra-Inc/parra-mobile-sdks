@@ -126,4 +126,6 @@ public enum ParraAttributes {
         public let padding: ParraPaddingSize
         public let background: Color?
     }
+
+    public typealias Badge = ParraAttributes.Label
 }

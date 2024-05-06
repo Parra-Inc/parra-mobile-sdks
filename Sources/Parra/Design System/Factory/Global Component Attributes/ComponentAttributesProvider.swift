@@ -6,7 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 public protocol ComponentAttributesProvider {
     // MARK: Labels
@@ -15,6 +15,15 @@ public protocol ComponentAttributesProvider {
         for textStyle: ParraTextStyle,
         theme: ParraTheme
     ) -> ParraAttributes.Label
+
+    // MARK: Badges
+
+    func badgeAttributes(
+        for size: ParraBadgeSize,
+        variant: ParraBadgeVariant,
+        swatch: ParraColorSwatch?,
+        theme: ParraTheme
+    ) -> ParraAttributes.Badge
 
     // MARK: Buttons
 
@@ -38,4 +47,11 @@ public protocol ComponentAttributesProvider {
         with type: ParraButtonType,
         theme: ParraTheme
     ) -> ParraAttributes.ContainedButton
+
+    func imageButtonAttributes(
+        in state: ParraButtonState,
+        for size: ParraImageButtonSize,
+        with type: ParraButtonType,
+        theme: ParraTheme
+    ) -> ParraAttributes.ImageButton
 }

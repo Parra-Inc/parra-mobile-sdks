@@ -15,31 +15,5 @@ public class FeedbackCardWidgetConfig: ContainerConfig {
 
     // MARK: - Public
 
-    public static let `default` = FeedbackCardWidgetConfig(
-        //        backButton: ImageButtonConfig(
-//            style: .primary,
-//            size: .smallSquare
-//        ),
-//        forwardButton: ImageButtonConfig(
-//            style: .primary,
-//            size: .smallSquare
-//        ),
-//        titleLabel: LabelConfig(fontStyle: .headline),
-//        subtitleLabel: LabelConfig(fontStyle: .subheadline),
-//        booleanOptions: TextButtonConfig(
-//            style: .primary,
-//            size: .medium,
-//            isMaxWidth: true
-//        ),
-//        choiceOptions: TextButtonConfig(
-//            style: .primary,
-//            size: .medium,
-//            isMaxWidth: true
-//        ),
-//        checkboxOptions: TextButtonConfig(
-//            style: .primary,
-//            size: .medium,
-//            isMaxWidth: true
-//        )
-    )
+    public static let `default` = FeedbackCardWidgetConfig()
 }

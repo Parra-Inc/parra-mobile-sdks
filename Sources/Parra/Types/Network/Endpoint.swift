@@ -139,10 +139,8 @@ enum ParraEndpoint {
         }
     }
 
-    // MARK: - Private
-
     // All endpoints should use kebab case!
-    private var route: String {
+    var route: String {
         switch self {
         // Auth
         case .postAuthentication(let tenantId):

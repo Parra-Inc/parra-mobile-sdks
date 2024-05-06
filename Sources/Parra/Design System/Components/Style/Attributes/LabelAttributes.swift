@@ -21,7 +21,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         fontWidth: Font.Width? = nil,
         padding: EdgeInsets? = nil,
         layoutDirectionBehavior: LayoutDirectionBehavior? = nil,
-        iconAttributes: ImageAttributes? = nil
+        iconAttributes: ParraAttributes.Image? = nil
     ) {
         self.background = background
         self.cornerRadius = cornerRadius
@@ -48,7 +48,7 @@ public struct LabelAttributes: ParraStyleAttributes {
         fontWidth: Font.Width? = nil,
         padding: EdgeInsets? = nil,
         layoutDirectionBehavior: LayoutDirectionBehavior? = nil,
-        iconAttributes: ImageAttributes? = nil,
+        iconAttributes: ParraAttributes.Image? = nil,
         frame: FrameAttributes? = nil,
         borderWidth: CGFloat? = nil,
         borderColor: Color? = nil
@@ -79,7 +79,7 @@ public struct LabelAttributes: ParraStyleAttributes {
     public let fontWidth: Font.Width?
     public let padding: EdgeInsets?
     public let layoutDirectionBehavior: LayoutDirectionBehavior?
-    public let iconAttributes: ImageAttributes?
+    public let iconAttributes: ParraAttributes.Image?
 
     // MARK: - Internal
 

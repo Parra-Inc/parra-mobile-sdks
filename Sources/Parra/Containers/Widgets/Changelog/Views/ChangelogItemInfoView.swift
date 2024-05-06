@@ -33,14 +33,14 @@ struct ChangelogItemInfoView: View {
         let palette = themeObserver.theme.palette
 
         HStack(alignment: .center, spacing: 4) {
-            Badge(
+            componentFactory.buildBadge(
                 size: .md,
                 text: version.text,
-                color: palette.success,
-                icon: .symbol("circle.fill")
+                swatch: palette.success,
+                iconSymbol: "circle.fill"
             )
 
-            Badge(
+            componentFactory.buildBadge(
                 size: .md,
                 text: type.text
             )
