@@ -13,12 +13,10 @@ struct ChangelogWidget: Container {
 
     init(
         config: ChangelogWidgetConfig,
-        style: ChangelogWidgetStyle,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self.style = style
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -28,15 +26,18 @@ struct ChangelogWidget: Container {
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ChangelogWidgetConfig
-    let style: ChangelogWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
-    var headerSpace: CGFloat {
-        return style.contentPadding.top
-    }
-
     var body: some View {
+        let defaultWidgetAttributes = ParraAttributes.Widget.default(
+            with: themeObserver.theme
+        )
+
+        let contentPadding = themeObserver.theme.padding.value(
+            for: defaultWidgetAttributes.contentPadding
+        )
+
         VStack(spacing: 0) {
             VStack(alignment: .leading) {
                 componentFactory.buildLabel(
@@ -45,8 +46,8 @@ struct ChangelogWidget: Container {
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding([.horizontal, .top], from: style.contentPadding)
-            .padding(.bottom, headerSpace)
+            .padding([.horizontal, .top], from: contentPadding)
+            .padding(.bottom, headerSpace(with: contentPadding))
             .border(
                 width: 1,
                 edges: .bottom,
@@ -55,7 +56,7 @@ struct ChangelogWidget: Container {
                     .secondaryBackground : .clear
             )
 
-            list
+            list(with: defaultWidgetAttributes)
                 .environment(config)
                 .environmentObject(contentObserver)
                 .environmentObject(componentFactory)
@@ -73,18 +74,29 @@ struct ChangelogWidget: Container {
 
                     ReleaseWidget(
                         config: config,
-                        style: style,
                         componentFactory: componentFactory,
                         contentObserver: contentObserver
                     )
                     .environmentObject(navigationState)
                 }
         }
-        .padding([.horizontal, .bottom], from: style.padding)
-        .applyBackground(style.background)
+        .applyPadding(
+            size: defaultWidgetAttributes.padding,
+            on: [.horizontal, .bottom],
+            from: themeObserver.theme
+        )
+        .applyBackground(defaultWidgetAttributes.background)
     }
 
-    var items: some View {
+    func headerSpace(
+        with contentPadding: EdgeInsets
+    ) -> CGFloat {
+        return contentPadding.top
+    }
+
+    func items(
+        with attributes: ParraAttributes.Widget
+    ) -> some View {
         LazyVStack(alignment: .leading, spacing: 12) {
             let items = contentObserver.releasePaginator.items
 
@@ -96,8 +108,7 @@ struct ChangelogWidget: Container {
                     value: release,
                     label: {
                         ChangelogListItem(
-                            content: release,
-                            style: style
+                            content: release
                         )
                     }
                 )
@@ -117,7 +128,10 @@ struct ChangelogWidget: Container {
                     ProgressView()
                 }
                 .frame(maxWidth: .infinity)
-                .padding(style.contentPadding)
+                .applyPadding(
+                    size: attributes.contentPadding,
+                    from: themeObserver.theme
+                )
             }
         }
         .redacted(
@@ -134,9 +148,16 @@ struct ChangelogWidget: Container {
         }
     }
 
-    var list: some View {
+    @ViewBuilder
+    func list(
+        with attributes: ParraAttributes.Widget
+    ) -> some View {
+        let contentPadding = themeObserver.theme.padding.value(
+            for: attributes.contentPadding
+        )
+
         ScrollView {
-            items
+            items(with: attributes)
         }
         // A limited number of placeholder cells will be generated.
         // Don't allow scrolling past them while loading.
@@ -145,26 +166,24 @@ struct ChangelogWidget: Container {
         )
         .contentMargins(
             .top,
-            headerSpace,
+            headerSpace(with: contentPadding),
             for: .scrollContent
         )
         .contentMargins(
             [.leading, .trailing, .bottom],
-            style.contentPadding,
+            contentPadding,
             for: .scrollContent
         )
         .emptyPlaceholder(contentObserver.releasePaginator.items) {
             componentFactory.buildEmptyState(
                 config: EmptyStateConfig.default,
-                content: contentObserver.content.emptyStateView,
-                localAttributes: style.emptyState
+                content: contentObserver.content.emptyStateView
             )
         }
         .errorPlaceholder(contentObserver.releasePaginator.error) {
             componentFactory.buildEmptyState(
                 config: EmptyStateConfig.errorDefault,
-                content: contentObserver.content.errorStateView,
-                localAttributes: style.errorState
+                content: contentObserver.content.errorStateView
             )
         }
         .refreshable {
@@ -185,7 +204,6 @@ struct ChangelogWidget: Container {
     ParraContainerPreview<ChangelogWidget> { parra, componentFactory, _ in
         ChangelogWidget(
             config: .default,
-            style: .default(with: .default),
             componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: .init(

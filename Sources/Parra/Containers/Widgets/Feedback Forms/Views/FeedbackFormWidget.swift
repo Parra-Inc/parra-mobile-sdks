@@ -13,12 +13,10 @@ struct FeedbackFormWidget: Container {
 
     init(
         config: FeedbackFormWidgetConfig,
-        style: FeedbackFormWidgetStyle,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self.style = style
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -28,11 +26,18 @@ struct FeedbackFormWidget: Container {
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: FeedbackFormWidgetConfig
-    let style: FeedbackFormWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
+        let defaultWidgetAttributes = ParraAttributes.Widget.default(
+            with: themeObserver.theme
+        )
+
+        let contentPadding = themeObserver.theme.padding.value(
+            for: defaultWidgetAttributes.contentPadding
+        )
+
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -43,15 +48,14 @@ struct FeedbackFormWidget: Container {
             }
             .contentMargins(
                 .all,
-                style.contentPadding,
+                contentPadding,
                 for: .scrollContent
             )
             .scrollDismissesKeyboard(.interactively)
 
             WidgetFooter(
                 primaryActionBuilder: {
-                    componentFactory.buildTextButton(
-                        variant: .contained,
+                    componentFactory.buildContainedButton(
                         config: TextButtonConfig(
                             style: .primary,
                             size: .large,
@@ -65,11 +69,13 @@ struct FeedbackFormWidget: Container {
                     .disabled(!contentObserver.content.canSubmit)
                 },
                 secondaryActionBuilder: nil,
-                contentPadding: style.contentPadding
+                contentPadding: contentPadding
             )
         }
-        .applyBackground(style.background)
-        .padding(style.padding)
+        .applyWidgetAttributes(
+            attributes: defaultWidgetAttributes,
+            using: themeObserver.theme
+        )
         .environmentObject(contentObserver)
         .environmentObject(componentFactory)
     }
@@ -97,7 +103,7 @@ struct FeedbackFormWidget: Container {
 
                 switch field.data {
                 case .feedbackFormSelectFieldData:
-                    fatalError()
+                    EmptyView()
 //                    let content = MenuContent(
 //                        title: field.title,
 //                        placeholder: data.placeholder,
@@ -178,7 +184,6 @@ struct FeedbackFormWidget: Container {
     ParraContainerPreview<FeedbackFormWidget> { _, componentFactory, _ in
         FeedbackFormWidget(
             config: .default,
-            style: .default(with: .default),
             componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: .init(

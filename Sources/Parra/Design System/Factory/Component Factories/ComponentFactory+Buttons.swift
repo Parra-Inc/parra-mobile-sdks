@@ -127,17 +127,6 @@ extension ComponentFactory {
     }
 
     @ViewBuilder
-    func buildTextButton(
-        variant: ParraButtonVariant,
-        config: TextButtonConfig,
-        content: TextButtonContent,
-        localAttributes: TextButtonAttributes? = nil,
-        onPress: @escaping () -> Void
-    ) -> some View {
-        EmptyView()
-    }
-
-    @ViewBuilder
     func buildImageButton(
         variant: ParraButtonVariant,
         config: ImageButtonConfig,

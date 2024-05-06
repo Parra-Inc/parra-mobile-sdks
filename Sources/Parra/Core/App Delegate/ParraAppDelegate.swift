@@ -77,10 +77,11 @@ open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
 
     static var orientationLock = UIInterfaceOrientationMask.all {
         didSet {
-            let isSingleOrientation = orientationLock == .portrait
-                || orientationLock == .landscapeLeft
-                || orientationLock == .landscapeRight
-                || orientationLock == .portraitUpsideDown
+            let isPortrait = orientationLock == .portrait || orientationLock ==
+                .portraitUpsideDown
+            let isLandscape = orientationLock == .landscapeLeft ||
+                orientationLock == .landscapeRight
+            let isSingleOrientation = isPortrait || isLandscape
 
             if isSingleOrientation, let windowScene =
                 UIApplication.shared.connectedScenes.first as? UIWindowScene

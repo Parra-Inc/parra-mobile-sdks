@@ -51,10 +51,7 @@ struct FeedbackCardView: View {
     ParraCardViewPreview {
         FeedbackCardView(
             cardItem: ParraCardItemFixtures.boolCard,
-            contentPadding: FeedbackCardWidgetStyle.default(
-                with: .default
-            )
-            .contentPadding
+            contentPadding: .zero
         )
     }
 }

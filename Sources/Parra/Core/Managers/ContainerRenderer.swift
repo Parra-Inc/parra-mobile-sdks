@@ -50,13 +50,8 @@ class ContainerRenderer {
 
         contentTransformer?(contentObserver)
 
-        let style = C.Style.default(
-            with: theme
-        )
-
         return C(
             config: config,
-            style: style,
             componentFactory: componentFactory,
             contentObserver: contentObserver
         )

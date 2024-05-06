@@ -13,12 +13,10 @@ struct RoadmapWidget: Container {
 
     init(
         config: RoadmapWidgetConfig,
-        style: RoadmapWidgetStyle,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self.style = style
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -28,7 +26,6 @@ struct RoadmapWidget: Container {
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: RoadmapWidgetConfig
-    let style: RoadmapWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
@@ -39,8 +36,7 @@ struct RoadmapWidget: Container {
     var footer: some View {
         WidgetFooter {
             if contentObserver.canAddRequests {
-                componentFactory.buildTextButton(
-                    variant: .contained,
+                componentFactory.buildContainedButton(
                     config: TextButtonConfig(
                         style: .primary,
                         size: .large,
@@ -80,84 +76,24 @@ struct RoadmapWidget: Container {
         }
     }
 
-    var scrollView: some View {
-        ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 12) {
-                    ScrollToTopView(
-                        reader: scrollViewProxy,
-                        animateChanges: false,
-                        scrollOnChange: $contentObserver.selectedTab
-                    )
-
-                    cells
-
-                    if contentObserver.ticketPaginator.isLoading {
-                        VStack(alignment: .center) {
-                            ProgressView()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(style.contentPadding)
-                    }
-                }
-                .redacted(
-                    when: contentObserver.ticketPaginator
-                        .isShowingPlaceholders
-                )
-                .background(GeometryReader {
-                    Color.clear.preference(
-                        key: ViewOffsetKey.self,
-                        value: -$0.frame(in: .named("scroll")).origin.y
-                    )
-                })
-                .onPreferenceChange(ViewOffsetKey.self) { offset in
-                    showNavigationDivider = offset > 0.0
-                }
-            }
-            // A limited number of placeholder cells will be generated.
-            // Don't allow scrolling past them while loading.
-            .scrollDisabled(
-                contentObserver.ticketPaginator.isShowingPlaceholders
-            )
-            .contentMargins(
-                .top,
-                headerSpace / 2,
-                for: .scrollContent
-            )
-            .contentMargins(
-                [.leading, .trailing, .bottom],
-                style.contentPadding,
-                for: .scrollContent
-            )
-            .scrollIndicatorsFlash(trigger: contentObserver.selectedTab)
-            .emptyPlaceholder(items) {
-                componentFactory.buildEmptyState(
-                    config: .default,
-                    content: contentObserver.content.emptyStateView
-                )
-            }
-            .errorPlaceholder(contentObserver.ticketPaginator.error) {
-                componentFactory.buildEmptyState(
-                    config: .errorDefault,
-                    content: contentObserver.content.errorStateView
-                )
-            }
-            .refreshable {
-                contentObserver.ticketPaginator.refresh()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .coordinateSpace(name: "scroll")
-        }
-    }
-
     var body: some View {
+        let defaultWidgetAttributes = ParraAttributes.Widget.default(
+            with: themeObserver.theme
+        )
+
+        let contentPadding = themeObserver.theme.padding.value(
+            for: defaultWidgetAttributes.contentPadding
+        )
+
         VStack(spacing: 0) {
-            tabBar
-            scrollView
+            tabBar(with: contentPadding)
+            scrollView(with: contentPadding)
             footer
         }
-        .applyBackground(style.background)
-        .padding(style.padding)
+        .applyWidgetAttributes(
+            attributes: defaultWidgetAttributes,
+            using: themeObserver.theme
+        )
         .environment(config)
         .environmentObject(contentObserver)
         .environmentObject(componentFactory)
@@ -189,11 +125,87 @@ struct RoadmapWidget: Container {
         .renderToast(toast: $alertManager.currentToast)
     }
 
-    var headerSpace: CGFloat {
-        return style.contentPadding.top
+    func scrollView(
+        with contentPadding: EdgeInsets
+    ) -> some View {
+        ScrollViewReader { scrollViewProxy in
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 12) {
+                    ScrollToTopView(
+                        reader: scrollViewProxy,
+                        animateChanges: false,
+                        scrollOnChange: $contentObserver.selectedTab
+                    )
+
+                    cells
+
+                    if contentObserver.ticketPaginator.isLoading {
+                        VStack(alignment: .center) {
+                            ProgressView()
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(contentPadding)
+                    }
+                }
+                .redacted(
+                    when: contentObserver.ticketPaginator
+                        .isShowingPlaceholders
+                )
+                .background(GeometryReader {
+                    Color.clear.preference(
+                        key: ViewOffsetKey.self,
+                        value: -$0.frame(in: .named("scroll")).origin.y
+                    )
+                })
+                .onPreferenceChange(ViewOffsetKey.self) { offset in
+                    showNavigationDivider = offset > 0.0
+                }
+            }
+            // A limited number of placeholder cells will be generated.
+            // Don't allow scrolling past them while loading.
+            .scrollDisabled(
+                contentObserver.ticketPaginator.isShowingPlaceholders
+            )
+            .contentMargins(
+                .top,
+                headerSpace(from: contentPadding) / 2,
+                for: .scrollContent
+            )
+            .contentMargins(
+                [.leading, .trailing, .bottom],
+                contentPadding,
+                for: .scrollContent
+            )
+            .scrollIndicatorsFlash(trigger: contentObserver.selectedTab)
+            .emptyPlaceholder(items) {
+                componentFactory.buildEmptyState(
+                    config: .default,
+                    content: contentObserver.content.emptyStateView
+                )
+            }
+            .errorPlaceholder(contentObserver.ticketPaginator.error) {
+                componentFactory.buildEmptyState(
+                    config: .errorDefault,
+                    content: contentObserver.content.errorStateView
+                )
+            }
+            .refreshable {
+                contentObserver.ticketPaginator.refresh()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .coordinateSpace(name: "scroll")
+        }
     }
 
-    var tabBar: some View {
+    func headerSpace(
+        from contentPadding: EdgeInsets
+    ) -> CGFloat {
+        return contentPadding.top
+    }
+
+    func tabBar(
+        with contentPadding: EdgeInsets
+    ) -> some View {
         VStack(alignment: .leading, spacing: 20) {
             componentFactory.buildLabel(
                 fontStyle: .title,
@@ -220,8 +232,10 @@ struct RoadmapWidget: Container {
                 .lineLimit(5)
             }
         }
-        .padding([.horizontal, .top], from: style.contentPadding)
-        .padding(.bottom, headerSpace)
+        .padding([.horizontal, .top], from: contentPadding)
+        .padding(.bottom, headerSpace(
+            from: contentPadding
+        ))
         .border(
             width: 1,
             edges: .bottom,
@@ -241,7 +255,6 @@ struct RoadmapWidget: Container {
     ParraContainerPreview<RoadmapWidget> { parra, componentFactory, config in
         RoadmapWidget(
             config: .default,
-            style: .default(with: .default),
             componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: RoadmapWidget.ContentObserver.InitialParams(

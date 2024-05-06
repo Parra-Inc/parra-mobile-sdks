@@ -32,22 +32,3 @@ public class FeedbackFormWidgetConfig: ContainerConfig {
     /// The maximum number of characters allowed in a text field input.
     public let maxTextFieldCharacters: Int
 }
-
-// public static let `default` = FeedbackFormWidgetConfig(
-//    title: LabelConfig(fontStyle: .title),
-//    description: LabelConfig(fontStyle: .subheadline),
-//    textFields: TextEditorConfig(
-//        title: LabelConfig(fontStyle: .subheadline),
-//        helper: LabelConfig(fontStyle: .caption),
-//        maxCharacters: 30
-//    ),
-//    inputFields: TextInputConfig(
-//        title: LabelConfig(fontStyle: .subheadline),
-//        helper: LabelConfig(fontStyle: .caption)
-//    ),
-//    submitButton: TextButtonConfig(
-//        style: .primary,
-//        size: .large,
-//        isMaxWidth: true
-//    )
-// )

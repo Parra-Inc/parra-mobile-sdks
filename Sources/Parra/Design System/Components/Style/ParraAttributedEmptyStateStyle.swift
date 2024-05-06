@@ -39,28 +39,6 @@ struct ParraAttributedEmptyStateStyle: ParraAttributedStyle {
         }
 
         self.iconAttributes = attributes.icon
-
-        if let primaryActionContent = content.primaryAction {
-            self.primaryActionStyle = ParraAttributedTextButtonStyle(
-                config: EmptyStateConfig.defaultPrimaryAction,
-                content: primaryActionContent,
-                attributes: attributes.primaryAction,
-                theme: theme
-            )
-        } else {
-            self.primaryActionStyle = nil
-        }
-
-        if let secondaryActionContent = content.secondaryAction {
-            self.secondaryActionStyle = ParraAttributedTextButtonStyle(
-                config: EmptyStateConfig.defaultSecondaryAction,
-                content: secondaryActionContent,
-                attributes: attributes.secondaryAction,
-                theme: theme
-            )
-        } else {
-            self.secondaryActionStyle = nil
-        }
     }
 
     // MARK: - Internal
@@ -73,6 +51,4 @@ struct ParraAttributedEmptyStateStyle: ParraAttributedStyle {
     let titleStyle: ParraAttributedLabelStyle
     let subtitleStyle: ParraAttributedLabelStyle?
     let iconAttributes: ParraAttributes.Image?
-    let primaryActionStyle: ParraAttributedTextButtonStyle?
-    let secondaryActionStyle: ParraAttributedTextButtonStyle?
 }

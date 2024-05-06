@@ -60,8 +60,7 @@ struct AuthenticationEmailPasswordView: View {
                 contentObserver.loginTapped()
             }
 
-            componentFactory.buildTextButton(
-                variant: .contained,
+            componentFactory.buildContainedButton(
                 config: TextButtonConfig(
                     style: .primary,
                     size: .large,
@@ -82,8 +81,7 @@ struct AuthenticationEmailPasswordView: View {
 
             Spacer()
 
-            componentFactory.buildTextButton(
-                variant: .plain,
+            componentFactory.buildPlainButton(
                 config: TextButtonConfig(
                     style: .primary,
                     size: .small,

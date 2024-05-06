@@ -13,12 +13,10 @@ struct ProfileWidget: Container {
 
     init(
         config: ProfileWidgetConfig,
-        style: ProfileWidgetStyle,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self.style = style
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -28,7 +26,6 @@ struct ProfileWidget: Container {
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ProfileWidgetConfig
-    let style: ProfileWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
@@ -69,7 +66,6 @@ struct ProfileWidget: Container {
     ParraContainerPreview<ProfileWidget> { parra, factory, config in
         ProfileWidget(
             config: .default,
-            style: .default(with: .default),
             componentFactory: factory,
             contentObserver: .init(
                 initialParams: .init(

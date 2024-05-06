@@ -12,7 +12,6 @@ struct ChangelogListItem: View {
     // MARK: - Internal
 
     let content: AppReleaseStubContent
-    let style: ChangelogWidgetStyle
 
     var body: some View {
         let palette = themeObserver.theme.palette

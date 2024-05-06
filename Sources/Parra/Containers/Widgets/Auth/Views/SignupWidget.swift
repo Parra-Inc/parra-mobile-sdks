@@ -18,12 +18,10 @@ struct SignupWidget: Container {
 
     init(
         config: ParraAuthConfig,
-        style: AuthenticationWidgetStyle,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self.style = style
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -31,16 +29,10 @@ struct SignupWidget: Container {
     // MARK: - Public
 
     public var body: some View {
-        VStack {
-            signupContent
-                .padding(style.contentPadding)
-                .applyCornerRadii(
-                    size: style.cornerRadius,
-                    from: themeObserver.theme
-                )
-        }
-        .applyBackground(style.background)
-        .padding(style.padding)
+        signupContent
+            .applyDefaultWidgetAttributes(
+                using: themeObserver.theme
+            )
     }
 
     // MARK: - Internal
@@ -52,7 +44,6 @@ struct SignupWidget: Container {
 
     let componentFactory: ComponentFactory
     let config: ParraAuthConfig
-    let style: AuthenticationWidgetStyle
 
     @StateObject var contentObserver: AuthenticationWidget.ContentObserver
     @EnvironmentObject var themeObserver: ParraThemeObserver
@@ -92,8 +83,7 @@ struct SignupWidget: Container {
 //                contentObserver.signupTapped()
 //            }
 
-            componentFactory.buildTextButton(
-                variant: .contained,
+            componentFactory.buildContainedButton(
                 config: TextButtonConfig(
                     style: .primary,
                     size: .large,
@@ -115,7 +105,6 @@ struct SignupWidget: Container {
     ParraContainerPreview<SignupWidget> { parra, factory, config in
         SignupWidget(
             config: config,
-            style: .default(with: .default),
             componentFactory: factory,
             contentObserver: .init(
                 initialParams: .init(

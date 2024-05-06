@@ -27,15 +27,13 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
             isSelected: isSelected
         )
 
-        componentFactory.buildTextButton(
-            variant: .outlined,
+        componentFactory.buildOutlinedButton(
             config: TextButtonConfig(
                 style: .primary,
                 size: .medium,
                 isMaxWidth: true
             ),
             content: content,
-            localAttributes: attributes,
             onPress: {
                 if isSelected {
                     contentObserver.update(

@@ -13,13 +13,11 @@ struct FeedbackCardWidget: Container {
 
     init(
         config: FeedbackCardWidgetConfig,
-        style: FeedbackCardWidgetStyle,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.componentFactory = componentFactory
         self.config = config
-        self.style = style
 
         _contentObserver = StateObject(
             wrappedValue: contentObserver
@@ -33,19 +31,26 @@ struct FeedbackCardWidget: Container {
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: FeedbackCardWidgetConfig
-    let style: FeedbackCardWidgetStyle
 
     @Environment(\.parra) var parra
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
+        let defaultWidgetAttributes = ParraAttributes.Widget.default(
+            with: themeObserver.theme
+        )
+
+        let contentPadding = themeObserver.theme.padding.value(
+            for: defaultWidgetAttributes.contentPadding
+        )
+
         ScrollViewReader { scrollViewProxy in
             VStack(spacing: 0) {
                 // Extra wrapper used to support configuration of padding inside and
                 // outside of the content view
                 VStack(spacing: 10) {
                     navigation
-                        .padding(.horizontal, from: style.contentPadding)
+                        .padding(.horizontal, from: contentPadding)
 
                     // Leading and trailing content padding isn't applied to cards
                     // it will be grabbed later and applied to their content to keep
@@ -66,18 +71,21 @@ struct FeedbackCardWidget: Container {
                         }
                 }
                 .clipped()
-                .padding(.vertical, from: style.contentPadding)
-                .applyBackground(style.background)
-                .applyCornerRadii(
-                    size: style.cornerRadius,
-                    from: themeObserver.theme
-                )
+                .padding(.vertical, from: contentPadding)
+//                .applyBackground(style.background)
+//                .applyCornerRadii(
+//                    size: style.cornerRadius,
+//                    from: themeObserver.theme
+//                )
             }
             .frame(
                 maxWidth: .infinity,
                 maxHeight: FeedbackCardWidget.height
             )
-            .padding(style.padding)
+            .applyWidgetAttributes(
+                attributes: defaultWidgetAttributes,
+                using: themeObserver.theme
+            )
         }
         .onAppear {
             contentObserver.startObservingCardChangeNotifications()
@@ -93,6 +101,14 @@ struct FeedbackCardWidget: Container {
     // MARK: - Private
 
     @ViewBuilder private var content: some View {
+        let defaultWidgetAttributes = ParraAttributes.Widget.default(
+            with: themeObserver.theme
+        )
+
+        let contentPadding = themeObserver.theme.padding.value(
+            for: defaultWidgetAttributes.contentPadding
+        )
+
         GeometryReader { geometry in
             ScrollView(.horizontal) {
                 LazyHStack(alignment: .top, spacing: 0) {
@@ -102,7 +118,7 @@ struct FeedbackCardWidget: Container {
                     ) { index in
                         FeedbackCardView(
                             cardItem: contentObserver.cards[index],
-                            contentPadding: style.contentPadding
+                            contentPadding: contentPadding
                         )
                         .frame(
                             width: geometry.size.width,
@@ -131,7 +147,6 @@ struct FeedbackCardWidget: Container {
             ParraContainerPreview<FeedbackCardWidget> { parra, componentFactory, _ in
                 FeedbackCardWidget(
                     config: .default,
-                    style: .default(with: componentFactory.theme),
                     componentFactory: componentFactory,
                     contentObserver: .init(
                         initialParams: .init(

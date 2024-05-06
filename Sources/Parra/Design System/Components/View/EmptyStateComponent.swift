@@ -69,14 +69,11 @@ struct EmptyStateComponent: EmptyStateComponentType {
 
                 VStack(spacing: 0) {
                     withContent(
-                        content: content.primaryAction,
-                        style: style.primaryActionStyle
-                    ) { content, style in
-                        componentFactory.buildTextButton(
-                            variant: .contained,
+                        content: content.primaryAction
+                    ) { content in
+                        componentFactory.buildContainedButton(
                             config: config.primaryAction,
                             content: content,
-                            localAttributes: style.attributes,
                             onPress: {
                                 onPrimaryAction?()
                             }
@@ -84,14 +81,11 @@ struct EmptyStateComponent: EmptyStateComponentType {
                     }
 
                     withContent(
-                        content: content.secondaryAction,
-                        style: style.secondaryActionStyle
-                    ) { content, style in
-                        componentFactory.buildTextButton(
-                            variant: .plain,
+                        content: content.secondaryAction
+                    ) { content in
+                        componentFactory.buildPlainButton(
                             config: config.secondaryAction,
                             content: content,
-                            localAttributes: style.attributes,
                             onPress: {
                                 onSecondaryAction?()
                             }

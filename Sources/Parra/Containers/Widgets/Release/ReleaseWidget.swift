@@ -50,12 +50,10 @@ struct ReleaseWidget: Container {
 
     init(
         config: ChangelogWidgetConfig,
-        style: ChangelogWidgetStyle,
         componentFactory: ComponentFactory,
         contentObserver: ReleaseContentObserver
     ) {
         self.config = config
-        self.style = style
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
 
@@ -89,7 +87,6 @@ struct ReleaseWidget: Container {
 
     @StateObject var contentObserver: ReleaseContentObserver
     let config: ChangelogWidgetConfig
-    let style: ChangelogWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
@@ -134,8 +131,7 @@ struct ReleaseWidget: Container {
             withContent(
                 content: contentObserver.content.otherReleasesButton
             ) { content in
-                componentFactory.buildTextButton(
-                    variant: .contained,
+                componentFactory.buildContainedButton(
                     config: TextButtonConfig(
                         style: .primary,
                         size: .large,
@@ -150,14 +146,58 @@ struct ReleaseWidget: Container {
         }
     }
 
-    @ViewBuilder var primaryContent: some View {
+    var body: some View {
+        let defaultWidgetAttributes = ParraAttributes.Widget.default(
+            with: themeObserver.theme
+        )
+
+        let contentPadding = themeObserver.theme.padding.value(
+            for: defaultWidgetAttributes.contentPadding
+        )
+
+        VStack(spacing: 0) {
+            primaryContent(with: contentPadding)
+
+            footer
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .applyWidgetAttributes(
+            attributes: defaultWidgetAttributes,
+            using: themeObserver.theme
+        )
+        .task {
+            await contentObserver.loadSections()
+        }
+        .environment(config)
+        .environmentObject(contentObserver)
+        .environmentObject(componentFactory)
+        // required to prevent navigation bar from changing colors when scrolled
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .navigationDestination(for: String.self) { destination in
+            if destination == "changelog" {
+                ChangelogWidget(
+                    config: config,
+                    componentFactory: componentFactory,
+                    contentObserver: changelogContentObserver
+                )
+                .padding(.top, 40)
+                .edgesIgnoringSafeArea([.top])
+                .environmentObject(navigationState)
+            }
+        }
+    }
+
+    @ViewBuilder
+    func primaryContent(
+        with contentPadding: EdgeInsets
+    ) -> some View {
         let content = contentObserver.content
 
         GeometryReader { geometry in
             let width = Double.maximum(
                 geometry.size.width
-                    - style.contentPadding.leading
-                    - style.contentPadding.trailing,
+                    - contentPadding.leading
+                    - contentPadding.trailing,
                 0.0
             )
 
@@ -201,40 +241,9 @@ struct ReleaseWidget: Container {
         .clipped()
         .contentMargins(
             [.horizontal, .bottom],
-            style.contentPadding,
+            contentPadding,
             for: .scrollContent
         )
-    }
-
-    var body: some View {
-        VStack(spacing: 0) {
-            primaryContent
-
-            footer
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .applyBackground(style.background)
-        .task {
-            await contentObserver.loadSections()
-        }
-        .environment(config)
-        .environmentObject(contentObserver)
-        .environmentObject(componentFactory)
-        // required to prevent navigation bar from changing colors when scrolled
-        .toolbarBackground(.hidden, for: .navigationBar)
-        .navigationDestination(for: String.self) { destination in
-            if destination == "changelog" {
-                ChangelogWidget(
-                    config: config,
-                    style: style,
-                    componentFactory: componentFactory,
-                    contentObserver: changelogContentObserver
-                )
-                .padding(.top, 40)
-                .edgesIgnoringSafeArea([.top])
-                .environmentObject(navigationState)
-            }
-        }
     }
 
     // MARK: - Private

@@ -12,8 +12,7 @@ extension ComponentFactory {
     @ViewBuilder
     func buildEmptyState(
         config: EmptyStateConfig,
-        content: EmptyStateContent,
-        localAttributes: EmptyStateAttributes? = nil
+        content: EmptyStateContent
     ) -> some View {
         EmptyView()
 //        let mergedAttributes = EmptyStateComponent.applyStandardCustomizations(

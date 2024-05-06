@@ -14,12 +14,10 @@ struct AuthenticationWidget: Container {
 
     init(
         config: ParraAuthConfig,
-        style: AuthenticationWidgetStyle,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self.style = style
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -38,7 +36,6 @@ struct AuthenticationWidget: Container {
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ParraAuthConfig
-    let style: AuthenticationWidgetStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
@@ -46,61 +43,52 @@ struct AuthenticationWidget: Container {
         let content = contentObserver.content
 
         VStack(spacing: 0) {
-            Spacer()
-
-            VStack(spacing: 0) {
-                HStack(spacing: 0) {
-                    withContent(content: content.icon) { content in
-                        ImageComponent(
-                            content: content,
-                            attributes: ParraAttributes.Image(
-                                size: CGSize(width: 60.0, height: 60.0)
-                            )
+            HStack(spacing: 0) {
+                withContent(content: content.icon) { content in
+                    ImageComponent(
+                        content: content,
+                        attributes: ParraAttributes.Image(
+                            size: CGSize(width: 60.0, height: 60.0)
                         )
-                    }
-
-                    componentFactory.buildLabel(
-                        fontStyle: .largeTitle,
-                        content: content.title
                     )
-                    .padding(.leading, content.icon == nil ? 0 : 6)
                 }
-                .padding(
-                    .padding(
-                        bottom: content.subtitle == nil ? 20 : 0
-                    )
+
+                componentFactory.buildLabel(
+                    fontStyle: .largeTitle,
+                    content: content.title
                 )
-
-                withContent(content: content.subtitle) { content in
-                    componentFactory.buildLabel(
-                        fontStyle: .subheadline,
-                        content: content
-                    )
-                }
-
-                if let emailContent = contentObserver.content.emailContent {
-                    AuthenticationEmailPasswordView(
-                        config: config,
-                        content: emailContent,
-                        contentObserver: contentObserver,
-                        componentFactory: componentFactory
-                    )
-                    .environmentObject(navigationState)
-                }
+                .padding(.leading, content.icon == nil ? 0 : 6)
             }
-            .padding(style.contentPadding)
-            .applyCornerRadii(
-                size: style.cornerRadius,
-                from: themeObserver.theme
+            .padding(
+                .padding(
+                    bottom: content.subtitle == nil ? 20 : 0
+                )
             )
+
+            withContent(content: content.subtitle) { content in
+                componentFactory.buildLabel(
+                    fontStyle: .subheadline,
+                    content: content
+                )
+            }
+
+            if let emailContent = contentObserver.content.emailContent {
+                AuthenticationEmailPasswordView(
+                    config: config,
+                    content: emailContent,
+                    contentObserver: contentObserver,
+                    componentFactory: componentFactory
+                )
+                .environmentObject(navigationState)
+            }
         }
-        .applyBackground(style.background)
-        .padding(style.padding)
+        .applyDefaultWidgetAttributes(
+            using: themeObserver.theme
+        )
         .navigationDestination(for: String.self) { destination in
             if destination == "signup" {
                 SignupWidget(
                     config: config,
-                    style: style,
                     componentFactory: componentFactory,
                     contentObserver: contentObserver
                 )
@@ -121,7 +109,6 @@ struct AuthenticationWidget: Container {
     ParraContainerPreview<AuthenticationWidget> { parra, factory, _ in
         AuthenticationWidget(
             config: .default,
-            style: .default(with: .default),
             componentFactory: factory,
             contentObserver: AuthenticationWidget.ContentObserver(
                 initialParams: .init(

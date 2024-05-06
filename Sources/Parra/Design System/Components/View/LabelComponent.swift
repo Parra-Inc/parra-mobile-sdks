@@ -30,6 +30,7 @@ struct LabelComponent: LabelComponentType {
         Label(
             title: {
                 Text(content.text)
+                    .applyFrame(attributes.frame)
                     .applyTextAttributes(
                         attributes.text,
                         using: themeObserver.theme

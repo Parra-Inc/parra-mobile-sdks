@@ -10,6 +10,40 @@ import SwiftUI
 
 extension View {
     @ViewBuilder
+    func applyDefaultWidgetAttributes(
+        using theme: ParraTheme
+    ) -> some View {
+        let attributes = ParraAttributes.Widget.default(
+            with: theme
+        )
+
+        applyWidgetAttributes(
+            attributes: attributes,
+            using: theme
+        )
+    }
+
+    @ViewBuilder
+    func applyWidgetAttributes(
+        attributes: ParraAttributes.Widget,
+        using theme: ParraTheme
+    ) -> some View {
+        applyPadding(
+            size: attributes.contentPadding,
+            from: theme
+        )
+        .applyCornerRadii(
+            size: attributes.cornerRadius,
+            from: theme
+        )
+        .background(attributes.background ?? .clear)
+        .applyPadding(
+            size: attributes.padding,
+            from: theme
+        )
+    }
+
+    @ViewBuilder
     func applyImageAttributes(
         _ attributes: ParraAttributes.Image,
         using theme: ParraTheme
@@ -55,7 +89,9 @@ extension View {
             .fontWidth(attributes.width)
             .fontWeight(attributes.weight)
             .fontDesign(attributes.design)
-            .foregroundColor(attributes.color)
+            .foregroundColor(
+                attributes.color ?? theme.palette.primaryText.toParraColor()
+            )
             .multilineTextAlignment(attributes.alignment ?? .leading)
             .shadow(
                 color: attributes.shadow?.color ?? .clear,
@@ -70,20 +106,20 @@ extension View {
         _ attributes: ParraAttributes.Label,
         using theme: ParraTheme
     ) -> some View {
-        backgroundStyle(attributes.background ?? .clear)
-            .applyCornerRadii(
-                size: attributes.cornerRadius,
-                from: theme
-            )
-            .applyPadding(
-                size: attributes.padding,
-                from: theme
-            )
-            .applyBorder(
-                attributes.border,
-                with: attributes.cornerRadius,
-                from: theme
-            )
+        applyPadding(
+            size: attributes.padding,
+            from: theme
+        )
+        .applyCornerRadii(
+            size: attributes.cornerRadius,
+            from: theme
+        )
+        .background(attributes.background ?? .clear)
+        .applyBorder(
+            attributes.border,
+            with: attributes.cornerRadius,
+            from: theme
+        )
     }
 
     @ViewBuilder
@@ -165,10 +201,12 @@ extension View {
     @ViewBuilder
     func applyPadding(
         size: ParraPaddingSize?,
+        on edges: Edge.Set = .all,
         from theme: ParraTheme
     ) -> some View {
         padding(
-            theme.padding.value(
+            edges,
+            from: theme.padding.value(
                 for: size ?? .zero
             )
         )

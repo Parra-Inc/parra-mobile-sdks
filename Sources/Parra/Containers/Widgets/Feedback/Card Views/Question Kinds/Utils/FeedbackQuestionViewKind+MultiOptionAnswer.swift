@@ -30,15 +30,13 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
             isSelected: isSelected
         )
 
-        componentFactory.buildTextButton(
-            variant: .outlined,
+        componentFactory.buildOutlinedButton(
             config: TextButtonConfig(
                 style: .primary,
                 size: .medium,
                 isMaxWidth: true
             ),
             content: content,
-            localAttributes: attributes,
             onPress: {
                 var currentOptions = (currentAnswer?.options ?? []).map(\.id)
 

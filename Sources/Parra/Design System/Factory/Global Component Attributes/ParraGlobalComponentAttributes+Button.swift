@@ -51,11 +51,7 @@ public extension ParraGlobalComponentAttributes {
             theme: theme
         )
 
-        textAttributes.color = containedButtonTextColor(
-            in: state,
-            with: type,
-            theme: theme
-        )
+        textAttributes.color = theme.palette.primary.toParraColor()
 
         return textAttributes
     }
@@ -297,7 +293,7 @@ public extension ParraGlobalComponentAttributes {
         theme: ParraTheme
     ) -> ParraAttributes.ContainedButton {
         return ParraAttributes.ContainedButton(
-            label: plainButtonLabelAttributes(
+            label: containedButtonLabelAttributes(
                 in: state,
                 for: size,
                 with: type,

@@ -14,12 +14,10 @@ public struct ParraFeedbackView: ParraPublicContainer {
     public init(
         cards: [ParraCardItem],
         config: FeedbackCardWidgetConfig = .default,
-        style: FeedbackCardWidgetStyle? = nil,
         cardDelegate: ParraCardViewDelegate? = nil
     ) {
         self.cards = cards
         self.config = config
-        self.style = style
         self.cardDelegate = cardDelegate
     }
 
@@ -31,11 +29,9 @@ public struct ParraFeedbackView: ParraPublicContainer {
         let theme = parraInstance.configuration.theme
         let globalComponentAttributes = parraInstance.configuration
             .globalComponentAttributes
-        let style = style ?? .default(with: theme)
 
         FeedbackCardWidget(
             config: config,
-            style: style,
             componentFactory: ComponentFactory(
                 attributes: globalComponentAttributes,
                 theme: theme
@@ -67,7 +63,6 @@ public struct ParraFeedbackView: ParraPublicContainer {
 
     private let cards: [ParraCardItem]
     private let config: Wrapped.Config
-    private let style: Wrapped.Style?
     private weak var cardDelegate: ParraCardViewDelegate?
 }
 

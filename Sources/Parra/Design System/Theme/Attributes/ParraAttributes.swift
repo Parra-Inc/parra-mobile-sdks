@@ -11,6 +11,33 @@ import SwiftUI
 /// All defaults should be nil and rely on defaults defined in the view
 /// after accessing the theme/etc from env.
 public enum ParraAttributes {
+    public struct Widget {
+        public let background: Color?
+        public let cornerRadius: ParraCornerRadiusSize
+        public let contentPadding: ParraPaddingSize
+        public let padding: ParraPaddingSize
+
+        public static func `default`(with theme: ParraTheme) -> Widget {
+            let palette = theme.palette
+
+            return Widget(
+                background: palette.primaryBackground,
+                cornerRadius: .zero,
+                contentPadding: .custom(
+                    EdgeInsets(vertical: 12, horizontal: 20)
+                ),
+                padding: .custom(
+                    EdgeInsets(
+                        top: 16,
+                        leading: 0.0,
+                        bottom: 0.0,
+                        trailing: 0.0
+                    )
+                )
+            )
+        }
+    }
+
     public struct Image {
         // MARK: - Lifecycle
 
@@ -70,6 +97,10 @@ public enum ParraAttributes {
         public let cornerRadius: ParraCornerRadiusSize
         public let padding: ParraPaddingSize
         public let background: Color?
+
+        // MARK: - Internal
+
+        var frame: FrameAttributes?
     }
 
     public struct PlainButton {
