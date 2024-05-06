@@ -12,10 +12,10 @@ import SwiftUI
 /// after accessing the theme/etc from env.
 public enum ParraAttributes {
     public struct Widget {
-        public let background: Color?
-        public let cornerRadius: ParraCornerRadiusSize
-        public let contentPadding: ParraPaddingSize
-        public let padding: ParraPaddingSize
+        public internal(set) var background: Color?
+        public internal(set) var cornerRadius: ParraCornerRadiusSize
+        public internal(set) var contentPadding: ParraPaddingSize
+        public internal(set) var padding: ParraPaddingSize
 
         public static func `default`(with theme: ParraTheme) -> Widget {
             let palette = theme.palette
@@ -61,13 +61,13 @@ public enum ParraAttributes {
 
         // MARK: - Public
 
-        public let tint: Color?
-        public let opacity: CGFloat?
-        public let size: CGSize?
-        public let border: ParraAttributes.Border
-        public let cornerRadius: ParraCornerRadiusSize
-        public let padding: ParraPaddingSize
-        public let background: Color?
+        public internal(set) var tint: Color?
+        public internal(set) var opacity: CGFloat?
+        public internal(set) var size: CGSize?
+        public internal(set) var border: ParraAttributes.Border
+        public internal(set) var cornerRadius: ParraCornerRadiusSize
+        public internal(set) var padding: ParraPaddingSize
+        public internal(set) var background: Color?
     }
 
     public struct Label {
@@ -89,14 +89,32 @@ public enum ParraAttributes {
             self.background = background
         }
 
+        init(
+            text: ParraAttributes.Text,
+            icon: ParraAttributes.Image = .init(),
+            border: ParraAttributes.Border = .init(),
+            cornerRadius: ParraCornerRadiusSize = .zero,
+            padding: ParraPaddingSize = .zero,
+            background: Color? = nil,
+            frame: FrameAttributes? = nil
+        ) {
+            self.text = text
+            self.icon = icon
+            self.border = border
+            self.cornerRadius = cornerRadius
+            self.padding = padding
+            self.background = background
+            self.frame = frame
+        }
+
         // MARK: - Public
 
-        public let text: ParraAttributes.Text
-        public let icon: ParraAttributes.Image
-        public let border: ParraAttributes.Border
-        public let cornerRadius: ParraCornerRadiusSize
-        public let padding: ParraPaddingSize
-        public let background: Color?
+        public internal(set) var text: ParraAttributes.Text
+        public internal(set) var icon: ParraAttributes.Image
+        public internal(set) var border: ParraAttributes.Border
+        public internal(set) var cornerRadius: ParraCornerRadiusSize
+        public internal(set) var padding: ParraPaddingSize
+        public internal(set) var background: Color?
 
         // MARK: - Internal
 
@@ -106,56 +124,109 @@ public enum ParraAttributes {
     public struct PlainButton {
         // No background, handled by theme/type/variant
 
-        public let label: ParraAttributes.Label
-        public let cornerRadius: ParraCornerRadiusSize
-        public let padding: ParraPaddingSize
+        public internal(set) var label: ParraAttributes.Label
+        public internal(set) var cornerRadius: ParraCornerRadiusSize
+        public internal(set) var padding: ParraPaddingSize
     }
 
     public struct OutlinedButton {
         // No background, handled by theme/type/variant
 
-        public let label: ParraAttributes.Label
-        public let border: ParraAttributes.Border
-        public let cornerRadius: ParraCornerRadiusSize
-        public let padding: ParraPaddingSize
+        public internal(set) var label: ParraAttributes.Label
+        public internal(set) var border: ParraAttributes.Border
+        public internal(set) var cornerRadius: ParraCornerRadiusSize
+        public internal(set) var padding: ParraPaddingSize
     }
 
     public struct ContainedButton {
         // No background, handled by theme/type/variant
 
-        public let label: ParraAttributes.Label
-        public let border: ParraAttributes.Border
-        public let cornerRadius: ParraCornerRadiusSize
-        public let padding: ParraPaddingSize
+        public internal(set) var label: ParraAttributes.Label
+        public internal(set) var border: ParraAttributes.Border
+        public internal(set) var cornerRadius: ParraCornerRadiusSize
+        public internal(set) var padding: ParraPaddingSize
     }
 
     public struct ImageButton {
-        public let image: ParraAttributes.Image
+        public internal(set) var image: ParraAttributes.Image
 
-        public let border: ParraAttributes.Border
-        public let cornerRadius: ParraCornerRadiusSize
-        public let padding: ParraPaddingSize
+        public internal(set) var border: ParraAttributes.Border
+        public internal(set) var cornerRadius: ParraCornerRadiusSize
+        public internal(set) var padding: ParraPaddingSize
     }
 
     public struct TextInput {
-        public let text: ParraAttributes.Text
-        // TODO: content type, keyboard, autocorrect, capitalization, tint, etc
+        // MARK: - Lifecycle
 
-        public let border: ParraAttributes.Border
-        public let cornerRadius: ParraCornerRadiusSize
-        public let padding: ParraPaddingSize
-        public let background: Color?
+        init(
+            text: ParraAttributes.Text,
+            titleLabel: ParraAttributes.Label,
+            helperLabel: ParraAttributes.Label,
+            errorLabel: ParraAttributes.Label,
+            border: ParraAttributes.Border,
+            cornerRadius: ParraCornerRadiusSize,
+            padding: ParraPaddingSize,
+            background: Color?,
+            tint: Color?,
+            keyboardType: UIKeyboardType,
+            textCase: SwiftUI.Text.Case?,
+            textContentType: UITextContentType?,
+            textInputAutocapitalization: TextInputAutocapitalization?,
+            autocorrectionDisabled: Bool,
+            frame: FrameAttributes? = nil
+        ) {
+            self.text = text
+            self.titleLabel = titleLabel
+            self.helperLabel = helperLabel
+            self.errorLabel = errorLabel
+            self.border = border
+            self.cornerRadius = cornerRadius
+            self.padding = padding
+            self.background = background
+            self.tint = tint
+            self.keyboardType = keyboardType
+            self.textCase = textCase
+            self.textContentType = textContentType
+            self.textInputAutocapitalization = textInputAutocapitalization
+            self.autocorrectionDisabled = autocorrectionDisabled
+            self.frame = frame
+        }
+
+        // MARK: - Public
+
+        public internal(set) var text: ParraAttributes.Text
+        public internal(set) var titleLabel: ParraAttributes.Label
+        public internal(set) var helperLabel: ParraAttributes.Label
+        public internal(set) var errorLabel: ParraAttributes.Label
+
+        public internal(set) var border: ParraAttributes.Border
+        public internal(set) var cornerRadius: ParraCornerRadiusSize
+        public internal(set) var padding: ParraPaddingSize
+        public internal(set) var background: Color?
+        public internal(set) var tint: Color?
+
+        public internal(set) var keyboardType: UIKeyboardType
+        public internal(set) var textCase: SwiftUI.Text.Case?
+        public internal(set) var textContentType: UITextContentType?
+        public internal(
+            set
+        ) var textInputAutocapitalization: TextInputAutocapitalization?
+        public internal(set) var autocorrectionDisabled: Bool
+
+        // MARK: - Internal
+
+        let frame: FrameAttributes?
     }
 
     public struct TextEditor {
-        public let text: ParraAttributes.Text
-        public let lineLimit: Int?
+        public internal(set) var text: ParraAttributes.Text
+        public internal(set) var lineLimit: Int?
         // TODO: content type, keyboard, autocorrect, capitalization, tint, etc
 
-        public let border: ParraAttributes.Border
-        public let cornerRadius: ParraCornerRadiusSize
-        public let padding: ParraPaddingSize
-        public let background: Color?
+        public internal(set) var border: ParraAttributes.Border
+        public internal(set) var cornerRadius: ParraCornerRadiusSize
+        public internal(set) var padding: ParraPaddingSize
+        public internal(set) var background: Color?
     }
 
     public typealias Badge = ParraAttributes.Label

@@ -16,12 +16,22 @@ public struct TextInputConfig {
             .validationRules,
         preferValidationErrorsToHelperMessage: Bool = TextInputConfig.default
             .preferValidationErrorsToHelperMessage,
-        isSecure: Bool = false
+        isSecure: Bool = false,
+        keyboardType: UIKeyboardType = .default,
+        textCase: Text.Case? = nil,
+        textContentType: UITextContentType? = nil,
+        textInputAutocapitalization: TextInputAutocapitalization? = nil,
+        autocorrectionDisabled: Bool = true
     ) {
         self.validationRules = validationRules
         self.preferValidationErrorsToHelperMessage
             = preferValidationErrorsToHelperMessage
         self.isSecure = isSecure
+        self.keyboardType = keyboardType
+        self.textCase = textCase
+        self.textContentType = textContentType
+        self.textInputAutocapitalization = textInputAutocapitalization
+        self.autocorrectionDisabled = autocorrectionDisabled
     }
 
     // MARK: - Public
@@ -41,6 +51,12 @@ public struct TextInputConfig {
     /// Whether or not the text field should be secure. Defaults to false.
     /// If true, the text field will display a secure entry view for passwords.
     public let isSecure: Bool
+
+    public let keyboardType: UIKeyboardType
+    public let textCase: Text.Case?
+    public let textContentType: UITextContentType?
+    public let textInputAutocapitalization: TextInputAutocapitalization?
+    public let autocorrectionDisabled: Bool
 
     // MARK: - Internal
 

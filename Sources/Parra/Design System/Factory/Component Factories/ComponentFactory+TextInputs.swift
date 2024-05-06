@@ -12,37 +12,17 @@ extension ComponentFactory {
     @ViewBuilder
     func buildTextInput(
         config: TextInputConfig,
-        content: TextInputContent,
-        localAttributes: TextInputAttributes? = nil
+        content: TextInputContent
     ) -> some View {
-        EmptyView()
-//        let mergedAttributes = TextInputComponent
-//            .applyStandardCustomizations(
-//                onto: localAttributes,
-//                theme: theme,
-//                config: config
-//            )
-//
-//        // If a container level factory function was provided for this
-//        // component, use it and supply global attribute overrides instead of
-//        // local, if provided.
-//        if let builder = suppliedBuilder,
-//           let view = builder(config, content, mergedAttributes)
-//        {
-//            view
-//        } else {
-//            let style = ParraAttributedTextInputStyle(
-//                config: config,
-//                content: content,
-//                attributes: mergedAttributes,
-//                theme: theme
-//            )
-//
-//            TextInputComponent(
-//                config: config,
-//                content: content,
-//                style: style
-//            )
-//        }
+        let attributes = attributeProvider.textInputAttributes(
+            config: config,
+            theme: theme
+        )
+
+        TextInputComponent(
+            config: config,
+            content: content,
+            attributes: attributes
+        )
     }
 }

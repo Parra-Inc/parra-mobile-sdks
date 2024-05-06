@@ -52,36 +52,32 @@ struct SignupWidget: Container {
         let content = contentObserver.content.signupContent
 
         VStack {
-//            componentFactory.buildTextInput(
-//                config: config.emailField,
-//                content: content.emailField,
-//                localAttributes: TextInputAttributes(
-//                    padding: .padding(
-//                        top: 50,
-//                        bottom: 5
-//                    ),
-//                    textContentType: .emailAddress
-//                )
-//            )
-//            .submitLabel(.next)
-//            .focused($focusedField, equals: .email)
-//            .onSubmit {
-//                focusNextField($focusedField)
-//            }
+            componentFactory.buildTextInput(
+                config: TextInputConfig(
+                    textContentType: .emailAddress
+                ),
+                content: content.emailField
+            )
+            .padding(.top, 50)
+            .padding(.bottom, 5)
+            .submitLabel(.next)
+            .focused($focusedField, equals: .email)
+            .onSubmit {
+                focusNextField($focusedField)
+            }
 
-//            componentFactory.buildTextInput(
-//                config: config.passwordField,
-//                content: content.passwordField,
-//                localAttributes: TextInputAttributes(
-//                    padding: .padding(bottom: 16),
-//                    textContentType: .password
-//                )
-//            )
-//            .submitLabel(.next)
-//            .focused($focusedField, equals: .password)
-//            .onSubmit(of: .text) {
-//                contentObserver.signupTapped()
-//            }
+            componentFactory.buildTextInput(
+                config: TextInputConfig(
+                    textContentType: .password
+                ),
+                content: content.passwordField
+            )
+            .padding(.bottom, 16)
+            .submitLabel(.next)
+            .focused($focusedField, equals: .password)
+            .onSubmit(of: .text) {
+                contentObserver.signupTapped()
+            }
 
             componentFactory.buildContainedButton(
                 config: TextButtonConfig(

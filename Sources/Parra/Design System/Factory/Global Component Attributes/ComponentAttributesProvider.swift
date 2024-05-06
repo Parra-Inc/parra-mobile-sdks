@@ -25,6 +25,13 @@ public protocol ComponentAttributesProvider {
         theme: ParraTheme
     ) -> ParraAttributes.Badge
 
+    // MARK: Text Inputs
+
+    func textInputAttributes(
+        config: TextInputConfig,
+        theme: ParraTheme
+    ) -> ParraAttributes.TextInput
+
     // MARK: Buttons
 
     func plainButtonAttributes(

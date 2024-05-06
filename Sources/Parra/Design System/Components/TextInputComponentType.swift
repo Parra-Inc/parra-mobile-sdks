@@ -11,11 +11,11 @@ import SwiftUI
 protocol TextInputComponentType: View {
     var config: TextInputConfig { get }
     var content: TextInputContent { get }
-    var style: ParraAttributedTextInputStyle { get }
+    var attributes: ParraAttributes.TextInput { get }
 
     init(
         config: TextInputConfig,
         content: TextInputContent,
-        style: ParraAttributedTextInputStyle
+        attributes: ParraAttributes.TextInput
     )
 }
