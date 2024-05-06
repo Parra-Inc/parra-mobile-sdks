@@ -13,30 +13,31 @@ public struct ParraConfiguration {
 
     public init(
         appInfoOptions: ParraAppInfoOptions = .default,
-        globalComponentAttributes: GlobalComponentAttributes = .default,
+        themeOptions: ParraTheme = .default,
+        globalComponentAttributes: ParraGlobalComponentAttributes = .default,
         loggerOptions: ParraLoggerOptions = .default,
         pushNotificationOptions: ParraPushNotificationOptions = .default,
-        themeOptions: ParraTheme = .default,
         whatsNewOptions: ParraReleaseOptions = .default
     ) {
         self.appInfoOptions = appInfoOptions
-        self.globalComponentAttributes = globalComponentAttributes
-        self.pushNotificationOptions = pushNotificationOptions
         self.theme = themeOptions
-        self.whatsNewOptions = whatsNewOptions
-
+        self.globalComponentAttributes = globalComponentAttributes
         self.loggerOptions = ParraConfiguration.applyLoggerOptionsOverrides(
             loggerOptions: loggerOptions
         )
+        self.pushNotificationOptions = pushNotificationOptions
+        self.whatsNewOptions = whatsNewOptions
     }
 
     // MARK: - Public
 
     public let appInfoOptions: ParraAppInfoOptions
+    public internal(set) var theme: ParraTheme
+    public private(
+        set
+    ) var globalComponentAttributes: ParraGlobalComponentAttributes
     public let loggerOptions: ParraLoggerOptions
     public let pushNotificationOptions: ParraPushNotificationOptions
-    public internal(set) var theme: ParraTheme
-    public private(set) var globalComponentAttributes: GlobalComponentAttributes
     public let whatsNewOptions: ParraReleaseOptions
 
     // MARK: - Private

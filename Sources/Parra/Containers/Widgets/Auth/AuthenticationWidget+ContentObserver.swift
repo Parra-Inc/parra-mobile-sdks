@@ -150,7 +150,7 @@ extension AuthenticationWidget {
                 case .email:
                     let error = TextValidator.validate(
                         text: text,
-                        against: authWidgetConfig.emailField.validationRules
+                        against: authWidgetConfig.emailValidationRules
                     )
 
                     areAllValid = areAllValid && error == nil
@@ -161,7 +161,7 @@ extension AuthenticationWidget {
                 case .password:
                     let error = TextValidator.validate(
                         text: text,
-                        against: authWidgetConfig.passwordField.validationRules
+                        against: authWidgetConfig.passwordValidationRules
                     )
 
                     areAllValid = areAllValid && error == nil

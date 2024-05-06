@@ -16,7 +16,6 @@ extension View {
         with formBinding: Binding<ParraFeedbackForm?>,
         config: FeedbackFormWidgetConfig,
         submissionType: FeedbackFormSubmissionType,
-        localBuilder: FeedbackFormWidgetBuilderConfig,
         onDismiss: ((SheetDismissType) -> Void)?
     ) -> some View {
         loadAndPresentSheet(
@@ -36,7 +35,6 @@ extension View {
             ),
             with: .feedbackFormLoader(
                 config: config,
-                localBuilder: localBuilder,
                 submissionType: .default
             ),
             onDismiss: onDismiss

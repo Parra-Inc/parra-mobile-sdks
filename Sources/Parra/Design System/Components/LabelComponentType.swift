@@ -14,16 +14,5 @@ protocol LabelComponentType: View {
     // wrapper classes utilize their config to customize their style, which they render.
 
     var content: LabelContent { get }
-    var style: ParraAttributedLabelStyle { get }
-
-    init(
-        content: LabelContent,
-        style: ParraAttributedLabelStyle
-    )
-
-    static func applyStandardCustomizations(
-        onto inputAttributes: LabelAttributes?,
-        theme: ParraTheme,
-        config: LabelConfig
-    ) -> LabelAttributes
+    var attributes: ParraAttributes.Label { get }
 }

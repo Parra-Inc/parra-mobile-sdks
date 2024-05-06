@@ -26,7 +26,6 @@ final class ModalScreenManager {
     func presentModalView<ContainerType>(
         of type: ContainerType.Type,
         with config: ContainerType.Config = .init(),
-        localBuilder: ContainerType.BuilderConfig,
         contentObserver: ContainerType.ContentObserver,
         detents: [UISheetPresentationController.Detent] = [.large()],
         prefersGrabberVisible: Bool = true,
@@ -46,7 +45,6 @@ final class ModalScreenManager {
             let navigationState = NavigationState()
 
             let container: ContainerType = containerRenderer.renderContainer(
-                with: localBuilder,
                 contentObserver: contentObserver,
                 config: config
             )

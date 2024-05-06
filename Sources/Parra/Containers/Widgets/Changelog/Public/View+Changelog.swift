@@ -15,7 +15,6 @@ public extension View {
     func presentParraChangelog(
         isPresented: Binding<Bool>,
         config: ChangelogWidgetConfig = .default,
-        localBuilder: ChangelogWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         let params = ChangelogParams(
@@ -55,8 +54,7 @@ public extension View {
                 }
             ),
             with: .changelogLoader(
-                config: config,
-                localBuilder: localBuilder
+                config: config
             ),
             onDismiss: onDismiss
         )

@@ -21,7 +21,6 @@ class ContainerRenderer {
 
     @MainActor
     func renderContainer<C: Container>(
-        with localBuilder: C.BuilderConfig,
         params: C.ContentObserver.InitialParams,
         config: C.Config,
         contentTransformer: ((C.ContentObserver) -> Void)? = nil
@@ -31,7 +30,6 @@ class ContainerRenderer {
         )
 
         return renderContainer(
-            with: localBuilder,
             contentObserver: contentObserver,
             config: config,
             contentTransformer: contentTransformer
@@ -40,16 +38,13 @@ class ContainerRenderer {
 
     @MainActor
     func renderContainer<C: Container>(
-        with localBuilder: C.BuilderConfig,
         contentObserver: C.ContentObserver,
         config: C.Config,
         contentTransformer: ((C.ContentObserver) -> Void)? = nil
     ) -> C {
         let theme = configuration.theme
-        let globalComponentAttributes = configuration.globalComponentAttributes
-
         let componentFactory = ComponentFactory(
-            global: globalComponentAttributes,
+            attributes: configuration.globalComponentAttributes,
             theme: theme
         )
 
@@ -62,7 +57,6 @@ class ContainerRenderer {
         return C(
             config: config,
             style: style,
-            localBuilderConfig: localBuilder,
             componentFactory: componentFactory,
             contentObserver: contentObserver
         )

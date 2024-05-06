@@ -12,72 +12,42 @@ public class FeedbackFormWidgetConfig: ContainerConfig {
     // MARK: - Lifecycle
 
     required init() {
-        self.title = FeedbackFormWidgetConfig.default.title
-        self.description = FeedbackFormWidgetConfig.default.description
-        self.selectFields = FeedbackFormWidgetConfig.default.selectFields
-        self.textFields = FeedbackFormWidgetConfig.default.textFields
-        self.inputFields = FeedbackFormWidgetConfig.default.inputFields
-        self.submitButton = FeedbackFormWidgetConfig.default.submitButton
+        self.maxTextFieldCharacters = FeedbackFormWidgetConfig.default
+            .maxTextFieldCharacters
     }
 
     public init(
-        title: LabelConfig = FeedbackFormWidgetConfig.default.title,
-        description: LabelConfig = FeedbackFormWidgetConfig.default.description,
-        selectFields: MenuConfig = FeedbackFormWidgetConfig.default
-            .selectFields,
-        textFields: TextEditorConfig = FeedbackFormWidgetConfig.default
-            .textFields,
-        inputFields: TextInputConfig = FeedbackFormWidgetConfig.default
-            .inputFields,
-        submitButton: TextButtonConfig = FeedbackFormWidgetConfig.default
-            .submitButton
+        maxTextFieldCharacters: Int = FeedbackFormWidgetConfig.default
+            .maxTextFieldCharacters
     ) {
-        self.title = title
-        self.description = description
-        self.selectFields = selectFields
-        self.textFields = textFields
-        self.inputFields = inputFields
-        self.submitButton = submitButton
+        self.maxTextFieldCharacters = maxTextFieldCharacters
     }
 
     // MARK: - Public
 
     public static let `default` = FeedbackFormWidgetConfig(
-        title: LabelConfig(fontStyle: .title),
-        description: LabelConfig(fontStyle: .subheadline),
-        selectFields: MenuConfig(
-            title: LabelConfig(fontStyle: .subheadline),
-            helper: LabelConfig(fontStyle: .caption),
-            menuOption: LabelConfig(fontStyle: .body),
-            menuOptionSelected: LabelConfig(fontStyle: .body)
-        ),
-        textFields: TextEditorConfig(
-            title: LabelConfig(fontStyle: .subheadline),
-            helper: LabelConfig(fontStyle: .caption),
-            maxCharacters: 30
-        ),
-        inputFields: TextInputConfig(
-            title: LabelConfig(fontStyle: .subheadline),
-            helper: LabelConfig(fontStyle: .caption)
-        ),
-        submitButton: TextButtonConfig(
-            style: .primary,
-            size: .large,
-            isMaxWidth: true
-        )
+        maxTextFieldCharacters: 30
     )
 
-    public let title: LabelConfig
-    public let description: LabelConfig
-
-    /// Any dynamic "select" fields
-    public let selectFields: MenuConfig
-
-    /// Any dynamic multi-line "text" fields
-    public let textFields: TextEditorConfig
-
-    /// Any dynamic single-line "input" fields
-    public let inputFields: TextInputConfig
-
-    public let submitButton: TextButtonConfig
+    /// The maximum number of characters allowed in a text field input.
+    public let maxTextFieldCharacters: Int
 }
+
+// public static let `default` = FeedbackFormWidgetConfig(
+//    title: LabelConfig(fontStyle: .title),
+//    description: LabelConfig(fontStyle: .subheadline),
+//    textFields: TextEditorConfig(
+//        title: LabelConfig(fontStyle: .subheadline),
+//        helper: LabelConfig(fontStyle: .caption),
+//        maxCharacters: 30
+//    ),
+//    inputFields: TextInputConfig(
+//        title: LabelConfig(fontStyle: .subheadline),
+//        helper: LabelConfig(fontStyle: .caption)
+//    ),
+//    submitButton: TextButtonConfig(
+//        style: .primary,
+//        size: .large,
+//        isMaxWidth: true
+//    )
+// )

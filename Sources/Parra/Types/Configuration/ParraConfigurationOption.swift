@@ -25,7 +25,7 @@ public enum ParraConfigurationOption: CaseIterable {
     /// Global defaults to use for attributes for base Parra components. This
     /// allows for broad customization of how buttons/labels/etc look which will
     /// be built upon by builder factories for specific Widgets later.
-    case globalComponentAttributes(GlobalComponentAttributes)
+    case ParraGlobalComponentAttributes(ParraGlobalComponentAttributes)
 
     case whatsNew(ParraReleaseOptions)
 
@@ -35,7 +35,7 @@ public enum ParraConfigurationOption: CaseIterable {
         .logger(.default),
         .pushNotifications(.default),
         .theme(.default),
-        .globalComponentAttributes(.default),
+        .ParraGlobalComponentAttributes(.default),
         .whatsNew(.default)
     ]
 }

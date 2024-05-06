@@ -31,7 +31,7 @@ public struct AlertContent: Hashable, Equatable {
     public private(set) var dismiss: ImageButtonContent?
 
     public static func defaultIcon(
-        for style: AlertConfig.Style
+        for style: AlertLevel
     ) -> ImageContent {
         let symbolName = switch style {
         case .success:
@@ -48,7 +48,7 @@ public struct AlertContent: Hashable, Equatable {
     }
 
     public static func defaultDismiss(
-        for style: AlertConfig.Style,
+        for style: AlertLevel,
         onPress: (() -> Void)? = nil
     ) -> ImageButtonContent {
         return ImageButtonContent(

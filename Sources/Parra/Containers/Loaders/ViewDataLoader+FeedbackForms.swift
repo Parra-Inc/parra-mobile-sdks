@@ -13,14 +13,12 @@ private let logger = Logger()
 extension ViewDataLoader {
     static func feedbackFormLoader(
         config: FeedbackFormWidgetConfig,
-        localBuilder: FeedbackFormWidget.BuilderConfig,
         submissionType: FeedbackFormSubmissionType
     ) -> ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget> {
         return ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget>(
             renderer: { parra, form, dismisser in
                 let container: FeedbackFormWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
-                        with: localBuilder,
                         params: .init(
                             formData: form.data
                         ),

@@ -31,62 +31,7 @@ struct ParraAttributedLabelStyle: LabelStyle, ParraAttributedStyle {
     let isLoading: Bool
 
     func makeBody(configuration: Configuration) -> some View {
-        let fontColor = attributes.fontColor ?? theme.palette.primaryText
-            .toParraColor()
-
-        let defaultImageAttributes = ImageAttributes(
-            tint: attributes.iconAttributes?.tint ?? fontColor
-        )
-
-        let progressView: (some View)? = if isLoading {
-            ProgressView()
-                .tint(fontColor)
-        } else {
-            nil
-        }
-
-        let image: (some View)? = if let icon = content.icon {
-            ImageComponent(
-                content: icon,
-                attributes: defaultImageAttributes.withUpdates(
-                    updates: attributes.iconAttributes
-                )
-            )
-            // Need to override resizable modifier from general implementation.
-            .fixedSize()
-        } else {
-            nil
-        }
-
-        let text = Text(content.text)
-            .font(attributes.font)
-            .fontDesign(attributes.fontDesign)
-            .fontWeight(attributes.fontWeight)
-            .fontWidth(attributes.fontWidth)
-
-        HStack(spacing: attributes.padding?.leading ?? 6) {
-            switch attributes.layoutDirectionBehavior {
-            case .mirrors:
-                progressView
-                text
-                image
-            default:
-                image
-                text
-                progressView
-            }
-        }
-        .applyFrame(attributes.frame)
-        .foregroundStyle(fontColor)
-        .padding(attributes.padding ?? .zero)
-        .applyBorder(
-            borderColor: attributes.borderColor ?? fontColor,
-            borderWidth: attributes.borderWidth,
-            cornerRadius: attributes.cornerRadius,
-            from: theme
-        )
-        .applyBackground(attributes.background)
-        .applyCornerRadii(size: attributes.cornerRadius, from: theme)
+        EmptyView()
     }
 
     func withContent(content: LabelContent) -> ParraAttributedLabelStyle {

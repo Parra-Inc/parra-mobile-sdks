@@ -20,19 +20,16 @@ struct ParraContainerPreview<ContainerType>: View
         content: @escaping (
             _ parra: Parra,
             _ factory: ComponentFactory,
-            _ config: ContainerType.Config,
-            _ builderConfig: ContainerType.BuilderConfig
+            _ config: ContainerType.Config
         ) -> any View,
         config: ContainerType.Config = .init(),
-        builderConfig: ContainerType.BuilderConfig = .init(),
         theme: ParraTheme = .default
     ) {
         self.content = content
         self.configuration = .init(themeOptions: theme)
         self.config = config
-        self.builderConfig = builderConfig
         self.factory = ComponentFactory(
-            global: GlobalComponentAttributes(),
+            attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
     }
@@ -49,11 +46,10 @@ struct ParraContainerPreview<ContainerType>: View
             configuration: configuration,
             viewContent: { parra in
                 ParraOptionalAuthView { _ in
-                    AnyView(content(parra, factory, config, builderConfig))
+                    AnyView(content(parra, factory, config))
                 }
             }
         )
-        .environment(builderConfig)
         .environment(config)
         .environmentObject(factory)
     }
@@ -63,12 +59,10 @@ struct ParraContainerPreview<ContainerType>: View
     @ViewBuilder private var content: (
         _ parra: Parra,
         _ factory: ComponentFactory,
-        _ config: ContainerType.Config,
-        _ builderConfig: ContainerType.BuilderConfig
+        _ config: ContainerType.Config
     ) -> any View
 
     private let factory: ComponentFactory
     private let config: ContainerType.Config
-    private let builderConfig: ContainerType.BuilderConfig
     private let configuration: ParraConfiguration
 }

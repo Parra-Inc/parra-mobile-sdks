@@ -9,7 +9,6 @@
 import SwiftUI
 
 protocol Container: View {
-    associatedtype BuilderConfig: LocalComponentBuilderConfig
     associatedtype Config: ContainerConfig
     associatedtype ContentObserver: ContainerContentObserver
 
@@ -22,7 +21,6 @@ protocol Container: View {
     // Expected via init
     var config: Config { get }
     var style: Style { get }
-    var localBuilderConfig: BuilderConfig { get }
     var componentFactory: ComponentFactory { get }
     var contentObserver: ContentObserver { get }
 
@@ -32,7 +30,6 @@ protocol Container: View {
     init(
         config: Config,
         style: Style,
-        localBuilderConfig: BuilderConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     )

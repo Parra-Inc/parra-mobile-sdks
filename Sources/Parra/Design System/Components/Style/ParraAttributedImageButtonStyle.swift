@@ -9,33 +9,36 @@
 import SwiftUI
 
 struct ParraAttributedImageButtonStyle: ButtonStyle, ParraAttributedStyle {
+    // MARK: - Internal
+
     let config: ImageButtonConfig
     let content: ImageButtonContent
-    let attributes: ImageButtonAttributes
-    let theme: ParraTheme
+
+    let attributes: ParraAttributes.ImageButton
+    let pressedAttributes: ParraAttributes.ImageButton
+    let disabledAttributes: ParraAttributes.ImageButton
 
     @ViewBuilder
     func makeBody(configuration: Configuration) -> some View {
-        let primaryColor = theme.palette.primary.toParraColor()
-
-        let defaults = ImageAttributes(
-            tint: primaryColor,
-            borderColor: primaryColor
-        ).withUpdates(
-            updates: attributes.image
-        )
-
         let currentAttributes = if content.isDisabled {
-            attributes.imageDisabled ?? defaults
+            disabledAttributes
         } else if configuration.isPressed {
-            attributes.imagePressed ?? defaults
+            pressedAttributes
         } else {
-            defaults
+            attributes
         }
 
         ImageComponent(
             content: content.image,
-            attributes: currentAttributes
+            attributes: currentAttributes.image
+        )
+        .applyImageButtonAttributes(
+            currentAttributes,
+            using: themeObserver.theme
         )
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 }

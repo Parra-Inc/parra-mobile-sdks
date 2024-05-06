@@ -16,7 +16,6 @@ struct ParraCardViewPreview<Content>: View where Content: View {
         content: @escaping () -> Content,
         cards: [ParraCardItem] = ParraCardItem.validStates(),
         config: FeedbackCardWidgetConfig = .default,
-        localBuilder: FeedbackCardWidgetBuilderConfig = .init(),
         theme: ParraTheme = .default
     ) {
         self.content = content
@@ -25,9 +24,8 @@ struct ParraCardViewPreview<Content>: View where Content: View {
         self.configuration = ParraConfiguration(
             themeOptions: theme
         )
-        self.localBuilder = localBuilder
         self.factory = ComponentFactory(
-            global: GlobalComponentAttributes(),
+            attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
     }
@@ -79,7 +77,6 @@ struct ParraCardViewPreview<Content>: View where Content: View {
             }
         )
         .environmentObject(factory)
-        .environment(localBuilder)
         .environment(config)
     }
 
@@ -89,7 +86,6 @@ struct ParraCardViewPreview<Content>: View where Content: View {
 
     private let cards: [ParraCardItem]
     private let config: FeedbackCardWidgetConfig
-    private let localBuilder: FeedbackCardWidgetBuilderConfig
     private let factory: ComponentFactory
     private let configuration: ParraConfiguration
 }

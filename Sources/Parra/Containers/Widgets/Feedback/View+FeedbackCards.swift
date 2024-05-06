@@ -17,7 +17,6 @@ public extension View {
         for appArea: ParraQuestionAppArea = .all,
         isPresented: Binding<Bool>,
         modalStyle: ParraCardModalType = .drawer,
-        localBuilder: FeedbackCardWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
 //        modifier(
@@ -36,7 +35,6 @@ public extension View {
 //                        isPresented.wrappedValue = false
 //                    }
 //                }),
-//                localBuilder: localBuilder,
 //                onDismiss: onDismiss
 //            )
 //        )
@@ -47,7 +45,6 @@ public extension View {
     func presentParraFeedbackCards(
         _ cards: Binding<[ParraCardItem]?>,
         modalStyle: ParraCardModalType = .drawer,
-        localBuilder: FeedbackCardWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
 //        modifier(
@@ -66,7 +63,6 @@ public extension View {
         ////                        form.wrappedValue = nil
         ////                    }
 //                }),
-//                localBuilder: localBuilder,
 //                onDismiss: onDismiss
 //            )
 //        )

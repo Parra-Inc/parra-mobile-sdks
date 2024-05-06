@@ -10,7 +10,7 @@ import SwiftUI
 
 class AlertManager: ObservableObject {
     struct Alert: Equatable {
-        let config: AlertConfig
+        let level: AlertLevel
         let content: AlertContent
         let attributes: AlertAttributes?
         let onDismiss: () -> Void
@@ -78,13 +78,13 @@ class AlertManager: ObservableObject {
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25,
         in location: AlertLocation = .topCenter,
-        config: AlertConfig,
+        level: AlertLevel,
         content: AlertContent,
         attributes: AlertAttributes? = nil,
         primaryAction: (() -> Void)? = nil
     ) {
         currentToast = Alert(
-            config: config,
+            level: level,
             content: content,
             attributes: attributes,
             onDismiss: dismissToast,
@@ -103,20 +103,18 @@ class AlertManager: ObservableObject {
         animationDuration: TimeInterval = 0.25,
         primaryAction: (() -> Void)? = nil
     ) {
-        let style = AlertConfig.Style.success
+        let level = AlertLevel.success
 
         showToast(
             for: duration,
             animationDuration: animationDuration,
             in: location,
-            config: AlertConfig(
-                style: style
-            ),
+            level: level,
             content: AlertContent(
                 title: LabelContent(text: title),
                 subtitle: LabelContent(text: subtitle),
-                icon: AlertContent.defaultIcon(for: style),
-                dismiss: AlertContent.defaultDismiss(for: style)
+                icon: AlertContent.defaultIcon(for: level),
+                dismiss: AlertContent.defaultDismiss(for: level)
             ),
             primaryAction: primaryAction
         )
@@ -131,20 +129,18 @@ class AlertManager: ObservableObject {
         animationDuration: TimeInterval = 0.25,
         primaryAction: (() -> Void)? = nil
     ) {
-        let style = AlertConfig.Style.error
+        let level = AlertLevel.error
 
         showToast(
             for: duration,
             animationDuration: animationDuration,
             in: location,
-            config: AlertConfig(
-                style: style
-            ),
+            level: level,
             content: AlertContent(
                 title: LabelContent(text: title),
                 subtitle: LabelContent(text: userFacingMessage),
-                icon: AlertContent.defaultIcon(for: style),
-                dismiss: AlertContent.defaultDismiss(for: style)
+                icon: AlertContent.defaultIcon(for: level),
+                dismiss: AlertContent.defaultDismiss(for: level)
             ),
             primaryAction: primaryAction
         )
@@ -157,12 +153,12 @@ class AlertManager: ObservableObject {
         animationDuration: TimeInterval = 0.25,
         primaryAction: (() -> Void)? = nil
     ) {
-        let style = AlertConfig.Style.info
+        let level = AlertLevel.info
 
         showToast(
             for: duration,
             in: location,
-            config: .defaultWhatsNew,
+            level: level,
             content: AlertContent(
                 title: LabelContent(
                     text: "New Version Available!"
@@ -170,8 +166,8 @@ class AlertManager: ObservableObject {
                 subtitle: LabelContent(
                     text: "Version \(newInstalledVersionInfo.release.version) is now available."
                 ),
-                icon: AlertContent.defaultIcon(for: style),
-                dismiss: AlertContent.defaultDismiss(for: style)
+                icon: AlertContent.defaultIcon(for: level),
+                dismiss: AlertContent.defaultDismiss(for: level)
             ),
             attributes: AlertAttributes(),
             primaryAction: primaryAction

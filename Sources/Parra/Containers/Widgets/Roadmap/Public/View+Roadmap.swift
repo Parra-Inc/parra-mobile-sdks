@@ -15,7 +15,6 @@ public extension View {
     func presentParraRoadmap(
         isPresented: Binding<Bool>,
         config: RoadmapWidgetConfig = .default,
-        localBuilder: RoadmapWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         let transformParams = RoadmapParams(
@@ -67,8 +66,7 @@ public extension View {
                 }
             ),
             with: .roadmapLoader(
-                config: config,
-                localBuilder: localBuilder
+                config: config
             ),
             onDismiss: onDismiss
         )

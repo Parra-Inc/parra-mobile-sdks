@@ -16,7 +16,8 @@ public struct ParraTheme: ParraConfigurationOptionType {
         lightPalette: ParraColorPalette,
         darkPalette: ParraColorPalette? = nil,
         typography: ParraTypography = .default,
-        cornerRadius: ParraCornerRadiusConfig = .default
+        cornerRadius: ParraCornerRadiusConfig = .default,
+        padding: ParraPaddingConfig = .default
     ) {
         self.palette = ParraTheme.createDynamicPalette(
             lightPalette: lightPalette,
@@ -24,6 +25,7 @@ public struct ParraTheme: ParraConfigurationOptionType {
         )
         self.typography = typography
         self.cornerRadius = cornerRadius
+        self.padding = padding
     }
 
     public init(
@@ -51,7 +53,8 @@ public struct ParraTheme: ParraConfigurationOptionType {
             lightPalette: lightPalette,
             darkPalette: darkPalette,
             typography: .default,
-            cornerRadius: .default
+            cornerRadius: .default,
+            padding: .default
         )
     }
 
@@ -84,6 +87,7 @@ public struct ParraTheme: ParraConfigurationOptionType {
     let palette: ParraColorPalette
     let typography: ParraTypography
     let cornerRadius: ParraCornerRadiusConfig
+    let padding: ParraPaddingConfig
 
     // MARK: - Private
 

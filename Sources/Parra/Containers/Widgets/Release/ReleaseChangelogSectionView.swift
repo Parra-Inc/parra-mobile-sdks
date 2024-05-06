@@ -12,7 +12,6 @@ struct ReleaseChangelogSectionView: View {
     let content: AppReleaseSectionContent
 
     @Environment(ChangelogWidgetConfig.self) var config
-    @Environment(ChangelogWidgetBuilderConfig.self) var builderConfig
     @EnvironmentObject var componentFactory: ComponentFactory
 
     var combinedText: String {
@@ -24,15 +23,13 @@ struct ReleaseChangelogSectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             componentFactory.buildLabel(
-                config: config.releaseDetailSectionTitle,
-                content: content.title,
-                suppliedBuilder: builderConfig.releaseDetailSectionTitle
+                fontStyle: .title2,
+                content: content.title
             )
 
             componentFactory.buildLabel(
-                config: config.releaseDetailSectionItem,
-                content: LabelContent(text: combinedText),
-                suppliedBuilder: builderConfig.releaseDetailSectionItem
+                fontStyle: .body,
+                content: LabelContent(text: combinedText)
             )
             .multilineTextAlignment(.leading)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -42,7 +39,7 @@ struct ReleaseChangelogSectionView: View {
 }
 
 #Preview {
-    ParraContainerPreview<ChangelogWidget> { _, _, _, _ in
+    ParraContainerPreview<ChangelogWidget> { _, _, _ in
         VStack(spacing: 24) {
             Spacer()
             ReleaseChangelogSectionView(

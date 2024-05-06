@@ -14,10 +14,12 @@ public struct LabelContent: Hashable, Equatable {
 
     public init(
         text: String,
-        icon: ImageContent? = nil
+        icon: ImageContent? = nil,
+        isLoading: Bool = false
     ) {
         self.text = text
         self.icon = icon
+        self.isLoading = isLoading
     }
 
     public init?(text: String?) {
@@ -27,10 +29,12 @@ public struct LabelContent: Hashable, Equatable {
 
         self.text = text
         self.icon = nil
+        self.isLoading = false
     }
 
     // MARK: - Public
 
-    public let text: String
-    public let icon: ImageContent?
+    public internal(set) var text: String
+    public internal(set) var icon: ImageContent?
+    public internal(set) var isLoading: Bool
 }

@@ -94,7 +94,7 @@ struct ToastPresenter: ViewModifier {
         if let toast {
             componentFactory.buildAlert(
                 variant: .toast(onDismiss: toast.onDismiss),
-                config: toast.config,
+                level: toast.level,
                 content: toast.content,
                 localAttributes: toast.attributes,
                 primaryAction: toast.primaryAction

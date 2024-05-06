@@ -49,12 +49,12 @@ public struct AlertAttributes: ParraStyleAttributes {
     // MARK: - Internal
 
     static func defaultBackground(
-        for style: AlertConfig.Style,
+        for level: AlertLevel,
         with theme: ParraTheme
     ) -> ParraColor {
         let palette = theme.palette
 
-        return switch style {
+        return switch level {
         case .success:
             Color(
                 lightVariant: palette.success.shade300,
@@ -76,12 +76,12 @@ public struct AlertAttributes: ParraStyleAttributes {
     }
 
     static func defaultIconTint(
-        for style: AlertConfig.Style,
+        for level: AlertLevel,
         with theme: ParraTheme
     ) -> ParraColor {
         let palette = theme.palette
 
-        return switch style {
+        return switch level {
         case .success:
             Color(
                 lightVariant: palette.success.shade600,
@@ -106,12 +106,12 @@ public struct AlertAttributes: ParraStyleAttributes {
     }
 
     static func defaultBorder(
-        for style: AlertConfig.Style,
+        for level: AlertLevel,
         with theme: ParraTheme
     ) -> ParraColor? {
         let palette = theme.palette
 
-        return switch style {
+        return switch level {
         case .success:
             Color(
                 lightVariant: palette.success.shade400,
@@ -130,21 +130,5 @@ public struct AlertAttributes: ParraStyleAttributes {
                 darkVariant: palette.error.shade950
             )
         }
-    }
-
-    func withUpdates(
-        updates: AlertAttributes?
-    ) -> AlertAttributes {
-        return AlertAttributes(
-            title: title.withUpdates(updates: updates?.title),
-            subtitle: subtitle.withUpdates(updates: updates?.subtitle),
-            icon: icon.withUpdates(updates: updates?.icon),
-            dismiss: dismiss.withUpdates(updates: updates?.dismiss),
-            background: updates?.background ?? background,
-            cornerRadius: updates?.cornerRadius ?? cornerRadius,
-            padding: updates?.padding ?? padding,
-            borderWidth: updates?.borderWidth ?? borderWidth,
-            borderColor: updates?.borderColor ?? borderColor
-        )
     }
 }

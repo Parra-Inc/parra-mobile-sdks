@@ -19,8 +19,7 @@ struct ChangelogLoaderResult: Equatable {
 
 extension ViewDataLoader {
     static func changelogLoader(
-        config: ChangelogWidgetConfig,
-        localBuilder: ChangelogWidget.BuilderConfig
+        config: ChangelogWidgetConfig
     )
         -> ViewDataLoader<
             ChangelogParams,
@@ -36,7 +35,6 @@ extension ViewDataLoader {
             renderer: { parra, params, _ in
                 let container: ChangelogWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
-                        with: localBuilder,
                         params: .init(
                             appReleaseCollection: params.appReleaseCollection,
                             api: parra.parraInternal.api

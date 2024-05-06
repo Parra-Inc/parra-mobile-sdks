@@ -11,7 +11,7 @@ import Foundation
 public extension Parra {
     /// Fetches information about the most recent release of your app from
     /// Parra. This information can be used to render custom UI, or with Parra's
-    /// ``SwiftUI/View/presentParraRelease(with:config:localBuilder:onDismiss:)``
+    /// ``SwiftUI/View/presentParraRelease(with:config:onDismiss:)``
     /// modifier to present a sheet showing off the details of the release.
     func fetchLatestRelease() async throws -> NewInstalledVersionInfo? {
         let appInfo = try await parraInternal.latestVersionManager

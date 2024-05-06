@@ -12,7 +12,6 @@ struct RoadmapDetailView: View {
     @Binding var ticketContent: TicketUserContent
 
     @Environment(RoadmapWidgetConfig.self) var config
-    @Environment(RoadmapWidgetBuilderConfig.self) var builderConfig
     @EnvironmentObject var contentObserver: RoadmapWidget.ContentObserver
     @EnvironmentObject var componentFactory: ComponentFactory
     @EnvironmentObject var themeObserver: ParraThemeObserver
@@ -28,9 +27,8 @@ struct RoadmapDetailView: View {
                     }
 
                     componentFactory.buildLabel(
-                        config: LabelConfig(fontStyle: .title),
-                        content: ticketContent.title,
-                        suppliedBuilder: builderConfig.requestTitleLabel
+                        fontStyle: .title,
+                        content: ticketContent.title
                     )
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -54,15 +52,12 @@ struct RoadmapDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 componentFactory.buildLabel(
-                    config: config.createdAt,
+                    fontStyle: .caption,
                     content: LabelContent(
                         text: "Created \(ticketContent.createdAt.text)"
-                    ),
-                    suppliedBuilder: builderConfig.createdAtLabel,
-                    localAttributes: LabelAttributes(
-                        fontColor: palette.secondaryText
                     )
                 )
+                .foregroundStyle(palette.secondaryText.toParraColor())
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding([.top, .leading, .trailing], 20)
@@ -73,10 +68,8 @@ struct RoadmapDetailView: View {
 
                 ScrollView {
                     componentFactory.buildLabel(
-                        config: LabelConfig(fontStyle: .body),
-                        content: description,
-                        suppliedBuilder: builderConfig
-                            .requestDescriptionLabel
+                        fontStyle: .body,
+                        content: description
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }

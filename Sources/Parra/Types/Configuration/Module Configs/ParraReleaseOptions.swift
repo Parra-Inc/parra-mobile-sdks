@@ -76,7 +76,7 @@ public struct ParraReleaseOptions: ParraConfigurationOptionType {
         /// release from the Parra API. You can make your own determination
         /// about whether you wish to display it. The result of this method can
         /// be passed to the
-        /// ``SwiftUI/View/presentParraRelease(with:config:localBuilder:onDismiss:)``
+        /// ``SwiftUI/View/presentParraRelease(with:config:onDismiss:)``
         /// modifier to display the What's New screen.
         case manual
 

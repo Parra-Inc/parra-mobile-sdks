@@ -15,13 +15,11 @@ public struct ParraFeedbackView: ParraPublicContainer {
         cards: [ParraCardItem],
         config: FeedbackCardWidgetConfig = .default,
         style: FeedbackCardWidgetStyle? = nil,
-        localbuilderConfig: FeedbackCardWidgetBuilderConfig = .init(),
         cardDelegate: ParraCardViewDelegate? = nil
     ) {
         self.cards = cards
         self.config = config
         self.style = style
-        self.localbuilderConfig = localbuilderConfig
         self.cardDelegate = cardDelegate
     }
 
@@ -38,9 +36,8 @@ public struct ParraFeedbackView: ParraPublicContainer {
         FeedbackCardWidget(
             config: config,
             style: style,
-            localBuilderConfig: localbuilderConfig,
             componentFactory: ComponentFactory(
-                global: globalComponentAttributes,
+                attributes: globalComponentAttributes,
                 theme: theme
             ),
             contentObserver: Wrapped.ContentObserver(
@@ -71,7 +68,6 @@ public struct ParraFeedbackView: ParraPublicContainer {
     private let cards: [ParraCardItem]
     private let config: Wrapped.Config
     private let style: Wrapped.Style?
-    private let localbuilderConfig: Wrapped.BuilderConfig
     private weak var cardDelegate: ParraCardViewDelegate?
 }
 

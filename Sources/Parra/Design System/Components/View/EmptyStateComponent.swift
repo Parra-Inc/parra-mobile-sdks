@@ -44,6 +44,7 @@ struct EmptyStateComponent: EmptyStateComponentType {
                     content: content.icon,
                     style: style.iconAttributes
                 ) { content, attributes in
+
                     ImageComponent(
                         content: content,
                         attributes: attributes
@@ -52,19 +53,16 @@ struct EmptyStateComponent: EmptyStateComponentType {
                 }
 
                 componentFactory.buildLabel(
-                    config: config.title,
-                    content: content.title,
-                    localAttributes: style.titleStyle.attributes
+                    fontStyle: .title,
+                    content: content.title
                 )
 
                 withContent(
-                    content: content.subtitle,
-                    style: style.subtitleStyle
-                ) { content, style in
+                    content: content.subtitle
+                ) { content in
                     componentFactory.buildLabel(
-                        config: config.subtitle,
-                        content: content,
-                        localAttributes: style.attributes
+                        fontStyle: .subheadline,
+                        content: content
                     )
                     .multilineTextAlignment(.center)
                 }

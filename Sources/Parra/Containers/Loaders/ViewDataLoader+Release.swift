@@ -12,8 +12,7 @@ private let logger = Logger()
 
 extension ViewDataLoader {
     static func releaseLoader(
-        config: ChangelogWidgetConfig,
-        localBuilder: ReleaseWidget.BuilderConfig
+        config: ChangelogWidgetConfig
     )
         -> ViewDataLoader<
             Never,
@@ -29,7 +28,6 @@ extension ViewDataLoader {
             renderer: { parra, releaseContent, _ in
                 let container: ReleaseWidget = parra.parraInternal
                     .containerRenderer.renderContainer(
-                        with: localBuilder,
                         params: ReleaseContentObserver.InitialParams(
                             contentType: releaseContent,
                             api: parra.parraInternal.api

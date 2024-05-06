@@ -15,13 +15,11 @@ struct AuthenticationWidget: Container {
     init(
         config: ParraAuthConfig,
         style: AuthenticationWidgetStyle,
-        localBuilderConfig: AuthenticationWidgetBuilderConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
         self.style = style
-        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -37,7 +35,6 @@ struct AuthenticationWidget: Container {
 
     // MARK: - Internal
 
-    let localBuilderConfig: AuthenticationWidgetBuilderConfig
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ParraAuthConfig
@@ -56,27 +53,17 @@ struct AuthenticationWidget: Container {
                     withContent(content: content.icon) { content in
                         ImageComponent(
                             content: content,
-                            attributes: ImageAttributes(
-                                frame: .fixed(
-                                    FixedFrameAttributes(
-                                        width: 60,
-                                        height: 60
-                                    )
-                                )
+                            attributes: ParraAttributes.Image(
+                                size: CGSize(width: 60.0, height: 60.0)
                             )
                         )
                     }
 
                     componentFactory.buildLabel(
-                        config: config.title,
-                        content: content.title,
-                        suppliedBuilder: localBuilderConfig.title,
-                        localAttributes: LabelAttributes(
-                            padding: .padding(
-                                leading: content.icon == nil ? 0 : 6
-                            )
-                        )
+                        fontStyle: .largeTitle,
+                        content: content.title
                     )
+                    .padding(.leading, content.icon == nil ? 0 : 6)
                 }
                 .padding(
                     .padding(
@@ -86,9 +73,8 @@ struct AuthenticationWidget: Container {
 
                 withContent(content: content.subtitle) { content in
                     componentFactory.buildLabel(
-                        config: config.subtitle,
-                        content: content,
-                        suppliedBuilder: localBuilderConfig.subtitle
+                        fontStyle: .subheadline,
+                        content: content
                     )
                 }
 
@@ -115,11 +101,10 @@ struct AuthenticationWidget: Container {
                 SignupWidget(
                     config: config,
                     style: style,
-                    localBuilderConfig: localBuilderConfig,
                     componentFactory: componentFactory,
                     contentObserver: contentObserver
                 )
-                .edgesIgnoringSafeArea([.top])
+                .ignoresSafeArea(.container, edges: .top)
                 .environmentObject(navigationState)
             }
         }
@@ -133,11 +118,10 @@ struct AuthenticationWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<AuthenticationWidget> { parra, factory, _, builderConfig in
+    ParraContainerPreview<AuthenticationWidget> { parra, factory, _ in
         AuthenticationWidget(
             config: .default,
             style: .default(with: .default),
-            localBuilderConfig: builderConfig,
             componentFactory: factory,
             contentObserver: AuthenticationWidget.ContentObserver(
                 initialParams: .init(

@@ -61,19 +61,4 @@ public struct ImageAttributes: ParraStyleAttributes {
     let frame: FrameAttributes?
     let borderWidth: CGFloat?
     let borderColor: Color?
-
-    func withUpdates(
-        updates: ImageAttributes?
-    ) -> ImageAttributes {
-        return ImageAttributes(
-            background: updates?.background ?? background,
-            cornerRadius: updates?.cornerRadius ?? cornerRadius,
-            tint: updates?.tint ?? tint,
-            opacity: updates?.opacity ?? opacity,
-            padding: updates?.padding ?? padding,
-            frame: updates?.frame ?? frame,
-            borderWidth: updates?.borderWidth ?? borderWidth,
-            borderColor: updates?.borderColor ?? borderColor
-        )
-    }
 }

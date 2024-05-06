@@ -12,11 +12,9 @@ public struct ParraDefaultAuthenticationView: View {
     // MARK: - Lifecycle
 
     public init(
-        config: ParraAuthConfig = .default,
-        builderConfig: AuthenticationWidgetBuilderConfig = .init()
+        config: ParraAuthConfig = .default
     ) {
         self.config = config
-        self.builderConfig = builderConfig
     }
 
     // MARK: - Public
@@ -39,7 +37,6 @@ public struct ParraDefaultAuthenticationView: View {
     @MainActor var container: some View {
         let container: AuthenticationWidget = parra.parraInternal
             .containerRenderer.renderContainer(
-                with: builderConfig,
                 params: .init(
                     config: .default,
                     content: .default,
@@ -55,7 +52,6 @@ public struct ParraDefaultAuthenticationView: View {
     // MARK: - Private
 
     private let config: ParraAuthConfig
-    private let builderConfig: AuthenticationWidgetBuilderConfig
 
     @Environment(\.parra) private var parra
 }

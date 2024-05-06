@@ -9,15 +9,5 @@
 import SwiftUI
 
 public struct SegmentConfig {
-    // MARK: - Lifecycle
-
-    public init(
-        optionLabels: LabelConfig = LabelConfig(fontStyle: .body)
-    ) {
-        self.optionLabels = optionLabels
-    }
-
-    // MARK: - Public
-
-    public let optionLabels: LabelConfig
+    public init() {}
 }

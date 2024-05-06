@@ -90,24 +90,4 @@ public struct TextEditorAttributes: ParraStyleAttributes {
     let frame: FrameAttributes?
     let borderWidth: CGFloat
     let borderColor: Color?
-
-    func withUpdates(
-        updates: TextEditorAttributes?
-    ) -> TextEditorAttributes {
-        return TextEditorAttributes(
-            title: updates?.title ?? title,
-            helper: updates?.helper ?? helper,
-            background: updates?.background ?? background,
-            cornerRadius: updates?.cornerRadius ?? cornerRadius,
-            font: updates?.font ?? font,
-            fontColor: updates?.fontColor ?? fontColor,
-            fontDesign: updates?.fontDesign ?? fontDesign,
-            fontWeight: updates?.fontWeight ?? fontWeight,
-            fontWidth: updates?.fontWidth ?? fontWidth,
-            padding: updates?.padding ?? padding,
-            frame: updates?.frame ?? frame,
-            borderWidth: updates?.borderWidth ?? borderWidth,
-            borderColor: updates?.borderColor ?? borderColor
-        )
-    }
 }

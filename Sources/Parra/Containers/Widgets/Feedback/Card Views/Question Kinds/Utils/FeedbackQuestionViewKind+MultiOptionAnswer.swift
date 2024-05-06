@@ -32,9 +32,12 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
 
         componentFactory.buildTextButton(
             variant: .outlined,
-            config: config.checkboxOptions,
+            config: TextButtonConfig(
+                style: .primary,
+                size: .medium,
+                isMaxWidth: true
+            ),
             content: content,
-            suppliedBuilder: localBuilderConfig.checkboxOptions,
             localAttributes: attributes,
             onPress: {
                 var currentOptions = (currentAnswer?.options ?? []).map(\.id)
@@ -102,12 +105,7 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
         let attributes = TextButtonAttributes(
             padding: .zero,
             title: titleAttributes,
-            titlePressed: titleAttributes.withUpdates(
-                updates: LabelAttributes(
-                    fontColor: selectedColor,
-                    borderColor: selectedColor
-                )
-            )
+            titlePressed: titleAttributes
         )
 
         return (content, attributes)

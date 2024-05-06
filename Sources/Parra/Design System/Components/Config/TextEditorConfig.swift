@@ -12,8 +12,6 @@ public struct TextEditorConfig {
     // MARK: - Lifecycle
 
     public init(
-        title: LabelConfig = LabelConfig(fontStyle: .body),
-        helper: LabelConfig = LabelConfig(fontStyle: .subheadline),
         minLines: Int? = nil,
         minCharacters: Int? = nil,
         maxCharacters: Int? = nil,
@@ -23,8 +21,6 @@ public struct TextEditorConfig {
         preferValidationErrorsToHelperMessage: Bool = TextEditorConfig.default
             .preferValidationErrorsToHelperMessage
     ) {
-        self.title = title
-        self.helper = helper
         self.minLines = minLines
         self.minCharacters = minCharacters
         self.maxCharacters = maxCharacters
@@ -38,8 +34,6 @@ public struct TextEditorConfig {
     // MARK: - Public
 
     public static let `default` = TextEditorConfig(
-        title: LabelConfig(fontStyle: .body),
-        helper: LabelConfig(fontStyle: .subheadline),
         minLines: 3,
         minCharacters: 0,
         maxCharacters: nil,
@@ -47,9 +41,6 @@ public struct TextEditorConfig {
         showCharacterCountLabel: true,
         preferValidationErrorsToHelperMessage: true
     )
-
-    public let title: LabelConfig
-    public let helper: LabelConfig
 
     public let minLines: Int?
     public let minCharacters: Int?
@@ -87,8 +78,6 @@ public struct TextEditorConfig {
         -> TextEditorConfig
     {
         return TextEditorConfig(
-            title: title,
-            helper: helper,
             minLines: data.lines,
             minCharacters: data.minCharacters,
             maxCharacters: data.maxCharacters,

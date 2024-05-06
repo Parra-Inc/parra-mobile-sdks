@@ -13,7 +13,7 @@ struct AsyncImageComponent: AsyncImageComponentType {
 
     init(
         content: AsyncImageContent,
-        attributes: ImageAttributes
+        attributes: ParraAttributes.Image
     ) {
         self.content = content
         self.attributes = attributes
@@ -22,7 +22,7 @@ struct AsyncImageComponent: AsyncImageComponentType {
     // MARK: - Internal
 
     let content: AsyncImageContent
-    let attributes: ImageAttributes
+    let attributes: ParraAttributes.Image
 
     @Environment(\.parra) var parra
 
@@ -36,18 +36,7 @@ struct AsyncImageComponent: AsyncImageComponentType {
             transaction: Transaction(animation: .easeIn(duration: 0.35)),
             content: imageContent
         )
-        .padding(attributes.padding ?? .zero)
-        .applyBorder(
-            borderColor: attributes.borderColor,
-            borderWidth: attributes.borderWidth,
-            cornerRadius: attributes.cornerRadius,
-            from: theme
-        )
-        .applyFrame(attributes.frame)
-        .applyBackground(attributes.background)
-        .applyCornerRadii(size: attributes.cornerRadius, from: theme)
-        .applyOpacity(attributes.opacity)
-        .foregroundStyle(attributes.tint ?? .black)
+        .applyImageAttributes(attributes, using: theme)
     }
 
     // MARK: - Private
@@ -99,8 +88,8 @@ struct AsyncImageComponent: AsyncImageComponentType {
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                     )!
                 ),
-                attributes: ImageAttributes(
-                    frame: .fixed(FixedFrameAttributes(width: 320, height: 140))
+                attributes: .init(
+                    size: CGSize(width: 320, height: 140)
                 )
             )
 
@@ -112,8 +101,8 @@ struct AsyncImageComponent: AsyncImageComponentType {
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100"
                     )!
                 ),
-                attributes: ImageAttributes(
-                    frame: .fixed(FixedFrameAttributes(width: 320, height: 140))
+                attributes: .init(
+                    size: CGSize(width: 320, height: 140)
                 )
             )
 
@@ -125,8 +114,8 @@ struct AsyncImageComponent: AsyncImageComponentType {
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4efsdfsd"
                     )!
                 ),
-                attributes: ImageAttributes(
-                    frame: .fixed(FixedFrameAttributes(width: 320, height: 140))
+                attributes: .init(
+                    size: CGSize(width: 320, height: 140)
                 )
             )
 

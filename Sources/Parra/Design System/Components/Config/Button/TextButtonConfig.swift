@@ -12,7 +12,7 @@ public struct TextButtonConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(
-        style: ParraButtonCategory = .primary,
+        style: ParraButtonType = .primary,
         size: ParraButtonSize = .medium,
         isMaxWidth: Bool = false
     ) {
@@ -23,7 +23,7 @@ public struct TextButtonConfig: Equatable {
 
     // MARK: - Public
 
-    public let style: ParraButtonCategory
+    public let style: ParraButtonType
     public let size: ParraButtonSize
     public let isMaxWidth: Bool
 }

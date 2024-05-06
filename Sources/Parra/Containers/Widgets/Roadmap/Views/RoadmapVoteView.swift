@@ -27,9 +27,12 @@ struct RoadmapVoteView: View {
         VStack(alignment: .center) {
             componentFactory.buildImageButton(
                 variant: .plain,
-                config: config.requestUpvoteButtons,
+                config: ImageButtonConfig(
+                    style: .primary,
+                    size: .custom(CGSize(width: 18, height: 18)),
+                    variant: .plain
+                ),
                 content: ticketContent.voteButton,
-                suppliedBuilder: builderConfig.requestUpvoteButton,
                 localAttributes: ImageButtonAttributes(
                     image: ImageAttributes(
                         tint: voteHightlightColor.toParraColor()
@@ -39,6 +42,7 @@ struct RoadmapVoteView: View {
                     contentObserver.currentTicketToVote = ticketContent.id
                 }
             )
+            .frame(width: 18, height: 18)
             // manual adjust ment to try to align better with the title text
             .padding(.top, topPadding)
             .contentShape(.rect)
@@ -49,9 +53,8 @@ struct RoadmapVoteView: View {
             )
 
             componentFactory.buildLabel(
-                config: config.voteCount,
-                content: ticketContent.voteCount,
-                suppliedBuilder: builderConfig.voteCountLabel
+                fontStyle: .callout,
+                content: ticketContent.voteCount
             )
             .minimumScaleFactor(0.7)
         }
@@ -60,7 +63,6 @@ struct RoadmapVoteView: View {
     // MARK: - Private
 
     @Environment(RoadmapWidgetConfig.self) private var config
-    @Environment(RoadmapWidgetBuilderConfig.self) private var builderConfig
     @EnvironmentObject private var contentObserver: RoadmapWidget
         .ContentObserver
     @EnvironmentObject private var componentFactory: ComponentFactory

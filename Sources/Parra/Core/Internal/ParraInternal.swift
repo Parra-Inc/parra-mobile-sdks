@@ -52,7 +52,7 @@ class ParraInternal {
         self.alertManager = alertManager
         self.modalScreenManager = modalScreenManager
         self.globalComponentFactory = ComponentFactory(
-            global: configuration.globalComponentAttributes,
+            attributes: configuration.globalComponentAttributes,
             theme: configuration.theme
         )
     }

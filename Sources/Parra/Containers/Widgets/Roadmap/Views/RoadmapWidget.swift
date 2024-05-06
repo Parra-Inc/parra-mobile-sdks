@@ -14,20 +14,17 @@ struct RoadmapWidget: Container {
     init(
         config: RoadmapWidgetConfig,
         style: RoadmapWidgetStyle,
-        localBuilderConfig: RoadmapWidgetBuilderConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
         self.style = style
-        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
 
     // MARK: - Internal
 
-    let localBuilderConfig: RoadmapWidgetBuilderConfig
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: RoadmapWidgetConfig
@@ -44,10 +41,12 @@ struct RoadmapWidget: Container {
             if contentObserver.canAddRequests {
                 componentFactory.buildTextButton(
                     variant: .contained,
-                    config: config.addRequestButton,
+                    config: TextButtonConfig(
+                        style: .primary,
+                        size: .large,
+                        isMaxWidth: true
+                    ),
                     content: contentObserver.content
-                        .addRequestButton,
-                    suppliedBuilder: localBuilderConfig
                         .addRequestButton,
                     onPress: {
                         contentObserver.addRequest()
@@ -133,16 +132,14 @@ struct RoadmapWidget: Container {
             .scrollIndicatorsFlash(trigger: contentObserver.selectedTab)
             .emptyPlaceholder(items) {
                 componentFactory.buildEmptyState(
-                    config: config.emptyStateView,
-                    content: contentObserver.content.emptyStateView,
-                    suppliedBuilder: localBuilderConfig.emptyStateView
+                    config: .default,
+                    content: contentObserver.content.emptyStateView
                 )
             }
             .errorPlaceholder(contentObserver.ticketPaginator.error) {
                 componentFactory.buildEmptyState(
-                    config: config.errorStateView,
-                    content: contentObserver.content.errorStateView,
-                    suppliedBuilder: localBuilderConfig.errorStateView
+                    config: .errorDefault,
+                    content: contentObserver.content.errorStateView
                 )
             }
             .refreshable {
@@ -162,7 +159,6 @@ struct RoadmapWidget: Container {
         .applyBackground(style.background)
         .padding(style.padding)
         .environment(config)
-        .environment(localBuilderConfig)
         .environmentObject(contentObserver)
         .environmentObject(componentFactory)
         .presentParraFeedbackForm(
@@ -187,7 +183,6 @@ struct RoadmapWidget: Container {
 
                 RoadmapDetailView(ticketContent: binding)
                     .environment(config)
-                    .environment(localBuilderConfig)
                     .environmentObject(contentObserver)
             }
         }
@@ -201,9 +196,8 @@ struct RoadmapWidget: Container {
     var tabBar: some View {
         VStack(alignment: .leading, spacing: 20) {
             componentFactory.buildLabel(
-                config: config.title,
-                content: contentObserver.content.title,
-                suppliedBuilder: localBuilderConfig.title
+                fontStyle: .title,
+                content: contentObserver.content.title
             )
 
             Picker(
@@ -219,9 +213,8 @@ struct RoadmapWidget: Container {
 
             if let description = contentObserver.selectedTab.description {
                 componentFactory.buildLabel(
-                    config: config.tabDescription,
-                    content: LabelContent(text: description),
-                    suppliedBuilder: localBuilderConfig.tabDescription
+                    fontStyle: .subheadline,
+                    content: LabelContent(text: description)
                 )
                 .multilineTextAlignment(.leading)
                 .lineLimit(5)
@@ -245,11 +238,10 @@ struct RoadmapWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<RoadmapWidget> { parra, componentFactory, config, builderConfig in
+    ParraContainerPreview<RoadmapWidget> { parra, componentFactory, config in
         RoadmapWidget(
             config: .default,
             style: .default(with: .default),
-            localBuilderConfig: builderConfig,
             componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: RoadmapWidget.ContentObserver.InitialParams(

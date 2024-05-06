@@ -14,20 +14,17 @@ struct FeedbackFormWidget: Container {
     init(
         config: FeedbackFormWidgetConfig,
         style: FeedbackFormWidgetStyle,
-        localBuilderConfig: FeedbackFormWidgetBuilderConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
         self.style = style
-        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
 
     // MARK: - Internal
 
-    let localBuilderConfig: FeedbackFormWidgetBuilderConfig
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: FeedbackFormWidgetConfig
@@ -55,9 +52,12 @@ struct FeedbackFormWidget: Container {
                 primaryActionBuilder: {
                     componentFactory.buildTextButton(
                         variant: .contained,
-                        config: config.submitButton,
+                        config: TextButtonConfig(
+                            style: .primary,
+                            size: .large,
+                            isMaxWidth: true
+                        ),
                         content: contentObserver.content.submitButton,
-                        suppliedBuilder: localBuilderConfig.submitButton,
                         onPress: {
                             contentObserver.submit()
                         }
@@ -77,16 +77,14 @@ struct FeedbackFormWidget: Container {
     var header: some View {
         VStack(alignment: .leading, spacing: 10) {
             componentFactory.buildLabel(
-                config: config.title,
-                content: contentObserver.content.title,
-                suppliedBuilder: localBuilderConfig.title
+                fontStyle: .title,
+                content: contentObserver.content.title
             )
 
             if let descriptionContent = contentObserver.content.description {
                 componentFactory.buildLabel(
-                    config: config.description,
-                    content: descriptionContent,
-                    suppliedBuilder: localBuilderConfig.description
+                    fontStyle: .subheadline,
+                    content: descriptionContent
                 )
             }
         }
@@ -98,30 +96,30 @@ struct FeedbackFormWidget: Container {
                 let field = fieldWithState.field
 
                 switch field.data {
-                case .feedbackFormSelectFieldData(let data):
-                    let content = MenuContent(
-                        title: field.title,
-                        placeholder: data.placeholder,
-                        helper: field.helperText,
-                        options: data.options.map { fieldOption in
-                            MenuContent.Option(
-                                id: fieldOption.id,
-                                title: fieldOption.title,
-                                value: fieldOption.id
-                            )
-                        }
-                    ) { option in
-                        onFieldValueChanged(
-                            field: field,
-                            value: option?.value
-                        )
-                    }
-
-                    componentFactory.buildMenu(
-                        config: config.selectFields.withFormTextFieldData(data),
-                        content: content,
-                        suppliedBuilder: localBuilderConfig.selectFields
-                    )
+                case .feedbackFormSelectFieldData:
+                    fatalError()
+//                    let content = MenuContent(
+//                        title: field.title,
+//                        placeholder: data.placeholder,
+//                        helper: field.helperText,
+//                        options: data.options.map { fieldOption in
+//                            MenuContent.Option(
+//                                id: fieldOption.id,
+//                                title: fieldOption.title,
+//                                value: fieldOption.id
+//                            )
+//                        }
+//                    ) { option in
+//                        onFieldValueChanged(
+//                            field: field,
+//                            value: option?.value
+//                        )
+//                    }
+                ////
+//                    componentFactory.buildMenu(
+//                        config: config.selectFields.withFormTextFieldData(data),
+//                        content: content
+//                    )
                 case .feedbackFormTextFieldData(let data):
                     let content = TextEditorContent(
                         title: field.title,
@@ -136,9 +134,10 @@ struct FeedbackFormWidget: Container {
                     }
 
                     componentFactory.buildTextEditor(
-                        config: config.textFields.withFormTextFieldData(data),
-                        content: content,
-                        suppliedBuilder: localBuilderConfig.textFields
+                        config: TextEditorConfig(
+                            maxCharacters: 30
+                        ),
+                        content: content
                     )
                 case .feedbackFormInputFieldData(let data):
                     let content = TextInputContent(
@@ -154,9 +153,8 @@ struct FeedbackFormWidget: Container {
                     }
 
                     componentFactory.buildTextInput(
-                        config: config.inputFields.withFormTextFieldData(data),
-                        content: content,
-                        suppliedBuilder: localBuilderConfig.inputFields
+                        config: TextInputConfig(),
+                        content: content
                     )
                 }
             }
@@ -177,11 +175,10 @@ struct FeedbackFormWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<FeedbackFormWidget> { _, componentFactory, _, builderConfig in
+    ParraContainerPreview<FeedbackFormWidget> { _, componentFactory, _ in
         FeedbackFormWidget(
             config: .default,
             style: .default(with: .default),
-            localBuilderConfig: builderConfig,
             componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: .init(

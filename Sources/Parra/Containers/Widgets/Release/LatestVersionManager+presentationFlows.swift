@@ -195,7 +195,6 @@ extension LatestVersionManager {
                 self.modalScreenManager.presentModalView(
                     of: ReleaseWidget.self,
                     with: .default,
-                    localBuilder: .init(),
                     contentObserver: contentObserver,
                     onDismiss: nil
                 )

@@ -29,37 +29,36 @@ struct SegmentComponent: SegmentComponentType {
             }
         )
     }
-
-    static func applyStandardCustomizations(
-        onto inputAttributes: SegmentAttributes?,
-        theme: ParraTheme,
-        config: SegmentConfig
-    ) -> SegmentAttributes {
-        let palette = theme.palette
-
-        let defaultAttributes = SegmentAttributes(
-            optionLabels: LabelAttributes(
-                font: Font.system(config.optionLabels.fontStyle),
-                fontColor: palette.primaryText
-            ),
-            optionLabelBackgroundColor: palette.primaryBackground,
-            optionLabelSelectedBackgroundColor: palette.primary.toParraColor(),
-            optionLabelSelectedFontColor: palette.secondaryText.toParraColor(),
-            cornerRadius: .md,
-            borderWidth: 1.5,
-            borderColor: palette.primarySeparator.toParraColor()
-        )
-
-        return defaultAttributes.withUpdates(
-            updates: inputAttributes
-        )
-    }
+//    static func applyStandardCustomizations(
+//        onto inputAttributes: SegmentAttributes?,
+//        theme: ParraTheme,
+//        config: SegmentConfig
+//    ) -> SegmentAttributes {
+//        let palette = theme.palette
+//
+//        let defaultAttributes = SegmentAttributes(
+//            optionLabels: LabelAttributes(
+//                font: Font.system(config.optionLabels.fontStyle),
+//                fontColor: palette.primaryText
+//            ),
+//            optionLabelBackgroundColor: palette.primaryBackground,
+//            optionLabelSelectedBackgroundColor: palette.primary.toParraColor(),
+//            optionLabelSelectedFontColor: palette.secondaryText.toParraColor(),
+//            cornerRadius: .md,
+//            borderWidth: 1.5,
+//            borderColor: palette.primarySeparator.toParraColor()
+//        )
+//
+//        return defaultAttributes.withUpdates(
+//            updates: inputAttributes
+//        )
+//    }
 }
 
 #Preview {
     ParraViewPreview { factory in
         factory.buildSegment(
-            config: SegmentConfig(optionLabels: LabelConfig(fontStyle: .body)),
+            config: SegmentConfig(),
             content: SegmentContent(
                 options: ParraCardItemFixtures.ratingQuestionData.options.map {
                     SegmentContent.Option(

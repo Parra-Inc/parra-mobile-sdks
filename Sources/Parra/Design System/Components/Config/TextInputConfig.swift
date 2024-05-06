@@ -12,16 +12,12 @@ public struct TextInputConfig {
     // MARK: - Lifecycle
 
     public init(
-        title: LabelConfig = TextInputConfig.default.title,
-        helper: LabelConfig = TextInputConfig.default.helper,
         validationRules: [TextValidatorRule] = TextInputConfig.default
             .validationRules,
         preferValidationErrorsToHelperMessage: Bool = TextInputConfig.default
             .preferValidationErrorsToHelperMessage,
         isSecure: Bool = false
     ) {
-        self.title = title
-        self.helper = helper
         self.validationRules = validationRules
         self.preferValidationErrorsToHelperMessage
             = preferValidationErrorsToHelperMessage
@@ -31,14 +27,9 @@ public struct TextInputConfig {
     // MARK: - Public
 
     public static let `default` = TextInputConfig(
-        title: LabelConfig(fontStyle: .body),
-        helper: LabelConfig(fontStyle: .subheadline),
         validationRules: [],
         preferValidationErrorsToHelperMessage: true
     )
-
-    public let title: LabelConfig
-    public let helper: LabelConfig
 
     public let validationRules: [TextValidatorRule]
 

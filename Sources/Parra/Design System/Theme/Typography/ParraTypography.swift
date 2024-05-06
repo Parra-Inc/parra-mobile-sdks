@@ -8,97 +8,96 @@
 
 import SwiftUI
 
+public enum ParraTextStyle {
+    case largeTitle
+    case title
+    case title2
+    case title3
+    case headline
+    case subheadline
+    case body
+    case callout
+    case caption
+    case caption2
+    case footnote
+
+    // MARK: - Lifecycle
+
+    init(
+        _ systemTextStyle: Font.TextStyle
+    ) {
+        switch systemTextStyle {
+        case .largeTitle:
+            self = .largeTitle
+        case .title:
+            self = .title
+        case .title2:
+            self = .title2
+        case .title3:
+            self = .title3
+        case .headline:
+            self = .headline
+        case .subheadline:
+            self = .subheadline
+        case .body:
+            self = .body
+        case .callout:
+            self = .callout
+        case .caption:
+            self = .caption
+        case .caption2:
+            self = .caption2
+        case .footnote:
+            self = .footnote
+        default:
+            self = .body
+        }
+    }
+
+    // MARK: - Internal
+
+    var systemTextStyle: Font.TextStyle {
+        switch self {
+        case .largeTitle:
+            return .largeTitle
+        case .title:
+            return .title
+        case .title2:
+            return .title2
+        case .title3:
+            return .title3
+        case .headline:
+            return .headline
+        case .subheadline:
+            return .subheadline
+        case .body:
+            return .body
+        case .callout:
+            return .callout
+        case .caption:
+            return .caption
+        case .caption2:
+            return .caption2
+        case .footnote:
+            return .footnote
+        }
+    }
+}
+
 public struct ParraTypography {
     // MARK: - Public
 
-    public struct Attributes {
-        // MARK: - Lifecycle
-
-        public init(
-            font: Font? = nil,
-            width: Font.Width? = nil,
-            weight: Font.Weight? = nil,
-            design: Font.Design? = nil
-        ) {
-            self.font = font
-            self.width = width
-            self.weight = weight
-            self.design = design
-        }
-
-        public init(
-            font: UIFont? = nil,
-            width: Font.Width? = nil,
-            weight: Font.Weight? = nil,
-            design: Font.Design? = nil
-        ) {
-            self.font = if let font {
-                Font(font as CTFont)
-            } else {
-                nil
-            }
-
-            self.width = width
-            self.weight = weight
-            self.design = design
-        }
-
-        // MARK: - Public
-
-        public let font: Font?
-        public let width: Font.Width?
-        public let weight: Font.Weight?
-        public let design: Font.Design?
-    }
-
     public static let `default` = ParraTypography(
-        textStyles: [:],
-        buttonTextStyles: [:]
+        textStyles: [:]
     )
 
     // MARK: - Internal
 
-    let textStyles: [Font.TextStyle: Attributes]
-    let buttonTextStyles: [ParraButtonSize: Attributes]
+    let textStyles: [ParraTextStyle: ParraAttributes.Text]
 
     func getTextAttributes(
-        for fontStyle: Font.TextStyle,
-        design: Font.Design? = nil,
-        weight: Font.Weight? = nil
-    ) -> Attributes {
-        return textStyles[fontStyle] ?? Attributes(
-            font: Font.system(
-                fontStyle,
-                design: design,
-                weight: weight
-            )
-        )
-    }
-
-    func getButtonTextAttributes(
-        for buttonSize: ParraButtonSize,
-        design: Font.Design? = nil,
-        weight: Font.Weight? = nil
-    ) -> Attributes {
-        if let attributes = buttonTextStyles[buttonSize] {
-            return attributes
-        }
-
-        let defaultStyle: Font.TextStyle = switch buttonSize {
-        case .small:
-            .footnote
-        case .medium:
-            .subheadline
-        case .large:
-            .headline
-        }
-
-        return Attributes(
-            font: Font.system(
-                defaultStyle,
-                design: design,
-                weight: weight
-            )
-        )
+        for fontStyle: ParraTextStyle
+    ) -> ParraAttributes.Text? {
+        return textStyles[fontStyle]
     }
 }

@@ -18,10 +18,4 @@ protocol TextInputComponentType: View {
         content: TextInputContent,
         style: ParraAttributedTextInputStyle
     )
-
-    static func applyStandardCustomizations(
-        onto inputAttributes: TextInputAttributes?,
-        theme: ParraTheme,
-        config: TextInputConfig
-    ) -> TextInputAttributes
 }

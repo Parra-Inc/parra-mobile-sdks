@@ -8,19 +8,54 @@
 
 import SwiftUI
 
+// struct ParraUsernameView: View {
+//
+//    @EnvironmentObject var componentFactory: ComponentFactory
+//    @EnvironmentObject var themeObserver: ParraThemeObserver
+//
+//    @Environment(\.parraAuthState) var parraAuth
+//
+//    let fontStyle: Font.TextStyle
+//    let localAttributes: LabelAttributes?
+//
+//    var body: some View {
+//        switch parraAuth.current {
+//        case .authenticated(let user):
+//            componentFactory.buildLabel(
+//                config: .init(fontStyle: fontStyle),
+//                content: LabelContent(text: user.userInfo?.name ?? "-"),
+//                localAttributes: localAttributes
+//            )
+//        case .unauthenticated:
+//            Text("-")
+//        }
+//    }
+//
+// }
+//
+// HStack {
+////    ParraAvatarView()
+//
+//    VStack {
+//        ParraUsernameView(fontStyle: .title)
+//            .background(.red)
+//            .font(.headline)
+//
+//        //.. Email
+//    }
+// }
+
 struct ReleaseWidget: Container {
     // MARK: - Lifecycle
 
     init(
         config: ChangelogWidgetConfig,
         style: ChangelogWidgetStyle,
-        localBuilderConfig: ChangelogWidgetBuilderConfig,
         componentFactory: ComponentFactory,
         contentObserver: ReleaseContentObserver
     ) {
         self.config = config
         self.style = style
-        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
 
@@ -50,7 +85,6 @@ struct ReleaseWidget: Container {
 
     // MARK: - Internal
 
-    let localBuilderConfig: ChangelogWidgetBuilderConfig
     let componentFactory: ComponentFactory
 
     @StateObject var contentObserver: ReleaseContentObserver
@@ -75,18 +109,14 @@ struct ReleaseWidget: Container {
     var header: some View {
         VStack(alignment: .leading, spacing: 4) {
             componentFactory.buildLabel(
-                config: config.releaseDetailTitle,
-                content: contentObserver.content.title,
-                suppliedBuilder: localBuilderConfig.releaseDetailTitle,
-                localAttributes: style.releaseDetailTitle
+                fontStyle: .title,
+                content: contentObserver.content.title
             )
 
             withContent(content: contentObserver.content.subtitle) { content in
                 componentFactory.buildLabel(
-                    config: config.releaseDetailSubtitle,
-                    content: content,
-                    suppliedBuilder: localBuilderConfig.releaseDetailSubtitle,
-                    localAttributes: style.releaseDetailSubtitle
+                    fontStyle: .subheadline,
+                    content: content
                 )
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -106,10 +136,12 @@ struct ReleaseWidget: Container {
             ) { content in
                 componentFactory.buildTextButton(
                     variant: .contained,
-                    config: config.releaseDetailShowOtherReleasesButton,
+                    config: TextButtonConfig(
+                        style: .primary,
+                        size: .large,
+                        isMaxWidth: true
+                    ),
                     content: content,
-                    suppliedBuilder: localBuilderConfig
-                        .releaseDetailShowOtherReleasesButton,
                     onPress: {
                         navigationState.navigationPath.append("changelog")
                     }
@@ -141,7 +173,9 @@ struct ReleaseWidget: Container {
 
                         AsyncImageComponent(
                             content: content.image,
-                            attributes: style.releaseDetailHeaderImage
+                            attributes: ParraAttributes.Image(
+                                cornerRadius: .sm
+                            )
                         )
                         .aspectRatio(aspectRatio, contentMode: .fill)
                         .frame(
@@ -154,11 +188,8 @@ struct ReleaseWidget: Container {
                         content: content.description
                     ) { content in
                         componentFactory.buildLabel(
-                            config: config.releaseDetailDescription,
-                            content: content,
-                            suppliedBuilder: localBuilderConfig
-                                .releaseDetailDescription,
-                            localAttributes: style.releaseDetailDescription
+                            fontStyle: .body,
+                            content: content
                         )
                         .multilineTextAlignment(.leading)
                     }
@@ -187,7 +218,6 @@ struct ReleaseWidget: Container {
             await contentObserver.loadSections()
         }
         .environment(config)
-        .environment(localBuilderConfig)
         .environmentObject(contentObserver)
         .environmentObject(componentFactory)
         // required to prevent navigation bar from changing colors when scrolled
@@ -197,7 +227,6 @@ struct ReleaseWidget: Container {
                 ChangelogWidget(
                     config: config,
                     style: style,
-                    localBuilderConfig: localBuilderConfig,
                     componentFactory: componentFactory,
                     contentObserver: changelogContentObserver
                 )

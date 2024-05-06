@@ -18,10 +18,4 @@ protocol MenuComponentType: View {
         content: MenuContent,
         style: ParraAttributedMenuStyle
     )
-
-    static func applyStandardCustomizations(
-        onto inputAttributes: MenuAttributes?,
-        theme: ParraTheme,
-        config: MenuConfig
-    ) -> MenuAttributes
 }

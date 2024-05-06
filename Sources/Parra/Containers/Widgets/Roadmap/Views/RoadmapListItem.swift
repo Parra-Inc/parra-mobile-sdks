@@ -36,13 +36,10 @@ struct RoadmapListItem: View {
             Spacer()
 
             componentFactory.buildLabel(
-                config: config.createdAt,
-                content: ticketContent.createdAt,
-                suppliedBuilder: builderConfig.createdAtLabel,
-                localAttributes: LabelAttributes(
-                    fontColor: theme.palette.secondaryText
-                )
+                fontStyle: .caption,
+                content: ticketContent.createdAt
             )
+            .foregroundStyle(theme.palette.secondaryText.toParraColor())
         }
         .frame(maxWidth: .infinity)
     }
@@ -63,18 +60,15 @@ struct RoadmapListItem: View {
 
                 VStack(alignment: .leading) {
                     componentFactory.buildLabel(
-                        config: config.requestTitles,
-                        content: ticketContent.title,
-                        suppliedBuilder: builderConfig.requestTitleLabel
+                        fontStyle: .headline,
+                        content: ticketContent.title
                     )
                     .multilineTextAlignment(.leading)
 
                     if let description = ticketContent.description {
                         componentFactory.buildLabel(
-                            config: config.requestDescriptions,
-                            content: description,
-                            suppliedBuilder: builderConfig
-                                .requestDescriptionLabel
+                            fontStyle: .subheadline,
+                            content: description
                         )
                         .lineLimit(3)
                         .truncationMode(.tail)
@@ -96,7 +90,6 @@ struct RoadmapListItem: View {
     // MARK: - Private
 
     @Environment(RoadmapWidgetConfig.self) private var config
-    @Environment(RoadmapWidgetBuilderConfig.self) private var builderConfig
     @EnvironmentObject private var contentObserver: RoadmapWidget
         .ContentObserver
     @EnvironmentObject private var componentFactory: ComponentFactory

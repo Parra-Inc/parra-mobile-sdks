@@ -16,7 +16,7 @@ public extension Parra {
         parraInternal.configuration.theme = newTheme
 
         parraInternal.globalComponentFactory = ComponentFactory(
-            global: parraInternal.configuration.globalComponentAttributes,
+            attributes: parraInternal.configuration.globalComponentAttributes,
             theme: newTheme
         )
 

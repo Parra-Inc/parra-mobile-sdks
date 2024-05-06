@@ -14,7 +14,7 @@ struct ContainedButtonComponent: TextButtonComponentType {
     init(
         config: TextButtonConfig,
         content: TextButtonContent,
-        style: ParraAttributedTextButtonStyle,
+        style: ContainedButtonStyle,
         onPress: @escaping () -> Void
     ) {
         self.config = config
@@ -27,22 +27,17 @@ struct ContainedButtonComponent: TextButtonComponentType {
 
     let config: TextButtonConfig
     let content: TextButtonContent
-    let style: ParraAttributedTextButtonStyle
+    let style: ContainedButtonStyle
     let onPress: () -> Void
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
-
     var body: some View {
-        Button(action: onPress, label: {
+        Button(
+            action: onPress
+        ) {
             EmptyView()
-        })
+        }
         .disabled(content.isDisabled)
         .buttonStyle(style)
-        .padding(style.attributes.padding ?? .zero)
-        .applyCornerRadii(
-            size: style.attributes.cornerRadius,
-            from: themeObserver.theme
-        )
     }
 }
 

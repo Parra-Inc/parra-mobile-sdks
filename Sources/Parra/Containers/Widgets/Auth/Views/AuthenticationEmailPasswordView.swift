@@ -26,7 +26,9 @@ struct AuthenticationEmailPasswordView: View {
     var body: some View {
         VStack(spacing: 0) {
             componentFactory.buildTextInput(
-                config: config.emailField,
+                config: TextInputConfig(
+                    validationRules: config.emailValidationRules
+                ),
                 content: content.emailField,
                 localAttributes: TextInputAttributes(
                     padding: .padding(
@@ -43,7 +45,9 @@ struct AuthenticationEmailPasswordView: View {
             }
 
             componentFactory.buildTextInput(
-                config: config.passwordField,
+                config: TextInputConfig(
+                    validationRules: config.passwordValidationRules
+                ),
                 content: content.passwordField,
                 localAttributes: TextInputAttributes(
                     padding: .padding(bottom: 16),
@@ -58,7 +62,11 @@ struct AuthenticationEmailPasswordView: View {
 
             componentFactory.buildTextButton(
                 variant: .contained,
-                config: config.loginButton,
+                config: TextButtonConfig(
+                    style: .primary,
+                    size: .large,
+                    isMaxWidth: true
+                ),
                 content: content.loginButton
             ) {
                 contentObserver.loginTapped()
@@ -66,25 +74,21 @@ struct AuthenticationEmailPasswordView: View {
 
             if let error = contentObserver.error {
                 componentFactory.buildLabel(
-                    config: config.loginErrorLabel,
-                    content: LabelContent(text: error),
-                    localAttributes: .defaultFormCallout(
-                        in: themeObserver.theme,
-                        with: config.loginErrorLabel,
-                        erroring: true
-                    ).withUpdates(
-                        updates: LabelAttributes(
-                            padding: .padding(top: 4)
-                        )
-                    )
+                    fontStyle: .caption,
+                    content: LabelContent(text: error)
                 )
+                .applyFormCalloutAttributes(erroring: true)
             }
 
             Spacer()
 
             componentFactory.buildTextButton(
                 variant: .plain,
-                config: config.signupButton,
+                config: TextButtonConfig(
+                    style: .primary,
+                    size: .small,
+                    isMaxWidth: false
+                ),
                 content: content.signupButton
             ) {
                 navigationState.navigationPath.append("signup")

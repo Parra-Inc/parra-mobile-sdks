@@ -127,25 +127,3 @@ public struct ImageButtonAttributes: ParraStyleAttributes {
         )
     }
 }
-
-extension ImageButtonAttributes {
-    func withUpdates(updates: Self?) -> Self {
-        let updatedImagePressed: ImageAttributes? = if let imagePressed {
-            imagePressed.withUpdates(updates: updates?.imagePressed)
-        } else {
-            updates?.imagePressed
-        }
-
-        let updatedImageDisabled: ImageAttributes? = if let imageDisabled {
-            imageDisabled.withUpdates(updates: updates?.imageDisabled)
-        } else {
-            updates?.imageDisabled
-        }
-
-        return ImageButtonAttributes(
-            image: image.withUpdates(updates: updates?.image),
-            imageDisabled: updatedImagePressed,
-            imagePressed: updatedImageDisabled
-        )
-    }
-}

@@ -15,7 +15,6 @@ public extension View {
     func presentParraReleaseModal(
         with appVersionInfoBinding: Binding<NewInstalledVersionInfo?>,
         config: ChangelogWidgetConfig = .default,
-        localBuilder: ChangelogWidgetBuilderConfig = .init(),
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         return loadAndPresentSheet(
@@ -34,8 +33,7 @@ public extension View {
                 }
             ),
             with: .releaseLoader(
-                config: config,
-                localBuilder: localBuilder
+                config: config
             ),
             onDismiss: onDismiss
         )
@@ -46,7 +44,6 @@ public extension View {
 //    func presentParraReleaseToast(
 //        with appVersionInfoBinding: Binding<NewInstalledVersionInfo?>,
 //        config: ChangelogWidgetConfig = .default,
-//        localBuilder: ChangelogWidgetBuilderConfig = .init(),
 //        onDismiss: ((SheetDismissType) -> Void)? = nil
 //    ) -> some View {
 //        return loadAndPresentSheet(
@@ -65,8 +62,7 @@ public extension View {
 //                }
 //            ),
 //            with: .releaseLoader(
-//                config: config,
-//                localBuilder: localBuilder
+//                config: config
 //            ),
 //            onDismiss: onDismiss
 //        )

@@ -58,22 +58,23 @@ private func renderButtonComponent(
     content: TextButtonContent,
     theme: ParraTheme = .default
 ) -> some View {
-    return type.init(
-        config: config,
-        content: content,
-        style: ParraAttributedTextButtonStyle(
-            config: config,
-            content: content,
-            attributes: type.applyStandardCustomizations(
-                onto: TextButtonAttributes(),
-                theme: theme,
-                config: config,
-                for: type
-            ),
-            theme: theme
-        ),
-        onPress: {}
-    )
+    return Text("TODO: Implement renderButtonComponent")
+//    return type.init(
+//        config: config,
+//        content: content,
+//        style: ParraAttributedTextButtonStyle(
+//            config: config,
+//            content: content,
+//            attributes: type.applyStandardCustomizations(
+//                onto: TextButtonAttributes(),
+//                theme: theme,
+//                config: config,
+//                for: type
+//            ),
+//            theme: theme
+//        ),
+//        onPress: {}
+//    )
 }
 
 private func renderRowTitle(_ title: String) -> some View {

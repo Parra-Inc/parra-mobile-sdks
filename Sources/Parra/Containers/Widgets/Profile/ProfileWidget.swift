@@ -14,20 +14,17 @@ struct ProfileWidget: Container {
     init(
         config: ProfileWidgetConfig,
         style: ProfileWidgetStyle,
-        localBuilderConfig: ProfileWidgetBuilderConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
         self.style = style
-        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
 
     // MARK: - Internal
 
-    let localBuilderConfig: ProfileWidgetBuilderConfig
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ProfileWidgetConfig
@@ -69,11 +66,10 @@ struct ProfileWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<ProfileWidget> { parra, factory, config, builderConfig in
+    ParraContainerPreview<ProfileWidget> { parra, factory, config in
         ProfileWidget(
             config: .default,
             style: .default(with: .default),
-            localBuilderConfig: builderConfig,
             componentFactory: factory,
             contentObserver: .init(
                 initialParams: .init(

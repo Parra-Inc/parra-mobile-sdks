@@ -8,15 +8,21 @@
 
 import SwiftUI
 
+struct ProfileSettingsWidget: View {
+    var body: some View {
+        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text(
+            "Hello, world!"
+        )/*@END_MENU_TOKEN@*/
+    }
+}
+
 public struct ParraProfileView: View {
     // MARK: - Lifecycle
 
     public init(
-        config: ProfileWidgetConfig = .default,
-        builderConfig: ProfileWidgetBuilderConfig = .init()
+        config: ProfileWidgetConfig = .default
     ) {
         self.config = config
-        self.builderConfig = builderConfig
     }
 
     // MARK: - Public
@@ -24,11 +30,15 @@ public struct ParraProfileView: View {
     public var body: some View {
         NavigationStack {
             profileContainer
-        }
-        .toolbar {
-            Button {} label: {
-                Image(systemName: "gear")
-            }
+                .toolbar {
+                    if config.settingsEnabled {
+                        NavigationLink {
+                            ProfileSettingsWidget()
+                        } label: {
+                            Image(systemName: "gearshape")
+                        }
+                    }
+                }
         }
     }
 
@@ -37,7 +47,6 @@ public struct ParraProfileView: View {
     @MainActor var profileContainer: some View {
         let container: ProfileWidget = parra.parraInternal
             .containerRenderer.renderContainer(
-                with: builderConfig,
                 params: .init(
                     api: parra.parraInternal.api
                 ),
@@ -52,5 +61,4 @@ public struct ParraProfileView: View {
     @Environment(\.parra) private var parra
 
     private let config: ProfileWidgetConfig
-    private let builderConfig: ProfileWidgetBuilderConfig
 }

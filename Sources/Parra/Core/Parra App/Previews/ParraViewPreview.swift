@@ -21,7 +21,7 @@ struct ParraViewPreview<Content>: View where Content: View {
         self.content = content
         self.configuration = .init(themeOptions: theme)
         self.factory = ComponentFactory(
-            global: GlobalComponentAttributes(),
+            attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
     }

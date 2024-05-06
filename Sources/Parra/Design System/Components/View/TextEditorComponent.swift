@@ -13,21 +13,19 @@ struct TextEditorComponent: TextEditorComponentType {
 
     init(
         config: TextEditorConfig,
-        content: TextEditorContent,
-        style: ParraAttributedTextEditorStyle
+        content: TextEditorContent
     ) {
         self.config = config
         self.content = content
-        self.style = style
     }
 
     // MARK: - Internal
 
     var config: TextEditorConfig
     var content: TextEditorContent
-    var style: ParraAttributedTextEditorStyle
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
+    @EnvironmentObject var componentFactory: ComponentFactory
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -44,15 +42,15 @@ struct TextEditorComponent: TextEditorComponentType {
                     content.textChanged?(newValue)
                 }
 
-                UnevenRoundedRectangle(
-                    cornerRadii: themeObserver.theme.cornerRadius
-                        .value(for: style.attributes.cornerRadius)
-                )
-                .strokeBorder(
-                    style.attributes.borderColor
-                        ?? themeObserver.theme.palette.secondaryBackground,
-                    lineWidth: style.attributes.borderWidth
-                )
+//                UnevenRoundedRectangle(
+//                    cornerRadii: themeObserver.theme.cornerRadius
+//                        .value(for: style.attributes.cornerRadius)
+//                )
+//                .strokeBorder(
+//                    style.attributes.borderColor
+//                        ?? themeObserver.theme.palette.secondaryBackground,
+//                    lineWidth: style.attributes.borderWidth
+//                )
 
                 placeholder
 
@@ -61,62 +59,62 @@ struct TextEditorComponent: TextEditorComponentType {
 
             helperLabel
         }
-        .padding(style.attributes.padding ?? .zero)
-        .applyBackground(style.attributes.background)
+//        .padding(style.attributes.padding ?? .zero)
+//        .applyBackground(style.attributes.background)
     }
 
-    static func applyStandardCustomizations(
-        onto inputAttributes: TextEditorAttributes?,
-        theme: ParraTheme,
-        config: TextEditorConfig
-    ) -> TextEditorAttributes {
-        let palette = theme.palette
-
-        let title = LabelAttributes.defaultFormTitle(
-            in: theme,
-            with: config.title
-        )
-        let helper = LabelAttributes.defaultFormHelper(
-            in: theme,
-            with: config.helper
-        )
-
-        return inputAttributes ?? TextEditorAttributes(
-            title: title,
-            helper: helper,
-            cornerRadius: .md,
-            font: .body,
-            fontColor: palette.primaryText.toParraColor(),
-            padding: .zero,
-            frame: .flexible(
-                FlexibleFrameAttributes(
-                    minHeight: 60,
-                    idealHeight: 150,
-                    maxHeight: 240
-                )
-            ),
-            borderWidth: 1,
-            borderColor: palette.secondaryText.toParraColor()
-        )
-    }
+//    static func applyStandardCustomizations(
+//        onto inputAttributes: TextEditorAttributes?,
+//        theme: ParraTheme,
+//        config: TextEditorConfig
+//    ) -> TextEditorAttributes {
+//        let palette = theme.palette
+//
+//        let title = LabelAttributes.defaultFormTitle(
+//            in: theme,
+//            with: config.title
+//        )
+//        let helper = LabelAttributes.defaultFormHelper(
+//            in: theme,
+//            with: config.helper
+//        )
+//
+//        return inputAttributes ?? TextEditorAttributes(
+//            title: title,
+//            helper: helper,
+//            cornerRadius: .md,
+//            font: .body,
+//            fontColor: palette.primaryText.toParraColor(),
+//            padding: .zero,
+//            frame: .flexible(
+//                FlexibleFrameAttributes(
+//                    minHeight: 60,
+//                    idealHeight: 150,
+//                    maxHeight: 240
+//                )
+//            ),
+//            borderWidth: 1,
+//            borderColor: palette.secondaryText.toParraColor()
+//        )
+//    }
 
     @ViewBuilder
     func applyStyle(to view: some View) -> some View {
         view
-            .tint(themeObserver.theme.palette.primary.toParraColor())
-            .background(.clear)
-            .contentMargins(
-                .all,
-                Constant.contentInsets,
-                for: .automatic
-            )
-            .applyFrame(style.attributes.frame)
-            .foregroundStyle(fontColor)
-            .font(style.attributes.font)
-            .fontDesign(style.attributes.fontDesign)
-            .fontWeight(style.attributes.fontWeight)
-            .fontWidth(style.attributes.fontWidth)
-            .lineLimit((config.minLines ?? 0)...)
+//            .tint(themeObserver.theme.palette.primary.toParraColor())
+//            .background(.clear)
+//            .contentMargins(
+//                .all,
+//                Constant.contentInsets,
+//                for: .automatic
+//            )
+//            .applyFrame(style.attributes.frame)
+//            .foregroundStyle(fontColor)
+//            .font(style.attributes.font)
+//            .fontDesign(style.attributes.fontDesign)
+//            .fontWeight(style.attributes.fontWeight)
+//            .fontWidth(style.attributes.fontWidth)
+//            .lineLimit((config.minLines ?? 0)...)
     }
 
     // MARK: - Private
@@ -137,113 +135,123 @@ struct TextEditorComponent: TextEditorComponentType {
     @State private var hasReceivedInput = false
 
     @ViewBuilder private var titleLabel: some View {
-        if let title = content.title, let titleStyle = style.titleStyle {
-            LabelComponent(
-                content: title,
-                style: titleStyle
+        withContent(
+            content: content.title
+        ) { content in
+            componentFactory.buildLabel(
+                fontStyle: .body,
+                content: content
             )
         }
     }
 
-    private var fontColor: Color {
-        return style.attributes.fontColor
-            ?? themeObserver.theme.palette.primaryText.toParraColor()
-    }
+//    private var fontColor: Color {
+//        return style.attributes.fontColor
+//            ?? themeObserver.theme.palette.primaryText.toParraColor()
+//    }
 
     @ViewBuilder private var placeholder: some View {
-        let attributes = style.attributes
-
-        if let placeholder = content.placeholder, text.isEmpty {
-            Text(placeholder.text)
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity,
-                    alignment: .topLeading
-                )
-                .padding(Constant.primaryTextPadding)
-                .foregroundStyle(Color(UIColor.placeholderText))
-                .font(attributes.font)
-                .fontDesign(attributes.fontDesign)
-                .fontWeight(attributes.fontWeight)
-                .fontWidth(attributes.fontWidth)
-                .allowsHitTesting(false)
-        }
+        EmptyView()
+//        let attributes = style.attributes
+//
+//        if let placeholder = content.placeholder, text.isEmpty {
+//            Text(placeholder.text)
+//                .frame(
+//                    maxWidth: .infinity,
+//                    maxHeight: .infinity,
+//                    alignment: .topLeading
+//                )
+//                .padding(Constant.primaryTextPadding)
+//                .foregroundStyle(Color(UIColor.placeholderText))
+//                .font(attributes.font)
+//                .fontDesign(attributes.fontDesign)
+//                .fontWeight(attributes.fontWeight)
+//                .fontWidth(attributes.fontWidth)
+//                .allowsHitTesting(false)
+//        }
     }
 
     @ViewBuilder private var helperLabel: some View {
-        let (message, baseStyle, isError): (
-            String?,
-            ParraAttributedLabelStyle?,
-            Bool
-        ) = if let errorMessage = style.content.errorMessage,
-               config.preferValidationErrorsToHelperMessage
-        {
-            // Even though we're displaying the error message, we only want to
-            // render it as an error if input has already been received. This
-            // prevents errors from being as apparent before the user has had
-            // the chance to try to enter anything.
-            (errorMessage, nil, hasReceivedInput)
-        } else if let helperContent = content.helper,
-                  let helperStyle = style.helperStyle
-        {
-            (helperContent.text, helperStyle, false)
-        } else {
-            (nil, nil, false)
-        }
-
-        if let message {
-            let content = LabelContent(text: message)
-            let style = baseStyle?.withContent(
-                content: content
-            ) ?? ParraAttributedLabelStyle(
-                content: content,
-                attributes: .defaultFormHelper(
-                    in: themeObserver.theme,
-                    with: LabelConfig(fontStyle: .caption),
-                    erroring: isError
-                ),
-                theme: themeObserver.theme
-            )
-
-            LabelComponent(
-                content: content,
-                style: style
-            )
-            .padding(.trailing, 4)
-        }
+        EmptyView()
+//        LabelComponent(
+//            content: content.helper,
+//            style: style.helperStyle
+//        )
+//        .applyFormHelperAttributes(erroring: <#T##Bool#>)
+//        let (message, baseStyle, isError): (
+//            String?,
+//            ParraAttributedLabelStyle?,
+//            Bool
+//        ) = if let errorMessage = style.content.errorMessage,
+//               config.preferValidationErrorsToHelperMessage
+//        {
+//            // Even though we're displaying the error message, we only want to
+//            // render it as an error if input has already been received. This
+//            // prevents errors from being as apparent before the user has had
+//            // the chance to try to enter anything.
+//            (errorMessage, nil, hasReceivedInput)
+//        } else if let helperContent = content.helper,
+//                  let helperStyle = style.helperStyle
+//        {
+//            (helperContent.text, helperStyle, false)
+//        } else {
+//            (nil, nil, false)
+//        }
+//
+//        if let message {
+//            let content = LabelContent(text: message)
+//            let style = baseStyle?.withContent(
+//                content: content
+//            ) ?? ParraAttributedLabelStyle(
+//                content: content,
+//                attributes: .defaultFormHelper(
+//                    in: themeObserver.theme,
+//                    with: LabelConfig(fontStyle: .caption),
+//                    erroring: isError
+//                ),
+//                theme: themeObserver.theme
+//            )
+//
+//            LabelComponent(
+//                content: content,
+//                style: style
+//            )
+//            .padding(.trailing, 4)
+//        }
     }
 
     @ViewBuilder private var characterCount: some View {
-        if config.showCharacterCountLabel {
-            let (count, allowed) = characterCountString(
-                with: config.maxCharacters
-            )
-
-            let content = LabelContent(text: count)
-
-            VStack {
-                LabelComponent(
-                    content: content,
-                    style: ParraAttributedLabelStyle(
-                        content: content,
-                        attributes: .defaultFormCallout(
-                            in: themeObserver.theme,
-                            with: LabelConfig(fontStyle: .callout),
-                            erroring: !allowed
-                        ),
-                        theme: themeObserver.theme
-                    )
-                )
-                .padding(
-                    EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 10)
-                )
-            }
-            .frame(
-                maxWidth: .infinity,
-                maxHeight: .infinity,
-                alignment: .bottomTrailing
-            )
-        }
+        EmptyView()
+//        if config.showCharacterCountLabel {
+//            let (count, allowed) = characterCountString(
+//                with: config.maxCharacters
+//            )
+//
+//            let content = LabelContent(text: count)
+//
+//            VStack {
+//                LabelComponent(
+//                    content: content,
+//                    style: ParraAttributedLabelStyle(
+//                        content: content,
+//                        attributes: .defaultFormCallout(
+//                            in: themeObserver.theme,
+//                            with: LabelConfig(fontStyle: .callout),
+//                            erroring: !allowed
+//                        ),
+//                        theme: themeObserver.theme
+//                    )
+//                )
+//                .padding(
+//                    EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 10)
+//                )
+//            }
+//            .frame(
+//                maxWidth: .infinity,
+//                maxHeight: .infinity,
+//                alignment: .bottomTrailing
+//            )
+//        }
     }
 
     private func characterCountString(
@@ -259,53 +267,53 @@ struct TextEditorComponent: TextEditorComponentType {
     }
 }
 
-#Preview {
-    ParraViewPreview { factory in
-        VStack {
-            factory.buildTextEditor(
-                config: FeedbackFormWidget.Config.default.textFields,
-                content: TextEditorContent(
-                    title: "Some title",
-                    placeholder: "temp placeholder",
-                    helper: "helper text woo",
-                    errorMessage: nil,
-                    textChanged: nil
-                )
-            )
-
-            factory.buildTextEditor(
-                config: FeedbackFormWidget.Config.default.textFields,
-                content: TextEditorContent(
-                    title: "Some title",
-                    placeholder: "temp placeholder",
-                    helper: "helper text woo",
-                    errorMessage: nil,
-                    textChanged: nil
-                )
-            )
-
-            factory.buildTextEditor(
-                config: FeedbackFormWidget.Config.default.textFields,
-                content: TextEditorContent(
-                    title: "Some title",
-                    placeholder: "temp placeholder",
-                    helper: "helper text woo",
-                    errorMessage: "That text isn't very good",
-                    textChanged: nil
-                )
-            )
-
-            factory.buildTextEditor(
-                config: FeedbackFormWidget.Config.default.textFields,
-                content: TextEditorContent(
-                    title: "Some title",
-                    placeholder: "temp placeholder",
-                    helper: "helper text woo",
-                    errorMessage: nil,
-                    textChanged: nil
-                )
-            )
-        }
-    }
-    .padding()
-}
+// #Preview {
+//    ParraViewPreview { factory in
+//        VStack {
+//            factory.buildTextEditor(
+//                config: FeedbackFormWidget.Config.default.textFields,
+//                content: TextEditorContent(
+//                    title: "Some title",
+//                    placeholder: "temp placeholder",
+//                    helper: "helper text woo",
+//                    errorMessage: nil,
+//                    textChanged: nil
+//                )
+//            )
+//
+//            factory.buildTextEditor(
+//                config: FeedbackFormWidget.Config.default.textFields,
+//                content: TextEditorContent(
+//                    title: "Some title",
+//                    placeholder: "temp placeholder",
+//                    helper: "helper text woo",
+//                    errorMessage: nil,
+//                    textChanged: nil
+//                )
+//            )
+//
+//            factory.buildTextEditor(
+//                config: FeedbackFormWidget.Config.default.textFields,
+//                content: TextEditorContent(
+//                    title: "Some title",
+//                    placeholder: "temp placeholder",
+//                    helper: "helper text woo",
+//                    errorMessage: "That text isn't very good",
+//                    textChanged: nil
+//                )
+//            )
+//
+//            factory.buildTextEditor(
+//                config: FeedbackFormWidget.Config.default.textFields,
+//                content: TextEditorContent(
+//                    title: "Some title",
+//                    placeholder: "temp placeholder",
+//                    helper: "helper text woo",
+//                    errorMessage: nil,
+//                    textChanged: nil
+//                )
+//            )
+//        }
+//    }
+//    .padding()
+// }

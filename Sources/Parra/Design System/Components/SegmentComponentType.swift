@@ -18,10 +18,4 @@ protocol SegmentComponentType: View {
         content: SegmentContent,
         style: ParraAttributedSegmentStyle
     )
-
-    static func applyStandardCustomizations(
-        onto inputAttributes: SegmentAttributes?,
-        theme: ParraTheme,
-        config: SegmentConfig
-    ) -> SegmentAttributes
 }

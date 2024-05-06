@@ -1,5 +1,5 @@
 //
-//  ParraButtonCategory.swift
+//  ParraButtonType.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/6/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ParraButtonCategory: Equatable {
+public enum ParraButtonType: Equatable {
     case primary
     case secondary
 }

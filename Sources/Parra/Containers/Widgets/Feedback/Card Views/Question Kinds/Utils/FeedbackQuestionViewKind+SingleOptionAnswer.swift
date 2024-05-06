@@ -29,9 +29,12 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
 
         componentFactory.buildTextButton(
             variant: .outlined,
-            config: config.choiceOptions,
+            config: TextButtonConfig(
+                style: .primary,
+                size: .medium,
+                isMaxWidth: true
+            ),
             content: content,
-            suppliedBuilder: localBuilderConfig.choiceOptions,
             localAttributes: attributes,
             onPress: {
                 if isSelected {
@@ -90,12 +93,7 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
         let attributes = TextButtonAttributes(
             padding: .zero,
             title: titleAttributes,
-            titlePressed: titleAttributes.withUpdates(
-                updates: LabelAttributes(
-                    fontColor: selectedColor,
-                    borderColor: selectedColor
-                )
-            )
+            titlePressed: titleAttributes
         )
 
         return (content, attributes)

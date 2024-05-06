@@ -14,9 +14,11 @@ extension FeedbackCardWidget {
             HStack(alignment: .center) {
                 componentFactory.buildImageButton(
                     variant: .plain,
-                    config: config.backButton,
-                    content: contentObserver.content.backButton,
-                    suppliedBuilder: localBuilderConfig.backButton
+                    config: ImageButtonConfig(
+                        style: .primary,
+                        size: .smallSquare
+                    ),
+                    content: contentObserver.content.backButton
                 ) {
                     contentObserver.onPressBack()
                 }
@@ -29,9 +31,11 @@ extension FeedbackCardWidget {
 
                 componentFactory.buildImageButton(
                     variant: .plain,
-                    config: config.forwardButton,
-                    content: contentObserver.content.forwardButton,
-                    suppliedBuilder: localBuilderConfig.forwardButton
+                    config: ImageButtonConfig(
+                        style: .primary,
+                        size: .smallSquare
+                    ),
+                    content: contentObserver.content.forwardButton
                 ) {
                     contentObserver.onPressForward()
                 }

@@ -12,15 +12,16 @@ class ComponentFactory: ObservableObject {
     // MARK: - Lifecycle
 
     init(
-        global: GlobalComponentAttributes?,
+        attributes: ComponentAttributesProvider =
+            ParraGlobalComponentAttributes(),
         theme: ParraTheme
     ) {
-        self.global = global
+        self.attributeProvider = attributes
         self.theme = theme
     }
 
     // MARK: - Internal
 
-    let global: GlobalComponentAttributes?
+    let attributeProvider: ComponentAttributesProvider
     let theme: ParraTheme
 }

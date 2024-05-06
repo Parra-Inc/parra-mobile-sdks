@@ -48,27 +48,4 @@ public struct SegmentAttributes: ParraStyleAttributes {
 
     public let borderWidth: CGFloat?
     public let borderColor: Color?
-
-    // MARK: - Internal
-
-    func withUpdates(
-        updates: SegmentAttributes?
-    ) -> SegmentAttributes {
-        return SegmentAttributes(
-            optionLabels: optionLabels.withUpdates(
-                updates: updates?.optionLabels
-            ),
-            optionLabelBackgroundColor: updates?
-                .optionLabelBackgroundColor ?? optionLabelBackgroundColor,
-            optionLabelSelectedBackgroundColor: updates?
-                .optionLabelSelectedBackgroundColor ??
-                optionLabelSelectedBackgroundColor,
-            optionLabelSelectedFontColor: updates?
-                .optionLabelSelectedFontColor ?? optionLabelSelectedFontColor,
-            cornerRadius: updates?.cornerRadius ?? cornerRadius,
-            padding: updates?.padding ?? padding,
-            borderWidth: updates?.borderWidth ?? borderWidth,
-            borderColor: updates?.borderColor ?? borderColor
-        )
-    }
 }

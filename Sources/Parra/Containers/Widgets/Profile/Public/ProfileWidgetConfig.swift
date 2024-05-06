@@ -12,20 +12,20 @@ public class ProfileWidgetConfig: ContainerConfig {
     // MARK: - Lifecycle
 
     required init() {
-        self.title = ProfileWidgetConfig.default.title
+        self.settingsEnabled = ProfileWidgetConfig.default.settingsEnabled
     }
 
     public init(
-        title: LabelConfig = ProfileWidgetConfig.default.title
+        settingsEnabled: Bool = ProfileWidgetConfig.default.settingsEnabled
     ) {
-        self.title = title
+        self.settingsEnabled = settingsEnabled
     }
 
     // MARK: - Public
 
     public static let `default` = ProfileWidgetConfig(
-        title: LabelConfig(fontStyle: .largeTitle)
+        settingsEnabled: true
     )
 
-    public let title: LabelConfig
+    public let settingsEnabled: Bool
 }

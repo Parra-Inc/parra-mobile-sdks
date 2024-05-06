@@ -70,35 +70,6 @@ struct TextInputComponent: TextInputComponentType {
         .applyBackground(style.attributes.background)
     }
 
-    static func applyStandardCustomizations(
-        onto inputAttributes: TextInputAttributes?,
-        theme: ParraTheme,
-        config: TextInputConfig
-    ) -> TextInputAttributes {
-        let palette = theme.palette
-
-        let title = LabelAttributes.defaultFormTitle(
-            in: theme,
-            with: config.title
-        )
-        let helper = LabelAttributes.defaultFormHelper(
-            in: theme,
-            with: config.helper
-        )
-
-        return TextInputAttributes(
-            title: title,
-            helper: helper,
-            cornerRadius: .md,
-            font: .body,
-            fontColor: palette.primaryText.toParraColor(),
-            padding: .zero,
-            frame: .fixed(.init(height: 52)),
-            borderWidth: 1,
-            borderColor: palette.secondaryText.toParraColor()
-        ).withUpdates(updates: inputAttributes)
-    }
-
     // MARK: - Private
 
     @State private var text = ""
@@ -106,123 +77,123 @@ struct TextInputComponent: TextInputComponentType {
 
     @ViewBuilder private var titleLabel: some View {
         if let title = content.title, let titleStyle = style.titleStyle {
-            LabelComponent(
-                content: title,
-                style: titleStyle
-            )
+            EmptyView()
+//            LabelComponent(
+//                content: title,
+//                style: titleStyle
+//            )
         }
     }
 
     @ViewBuilder private var helperLabel: some View {
-        let (message, baseStyle, isError): (
-            String?,
-            ParraAttributedLabelStyle?,
-            Bool
-        ) = if let errorMessage = style.content.errorMessage,
-               config.preferValidationErrorsToHelperMessage
-        {
-            // Even though we're displaying the error message, we only want to
-            // render it as an error if input has already been received. This
-            // prevents errors from being as apparent before the user has had
-            // the chance to try to enter anything.
-            (errorMessage, nil, hasReceivedInput)
-        } else if let helperContent = content.helper,
-                  let helperStyle = style.helperStyle
-        {
-            (helperContent.text, helperStyle, false)
-        } else {
-            (nil, nil, false)
-        }
-
-        let content = if let message {
-            LabelContent(text: message)
-        } else {
-            LabelContent(text: "")
-        }
-
-        let style = baseStyle?.withContent(
-            content: content
-        ) ?? ParraAttributedLabelStyle(
-            content: content,
-            attributes: .defaultFormHelper(
-                in: themeObserver.theme,
-                with: LabelConfig(fontStyle: .caption),
-                erroring: isError
-            ),
-            theme: themeObserver.theme
-        )
-
-        LabelComponent(
-            content: content,
-            style: style
-        )
-        .lineLimit(1)
+        EmptyView()
+//        let (message, baseStyle, isError): (
+//            String?,
+//            ParraAttributedLabelStyle?,
+//            Bool
+//        ) = if let errorMessage = style.content.errorMessage,
+//               config.preferValidationErrorsToHelperMessage
+//        {
+//            // Even though we're displaying the error message, we only want to
+//            // render it as an error if input has already been received. This
+//            // prevents errors from being as apparent before the user has had
+//            // the chance to try to enter anything.
+//            (errorMessage, nil, hasReceivedInput)
+//        } else if let helperContent = content.helper,
+//                  let helperStyle = style.helperStyle
+//        {
+//            (helperContent.text, helperStyle, false)
+//        } else {
+//            (nil, nil, false)
+//        }
+//
+//        let content = if let message {
+//            LabelContent(text: message)
+//        } else {
+//            LabelContent(text: "")
+//        }
+//
+//        let style = baseStyle?.withContent(
+//            content: content
+//        ) ?? ParraAttributedLabelStyle(
+//            content: content,
+//            attributes: .defaultFormHelper(
+//                in: themeObserver.theme,
+//                with: LabelConfig(fontStyle: .caption),
+//                erroring: isError
+//            ),
+//            theme: themeObserver.theme
+//        )
+//
+//        LabelComponent(
+//            content: content,
+//            style: style
+//        )
+//        .lineLimit(1)
     }
 }
 
-#Preview {
-    ParraViewPreview { factory in
-        VStack {
-            factory.buildTextInput(
-                config: FeedbackFormWidget.Config.default.inputFields,
-                content: TextInputContent(
-                    title: "Some title",
-                    placeholder: "temp placeholder",
-                    helper: "helper text woo",
-                    errorMessage: nil,
-                    textChanged: nil
-                )
-            )
-
-            factory.buildTextInput(
-                config: FeedbackFormWidget.Config.default.inputFields,
-                content: TextInputContent(
-                    title: "Some title",
-                    placeholder: "temp placeholder",
-                    helper: "helper text woo",
-                    errorMessage: nil,
-                    textChanged: nil
-                )
-            )
-
-            factory.buildTextInput(
-                config: FeedbackFormWidget.Config.default.inputFields,
-                content: TextInputContent(
-                    title: "Some title",
-                    placeholder: "",
-                    helper: "helper text woo",
-                    errorMessage: "That text isn't very good",
-                    textChanged: nil
-                )
-            )
-
-            factory.buildTextInput(
-                config: FeedbackFormWidget.Config.default.inputFields,
-                content: TextInputContent(
-                    title: "Some title",
-                    placeholder: nil,
-                    helper: "helper text woo",
-                    errorMessage: nil,
-                    textChanged: nil
-                )
-            )
-
-            factory.buildTextInput(
-                config: TextInputConfig(
-                    title: LabelConfig(fontStyle: .body),
-                    helper: LabelConfig(fontStyle: .caption),
-                    validationRules: [.hasLowercase, .hasUppercase],
-                    isSecure: true
-                ),
-                content: TextInputContent(
-                    title: "Some title",
-                    placeholder: nil,
-                    helper: "helper text woo",
-                    errorMessage: nil,
-                    textChanged: nil
-                )
-            )
-        }
-    }
-    .padding()
-}
+// #Preview {
+//    ParraViewPreview { factory in
+//        VStack {
+//            factory.buildTextInput(
+//                config: FeedbackFormWidget.Config.default.inputFields,
+//                content: TextInputContent(
+//                    title: "Some title",
+//                    placeholder: "temp placeholder",
+//                    helper: "helper text woo",
+//                    errorMessage: nil,
+//                    textChanged: nil
+//                )
+//            )
+//
+//            factory.buildTextInput(
+//                config: FeedbackFormWidget.Config.default.inputFields,
+//                content: TextInputContent(
+//                    title: "Some title",
+//                    placeholder: "temp placeholder",
+//                    helper: "helper text woo",
+//                    errorMessage: nil,
+//                    textChanged: nil
+//                )
+//            )
+//
+//            factory.buildTextInput(
+//                config: FeedbackFormWidget.Config.default.inputFields,
+//                content: TextInputContent(
+//                    title: "Some title",
+//                    placeholder: "",
+//                    helper: "helper text woo",
+//                    errorMessage: "That text isn't very good",
+//                    textChanged: nil
+//                )
+//            )
+//
+//            factory.buildTextInput(
+//                config: FeedbackFormWidget.Config.default.inputFields,
+//                content: TextInputContent(
+//                    title: "Some title",
+//                    placeholder: nil,
+//                    helper: "helper text woo",
+//                    errorMessage: nil,
+//                    textChanged: nil
+//                )
+//            )
+//
+//            factory.buildTextInput(
+//                config: TextInputConfig(
+//                    validationRules: [.hasLowercase, .hasUppercase],
+//                    isSecure: true
+//                ),
+//                content: TextInputContent(
+//                    title: "Some title",
+//                    placeholder: nil,
+//                    helper: "helper text woo",
+//                    errorMessage: nil,
+//                    textChanged: nil
+//                )
+//            )
+//        }
+//    }
+//    .padding()
+// }

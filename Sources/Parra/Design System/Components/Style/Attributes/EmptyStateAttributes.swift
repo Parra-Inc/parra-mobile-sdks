@@ -14,7 +14,7 @@ public struct EmptyStateAttributes: ParraStyleAttributes {
     public init(
         title: LabelAttributes = LabelAttributes(),
         subtitle: LabelAttributes = .init(),
-        icon: ImageAttributes = .init(),
+        icon: ParraAttributes.Image = .init(),
         primaryAction: TextButtonAttributes = .init(),
         secondaryAction: TextButtonAttributes = .init(),
         background: (any ShapeStyle)? = nil,
@@ -33,28 +33,10 @@ public struct EmptyStateAttributes: ParraStyleAttributes {
 
     public let title: LabelAttributes
     public let subtitle: LabelAttributes
-    public let icon: ImageAttributes
+    public let icon: ParraAttributes.Image
     public let primaryAction: TextButtonAttributes
     public let secondaryAction: TextButtonAttributes
 
     public let background: (any ShapeStyle)?
     public let padding: EdgeInsets?
-
-    // MARK: - Internal
-
-    func withUpdates(
-        updates: EmptyStateAttributes?
-    ) -> EmptyStateAttributes {
-        return EmptyStateAttributes(
-            title: title.withUpdates(updates: updates?.title),
-            subtitle: subtitle.withUpdates(updates: updates?.subtitle),
-            icon: icon.withUpdates(updates: updates?.icon),
-            primaryAction: primaryAction
-                .withUpdates(updates: updates?.primaryAction),
-            secondaryAction: secondaryAction
-                .withUpdates(updates: updates?.secondaryAction),
-            background: updates?.background ?? background,
-            padding: updates?.padding ?? padding
-        )
-    }
 }

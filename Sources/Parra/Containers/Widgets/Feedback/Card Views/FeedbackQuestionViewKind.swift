@@ -16,7 +16,6 @@ protocol FeedbackQuestionViewKind: View {
     var question: Question { get }
     var themeObserver: ParraThemeObserver { get }
     var contentObserver: FeedbackCardWidget.ContentObserver { get }
-    var localBuilderConfig: FeedbackCardWidgetBuilderConfig { get }
     var componentFactory: ComponentFactory { get }
     var config: FeedbackCardWidgetConfig { get }
 

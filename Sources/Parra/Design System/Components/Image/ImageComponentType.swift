@@ -10,10 +10,10 @@ import SwiftUI
 
 protocol ImageComponentType: View {
     var content: ImageContent { get }
-    var attributes: ImageAttributes { get }
+    var attributes: ParraAttributes.Image { get }
 
     init(
         content: ImageContent,
-        attributes: ImageAttributes
+        attributes: ParraAttributes.Image
     )
 }

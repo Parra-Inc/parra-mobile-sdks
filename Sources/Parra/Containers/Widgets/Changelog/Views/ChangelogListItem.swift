@@ -19,20 +19,18 @@ struct ChangelogListItem: View {
 
         VStack(alignment: .leading, spacing: 12) {
             componentFactory.buildLabel(
-                config: config.releasePreviewNames,
-                content: content.name,
-                suppliedBuilder: builderConfig.releasePreviewNames,
-                localAttributes: style.releasePreviewNames
+                fontStyle: .headline,
+                content: content.name
             )
             .frame(maxWidth: .infinity, alignment: .leading)
             .multilineTextAlignment(.leading)
 
-            withContent(content: content.description) { content in
+            withContent(
+                content: content.description
+            ) { content in
                 componentFactory.buildLabel(
-                    config: config.releasePreviewDescriptions,
-                    content: content,
-                    suppliedBuilder: builderConfig.releasePreviewDescriptions,
-                    localAttributes: style.releasePreviewDescriptions
+                    fontStyle: .body,
+                    content: content
                 )
                 .lineLimit(3)
                 .truncationMode(.tail)
@@ -52,7 +50,7 @@ struct ChangelogListItem: View {
     // MARK: - Private
 
     @Environment(ChangelogWidgetConfig.self) private var config
-    @Environment(ChangelogWidgetBuilderConfig.self) private var builderConfig
+
     @EnvironmentObject private var contentObserver: ChangelogWidget
         .ContentObserver
     @EnvironmentObject private var componentFactory: ComponentFactory

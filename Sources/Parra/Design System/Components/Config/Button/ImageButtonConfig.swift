@@ -12,7 +12,7 @@ public struct ImageButtonConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(
-        style: ParraButtonCategory = .primary,
+        style: ParraButtonType = .primary,
         size: Size = .smallSquare,
         variant: ParraButtonVariant = .plain
     ) {
@@ -23,7 +23,7 @@ public struct ImageButtonConfig: Equatable {
 
     // MARK: - Public
 
-    public let style: ParraButtonCategory
+    public let style: ParraButtonType
     public let size: Size
     public let variant: ParraButtonVariant
 }

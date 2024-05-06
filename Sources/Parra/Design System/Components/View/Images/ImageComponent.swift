@@ -12,11 +12,9 @@ struct ImageComponent: ImageComponentType {
     // MARK: - Internal
 
     let content: ImageContent
-    let attributes: ImageAttributes
+    let attributes: ParraAttributes.Image
 
-    var body: some View {
-        let primaryColor = themeObserver.theme.palette.primary.toParraColor()
-
+    @ViewBuilder var baseImage: Image {
         let image = switch content {
         case .resource(let name, let bundle, let templateRenderingMode):
             Image(name, bundle: bundle)
@@ -33,24 +31,15 @@ struct ImageComponent: ImageComponentType {
         }
 
         image
+    }
+
+    var body: some View {
+        baseImage
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .applyOpacity(attributes.opacity)
-            .foregroundStyle(
-                attributes.tint ?? primaryColor
-            )
-            .applyFrame(attributes.frame)
-            .padding(attributes.padding ?? .zero)
-            .applyBorder(
-                borderColor: attributes.borderColor ?? primaryColor,
-                borderWidth: attributes.borderWidth,
-                cornerRadius: attributes.cornerRadius,
-                from: themeObserver.theme
-            )
-            .applyBackground(attributes.background)
-            .applyCornerRadii(
-                size: attributes.cornerRadius,
-                from: themeObserver.theme
+            .applyImageAttributes(
+                attributes,
+                using: themeObserver.theme
             )
     }
 

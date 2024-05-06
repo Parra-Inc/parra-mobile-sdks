@@ -42,7 +42,7 @@ struct ParraAttributedEmptyStateStyle: ParraAttributedStyle {
 
         if let primaryActionContent = content.primaryAction {
             self.primaryActionStyle = ParraAttributedTextButtonStyle(
-                config: config.primaryAction,
+                config: EmptyStateConfig.defaultPrimaryAction,
                 content: primaryActionContent,
                 attributes: attributes.primaryAction,
                 theme: theme
@@ -53,7 +53,7 @@ struct ParraAttributedEmptyStateStyle: ParraAttributedStyle {
 
         if let secondaryActionContent = content.secondaryAction {
             self.secondaryActionStyle = ParraAttributedTextButtonStyle(
-                config: config.secondaryAction,
+                config: EmptyStateConfig.defaultSecondaryAction,
                 content: secondaryActionContent,
                 attributes: attributes.secondaryAction,
                 theme: theme
@@ -72,7 +72,7 @@ struct ParraAttributedEmptyStateStyle: ParraAttributedStyle {
 
     let titleStyle: ParraAttributedLabelStyle
     let subtitleStyle: ParraAttributedLabelStyle?
-    let iconAttributes: ImageAttributes?
+    let iconAttributes: ParraAttributes.Image?
     let primaryActionStyle: ParraAttributedTextButtonStyle?
     let secondaryActionStyle: ParraAttributedTextButtonStyle?
 }

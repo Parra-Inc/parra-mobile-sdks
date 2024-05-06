@@ -10,7 +10,7 @@ import SwiftUI
 
 // TODO:
 // 1. Forgot password?
-// 2.
+// 2. Terms of Service
 
 /// The login screen for the Parra app.
 struct SignupWidget: Container {
@@ -19,13 +19,11 @@ struct SignupWidget: Container {
     init(
         config: ParraAuthConfig,
         style: AuthenticationWidgetStyle,
-        localBuilderConfig: AuthenticationWidgetBuilderConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
         self.style = style
-        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
@@ -52,7 +50,6 @@ struct SignupWidget: Container {
         case password
     }
 
-    let localBuilderConfig: AuthenticationWidgetBuilderConfig
     let componentFactory: ComponentFactory
     let config: ParraAuthConfig
     let style: AuthenticationWidgetStyle
@@ -64,40 +61,44 @@ struct SignupWidget: Container {
         let content = contentObserver.content.signupContent
 
         VStack {
-            componentFactory.buildTextInput(
-                config: config.emailField,
-                content: content.emailField,
-                localAttributes: TextInputAttributes(
-                    padding: .padding(
-                        top: 50,
-                        bottom: 5
-                    ),
-                    textContentType: .emailAddress
-                )
-            )
-            .submitLabel(.next)
-            .focused($focusedField, equals: .email)
-            .onSubmit {
-                focusNextField($focusedField)
-            }
+//            componentFactory.buildTextInput(
+//                config: config.emailField,
+//                content: content.emailField,
+//                localAttributes: TextInputAttributes(
+//                    padding: .padding(
+//                        top: 50,
+//                        bottom: 5
+//                    ),
+//                    textContentType: .emailAddress
+//                )
+//            )
+//            .submitLabel(.next)
+//            .focused($focusedField, equals: .email)
+//            .onSubmit {
+//                focusNextField($focusedField)
+//            }
 
-            componentFactory.buildTextInput(
-                config: config.passwordField,
-                content: content.passwordField,
-                localAttributes: TextInputAttributes(
-                    padding: .padding(bottom: 16),
-                    textContentType: .password
-                )
-            )
-            .submitLabel(.next)
-            .focused($focusedField, equals: .password)
-            .onSubmit(of: .text) {
-                contentObserver.signupTapped()
-            }
+//            componentFactory.buildTextInput(
+//                config: config.passwordField,
+//                content: content.passwordField,
+//                localAttributes: TextInputAttributes(
+//                    padding: .padding(bottom: 16),
+//                    textContentType: .password
+//                )
+//            )
+//            .submitLabel(.next)
+//            .focused($focusedField, equals: .password)
+//            .onSubmit(of: .text) {
+//                contentObserver.signupTapped()
+//            }
 
             componentFactory.buildTextButton(
                 variant: .contained,
-                config: config.signupConfirmButton,
+                config: TextButtonConfig(
+                    style: .primary,
+                    size: .large,
+                    isMaxWidth: true
+                ),
                 content: content.signupButton
             ) {
                 contentObserver.signupTapped()
@@ -111,11 +112,10 @@ struct SignupWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<SignupWidget> { parra, factory, config, builderConfig in
+    ParraContainerPreview<SignupWidget> { parra, factory, config in
         SignupWidget(
             config: config,
             style: .default(with: .default),
-            localBuilderConfig: builderConfig,
             componentFactory: factory,
             contentObserver: .init(
                 initialParams: .init(

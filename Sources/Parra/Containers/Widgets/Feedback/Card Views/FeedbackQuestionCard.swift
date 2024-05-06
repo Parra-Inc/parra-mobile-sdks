@@ -12,7 +12,6 @@ struct FeedbackQuestionCard: View {
     // MARK: - Internal
 
     @Environment(FeedbackCardWidgetConfig.self) var config
-    @Environment(FeedbackCardWidgetBuilderConfig.self) var localBuilderConfig
     @EnvironmentObject var componentFactory: ComponentFactory
 
     let bucketId: String
@@ -22,9 +21,8 @@ struct FeedbackQuestionCard: View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 2) {
                 componentFactory.buildLabel(
-                    config: config.titleLabel,
-                    content: LabelContent(text: question.title),
-                    suppliedBuilder: localBuilderConfig.title
+                    fontStyle: .headline,
+                    content: LabelContent(text: question.title)
                 )
                 .minimumScaleFactor(0.8)
                 .lineLimit(2)
@@ -34,9 +32,8 @@ struct FeedbackQuestionCard: View {
 
                 if let subtitle = question.subtitle {
                     componentFactory.buildLabel(
-                        config: config.subtitleLabel,
-                        content: LabelContent(text: subtitle),
-                        suppliedBuilder: localBuilderConfig.subtitle
+                        fontStyle: .subheadline,
+                        content: LabelContent(text: subtitle)
                     )
                     .minimumScaleFactor(0.8)
                     .lineLimit(2)

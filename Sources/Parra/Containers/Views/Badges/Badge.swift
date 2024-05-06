@@ -43,9 +43,8 @@ struct Badge: View {
 
     var body: some View {
         componentFactory.buildLabel(
-            config: LabelConfig(fontStyle: .footnote),
-            content: LabelContent(text: text, icon: icon),
-            localAttributes: attributes
+            fontStyle: .footnote,
+            content: LabelContent(text: text, icon: icon)
         )
         .minimumScaleFactor(0.7)
         .scaledToFill()
@@ -66,10 +65,11 @@ struct Badge: View {
                 cornerRadius: size.cornerRadius,
                 font: .system(size: size.fontSize).weight(size.fontWeight),
                 padding: size.padding,
-                iconAttributes: iconAttributes ?? .defaultForTintedBadge(
-                    with: size,
-                    tintColor: primaryColor.toParraColor()
-                ),
+                iconAttributes: iconAttributes,
+//                ?? .defaultForTintedBadge(
+//                    with: size,
+//                    tintColor: primaryColor.toParraColor()
+//                ),
                 borderWidth: isPlaceholder ? 0 : 1,
                 borderColor: palette.primarySeparator.toParraColor()
             )
@@ -80,10 +80,11 @@ struct Badge: View {
                 font: .system(size: size.fontSize).weight(size.fontWeight),
                 fontColor: primaryColor.shade700.toParraColor(),
                 padding: size.padding,
-                iconAttributes: iconAttributes ?? .defaultForTintedBadge(
-                    with: size,
-                    tintColor: primaryColor.shade600.toParraColor()
-                ),
+                iconAttributes: iconAttributes,
+//                ?? .defaultForTintedBadge(
+//                    with: size,
+//                    tintColor: primaryColor.shade600.toParraColor()
+//                ),
                 borderWidth: 1,
                 borderColor: primaryColor.shade600.toParraColor()
             )

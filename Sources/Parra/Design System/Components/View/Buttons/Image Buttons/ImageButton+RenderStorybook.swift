@@ -69,21 +69,22 @@ private func renderButtonComponent(
     content: ImageButtonContent,
     theme: ParraTheme = .default
 ) -> some View {
-    return ImageButtonComponent(
-        config: config,
-        content: content,
-        style: ParraAttributedImageButtonStyle(
-            config: config,
-            content: content,
-            attributes: ImageButtonComponent.applyStandardCustomizations(
-                onto: ImageButtonAttributes(image: ImageAttributes()),
-                theme: theme,
-                config: config
-            ),
-            theme: theme
-        ),
-        onPress: {}
-    )
+    EmptyView()
+//    return ImageButtonComponent(
+//        config: config,
+//        content: content,
+//        style: ParraAttributedImageButtonStyle(
+//            config: config,
+//            content: content,
+//            attributes: ImageButtonComponent.applyStandardCustomizations(
+//                onto: ImageButtonAttributes(image: ImageAttributes()),
+//                theme: theme,
+//                config: config
+//            ),
+//            theme: theme
+//        ),
+//        onPress: {}
+//    )
 }
 
 private func renderRowTitle(_ title: String) -> some View {
@@ -106,7 +107,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.primary,
+                        style: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.plain
                     ),
@@ -117,7 +118,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.secondary,
+                        style: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.plain
                     ),
@@ -134,7 +135,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.primary,
+                        style: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.plain
                     ),
@@ -146,7 +147,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.secondary,
+                        style: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.plain
                     ),
@@ -164,7 +165,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.primary,
+                        style: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.outlined
                     ),
@@ -175,7 +176,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.secondary,
+                        style: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.outlined
                     ),
@@ -192,7 +193,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.primary,
+                        style: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.outlined
                     ),
@@ -204,7 +205,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.secondary,
+                        style: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.outlined
                     ),
@@ -222,7 +223,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.primary,
+                        style: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.contained
                     ),
@@ -233,7 +234,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.secondary,
+                        style: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.contained
                     ),
@@ -250,7 +251,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.primary,
+                        style: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.contained
                     ),
@@ -262,7 +263,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     config: ImageButtonConfig(
-                        style: ParraButtonCategory.secondary,
+                        style: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.contained
                     ),

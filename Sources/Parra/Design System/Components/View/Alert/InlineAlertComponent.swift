@@ -11,51 +11,43 @@ import SwiftUI
 struct InlineAlertComponent: AlertComponentType {
     // MARK: - Internal
 
-    let config: AlertConfig
     let content: AlertContent
-    let style: ParraAttributedAlertStyle
 
     var body: some View {
-        let attributes = style.attributes
-
         VStack {
             HStack(spacing: 11) {
                 if let icon = content.icon {
                     ImageComponent(
                         content: icon,
-                        attributes: attributes.icon
+                        attributes: ParraAttributes.Image()
                     )
                 }
 
                 componentFactory.buildLabel(
-                    config: config.title,
-                    content: content.title,
-                    localAttributes: style.attributes.title
+                    fontStyle: .headline,
+                    content: content.title
                 )
-                .multilineTextAlignment(.leading)
             }
 
             if let subtitleContent = content.subtitle {
                 componentFactory.buildLabel(
-                    config: config.subtitle,
-                    content: subtitleContent,
-                    localAttributes: style.attributes.subtitle
+                    fontStyle: .subheadline,
+                    content: subtitleContent
                 )
-                .multilineTextAlignment(.leading)
             }
         }
-        .padding(.all, from: attributes.padding ?? .zero)
-        .applyBackground(attributes.background)
-        .applyCornerRadii(
-            size: attributes.cornerRadius,
-            from: themeObserver.theme
-        )
-        .applyBorder(
-            borderColor: attributes.borderColor ?? .clear,
-            borderWidth: attributes.borderWidth,
-            cornerRadius: attributes.cornerRadius,
-            from: themeObserver.theme
-        )
+//        .padding(.all, from: attributes.padding ?? .zero)
+//        .applyBackground(attributes.background)
+//        .applyCornerRadii(
+//            size: attributes.cornerRadius,
+//            from: themeObserver.theme
+//        )
+//        .applyBorder(
+//            borderColor: attributes.borderColor ?? .clear,
+//            borderWidth: attributes.borderWidth,
+//            cornerRadius: attributes.cornerRadius,
+//            from: themeObserver.theme
+//        )
     }
 
     // MARK: - Private
@@ -70,17 +62,17 @@ struct InlineAlertComponent: AlertComponentType {
             Spacer()
             Spacer()
 
-            ForEach(AlertConfig.Style.allCases, id: \.self) { style in
+            ForEach(AlertLevel.allCases, id: \.self) { level in
                 factory.buildAlert(
                     variant: .inline,
-                    config: AlertConfig(style: style),
+                    level: level,
                     content: AlertContent(
                         title: LabelContent(text: "The task was completed"),
                         subtitle: LabelContent(
                             text: "This is just an FYI. You can go about your day without worrying about anything."
                         ),
-                        icon: AlertContent.defaultIcon(for: style),
-                        dismiss: AlertContent.defaultDismiss(for: style)
+                        icon: AlertContent.defaultIcon(for: level),
+                        dismiss: AlertContent.defaultDismiss(for: level)
                     ),
                     primaryAction: nil
                 )

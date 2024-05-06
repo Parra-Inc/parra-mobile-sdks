@@ -14,20 +14,17 @@ struct ChangelogWidget: Container {
     init(
         config: ChangelogWidgetConfig,
         style: ChangelogWidgetStyle,
-        localBuilderConfig: ChangelogWidgetBuilderConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
         self.style = style
-        self.localBuilderConfig = localBuilderConfig
         self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
 
     // MARK: - Internal
 
-    let localBuilderConfig: ChangelogWidgetBuilderConfig
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ChangelogWidgetConfig
@@ -43,9 +40,8 @@ struct ChangelogWidget: Container {
         VStack(spacing: 0) {
             VStack(alignment: .leading) {
                 componentFactory.buildLabel(
-                    config: config.title,
-                    content: contentObserver.content.title,
-                    suppliedBuilder: localBuilderConfig.title
+                    fontStyle: .title,
+                    content: contentObserver.content.title
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -61,7 +57,6 @@ struct ChangelogWidget: Container {
 
             list
                 .environment(config)
-                .environment(localBuilderConfig)
                 .environmentObject(contentObserver)
                 .environmentObject(componentFactory)
                 .navigationDestination(
@@ -79,7 +74,6 @@ struct ChangelogWidget: Container {
                     ReleaseWidget(
                         config: config,
                         style: style,
-                        localBuilderConfig: localBuilderConfig,
                         componentFactory: componentFactory,
                         contentObserver: contentObserver
                     )
@@ -161,17 +155,15 @@ struct ChangelogWidget: Container {
         )
         .emptyPlaceholder(contentObserver.releasePaginator.items) {
             componentFactory.buildEmptyState(
-                config: config.emptyStateView,
+                config: EmptyStateConfig.default,
                 content: contentObserver.content.emptyStateView,
-                suppliedBuilder: localBuilderConfig.emptyStateView,
                 localAttributes: style.emptyState
             )
         }
         .errorPlaceholder(contentObserver.releasePaginator.error) {
             componentFactory.buildEmptyState(
-                config: config.errorStateView,
+                config: EmptyStateConfig.errorDefault,
                 content: contentObserver.content.errorStateView,
-                suppliedBuilder: localBuilderConfig.errorStateView,
                 localAttributes: style.errorState
             )
         }
@@ -190,11 +182,10 @@ struct ChangelogWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<ChangelogWidget> { parra, componentFactory, _, builderConfig in
+    ParraContainerPreview<ChangelogWidget> { parra, componentFactory, _ in
         ChangelogWidget(
             config: .default,
             style: .default(with: .default),
-            localBuilderConfig: builderConfig,
             componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: .init(

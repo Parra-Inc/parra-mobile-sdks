@@ -48,20 +48,16 @@ struct ChangelogItemInfoView: View {
             Spacer()
 
             componentFactory.buildLabel(
-                config: config.releasePreviewCreatedAts,
-                content: createdAt,
-                suppliedBuilder: builderConfig.releasePreviewCreatedAts,
-                localAttributes: LabelAttributes(
-                    fontColor: palette.secondaryText
-                )
+                fontStyle: .caption,
+                content: createdAt
             )
+            .foregroundStyle(palette.secondaryText.toParraColor())
         }
     }
 
     // MARK: - Private
 
     @Environment(ChangelogWidgetConfig.self) private var config
-    @Environment(ChangelogWidgetBuilderConfig.self) private var builderConfig
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
 }
