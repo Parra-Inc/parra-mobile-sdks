@@ -73,7 +73,7 @@ struct FeedbackFormWidget: Container {
             )
         }
         .applyWidgetAttributes(
-            attributes: defaultWidgetAttributes,
+            attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: themeObserver.theme
         )
         .environmentObject(contentObserver)
@@ -94,6 +94,10 @@ struct FeedbackFormWidget: Container {
                 )
             }
         }
+        .applyPadding(
+            size: .lg,
+            from: themeObserver.theme
+        )
     }
 
     var fieldViews: some View {

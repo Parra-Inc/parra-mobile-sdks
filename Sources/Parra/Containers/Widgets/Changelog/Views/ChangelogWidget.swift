@@ -80,12 +80,15 @@ struct ChangelogWidget: Container {
                     .environmentObject(navigationState)
                 }
         }
+        .applyWidgetAttributes(
+            attributes: defaultWidgetAttributes.withoutContentPadding(),
+            using: themeObserver.theme
+        )
         .applyPadding(
             size: defaultWidgetAttributes.padding,
             on: [.horizontal, .bottom],
             from: themeObserver.theme
         )
-        .applyBackground(defaultWidgetAttributes.background)
     }
 
     func headerSpace(

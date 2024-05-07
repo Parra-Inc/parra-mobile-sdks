@@ -28,11 +28,11 @@ extension View {
         attributes: ParraAttributes.Widget,
         using theme: ParraTheme
     ) -> some View {
-        applyPadding(
-            size: attributes.contentPadding,
-            from: theme
-        )
-        .applyCornerRadii(
+//        applyPadding(
+//            size: attributes.contentPadding,
+//            from: theme
+//        )
+        applyCornerRadii(
             size: attributes.cornerRadius,
             from: theme
         )

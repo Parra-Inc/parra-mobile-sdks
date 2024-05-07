@@ -91,7 +91,7 @@ struct RoadmapWidget: Container {
             footer
         }
         .applyWidgetAttributes(
-            attributes: defaultWidgetAttributes,
+            attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: themeObserver.theme
         )
         .environment(config)

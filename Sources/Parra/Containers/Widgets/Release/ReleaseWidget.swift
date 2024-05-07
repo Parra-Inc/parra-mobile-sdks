@@ -162,7 +162,7 @@ struct ReleaseWidget: Container {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .applyWidgetAttributes(
-            attributes: defaultWidgetAttributes,
+            attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: themeObserver.theme
         )
         .task {

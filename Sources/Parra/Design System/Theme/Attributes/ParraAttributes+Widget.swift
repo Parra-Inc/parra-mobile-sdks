@@ -10,6 +10,8 @@ import SwiftUI
 
 public extension ParraAttributes {
     struct Widget {
+        // MARK: - Public
+
         public internal(set) var background: Color?
         public internal(set) var cornerRadius: ParraCornerRadiusSize
         public internal(set) var contentPadding: ParraPaddingSize
@@ -24,15 +26,16 @@ public extension ParraAttributes {
                 contentPadding: .custom(
                     EdgeInsets(vertical: 12, horizontal: 20)
                 ),
-                padding: .custom(
-                    EdgeInsets(
-                        top: 16,
-                        leading: 0.0,
-                        bottom: 0.0,
-                        trailing: 0.0
-                    )
-                )
+                padding: .zero
             )
+        }
+
+        // MARK: - Internal
+
+        func withoutContentPadding() -> Widget {
+            var copy = self
+            copy.contentPadding = .zero
+            return copy
         }
     }
 }

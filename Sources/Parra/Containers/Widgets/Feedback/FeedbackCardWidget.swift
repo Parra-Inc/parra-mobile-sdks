@@ -72,19 +72,15 @@ struct FeedbackCardWidget: Container {
                 }
                 .clipped()
                 .padding(.vertical, from: contentPadding)
-//                .applyBackground(style.background)
-//                .applyCornerRadii(
-//                    size: style.cornerRadius,
-//                    from: themeObserver.theme
-//                )
+                .applyBackground(defaultWidgetAttributes.background)
+                .applyCornerRadii(
+                    size: defaultWidgetAttributes.cornerRadius,
+                    from: themeObserver.theme
+                )
             }
             .frame(
                 maxWidth: .infinity,
                 maxHeight: FeedbackCardWidget.height
-            )
-            .applyWidgetAttributes(
-                attributes: defaultWidgetAttributes,
-                using: themeObserver.theme
             )
         }
         .onAppear {
