@@ -14,7 +14,7 @@ public struct AlertContent: Hashable, Equatable {
     public init(
         title: LabelContent,
         subtitle: LabelContent?,
-        icon: ImageContent?,
+        icon: ParraImageContent?,
         dismiss: ImageButtonContent?
     ) {
         self.title = title
@@ -27,12 +27,12 @@ public struct AlertContent: Hashable, Equatable {
 
     public let title: LabelContent
     public let subtitle: LabelContent?
-    public let icon: ImageContent?
+    public let icon: ParraImageContent?
     public private(set) var dismiss: ImageButtonContent?
 
     public static func defaultIcon(
         for style: AlertLevel
-    ) -> ImageContent {
+    ) -> ParraImageContent {
         let symbolName = switch style {
         case .success:
             "checkmark.circle"
@@ -44,7 +44,7 @@ public struct AlertContent: Hashable, Equatable {
             "xmark.circle"
         }
 
-        return ImageContent.symbol(symbolName, .monochrome)
+        return ParraImageContent.symbol(symbolName, .monochrome)
     }
 
     public static func defaultDismiss(
@@ -52,7 +52,7 @@ public struct AlertContent: Hashable, Equatable {
         onPress: (() -> Void)? = nil
     ) -> ImageButtonContent {
         return ImageButtonContent(
-            image: ImageContent.symbol("xmark", .monochrome),
+            image: ParraImageContent.symbol("xmark", .monochrome),
             isDisabled: false
         )
     }

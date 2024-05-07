@@ -9,11 +9,11 @@
 import SwiftUI
 
 protocol ImageComponentType: View {
-    var content: ImageContent { get }
+    var content: ParraImageContent { get }
     var attributes: ParraAttributes.Image { get }
 
     init(
-        content: ImageContent,
+        content: ParraImageContent,
         attributes: ParraAttributes.Image
     )
 }

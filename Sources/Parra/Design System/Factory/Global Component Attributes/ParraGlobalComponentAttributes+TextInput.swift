@@ -22,19 +22,17 @@ public extension ParraGlobalComponentAttributes {
 
         let titleLabel = ParraAttributes.Label(
             text: ParraAttributes.Text(
-                font: .caption,
-                weight: .medium,
+                font: .callout,
                 color: palette.primaryText.toParraColor()
             ),
             padding: .custom(
-                EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 2)
+                EdgeInsets(top: 0, leading: 1, bottom: 8, trailing: 2)
             )
         )
 
         let helperLabel = ParraAttributes.Label(
             text: ParraAttributes.Text(
-                font: .caption,
-                weight: .medium,
+                font: .caption2,
                 color: palette.secondaryText.toParraColor()
             ),
             padding: .custom(
@@ -61,10 +59,10 @@ public extension ParraGlobalComponentAttributes {
             errorLabel: errorLabel,
             border: ParraAttributes.Border(
                 width: 1,
-                color: palette.secondaryText.toParraColor()
+                color: palette.secondarySeparator.toParraColor()
             ),
-            cornerRadius: .md,
-            padding: .zero,
+            cornerRadius: .lg,
+            padding: .md,
             background: nil,
             tint: palette.primary.toParraColor(),
             keyboardType: config.keyboardType,

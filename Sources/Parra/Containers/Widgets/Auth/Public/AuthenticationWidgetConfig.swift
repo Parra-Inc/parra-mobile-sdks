@@ -17,16 +17,20 @@ public class ParraAuthConfig: ContainerConfig {
 
         self.passwordValidationRules = ParraAuthConfig.default
             .passwordValidationRules
+
+        self.appIcon = ParraAuthConfig.default.appIcon
     }
 
     public init(
         emailValidationRules: [TextValidatorRule] = ParraAuthConfig.default
             .emailValidationRules,
         passwordValidationRules: [TextValidatorRule] = ParraAuthConfig.default
-            .passwordValidationRules
+            .passwordValidationRules,
+        appIcon: ParraImageContent?
     ) {
         self.emailValidationRules = emailValidationRules
         self.passwordValidationRules = passwordValidationRules
+        self.appIcon = appIcon
     }
 
     // MARK: - Public
@@ -42,9 +46,12 @@ public class ParraAuthConfig: ContainerConfig {
             .maxLength(256),
             .hasLowercase,
             .hasUppercase
-        ]
+        ],
+        appIcon: nil
     )
 
     public let emailValidationRules: [TextValidatorRule]
     public let passwordValidationRules: [TextValidatorRule]
+
+    public let appIcon: ParraImageContent?
 }

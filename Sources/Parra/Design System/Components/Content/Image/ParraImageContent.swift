@@ -1,5 +1,5 @@
 //
-//  ImageContent.swift
+//  ParraImageContent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/23/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public enum ImageContent: Hashable, Equatable {
+public enum ParraImageContent: Hashable, Equatable {
     /// Assets libraries
     case resource(String, Bundle? = .main, Image.TemplateRenderingMode? = nil)
 
@@ -24,8 +24,8 @@ public enum ImageContent: Hashable, Equatable {
     // MARK: - Public
 
     public static func == (
-        lhs: ImageContent,
-        rhs: ImageContent
+        lhs: ParraImageContent,
+        rhs: ParraImageContent
     ) -> Bool {
         return lhs.hashValue == rhs.hashValue
     }

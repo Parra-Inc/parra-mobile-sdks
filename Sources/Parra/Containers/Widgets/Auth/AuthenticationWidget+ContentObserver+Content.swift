@@ -69,10 +69,20 @@ extension AuthenticationWidget.ContentObserver {
             {
                 EmailContent(
                     emailField: TextInputContent(
-                        placeholder: emailPassword.emailPlaceholder
+                        title: LabelContent(
+                            text: emailPassword.emailTitle
+                        ),
+                        placeholder: LabelContent(
+                            text: emailPassword.emailPlaceholder
+                        )
                     ),
                     passwordField: TextInputContent(
-                        placeholder: emailPassword.passwordPlaceholder
+                        title: LabelContent(
+                            text: emailPassword.passwordTitle
+                        ),
+                        placeholder: LabelContent(
+                            text: emailPassword.passwordPlaceholder
+                        )
                     ),
                     loginButton: TextButtonContent(
                         text: LabelContent(
@@ -94,12 +104,20 @@ extension AuthenticationWidget.ContentObserver {
 
             let signupContent = SignupContent(
                 emailField: TextInputContent(
-                    placeholder: content.emailPassword?
-                        .emailPlaceholder ?? "email address"
+                    title: LabelContent(
+                        text: content.emailPassword?.emailTitle
+                    ),
+                    placeholder: LabelContent(
+                        text: content.emailPassword?.emailPlaceholder
+                    )
                 ),
                 passwordField: TextInputContent(
-                    placeholder: content.emailPassword?
-                        .passwordPlaceholder ?? "password"
+                    title: LabelContent(
+                        text: content.emailPassword?.passwordTitle
+                    ),
+                    placeholder: LabelContent(
+                        text: content.emailPassword?.passwordPlaceholder
+                    )
                 ),
                 signupButton: TextButtonContent(
                     text: LabelContent(
@@ -120,7 +138,7 @@ extension AuthenticationWidget.ContentObserver {
         }
 
         init(
-            icon: ImageContent?,
+            icon: ParraImageContent?,
             title: LabelContent,
             subtitle: LabelContent?,
             emailContent: EmailContent?,
@@ -135,7 +153,7 @@ extension AuthenticationWidget.ContentObserver {
 
         // MARK: - Internal
 
-        let icon: ImageContent?
+        let icon: ParraImageContent?
         let title: LabelContent
         let subtitle: LabelContent?
         var emailContent: EmailContent?

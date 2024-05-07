@@ -26,6 +26,11 @@ extension View {
             )
             .applyFrame(attributes.frame)
             .padding(.horizontal, 12)
+            .background(attributes.background)
+            .applyCornerRadii(
+                size: attributes.cornerRadius,
+                from: theme
+            )
             .applyBorder(
                 attributes.border,
                 with: attributes.cornerRadius,

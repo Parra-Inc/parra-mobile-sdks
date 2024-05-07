@@ -30,8 +30,8 @@ extension ComponentFactory {
             theme: theme
         )
 
-        let icon: ImageContent? = if let iconSymbol {
-            ImageContent.symbol(iconSymbol, .palette)
+        let icon: ParraImageContent? = if let iconSymbol {
+            ParraImageContent.symbol(iconSymbol, .palette)
         } else {
             nil
         }

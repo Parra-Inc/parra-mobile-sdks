@@ -12,7 +12,7 @@ public struct ImageButtonContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(
-        image: ImageContent,
+        image: ParraImageContent,
         isDisabled: Bool = false
     ) {
         self.image = image
@@ -21,6 +21,6 @@ public struct ImageButtonContent: Hashable, Equatable {
 
     // MARK: - Public
 
-    public let image: ImageContent
+    public let image: ParraImageContent
     public internal(set) var isDisabled: Bool
 }

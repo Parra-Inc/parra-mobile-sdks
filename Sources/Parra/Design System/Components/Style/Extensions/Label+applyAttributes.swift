@@ -9,13 +9,6 @@
 import SwiftUI
 
 extension LabelComponent {
-    func applyFormTitleAttributes() -> some View {
-        foregroundStyle(themeObserver.theme.palette.primaryText.toParraColor())
-            .fontWeight(.medium)
-            .padding(.bottom, 10)
-            .padding(.trailing, 2)
-    }
-
     func applyFormHelperAttributes(erroring: Bool = false) -> some View {
         let fontColor = erroring
             ? themeObserver.theme.palette.error.toParraColor()

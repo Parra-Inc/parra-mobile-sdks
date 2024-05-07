@@ -11,7 +11,7 @@ import SwiftUI
 struct ImageComponent: ImageComponentType {
     // MARK: - Internal
 
-    let content: ImageContent
+    let content: ParraImageContent
     let attributes: ParraAttributes.Image
 
     @ViewBuilder var baseImage: Image {

@@ -68,6 +68,11 @@ struct TextInputComponent: TextInputComponentType {
 
             helperLabel
         }
+        .applyPadding(
+            size: attributes.padding,
+            on: [.horizontal, .bottom],
+            from: themeObserver.theme
+        )
     }
 
     // MARK: - Private

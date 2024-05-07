@@ -14,7 +14,7 @@ public struct EmptyStateContent: Hashable, Equatable {
     public init(
         title: LabelContent,
         subtitle: LabelContent? = nil,
-        icon: ImageContent? = .symbol("tray"),
+        icon: ParraImageContent? = .symbol("tray"),
         primaryAction: TextButtonContent? = nil,
         secondaryAction: TextButtonContent? = nil
     ) {
@@ -29,7 +29,7 @@ public struct EmptyStateContent: Hashable, Equatable {
 
     public let title: LabelContent
     public let subtitle: LabelContent?
-    public let icon: ImageContent?
+    public let icon: ParraImageContent?
     public private(set) var primaryAction: TextButtonContent?
     public private(set) var secondaryAction: TextButtonContent?
 

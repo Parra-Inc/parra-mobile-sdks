@@ -13,7 +13,7 @@ public struct BadgeContent: Hashable, Equatable {
 
     public init(
         text: String,
-        icon: ImageContent? = nil
+        icon: ParraImageContent? = nil
     ) {
         self.text = text
         self.icon = icon
@@ -22,5 +22,5 @@ public struct BadgeContent: Hashable, Equatable {
     // MARK: - Public
 
     public internal(set) var text: String
-    public internal(set) var icon: ImageContent?
+    public internal(set) var icon: ParraImageContent?
 }

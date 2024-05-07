@@ -43,6 +43,14 @@ struct PlainButtonStyle: ButtonStyle, ParraAttributedStyle {
             currentAttributes,
             using: themeObserver.theme
         )
+        .overlay(
+            alignment: .leading
+        ) {
+            if content.isLoading {
+                ProgressView()
+                    .tint(currentAttributes.label.text.color ?? .black)
+            }
+        }
     }
 
     // MARK: - Private

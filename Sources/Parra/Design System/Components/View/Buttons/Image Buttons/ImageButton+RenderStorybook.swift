@@ -112,7 +112,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.plain
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol("laser.burst")
+                        image: ParraImageContent.symbol("laser.burst")
                     )
                 )
 
@@ -123,7 +123,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.plain
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol(
+                        image: ParraImageContent.symbol(
                             "lightspectrum.horizontal"
                         )
                     )
@@ -140,7 +140,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.plain
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol("laser.burst"),
+                        image: ParraImageContent.symbol("laser.burst"),
                         isDisabled: true
                     )
                 )
@@ -152,7 +152,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.plain
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol(
+                        image: ParraImageContent.symbol(
                             "lightspectrum.horizontal"
                         ),
                         isDisabled: true
@@ -170,7 +170,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol("laser.burst")
+                        image: ParraImageContent.symbol("laser.burst")
                     )
                 )
 
@@ -181,7 +181,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol(
+                        image: ParraImageContent.symbol(
                             "lightspectrum.horizontal"
                         )
                     )
@@ -198,7 +198,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol("laser.burst"),
+                        image: ParraImageContent.symbol("laser.burst"),
                         isDisabled: true
                     )
                 )
@@ -210,7 +210,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.outlined
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol(
+                        image: ParraImageContent.symbol(
                             "lightspectrum.horizontal"
                         ),
                         isDisabled: true
@@ -228,7 +228,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.contained
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol("laser.burst")
+                        image: ParraImageContent.symbol("laser.burst")
                     )
                 )
 
@@ -239,7 +239,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.contained
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol(
+                        image: ParraImageContent.symbol(
                             "lightspectrum.horizontal"
                         )
                     )
@@ -256,7 +256,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.contained
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol("laser.burst"),
+                        image: ParraImageContent.symbol("laser.burst"),
                         isDisabled: true
                     )
                 )
@@ -268,7 +268,7 @@ private func renderColumn(
                         variant: ParraButtonVariant.contained
                     ),
                     content: ImageButtonContent(
-                        image: ImageContent.symbol(
+                        image: ParraImageContent.symbol(
                             "lightspectrum.horizontal"
                         ),
                         isDisabled: true
