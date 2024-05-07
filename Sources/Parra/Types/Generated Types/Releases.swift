@@ -813,13 +813,11 @@ public struct AppInfo: Codable, Equatable, Hashable {
     public init(
         versionToken: String,
         newInstalledVersionInfo: NewInstalledVersionInfo?,
-        termsOfUse: URL?,
-        privacyPolicy: URL?
+        legal: LegalInfo
     ) {
         self.versionToken = versionToken
         self.newInstalledVersionInfo = newInstalledVersionInfo
-        self.termsOfUse = termsOfUse
-        self.privacyPolicy = privacyPolicy
+        self.legal = legal
     }
 
     // MARK: - Public
@@ -827,12 +825,60 @@ public struct AppInfo: Codable, Equatable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case versionToken
         case newInstalledVersionInfo
-        case termsOfUse
-        case privacyPolicy
+        case legal
     }
 
     public let versionToken: String
     public let newInstalledVersionInfo: NewInstalledVersionInfo?
-    public let termsOfUse: URL?
-    public let privacyPolicy: URL?
+    public let legal: LegalInfo
+}
+
+public struct LegalInfo: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(privacyPolicy: LegalDocument?) {
+        self.privacyPolicy = privacyPolicy
+    }
+
+    // MARK: - Public
+
+    public let privacyPolicy: LegalDocument?
+
+    // MARK: - Internal
+
+    enum CodingKeys: CodingKey {
+        case privacyPolicy
+    }
+}
+
+public struct LegalDocument: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        type: String,
+        title: String,
+        url: URL
+    ) {
+        self.id = id
+        self.type = type
+        self.title = title
+        self.url = url
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let type: String
+    public let title: String
+    public let url: URL
+
+    // MARK: - Internal
+
+    enum CodingKeys: CodingKey {
+        case id
+        case type
+        case title
+        case url
+    }
 }

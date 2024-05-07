@@ -20,8 +20,14 @@ extension AppInfo: ParraFixture {
                     ),
                     release: AppRelease.validStates()[0]
                 ),
-                termsOfUse: URL(string: "https://parra.io/tos"),
-                privacyPolicy: URL(string: "https://parra.io/privacy")
+                legal: LegalInfo(
+                    privacyPolicy: LegalDocument(
+                        id: .uuid,
+                        type: "privacy",
+                        title: "Privacy Policy",
+                        url: URL(string: "https://parra.io/privacy")!
+                    )
+                )
             )
         ]
     }
