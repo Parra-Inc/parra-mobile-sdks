@@ -849,6 +849,8 @@ public struct LegalInfo: Codable, Equatable, Hashable {
     enum CodingKeys: CodingKey {
         case privacyPolicy
     }
+
+    static let empty = LegalInfo(privacyPolicy: nil)
 }
 
 public struct LegalDocument: Codable, Equatable, Hashable, Identifiable {

@@ -19,12 +19,14 @@ final actor LatestVersionManager {
         modalScreenManager: ModalScreenManager,
         alertManager: AlertManager,
         api: API,
+        authServer: AuthServer,
         externalResourceServer: ExternalResourceServer
     ) {
         self.configuration = configuration
         self.modalScreenManager = modalScreenManager
         self.alertManager = alertManager
         self.api = api
+        self.authServer = authServer
         self.externalResourceServer = externalResourceServer
     }
 
@@ -49,6 +51,7 @@ final actor LatestVersionManager {
     }
 
     let api: API
+    let authServer: AuthServer
     let externalResourceServer: ExternalResourceServer
     let modalScreenManager: ModalScreenManager
     let alertManager: AlertManager
@@ -66,7 +69,8 @@ final actor LatestVersionManager {
         jsonDecoder: .parraDecoder
     )
 
-    func fetchAndPresentWhatsNew(
+    func checkAndPresentWhatsNew(
+        against appInfo: AppInfo,
         with options: ParraReleaseOptions,
         using modalScreenManager: ModalScreenManager
     ) async {
@@ -74,11 +78,13 @@ final actor LatestVersionManager {
             switch options.presentationMode {
             case .automatic(let behavior):
                 try await handleWhatsNewFlow(
+                    in: appInfo,
                     with: behavior,
                     style: options.presentationStyle
                 )
             case .delayed(let behavior, let delay):
                 try await handleWhatsNewFlow(
+                    in: appInfo,
                     with: behavior,
                     style: options.presentationStyle,
                     after: delay
@@ -100,7 +106,8 @@ final actor LatestVersionManager {
     /// - Parameter force: Don't send the last version token with the request,
     ///                    meaning the latest release will always be fetched.
     func fetchLatestAppInfo(
-        force: Bool = false
+        force: Bool = false,
+        timeout: TimeInterval? = nil
     ) async throws -> AppInfo {
         let versionToken: String? = if force {
             nil
@@ -108,8 +115,9 @@ final actor LatestVersionManager {
             await cachedVersionToken()?.token
         }
 
-        let response = try await api.getAppInfo(
-            versionToken: versionToken
+        let response = try await authServer.getAppInfo(
+            versionToken: versionToken,
+            timeout: timeout
         )
 
         let newVersionToken = response.versionToken

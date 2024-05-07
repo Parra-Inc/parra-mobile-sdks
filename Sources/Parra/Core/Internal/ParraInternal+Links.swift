@@ -9,10 +9,25 @@
 import UIKit
 
 extension ParraInternal {
+    func openLink(
+        url: URL
+    ) {
+        let app = UIApplication.shared
+
+        guard app.canOpenURL(url) else {
+            Logger.warn("Failed to open link to site", [
+                "url": url.absoluteString
+            ])
+
+            return
+        }
+
+        app.open(url)
+    }
+
     func openTrackedSiteLink(
         medium: String
     ) {
-        let app = UIApplication.shared
         let bundleId = configuration.appInfoOptions.bundleId
 
         let params: [String: String] = [
@@ -41,14 +56,6 @@ extension ParraInternal {
             return
         }
 
-        guard app.canOpenURL(url) else {
-            Logger.warn("Failed to open link to site", [
-                "url": url.absoluteString
-            ])
-
-            return
-        }
-
-        app.open(url)
+        openLink(url: url)
     }
 }

@@ -116,7 +116,7 @@ struct AuthenticationWidget: Container {
                     content: .default,
                     authService: parra.parraInternal.authService,
                     alertManager: parra.parraInternal.alertManager,
-                    initialError: nil
+                    legalInfo: AppInfo.validStates()[0].legal
                 )
             )
         )

@@ -22,6 +22,7 @@ extension AuthenticationWidget {
             self.authWidgetConfig = initialParams.config
             self.authService = initialParams.authService
             self.alertManager = initialParams.alertManager
+            self.legalInfo = initialParams.legalInfo
             self.content = Content(content: initialParams.content)
 
             content.emailContent?.emailField.textChanged = onEmailChanged
@@ -36,6 +37,7 @@ extension AuthenticationWidget {
         let authWidgetConfig: ParraAuthConfig
         let authService: AuthService
         let alertManager: AlertManager
+        let legalInfo: LegalInfo
 
         @Published var content: Content
         @Published var error: String?

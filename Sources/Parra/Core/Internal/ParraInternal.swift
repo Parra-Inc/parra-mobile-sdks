@@ -108,7 +108,11 @@ class ParraInternal {
         if !hasPerformedSingleInitActions {
             hasPerformedSingleInitActions = true
 
-            await performPostInitialAuthActions()
+            await performPostLaunchAuthOptionalActions()
+
+            if case .authenticated = result {
+                await performPostLaunchAuthRequiredActions()
+            }
         }
 
         switch result {
@@ -123,6 +127,17 @@ class ParraInternal {
         }
     }
 
+    // 1. Post app launch, before splash dismisses
+    // 2. Post auth refresh
+    //    a. authenticated
+    //    b. unauthenticated
+
+    /// Must be completed before the splash screen is dismissed!
+    /// Keep this as lean as possible!!!!
+    func performActionsRequiredForAppLaunch() async {
+        await fetchLatestAppInfo()
+    }
+
     // MARK: - Private
 
     /// Not exactly the same as "is initialized." We need to handle the case
@@ -131,29 +146,57 @@ class ParraInternal {
     /// place when this is false.
     private var hasPerformedSingleInitActions = false
 
-    @MainActor
-    private func performPostInitialAuthActions() async {
-        logger.debug("Performing push authentication refresh actions.")
+    private func performPostLaunchAuthOptionalActions() async {
+        logger.debug("Performing first launch auth optional actions.")
+    }
+
+    private func performPostLaunchAuthRequiredActions() async {
+        logger.debug("Performing first launch auth required actions.")
 
         await sessionManager.initializeSessions()
 
         if configuration.pushNotificationOptions.enabled {
-            UIApplication.shared.registerForRemoteNotifications()
+            await MainActor.run {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
         }
 
         let whatsNewOptions = configuration.whatsNewOptions
 
-        switch whatsNewOptions.presentationMode {
-        case .automatic, .delayed:
+        // only runs once if authenticated. It's fine if this doesn't run
+        // in the event there was a timeout fetching app info during the
+        // splash screen
 
-            Task {
-                await latestVersionManager.fetchAndPresentWhatsNew(
-                    with: whatsNewOptions,
-                    using: modalScreenManager
-                )
+        if let appInfo = appState.appInfo {
+            switch whatsNewOptions.presentationMode {
+            case .automatic, .delayed:
+                Task {
+                    await latestVersionManager.checkAndPresentWhatsNew(
+                        against: appInfo,
+                        with: whatsNewOptions,
+                        using: modalScreenManager
+                    )
+                }
+            case .manual:
+                break
             }
-        case .manual:
-            break
+        }
+    }
+
+    private func fetchLatestAppInfo() async {
+        do {
+            let appInfo = try await latestVersionManager.fetchLatestAppInfo(
+                force: true,
+                timeout: 5.0
+            )
+
+            logger.debug("Fetched latest app info", [
+                "versionToken": appInfo.versionToken
+            ])
+
+            appState.appInfo = appInfo
+        } catch {
+            logger.error("Failed to fetch latest app info", error)
         }
     }
 }

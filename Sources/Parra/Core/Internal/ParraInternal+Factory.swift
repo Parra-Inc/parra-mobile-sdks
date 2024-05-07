@@ -117,7 +117,8 @@ extension ParraInternal {
         let authServer = AuthServer(
             appState: appState,
             appConfig: configuration,
-            configuration: instanceConfiguration.authServerConfiguration
+            configuration: instanceConfiguration.authServerConfiguration,
+            dataManager: dataManager
         )
 
         let externalResourceServer = ExternalResourceServer(
@@ -182,6 +183,7 @@ extension ParraInternal {
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
             api: api,
+            authServer: authServer,
             externalResourceServer: externalResourceServer
         )
 

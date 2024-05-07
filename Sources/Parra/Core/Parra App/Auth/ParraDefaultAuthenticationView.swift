@@ -41,7 +41,9 @@ public struct ParraDefaultAuthenticationView: View {
                     config: .default,
                     content: .default,
                     authService: parra.parraInternal.authService,
-                    alertManager: parra.parraInternal.alertManager
+                    alertManager: parra.parraInternal.alertManager,
+                    legalInfo: parra.parraInternal.appState.appInfo?
+                        .legal ?? .empty
                 ),
                 config: config
             )

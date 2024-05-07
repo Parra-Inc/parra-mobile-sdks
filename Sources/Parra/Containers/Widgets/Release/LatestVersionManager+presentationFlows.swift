@@ -142,6 +142,7 @@ extension LatestVersionManager {
     }
 
     func handleWhatsNewFlow(
+        in appInfo: AppInfo,
         with behavior: ParraReleaseOptions.Behavior,
         style: ParraReleaseOptions.PresentationStyle,
         after delay: TimeInterval = 0.0

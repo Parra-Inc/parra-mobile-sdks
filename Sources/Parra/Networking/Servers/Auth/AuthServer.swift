@@ -18,11 +18,13 @@ final class AuthServer: Server {
     init(
         appState: ParraAppState,
         appConfig: ParraConfiguration,
-        configuration: ServerConfiguration
+        configuration: ServerConfiguration,
+        dataManager: DataManager
     ) {
         self.appState = appState
         self.appConfig = appConfig
         self.configuration = configuration
+        self.dataManager = dataManager
         self.headerFactory = HeaderFactory(
             appState: appState,
             appConfig: appConfig
@@ -38,6 +40,7 @@ final class AuthServer: Server {
     let appState: ParraAppState
     let appConfig: ParraConfiguration
     let configuration: ServerConfiguration
+    let dataManager: DataManager
     let headerFactory: HeaderFactory
     weak var delegate: ServerDelegate?
 
@@ -94,7 +97,7 @@ final class AuthServer: Server {
     ) async throws -> User {
         let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performAuthRequest(
+        return try await performOptionalAuthRequest(
             to: .postCreateUser(
                 tenantId: appState.tenantId
             ),
@@ -106,7 +109,7 @@ final class AuthServer: Server {
     func postLogin(
         accessToken: String
     ) async throws -> UserInfoResponse {
-        return try await performAuthRequest(
+        return try await performOptionalAuthRequest(
             to: .postLogin(
                 tenantId: appState.tenantId
             ),
@@ -117,7 +120,7 @@ final class AuthServer: Server {
     func postLogout(
         accessToken: String
     ) async throws {
-        let _: EmptyResponseObject = try await performAuthRequest(
+        let _: EmptyResponseObject = try await performOptionalAuthRequest(
             to: .postLogout(
                 tenantId: appState.tenantId
             ),
@@ -129,7 +132,7 @@ final class AuthServer: Server {
         accessToken: String,
         timeout: TimeInterval? = nil
     ) async throws -> UserInfoResponse {
-        return try await performAuthRequest(
+        return try await performOptionalAuthRequest(
             to: .getUserInfo(
                 tenantId: appState.tenantId
             ),
@@ -138,15 +141,53 @@ final class AuthServer: Server {
         )
     }
 
+    func getAppInfo(
+        versionToken: String?,
+        timeout: TimeInterval? = nil
+    ) async throws -> AppInfo {
+        var queryItems = [String: String]()
+
+        if let versionToken {
+            // If nil, key not be set.
+            queryItems["version_token"] = versionToken
+        }
+
+        // nil if un-authenticated.
+        let accessToken = await dataManager.getAccessToken()
+
+        return try await performOptionalAuthRequest(
+            to: .getAppInfo(
+                tenantId: appState.tenantId,
+                applicationId: appState.applicationId
+            ),
+            with: accessToken,
+            queryItems: queryItems,
+            timeout: timeout
+        )
+    }
+
     // MARK: - Private
 
-    private func performAuthRequest<T>(
+    private func performOptionalAuthRequest<T>(
         to endpoint: ParraEndpoint,
         with accessToken: String?,
+        queryItems: [String: String] = [:],
         body: Data? = nil,
         timeout: TimeInterval? = nil
     ) async throws -> T where T: Codable {
-        var request = URLRequest(url: endpoint.url)
+        guard var urlComponents = URLComponents(
+            url: endpoint.url,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw ParraError.generic(
+                "Failed to create components for url: \(endpoint.url)",
+                nil
+            )
+        }
+
+        urlComponents.setQueryItems(with: queryItems)
+
+        var request = URLRequest(url: urlComponents.url!)
 
         request.httpMethod = endpoint.method.rawValue
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData

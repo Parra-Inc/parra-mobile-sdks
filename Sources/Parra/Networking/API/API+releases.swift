@@ -9,25 +9,6 @@
 import Foundation
 
 extension API {
-    func getAppInfo(
-        versionToken: String?
-    ) async throws -> AppInfo {
-        var queryItems = [String: String]()
-
-        if let versionToken {
-            // If nil, key not be set.
-            queryItems["version_token"] = versionToken
-        }
-
-        return try await hitEndpoint(
-            .getAppInfo(
-                tenantId: appState.tenantId,
-                applicationId: appState.applicationId
-            ),
-            queryItems: queryItems
-        )
-    }
-
     func getRelease(
         with releaseId: String
     ) async throws -> AppRelease {

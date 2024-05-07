@@ -107,7 +107,8 @@ struct SignupWidget: Container {
                     config: .default,
                     content: .default,
                     authService: parra.parraInternal.authService,
-                    alertManager: parra.parraInternal.alertManager
+                    alertManager: parra.parraInternal.alertManager,
+                    legalInfo: AppInfo.validStates()[0].legal
                 )
             )
         )

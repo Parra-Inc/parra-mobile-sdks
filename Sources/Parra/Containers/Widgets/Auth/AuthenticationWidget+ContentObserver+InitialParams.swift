@@ -17,13 +17,13 @@ extension AuthenticationWidget.ContentObserver {
             content: ParraAuthContent,
             authService: AuthService,
             alertManager: AlertManager,
-            initialError: Error? = nil
+            legalInfo: LegalInfo
         ) {
             self.config = config
             self.content = content
             self.authService = authService
             self.alertManager = alertManager
-            self.initialError = initialError
+            self.legalInfo = legalInfo
         }
 
         // MARK: - Internal
@@ -32,6 +32,6 @@ extension AuthenticationWidget.ContentObserver {
         let content: ParraAuthContent
         let authService: AuthService
         let alertManager: AlertManager
-        let initialError: Error?
+        let legalInfo: LegalInfo
     }
 }

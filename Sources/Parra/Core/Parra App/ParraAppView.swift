@@ -128,9 +128,17 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
                             using: parra.authService
                         )
 
+                        logger.debug("Initial auth check complete")
+
+                        await parra.performActionsRequiredForAppLaunch()
+
+                        logger.debug("Post app launch actions complete")
+
                         logger.info("Parra SDK Initialized")
 
                         launchScreenState.dismiss()
+
+                        logger.debug("Launch screen dismissed")
                     }
             }
         }
@@ -138,7 +146,9 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
         .environmentObject(alertManager)
         .environmentObject(themeObserver)
         .environmentObject(parra.globalComponentFactory)
-        .onChange(of: parraAuthState.current) { _, newValue in
+        .onChange(
+            of: parraAuthState.current
+        ) { _, newValue in
             Task { @MainActor in
                 await parra.authStateDidChange(to: newValue)
             }
