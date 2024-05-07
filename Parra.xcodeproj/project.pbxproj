@@ -349,6 +349,12 @@
 		009D841F2BE94F7B005EBFEB /* ContainedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D841E2BE94F7B005EBFEB /* ContainedButtonStyle.swift */; };
 		009D84212BE95932005EBFEB /* ParraGlobalComponentAttributes+TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D84202BE95932005EBFEB /* ParraGlobalComponentAttributes+TextInput.swift */; };
 		009D84232BE97039005EBFEB /* View+applyTextInputAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D84222BE97039005EBFEB /* View+applyTextInputAttributes.swift */; };
+		009D84252BEA68F9005EBFEB /* ParraAttributes+Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D84242BEA68F9005EBFEB /* ParraAttributes+Widget.swift */; };
+		009D84272BEA6921005EBFEB /* ParraAttributes+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D84262BEA6921005EBFEB /* ParraAttributes+Image.swift */; };
+		009D84292BEA6926005EBFEB /* ParraAttributes+Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D84282BEA6926005EBFEB /* ParraAttributes+Label.swift */; };
+		009D842B2BEA692E005EBFEB /* ParraAttributes+Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D842A2BEA692E005EBFEB /* ParraAttributes+Button.swift */; };
+		009D842D2BEA6978005EBFEB /* ParraAttributes+TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D842C2BEA6978005EBFEB /* ParraAttributes+TextInput.swift */; };
+		009D842F2BEA6992005EBFEB /* ParraAttributes+TextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D842E2BEA6992005EBFEB /* ParraAttributes+TextEditor.swift */; };
 		00A2CEE52B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */; };
 		00A2CEE72B696AE600684DC0 /* TextButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE62B696AE500684DC0 /* TextButtonConfig.swift */; };
 		00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */; };
@@ -359,9 +365,9 @@
 		00AB95A12BE4524C00B27091 /* ParraPaddingSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A02BE4524C00B27091 /* ParraPaddingSize.swift */; };
 		00AB95A32BE4529900B27091 /* ParraPaddingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A22BE4529900B27091 /* ParraPaddingConfig.swift */; };
 		00AB95A62BE4546000B27091 /* ParraAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A52BE4546000B27091 /* ParraAttributes.swift */; };
-		00AB95A82BE4547400B27091 /* Attributes+Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A72BE4547400B27091 /* Attributes+Shadow.swift */; };
-		00AB95AA2BE4547C00B27091 /* Attributes+Border.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A92BE4547C00B27091 /* Attributes+Border.swift */; };
-		00AB95AC2BE455D100B27091 /* Attributes+Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95AB2BE455D100B27091 /* Attributes+Text.swift */; };
+		00AB95A82BE4547400B27091 /* ParraAttributes+Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A72BE4547400B27091 /* ParraAttributes+Shadow.swift */; };
+		00AB95AA2BE4547C00B27091 /* ParraAttributes+Border.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A92BE4547C00B27091 /* ParraAttributes+Border.swift */; };
+		00AB95AC2BE455D100B27091 /* ParraAttributes+Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95AB2BE455D100B27091 /* ParraAttributes+Text.swift */; };
 		00ABF1432B78516A00A054A2 /* ParraInternal+SyncTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1422B78516A00A054A2 /* ParraInternal+SyncTarget.swift */; };
 		00ABF1452B7851BF00A054A2 /* ParraInternal+SyncManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1442B7851BF00A054A2 /* ParraInternal+SyncManagerDelegate.swift */; };
 		00ABF1472B7852D700A054A2 /* SyncManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1462B7852D700A054A2 /* SyncManagerDelegate.swift */; };
@@ -1036,6 +1042,12 @@
 		009D841E2BE94F7B005EBFEB /* ContainedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainedButtonStyle.swift; sourceTree = "<group>"; };
 		009D84202BE95932005EBFEB /* ParraGlobalComponentAttributes+TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraGlobalComponentAttributes+TextInput.swift"; sourceTree = "<group>"; };
 		009D84222BE97039005EBFEB /* View+applyTextInputAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+applyTextInputAttributes.swift"; sourceTree = "<group>"; };
+		009D84242BEA68F9005EBFEB /* ParraAttributes+Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+Widget.swift"; sourceTree = "<group>"; };
+		009D84262BEA6921005EBFEB /* ParraAttributes+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+Image.swift"; sourceTree = "<group>"; };
+		009D84282BEA6926005EBFEB /* ParraAttributes+Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+Label.swift"; sourceTree = "<group>"; };
+		009D842A2BEA692E005EBFEB /* ParraAttributes+Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+Button.swift"; sourceTree = "<group>"; };
+		009D842C2BEA6978005EBFEB /* ParraAttributes+TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+TextInput.swift"; sourceTree = "<group>"; };
+		009D842E2BEA6992005EBFEB /* ParraAttributes+TextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+TextEditor.swift"; sourceTree = "<group>"; };
 		00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraColorSwatch+ParraColorConvertible.swift"; sourceTree = "<group>"; };
 		00A2CEE62B696AE500684DC0 /* TextButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextButtonConfig.swift; sourceTree = "<group>"; };
 		00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+inits.swift"; sourceTree = "<group>"; };
@@ -1046,9 +1058,9 @@
 		00AB95A02BE4524C00B27091 /* ParraPaddingSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddingSize.swift; sourceTree = "<group>"; };
 		00AB95A22BE4529900B27091 /* ParraPaddingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddingConfig.swift; sourceTree = "<group>"; };
 		00AB95A52BE4546000B27091 /* ParraAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAttributes.swift; sourceTree = "<group>"; };
-		00AB95A72BE4547400B27091 /* Attributes+Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Attributes+Shadow.swift"; sourceTree = "<group>"; };
-		00AB95A92BE4547C00B27091 /* Attributes+Border.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Attributes+Border.swift"; sourceTree = "<group>"; };
-		00AB95AB2BE455D100B27091 /* Attributes+Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Attributes+Text.swift"; sourceTree = "<group>"; };
+		00AB95A72BE4547400B27091 /* ParraAttributes+Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+Shadow.swift"; sourceTree = "<group>"; };
+		00AB95A92BE4547C00B27091 /* ParraAttributes+Border.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+Border.swift"; sourceTree = "<group>"; };
+		00AB95AB2BE455D100B27091 /* ParraAttributes+Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+Text.swift"; sourceTree = "<group>"; };
 		00AB95AD2BE4735200B27091 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		00ABF1422B78516A00A054A2 /* ParraInternal+SyncTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+SyncTarget.swift"; sourceTree = "<group>"; };
 		00ABF1442B7851BF00A054A2 /* ParraInternal+SyncManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+SyncManagerDelegate.swift"; sourceTree = "<group>"; };
@@ -2558,9 +2570,15 @@
 			isa = PBXGroup;
 			children = (
 				00AB95A52BE4546000B27091 /* ParraAttributes.swift */,
-				00AB95A92BE4547C00B27091 /* Attributes+Border.swift */,
-				00AB95A72BE4547400B27091 /* Attributes+Shadow.swift */,
-				00AB95AB2BE455D100B27091 /* Attributes+Text.swift */,
+				00AB95A92BE4547C00B27091 /* ParraAttributes+Border.swift */,
+				009D842A2BEA692E005EBFEB /* ParraAttributes+Button.swift */,
+				009D84262BEA6921005EBFEB /* ParraAttributes+Image.swift */,
+				009D84282BEA6926005EBFEB /* ParraAttributes+Label.swift */,
+				00AB95A72BE4547400B27091 /* ParraAttributes+Shadow.swift */,
+				00AB95AB2BE455D100B27091 /* ParraAttributes+Text.swift */,
+				009D842E2BEA6992005EBFEB /* ParraAttributes+TextEditor.swift */,
+				009D842C2BEA6978005EBFEB /* ParraAttributes+TextInput.swift */,
+				009D84242BEA68F9005EBFEB /* ParraAttributes+Widget.swift */,
 			);
 			path = Attributes;
 			sourceTree = "<group>";
@@ -3462,7 +3480,7 @@
 			files = (
 				00E76D0B2B66D09800B01DD8 /* LabelAttributes.swift in Sources */,
 				003622232B5D9ABB009EFE53 /* UIColor+ParraColorSwatchConvertible.swift in Sources */,
-				00AB95AA2BE4547C00B27091 /* Attributes+Border.swift in Sources */,
+				00AB95AA2BE4547C00B27091 /* ParraAttributes+Border.swift in Sources */,
 				00ABF17A2B7D34CB00A054A2 /* LaunchScreenStateManager.swift in Sources */,
 				00BD2FF82A47774300B4BEB2 /* URLSessionType.swift in Sources */,
 				00916DCA2AD35D9600B4856F /* ParraInstanceStorageConfiguration.swift in Sources */,
@@ -3548,6 +3566,7 @@
 				00FCB1322B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift in Sources */,
 				001B7B0E27DE3A9B00DEEECD /* Parra.swift in Sources */,
 				002A9FE12BCF553E00B88394 /* AuthenticationWidget+ContentObserver.swift in Sources */,
+				009D842B2BEA692E005EBFEB /* ParraAttributes+Button.swift in Sources */,
 				0027FB6B2BD6D30200558E51 /* ParraDefaultAuthenticationView.swift in Sources */,
 				002A9FE22BCF553E00B88394 /* AuthenticationWidget.swift in Sources */,
 				002A9FE32BCF553E00B88394 /* AuthenticationWidget+ContentObserver+InitialParams.swift in Sources */,
@@ -3595,6 +3614,7 @@
 				004F3EE72BA4B3E600424802 /* ChangelogWidgetConfig.swift in Sources */,
 				00ABF1AE2B865B8700A054A2 /* FeedbackCardWidget.swift in Sources */,
 				00EBCE162AA4F0D100887639 /* ParraLoggerExtraStyle.swift in Sources */,
+				009D84252BEA68F9005EBFEB /* ParraAttributes+Widget.swift in Sources */,
 				0079EDCC2BD8118D0045EEE5 /* Parra+Theme.swift in Sources */,
 				00FCB13D2B91363500635DC8 /* SegmentComponent.swift in Sources */,
 				00E15A23292AFB2B0049C2C7 /* SessionStorage.swift in Sources */,
@@ -3654,7 +3674,7 @@
 				00ABF1D02B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift in Sources */,
 				004F3EEB2BA4BF4F00424802 /* ChangelogWidget+ContentObserver.swift in Sources */,
 				00ABF1762B7D344C00A054A2 /* ParraDefaultLaunchScreen.swift in Sources */,
-				00AB95A82BE4547400B27091 /* Attributes+Shadow.swift in Sources */,
+				00AB95A82BE4547400B27091 /* ParraAttributes+Shadow.swift in Sources */,
 				0039623D2A48B51100B8655F /* CAShapeLayer.swift in Sources */,
 				009D84172BE9271C005EBFEB /* Font+toUIFont.swift in Sources */,
 				00FCB1682B96271700635DC8 /* ImageButtonContent.swift in Sources */,
@@ -3717,10 +3737,12 @@
 				00E76D242B66D1FD00B01DD8 /* LabelContent.swift in Sources */,
 				008434612BE1595900700881 /* AuthenticationEmailPasswordView.swift in Sources */,
 				00C00ABB2A8A6BC2003B21D3 /* SessionStorageContext.swift in Sources */,
+				009D842F2BEA6992005EBFEB /* ParraAttributes+TextEditor.swift in Sources */,
 				00374D032BA0A63E0028EDA8 /* RoadmapTicketTypeIcon.swift in Sources */,
 				00FCB1812B976D3300635DC8 /* UserTicketCollectionResponse+Fixtures.swift in Sources */,
 				0027FB6D2BD6D89700558E51 /* ParraAuthContent.swift in Sources */,
 				006FA06A2B77D35800B60F5E /* ParraSyncMode.swift in Sources */,
+				009D842D2BEA6978005EBFEB /* ParraAttributes+TextInput.swift in Sources */,
 				00F7C4B22B9A610200DBDF5A /* ImageComponentType.swift in Sources */,
 				004F3EE32BA4B1F100424802 /* ViewOffsetKey.swift in Sources */,
 				0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */,
@@ -3861,7 +3883,7 @@
 				00FCB17F2B976D2300635DC8 /* AppRoadmapConfiguration+Fixtures.swift in Sources */,
 				00A413D32BE2A9F1003E4E56 /* ProfileWidget+ContentObserver.swift in Sources */,
 				00374D082BA0BA500028EDA8 /* ParraBadgeSize.swift in Sources */,
-				00AB95AC2BE455D100B27091 /* Attributes+Text.swift in Sources */,
+				00AB95AC2BE455D100B27091 /* ParraAttributes+Text.swift in Sources */,
 				00FCB1862B9779F000635DC8 /* View+SheetWithLoader.swift in Sources */,
 				00FCB1842B9779D200635DC8 /* SheetWithLoader.swift in Sources */,
 				00497D7929F88CC4004EF5AB /* ParraSessionsResponse.swift in Sources */,
@@ -3887,6 +3909,7 @@
 				004F3EFF2BA53A2E00424802 /* AppRelease+Fixtures.swift in Sources */,
 				00D5DD932BD16D27002E09B7 /* TextValidatorRule.swift in Sources */,
 				00A2CEE52B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift in Sources */,
+				009D84292BEA6926005EBFEB /* ParraAttributes+Label.swift in Sources */,
 				00FCB1622B93C43400635DC8 /* UserTicket+Fixtures.swift in Sources */,
 				00EBCE0F2AA4CF0C00887639 /* QualityOfService+Codable.swift in Sources */,
 				00ABF19E2B8415A200A054A2 /* ParraLaunchScreen.Config+Preview.swift in Sources */,
@@ -3983,6 +4006,7 @@
 				00F7C4A82B9A438500DBDF5A /* ComponentFactory+TextInputs.swift in Sources */,
 				00C1190A2BAF11FA0013FD03 /* ParraEnvironmentKey.swift in Sources */,
 				00DA7FEC295CAB9E00109081 /* AnyDecodable.swift in Sources */,
+				009D84272BEA6921005EBFEB /* ParraAttributes+Image.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
