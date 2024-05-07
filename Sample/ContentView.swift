@@ -13,12 +13,12 @@ struct ContentView: View {
         TabView {
             SampleTab()
                 .tabItem {
-                    Label("Features", systemImage: "list.bullet.circle.fill")
+                    Label("Features", systemImage: "bird.circle.fill")
                 }
 
             ProfileTab()
                 .tabItem {
-                    Label("Profile", systemImage: "person.fill")
+                    Label("Profile", systemImage: "person.circle.fill")
                 }
         }
     }
