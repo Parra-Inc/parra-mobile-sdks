@@ -16,9 +16,6 @@ public struct TextButtonContent: Equatable, Hashable {
         isDisabled: Bool = false,
         isLoading: Bool = false
     ) {
-        var text = text
-        text.isLoading = isLoading
-
         self.text = text
         self.isDisabled = isDisabled
         self.isLoading = isLoading
