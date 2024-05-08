@@ -51,14 +51,14 @@ struct SignupWidget: Container {
     @ViewBuilder var signupContent: some View {
         let content = contentObserver.content.signupContent
 
-        VStack {
+        VStack(spacing: 0) {
             componentFactory.buildTextInput(
                 config: TextInputConfig(
                     textContentType: .emailAddress
                 ),
                 content: content.emailField
             )
-            .padding(.top, 50)
+            .padding(.top, 80)
             .padding(.bottom, 5)
             .submitLabel(.next)
             .focused($focusedField, equals: .email)
@@ -89,12 +89,51 @@ struct SignupWidget: Container {
             ) {
                 contentObserver.signupTapped()
             }
+
+            Spacer()
+
+            legal
         }
     }
 
     // MARK: - Private
 
     @FocusState private var focusedField: Field?
+    @Environment(\.parra) private var parra
+
+    @ViewBuilder private var legal: some View {
+        HStack {
+            if let privacyPolicy = contentObserver.legalInfo.privacyPolicy {
+                buttonForLegalDocument(privacyPolicy)
+            }
+
+            //            componentFactory.buildLabel(
+            //                fontStyle: .body,
+            //                content: LabelContent(text: "·")
+            //            )
+        }
+    }
+
+    @ViewBuilder
+    private func buttonForLegalDocument(
+        _ document: LegalDocument
+    ) -> some View {
+        componentFactory.buildPlainButton(
+            config: TextButtonConfig(
+                style: .secondary,
+                size: .small
+            ),
+            content: TextButtonContent(
+                text: LabelContent(
+                    text: document.title
+                )
+            )
+        ) {
+            parra.parraInternal.openLink(
+                url: document.url
+            )
+        }
+    }
 }
 
 #Preview {

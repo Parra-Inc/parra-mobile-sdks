@@ -42,8 +42,10 @@ struct AuthenticationWidget: Container {
     @ViewBuilder var mainView: some View {
         let content = contentObserver.content
 
+        Spacer()
+
         VStack(spacing: 0) {
-            HStack(spacing: 0) {
+            VStack(spacing: 0) {
                 withContent(content: content.icon) { content in
                     ImageComponent(
                         content: content,
