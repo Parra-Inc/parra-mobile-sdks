@@ -40,6 +40,28 @@ public extension ParraGlobalComponentAttributes {
 
     // MARK: - Plain Button
 
+    func plainButtonTextColor(
+        in state: ParraButtonState,
+        with type: ParraButtonType,
+        theme: ParraTheme
+    ) -> ParraColor {
+        let baseColor: Color = switch type {
+        case .primary:
+            theme.palette.primary.toParraColor()
+        case .secondary:
+            theme.palette.secondary.toParraColor()
+        }
+
+        return switch state {
+        case .normal:
+            baseColor
+        case .disabled:
+            baseColor.opacity(0.6)
+        case .pressed:
+            baseColor.opacity(0.6)
+        }
+    }
+
     func plainButtonTextAttributes(
         in state: ParraButtonState,
         for size: ParraButtonSize,
@@ -51,7 +73,11 @@ public extension ParraGlobalComponentAttributes {
             theme: theme
         )
 
-        textAttributes.color = theme.palette.primary.toParraColor()
+        textAttributes.color = plainButtonTextColor(
+            in: state,
+            with: type,
+            theme: theme
+        )
 
         return textAttributes
     }
