@@ -36,11 +36,13 @@ extension AuthenticationWidget.ContentObserver {
             emailField: TextInputContent,
             passwordField: TextInputContent,
             loginButton: TextButtonContent,
+            forgotPasswordButton: TextButtonContent,
             signupButton: TextButtonContent
         ) {
             self.emailField = emailField
             self.passwordField = passwordField
             self.loginButton = loginButton
+            self.forgotPasswordButton = forgotPasswordButton
             self.signupButton = signupButton
         }
 
@@ -49,6 +51,7 @@ extension AuthenticationWidget.ContentObserver {
         var emailField: TextInputContent
         var passwordField: TextInputContent
         var loginButton: TextButtonContent
+        var forgotPasswordButton: TextButtonContent
         var signupButton: TextButtonContent
     }
 
@@ -89,6 +92,11 @@ extension AuthenticationWidget.ContentObserver {
                             text: emailPassword.loginButtonTitle ?? "Log in"
                         ),
                         isDisabled: true
+                    ),
+                    forgotPasswordButton: TextButtonContent(
+                        text: LabelContent(
+                            text: "Forgot password?"
+                        )
                     ),
                     signupButton: TextButtonContent(
                         text: LabelContent(

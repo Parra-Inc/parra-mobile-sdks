@@ -15,6 +15,7 @@ struct AuthenticationEmailPasswordView: View {
     }
 
     @FocusState private var focusedField: Field?
+    @Environment(\.parra) var parra
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var navigationState: NavigationState
 
@@ -69,6 +70,15 @@ struct AuthenticationEmailPasswordView: View {
             ) {
                 contentObserver.loginTapped()
             }
+
+            componentFactory.buildPlainButton(
+                config: TextButtonConfig(
+                    style: .primary,
+                    size: .small,
+                    isMaxWidth: false
+                ),
+                content: content.forgotPasswordButton
+            ) {}
 
             if let error = contentObserver.error {
                 componentFactory.buildLabel(
