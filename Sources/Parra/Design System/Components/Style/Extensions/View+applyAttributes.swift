@@ -70,6 +70,32 @@ extension View {
     }
 
     @ViewBuilder
+    func applyAsyncImageAttributes(
+        _ attributes: ParraAttributes.AsyncImage,
+        using theme: ParraTheme
+    ) -> some View {
+        withFrame(attributes.size)
+            .background(attributes.background ?? .clear)
+            .applyPadding(
+                size: attributes.padding,
+                from: theme
+            )
+            .foregroundStyle(
+                attributes.tint ?? .black
+            )
+            .opacity(attributes.opacity ?? 1.0)
+            .applyCornerRadii(
+                size: attributes.cornerRadius,
+                from: theme
+            )
+            .applyBorder(
+                attributes.border,
+                with: attributes.cornerRadius,
+                from: theme
+            )
+    }
+
+    @ViewBuilder
     private func withFrame(
         _ size: CGSize?
     ) -> some View {
@@ -178,6 +204,11 @@ extension View {
         )
         .applyPadding(
             size: attributes.padding,
+            from: theme
+        )
+        .applyBorder(
+            attributes.border,
+            with: attributes.cornerRadius,
             from: theme
         )
     }

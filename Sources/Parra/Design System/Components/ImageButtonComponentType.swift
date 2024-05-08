@@ -11,12 +11,12 @@ import SwiftUI
 protocol ImageButtonComponentType: View {
     var config: ImageButtonConfig { get }
     var content: ImageButtonContent { get }
-    var style: ParraAttributedImageButtonStyle { get }
+    var style: ImageButtonStyle { get }
 
     init(
         config: ImageButtonConfig,
         content: ImageButtonContent,
-        style: ParraAttributedImageButtonStyle,
+        style: ImageButtonStyle,
         onPress: @escaping () -> Void
     )
 }

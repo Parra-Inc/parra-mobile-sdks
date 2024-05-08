@@ -213,7 +213,7 @@ struct ReleaseWidget: Container {
 
                         AsyncImageComponent(
                             content: content.image,
-                            attributes: ParraAttributes.Image(
+                            attributes: ParraAttributes.AsyncImage(
                                 cornerRadius: .sm
                             )
                         )

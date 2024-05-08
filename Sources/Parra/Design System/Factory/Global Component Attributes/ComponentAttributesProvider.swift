@@ -25,6 +25,14 @@ public protocol ComponentAttributesProvider {
         theme: ParraTheme
     ) -> ParraAttributes.Badge
 
+    func imageAttributes(
+        content: ParraImageContent
+    ) -> ParraAttributes.Image
+
+    func asyncImageAttributes(
+        content: AsyncImageContent
+    ) -> ParraAttributes.AsyncImage
+
     // MARK: Text Inputs
 
     func textInputAttributes(
@@ -56,6 +64,7 @@ public protocol ComponentAttributesProvider {
     ) -> ParraAttributes.ContainedButton
 
     func imageButtonAttributes(
+        variant: ParraButtonVariant,
         in state: ParraButtonState,
         for size: ParraImageButtonSize,
         with type: ParraButtonType,

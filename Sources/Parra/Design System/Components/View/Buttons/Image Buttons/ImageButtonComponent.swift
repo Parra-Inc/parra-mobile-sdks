@@ -14,7 +14,7 @@ struct ImageButtonComponent: ImageButtonComponentType {
     init(
         config: ImageButtonConfig,
         content: ImageButtonContent,
-        style: ParraAttributedImageButtonStyle,
+        style: ImageButtonStyle,
         onPress: @escaping () -> Void
     ) {
         self.config = config
@@ -27,7 +27,7 @@ struct ImageButtonComponent: ImageButtonComponentType {
 
     let config: ImageButtonConfig
     let content: ImageButtonContent
-    let style: ParraAttributedImageButtonStyle
+    let style: ImageButtonStyle
     let onPress: () -> Void
 
     @EnvironmentObject var themeObserver: ParraThemeObserver

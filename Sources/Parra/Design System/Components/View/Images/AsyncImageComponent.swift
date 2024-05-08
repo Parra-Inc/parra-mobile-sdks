@@ -13,7 +13,7 @@ struct AsyncImageComponent: AsyncImageComponentType {
 
     init(
         content: AsyncImageContent,
-        attributes: ParraAttributes.Image
+        attributes: ParraAttributes.AsyncImage
     ) {
         self.content = content
         self.attributes = attributes
@@ -22,7 +22,7 @@ struct AsyncImageComponent: AsyncImageComponentType {
     // MARK: - Internal
 
     let content: AsyncImageContent
-    let attributes: ParraAttributes.Image
+    let attributes: ParraAttributes.AsyncImage
 
     @Environment(\.parra) var parra
 
@@ -36,7 +36,7 @@ struct AsyncImageComponent: AsyncImageComponentType {
             transaction: Transaction(animation: .easeIn(duration: 0.35)),
             content: imageContent
         )
-        .applyImageAttributes(attributes, using: theme)
+        .applyAsyncImageAttributes(attributes, using: theme)
     }
 
     // MARK: - Private

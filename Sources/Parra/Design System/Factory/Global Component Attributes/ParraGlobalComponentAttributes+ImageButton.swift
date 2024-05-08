@@ -10,16 +10,92 @@ import SwiftUI
 
 public extension ParraGlobalComponentAttributes {
     func imageButtonAttributes(
+        variant: ParraButtonVariant,
         in state: ParraButtonState,
         for size: ParraImageButtonSize,
         with type: ParraButtonType,
         theme: ParraTheme
     ) -> ParraAttributes.ImageButton {
+        let palette = theme.palette
+
+        let backgroundColor: Color? = switch variant {
+        case .plain, .outlined:
+            .clear
+        case .contained:
+            switch type {
+            case .primary:
+                palette.primary.toParraColor()
+            case .secondary:
+                palette.secondary.toParraColor()
+            }
+        }
+
+        let tint: Color = switch variant {
+        case .plain, .outlined:
+            switch type {
+            case .primary:
+                palette.primary.toParraColor()
+            case .secondary:
+                palette.secondary.toParraColor()
+            }
+        case .contained:
+            palette.primaryBackground.toParraColor()
+        }
+
+        let (borderColor, borderWidth): (Color?, CGFloat?) = switch variant {
+        case .contained, .plain:
+            (nil, nil)
+        case .outlined:
+            switch type {
+            case .primary:
+                (palette.primary.toParraColor(), 1.5)
+            case .secondary:
+                (palette.secondary.toParraColor(), 1.5)
+            }
+        }
+
+        let frameSize = switch size {
+        case .smallSquare:
+            CGSize(width: 20, height: 20)
+        case .mediumSquare:
+            CGSize(width: 34, height: 34)
+        case .largeSquare:
+            CGSize(width: 50, height: 50)
+        case .custom(let customSize):
+            customSize
+        }
+
+        let padding = EdgeInsets(
+            vertical: (frameSize.height * 0.2).rounded(.down),
+            horizontal: (frameSize.width * 0.2).rounded(.down)
+        )
+
+        let cornerRadius: ParraCornerRadiusSize = switch size {
+        case .smallSquare, .mediumSquare:
+            .sm
+        case .largeSquare:
+            .md
+        case .custom:
+            .zero
+        }
+
+        let border = ParraAttributes.Border(
+            width: borderWidth,
+            color: borderColor
+        )
+
         return ParraAttributes.ImageButton(
-            image: ParraAttributes.Image(),
-            border: .init(),
-            cornerRadius: .md,
-            padding: .md
+            image: ParraAttributes.Image(
+                tint: tint,
+                size: frameSize,
+                border: border,
+                cornerRadius: cornerRadius,
+                padding: .custom(padding),
+                background: backgroundColor
+            ),
+            border: ParraAttributes.Border(),
+            cornerRadius: .zero,
+            padding: .sm
         )
     }
 }

@@ -105,6 +105,40 @@ extension ComponentFactory {
         )
     }
 
+    @ViewBuilder
+    func buildImageButton(
+        variant: ParraButtonVariant,
+        config: ImageButtonConfig,
+        content: ImageButtonContent,
+        onPress: @escaping () -> Void
+    ) -> some View {
+        let (
+            attributes,
+            pressedAttributes,
+            disabledAttributes
+        ) = createImageButtonAttributeStateVariants(
+            variant: variant,
+            for: config.size,
+            type: config.style,
+            factory: attributeProvider.imageButtonAttributes
+        )
+
+        let style = ImageButtonStyle(
+            config: config,
+            content: content,
+            attributes: attributes,
+            pressedAttributes: pressedAttributes,
+            disabledAttributes: disabledAttributes
+        )
+
+        ImageButtonComponent(
+            config: config,
+            content: content,
+            style: style,
+            onPress: onPress
+        )
+    }
+
     private func createButtonAttributeStateVariants<T>(
         for size: ParraButtonSize,
         type: ParraButtonType,
@@ -126,43 +160,26 @@ extension ComponentFactory {
         )
     }
 
-    @ViewBuilder
-    func buildImageButton(
+    private func createImageButtonAttributeStateVariants<T>(
         variant: ParraButtonVariant,
-        config: ImageButtonConfig,
-        content: ImageButtonContent,
-        localAttributes: ImageButtonAttributes? = nil,
-        onPress: @escaping () -> Void
-    ) -> some View {
-        EmptyView()
-//        let mergedAttributes = ImageButtonComponent
-//            .applyStandardCustomizations(
-//                onto: localAttributes,
-//                theme: theme,
-//                config: config
-//            )
-//
-//        // If a container level factory function was provided for this
-//        // component, use it and supply global attribute overrides instead
-//        // of local, if provided.
-//        if let builder = suppliedBuilder,
-//           let view = builder(config, content, mergedAttributes, onPress)
-//        {
-//            view
-//        } else {
-//            let style = ParraAttributedImageButtonStyle(
-//                config: config,
-//                content: content,
-//                attributes: mergedAttributes,
-//                theme: theme
-//            )
-//
-//            ImageButtonComponent(
-//                config: config,
-//                content: content,
-//                style: style,
-//                onPress: onPress
-//            )
-//        }
+        for size: ParraImageButtonSize,
+        type: ParraButtonType,
+        factory: (
+            _ variant: ParraButtonVariant,
+            _ state: ParraButtonState,
+            _ size: ParraImageButtonSize,
+            _ type: ParraButtonType,
+            _ theme: ParraTheme
+        ) -> T
+    ) -> (
+        normal: T,
+        pressed: T,
+        disabled: T
+    ) {
+        return (
+            factory(variant, .normal, size, type, theme),
+            factory(variant, .pressed, size, type, theme),
+            factory(variant, .disabled, size, type, theme)
+        )
     }
 }

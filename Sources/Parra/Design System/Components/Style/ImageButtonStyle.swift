@@ -1,14 +1,14 @@
 //
-//  ParraAttributedImageButtonStyle.swift
+//  ImageButtonStyle.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 3/4/24.
+//  Created by Mick MacCallum on 5/7/24.
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
 import SwiftUI
 
-struct ParraAttributedImageButtonStyle: ButtonStyle, ParraAttributedStyle {
+struct ImageButtonStyle: ButtonStyle, ParraAttributedStyle {
     // MARK: - Internal
 
     let config: ImageButtonConfig
@@ -33,7 +33,7 @@ struct ParraAttributedImageButtonStyle: ButtonStyle, ParraAttributedStyle {
             attributes: currentAttributes.image
         )
         .applyImageButtonAttributes(
-            currentAttributes,
+            attributes,
             using: themeObserver.theme
         )
     }
