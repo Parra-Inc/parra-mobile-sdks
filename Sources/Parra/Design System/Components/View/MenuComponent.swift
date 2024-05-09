@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct MenuComponent: MenuComponentType {
+struct MenuComponent: View {
     // MARK: - Internal
 
     let config: MenuConfig

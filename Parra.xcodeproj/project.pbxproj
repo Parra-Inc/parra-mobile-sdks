@@ -24,7 +24,6 @@
 		001677552B6AE7FD00674001 /* FlexibleFrameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677542B6AE7FD00674001 /* FlexibleFrameAttributes.swift */; };
 		0016775C2B6FDCBA00674001 /* ParraStyleAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0016775B2B6FDCBA00674001 /* ParraStyleAttributes.swift */; };
 		0016775E2B6FDEFB00674001 /* ParraAttributedStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0016775D2B6FDEFB00674001 /* ParraAttributedStyle.swift */; };
-		001677652B6FE5F000674001 /* TextButtonComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001677642B6FE5F000674001 /* TextButtonComponentType.swift */; };
 		001779B22BC08A4F000AF0BB /* String+now.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001779B12BC08A4F000AF0BB /* String+now.swift */; };
 		001779B52BC08C19000AF0BB /* ParraFeedbackPopupState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E269E32A523000001A0F50 /* ParraFeedbackPopupState.swift */; };
 		001779B72BC08C59000AF0BB /* TextValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006153E92A36200300ED4CBF /* TextValidator.swift */; };
@@ -216,7 +215,6 @@
 		00706B132B719C2000C28F66 /* TextEditorAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B122B719C2000C28F66 /* TextEditorAttributes.swift */; };
 		00706B172B719CF700C28F66 /* TextEditorContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B162B719CF700C28F66 /* TextEditorContent.swift */; };
 		00706B192B71A6E600C28F66 /* TextEditorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B182B71A6E600C28F66 /* TextEditorConfig.swift */; };
-		00706B1B2B71A70A00C28F66 /* TextEditorComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B1A2B71A70A00C28F66 /* TextEditorComponentType.swift */; };
 		00706B1D2B71A76600C28F66 /* TextEditorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B1C2B71A76600C28F66 /* TextEditorComponent.swift */; };
 		00706B222B72C20A00C28F66 /* View+applyAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B212B72C20A00C28F66 /* View+applyAttributes.swift */; };
 		00706B252B72C25600C28F66 /* ParraButtonSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B242B72C25600C28F66 /* ParraButtonSize.swift */; };
@@ -422,7 +420,6 @@
 		00ABF19C2B84158E00A054A2 /* ParraAuthenticationConfiguration+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF19B2B84158E00A054A2 /* ParraAuthenticationConfiguration+Preview.swift */; };
 		00ABF19E2B8415A200A054A2 /* ParraLaunchScreen.Config+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF19D2B8415A200A054A2 /* ParraLaunchScreen.Config+Preview.swift */; };
 		00ABF1A02B84329200A054A2 /* TextInputComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF19F2B84329200A054A2 /* TextInputComponent.swift */; };
-		00ABF1A22B8526FA00A054A2 /* TextInputComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1A12B8526FA00A054A2 /* TextInputComponentType.swift */; };
 		00ABF1A42B85271B00A054A2 /* TextInputConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1A32B85271B00A054A2 /* TextInputConfig.swift */; };
 		00ABF1A62B85284900A054A2 /* TextInputContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1A52B85284900A054A2 /* TextInputContent.swift */; };
 		00ABF1AE2B865B8700A054A2 /* FeedbackCardWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1AD2B865B8700A054A2 /* FeedbackCardWidget.swift */; };
@@ -462,7 +459,6 @@
 		00BF36D52B5ACAD20097905C /* FieldState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36D42B5ACAD20097905C /* FieldState.swift */; };
 		00C00ABB2A8A6BC2003B21D3 /* SessionStorageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C00ABA2A8A6BC2003B21D3 /* SessionStorageContext.swift */; };
 		00C00ABD2A8A6BD1003B21D3 /* SessionReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C00ABC2A8A6BD1003B21D3 /* SessionReader.swift */; };
-		00C118F72BAC731A0013FD03 /* AsyncImageComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C118F62BAC731A0013FD03 /* AsyncImageComponentType.swift */; };
 		00C118FA2BAC73900013FD03 /* AsyncImageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C118F92BAC73900013FD03 /* AsyncImageContent.swift */; };
 		00C118FD2BAC89270013FD03 /* AsyncImageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C118FC2BAC89270013FD03 /* AsyncImageComponent.swift */; };
 		00C118FF2BAC94DE0013FD03 /* ReleaseHeaderContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C118FE2BAC94DE0013FD03 /* ReleaseHeaderContent.swift */; };
@@ -522,7 +518,6 @@
 		00E76D282B66D22000B01DD8 /* TextButtonContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D272B66D22000B01DD8 /* TextButtonContent.swift */; };
 		00E76D2D2B66D26300B01DD8 /* ComponentFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D2C2B66D26300B01DD8 /* ComponentFactory.swift */; };
 		00E76D342B66E3FD00B01DD8 /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D332B66E3FD00B01DD8 /* Container.swift */; };
-		00E76D362B66E42600B01DD8 /* LabelComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D352B66E42600B01DD8 /* LabelComponentType.swift */; };
 		00E76D3B2B66E4E000B01DD8 /* FeedbackFormWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D3A2B66E4E000B01DD8 /* FeedbackFormWidget.swift */; };
 		00E76D3D2B66E6E100B01DD8 /* ContainerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D3C2B66E6E100B01DD8 /* ContainerConfig.swift */; };
 		00E76D442B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D432B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift */; };
@@ -551,7 +546,6 @@
 		00F7C48D2B99FE8200DBDF5A /* ParraAlertContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C48C2B99FE8200DBDF5A /* ParraAlertContent.swift */; };
 		00F7C4922B9A0E8200DBDF5A /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4912B9A0E8200DBDF5A /* AlertManager.swift */; };
 		00F7C4952B9A111B00DBDF5A /* InlineAlertComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4942B9A111B00DBDF5A /* InlineAlertComponent.swift */; };
-		00F7C4972B9A113900DBDF5A /* AlertComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4962B9A113900DBDF5A /* AlertComponentType.swift */; };
 		00F7C4A02B9A42FA00DBDF5A /* ComponentFactory+Labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C49F2B9A42FA00DBDF5A /* ComponentFactory+Labels.swift */; };
 		00F7C4A22B9A430A00DBDF5A /* ComponentFactory+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4A12B9A430A00DBDF5A /* ComponentFactory+Buttons.swift */; };
 		00F7C4A62B9A437A00DBDF5A /* ComponentFactory+TextEditors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4A52B9A437A00DBDF5A /* ComponentFactory+TextEditors.swift */; };
@@ -560,7 +554,6 @@
 		00F7C4AC2B9A439700DBDF5A /* ComponentFactory+Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4AB2B9A439700DBDF5A /* ComponentFactory+Alerts.swift */; };
 		00F7C4AE2B9A5B6C00DBDF5A /* ToastAlertComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4AD2B9A5B6C00DBDF5A /* ToastAlertComponent.swift */; };
 		00F7C4B02B9A609D00DBDF5A /* ImageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4AF2B9A609D00DBDF5A /* ImageComponent.swift */; };
-		00F7C4B22B9A610200DBDF5A /* ImageComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4B12B9A610200DBDF5A /* ImageComponentType.swift */; };
 		00FCB12F2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB12E2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift */; };
 		00FCB1322B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1312B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift */; };
 		00FCB1342B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1332B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift */; };
@@ -571,7 +564,6 @@
 		00FCB13F2B91496E00635DC8 /* SegmentConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB13E2B91496E00635DC8 /* SegmentConfig.swift */; };
 		00FCB1412B914A2C00635DC8 /* SegmentContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1402B914A2C00635DC8 /* SegmentContent.swift */; };
 		00FCB1432B914DB000635DC8 /* SegmentAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1422B914DB000635DC8 /* SegmentAttributes.swift */; };
-		00FCB1452B91532B00635DC8 /* SegmentComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1442B91532B00635DC8 /* SegmentComponentType.swift */; };
 		00FCB1472B91537C00635DC8 /* ParraAttributedSegmentStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1462B91537C00635DC8 /* ParraAttributedSegmentStyle.swift */; };
 		00FCB14B2B939B9100635DC8 /* RoadmapWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB14A2B939B9100635DC8 /* RoadmapWidget.swift */; };
 		00FCB14D2B939BC600635DC8 /* RoadmapWidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB14C2B939BC600635DC8 /* RoadmapWidgetConfig.swift */; };
@@ -581,7 +573,6 @@
 		00FCB15E2B93C34E00635DC8 /* RoadmapListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB15D2B93C34E00635DC8 /* RoadmapListItem.swift */; };
 		00FCB1622B93C43400635DC8 /* UserTicket+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1612B93C43400635DC8 /* UserTicket+Fixtures.swift */; };
 		00FCB1642B961EE000635DC8 /* ImageButtonComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1632B961EE000635DC8 /* ImageButtonComponent.swift */; };
-		00FCB1662B961F9100635DC8 /* ImageButtonComponentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1652B961F9100635DC8 /* ImageButtonComponentType.swift */; };
 		00FCB1682B96271700635DC8 /* ImageButtonContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1672B96271700635DC8 /* ImageButtonContent.swift */; };
 		00FCB16A2B96275A00635DC8 /* ImageButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1692B96275A00635DC8 /* ImageButtonConfig.swift */; };
 		00FCB1742B962D8700635DC8 /* FixedFrameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FCB1732B962D8700635DC8 /* FixedFrameAttributes.swift */; };
@@ -701,7 +692,6 @@
 		001677542B6AE7FD00674001 /* FlexibleFrameAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleFrameAttributes.swift; sourceTree = "<group>"; };
 		0016775B2B6FDCBA00674001 /* ParraStyleAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStyleAttributes.swift; sourceTree = "<group>"; };
 		0016775D2B6FDEFB00674001 /* ParraAttributedStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAttributedStyle.swift; sourceTree = "<group>"; };
-		001677642B6FE5F000674001 /* TextButtonComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextButtonComponentType.swift; sourceTree = "<group>"; };
 		001779B12BC08A4F000AF0BB /* String+now.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+now.swift"; sourceTree = "<group>"; };
 		001779BC2BC08DA1000AF0BB /* ParraFeedbackForm+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedbackForm+Fixtures.swift"; sourceTree = "<group>"; };
 		001779BF2BC08E47000AF0BB /* ParraSessionsResponse+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraSessionsResponse+Fixtures.swift"; sourceTree = "<group>"; };
@@ -889,7 +879,6 @@
 		006DE9872A47547900521F5D /* ParraLazyLogParam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLazyLogParam.swift; sourceTree = "<group>"; };
 		006FA0692B77D35800B60F5E /* ParraSyncMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncMode.swift; sourceTree = "<group>"; };
 		00706B062B713BCA00C28F66 /* MenuComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuComponent.swift; sourceTree = "<group>"; };
-		00706B082B713BF800C28F66 /* MenuComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuComponentType.swift; sourceTree = "<group>"; };
 		00706B0A2B713C9800C28F66 /* MenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuContent.swift; sourceTree = "<group>"; };
 		00706B0C2B713EB000C28F66 /* MenuConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuConfig.swift; sourceTree = "<group>"; };
 		00706B0E2B713F7000C28F66 /* ParraAttributedMenuStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAttributedMenuStyle.swift; sourceTree = "<group>"; };
@@ -897,7 +886,6 @@
 		00706B122B719C2000C28F66 /* TextEditorAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorAttributes.swift; sourceTree = "<group>"; };
 		00706B162B719CF700C28F66 /* TextEditorContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorContent.swift; sourceTree = "<group>"; };
 		00706B182B71A6E600C28F66 /* TextEditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorConfig.swift; sourceTree = "<group>"; };
-		00706B1A2B71A70A00C28F66 /* TextEditorComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorComponentType.swift; sourceTree = "<group>"; };
 		00706B1C2B71A76600C28F66 /* TextEditorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorComponent.swift; sourceTree = "<group>"; };
 		00706B212B72C20A00C28F66 /* View+applyAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+applyAttributes.swift"; sourceTree = "<group>"; };
 		00706B242B72C25600C28F66 /* ParraButtonSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraButtonSize.swift; sourceTree = "<group>"; };
@@ -1100,7 +1088,6 @@
 		00ABF19B2B84158E00A054A2 /* ParraAuthenticationConfiguration+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAuthenticationConfiguration+Preview.swift"; sourceTree = "<group>"; };
 		00ABF19D2B8415A200A054A2 /* ParraLaunchScreen.Config+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraLaunchScreen.Config+Preview.swift"; sourceTree = "<group>"; };
 		00ABF19F2B84329200A054A2 /* TextInputComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputComponent.swift; sourceTree = "<group>"; };
-		00ABF1A12B8526FA00A054A2 /* TextInputComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputComponentType.swift; sourceTree = "<group>"; };
 		00ABF1A32B85271B00A054A2 /* TextInputConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputConfig.swift; sourceTree = "<group>"; };
 		00ABF1A52B85284900A054A2 /* TextInputContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputContent.swift; sourceTree = "<group>"; };
 		00ABF1AD2B865B8700A054A2 /* FeedbackCardWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCardWidget.swift; sourceTree = "<group>"; };
@@ -1143,7 +1130,6 @@
 		00BF36D42B5ACAD20097905C /* FieldState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldState.swift; sourceTree = "<group>"; };
 		00C00ABA2A8A6BC2003B21D3 /* SessionStorageContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStorageContext.swift; sourceTree = "<group>"; };
 		00C00ABC2A8A6BD1003B21D3 /* SessionReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionReader.swift; sourceTree = "<group>"; };
-		00C118F62BAC731A0013FD03 /* AsyncImageComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageComponentType.swift; sourceTree = "<group>"; };
 		00C118F92BAC73900013FD03 /* AsyncImageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageContent.swift; sourceTree = "<group>"; };
 		00C118FC2BAC89270013FD03 /* AsyncImageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageComponent.swift; sourceTree = "<group>"; };
 		00C118FE2BAC94DE0013FD03 /* ReleaseHeaderContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseHeaderContent.swift; sourceTree = "<group>"; };
@@ -1223,7 +1209,6 @@
 		00E76D272B66D22000B01DD8 /* TextButtonContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextButtonContent.swift; sourceTree = "<group>"; };
 		00E76D2C2B66D26300B01DD8 /* ComponentFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentFactory.swift; sourceTree = "<group>"; };
 		00E76D332B66E3FD00B01DD8 /* Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
-		00E76D352B66E42600B01DD8 /* LabelComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelComponentType.swift; sourceTree = "<group>"; };
 		00E76D3A2B66E4E000B01DD8 /* FeedbackFormWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormWidget.swift; sourceTree = "<group>"; };
 		00E76D3C2B66E6E100B01DD8 /* ContainerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerConfig.swift; sourceTree = "<group>"; };
 		00E76D432B66E83400B01DD8 /* FeedbackFormWidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackFormWidgetConfig.swift; sourceTree = "<group>"; };
@@ -1260,7 +1245,6 @@
 		00F7C48E2B9A049A00DBDF5A /* AlertAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertAttributes.swift; sourceTree = "<group>"; };
 		00F7C4912B9A0E8200DBDF5A /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		00F7C4942B9A111B00DBDF5A /* InlineAlertComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineAlertComponent.swift; sourceTree = "<group>"; };
-		00F7C4962B9A113900DBDF5A /* AlertComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertComponentType.swift; sourceTree = "<group>"; };
 		00F7C49F2B9A42FA00DBDF5A /* ComponentFactory+Labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComponentFactory+Labels.swift"; sourceTree = "<group>"; };
 		00F7C4A12B9A430A00DBDF5A /* ComponentFactory+Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComponentFactory+Buttons.swift"; sourceTree = "<group>"; };
 		00F7C4A32B9A436F00DBDF5A /* ComponentFactory+Menus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComponentFactory+Menus.swift"; sourceTree = "<group>"; };
@@ -1270,7 +1254,6 @@
 		00F7C4AB2B9A439700DBDF5A /* ComponentFactory+Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComponentFactory+Alerts.swift"; sourceTree = "<group>"; };
 		00F7C4AD2B9A5B6C00DBDF5A /* ToastAlertComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastAlertComponent.swift; sourceTree = "<group>"; };
 		00F7C4AF2B9A609D00DBDF5A /* ImageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageComponent.swift; sourceTree = "<group>"; };
-		00F7C4B12B9A610200DBDF5A /* ImageComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageComponentType.swift; sourceTree = "<group>"; };
 		00FCB12E2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackChoiceQuestionCard.swift; sourceTree = "<group>"; };
 		00FCB1312B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackQuestionViewKind+SingleOptionAnswer.swift"; sourceTree = "<group>"; };
 		00FCB1332B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCheckboxQuestionCard.swift; sourceTree = "<group>"; };
@@ -1281,7 +1264,6 @@
 		00FCB13E2B91496E00635DC8 /* SegmentConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentConfig.swift; sourceTree = "<group>"; };
 		00FCB1402B914A2C00635DC8 /* SegmentContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentContent.swift; sourceTree = "<group>"; };
 		00FCB1422B914DB000635DC8 /* SegmentAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentAttributes.swift; sourceTree = "<group>"; };
-		00FCB1442B91532B00635DC8 /* SegmentComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentComponentType.swift; sourceTree = "<group>"; };
 		00FCB1462B91537C00635DC8 /* ParraAttributedSegmentStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAttributedSegmentStyle.swift; sourceTree = "<group>"; };
 		00FCB14A2B939B9100635DC8 /* RoadmapWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapWidget.swift; sourceTree = "<group>"; };
 		00FCB14C2B939BC600635DC8 /* RoadmapWidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapWidgetConfig.swift; sourceTree = "<group>"; };
@@ -1291,7 +1273,6 @@
 		00FCB15D2B93C34E00635DC8 /* RoadmapListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapListItem.swift; sourceTree = "<group>"; };
 		00FCB1612B93C43400635DC8 /* UserTicket+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserTicket+Fixtures.swift"; sourceTree = "<group>"; };
 		00FCB1632B961EE000635DC8 /* ImageButtonComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonComponent.swift; sourceTree = "<group>"; };
-		00FCB1652B961F9100635DC8 /* ImageButtonComponentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonComponentType.swift; sourceTree = "<group>"; };
 		00FCB1672B96271700635DC8 /* ImageButtonContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonContent.swift; sourceTree = "<group>"; };
 		00FCB1692B96275A00635DC8 /* ImageButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonConfig.swift; sourceTree = "<group>"; };
 		00FCB1732B962D8700635DC8 /* FixedFrameAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedFrameAttributes.swift; sourceTree = "<group>"; };
@@ -2724,15 +2705,6 @@
 			path = State;
 			sourceTree = "<group>";
 		};
-		00C118F52BAC73100013FD03 /* Image */ = {
-			isa = PBXGroup;
-			children = (
-				00F7C4B12B9A610200DBDF5A /* ImageComponentType.swift */,
-				00C118F62BAC731A0013FD03 /* AsyncImageComponentType.swift */,
-			);
-			path = Image;
-			sourceTree = "<group>";
-		};
 		00C118F82BAC73870013FD03 /* Image */ = {
 			isa = PBXGroup;
 			children = (
@@ -2932,16 +2904,7 @@
 		00E76D032B66D05A00B01DD8 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				00F7C4962B9A113900DBDF5A /* AlertComponentType.swift */,
 				00374D822BA202B00028EDA8 /* EmptyStateComponentType.swift */,
-				00C118F52BAC73100013FD03 /* Image */,
-				00FCB1652B961F9100635DC8 /* ImageButtonComponentType.swift */,
-				00E76D352B66E42600B01DD8 /* LabelComponentType.swift */,
-				00706B082B713BF800C28F66 /* MenuComponentType.swift */,
-				00FCB1442B91532B00635DC8 /* SegmentComponentType.swift */,
-				001677642B6FE5F000674001 /* TextButtonComponentType.swift */,
-				00706B1A2B71A70A00C28F66 /* TextEditorComponentType.swift */,
-				00ABF1A12B8526FA00A054A2 /* TextInputComponentType.swift */,
 				00E76D1B2B66D18100B01DD8 /* Config */,
 				00E76D1C2B66D18600B01DD8 /* Content */,
 				00E76D072B66D07800B01DD8 /* Style */,
@@ -3545,7 +3508,6 @@
 				008434582BDC06A100700881 /* CameraView.swift in Sources */,
 				00FCB18C2B9791C000635DC8 /* ViewDataLoader+FeedbackForms.swift in Sources */,
 				00BF36C72B59AB000097905C /* ParraFixture.swift in Sources */,
-				00C118F72BAC731A0013FD03 /* AsyncImageComponentType.swift in Sources */,
 				00916A772B76C483009C87DC /* ParraAppDelegate.swift in Sources */,
 				007ED46A2A6BFBEA0077E446 /* ParraLoggerThreadInfo+ParraDictionaryConvertible.swift in Sources */,
 				009D84212BE95932005EBFEB /* ParraGlobalComponentAttributes+TextInput.swift in Sources */,
@@ -3557,7 +3519,6 @@
 				0087CA7C2A599916007D72FA /* ParraSessionManager+LogFormatters.swift in Sources */,
 				00FCB14D2B939BC600635DC8 /* RoadmapWidgetConfig.swift in Sources */,
 				00A2CEE72B696AE600684DC0 /* TextButtonConfig.swift in Sources */,
-				00ABF1A22B8526FA00A054A2 /* TextInputComponentType.swift in Sources */,
 				009D84372BEAE9D1005EBFEB /* ParraGlobalComponentAttributes+Image.swift in Sources */,
 				00FCB1762B962DC400635DC8 /* FrameAttributes.swift in Sources */,
 				00916A732B75CDC7009C87DC /* View+FeedbackForm.swift in Sources */,
@@ -3630,7 +3591,6 @@
 				00ABF1742B7D343A00A054A2 /* LaunchScreenType.swift in Sources */,
 				00374D872BA20D590028EDA8 /* View+conditionalRender.swift in Sources */,
 				006654392A89AFB000CD04E6 /* ParraSessionUploadGenerator.swift in Sources */,
-				00F7C4972B9A113900DBDF5A /* AlertComponentType.swift in Sources */,
 				00EBCE142AA4D58F00887639 /* ParraLogLevel+ConsoleOutput.swift in Sources */,
 				00FCB18A2B9780C900635DC8 /* ViewDataLoader.swift in Sources */,
 				00FCB1432B914DB000635DC8 /* SegmentAttributes.swift in Sources */,
@@ -3646,7 +3606,6 @@
 				0099EB082B8D09200053F366 /* ParraPublicContainer.swift in Sources */,
 				00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */,
 				0011C7DE2B9B7DCC0095EAE8 /* UIDevice++.swift in Sources */,
-				001677652B6FE5F000674001 /* TextButtonComponentType.swift in Sources */,
 				00995BEF2BB4C99600384D94 /* ViewDataLoader+Release.swift in Sources */,
 				00DA7FF0295DD28700109081 /* Parra+Analytics.swift in Sources */,
 				00E76D342B66E3FD00B01DD8 /* Container.swift in Sources */,
@@ -3741,7 +3700,6 @@
 				00E76D482B66E89C00B01DD8 /* ContainerContent.swift in Sources */,
 				0087CA982A59DEC8007D72FA /* ProcessInfoThermalState+ParraLogStringConvertible.swift in Sources */,
 				0087CA902A59B435007D72FA /* ParraLoggerOptions.swift in Sources */,
-				00FCB1452B91532B00635DC8 /* SegmentComponentType.swift in Sources */,
 				0066540A2A7EAAFA00CD04E6 /* URLRequest+ParraDictionaryConvertible.swift in Sources */,
 				007ED4742A6C458A0077E446 /* ParraSessionEvent.swift in Sources */,
 				00FCB1982B97BC5800635DC8 /* FeedbackCardWidget+ContentObserver+InitialParams.swift in Sources */,
@@ -3788,7 +3746,6 @@
 				00069BC52BECFC4E003C447A /* View+applyAlertAttributes.swift in Sources */,
 				006FA06A2B77D35800B60F5E /* ParraSyncMode.swift in Sources */,
 				009D842D2BEA6978005EBFEB /* ParraAttributes+TextInput.swift in Sources */,
-				00F7C4B22B9A610200DBDF5A /* ImageComponentType.swift in Sources */,
 				004F3EE32BA4B1F100424802 /* ViewOffsetKey.swift in Sources */,
 				0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */,
 				00995C012BB609F700384D94 /* LogView.swift in Sources */,
@@ -3898,7 +3855,6 @@
 				004F3F0C2BA88F6D00424802 /* TicketStubContent.swift in Sources */,
 				00374CFF2BA0108C0028EDA8 /* RoadmapVoteView.swift in Sources */,
 				0087CA852A59A046007D72FA /* QualityOfService+ParraLogDescription.swift in Sources */,
-				00E76D362B66E42600B01DD8 /* LabelComponentType.swift in Sources */,
 				005D31ED29A8561D001D0E0A /* QuestionAnswer.swift in Sources */,
 				0084345A2BDC06D000700881 /* CameraDataModel.swift in Sources */,
 				001B7B8E27DE806100DEEECD /* DataStorageMedium.swift in Sources */,
@@ -3985,7 +3941,6 @@
 				00C1190C2BAF1E7C0013FD03 /* ParraInternal.swift in Sources */,
 				009D84192BE92BDA005EBFEB /* ParraGlobalComponentAttributes+ImageButton.swift in Sources */,
 				008434662BE15A2700700881 /* ParraProfileView.swift in Sources */,
-				00706B1B2B71A70A00C28F66 /* TextEditorComponentType.swift in Sources */,
 				00E15A212929BC790049C2C7 /* UIDeviceOrientation+ParraLogStringConvertible.swift in Sources */,
 				00995BED2BB4650D00384D94 /* ContainerRenderer.swift in Sources */,
 				00374CF92B9F61440028EDA8 /* ScrollToTopView.swift in Sources */,
@@ -4032,7 +3987,6 @@
 				0016775C2B6FDCBA00674001 /* ParraStyleAttributes.swift in Sources */,
 				009D84152BE92069005EBFEB /* BadgeContent.swift in Sources */,
 				00ABF1472B7852D700A054A2 /* SyncManagerDelegate.swift in Sources */,
-				00FCB1662B961F9100635DC8 /* ImageButtonComponentType.swift in Sources */,
 				009D841F2BE94F7B005EBFEB /* ContainedButtonStyle.swift in Sources */,
 				003621EE2B5C769A009EFE53 /* ParraTheme.swift in Sources */,
 				004F3F202BA8D51F00424802 /* ParraReleaseOptions.swift in Sources */,

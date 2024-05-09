@@ -8,21 +8,24 @@
 
 import SwiftUI
 
-struct TextEditorComponent: TextEditorComponentType {
+struct TextEditorComponent: View {
     // MARK: - Lifecycle
 
     init(
         config: TextEditorConfig,
-        content: TextEditorContent
+        content: TextEditorContent,
+        attributes: ParraAttributes.TextEditor
     ) {
         self.config = config
         self.content = content
+        self.attributes = attributes
     }
 
     // MARK: - Internal
 
-    var config: TextEditorConfig
-    var content: TextEditorContent
+    let config: TextEditorConfig
+    let content: TextEditorContent
+    let attributes: ParraAttributes.TextEditor
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
     @EnvironmentObject var componentFactory: ComponentFactory

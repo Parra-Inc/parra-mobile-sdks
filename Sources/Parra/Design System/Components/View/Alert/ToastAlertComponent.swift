@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ToastAlertComponent: AlertComponentType {
+struct ToastAlertComponent: View {
     // MARK: - Internal
 
     let content: ParraAlertContent

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct InlineAlertComponent: AlertComponentType {
+struct InlineAlertComponent: View {
     // MARK: - Internal
 
     let content: ParraAlertContent

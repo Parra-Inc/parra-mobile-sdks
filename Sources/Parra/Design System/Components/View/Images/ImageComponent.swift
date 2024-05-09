@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ImageComponent: ImageComponentType {
+struct ImageComponent: View {
     // MARK: - Internal
 
     let content: ParraImageContent

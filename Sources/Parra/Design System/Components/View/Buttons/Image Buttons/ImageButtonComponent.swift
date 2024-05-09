@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ImageButtonComponent: ImageButtonComponentType {
+struct ImageButtonComponent: View {
     // MARK: - Lifecycle
 
     init(

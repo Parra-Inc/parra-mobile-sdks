@@ -11,7 +11,7 @@
 import SwiftUI
 
 func renderStorybook(
-    for componentType: (some TextButtonComponentType).Type
+    for componentType: (some View).Type
 ) -> some View {
     return VStack {
         HStack {
@@ -53,7 +53,7 @@ func renderStorybook(
 }
 
 private func renderButtonComponent(
-    type: (some TextButtonComponentType).Type,
+    type: (some View).Type,
     config: TextButtonConfig,
     content: TextButtonContent,
     theme: ParraTheme = .default
@@ -88,7 +88,7 @@ private func renderRowTitle(_ title: String) -> some View {
 }
 
 private func renderColumn(
-    for componentType: (some TextButtonComponentType).Type,
+    for componentType: (some View).Type,
     size: ParraButtonSize
 ) -> some View {
     let title = switch size {

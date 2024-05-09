@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct LabelComponent: LabelComponentType {
+struct LabelComponent: View {
     // MARK: - Lifecycle
 
     init(

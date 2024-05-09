@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AsyncImageComponent: AsyncImageComponentType {
+struct AsyncImageComponent: View {
     // MARK: - Lifecycle
 
     init(

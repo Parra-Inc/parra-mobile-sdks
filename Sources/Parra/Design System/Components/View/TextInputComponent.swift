@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct TextInputComponent: TextInputComponentType {
+struct TextInputComponent: View {
     // MARK: - Lifecycle
 
     init(

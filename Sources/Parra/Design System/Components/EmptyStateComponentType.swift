@@ -6,22 +6,6 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import SwiftUI
-
-protocol EmptyStateComponentType: View {
-    var config: EmptyStateConfig { get }
-    var content: EmptyStateContent { get }
-    var style: ParraAttributedEmptyStateStyle { get }
-
-    init(
-        config: EmptyStateConfig,
-        content: EmptyStateContent,
-        style: ParraAttributedEmptyStateStyle,
-        onPrimaryAction: (() -> Void)?,
-        onSecondaryAction: (() -> Void)?
-    )
-}
-
 // extension EmptyStateComponentType {
 //    static func applyStandardCustomizations(
 //        onto inputAttributes: EmptyStateAttributes?,

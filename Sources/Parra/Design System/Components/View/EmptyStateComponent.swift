@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct EmptyStateComponent: EmptyStateComponentType {
+struct EmptyStateComponent: View {
     // MARK: - Lifecycle
 
     init(

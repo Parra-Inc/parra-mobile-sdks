@@ -132,8 +132,10 @@ extension RoadmapWidget.ContentObserver {
     private func replaceTicket(
         with content: TicketUserContent
     ) {
-        ticketPaginator.updateItem(content)
+        Task { @MainActor in
+            ticketPaginator.updateItem(content)
 
-        updateTicketOnAllTabs(content)
+            updateTicketOnAllTabs(content)
+        }
     }
 }

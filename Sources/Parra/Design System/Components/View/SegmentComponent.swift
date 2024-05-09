@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct SegmentComponent: SegmentComponentType {
+struct SegmentComponent: View {
     var config: SegmentConfig
     let content: SegmentContent
     let style: ParraAttributedSegmentStyle

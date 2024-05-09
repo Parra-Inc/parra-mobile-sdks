@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct OutlinedButtonComponent: TextButtonComponentType {
+struct OutlinedButtonComponent: View {
     // MARK: - Lifecycle
 
     init(

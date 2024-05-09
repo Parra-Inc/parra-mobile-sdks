@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ContainedButtonComponent: TextButtonComponentType {
+struct ContainedButtonComponent: View {
     // MARK: - Lifecycle
 
     init(
