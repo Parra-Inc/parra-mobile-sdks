@@ -52,14 +52,17 @@ struct SignupWidget: Container {
         let content = contentObserver.content.signupContent
 
         VStack(spacing: 0) {
+            Spacer()
+
             componentFactory.buildTextInput(
                 config: TextInputConfig(
-                    textContentType: .emailAddress
+                    validationRules: config.emailValidationRules,
+                    textContentType: .emailAddress,
+                    textInputAutocapitalization: .never,
+                    autocorrectionDisabled: true
                 ),
                 content: content.emailField
             )
-            .padding(.top, 80)
-            .padding(.bottom, 5)
             .submitLabel(.next)
             .focused($focusedField, equals: .email)
             .onSubmit {
@@ -68,7 +71,11 @@ struct SignupWidget: Container {
 
             componentFactory.buildTextInput(
                 config: TextInputConfig(
-                    textContentType: .password
+                    validationRules: config.passwordValidationRules,
+                    isSecure: true,
+                    textContentType: .password,
+                    textInputAutocapitalization: .never,
+                    autocorrectionDisabled: true
                 ),
                 content: content.passwordField
             )
@@ -76,6 +83,8 @@ struct SignupWidget: Container {
             .submitLabel(.next)
             .focused($focusedField, equals: .password)
             .onSubmit(of: .text) {
+                focusedField = nil
+
                 contentObserver.signupTapped()
             }
 
@@ -87,13 +96,16 @@ struct SignupWidget: Container {
                 ),
                 content: content.signupButton
             ) {
+                focusedField = nil
+
                 contentObserver.signupTapped()
             }
-
-            Spacer()
-
-            legal
         }
+        .padding(.top, 60)
+
+        Spacer()
+
+        legal
     }
 
     // MARK: - Private

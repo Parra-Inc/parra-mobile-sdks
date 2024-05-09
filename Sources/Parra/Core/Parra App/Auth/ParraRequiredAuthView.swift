@@ -30,27 +30,20 @@ public struct ParraRequiredAuthView<
     ) -> AuthenticatedContent
 
     public var body: some View {
-        VStack {
-            content
-        }
-        .onAppear {
-            print(parraAuthState)
-            print(parraAuthState)
-            print(parraAuthState)
-        }
-        .onChange(
-            of: parraAuthState.current,
-            initial: true
-        ) { oldValue, newValue in
-            switch (oldValue, newValue) {
-            case (.unauthenticated, .authenticated):
-                withAnimation {
+        content
+            .onChange(
+                of: parraAuthState.current,
+                initial: true
+            ) { oldValue, newValue in
+                switch (oldValue, newValue) {
+                case (.unauthenticated, .authenticated):
+                    withAnimation {
+                        currentUserMirror = newValue
+                    }
+                default:
                     currentUserMirror = newValue
                 }
-            default:
-                currentUserMirror = newValue
             }
-        }
     }
 
     public func authenticatedContent(

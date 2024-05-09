@@ -57,6 +57,8 @@ struct AuthenticationEmailPasswordView: View {
             .submitLabel(.next)
             .focused($focusedField, equals: .password)
             .onSubmit(of: .text) {
+                focusedField = nil
+
                 contentObserver.loginTapped()
             }
 
@@ -68,6 +70,8 @@ struct AuthenticationEmailPasswordView: View {
                 ),
                 content: content.loginButton
             ) {
+                focusedField = nil
+
                 contentObserver.loginTapped()
             }
 

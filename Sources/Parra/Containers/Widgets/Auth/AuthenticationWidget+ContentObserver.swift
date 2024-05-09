@@ -159,6 +159,7 @@ extension AuthenticationWidget {
 
                     if text != nil || alwaysShowErrors {
                         content.emailContent?.emailField.errorMessage = error
+                        content.signupContent.emailField.errorMessage = error
                     }
                 case .password:
                     let error = TextValidator.validate(
@@ -170,11 +171,13 @@ extension AuthenticationWidget {
 
                     if text != nil || alwaysShowErrors {
                         content.emailContent?.passwordField.errorMessage = error
+                        content.signupContent.passwordField.errorMessage = error
                     }
                 }
             }
 
             content.emailContent?.loginButton.isDisabled = !areAllValid
+            content.signupContent.signupButton.isDisabled = !areAllValid
         }
 
         func onEmailChanged(_ email: String?) {
