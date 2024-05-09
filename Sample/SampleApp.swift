@@ -18,9 +18,12 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
             workspaceId: Parra.Demo.workspaceId,
             applicationId: Parra.Demo.applicationId,
             appContent: {
-                ParraRequiredAuthView { _ in
-                    ContentView()
-                }
+                ParraRequiredAuthView(
+                    authenticatedContent: { _ in
+                        ContentView()
+                    },
+                    authenticationFlowConfig: ParraAuthenticationFlowConfig()
+                )
             }
         )
     }

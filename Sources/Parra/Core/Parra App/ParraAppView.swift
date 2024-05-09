@@ -23,25 +23,21 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
 
         let parra: ParraInternal
         let appState: ParraAppState
-        let authState: ParraAuthState
         let launchScreenConfig: ParraLaunchScreen.Config?
 
         switch target {
         case .app(
             let authenticationMethod,
             let targetAppState,
-            let targetAuthState,
             let config
         ):
             self.authenticationMethod = authenticationMethod
 
             launchScreenConfig = config
             appState = targetAppState
-            authState = targetAuthState
 
             parra = ParraInternal.createParraInstance(
                 appState: appState,
-                authState: authState,
                 authenticationMethod: authenticationMethod,
                 configuration: configuration
             )
@@ -53,12 +49,10 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
                 tenantId: Parra.Demo.workspaceId,
                 applicationId: Parra.Demo.applicationId
             )
-            authState = ParraAuthState()
 
             parra = ParraInternal
                 .createParraSwiftUIPreviewsInstance(
                     appState: appState,
-                    authState: authState,
                     authenticationMethod: authenticationMethod,
                     configuration: configuration
                 )
@@ -79,10 +73,6 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
 
         self._parraAppState = StateObject(
             wrappedValue: appState
-        )
-
-        self._parraAuthState = StateObject(
-            wrappedValue: authState
         )
 
         self._themeObserver = StateObject(
@@ -207,7 +197,8 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
 
     @ViewBuilder private var content: (_ parra: Parra) -> Content
     @StateObject private var parraAppState: ParraAppState
-    @StateObject private var parraAuthState: ParraAuthState
+    @StateObject private var parraAuthState: ParraAuthState =
+        ParraAuthStateEnvironmentKey.defaultValue
     @StateObject private var launchScreenState = LaunchScreenStateManager()
 
     @StateObject private var themeObserver: ParraThemeObserver

@@ -11,26 +11,11 @@ import SwiftUI
 
 private let logger = Logger()
 
-public class ParraAuthState: ObservableObject, Equatable {
+public class ParraAuthState: ObservableObject {
     // MARK: - Public
 
     @Published
     public private(set) var current: ParraAuthResult = .unauthenticated(nil)
-
-    public static func == (
-        lhs: ParraAuthState,
-        rhs: ParraAuthState
-    ) -> Bool {
-        switch (lhs.current, rhs.current) {
-        case (.authenticated(let lhsUser), .authenticated(let rhsUser)):
-            return lhsUser == rhsUser
-        case (.unauthenticated(let lhsError), .unauthenticated(let rhsError)):
-            return lhsError?.localizedDescription == rhsError?
-                .localizedDescription
-        default:
-            return false
-        }
-    }
 
     // MARK: - Internal
 

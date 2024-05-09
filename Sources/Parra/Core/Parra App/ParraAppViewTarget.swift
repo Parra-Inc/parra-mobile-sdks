@@ -12,7 +12,6 @@ enum ParraAppViewTarget {
     case app(
         ParraAuthType,
         ParraAppState,
-        ParraAuthState,
         ParraLaunchScreen.Config?
     )
     case preview

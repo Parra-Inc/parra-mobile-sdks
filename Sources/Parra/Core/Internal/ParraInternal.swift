@@ -23,7 +23,6 @@ class ParraInternal {
         authenticationMethod: ParraAuthType,
         configuration: ParraConfiguration,
         appState: ParraAppState,
-        authState: ParraAuthState,
         dataManager: DataManager,
         syncManager: ParraSyncManager,
         authService: AuthService,
@@ -39,7 +38,6 @@ class ParraInternal {
         self.authenticationMethod = authenticationMethod
         self.configuration = configuration
         self.appState = appState
-        self.authState = authState
         self.dataManager = dataManager
         self.syncManager = syncManager
         self.authService = authService
@@ -76,7 +74,6 @@ class ParraInternal {
     var configuration: ParraConfiguration
     let authenticationMethod: ParraAuthType
     let appState: ParraAppState
-    let authState: ParraAuthState
 
     // MARK: - Managers
 

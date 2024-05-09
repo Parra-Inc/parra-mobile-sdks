@@ -19,7 +19,6 @@ class ContainerRenderer {
 
     // MARK: - Internal
 
-    @MainActor
     func renderContainer<C: Container>(
         params: C.ContentObserver.InitialParams,
         config: C.Config,
@@ -36,7 +35,6 @@ class ContainerRenderer {
         )
     }
 
-    @MainActor
     func renderContainer<C: Container>(
         contentObserver: C.ContentObserver,
         config: C.Config,

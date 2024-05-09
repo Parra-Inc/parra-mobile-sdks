@@ -100,13 +100,10 @@ open class ParraApp<
             applicationId: applicationId
         )
 
-        let authState = ParraAuthState()
-
         self.appContent = ParraAppView(
             target: .app(
                 authenticationMethod,
                 appState,
-                authState,
                 launchScreenConfig
             ),
             configuration: configuration,
