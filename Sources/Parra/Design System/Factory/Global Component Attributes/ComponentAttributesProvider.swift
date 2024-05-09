@@ -93,4 +93,11 @@ public protocol ComponentAttributesProvider {
         localAttributes: ParraAttributes.ImageButton?,
         theme: ParraTheme
     ) -> ParraAttributes.ImageButton
+
+    // MARK: Segmented Controls
+
+    func segmentedControlAttributes(
+        localAttributes: ParraAttributes.Segment?,
+        theme: ParraTheme
+    ) -> ParraAttributes.Segment
 }

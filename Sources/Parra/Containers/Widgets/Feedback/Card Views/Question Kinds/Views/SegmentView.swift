@@ -15,12 +15,14 @@ struct SegmentView: UIViewRepresentable {
 
     init(
         options: [SegmentControl.Option],
-        style: ParraAttributedSegmentStyle,
+        attributes: ParraAttributes.Segment,
+        theme: ParraTheme,
         onSelect: ((_: SegmentControl.Option) -> Void)? = nil,
         onConfirm: ((_: SegmentControl.Option) -> Void)? = nil
     ) {
         self.options = options
-        self.style = style
+        self.attributes = attributes
+        self.theme = theme
         self.onSelect = onSelect
         self.onConfirm = onConfirm
     }
@@ -28,7 +30,8 @@ struct SegmentView: UIViewRepresentable {
     // MARK: - Internal
 
     let options: [SegmentControl.Option]
-    let style: ParraAttributedSegmentStyle
+    let attributes: ParraAttributes.Segment
+    let theme: ParraTheme
     let onSelect: ((_ option: SegmentControl.Option) -> Void)?
     let onConfirm: ((_ option: SegmentControl.Option) -> Void)?
 
@@ -37,7 +40,8 @@ struct SegmentView: UIViewRepresentable {
     ) -> SegmentControl {
         SegmentControl(
             options: options,
-            style: style,
+            attributes: attributes,
+            theme: theme,
             onSelect: onSelect,
             onConfirm: onConfirm
         )
@@ -47,7 +51,7 @@ struct SegmentView: UIViewRepresentable {
         _ uiView: SegmentControl,
         context: Context
     ) {
-        uiView.appleStyle(style)
+        uiView.appleStyle(attributes)
     }
 
     @MainActor
@@ -70,11 +74,13 @@ class SegmentControl: UIControl {
 
     required init(
         options: [Option],
-        style: ParraAttributedSegmentStyle,
+        attributes: ParraAttributes.Segment,
+        theme: ParraTheme,
         onSelect: ((_ option: Option) -> Void)?,
         onConfirm: ((_ option: Option) -> Void)?
     ) {
-        self.style = style
+        self.attributes = attributes
+        self.theme = theme
         self.onSelect = onSelect
         self.onConfirm = onConfirm
 
@@ -123,7 +129,7 @@ class SegmentControl: UIControl {
             )
         ])
 
-        appleStyle(style)
+        appleStyle(attributes)
     }
 
     @available(*, unavailable)
@@ -171,11 +177,9 @@ class SegmentControl: UIControl {
         return super.endTracking(touch, with: event)
     }
 
-    func appleStyle(_ style: ParraAttributedSegmentStyle) {
-        let attributes = style.attributes
-
+    func appleStyle(_ attributes: ParraAttributes.Segment) {
         var corners = CACornerMask()
-        let cornerRadius = style.theme.cornerRadius.value(
+        let cornerRadius = theme.cornerRadius.value(
             for: attributes.cornerRadius
         )
 
@@ -194,12 +198,12 @@ class SegmentControl: UIControl {
 
         layer.maskedCorners = corners
         layer.cornerRadius = cornerRadius.topLeading
-        layer.borderColor = if let borderColor = attributes.borderColor {
+        layer.borderColor = if let borderColor = attributes.border.color {
             UIColor(borderColor).cgColor
         } else {
             nil
         }
-        layer.borderWidth = attributes.borderWidth ?? 1.5
+        layer.borderWidth = attributes.border.width ?? 1.5
 
         for subview in labelStack.arrangedSubviews {
             guard let label = subview as? UILabel else {
@@ -213,27 +217,35 @@ class SegmentControl: UIControl {
             var container = AttributeContainer()
 
             if option == highlightedOption {
-//                container.font = attributes.optionLabelsSelected.font
-//                if let fontColor = attributes.optionLabelsSelected.fontColor {
-//                    container.foregroundColor = UIColor(fontColor)
-//                }
-//
-//                if let background = attributes.optionLabelsSelected.background {
-                ////                    background.
-//                }
-
-                label.backgroundColor = .red
-            } else {
-                container.font = attributes.optionLabels.font
-                if let fontColor = attributes.optionLabels.fontColor {
+                if let font = attributes.selectedOptionLabels.text.font {
+                    // TODO: weights/etc unhandled
+                    container.font = font
+                }
+                if let fontColor = attributes.selectedOptionLabels.text.color {
                     container.foregroundColor = UIColor(fontColor)
                 }
 
-                label.backgroundColor = .blue
+                if let background = attributes.selectedOptionLabels.background {
+                    label.backgroundColor = UIColor(background)
+                }
+            } else {
+                if let font = attributes.unselectedOptionLabels.text.font {
+                    container.font = font
+                }
+
+                if let fontColor = attributes.unselectedOptionLabels.text
+                    .color
+                {
+                    container.foregroundColor = UIColor(fontColor)
+                }
+
+                label.backgroundColor = .clear
             }
 
             label.layer.borderWidth = 0.5
-            if let borderColor = attributes.borderColor {
+            if let borderColor = attributes.unselectedOptionLabels.border
+                .color
+            {
                 label.layer.borderColor = UIColor(borderColor).cgColor
             }
 
@@ -242,8 +254,9 @@ class SegmentControl: UIControl {
             )
 
             // Setting the background color on the labels layer is necessary to support animation
-//            label.layer.backgroundColor = option == highlightedOption
-//                ? config.accessoryTintColor?.cgColor : UIColor.clear.cgColor
+            label.layer.backgroundColor = option == highlightedOption
+                ? attributes.selectedOptionLabels.background?.cgColor
+                : attributes.unselectedOptionLabels.background?.cgColor
 
             setNeedsDisplay()
         }
@@ -251,7 +264,8 @@ class SegmentControl: UIControl {
 
     // MARK: - Private
 
-    private let style: ParraAttributedSegmentStyle
+    private let attributes: ParraAttributes.Segment
+    private let theme: ParraTheme
 
     private let onSelect: ((_ option: Option) -> Void)?
     private let onConfirm: ((_ option: Option) -> Void)?
@@ -285,7 +299,7 @@ class SegmentControl: UIControl {
             delay: 0.0,
             options: [.allowUserInteraction, .beginFromCurrentState]
         ) { [self] in
-            appleStyle(style)
+            appleStyle(attributes)
         } completion: { [weak self] _ in
             guard let strongSelf = self else {
                 return

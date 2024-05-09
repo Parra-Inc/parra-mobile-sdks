@@ -13,35 +13,17 @@ extension ComponentFactory {
     func buildSegment(
         config: SegmentConfig,
         content: SegmentContent,
-        localAttributes: SegmentAttributes? = nil
+        localAttributes: ParraAttributes.Segment? = nil
     ) -> some View {
-        EmptyView()
-//        let mergedAttributes = SegmentComponent
-//            .applyStandardCustomizations(
-//                onto: localAttributes,
-//                theme: theme,
-//                config: config
-//            )
-//
-//        // If a container level factory function was provided for this component,
-//        // use it and supply global attribute overrides instead of local, if provided.
-//        if let builder = suppliedBuilder,
-//           let view = builder(config, content, mergedAttributes)
-//        {
-//            view
-//        } else {
-//            let style = ParraAttributedSegmentStyle(
-//                config: config,
-//                content: content,
-//                attributes: mergedAttributes,
-//                theme: theme
-//            )
-//
-//            SegmentComponent(
-//                config: config,
-//                content: content,
-//                style: style
-//            )
-//        }
+        let attributes = attributeProvider.segmentedControlAttributes(
+            localAttributes: localAttributes,
+            theme: theme
+        )
+
+        SegmentComponent(
+            config: config,
+            content: content,
+            attributes: attributes
+        )
     }
 }

@@ -9,14 +9,17 @@
 import SwiftUI
 
 struct SegmentComponent: View {
+    // MARK: - Internal
+
     var config: SegmentConfig
     let content: SegmentContent
-    let style: ParraAttributedSegmentStyle
+    let attributes: ParraAttributes.Segment
 
     var body: some View {
         SegmentView(
             options: content.options.map { .init(id: $0.id, title: $0.text) },
-            style: style,
+            attributes: attributes,
+            theme: themeObserver.theme,
             onSelect: { option in
                 content.optionSelected?(
                     .init(id: option.id, text: option.title)
@@ -29,30 +32,10 @@ struct SegmentComponent: View {
             }
         )
     }
-//    static func applyStandardCustomizations(
-//        onto inputAttributes: SegmentAttributes?,
-//        theme: ParraTheme,
-//        config: SegmentConfig
-//    ) -> SegmentAttributes {
-//        let palette = theme.palette
-//
-//        let defaultAttributes = SegmentAttributes(
-//            optionLabels: LabelAttributes(
-//                font: Font.system(config.optionLabels.fontStyle),
-//                fontColor: palette.primaryText
-//            ),
-//            optionLabelBackgroundColor: palette.primaryBackground,
-//            optionLabelSelectedBackgroundColor: palette.primary.toParraColor(),
-//            optionLabelSelectedFontColor: palette.secondaryText.toParraColor(),
-//            cornerRadius: .md,
-//            borderWidth: 1.5,
-//            borderColor: palette.primarySeparator.toParraColor()
-//        )
-//
-//        return defaultAttributes.withUpdates(
-//            updates: inputAttributes
-//        )
-//    }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 }
 
 #Preview {
