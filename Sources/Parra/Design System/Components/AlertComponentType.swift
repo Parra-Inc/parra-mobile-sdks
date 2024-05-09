@@ -9,8 +9,7 @@
 import SwiftUI
 
 protocol AlertComponentType: View {
-    var content: AlertContent { get }
-//    var style: ParraAttributedAlertStyle { get }
+    var content: ParraAlertContent { get }
 }
 
 extension AlertComponentType {

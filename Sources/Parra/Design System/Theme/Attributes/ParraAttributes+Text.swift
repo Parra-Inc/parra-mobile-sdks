@@ -32,7 +32,7 @@ public extension ParraAttributes {
         }
 
         public init(
-            font: UIFont? = nil,
+            font: UIFont?,
             width: Font.Width? = nil,
             weight: Font.Weight? = nil,
             design: Font.Design? = nil,

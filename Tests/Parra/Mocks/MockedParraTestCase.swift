@@ -89,6 +89,7 @@ class MockedParraTestCase: ParraBaseMock {
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
             api: api,
+            authServer: mockAuthServer.resourceServer,
             externalResourceServer: mockExternalResourceServer.resourceServer
         )
 
@@ -124,7 +125,6 @@ class MockedParraTestCase: ParraBaseMock {
             ),
             configuration: configuration,
             appState: appState,
-            authState: authState,
             dataManager: dataManager,
             syncManager: syncManager,
             authService: authService,
@@ -221,7 +221,8 @@ class MockedParraTestCase: ParraBaseMock {
         let authServer = AuthServer(
             appState: appState,
             appConfig: appConfig,
-            configuration: configuration
+            configuration: configuration,
+            dataManager: dataManager
         )
 
         let authService = AuthService(
@@ -285,7 +286,7 @@ class MockedParraTestCase: ParraBaseMock {
 
         let (
             mockApiResourceServer,
-            _,
+            mockAuthServer,
             mockExternalResourceServer
         ) = await createMockResourceServers(
             appState: appState,
@@ -316,6 +317,7 @@ class MockedParraTestCase: ParraBaseMock {
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
             api: api,
+            authServer: mockAuthServer.resourceServer,
             externalResourceServer: mockExternalResourceServer.resourceServer
         )
     }

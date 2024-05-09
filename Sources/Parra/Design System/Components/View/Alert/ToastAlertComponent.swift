@@ -11,9 +11,9 @@ import SwiftUI
 struct ToastAlertComponent: AlertComponentType {
     // MARK: - Internal
 
-    let content: AlertContent
+    let content: ParraAlertContent
+    let attributes: ParraAttributes.ToastAlert
     let onDismiss: () -> Void
-
     let primaryAction: (() -> Void)?
 
     var body: some View {
@@ -26,13 +26,17 @@ struct ToastAlertComponent: AlertComponentType {
                     if let icon = content.icon {
                         ImageComponent(
                             content: icon,
-                            attributes: .init()
+                            attributes: attributes.icon
                         )
                     }
 
                     componentFactory.buildLabel(
                         fontStyle: .headline,
                         content: content.title
+                    )
+                    .applyLabelAttributes(
+                        attributes.title,
+                        using: themeObserver.theme
                     )
                 }
 
@@ -41,45 +45,50 @@ struct ToastAlertComponent: AlertComponentType {
                         fontStyle: .subheadline,
                         content: subtitleContent
                     )
+                    .applyLabelAttributes(
+                        attributes.subtitle,
+                        using: themeObserver.theme
+                    )
                 }
             }
         }
-//        .padding(.all, from: attributes.padding ?? .zero)
-//        .applyBackground(attributes.background)
-//        .applyCornerRadii(
-//            size: attributes.cornerRadius,
-//            from: themeObserver.theme
-//        )
-//        .overlay(
-//            ZStack {
-//                UnevenRoundedRectangle(
-//                    cornerRadii: themeObserver.theme.cornerRadius
-//                        .value(for: attributes.cornerRadius)
-//                )
-//                .strokeBorder(
-//                    attributes.borderColor ?? .clear,
-//                    lineWidth: attributes.borderWidth ?? 0
-//                )
-//
-//                if let dismissButtonContent = content.dismiss {
-//                    VStack {
-//                        componentFactory.buildImageButton(
-//                            variant: .plain,
-//                            config: .init(),
-//                            content: dismissButtonContent,
-//                            localAttributes: attributes.dismiss,
-//                            onPress: onDismiss
-//                        )
-//                        .frame(width: 12, height: 12)
-//                    }
-//                    .frame(
-//                        maxWidth: .infinity,
-//                        maxHeight: .infinity,
-//                        alignment: .topTrailing
-//                    )
-//                }
-//            }
-//        )
+        .applyToastAlertAttributes(
+            attributes,
+            using: themeObserver.theme
+        )
+        .overlay(
+            ZStack {
+                UnevenRoundedRectangle(
+                    cornerRadii: themeObserver.theme.cornerRadius
+                        .value(for: attributes.cornerRadius)
+                )
+                .strokeBorder(
+                    attributes.border.color ?? .clear,
+                    lineWidth: attributes.border.width ?? 0
+                )
+
+                if let dismissButtonContent = content.dismiss {
+                    VStack {
+                        componentFactory.buildImageButton(
+                            config: ImageButtonConfig(
+                                variant: .plain
+                            ),
+                            content: dismissButtonContent,
+                            onPress: onDismiss
+                        )
+                        .applyImageButtonAttributes(
+                            attributes.dismissButton,
+                            using: themeObserver.theme
+                        )
+                    }
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity,
+                        alignment: .topTrailing
+                    )
+                }
+            }
+        )
     }
 
     // MARK: - Private
@@ -95,18 +104,17 @@ struct ToastAlertComponent: AlertComponentType {
             Spacer()
 
             ForEach(AlertLevel.allCases, id: \.self) { level in
-                factory.buildAlert(
-                    variant: .toast(onDismiss: {}),
+                factory.buildToastAlert(
                     level: level,
-                    content: AlertContent(
+                    content: ParraAlertContent(
                         title: LabelContent(text: "The task was completed"),
                         subtitle: LabelContent(
                             text: "This is just an FYI. You can go about your day without worrying about anything."
                         ),
-                        icon: AlertContent.defaultIcon(for: level),
-                        dismiss: AlertContent.defaultDismiss(for: level)
+                        icon: ParraAlertContent.defaultIcon(for: level),
+                        dismiss: ParraAlertContent.defaultDismiss(for: level)
                     ),
-                    primaryAction: nil
+                    onDismiss: {}
                 )
 
                 Spacer()

@@ -13,10 +13,10 @@ extension FeedbackCardWidget {
         if contentObserver.showNavigation {
             HStack(alignment: .center) {
                 componentFactory.buildImageButton(
-                    variant: .plain,
                     config: ImageButtonConfig(
-                        style: .primary,
-                        size: .smallSquare
+                        type: .primary,
+                        size: .smallSquare,
+                        variant: .plain
                     ),
                     content: contentObserver.content.backButton
                 ) {
@@ -30,10 +30,10 @@ extension FeedbackCardWidget {
                 Spacer()
 
                 componentFactory.buildImageButton(
-                    variant: .plain,
                     config: ImageButtonConfig(
-                        style: .primary,
-                        size: .smallSquare
+                        type: .primary,
+                        size: .smallSquare,
+                        variant: .plain
                     ),
                     content: contentObserver.content.forwardButton
                 ) {

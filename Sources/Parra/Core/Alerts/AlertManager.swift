@@ -11,7 +11,7 @@ import SwiftUI
 class AlertManager: ObservableObject {
     struct Alert: Equatable {
         let level: AlertLevel
-        let content: AlertContent
+        let content: ParraAlertContent
         let attributes: AlertAttributes?
         let onDismiss: () -> Void
 
@@ -79,7 +79,7 @@ class AlertManager: ObservableObject {
         animationDuration: TimeInterval = 0.25,
         in location: AlertLocation = .topCenter,
         level: AlertLevel,
-        content: AlertContent,
+        content: ParraAlertContent,
         attributes: AlertAttributes? = nil,
         primaryAction: (() -> Void)? = nil
     ) {
@@ -110,11 +110,11 @@ class AlertManager: ObservableObject {
             animationDuration: animationDuration,
             in: location,
             level: level,
-            content: AlertContent(
+            content: ParraAlertContent(
                 title: LabelContent(text: title),
                 subtitle: LabelContent(text: subtitle),
-                icon: AlertContent.defaultIcon(for: level),
-                dismiss: AlertContent.defaultDismiss(for: level)
+                icon: ParraAlertContent.defaultIcon(for: level),
+                dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
             primaryAction: primaryAction
         )
@@ -136,11 +136,11 @@ class AlertManager: ObservableObject {
             animationDuration: animationDuration,
             in: location,
             level: level,
-            content: AlertContent(
+            content: ParraAlertContent(
                 title: LabelContent(text: title),
                 subtitle: LabelContent(text: userFacingMessage),
-                icon: AlertContent.defaultIcon(for: level),
-                dismiss: AlertContent.defaultDismiss(for: level)
+                icon: ParraAlertContent.defaultIcon(for: level),
+                dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
             primaryAction: primaryAction
         )
@@ -159,15 +159,15 @@ class AlertManager: ObservableObject {
             for: duration,
             in: location,
             level: level,
-            content: AlertContent(
+            content: ParraAlertContent(
                 title: LabelContent(
                     text: "New Version Available!"
                 ),
                 subtitle: LabelContent(
                     text: "Version \(newInstalledVersionInfo.release.version) is now available."
                 ),
-                icon: AlertContent.defaultIcon(for: level),
-                dismiss: AlertContent.defaultDismiss(for: level)
+                icon: ParraAlertContent.defaultIcon(for: level),
+                dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
             attributes: AlertAttributes(),
             primaryAction: primaryAction

@@ -8,69 +8,42 @@
 
 import SwiftUI
 
-enum AlertComponentVariant {
-    case toast(onDismiss: () -> Void)
-    case inline
-}
-
 extension ComponentFactory {
     @ViewBuilder
-    func buildAlert(
-        variant: AlertComponentVariant,
+    func buildInlineAlert(
         level: AlertLevel,
-        content: AlertContent,
-        localAttributes: AlertAttributes? = nil,
-        primaryAction: (() -> Void)?
+        content: ParraAlertContent
     ) -> some View {
-        EmptyView()
-//        let mergedAttributes = switch variant {
-//        case .inline:
-//            InlineAlertComponent.applyStandardCustomizations(
-//                onto: localAttributes,
-//                theme: theme,
-//                config: config,
-//                for: InlineAlertComponent.self
-//            )
-//        case .toast:
-//            ToastAlertComponent.applyStandardCustomizations(
-//                onto: localAttributes,
-//                theme: theme,
-//                config: config,
-//                for: ToastAlertComponent.self
-//            )
-//        }
-//
-//        // If a container level factory function was provided for this
-//        // component, use it and supply global attribute overrides instead of
-//        // local, if provided.
-//        if let builder = suppliedBuilder,
-//           let view = builder(config, content, mergedAttributes)
-//        {
-//            view
-//        } else {
-//            let style = ParraAttributedAlertStyle(
-//                config: config,
-//                content: content,
-//                attributes: mergedAttributes,
-//                theme: theme
-//            )
-//
-//            switch variant {
-//            case .inline:
-//                InlineAlertComponent(
-//                    config: config,
-//                    content: content,
-//                    style: style
-//                )
-//            case .toast(let onDismiss):
-//                ToastAlertComponent(
-//                    config: config,
-//                    content: content,
-//                    style: style,
-//                    onDismiss: onDismiss,
-//                    primaryAction: primaryAction
-//                )
-//            }
-//        }
+        let attributes = attributeProvider.inlineAlertAttributes(
+            content: content,
+            level: level,
+            theme: theme
+        )
+
+        InlineAlertComponent(
+            content: content,
+            attributes: attributes
+        )
+    }
+
+    @ViewBuilder
+    func buildToastAlert(
+        level: AlertLevel,
+        content: ParraAlertContent,
+        onDismiss: @escaping () -> Void,
+        primaryAction: (() -> Void)? = nil
+    ) -> some View {
+        let attributes = attributeProvider.toastAlertAttributes(
+            content: content,
+            level: level,
+            theme: theme
+        )
+
+        ToastAlertComponent(
+            content: content,
+            attributes: attributes,
+            onDismiss: onDismiss,
+            primaryAction: primaryAction
+        )
     }
 }

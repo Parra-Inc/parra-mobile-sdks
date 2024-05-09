@@ -92,11 +92,10 @@ struct ToastPresenter: ViewModifier {
     @ViewBuilder
     func mainToastView() -> some View {
         if let toast {
-            componentFactory.buildAlert(
-                variant: .toast(onDismiss: toast.onDismiss),
+            componentFactory.buildToastAlert(
                 level: toast.level,
                 content: toast.content,
-                localAttributes: toast.attributes,
+                onDismiss: toast.onDismiss,
                 primaryAction: toast.primaryAction
             )
             .transition(transition)

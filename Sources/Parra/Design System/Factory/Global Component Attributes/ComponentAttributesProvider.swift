@@ -33,6 +33,20 @@ public protocol ComponentAttributesProvider {
         content: AsyncImageContent
     ) -> ParraAttributes.AsyncImage
 
+    // MARK: Alerts
+
+    func inlineAlertAttributes(
+        content: ParraAlertContent,
+        level: AlertLevel,
+        theme: ParraTheme
+    ) -> ParraAttributes.InlineAlert
+
+    func toastAlertAttributes(
+        content: ParraAlertContent,
+        level: AlertLevel,
+        theme: ParraTheme
+    ) -> ParraAttributes.ToastAlert
+
     // MARK: Text Inputs
 
     func textInputAttributes(

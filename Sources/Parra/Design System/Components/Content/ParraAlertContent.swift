@@ -1,5 +1,5 @@
 //
-//  AlertContent.swift
+//  ParraAlertContent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/7/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct AlertContent: Hashable, Equatable {
+public struct ParraAlertContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(

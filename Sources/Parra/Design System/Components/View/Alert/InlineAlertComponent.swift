@@ -11,7 +11,8 @@ import SwiftUI
 struct InlineAlertComponent: AlertComponentType {
     // MARK: - Internal
 
-    let content: AlertContent
+    let content: ParraAlertContent
+    let attributes: ParraAttributes.InlineAlert
 
     var body: some View {
         VStack {
@@ -19,13 +20,17 @@ struct InlineAlertComponent: AlertComponentType {
                 if let icon = content.icon {
                     ImageComponent(
                         content: icon,
-                        attributes: ParraAttributes.Image()
+                        attributes: attributes.icon
                     )
                 }
 
                 componentFactory.buildLabel(
                     fontStyle: .headline,
                     content: content.title
+                )
+                .applyLabelAttributes(
+                    attributes.title,
+                    using: themeObserver.theme
                 )
             }
 
@@ -34,20 +39,16 @@ struct InlineAlertComponent: AlertComponentType {
                     fontStyle: .subheadline,
                     content: subtitleContent
                 )
+                .applyLabelAttributes(
+                    attributes.subtitle,
+                    using: themeObserver.theme
+                )
             }
         }
-//        .padding(.all, from: attributes.padding ?? .zero)
-//        .applyBackground(attributes.background)
-//        .applyCornerRadii(
-//            size: attributes.cornerRadius,
-//            from: themeObserver.theme
-//        )
-//        .applyBorder(
-//            borderColor: attributes.borderColor ?? .clear,
-//            borderWidth: attributes.borderWidth,
-//            cornerRadius: attributes.cornerRadius,
-//            from: themeObserver.theme
-//        )
+        .applyInlineAlertAttributes(
+            attributes,
+            using: themeObserver.theme
+        )
     }
 
     // MARK: - Private
@@ -63,18 +64,16 @@ struct InlineAlertComponent: AlertComponentType {
             Spacer()
 
             ForEach(AlertLevel.allCases, id: \.self) { level in
-                factory.buildAlert(
-                    variant: .inline,
+                factory.buildInlineAlert(
                     level: level,
-                    content: AlertContent(
+                    content: ParraAlertContent(
                         title: LabelContent(text: "The task was completed"),
                         subtitle: LabelContent(
                             text: "This is just an FYI. You can go about your day without worrying about anything."
                         ),
-                        icon: AlertContent.defaultIcon(for: level),
-                        dismiss: AlertContent.defaultDismiss(for: level)
-                    ),
-                    primaryAction: nil
+                        icon: ParraAlertContent.defaultIcon(for: level),
+                        dismiss: ParraAlertContent.defaultDismiss(for: level)
+                    )
                 )
 
                 Spacer()

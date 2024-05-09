@@ -107,7 +107,6 @@ extension ComponentFactory {
 
     @ViewBuilder
     func buildImageButton(
-        variant: ParraButtonVariant,
         config: ImageButtonConfig,
         content: ImageButtonContent,
         onPress: @escaping () -> Void
@@ -117,9 +116,7 @@ extension ComponentFactory {
             pressedAttributes,
             disabledAttributes
         ) = createImageButtonAttributeStateVariants(
-            variant: variant,
-            for: config.size,
-            type: config.style,
+            from: config,
             factory: attributeProvider.imageButtonAttributes
         )
 
@@ -161,9 +158,7 @@ extension ComponentFactory {
     }
 
     private func createImageButtonAttributeStateVariants<T>(
-        variant: ParraButtonVariant,
-        for size: ParraImageButtonSize,
-        type: ParraButtonType,
+        from config: ImageButtonConfig,
         factory: (
             _ variant: ParraButtonVariant,
             _ state: ParraButtonState,
@@ -177,9 +172,9 @@ extension ComponentFactory {
         disabled: T
     ) {
         return (
-            factory(variant, .normal, size, type, theme),
-            factory(variant, .pressed, size, type, theme),
-            factory(variant, .disabled, size, type, theme)
+            factory(config.variant, .normal, config.size, config.type, theme),
+            factory(config.variant, .pressed, config.size, config.type, theme),
+            factory(config.variant, .disabled, config.size, config.type, theme)
         )
     }
 }

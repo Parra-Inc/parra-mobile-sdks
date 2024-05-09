@@ -26,9 +26,8 @@ struct RoadmapVoteView: View {
 
         VStack(alignment: .center) {
             componentFactory.buildImageButton(
-                variant: .plain,
                 config: ImageButtonConfig(
-                    style: .primary,
+                    type: .primary,
                     size: .custom(CGSize(width: 18, height: 18)),
                     variant: .plain
                 ),
