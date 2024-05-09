@@ -89,6 +89,7 @@ struct PhotoWell: View {
                 ),
                 content: imageContent
             )
+            .scaledToFill()
         case .loaded(let image), .processing(let image):
             Image(uiImage: image)
                 .resizable()
