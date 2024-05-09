@@ -19,17 +19,31 @@ struct ChangelogListItem: View {
         VStack(alignment: .leading, spacing: 12) {
             componentFactory.buildLabel(
                 fontStyle: .headline,
-                content: content.name
+                content: content.name,
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        alignment: .leading
+                    ),
+                    frame: .flexible(
+                        FlexibleFrameAttributes(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    )
+                )
             )
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .multilineTextAlignment(.leading)
 
             withContent(
                 content: content.description
             ) { content in
                 componentFactory.buildLabel(
                     fontStyle: .body,
-                    content: content
+                    content: content,
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            alignment: .leading
+                        )
+                    )
                 )
                 .lineLimit(3)
                 .truncationMode(.tail)

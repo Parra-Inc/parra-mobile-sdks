@@ -17,7 +17,8 @@ extension ComponentFactory {
         variant: ParraBadgeVariant = .outlined,
         text: String,
         swatch: ParraColorSwatch? = nil,
-        iconSymbol: String? = nil
+        iconSymbol: String? = nil,
+        localAttributes: ParraAttributes.Badge? = nil
     ) -> BadgeComponent {
 //        let isPlaceholder = redactionReasons.contains(.placeholder)
 //        let primaryColor = isPlaceholder
@@ -27,6 +28,7 @@ extension ComponentFactory {
             for: size,
             variant: variant,
             swatch: swatch,
+            localAttributes: localAttributes,
             theme: theme
         )
 

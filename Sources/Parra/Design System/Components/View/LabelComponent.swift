@@ -91,55 +91,72 @@ struct LabelComponent: LabelComponentType {
 
             factory.buildLabel(
                 fontStyle: .body,
-                content: LabelContent(text: "With a background")
+                content: LabelContent(text: "With a background"),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        font: .title,
+                        color: .green
+                    ),
+                    background: .red
+                )
             )
-            .background(.red)
-            .font(.title)
-            .foregroundColor(.green)
 
             factory.buildLabel(
                 fontStyle: .title,
-                content: LabelContent(text: "With a gradient background")
+                content: LabelContent(text: "With a gradient background"),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        font: .title,
+                        color: .green
+                    ),
+                    cornerRadius: .md,
+                    padding: .custom(
+                        .padding(
+                            top: 4,
+                            leading: 20,
+                            bottom: 20,
+                            trailing: 10
+                        )
+                    ),
+                    background: .purple
+                )
             )
-            .background(Gradient(colors: [.pink, .purple]))
-            .cornerRadius(4)
-            .padding(EdgeInsets(
-                top: 4,
-                leading: 10,
-                bottom: 4,
-                trailing: 10
-            ))
-            .foregroundStyle(.white)
 
             factory.buildLabel(
                 fontStyle: .title,
                 content: LabelContent(
-                    text: "BG gradient and icon",
+                    text: "BG and icon",
                     icon: .symbol("fireworks")
+                ),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        color: .white
+                    ),
+                    icon: ParraAttributes.Image(
+                        tint: .white
+                    ),
+                    cornerRadius: .xxl,
+                    padding: .custom(
+                        .padding(
+                            top: 4,
+                            leading: 10,
+                            bottom: 4,
+                            trailing: 10
+                        )
+                    ),
+                    background: .pink
                 )
             )
-            .foregroundStyle(.white)
-            .cornerRadius(4)
-            .padding(EdgeInsets(
-                top: 4,
-                leading: 10,
-                bottom: 4,
-                trailing: 10
-            ))
-            .background(Gradient(colors: [.pink, .purple]))
 
             factory.buildLabel(
                 fontStyle: .subheadline,
-                content: LabelContent(text: "With a corner radius")
+                content: LabelContent(text: "With a corner radius"),
+                localAttributes: ParraAttributes.Label(
+                    cornerRadius: .lg,
+                    padding: .lg,
+                    background: .green
+                )
             )
-            .cornerRadius(8)
-            .background(.green)
-            .padding(EdgeInsets(
-                top: 8,
-                leading: 8,
-                bottom: 8,
-                trailing: 8
-            ))
         }
     }
 }

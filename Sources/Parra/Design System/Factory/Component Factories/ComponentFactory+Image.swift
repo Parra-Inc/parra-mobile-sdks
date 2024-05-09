@@ -11,10 +11,13 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildImage(
-        content: ParraImageContent
+        content: ParraImageContent,
+        localAttributes: ParraAttributes.Image? = nil
     ) -> some View {
         let attributes = attributeProvider.imageAttributes(
-            content: content
+            content: content,
+            localAttributes: localAttributes,
+            theme: theme
         )
 
         ImageComponent(
@@ -25,10 +28,13 @@ extension ComponentFactory {
 
     @ViewBuilder
     func buildAsyncImage(
-        content: AsyncImageContent
+        content: AsyncImageContent,
+        localAttributes: ParraAttributes.AsyncImage? = nil
     ) -> some View {
         let attributes = attributeProvider.asyncImageAttributes(
-            content: content
+            content: content,
+            localAttributes: localAttributes,
+            theme: theme
         )
 
         AsyncImageComponent(

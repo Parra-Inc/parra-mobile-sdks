@@ -12,10 +12,12 @@ extension ComponentFactory {
     @ViewBuilder
     func buildTextInput(
         config: TextInputConfig,
-        content: TextInputContent
+        content: TextInputContent,
+        localAttributes: ParraAttributes.TextInput? = nil
     ) -> some View {
         let attributes = attributeProvider.textInputAttributes(
             config: config,
+            localAttributes: localAttributes,
             theme: theme
         )
 

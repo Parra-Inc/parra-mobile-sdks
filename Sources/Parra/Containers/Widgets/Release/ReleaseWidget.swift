@@ -113,10 +113,19 @@ struct ReleaseWidget: Container {
             withContent(content: contentObserver.content.subtitle) { content in
                 componentFactory.buildLabel(
                     fontStyle: .subheadline,
-                    content: content
+                    content: content,
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            alignment: .leading
+                        ),
+                        frame: .flexible(
+                            FlexibleFrameAttributes(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                        )
+                    )
                 )
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
 
             ChangelogItemInfoView(
@@ -229,7 +238,12 @@ struct ReleaseWidget: Container {
                     ) { content in
                         componentFactory.buildLabel(
                             fontStyle: .body,
-                            content: content
+                            content: content,
+                            localAttributes: ParraAttributes.Label(
+                                text: ParraAttributes.Text(
+                                    alignment: .leading
+                                )
+                            )
                         )
                         .multilineTextAlignment(.leading)
                     }

@@ -29,10 +29,19 @@ struct ReleaseChangelogSectionView: View {
 
             componentFactory.buildLabel(
                 fontStyle: .body,
-                content: LabelContent(text: combinedText)
+                content: LabelContent(text: combinedText),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        alignment: .leading
+                    ),
+                    frame: .flexible(
+                        FlexibleFrameAttributes(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    )
+                )
             )
-            .multilineTextAlignment(.leading)
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

@@ -11,6 +11,7 @@ import SwiftUI
 public extension ParraGlobalComponentAttributes {
     func textInputAttributes(
         config: TextInputConfig,
+        localAttributes: ParraAttributes.TextInput? = nil,
         theme: ParraTheme
     ) -> ParraAttributes.TextInput {
         let palette = theme.palette
@@ -71,6 +72,6 @@ public extension ParraGlobalComponentAttributes {
             textInputAutocapitalization: config.textInputAutocapitalization,
             autocorrectionDisabled: config.autocorrectionDisabled,
             frame: .fixed(FixedFrameAttributes(height: 52))
-        )
+        ).mergingOverrides(localAttributes)
     }
 }

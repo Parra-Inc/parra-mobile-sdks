@@ -13,6 +13,7 @@ public protocol ComponentAttributesProvider {
 
     func labelAttributes(
         for textStyle: ParraTextStyle,
+        localAttributes: ParraAttributes.Label?,
         theme: ParraTheme
     ) -> ParraAttributes.Label
 
@@ -22,15 +23,20 @@ public protocol ComponentAttributesProvider {
         for size: ParraBadgeSize,
         variant: ParraBadgeVariant,
         swatch: ParraColorSwatch?,
+        localAttributes: ParraAttributes.Badge?,
         theme: ParraTheme
     ) -> ParraAttributes.Badge
 
     func imageAttributes(
-        content: ParraImageContent
+        content: ParraImageContent,
+        localAttributes: ParraAttributes.Image?,
+        theme: ParraTheme
     ) -> ParraAttributes.Image
 
     func asyncImageAttributes(
-        content: AsyncImageContent
+        content: AsyncImageContent,
+        localAttributes: ParraAttributes.AsyncImage?,
+        theme: ParraTheme
     ) -> ParraAttributes.AsyncImage
 
     // MARK: Alerts
@@ -38,12 +44,14 @@ public protocol ComponentAttributesProvider {
     func inlineAlertAttributes(
         content: ParraAlertContent,
         level: AlertLevel,
+        localAttributes: ParraAttributes.InlineAlert?,
         theme: ParraTheme
     ) -> ParraAttributes.InlineAlert
 
     func toastAlertAttributes(
         content: ParraAlertContent,
         level: AlertLevel,
+        localAttributes: ParraAttributes.ToastAlert?,
         theme: ParraTheme
     ) -> ParraAttributes.ToastAlert
 
@@ -51,6 +59,7 @@ public protocol ComponentAttributesProvider {
 
     func textInputAttributes(
         config: TextInputConfig,
+        localAttributes: ParraAttributes.TextInput?,
         theme: ParraTheme
     ) -> ParraAttributes.TextInput
 
@@ -59,18 +68,21 @@ public protocol ComponentAttributesProvider {
     func plainButtonAttributes(
         for size: ParraButtonSize,
         with type: ParraButtonType,
+        localAttributes: ParraAttributes.PlainButton?,
         theme: ParraTheme
     ) -> ParraAttributes.PlainButton
 
     func outlinedButtonAttributes(
         for size: ParraButtonSize,
         with type: ParraButtonType,
+        localAttributes: ParraAttributes.OutlinedButton?,
         theme: ParraTheme
     ) -> ParraAttributes.OutlinedButton
 
     func containedButtonAttributes(
         for size: ParraButtonSize,
         with type: ParraButtonType,
+        localAttributes: ParraAttributes.ContainedButton?,
         theme: ParraTheme
     ) -> ParraAttributes.ContainedButton
 
@@ -78,6 +90,7 @@ public protocol ComponentAttributesProvider {
         variant: ParraButtonVariant,
         for size: ParraImageButtonSize,
         with type: ParraButtonType,
+        localAttributes: ParraAttributes.ImageButton?,
         theme: ParraTheme
     ) -> ParraAttributes.ImageButton
 }

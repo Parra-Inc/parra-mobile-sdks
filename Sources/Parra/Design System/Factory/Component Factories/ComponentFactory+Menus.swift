@@ -12,8 +12,8 @@ extension ComponentFactory {
     @ViewBuilder
     func buildMenu(
         config: MenuConfig,
-        content: MenuContent,
-        localAttributes: MenuAttributes? = nil
+        content: MenuContent
+//        localAttributes: MenuAttributes? = nil
     ) -> some View {
         EmptyView()
 //        let mergedAttributes = MenuComponent.applyStandardCustomizations(

@@ -12,6 +12,7 @@ import SwiftUI
 public extension ParraGlobalComponentAttributes {
     func labelAttributes(
         for textStyle: ParraTextStyle,
+        localAttributes: ParraAttributes.Label? = nil,
         theme: ParraTheme
     ) -> ParraAttributes.Label {
         let text = textAttributes(
@@ -23,10 +24,7 @@ public extension ParraGlobalComponentAttributes {
             text: text,
             icon: ParraAttributes.Image(
                 tint: text.color
-            ),
-            border: .init(),
-            cornerRadius: .zero,
-            padding: .zero
-        )
+            )
+        ).mergingOverrides(localAttributes)
     }
 }

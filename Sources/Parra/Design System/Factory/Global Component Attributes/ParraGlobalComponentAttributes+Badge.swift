@@ -14,6 +14,7 @@ public extension ParraGlobalComponentAttributes {
         for size: ParraBadgeSize,
         variant: ParraBadgeVariant,
         swatch: ParraColorSwatch?,
+        localAttributes: ParraAttributes.Badge?,
         theme: ParraTheme
     ) -> ParraAttributes.Badge {
         let palette = theme.palette
@@ -53,7 +54,7 @@ public extension ParraGlobalComponentAttributes {
                 cornerRadius: size.cornerRadius,
                 padding: .custom(size.padding),
                 background: swatch.shade50.toParraColor()
-            )
+            ).mergingOverrides(localAttributes)
         case .contained:
             return ParraAttributes.Badge(
                 text: text,
@@ -71,27 +72,7 @@ public extension ParraGlobalComponentAttributes {
                 cornerRadius: size.cornerRadius,
                 padding: .custom(size.padding),
                 background: swatch.shade50.toParraColor()
-            )
+            ).mergingOverrides(localAttributes)
         }
     }
-
-//    func labelAttributes(
-//        for textStyle: ParraTextStyle,
-//        theme: ParraTheme
-//    ) -> ParraAttributes.Label {
-//        let text = textAttributes(
-//            for: textStyle,
-//            theme: theme
-//        )
-//
-//        return ParraAttributes.Label(
-//            text: text,
-//            icon: ParraAttributes.Image(
-//                tint: text.color
-//            ),
-//            border: .init(),
-//            cornerRadius: .zero,
-//            padding: .zero
-//        )
-//    }
 }

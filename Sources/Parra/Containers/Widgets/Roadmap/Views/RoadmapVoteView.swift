@@ -32,14 +32,23 @@ struct RoadmapVoteView: View {
                     variant: .plain
                 ),
                 content: ticketContent.voteButton,
+                localAttributes: ParraAttributes.ImageButton(
+                    normal: .init(
+                        image: ParraAttributes.Image(
+                            tint: voteHightlightColor.toParraColor(),
+                            size: CGSize(width: 18, height: 18)
+                        ),
+                        // manual adjust ment to try to align better with the title text
+                        padding: .custom(
+                            .padding(top: topPadding)
+                        )
+                    )
+                ),
                 onPress: {
                     contentObserver.currentTicketToVote = ticketContent.id
                 }
             )
-            .tint(voteHightlightColor.toParraColor())
-            .frame(width: 18, height: 18)
-            // manual adjust ment to try to align better with the title text
-            .padding(.top, topPadding)
+
             .contentShape(.rect)
             .symbolEffect(
                 .bounce.up,

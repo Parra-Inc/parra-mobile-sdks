@@ -8,15 +8,17 @@
 
 import SwiftUI
 
+// MARK: - ParraAttributes.Shadow
+
 public extension ParraAttributes {
     struct Shadow {
         // MARK: - Lifecycle
 
         public init(
-            color: Color,
-            radius: CGFloat = 0.0,
-            x: CGFloat = 0.0,
-            y: CGFloat = 0.0
+            color: Color? = nil,
+            radius: CGFloat? = nil,
+            x: CGFloat? = nil,
+            y: CGFloat? = nil
         ) {
             self.color = color
             self.radius = radius
@@ -26,9 +28,24 @@ public extension ParraAttributes {
 
         // MARK: - Public
 
-        public let color: Color
-        public let radius: CGFloat
-        public let x: CGFloat
-        public let y: CGFloat
+        public let color: Color?
+        public let radius: CGFloat?
+        public let x: CGFloat?
+        public let y: CGFloat?
+    }
+}
+
+// MARK: - ParraAttributes.Shadow + OverridableAttributes
+
+extension ParraAttributes.Shadow: OverridableAttributes {
+    func mergingOverrides(
+        _ overrides: ParraAttributes.Shadow?
+    ) -> ParraAttributes.Shadow {
+        return ParraAttributes.Shadow(
+            color: overrides?.color ?? color,
+            radius: overrides?.radius ?? radius,
+            x: overrides?.x ?? x,
+            y: overrides?.y ?? y
+        )
     }
 }

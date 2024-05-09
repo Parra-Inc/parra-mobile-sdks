@@ -8,16 +8,18 @@
 
 import SwiftUI
 
+// MARK: - ParraAttributes.Label
+
 public extension ParraAttributes {
     struct Label {
         // MARK: - Lifecycle
 
         public init(
-            text: ParraAttributes.Text,
+            text: ParraAttributes.Text = .init(),
             icon: ParraAttributes.Image = .init(),
             border: ParraAttributes.Border = .init(),
-            cornerRadius: ParraCornerRadiusSize = .zero,
-            padding: ParraPaddingSize = .zero,
+            cornerRadius: ParraCornerRadiusSize? = nil,
+            padding: ParraPaddingSize? = nil,
             background: Color? = nil
         ) {
             self.text = text
@@ -29,11 +31,11 @@ public extension ParraAttributes {
         }
 
         init(
-            text: ParraAttributes.Text,
+            text: ParraAttributes.Text = .init(),
             icon: ParraAttributes.Image = .init(),
             border: ParraAttributes.Border = .init(),
-            cornerRadius: ParraCornerRadiusSize = .zero,
-            padding: ParraPaddingSize = .zero,
+            cornerRadius: ParraCornerRadiusSize? = .zero,
+            padding: ParraPaddingSize? = .zero,
             background: Color? = nil,
             frame: FrameAttributes? = nil
         ) {
@@ -51,12 +53,30 @@ public extension ParraAttributes {
         public internal(set) var text: ParraAttributes.Text
         public internal(set) var icon: ParraAttributes.Image
         public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize
-        public internal(set) var padding: ParraPaddingSize
+        public internal(set) var cornerRadius: ParraCornerRadiusSize?
+        public internal(set) var padding: ParraPaddingSize?
         public internal(set) var background: Color?
 
         // MARK: - Internal
 
         var frame: FrameAttributes?
+    }
+}
+
+// MARK: - ParraAttributes.Label + OverridableAttributes
+
+extension ParraAttributes.Label: OverridableAttributes {
+    func mergingOverrides(
+        _ overrides: ParraAttributes.Label?
+    ) -> ParraAttributes.Label {
+        ParraAttributes.Label(
+            text: text.mergingOverrides(overrides?.text),
+            icon: icon.mergingOverrides(overrides?.icon),
+            border: border.mergingOverrides(overrides?.border),
+            cornerRadius: overrides?.cornerRadius ?? cornerRadius,
+            padding: overrides?.padding ?? padding,
+            background: overrides?.background ?? background,
+            frame: overrides?.frame ?? frame
+        )
     }
 }

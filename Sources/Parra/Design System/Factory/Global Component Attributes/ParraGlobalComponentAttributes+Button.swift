@@ -108,6 +108,7 @@ public extension ParraGlobalComponentAttributes {
     func plainButtonAttributes(
         for size: ParraButtonSize,
         with type: ParraButtonType,
+        localAttributes: ParraAttributes.PlainButton?,
         theme: ParraTheme
     ) -> ParraAttributes.PlainButton {
         let cornerRadius = buttonCornerRadius(for: size)
@@ -144,7 +145,7 @@ public extension ParraGlobalComponentAttributes {
                 cornerRadius: cornerRadius,
                 padding: padding
             )
-        )
+        ).mergingOverrides(localAttributes)
     }
 
     // MARK: - Outlined Button
@@ -229,6 +230,7 @@ public extension ParraGlobalComponentAttributes {
     func outlinedButtonAttributes(
         for size: ParraButtonSize,
         with type: ParraButtonType,
+        localAttributes: ParraAttributes.OutlinedButton?,
         theme: ParraTheme
     ) -> ParraAttributes.OutlinedButton {
         let cornerRadius = buttonCornerRadius(for: size)
@@ -272,7 +274,7 @@ public extension ParraGlobalComponentAttributes {
                 cornerRadius: cornerRadius,
                 padding: padding
             )
-        )
+        ).mergingOverrides(localAttributes)
     }
 
     // MARK: - Contained Button
@@ -366,6 +368,7 @@ public extension ParraGlobalComponentAttributes {
     func containedButtonAttributes(
         for size: ParraButtonSize,
         with type: ParraButtonType,
+        localAttributes: ParraAttributes.ContainedButton?,
         theme: ParraTheme
     ) -> ParraAttributes.ContainedButton {
         let border = ParraAttributes.Border()
@@ -406,7 +409,7 @@ public extension ParraGlobalComponentAttributes {
                 cornerRadius: cornerRadius,
                 padding: padding
             )
-        )
+        ).mergingOverrides(localAttributes)
     }
 
     private func baseTextAttributes(

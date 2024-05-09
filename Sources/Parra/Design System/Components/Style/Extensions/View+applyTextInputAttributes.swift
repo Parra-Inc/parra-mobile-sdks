@@ -37,10 +37,10 @@ extension View {
                 from: theme
             )
             .applyTextAttributes(attributes.text, using: theme)
-            .keyboardType(attributes.keyboardType)
+            .keyboardType(attributes.keyboardType ?? .default)
             .textCase(attributes.textCase)
             .textContentType(attributes.textContentType)
             .textInputAutocapitalization(attributes.textInputAutocapitalization)
-            .autocorrectionDisabled(attributes.autocorrectionDisabled)
+            .autocorrectionDisabled(attributes.autocorrectionDisabled ?? false)
     }
 }

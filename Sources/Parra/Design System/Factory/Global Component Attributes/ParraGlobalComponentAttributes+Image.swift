@@ -10,14 +10,18 @@ import Foundation
 
 public extension ParraGlobalComponentAttributes {
     func imageAttributes(
-        content: ParraImageContent
+        content: ParraImageContent,
+        localAttributes: ParraAttributes.Image?,
+        theme: ParraTheme
     ) -> ParraAttributes.Image {
-        return ParraAttributes.Image()
+        return ParraAttributes.Image().mergingOverrides(localAttributes)
     }
 
     func asyncImageAttributes(
-        content: AsyncImageContent
+        content: AsyncImageContent,
+        localAttributes: ParraAttributes.AsyncImage?,
+        theme: ParraTheme
     ) -> ParraAttributes.AsyncImage {
-        return ParraAttributes.AsyncImage()
+        return ParraAttributes.AsyncImage().mergingOverrides(localAttributes)
     }
 }

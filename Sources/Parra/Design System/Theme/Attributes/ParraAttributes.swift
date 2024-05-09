@@ -13,3 +13,7 @@ import SwiftUI
 public enum ParraAttributes {
     public typealias Badge = ParraAttributes.Label
 }
+
+protocol OverridableAttributes {
+    func mergingOverrides(_ overrides: Self?) -> Self
+}

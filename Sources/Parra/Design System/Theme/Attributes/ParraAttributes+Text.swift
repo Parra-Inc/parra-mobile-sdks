@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+// MARK: - ParraAttributes.Text
+
 public extension ParraAttributes {
     /// Attributes specific to text, not necessarily a "label" component.
     struct Text {
@@ -20,7 +22,7 @@ public extension ParraAttributes {
             design: Font.Design? = nil,
             color: Color? = nil,
             alignment: TextAlignment? = nil,
-            shadow: Shadow? = nil
+            shadow: Shadow = .init()
         ) {
             self.font = font
             self.width = width
@@ -38,7 +40,7 @@ public extension ParraAttributes {
             design: Font.Design? = nil,
             color: Color? = nil,
             alignment: TextAlignment? = nil,
-            shadow: Shadow? = nil
+            shadow: Shadow = .init()
         ) {
             self.font = if let font {
                 Font(font as CTFont)
@@ -62,6 +64,24 @@ public extension ParraAttributes {
         public var design: Font.Design?
         public var color: Color?
         public var alignment: TextAlignment?
-        public var shadow: Shadow?
+        public var shadow: Shadow
+    }
+}
+
+// MARK: - ParraAttributes.Text + OverridableAttributes
+
+extension ParraAttributes.Text: OverridableAttributes {
+    func mergingOverrides(
+        _ overrides: ParraAttributes.Text?
+    ) -> ParraAttributes.Text {
+        ParraAttributes.Text(
+            font: overrides?.font ?? font,
+            width: overrides?.width ?? width,
+            weight: overrides?.weight ?? weight,
+            design: overrides?.design ?? design,
+            color: overrides?.color ?? color,
+            alignment: overrides?.alignment ?? alignment,
+            shadow: shadow.mergingOverrides(overrides?.shadow)
+        )
     }
 }

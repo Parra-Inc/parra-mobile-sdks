@@ -28,10 +28,19 @@ struct RoadmapDetailView: View {
 
                     componentFactory.buildLabel(
                         fontStyle: .title,
-                        content: ticketContent.title
+                        content: ticketContent.title,
+                        localAttributes: ParraAttributes.Label(
+                            text: ParraAttributes.Text(
+                                alignment: .leading
+                            ),
+                            frame: .flexible(
+                                FlexibleFrameAttributes(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                            )
+                        )
                     )
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxWidth: .infinity)
 
@@ -55,10 +64,19 @@ struct RoadmapDetailView: View {
                     fontStyle: .caption,
                     content: LabelContent(
                         text: "Created \(ticketContent.createdAt.text)"
+                    ),
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            color: palette.secondaryText.toParraColor()
+                        ),
+                        frame: .flexible(
+                            FlexibleFrameAttributes(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                        )
                     )
                 )
-                .foregroundStyle(palette.secondaryText.toParraColor())
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding([.top, .leading, .trailing], 20)
 
@@ -69,9 +87,16 @@ struct RoadmapDetailView: View {
                 ScrollView {
                     componentFactory.buildLabel(
                         fontStyle: .body,
-                        content: description
+                        content: description,
+                        localAttributes: ParraAttributes.Label(
+                            frame: .flexible(
+                                FlexibleFrameAttributes(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                            )
+                        )
                     )
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .contentMargins(
                     .all,

@@ -13,11 +13,13 @@ extension ComponentFactory {
     func buildPlainButton(
         config: TextButtonConfig,
         content: TextButtonContent,
+        localAttributes: ParraAttributes.PlainButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
         let attributes = attributeProvider.plainButtonAttributes(
             for: config.size,
             with: config.type,
+            localAttributes: localAttributes,
             theme: theme
         )
 
@@ -39,11 +41,13 @@ extension ComponentFactory {
     func buildOutlinedButton(
         config: TextButtonConfig,
         content: TextButtonContent,
+        localAttributes: ParraAttributes.OutlinedButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
         let attributes = attributeProvider.outlinedButtonAttributes(
             for: config.size,
             with: config.type,
+            localAttributes: localAttributes,
             theme: theme
         )
 
@@ -65,11 +69,13 @@ extension ComponentFactory {
     func buildContainedButton(
         config: TextButtonConfig,
         content: TextButtonContent,
+        localAttributes: ParraAttributes.ContainedButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
         let attributes = attributeProvider.containedButtonAttributes(
             for: config.size,
             with: config.type,
+            localAttributes: localAttributes,
             theme: theme
         )
 
@@ -91,13 +97,14 @@ extension ComponentFactory {
     func buildImageButton(
         config: ImageButtonConfig,
         content: ImageButtonContent,
-        attributes overrideAttributes: ParraAttributes.ImageButton? = nil,
+        localAttributes: ParraAttributes.ImageButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
         let attributes = attributeProvider.imageButtonAttributes(
             variant: config.variant,
             for: config.size,
             with: config.type,
+            localAttributes: localAttributes,
             theme: theme
         )
 

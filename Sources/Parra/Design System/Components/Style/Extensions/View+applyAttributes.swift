@@ -32,11 +32,11 @@ extension View {
             size: attributes.contentPadding,
             from: theme
         )
+        .background(attributes.background ?? .clear)
         .applyCornerRadii(
             size: attributes.cornerRadius,
             from: theme
         )
-        .background(attributes.background ?? .clear)
         .applyPadding(
             size: attributes.padding,
             from: theme
@@ -120,10 +120,10 @@ extension View {
             )
             .multilineTextAlignment(attributes.alignment ?? .leading)
             .shadow(
-                color: attributes.shadow?.color ?? .clear,
-                radius: attributes.shadow?.radius ?? 0.0,
-                x: attributes.shadow?.x ?? 0.0,
-                y: attributes.shadow?.y ?? 0.0
+                color: attributes.shadow.color ?? .clear,
+                radius: attributes.shadow.radius ?? 0.0,
+                x: attributes.shadow.x ?? 0.0,
+                y: attributes.shadow.y ?? 0.0
             )
     }
 
@@ -136,11 +136,11 @@ extension View {
             size: attributes.padding,
             from: theme
         )
+        .background(attributes.background ?? .clear)
         .applyCornerRadii(
             size: attributes.cornerRadius,
             from: theme
         )
-        .background(attributes.background ?? .clear)
         .applyBorder(
             attributes.border,
             with: attributes.cornerRadius,

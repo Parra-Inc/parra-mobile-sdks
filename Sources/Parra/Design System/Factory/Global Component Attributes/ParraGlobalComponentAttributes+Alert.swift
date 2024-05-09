@@ -12,6 +12,7 @@ public extension ParraGlobalComponentAttributes {
     func inlineAlertAttributes(
         content: ParraAlertContent,
         level: AlertLevel,
+        localAttributes: ParraAttributes.InlineAlert?,
         theme: ParraTheme
     ) -> ParraAttributes.InlineAlert {
         let backgroundColor = defaultBackground(
@@ -54,12 +55,13 @@ public extension ParraGlobalComponentAttributes {
             cornerRadius: .xl,
             padding: .xxl,
             background: backgroundColor
-        )
+        ).mergingOverrides(localAttributes)
     }
 
     func toastAlertAttributes(
         content: ParraAlertContent,
         level: AlertLevel,
+        localAttributes: ParraAttributes.ToastAlert?,
         theme: ParraTheme
     ) -> ParraAttributes.ToastAlert {
         let backgroundColor = defaultBackground(
@@ -116,7 +118,7 @@ public extension ParraGlobalComponentAttributes {
             cornerRadius: .xl,
             padding: edgePaddingSize,
             background: backgroundColor
-        )
+        ).mergingOverrides(localAttributes)
     }
 
     private func defaultDismissButton(

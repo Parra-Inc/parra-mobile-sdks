@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+// MARK: - ParraAttributes.Border
+
 public extension ParraAttributes {
     struct Border {
         // MARK: - Lifecycle
@@ -24,5 +26,18 @@ public extension ParraAttributes {
 
         public let width: CGFloat?
         public let color: Color?
+    }
+}
+
+// MARK: - ParraAttributes.Border + OverridableAttributes
+
+extension ParraAttributes.Border: OverridableAttributes {
+    func mergingOverrides(
+        _ overrides: ParraAttributes.Border?
+    ) -> ParraAttributes.Border {
+        ParraAttributes.Border(
+            width: overrides?.width ?? width,
+            color: overrides?.color ?? color
+        )
     }
 }

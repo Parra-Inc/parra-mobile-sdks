@@ -33,10 +33,13 @@ struct AuthenticationEmailPasswordView: View {
                     textInputAutocapitalization: .never,
                     autocorrectionDisabled: true
                 ),
-                content: content.emailField
+                content: content.emailField,
+                localAttributes: ParraAttributes.TextInput(
+                    padding: .custom(
+                        .padding(top: 50, bottom: 5)
+                    )
+                )
             )
-            .padding(.top, 50)
-            .padding(.bottom, 5)
             .submitLabel(.next)
             .focused($focusedField, equals: .password)
             .onSubmit(of: .text) {
@@ -51,9 +54,13 @@ struct AuthenticationEmailPasswordView: View {
                     textInputAutocapitalization: .never,
                     autocorrectionDisabled: true
                 ),
-                content: content.passwordField
+                content: content.passwordField,
+                localAttributes: ParraAttributes.TextInput(
+                    padding: .custom(
+                        .padding(bottom: 16)
+                    )
+                )
             )
-            .padding(.bottom, 16)
             .submitLabel(.next)
             .focused($focusedField, equals: .password)
             .onSubmit(of: .text) {
@@ -87,11 +94,13 @@ struct AuthenticationEmailPasswordView: View {
             if let error = contentObserver.error {
                 componentFactory.buildLabel(
                     fontStyle: .caption,
-                    content: LabelContent(text: error)
-                )
-                .foregroundStyle(
-                    themeObserver.theme.palette.error.toParraColor()
-                        .opacity(0.8)
+                    content: LabelContent(text: error),
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            color: themeObserver.theme.palette.error
+                                .toParraColor().opacity(0.8)
+                        )
+                    )
                 )
             }
 

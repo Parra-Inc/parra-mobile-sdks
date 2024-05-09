@@ -77,9 +77,13 @@ struct SignupWidget: Container {
                     textInputAutocapitalization: .never,
                     autocorrectionDisabled: true
                 ),
-                content: content.passwordField
+                content: content.passwordField,
+                localAttributes: ParraAttributes.TextInput(
+                    padding: .custom(
+                        .padding(bottom: 16)
+                    )
+                )
             )
-            .padding(.bottom, 16)
             .submitLabel(.next)
             .focused($focusedField, equals: .password)
             .onSubmit(of: .text) {

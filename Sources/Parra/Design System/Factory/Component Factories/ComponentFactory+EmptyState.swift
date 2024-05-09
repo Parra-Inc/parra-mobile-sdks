@@ -13,6 +13,7 @@ extension ComponentFactory {
     func buildEmptyState(
         config: EmptyStateConfig,
         content: EmptyStateContent
+//        localAttributes: ParraAttributes.em
     ) -> some View {
         EmptyView()
 //        let mergedAttributes = EmptyStateComponent.applyStandardCustomizations(

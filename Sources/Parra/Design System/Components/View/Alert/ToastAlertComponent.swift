@@ -32,22 +32,16 @@ struct ToastAlertComponent: AlertComponentType {
 
                     componentFactory.buildLabel(
                         fontStyle: .headline,
-                        content: content.title
-                    )
-                    .applyLabelAttributes(
-                        attributes.title,
-                        using: themeObserver.theme
+                        content: content.title,
+                        localAttributes: attributes.title
                     )
                 }
 
                 if let subtitleContent = content.subtitle {
                     componentFactory.buildLabel(
                         fontStyle: .subheadline,
-                        content: subtitleContent
-                    )
-                    .applyLabelAttributes(
-                        attributes.subtitle,
-                        using: themeObserver.theme
+                        content: subtitleContent,
+                        localAttributes: attributes.subtitle
                     )
                 }
             }
@@ -74,7 +68,7 @@ struct ToastAlertComponent: AlertComponentType {
                                 variant: .plain
                             ),
                             content: dismissButtonContent,
-                            attributes: attributes.dismissButton,
+                            localAttributes: attributes.dismissButton,
                             onPress: onDismiss
                         )
                     }

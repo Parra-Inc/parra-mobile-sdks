@@ -42,9 +42,16 @@ struct ChangelogWidget: Container {
             VStack(alignment: .leading) {
                 componentFactory.buildLabel(
                     fontStyle: .title,
-                    content: contentObserver.content.title
+                    content: contentObserver.content.title,
+                    localAttributes: ParraAttributes.Label(
+                        frame: .flexible(
+                            FlexibleFrameAttributes(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                        )
+                    )
                 )
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding([.horizontal, .top], from: contentPadding)
             .padding(.bottom, headerSpace(with: contentPadding))

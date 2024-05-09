@@ -57,9 +57,13 @@ struct AuthenticationWidget: Container {
 
                 componentFactory.buildLabel(
                     fontStyle: .largeTitle,
-                    content: content.title
+                    content: content.title,
+                    localAttributes: ParraAttributes.Label(
+                        padding: .custom(
+                            .padding(bottom: content.icon == nil ? 0 : 6)
+                        )
+                    )
                 )
-                .padding(.leading, content.icon == nil ? 0 : 6)
             }
             .padding(
                 .padding(

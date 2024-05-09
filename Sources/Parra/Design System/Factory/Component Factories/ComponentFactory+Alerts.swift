@@ -12,11 +12,13 @@ extension ComponentFactory {
     @ViewBuilder
     func buildInlineAlert(
         level: AlertLevel,
-        content: ParraAlertContent
+        content: ParraAlertContent,
+        localAttributes: ParraAttributes.InlineAlert? = nil
     ) -> some View {
         let attributes = attributeProvider.inlineAlertAttributes(
             content: content,
             level: level,
+            localAttributes: localAttributes,
             theme: theme
         )
 
@@ -31,11 +33,13 @@ extension ComponentFactory {
         level: AlertLevel,
         content: ParraAlertContent,
         onDismiss: @escaping () -> Void,
-        primaryAction: (() -> Void)? = nil
+        primaryAction: (() -> Void)? = nil,
+        localAttributes: ParraAttributes.ToastAlert? = nil
     ) -> some View {
         let attributes = attributeProvider.toastAlertAttributes(
             content: content,
             level: level,
+            localAttributes: localAttributes,
             theme: theme
         )
 

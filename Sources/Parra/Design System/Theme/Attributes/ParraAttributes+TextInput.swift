@@ -8,25 +8,27 @@
 
 import SwiftUI
 
+// MARK: - ParraAttributes.TextInput
+
 public extension ParraAttributes {
     struct TextInput {
         // MARK: - Lifecycle
 
         init(
-            text: ParraAttributes.Text,
-            titleLabel: ParraAttributes.Label,
-            helperLabel: ParraAttributes.Label,
-            errorLabel: ParraAttributes.Label,
-            border: ParraAttributes.Border,
-            cornerRadius: ParraCornerRadiusSize,
-            padding: ParraPaddingSize,
-            background: Color?,
-            tint: Color?,
-            keyboardType: UIKeyboardType,
-            textCase: SwiftUI.Text.Case?,
-            textContentType: UITextContentType?,
-            textInputAutocapitalization: TextInputAutocapitalization?,
-            autocorrectionDisabled: Bool,
+            text: ParraAttributes.Text = .init(),
+            titleLabel: ParraAttributes.Label = .init(),
+            helperLabel: ParraAttributes.Label = .init(),
+            errorLabel: ParraAttributes.Label = .init(),
+            border: ParraAttributes.Border = .init(),
+            cornerRadius: ParraCornerRadiusSize? = nil,
+            padding: ParraPaddingSize? = nil,
+            background: Color? = nil,
+            tint: Color? = nil,
+            keyboardType: UIKeyboardType? = nil,
+            textCase: SwiftUI.Text.Case? = nil,
+            textContentType: UITextContentType? = nil,
+            textInputAutocapitalization: TextInputAutocapitalization? = nil,
+            autocorrectionDisabled: Bool? = nil,
             frame: FrameAttributes? = nil
         ) {
             self.text = text
@@ -54,21 +56,49 @@ public extension ParraAttributes {
         public internal(set) var errorLabel: ParraAttributes.Label
 
         public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize
-        public internal(set) var padding: ParraPaddingSize
+        public internal(set) var cornerRadius: ParraCornerRadiusSize?
+        public internal(set) var padding: ParraPaddingSize?
         public internal(set) var background: Color?
         public internal(set) var tint: Color?
 
-        public internal(set) var keyboardType: UIKeyboardType
+        public internal(set) var keyboardType: UIKeyboardType?
         public internal(set) var textCase: SwiftUI.Text.Case?
         public internal(set) var textContentType: UITextContentType?
         public internal(
             set
         ) var textInputAutocapitalization: TextInputAutocapitalization?
-        public internal(set) var autocorrectionDisabled: Bool
+        public internal(set) var autocorrectionDisabled: Bool?
 
         // MARK: - Internal
 
         let frame: FrameAttributes?
+    }
+}
+
+// MARK: - ParraAttributes.TextInput + OverridableAttributes
+
+extension ParraAttributes.TextInput: OverridableAttributes {
+    func mergingOverrides(
+        _ overrides: ParraAttributes.TextInput?
+    ) -> ParraAttributes.TextInput {
+        return ParraAttributes.TextInput(
+            text: text.mergingOverrides(overrides?.text),
+            titleLabel: titleLabel.mergingOverrides(overrides?.titleLabel),
+            helperLabel: helperLabel.mergingOverrides(overrides?.helperLabel),
+            errorLabel: errorLabel.mergingOverrides(overrides?.errorLabel),
+            border: border.mergingOverrides(overrides?.border),
+            cornerRadius: overrides?.cornerRadius ?? cornerRadius,
+            padding: overrides?.padding ?? padding,
+            background: overrides?.background ?? background,
+            tint: overrides?.tint ?? tint,
+            keyboardType: overrides?.keyboardType ?? keyboardType,
+            textCase: overrides?.textCase ?? textCase,
+            textContentType: overrides?.textContentType ?? textContentType,
+            textInputAutocapitalization: overrides?
+                .textInputAutocapitalization ?? textInputAutocapitalization,
+            autocorrectionDisabled: overrides?
+                .autocorrectionDisabled ?? autocorrectionDisabled,
+            frame: overrides?.frame ?? frame
+        )
     }
 }

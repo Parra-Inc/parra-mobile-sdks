@@ -13,6 +13,7 @@ public extension ParraGlobalComponentAttributes {
         variant: ParraButtonVariant,
         for size: ParraImageButtonSize,
         with type: ParraButtonType,
+        localAttributes: ParraAttributes.ImageButton? = nil,
         theme: ParraTheme
     ) -> ParraAttributes.ImageButton {
         let palette = theme.palette
@@ -123,6 +124,6 @@ public extension ParraGlobalComponentAttributes {
                 cornerRadius: .zero,
                 padding: .sm
             )
-        )
+        ).mergingOverrides(localAttributes)
     }
 }
