@@ -29,11 +29,13 @@ struct ProfileWidget: Container {
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
 
+    @EnvironmentObject var parraAuthState: ParraAuthState
+
     var body: some View {
         VStack {
             Text("Profile")
 
-            switch authState.current {
+            switch parraAuthState.current {
             case .authenticated(let user):
                 PhotoWell(stub: user.userInfo?.avatar) { newAvatar in
                     await contentObserver.onAvatarSelectionChange(
@@ -59,7 +61,6 @@ struct ProfileWidget: Container {
     // MARK: - Private
 
     @Environment(\.parra) private var parra
-    @Environment(\.parraAuthState) private var authState
 }
 
 #Preview {

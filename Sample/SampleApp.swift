@@ -22,7 +22,7 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
                     authenticatedContent: { _ in
                         ContentView()
                     },
-                    authenticationFlowConfig: ParraAuthenticationFlowConfig()
+                    authenticationFlowConfig: .default
                 )
             }
         )

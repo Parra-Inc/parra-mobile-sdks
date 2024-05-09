@@ -197,8 +197,7 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
 
     @ViewBuilder private var content: (_ parra: Parra) -> Content
     @StateObject private var parraAppState: ParraAppState
-    @StateObject private var parraAuthState: ParraAuthState =
-        ParraAuthStateEnvironmentKey.defaultValue
+    @StateObject private var parraAuthState: ParraAuthState = .init()
     @StateObject private var launchScreenState = LaunchScreenStateManager()
 
     @StateObject private var themeObserver: ParraThemeObserver
@@ -213,7 +212,7 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
     private func renderPrimaryContent() -> some View {
         content(Parra.default)
             .environment(\.parra, Parra.default)
-            .environment(\.parraAuthState, parraAuthState)
+            .environmentObject(parraAuthState)
             .renderToast(toast: $alertManager.currentToast)
             .onShake {
                 if AppEnvironment.isParraDemoBeta {

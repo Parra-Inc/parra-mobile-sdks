@@ -9,80 +9,84 @@
 import SwiftUI
 
 public struct ParraRequiredAuthView<
-    AuthenticatedContent, UnauthenticatedContent
->: ParraAppContent where AuthenticatedContent: View,
-    UnauthenticatedContent: View
-{
+    AuthenticatedContent
+>: ParraAppContent where AuthenticatedContent: View {
     // MARK: - Lifecycle
 
     public init(
-        authenticatedContent: @escaping (_ user: ParraUser)
-            -> AuthenticatedContent,
-        unauthenticatedContent: @escaping (_ error: Error?)
-            -> UnauthenticatedContent = { _ in
-                ParraDefaultAuthenticationView()
-            }
+        authenticatedContent: @escaping (
+            _ user: ParraUser
+        ) -> AuthenticatedContent,
+        authenticationFlowConfig: ParraAuthenticationFlowConfig = .default
     ) {
         self.authenticatedContent = authenticatedContent
-        self.unauthenticatedContent = unauthenticatedContent
+        self.authenticationFlowConfig = authenticationFlowConfig
     }
 
     // MARK: - Public
 
-    @ViewBuilder public var authenticatedContent: (_ user: ParraUser)
-        -> AuthenticatedContent
-    @ViewBuilder public var unauthenticatedContent: (_ error: Error?)
-        -> UnauthenticatedContent
+    @ViewBuilder public var authenticatedContent: (
+        _ user: ParraUser
+    ) -> AuthenticatedContent
 
     public var body: some View {
-        let result = switch currentUserMirror {
-        case .authenticated(let user):
-            AnyView(authenticatedContent(for: user))
-        case .unauthenticated(let error):
-            AnyView(
-                unauthenticatedContent(for: error)
-                    .transition(
-                        .push(from: .top)
-                            .animation(.easeIn(duration: 0.35))
-                    )
-            )
+        VStack {
+            content
         }
-
-        result
-            .onAppear {
-                currentUserMirror = authState.current
-            }
-            .onChange(
-                of: authState.current
-            ) { oldValue, newValue in
-                switch (oldValue, newValue) {
-                case (.unauthenticated, .authenticated):
-                    withAnimation {
-                        currentUserMirror = newValue
-                    }
-                default:
+        .onAppear {
+            print(parraAuthState)
+            print(parraAuthState)
+            print(parraAuthState)
+        }
+        .onChange(
+            of: parraAuthState.current,
+            initial: true
+        ) { oldValue, newValue in
+            switch (oldValue, newValue) {
+            case (.unauthenticated, .authenticated):
+                withAnimation {
                     currentUserMirror = newValue
                 }
+            default:
+                currentUserMirror = newValue
             }
+        }
     }
 
-    public func authenticatedContent(for user: ParraUser)
-        -> AuthenticatedContent
-    {
+    public func authenticatedContent(
+        for user: ParraUser
+    ) -> AuthenticatedContent {
         return authenticatedContent(user)
     }
 
-    public func unauthenticatedContent(for error: Error?)
-        -> UnauthenticatedContent
-    {
-        return unauthenticatedContent(error)
+    public func unauthenticatedContent(
+        for error: Error?
+    ) -> ParraAuthenticationFlowView {
+        return ParraAuthenticationFlowView(
+            flowConfig: authenticationFlowConfig
+        )
     }
 
     // MARK: - Internal
 
-    @Environment(\.parraAuthState) var authState
+    @EnvironmentObject var parraAuthState: ParraAuthState
+
+    @ViewBuilder var content: some View {
+        switch currentUserMirror {
+        case .authenticated(let user):
+            authenticatedContent(for: user)
+        case .unauthenticated(let error):
+            unauthenticatedContent(for: error)
+                .transition(
+                    .push(from: .top)
+                        .animation(.easeIn(duration: 0.35))
+                )
+        }
+    }
 
     // MARK: - Private
+
+    private let authenticationFlowConfig: ParraAuthenticationFlowConfig
 
     @State private var currentUserMirror: ParraAuthResult =
         .unauthenticated(nil)

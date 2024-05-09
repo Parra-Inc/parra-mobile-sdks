@@ -96,6 +96,8 @@ public class ParraAuthState: ObservableObject {
     }
 
     private func handleAuthChange(notification: Notification) {
+        logger.debug("Received auth state change notification")
+
         guard let userInfo = notification.userInfo,
               let result =
               userInfo[Parra.authenticationStateKey] as? ParraAuthResult else

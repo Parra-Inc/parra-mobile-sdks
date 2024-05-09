@@ -24,7 +24,7 @@ public struct ParraOptionalAuthView<Content>: ParraAppContent
     @ViewBuilder public var content: (_ authResult: ParraAuthResult) -> Content
 
     public var body: some View {
-        switch authState.current {
+        switch parraAuthState.current {
         case .authenticated(let user):
             return authenticatedContent(for: user)
         case .unauthenticated(let error):
@@ -40,7 +40,7 @@ public struct ParraOptionalAuthView<Content>: ParraAppContent
         return content(.unauthenticated(error))
     }
 
-    // MARK: - Private
+    // MARK: - Internal
 
-    @Environment(\.parraAuthState) private var authState
+    @EnvironmentObject var parraAuthState: ParraAuthState
 }

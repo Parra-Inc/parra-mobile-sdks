@@ -350,7 +350,10 @@ final class AuthService {
 
             _cachedToken = parraUser.credential
         case .unauthenticated(let error):
-            logger.debug("User unauthenticated: \(String(describing: error))")
+            logger
+                .debug(
+                    "User unauthenticated with error: \(String(describing: error))"
+                )
 
             await dataManager.removeCurrentUser()
 

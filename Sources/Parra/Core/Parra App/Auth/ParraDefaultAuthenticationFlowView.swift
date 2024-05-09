@@ -1,5 +1,5 @@
 //
-//  ParraDefaultAuthenticationView.swift
+//  ParraDefaultAuthenticationFlowView.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 4/22/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ParraDefaultAuthenticationView: View {
+public struct ParraDefaultAuthenticationFlowView: View {
     // MARK: - Lifecycle
 
     public init(
@@ -34,7 +34,7 @@ public struct ParraDefaultAuthenticationView: View {
 
     // MARK: - Internal
 
-    @MainActor var container: some View {
+    var container: some View {
         let container: AuthenticationWidget = parra.parraInternal
             .containerRenderer.renderContainer(
                 params: .init(
