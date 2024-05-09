@@ -123,19 +123,51 @@ public extension ParraGlobalComponentAttributes {
         trailingPadding: CGFloat
     ) -> ParraAttributes.ImageButton {
         return ParraAttributes.ImageButton(
-            image: ParraAttributes.Image(
-                tint: Color(
-                    lightVariant: ParraColorSwatch.gray.shade600,
-                    darkVariant: ParraColorSwatch.gray.shade300
+            normal: ParraAttributes.ImageButton.StatefulAttributes(
+                image: ParraAttributes.Image(
+                    tint: Color(
+                        lightVariant: ParraColorSwatch.gray.shade600,
+                        darkVariant: ParraColorSwatch.gray.shade300
+                    ),
+                    size: CGSize(width: 12, height: 12),
+                    padding: .custom(
+                        .padding(trailing: trailingPadding)
+                    )
                 ),
-                size: CGSize(width: 12, height: 12),
-                padding: .custom(
-                    .padding(trailing: trailingPadding)
-                )
+                border: ParraAttributes.Border(),
+                cornerRadius: .zero,
+                padding: .zero
             ),
-            border: ParraAttributes.Border(),
-            cornerRadius: .zero,
-            padding: .zero
+            pressed: ParraAttributes.ImageButton.StatefulAttributes(
+                image: ParraAttributes.Image(
+                    tint: Color(
+                        lightVariant: ParraColorSwatch.gray.shade600,
+                        darkVariant: ParraColorSwatch.gray.shade300
+                    ).opacity(0.8),
+                    size: CGSize(width: 12, height: 12),
+                    padding: .custom(
+                        .padding(trailing: trailingPadding)
+                    )
+                ),
+                border: ParraAttributes.Border(),
+                cornerRadius: .zero,
+                padding: .zero
+            ),
+            disabled: ParraAttributes.ImageButton.StatefulAttributes(
+                image: ParraAttributes.Image(
+                    tint: Color(
+                        lightVariant: ParraColorSwatch.gray.shade600,
+                        darkVariant: ParraColorSwatch.gray.shade300
+                    ).opacity(0.6),
+                    size: CGSize(width: 12, height: 12),
+                    padding: .custom(
+                        .padding(trailing: trailingPadding)
+                    )
+                ),
+                border: ParraAttributes.Border(),
+                cornerRadius: .zero,
+                padding: .zero
+            )
         )
     }
 

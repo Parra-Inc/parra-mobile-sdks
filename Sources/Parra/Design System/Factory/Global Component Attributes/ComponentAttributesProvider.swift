@@ -57,21 +57,18 @@ public protocol ComponentAttributesProvider {
     // MARK: Buttons
 
     func plainButtonAttributes(
-        in state: ParraButtonState,
         for size: ParraButtonSize,
         with type: ParraButtonType,
         theme: ParraTheme
     ) -> ParraAttributes.PlainButton
 
     func outlinedButtonAttributes(
-        in state: ParraButtonState,
         for size: ParraButtonSize,
         with type: ParraButtonType,
         theme: ParraTheme
     ) -> ParraAttributes.OutlinedButton
 
     func containedButtonAttributes(
-        in state: ParraButtonState,
         for size: ParraButtonSize,
         with type: ParraButtonType,
         theme: ParraTheme
@@ -79,7 +76,6 @@ public protocol ComponentAttributesProvider {
 
     func imageButtonAttributes(
         variant: ParraButtonVariant,
-        in state: ParraButtonState,
         for size: ParraImageButtonSize,
         with type: ParraButtonType,
         theme: ParraTheme

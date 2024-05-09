@@ -64,7 +64,7 @@ struct AuthenticationEmailPasswordView: View {
 
             componentFactory.buildContainedButton(
                 config: TextButtonConfig(
-                    style: .primary,
+                    type: .primary,
                     size: .large,
                     isMaxWidth: true
                 ),
@@ -77,7 +77,7 @@ struct AuthenticationEmailPasswordView: View {
 
             componentFactory.buildPlainButton(
                 config: TextButtonConfig(
-                    style: .primary,
+                    type: .primary,
                     size: .small,
                     isMaxWidth: false
                 ),
@@ -99,7 +99,7 @@ struct AuthenticationEmailPasswordView: View {
 
             componentFactory.buildPlainButton(
                 config: TextButtonConfig(
-                    style: .primary,
+                    type: .primary,
                     size: .small,
                     isMaxWidth: false
                 ),

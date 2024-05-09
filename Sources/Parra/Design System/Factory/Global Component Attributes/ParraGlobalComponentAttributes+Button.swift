@@ -106,20 +106,44 @@ public extension ParraGlobalComponentAttributes {
     }
 
     func plainButtonAttributes(
-        in state: ParraButtonState,
         for size: ParraButtonSize,
         with type: ParraButtonType,
         theme: ParraTheme
     ) -> ParraAttributes.PlainButton {
+        let cornerRadius = buttonCornerRadius(for: size)
+        let padding = buttonPadding(for: size)
+
         return ParraAttributes.PlainButton(
-            label: plainButtonLabelAttributes(
-                in: state,
-                for: size,
-                with: type,
-                theme: theme
+            normal: ParraAttributes.PlainButton.StatefulAttributes(
+                label: plainButtonLabelAttributes(
+                    in: .normal,
+                    for: size,
+                    with: type,
+                    theme: theme
+                ),
+                cornerRadius: cornerRadius,
+                padding: padding
             ),
-            cornerRadius: buttonCornerRadius(for: size),
-            padding: buttonPadding(for: size)
+            pressed: ParraAttributes.PlainButton.StatefulAttributes(
+                label: plainButtonLabelAttributes(
+                    in: .pressed,
+                    for: size,
+                    with: type,
+                    theme: theme
+                ),
+                cornerRadius: cornerRadius,
+                padding: padding
+            ),
+            disabled: ParraAttributes.PlainButton.StatefulAttributes(
+                label: plainButtonLabelAttributes(
+                    in: .disabled,
+                    for: size,
+                    with: type,
+                    theme: theme
+                ),
+                cornerRadius: cornerRadius,
+                padding: padding
+            )
         )
     }
 
@@ -203,24 +227,51 @@ public extension ParraGlobalComponentAttributes {
     }
 
     func outlinedButtonAttributes(
-        in state: ParraButtonState,
         for size: ParraButtonSize,
         with type: ParraButtonType,
         theme: ParraTheme
     ) -> ParraAttributes.OutlinedButton {
+        let cornerRadius = buttonCornerRadius(for: size)
+        let padding = buttonPadding(for: size)
+        let border = ParraAttributes.Border(
+            width: 1,
+            color: theme.palette.primary.toParraColor()
+        )
+
         return ParraAttributes.OutlinedButton(
-            label: outlinedButtonLabelAttributes(
-                in: state,
-                for: size,
-                with: type,
-                theme: theme
+            normal: ParraAttributes.OutlinedButton.StatefulAttributes(
+                label: outlinedButtonLabelAttributes(
+                    in: .normal,
+                    for: size,
+                    with: type,
+                    theme: theme
+                ),
+                border: border,
+                cornerRadius: cornerRadius,
+                padding: padding
             ),
-            border: ParraAttributes.Border(
-                width: 1,
-                color: theme.palette.primary.toParraColor()
+            pressed: ParraAttributes.OutlinedButton.StatefulAttributes(
+                label: outlinedButtonLabelAttributes(
+                    in: .pressed,
+                    for: size,
+                    with: type,
+                    theme: theme
+                ),
+                border: border,
+                cornerRadius: cornerRadius,
+                padding: padding
             ),
-            cornerRadius: buttonCornerRadius(for: size),
-            padding: buttonPadding(for: size)
+            disabled: ParraAttributes.OutlinedButton.StatefulAttributes(
+                label: outlinedButtonLabelAttributes(
+                    in: .disabled,
+                    for: size,
+                    with: type,
+                    theme: theme
+                ),
+                border: border,
+                cornerRadius: cornerRadius,
+                padding: padding
+            )
         )
     }
 
@@ -313,21 +364,48 @@ public extension ParraGlobalComponentAttributes {
     }
 
     func containedButtonAttributes(
-        in state: ParraButtonState,
         for size: ParraButtonSize,
         with type: ParraButtonType,
         theme: ParraTheme
     ) -> ParraAttributes.ContainedButton {
+        let border = ParraAttributes.Border()
+        let cornerRadius = buttonCornerRadius(for: size)
+        let padding = buttonPadding(for: size)
+
         return ParraAttributes.ContainedButton(
-            label: containedButtonLabelAttributes(
-                in: state,
-                for: size,
-                with: type,
-                theme: theme
+            normal: ParraAttributes.ContainedButton.StatefulAttributes(
+                label: containedButtonLabelAttributes(
+                    in: .normal,
+                    for: size,
+                    with: type,
+                    theme: theme
+                ),
+                border: border,
+                cornerRadius: cornerRadius,
+                padding: padding
             ),
-            border: ParraAttributes.Border(),
-            cornerRadius: buttonCornerRadius(for: size),
-            padding: buttonPadding(for: size)
+            pressed: ParraAttributes.ContainedButton.StatefulAttributes(
+                label: containedButtonLabelAttributes(
+                    in: .pressed,
+                    for: size,
+                    with: type,
+                    theme: theme
+                ),
+                border: border,
+                cornerRadius: cornerRadius,
+                padding: padding
+            ),
+            disabled: ParraAttributes.ContainedButton.StatefulAttributes(
+                label: containedButtonLabelAttributes(
+                    in: .disabled,
+                    for: size,
+                    with: type,
+                    theme: theme
+                ),
+                border: border,
+                cornerRadius: cornerRadius,
+                padding: padding
+            )
         )
     }
 

@@ -13,19 +13,16 @@ struct ImageButtonStyle: ButtonStyle, ParraAttributedStyle {
 
     let config: ImageButtonConfig
     let content: ImageButtonContent
-
     let attributes: ParraAttributes.ImageButton
-    let pressedAttributes: ParraAttributes.ImageButton
-    let disabledAttributes: ParraAttributes.ImageButton
 
     @ViewBuilder
     func makeBody(configuration: Configuration) -> some View {
         let currentAttributes = if content.isDisabled {
-            disabledAttributes
+            attributes.disabled
         } else if configuration.isPressed {
-            pressedAttributes
+            attributes.pressed
         } else {
-            attributes
+            attributes.normal
         }
 
         ImageComponent(
@@ -33,7 +30,7 @@ struct ImageButtonStyle: ButtonStyle, ParraAttributedStyle {
             attributes: currentAttributes.image
         )
         .applyImageButtonAttributes(
-            attributes,
+            currentAttributes,
             using: themeObserver.theme
         )
     }

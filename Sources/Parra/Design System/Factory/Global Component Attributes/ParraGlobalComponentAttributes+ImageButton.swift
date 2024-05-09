@@ -11,7 +11,6 @@ import SwiftUI
 public extension ParraGlobalComponentAttributes {
     func imageButtonAttributes(
         variant: ParraButtonVariant,
-        in state: ParraButtonState,
         for size: ParraImageButtonSize,
         with type: ParraButtonType,
         theme: ParraTheme
@@ -85,17 +84,45 @@ public extension ParraGlobalComponentAttributes {
         )
 
         return ParraAttributes.ImageButton(
-            image: ParraAttributes.Image(
-                tint: tint,
-                size: frameSize,
-                border: border,
-                cornerRadius: cornerRadius,
-                padding: .custom(padding),
-                background: backgroundColor
+            normal: ParraAttributes.ImageButton.StatefulAttributes(
+                image: ParraAttributes.Image(
+                    tint: tint,
+                    size: frameSize,
+                    border: border,
+                    cornerRadius: cornerRadius,
+                    padding: .custom(padding),
+                    background: backgroundColor
+                ),
+                border: ParraAttributes.Border(),
+                cornerRadius: .zero,
+                padding: .sm
             ),
-            border: ParraAttributes.Border(),
-            cornerRadius: .zero,
-            padding: .sm
+            pressed: ParraAttributes.ImageButton.StatefulAttributes(
+                image: ParraAttributes.Image(
+                    tint: tint.opacity(0.8),
+                    size: frameSize,
+                    border: border,
+                    cornerRadius: cornerRadius,
+                    padding: .custom(padding),
+                    background: backgroundColor
+                ),
+                border: ParraAttributes.Border(),
+                cornerRadius: .zero,
+                padding: .sm
+            ),
+            disabled: ParraAttributes.ImageButton.StatefulAttributes(
+                image: ParraAttributes.Image(
+                    tint: tint.opacity(0.6),
+                    size: frameSize,
+                    border: border,
+                    cornerRadius: cornerRadius,
+                    padding: .custom(padding),
+                    background: backgroundColor
+                ),
+                border: ParraAttributes.Border(),
+                cornerRadius: .zero,
+                padding: .sm
+            )
         )
     }
 }

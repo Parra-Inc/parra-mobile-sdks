@@ -38,7 +38,7 @@ struct RoadmapWidget: Container {
             if contentObserver.canAddRequests {
                 componentFactory.buildContainedButton(
                     config: TextButtonConfig(
-                        style: .primary,
+                        type: .primary,
                         size: .large,
                         isMaxWidth: true
                     ),

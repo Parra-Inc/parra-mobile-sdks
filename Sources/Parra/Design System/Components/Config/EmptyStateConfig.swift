@@ -22,13 +22,13 @@ public struct EmptyStateConfig: Equatable {
     // MARK: - Public
 
     public static let defaultPrimaryAction = TextButtonConfig(
-        style: .primary,
+        type: .primary,
         size: .large,
         isMaxWidth: true
     )
 
     public static let defaultSecondaryAction = TextButtonConfig(
-        style: .secondary,
+        type: .secondary,
         size: .medium,
         isMaxWidth: true
     )
@@ -40,12 +40,12 @@ public struct EmptyStateConfig: Equatable {
 
     public static let errorDefault = EmptyStateConfig(
         primaryAction: TextButtonConfig(
-            style: .primary,
+            type: .primary,
             size: .large,
             isMaxWidth: true
         ),
         secondaryAction: TextButtonConfig(
-            style: .secondary,
+            type: .secondary,
             size: .medium,
             isMaxWidth: true
         )

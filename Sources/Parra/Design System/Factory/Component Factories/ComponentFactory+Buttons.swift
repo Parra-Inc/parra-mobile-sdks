@@ -15,22 +15,16 @@ extension ComponentFactory {
         content: TextButtonContent,
         onPress: @escaping () -> Void
     ) -> some View {
-        let (
-            attributes,
-            pressedAttributes,
-            disabledAttributes
-        ) = createButtonAttributeStateVariants(
+        let attributes = attributeProvider.plainButtonAttributes(
             for: config.size,
-            type: config.style,
-            factory: attributeProvider.plainButtonAttributes
+            with: config.type,
+            theme: theme
         )
 
         let style = PlainButtonStyle(
             config: config,
             content: content,
-            attributes: attributes,
-            pressedAttributes: pressedAttributes,
-            disabledAttributes: disabledAttributes
+            attributes: attributes
         )
 
         PlainButtonComponent(
@@ -47,22 +41,16 @@ extension ComponentFactory {
         content: TextButtonContent,
         onPress: @escaping () -> Void
     ) -> some View {
-        let (
-            attributes,
-            pressedAttributes,
-            disabledAttributes
-        ) = createButtonAttributeStateVariants(
+        let attributes = attributeProvider.outlinedButtonAttributes(
             for: config.size,
-            type: config.style,
-            factory: attributeProvider.outlinedButtonAttributes
+            with: config.type,
+            theme: theme
         )
 
         let style = OutlinedButtonStyle(
             config: config,
             content: content,
-            attributes: attributes,
-            pressedAttributes: pressedAttributes,
-            disabledAttributes: disabledAttributes
+            attributes: attributes
         )
 
         OutlinedButtonComponent(
@@ -79,22 +67,16 @@ extension ComponentFactory {
         content: TextButtonContent,
         onPress: @escaping () -> Void
     ) -> some View {
-        let (
-            attributes,
-            pressedAttributes,
-            disabledAttributes
-        ) = createButtonAttributeStateVariants(
+        let attributes = attributeProvider.containedButtonAttributes(
             for: config.size,
-            type: config.style,
-            factory: attributeProvider.containedButtonAttributes
+            with: config.type,
+            theme: theme
         )
 
         let style = ContainedButtonStyle(
             config: config,
             content: content,
-            attributes: attributes,
-            pressedAttributes: pressedAttributes,
-            disabledAttributes: disabledAttributes
+            attributes: attributes
         )
 
         ContainedButtonComponent(
@@ -109,23 +91,20 @@ extension ComponentFactory {
     func buildImageButton(
         config: ImageButtonConfig,
         content: ImageButtonContent,
+        attributes overrideAttributes: ParraAttributes.ImageButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
-        let (
-            attributes,
-            pressedAttributes,
-            disabledAttributes
-        ) = createImageButtonAttributeStateVariants(
-            from: config,
-            factory: attributeProvider.imageButtonAttributes
+        let attributes = attributeProvider.imageButtonAttributes(
+            variant: config.variant,
+            for: config.size,
+            with: config.type,
+            theme: theme
         )
 
         let style = ImageButtonStyle(
             config: config,
             content: content,
-            attributes: attributes,
-            pressedAttributes: pressedAttributes,
-            disabledAttributes: disabledAttributes
+            attributes: attributes
         )
 
         ImageButtonComponent(
@@ -133,48 +112,6 @@ extension ComponentFactory {
             content: content,
             style: style,
             onPress: onPress
-        )
-    }
-
-    private func createButtonAttributeStateVariants<T>(
-        for size: ParraButtonSize,
-        type: ParraButtonType,
-        factory: (
-            _ state: ParraButtonState,
-            _ size: ParraButtonSize,
-            _ type: ParraButtonType,
-            _ theme: ParraTheme
-        ) -> T
-    ) -> (
-        normal: T,
-        pressed: T,
-        disabled: T
-    ) {
-        return (
-            factory(.normal, size, type, theme),
-            factory(.pressed, size, type, theme),
-            factory(.disabled, size, type, theme)
-        )
-    }
-
-    private func createImageButtonAttributeStateVariants<T>(
-        from config: ImageButtonConfig,
-        factory: (
-            _ variant: ParraButtonVariant,
-            _ state: ParraButtonState,
-            _ size: ParraImageButtonSize,
-            _ type: ParraButtonType,
-            _ theme: ParraTheme
-        ) -> T
-    ) -> (
-        normal: T,
-        pressed: T,
-        disabled: T
-    ) {
-        return (
-            factory(config.variant, .normal, config.size, config.type, theme),
-            factory(config.variant, .pressed, config.size, config.type, theme),
-            factory(config.variant, .disabled, config.size, config.type, theme)
         )
     }
 }

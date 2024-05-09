@@ -150,7 +150,7 @@ extension View {
 
     @ViewBuilder
     func applyPlainButtonAttributes(
-        _ attributes: ParraAttributes.PlainButton,
+        _ attributes: ParraAttributes.PlainButton.StatefulAttributes,
         using theme: ParraTheme
     ) -> some View {
         applyCornerRadii(
@@ -165,7 +165,7 @@ extension View {
 
     @ViewBuilder
     func applyOutlinedButtonAttributes(
-        _ attributes: ParraAttributes.OutlinedButton,
+        _ attributes: ParraAttributes.OutlinedButton.StatefulAttributes,
         using theme: ParraTheme
     ) -> some View {
         applyCornerRadii(
@@ -180,7 +180,7 @@ extension View {
 
     @ViewBuilder
     func applyContainedButtonAttributes(
-        _ attributes: ParraAttributes.ContainedButton,
+        _ attributes: ParraAttributes.ContainedButton.StatefulAttributes,
         using theme: ParraTheme
     ) -> some View {
         applyCornerRadii(
@@ -195,7 +195,7 @@ extension View {
 
     @ViewBuilder
     func applyImageButtonAttributes(
-        _ attributes: ParraAttributes.ImageButton,
+        _ attributes: ParraAttributes.ImageButton.StatefulAttributes,
         using theme: ParraTheme
     ) -> some View {
         applyCornerRadii(

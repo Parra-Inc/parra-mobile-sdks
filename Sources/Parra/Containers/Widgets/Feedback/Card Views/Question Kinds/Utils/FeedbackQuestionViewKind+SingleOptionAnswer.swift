@@ -29,7 +29,7 @@ extension FeedbackQuestionViewKind where AnswerType == SingleOptionAnswer {
 
         componentFactory.buildOutlinedButton(
             config: TextButtonConfig(
-                style: .primary,
+                type: .primary,
                 size: .medium,
                 isMaxWidth: true
             ),

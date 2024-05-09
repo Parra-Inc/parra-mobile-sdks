@@ -74,11 +74,8 @@ struct ToastAlertComponent: AlertComponentType {
                                 variant: .plain
                             ),
                             content: dismissButtonContent,
+                            attributes: attributes.dismissButton,
                             onPress: onDismiss
-                        )
-                        .applyImageButtonAttributes(
-                            attributes.dismissButton,
-                            using: themeObserver.theme
                         )
                     }
                     .frame(

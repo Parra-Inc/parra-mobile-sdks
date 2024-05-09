@@ -133,7 +133,7 @@ struct ReleaseWidget: Container {
             ) { content in
                 componentFactory.buildContainedButton(
                     config: TextButtonConfig(
-                        style: .primary,
+                        type: .primary,
                         size: .large,
                         isMaxWidth: true
                     ),

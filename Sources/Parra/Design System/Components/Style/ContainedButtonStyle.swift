@@ -15,17 +15,15 @@ struct ContainedButtonStyle: ButtonStyle, ParraAttributedStyle {
     let content: TextButtonContent
 
     let attributes: ParraAttributes.ContainedButton
-    let pressedAttributes: ParraAttributes.ContainedButton
-    let disabledAttributes: ParraAttributes.ContainedButton
 
     @ViewBuilder
     func makeBody(configuration: Configuration) -> some View {
         let currentAttributes = if content.isDisabled {
-            disabledAttributes
+            attributes.disabled
         } else if configuration.isPressed {
-            pressedAttributes
+            attributes.pressed
         } else {
-            attributes
+            attributes.normal
         }
 
         var labelAttributes = currentAttributes.label

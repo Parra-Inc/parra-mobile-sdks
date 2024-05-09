@@ -90,7 +90,7 @@ struct SignupWidget: Container {
 
             componentFactory.buildContainedButton(
                 config: TextButtonConfig(
-                    style: .primary,
+                    type: .primary,
                     size: .large,
                     isMaxWidth: true
                 ),
@@ -132,7 +132,7 @@ struct SignupWidget: Container {
     ) -> some View {
         componentFactory.buildPlainButton(
             config: TextButtonConfig(
-                style: .secondary,
+                type: .secondary,
                 size: .small
             ),
             content: TextButtonContent(

@@ -57,7 +57,7 @@ struct FeedbackFormWidget: Container {
                 primaryActionBuilder: {
                     componentFactory.buildContainedButton(
                         config: TextButtonConfig(
-                            style: .primary,
+                            type: .primary,
                             size: .large,
                             isMaxWidth: true
                         ),

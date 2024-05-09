@@ -62,7 +62,7 @@ private func renderButtonComponent(
 //    return type.init(
 //        config: config,
 //        content: content,
-//        style: ParraAttributedTextButtonStyle(
+//        type: ParraAttributedTextButtonStyle(
 //            config: config,
 //            content: content,
 //            attributes: type.applyStandardCustomizations(
@@ -108,7 +108,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .primary,
+                        type: .primary,
                         size: size
                     ),
                     content: TextButtonContent(
@@ -119,7 +119,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .secondary,
+                        type: .secondary,
                         size: size
                     ),
                     content: TextButtonContent(
@@ -134,7 +134,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .primary,
+                        type: .primary,
                         size: size
                     ),
                     content: TextButtonContent(
@@ -148,7 +148,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .secondary,
+                        type: .secondary,
                         size: size
                     ),
                     content: TextButtonContent(
@@ -166,7 +166,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .primary,
+                        type: .primary,
                         size: size,
                         isMaxWidth: true
                     ),
@@ -178,7 +178,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .secondary,
+                        type: .secondary,
                         size: size,
                         isMaxWidth: true
                     ),
@@ -194,7 +194,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .primary,
+                        type: .primary,
                         size: size
                     ),
                     content: TextButtonContent(
@@ -206,7 +206,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .secondary,
+                        type: .secondary,
                         size: size
                     ),
                     content: TextButtonContent(
@@ -222,7 +222,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .primary,
+                        type: .primary,
                         size: size
                     ),
                     content: TextButtonContent(
@@ -237,7 +237,7 @@ private func renderColumn(
                 renderButtonComponent(
                     type: componentType,
                     config: TextButtonConfig(
-                        style: .secondary,
+                        type: .secondary,
                         size: size
                     ),
                     content: TextButtonContent(
