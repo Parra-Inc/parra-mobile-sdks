@@ -89,7 +89,10 @@ struct AuthenticationEmailPasswordView: View {
                     fontStyle: .caption,
                     content: LabelContent(text: error)
                 )
-                .applyFormCalloutAttributes(erroring: true)
+                .foregroundStyle(
+                    themeObserver.theme.palette.error.toParraColor()
+                        .opacity(0.8)
+                )
             }
 
             Spacer()
@@ -102,6 +105,8 @@ struct AuthenticationEmailPasswordView: View {
                 ),
                 content: content.signupButton
             ) {
+                focusedField = nil
+
                 navigationState.navigationPath.append("signup")
             }
         }

@@ -140,7 +140,6 @@ struct CameraView: View {
         Spacer()
 
         Button {
-            print("TAKE PHOTO TAPPED +++++++++++++")
             model.camera.takePhoto()
         } label: {
             Label {
@@ -163,7 +162,6 @@ struct CameraView: View {
         .simultaneousGesture(
             LongPressGesture(minimumDuration: 0)
                 .onChanged { pressing in
-                    print("LONG PRESSED +++++++++++++: \(pressing)")
                     withAnimation {
                         if pressing {
                             captureButtonScale = 0.9

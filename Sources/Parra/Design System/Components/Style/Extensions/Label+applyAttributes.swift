@@ -25,12 +25,4 @@ extension LabelComponent {
                 alignment: .trailing
             )
     }
-
-    func applyFormCalloutAttributes(erroring: Bool = false) -> some View {
-        let fontColor = erroring
-            ? themeObserver.theme.palette.error.toParraColor()
-            : themeObserver.theme.palette.secondaryText.toParraColor()
-
-        return foregroundStyle(fontColor.opacity(0.8))
-    }
 }
