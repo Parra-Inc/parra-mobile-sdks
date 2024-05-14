@@ -19,7 +19,12 @@ public struct TextEditorConfig {
         showCharacterCountLabel: Bool = TextEditorConfig.default
             .showCharacterCountLabel,
         preferValidationErrorsToHelperMessage: Bool = TextEditorConfig.default
-            .preferValidationErrorsToHelperMessage
+            .preferValidationErrorsToHelperMessage,
+        keyboardType: UIKeyboardType = .default,
+        textCase: Text.Case? = nil,
+        textContentType: UITextContentType? = nil,
+        textInputAutocapitalization: TextInputAutocapitalization? = nil,
+        autocorrectionDisabled: Bool = true
     ) {
         self.minLines = minLines
         self.minCharacters = minCharacters
@@ -29,6 +34,12 @@ public struct TextEditorConfig {
         self
             .preferValidationErrorsToHelperMessage =
             preferValidationErrorsToHelperMessage
+
+        self.keyboardType = keyboardType
+        self.textCase = textCase
+        self.textContentType = textContentType
+        self.textInputAutocapitalization = textInputAutocapitalization
+        self.autocorrectionDisabled = autocorrectionDisabled
     }
 
     // MARK: - Public
@@ -57,22 +68,13 @@ public struct TextEditorConfig {
     /// editor, set this to false and leave ``helper`` unset.
     public let preferValidationErrorsToHelperMessage: Bool
 
-    // MARK: - Internal
+    public let keyboardType: UIKeyboardType
+    public let textCase: Text.Case?
+    public let textContentType: UITextContentType?
+    public let textInputAutocapitalization: TextInputAutocapitalization?
+    public let autocorrectionDisabled: Bool
 
-    func withDefaults(from defaults: TextEditorConfig) -> TextEditorConfig {
-        return TextEditorConfig(
-            minLines: minLines ?? defaults.minLines ?? TextEditorConfig.default
-                .minLines,
-            minCharacters: minCharacters ?? defaults
-                .minCharacters ?? TextEditorConfig.default.minCharacters,
-            maxCharacters: maxCharacters ?? defaults
-                .maxCharacters ?? TextEditorConfig.default.maxCharacters,
-            maxHeight: maxHeight ?? defaults.maxHeight ?? TextEditorConfig
-                .default.maxHeight,
-            showCharacterCountLabel: showCharacterCountLabel,
-            preferValidationErrorsToHelperMessage: preferValidationErrorsToHelperMessage
-        )
-    }
+    // MARK: - Internal
 
     func withFormTextFieldData(_ data: FeedbackFormTextFieldData)
         -> TextEditorConfig
@@ -83,7 +85,12 @@ public struct TextEditorConfig {
             maxCharacters: data.maxCharacters,
             maxHeight: data.maxHeight,
             showCharacterCountLabel: showCharacterCountLabel,
-            preferValidationErrorsToHelperMessage: preferValidationErrorsToHelperMessage
+            preferValidationErrorsToHelperMessage: preferValidationErrorsToHelperMessage,
+            keyboardType: keyboardType,
+            textCase: textCase,
+            textContentType: textContentType,
+            textInputAutocapitalization: textInputAutocapitalization,
+            autocorrectionDisabled: autocorrectionDisabled
         )
     }
 }

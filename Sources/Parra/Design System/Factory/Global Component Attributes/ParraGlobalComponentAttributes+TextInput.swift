@@ -21,33 +21,12 @@ public extension ParraGlobalComponentAttributes {
             color: palette.primaryText.toParraColor()
         )
 
-        let titleLabel = ParraAttributes.Label(
-            text: ParraAttributes.Text(
-                font: .callout,
-                color: palette.primaryText.toParraColor()
-            ),
-            padding: .custom(
-                EdgeInsets(top: 0, leading: 1, bottom: 8, trailing: 2)
-            )
+        let titleLabel = ParraAttributes.Label.defaultInputTitle(
+            for: theme
         )
 
-        let helperLabel = ParraAttributes.Label(
-            text: ParraAttributes.Text(
-                font: .caption2,
-                color: palette.secondaryText.toParraColor()
-            ),
-            padding: .custom(
-                EdgeInsets(top: 3, leading: 0, bottom: 0, trailing: 2)
-            ),
-            frame: .flexible(
-                FlexibleFrameAttributes(
-                    maxWidth: .infinity,
-                    minHeight: 12,
-                    idealHeight: 12,
-                    maxHeight: 12,
-                    alignment: .trailing
-                )
-            )
+        let helperLabel = ParraAttributes.Label.defaultInputHelper(
+            for: theme
         )
 
         var errorLabel = helperLabel

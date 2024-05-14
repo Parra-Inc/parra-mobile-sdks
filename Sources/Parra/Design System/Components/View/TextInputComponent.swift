@@ -28,6 +28,7 @@ struct TextInputComponent: View {
     var attributes: ParraAttributes.TextInput
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
+    @EnvironmentObject var componentFactory: ComponentFactory
 
     @ViewBuilder var baseView: some View {
         let prompt = Text(content.placeholder?.text ?? "")
@@ -81,10 +82,13 @@ struct TextInputComponent: View {
     @State private var hasReceivedInput = false
 
     @ViewBuilder private var titleLabel: some View {
-        if let title = content.title {
-            LabelComponent(
-                content: title,
-                attributes: attributes.titleLabel
+        withContent(
+            content: content.title
+        ) { content in
+            componentFactory.buildLabel(
+                fontStyle: .body,
+                content: content,
+                localAttributes: attributes.titleLabel
             )
         }
     }
@@ -116,9 +120,10 @@ struct TextInputComponent: View {
         let helperAttributes = isError
             ? attributes.errorLabel : attributes.helperLabel
 
-        LabelComponent(
+        componentFactory.buildLabel(
+            fontStyle: .caption2,
             content: content,
-            attributes: helperAttributes
+            localAttributes: helperAttributes
         )
         .lineLimit(1)
     }

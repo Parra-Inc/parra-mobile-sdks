@@ -25,36 +25,12 @@ public extension ParraGlobalComponentAttributes {
         var placeholderText = text
         placeholderText.color = Color(UIColor.placeholderText)
 
-        let titleLabel = ParraAttributes.Label(
-            text: ParraAttributes.Text(
-                font: .body,
-                weight: .medium,
-                color: palette.primaryText.toParraColor(),
-                alignment: .leading
-            ),
-            padding: .custom(
-                .padding(bottom: 10, trailing: 2)
-            )
+        let titleLabel = ParraAttributes.Label.defaultInputTitle(
+            for: theme
         )
 
-        let helperLabel = ParraAttributes.Label(
-            text: ParraAttributes.Text(
-                font: .caption,
-                color: palette.secondaryText.toParraColor(),
-                alignment: .trailing
-            ),
-            padding: .custom(
-                .padding(top: 3, bottom: 4, trailing: 2)
-            ),
-            frame: .flexible(
-                FlexibleFrameAttributes(
-                    maxWidth: .infinity,
-                    minHeight: 12,
-                    idealHeight: 12,
-                    maxHeight: 12,
-                    alignment: .trailing
-                )
-            )
+        let helperLabel = ParraAttributes.Label.defaultInputHelper(
+            for: theme
         )
 
         var errorLabel = helperLabel
@@ -71,11 +47,6 @@ public extension ParraGlobalComponentAttributes {
             )
         )
 
-        let border = ParraAttributes.Border(
-            width: 1,
-            color: palette.secondaryText.toParraColor()
-        )
-
         return ParraAttributes.TextEditor(
             text: text,
             placeholderText: placeholderText,
@@ -83,11 +54,19 @@ public extension ParraGlobalComponentAttributes {
             helperLabel: helperLabel,
             errorLabel: errorLabel,
             characterCountLabel: characterCountLabel,
-            border: border,
-            cornerRadius: .md,
+            border: ParraAttributes.Border(
+                width: 1,
+                color: palette.secondaryText.toParraColor()
+            ),
+            cornerRadius: .lg,
             padding: .md,
             background: nil,
             tint: palette.primary.toParraColor(),
+            keyboardType: config.keyboardType,
+            textCase: config.textCase,
+            textContentType: config.textContentType,
+            textInputAutocapitalization: config.textInputAutocapitalization,
+            autocorrectionDisabled: config.autocorrectionDisabled,
             frame: .flexible(
                 FlexibleFrameAttributes(
                     minHeight: 60,
@@ -95,6 +74,6 @@ public extension ParraGlobalComponentAttributes {
                     maxHeight: 240
                 )
             )
-        )
+        ).mergingOverrides(localAttributes)
     }
 }

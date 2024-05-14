@@ -80,3 +80,49 @@ extension ParraAttributes.Label: OverridableAttributes {
         )
     }
 }
+
+extension ParraAttributes.Label {
+    static func defaultInputTitle(
+        for theme: ParraTheme
+    ) -> Self {
+        let palette = theme.palette
+
+        return ParraAttributes.Label(
+            text: ParraAttributes.Text(
+                font: .body,
+                weight: .medium,
+                color: palette.primaryText.toParraColor(),
+                alignment: .leading
+            ),
+            padding: .custom(
+                .padding(leading: 1, bottom: 8, trailing: 2)
+            )
+        )
+    }
+
+    static func defaultInputHelper(
+        for theme: ParraTheme
+    ) -> Self {
+        let palette = theme.palette
+
+        return ParraAttributes.Label(
+            text: ParraAttributes.Text(
+                font: .caption,
+                color: palette.secondaryText.toParraColor(),
+                alignment: .trailing
+            ),
+            padding: .custom(
+                .padding(top: 3, bottom: 4, trailing: 2)
+            ),
+            frame: .flexible(
+                FlexibleFrameAttributes(
+                    maxWidth: .infinity,
+                    minHeight: 12,
+                    idealHeight: 12,
+                    maxHeight: 12,
+                    alignment: .trailing
+                )
+            )
+        )
+    }
+}
