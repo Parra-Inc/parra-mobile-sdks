@@ -63,6 +63,14 @@ public protocol ComponentAttributesProvider {
         theme: ParraTheme
     ) -> ParraAttributes.TextInput
 
+    // MARK: Text Editors
+
+    func textEditorAttributes(
+        config: TextEditorConfig,
+        localAttributes: ParraAttributes.TextEditor?,
+        theme: ParraTheme
+    ) -> ParraAttributes.TextEditor
+
     // MARK: Buttons
 
     func plainButtonAttributes(

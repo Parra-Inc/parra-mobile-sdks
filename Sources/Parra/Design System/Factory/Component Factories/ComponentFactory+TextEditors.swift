@@ -13,36 +13,18 @@ extension ComponentFactory {
     func buildTextEditor(
         config: TextEditorConfig,
         content: TextEditorContent,
-        localAttributes: TextEditorAttributes? = nil
+        localAttributes: ParraAttributes.TextEditor? = nil
     ) -> some View {
-        EmptyView()
-//        let mergedAttributes = TextEditorComponent
-//            .applyStandardCustomizations(
-//                onto: localAttributes,
-//                theme: theme,
-//                config: config
-//            )
-//
-//        // If a container level factory function was provided for this
-//        // component, use it and supply global attribute overrides instead of
-//        // local, if provided.
-//        if let builder = suppliedBuilder,
-//           let view = builder(config, content, mergedAttributes)
-//        {
-//            view
-//        } else {
-//            let style = ParraAttributedTextEditorStyle(
-//                config: config,
-//                content: content,
-//                attributes: mergedAttributes,
-//                theme: theme
-//            )
-//
-//            TextEditorComponent(
-//                config: config,
-//                content: content,
-//                style: style
-//            )
-//        }
+        let attributes = attributeProvider.textEditorAttributes(
+            config: config,
+            localAttributes: localAttributes,
+            theme: theme
+        )
+
+        TextEditorComponent(
+            config: config,
+            content: content,
+            attributes: attributes
+        )
     }
 }

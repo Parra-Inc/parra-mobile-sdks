@@ -14,6 +14,39 @@ public extension ParraAttributes {
     struct TextInput {
         // MARK: - Lifecycle
 
+        public init(
+            text: ParraAttributes.Text = .init(),
+            titleLabel: ParraAttributes.Label = .init(),
+            helperLabel: ParraAttributes.Label = .init(),
+            errorLabel: ParraAttributes.Label = .init(),
+            border: ParraAttributes.Border = .init(),
+            cornerRadius: ParraCornerRadiusSize? = nil,
+            padding: ParraPaddingSize? = nil,
+            background: Color? = nil,
+            tint: Color? = nil,
+            keyboardType: UIKeyboardType? = nil,
+            textCase: SwiftUI.Text.Case? = nil,
+            textContentType: UITextContentType? = nil,
+            textInputAutocapitalization: TextInputAutocapitalization? = nil,
+            autocorrectionDisabled: Bool? = nil
+        ) {
+            self.text = text
+            self.titleLabel = titleLabel
+            self.helperLabel = helperLabel
+            self.errorLabel = errorLabel
+            self.border = border
+            self.cornerRadius = cornerRadius
+            self.padding = padding
+            self.background = background
+            self.tint = tint
+            self.keyboardType = keyboardType
+            self.textCase = textCase
+            self.textContentType = textContentType
+            self.textInputAutocapitalization = textInputAutocapitalization
+            self.autocorrectionDisabled = autocorrectionDisabled
+            self.frame = nil
+        }
+
         init(
             text: ParraAttributes.Text = .init(),
             titleLabel: ParraAttributes.Label = .init(),
