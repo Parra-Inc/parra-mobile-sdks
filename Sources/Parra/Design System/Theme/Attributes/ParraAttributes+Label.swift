@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - ParraAttributes.Label
 
 public extension ParraAttributes {
-    struct Label {
+    struct Label: ParraCommonViewAttributes {
         // MARK: - Lifecycle
 
         public init(

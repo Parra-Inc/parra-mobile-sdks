@@ -17,3 +17,10 @@ public enum ParraAttributes {
 protocol OverridableAttributes {
     func mergingOverrides(_ overrides: Self?) -> Self
 }
+
+protocol ParraCommonViewAttributes {
+    var border: ParraAttributes.Border { get }
+    var cornerRadius: ParraCornerRadiusSize? { get }
+    var padding: ParraPaddingSize? { get }
+    var background: Color? { get }
+}

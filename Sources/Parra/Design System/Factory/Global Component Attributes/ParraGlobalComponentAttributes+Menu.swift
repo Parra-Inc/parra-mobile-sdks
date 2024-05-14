@@ -14,6 +14,8 @@ public extension ParraGlobalComponentAttributes {
         localAttributes: ParraAttributes.Menu?,
         theme: ParraTheme
     ) -> ParraAttributes.Menu {
+        let palette = theme.palette
+
         let titleLabel = ParraAttributes.Label.defaultInputTitle(
             for: theme
         )
@@ -45,7 +47,7 @@ public extension ParraGlobalComponentAttributes {
             unselectedMenuItemLabels: unselectedMenuItemLabels,
             border: ParraAttributes.Border(
                 width: 1,
-                color: theme.palette.primarySeparator.toParraColor()
+                color: palette.secondarySeparator.toParraColor()
             ),
             cornerRadius: .md,
             padding: .zero,

@@ -14,20 +14,7 @@ extension View {
         _ attributes: ParraAttributes.InlineAlert,
         using theme: ParraTheme
     ) -> some View {
-        applyPadding(
-            size: attributes.padding,
-            from: theme
-        )
-        .background(attributes.background ?? .clear)
-        .applyCornerRadii(
-            size: attributes.cornerRadius,
-            from: theme
-        )
-        .applyBorder(
-            attributes.border,
-            with: attributes.cornerRadius,
-            from: theme
-        )
+        applyCommonViewAttributes(attributes, from: theme)
     }
 
     @ViewBuilder

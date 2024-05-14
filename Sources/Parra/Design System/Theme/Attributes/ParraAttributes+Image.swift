@@ -9,7 +9,7 @@
 import SwiftUI
 
 public extension ParraAttributes {
-    struct Image {
+    struct Image: ParraCommonViewAttributes {
         // MARK: - Lifecycle
 
         public init(
@@ -41,7 +41,7 @@ public extension ParraAttributes {
         public internal(set) var background: Color?
     }
 
-    struct AsyncImage {
+    struct AsyncImage: ParraCommonViewAttributes {
         // MARK: - Lifecycle
 
         public init(

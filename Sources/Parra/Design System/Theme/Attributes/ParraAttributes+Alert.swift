@@ -9,7 +9,7 @@
 import SwiftUI
 
 public extension ParraAttributes {
-    struct InlineAlert {
+    struct InlineAlert: ParraCommonViewAttributes {
         public let title: ParraAttributes.Label
         public let subtitle: ParraAttributes.Label
         public let icon: ParraAttributes.Image

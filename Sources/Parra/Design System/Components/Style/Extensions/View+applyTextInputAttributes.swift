@@ -15,7 +15,6 @@ extension View {
         using theme: ParraTheme
     ) -> some View {
         tint(attributes.tint)
-            .background(.clear)
             .contentMargins(
                 .all,
                 EdgeInsets(

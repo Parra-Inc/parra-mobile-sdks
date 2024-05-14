@@ -56,7 +56,7 @@ public extension ParraGlobalComponentAttributes {
             characterCountLabel: characterCountLabel,
             border: ParraAttributes.Border(
                 width: 1,
-                color: palette.secondaryText.toParraColor()
+                color: palette.secondarySeparator.toParraColor()
             ),
             cornerRadius: .lg,
             padding: .md,

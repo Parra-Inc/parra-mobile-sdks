@@ -15,7 +15,6 @@ extension View {
         using theme: ParraTheme
     ) -> some View {
         tint(attributes.tint)
-            .background(.clear)
             .contentMargins(
                 .all,
                 EdgeInsets(
@@ -25,6 +24,7 @@ extension View {
                 for: .automatic
             )
             .applyFrame(attributes.frame)
+            .applyCommonViewAttributes(attributes, from: theme)
             .background(attributes.background)
             .applyCornerRadii(
                 size: attributes.cornerRadius,
