@@ -19,6 +19,7 @@ public extension ParraAttributes {
             helperLabel: ParraAttributes.Label = .init(),
             selectedMenuItemLabels: ParraAttributes.Label = .init(),
             unselectedMenuItemLabels: ParraAttributes.Label = .init(),
+            tint: Color? = nil,
             border: ParraAttributes.Border = .init(),
             cornerRadius: ParraCornerRadiusSize? = nil,
             padding: ParraPaddingSize? = nil,
@@ -28,6 +29,7 @@ public extension ParraAttributes {
             self.helperLabel = helperLabel
             self.selectedMenuItemLabels = selectedMenuItemLabels
             self.unselectedMenuItemLabels = unselectedMenuItemLabels
+            self.tint = tint
             self.border = border
             self.cornerRadius = cornerRadius
             self.padding = padding
@@ -40,6 +42,7 @@ public extension ParraAttributes {
         public internal(set) var helperLabel: ParraAttributes.Label
         public internal(set) var selectedMenuItemLabels: ParraAttributes.Label
         public internal(set) var unselectedMenuItemLabels: ParraAttributes.Label
+        public internal(set) var tint: Color?
         public internal(set) var border: ParraAttributes.Border
         public internal(set) var cornerRadius: ParraCornerRadiusSize?
         public internal(set) var padding: ParraPaddingSize?
@@ -60,6 +63,7 @@ extension ParraAttributes.Menu: OverridableAttributes {
                 .mergingOverrides(overrides?.selectedMenuItemLabels),
             unselectedMenuItemLabels: unselectedMenuItemLabels
                 .mergingOverrides(overrides?.unselectedMenuItemLabels),
+            tint: overrides?.tint ?? tint,
             border: border.mergingOverrides(overrides?.border),
             cornerRadius: overrides?.cornerRadius ?? cornerRadius,
             padding: overrides?.padding ?? padding,

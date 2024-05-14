@@ -21,17 +21,6 @@ struct MenuComponent: View {
             // spacing controlled by individual component padding.
             titleLabel
 
-//            let tint = attributes.tint ?? theme.palette.secondaryText.toParraColor()
-//
-//                .tint(tint)
-//                .applyCornerRadii(size: attributes.cornerRadius, from: theme)
-//                .applyBorder(
-//                    borderColor: tint,
-//                    borderWidth: attributes.borderWidth,
-//                    cornerRadius: attributes.cornerRadius,
-//                    from: theme
-//                )
-
             Menu {
                 ForEach(content.options.indices, id: \.self) { index in
                     menuItem(for: index)
@@ -40,11 +29,13 @@ struct MenuComponent: View {
                 menuLabel
             }
             .menuOrder(config.sortOrder)
+            .applyMenuAttributes(
+                attributes,
+                using: themeObserver.theme
+            )
 
             helperLabel
         }
-//        .padding(style.attributes.padding ?? .zero)
-//        .applyBackground(style.attributes.background)
     }
 
     // MARK: - Private
@@ -105,15 +96,18 @@ struct MenuComponent: View {
 
             Spacer()
 
+            let padding = themeObserver.theme.padding.value(
+                for: attributes.selectedMenuItemLabels.padding
+            )
+
             Image(systemName: "chevron.up.chevron.down")
                 .padding(.vertical, 16)
                 .foregroundStyle(.primary.opacity(elementOpacity))
                 .frame(width: 24, height: 24)
-//                .padding(
-//                    .trailing,
-//                    style.menuOptionStyle.attributes.padding?
-//                        .trailing ?? 0
-//                )
+                .padding(
+                    .trailing,
+                    padding.trailing
+                )
         }
     }
 

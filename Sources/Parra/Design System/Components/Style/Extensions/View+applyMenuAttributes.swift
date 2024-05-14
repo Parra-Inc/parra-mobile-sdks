@@ -11,9 +11,10 @@ import SwiftUI
 extension View {
     @ViewBuilder
     func applyMenuAttributes(
-        attributes: ParraAttributes.Menu,
+        _ attributes: ParraAttributes.Menu,
         using theme: ParraTheme
     ) -> some View {
         applyCommonViewAttributes(attributes, from: theme)
+            .tint(attributes.tint)
     }
 }

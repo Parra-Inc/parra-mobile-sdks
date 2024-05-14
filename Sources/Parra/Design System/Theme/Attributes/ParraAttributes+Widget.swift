@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - ParraAttributes.Widget
 
 public extension ParraAttributes {
-    struct Widget: ParraCommonViewAttributes {
+    struct Widget {
         // MARK: - Public
 
         public internal(set) var background: Color?

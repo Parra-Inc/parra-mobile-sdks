@@ -357,7 +357,6 @@
 		009D84372BEAE9D1005EBFEB /* ParraGlobalComponentAttributes+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D84362BEAE9D1005EBFEB /* ParraGlobalComponentAttributes+Image.swift */; };
 		009D84382BEAEA84005EBFEB /* AlertAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C48E2B9A049A00DBDF5A /* AlertAttributes.swift */; };
 		009D84392BEAEA86005EBFEB /* TextButtonAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E76D5D2B6940A500B01DD8 /* TextButtonAttributes.swift */; };
-		009D843A2BEAEA8B005EBFEB /* MenuAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B102B71409E00C28F66 /* MenuAttributes.swift */; };
 		00A2CEE52B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */; };
 		00A2CEE72B696AE600684DC0 /* TextButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE62B696AE500684DC0 /* TextButtonConfig.swift */; };
 		00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */; };
@@ -893,7 +892,6 @@
 		00706B062B713BCA00C28F66 /* MenuComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuComponent.swift; sourceTree = "<group>"; };
 		00706B0A2B713C9800C28F66 /* MenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuContent.swift; sourceTree = "<group>"; };
 		00706B0C2B713EB000C28F66 /* MenuConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuConfig.swift; sourceTree = "<group>"; };
-		00706B102B71409E00C28F66 /* MenuAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuAttributes.swift; sourceTree = "<group>"; };
 		00706B162B719CF700C28F66 /* TextEditorContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorContent.swift; sourceTree = "<group>"; };
 		00706B182B71A6E600C28F66 /* TextEditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorConfig.swift; sourceTree = "<group>"; };
 		00706B1C2B71A76600C28F66 /* TextEditorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorComponent.swift; sourceTree = "<group>"; };
@@ -1561,7 +1559,6 @@
 				00374D782BA1E8540028EDA8 /* EmptyStateAttributes.swift */,
 				00FCB1772B962F3000635DC8 /* Frame */,
 				00E76D0A2B66D09800B01DD8 /* LabelAttributes.swift */,
-				00706B102B71409E00C28F66 /* MenuAttributes.swift */,
 				00E76D5D2B6940A500B01DD8 /* TextButtonAttributes.swift */,
 			);
 			path = Attributes;
@@ -3581,7 +3578,6 @@
 				0095389D2BC8759000420316 /* Server+performRequest.swift in Sources */,
 				00374CFD2B9FF5630028EDA8 /* Publisher+asyncMap.swift in Sources */,
 				00995BF62BB5C97900384D94 /* AppEnvironment.swift in Sources */,
-				009D843A2BEAEA8B005EBFEB /* MenuAttributes.swift in Sources */,
 				00EAE2FE2AA0C8A2003FB41C /* ParraSessionGeneratorType.swift in Sources */,
 				0087CA722A57B343007D72FA /* ParraLoggerCallSiteContext.swift in Sources */,
 				006DE9882A47547900521F5D /* ParraLazyLogParam.swift in Sources */,

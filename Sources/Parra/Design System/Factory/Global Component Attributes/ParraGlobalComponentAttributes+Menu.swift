@@ -45,12 +45,13 @@ public extension ParraGlobalComponentAttributes {
             helperLabel: helperLabel,
             selectedMenuItemLabels: selectedMenuItems,
             unselectedMenuItemLabels: unselectedMenuItemLabels,
+            tint: palette.secondaryText.toParraColor(),
             border: ParraAttributes.Border(
                 width: 1,
                 color: palette.secondarySeparator.toParraColor()
             ),
             cornerRadius: .md,
-            padding: .zero,
+            padding: .md,
             background: nil
         ).mergingOverrides(localAttributes)
     }
