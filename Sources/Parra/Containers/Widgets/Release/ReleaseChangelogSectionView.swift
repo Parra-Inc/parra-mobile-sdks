@@ -23,15 +23,19 @@ struct ReleaseChangelogSectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             componentFactory.buildLabel(
-                fontStyle: .title2,
-                content: content.title
+                content: content.title,
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        font: .title2
+                    )
+                )
             )
 
             componentFactory.buildLabel(
-                fontStyle: .body,
                 content: LabelContent(text: combinedText),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
+                        font: .body,
                         alignment: .leading
                     ),
                     frame: .flexible(

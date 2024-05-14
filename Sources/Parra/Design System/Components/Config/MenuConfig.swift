@@ -12,23 +12,14 @@ public struct MenuConfig {
     // MARK: - Lifecycle
 
     public init(
-        title: LabelConfig = LabelConfig(fontStyle: .body),
-        helper: LabelConfig = LabelConfig(fontStyle: .subheadline),
-        menuOption: LabelConfig = LabelConfig(fontStyle: .body),
-        menuOptionSelected: LabelConfig = LabelConfig(fontStyle: .body)
+        sortOrder: MenuOrder = .fixed
     ) {
-        self.title = title
-        self.helper = helper
-        self.menuOption = menuOption
-        self.menuOptionSelected = menuOptionSelected
+        self.sortOrder = sortOrder
     }
 
     // MARK: - Public
 
-    public let title: LabelConfig
-    public let helper: LabelConfig
-    public let menuOption: LabelConfig
-    public let menuOptionSelected: LabelConfig
+    public let sortOrder: MenuOrder
 
     // MARK: - Internal
 

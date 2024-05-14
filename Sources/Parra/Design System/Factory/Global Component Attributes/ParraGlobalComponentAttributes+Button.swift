@@ -426,7 +426,7 @@ public extension ParraGlobalComponentAttributes {
 
     private func baseTextStyle(
         for size: ParraButtonSize
-    ) -> ParraTextStyle {
+    ) -> Font.TextStyle {
         switch size {
         case .small:
             return .footnote

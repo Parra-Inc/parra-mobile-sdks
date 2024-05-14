@@ -11,7 +11,7 @@ import SwiftUI
 
 public extension ParraGlobalComponentAttributes {
     func textAttributes(
-        for textStyle: ParraTextStyle,
+        for textStyle: Font.TextStyle?,
         localAttributes: ParraAttributes.Text? = nil,
         theme: ParraTheme
     ) -> ParraAttributes.Text {
@@ -21,35 +21,35 @@ public extension ParraGlobalComponentAttributes {
             return overridenAttributes
         }
 
-        let font = Font.system(textStyle.systemTextStyle)
+        let style = textStyle ?? .body
 
         let attributes = switch textStyle {
         case .body:
             ParraAttributes.Text(
-                font: font,
+                style: style,
                 color: theme.palette.primaryText.toParraColor()
             )
         case .subheadline:
             ParraAttributes.Text(
-                font: font,
+                style: style,
                 color: theme.palette.primaryText.toParraColor()
             )
         case .largeTitle, .title, .title2, .title3:
             ParraAttributes.Text(
-                font: font,
+                style: style,
                 weight: .bold,
                 color: theme.palette.primaryText.toParraColor(),
                 alignment: .leading
             )
         case .callout:
             ParraAttributes.Text(
-                font: font,
+                style: style,
                 weight: .medium,
                 color: theme.palette.secondaryText.toParraColor().opacity(0.8)
             )
         default:
             ParraAttributes.Text(
-                font: font
+                style: style
             )
         }
 

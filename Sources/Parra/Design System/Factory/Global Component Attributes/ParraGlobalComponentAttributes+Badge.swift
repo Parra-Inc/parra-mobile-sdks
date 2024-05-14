@@ -28,10 +28,10 @@ public extension ParraGlobalComponentAttributes {
         }
 
         let text = ParraAttributes.Text(
-            font: .systemFont(
-                ofSize: size.fontSize
+            font: .size(
+                size: size.fontSize,
+                weight: size.fontWeight
             ),
-            weight: size.fontWeight,
             color: textColor,
             alignment: .center
         )

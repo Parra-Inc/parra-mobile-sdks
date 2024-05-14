@@ -31,7 +31,6 @@ struct ToastAlertComponent: View {
                     }
 
                     componentFactory.buildLabel(
-                        fontStyle: .headline,
                         content: content.title,
                         localAttributes: attributes.title
                     )
@@ -39,7 +38,6 @@ struct ToastAlertComponent: View {
 
                 if let subtitleContent = content.subtitle {
                     componentFactory.buildLabel(
-                        fontStyle: .subheadline,
                         content: subtitleContent,
                         localAttributes: attributes.subtitle
                     )

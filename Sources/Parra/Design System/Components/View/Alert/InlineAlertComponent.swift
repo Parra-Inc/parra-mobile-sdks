@@ -25,7 +25,6 @@ struct InlineAlertComponent: View {
                 }
 
                 componentFactory.buildLabel(
-                    fontStyle: .headline,
                     content: content.title,
                     localAttributes: attributes.title
                 )
@@ -33,7 +32,6 @@ struct InlineAlertComponent: View {
 
             if let subtitleContent = content.subtitle {
                 componentFactory.buildLabel(
-                    fontStyle: .subheadline,
                     content: subtitleContent,
                     localAttributes: attributes.subtitle
                 )

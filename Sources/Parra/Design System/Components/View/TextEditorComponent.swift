@@ -85,7 +85,6 @@ struct TextEditorComponent: View {
             content: content.title
         ) { content in
             componentFactory.buildLabel(
-                fontStyle: .body,
                 content: content,
                 localAttributes: attributes.titleLabel
             )
@@ -137,7 +136,6 @@ struct TextEditorComponent: View {
             ? attributes.errorLabel : attributes.helperLabel
 
         componentFactory.buildLabel(
-            fontStyle: .caption2,
             content: content,
             localAttributes: helperAttributes
         )
@@ -151,7 +149,6 @@ struct TextEditorComponent: View {
 
             VStack {
                 componentFactory.buildLabel(
-                    fontStyle: .caption,
                     content: LabelContent(text: count),
                     localAttributes: attributes.characterCountLabel
                 )

@@ -11,12 +11,10 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildLabel(
-        fontStyle: ParraTextStyle,
         content: LabelContent,
         localAttributes: ParraAttributes.Label? = nil
     ) -> LabelComponent {
         let attributes = attributeProvider.labelAttributes(
-            for: fontStyle,
             localAttributes: localAttributes,
             theme: theme
         )

@@ -67,34 +67,49 @@ struct LabelComponent: View {
     ParraViewPreview { factory in
         VStack(alignment: .leading, spacing: 16) {
             factory.buildLabel(
-                fontStyle: .body,
-                content: LabelContent(text: "Default config")
-            )
-
-            factory.buildLabel(
-                fontStyle: .title,
-                content: LabelContent(text: "A large title")
-            )
-
-            factory.buildLabel(
-                fontStyle: .subheadline,
-                content: LabelContent(text: "A subheadline")
-            )
-
-            factory.buildLabel(
-                fontStyle: .subheadline,
-                content: LabelContent(
-                    text: "A subheadline with icon",
-                    icon: .symbol("sun.rain.circle.fill")
+                content: LabelContent(text: "Default config"),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        style: .body
+                    )
                 )
             )
 
             factory.buildLabel(
-                fontStyle: .body,
+                content: LabelContent(text: "A large title"),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        style: .title
+                    )
+                )
+            )
+
+            factory.buildLabel(
+                content: LabelContent(text: "A subheadline"),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        style: .subheadline
+                    )
+                )
+            )
+
+            factory.buildLabel(
+                content: LabelContent(
+                    text: "A subheadline with icon",
+                    icon: .symbol("sun.rain.circle.fill")
+                ),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        style: .subheadline
+                    )
+                )
+            )
+
+            factory.buildLabel(
                 content: LabelContent(text: "With a background"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
-                        font: .title,
+                        style: .body,
                         color: .green
                     ),
                     background: .red
@@ -102,11 +117,10 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                fontStyle: .title,
                 content: LabelContent(text: "With a gradient background"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
-                        font: .title,
+                        style: .title,
                         color: .green
                     ),
                     cornerRadius: .md,
@@ -123,13 +137,13 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                fontStyle: .title,
                 content: LabelContent(
                     text: "BG and icon",
                     icon: .symbol("fireworks")
                 ),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
+                        style: .title,
                         color: .white
                     ),
                     icon: ParraAttributes.Image(
@@ -149,9 +163,11 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                fontStyle: .subheadline,
                 content: LabelContent(text: "With a corner radius"),
                 localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        style: .subheadline
+                    ),
                     cornerRadius: .lg,
                     padding: .lg,
                     background: .green

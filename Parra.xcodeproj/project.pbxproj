@@ -532,6 +532,12 @@
 		00E8A41C2BED679B00991D7C /* ParraGlobalComponentAttributes+Segment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8A41B2BED679B00991D7C /* ParraGlobalComponentAttributes+Segment.swift */; };
 		00E8A41E2BED6BB400991D7C /* ParraGlobalComponentAttributes+TextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8A41D2BED6BB400991D7C /* ParraGlobalComponentAttributes+TextEditor.swift */; };
 		00E8A4202BF399FD00991D7C /* View+applyTextEditorAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8A41F2BF399FD00991D7C /* View+applyTextEditorAttributes.swift */; };
+		00E8A4222BF3BE5100991D7C /* ParraAttributes+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8A4212BF3BE5100991D7C /* ParraAttributes+Menu.swift */; };
+		00E8A4232BF3BF8000991D7C /* MenuComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B062B713BCA00C28F66 /* MenuComponent.swift */; };
+		00E8A4242BF3BF8A00991D7C /* MenuConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B0C2B713EB000C28F66 /* MenuConfig.swift */; };
+		00E8A4252BF3BFB200991D7C /* MenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00706B0A2B713C9800C28F66 /* MenuContent.swift */; };
+		00E8A4262BF3BFE200991D7C /* ComponentFactory+Menus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F7C4A32B9A436F00DBDF5A /* ComponentFactory+Menus.swift */; };
+		00E8A4292BF3CA9000991D7C /* ParraGlobalComponentAttributes+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8A4282BF3CA9000991D7C /* ParraGlobalComponentAttributes+Menu.swift */; };
 		00EAE2F52A9BC3DB003FB41C /* FileHandleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EAE2F42A9BC3DB003FB41C /* FileHandleType.swift */; };
 		00EAE2F72A9BE71F003FB41C /* URL+helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EAE2F62A9BE71F003FB41C /* URL+helpers.swift */; };
 		00EAE2F92A9F7D42003FB41C /* ParraSessionEventTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EAE2F82A9F7D42003FB41C /* ParraSessionEventTarget.swift */; };
@@ -882,7 +888,6 @@
 		00706B062B713BCA00C28F66 /* MenuComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuComponent.swift; sourceTree = "<group>"; };
 		00706B0A2B713C9800C28F66 /* MenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuContent.swift; sourceTree = "<group>"; };
 		00706B0C2B713EB000C28F66 /* MenuConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuConfig.swift; sourceTree = "<group>"; };
-		00706B0E2B713F7000C28F66 /* ParraAttributedMenuStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAttributedMenuStyle.swift; sourceTree = "<group>"; };
 		00706B102B71409E00C28F66 /* MenuAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuAttributes.swift; sourceTree = "<group>"; };
 		00706B162B719CF700C28F66 /* TextEditorContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorContent.swift; sourceTree = "<group>"; };
 		00706B182B71A6E600C28F66 /* TextEditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorConfig.swift; sourceTree = "<group>"; };
@@ -1225,6 +1230,8 @@
 		00E8A41B2BED679B00991D7C /* ParraGlobalComponentAttributes+Segment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraGlobalComponentAttributes+Segment.swift"; sourceTree = "<group>"; };
 		00E8A41D2BED6BB400991D7C /* ParraGlobalComponentAttributes+TextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraGlobalComponentAttributes+TextEditor.swift"; sourceTree = "<group>"; };
 		00E8A41F2BF399FD00991D7C /* View+applyTextEditorAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+applyTextEditorAttributes.swift"; sourceTree = "<group>"; };
+		00E8A4212BF3BE5100991D7C /* ParraAttributes+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+Menu.swift"; sourceTree = "<group>"; };
+		00E8A4282BF3CA9000991D7C /* ParraGlobalComponentAttributes+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraGlobalComponentAttributes+Menu.swift"; sourceTree = "<group>"; };
 		00E8B32B278730D500FC3FFD /* ParraCardAnswerHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardAnswerHandler.swift; sourceTree = "<group>"; };
 		00E8B32D27878C3400FC3FFD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		00EAE2F42A9BC3DB003FB41C /* FileHandleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandleType.swift; sourceTree = "<group>"; };
@@ -2544,6 +2551,7 @@
 				009D84362BEAE9D1005EBFEB /* ParraGlobalComponentAttributes+Image.swift */,
 				009D84182BE92BDA005EBFEB /* ParraGlobalComponentAttributes+ImageButton.swift */,
 				009D84052BE547B6005EBFEB /* ParraGlobalComponentAttributes+Label.swift */,
+				00E8A4282BF3CA9000991D7C /* ParraGlobalComponentAttributes+Menu.swift */,
 				00E8A41B2BED679B00991D7C /* ParraGlobalComponentAttributes+Segment.swift */,
 				009D84032BE547B1005EBFEB /* ParraGlobalComponentAttributes+Text.swift */,
 				00E8A41D2BED6BB400991D7C /* ParraGlobalComponentAttributes+TextEditor.swift */,
@@ -2581,6 +2589,7 @@
 				009D842A2BEA692E005EBFEB /* ParraAttributes+Button.swift */,
 				009D84262BEA6921005EBFEB /* ParraAttributes+Image.swift */,
 				009D84282BEA6926005EBFEB /* ParraAttributes+Label.swift */,
+				00E8A4212BF3BE5100991D7C /* ParraAttributes+Menu.swift */,
 				00E8A4192BED641A00991D7C /* ParraAttributes+Segment.swift */,
 				00AB95A72BE4547400B27091 /* ParraAttributes+Shadow.swift */,
 				00AB95AB2BE455D100B27091 /* ParraAttributes+Text.swift */,
@@ -2939,7 +2948,6 @@
 				0016775A2B6FDC8700674001 /* Attributes */,
 				0016775D2B6FDEFB00674001 /* ParraAttributedStyle.swift */,
 				00374D802BA1F0E70028EDA8 /* ParraAttributedEmptyStateStyle.swift */,
-				00706B0E2B713F7000C28F66 /* ParraAttributedMenuStyle.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -3501,6 +3509,7 @@
 				00F7C4A22B9A430A00DBDF5A /* ComponentFactory+Buttons.swift in Sources */,
 				00E8A41A2BED641A00991D7C /* ParraAttributes+Segment.swift in Sources */,
 				008878122979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift in Sources */,
+				00E8A4232BF3BF8000991D7C /* MenuComponent.swift in Sources */,
 				00E201932B8F859900CF5A42 /* FeedbackQuestionViewKind.swift in Sources */,
 				00FCB1642B961EE000635DC8 /* ImageButtonComponent.swift in Sources */,
 				004F3F1E2BA8BFEF00424802 /* String+randomEmoji.swift in Sources */,
@@ -3635,6 +3644,7 @@
 				00995BFD2BB5FEB300384D94 /* RecentLogViewer.swift in Sources */,
 				00285DAA2BCDF25E00508DC8 /* ParraUser.swift in Sources */,
 				00D143CB2BB25BA300BDB8C4 /* View+Sheet.swift in Sources */,
+				00E8A4292BF3CA9000991D7C /* ParraGlobalComponentAttributes+Menu.swift in Sources */,
 				0082DFCE2A53BA6700E7A91D /* Date+now.swift in Sources */,
 				00995C0A2BB6FA2D00384D94 /* Notifications.swift in Sources */,
 				00AB95A32BE4529900B27091 /* ParraPaddingConfig.swift in Sources */,
@@ -3666,6 +3676,7 @@
 				005D31EB29A83EC5001D0E0A /* CompletedCard.swift in Sources */,
 				009538992BC8748900420316 /* ExternalResourceServer.swift in Sources */,
 				00BB361A2BEBBF67007B6B13 /* ParraAuthDefaultPasswordInputScreen.swift in Sources */,
+				00E8A4262BF3BFE200991D7C /* ComponentFactory+Menus.swift in Sources */,
 				001B7B2527DE3AC200DEEECD /* JSONDecoder.swift in Sources */,
 				00ABF1722B7D341D00A054A2 /* ParraLaunchScreen.swift in Sources */,
 				001B7B8227DE618300DEEECD /* DataManager+Keys.swift in Sources */,
@@ -3772,6 +3783,7 @@
 				001779C22BC08E8C000AF0BB /* ParraCredential+Fixtures.swift in Sources */,
 				009D84232BE97039005EBFEB /* View+applyTextInputAttributes.swift in Sources */,
 				0087CA7E2A5999D7007D72FA /* ParraSessionManager+LogProcessors.swift in Sources */,
+				00E8A4252BF3BFB200991D7C /* MenuContent.swift in Sources */,
 				0087CAA02A59E4F1007D72FA /* ParraSanitizedDictionaryConvertible.swift in Sources */,
 				003622072B5C9D53009EFE53 /* ParraColor+ParraColorSwatchConvertible.swift in Sources */,
 				0079EDC82BD8110F0045EEE5 /* Parra+Auth.swift in Sources */,
@@ -3970,6 +3982,7 @@
 				0087CA662A56114C007D72FA /* Logger.swift in Sources */,
 				001B7B1827DE3AA900DEEECD /* Users.swift in Sources */,
 				00E76D562B68287B00B01DD8 /* ContainedButtonComponent.swift in Sources */,
+				00E8A4242BF3BF8A00991D7C /* MenuConfig.swift in Sources */,
 				00DEF7262A3FE659006B0DF3 /* UIDevice+modelCode.swift in Sources */,
 				00706B272B72C28E00C28F66 /* ParraButtonVariant.swift in Sources */,
 				00EBCE0D2AA4CEEF00887639 /* ParraLoggerStackSymbols.swift in Sources */,
@@ -4002,6 +4015,7 @@
 				00ABF1B22B865C5200A054A2 /* FeedbackCardWidget+ContentObserver.swift in Sources */,
 				00BB36212BEBD74C007B6B13 /* Providers.swift in Sources */,
 				00ABF1BC2B867CE300A054A2 /* FeedbackCardView.swift in Sources */,
+				00E8A4222BF3BE5100991D7C /* ParraAttributes+Menu.swift in Sources */,
 				0087CA922A59BA51007D72FA /* ParraLoggerEnvironment.swift in Sources */,
 				001779B22BC08A4F000AF0BB /* String+now.swift in Sources */,
 				004F3EE52BA4B21100424802 /* ChangelogWidget.swift in Sources */,

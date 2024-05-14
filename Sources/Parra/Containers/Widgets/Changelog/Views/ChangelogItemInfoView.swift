@@ -48,10 +48,10 @@ struct ChangelogItemInfoView: View {
             Spacer()
 
             componentFactory.buildLabel(
-                fontStyle: .caption,
                 content: createdAt,
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
+                        font: .caption,
                         color: palette.secondaryText.toParraColor()
                     )
                 )

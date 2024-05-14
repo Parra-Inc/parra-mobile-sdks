@@ -12,7 +12,6 @@ public protocol ComponentAttributesProvider {
     // MARK: Labels
 
     func labelAttributes(
-        for textStyle: ParraTextStyle,
         localAttributes: ParraAttributes.Label?,
         theme: ParraTheme
     ) -> ParraAttributes.Label
@@ -108,4 +107,11 @@ public protocol ComponentAttributesProvider {
         localAttributes: ParraAttributes.Segment?,
         theme: ParraTheme
     ) -> ParraAttributes.Segment
+
+    // MARK: Menus
+
+    func menuAttributes(
+        localAttributes: ParraAttributes.Menu?,
+        theme: ParraTheme
+    ) -> ParraAttributes.Menu
 }

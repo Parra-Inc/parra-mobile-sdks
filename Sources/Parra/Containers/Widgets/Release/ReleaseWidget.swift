@@ -106,16 +106,20 @@ struct ReleaseWidget: Container {
     var header: some View {
         VStack(alignment: .leading, spacing: 4) {
             componentFactory.buildLabel(
-                fontStyle: .title,
-                content: contentObserver.content.title
+                content: contentObserver.content.title,
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        font: .title
+                    )
+                )
             )
 
             withContent(content: contentObserver.content.subtitle) { content in
                 componentFactory.buildLabel(
-                    fontStyle: .subheadline,
                     content: content,
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
+                            font: .subheadline,
                             alignment: .leading
                         ),
                         frame: .flexible(
@@ -237,10 +241,10 @@ struct ReleaseWidget: Container {
                         content: content.description
                     ) { content in
                         componentFactory.buildLabel(
-                            fontStyle: .body,
                             content: content,
                             localAttributes: ParraAttributes.Label(
                                 text: ParraAttributes.Text(
+                                    font: .body,
                                     alignment: .leading
                                 )
                             )

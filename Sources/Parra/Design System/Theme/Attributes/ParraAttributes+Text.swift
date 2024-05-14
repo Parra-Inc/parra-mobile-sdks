@@ -16,41 +16,76 @@ public extension ParraAttributes {
         // MARK: - Lifecycle
 
         public init(
-            font: Font? = nil,
-            width: Font.Width? = nil,
-            weight: Font.Weight? = nil,
-            design: Font.Design? = nil,
+            style: Font.TextStyle = .body,
+            width: Font.Width = .standard,
+            weight: Font.Weight = .regular,
+            design: Font.Design = .default,
             color: Color? = nil,
             alignment: TextAlignment? = nil,
             shadow: Shadow = .init()
         ) {
-            self.font = font
-            self.width = width
-            self.weight = weight
-            self.design = design
+            self.font = .style(
+                style: style,
+                width: width,
+                weight: weight,
+                design: design
+            )
             self.color = color
             self.alignment = alignment
             self.shadow = shadow
         }
 
         public init(
-            font: UIFont?,
-            width: Font.Width? = nil,
-            weight: Font.Weight? = nil,
-            design: Font.Design? = nil,
+            fontSize: CGFloat,
+            width: Font.Width = .standard,
+            weight: Font.Weight = .regular,
+            design: Font.Design = .default,
             color: Color? = nil,
             alignment: TextAlignment? = nil,
             shadow: Shadow = .init()
         ) {
-            self.font = if let font {
-                Font(font as CTFont)
-            } else {
-                nil
-            }
+            self.font = .size(
+                size: fontSize,
+                width: width,
+                weight: weight,
+                design: design
+            )
+            self.color = color
+            self.alignment = alignment
+            self.shadow = shadow
+        }
 
-            self.width = width
-            self.weight = weight
-            self.design = design
+        public init(
+            font: FontType,
+            color: Color? = nil,
+            alignment: TextAlignment? = nil,
+            shadow: Shadow = .init()
+        ) {
+            self.font = font
+            self.color = color
+            self.alignment = alignment
+            self.shadow = shadow
+        }
+
+        public init(
+            font: Font,
+            color: Color? = nil,
+            alignment: TextAlignment? = nil,
+            shadow: Shadow = .init()
+        ) {
+            self.font = .custom(font)
+            self.color = color
+            self.alignment = alignment
+            self.shadow = shadow
+        }
+
+        public init(
+            font: UIFont,
+            color: Color? = nil,
+            alignment: TextAlignment? = nil,
+            shadow: Shadow = .init()
+        ) {
+            self.font = .custom(Font(font as CTFont))
             self.color = color
             self.alignment = alignment
             self.shadow = shadow
@@ -58,10 +93,48 @@ public extension ParraAttributes {
 
         // MARK: - Public
 
-        public var font: Font?
-        public var width: Font.Width?
-        public var weight: Font.Weight?
-        public var design: Font.Design?
+        public enum FontType {
+            case style(
+                style: Font.TextStyle,
+                width: Font.Width = .standard,
+                weight: Font.Weight = .regular,
+                design: Font.Design = .default
+            )
+
+            case size(
+                size: CGFloat,
+                width: Font.Width = .standard,
+                weight: Font.Weight = .regular,
+                design: Font.Design = .default
+            )
+
+            case custom(Font)
+
+            // MARK: - Internal
+
+            var font: Font {
+                switch self {
+                case .style(let style, let width, let weight, let design):
+                    return Font.system(
+                        style,
+                        design: design,
+                        weight: weight
+                    )
+                    .width(width)
+                case .size(let size, let width, let weight, let design):
+                    return Font.system(
+                        size: size,
+                        weight: weight,
+                        design: design
+                    )
+                    .width(width)
+                case .custom(let font):
+                    return font
+                }
+            }
+        }
+
+        public var font: FontType
         public var color: Color?
         public var alignment: TextAlignment?
         public var shadow: Shadow
@@ -76,9 +149,6 @@ extension ParraAttributes.Text: OverridableAttributes {
     ) -> ParraAttributes.Text {
         ParraAttributes.Text(
             font: overrides?.font ?? font,
-            width: overrides?.width ?? width,
-            weight: overrides?.weight ?? weight,
-            design: overrides?.design ?? design,
             color: overrides?.color ?? color,
             alignment: overrides?.alignment ?? alignment,
             shadow: shadow.mergingOverrides(overrides?.shadow)

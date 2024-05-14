@@ -214,44 +214,44 @@ class SegmentControl: UIControl {
                 continue
             }
 
-            var container = AttributeContainer()
-
-            if option == highlightedOption {
-                if let font = attributes.selectedOptionLabels.text.font {
-                    // TODO: weights/etc unhandled
-                    container.font = font
-                }
-                if let fontColor = attributes.selectedOptionLabels.text.color {
-                    container.foregroundColor = UIColor(fontColor)
-                }
-
-                if let background = attributes.selectedOptionLabels.background {
-                    label.backgroundColor = UIColor(background)
-                }
-            } else {
-                if let font = attributes.unselectedOptionLabels.text.font {
-                    container.font = font
-                }
-
-                if let fontColor = attributes.unselectedOptionLabels.text
-                    .color
-                {
-                    container.foregroundColor = UIColor(fontColor)
-                }
-
-                label.backgroundColor = .clear
-            }
-
-            label.layer.borderWidth = 0.5
-            if let borderColor = attributes.unselectedOptionLabels.border
-                .color
-            {
-                label.layer.borderColor = UIColor(borderColor).cgColor
-            }
-
-            label.attributedText = NSAttributedString(
-                AttributedString(option.title, attributes: container)
-            )
+//            var container = AttributeContainer()
+//
+//            if option == highlightedOption {
+//                if let font = attributes.selectedOptionLabels.text.font {
+//                    // TODO: weights/etc unhandled
+//                    container.font = font
+//                }
+//                if let fontColor = attributes.selectedOptionLabels.text.color {
+//                    container.foregroundColor = UIColor(fontColor)
+//                }
+//
+//                if let background = attributes.selectedOptionLabels.background {
+//                    label.backgroundColor = UIColor(background)
+//                }
+//            } else {
+//                if let font = attributes.unselectedOptionLabels.text.font {
+//                    container.font = font
+//                }
+//
+//                if let fontColor = attributes.unselectedOptionLabels.text
+//                    .color
+//                {
+//                    container.foregroundColor = UIColor(fontColor)
+//                }
+//
+//                label.backgroundColor = .clear
+//            }
+//
+//            label.layer.borderWidth = 0.5
+//            if let borderColor = attributes.unselectedOptionLabels.border
+//                .color
+//            {
+//                label.layer.borderColor = UIColor(borderColor).cgColor
+//            }
+//
+//            label.attributedText = NSAttributedString(
+//                AttributedString(option.title, attributes: container)
+//            )
 
             // Setting the background color on the labels layer is necessary to support animation
             label.layer.backgroundColor = option == highlightedOption

@@ -41,9 +41,11 @@ struct ChangelogWidget: Container {
         VStack(spacing: 0) {
             VStack(alignment: .leading) {
                 componentFactory.buildLabel(
-                    fontStyle: .title,
                     content: contentObserver.content.title,
                     localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            font: .title
+                        ),
                         frame: .flexible(
                             FlexibleFrameAttributes(
                                 maxWidth: .infinity,

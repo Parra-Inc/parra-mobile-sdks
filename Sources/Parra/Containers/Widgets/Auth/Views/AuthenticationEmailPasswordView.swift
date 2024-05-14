@@ -93,10 +93,10 @@ struct AuthenticationEmailPasswordView: View {
 
             if let error = contentObserver.error {
                 componentFactory.buildLabel(
-                    fontStyle: .caption,
                     content: LabelContent(text: error),
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
+                            font: .caption,
                             color: themeObserver.theme.palette.error
                                 .toParraColor().opacity(0.8)
                         )

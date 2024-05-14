@@ -83,14 +83,22 @@ struct FeedbackFormWidget: Container {
     var header: some View {
         VStack(alignment: .leading, spacing: 10) {
             componentFactory.buildLabel(
-                fontStyle: .title,
-                content: contentObserver.content.title
+                content: contentObserver.content.title,
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        font: .title
+                    )
+                )
             )
 
             if let descriptionContent = contentObserver.content.description {
                 componentFactory.buildLabel(
-                    fontStyle: .subheadline,
-                    content: descriptionContent
+                    content: descriptionContent,
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            font: .subheadline
+                        )
+                    )
                 )
             }
         }
@@ -106,30 +114,29 @@ struct FeedbackFormWidget: Container {
                 let field = fieldWithState.field
 
                 switch field.data {
-                case .feedbackFormSelectFieldData:
-                    EmptyView()
-//                    let content = MenuContent(
-//                        title: field.title,
-//                        placeholder: data.placeholder,
-//                        helper: field.helperText,
-//                        options: data.options.map { fieldOption in
-//                            MenuContent.Option(
-//                                id: fieldOption.id,
-//                                title: fieldOption.title,
-//                                value: fieldOption.id
-//                            )
-//                        }
-//                    ) { option in
-//                        onFieldValueChanged(
-//                            field: field,
-//                            value: option?.value
-//                        )
-//                    }
-                ////
-//                    componentFactory.buildMenu(
-//                        config: config.selectFields.withFormTextFieldData(data),
-//                        content: content
-//                    )
+                case .feedbackFormSelectFieldData(let data):
+                    let content = MenuContent(
+                        title: field.title,
+                        placeholder: data.placeholder,
+                        helper: field.helperText,
+                        options: data.options.map { fieldOption in
+                            MenuContent.Option(
+                                id: fieldOption.id,
+                                title: fieldOption.title,
+                                value: fieldOption.id
+                            )
+                        }
+                    ) { option in
+                        onFieldValueChanged(
+                            field: field,
+                            value: option?.value
+                        )
+                    }
+
+                    componentFactory.buildMenu(
+                        config: MenuConfig(),
+                        content: content
+                    )
                 case .feedbackFormTextFieldData(let data):
                     let content = TextEditorContent(
                         title: field.title,

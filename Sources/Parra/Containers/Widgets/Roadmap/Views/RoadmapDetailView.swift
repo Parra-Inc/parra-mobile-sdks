@@ -27,10 +27,10 @@ struct RoadmapDetailView: View {
                     }
 
                     componentFactory.buildLabel(
-                        fontStyle: .title,
                         content: ticketContent.title,
                         localAttributes: ParraAttributes.Label(
                             text: ParraAttributes.Text(
+                                font: .title,
                                 alignment: .leading
                             ),
                             frame: .flexible(
@@ -61,12 +61,12 @@ struct RoadmapDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 componentFactory.buildLabel(
-                    fontStyle: .caption,
                     content: LabelContent(
                         text: "Created \(ticketContent.createdAt.text)"
                     ),
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
+                            font: .caption,
                             color: palette.secondaryText.toParraColor()
                         ),
                         frame: .flexible(
@@ -86,9 +86,11 @@ struct RoadmapDetailView: View {
 
                 ScrollView {
                     componentFactory.buildLabel(
-                        fontStyle: .body,
                         content: description,
                         localAttributes: ParraAttributes.Label(
+                            text: ParraAttributes.Text(
+                                font: .body
+                            ),
                             frame: .flexible(
                                 FlexibleFrameAttributes(
                                     maxWidth: .infinity,

@@ -12,36 +12,18 @@ extension ComponentFactory {
     @ViewBuilder
     func buildMenu(
         config: MenuConfig,
-        content: MenuContent
-//        localAttributes: MenuAttributes? = nil
+        content: MenuContent,
+        localAttributes: ParraAttributes.Menu? = nil
     ) -> some View {
-        EmptyView()
-//        let mergedAttributes = MenuComponent.applyStandardCustomizations(
-//            onto: localAttributes,
-//            theme: theme,
-//            config: config
-//        )
-//
-//        // If a container level factory function was provided for this
-//        // component, use it and supply global attribute overrides instead
-//        // of local, if provided.
-//        if let builder = suppliedBuilder,
-//           let view = builder(config, content, mergedAttributes)
-//        {
-//            view
-//        } else {
-//            let style = ParraAttributedMenuStyle(
-//                config: config,
-//                content: content,
-//                attributes: mergedAttributes,
-//                theme: theme
-//            )
-//
-//            MenuComponent(
-//                config: config,
-//                content: content,
-//                style: style
-//            )
-//        }
+        let attributes = attributeProvider.menuAttributes(
+            localAttributes: localAttributes,
+            theme: theme
+        )
+
+        MenuComponent(
+            config: config,
+            content: content,
+            attributes: attributes
+        )
     }
 }

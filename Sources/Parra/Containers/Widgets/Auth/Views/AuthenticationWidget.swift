@@ -56,9 +56,11 @@ struct AuthenticationWidget: Container {
                 }
 
                 componentFactory.buildLabel(
-                    fontStyle: .largeTitle,
                     content: content.title,
                     localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            font: .largeTitle
+                        ),
                         padding: .custom(
                             .padding(bottom: content.icon == nil ? 0 : 6)
                         )
@@ -73,8 +75,8 @@ struct AuthenticationWidget: Container {
 
             withContent(content: content.subtitle) { content in
                 componentFactory.buildLabel(
-                    fontStyle: .subheadline,
-                    content: content
+                    content: content,
+                    localAttributes: .default(with: .subheadline)
                 )
             }
 

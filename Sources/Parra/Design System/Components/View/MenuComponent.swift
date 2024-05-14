@@ -14,12 +14,23 @@ struct MenuComponent: View {
 
     let config: MenuConfig
     let content: MenuContent
-    let style: ParraAttributedMenuStyle
+    let attributes: ParraAttributes.Menu
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // spacing controlled by individual component padding.
             titleLabel
+
+//            let tint = attributes.tint ?? theme.palette.secondaryText.toParraColor()
+//
+//                .tint(tint)
+//                .applyCornerRadii(size: attributes.cornerRadius, from: theme)
+//                .applyBorder(
+//                    borderColor: tint,
+//                    borderWidth: attributes.borderWidth,
+//                    cornerRadius: attributes.cornerRadius,
+//                    from: theme
+//                )
 
             Menu {
                 ForEach(content.options.indices, id: \.self) { index in
@@ -28,63 +39,18 @@ struct MenuComponent: View {
             } label: {
                 menuLabel
             }
-            .menuStyle(style)
+            .menuOrder(config.sortOrder)
 
             helperLabel
         }
-        .padding(style.attributes.padding ?? .zero)
-        .applyBackground(style.attributes.background)
+//        .padding(style.attributes.padding ?? .zero)
+//        .applyBackground(style.attributes.background)
     }
 
-//    static func applyStandardCustomizations(
-//        onto inputAttributes: MenuAttributes?,
-//        theme: ParraTheme,
-//        config: MenuConfig
-//    ) -> MenuAttributes {
-//        let title = LabelAttributes.defaultFormTitle(
-//            in: theme,
-//            with: config.title
-//        )
-//        let helper = LabelAttributes.defaultFormHelper(
-//            in: theme,
-//            with: config.helper
-//        )
-//
-//        let menuItem = LabelComponent.applyStandardCustomizations(
-//            onto: LabelAttributes(
-//                fontColor: theme.palette.primaryText.toParraColor()
-//                    .opacity(0.75),
-//                fontWeight: .regular,
-//                padding: EdgeInsets(vertical: 18.5, horizontal: 14)
-//            ),
-//            theme: theme,
-//            config: config.menuOption
-//        )
-//
-//        let menuItemSelected = LabelComponent.applyStandardCustomizations(
-//            onto: LabelAttributes(
-//                fontColor: theme.palette.primaryText.toParraColor(),
-//                fontWeight: .medium,
-//                padding: EdgeInsets(vertical: 18.5, horizontal: 14)
-//            ),
-//            theme: theme,
-//            config: config.menuOptionSelected
-//        )
-//
-//        return inputAttributes ?? MenuAttributes(
-//            title: title,
-//            helper: helper,
-//            menuItem: menuItem,
-//            menuItemSelected: menuItemSelected,
-//            sortOrder: .fixed,
-//            tint: theme.palette.secondaryText.toParraColor(),
-//            cornerRadius: .md,
-//            padding: EdgeInsets(vertical: 0, horizontal: 0),
-//            borderWidth: 1
-//        )
-//    }
-
     // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var componentFactory: ComponentFactory
 
     @State private var selectedOption: MenuContent.Option?
 
@@ -93,48 +59,44 @@ struct MenuComponent: View {
     }
 
     @ViewBuilder private var titleLabel: some View {
-        EmptyView()
-//        if let title = content.title, let titleStyle = style.titleStyle {
-//            LabelComponent(
-//                content: title,
-//                style: titleStyle
-//            )
-//        }
+        withContent(
+            content: content.title
+        ) { content in
+            componentFactory.buildLabel(
+                content: content,
+                localAttributes: attributes.titleLabel
+            )
+        }
     }
 
     @ViewBuilder private var menuLabelText: some View {
-        EmptyView()
-//        if let selectedOption {
-//            let content = LabelContent(text: selectedOption.title)
-//
-//            LabelComponent(
-//                content: content,
-//                style: style.menuOptionSelectedStyle.withContent(
-//                    content: content
-//                )
-//            )
-//        } else {
-//            let normalContent: LabelContent? = if let placeholder = content
-//                .placeholder
-//            {
-//                placeholder
-//            } else if let firstOption = content.options.first {
-//                LabelContent(text: firstOption.title)
-//            } else {
-//                nil
-//            }
-//
-//            if let normalContent {
-//                LabelComponent(
-//                    content: normalContent,
-//                    style: style.menuOptionStyle.withContent(
-//                        content: normalContent
-//                    )
-//                )
-//            } else {
-//                EmptyView()
-//            }
-//        }
+        if let selectedOption {
+            let content = LabelContent(text: selectedOption.title)
+
+            componentFactory.buildLabel(
+                content: content,
+                localAttributes: attributes.selectedMenuItemLabels
+            )
+        } else {
+            let normalContent: LabelContent? = if let placeholder = content
+                .placeholder
+            {
+                placeholder
+            } else if let firstOption = content.options.first {
+                LabelContent(text: firstOption.title)
+            } else {
+                nil
+            }
+
+            if let normalContent {
+                componentFactory.buildLabel(
+                    content: normalContent,
+                    localAttributes: attributes.unselectedMenuItemLabels
+                )
+            } else {
+                EmptyView()
+            }
+        }
     }
 
     @ViewBuilder private var menuLabel: some View {
@@ -147,24 +109,23 @@ struct MenuComponent: View {
                 .padding(.vertical, 16)
                 .foregroundStyle(.primary.opacity(elementOpacity))
                 .frame(width: 24, height: 24)
-                .padding(
-                    .trailing,
-                    style.menuOptionStyle.attributes.padding?
-                        .trailing ?? 0
-                )
+//                .padding(
+//                    .trailing,
+//                    style.menuOptionStyle.attributes.padding?
+//                        .trailing ?? 0
+//                )
         }
     }
 
     @ViewBuilder private var helperLabel: some View {
-        EmptyView()
-//        if let helper = content.helper,
-//           let helperStyle = style.helperStyle
-//        {
-//            LabelComponent(
-//                content: helper,
-//                style: helperStyle
-//            )
-//        }
+        withContent(
+            content: content.helper
+        ) { content in
+            componentFactory.buildLabel(
+                content: content,
+                localAttributes: attributes.helperLabel
+            )
+        }
     }
 
     @ViewBuilder
@@ -189,39 +150,39 @@ struct MenuComponent: View {
     }
 }
 
-// #Preview {
-//    ParraViewPreview { factory in
-//        factory.buildMenu(
-//            config: FeedbackFormWidget.Config.default.selectFields,
-//            content: MenuContent(
-//                title: "We want to hear from you",
-//                placeholder: "Please select an option",
-//                helper: "You know, so we know which one you want!",
-//                options: [
-//                    MenuContent.Option(
-//                        id: "first",
-//                        title: "First option",
-//                        value: "first"
-//                    ),
-//                    MenuContent.Option(
-//                        id: "second",
-//                        title: "Second option",
-//                        value: "second"
-//                    ),
-//                    MenuContent.Option(
-//                        id: "third",
-//                        title: "Third option",
-//                        value: "third"
-//                    ),
-//                    MenuContent.Option(
-//                        id: "fourth",
-//                        title: "Fourth option",
-//                        value: "fourth"
-//                    )
-//                ],
-//                optionSelectionChanged: nil
-//            )
-//        )
-//    }
-//    .padding()
-// }
+#Preview {
+    ParraViewPreview { factory in
+        factory.buildMenu(
+            config: MenuConfig(),
+            content: MenuContent(
+                title: "We want to hear from you",
+                placeholder: "Please select an option",
+                helper: "You know, so we know which one you want!",
+                options: [
+                    MenuContent.Option(
+                        id: "first",
+                        title: "First option",
+                        value: "first"
+                    ),
+                    MenuContent.Option(
+                        id: "second",
+                        title: "Second option",
+                        value: "second"
+                    ),
+                    MenuContent.Option(
+                        id: "third",
+                        title: "Third option",
+                        value: "third"
+                    ),
+                    MenuContent.Option(
+                        id: "fourth",
+                        title: "Fourth option",
+                        value: "fourth"
+                    )
+                ],
+                optionSelectionChanged: nil
+            )
+        )
+    }
+    .padding()
+}

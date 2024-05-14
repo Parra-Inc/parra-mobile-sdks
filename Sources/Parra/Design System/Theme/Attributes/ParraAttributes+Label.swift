@@ -82,6 +82,14 @@ extension ParraAttributes.Label: OverridableAttributes {
 }
 
 extension ParraAttributes.Label {
+    static func `default`(with style: Font.TextStyle) -> ParraAttributes.Label {
+        return ParraAttributes.Label(
+            text: ParraAttributes.Text(
+                style: style
+            )
+        )
+    }
+
     static func defaultInputTitle(
         for theme: ParraTheme
     ) -> Self {
@@ -89,8 +97,10 @@ extension ParraAttributes.Label {
 
         return ParraAttributes.Label(
             text: ParraAttributes.Text(
-                font: .body,
-                weight: .medium,
+                font: .style(
+                    style: .body,
+                    weight: .medium
+                ),
                 color: palette.primaryText.toParraColor(),
                 alignment: .leading
             ),

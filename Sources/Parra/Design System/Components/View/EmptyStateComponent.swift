@@ -53,16 +53,24 @@ struct EmptyStateComponent: View {
                 }
 
                 componentFactory.buildLabel(
-                    fontStyle: .title,
-                    content: content.title
+                    content: content.title,
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            font: .title
+                        )
+                    )
                 )
 
                 withContent(
                     content: content.subtitle
                 ) { content in
                     componentFactory.buildLabel(
-                        fontStyle: .subheadline,
-                        content: content
+                        content: content,
+                        localAttributes: ParraAttributes.Label(
+                            text: ParraAttributes.Text(
+                                font: .subheadline
+                            )
+                        )
                     )
                     .multilineTextAlignment(.center)
                 }

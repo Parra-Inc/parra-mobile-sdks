@@ -36,8 +36,12 @@ struct RoadmapListItem: View {
             Spacer()
 
             componentFactory.buildLabel(
-                fontStyle: .caption,
-                content: ticketContent.createdAt
+                content: ticketContent.createdAt,
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        font: .caption
+                    )
+                )
             )
             .foregroundStyle(theme.palette.secondaryText.toParraColor())
         }
@@ -60,15 +64,15 @@ struct RoadmapListItem: View {
 
                 VStack(alignment: .leading) {
                     componentFactory.buildLabel(
-                        fontStyle: .headline,
-                        content: ticketContent.title
+                        content: ticketContent.title,
+                        localAttributes: .default(with: .headline)
                     )
                     .multilineTextAlignment(.leading)
 
                     if let description = ticketContent.description {
                         componentFactory.buildLabel(
-                            fontStyle: .subheadline,
-                            content: description
+                            content: description,
+                            localAttributes: .default(with: .subheadline)
                         )
                         .lineLimit(3)
                         .truncationMode(.tail)

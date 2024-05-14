@@ -86,7 +86,6 @@ struct TextInputComponent: View {
             content: content.title
         ) { content in
             componentFactory.buildLabel(
-                fontStyle: .body,
                 content: content,
                 localAttributes: attributes.titleLabel
             )
@@ -121,7 +120,6 @@ struct TextInputComponent: View {
             ? attributes.errorLabel : attributes.helperLabel
 
         componentFactory.buildLabel(
-            fontStyle: .caption2,
             content: content,
             localAttributes: helperAttributes
         )

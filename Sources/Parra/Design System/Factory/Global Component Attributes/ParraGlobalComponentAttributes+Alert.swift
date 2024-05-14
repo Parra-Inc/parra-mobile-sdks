@@ -32,7 +32,9 @@ public extension ParraGlobalComponentAttributes {
 
         return ParraAttributes.InlineAlert(
             title: ParraAttributes.Label(
-                text: ParraAttributes.Text(),
+                text: ParraAttributes.Text(
+                    font: .headline
+                ),
                 padding: .zero,
                 frame: .flexible(
                     FlexibleFrameAttributes(
@@ -42,7 +44,9 @@ public extension ParraGlobalComponentAttributes {
                 )
             ),
             subtitle: ParraAttributes.Label(
-                text: ParraAttributes.Text(),
+                text: ParraAttributes.Text(
+                    font: .subheadline
+                ),
                 frame: .flexible(
                     FlexibleFrameAttributes(
                         maxWidth: .infinity,
@@ -87,7 +91,9 @@ public extension ParraGlobalComponentAttributes {
 
         return ParraAttributes.ToastAlert(
             title: ParraAttributes.Label(
-                text: ParraAttributes.Text(),
+                text: ParraAttributes.Text(
+                    font: .headline
+                ),
                 padding: .custom(
                     .padding(trailing: labelTrailingPadding)
                 ),
@@ -99,7 +105,9 @@ public extension ParraGlobalComponentAttributes {
                 )
             ),
             subtitle: ParraAttributes.Label(
-                text: ParraAttributes.Text(),
+                text: ParraAttributes.Text(
+                    font: .subheadline
+                ),
                 padding: .custom(
                     .padding(trailing: labelTrailingPadding)
                 ),
