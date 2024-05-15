@@ -47,9 +47,9 @@ struct AuthenticationWidget: Container {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
                 withContent(content: content.icon) { content in
-                    ImageComponent(
+                    componentFactory.buildImage(
                         content: content,
-                        attributes: ParraAttributes.Image(
+                        localAttributes: ParraAttributes.Image(
                             size: CGSize(width: 60.0, height: 60.0)
                         )
                     )

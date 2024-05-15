@@ -30,12 +30,12 @@ struct BadgeComponent: View {
     @Environment(\.redactionReasons) var redactionReasons
 
     var body: some View {
-        LabelComponent(
+        componentFactory.buildLabel(
             content: LabelContent(
                 text: content.text,
                 icon: content.icon
             ),
-            attributes: attributes
+            localAttributes: attributes
         )
         .minimumScaleFactor(0.7)
         .scaledToFill()

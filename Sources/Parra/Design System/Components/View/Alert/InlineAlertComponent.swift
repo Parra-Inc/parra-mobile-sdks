@@ -17,10 +17,12 @@ struct InlineAlertComponent: View {
     var body: some View {
         VStack {
             HStack(spacing: 11) {
-                if let icon = content.icon {
-                    ImageComponent(
-                        content: icon,
-                        attributes: attributes.icon
+                withContent(
+                    content: content.icon
+                ) { content in
+                    componentFactory.buildImage(
+                        content: content,
+                        localAttributes: attributes.icon
                     )
                 }
 

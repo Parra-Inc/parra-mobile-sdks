@@ -26,9 +26,9 @@ struct PlainButtonStyle: ButtonStyle {
             attributes.normal
         }
 
-        LabelComponent(
+        componentFactory.buildLabel(
             content: content.text,
-            attributes: currentAttributes.label
+            localAttributes: currentAttributes.label
         )
         .applyPlainButtonAttributes(
             currentAttributes,
@@ -47,4 +47,5 @@ struct PlainButtonStyle: ButtonStyle {
     // MARK: - Private
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var componentFactory: ComponentFactory
 }

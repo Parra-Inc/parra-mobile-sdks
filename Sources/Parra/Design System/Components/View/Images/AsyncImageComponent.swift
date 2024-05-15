@@ -78,43 +78,43 @@ struct AsyncImageComponent: View {
 }
 
 #Preview {
-    ParraViewPreview { _ in
+    ParraViewPreview { componentFactory in
         VStack {
             Spacer()
 
-            AsyncImageComponent(
+            componentFactory.buildAsyncImage(
                 content: AsyncImageContent(
                     url: URL(
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                     )!
                 ),
-                attributes: .init(
+                localAttributes: .init(
                     size: CGSize(width: 320, height: 140)
                 )
             )
 
             Spacer()
 
-            AsyncImageComponent(
+            componentFactory.buildAsyncImage(
                 content: AsyncImageContent(
                     url: URL(
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100"
                     )!
                 ),
-                attributes: .init(
+                localAttributes: .init(
                     size: CGSize(width: 320, height: 140)
                 )
             )
 
             Spacer()
 
-            AsyncImageComponent(
+            componentFactory.buildAsyncImage(
                 content: AsyncImageContent(
                     url: URL(
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4efsdfsd"
                     )!
                 ),
-                attributes: .init(
+                localAttributes: .init(
                     size: CGSize(width: 320, height: 140)
                 )
             )

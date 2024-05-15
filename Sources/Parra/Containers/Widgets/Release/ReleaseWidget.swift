@@ -224,9 +224,9 @@ struct ReleaseWidget: Container {
                         let aspectRatio = content.size.width / content.size
                             .height
 
-                        AsyncImageComponent(
+                        componentFactory.buildAsyncImage(
                             content: content.image,
-                            attributes: ParraAttributes.AsyncImage(
+                            localAttributes: ParraAttributes.AsyncImage(
                                 cornerRadius: .sm
                             )
                         )

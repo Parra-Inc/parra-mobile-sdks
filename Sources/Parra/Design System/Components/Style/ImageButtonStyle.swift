@@ -25,9 +25,9 @@ struct ImageButtonStyle: ButtonStyle {
             attributes.normal
         }
 
-        ImageComponent(
+        componentFactory.buildImage(
             content: content.image,
-            attributes: currentAttributes.image
+            localAttributes: currentAttributes.image
         )
         .applyImageButtonAttributes(
             currentAttributes,
@@ -38,4 +38,5 @@ struct ImageButtonStyle: ButtonStyle {
     // MARK: - Private
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var componentFactory: ComponentFactory
 }

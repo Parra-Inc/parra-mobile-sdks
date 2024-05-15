@@ -26,9 +26,9 @@ struct OutlinedButtonStyle: ButtonStyle {
             attributes.normal
         }
 
-        LabelComponent(
+        componentFactory.buildLabel(
             content: content.text,
-            attributes: currentAttributes.label
+            localAttributes: currentAttributes.label
         )
         .applyOutlinedButtonAttributes(
             currentAttributes,
@@ -47,4 +47,5 @@ struct OutlinedButtonStyle: ButtonStyle {
     // MARK: - Private
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var componentFactory: ComponentFactory
 }

@@ -23,13 +23,14 @@ struct ToastAlertComponent: View {
         } label: {
             VStack {
                 HStack(spacing: 11) {
-                    if let icon = content.icon {
-                        ImageComponent(
-                            content: icon,
-                            attributes: attributes.icon
+                    withContent(
+                        content: content.icon
+                    ) { content in
+                        componentFactory.buildImage(
+                            content: content,
+                            localAttributes: attributes.icon
                         )
                     }
-
                     componentFactory.buildLabel(
                         content: content.title,
                         localAttributes: attributes.title

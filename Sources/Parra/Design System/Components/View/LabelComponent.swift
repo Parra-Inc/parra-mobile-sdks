@@ -24,8 +24,6 @@ struct LabelComponent: View {
     let content: LabelContent
     let attributes: ParraAttributes.Label
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
-
     var body: some View {
         Label(
             title: {
@@ -44,9 +42,9 @@ struct LabelComponent: View {
                     withContent(
                         content: content.icon
                     ) { content in
-                        ImageComponent(
+                        componentFactory.buildImage(
                             content: content,
-                            attributes: attributes.icon
+                            localAttributes: attributes.icon
                         )
                         // Need to override resizable modifier from
                         // general implementation.
@@ -61,6 +59,11 @@ struct LabelComponent: View {
         )
         .contentShape(.rect)
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var componentFactory: ComponentFactory
 }
 
 #Preview {
