@@ -1817,13 +1817,13 @@
 		003621EC2B5C7660009EFE53 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
+				00DDBA252B63FBBC00400761 /* ParraThemeObserver.swift */,
 				00AB95A42BE4545900B27091 /* Attributes */,
 				003621FD2B5C9CCC009EFE53 /* Colors */,
 				00EC6F7A2B61A1A600ABC8EC /* Corner Radius */,
 				003622282B5EB11E009EFE53 /* Extensions */,
 				00AB959F2BE4523F00B27091 /* Padding */,
 				003621FC2B5C9CC6009EFE53 /* Swatches */,
-				00DDBA252B63FBBC00400761 /* ParraThemeObserver.swift */,
 				00EC6F7B2B61A1BA00ABC8EC /* Typography */,
 			);
 			path = Theme;
