@@ -120,6 +120,46 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
+                content: LabelContent(text: "max width"),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        color: .white,
+                        shadow: ParraAttributes.Shadow(
+                            color: .white, radius: 6, x: 0, y: 0
+                        )
+                    ),
+                    cornerRadius: .md,
+                    padding: .md,
+                    background: .blue,
+                    frame: .flexible(
+                        FlexibleFrameAttributes(
+                            maxWidth: .infinity
+                        )
+                    )
+                )
+            )
+
+            factory.buildLabel(
+                content: LabelContent(text: "custom width"),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        color: .white,
+                        shadow: ParraAttributes.Shadow(
+                            color: .white, radius: 6, x: 0, y: 0
+                        )
+                    ),
+                    cornerRadius: .md,
+                    padding: .md,
+                    background: .blue,
+                    frame: .flexible(
+                        FlexibleFrameAttributes(
+                            minWidth: 240
+                        )
+                    )
+                )
+            )
+
+            factory.buildLabel(
                 content: LabelContent(text: "With a gradient background"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
@@ -177,5 +217,7 @@ struct LabelComponent: View {
                 )
             )
         }
+        .frame(maxWidth: .infinity)
+        .padding()
     }
 }

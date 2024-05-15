@@ -28,6 +28,7 @@ public extension ParraAttributes {
             self.cornerRadius = cornerRadius
             self.padding = padding
             self.background = background
+            self.frame = nil
         }
 
         init(
@@ -76,7 +77,7 @@ extension ParraAttributes.Label: OverridableAttributes {
             cornerRadius: overrides?.cornerRadius ?? cornerRadius,
             padding: overrides?.padding ?? padding,
             background: overrides?.background ?? background,
-            frame: frame?.mergingOverrides(overrides?.frame)
+            frame: frame?.mergingOverrides(overrides?.frame) ?? overrides?.frame
         )
     }
 }
