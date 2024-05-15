@@ -39,3 +39,21 @@ struct FlexibleFrameAttributes {
     let maxHeight: CGFloat?
     let alignment: Alignment
 }
+
+// MARK: OverridableAttributes
+
+extension FlexibleFrameAttributes: OverridableAttributes {
+    func mergingOverrides(
+        _ overrides: FlexibleFrameAttributes?
+    ) -> FlexibleFrameAttributes {
+        return FlexibleFrameAttributes(
+            minWidth: overrides?.minWidth ?? minWidth,
+            idealWidth: overrides?.idealWidth ?? idealWidth,
+            maxWidth: overrides?.maxWidth ?? maxWidth,
+            minHeight: overrides?.minHeight ?? minHeight,
+            idealHeight: overrides?.idealHeight ?? idealHeight,
+            maxHeight: overrides?.maxHeight ?? maxHeight,
+            alignment: overrides?.alignment ?? alignment
+        )
+    }
+}

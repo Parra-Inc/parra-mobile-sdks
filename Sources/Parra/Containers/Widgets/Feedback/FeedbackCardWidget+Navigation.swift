@@ -13,7 +13,7 @@ extension FeedbackCardWidget {
         if contentObserver.showNavigation {
             HStack(alignment: .center) {
                 componentFactory.buildImageButton(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: .primary,
                         size: .smallSquare,
                         variant: .plain
@@ -30,7 +30,7 @@ extension FeedbackCardWidget {
                 Spacer()
 
                 componentFactory.buildImageButton(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: .primary,
                         size: .smallSquare,
                         variant: .plain

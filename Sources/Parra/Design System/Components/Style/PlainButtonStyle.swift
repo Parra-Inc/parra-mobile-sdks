@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct PlainButtonStyle: ButtonStyle, ParraAttributedStyle {
+struct PlainButtonStyle: ButtonStyle {
     // MARK: - Internal
 
-    let config: TextButtonConfig
+    let config: ParraTextButtonConfig
     let content: TextButtonContent
 
     let attributes: ParraAttributes.PlainButton
@@ -26,16 +26,9 @@ struct PlainButtonStyle: ButtonStyle, ParraAttributedStyle {
             attributes.normal
         }
 
-        var labelAttributes = currentAttributes.label
-        let _ = labelAttributes.frame = .flexible(
-            FlexibleFrameAttributes(
-                maxWidth: config.isMaxWidth ? .infinity : nil
-            )
-        )
-
         LabelComponent(
             content: content.text,
-            attributes: labelAttributes
+            attributes: currentAttributes.label
         )
         .applyPlainButtonAttributes(
             currentAttributes,

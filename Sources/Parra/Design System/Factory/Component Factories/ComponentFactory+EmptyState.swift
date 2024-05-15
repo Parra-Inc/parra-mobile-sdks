@@ -12,36 +12,22 @@ extension ComponentFactory {
     @ViewBuilder
     func buildEmptyState(
         config: EmptyStateConfig,
-        content: EmptyStateContent
-//        localAttributes: ParraAttributes.em
+        content: EmptyStateContent,
+        localAttributes: ParraAttributes.EmptyState? = nil,
+        onPrimaryAction: (() -> Void)? = nil,
+        onSecondaryAction: (() -> Void)? = nil
     ) -> some View {
-        EmptyView()
-//        let mergedAttributes = EmptyStateComponent.applyStandardCustomizations(
-//            onto: localAttributes,
-//            theme: theme,
-//            config: config
-//        )
-//
-//        // If a container level factory function was provided for this
-//        // component, use it and supply global attribute overrides instead of
-//        // local, if provided.
-//        if let builder = suppliedBuilder,
-//           let view = builder(config, content, mergedAttributes)
-//        {
-//            view
-//        } else {
-//            let style = ParraAttributedEmptyStateStyle(
-//                config: config,
-//                content: content,
-//                attributes: mergedAttributes,
-//                theme: theme
-//            )
-//
-//            EmptyStateComponent(
-//                config: config,
-//                content: content,
-//                style: style
-//            )
-//        }
+        let attributes = attributeProvider.emptyStateAttributes(
+            localAttributes: localAttributes,
+            theme: theme
+        )
+
+        EmptyStateComponent(
+            config: config,
+            content: content,
+            attributes: attributes,
+            onPrimaryAction: onPrimaryAction,
+            onSecondaryAction: onSecondaryAction
+        )
     }
 }

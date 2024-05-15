@@ -73,30 +73,25 @@ public protocol ComponentAttributesProvider {
     // MARK: Buttons
 
     func plainButtonAttributes(
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         localAttributes: ParraAttributes.PlainButton?,
         theme: ParraTheme
     ) -> ParraAttributes.PlainButton
 
     func outlinedButtonAttributes(
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         localAttributes: ParraAttributes.OutlinedButton?,
         theme: ParraTheme
     ) -> ParraAttributes.OutlinedButton
 
     func containedButtonAttributes(
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         localAttributes: ParraAttributes.ContainedButton?,
         theme: ParraTheme
     ) -> ParraAttributes.ContainedButton
 
     func imageButtonAttributes(
-        variant: ParraButtonVariant,
-        for size: ParraImageButtonSize,
-        with type: ParraButtonType,
+        config: ParraImageButtonConfig,
         localAttributes: ParraAttributes.ImageButton?,
         theme: ParraTheme
     ) -> ParraAttributes.ImageButton
@@ -114,4 +109,11 @@ public protocol ComponentAttributesProvider {
         localAttributes: ParraAttributes.Menu?,
         theme: ParraTheme
     ) -> ParraAttributes.Menu
+
+    // MARK: Empty States
+
+    func emptyStateAttributes(
+        localAttributes: ParraAttributes.EmptyState?,
+        theme: ParraTheme
+    ) -> ParraAttributes.EmptyState
 }

@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct ImageButtonStyle: ButtonStyle, ParraAttributedStyle {
+struct ImageButtonStyle: ButtonStyle {
     // MARK: - Internal
 
-    let config: ImageButtonConfig
+    let config: ParraImageButtonConfig
     let content: ImageButtonContent
     let attributes: ParraAttributes.ImageButton
 

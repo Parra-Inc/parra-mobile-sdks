@@ -145,7 +145,7 @@ struct ReleaseWidget: Container {
                 content: contentObserver.content.otherReleasesButton
             ) { content in
                 componentFactory.buildContainedButton(
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .primary,
                         size: .large,
                         isMaxWidth: true

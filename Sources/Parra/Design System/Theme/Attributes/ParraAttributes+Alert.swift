@@ -10,6 +10,28 @@ import SwiftUI
 
 public extension ParraAttributes {
     struct InlineAlert: ParraCommonViewAttributes {
+        // MARK: - Lifecycle
+
+        public init(
+            title: ParraAttributes.Label = .init(),
+            subtitle: ParraAttributes.Label = .init(),
+            icon: ParraAttributes.Image = .init(),
+            border: ParraAttributes.Border = .init(),
+            cornerRadius: ParraCornerRadiusSize? = nil,
+            padding: ParraPaddingSize? = nil,
+            background: Color? = nil
+        ) {
+            self.title = title
+            self.subtitle = subtitle
+            self.icon = icon
+            self.border = border
+            self.cornerRadius = cornerRadius
+            self.padding = padding
+            self.background = background
+        }
+
+        // MARK: - Public
+
         public let title: ParraAttributes.Label
         public let subtitle: ParraAttributes.Label
         public let icon: ParraAttributes.Image
@@ -21,6 +43,30 @@ public extension ParraAttributes {
     }
 
     struct ToastAlert {
+        // MARK: - Lifecycle
+
+        public init(
+            title: ParraAttributes.Label = .init(),
+            subtitle: ParraAttributes.Label = .init(),
+            icon: ParraAttributes.Image = .init(),
+            dismissButton: ParraAttributes.ImageButton = .init(),
+            border: ParraAttributes.Border = .init(),
+            cornerRadius: ParraCornerRadiusSize? = nil,
+            padding: ParraPaddingSize? = nil,
+            background: Color? = nil
+        ) {
+            self.title = title
+            self.subtitle = subtitle
+            self.icon = icon
+            self.dismissButton = dismissButton
+            self.border = border
+            self.cornerRadius = cornerRadius
+            self.padding = padding
+            self.background = background
+        }
+
+        // MARK: - Public
+
         public let title: ParraAttributes.Label
         public let subtitle: ParraAttributes.Label
         public let icon: ParraAttributes.Image

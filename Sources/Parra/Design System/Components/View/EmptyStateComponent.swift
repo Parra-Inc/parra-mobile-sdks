@@ -9,56 +9,33 @@
 import SwiftUI
 
 struct EmptyStateComponent: View {
-    // MARK: - Lifecycle
-
-    init(
-        config: EmptyStateConfig,
-        content: EmptyStateContent,
-        style: ParraAttributedEmptyStateStyle,
-        onPrimaryAction: (() -> Void)? = nil,
-        onSecondaryAction: (() -> Void)? = nil
-    ) {
-        self.config = config
-        self.content = content
-        self.style = style
-        self.onPrimaryAction = onPrimaryAction
-        self.onSecondaryAction = onSecondaryAction
-    }
-
     // MARK: - Internal
 
     let config: EmptyStateConfig
     let content: EmptyStateContent
-    let style: ParraAttributedEmptyStateStyle
+    let attributes: ParraAttributes.EmptyState
     let onPrimaryAction: (() -> Void)?
     let onSecondaryAction: (() -> Void)?
 
     var body: some View {
-        let attributes = style.attributes
-
         VStack(alignment: .center) {
             Spacer()
 
             VStack(spacing: 0) {
                 withContent(
-                    content: content.icon,
-                    style: style.iconAttributes
-                ) { content, attributes in
+                    content: content.icon
+                ) { content in
 
-                    ImageComponent(
+                    componentFactory.buildImage(
                         content: content,
-                        attributes: attributes
+                        localAttributes: attributes.icon
                     )
                     .aspectRatio(contentMode: .fit)
                 }
 
                 componentFactory.buildLabel(
                     content: content.title,
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            font: .title
-                        )
-                    )
+                    localAttributes: attributes.titleLabel
                 )
 
                 withContent(
@@ -66,13 +43,8 @@ struct EmptyStateComponent: View {
                 ) { content in
                     componentFactory.buildLabel(
                         content: content,
-                        localAttributes: ParraAttributes.Label(
-                            text: ParraAttributes.Text(
-                                font: .subheadline
-                            )
-                        )
+                        localAttributes: attributes.subtitleLabel
                     )
-                    .multilineTextAlignment(.center)
                 }
 
                 VStack(spacing: 0) {
@@ -82,6 +54,7 @@ struct EmptyStateComponent: View {
                         componentFactory.buildContainedButton(
                             config: config.primaryAction,
                             content: content,
+                            localAttributes: attributes.primaryActionButton,
                             onPress: {
                                 onPrimaryAction?()
                             }
@@ -94,6 +67,7 @@ struct EmptyStateComponent: View {
                         componentFactory.buildPlainButton(
                             config: config.secondaryAction,
                             content: content,
+                            localAttributes: attributes.secondaryActionButton,
                             onPress: {
                                 onSecondaryAction?()
                             }
@@ -101,7 +75,10 @@ struct EmptyStateComponent: View {
                     }
                 }
             }
-            .padding(attributes.padding ?? .zero)
+            .applyEmptyStateAttributes(
+                attributes,
+                using: themeObserver.theme
+            )
 
             Spacer()
         }
@@ -112,6 +89,7 @@ struct EmptyStateComponent: View {
     // MARK: - Private
 
     @EnvironmentObject private var componentFactory: ComponentFactory
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 }
 
 #Preview {

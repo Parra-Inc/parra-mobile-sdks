@@ -27,3 +27,17 @@ struct FixedFrameAttributes {
     let height: CGFloat?
     let alignment: Alignment
 }
+
+// MARK: OverridableAttributes
+
+extension FixedFrameAttributes: OverridableAttributes {
+    func mergingOverrides(
+        _ overrides: FixedFrameAttributes?
+    ) -> FixedFrameAttributes {
+        return FixedFrameAttributes(
+            width: overrides?.width ?? width,
+            height: overrides?.height ?? height,
+            alignment: overrides?.alignment ?? alignment
+        )
+    }
+}

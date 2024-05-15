@@ -64,18 +64,17 @@ public extension ParraGlobalComponentAttributes {
 
     func plainButtonTextAttributes(
         in state: ParraButtonState,
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         theme: ParraTheme
     ) -> ParraAttributes.Text {
         var textAttributes = baseTextAttributes(
-            for: size,
+            for: config.size,
             theme: theme
         )
 
         textAttributes.color = plainButtonTextColor(
             in: state,
-            with: type,
+            with: config.type,
             theme: theme
         )
 
@@ -84,14 +83,12 @@ public extension ParraGlobalComponentAttributes {
 
     func plainButtonLabelAttributes(
         in state: ParraButtonState,
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         theme: ParraTheme
     ) -> ParraAttributes.Label {
         let text = plainButtonTextAttributes(
             in: state,
-            for: size,
-            with: type,
+            config: config,
             theme: theme
         )
 
@@ -100,17 +97,21 @@ public extension ParraGlobalComponentAttributes {
             icon: ParraAttributes.Image(
                 tint: text.color
             ),
-            padding: baseTitlePadding(for: size),
-            background: nil
+            padding: baseTitlePadding(for: config.size),
+            background: nil,
+            frame: baseLabelFrameAttributes(
+                isMaxWidth: config.isMaxWidth
+            )
         )
     }
 
     func plainButtonAttributes(
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         localAttributes: ParraAttributes.PlainButton?,
         theme: ParraTheme
     ) -> ParraAttributes.PlainButton {
+        let size = config.size
+
         let cornerRadius = buttonCornerRadius(for: size)
         let padding = buttonPadding(for: size)
 
@@ -118,8 +119,7 @@ public extension ParraGlobalComponentAttributes {
             normal: ParraAttributes.PlainButton.StatefulAttributes(
                 label: plainButtonLabelAttributes(
                     in: .normal,
-                    for: size,
-                    with: type,
+                    config: config,
                     theme: theme
                 ),
                 cornerRadius: cornerRadius,
@@ -128,8 +128,7 @@ public extension ParraGlobalComponentAttributes {
             pressed: ParraAttributes.PlainButton.StatefulAttributes(
                 label: plainButtonLabelAttributes(
                     in: .pressed,
-                    for: size,
-                    with: type,
+                    config: config,
                     theme: theme
                 ),
                 cornerRadius: cornerRadius,
@@ -138,8 +137,7 @@ public extension ParraGlobalComponentAttributes {
             disabled: ParraAttributes.PlainButton.StatefulAttributes(
                 label: plainButtonLabelAttributes(
                     in: .disabled,
-                    for: size,
-                    with: type,
+                    config: config,
                     theme: theme
                 ),
                 cornerRadius: cornerRadius,
@@ -182,18 +180,17 @@ public extension ParraGlobalComponentAttributes {
 
     func outlinedButtonTextAttributes(
         in state: ParraButtonState,
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         theme: ParraTheme
     ) -> ParraAttributes.Text {
         var textAttributes = baseTextAttributes(
-            for: size,
+            for: config.size,
             theme: theme
         )
 
         textAttributes.color = outlinedButtonTextColor(
             in: state,
-            with: type,
+            with: config.type,
             theme: theme
         )
 
@@ -202,14 +199,12 @@ public extension ParraGlobalComponentAttributes {
 
     func outlinedButtonLabelAttributes(
         in state: ParraButtonState,
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         theme: ParraTheme
     ) -> ParraAttributes.Label {
         let text = outlinedButtonTextAttributes(
             in: state,
-            for: size,
-            with: type,
+            config: config,
             theme: theme
         )
 
@@ -218,21 +213,25 @@ public extension ParraGlobalComponentAttributes {
             icon: ParraAttributes.Image(
                 tint: text.color
             ),
-            padding: baseTitlePadding(for: size),
+            padding: baseTitlePadding(for: config.size),
             background: outlinedButtonBackground(
                 in: state,
-                with: type,
+                with: config.type,
                 theme: theme
+            ),
+            frame: baseLabelFrameAttributes(
+                isMaxWidth: config.isMaxWidth
             )
         )
     }
 
     func outlinedButtonAttributes(
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         localAttributes: ParraAttributes.OutlinedButton?,
         theme: ParraTheme
     ) -> ParraAttributes.OutlinedButton {
+        let size = config.size
+
         let cornerRadius = buttonCornerRadius(for: size)
         let padding = buttonPadding(for: size)
         let border = ParraAttributes.Border(
@@ -244,8 +243,7 @@ public extension ParraGlobalComponentAttributes {
             normal: ParraAttributes.OutlinedButton.StatefulAttributes(
                 label: outlinedButtonLabelAttributes(
                     in: .normal,
-                    for: size,
-                    with: type,
+                    config: config,
                     theme: theme
                 ),
                 border: border,
@@ -255,8 +253,7 @@ public extension ParraGlobalComponentAttributes {
             pressed: ParraAttributes.OutlinedButton.StatefulAttributes(
                 label: outlinedButtonLabelAttributes(
                     in: .pressed,
-                    for: size,
-                    with: type,
+                    config: config,
                     theme: theme
                 ),
                 border: border,
@@ -266,8 +263,7 @@ public extension ParraGlobalComponentAttributes {
             disabled: ParraAttributes.OutlinedButton.StatefulAttributes(
                 label: outlinedButtonLabelAttributes(
                     in: .disabled,
-                    for: size,
-                    with: type,
+                    config: config,
                     theme: theme
                 ),
                 border: border,
@@ -298,18 +294,17 @@ public extension ParraGlobalComponentAttributes {
 
     func containedButtonTextAttributes(
         in state: ParraButtonState,
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         theme: ParraTheme
     ) -> ParraAttributes.Text {
         var textAttributes = baseTextAttributes(
-            for: size,
+            for: config.size,
             theme: theme
         )
 
         textAttributes.color = containedButtonTextColor(
             in: state,
-            with: type,
+            with: config.type,
             theme: theme
         )
 
@@ -340,37 +335,41 @@ public extension ParraGlobalComponentAttributes {
 
     func containedButtonLabelAttributes(
         in state: ParraButtonState,
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         theme: ParraTheme
     ) -> ParraAttributes.Label {
         let text = containedButtonTextAttributes(
             in: state,
-            for: size,
-            with: type,
+            config: config,
             theme: theme
         )
 
-        return ParraAttributes.Label(
+        let label = ParraAttributes.Label(
             text: text,
             icon: ParraAttributes.Image(
                 tint: text.color
             ),
-            padding: baseTitlePadding(for: size),
+            padding: baseTitlePadding(for: config.size),
             background: containedButtonBackground(
                 in: state,
-                with: type,
+                with: config.type,
                 theme: theme
+            ),
+            frame: baseLabelFrameAttributes(
+                isMaxWidth: config.isMaxWidth
             )
         )
+
+        return label
     }
 
     func containedButtonAttributes(
-        for size: ParraButtonSize,
-        with type: ParraButtonType,
+        config: ParraTextButtonConfig,
         localAttributes: ParraAttributes.ContainedButton?,
         theme: ParraTheme
     ) -> ParraAttributes.ContainedButton {
+        let size = config.size
+
         let border = ParraAttributes.Border()
         let cornerRadius = buttonCornerRadius(for: size)
         let padding = buttonPadding(for: size)
@@ -379,8 +378,7 @@ public extension ParraGlobalComponentAttributes {
             normal: ParraAttributes.ContainedButton.StatefulAttributes(
                 label: containedButtonLabelAttributes(
                     in: .normal,
-                    for: size,
-                    with: type,
+                    config: config,
                     theme: theme
                 ),
                 border: border,
@@ -390,8 +388,7 @@ public extension ParraGlobalComponentAttributes {
             pressed: ParraAttributes.ContainedButton.StatefulAttributes(
                 label: containedButtonLabelAttributes(
                     in: .pressed,
-                    for: size,
-                    with: type,
+                    config: config,
                     theme: theme
                 ),
                 border: border,
@@ -401,8 +398,7 @@ public extension ParraGlobalComponentAttributes {
             disabled: ParraAttributes.ContainedButton.StatefulAttributes(
                 label: containedButtonLabelAttributes(
                     in: .disabled,
-                    for: size,
-                    with: type,
+                    config: config,
                     theme: theme
                 ),
                 border: border,
@@ -410,6 +406,16 @@ public extension ParraGlobalComponentAttributes {
                 padding: padding
             )
         ).mergingOverrides(localAttributes)
+    }
+
+    private func baseLabelFrameAttributes(
+        isMaxWidth: Bool
+    ) -> FrameAttributes {
+        return .flexible(
+            FlexibleFrameAttributes(
+                maxWidth: isMaxWidth ? .infinity : nil
+            )
+        )
     }
 
     private func baseTextAttributes(

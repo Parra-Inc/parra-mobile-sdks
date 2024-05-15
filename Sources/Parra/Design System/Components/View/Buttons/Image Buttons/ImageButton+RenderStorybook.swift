@@ -65,7 +65,7 @@ func renderImageButtonStorybook() -> some View {
 }
 
 private func renderButtonComponent(
-    config: ImageButtonConfig,
+    config: ParraImageButtonConfig,
     content: ImageButtonContent,
     theme: ParraTheme = .default
 ) -> some View {
@@ -106,7 +106,7 @@ private func renderColumn(
                 renderRowTitle("Plain")
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.plain
@@ -117,7 +117,7 @@ private func renderColumn(
                 )
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.plain
@@ -134,7 +134,7 @@ private func renderColumn(
                 renderRowTitle("Plain disabled")
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.plain
@@ -146,7 +146,7 @@ private func renderColumn(
                 )
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.plain
@@ -164,7 +164,7 @@ private func renderColumn(
                 renderRowTitle("Outlined")
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.outlined
@@ -175,7 +175,7 @@ private func renderColumn(
                 )
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.outlined
@@ -192,7 +192,7 @@ private func renderColumn(
                 renderRowTitle("Outlined disabled")
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.outlined
@@ -204,7 +204,7 @@ private func renderColumn(
                 )
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.outlined
@@ -222,7 +222,7 @@ private func renderColumn(
                 renderRowTitle("Contained")
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.contained
@@ -233,7 +233,7 @@ private func renderColumn(
                 )
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.contained
@@ -250,7 +250,7 @@ private func renderColumn(
                 renderRowTitle("Contained disabled")
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.primary,
                         size: size,
                         variant: ParraButtonVariant.contained
@@ -262,7 +262,7 @@ private func renderColumn(
                 )
 
                 renderButtonComponent(
-                    config: ImageButtonConfig(
+                    config: ParraImageButtonConfig(
                         type: ParraButtonType.secondary,
                         size: size,
                         variant: ParraButtonVariant.contained

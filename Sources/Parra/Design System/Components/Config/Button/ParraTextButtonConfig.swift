@@ -1,5 +1,5 @@
 //
-//  TextButtonConfig.swift
+//  ParraTextButtonConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/30/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct TextButtonConfig: Equatable {
+public struct ParraTextButtonConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(

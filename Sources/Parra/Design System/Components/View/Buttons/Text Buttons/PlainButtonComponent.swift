@@ -12,7 +12,7 @@ struct PlainButtonComponent: View {
     // MARK: - Lifecycle
 
     init(
-        config: TextButtonConfig,
+        config: ParraTextButtonConfig,
         content: TextButtonContent,
         style: PlainButtonStyle,
         onPress: @escaping () -> Void
@@ -25,7 +25,7 @@ struct PlainButtonComponent: View {
 
     // MARK: - Internal
 
-    let config: TextButtonConfig
+    let config: ParraTextButtonConfig
     let content: TextButtonContent
     let style: PlainButtonStyle
     let onPress: () -> Void

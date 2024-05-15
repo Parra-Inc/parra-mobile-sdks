@@ -34,8 +34,8 @@ public extension ParraAttributes {
             text: ParraAttributes.Text = .init(),
             icon: ParraAttributes.Image = .init(),
             border: ParraAttributes.Border = .init(),
-            cornerRadius: ParraCornerRadiusSize? = .zero,
-            padding: ParraPaddingSize? = .zero,
+            cornerRadius: ParraCornerRadiusSize? = nil,
+            padding: ParraPaddingSize? = nil,
             background: Color? = nil,
             frame: FrameAttributes? = nil
         ) {
@@ -76,13 +76,15 @@ extension ParraAttributes.Label: OverridableAttributes {
             cornerRadius: overrides?.cornerRadius ?? cornerRadius,
             padding: overrides?.padding ?? padding,
             background: overrides?.background ?? background,
-            frame: overrides?.frame ?? frame
+            frame: frame?.mergingOverrides(overrides?.frame)
         )
     }
 }
 
 extension ParraAttributes.Label {
-    static func `default`(with style: Font.TextStyle) -> ParraAttributes.Label {
+    public static func `default`(
+        with style: Font.TextStyle
+    ) -> ParraAttributes.Label {
         return ParraAttributes.Label(
             text: ParraAttributes.Text(
                 style: style

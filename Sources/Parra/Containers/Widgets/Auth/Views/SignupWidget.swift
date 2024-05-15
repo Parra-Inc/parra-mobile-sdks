@@ -93,7 +93,7 @@ struct SignupWidget: Container {
             }
 
             componentFactory.buildContainedButton(
-                config: TextButtonConfig(
+                config: ParraTextButtonConfig(
                     type: .primary,
                     size: .large,
                     isMaxWidth: true
@@ -135,7 +135,7 @@ struct SignupWidget: Container {
         _ document: LegalDocument
     ) -> some View {
         componentFactory.buildPlainButton(
-            config: TextButtonConfig(
+            config: ParraTextButtonConfig(
                 type: .secondary,
                 size: .small
             ),

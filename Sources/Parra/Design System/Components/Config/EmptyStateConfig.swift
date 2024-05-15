@@ -12,8 +12,8 @@ public struct EmptyStateConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(
-        primaryAction: TextButtonConfig,
-        secondaryAction: TextButtonConfig
+        primaryAction: ParraTextButtonConfig,
+        secondaryAction: ParraTextButtonConfig
     ) {
         self.primaryAction = primaryAction
         self.secondaryAction = secondaryAction
@@ -21,13 +21,13 @@ public struct EmptyStateConfig: Equatable {
 
     // MARK: - Public
 
-    public static let defaultPrimaryAction = TextButtonConfig(
+    public static let defaultPrimaryAction = ParraTextButtonConfig(
         type: .primary,
         size: .large,
         isMaxWidth: true
     )
 
-    public static let defaultSecondaryAction = TextButtonConfig(
+    public static let defaultSecondaryAction = ParraTextButtonConfig(
         type: .secondary,
         size: .medium,
         isMaxWidth: true
@@ -39,18 +39,18 @@ public struct EmptyStateConfig: Equatable {
     )
 
     public static let errorDefault = EmptyStateConfig(
-        primaryAction: TextButtonConfig(
+        primaryAction: ParraTextButtonConfig(
             type: .primary,
             size: .large,
             isMaxWidth: true
         ),
-        secondaryAction: TextButtonConfig(
+        secondaryAction: ParraTextButtonConfig(
             type: .secondary,
             size: .medium,
             isMaxWidth: true
         )
     )
 
-    public let primaryAction: TextButtonConfig
-    public let secondaryAction: TextButtonConfig
+    public let primaryAction: ParraTextButtonConfig
+    public let secondaryAction: ParraTextButtonConfig
 }

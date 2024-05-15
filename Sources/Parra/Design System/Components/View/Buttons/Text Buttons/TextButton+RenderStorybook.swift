@@ -54,7 +54,7 @@ func renderStorybook(
 
 private func renderButtonComponent(
     type: (some View).Type,
-    config: TextButtonConfig,
+    config: ParraTextButtonConfig,
     content: TextButtonContent,
     theme: ParraTheme = .default
 ) -> some View {
@@ -107,7 +107,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .primary,
                         size: size
                     ),
@@ -118,7 +118,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .secondary,
                         size: size
                     ),
@@ -133,7 +133,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .primary,
                         size: size
                     ),
@@ -147,7 +147,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .secondary,
                         size: size
                     ),
@@ -165,7 +165,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .primary,
                         size: size,
                         isMaxWidth: true
@@ -177,7 +177,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .secondary,
                         size: size,
                         isMaxWidth: true
@@ -193,7 +193,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .primary,
                         size: size
                     ),
@@ -205,7 +205,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .secondary,
                         size: size
                     ),
@@ -221,7 +221,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .primary,
                         size: size
                     ),
@@ -236,7 +236,7 @@ private func renderColumn(
 
                 renderButtonComponent(
                     type: componentType,
-                    config: TextButtonConfig(
+                    config: ParraTextButtonConfig(
                         type: .secondary,
                         size: size
                     ),

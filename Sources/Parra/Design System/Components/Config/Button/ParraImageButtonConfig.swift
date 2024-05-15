@@ -1,5 +1,5 @@
 //
-//  ImageButtonConfig.swift
+//  ParraImageButtonConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/4/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ImageButtonConfig: Equatable {
+public struct ParraImageButtonConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(

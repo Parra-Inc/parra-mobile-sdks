@@ -11,14 +11,13 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildPlainButton(
-        config: TextButtonConfig,
+        config: ParraTextButtonConfig,
         content: TextButtonContent,
         localAttributes: ParraAttributes.PlainButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
         let attributes = attributeProvider.plainButtonAttributes(
-            for: config.size,
-            with: config.type,
+            config: config,
             localAttributes: localAttributes,
             theme: theme
         )
@@ -39,14 +38,13 @@ extension ComponentFactory {
 
     @ViewBuilder
     func buildOutlinedButton(
-        config: TextButtonConfig,
+        config: ParraTextButtonConfig,
         content: TextButtonContent,
         localAttributes: ParraAttributes.OutlinedButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
         let attributes = attributeProvider.outlinedButtonAttributes(
-            for: config.size,
-            with: config.type,
+            config: config,
             localAttributes: localAttributes,
             theme: theme
         )
@@ -67,14 +65,13 @@ extension ComponentFactory {
 
     @ViewBuilder
     func buildContainedButton(
-        config: TextButtonConfig,
+        config: ParraTextButtonConfig,
         content: TextButtonContent,
         localAttributes: ParraAttributes.ContainedButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
         let attributes = attributeProvider.containedButtonAttributes(
-            for: config.size,
-            with: config.type,
+            config: config,
             localAttributes: localAttributes,
             theme: theme
         )
@@ -95,15 +92,13 @@ extension ComponentFactory {
 
     @ViewBuilder
     func buildImageButton(
-        config: ImageButtonConfig,
+        config: ParraImageButtonConfig,
         content: ImageButtonContent,
         localAttributes: ParraAttributes.ImageButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
         let attributes = attributeProvider.imageButtonAttributes(
-            variant: config.variant,
-            for: config.size,
-            with: config.type,
+            config: config,
             localAttributes: localAttributes,
             theme: theme
         )

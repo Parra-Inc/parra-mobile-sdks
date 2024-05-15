@@ -12,7 +12,7 @@ struct ImageButtonComponent: View {
     // MARK: - Lifecycle
 
     init(
-        config: ImageButtonConfig,
+        config: ParraImageButtonConfig,
         content: ImageButtonContent,
         style: ImageButtonStyle,
         onPress: @escaping () -> Void
@@ -25,7 +25,7 @@ struct ImageButtonComponent: View {
 
     // MARK: - Internal
 
-    let config: ImageButtonConfig
+    let config: ParraImageButtonConfig
     let content: ImageButtonContent
     let style: ImageButtonStyle
     let onPress: () -> Void

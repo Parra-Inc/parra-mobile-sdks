@@ -70,7 +70,7 @@ struct AuthenticationEmailPasswordView: View {
             }
 
             componentFactory.buildContainedButton(
-                config: TextButtonConfig(
+                config: ParraTextButtonConfig(
                     type: .primary,
                     size: .large,
                     isMaxWidth: true
@@ -83,7 +83,7 @@ struct AuthenticationEmailPasswordView: View {
             }
 
             componentFactory.buildPlainButton(
-                config: TextButtonConfig(
+                config: ParraTextButtonConfig(
                     type: .primary,
                     size: .small,
                     isMaxWidth: false
@@ -107,7 +107,7 @@ struct AuthenticationEmailPasswordView: View {
             Spacer()
 
             componentFactory.buildPlainButton(
-                config: TextButtonConfig(
+                config: ParraTextButtonConfig(
                     type: .primary,
                     size: .small,
                     isMaxWidth: false

@@ -13,7 +13,7 @@ public extension ParraAttributes {
         // MARK: - Lifecycle
 
         public init(
-            normal: StatefulAttributes
+            normal: StatefulAttributes = .init()
         ) {
             self.normal = normal
             self.pressed = normal.mergingOverrides(
@@ -37,9 +37,9 @@ public extension ParraAttributes {
         }
 
         public init(
-            normal: StatefulAttributes,
-            pressed: StatefulAttributes,
-            disabled: StatefulAttributes
+            normal: StatefulAttributes = .init(),
+            pressed: StatefulAttributes = .init(),
+            disabled: StatefulAttributes = .init()
         ) {
             self.normal = normal
             self.pressed = pressed
@@ -78,7 +78,7 @@ public extension ParraAttributes {
         // MARK: - Lifecycle
 
         public init(
-            normal: StatefulAttributes
+            normal: StatefulAttributes = .init()
         ) {
             self.normal = normal
             self.pressed = normal.mergingOverrides(
@@ -102,9 +102,9 @@ public extension ParraAttributes {
         }
 
         public init(
-            normal: StatefulAttributes,
-            pressed: StatefulAttributes,
-            disabled: StatefulAttributes
+            normal: StatefulAttributes = .init(),
+            pressed: StatefulAttributes = .init(),
+            disabled: StatefulAttributes = .init()
         ) {
             self.normal = normal
             self.pressed = pressed
@@ -146,7 +146,7 @@ public extension ParraAttributes {
         // MARK: - Lifecycle
 
         public init(
-            normal: StatefulAttributes
+            normal: StatefulAttributes = .init()
         ) {
             self.normal = normal
             self.pressed = normal.mergingOverrides(
@@ -172,9 +172,9 @@ public extension ParraAttributes {
         }
 
         public init(
-            normal: StatefulAttributes,
-            pressed: StatefulAttributes,
-            disabled: StatefulAttributes
+            normal: StatefulAttributes = .init(),
+            pressed: StatefulAttributes = .init(),
+            disabled: StatefulAttributes = .init()
         ) {
             self.normal = normal
             self.pressed = pressed
@@ -216,7 +216,7 @@ public extension ParraAttributes {
         // MARK: - Lifecycle
 
         public init(
-            normal: StatefulAttributes
+            normal: StatefulAttributes = .init()
         ) {
             self.normal = normal
             self.pressed = normal.mergingOverrides(
@@ -236,9 +236,9 @@ public extension ParraAttributes {
         }
 
         public init(
-            normal: StatefulAttributes,
-            pressed: StatefulAttributes,
-            disabled: StatefulAttributes
+            normal: StatefulAttributes = .init(),
+            pressed: StatefulAttributes = .init(),
+            disabled: StatefulAttributes = .init()
         ) {
             self.normal = normal
             self.pressed = pressed
@@ -379,7 +379,7 @@ extension ParraAttributes.ContainedButton: OverridableAttributes {
     }
 }
 
-// MARK: - ParraAttributes.ContainedButton.StatefulAttributes + OverridableAttributes
+// MARK: - ParraAttributes.ContainedButton + OverridableAttributes
 
 extension ParraAttributes.ContainedButton
     .StatefulAttributes: OverridableAttributes
@@ -396,7 +396,7 @@ extension ParraAttributes.ContainedButton
     }
 }
 
-// MARK: - ParraAttributes.OutlinedButton.StatefulAttributes + OverridableAttributes
+// MARK: - ParraAttributes.OutlinedButton + OverridableAttributes
 
 extension ParraAttributes.OutlinedButton
     .StatefulAttributes: OverridableAttributes
@@ -413,7 +413,7 @@ extension ParraAttributes.OutlinedButton
     }
 }
 
-// MARK: - ParraAttributes.PlainButton.StatefulAttributes + OverridableAttributes
+// MARK: - ParraAttributes.PlainButton + OverridableAttributes
 
 extension ParraAttributes.PlainButton
     .StatefulAttributes: OverridableAttributes
@@ -465,7 +465,7 @@ extension ParraAttributes.ImageButton: OverridableAttributes {
     }
 }
 
-// MARK: - ParraAttributes.ImageButton.StatefulAttributes + OverridableAttributes
+// MARK: - ParraAttributes.ImageButton + OverridableAttributes
 
 extension ParraAttributes.ImageButton
     .StatefulAttributes: OverridableAttributes

@@ -62,7 +62,7 @@ struct ToastAlertComponent: View {
                 if let dismissButtonContent = content.dismiss {
                     VStack {
                         componentFactory.buildImageButton(
-                            config: ImageButtonConfig(
+                            config: ParraImageButtonConfig(
                                 variant: .plain
                             ),
                             content: dismissButtonContent,

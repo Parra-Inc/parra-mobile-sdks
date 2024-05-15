@@ -12,7 +12,7 @@ class AlertManager: ObservableObject {
     struct Alert: Equatable {
         let level: AlertLevel
         let content: ParraAlertContent
-        let attributes: AlertAttributes?
+        let attributes: ParraAttributes.ToastAlert?
         let onDismiss: () -> Void
 
         let duration: TimeInterval
@@ -80,7 +80,7 @@ class AlertManager: ObservableObject {
         in location: AlertLocation = .topCenter,
         level: AlertLevel,
         content: ParraAlertContent,
-        attributes: AlertAttributes? = nil,
+        attributes: ParraAttributes.ToastAlert? = nil,
         primaryAction: (() -> Void)? = nil
     ) {
         currentToast = Alert(
@@ -169,7 +169,7 @@ class AlertManager: ObservableObject {
                 icon: ParraAlertContent.defaultIcon(for: level),
                 dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
-            attributes: AlertAttributes(),
+            attributes: ParraAttributes.ToastAlert(),
             primaryAction: primaryAction
         )
     }

@@ -56,7 +56,7 @@ struct FeedbackFormWidget: Container {
             WidgetFooter(
                 primaryActionBuilder: {
                     componentFactory.buildContainedButton(
-                        config: TextButtonConfig(
+                        config: ParraTextButtonConfig(
                             type: .primary,
                             size: .large,
                             isMaxWidth: true

@@ -10,12 +10,13 @@ import SwiftUI
 
 public extension ParraGlobalComponentAttributes {
     func imageButtonAttributes(
-        variant: ParraButtonVariant,
-        for size: ParraImageButtonSize,
-        with type: ParraButtonType,
-        localAttributes: ParraAttributes.ImageButton? = nil,
+        config: ParraImageButtonConfig,
+        localAttributes: ParraAttributes.ImageButton?,
         theme: ParraTheme
     ) -> ParraAttributes.ImageButton {
+        let size = config.size
+        let type = config.type
+        let variant = config.variant
         let palette = theme.palette
 
         let backgroundColor: Color? = switch variant {

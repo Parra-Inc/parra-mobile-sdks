@@ -12,7 +12,7 @@ struct ContainedButtonComponent: View {
     // MARK: - Lifecycle
 
     init(
-        config: TextButtonConfig,
+        config: ParraTextButtonConfig,
         content: TextButtonContent,
         style: ContainedButtonStyle,
         onPress: @escaping () -> Void
@@ -25,7 +25,7 @@ struct ContainedButtonComponent: View {
 
     // MARK: - Internal
 
-    let config: TextButtonConfig
+    let config: ParraTextButtonConfig
     let content: TextButtonContent
     let style: ContainedButtonStyle
     let onPress: () -> Void
