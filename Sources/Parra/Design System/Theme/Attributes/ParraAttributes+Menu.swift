@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - ParraAttributes.Menu
 
 public extension ParraAttributes {
-    struct Menu: ParraCommonViewAttributes {
+    struct Menu {
         // MARK: - Lifecycle
 
         public init(

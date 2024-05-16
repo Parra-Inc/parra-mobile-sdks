@@ -30,7 +30,7 @@ public extension ParraGlobalComponentAttributes {
                 weight: .regular,
                 color: theme.palette.primaryText.toParraColor()
             ),
-            padding: .xl
+            padding: .xxl
         )
 
         var selectedMenuItems = unselectedMenuItemLabels
