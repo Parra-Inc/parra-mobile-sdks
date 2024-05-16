@@ -9,8 +9,6 @@
 import SwiftUI
 
 extension ComponentFactory {
-//    @Environment(\.redactionReasons) var redactionReasons
-
     @ViewBuilder
     func buildBadge(
         size: ParraBadgeSize = .sm,
@@ -20,10 +18,6 @@ extension ComponentFactory {
         iconSymbol: String? = nil,
         localAttributes: ParraAttributes.Badge? = nil
     ) -> BadgeComponent {
-//        let isPlaceholder = redactionReasons.contains(.placeholder)
-//        let primaryColor = isPlaceholder
-//            ? ParraColorSwatch.gray : (color ?? palette.primary)
-
         let attributes = attributeProvider.badgeAttributes(
             for: size,
             variant: variant,

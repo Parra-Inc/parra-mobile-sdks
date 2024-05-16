@@ -30,12 +30,30 @@ struct BadgeComponent: View {
     @Environment(\.redactionReasons) var redactionReasons
 
     var body: some View {
+        let isPlaceholder = redactionReasons.contains(.placeholder)
+
+        let labelAttributes = isPlaceholder
+            ? attributes.mergingOverrides(ParraAttributes.Label(
+                text: ParraAttributes.Text(
+                    font: attributes.text.fontType.font,
+                    color: ParraColorSwatch.gray.toParraColor()
+                ),
+                icon: ParraAttributes.Image(
+                    tint: ParraColorSwatch.gray.toParraColor()
+                ),
+                border: ParraAttributes.Border(
+                    color: ParraColorSwatch.gray.shade300.toParraColor()
+                ),
+                background: ParraColorSwatch.gray.shade100.toParraColor()
+            ))
+            : attributes
+
         componentFactory.buildLabel(
             content: LabelContent(
                 text: content.text,
                 icon: content.icon
             ),
-            localAttributes: attributes
+            localAttributes: labelAttributes
         )
         .minimumScaleFactor(0.7)
         .scaledToFill()
@@ -88,6 +106,13 @@ struct BadgeComponent: View {
                 )
 
                 factory.buildBadge(
+                    size: .sm,
+                    variant: .outlined,
+                    text: "FEATURE",
+                    iconSymbol: "circle.fill"
+                )
+
+                factory.buildBadge(
                     size: .md,
                     variant: .outlined,
                     text: "BUG"
@@ -125,6 +150,14 @@ struct BadgeComponent: View {
                     text: "FEATURE",
                     iconSymbol: "circle.fill"
                 )
+
+                factory.buildBadge(
+                    size: .md,
+                    variant: .outlined,
+                    text: "FEATURE",
+                    iconSymbol: "circle.fill"
+                )
+                .redacted(reason: .placeholder)
             }
 
             Spacer()
@@ -207,6 +240,14 @@ struct BadgeComponent: View {
                     text: "FEATURE",
                     iconSymbol: "circle.fill"
                 )
+
+                factory.buildBadge(
+                    size: .md,
+                    variant: .contained,
+                    text: "FEATURE",
+                    iconSymbol: "circle.fill"
+                )
+                .redacted(reason: .placeholder)
             }
 
             Spacer()
