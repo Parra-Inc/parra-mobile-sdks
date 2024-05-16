@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+private let closeButtonSize: CGFloat = 12
+
 public extension ParraGlobalComponentAttributes {
     func inlineAlertAttributes(
         content: ParraAlertContent,
@@ -87,7 +89,7 @@ public extension ParraGlobalComponentAttributes {
         let edgePadding = theme.padding.value(
             for: edgePaddingSize
         )
-        let labelTrailingPadding = edgePadding.trailing * 2.0 + 12
+        let labelTrailingPadding = edgePadding.trailing * 2.0 + closeButtonSize
 
         return ParraAttributes.ToastAlert(
             title: ParraAttributes.Label(
@@ -120,7 +122,7 @@ public extension ParraGlobalComponentAttributes {
             ),
             icon: icon,
             dismissButton: defaultDismissButton(
-                trailingPadding: edgePadding.trailing
+                cornerPadding: edgePadding.trailing
             ),
             border: border,
             cornerRadius: .xl,
@@ -130,7 +132,7 @@ public extension ParraGlobalComponentAttributes {
     }
 
     private func defaultDismissButton(
-        trailingPadding: CGFloat
+        cornerPadding: CGFloat
     ) -> ParraAttributes.ImageButton {
         return ParraAttributes.ImageButton(
             normal: ParraAttributes.ImageButton.StatefulAttributes(
@@ -139,9 +141,15 @@ public extension ParraGlobalComponentAttributes {
                         lightVariant: ParraColorSwatch.gray.shade600,
                         darkVariant: ParraColorSwatch.gray.shade300
                     ),
-                    size: CGSize(width: 12, height: 12),
+                    size: CGSize(
+                        width: closeButtonSize,
+                        height: closeButtonSize
+                    ),
                     padding: .custom(
-                        .padding(trailing: trailingPadding)
+                        .padding(
+                            top: cornerPadding,
+                            trailing: cornerPadding
+                        )
                     )
                 ),
                 border: ParraAttributes.Border(),
@@ -154,9 +162,15 @@ public extension ParraGlobalComponentAttributes {
                         lightVariant: ParraColorSwatch.gray.shade600,
                         darkVariant: ParraColorSwatch.gray.shade300
                     ).opacity(0.8),
-                    size: CGSize(width: 12, height: 12),
+                    size: CGSize(
+                        width: closeButtonSize,
+                        height: closeButtonSize
+                    ),
                     padding: .custom(
-                        .padding(trailing: trailingPadding)
+                        .padding(
+                            top: cornerPadding,
+                            trailing: cornerPadding
+                        )
                     )
                 ),
                 border: ParraAttributes.Border(),
@@ -169,9 +183,15 @@ public extension ParraGlobalComponentAttributes {
                         lightVariant: ParraColorSwatch.gray.shade600,
                         darkVariant: ParraColorSwatch.gray.shade300
                     ).opacity(0.6),
-                    size: CGSize(width: 12, height: 12),
+                    size: CGSize(
+                        width: closeButtonSize,
+                        height: closeButtonSize
+                    ),
                     padding: .custom(
-                        .padding(trailing: trailingPadding)
+                        .padding(
+                            top: cornerPadding,
+                            trailing: cornerPadding
+                        )
                     )
                 ),
                 border: ParraAttributes.Border(),
