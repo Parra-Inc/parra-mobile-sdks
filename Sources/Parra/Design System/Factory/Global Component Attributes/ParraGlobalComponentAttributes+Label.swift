@@ -75,8 +75,7 @@ public extension ParraGlobalComponentAttributes {
                     style: style,
                     width: width,
                     weight: weight,
-                    design: design,
-                    color: theme.palette.primaryText.toParraColor()
+                    design: design
                 )
             )
         }

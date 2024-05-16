@@ -148,10 +148,55 @@ extension ParraAttributes.Text: OverridableAttributes {
         _ overrides: ParraAttributes.Text?
     ) -> ParraAttributes.Text {
         ParraAttributes.Text(
-            fontType: overrides?.fontType ?? fontType,
+            fontType: fontType.mergingOverrides(overrides?.fontType),
             color: overrides?.color ?? color,
             alignment: overrides?.alignment ?? alignment,
             shadow: shadow.mergingOverrides(overrides?.shadow)
         )
+    }
+}
+
+// MARK: - ParraAttributes.Text.FontType + OverridableAttributes
+
+extension ParraAttributes.Text.FontType: OverridableAttributes {
+    func mergingOverrides(
+        _ overrides: ParraAttributes.Text.FontType?
+    ) -> ParraAttributes.Text.FontType {
+        switch (self, overrides) {
+        case (
+            .style(_, let width, let weight, let design),
+            .style(
+                let overrideStyle,
+                let overrideWidth,
+                let overrideWeight,
+                let overrideDesign
+            )
+        ):
+            return .style(
+                style: overrideStyle,
+                width: overrideWidth ?? width,
+                weight: overrideWeight ?? weight,
+                design: overrideDesign ?? design
+            )
+        case (
+            .size(_, let width, let weight, let design),
+            .size(
+                let overrideSize,
+                let overrideWidth,
+                let overrideWeight,
+                let overrideDesign
+            )
+        ):
+            return .size(
+                size: overrideSize,
+                width: overrideWidth ?? width,
+                weight: overrideWeight ?? weight,
+                design: overrideDesign ?? design
+            )
+        case (.custom, .custom(let font)):
+            return .custom(font)
+        default:
+            return overrides ?? self
+        }
     }
 }

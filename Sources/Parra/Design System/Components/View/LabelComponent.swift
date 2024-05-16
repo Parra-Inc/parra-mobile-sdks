@@ -82,9 +82,15 @@ struct LabelComponent: View {
                 content: LabelContent(text: "A large title"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
-                        style: .title
+                        style: .largeTitle,
+                        weight: .heavy
                     )
                 )
+            )
+
+            factory.buildLabel(
+                content: LabelContent(text: "A large title 2"),
+                localAttributes: .default(with: .largeTitle)
             )
 
             factory.buildLabel(
