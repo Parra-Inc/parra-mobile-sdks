@@ -102,7 +102,7 @@ extension ParraAttributes.Label {
             text: ParraAttributes.Text(
                 fontType: .style(
                     style: .body,
-                    weight: .medium
+                    weight: .regular
                 ),
                 color: palette.primaryText.toParraColor(),
                 alignment: .leading
