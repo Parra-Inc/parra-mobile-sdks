@@ -109,7 +109,7 @@ struct ReleaseWidget: Container {
                 content: contentObserver.content.title,
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
-                        font: .title
+                        style: .title
                     )
                 )
             )
@@ -119,7 +119,7 @@ struct ReleaseWidget: Container {
                     content: content,
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
-                            font: .subheadline,
+                            style: .subheadline,
                             alignment: .leading
                         ),
                         frame: .flexible(
@@ -244,7 +244,7 @@ struct ReleaseWidget: Container {
                             content: content,
                             localAttributes: ParraAttributes.Label(
                                 text: ParraAttributes.Text(
-                                    font: .body,
+                                    style: .body,
                                     alignment: .leading
                                 )
                             )

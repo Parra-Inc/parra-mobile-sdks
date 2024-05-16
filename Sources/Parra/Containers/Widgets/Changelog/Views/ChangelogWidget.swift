@@ -44,7 +44,7 @@ struct ChangelogWidget: Container {
                     content: contentObserver.content.title,
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
-                            font: .title
+                            style: .title
                         ),
                         frame: .flexible(
                             FlexibleFrameAttributes(

@@ -84,21 +84,13 @@ struct FeedbackFormWidget: Container {
         VStack(alignment: .leading, spacing: 10) {
             componentFactory.buildLabel(
                 content: contentObserver.content.title,
-                localAttributes: ParraAttributes.Label(
-                    text: ParraAttributes.Text(
-                        font: .title
-                    )
-                )
+                localAttributes: .default(with: .title)
             )
 
             if let descriptionContent = contentObserver.content.description {
                 componentFactory.buildLabel(
                     content: descriptionContent,
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            font: .subheadline
-                        )
-                    )
+                    localAttributes: .default(with: .subheadline)
                 )
             }
         }

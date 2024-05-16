@@ -28,7 +28,7 @@ public extension ParraGlobalComponentAttributes {
         }
 
         let text = ParraAttributes.Text(
-            font: .size(
+            fontType: .size(
                 size: size.fontSize,
                 weight: size.fontWeight
             ),

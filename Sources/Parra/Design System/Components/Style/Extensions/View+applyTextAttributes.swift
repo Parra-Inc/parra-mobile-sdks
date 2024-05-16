@@ -14,7 +14,7 @@ extension View {
         _ attributes: ParraAttributes.Text,
         using theme: ParraTheme
     ) -> some View {
-        font(attributes.font.font)
+        font(attributes.fontType.font)
             .foregroundColor(
                 attributes.color ?? theme.palette.primaryText.toParraColor()
             )

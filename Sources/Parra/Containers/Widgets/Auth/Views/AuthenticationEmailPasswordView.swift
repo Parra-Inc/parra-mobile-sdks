@@ -96,7 +96,7 @@ struct AuthenticationEmailPasswordView: View {
                     content: LabelContent(text: error),
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
-                            font: .caption,
+                            style: .caption,
                             color: themeObserver.theme.palette.error
                                 .toParraColor().opacity(0.8)
                         )

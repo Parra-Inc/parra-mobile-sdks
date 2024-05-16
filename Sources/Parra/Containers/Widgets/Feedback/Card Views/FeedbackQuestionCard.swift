@@ -22,11 +22,7 @@ struct FeedbackQuestionCard: View {
             VStack(alignment: .leading, spacing: 2) {
                 componentFactory.buildLabel(
                     content: LabelContent(text: question.title),
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            font: .headline
-                        )
-                    )
+                    localAttributes: .default(with: .headline)
                 )
                 .minimumScaleFactor(0.8)
                 .lineLimit(2)
@@ -37,11 +33,7 @@ struct FeedbackQuestionCard: View {
                 if let subtitle = question.subtitle {
                     componentFactory.buildLabel(
                         content: LabelContent(text: subtitle),
-                        localAttributes: ParraAttributes.Label(
-                            text: ParraAttributes.Text(
-                                font: .subheadline
-                            )
-                        )
+                        localAttributes: .default(with: .subheadline)
                     )
                     .minimumScaleFactor(0.8)
                     .lineLimit(2)

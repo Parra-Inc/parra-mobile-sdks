@@ -37,11 +37,7 @@ struct RoadmapListItem: View {
 
             componentFactory.buildLabel(
                 content: ticketContent.createdAt,
-                localAttributes: ParraAttributes.Label(
-                    text: ParraAttributes.Text(
-                        font: .caption
-                    )
-                )
+                localAttributes: .default(with: .caption)
             )
             .foregroundStyle(theme.palette.secondaryText.toParraColor())
         }

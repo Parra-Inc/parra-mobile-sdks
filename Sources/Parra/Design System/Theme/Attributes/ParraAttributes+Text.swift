@@ -17,14 +17,14 @@ public extension ParraAttributes {
 
         public init(
             style: Font.TextStyle = .body,
-            width: Font.Width = .standard,
-            weight: Font.Weight = .regular,
-            design: Font.Design = .default,
+            width: Font.Width? = nil,
+            weight: Font.Weight? = nil,
+            design: Font.Design? = nil,
             color: Color? = nil,
             alignment: TextAlignment? = nil,
             shadow: Shadow = .init()
         ) {
-            self.font = .style(
+            self.fontType = .style(
                 style: style,
                 width: width,
                 weight: weight,
@@ -37,14 +37,14 @@ public extension ParraAttributes {
 
         public init(
             fontSize: CGFloat,
-            width: Font.Width = .standard,
-            weight: Font.Weight = .regular,
-            design: Font.Design = .default,
+            width: Font.Width? = nil,
+            weight: Font.Weight? = nil,
+            design: Font.Design? = nil,
             color: Color? = nil,
             alignment: TextAlignment? = nil,
             shadow: Shadow = .init()
         ) {
-            self.font = .size(
+            self.fontType = .size(
                 size: fontSize,
                 width: width,
                 weight: weight,
@@ -56,12 +56,12 @@ public extension ParraAttributes {
         }
 
         public init(
-            font: FontType,
+            fontType: FontType,
             color: Color? = nil,
             alignment: TextAlignment? = nil,
             shadow: Shadow = .init()
         ) {
-            self.font = font
+            self.fontType = fontType
             self.color = color
             self.alignment = alignment
             self.shadow = shadow
@@ -73,7 +73,7 @@ public extension ParraAttributes {
             alignment: TextAlignment? = nil,
             shadow: Shadow = .init()
         ) {
-            self.font = .custom(font)
+            self.fontType = .custom(font)
             self.color = color
             self.alignment = alignment
             self.shadow = shadow
@@ -85,7 +85,7 @@ public extension ParraAttributes {
             alignment: TextAlignment? = nil,
             shadow: Shadow = .init()
         ) {
-            self.font = .custom(Font(font as CTFont))
+            self.fontType = .custom(Font(font as CTFont))
             self.color = color
             self.alignment = alignment
             self.shadow = shadow
@@ -96,16 +96,16 @@ public extension ParraAttributes {
         public enum FontType {
             case style(
                 style: Font.TextStyle,
-                width: Font.Width = .standard,
-                weight: Font.Weight = .regular,
-                design: Font.Design = .default
+                width: Font.Width? = nil,
+                weight: Font.Weight? = nil,
+                design: Font.Design? = nil
             )
 
             case size(
                 size: CGFloat,
-                width: Font.Width = .standard,
-                weight: Font.Weight = .regular,
-                design: Font.Design = .default
+                width: Font.Width? = nil,
+                weight: Font.Weight? = nil,
+                design: Font.Design? = nil
             )
 
             case custom(Font)
@@ -120,21 +120,21 @@ public extension ParraAttributes {
                         design: design,
                         weight: weight
                     )
-                    .width(width)
+                    .width(width ?? .standard)
                 case .size(let size, let width, let weight, let design):
                     return Font.system(
                         size: size,
                         weight: weight,
                         design: design
                     )
-                    .width(width)
+                    .width(width ?? .standard)
                 case .custom(let font):
                     return font
                 }
             }
         }
 
-        public var font: FontType
+        public var fontType: FontType
         public var color: Color?
         public var alignment: TextAlignment?
         public var shadow: Shadow
@@ -148,7 +148,7 @@ extension ParraAttributes.Text: OverridableAttributes {
         _ overrides: ParraAttributes.Text?
     ) -> ParraAttributes.Text {
         ParraAttributes.Text(
-            font: overrides?.font ?? font,
+            fontType: overrides?.fontType ?? fontType,
             color: overrides?.color ?? color,
             alignment: overrides?.alignment ?? alignment,
             shadow: shadow.mergingOverrides(overrides?.shadow)

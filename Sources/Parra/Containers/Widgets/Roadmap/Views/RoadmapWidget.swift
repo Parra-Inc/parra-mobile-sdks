@@ -209,11 +209,7 @@ struct RoadmapWidget: Container {
         VStack(alignment: .leading, spacing: 20) {
             componentFactory.buildLabel(
                 content: contentObserver.content.title,
-                localAttributes: ParraAttributes.Label(
-                    text: ParraAttributes.Text(
-                        font: .title
-                    )
-                )
+                localAttributes: .default(with: .title)
             )
 
             Picker(
@@ -230,11 +226,7 @@ struct RoadmapWidget: Container {
             if let description = contentObserver.selectedTab.description {
                 componentFactory.buildLabel(
                     content: LabelContent(text: description),
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            font: .subheadline
-                        )
-                    )
+                    localAttributes: .default(with: .subheadline)
                 )
                 .multilineTextAlignment(.leading)
                 .lineLimit(5)

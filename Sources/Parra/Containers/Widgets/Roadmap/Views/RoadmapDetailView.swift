@@ -30,7 +30,7 @@ struct RoadmapDetailView: View {
                         content: ticketContent.title,
                         localAttributes: ParraAttributes.Label(
                             text: ParraAttributes.Text(
-                                font: .title,
+                                style: .title,
                                 alignment: .leading
                             ),
                             frame: .flexible(
@@ -66,7 +66,7 @@ struct RoadmapDetailView: View {
                     ),
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
-                            font: .caption,
+                            style: .caption,
                             color: palette.secondaryText.toParraColor()
                         ),
                         frame: .flexible(
@@ -89,7 +89,7 @@ struct RoadmapDetailView: View {
                         content: description,
                         localAttributes: ParraAttributes.Label(
                             text: ParraAttributes.Text(
-                                font: .body
+                                style: .body
                             ),
                             frame: .flexible(
                                 FlexibleFrameAttributes(

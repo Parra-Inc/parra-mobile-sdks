@@ -17,7 +17,7 @@ public extension ParraGlobalComponentAttributes {
         let palette = theme.palette
 
         let text = ParraAttributes.Text(
-            font: .body,
+            style: .body,
             color: palette.primaryText.toParraColor()
         )
 

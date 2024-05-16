@@ -16,14 +16,14 @@ public extension ParraGlobalComponentAttributes {
         return ParraAttributes.Segment(
             selectedOptionLabels: ParraAttributes.Label(
                 text: ParraAttributes.Text(
-                    font: .body,
+                    style: .body,
                     color: theme.palette.primaryText.toParraColor()
                 ),
                 background: theme.palette.primary.toParraColor()
             ),
             unselectedOptionLabels: ParraAttributes.Label(
                 text: ParraAttributes.Text(
-                    font: .body,
+                    style: .body,
                     color: theme.palette.secondaryText.toParraColor()
                 ),
                 background: theme.palette.primaryBackground

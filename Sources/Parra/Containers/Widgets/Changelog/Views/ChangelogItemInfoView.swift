@@ -51,7 +51,7 @@ struct ChangelogItemInfoView: View {
                 content: createdAt,
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
-                        font: .caption,
+                        style: .caption,
                         color: palette.secondaryText.toParraColor()
                     )
                 )

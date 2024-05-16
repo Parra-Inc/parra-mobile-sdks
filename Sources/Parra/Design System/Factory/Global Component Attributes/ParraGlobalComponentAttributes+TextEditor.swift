@@ -17,7 +17,7 @@ public extension ParraGlobalComponentAttributes {
         let palette = theme.palette
 
         let text = ParraAttributes.Text(
-            font: .body,
+            style: .body,
             color: palette.primaryText.toParraColor(),
             alignment: .leading
         )
@@ -38,7 +38,7 @@ public extension ParraGlobalComponentAttributes {
 
         let characterCountLabel = ParraAttributes.Label(
             text: ParraAttributes.Text(
-                font: .caption,
+                style: .caption,
                 color: palette.secondaryText.toParraColor().opacity(0.8),
                 alignment: .trailing
             ),

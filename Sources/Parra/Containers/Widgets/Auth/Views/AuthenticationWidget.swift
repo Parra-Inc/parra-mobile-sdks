@@ -59,7 +59,7 @@ struct AuthenticationWidget: Container {
                     content: content.title,
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
-                            font: .largeTitle
+                            style: .largeTitle
                         ),
                         padding: .custom(
                             .padding(bottom: content.icon == nil ? 0 : 6)

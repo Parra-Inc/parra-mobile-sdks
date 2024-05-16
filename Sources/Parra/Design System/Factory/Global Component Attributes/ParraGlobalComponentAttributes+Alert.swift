@@ -33,7 +33,7 @@ public extension ParraGlobalComponentAttributes {
         return ParraAttributes.InlineAlert(
             title: ParraAttributes.Label(
                 text: ParraAttributes.Text(
-                    font: .headline
+                    style: .headline
                 ),
                 padding: .zero,
                 frame: .flexible(
@@ -45,7 +45,7 @@ public extension ParraGlobalComponentAttributes {
             ),
             subtitle: ParraAttributes.Label(
                 text: ParraAttributes.Text(
-                    font: .subheadline
+                    style: .subheadline
                 ),
                 frame: .flexible(
                     FlexibleFrameAttributes(
@@ -92,7 +92,7 @@ public extension ParraGlobalComponentAttributes {
         return ParraAttributes.ToastAlert(
             title: ParraAttributes.Label(
                 text: ParraAttributes.Text(
-                    font: .headline
+                    style: .headline
                 ),
                 padding: .custom(
                     .padding(trailing: labelTrailingPadding)
@@ -106,7 +106,7 @@ public extension ParraGlobalComponentAttributes {
             ),
             subtitle: ParraAttributes.Label(
                 text: ParraAttributes.Text(
-                    font: .subheadline
+                    style: .subheadline
                 ),
                 padding: .custom(
                     .padding(trailing: labelTrailingPadding)
@@ -120,7 +120,7 @@ public extension ParraGlobalComponentAttributes {
             ),
             icon: icon,
             dismissButton: defaultDismissButton(
-                trailingPadding: labelTrailingPadding
+                trailingPadding: edgePadding.trailing
             ),
             border: border,
             cornerRadius: .xl,

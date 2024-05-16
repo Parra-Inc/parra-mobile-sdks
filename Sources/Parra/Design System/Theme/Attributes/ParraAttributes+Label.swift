@@ -100,7 +100,7 @@ extension ParraAttributes.Label {
 
         return ParraAttributes.Label(
             text: ParraAttributes.Text(
-                font: .style(
+                fontType: .style(
                     style: .body,
                     weight: .medium
                 ),
@@ -120,7 +120,7 @@ extension ParraAttributes.Label {
 
         return ParraAttributes.Label(
             text: ParraAttributes.Text(
-                font: .caption,
+                style: .caption,
                 color: palette.secondaryText.toParraColor(),
                 alignment: .trailing
             ),

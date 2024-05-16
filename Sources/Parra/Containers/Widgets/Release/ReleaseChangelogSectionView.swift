@@ -26,7 +26,7 @@ struct ReleaseChangelogSectionView: View {
                 content: content.title,
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
-                        font: .title2
+                        style: .title2
                     )
                 )
             )
@@ -35,7 +35,7 @@ struct ReleaseChangelogSectionView: View {
                 content: LabelContent(text: combinedText),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
-                        font: .body,
+                        style: .body,
                         alignment: .leading
                     ),
                     frame: .flexible(

@@ -21,7 +21,7 @@ struct ChangelogListItem: View {
                 content: content.name,
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
-                        font: .headline,
+                        style: .headline,
                         alignment: .leading
                     ),
                     frame: .flexible(
@@ -40,7 +40,7 @@ struct ChangelogListItem: View {
                     content: content,
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
-                            font: .body,
+                            style: .body,
                             alignment: .leading
                         )
                     )

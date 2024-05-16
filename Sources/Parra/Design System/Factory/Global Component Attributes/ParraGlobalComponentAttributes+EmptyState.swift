@@ -18,7 +18,7 @@ public extension ParraGlobalComponentAttributes {
         return ParraAttributes.EmptyState(
             titleLabel: ParraAttributes.Label(
                 text: ParraAttributes.Text(
-                    font: .title
+                    style: .title
                 ),
                 padding: .custom(
                     .padding(top: 12)
@@ -26,7 +26,7 @@ public extension ParraGlobalComponentAttributes {
             ),
             subtitleLabel: ParraAttributes.Label(
                 text: ParraAttributes.Text(
-                    font: .subheadline,
+                    style: .subheadline,
                     alignment: .center
                 ),
                 padding: .custom(

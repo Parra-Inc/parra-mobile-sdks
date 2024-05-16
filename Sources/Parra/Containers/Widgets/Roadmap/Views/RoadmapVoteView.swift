@@ -58,11 +58,7 @@ struct RoadmapVoteView: View {
 
             componentFactory.buildLabel(
                 content: ticketContent.voteCount,
-                localAttributes: ParraAttributes.Label(
-                    text: ParraAttributes.Text(
-                        font: .callout
-                    )
-                )
+                localAttributes: .default(with: .callout)
             )
             .minimumScaleFactor(0.7)
         }
