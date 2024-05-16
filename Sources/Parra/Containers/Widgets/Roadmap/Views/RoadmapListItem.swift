@@ -40,6 +40,7 @@ struct RoadmapListItem: View {
                 localAttributes: .default(with: .caption)
             )
             .foregroundStyle(theme.palette.secondaryText.toParraColor())
+            .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity)
     }

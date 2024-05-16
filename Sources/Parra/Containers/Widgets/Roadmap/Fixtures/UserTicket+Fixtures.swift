@@ -16,7 +16,7 @@ extension UserTicket: ParraFixture {
             UserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "PAR-2349",
-                createdAt: .now,
+                createdAt: .now.daysAgo(0.01),
                 updatedAt: .now.daysAgo(1.3),
                 deletedAt: nil,
                 title: "The app crashes on the home screen",

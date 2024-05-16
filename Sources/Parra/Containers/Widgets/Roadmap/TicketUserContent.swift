@@ -19,7 +19,8 @@ struct TicketUserContent: Identifiable, Hashable {
         self.ticketNumber = userTicket.ticketNumber
         self.createdAt = LabelContent(
             text: userTicket.createdAt.timeAgo(
-                dateTimeStyle: .numeric
+                dateTimeStyle: .numeric,
+                unitStyle: .short
             )
         )
         self.type = userTicket.type
