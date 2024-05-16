@@ -36,6 +36,10 @@ struct MenuComponent: View {
 
             helperLabel
         }
+        .applyPadding(
+            size: attributes.padding,
+            from: themeObserver.theme
+        )
     }
 
     // MARK: - Private
@@ -97,7 +101,7 @@ struct MenuComponent: View {
             Spacer()
 
             let padding = themeObserver.theme.padding.value(
-                for: attributes.selectedMenuItemLabels.padding
+                for: attributes.padding
             )
 
             Image(systemName: "chevron.up.chevron.down")

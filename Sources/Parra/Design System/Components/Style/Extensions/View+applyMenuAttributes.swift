@@ -14,7 +14,16 @@ extension View {
         _ attributes: ParraAttributes.Menu,
         using theme: ParraTheme
     ) -> some View {
-        applyCommonViewAttributes(attributes, from: theme)
+        background(attributes.background ?? .clear)
+            .applyCornerRadii(
+                size: attributes.cornerRadius,
+                from: theme
+            )
+            .applyBorder(
+                attributes.border,
+                with: attributes.cornerRadius,
+                from: theme
+            )
             .tint(attributes.tint)
     }
 }
