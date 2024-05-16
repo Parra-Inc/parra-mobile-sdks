@@ -53,7 +53,7 @@ public extension ParraGlobalComponentAttributes {
                 ),
                 cornerRadius: size.cornerRadius,
                 padding: .custom(size.padding),
-                background: swatch.shade50.toParraColor()
+                background: palette.primaryBackground
             ).mergingOverrides(localAttributes)
         case .contained:
             return ParraAttributes.Badge(
@@ -67,11 +67,11 @@ public extension ParraGlobalComponentAttributes {
                 ),
                 border: ParraAttributes.Border(
                     width: 1,
-                    color: swatch.shade600.toParraColor()
+                    color: swatch.shade500.toParraColor()
                 ),
                 cornerRadius: size.cornerRadius,
                 padding: .custom(size.padding),
-                background: swatch.shade50.toParraColor()
+                background: swatch.shade100.toParraColor()
             ).mergingOverrides(localAttributes)
         }
     }
