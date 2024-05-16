@@ -381,7 +381,34 @@ public struct CachedAsyncImage<Content>: View where Content: View {
 
     public var body: some View {
         content(phase)
-            .task(id: urlRequest, load)
+            .task(id: urlRequest) {
+                do {
+                    if let urlRequest {
+                        let (image, metrics) = try await remoteImage(
+                            from: urlRequest,
+                            session: urlSession
+                        )
+                        if metrics.transactionMetrics.last?
+                            .resourceFetchType == .localCache
+                        {
+                            // WARNING: This does not behave well when the url is changed with another
+                            phase = .success(image)
+                        } else {
+                            withAnimation(transaction.animation) {
+                                phase = .success(image)
+                            }
+                        }
+                    } else {
+                        withAnimation(transaction.animation) {
+                            phase = .empty
+                        }
+                    }
+                } catch {
+                    withAnimation(transaction.animation) {
+                        phase = .failure(error)
+                    }
+                }
+            }
     }
 
     // MARK: - Private
@@ -397,36 +424,6 @@ public struct CachedAsyncImage<Content>: View where Content: View {
     private let transaction: Transaction
 
     private let content: (AsyncImagePhase) -> Content
-
-    @Sendable
-    private func load() async {
-        do {
-            if let urlRequest {
-                let (image, metrics) = try await remoteImage(
-                    from: urlRequest,
-                    session: urlSession
-                )
-                if metrics.transactionMetrics.last?
-                    .resourceFetchType == .localCache
-                {
-                    // WARNING: This does not behave well when the url is changed with another
-                    phase = .success(image)
-                } else {
-                    withAnimation(transaction.animation) {
-                        phase = .success(image)
-                    }
-                }
-            } else {
-                withAnimation(transaction.animation) {
-                    phase = .empty
-                }
-            }
-        } catch {
-            withAnimation(transaction.animation) {
-                phase = .failure(error)
-            }
-        }
-    }
 }
 
 // MARK: - AsyncImage.LoadingError
