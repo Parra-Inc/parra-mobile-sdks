@@ -1,5 +1,5 @@
 //
-//  LatestVersionManager+AppStoreResponse+Fixtures.swift
+//  AppInfoManager+AppStoreResponse+Fixtures.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/25/24.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-extension LatestVersionManager.AppStoreResponse: ParraFixture {
-    static func validStates() -> [LatestVersionManager.AppStoreResponse] {
+extension AppInfoManager.AppStoreResponse: ParraFixture {
+    static func validStates() -> [AppInfoManager.AppStoreResponse] {
         return [
-            LatestVersionManager.AppStoreResponse(
+            AppInfoManager.AppStoreResponse(
                 results: [
-                    LatestVersionManager.AppStoreResponse.Result(
+                    AppInfoManager.AppStoreResponse.Result(
                         description: "Do you frequently look for recipes only to find yourself wading through pages of back stories and personal anecdotes before getting to meat and potatoes? Only Recipes is here to help!\n\n\nAll you have to do is look up a recipe and copy the link. Then just paste it into Only Recipes and we'll scan the website to look for the important parts, like the instructions and ingredients.\n\nEvery recipe you add will be stored in a list so they're easy to access again later.\n\n\nWorks with many popular recipe websites like...\n\n• food.com\n• foodnetwork.com\n• 101cookbooks.com\n• allrecipes.com\n• seriouseats.com\n• yummly.com\n• eatingwell.com\n• epicurious.com\n\n...and many, many more!\n\n\n*Only Recipes is not affiliated with any of the recipe websites listed above, or supported in the app.\n*We current only support scanning websites on English language websites.",
                         bundleId: "com.humblebots.onlyrecipes",
                         trackName: "Only Recipes",
@@ -29,7 +29,7 @@ extension LatestVersionManager.AppStoreResponse: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [LatestVersionManager.AppStoreResponse] {
+    static func invalidStates() -> [AppInfoManager.AppStoreResponse] {
         return []
     }
 }

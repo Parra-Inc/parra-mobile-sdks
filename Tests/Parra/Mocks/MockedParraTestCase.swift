@@ -84,7 +84,7 @@ class MockedParraTestCase: ParraBaseMock {
             notificationCenter: notificationCenter
         )
 
-        let latestVersionManager = LatestVersionManager(
+        let appInfoManager = AppInfoManager(
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
@@ -132,7 +132,7 @@ class MockedParraTestCase: ParraBaseMock {
             api: api,
             notificationCenter: notificationCenter,
             feedback: feedback,
-            latestVersionManager: latestVersionManager,
+            appInfoManager: appInfoManager,
             containerRenderer: containerRenderer,
             alertManager: alertManager,
             modalScreenManager: modalScreenManager
@@ -272,14 +272,14 @@ class MockedParraTestCase: ParraBaseMock {
         )
     }
 
-    func createLatestVersionManagerMock(
+    func createAppInfoManagerMock(
         appState: ParraAppState = ParraAppState(
             tenantId: UUID().uuidString,
             applicationId: UUID().uuidString
         ),
         appConfig: ParraConfiguration = .init(),
         authenticationProvider: @escaping ParraTokenProvider
-    ) async -> LatestVersionManager {
+    ) async -> AppInfoManager {
         let configuration = ParraConfiguration()
         let notificationCenter = ParraNotificationCenter()
         let dataManager = createMockDataManager()
@@ -312,7 +312,7 @@ class MockedParraTestCase: ParraBaseMock {
             apiResourceServer: mockApiResourceServer.resourceServer
         )
 
-        return LatestVersionManager(
+        return AppInfoManager(
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,

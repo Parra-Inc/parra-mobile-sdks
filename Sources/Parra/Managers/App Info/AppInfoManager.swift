@@ -1,5 +1,5 @@
 //
-//  LatestVersionManager.swift
+//  AppInfoManager.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/21/24.
@@ -11,7 +11,7 @@ import UIKit
 
 private let logger = Logger()
 
-final actor LatestVersionManager {
+final class AppInfoManager {
     // MARK: - Lifecycle
 
     init(

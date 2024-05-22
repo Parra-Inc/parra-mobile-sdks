@@ -128,6 +128,18 @@ final class AuthServer: Server {
         )
     }
 
+    func postAuthChallenges(
+        requestData: AuthChallengesRequestBody
+    ) async throws -> AuthChallengeResponse {
+        return try await performOptionalAuthFormEncodedRequest(
+            to: .postAuthChallenges(
+                tenantId: appState.tenantId
+            ),
+            with: nil,
+            data: requestData.payload
+        )
+    }
+
     func getUserInfo(
         accessToken: String,
         timeout: TimeInterval? = nil
@@ -211,6 +223,20 @@ final class AuthServer: Server {
 
         return try await performRequest(
             request: request,
+            timeout: timeout
+        )
+    }
+
+    private func performOptionalAuthFormEncodedRequest<T>(
+        to endpoint: ParraEndpoint,
+        with accessToken: String?,
+        data: [String: String],
+        timeout: TimeInterval? = nil
+    ) async throws -> T where T: Codable {
+        return try await performFormPostRequest(
+            to: endpoint.url,
+            data: data,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
             timeout: timeout
         )
     }

@@ -24,9 +24,6 @@ struct BadgeComponent: View {
     let content: BadgeContent
     let attributes: ParraAttributes.Badge
 
-    @EnvironmentObject var componentFactory: ComponentFactory
-    @EnvironmentObject var themeObserver: ParraThemeObserver
-
     @Environment(\.redactionReasons) var redactionReasons
 
     var body: some View {
@@ -59,6 +56,11 @@ struct BadgeComponent: View {
         .scaledToFill()
         .contentShape(.rect)
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var componentFactory: ComponentFactory
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 }
 
 #Preview {

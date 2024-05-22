@@ -14,6 +14,7 @@ enum ParraEndpoint {
     case postCreateUser(tenantId: String)
     case postLogin(tenantId: String)
     case postLogout(tenantId: String)
+    case postAuthChallenges(tenantId: String)
 
     // Feedback
     case getCards
@@ -54,7 +55,7 @@ enum ParraEndpoint {
 
     var url: URL {
         switch self {
-        case .postCreateUser(let tenantId):
+        case .postCreateUser(let tenantId), .postAuthChallenges(let tenantId):
 
             let baseHost = ParraInternal.Constants.parraApiHost
             let host = "tenant-\(tenantId).\(baseHost)"
@@ -74,7 +75,7 @@ enum ParraEndpoint {
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions, .postCreateUser,
              .postPushTokens, .postAuthentication, .postVoteForTicket,
-             .postLogin, .postLogout, .postUpdateAvatar:
+             .postLogin, .postLogout, .postUpdateAvatar, .postAuthChallenges:
             return .post
         case .deleteVoteForTicket:
             return .delete
@@ -118,6 +119,8 @@ enum ParraEndpoint {
             return "tenants/:tenantId/issuers/public/auth/token"
         case .postCreateUser:
             return "auth/signup"
+        case .postAuthChallenges:
+            return "auth/challenges"
         case .postLogin:
             return "tenants/:tenantId/auth/login"
         case .postLogout:
@@ -147,6 +150,8 @@ enum ParraEndpoint {
             return "tenants/\(tenantId)/issuers/public/auth/token"
         case .postCreateUser:
             return "auth/signup"
+        case .postAuthChallenges:
+            return "auth/challenges"
         case .postLogin(let tenantId):
             return "tenants/\(tenantId)/auth/login"
         case .postLogout(let tenantId):

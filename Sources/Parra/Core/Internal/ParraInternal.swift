@@ -10,6 +10,10 @@ import Foundation
 import os
 import UIKit
 
+struct LaunchActionsResult {
+    let authInfo: ParraAppAuthInfo
+}
+
 private let logger = Logger(category: "Parra")
 
 /// The internal Parra instance containing any top level references/functions
@@ -30,7 +34,7 @@ class ParraInternal {
         api: API,
         notificationCenter: NotificationCenterType,
         feedback: ParraFeedback,
-        latestVersionManager: LatestVersionManager,
+        appInfoManager: AppInfoManager,
         containerRenderer: ContainerRenderer,
         alertManager: AlertManager,
         modalScreenManager: ModalScreenManager
@@ -45,7 +49,7 @@ class ParraInternal {
         self.api = api
         self.notificationCenter = notificationCenter
         self.feedback = feedback
-        self.latestVersionManager = latestVersionManager
+        self.appInfoManager = appInfoManager
         self.containerRenderer = containerRenderer
         self.alertManager = alertManager
         self.modalScreenManager = modalScreenManager
@@ -84,7 +88,7 @@ class ParraInternal {
     @usableFromInline let sessionManager: ParraSessionManager
     let api: API
     let notificationCenter: NotificationCenterType
-    let latestVersionManager: LatestVersionManager
+    let appInfoManager: AppInfoManager
     let containerRenderer: ContainerRenderer
     let alertManager: AlertManager
     let modalScreenManager: ModalScreenManager
@@ -131,8 +135,14 @@ class ParraInternal {
 
     /// Must be completed before the splash screen is dismissed!
     /// Keep this as lean as possible!!!!
-    func performActionsRequiredForAppLaunch() async {
-        await fetchLatestAppInfo()
+    func performActionsRequiredForAppLaunch() async throws
+        -> LaunchActionsResult
+    {
+        let authInfo = try await fetchLatestAppInfo()
+
+        return LaunchActionsResult(
+            authInfo: authInfo
+        )
     }
 
     // MARK: - Private
@@ -168,7 +178,7 @@ class ParraInternal {
             switch whatsNewOptions.presentationMode {
             case .automatic, .delayed:
                 Task {
-                    await latestVersionManager.checkAndPresentWhatsNew(
+                    await appInfoManager.checkAndPresentWhatsNew(
                         against: appInfo,
                         with: whatsNewOptions,
                         using: modalScreenManager
@@ -180,9 +190,9 @@ class ParraInternal {
         }
     }
 
-    private func fetchLatestAppInfo() async {
+    private func fetchLatestAppInfo() async throws -> ParraAppAuthInfo {
         do {
-            let appInfo = try await latestVersionManager.fetchLatestAppInfo(
+            let appInfo = try await appInfoManager.fetchLatestAppInfo(
                 force: true,
                 timeout: 5.0
             )
@@ -192,8 +202,12 @@ class ParraInternal {
             ])
 
             appState.appInfo = appInfo
+
+            return appInfo.auth
         } catch {
             logger.error("Failed to fetch latest app info", error)
+
+            throw error
         }
     }
 }

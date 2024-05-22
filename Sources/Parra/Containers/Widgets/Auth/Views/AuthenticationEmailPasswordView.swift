@@ -26,48 +26,48 @@ struct AuthenticationEmailPasswordView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            componentFactory.buildTextInput(
-                config: TextInputConfig(
-                    validationRules: config.emailValidationRules,
-                    textContentType: .emailAddress,
-                    textInputAutocapitalization: .never,
-                    autocorrectionDisabled: true
-                ),
-                content: content.emailField,
-                localAttributes: ParraAttributes.TextInput(
-                    padding: .custom(
-                        .padding(top: 50, bottom: 5)
-                    )
-                )
-            )
-            .submitLabel(.next)
-            .focused($focusedField, equals: .password)
-            .onSubmit(of: .text) {
-                contentObserver.loginTapped()
-            }
+//            componentFactory.buildTextInput(
+//                config: TextInputConfig(
+//                    validationRules: config.emailValidationRules,
+//                    textContentType: .emailAddress,
+//                    textInputAutocapitalization: .never,
+//                    autocorrectionDisabled: true
+//                ),
+//                content: content.emailField,
+//                localAttributes: ParraAttributes.TextInput(
+//                    padding: .custom(
+//                        .padding(top: 50, bottom: 5)
+//                    )
+//                )
+//            )
+//            .submitLabel(.next)
+//            .focused($focusedField, equals: .password)
+//            .onSubmit(of: .text) {
+//                contentObserver.loginTapped()
+//            }
 
-            componentFactory.buildTextInput(
-                config: TextInputConfig(
-                    validationRules: config.passwordValidationRules,
-                    isSecure: true,
-                    textContentType: .password,
-                    textInputAutocapitalization: .never,
-                    autocorrectionDisabled: true
-                ),
-                content: content.passwordField,
-                localAttributes: ParraAttributes.TextInput(
-                    padding: .custom(
-                        .padding(bottom: 16)
-                    )
-                )
-            )
-            .submitLabel(.next)
-            .focused($focusedField, equals: .password)
-            .onSubmit(of: .text) {
-                focusedField = nil
-
-                contentObserver.loginTapped()
-            }
+//            componentFactory.buildTextInput(
+//                config: TextInputConfig(
+//                    validationRules: config.passwordValidationRules,
+//                    isSecure: true,
+//                    textContentType: .password,
+//                    textInputAutocapitalization: .never,
+//                    autocorrectionDisabled: true
+//                ),
+//                content: content.passwordField,
+//                localAttributes: ParraAttributes.TextInput(
+//                    padding: .custom(
+//                        .padding(bottom: 16)
+//                    )
+//                )
+//            )
+//            .submitLabel(.next)
+//            .focused($focusedField, equals: .password)
+//            .onSubmit(of: .text) {
+//                focusedField = nil
+//
+//                contentObserver.loginTapped()
+//            }
 
             componentFactory.buildContainedButton(
                 config: ParraTextButtonConfig(

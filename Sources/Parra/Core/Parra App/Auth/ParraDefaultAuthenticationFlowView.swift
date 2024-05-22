@@ -8,16 +8,28 @@
 
 import SwiftUI
 
-public struct ParraDefaultAuthenticationFlowView: View {
+public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
     // MARK: - Lifecycle
 
     public init(
-        config: ParraAuthConfig = .default
+        flowConfig: ParraAuthenticationFlowConfig
     ) {
-        self.config = config
+        let navigationState = NavigationState()
+
+        self.flowConfig = flowConfig
+
+        _navigationState = StateObject(wrappedValue: navigationState)
+        _flowManager = StateObject(
+            wrappedValue: AuthenticationFlowManager(
+                flowConfig: flowConfig,
+                navigationState: navigationState
+            )
+        )
     }
 
     // MARK: - Public
+
+    public var delegate: (any ParraAuthenticationFlowDelegate)?
 
     public var body: some View {
         container
@@ -34,26 +46,37 @@ public struct ParraDefaultAuthenticationFlowView: View {
 
     // MARK: - Internal
 
-    var container: some View {
-        let container: AuthenticationWidget = parra.parraInternal
-            .containerRenderer.renderContainer(
-                params: .init(
-                    config: .default,
-                    content: .default,
-                    authService: parra.parraInternal.authService,
-                    alertManager: parra.parraInternal.alertManager,
-                    legalInfo: parra.parraInternal.appState.appInfo?
-                        .legal ?? .empty
-                ),
-                config: config
-            )
+    @EnvironmentObject var parraAuthInfo: ParraAppAuthInfo
 
-        return container
+    var container: some View {
+        NavigationStack(
+            path: $navigationState.navigationPath
+        ) {
+            flowManager.providerAuthScreen(
+                authScreen: .landingScreen,
+                authService: parra.parraInternal.authService,
+                using: parraAuthInfo
+            )
+            .navigationDestination(
+                for: AuthenticationFlowManager.AuthScreen.self
+            ) { destination in
+                flowManager.providerAuthScreen(
+                    authScreen: destination,
+                    authService: parra.parraInternal.authService,
+                    using: parraAuthInfo
+                )
+                .environmentObject(parraAuthInfo)
+                .environmentObject(navigationState)
+            }
+        }
     }
 
     // MARK: - Private
 
-    private let config: ParraAuthConfig
+    private let flowConfig: ParraAuthenticationFlowConfig
+
+    @StateObject private var flowManager: AuthenticationFlowManager
+    @StateObject private var navigationState = NavigationState()
 
     @Environment(\.parra) private var parra
 }

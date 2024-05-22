@@ -8,29 +8,67 @@
 
 import SwiftUI
 
-public enum LoginMethod {
-    case emailOrPhone
-    case sso(SSO)
+public enum AuthenticationMethod: Equatable {
+    case passwordless(PasswordlessType)
+    case password // implies email
+    case sso(SsoType)
+    case passkey
 
     // MARK: - Public
 
-    public enum SSO {
+    public enum SsoType {
         case google
         case apple
         case facebook
     }
+
+    public enum PasswordlessType {
+        case sms
+        case email
+    }
 }
 
-public typealias LandingScreenProvider = (
-    _ selectLoginMethod: @escaping (LoginMethod) -> Void
-) -> any View
+public enum ChallengeType {
+    case password(validationRules: [TextValidatorRule])
+    case passwordlessSms(codeLength: Int)
+    case passwordlessEmail(codeLength: Int)
+}
 
-public typealias EmailInputScreenProvider = (
-    _ submitEmail: @escaping (_ email: String) -> Void
-) -> any View
+public enum IdentityType {
+    case email
+    case phone
+    case username
+}
 
-public typealias PasswordInputScreenProvider = (
-    _ email: String,
-    _ submitPassword: @escaping (_ password: String) -> Void,
-    _ loginWithoutPassword: @escaping () -> Void
-) -> any View
+public enum ChallengeResponse {
+    case password(String)
+    case passwordlessSms(String)
+    case passwordlessEmail(String)
+}
+
+// app info endpoint will contain list of available login methods
+
+public protocol ParraAuthScreenParams {}
+public protocol ParraAuthScreen: View {
+    associatedtype Params: ParraAuthScreenParams
+
+    init(params: Params)
+}
+
+public typealias ParraAuthScreenProvider<T> = (T.Params) -> T
+    where T: ParraAuthScreen
+
+public typealias ParraAuthLandingScreenProvider =
+    ParraAuthScreenProvider<ParraAuthDefaultLandingScreen>
+
+// collects email or phone number. has continue button. server will respond to
+// continue action with info necessary to draw the next page
+public typealias ParraAuthIdentityInputScreenProvider =
+    ParraAuthScreenProvider<ParraAuthDefaultIdentityInputScreen>
+// --> identity from server after this ^^^
+
+// if password and passwordless -> show password field and "login with out password" button which navigates to passwordless screen
+// if password only, don't show "login without password"
+// if passwordless only show the passwordless screen
+public typealias ParraAuthIdentityChallengeScreenProvider =
+    ParraAuthScreenProvider<ParraAuthDefaultIdentityChallengeScreen>

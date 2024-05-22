@@ -11,29 +11,43 @@ import Foundation
 final class LaunchScreenStateManager: ObservableObject {
     enum State: Equatable {
         case initial
-        case transitioning
-        case complete
+        case transitioning(ParraAppAuthInfo)
+        case complete(ParraAppAuthInfo)
 
         // MARK: - Internal
 
         var showLaunchScreen: Bool {
-            return self == State.initial || self == State.transitioning
+            switch self {
+            case .initial, .transitioning:
+                return true
+            case .complete:
+                return false
+            }
         }
 
         var showAppContent: Bool {
-            return self == State.transitioning || self == State.complete
+            switch self {
+            case .transitioning, .complete:
+                return true
+            case .initial:
+                return false
+            }
         }
     }
 
     @MainActor @Published private(set) var state: State = .initial
 
     @MainActor
-    func dismiss() {
-        state = .transitioning
+    func dismiss(
+        with authInfo: ParraAppAuthInfo
+    ) {
+        state = .transitioning(authInfo)
     }
 
     @MainActor
-    func complete() {
-        state = .complete
+    func complete(
+        with authInfo: ParraAppAuthInfo
+    ) {
+        state = .complete(authInfo)
     }
 }

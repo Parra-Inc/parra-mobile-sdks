@@ -1,5 +1,5 @@
 //
-//  LatestVersionManager+presentationFlows.swift
+//  AppInfoManager+presentationFlows.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/28/24.
@@ -10,7 +10,7 @@ import SwiftUI
 
 private let logger = Logger()
 
-extension LatestVersionManager {
+extension AppInfoManager {
     /// Noop
     func handleDebugWhatsNewFlow() {
         logger.debug(

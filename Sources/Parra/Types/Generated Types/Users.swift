@@ -97,6 +97,137 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     public let email: String
 }
 
+struct AuthChallengesRequestBody: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    init(
+        email: String? = nil,
+        phoneNumber: String? = nil,
+        username: String? = nil,
+        unknownIdentity: String? = nil
+    ) {
+        self.email = email
+        self.phoneNumber = phoneNumber
+        self.username = username
+        self.unknownIdentity = unknownIdentity
+    }
+
+    init(identity: String, identityType: IdentityType?) {
+        guard let identityType else {
+            self.unknownIdentity = identity
+            self.email = nil
+            self.phoneNumber = nil
+            self.username = nil
+
+            return
+        }
+
+        switch identityType {
+        case .email:
+            self.email = identity
+            self.phoneNumber = nil
+            self.username = nil
+            self.unknownIdentity = nil
+        case .phone:
+            self.email = nil
+            self.phoneNumber = identity
+            self.username = nil
+            self.unknownIdentity = nil
+        case .username:
+            self.email = nil
+            self.phoneNumber = nil
+            self.username = identity
+            self.unknownIdentity = nil
+        }
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case email
+        case phoneNumber
+        case username
+        case unknownIdentity
+    }
+
+    let email: String?
+    let phoneNumber: String?
+    let username: String?
+    let unknownIdentity: String?
+
+    var payload: [String: String] {
+        var payload: [String: String] = [:]
+
+        if let email {
+            payload["email"] = email
+        }
+
+        if let phoneNumber {
+            payload["phone_number"] = phoneNumber
+        }
+
+        if let username {
+            payload["username"] = username
+        }
+
+        if let unknownIdentity {
+            payload["unknown_identity"] = unknownIdentity
+        }
+
+        return payload
+    }
+}
+
+public enum ParraAuthChallengeType: String, Codable, Equatable, Hashable {
+    case password
+    case passwordlessSms
+    case passwordlessEmail
+    case verificationSms
+    case verificationEmail
+}
+
+public struct ParraAuthChallenge: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    init(
+        id: ParraAuthChallengeType
+    ) {
+        self.id = id
+    }
+
+    // MARK: - Public
+
+    public let id: ParraAuthChallengeType
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+    }
+}
+
+struct AuthChallengeResponse: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    init(
+        exists: Bool,
+        challenges: [ParraAuthChallenge]
+    ) {
+        self.exists = exists
+        self.challenges = challenges
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case exists
+        case challenges
+    }
+
+    let exists: Bool
+    let challenges: [ParraAuthChallenge]
+}
+
 struct CreateUserRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 

@@ -28,11 +28,11 @@ public struct ParraLaunchScreen: View {
                 of: launchScreenState.state,
                 initial: true
             ) { _, newValue in
-                if newValue == .transitioning, shouldFade {
+                if case .transitioning(let authInfo) = newValue, shouldFade {
                     withAnimation(.linear(duration: config.fadeDuration)) {
                         shouldFade = false
                     } completion: {
-                        launchScreenState.complete()
+                        launchScreenState.complete(with: authInfo)
                     }
                 }
             }

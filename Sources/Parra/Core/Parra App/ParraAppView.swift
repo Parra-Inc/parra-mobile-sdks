@@ -95,8 +95,12 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
             // During this phase, initialization has finished so the primary
             // content view can be created, but the launch screen can not be
             // destroyed until its animation off screen has completed.
-            if launchScreenState.state.showAppContent {
-                renderPrimaryContent()
+
+            switch launchScreenState.state {
+            case .transitioning(let authInfo), .complete(let authInfo):
+                renderPrimaryContent(with: authInfo)
+            default:
+                EmptyView()
             }
 
             // When the app first launches, default to displaying the launch
@@ -105,7 +109,10 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
             // being initialized from running until we're ready.
             if launchScreenState.state.showLaunchScreen {
                 renderLaunchScreen()
-                    .task(id: "parra-init", priority: .userInitiated) {
+                    .task(
+                        id: "parra-init",
+                        priority: .userInitiated
+                    ) {
                         guard launchScreenState
                             .state == LaunchScreenStateManager.State
                             .initial else
@@ -120,15 +127,27 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
 
                         logger.debug("Initial auth check complete")
 
-                        await parra.performActionsRequiredForAppLaunch()
+                        do {
+                            let result = try await parra
+                                .performActionsRequiredForAppLaunch()
 
-                        logger.debug("Post app launch actions complete")
+                            logger.debug("Post app launch actions complete")
 
-                        logger.info("Parra SDK Initialized")
+                            logger.info("Parra SDK Initialized")
 
-                        launchScreenState.dismiss()
+                            launchScreenState.dismiss(
+                                with: result.authInfo
+                            )
 
-                        logger.debug("Launch screen dismissed")
+                            logger.debug("Launch screen dismissed")
+                        } catch {
+                            logger.fatal(
+                                "Failed to perform post app launch actions",
+                                error
+                            )
+
+                            fatalError()
+                        }
                     }
             }
         }
@@ -209,10 +228,13 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
 
     @State private var showLogs = false
 
-    private func renderPrimaryContent() -> some View {
+    private func renderPrimaryContent(
+        with authInfo: ParraAppAuthInfo
+    ) -> some View {
         content(Parra.default)
             .environment(\.parra, Parra.default)
             .environmentObject(parraAuthState)
+            .environmentObject(authInfo)
             .renderToast(toast: $alertManager.currentToast)
             .onShake {
                 if AppEnvironment.isParraDemoBeta {

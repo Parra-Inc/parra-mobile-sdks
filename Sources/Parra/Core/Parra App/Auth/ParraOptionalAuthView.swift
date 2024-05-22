@@ -14,33 +14,42 @@ public struct ParraOptionalAuthView<Content>: ParraAppContent
     // MARK: - Lifecycle
 
     public init(
-        content: @escaping (_ result: ParraAuthResult) -> Content
+        content: @escaping (
+            _ result: ParraAuthResult
+        ) -> Content
     ) {
         self.content = content
     }
 
     // MARK: - Public
 
-    @ViewBuilder public var content: (_ authResult: ParraAuthResult) -> Content
+    @ViewBuilder public var content: (
+        _ authResult: ParraAuthResult
+    ) -> Content
 
-    public var body: some View {
+    @ViewBuilder public var body: some View {
         switch parraAuthState.current {
         case .authenticated(let user):
-            return authenticatedContent(for: user)
-        case .unauthenticated(let error):
-            return unauthenticatedContent(for: error)
+            authenticatedContent(for: user)
+        case .unauthenticated:
+            unauthenticatedContent(with: parraAuthInfo)
         }
     }
 
-    public func authenticatedContent(for user: ParraUser) -> Content {
+    public func authenticatedContent(
+        for user: ParraUser
+    ) -> Content {
         return content(.authenticated(user))
     }
 
-    public func unauthenticatedContent(for error: (any Error)?) -> Content {
-        return content(.unauthenticated(error))
+    public func unauthenticatedContent(
+        with authInfo: ParraAppAuthInfo
+    ) -> some View {
+        return content(.unauthenticated(nil))
     }
 
     // MARK: - Internal
 
     @EnvironmentObject var parraAuthState: ParraAuthState
+    @EnvironmentObject var parraAuthInfo: ParraAppAuthInfo
 }

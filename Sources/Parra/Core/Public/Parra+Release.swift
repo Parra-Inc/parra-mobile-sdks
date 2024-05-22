@@ -14,7 +14,7 @@ public extension Parra {
     /// ``SwiftUI/View/presentParraRelease(with:config:onDismiss:)``
     /// modifier to present a sheet showing off the details of the release.
     func fetchLatestRelease() async throws -> NewInstalledVersionInfo? {
-        let appInfo = try await parraInternal.latestVersionManager
+        let appInfo = try await parraInternal.appInfoManager
             .fetchLatestAppInfo(
                 force: true
             )

@@ -173,7 +173,7 @@ extension ParraInternal {
 
         let alertManager = AlertManager()
 
-        let latestVersionManager = LatestVersionManager(
+        let appInfoManager = AppInfoManager(
             configuration: configuration,
             modalScreenManager: modalScreenManager,
             alertManager: alertManager,
@@ -210,7 +210,7 @@ extension ParraInternal {
             api: api,
             notificationCenter: notificationCenter,
             feedback: feedback,
-            latestVersionManager: latestVersionManager,
+            appInfoManager: appInfoManager,
             containerRenderer: containerRenderer,
             alertManager: alertManager,
             modalScreenManager: modalScreenManager

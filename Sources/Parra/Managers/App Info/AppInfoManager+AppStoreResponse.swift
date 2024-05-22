@@ -1,5 +1,5 @@
 //
-//  LatestVersionManager+AppStoreResponse.swift
+//  AppInfoManager+AppStoreResponse.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/25/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension LatestVersionManager {
+extension AppInfoManager {
     struct AppStoreResponse: Codable {
         // MARK: - Lifecycle
 

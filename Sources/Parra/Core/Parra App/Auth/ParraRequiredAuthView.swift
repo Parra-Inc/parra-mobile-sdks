@@ -9,25 +9,29 @@
 import SwiftUI
 
 public struct ParraRequiredAuthView<
-    AuthenticatedContent
->: ParraAppContent where AuthenticatedContent: View {
+    AuthenticatedContent, UnauthenticatedContent
+>: ParraAppContent where AuthenticatedContent: View,
+    UnauthenticatedContent: ParraAuthenticationFlow
+{
     // MARK: - Lifecycle
 
     public init(
         authenticatedContent: @escaping (
             _ user: ParraUser
         ) -> AuthenticatedContent,
-        authenticationFlowConfig: ParraAuthenticationFlowConfig = .default
+        unauthenticatedContent: @escaping (
+            _ authInfo: ParraAppAuthInfo
+        ) -> UnauthenticatedContent
     ) {
         self.authenticatedContent = authenticatedContent
-        self.authenticationFlowConfig = authenticationFlowConfig
+        self.unauthenticatedContent = unauthenticatedContent
     }
 
     // MARK: - Public
 
-    @ViewBuilder public var authenticatedContent: (
-        _ user: ParraUser
-    ) -> AuthenticatedContent
+    public let unauthenticatedContent: (
+        _ authInfo: ParraAppAuthInfo
+    ) -> UnauthenticatedContent
 
     public var body: some View {
         content
@@ -53,23 +57,27 @@ public struct ParraRequiredAuthView<
     }
 
     public func unauthenticatedContent(
-        for error: Error?
-    ) -> ParraAuthenticationFlowView {
-        return ParraAuthenticationFlowView(
-            flowConfig: authenticationFlowConfig
-        )
+        with authInfo: ParraAppAuthInfo
+    ) -> UnauthenticatedContent {
+        var authView = unauthenticatedContent(authInfo)
+
+        authView.delegate = self
+
+        return authView
     }
 
     // MARK: - Internal
 
+    @Environment(\.parra) var parra
     @EnvironmentObject var parraAuthState: ParraAuthState
+    @EnvironmentObject var parraAuthInfo: ParraAppAuthInfo
 
     @ViewBuilder var content: some View {
         switch currentUserMirror {
         case .authenticated(let user):
             authenticatedContent(for: user)
-        case .unauthenticated(let error):
-            unauthenticatedContent(for: error)
+        case .unauthenticated:
+            unauthenticatedContent(parraAuthInfo)
                 .transition(
                     .push(from: .top)
                         .animation(.easeIn(duration: 0.35))
@@ -79,8 +87,24 @@ public struct ParraRequiredAuthView<
 
     // MARK: - Private
 
-    private let authenticationFlowConfig: ParraAuthenticationFlowConfig
+    private var authenticatedContent: (
+        _ user: ParraUser
+    ) -> AuthenticatedContent
 
     @State private var currentUserMirror: ParraAuthResult =
         .unauthenticated(nil)
+}
+
+// MARK: ParraAuthenticationFlowDelegate
+
+extension ParraRequiredAuthView: ParraAuthenticationFlowDelegate {
+    public func completeAuthentication(
+        with user: ParraUser
+    ) {
+        Task {
+            await parra.parraInternal.authService.applyUserUpdate(
+                .authenticated(user)
+            )
+        }
+    }
 }

@@ -21,6 +21,16 @@ public struct TextButtonContent: Equatable, Hashable {
         self.isLoading = isLoading
     }
 
+    public init(
+        text: String,
+        isDisabled: Bool = false,
+        isLoading: Bool = false
+    ) {
+        self.text = LabelContent(text: text)
+        self.isDisabled = isDisabled
+        self.isLoading = isLoading
+    }
+
     // MARK: - Public
 
     public internal(set) var text: LabelContent

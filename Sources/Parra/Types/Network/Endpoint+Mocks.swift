@@ -67,7 +67,7 @@ extension ParraEndpoint {
         let object: Codable = if absoluteUrl
             .contains("itunes.apple.com/us/lookup")
         {
-            LatestVersionManager.AppStoreResponse.validStates()[0]
+            AppInfoManager.AppStoreResponse.validStates()[0]
         } else {
             throw ParraError.generic(
                 "getMockResponseData has no implemented return for status: \(status) for url: \(absoluteUrl)",

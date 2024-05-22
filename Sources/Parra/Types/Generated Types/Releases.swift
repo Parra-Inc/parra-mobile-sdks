@@ -813,10 +813,12 @@ public struct AppInfo: Codable, Equatable, Hashable {
     public init(
         versionToken: String,
         newInstalledVersionInfo: NewInstalledVersionInfo?,
+        auth: ParraAppAuthInfo,
         legal: LegalInfo
     ) {
         self.versionToken = versionToken
         self.newInstalledVersionInfo = newInstalledVersionInfo
+        self.auth = auth
         self.legal = legal
     }
 
@@ -825,12 +827,165 @@ public struct AppInfo: Codable, Equatable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case versionToken
         case newInstalledVersionInfo
+        case auth
         case legal
     }
 
     public let versionToken: String
     public let newInstalledVersionInfo: NewInstalledVersionInfo?
+    public let auth: ParraAppAuthInfo
     public let legal: LegalInfo
+}
+
+public struct PasswordRule: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        regularExpression: String?,
+        errorMessage: String?
+    ) {
+        self.regularExpression = regularExpression
+        self.errorMessage = errorMessage
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case regularExpression = "regular_expression"
+        case errorMessage = "error_message"
+    }
+
+    public let regularExpression: String?
+    public let errorMessage: String?
+}
+
+public struct PasswordConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        iosPasswordRulesDescriptor: String?,
+        rules: [PasswordRule]
+    ) {
+        self.iosPasswordRulesDescriptor = iosPasswordRulesDescriptor
+        self.rules = rules
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case iosPasswordRulesDescriptor = "ios_password_rules_descriptor"
+        case rules
+    }
+
+    public let iosPasswordRulesDescriptor: String?
+    public let rules: [PasswordRule]
+}
+
+public struct UsernameConfig: Codable, Equatable, Hashable {
+    public init(
+    ) {}
+}
+
+public struct EmailConfig: Codable, Equatable, Hashable {
+    public init(
+    ) {}
+}
+
+public struct PhoneNumberConfig: Codable, Equatable, Hashable {
+    public init(
+    ) {}
+}
+
+public struct AppInfoDatabaseConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        password: PasswordConfig?,
+        username: UsernameConfig?,
+        email: EmailConfig?,
+        phoneNumber: PhoneNumberConfig?
+    ) {
+        self.password = password
+        self.username = username
+        self.email = email
+        self.phoneNumber = phoneNumber
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case password
+        case username
+        case email
+        case phoneNumber = "phone_number"
+    }
+
+    public let password: PasswordConfig?
+    public let username: UsernameConfig?
+    public let email: EmailConfig?
+    public let phoneNumber: PhoneNumberConfig?
+}
+
+public struct AuthInfoPasswordlessSmsConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        otpLength: Int
+    ) {
+        self.otpLength = otpLength
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case otpLength = "otp_length"
+    }
+
+    public let otpLength: Int
+}
+
+public struct AuthInfoPasswordlessConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        sms: AuthInfoPasswordlessSmsConfig?
+    ) {
+        self.sms = sms
+    }
+
+    // MARK: - Public
+
+    public let sms: AuthInfoPasswordlessSmsConfig?
+}
+
+public class ParraAppAuthInfo: ObservableObject, Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        database: AppInfoDatabaseConfig?,
+        passwordless: AuthInfoPasswordlessConfig?
+    ) {
+        self.database = database
+        self.passwordless = passwordless
+    }
+
+    // MARK: - Public
+
+    public let database: AppInfoDatabaseConfig?
+    public let passwordless: AuthInfoPasswordlessConfig?
+
+    public static func == (
+        lhs: ParraAppAuthInfo,
+        rhs: ParraAppAuthInfo
+    ) -> Bool {
+        return lhs.database == rhs.database && lhs.passwordless == rhs
+            .passwordless
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(database)
+        hasher.combine(passwordless)
+    }
 }
 
 public struct LegalInfo: Codable, Equatable, Hashable {

@@ -40,7 +40,6 @@ final class AuthService {
 
     // https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow
 
-    @discardableResult
     func login(
         authType: OAuth2Service.AuthType
     ) async -> ParraAuthResult {
@@ -68,12 +67,9 @@ final class AuthService {
             result = .unauthenticated(error)
         }
 
-        await applyUserUpdate(result)
-
         return result
     }
 
-    @discardableResult
     func signUp(
         authType: OAuth2Service.AuthType
     ) async -> ParraAuthResult {
@@ -109,8 +105,6 @@ final class AuthService {
             result = .unauthenticated(error)
         }
 
-        await applyUserUpdate(result)
-
         return result
     }
 
@@ -130,8 +124,20 @@ final class AuthService {
                 logger.error("Error sending logout request", error)
             }
         }
+    }
 
-        await applyUserUpdate(.unauthenticated(nil))
+    func getAuthChallenges(
+        for identity: String,
+        with identityType: IdentityType?
+    ) async throws -> AuthChallengeResponse {
+        let body = AuthChallengesRequestBody(
+            identity: identity,
+            identityType: identityType
+        )
+
+        return try await authServer.postAuthChallenges(
+            requestData: body
+        )
     }
 
     func getCurrentUser() async -> ParraUser? {
@@ -221,6 +227,36 @@ final class AuthService {
         )
 
         await applyUserUpdate(.authenticated(user))
+    }
+
+    func applyUserUpdate(
+        _ authResult: ParraAuthResult
+    ) async {
+        switch authResult {
+        case .authenticated(let parraUser):
+            logger.debug("User authenticated: \(parraUser)")
+
+            await dataManager.updateCurrentUser(parraUser)
+
+            _cachedToken = parraUser.credential
+        case .unauthenticated(let error):
+            logger
+                .debug(
+                    "User unauthenticated with error: \(String(describing: error))"
+                )
+
+            await dataManager.removeCurrentUser()
+
+            _cachedToken = nil
+        }
+
+        ParraNotificationCenter.default.post(
+            name: Parra.authenticationStateDidChangeNotification,
+            object: nil,
+            userInfo: [
+                Parra.authenticationStateKey: authResult
+            ]
+        )
     }
 
     // MARK: - Private
@@ -337,35 +373,5 @@ final class AuthService {
         }
 
         await dataManager.updateCurrentUserCredential(credential)
-    }
-
-    private func applyUserUpdate(
-        _ authResult: ParraAuthResult
-    ) async {
-        switch authResult {
-        case .authenticated(let parraUser):
-            logger.debug("User authenticated: \(parraUser)")
-
-            await dataManager.updateCurrentUser(parraUser)
-
-            _cachedToken = parraUser.credential
-        case .unauthenticated(let error):
-            logger
-                .debug(
-                    "User unauthenticated with error: \(String(describing: error))"
-                )
-
-            await dataManager.removeCurrentUser()
-
-            _cachedToken = nil
-        }
-
-        ParraNotificationCenter.default.post(
-            name: Parra.authenticationStateDidChangeNotification,
-            object: nil,
-            userInfo: [
-                Parra.authenticationStateKey: authResult
-            ]
-        )
     }
 }

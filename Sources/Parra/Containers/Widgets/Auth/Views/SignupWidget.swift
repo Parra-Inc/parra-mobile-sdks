@@ -54,43 +54,43 @@ struct SignupWidget: Container {
         VStack(spacing: 0) {
             Spacer()
 
-            componentFactory.buildTextInput(
-                config: TextInputConfig(
-                    validationRules: config.emailValidationRules,
-                    textContentType: .emailAddress,
-                    textInputAutocapitalization: .never,
-                    autocorrectionDisabled: true
-                ),
-                content: content.emailField
-            )
-            .submitLabel(.next)
-            .focused($focusedField, equals: .email)
-            .onSubmit {
-                focusNextField($focusedField)
-            }
+//            componentFactory.buildTextInput(
+//                config: TextInputConfig(
+//                    validationRules: config.emailValidationRules,
+//                    textContentType: .emailAddress,
+//                    textInputAutocapitalization: .never,
+//                    autocorrectionDisabled: true
+//                ),
+//                content: content.emailField
+//            )
+//            .submitLabel(.next)
+//            .focused($focusedField, equals: .email)
+//            .onSubmit {
+//                focusNextField($focusedField)
+//            }
 
-            componentFactory.buildTextInput(
-                config: TextInputConfig(
-                    validationRules: config.passwordValidationRules,
-                    isSecure: true,
-                    textContentType: .password,
-                    textInputAutocapitalization: .never,
-                    autocorrectionDisabled: true
-                ),
-                content: content.passwordField,
-                localAttributes: ParraAttributes.TextInput(
-                    padding: .custom(
-                        .padding(bottom: 16)
-                    )
-                )
-            )
-            .submitLabel(.next)
-            .focused($focusedField, equals: .password)
-            .onSubmit(of: .text) {
-                focusedField = nil
-
-                contentObserver.signupTapped()
-            }
+//            componentFactory.buildTextInput(
+//                config: TextInputConfig(
+//                    validationRules: config.passwordValidationRules,
+//                    isSecure: true,
+//                    textContentType: .password,
+//                    textInputAutocapitalization: .never,
+//                    autocorrectionDisabled: true
+//                ),
+//                content: content.passwordField,
+//                localAttributes: ParraAttributes.TextInput(
+//                    padding: .custom(
+//                        .padding(bottom: 16)
+//                    )
+//                )
+//            )
+//            .submitLabel(.next)
+//            .focused($focusedField, equals: .password)
+//            .onSubmit(of: .text) {
+//                focusedField = nil
+//
+//                contentObserver.signupTapped()
+//            }
 
             componentFactory.buildContainedButton(
                 config: ParraTextButtonConfig(

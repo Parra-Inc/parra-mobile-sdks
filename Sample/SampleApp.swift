@@ -22,7 +22,11 @@ final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
                     authenticatedContent: { _ in
                         ContentView()
                     },
-                    authenticationFlowConfig: .default
+                    unauthenticatedContent: { _ in
+                        ParraDefaultAuthenticationFlowView(
+                            flowConfig: .default
+                        )
+                    }
                 )
             }
         )

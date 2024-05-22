@@ -12,29 +12,35 @@ public struct ParraAuthenticationFlowConfig {
     // MARK: - Lifecycle
 
     public init(
-        landingScreen: LandingScreenProvider? = nil,
-        emailInputScreen: EmailInputScreenProvider? = nil,
-        passwordInputScreen: PasswordInputScreenProvider? = nil
+        supportedMethods: [AuthenticationMethod] = [
+            .passkey,
+            .passwordless(.sms)
+        ],
+        landingScreenProvider: ParraAuthLandingScreenProvider? = nil,
+        identityInputScreenProvider: ParraAuthIdentityInputScreenProvider? =
+            nil,
+        identityChallengeScreenProvider: ParraAuthIdentityChallengeScreenProvider? =
+            nil
     ) {
-        self.landingScreen = landingScreen ?? { selectLoginMethod in
+        self.landingScreenProvider = landingScreenProvider ?? { params in
             ParraAuthDefaultLandingScreen(
-                selectLoginMethod: selectLoginMethod
-            )
-        }
-
-        self.emailInputScreen = emailInputScreen ?? { submitEmail in
-            ParraAuthDefaultEmailInputScreen(
-                submitEmail: submitEmail
+                params: params
             )
         }
 
         self
-            .passwordInputScreen = passwordInputScreen ??
-            { email, submitPassword, loginWithoutPassword in
-                ParraAuthDefaultPasswordInputScreen(
-                    email: email,
-                    submitPassword: submitPassword,
-                    loginWithoutPassword: loginWithoutPassword
+            .identityInputScreenProvider = identityInputScreenProvider ??
+            { params in
+                ParraAuthDefaultIdentityInputScreen(
+                    params: params
+                )
+            }
+
+        self
+            .identityChallengeScreenProvider =
+            identityChallengeScreenProvider ?? { params in
+                ParraAuthDefaultIdentityChallengeScreen(
+                    params: params
                 )
             }
     }
@@ -43,7 +49,7 @@ public struct ParraAuthenticationFlowConfig {
 
     public static let `default` = ParraAuthenticationFlowConfig()
 
-    public var landingScreen: LandingScreenProvider
-    public var emailInputScreen: EmailInputScreenProvider
-    public var passwordInputScreen: PasswordInputScreenProvider
+    public var landingScreenProvider: ParraAuthLandingScreenProvider
+    public var identityInputScreenProvider: ParraAuthIdentityInputScreenProvider
+    public var identityChallengeScreenProvider: ParraAuthIdentityChallengeScreenProvider
 }
