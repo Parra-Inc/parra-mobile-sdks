@@ -12,7 +12,7 @@ import SwiftUI
 
 struct ToastPresenter: ViewModifier {
     @Environment(\.defaultSafeAreaInsets) private var defaultSafeAreaInsets
-    @EnvironmentObject var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject var componentFactory: ComponentFactory
 
     @Binding var toast: AlertManager.Alert?

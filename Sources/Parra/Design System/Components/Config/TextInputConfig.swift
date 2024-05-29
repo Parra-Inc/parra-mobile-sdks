@@ -21,7 +21,8 @@ public struct TextInputConfig {
         textCase: Text.Case? = nil,
         textContentType: UITextContentType? = nil,
         textInputAutocapitalization: TextInputAutocapitalization? = nil,
-        autocorrectionDisabled: Bool = true
+        autocorrectionDisabled: Bool = true,
+        passwordRuleDescriptor: String? = nil
     ) {
         self.validationRules = validationRules
         self.preferValidationErrorsToHelperMessage
@@ -32,6 +33,7 @@ public struct TextInputConfig {
         self.textContentType = textContentType
         self.textInputAutocapitalization = textInputAutocapitalization
         self.autocorrectionDisabled = autocorrectionDisabled
+        self.passwordRuleDescriptor = passwordRuleDescriptor
     }
 
     // MARK: - Public
@@ -57,6 +59,12 @@ public struct TextInputConfig {
     public let textContentType: UITextContentType?
     public let textInputAutocapitalization: TextInputAutocapitalization?
     public let autocorrectionDisabled: Bool
+
+    /// Custom rules for suggesting passwords for this text input.
+    /// See https://developer.apple.com/documentation/security/password_autofill/customizing_password_autofill_rules
+    /// for more information.
+    /// Note: This is ignored if `isSecure` is false.
+    public let passwordRuleDescriptor: String?
 
     // MARK: - Internal
 

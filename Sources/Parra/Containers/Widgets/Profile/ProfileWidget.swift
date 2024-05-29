@@ -28,7 +28,6 @@ struct ProfileWidget: Container {
     let config: ProfileWidgetConfig
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
-
     @EnvironmentObject var parraAuthState: ParraAuthState
 
     var body: some View {

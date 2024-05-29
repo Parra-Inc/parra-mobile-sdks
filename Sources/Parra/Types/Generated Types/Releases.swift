@@ -34,7 +34,7 @@ public enum TicketType: String, Codable, Equatable, CaseIterable {
 public enum TicketStatus: String, Codable, Equatable, CaseIterable {
     case open
     case planning
-    case inProgress = "in_progress"
+    case inProgress
     case done
     case live
     case closed
@@ -43,7 +43,7 @@ public enum TicketStatus: String, Codable, Equatable, CaseIterable {
 
 public enum TicketDisplayStatus: String, Codable, Equatable, CaseIterable {
     case pending
-    case inProgress = "in_progress"
+    case inProgress
     case live
     case rejected
 }
@@ -807,7 +807,9 @@ public struct NewInstalledVersionInfo: Codable, Equatable, Hashable {
     public let release: AppRelease
 }
 
-public struct AppInfo: Codable, Equatable, Hashable {
+public final class ParraAppInfo: ObservableObject, Codable, Equatable,
+    Hashable
+{
     // MARK: - Lifecycle
 
     public init(
@@ -835,14 +837,33 @@ public struct AppInfo: Codable, Equatable, Hashable {
     public let newInstalledVersionInfo: NewInstalledVersionInfo?
     public let auth: ParraAppAuthInfo
     public let legal: LegalInfo
+
+    public static func == (
+        lhs: ParraAppInfo,
+        rhs: ParraAppInfo
+    ) -> Bool {
+        return lhs.versionToken == rhs.versionToken
+            && lhs.newInstalledVersionInfo == rhs.newInstalledVersionInfo
+            && lhs.auth == rhs.auth
+            && lhs.legal == rhs.legal
+    }
+
+    public func hash(
+        into hasher: inout Hasher
+    ) {
+        hasher.combine(versionToken)
+        hasher.combine(newInstalledVersionInfo)
+        hasher.combine(auth)
+        hasher.combine(legal)
+    }
 }
 
 public struct PasswordRule: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        regularExpression: String?,
-        errorMessage: String?
+        regularExpression: String,
+        errorMessage: String
     ) {
         self.regularExpression = regularExpression
         self.errorMessage = errorMessage
@@ -850,13 +871,8 @@ public struct PasswordRule: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
-        case regularExpression = "regular_expression"
-        case errorMessage = "error_message"
-    }
-
-    public let regularExpression: String?
-    public let errorMessage: String?
+    public let regularExpression: String
+    public let errorMessage: String
 }
 
 public struct PasswordConfig: Codable, Equatable, Hashable {
@@ -871,11 +887,6 @@ public struct PasswordConfig: Codable, Equatable, Hashable {
     }
 
     // MARK: - Public
-
-    public enum CodingKeys: String, CodingKey {
-        case iosPasswordRulesDescriptor = "ios_password_rules_descriptor"
-        case rules
-    }
 
     public let iosPasswordRulesDescriptor: String?
     public let rules: [PasswordRule]
@@ -917,7 +928,7 @@ public struct AppInfoDatabaseConfig: Codable, Equatable, Hashable {
         case password
         case username
         case email
-        case phoneNumber = "phone_number"
+        case phoneNumber
     }
 
     public let password: PasswordConfig?
@@ -938,7 +949,7 @@ public struct AuthInfoPasswordlessSmsConfig: Codable, Equatable, Hashable {
     // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
-        case otpLength = "otp_length"
+        case otpLength
     }
 
     public let otpLength: Int
@@ -958,7 +969,7 @@ public struct AuthInfoPasswordlessConfig: Codable, Equatable, Hashable {
     public let sms: AuthInfoPasswordlessSmsConfig?
 }
 
-public class ParraAppAuthInfo: ObservableObject, Codable, Equatable, Hashable {
+public class ParraAppAuthInfo: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -991,21 +1002,27 @@ public class ParraAppAuthInfo: ObservableObject, Codable, Equatable, Hashable {
 public struct LegalInfo: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
-    public init(privacyPolicy: LegalDocument?) {
+    public init(
+        privacyPolicy: LegalDocument? = nil,
+        termsOfService: LegalDocument? = nil
+    ) {
         self.privacyPolicy = privacyPolicy
+        self.termsOfService = termsOfService
     }
 
     // MARK: - Public
 
     public let privacyPolicy: LegalDocument?
+    public let termsOfService: LegalDocument?
 
     // MARK: - Internal
 
     enum CodingKeys: CodingKey {
         case privacyPolicy
+        case termsOfService
     }
 
-    static let empty = LegalInfo(privacyPolicy: nil)
+    static let empty = LegalInfo()
 }
 
 public struct LegalDocument: Codable, Equatable, Hashable, Identifiable {

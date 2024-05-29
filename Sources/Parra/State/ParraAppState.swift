@@ -41,7 +41,7 @@ public class ParraAppState: ObservableObject, Equatable {
 
     // MARK: - Internal
 
-    var appInfo: AppInfo?
+    var appInfo: ParraAppInfo?
 
     private(set) var tenantId: String
     private(set) var applicationId: String

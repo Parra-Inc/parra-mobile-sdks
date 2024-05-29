@@ -8,6 +8,12 @@
 
 import SwiftUI
 
+// TODO: Temp until server updates!!!
+public enum ParraIdentityType {
+    case email
+    case phone
+}
+
 public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     // MARK: - Lifecycle
 
@@ -37,34 +43,79 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     }
 
     public var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
+            titleLabel
+
+            subtitleLabel
+
             continueButton
         }
+        .frame(maxWidth: .infinity)
+        .applyDefaultWidgetAttributes(
+            using: themeObserver.theme
+        )
     }
 
-    // MARK: - Internal
+    // MARK: - Private
 
-    var continueButtonTitle: String {
+    private let params: Params
+
+    @EnvironmentObject private var componentFactory: ComponentFactory
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var navigationState: NavigationState
+
+    private var continueButtonTitle: String {
         let methods = params.availableAuthMethods
         let hasEmail = methods.contains(.password)
         let hasSms = methods.contains(.passwordless(.sms))
 
         if hasEmail, hasSms {
-            return "Continue with Email or Phone"
+            return "Continue with email or phone"
         } else if hasEmail {
-            return "Continue with Email"
+            return "Continue with email"
         } else if hasSms {
-            return "Continue with Phone"
+            return "Continue with phone"
         } else {
             return "Continue"
         }
     }
 
-    @ViewBuilder var continueButton: some View {
+    private var title: String {
+        guard let name = Parra.appBundleName() else {
+            return "Welcome"
+        }
+
+        return "Welcome\nto \(name)"
+    }
+
+    @ViewBuilder private var titleLabel: some View {
+        componentFactory.buildLabel(
+            content: LabelContent(text: title),
+            localAttributes: ParraAttributes.Label(
+                text: ParraAttributes.Text(
+                    font: .systemFont(ofSize: 50, weight: .heavy),
+                    alignment: .leading
+                ),
+                padding: .md
+            )
+        )
+    }
+
+    @ViewBuilder private var subtitleLabel: some View {
+        componentFactory.buildLabel(
+            content: LabelContent(text: "Sign up or log in to continue."),
+            localAttributes: ParraAttributes.Label(
+                text: .default(with: .subheadline),
+                padding: .md
+            )
+        )
+    }
+
+    @ViewBuilder private var continueButton: some View {
         componentFactory.buildContainedButton(
             config: ParraTextButtonConfig(
                 type: .primary,
-                size: .medium,
+                size: .large,
                 isMaxWidth: true
             ),
             content: TextButtonContent(
@@ -76,12 +127,4 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
             )
         }
     }
-
-    // MARK: - Private
-
-    private let params: Params
-
-    @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
-    @EnvironmentObject private var navigationState: NavigationState
 }

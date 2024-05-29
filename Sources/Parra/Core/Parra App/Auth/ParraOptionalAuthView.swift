@@ -32,7 +32,7 @@ public struct ParraOptionalAuthView<Content>: ParraAppContent
         case .authenticated(let user):
             authenticatedContent(for: user)
         case .unauthenticated:
-            unauthenticatedContent(with: parraAuthInfo)
+            unauthenticatedContent(with: parraAppInfo)
         }
     }
 
@@ -43,7 +43,7 @@ public struct ParraOptionalAuthView<Content>: ParraAppContent
     }
 
     public func unauthenticatedContent(
-        with authInfo: ParraAppAuthInfo
+        with appInfo: ParraAppInfo
     ) -> some View {
         return content(.unauthenticated(nil))
     }
@@ -51,5 +51,5 @@ public struct ParraOptionalAuthView<Content>: ParraAppContent
     // MARK: - Internal
 
     @EnvironmentObject var parraAuthState: ParraAuthState
-    @EnvironmentObject var parraAuthInfo: ParraAppAuthInfo
+    @EnvironmentObject var parraAppInfo: ParraAppInfo
 }

@@ -37,8 +37,6 @@ struct AuthenticationWidget: Container {
     @StateObject var contentObserver: ContentObserver
     let config: ParraAuthConfig
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
-
     @ViewBuilder var mainView: some View {
         let content = contentObserver.content
 
@@ -107,6 +105,8 @@ struct AuthenticationWidget: Container {
     }
 
     // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 
     @Environment(\.parra) private var parra
 

@@ -19,6 +19,14 @@ struct TextInputComponent: View {
         self.config = config
         self.content = content
         self.attributes = attributes
+
+        if let passwordRuleDescriptor = config.passwordRuleDescriptor,
+           config.isSecure
+        {
+            UITextField.appearance().passwordRules = UITextInputPasswordRules(
+                descriptor: passwordRuleDescriptor
+            )
+        }
     }
 
     // MARK: - Internal
@@ -27,7 +35,6 @@ struct TextInputComponent: View {
     var content: TextInputContent
     var attributes: ParraAttributes.TextInput
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
     @EnvironmentObject var componentFactory: ComponentFactory
 
     @ViewBuilder var baseView: some View {
@@ -60,7 +67,7 @@ struct TextInputComponent: View {
                     attributes,
                     using: themeObserver.theme
                 )
-
+                .focused($isFocused)
                 .onChange(of: text) { _, newValue in
                     hasReceivedInput = true
 
@@ -74,10 +81,16 @@ struct TextInputComponent: View {
             on: [.horizontal, .bottom],
             from: themeObserver.theme
         )
+        .onTapGesture {
+            isFocused = true
+        }
     }
 
     // MARK: - Private
 
+    @FocusState private var isFocused: Bool
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
     @State private var text = ""
     @State private var hasReceivedInput = false
 

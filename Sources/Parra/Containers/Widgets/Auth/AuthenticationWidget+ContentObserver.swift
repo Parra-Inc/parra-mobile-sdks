@@ -61,29 +61,29 @@ extension AuthenticationWidget {
 
             setLoading(true)
 
-            Task {
-                let authResult = await authService.signUp(
-                    authType: .emailPassword(
-                        email: email,
-                        password: password
-                    )
-                )
-
-                setLoading(false)
-
-                Task { @MainActor in
-                    switch authResult {
-                    case .authenticated(let parraUser):
-                        logger.info("Signup successful", [
-                            "user_id": parraUser.info.user?.id ?? ""
-                        ])
-                    case .unauthenticated(let error):
-                        logger.error("Signup failed", error)
-
-                        self.error = "Signup failed. Please try again."
-                    }
-                }
-            }
+//            Task {
+//                let authResult = await authService.signUp(
+//                    authType: .emailPassword(
+//                        email: email,
+//                        password: password
+//                    )
+//                )
+//
+//                setLoading(false)
+//
+//                Task { @MainActor in
+//                    switch authResult {
+//                    case .authenticated(let parraUser):
+//                        logger.info("Signup successful", [
+//                            "user_id": parraUser.info.user?.id ?? ""
+//                        ])
+//                    case .unauthenticated(let error):
+//                        logger.error("Signup failed", error)
+//
+//                        self.error = "Signup failed. Please try again."
+//                    }
+//                }
+//            }
         }
 
         func loginTapped() {
@@ -111,7 +111,10 @@ extension AuthenticationWidget {
 
             Task {
                 let authResult = await authService.login(
-                    authType: .emailPassword(email: email, password: password)
+                    authType: .emailPassword(
+                        email: email,
+                        password: password
+                    )
                 )
 
                 setLoading(false)

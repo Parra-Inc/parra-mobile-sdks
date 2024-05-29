@@ -11,17 +11,7 @@ import Foundation
 extension OAuth2Service {
     enum AuthType {
         case emailPassword(email: String, password: String)
-
-        // MARK: - Internal
-
-        var requestPayload: CreateUserRequestBody {
-            switch self {
-            case .emailPassword(let email, let password):
-                return CreateUserRequestBody(
-                    email: email,
-                    password: password
-                )
-            }
-        }
+        case passwordless(email: String)
+        case passwordlessSms(sms: String)
     }
 }

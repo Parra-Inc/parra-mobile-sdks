@@ -180,10 +180,31 @@ struct AuthChallengesRequestBody: Codable, Equatable, Hashable {
 
 public enum ParraAuthChallengeType: String, Codable, Equatable, Hashable {
     case password
-    case passwordlessSms
-    case passwordlessEmail
-    case verificationSms
-    case verificationEmail
+    case passwordlessSms = "passwordless_sms"
+    case passwordlessEmail = "passwordless_email"
+    case verificationSms = "verification_sms"
+    case verificationEmail = "verification_email"
+    case passkeys
+
+    // MARK: - Internal
+
+    var isPasswordless: Bool {
+        switch self {
+        case .passwordlessSms, .passwordlessEmail:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var isVerification: Bool {
+        switch self {
+        case .verificationSms, .verificationEmail:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 public struct ParraAuthChallenge: Codable, Equatable, Hashable {

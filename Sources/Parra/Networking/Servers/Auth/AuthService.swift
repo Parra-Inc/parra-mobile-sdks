@@ -71,19 +71,30 @@ final class AuthService {
     }
 
     func signUp(
-        authType: OAuth2Service.AuthType
+        email: String,
+        password: String
     ) async -> ParraAuthResult {
         logger.debug("Signing up with username/password")
 
         let result: ParraAuthResult
 
+        let authType = OAuth2Service.AuthType.emailPassword(
+            email: email,
+            password: password
+        )
+
+        let requestPayload = CreateUserRequestBody(
+            email: email,
+            password: password
+        )
+
         do {
             logger
                 .debug(
-                    "About to sign up with: \(String(describing: authType.requestPayload))"
+                    "About to sign up with: \(String(describing: requestPayload))"
                 )
             try await authServer.postSignup(
-                requestData: authType.requestPayload
+                requestData: requestPayload
             )
             logger.debug("finished sign up endpoint... authenticating...")
             let oauthToken = try await oauth2Service.authenticate(
@@ -124,6 +135,8 @@ final class AuthService {
                 logger.error("Error sending logout request", error)
             }
         }
+
+        await applyUserUpdate(.unauthenticated(nil))
     }
 
     func getAuthChallenges(

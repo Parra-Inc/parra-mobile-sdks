@@ -57,9 +57,10 @@ public struct ParraFeedbackView: ParraPublicContainer {
     typealias Wrapped = FeedbackCardWidget
 
     @Environment(\.parra) var parra
-    @EnvironmentObject var themeObserver: ParraThemeObserver
 
     // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 
     private let cards: [ParraCardItem]
     private let config: Wrapped.Config

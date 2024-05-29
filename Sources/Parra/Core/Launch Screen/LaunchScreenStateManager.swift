@@ -11,8 +11,8 @@ import Foundation
 final class LaunchScreenStateManager: ObservableObject {
     enum State: Equatable {
         case initial
-        case transitioning(ParraAppAuthInfo)
-        case complete(ParraAppAuthInfo)
+        case transitioning(ParraAppInfo)
+        case complete(ParraAppInfo)
 
         // MARK: - Internal
 
@@ -39,14 +39,14 @@ final class LaunchScreenStateManager: ObservableObject {
 
     @MainActor
     func dismiss(
-        with authInfo: ParraAppAuthInfo
+        with appInfo: ParraAppInfo
     ) {
-        state = .transitioning(authInfo)
+        state = .transitioning(appInfo)
     }
 
     @MainActor
     func complete(
-        with authInfo: ParraAppAuthInfo
+        with authInfo: ParraAppInfo
     ) {
         state = .complete(authInfo)
     }

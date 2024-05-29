@@ -46,7 +46,6 @@ struct SignupWidget: Container {
     let config: ParraAuthConfig
 
     @StateObject var contentObserver: AuthenticationWidget.ContentObserver
-    @EnvironmentObject var themeObserver: ParraThemeObserver
 
     @ViewBuilder var signupContent: some View {
         let content = contentObserver.content.signupContent
@@ -113,6 +112,8 @@ struct SignupWidget: Container {
     }
 
     // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 
     @FocusState private var focusedField: Field?
     @Environment(\.parra) private var parra

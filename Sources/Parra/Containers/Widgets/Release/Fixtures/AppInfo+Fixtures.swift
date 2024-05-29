@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-extension AppInfo: ParraFixture {
-    static func validStates() -> [AppInfo] {
+extension ParraAppInfo: ParraFixture {
+    static func validStates() -> [ParraAppInfo] {
         return [
-            AppInfo(
+            ParraAppInfo(
                 versionToken: "1.0.0",
                 newInstalledVersionInfo: NewInstalledVersionInfo(
                     configuration: AppReleaseConfiguration(
@@ -53,19 +53,12 @@ extension AppInfo: ParraFixture {
                         )
                     )
                 ),
-                legal: LegalInfo(
-                    privacyPolicy: LegalDocument(
-                        id: .uuid,
-                        type: "privacy",
-                        title: "Privacy Policy",
-                        url: URL(string: "https://parra.io/privacy")!
-                    )
-                )
+                legal: LegalInfo.validStates()[0]
             )
         ]
     }
 
-    static func invalidStates() -> [AppInfo] {
+    static func invalidStates() -> [ParraAppInfo] {
         return []
     }
 }

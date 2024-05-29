@@ -8,11 +8,13 @@
 
 import Foundation
 
+private let logger = Logger()
+
 enum TextValidator {
     static func isValid(
         text: String?,
         against rule: TextValidatorRule
-    ) -> Bool {
+    ) throws -> Bool {
         guard let text else {
             return false
         }
@@ -25,6 +27,10 @@ enum TextValidator {
         case .email:
             return text.matches(
                 pattern: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
+            )
+        case .phone:
+            return text.matches(
+                pattern: /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
             )
         case .hasUppercase:
             return text.matches(
@@ -42,6 +48,10 @@ enum TextValidator {
             return text.matches(
                 pattern: /^(?=.*[^a-zA-Z0-9])$/
             )
+        case .regex(let pattern, _):
+            return try text.matches(
+                pattern: Regex(pattern)
+            )
         case .custom(let validator, _):
             return validator(text)
         }
@@ -50,9 +60,9 @@ enum TextValidator {
     static func isValid(
         text: String?,
         against rules: [TextValidatorRule]
-    ) -> Bool {
-        return rules.allSatisfy {
-            isValid(text: text, against: $0)
+    ) throws -> Bool {
+        return try rules.allSatisfy {
+            try isValid(text: text, against: $0)
         }
     }
 
@@ -69,33 +79,44 @@ enum TextValidator {
         }
 
         for rule in rules {
-            let valid = isValid(text: text, against: rule)
+            do {
+                let valid = try isValid(text: text, against: rule)
 
-            switch (valid, rule) {
-            case (false, .minLength(let min)):
-                let chars = min.simplePluralized(singularString: "character")
+                switch (valid, rule) {
+                case (false, .minLength(let min)):
+                    let chars = min
+                        .simplePluralized(singularString: "character")
 
-                return "must have at least \(min) \(chars)"
-            case (false, .maxLength(let max)):
-                let chars = max.simplePluralized(singularString: "character")
+                    return "must have at least \(min) \(chars)"
+                case (false, .maxLength(let max)):
+                    let chars = max
+                        .simplePluralized(singularString: "character")
 
-                return "must have at most \(max) \(chars)"
-            case (false, .email):
-                return "must be a valid email address"
-            case (false, .hasUppercase):
-                return "must have at least one uppercase letter"
-            case (false, .hasLowercase):
-                return "must have at least one lowercase letter"
-            case (false, .hasNumber):
-                return "must have at least one number"
-            case (false, .hasSpecialCharacter):
-                return "must have at least one special character"
-            case (false, .custom(_, let failureMessage)):
-                if let failureMessage {
-                    return failureMessage
+                    return "must have at most \(max) \(chars)"
+                case (false, .email):
+                    return "must be a valid email address"
+                case (false, .hasUppercase):
+                    return "must have at least one uppercase letter"
+                case (false, .hasLowercase):
+                    return "must have at least one lowercase letter"
+                case (false, .hasNumber):
+                    return "must have at least one number"
+                case (false, .hasSpecialCharacter):
+                    return "must have at least one special character"
+                case (false, .custom(_, let failureMessage)):
+                    if let failureMessage {
+                        return failureMessage
+                    }
+                default:
+                    continue
                 }
-            default:
-                continue
+            } catch {
+                logger.error("Error validating text", error, [
+                    "text": text,
+                    "rules": rules.map { rule in
+                        rule.description
+                    }.joined()
+                ])
             }
         }
 

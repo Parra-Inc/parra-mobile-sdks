@@ -117,6 +117,11 @@ final class AuthServer: Server {
         )
     }
 
+//    func postLoginPasswordless(
+//        //   /v1/tenants/{tenant_id}/auth/challenges/passwordless:
+//
+//    )
+
     func postLogout(
         accessToken: String
     ) async throws {
@@ -156,7 +161,7 @@ final class AuthServer: Server {
     func getAppInfo(
         versionToken: String?,
         timeout: TimeInterval? = nil
-    ) async throws -> AppInfo {
+    ) async throws -> ParraAppInfo {
         var queryItems = [String: String]()
 
         if let versionToken {

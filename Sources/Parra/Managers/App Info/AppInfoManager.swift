@@ -70,7 +70,7 @@ final class AppInfoManager {
     )
 
     func checkAndPresentWhatsNew(
-        against appInfo: AppInfo,
+        against appInfo: ParraAppInfo,
         with options: ParraReleaseOptions,
         using modalScreenManager: ModalScreenManager
     ) async {
@@ -108,7 +108,7 @@ final class AppInfoManager {
     func fetchLatestAppInfo(
         force: Bool = false,
         timeout: TimeInterval? = nil
-    ) async throws -> AppInfo {
+    ) async throws -> ParraAppInfo {
         let versionToken: String? = if force {
             nil
         } else {

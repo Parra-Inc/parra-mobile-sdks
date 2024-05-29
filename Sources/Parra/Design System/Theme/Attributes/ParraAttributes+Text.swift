@@ -200,3 +200,13 @@ extension ParraAttributes.Text.FontType: OverridableAttributes {
         }
     }
 }
+
+public extension ParraAttributes.Text {
+    static func `default`(
+        with style: Font.TextStyle
+    ) -> ParraAttributes.Text {
+        return ParraAttributes.Text(
+            style: style
+        )
+    }
+}

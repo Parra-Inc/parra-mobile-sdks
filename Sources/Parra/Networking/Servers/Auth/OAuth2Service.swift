@@ -36,7 +36,6 @@ final class OAuth2Service {
     ) async throws -> Token {
         var data: [String: String] = [
             "grant_type": "password",
-            "audience": "api.parra.io",
             "scope": "offline_access",
             "client_id": clientId
         ]
@@ -45,22 +44,26 @@ final class OAuth2Service {
         case .emailPassword(let email, let password):
             data["username"] = email
             data["password"] = password
-        }
 
-        let response: TokenResponse = try await authServer
-            .performFormPostRequest(
-                to: tokenUrl,
-                data: data,
-                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                delegate: nil
+            let response: TokenResponse = try await authServer
+                .performFormPostRequest(
+                    to: tokenUrl,
+                    data: data,
+                    cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+                    delegate: nil
+                )
+
+            return OAuth2Service.Token(
+                accessToken: response.accessToken,
+                tokenType: response.tokenType,
+                expiresIn: response.expiresIn,
+                refreshToken: response.refreshToken
             )
-
-        return OAuth2Service.Token(
-            accessToken: response.accessToken,
-            tokenType: response.tokenType,
-            expiresIn: response.expiresIn,
-            refreshToken: response.refreshToken
-        )
+        case .passwordless(let email):
+            fatalError()
+        case .passwordlessSms(let sms):
+            fatalError()
+        }
     }
 
     func refreshToken(

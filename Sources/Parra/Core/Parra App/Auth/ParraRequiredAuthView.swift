@@ -20,7 +20,7 @@ public struct ParraRequiredAuthView<
             _ user: ParraUser
         ) -> AuthenticatedContent,
         unauthenticatedContent: @escaping (
-            _ authInfo: ParraAppAuthInfo
+            _ appInfo: ParraAppInfo
         ) -> UnauthenticatedContent
     ) {
         self.authenticatedContent = authenticatedContent
@@ -30,7 +30,7 @@ public struct ParraRequiredAuthView<
     // MARK: - Public
 
     public let unauthenticatedContent: (
-        _ authInfo: ParraAppAuthInfo
+        _ appInfo: ParraAppInfo
     ) -> UnauthenticatedContent
 
     public var body: some View {
@@ -57,9 +57,9 @@ public struct ParraRequiredAuthView<
     }
 
     public func unauthenticatedContent(
-        with authInfo: ParraAppAuthInfo
+        with appInfo: ParraAppInfo
     ) -> UnauthenticatedContent {
-        var authView = unauthenticatedContent(authInfo)
+        var authView = unauthenticatedContent(appInfo)
 
         authView.delegate = self
 
@@ -70,14 +70,14 @@ public struct ParraRequiredAuthView<
 
     @Environment(\.parra) var parra
     @EnvironmentObject var parraAuthState: ParraAuthState
-    @EnvironmentObject var parraAuthInfo: ParraAppAuthInfo
+    @EnvironmentObject var parraAppInfo: ParraAppInfo
 
     @ViewBuilder var content: some View {
         switch currentUserMirror {
         case .authenticated(let user):
             authenticatedContent(for: user)
         case .unauthenticated:
-            unauthenticatedContent(parraAuthInfo)
+            unauthenticatedContent(parraAppInfo)
                 .transition(
                     .push(from: .top)
                         .animation(.easeIn(duration: 0.35))

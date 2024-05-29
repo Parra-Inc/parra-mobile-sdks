@@ -26,8 +26,6 @@ struct WidgetFooter: View {
     @ViewBuilder let primaryActionBuilder: () -> any View
     @ViewBuilder let secondaryActionBuilder: (() -> any View)?
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
-
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
             AnyView(primaryActionBuilder())
@@ -51,6 +49,8 @@ struct WidgetFooter: View {
     }
 
     // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 
     private let contentPadding: EdgeInsets
 }

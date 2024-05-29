@@ -142,7 +142,7 @@ extension AppInfoManager {
     }
 
     func handleWhatsNewFlow(
-        in appInfo: AppInfo,
+        in appInfo: ParraAppInfo,
         with behavior: ParraReleaseOptions.Behavior,
         style: ParraReleaseOptions.PresentationStyle,
         after delay: TimeInterval = 0.0
@@ -164,7 +164,7 @@ extension AppInfoManager {
     }
 
     private func displayReleaseIfExists(
-        latestAppInfo: AppInfo,
+        latestAppInfo: ParraAppInfo,
         with style: ParraReleaseOptions.PresentationStyle,
         after delay: TimeInterval
     ) async throws {

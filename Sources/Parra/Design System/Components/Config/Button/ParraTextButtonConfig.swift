@@ -26,4 +26,8 @@ public struct ParraTextButtonConfig: Equatable {
     public let type: ParraButtonType
     public let size: ParraButtonSize
     public let isMaxWidth: Bool
+
+    // MARK: - Internal
+
+    static let `default` = ParraTextButtonConfig()
 }

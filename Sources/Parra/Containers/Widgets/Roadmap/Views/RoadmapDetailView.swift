@@ -9,12 +9,13 @@
 import SwiftUI
 
 struct RoadmapDetailView: View {
+    // MARK: - Internal
+
     @Binding var ticketContent: TicketUserContent
 
     @Environment(RoadmapWidgetConfig.self) var config
     @EnvironmentObject var contentObserver: RoadmapWidget.ContentObserver
     @EnvironmentObject var componentFactory: ComponentFactory
-    @EnvironmentObject var themeObserver: ParraThemeObserver
 
     var body: some View {
         let palette = themeObserver.theme.palette
@@ -117,4 +118,8 @@ struct RoadmapDetailView: View {
         .navigationTitle(ticketContent.ticketNumber)
         .navigationBarTitleDisplayMode(.inline)
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 }

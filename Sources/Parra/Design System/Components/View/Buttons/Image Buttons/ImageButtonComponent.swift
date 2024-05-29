@@ -30,8 +30,6 @@ struct ImageButtonComponent: View {
     let style: ImageButtonStyle
     let onPress: () -> Void
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
-
     var body: some View {
         Button(action: {
             onPress()
@@ -41,6 +39,10 @@ struct ImageButtonComponent: View {
         .disabled(content.isDisabled)
         .buttonStyle(style)
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 }
 
 #Preview("Image Button") {

@@ -11,7 +11,7 @@ import os
 import UIKit
 
 struct LaunchActionsResult {
-    let authInfo: ParraAppAuthInfo
+    let appInfo: ParraAppInfo
 }
 
 private let logger = Logger(category: "Parra")
@@ -138,10 +138,10 @@ class ParraInternal {
     func performActionsRequiredForAppLaunch() async throws
         -> LaunchActionsResult
     {
-        let authInfo = try await fetchLatestAppInfo()
+        let appInfo = try await fetchLatestAppInfo()
 
         return LaunchActionsResult(
-            authInfo: authInfo
+            appInfo: appInfo
         )
     }
 
@@ -190,7 +190,7 @@ class ParraInternal {
         }
     }
 
-    private func fetchLatestAppInfo() async throws -> ParraAppAuthInfo {
+    private func fetchLatestAppInfo() async throws -> ParraAppInfo {
         do {
             let appInfo = try await appInfoManager.fetchLatestAppInfo(
                 force: true,
@@ -203,7 +203,7 @@ class ParraInternal {
 
             appState.appInfo = appInfo
 
-            return appInfo.auth
+            return appInfo
         } catch {
             logger.error("Failed to fetch latest app info", error)
 

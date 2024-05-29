@@ -14,7 +14,8 @@ extension ParraEndpoint {
         let object: Codable = switch status {
         case 200 ..< 300:
             switch self {
-            case .getUserInfo, .postLogin, .postLogout, .postUpdateAvatar:
+            case .getUserInfo, .postLogin, .postLogout, .postUpdateAvatar,
+                 .postAuthChallenges:
                 fatalError()
             case .postCreateUser:
                 UserInfoResponse.validStates()[0]
@@ -45,7 +46,7 @@ extension ParraEndpoint {
             case .getPaginateReleases:
                 AppReleaseCollectionResponse.validStates()[0]
             case .getAppInfo:
-                AppInfo.validStates()[0]
+                ParraAppInfo.validStates()[0]
             }
         default:
             throw ParraError.generic(

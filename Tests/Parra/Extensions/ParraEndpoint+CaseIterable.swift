@@ -18,6 +18,7 @@ extension ParraEndpoint: CaseIterable {
             .getRoadmap(tenantId: "", applicationId: ""),
             .getPaginateTickets(tenantId: "", applicationId: ""),
             .postAuthentication(tenantId: ""),
+            .postAuthentication(tenantId: ""),
             .postCreateUser(tenantId: ""),
             .postLogin(tenantId: ""),
             .postLogout(tenantId: ""),
@@ -48,7 +49,7 @@ extension ParraEndpoint: CaseIterable {
                  .getRoadmap, .getPaginateTickets, .postVoteForTicket,
                  .deleteVoteForTicket, .getRelease, .getPaginateReleases,
                  .getAppInfo, .postCreateUser, .postLogin, .postLogout,
-                 .postUpdateAvatar:
+                 .postUpdateAvatar, .postAuthChallenges:
                 finalCases.append(testCase)
             }
         }

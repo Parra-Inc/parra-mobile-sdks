@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct RoadmapTicketTypeIcon: View {
-    let type: TicketType
+    // MARK: - Internal
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
+    let type: TicketType
 
     var body: some View {
         VStack {
@@ -28,6 +28,10 @@ struct RoadmapTicketTypeIcon: View {
         .background(type.backgroundColor)
         .applyCornerRadii(size: .xs, from: themeObserver.theme)
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 }
 
 #Preview {

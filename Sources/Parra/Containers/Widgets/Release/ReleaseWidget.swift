@@ -11,7 +11,7 @@ import SwiftUI
 // struct ParraUsernameView: View {
 //
 //    @EnvironmentObject var componentFactory: ComponentFactory
-//    @EnvironmentObject var themeObserver: ParraThemeObserver
+//    @EnvironmentObject private var themeObserver: ParraThemeObserver
 //
 //    @Environment(\.parraAuthState) var parraAuth
 //

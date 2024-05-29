@@ -27,7 +27,6 @@ struct TextEditorComponent: View {
     let content: TextEditorContent
     let attributes: ParraAttributes.TextEditor
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
     @EnvironmentObject var componentFactory: ComponentFactory
 
     var body: some View {
@@ -77,6 +76,7 @@ struct TextEditorComponent: View {
         )
     }
 
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
     @State private var text = ""
     @State private var hasReceivedInput = false
 
