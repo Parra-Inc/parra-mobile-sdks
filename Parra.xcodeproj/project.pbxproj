@@ -471,6 +471,9 @@
 		00D151232C0661670049D88F /* ChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D151222C0661670049D88F /* ChallengeView.swift */; };
 		00D151252C0661B20049D88F /* ChallengeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D151242C0661B20049D88F /* ChallengeVerificationView.swift */; };
 		00D151272C06BB710049D88F /* LegalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D151262C06BB710049D88F /* LegalInfoView.swift */; };
+		00D151292C0764AD0049D88F /* PasswordStrengthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D151282C0764AD0049D88F /* PasswordStrengthView.swift */; };
+		00D1512B2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D1512A2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift */; };
+		00D1512D2C0766C60049D88F /* PasswordConfig+ParraFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D1512C2C0766C60049D88F /* PasswordConfig+ParraFixture.swift */; };
 		00D5DD912BD163EF002E09B7 /* String+matchesPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD902BD163EF002E09B7 /* String+matchesPattern.swift */; };
 		00D5DD932BD16D27002E09B7 /* TextValidatorRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD922BD16D27002E09B7 /* TextValidatorRule.swift */; };
 		00D5DD952BD19864002E09B7 /* TrackingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD942BD19864002E09B7 /* TrackingHeader.swift */; };
@@ -1160,6 +1163,9 @@
 		00D151222C0661670049D88F /* ChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeView.swift; sourceTree = "<group>"; };
 		00D151242C0661B20049D88F /* ChallengeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeVerificationView.swift; sourceTree = "<group>"; };
 		00D151262C06BB710049D88F /* LegalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInfoView.swift; sourceTree = "<group>"; };
+		00D151282C0764AD0049D88F /* PasswordStrengthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordStrengthView.swift; sourceTree = "<group>"; };
+		00D1512A2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAppAuthInfo+ParraFixtures.swift"; sourceTree = "<group>"; };
+		00D1512C2C0766C60049D88F /* PasswordConfig+ParraFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PasswordConfig+ParraFixture.swift"; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Constants.swift"; sourceTree = "<group>"; };
 		00D5156427D4376500C4F2CC /* ParraSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManager.swift; sourceTree = "<group>"; };
 		00D5156627D4506B00C4F2CC /* ParraInternal+SyncEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+SyncEvents.swift"; sourceTree = "<group>"; };
@@ -2598,6 +2604,7 @@
 				00D151222C0661670049D88F /* ChallengeView.swift */,
 				00D151242C0661B20049D88F /* ChallengeVerificationView.swift */,
 				00A970FC2C060D9D00AB3436 /* CodeEntryView.swift */,
+				00D151282C0764AD0049D88F /* PasswordStrengthView.swift */,
 			);
 			path = Challege;
 			sourceTree = "<group>";
@@ -2828,6 +2835,8 @@
 			isa = PBXGroup;
 			children = (
 				00D1511E2C0657860049D88F /* LegalInfo+ParraFixtures.swift */,
+				00D1512A2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift */,
+				00D1512C2C0766C60049D88F /* PasswordConfig+ParraFixture.swift */,
 			);
 			path = Fixtures;
 			sourceTree = "<group>";
@@ -3536,6 +3545,7 @@
 				00F7C4A22B9A430A00DBDF5A /* ComponentFactory+Buttons.swift in Sources */,
 				00E8A41A2BED641A00991D7C /* ParraAttributes+Segment.swift in Sources */,
 				008878122979A3E20087AC1D /* UIApplicationState+ParraLogStringConvertible.swift in Sources */,
+				00D1512D2C0766C60049D88F /* PasswordConfig+ParraFixture.swift in Sources */,
 				00E8A4232BF3BF8000991D7C /* MenuComponent.swift in Sources */,
 				00E201932B8F859900CF5A42 /* FeedbackQuestionViewKind.swift in Sources */,
 				00FCB1642B961EE000635DC8 /* ImageButtonComponent.swift in Sources */,
@@ -3657,6 +3667,7 @@
 				00D151252C0661B20049D88F /* ChallengeVerificationView.swift in Sources */,
 				0079EDCC2BD8118D0045EEE5 /* Parra+Theme.swift in Sources */,
 				00FCB13D2B91363500635DC8 /* SegmentComponent.swift in Sources */,
+				00D151292C0764AD0049D88F /* PasswordStrengthView.swift in Sources */,
 				00E15A23292AFB2B0049C2C7 /* SessionStorage.swift in Sources */,
 				00E76D3D2B66E6E100B01DD8 /* ContainerConfig.swift in Sources */,
 				00916DC82AD35D8700B4856F /* ParraInstanceConfiguration.swift in Sources */,
@@ -4049,6 +4060,7 @@
 				004F3EE52BA4B21100424802 /* ChangelogWidget.swift in Sources */,
 				00ABF1782B7D346500A054A2 /* ParraStoryboardLaunchScreen.swift in Sources */,
 				001677532B6ABFB700674001 /* TextButton+RenderStorybook.swift in Sources */,
+				00D1512B2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift in Sources */,
 				00E15A1F2929B7C10049C2C7 /* ParraSessionManager.swift in Sources */,
 				00995C042BB6F9AE00384D94 /* Tenants.swift in Sources */,
 				007ED46D2A6BFBF50077E446 /* ParraLogProcessedData.swift in Sources */,

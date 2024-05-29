@@ -969,7 +969,7 @@ public struct AuthInfoPasswordlessConfig: Codable, Equatable, Hashable {
     public let sms: AuthInfoPasswordlessSmsConfig?
 }
 
-public class ParraAppAuthInfo: Codable, Equatable, Hashable {
+public final class ParraAppAuthInfo: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
