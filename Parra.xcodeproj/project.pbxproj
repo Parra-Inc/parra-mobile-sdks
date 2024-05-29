@@ -474,6 +474,7 @@
 		00D151292C0764AD0049D88F /* PasswordStrengthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D151282C0764AD0049D88F /* PasswordStrengthView.swift */; };
 		00D1512B2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D1512A2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift */; };
 		00D1512D2C0766C60049D88F /* PasswordConfig+ParraFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D1512C2C0766C60049D88F /* PasswordConfig+ParraFixture.swift */; };
+		00D1512F2C076E7A0049D88F /* PasswordEntropyCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D1512E2C076E7A0049D88F /* PasswordEntropyCalculator.swift */; };
 		00D5DD912BD163EF002E09B7 /* String+matchesPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD902BD163EF002E09B7 /* String+matchesPattern.swift */; };
 		00D5DD932BD16D27002E09B7 /* TextValidatorRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD922BD16D27002E09B7 /* TextValidatorRule.swift */; };
 		00D5DD952BD19864002E09B7 /* TrackingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD942BD19864002E09B7 /* TrackingHeader.swift */; };
@@ -1166,6 +1167,7 @@
 		00D151282C0764AD0049D88F /* PasswordStrengthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordStrengthView.swift; sourceTree = "<group>"; };
 		00D1512A2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAppAuthInfo+ParraFixtures.swift"; sourceTree = "<group>"; };
 		00D1512C2C0766C60049D88F /* PasswordConfig+ParraFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PasswordConfig+ParraFixture.swift"; sourceTree = "<group>"; };
+		00D1512E2C076E7A0049D88F /* PasswordEntropyCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordEntropyCalculator.swift; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Constants.swift"; sourceTree = "<group>"; };
 		00D5156427D4376500C4F2CC /* ParraSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManager.swift; sourceTree = "<group>"; };
 		00D5156627D4506B00C4F2CC /* ParraInternal+SyncEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+SyncEvents.swift"; sourceTree = "<group>"; };
@@ -2499,6 +2501,7 @@
 			isa = PBXGroup;
 			children = (
 				00995BF52BB5C97900384D94 /* AppEnvironment.swift */,
+				00D1512E2C076E7A0049D88F /* PasswordEntropyCalculator.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -3948,6 +3951,7 @@
 				001B7B8827DE712200DEEECD /* ParraStorageModule.swift in Sources */,
 				00BD2FFA2A47778E00B4BEB2 /* NotificationCenterType.swift in Sources */,
 				001779B72BC08C59000AF0BB /* TextValidator.swift in Sources */,
+				00D1512F2C076E7A0049D88F /* PasswordEntropyCalculator.swift in Sources */,
 				00C00ABD2A8A6BD1003B21D3 /* SessionReader.swift in Sources */,
 				00E76D2D2B66D26300B01DD8 /* ComponentFactory.swift in Sources */,
 				00C119192BAFAE250013FD03 /* ParraConfigurationOptionType.swift in Sources */,
