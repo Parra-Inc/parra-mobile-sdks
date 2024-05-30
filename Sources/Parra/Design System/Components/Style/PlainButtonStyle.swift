@@ -39,6 +39,14 @@ struct PlainButtonStyle: ButtonStyle {
             if content.isLoading {
                 ProgressView()
                     .tint(currentAttributes.label.text.color ?? .black)
+                    // Apply theme padding to get within the button's bounds +
+                    // extra for an inner pad.
+                    .applyPadding(
+                        size: currentAttributes.padding,
+                        on: .leading,
+                        from: themeObserver.theme
+                    )
+                    .padding(.leading, 12)
             }
         }
     }
