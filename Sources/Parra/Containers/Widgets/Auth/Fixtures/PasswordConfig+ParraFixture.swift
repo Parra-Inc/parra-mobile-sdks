@@ -16,19 +16,19 @@ extension PasswordConfig: ParraFixture {
                 rules: [
                     PasswordRule(
                         regularExpression: "/^(?=.{8,128}$)/",
-                        errorMessage: "Password must be between 8 and 128 characters"
+                        errorMessage: "between 8 and 128 characters"
                     ),
                     PasswordRule(
                         regularExpression: "/^(?=.*[A-Z])/",
-                        errorMessage: "Password must contain at least one uppercase letter"
+                        errorMessage: "at least one uppercase letter"
                     ),
                     PasswordRule(
                         regularExpression: "/^(?=.*[a-z])/",
-                        errorMessage: "Password must contain at least one lowercase letter"
+                        errorMessage: "at least one lowercase letter"
                     ),
                     PasswordRule(
                         regularExpression: "/^(?=.*\\\\d)/",
-                        errorMessage: "Password must contain at least one number"
+                        errorMessage: "at least one number"
                     )
                 ]
             )

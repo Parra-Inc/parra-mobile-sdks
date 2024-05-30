@@ -473,7 +473,8 @@ public extension ParraGlobalComponentAttributes {
         for size: ParraButtonSize
     ) -> Font {
         return Font.system(
-            size: baseFontSize(for: size)
+            size: baseFontSize(for: size),
+            weight: .semibold
         )
     }
 

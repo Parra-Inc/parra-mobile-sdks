@@ -9,12 +9,46 @@
 import Foundation
 
 enum PasswordEntropyCalculator {
-    enum Strength {
+    enum Strength: CustomStringConvertible {
         case veryWeak
         case weak
         case moderate
         case strong
         case veryStrong
+
+        // MARK: - Internal
+
+        var description: String {
+            switch self {
+            case .veryWeak:
+                return "Very Weak"
+            case .weak:
+                return "Weak"
+            case .moderate:
+                return "Moderate"
+            case .strong:
+                return "Strong"
+            case .veryStrong:
+                return "Very Strong"
+            }
+        }
+
+        func color(
+            for theme: ParraTheme
+        ) -> ParraColor {
+            switch self {
+            case .veryWeak:
+                return theme.palette.error.toParraColor()
+            case .weak:
+                return theme.palette.warning.toParraColor()
+            case .moderate:
+                return theme.palette.secondary.toParraColor()
+            case .strong:
+                return theme.palette.success.toParraColor()
+            case .veryStrong:
+                return theme.palette.success.toParraColor()
+            }
+        }
     }
 
     static func calculateEntropy(

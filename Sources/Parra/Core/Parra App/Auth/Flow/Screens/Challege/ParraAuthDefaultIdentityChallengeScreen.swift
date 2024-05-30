@@ -47,8 +47,6 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             .navigationTitle(primaryActionName)
             .onAppear {
                 continueButtonContent = continueButtonContent.withLoading(false)
-
-                flowManager.reset()
             }
     }
 
@@ -90,10 +88,16 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
         } else {
             ChallengeView(
                 passwordChallengeAvailable: passwordChallengeAvailable,
-                userExists: params.userExists
-            ) { challenge in
-                challengeResponse = .password(challenge)
-            }
+                userExists: params.userExists,
+                onUpdate: { challenge in
+                    challengeResponse = .password(challenge)
+                },
+                onSubmit: {
+                    if let challengeResponse {
+                        submitChallengeResponse(challengeResponse)
+                    }
+                }
+            )
         }
     }
 
@@ -113,19 +117,16 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     @EnvironmentObject private var flowManager: AuthenticationFlowManager
 
     private var challengeContent: some View {
-        VStack {
+        VStack(alignment: .leading) {
             componentFactory.buildLabel(
                 content: LabelContent(text: title),
                 localAttributes: ParraAttributes.Label(
+                    text: .default(with: .largeTitle),
                     padding: .md
                 )
             )
 
             challengeView
-                .applyPadding(
-                    size: .md,
-                    from: themeObserver.theme
-                )
 
             componentFactory.buildContainedButton(
                 config: ParraTextButtonConfig(
@@ -135,7 +136,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 content: continueButtonContent,
                 localAttributes: ParraAttributes.ContainedButton(
                     normal: ParraAttributes.ContainedButton.StatefulAttributes(
-                        padding: .md
+                        padding: .zero
                     )
                 )
             ) {
@@ -151,6 +152,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     } else if let challenge =
                         firstAvailablePasswordlessChallenge
                     {
+                        // If there isn't a password challenge available, we
+                        //
                         switch challenge.id {
                         case .passwordlessEmail:
                             "\(primaryActionName) with email"
@@ -160,6 +163,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                             primaryActionName
                         }
                     } else {
+                        // shouldn't happen
                         primaryActionName
                     }
 
@@ -167,15 +171,14 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     config: .default,
                     content: TextButtonContent(
                         text: passwordlessLoginTitle
-                    ),
-                    localAttributes: ParraAttributes.PlainButton(
-                        normal: .init(
-                            padding: .md
-                        )
                     )
                 ) {}
             }
         }
+        .applyPadding(
+            size: .md,
+            from: themeObserver.theme
+        )
     }
 
     private var firstAvailablePasswordlessChallenge: ParraAuthChallenge? {
@@ -220,6 +223,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 try await params.submit(
                     response
                 )
+
             } catch {
                 print(error)
             }
@@ -239,6 +243,10 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 identityType: .email,
                 userExists: false,
                 availableChallenges: [
+                    .init(id: .password),
+                    .init(id: .passwordlessEmail)
+                ],
+                supportedChallenges: [
                     .init(id: .password),
                     .init(id: .passwordlessEmail)
                 ],
@@ -265,6 +273,9 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 availableChallenges: [
                     .init(id: .password)
                 ],
+                supportedChallenges: [
+                    .init(id: .password)
+                ],
                 legalInfo: LegalInfo.validStates()[0],
                 submit: { _ in }
             )
@@ -283,9 +294,12 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
         ParraAuthDefaultIdentityChallengeScreen(
             params: .init(
                 identity: "2392335730",
-                identityType: .phone,
+                identityType: .phoneNumber,
                 userExists: false,
                 availableChallenges: [
+                    .init(id: .passwordlessSms)
+                ],
+                supportedChallenges: [
                     .init(id: .passwordlessSms)
                 ],
                 legalInfo: LegalInfo.validStates()[0],
@@ -306,9 +320,12 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
         ParraAuthDefaultIdentityChallengeScreen(
             params: .init(
                 identity: "2392335730",
-                identityType: .phone,
+                identityType: .phoneNumber,
                 userExists: true,
                 availableChallenges: [
+                    .init(id: .passwordlessSms)
+                ],
+                supportedChallenges: [
                     .init(id: .passwordlessSms)
                 ],
                 legalInfo: LegalInfo.validStates()[0],
@@ -329,9 +346,12 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
         ParraAuthDefaultIdentityChallengeScreen(
             params: .init(
                 identity: "2392335730",
-                identityType: .phone,
+                identityType: .phoneNumber,
                 userExists: true,
                 availableChallenges: [
+                    .init(id: .verificationSms)
+                ],
+                supportedChallenges: [
                     .init(id: .verificationSms)
                 ],
                 legalInfo: LegalInfo.validStates()[0],

@@ -128,7 +128,7 @@ struct AuthChallengesRequestBody: Codable, Equatable, Hashable {
             self.phoneNumber = nil
             self.username = nil
             self.unknownIdentity = nil
-        case .phone:
+        case .phoneNumber:
             self.email = nil
             self.phoneNumber = identity
             self.username = nil
@@ -138,6 +138,11 @@ struct AuthChallengesRequestBody: Codable, Equatable, Hashable {
             self.phoneNumber = nil
             self.username = identity
             self.unknownIdentity = nil
+        case .uknownIdentity:
+            self.email = nil
+            self.phoneNumber = nil
+            self.username = nil
+            self.unknownIdentity = identity
         }
     }
 
@@ -227,26 +232,48 @@ public struct ParraAuthChallenge: Codable, Equatable, Hashable {
     }
 }
 
+public enum IdentityType: String, Codable {
+    case email
+    case phoneNumber = "phone_number"
+    case username
+    case uknownIdentity = "unknown_identity"
+}
+
 struct AuthChallengeResponse: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
         exists: Bool,
-        challenges: [ParraAuthChallenge]
+        type: IdentityType,
+        supportedChallenges: [ParraAuthChallenge],
+        availableChallenges: [ParraAuthChallenge]?
     ) {
         self.exists = exists
-        self.challenges = challenges
+        self.type = type
+        self.supportedChallenges = supportedChallenges
+        self.availableChallenges = availableChallenges
     }
 
     // MARK: - Internal
 
     enum CodingKeys: String, CodingKey {
         case exists
-        case challenges
+        case type
+        case supportedChallenges
+        case availableChallenges
     }
 
     let exists: Bool
-    let challenges: [ParraAuthChallenge]
+    let type: IdentityType
+
+    /// The types of challenges that are available per the `type` of identity,
+    /// regardless of whether the user has completed them.
+    let supportedChallenges: [ParraAuthChallenge]
+
+    /// Challenges that are available for the current user. For example, a user
+    /// who signed up with email/password but also has a verified phone number
+    /// will have both password and passwordless SMS challenges available.
+    let availableChallenges: [ParraAuthChallenge]?
 }
 
 struct CreateUserRequestBody: Codable, Equatable, Hashable {

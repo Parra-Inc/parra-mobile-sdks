@@ -17,6 +17,7 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
             identityType: IdentityType,
             userExists: Bool,
             availableChallenges: [ParraAuthChallenge],
+            supportedChallenges: [ParraAuthChallenge],
             legalInfo: LegalInfo,
             submit: @escaping (
                 _ challengeResponse: ChallengeResponse
@@ -27,6 +28,7 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
             self.identityType = identityType
             self.userExists = userExists
             self.availableChallenges = availableChallenges
+            self.supportedChallenges = supportedChallenges
             self.legalInfo = legalInfo
             self.submit = submit
         }
@@ -37,6 +39,7 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
         public let identityType: IdentityType
         public let userExists: Bool
         public let availableChallenges: [ParraAuthChallenge]
+        public let supportedChallenges: [ParraAuthChallenge]
         public let legalInfo: LegalInfo
         public let submit: (_ challengeResponse: ChallengeResponse) async throws
             -> Void

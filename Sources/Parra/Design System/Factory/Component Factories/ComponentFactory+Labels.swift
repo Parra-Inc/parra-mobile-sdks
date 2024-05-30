@@ -24,4 +24,15 @@ extension ComponentFactory {
             attributes: attributes
         )
     }
+
+    @ViewBuilder
+    func buildLabel(
+        text: String,
+        localAttributes: ParraAttributes.Label? = nil
+    ) -> LabelComponent {
+        buildLabel(
+            content: LabelContent(text: text),
+            localAttributes: localAttributes
+        )
+    }
 }

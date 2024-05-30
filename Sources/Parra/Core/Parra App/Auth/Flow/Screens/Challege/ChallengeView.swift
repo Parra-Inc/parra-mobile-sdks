@@ -16,20 +16,38 @@ struct ChallengeView: View {
     let passwordChallengeAvailable: Bool
     let userExists: Bool
     let onUpdate: (_ challenge: String) -> Void
+    let onSubmit: () -> Void
 
     var body: some View {
-        componentFactory.buildTextInput(
-            config: challengeFieldConfig,
-            content: TextInputContent(
-                placeholder: "Password",
-                errorMessage: .init()
-            ) { newText in
-                challenge = newText ?? ""
-            },
-            localAttributes: ParraAttributes.TextInput(
-                padding: .zero
+        VStack {
+            componentFactory.buildTextInput(
+                config: challengeFieldConfig,
+                content: TextInputContent(
+                    placeholder: "Password",
+                    errorMessage: .init()
+                ) { newText in
+                    challenge = newText ?? ""
+                },
+                localAttributes: ParraAttributes.TextInput(
+                    padding: .zero
+                )
             )
-        )
+            .onChange(of: challenge) { _, newValue in
+                onUpdate(newValue)
+            }
+            .onSubmit(of: .text, onSubmit)
+
+            if let passwordConfig = parraAppInfo.auth.database?.password,
+               passwordChallengeAvailable, !userExists
+            {
+                // Password strength view only shows up for create account flow
+                // that supports password challenges.
+                PasswordStrengthView(
+                    password: $challenge,
+                    rules: passwordConfig.rules
+                )
+            }
+        }
     }
 
     // MARK: - Private
@@ -81,6 +99,7 @@ struct ChallengeView: View {
         ChallengeView(
             passwordChallengeAvailable: true,
             userExists: true
-        ) { _ in }
+        ) { _ in
+        } onSubmit: {}
     }
 }

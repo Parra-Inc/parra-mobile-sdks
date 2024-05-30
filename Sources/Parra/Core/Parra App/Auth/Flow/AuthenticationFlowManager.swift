@@ -62,18 +62,12 @@ class AuthenticationFlowManager: ObservableObject {
                 )
             )
         case .identityChallengeScreen:
-            if let challengeParams = challengeParamStack.popLast() {
+            if let challengeParams = challengeParamStack.last {
                 flowConfig.identityChallengeScreenProvider(
                     challengeParams
                 )
             }
         }
-    }
-
-    func reset() {
-        // Need to reset this state if the user navigated back to the
-        // landing screen and wants to enter another credential
-        challengeParamStack.removeAll()
     }
 
     // MARK: - Private
@@ -126,10 +120,10 @@ class AuthenticationFlowManager: ObservableObject {
 
         let nextParams = ParraAuthDefaultIdentityChallengeScreen.Params(
             identity: identity,
-            identityType: identityType ?? .phone,
-            // TODO: Replace with identityType from response
+            identityType: response.type,
             userExists: response.exists,
-            availableChallenges: response.challenges,
+            availableChallenges: response.availableChallenges ?? [],
+            supportedChallenges: response.supportedChallenges,
             legalInfo: appInfo.legal,
             submit: { response in
                 try await self.onChallengeResponseSubmitted(
@@ -139,6 +133,10 @@ class AuthenticationFlowManager: ObservableObject {
                 )
             }
         )
+
+        // Need to reset this state if the user navigated back to the
+        // landing screen and wants to enter another credential
+        challengeParamStack.removeAll()
 
         challengeParamStack.append(nextParams)
 
@@ -197,8 +195,6 @@ class AuthenticationFlowManager: ObservableObject {
             )
         }
 
-        print("YAY!")
-
         await authService.applyUserUpdate(
             authResult
         )
@@ -220,7 +216,7 @@ class AuthenticationFlowManager: ObservableObject {
         }
 
         if authMethod.contains(.passwordless(.sms)) {
-            return .phone
+            return .phoneNumber
         }
 
         return nil

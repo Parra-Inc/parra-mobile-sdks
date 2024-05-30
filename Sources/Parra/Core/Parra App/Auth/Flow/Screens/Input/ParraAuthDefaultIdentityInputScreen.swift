@@ -38,6 +38,22 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     }
 
     public var body: some View {
+        let allowsPhone = availablePasswordlessMethods.contains(.sms)
+        let allowsEmail = params.availableAuthMethods.contains(.password)
+            || availablePasswordlessMethods.contains(.email)
+
+        let inputMode: PhoneOrEmailTextInputView.Mode = if allowsEmail,
+                                                           allowsPhone
+        {
+            .auto
+        } else if allowsEmail {
+            .email
+        } else if allowsPhone {
+            .phone
+        } else {
+            .auto
+        }
+
         VStack(alignment: .leading) {
             componentFactory.buildLabel(
                 content: LabelContent(text: identityFieldTitle),
@@ -47,19 +63,11 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 )
             )
 
-            componentFactory.buildTextInput(
-                config: identityFieldConfig,
-                content: TextInputContent(
-                    placeholder: identityFieldTitle,
-                    errorMessage: .init()
-                ) { newText in
-                    onIdentityChanged(newText ?? "")
-                },
-                localAttributes: ParraAttributes.TextInput(
-                    padding: .md
-                )
+            PhoneOrEmailTextInputView(
+                entry: $identity,
+                mode: inputMode,
+                onSubmit: submit
             )
-            .onSubmit(of: .text, submit)
 
             componentFactory.buildContainedButton(
                 config: ParraTextButtonConfig(
@@ -76,7 +84,21 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             using: themeObserver.theme
         )
         .onAppear {
-            continueButtonContent = continueButtonContent.withLoading(false)
+            continueButtonContent = TextButtonContent(
+                text: continueButtonContent.text,
+                isDisabled: identity.isEmpty
+            )
+        }
+        .onChange(of: identity) { _, newValue in
+            let trimmed = newValue.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+
+            // TODO: is valid?
+            continueButtonContent = TextButtonContent(
+                text: continueButtonContent.text,
+                isDisabled: trimmed.isEmpty
+            )
         }
     }
 
@@ -84,7 +106,8 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
     @State private var identity = ""
     @State private var continueButtonContent: TextButtonContent = .init(
-        text: "Continue"
+        text: "Continue",
+        isDisabled: true
     )
 
     private let params: Params
@@ -167,14 +190,10 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         }
     }
 
-    private func onIdentityChanged(
-        _ identity: String
-    ) {
-        self.identity = identity
-    }
-
     private func submit() {
         continueButtonContent = continueButtonContent.withLoading(true)
+
+        print("++++++++++++++++++ |\(identity)| ++++++++++++++++++")
 
         Task {
             do {

@@ -34,12 +34,6 @@ public enum ChallengeType {
     case passwordlessEmail(codeLength: Int)
 }
 
-public enum IdentityType {
-    case email
-    case phone
-    case username
-}
-
 public enum ChallengeResponse {
     case password(String)
     case passwordlessSms(String)

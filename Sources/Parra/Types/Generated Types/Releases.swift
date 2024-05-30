@@ -893,18 +893,60 @@ public struct PasswordConfig: Codable, Equatable, Hashable {
 }
 
 public struct UsernameConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
     public init(
-    ) {}
+        required: Bool,
+        allowSignup: Bool
+    ) {
+        self.required = required
+        self.allowSignup = allowSignup
+    }
+
+    // MARK: - Public
+
+    public let required: Bool
+    public let allowSignup: Bool
 }
 
 public struct EmailConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
     public init(
-    ) {}
+        required: Bool,
+        requireVerification: Bool,
+        allowSignup: Bool
+    ) {
+        self.required = required
+        self.requireVerification = requireVerification
+        self.allowSignup = allowSignup
+    }
+
+    // MARK: - Public
+
+    public let required: Bool
+    public let requireVerification: Bool
+    public let allowSignup: Bool
 }
 
 public struct PhoneNumberConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
     public init(
-    ) {}
+        required: Bool,
+        requireVerification: Bool,
+        allowSignup: Bool
+    ) {
+        self.required = required
+        self.requireVerification = requireVerification
+        self.allowSignup = allowSignup
+    }
+
+    // MARK: - Public
+
+    public let required: Bool
+    public let requireVerification: Bool
+    public let allowSignup: Bool
 }
 
 public struct AppInfoDatabaseConfig: Codable, Equatable, Hashable {
