@@ -24,9 +24,13 @@ struct CodeEntryView: View {
     // MARK: - Public
 
     public var body: some View {
-        HStack(alignment: .center, spacing: 12) {
+        HStack(alignment: .center) {
             ForEach(0 ... length - 1, id: \.self) { index in
                 makeDigitBox(index)
+
+                if index < length - 1 {
+                    Spacer()
+                }
             }
         }
         .background {
@@ -84,7 +88,7 @@ struct CodeEntryView: View {
                 }
             }
         }
-        .frame(width: 42, height: 50)
+        .frame(width: 46, height: 60)
         .background {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .stroke(

@@ -150,7 +150,7 @@ class AuthenticationFlowManager: ObservableObject {
                 passwordlessConfig: passwordlessConfig,
                 legalInfo: appInfo.legal
             ) {
-                try await self.sendLoginCode(
+                return try await self.sendLoginCode(
                     type: passwordlessType,
                     value: identity,
                     authService: authService

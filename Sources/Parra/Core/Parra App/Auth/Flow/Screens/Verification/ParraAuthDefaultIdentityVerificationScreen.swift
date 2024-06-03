@@ -15,6 +15,9 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
         params: Params
     ) {
         self.params = params
+        self.continueButtonContent = .init(
+            text: "Continue"
+        )
 
         print(params)
     }
@@ -32,6 +35,10 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
 
                 triggerVerifyCode()
             }
+            .applyPadding(
+                size: .md,
+                from: themeObserver.theme
+            )
 
             actions
 
@@ -65,7 +72,10 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
         )
         .navigationTitle("Confirm it's you")
         .onAppear {
-//            continueButtonContent = continueButtonContent.withLoading(false)
+            continueButtonContent = continueButtonContent.withLoading(false)
+        }
+        .onReceive(timer) { _ in
+            processResponseChange(challengeResponse)
         }
     }
 
@@ -80,6 +90,14 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     // Presence of this indicates that a code has been sent.
     @State private var challengeResponse: ParraPasswordlessChallengeResponse?
     @State private var currentCode: String = ""
+    @State private var retryTimeRemaining: TimeInterval?
+    @State private var continueButtonContent: TextButtonContent
+
+    private let timer = Timer.publish(
+        every: 1,
+        on: .main,
+        in: .common
+    ).autoconnect()
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeObserver: ParraThemeObserver
@@ -95,29 +113,43 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     size: .large,
                     isMaxWidth: true
                 ),
-                text: "Continue"
+                content: continueButtonContent
             ) {
                 triggerVerifyCode()
             }
 
             HStack {
+                let content: TextButtonContent = if let retryTimeRemaining,
+                                                    challengeResponse
+                                                    .retryAt != nil
+                {
+                    {
+                        let duration = Duration(
+                            secondsComponent: Int64(retryTimeRemaining),
+                            attosecondsComponent: 0
+                        ).formatted(.time(pattern: .minuteSecond))
+
+                        return TextButtonContent(
+                            text: "Resend code in \(duration)",
+                            isDisabled: true
+                        )
+                    }()
+                } else {
+                    TextButtonContent(
+                        text: "Resend code"
+                    )
+                }
+
                 componentFactory.buildPlainButton(
                     config: ParraTextButtonConfig(
                         type: .secondary,
                         size: .small,
                         isMaxWidth: false
                     ),
-                    text: "Resend code"
+                    content: content
                 ) {
                     triggerCodeSend()
                 }
-
-                Text(
-                    timerInterval: Date() ... challengeResponse.expiresAt,
-                    pauseTime: challengeResponse.expiresAt,
-                    countsDown: true,
-                    showsHours: false
-                )
             }
         } else {
             componentFactory.buildContainedButton(
@@ -133,13 +165,48 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
         }
     }
 
+    private func processResponseChange(
+        _ response: ParraPasswordlessChallengeResponse?
+    ) {
+        challengeResponse = response
+
+        guard let response else {
+            retryTimeRemaining = nil
+
+            return
+        }
+
+        let now = Date.now
+
+        withAnimation {
+            if response.expiresAt < now {
+                // If the challenge has expired, remove it.
+                challengeResponse = nil
+            }
+
+            if let retryAt = response.retryAt {
+                let diff = retryAt.timeIntervalSince(now)
+
+                if diff <= 0 {
+                    retryTimeRemaining = nil
+                } else {
+                    retryTimeRemaining = diff
+                }
+            } else {
+                retryTimeRemaining = nil
+            }
+        }
+    }
+
     private func triggerCodeSend() {
         Task {
             do {
                 let result = try await params.requestCodeResend()
 
-                withAnimation {
-                    challengeResponse = result
+                print(result)
+
+                Task { @MainActor in
+                    processResponseChange(result)
                 }
             } catch {
                 print("Error sending code: \(error)")
@@ -148,11 +215,17 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     }
 
     private func triggerVerifyCode() {
+        continueButtonContent = continueButtonContent.withLoading(true)
+
         Task {
             do {
                 try await params.verifyCode(currentCode)
             } catch {
                 print("Error verifying code: \(error)")
+            }
+
+            Task { @MainActor in
+                continueButtonContent = continueButtonContent.withLoading(false)
             }
         }
     }
