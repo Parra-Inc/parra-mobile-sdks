@@ -45,29 +45,18 @@ final class AuthService {
     ) async -> ParraAuthResult {
         logger.debug("Logging in with username/password")
 
-        let result: ParraAuthResult
-
         do {
             let oauthToken = try await oauth2Service.authenticate(
                 using: authType
             )
 
             // On login, get user info via login route instead of GET user-info
-            let userInfo = try await authServer.postLogin(
-                accessToken: oauthToken.accessToken
+            return await completeLogin(
+                with: oauthToken
             )
-
-            let user = ParraUser(
-                credential: .oauth2(oauthToken),
-                info: userInfo
-            )
-
-            result = .authenticated(user)
         } catch {
-            result = .unauthenticated(error)
+            return .unauthenticated(error)
         }
-
-        return result
     }
 
     func signUp(
@@ -75,8 +64,6 @@ final class AuthService {
         password: String
     ) async -> ParraAuthResult {
         logger.debug("Signing up with username/password")
-
-        let result: ParraAuthResult
 
         let authType = OAuth2Service.AuthType.emailPassword(
             email: email,
@@ -102,21 +89,12 @@ final class AuthService {
             )
             logger.debug("Finished auth endpoint")
 
-            let userInfo = try await authServer.postLogin(
-                accessToken: oauthToken.accessToken
+            return await completeLogin(
+                with: oauthToken
             )
-
-            let user = ParraUser(
-                credential: .oauth2(oauthToken),
-                info: userInfo
-            )
-
-            result = .authenticated(user)
         } catch {
-            result = .unauthenticated(error)
+            return .unauthenticated(error)
         }
-
-        return result
     }
 
     func logout() async {
@@ -151,6 +129,59 @@ final class AuthService {
         return try await authServer.postAuthChallenges(
             requestData: body
         )
+    }
+
+    func passwordlessSendCode(
+        email: String? = nil,
+        phoneNumber: String? = nil
+    ) async throws -> ParraPasswordlessChallengeResponse {
+        logger.debug("Sending passwordless code", [
+            "email": email ?? "nil",
+            "phoneNumber": phoneNumber ?? "nil"
+        ])
+
+        if email == nil, phoneNumber == nil {
+            throw ParraError.message(
+                "Either email or phone number must be provided"
+            )
+        }
+
+        let body = PasswordlessChallengeRequestBody(
+            clientId: authServer.appState.applicationId,
+            email: email,
+            phoneNumber: phoneNumber
+        )
+
+        return try await authServer.postPasswordless(
+            requestData: body
+        )
+    }
+
+    func passwordlessVerifyCode(
+        type: AuthenticationMethod.PasswordlessType,
+        code: String
+    ) async throws -> ParraAuthResult {
+        logger.debug("Confirming passwordless code")
+
+        let authType: OAuth2Service.AuthType = switch type {
+        case .sms:
+            .passwordlessSms(code: code)
+        case .email:
+            .passwordless(code: code)
+        }
+
+        do {
+            let oauthToken = try await oauth2Service.authenticate(
+                using: authType
+            )
+
+            // On login, get user info via login route instead of GET user-info
+            return await completeLogin(
+                with: oauthToken
+            )
+        } catch {
+            return .unauthenticated(error)
+        }
     }
 
     func getCurrentUser() async -> ParraUser? {
@@ -386,5 +417,26 @@ final class AuthService {
         }
 
         await dataManager.updateCurrentUserCredential(credential)
+    }
+
+    private func completeLogin(
+        with oauthToken: OAuth2Service.Token
+    ) async -> ParraAuthResult {
+        do {
+            let userInfo = try await authServer.postLogin(
+                accessToken: oauthToken.accessToken
+            )
+
+            let user = ParraUser(
+                credential: .oauth2(oauthToken),
+                info: userInfo
+            )
+
+            return .authenticated(user)
+        } catch {
+            logger.error("Failed to login with oauth token", error)
+
+            return .unauthenticated(error)
+        }
     }
 }

@@ -37,6 +37,35 @@ extension ComponentFactory {
     }
 
     @ViewBuilder
+    func buildPlainButton(
+        config: ParraTextButtonConfig,
+        text: String,
+        localAttributes: ParraAttributes.PlainButton? = nil,
+        onPress: @escaping () -> Void
+    ) -> some View {
+        let attributes = attributeProvider.plainButtonAttributes(
+            config: config,
+            localAttributes: localAttributes,
+            theme: theme
+        )
+
+        let content = TextButtonContent(text: text)
+
+        let style = PlainButtonStyle(
+            config: config,
+            content: content,
+            attributes: attributes
+        )
+
+        PlainButtonComponent(
+            config: config,
+            content: content,
+            style: style,
+            onPress: onPress
+        )
+    }
+
+    @ViewBuilder
     func buildOutlinedButton(
         config: ParraTextButtonConfig,
         content: TextButtonContent,
@@ -64,6 +93,35 @@ extension ComponentFactory {
     }
 
     @ViewBuilder
+    func buildOutlinedButton(
+        config: ParraTextButtonConfig,
+        text: String,
+        localAttributes: ParraAttributes.OutlinedButton? = nil,
+        onPress: @escaping () -> Void
+    ) -> some View {
+        let attributes = attributeProvider.outlinedButtonAttributes(
+            config: config,
+            localAttributes: localAttributes,
+            theme: theme
+        )
+
+        let content = TextButtonContent(text: text)
+
+        let style = OutlinedButtonStyle(
+            config: config,
+            content: content,
+            attributes: attributes
+        )
+
+        OutlinedButtonComponent(
+            config: config,
+            content: content,
+            style: style,
+            onPress: onPress
+        )
+    }
+
+    @ViewBuilder
     func buildContainedButton(
         config: ParraTextButtonConfig,
         content: TextButtonContent,
@@ -75,6 +133,35 @@ extension ComponentFactory {
             localAttributes: localAttributes,
             theme: theme
         )
+
+        let style = ContainedButtonStyle(
+            config: config,
+            content: content,
+            attributes: attributes
+        )
+
+        ContainedButtonComponent(
+            config: config,
+            content: content,
+            style: style,
+            onPress: onPress
+        )
+    }
+
+    @ViewBuilder
+    func buildContainedButton(
+        config: ParraTextButtonConfig,
+        text: String,
+        localAttributes: ParraAttributes.ContainedButton? = nil,
+        onPress: @escaping () -> Void
+    ) -> some View {
+        let attributes = attributeProvider.containedButtonAttributes(
+            config: config,
+            localAttributes: localAttributes,
+            theme: theme
+        )
+
+        let content = TextButtonContent(text: text)
 
         let style = ContainedButtonStyle(
             config: config,

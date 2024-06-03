@@ -15,7 +15,7 @@ extension ParraEndpoint {
         case 200 ..< 300:
             switch self {
             case .getUserInfo, .postLogin, .postLogout, .postUpdateAvatar,
-                 .postAuthChallenges:
+                 .postAuthChallenges, .postPasswordless:
                 fatalError()
             case .postCreateUser:
                 UserInfoResponse.validStates()[0]

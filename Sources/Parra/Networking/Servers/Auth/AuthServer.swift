@@ -117,11 +117,6 @@ final class AuthServer: Server {
         )
     }
 
-//    func postLoginPasswordless(
-//        //   /v1/tenants/{tenant_id}/auth/challenges/passwordless:
-//
-//    )
-
     func postLogout(
         accessToken: String
     ) async throws {
@@ -136,12 +131,28 @@ final class AuthServer: Server {
     func postAuthChallenges(
         requestData: AuthChallengesRequestBody
     ) async throws -> AuthChallengeResponse {
-        return try await performOptionalAuthFormEncodedRequest(
+        let body = try configuration.jsonEncoder.encode(requestData)
+
+        return try await performOptionalAuthRequest(
             to: .postAuthChallenges(
                 tenantId: appState.tenantId
             ),
             with: nil,
-            data: requestData.payload
+            body: body
+        )
+    }
+
+    func postPasswordless(
+        requestData: PasswordlessChallengeRequestBody
+    ) async throws -> ParraPasswordlessChallengeResponse {
+        let body = try configuration.jsonEncoder.encode(requestData)
+
+        return try await performOptionalAuthRequest(
+            to: .postPasswordless(
+                tenantId: appState.tenantId
+            ),
+            with: nil,
+            body: body
         )
     }
 

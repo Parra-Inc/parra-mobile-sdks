@@ -63,6 +63,7 @@ struct CodeEntryView: View {
     @ViewBuilder
     func makeDigitBox(_ index: Int) -> some View {
         let palette = themeObserver.theme.palette
+        let isHighlighted = isKeyboardShowing && otpText.count == index
 
         ZStack {
             if otpText.count > index {
@@ -73,13 +74,18 @@ struct CodeEntryView: View {
 
                 Text(String(otpText[index]))
             } else {
-                Text(" ")
+                if isHighlighted {
+                    Text("|")
+                        .font(.title3)
+                        .fontWeight(.light)
+                        .foregroundStyle(palette.primary.toParraColor())
+                } else {
+                    Text(" ")
+                }
             }
         }
         .frame(width: 42, height: 50)
         .background {
-            let isHighlighted = isKeyboardShowing && otpText.count == index
-
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .stroke(
                     isHighlighted

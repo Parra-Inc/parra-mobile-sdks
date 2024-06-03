@@ -28,16 +28,12 @@ public enum AuthenticationMethod: Equatable {
     }
 }
 
-public enum ChallengeType {
-    case password(validationRules: [TextValidatorRule])
-    case passwordlessSms(codeLength: Int)
-    case passwordlessEmail(codeLength: Int)
-}
-
 public enum ChallengeResponse {
     case password(String)
     case passwordlessSms(String)
     case passwordlessEmail(String)
+    case verificationSms(String)
+    case verificationEmail(String)
 }
 
 // app info endpoint will contain list of available login methods
@@ -66,3 +62,6 @@ public typealias ParraAuthIdentityInputScreenProvider =
 // if passwordless only show the passwordless screen
 public typealias ParraAuthIdentityChallengeScreenProvider =
     ParraAuthScreenProvider<ParraAuthDefaultIdentityChallengeScreen>
+
+public typealias ParraAuthIdentityVerificationScreenProvider =
+    ParraAuthScreenProvider<ParraAuthDefaultIdentityVerificationScreen>

@@ -35,35 +35,37 @@ final class OAuth2Service {
         using signupType: AuthType
     ) async throws -> Token {
         var data: [String: String] = [
-            "grant_type": "password",
             "scope": "offline_access",
             "client_id": clientId
         ]
 
         switch signupType {
         case .emailPassword(let email, let password):
+            data["grant_type"] = "password"
             data["username"] = email
             data["password"] = password
-
-            let response: TokenResponse = try await authServer
-                .performFormPostRequest(
-                    to: tokenUrl,
-                    data: data,
-                    cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                    delegate: nil
-                )
-
-            return OAuth2Service.Token(
-                accessToken: response.accessToken,
-                tokenType: response.tokenType,
-                expiresIn: response.expiresIn,
-                refreshToken: response.refreshToken
-            )
-        case .passwordless(let email):
-            fatalError()
-        case .passwordlessSms(let sms):
-            fatalError()
+        case .passwordless(let code):
+            data["grant_type"] = "passwordless_otp"
+            data["code"] = code
+        case .passwordlessSms(let code):
+            data["grant_type"] = "passwordless_otp"
+            data["code"] = code
         }
+
+        let response: TokenResponse = try await authServer
+            .performFormPostRequest(
+                to: tokenUrl,
+                data: data,
+                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+                delegate: nil
+            )
+
+        return OAuth2Service.Token(
+            accessToken: response.accessToken,
+            tokenType: response.tokenType,
+            expiresIn: response.expiresIn,
+            refreshToken: response.refreshToken
+        )
     }
 
     func refreshToken(

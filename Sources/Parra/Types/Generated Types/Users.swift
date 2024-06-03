@@ -276,6 +276,30 @@ struct AuthChallengeResponse: Codable, Equatable, Hashable {
     let availableChallenges: [ParraAuthChallenge]?
 }
 
+enum PasswordlessStrategy: String, Codable, Equatable, Hashable {
+    case email
+    case sms
+}
+
+enum PasswordlessChallengeStatus: String, Codable, Equatable, Hashable {
+    case pending
+    case completed
+    case expired
+}
+
+public struct ParraPasswordlessChallengeResponse: Codable, Equatable, Hashable {
+    let strategy: PasswordlessStrategy
+    let status: PasswordlessChallengeStatus
+    let expiresAt: Date
+    let retryAt: Date?
+}
+
+struct PasswordlessChallengeRequestBody: Codable, Equatable, Hashable {
+    let clientId: String
+    let email: String?
+    let phoneNumber: String?
+}
+
 struct CreateUserRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 

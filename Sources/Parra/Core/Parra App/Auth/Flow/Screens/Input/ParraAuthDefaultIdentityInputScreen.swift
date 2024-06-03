@@ -54,32 +54,35 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             .auto
         }
 
-        VStack(alignment: .leading) {
-            componentFactory.buildLabel(
-                content: LabelContent(text: identityFieldTitle),
-                localAttributes: ParraAttributes.Label(
-                    text: .default(with: .largeTitle),
-                    padding: .md
+        ZStack {
+            VStack(alignment: .leading) {
+                componentFactory.buildLabel(
+                    content: LabelContent(text: identityFieldTitle),
+                    localAttributes: ParraAttributes.Label(
+                        text: .default(with: .title),
+                        padding: .md
+                    )
                 )
-            )
 
-            PhoneOrEmailTextInputView(
-                entry: $identity,
-                mode: inputMode,
-                onSubmit: submit
-            )
+                PhoneOrEmailTextInputView(
+                    entry: $identity,
+                    mode: inputMode,
+                    currendMode: $emailPhoneFieldCurrentMode,
+                    onSubmit: submit
+                )
 
-            componentFactory.buildContainedButton(
-                config: ParraTextButtonConfig(
-                    type: .primary,
-                    size: .large,
-                    isMaxWidth: true
-                ),
-                content: continueButtonContent,
-                onPress: submit
-            )
+                componentFactory.buildContainedButton(
+                    config: ParraTextButtonConfig(
+                        type: .primary,
+                        size: .large,
+                        isMaxWidth: true
+                    ),
+                    content: continueButtonContent,
+                    onPress: submit
+                )
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
         .applyDefaultWidgetAttributes(
             using: themeObserver.theme
         )
@@ -109,6 +112,8 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         text: "Continue",
         isDisabled: true
     )
+    @State private var emailPhoneFieldCurrentMode: PhoneOrEmailTextInputView
+        .Mode = .auto
 
     private let params: Params
 

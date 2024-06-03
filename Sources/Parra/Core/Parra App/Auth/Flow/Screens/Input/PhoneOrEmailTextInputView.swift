@@ -94,13 +94,15 @@ struct PhoneOrEmailTextInputView: View {
     init(
         entry: Binding<String>,
         mode: Mode = .auto,
+        currendMode: Binding<Mode>,
         country: CountryCode = .usa,
         attributes: ParraAttributes.TextInput? = nil,
         onSubmit: (() -> Void)? = nil
     ) {
         self._entry = entry
+        self._currentMode = currendMode
+
         self.defaultMode = mode
-        self.currentMode = mode
         self.selectedCountry = country
         self.attributes = attributes
         self.onSubmit = onSubmit
@@ -195,7 +197,7 @@ struct PhoneOrEmailTextInputView: View {
 
     private let defaultMode: Mode
     private let onSubmit: (() -> Void)?
-    @State private var currentMode: Mode
+    @Binding private var currentMode: Mode
     @State private var presentSheet = false
     @State private var selectedCountry: CountryCode
     @Binding private var entry: String
@@ -258,19 +260,16 @@ struct PhoneOrEmailTextInputView: View {
         TextField(
             value: Binding<String>(
                 get: {
-                    if currentMode == .phone {
-                        let val = $entry.wrappedValue
-                            .trimmingCharacters(
-                                in: .whitespacesAndNewlines
-                            )
-                            .trimmingPrefix(selectedCountry.dial_code)
+                    // We trim the dial code from the entry in the email case
+                    // too, in case there was a transition from phone to email
+                    // that caused it to remain.
+                    let val = $entry.wrappedValue
+                        .trimmingCharacters(
+                            in: .whitespacesAndNewlines
+                        )
+                        .trimmingPrefix(selectedCountry.dial_code)
 
-                        return String(val)
-                    }
-
-                    return $entry.wrappedValue.trimmingCharacters(
-                        in: .whitespacesAndNewlines
-                    )
+                    return String(val)
                 },
                 set: { val in
                     if currentMode == .phone {
@@ -316,13 +315,15 @@ struct PhoneOrEmailTextInputView: View {
                 // If the text input is cleared, we have to reset which
                 // mode it was last known to be in.
                 if trimmed.isEmpty {
-                    currentMode = .auto
+                    withAnimation(.snappy) {
+                        currentMode = .auto
+                    }
                 }
 
                 return
             }
 
-            withAnimation {
+            withAnimation(.snappy) {
                 currentMode = trimmed.matches(
                     pattern: /^.*[a-zA-Z]+.*$/
                 ) ? .email : .phone
@@ -336,6 +337,9 @@ struct PhoneOrEmailTextInputView: View {
 
 #Preview {
     ParraViewPreview { _ in
-        PhoneOrEmailTextInputView(entry: .constant(""))
+        PhoneOrEmailTextInputView(
+            entry: .constant(""),
+            currendMode: .constant(.auto)
+        )
     }
 }

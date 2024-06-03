@@ -20,6 +20,8 @@ public struct ParraAuthenticationFlowConfig {
         identityInputScreenProvider: ParraAuthIdentityInputScreenProvider? =
             nil,
         identityChallengeScreenProvider: ParraAuthIdentityChallengeScreenProvider? =
+            nil,
+        identityVerificationScreenProvider: ParraAuthIdentityVerificationScreenProvider? =
             nil
     ) {
         self.landingScreenProvider = landingScreenProvider ?? { params in
@@ -43,6 +45,13 @@ public struct ParraAuthenticationFlowConfig {
                     params: params
                 )
             }
+
+        self.identityVerificationScreenProvider =
+            identityVerificationScreenProvider ?? { params in
+                ParraAuthDefaultIdentityVerificationScreen(
+                    params: params
+                )
+            }
     }
 
     // MARK: - Public
@@ -52,4 +61,5 @@ public struct ParraAuthenticationFlowConfig {
     public var landingScreenProvider: ParraAuthLandingScreenProvider
     public var identityInputScreenProvider: ParraAuthIdentityInputScreenProvider
     public var identityChallengeScreenProvider: ParraAuthIdentityChallengeScreenProvider
+    public var identityVerificationScreenProvider: ParraAuthIdentityVerificationScreenProvider
 }
