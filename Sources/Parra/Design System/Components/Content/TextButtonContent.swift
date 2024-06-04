@@ -39,6 +39,16 @@ public struct TextButtonContent: Equatable, Hashable {
 
     // MARK: - Internal
 
+    func withDisabled(
+        _ isDisabled: Bool
+    ) -> TextButtonContent {
+        var copy = self
+
+        copy.isDisabled = isDisabled
+
+        return copy
+    }
+
     func withLoading(
         _ isLoading: Bool
     ) -> TextButtonContent {

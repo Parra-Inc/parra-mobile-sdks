@@ -15,19 +15,19 @@ extension PasswordConfig: ParraFixture {
                 iosPasswordRulesDescriptor: "required: upper, lower, digit; minlength: 8; maxlength: 128;",
                 rules: [
                     PasswordRule(
-                        regularExpression: "/^(?=.{8,128}$)/",
+                        regularExpression: "^.{8,128}$",
                         errorMessage: "between 8 and 128 characters"
                     ),
                     PasswordRule(
-                        regularExpression: "/^(?=.*[A-Z])/",
+                        regularExpression: "^.*[A-Z]+.*$",
                         errorMessage: "at least one uppercase letter"
                     ),
                     PasswordRule(
-                        regularExpression: "/^(?=.*[a-z])/",
+                        regularExpression: "^.*[a-z]+.*$",
                         errorMessage: "at least one lowercase letter"
                     ),
                     PasswordRule(
-                        regularExpression: "/^(?=.*\\\\d)/",
+                        regularExpression: "^.*[0-9]+.*$",
                         errorMessage: "at least one number"
                     )
                 ]

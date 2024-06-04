@@ -20,7 +20,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     ) {
         self.primaryActionName = params.userExists ? "Log in" : "Sign Up"
         self.continueButtonContent = TextButtonContent(
-            text: primaryActionName
+            text: primaryActionName,
+            isDisabled: true
         )
         self.params = params
     }
@@ -88,8 +89,12 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             ChallengeView(
                 passwordChallengeAvailable: passwordChallengeAvailable,
                 userExists: params.userExists,
-                onUpdate: { challenge in
+                onUpdate: { challenge, isValid in
                     challengeResponse = .password(challenge)
+
+                    continueButtonContent = continueButtonContent.withDisabled(
+                        !isValid
+                    )
                 },
                 onSubmit: {
                     if let challengeResponse {
@@ -110,9 +115,9 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     )
                 )
             ) {
-//                submitChallengeResponse(
-//                    <#T##ChallengeResponse#>
-//                )
+                if let challengeResponse {
+                    submitChallengeResponse(challengeResponse)
+                }
             }
 
             if passwordlessChallengesAvailable,

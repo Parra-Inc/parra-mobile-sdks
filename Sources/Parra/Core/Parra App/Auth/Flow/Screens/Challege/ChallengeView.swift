@@ -11,11 +11,16 @@ import SwiftUI
 struct ChallengeView: View {
     // MARK: - Internal
 
-    @State var challenge: String = ""
+    @State var passwordState: PasswordStrengthView.ValidityState = .init(
+        password: "",
+        isValid: false
+    )
+
+    @State private var validatedRules: [(PasswordRule, Bool)] = []
 
     let passwordChallengeAvailable: Bool
     let userExists: Bool
-    let onUpdate: (_ challenge: String) -> Void
+    let onUpdate: (_ challenge: String, _ isValid: Bool) -> Void
     let onSubmit: () -> Void
 
     var body: some View {
@@ -26,28 +31,91 @@ struct ChallengeView: View {
                     placeholder: "Password",
                     errorMessage: nil
                 ) { newText in
-                    challenge = newText ?? ""
+                    validate(
+                        password: newText ?? ""
+                    )
                 },
                 localAttributes: ParraAttributes.TextInput(
                     padding: .zero
                 )
             )
-            .onChange(of: challenge) { _, newValue in
-                onUpdate(newValue)
+            .onChange(of: passwordState) { _, newValue in
+                onUpdate(newValue.password, newValue.isValid)
             }
             .onSubmit(of: .text, onSubmit)
 
-            if let passwordConfig = parraAppInfo.auth.database?.password,
-               passwordChallengeAvailable, !userExists
-            {
-                // Password strength view only shows up for create account flow
-                // that supports password challenges.
+            // Password strength view only shows up for create account flow
+            // that supports password challenges.
+            if !userExists {
                 PasswordStrengthView(
-                    password: $challenge,
-                    rules: passwordConfig.rules
+                    passwordState: $passwordState,
+                    validatedRules: $validatedRules
                 )
             }
         }
+        .onAppear {
+            validate(
+                password: passwordState.password
+            )
+        }
+    }
+
+    private func validate(
+        password: String
+    ) {
+        guard let passwordConfig = parraAppInfo.auth.database?.password else {
+            passwordState = .init(
+                password: password,
+                isValid: false
+            )
+
+            return
+        }
+
+        let rules = passwordConfig.rules
+
+        if password.isEmpty {
+            validatedRules = rules.map { rule in
+                (rule, false)
+            }
+            passwordState = .init(
+                password: password,
+                isValid: false
+            )
+
+            return
+        }
+
+        var isValid = true
+
+        validatedRules = rules.map { rule in
+            let valid: Bool
+
+            do {
+                valid = try TextValidator.isValid(
+                    text: password,
+                    against: .regex(
+                        rule.regularExpression,
+                        failureMessage: rule.errorMessage
+                    )
+                )
+            } catch {
+                Logger.error("Error validating auth challenge", error)
+
+                valid = false
+            }
+
+            if !valid {
+                isValid = false
+            }
+
+            return (rule, valid)
+        }
+
+        passwordState = .init(
+            password: password,
+            isValid: isValid
+        )
     }
 
     // MARK: - Private
@@ -97,10 +165,20 @@ struct ChallengeView: View {
 
 #Preview {
     ParraViewPreview { _ in
-        ChallengeView(
-            passwordChallengeAvailable: true,
-            userExists: true
-        ) { _ in
-        } onSubmit: {}
+        VStack(spacing: 30) {
+            ChallengeView(
+                passwordChallengeAvailable: true,
+                userExists: true
+            ) { _, _ in
+            } onSubmit: {}
+
+            ChallengeView(
+                passwordChallengeAvailable: true,
+                userExists: false
+            ) { _, _ in
+            } onSubmit: {}
+        }
+        .padding()
     }
+    .environmentObject(ParraAppInfo.validStates()[0])
 }

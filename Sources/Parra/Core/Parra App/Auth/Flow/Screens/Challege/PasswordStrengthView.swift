@@ -12,16 +12,21 @@ struct PasswordStrengthView: View {
     // MARK: - Lifecycle
 
     init(
-        password: Binding<String>,
-        rules: [PasswordRule]
+        passwordState: Binding<ValidityState>,
+        validatedRules: Binding<[(PasswordRule, Bool)]>
     ) {
-        self._password = password
-        self.validatedRules = rules.map { ($0, false) }
+        self._state = passwordState
+        self._validatedRules = validatedRules
     }
 
     // MARK: - Internal
 
-    var header: some View {
+    struct ValidityState: Equatable {
+        let password: String
+        let isValid: Bool
+    }
+
+    @ViewBuilder var header: some View {
         HStack {
             componentFactory.buildLabel(
                 text: "Your password must include",
@@ -80,47 +85,48 @@ struct PasswordStrengthView: View {
             )
         }
         .frame(maxWidth: .infinity)
-        .onChange(of: password) { _, _ in
-            validate()
-        }
     }
 
     // MARK: - Private
 
-    @Binding private var password: String
-    @State private var validatedRules: [(PasswordRule, Bool)]
+    @Binding private var state: ValidityState
+    @Binding private var validatedRules: [(PasswordRule, Bool)]
     @State private var passwordStrength: PasswordEntropyCalculator.Strength?
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
 
+    @ViewBuilder
     private func renderRule(
         rule: PasswordRule,
         valid: Bool
     ) -> some View {
+        let color = valid
+            ? themeObserver.theme.palette.success
+            : themeObserver.theme.palette.error
+
+        let symbol = valid
+            ? "checkmark.circle.fill"
+            : "xmark.circle.fill"
+
         Label {
             componentFactory.buildLabel(
                 text: rule.errorMessage,
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .caption,
-                        color: themeObserver.theme.palette.success
-                            .toParraColor()
+                        color: color.toParraColor()
                     )
                 )
             )
         } icon: {
-            Image(systemName: "checkmark.circle.fill")
-                .foregroundStyle(
-                    themeObserver.theme.palette.success
-                        .toParraColor()
-                )
+            Image(systemName: symbol)
+                .foregroundStyle(color.toParraColor())
                 .padding(.trailing, 8)
         }
-    }
+        .contentTransition(.symbolEffect(.automatic))
 
-    private func validate() {
-        password
+//        .symbolEffect(.pulse, value: valid)
     }
 }
 
@@ -128,23 +134,56 @@ struct PasswordStrengthView: View {
     ParraViewPreview { _ in
         VStack {
             PasswordStrengthView(
-                password: .constant(""),
-                rules: PasswordConfig.validStates()[0].rules
+                passwordState: .constant(.init(password: "", isValid: false)),
+                validatedRules: .constant(
+                    PasswordConfig.validStates()[0].rules
+                        .map { (
+                            $0,
+                            false
+                        ) }
+                )
             )
 
             PasswordStrengthView(
-                password: .constant("short"),
-                rules: PasswordConfig.validStates()[0].rules
+                passwordState: .constant(.init(
+                    password: "short",
+                    isValid: false
+                )),
+                validatedRules: .constant(
+                    PasswordConfig.validStates()[0].rules
+                        .map { (
+                            $0,
+                            false
+                        ) }
+                )
             )
 
             PasswordStrengthView(
-                password: .constant("abcdefghijklm"),
-                rules: PasswordConfig.validStates()[0].rules
+                passwordState: .constant(.init(
+                    password: "abcdefghijklm",
+                    isValid: false
+                )),
+                validatedRules: .constant(
+                    PasswordConfig.validStates()[0].rules
+                        .map { (
+                            $0,
+                            false
+                        ) }
+                )
             )
 
             PasswordStrengthView(
-                password: .constant("Gfo4FZ1-34Dy!"),
-                rules: PasswordConfig.validStates()[0].rules
+                passwordState: .constant(.init(
+                    password: "Gfo4FZ1-34Dy!",
+                    isValid: false
+                )),
+                validatedRules: .constant(
+                    PasswordConfig.validStates()[0].rules
+                        .map { (
+                            $0,
+                            false
+                        ) }
+                )
             )
         }
         .padding()
