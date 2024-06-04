@@ -213,7 +213,7 @@ struct PhoneOrEmailTextInputView: View {
         case .email:
             .emailAddress
         case .auto:
-            .default
+            .emailAddress
         }
 
         let contentType: UITextContentType? = switch currentMode {
@@ -222,7 +222,7 @@ struct PhoneOrEmailTextInputView: View {
         case .email:
             .emailAddress
         case .auto:
-            nil
+            .emailAddress
         }
 
         let placeholder = switch defaultMode {
