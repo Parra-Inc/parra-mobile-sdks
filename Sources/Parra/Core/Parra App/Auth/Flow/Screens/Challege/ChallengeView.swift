@@ -31,6 +31,18 @@ struct ChallengeView: View {
 
     var body: some View {
         VStack(spacing: 16) {
+//            componentFactory.buildTextInput(
+//                config: TextInputConfig(
+//                    keyboardType: .emailAddress,
+//                    textContentType: .username
+//                ),
+//                content: TextInputContent(
+//                    title: "",
+//                    defaultText: "mickm@hey.com"
+//                ),
+//                localAttributes: ParraAttributes.TextInput()
+//            )
+
             componentFactory.buildTextInput(
                 config: challengeFieldConfig,
                 content: TextInputContent(

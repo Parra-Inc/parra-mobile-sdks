@@ -13,12 +13,14 @@ public struct TextInputContent {
 
     public init(
         title: LabelContent? = nil,
+        defaultText: String = "",
         placeholder: LabelContent? = nil,
         helper: LabelContent? = nil,
         errorMessage: String? = nil,
         textChanged: ((String?) -> Void)? = nil
     ) {
         self.title = title
+        self.defaultText = defaultText
         self.placeholder = placeholder
         self.helper = helper
         self.errorMessage = errorMessage
@@ -27,6 +29,7 @@ public struct TextInputContent {
 
     public init(
         title: String? = nil,
+        defaultText: String = "",
         placeholder: String? = nil,
         helper: String? = nil,
         errorMessage: String? = nil,
@@ -37,6 +40,8 @@ public struct TextInputContent {
         } else {
             nil
         }
+
+        self.defaultText = defaultText
 
         self.placeholder = if let placeholder {
             LabelContent(text: placeholder)
@@ -59,6 +64,9 @@ public struct TextInputContent {
     /// A string which is displayed in a label above the text editor to provide
     /// contextual information.
     public let title: LabelContent?
+
+    /// Text that should be placed in the text field when it is first displayed.
+    public let defaultText: String
 
     /// A string which is displayed inside the text editor whenever the input
     /// string is empty.

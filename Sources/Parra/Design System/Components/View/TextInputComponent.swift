@@ -19,14 +19,7 @@ struct TextInputComponent: View {
         self.config = config
         self.content = content
         self.attributes = attributes
-
-        if let passwordRuleDescriptor = config.passwordRuleDescriptor,
-           config.isSecure
-        {
-            UITextField.appearance().passwordRules = UITextInputPasswordRules(
-                descriptor: "required: digit; allowed: digit; minlength: 4; maxlength: 6;"
-            )
-        }
+        self._text = State(initialValue: content.defaultText)
     }
 
     // MARK: - Internal
@@ -46,6 +39,17 @@ struct TextInputComponent: View {
                 prompt: prompt
             ) {
                 EmptyView()
+            }
+            .onAppear {
+                if let passwordRuleDescriptor = config.passwordRuleDescriptor,
+                   config.isSecure
+                {
+                    UITextField.appearance()
+                        .passwordRules = UITextInputPasswordRules(
+                            //                        descriptor: passwordRuleDescriptor
+                            descriptor: "required: digit; allowed: digit; minlength: 4; maxlength: 6;"
+                        )
+                }
             }
         } else {
             TextField(
@@ -91,7 +95,7 @@ struct TextInputComponent: View {
     @FocusState private var isFocused: Bool
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
-    @State private var text = ""
+    @State private var text: String
     @State private var hasReceivedInput = false
 
     @ViewBuilder private var titleLabel: some View {
