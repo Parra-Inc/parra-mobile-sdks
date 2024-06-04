@@ -95,8 +95,8 @@ class AuthenticationFlowManager: ObservableObject {
 
     private func supportedAuthMethods(
         for authInfo: ParraAppAuthInfo
-    ) -> [AuthenticationMethod] {
-        var methods = [AuthenticationMethod]()
+    ) -> [ParraAuthenticationMethod] {
+        var methods = [ParraAuthenticationMethod]()
 
         if let passwordless = authInfo.passwordless {
             if passwordless.sms != nil {
@@ -116,6 +116,10 @@ class AuthenticationFlowManager: ObservableObject {
         with appInfo: ParraAppInfo,
         authService: AuthService
     ) async throws {
+        logger.debug("Submitting identity", [
+            "identity": identity
+        ])
+
         let authMethods = supportedAuthMethods(
             for: appInfo.auth
         )
@@ -129,23 +133,29 @@ class AuthenticationFlowManager: ObservableObject {
             with: identityType
         )
 
-        let availableChallenges = response.availableChallenges ?? []
-
         // Need to reset this state if the user navigated back to the
         // landing screen and wants to enter another credential
         challengeParamStack.removeAll()
         verificationParamStack.removeAll()
 
-        let isPasswordlessOnly = availableChallenges.allSatisfy { challenge in
-            return challenge.id.isPasswordless
-        }
+        let isPasswordlessOnly = response.currentChallenges
+            .allSatisfy { challenge in
+                return challenge.id.isPasswordless
+            }
 
         if let passwordlessConfig = appInfo.auth.passwordless,
            isPasswordlessOnly
         {
-            let passwordlessType: AuthenticationMethod.PasswordlessType = .sms
+            logger.debug("Navigating to passwordless verification screen", [
+                "identity": identity
+            ])
+
+            let passwordlessType: ParraAuthenticationMethod
+                .PasswordlessType = .sms
 
             let nextParams = ParraAuthDefaultIdentityVerificationScreen.Params(
+                identity: identity,
+                passwordlessIdentityType: passwordlessType,
                 userExists: response.exists,
                 passwordlessConfig: passwordlessConfig,
                 legalInfo: appInfo.legal
@@ -167,11 +177,15 @@ class AuthenticationFlowManager: ObservableObject {
 
             navigate(to: .identityVerificationScreen)
         } else {
+            logger.debug("Navigating to identity challenge screen", [
+                "identity": identity
+            ])
+
             let nextParams = ParraAuthDefaultIdentityChallengeScreen.Params(
                 identity: identity,
                 identityType: response.type,
                 userExists: response.exists,
-                availableChallenges: availableChallenges,
+                availableChallenges: response.availableChallenges ?? [],
                 supportedChallenges: response.supportedChallenges,
                 legalInfo: appInfo.legal,
                 submit: { response in
@@ -236,7 +250,7 @@ class AuthenticationFlowManager: ObservableObject {
     }
 
     private func sendLoginCode(
-        type: AuthenticationMethod.PasswordlessType,
+        type: ParraAuthenticationMethod.PasswordlessType,
         value: String,
         authService: AuthService
     ) async throws -> ParraPasswordlessChallengeResponse {
@@ -253,7 +267,7 @@ class AuthenticationFlowManager: ObservableObject {
     }
 
     private func confirmLoginCode(
-        type: AuthenticationMethod.PasswordlessType,
+        type: ParraAuthenticationMethod.PasswordlessType,
         code: String,
         authService: AuthService
     ) async throws {
@@ -293,7 +307,7 @@ class AuthenticationFlowManager: ObservableObject {
     }
 
     private func determineIdentityType(
-        from authMethod: [AuthenticationMethod]
+        from authMethod: [ParraAuthenticationMethod]
     ) -> IdentityType? {
         // If the identity could have been 1 of multiple mismatching types,
         // leave it to the server to work out what the string is.

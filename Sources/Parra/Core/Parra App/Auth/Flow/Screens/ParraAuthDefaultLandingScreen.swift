@@ -29,8 +29,8 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         // MARK: - Lifecycle
 
         public init(
-            availableAuthMethods: [AuthenticationMethod],
-            selectAuthMethod: @escaping (AuthenticationMethod) -> Void
+            availableAuthMethods: [ParraAuthenticationMethod],
+            selectAuthMethod: @escaping (ParraAuthenticationMethod) -> Void
         ) {
             self.availableAuthMethods = availableAuthMethods
             self.selectAuthMethod = selectAuthMethod
@@ -38,8 +38,8 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
 
         // MARK: - Public
 
-        public let availableAuthMethods: [AuthenticationMethod]
-        public let selectAuthMethod: (AuthenticationMethod) -> Void
+        public let availableAuthMethods: [ParraAuthenticationMethod]
+        public let selectAuthMethod: (ParraAuthenticationMethod) -> Void
     }
 
     public var body: some View {

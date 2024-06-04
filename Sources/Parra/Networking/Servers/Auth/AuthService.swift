@@ -158,7 +158,7 @@ final class AuthService {
     }
 
     func passwordlessVerifyCode(
-        type: AuthenticationMethod.PasswordlessType,
+        type: ParraAuthenticationMethod.PasswordlessType,
         code: String
     ) async throws -> ParraAuthResult {
         logger.debug("Confirming passwordless code")

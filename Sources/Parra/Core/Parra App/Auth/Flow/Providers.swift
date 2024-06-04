@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public enum AuthenticationMethod: Equatable {
+public enum ParraAuthenticationMethod: Equatable {
     case passwordless(PasswordlessType)
     case password // implies email
     case sso(SsoType)

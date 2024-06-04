@@ -13,10 +13,12 @@ struct CodeEntryView: View {
 
     public init(
         length: Int = 6,
+        disabled: Bool = false,
         onChange: @escaping (String) -> Void,
         onComplete: @escaping (String) -> Void
     ) {
         self.length = length
+        self.disabled = disabled
         self.onChange = onChange
         self.onComplete = onComplete
     }
@@ -44,10 +46,26 @@ struct CodeEntryView: View {
                 .blendMode(.screen)
                 .focused($isKeyboardShowing)
                 .onChange(of: otpText) { _, newValue in
-                    onChange(newValue)
+                    // When this is disabled, we still want to be able to
+                    // display the keyboard but just want to ignore any input.
+                    if disabled, newValue != "" {
+                        otpText = ""
 
-                    if newValue.count == length {
-                        onComplete(newValue)
+                        return
+                    }
+
+                    let next = String(newValue.unicodeScalars.filter(
+                        CharacterSet.decimalDigits.contains
+                    ))
+
+                    onChange(next)
+
+                    if next.count == length {
+                        onComplete(next)
+                    }
+
+                    if next != newValue {
+                        otpText = next
                     }
                 }
                 .onAppear {
@@ -108,6 +126,7 @@ struct CodeEntryView: View {
     private let onChange: (String) -> Void
     private let onComplete: (String) -> Void
     private let length: Int
+    private let disabled: Bool
 
     @State private var otpText = ""
     @FocusState private var isKeyboardShowing: Bool
@@ -133,5 +152,6 @@ extension Binding where Value == String {
 
         } onComplete: { _ in
         }
+        .padding()
     }
 }

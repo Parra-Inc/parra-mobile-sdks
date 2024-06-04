@@ -26,7 +26,6 @@ class _LegalInfoView: UIView, UITextViewDelegate {
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.textContainer.lineBreakMode = .byWordWrapping
-        textView.textAlignment = .center
         textView.isEditable = false
         textView.isSelectable = false
         textView.isScrollEnabled = false
@@ -80,11 +79,6 @@ class _LegalInfoView: UIView, UITextViewDelegate {
             ]
         )
 
-        var attributedString = AttributedString(
-            "By continuing, you agree to our ",
-            attributes: baseAttributes
-        )
-
         var agreements = [LegalDocument]()
         if let privacyPolicy = legalInfo.privacyPolicy {
             agreements.append(privacyPolicy)
@@ -93,6 +87,14 @@ class _LegalInfoView: UIView, UITextViewDelegate {
         if let termsOfService = legalInfo.termsOfService {
             agreements.append(termsOfService)
         }
+
+        let prefixBreak = agreements.count == 2 ? "\n" : " "
+        let prefix = "By continuing, you agree to our\(prefixBreak)"
+
+        var attributedString = AttributedString(
+            prefix,
+            attributes: baseAttributes
+        )
 
         for (index, agreement) in agreements.enumerated() {
             var linkText = AttributedString(
@@ -133,6 +135,8 @@ class _LegalInfoView: UIView, UITextViewDelegate {
         }
 
         textView.attributedText = NSAttributedString(attributedString)
+        textView
+            .textAlignment = .center // has to be set after changing the text
         textView.invalidateIntrinsicContentSize()
     }
 

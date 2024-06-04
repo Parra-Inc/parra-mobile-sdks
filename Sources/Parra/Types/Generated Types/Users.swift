@@ -274,6 +274,14 @@ struct AuthChallengeResponse: Codable, Equatable, Hashable {
     /// who signed up with email/password but also has a verified phone number
     /// will have both password and passwordless SMS challenges available.
     let availableChallenges: [ParraAuthChallenge]?
+
+    var currentChallenges: [ParraAuthChallenge] {
+        if exists {
+            return availableChallenges ?? []
+        }
+
+        return supportedChallenges
+    }
 }
 
 enum PasswordlessStrategy: String, Codable, Equatable, Hashable {

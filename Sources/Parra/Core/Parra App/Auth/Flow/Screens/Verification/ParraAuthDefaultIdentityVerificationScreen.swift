@@ -16,34 +16,63 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     ) {
         self.params = params
         self.continueButtonContent = .init(
-            text: "Continue"
+            text: "Send code"
         )
-
-        print(params)
     }
 
     // MARK: - Public
 
     public var body: some View {
         VStack {
-            ChallengeVerificationView(
-                passwordlessConfig: params.passwordlessConfig
-            ) { challenge, _ in
-                currentCode = challenge
-            } onSubmit: { code, _ in
-                currentCode = code
-
-                triggerVerifyCode()
-            }
-            .applyPadding(
-                size: .md,
-                from: themeObserver.theme
+            componentFactory.buildLabel(
+                text: "Confirm your identity",
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        style: .title
+                    ),
+                    frame: .flexible(
+                        FlexibleFrameAttributes(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                    )
+                )
             )
+
+            componentFactory.buildLabel(
+                text: "We'll send a \(requiredLength)-digit code to \(params.identity) verify your identity.",
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        style: .subheadline
+                    )
+                )
+            )
+
+            ChallengeVerificationView(
+                passwordlessConfig: params.passwordlessConfig,
+                // ignore input before we've sent a code
+                disabled: challengeResponse == nil
+            ) { challenge, _ in
+                if challengeResponse != nil {
+                    currentCode = challenge.trimmingCharacters(
+                        in: .whitespacesAndNewlines
+                    )
+
+                    continueButtonContent = TextButtonContent(
+                        text: continueButtonContent.text,
+                        isDisabled: currentCode.count < requiredLength
+                    )
+                }
+            } onSubmit: { _, _ in }
+                .applyPadding(
+                    size: .md,
+                    from: themeObserver.theme
+                )
 
             actions
 
             componentFactory.buildLabel(
-                text: "We'll send a one time login code to the phone number you entered. SMS & data charges may apply.",
+                text: disclaimerText,
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .footnote,
@@ -83,6 +112,19 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
 
     @Environment(\.parra) var parra
 
+    var disclaimerText: String {
+        switch params.passwordlessIdentityType {
+        case .sms:
+            "We'll send a one time login code to the phone number you entered. SMS & data charges may apply."
+        case .email:
+            "We'll send a one time login code to the email address you entered."
+        }
+    }
+
+    var requiredLength: Int {
+        return params.passwordlessConfig.sms?.otpLength ?? 6
+    }
+
     // MARK: - Private
 
     private let params: Params
@@ -92,6 +134,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     @State private var currentCode: String = ""
     @State private var retryTimeRemaining: TimeInterval?
     @State private var continueButtonContent: TextButtonContent
+    @State private var errorMessage: String?
 
     private let timer = Timer.publish(
         every: 1,
@@ -158,7 +201,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     size: .large,
                     isMaxWidth: true
                 ),
-                text: "Send code"
+                content: continueButtonContent
             ) {
                 triggerCodeSend()
             }
@@ -171,7 +214,9 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
         challengeResponse = response
 
         guard let response else {
-            retryTimeRemaining = nil
+            withAnimation {
+                retryTimeRemaining = nil
+            }
 
             return
         }
@@ -199,23 +244,47 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     }
 
     private func triggerCodeSend() {
+        continueButtonContent = continueButtonContent.withLoading(true)
+        currentCode = ""
+
         Task {
             do {
                 let result = try await params.requestCodeResend()
 
-                print(result)
-
                 Task { @MainActor in
                     processResponseChange(result)
+
+                    if challengeResponse == nil {
+                        continueButtonContent = TextButtonContent(
+                            text: "Send code"
+                        )
+                    } else {
+                        continueButtonContent = TextButtonContent(
+                            text: "Continue",
+                            isDisabled: true
+                        )
+                    }
                 }
             } catch {
                 print("Error sending code: \(error)")
+
+                Task { @MainActor in
+                    continueButtonContent = continueButtonContent
+                        .withLoading(false)
+                }
             }
         }
     }
 
     private func triggerVerifyCode() {
         continueButtonContent = continueButtonContent.withLoading(true)
+
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
 
         Task {
             do {
@@ -235,6 +304,8 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     ParraViewPreview { _ in
         ParraAuthDefaultIdentityVerificationScreen(
             params: .init(
+                identity: "mickm@hey.com",
+                passwordlessIdentityType: .email,
                 userExists: false,
                 passwordlessConfig: .init(
                     sms: .init(otpLength: 6)

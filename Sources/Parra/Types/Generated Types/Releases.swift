@@ -997,7 +997,7 @@ public struct AuthInfoPasswordlessSmsConfig: Codable, Equatable, Hashable {
     public let otpLength: Int
 }
 
-public struct AuthInfoPasswordlessConfig: Codable, Equatable, Hashable {
+public struct ParraAuthInfoPasswordlessConfig: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -1016,7 +1016,7 @@ public final class ParraAppAuthInfo: Codable, Equatable, Hashable {
 
     public init(
         database: AppInfoDatabaseConfig?,
-        passwordless: AuthInfoPasswordlessConfig?
+        passwordless: ParraAuthInfoPasswordlessConfig?
     ) {
         self.database = database
         self.passwordless = passwordless
@@ -1025,7 +1025,7 @@ public final class ParraAppAuthInfo: Codable, Equatable, Hashable {
     // MARK: - Public
 
     public let database: AppInfoDatabaseConfig?
-    public let passwordless: AuthInfoPasswordlessConfig?
+    public let passwordless: ParraAuthInfoPasswordlessConfig?
 
     public static func == (
         lhs: ParraAppAuthInfo,

@@ -13,8 +13,11 @@ public extension ParraAuthDefaultIdentityVerificationScreen {
         // MARK: - Lifecycle
 
         public init(
+            identity: String,
+            passwordlessIdentityType: ParraAuthenticationMethod
+                .PasswordlessType,
             userExists: Bool,
-            passwordlessConfig: AuthInfoPasswordlessConfig,
+            passwordlessConfig: ParraAuthInfoPasswordlessConfig,
             legalInfo: LegalInfo,
             requestCodeResend: @escaping () async throws
                 -> ParraPasswordlessChallengeResponse,
@@ -22,6 +25,8 @@ public extension ParraAuthDefaultIdentityVerificationScreen {
                 _ code: String
             ) async throws -> Void
         ) {
+            self.identity = identity
+            self.passwordlessIdentityType = passwordlessIdentityType
             self.userExists = userExists
             self.passwordlessConfig = passwordlessConfig
             self.legalInfo = legalInfo
@@ -31,8 +36,11 @@ public extension ParraAuthDefaultIdentityVerificationScreen {
 
         // MARK: - Public
 
+        public let identity: String
+        public let passwordlessIdentityType: ParraAuthenticationMethod
+            .PasswordlessType
         public let userExists: Bool
-        public let passwordlessConfig: AuthInfoPasswordlessConfig
+        public let passwordlessConfig: ParraAuthInfoPasswordlessConfig
         public let legalInfo: LegalInfo
         public let requestCodeResend: () async throws
             -> ParraPasswordlessChallengeResponse

@@ -12,7 +12,7 @@ public struct ParraAuthenticationFlowConfig {
     // MARK: - Lifecycle
 
     public init(
-        supportedMethods: [AuthenticationMethod] = [
+        supportedMethods: [ParraAuthenticationMethod] = [
             .passkey,
             .passwordless(.sms)
         ],

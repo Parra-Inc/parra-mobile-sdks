@@ -9,22 +9,45 @@
 import SwiftUI
 
 struct ChallengeVerificationView: View {
-    let passwordlessConfig: AuthInfoPasswordlessConfig
+    // MARK: - Lifecycle
+
+    init(
+        passwordlessConfig: ParraAuthInfoPasswordlessConfig,
+        disabled: Bool = false,
+        onUpdate: @escaping (
+            _: String, _: ParraAuthenticationMethod.PasswordlessType
+        ) -> Void,
+        onSubmit: @escaping (
+            _: String, _: ParraAuthenticationMethod.PasswordlessType
+        ) -> Void
+    ) {
+        self.passwordlessConfig = passwordlessConfig
+        self.disabled = disabled
+        self.onUpdate = onUpdate
+        self.onSubmit = onSubmit
+    }
+
+    // MARK: - Internal
+
+    let passwordlessConfig: ParraAuthInfoPasswordlessConfig
+
+    let disabled: Bool
 
     let onUpdate: (
         _ challenge: String,
-        _ type: AuthenticationMethod.PasswordlessType
+        _ type: ParraAuthenticationMethod.PasswordlessType
     ) -> Void
 
     let onSubmit: (
         _ code: String,
-        _ type: AuthenticationMethod.PasswordlessType
+        _ type: ParraAuthenticationMethod.PasswordlessType
     ) -> Void
 
     @ViewBuilder var body: some View {
         if let sms = passwordlessConfig.sms {
             CodeEntryView(
-                length: sms.otpLength
+                length: sms.otpLength,
+                disabled: disabled
             ) { code in
                 onUpdate(code, .sms)
             } onComplete: { code in
@@ -39,7 +62,7 @@ struct ChallengeVerificationView: View {
 #Preview {
     ParraViewPreview { _ in
         ChallengeVerificationView(
-            passwordlessConfig: AuthInfoPasswordlessConfig(
+            passwordlessConfig: ParraAuthInfoPasswordlessConfig(
                 sms: AuthInfoPasswordlessSmsConfig(
                     otpLength: 6
                 )

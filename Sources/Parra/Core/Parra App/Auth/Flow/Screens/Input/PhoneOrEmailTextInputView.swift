@@ -120,10 +120,8 @@ struct PhoneOrEmailTextInputView: View {
         )
         .animation(.easeInOut(duration: 0.6), value: keyIsFocused)
         .onTapGesture {
-            let resign = #selector(UIResponder.resignFirstResponder)
-
             UIApplication.shared.sendAction(
-                resign,
+                #selector(UIResponder.resignFirstResponder),
                 to: nil,
                 from: nil,
                 for: nil

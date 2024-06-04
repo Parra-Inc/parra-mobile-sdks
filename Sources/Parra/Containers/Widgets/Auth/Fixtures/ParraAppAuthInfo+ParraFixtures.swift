@@ -18,7 +18,7 @@ extension ParraAppAuthInfo: ParraFixture {
                     email: nil,
                     phoneNumber: nil
                 ),
-                passwordless: AuthInfoPasswordlessConfig(
+                passwordless: ParraAuthInfoPasswordlessConfig(
                     sms: AuthInfoPasswordlessSmsConfig(
                         otpLength: 6
                     )

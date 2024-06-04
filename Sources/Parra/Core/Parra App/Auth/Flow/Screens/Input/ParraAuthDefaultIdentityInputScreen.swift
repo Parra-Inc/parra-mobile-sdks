@@ -24,7 +24,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
         public init(
             // basically whether to show "email" "phone number" or "email or phone number" in the placeholder
-            availableAuthMethods: [AuthenticationMethod],
+            availableAuthMethods: [ParraAuthenticationMethod],
             submit: @escaping (_ identity: String) async throws -> Void
         ) {
             self.availableAuthMethods = availableAuthMethods
@@ -33,7 +33,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
         // MARK: - Public
 
-        public let availableAuthMethods: [AuthenticationMethod]
+        public let availableAuthMethods: [ParraAuthenticationMethod]
         public let submit: (_ identity: String) async throws -> Void
     }
 
@@ -123,7 +123,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
     private var availablePasswordlessMethods: [
-        AuthenticationMethod
+        ParraAuthenticationMethod
             .PasswordlessType
     ] {
         params.availableAuthMethods.filter { method in
