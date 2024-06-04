@@ -28,6 +28,32 @@ open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
                 .LaunchOptionsKey: Any
         ]? = nil
     ) -> Bool {
+        // Keep this only enabled for simulator builds, as it's not supported
+        // on device and could be dangerous in production. This is a workaround
+        // for typing with the physical keyboard dismissing the software
+        // keyboard on simulators. Doing this makes it easier to make sure
+        // layouts are tested properly with the keyboard up.
+        #if targetEnvironment(simulator)
+        let selector = NSSelectorFromString("setHardwareLayout:")
+
+        typealias SetHardwareLayoutImp = @convention(c) (
+            UITextInputMode,
+            Selector
+        ) -> Void
+
+        for inputMode in UITextInputMode.activeInputModes {
+            if inputMode.responds(to: selector) {
+                guard let imp = inputMode.method(for: selector) else {
+                    continue
+                }
+
+                let function = unsafeBitCast(imp, to: SetHardwareLayoutImp.self)
+
+                function(inputMode, selector)
+            }
+        }
+        #endif
+
         return true
     }
 
