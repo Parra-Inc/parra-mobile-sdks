@@ -11,12 +11,18 @@ import SwiftUI
 struct ChallengeView: View {
     // MARK: - Internal
 
+    enum Field {
+        case password
+    }
+
     @State var passwordState: PasswordStrengthView.ValidityState = .init(
         password: "",
         isValid: false
     )
 
     @State private var validatedRules: [(PasswordRule, Bool)] = []
+
+    @FocusState private var focusState: Field?
 
     let passwordChallengeAvailable: Bool
     let userExists: Bool
@@ -43,6 +49,7 @@ struct ChallengeView: View {
                 onUpdate(newValue.password, newValue.isValid)
             }
             .onSubmit(of: .text, onSubmit)
+            .focused($focusState, equals: .password)
 
             // Password strength view only shows up for create account flow
             // that supports password challenges.
@@ -54,6 +61,8 @@ struct ChallengeView: View {
             }
         }
         .onAppear {
+            focusState = .password
+
             validate(
                 password: passwordState.password
             )
@@ -63,6 +72,18 @@ struct ChallengeView: View {
     private func validate(
         password: String
     ) {
+        if userExists {
+            // User is logging in. We just want to enable the login button if
+            // there is anything in the field. We won't be showing them the
+            // strength view to know what's wrong.
+            passwordState = .init(
+                password: password,
+                isValid: !password.isEmpty
+            )
+
+            return
+        }
+
         guard let passwordConfig = parraAppInfo.auth.database?.password else {
             passwordState = .init(
                 password: password,

@@ -29,26 +29,31 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     // MARK: - Public
 
     public var body: some View {
-        challengeContent
-            .frame(
-                maxWidth: .infinity,
-                maxHeight: .infinity
-            )
-            .overlay(alignment: .bottom) {
-                if !params.userExists {
-                    LegalInfoView(
-                        legalInfo: params.legalInfo,
-                        theme: themeObserver.theme
-                    )
-                }
+        ScrollView {
+            challengeContent
+        }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
+        .overlay(alignment: .bottom) {
+            if !params.userExists {
+                LegalInfoView(
+                    legalInfo: params.legalInfo,
+                    theme: themeObserver.theme
+                )
             }
-            .applyDefaultWidgetAttributes(
-                using: themeObserver.theme
+        }
+        .applyDefaultWidgetAttributes(
+            using: themeObserver.theme
+        )
+        .navigationTitle(primaryActionName)
+        .onAppear {
+            continueButtonContent = TextButtonContent(
+                text: continueButtonContent.text,
+                isDisabled: challengeResponse == nil
             )
-            .navigationTitle(primaryActionName)
-            .onAppear {
-                continueButtonContent = continueButtonContent.withLoading(false)
-            }
+        }
     }
 
     // MARK: - Internal
@@ -76,7 +81,6 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 content: LabelContent(text: title),
                 localAttributes: ParraAttributes.Label(
                     text: .default(with: .largeTitle),
-                    padding: .md,
                     frame: .flexible(
                         .init(
                             maxWidth: .infinity,
@@ -227,6 +231,13 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
         _ response: ChallengeResponse
     ) {
         continueButtonContent = continueButtonContent.withLoading(true)
+
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
 
         Task {
             do {

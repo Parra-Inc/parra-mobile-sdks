@@ -125,8 +125,6 @@ struct PasswordStrengthView: View {
                 .padding(.trailing, 8)
         }
         .contentTransition(.symbolEffect(.automatic))
-
-//        .symbolEffect(.pulse, value: valid)
     }
 }
 
