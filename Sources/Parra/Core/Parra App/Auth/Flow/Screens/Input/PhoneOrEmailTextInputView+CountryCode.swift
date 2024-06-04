@@ -9,10 +9,13 @@
 import SwiftUI
 
 extension PhoneOrEmailTextInputView {
-    struct CountryCode: Codable, Identifiable {
+    struct CountryCode: Codable, Equatable, Identifiable {
         static let allCountries: [CountryCode] = Bundle.parraBundle
             .decode("CountryCodes.json")
-        static let usa = allCountries.first(where: { $0.code == "US" })!
+
+        static let usa = allCountries.first(
+            where: { $0.code == "US" }
+        )!
 
         let id: String
         let name: String

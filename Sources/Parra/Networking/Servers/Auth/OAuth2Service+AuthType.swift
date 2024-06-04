@@ -10,8 +10,12 @@ import Foundation
 
 extension OAuth2Service {
     enum AuthType {
-        case emailPassword(email: String, password: String)
-        case passwordless(code: String)
+        case usernamePassword(
+            username: String,
+            password: String
+        )
+
+        case passwordlessEmail(code: String)
         case passwordlessSms(code: String)
     }
 }

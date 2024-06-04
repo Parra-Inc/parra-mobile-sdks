@@ -19,12 +19,12 @@ struct ChallengeView: View {
     let onSubmit: () -> Void
 
     var body: some View {
-        VStack {
+        VStack(spacing: 16) {
             componentFactory.buildTextInput(
                 config: challengeFieldConfig,
                 content: TextInputContent(
                     placeholder: "Password",
-                    errorMessage: .init()
+                    errorMessage: nil
                 ) { newText in
                     challenge = newText ?? ""
                 },
@@ -72,6 +72,7 @@ struct ChallengeView: View {
 
             return TextInputConfig(
                 validationRules: validationRules,
+                resizeWhenHelperMessageIsVisible: true,
                 isSecure: true,
                 keyboardType: .default,
                 textContentType: userExists ? .password : .newPassword,

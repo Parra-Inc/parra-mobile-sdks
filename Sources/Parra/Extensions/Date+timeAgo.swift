@@ -33,3 +33,11 @@ extension Date {
         return self.daysAgo(-daysAgo)
     }
 }
+
+extension Date {
+    func timeFromNowDisplay() -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter.localizedString(for: self, relativeTo: Date())
+    }
+}

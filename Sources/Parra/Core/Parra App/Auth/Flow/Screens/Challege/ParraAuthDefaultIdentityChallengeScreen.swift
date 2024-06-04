@@ -70,7 +70,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     @EnvironmentObject private var flowManager: AuthenticationFlowManager
 
     private var challengeContent: some View {
-        VStack(alignment: .center) {
+        VStack(alignment: .center, spacing: 16) {
             componentFactory.buildLabel(
                 content: LabelContent(text: title),
                 localAttributes: ParraAttributes.Label(

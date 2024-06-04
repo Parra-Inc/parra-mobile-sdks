@@ -129,14 +129,18 @@ struct TextInputComponent: View {
             LabelContent(text: "")
         }
 
-        let helperAttributes = isError
-            ? attributes.errorLabel : attributes.helperLabel
+        if content.text.isEmpty, config.resizeWhenHelperMessageIsVisible {
+            EmptyView()
+        } else {
+            let helperAttributes = isError
+                ? attributes.errorLabel : attributes.helperLabel
 
-        componentFactory.buildLabel(
-            content: content,
-            localAttributes: helperAttributes
-        )
-        .lineLimit(1)
+            componentFactory.buildLabel(
+                content: content,
+                localAttributes: helperAttributes
+            )
+            .lineLimit(1)
+        }
     }
 }
 

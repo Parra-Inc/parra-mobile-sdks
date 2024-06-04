@@ -40,11 +40,11 @@ final class OAuth2Service {
         ]
 
         switch signupType {
-        case .emailPassword(let email, let password):
+        case .usernamePassword(let email, let password):
             data["grant_type"] = "password"
             data["username"] = email
             data["password"] = password
-        case .passwordless(let code):
+        case .passwordlessEmail(let code):
             data["grant_type"] = "passwordless_otp"
             data["code"] = code
         case .passwordlessSms(let code):

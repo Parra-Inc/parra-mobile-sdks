@@ -313,6 +313,7 @@ struct CreateUserRequestBody: Codable, Equatable, Hashable {
 
     init(
         identity: String? = nil,
+        type: IdentityType,
         name: String? = nil,
         properties: [String: String]? = nil,
         username: String? = nil,
@@ -326,6 +327,7 @@ struct CreateUserRequestBody: Codable, Equatable, Hashable {
         locale: String? = nil
     ) {
         self.identity = identity
+        self.type = type
         self.name = name
         self.password = password
         self.properties = properties
@@ -342,6 +344,7 @@ struct CreateUserRequestBody: Codable, Equatable, Hashable {
     // MARK: - Internal
 
     let identity: String?
+    let type: IdentityType
     let name: String?
     let properties: [String: String]?
     let username: String?

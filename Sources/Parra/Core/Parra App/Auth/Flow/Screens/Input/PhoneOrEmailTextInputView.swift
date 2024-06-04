@@ -119,15 +119,15 @@ struct PhoneOrEmailTextInputView: View {
             from: themeObserver.theme
         )
         .animation(.easeInOut(duration: 0.6), value: keyIsFocused)
-        .onTapGesture {
-            UIApplication.shared.sendAction(
-                #selector(UIResponder.resignFirstResponder),
-                to: nil,
-                from: nil,
-                for: nil
-            )
+        .onAppear {
+            keyIsFocused = true
         }
-        .sheet(isPresented: $presentSheet) {
+        .sheet(
+            isPresented: $presentSheet,
+            onDismiss: {
+                keyIsFocused = true
+            }
+        ) {
             NavigationView {
                 List(filteredResorts) { country in
                     HStack {
@@ -165,7 +165,7 @@ struct PhoneOrEmailTextInputView: View {
                     prompt: "Search"
                 )
             }
-            .presentationDetents([.medium, .large])
+            .presentationDetents([.large])
         }
     }
 
@@ -297,6 +297,9 @@ struct PhoneOrEmailTextInputView: View {
             textInputAttributes,
             using: themeObserver.theme
         )
+        .onChange(of: selectedCountry) { oldValue, _ in
+            entry.trimPrefix(oldValue.dial_code)
+        }
         .onChange(of: entry) { _, newValue in
             // If the mode isn't auto, don't change it
             guard defaultMode == .auto else {

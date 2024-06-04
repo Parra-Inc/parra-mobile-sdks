@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+private let resendCodeTitle = "Resend code"
+
 public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     // MARK: - Lifecycle
 
@@ -24,29 +26,25 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
 
     public var body: some View {
         VStack {
-            componentFactory.buildLabel(
-                text: "Confirm your identity",
-                localAttributes: ParraAttributes.Label(
-                    text: ParraAttributes.Text(
-                        style: .title
-                    ),
-                    frame: .flexible(
-                        FlexibleFrameAttributes(
-                            maxWidth: .infinity,
-                            alignment: .leading
+            VStack(alignment: .leading) {
+                componentFactory.buildLabel(
+                    text: "Confirm your identity",
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            style: .title
                         )
                     )
                 )
-            )
 
-            componentFactory.buildLabel(
-                text: "We'll send a \(requiredLength)-digit code to \(params.identity) verify your identity.",
-                localAttributes: ParraAttributes.Label(
-                    text: ParraAttributes.Text(
-                        style: .subheadline
+                componentFactory.buildLabel(
+                    text: "We'll send a \(requiredLength)-digit code to \(params.identity) verify your identity.",
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            style: .subheadline
+                        )
                     )
                 )
-            )
+            }
 
             ChallengeVerificationView(
                 passwordlessConfig: params.passwordlessConfig,
@@ -113,12 +111,25 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     @Environment(\.parra) var parra
 
     var disclaimerText: String {
-        switch params.passwordlessIdentityType {
+        let prefix = switch params.passwordlessIdentityType {
         case .sms:
-            "We'll send a one time login code to the phone number you entered. SMS & data charges may apply."
+            "SMS & data charges may apply."
         case .email:
-            "We'll send a one time login code to the email address you entered."
+            "If you don't see the email, check your spam folder."
         }
+
+        guard let challengeResponse else {
+            return prefix
+        }
+
+        let expiresAt = challengeResponse.expiresAt
+        let now = Date.now
+
+        if expiresAt < now {
+            return "Code expired. Tap '\(resendCodeTitle)' to try again."
+        }
+
+        return "\(prefix) Code expires in \(expiresAt.timeFromNowDisplay())"
     }
 
     var requiredLength: Int {
@@ -173,13 +184,13 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                         ).formatted(.time(pattern: .minuteSecond))
 
                         return TextButtonContent(
-                            text: "Resend code in \(duration)",
+                            text: "\(resendCodeTitle) in \(duration)",
                             isDisabled: true
                         )
                     }()
                 } else {
                     TextButtonContent(
-                        text: "Resend code"
+                        text: resendCodeTitle
                     )
                 }
 

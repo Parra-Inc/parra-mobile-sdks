@@ -60,18 +60,20 @@ final class AuthService {
     }
 
     func signUp(
-        email: String,
-        password: String
+        username: String,
+        password: String,
+        type: IdentityType
     ) async -> ParraAuthResult {
         logger.debug("Signing up with username/password")
 
-        let authType = OAuth2Service.AuthType.emailPassword(
-            email: email,
+        let authType = OAuth2Service.AuthType.usernamePassword(
+            username: username,
             password: password
         )
 
         let requestPayload = CreateUserRequestBody(
-            email: email,
+            type: type,
+            username: username,
             password: password
         )
 
@@ -167,7 +169,7 @@ final class AuthService {
         case .sms:
             .passwordlessSms(code: code)
         case .email:
-            .passwordless(code: code)
+            .passwordlessEmail(code: code)
         }
 
         do {

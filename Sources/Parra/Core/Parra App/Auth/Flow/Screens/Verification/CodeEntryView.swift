@@ -85,7 +85,8 @@ struct CodeEntryView: View {
     @ViewBuilder
     func makeDigitBox(_ index: Int) -> some View {
         let palette = themeObserver.theme.palette
-        let isHighlighted = isKeyboardShowing && otpText.count == index
+        let isHighlighted = isKeyboardShowing && !disabled && otpText
+            .count == index
 
         ZStack {
             if otpText.count > index {

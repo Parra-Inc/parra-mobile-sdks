@@ -143,39 +143,22 @@ class AuthenticationFlowManager: ObservableObject {
                 return challenge.id.isPasswordless
             }
 
-        if let passwordlessConfig = appInfo.auth.passwordless,
-           isPasswordlessOnly
-        {
-            logger.debug("Navigating to passwordless verification screen", [
-                "identity": identity
-            ])
+        guard let passwordlessConfig = appInfo.auth.passwordless else {
+            throw ParraError.authenticationFailed(
+                "No passwordless config found for passwordless-only flow"
+            )
+        }
 
-            let passwordlessType: ParraAuthenticationMethod
-                .PasswordlessType = .sms
-
-            let nextParams = ParraAuthDefaultIdentityVerificationScreen.Params(
+        // If the user has only one passwordless method available, skip the
+        // challenge screen and go straight to the verification screen.
+        if isPasswordlessOnly {
+            navigateToIdentityVerificationScreen(
                 identity: identity,
-                passwordlessIdentityType: passwordlessType,
                 userExists: response.exists,
                 passwordlessConfig: passwordlessConfig,
-                legalInfo: appInfo.legal
-            ) {
-                return try await self.sendLoginCode(
-                    type: passwordlessType,
-                    value: identity,
-                    authService: authService
-                )
-            } verifyCode: { code in
-                try await self.confirmLoginCode(
-                    type: passwordlessType,
-                    code: code,
-                    authService: authService
-                )
-            }
-
-            verificationParamStack.append(nextParams)
-
-            navigate(to: .identityVerificationScreen)
+                legalInfo: appInfo.legal,
+                authService: authService
+            )
         } else {
             logger.debug("Navigating to identity challenge screen", [
                 "identity": identity
@@ -188,10 +171,14 @@ class AuthenticationFlowManager: ObservableObject {
                 availableChallenges: response.availableChallenges ?? [],
                 supportedChallenges: response.supportedChallenges,
                 legalInfo: appInfo.legal,
-                submit: { response in
+                submit: { challengeResponse in
                     try await self.onChallengeResponseSubmitted(
-                        response,
+                        challengeResponse,
                         with: appInfo.auth,
+                        identity: identity,
+                        userExists: response.exists,
+                        passwordlessConfig: passwordlessConfig,
+                        legalInfo: appInfo.legal,
                         authService: authService
                     )
                 }
@@ -203,9 +190,52 @@ class AuthenticationFlowManager: ObservableObject {
         }
     }
 
+    private func navigateToIdentityVerificationScreen(
+        identity: String,
+        userExists: Bool,
+        passwordlessConfig: ParraAuthInfoPasswordlessConfig,
+        legalInfo: LegalInfo,
+        authService: AuthService
+    ) {
+        logger.debug("Navigating to passwordless verification screen", [
+            "identity": identity
+        ])
+
+        let passwordlessType: ParraAuthenticationMethod
+            .PasswordlessType = .sms
+
+        let nextParams = ParraAuthDefaultIdentityVerificationScreen.Params(
+            identity: identity,
+            passwordlessIdentityType: passwordlessType,
+            userExists: userExists,
+            passwordlessConfig: passwordlessConfig,
+            legalInfo: legalInfo
+        ) {
+            return try await self.sendLoginCode(
+                type: passwordlessType,
+                value: identity,
+                authService: authService
+            )
+        } verifyCode: { code in
+            try await self.confirmLoginCode(
+                type: passwordlessType,
+                code: code,
+                authService: authService
+            )
+        }
+
+        verificationParamStack.append(nextParams)
+
+        navigate(to: .identityVerificationScreen)
+    }
+
     private func onChallengeResponseSubmitted(
         _ challengeResponse: ChallengeResponse,
         with authInfo: ParraAppAuthInfo,
+        identity: String,
+        userExists: Bool,
+        passwordlessConfig: ParraAuthInfoPasswordlessConfig,
+        legalInfo: LegalInfo,
         authService: AuthService
     ) async throws {
         guard let challengeParams = challengeParamStack.last else {
@@ -223,15 +253,19 @@ class AuthenticationFlowManager: ObservableObject {
                 authService: authService
             )
         case .passwordlessSms(let phoneNumber):
-            try await sendLoginCode(
-                type: .sms,
-                value: phoneNumber,
+            navigateToIdentityVerificationScreen(
+                identity: phoneNumber,
+                userExists: userExists,
+                passwordlessConfig: passwordlessConfig,
+                legalInfo: legalInfo,
                 authService: authService
             )
         case .passwordlessEmail(let email):
-            try await sendLoginCode(
-                type: .email,
-                value: email,
+            navigateToIdentityVerificationScreen(
+                identity: email,
+                userExists: userExists,
+                passwordlessConfig: passwordlessConfig,
+                legalInfo: legalInfo,
                 authService: authService
             )
         case .verificationSms(let code):
@@ -289,15 +323,16 @@ class AuthenticationFlowManager: ObservableObject {
     ) async throws {
         let authResult: ParraAuthResult = if challengeParams.userExists {
             await authService.login(
-                authType: .emailPassword(
-                    email: challengeParams.identity,
+                authType: .usernamePassword(
+                    username: challengeParams.identity,
                     password: password
                 )
             )
         } else {
             await authService.signUp(
-                email: challengeParams.identity,
-                password: password
+                username: challengeParams.identity,
+                password: password,
+                type: challengeParams.identityType
             )
         }
 

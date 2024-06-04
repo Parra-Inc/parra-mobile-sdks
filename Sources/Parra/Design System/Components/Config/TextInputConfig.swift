@@ -16,6 +16,7 @@ public struct TextInputConfig {
             .validationRules,
         preferValidationErrorsToHelperMessage: Bool = TextInputConfig.default
             .preferValidationErrorsToHelperMessage,
+        resizeWhenHelperMessageIsVisible: Bool = false,
         isSecure: Bool = false,
         keyboardType: UIKeyboardType = .default,
         textCase: Text.Case? = nil,
@@ -27,6 +28,7 @@ public struct TextInputConfig {
         self.validationRules = validationRules
         self.preferValidationErrorsToHelperMessage
             = preferValidationErrorsToHelperMessage
+        self.resizeWhenHelperMessageIsVisible = resizeWhenHelperMessageIsVisible
         self.isSecure = isSecure
         self.keyboardType = keyboardType
         self.textCase = textCase
@@ -49,6 +51,10 @@ public struct TextInputConfig {
     /// helper text string. If you don't want to display anything below the text
     /// field, set this to false and leave ``helper`` unset.
     public let preferValidationErrorsToHelperMessage: Bool
+
+    /// Whether the total size of the text input will change based on the
+    /// presence or absence of the helper message. Defaults to false.
+    public let resizeWhenHelperMessageIsVisible: Bool
 
     /// Whether or not the text field should be secure. Defaults to false.
     /// If true, the text field will display a secure entry view for passwords.
