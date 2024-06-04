@@ -1015,6 +1015,7 @@
 		0095389C2BC8759000420316 /* Server+performRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Server+performRequest.swift"; sourceTree = "<group>"; };
 		009538A12BC8760B00420316 /* AuthServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServer.swift; sourceTree = "<group>"; };
 		0095D3DC2BF69FE500F62EAF /* AuthenticationFlowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationFlowManager.swift; sourceTree = "<group>"; };
+		0096A16F2C0FD05E006928DC /* Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		00995BE52BB333BF00384D94 /* Dictionary+queryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+queryItems.swift"; sourceTree = "<group>"; };
 		00995BE82BB3753C00384D94 /* ModalScreenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalScreenManager.swift; sourceTree = "<group>"; };
 		00995BEC2BB4650D00384D94 /* ContainerRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerRenderer.swift; sourceTree = "<group>"; };
@@ -1327,7 +1328,7 @@
 		00FCB1932B97B84000635DC8 /* FeedbackFormWidget+ContentObserver+InitialParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormWidget+ContentObserver+InitialParams.swift"; sourceTree = "<group>"; };
 		00FCB1952B97B87F00635DC8 /* RoadmapWidget+ContentObserver+InitialParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoadmapWidget+ContentObserver+InitialParams.swift"; sourceTree = "<group>"; };
 		00FCB1972B97BC5800635DC8 /* FeedbackCardWidget+ContentObserver+InitialParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackCardWidget+ContentObserver+InitialParams.swift"; sourceTree = "<group>"; };
-		00FCDF572BA9DBC700F10427 /* Sample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sample.entitlements; sourceTree = "<group>"; };
+		00FCDF572BA9DBC700F10427 /* Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Debug.entitlements; sourceTree = "<group>"; };
 		00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2428,7 +2429,8 @@
 			isa = PBXGroup;
 			children = (
 				00ABF1812B7E6CCD00A054A2 /* Info.plist */,
-				00FCDF572BA9DBC700F10427 /* Sample.entitlements */,
+				00FCDF572BA9DBC700F10427 /* Debug.entitlements */,
+				0096A16F2C0FD05E006928DC /* Release.entitlements */,
 				00916A5F2B75C81A009C87DC /* SampleApp.swift */,
 				00916A612B75C81A009C87DC /* ContentView.swift */,
 				00D5DD982BD205AC002E09B7 /* SampleTab.swift */,
@@ -4383,7 +4385,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = Sample/Sample.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Sample/Debug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -4423,7 +4425,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = Sample/Sample.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Sample/Release.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
