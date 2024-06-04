@@ -31,7 +31,11 @@ class DataManager {
     }
 
     func getAccessToken() async -> String? {
-        return await credentialStorage.currentUser()?.credential.accessToken
+        return await getCurrentCredential()?.accessToken
+    }
+
+    func getCurrentCredential() async -> ParraUser.Credential? {
+        return await credentialStorage.currentUser()?.credential
     }
 
     func updateCurrentUser(_ user: ParraUser?) async {

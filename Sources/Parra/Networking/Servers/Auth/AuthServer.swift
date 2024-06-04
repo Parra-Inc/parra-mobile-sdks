@@ -180,8 +180,29 @@ final class AuthServer: Server {
             queryItems["version_token"] = versionToken
         }
 
-        // nil if un-authenticated.
-        let accessToken = await dataManager.getAccessToken()
+        // nil if un-authenticated but if the token is expired, we need to not
+        // send it to treat this as an unauthenticated request. It's important
+        // that fetching app into happens quickly and doesn't block the user.
+        let credential = await dataManager.getCurrentCredential()
+
+        let accessToken: String? = switch credential {
+        case .basic(let token):
+            token
+        case .oauth2(let token):
+            if token.isExpired || token.isNearlyExpired {
+                {
+                    logger.debug(
+                        "Access token has expired. Skipping sending with get app info request"
+                    )
+
+                    return nil
+                }()
+            } else {
+                token.accessToken
+            }
+        case nil:
+            nil
+        }
 
         return try await performOptionalAuthRequest(
             to: .getAppInfo(
