@@ -28,10 +28,7 @@ public enum ParraAuthType {
         userIdProvider: ParraUserIdProvider
     )
 
-    case parraAuth(
-        config: ParraAuthConfig = .default,
-        content: ParraAuthContent = .default
-    )
+    case parraAuth
 
     // MARK: - Internal
 
