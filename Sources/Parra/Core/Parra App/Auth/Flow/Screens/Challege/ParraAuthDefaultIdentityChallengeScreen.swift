@@ -31,19 +31,20 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     public var body: some View {
         ScrollView {
             challengeContent
-        }
-        .frame(
-            maxWidth: .infinity,
-            maxHeight: .infinity
-        )
-        .overlay(alignment: .bottom) {
+
             if !params.userExists {
+                Spacer()
+
                 LegalInfoView(
                     legalInfo: params.legalInfo,
                     theme: themeObserver.theme
                 )
             }
         }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
         .applyDefaultWidgetAttributes(
             using: themeObserver.theme
         )
