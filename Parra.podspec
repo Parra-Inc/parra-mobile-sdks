@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
   spec.swift_version            = '5.9'
   spec.static_framework         = true
 
-  spec.ios.deployment_target    = '13.0'
+  spec.ios.deployment_target    = '17.0'
 
   spec.source_files             = 'Parra/**/*.{h,swift,md}'
   spec.resources                = 'Parra/**/*.{png,jpeg,jpg,ttf,storyboard,xib,xcassets}'
