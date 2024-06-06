@@ -10,7 +10,9 @@ let package = Package(
     products: [
         .library(
             name: "Parra",
-            targets: ["Parra"]
+            targets: [
+                "Parra"
+            ]
             // type: .static, .dynamic
         )
     ],
@@ -19,18 +21,19 @@ let package = Package(
             name: "Parra",
             dependencies: [],
             exclude: [
-                "Parra/Legacy",
-                "Parra/Resources/README.md"
+                "Resources/README.md"
             ],
             resources: [
                 // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk
-                .process("Parra/PrivacyInfo.xcprivacy"),
-                .process("Parra/Resources")
+                .process("PrivacyInfo.xcprivacy"),
+                .process("Resources/")
             ]
         ),
         .testTarget(
             name: "ParraTests",
-            dependencies: ["Parra"]
+            dependencies: [
+                "Parra"
+            ]
         )
     ],
     swiftLanguageVersions: [.version("5.9")]
