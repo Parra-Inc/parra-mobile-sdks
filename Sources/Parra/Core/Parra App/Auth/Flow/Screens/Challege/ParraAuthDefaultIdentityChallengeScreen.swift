@@ -32,7 +32,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
         ScrollView {
             challengeContent
 
-            if !params.userExists {
+            if !params.userExists, params.legalInfo.hasDouments {
                 Spacer()
 
                 LegalInfoView(

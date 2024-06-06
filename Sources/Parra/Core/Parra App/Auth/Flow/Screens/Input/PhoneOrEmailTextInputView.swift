@@ -219,10 +219,11 @@ struct PhoneOrEmailTextInputView: View {
         let contentType: UITextContentType? = switch currentMode {
         case .phone:
             .telephoneNumber
+        // Should be username even for email case for autofill reasons.
         case .email:
-            .emailAddress
+            .username
         case .auto:
-            .emailAddress
+            .username
         }
 
         let placeholder = switch defaultMode {

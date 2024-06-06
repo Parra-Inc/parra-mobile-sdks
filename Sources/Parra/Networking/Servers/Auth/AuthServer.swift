@@ -156,6 +156,39 @@ final class AuthServer: Server {
         )
     }
 
+    func postWebAuthnRegisterChallenge(
+        requestData: WebAuthnRegisterChallengeRequest
+    ) async throws -> PublicKeyCredentialCreationOptions {
+        let data: [String: String] = [
+            "username": requestData.username
+        ]
+
+        return try await performOptionalAuthFormEncodedRequest(
+            to: .postWebAuthnRegisterChallenge(
+                tenantId: appState.tenantId
+            ),
+            with: nil,
+            data: data
+        )
+    }
+
+    func postWebAuthnAuthenticateChallenge(
+        requestData: WebAuthnAuthenticateChallengeRequest
+    ) async throws -> PublicKeyCredentialRequestOptions {
+        var data: [String: String] = [:]
+        if let username = requestData.username {
+            data["username"] = username
+        }
+
+        return try await performOptionalAuthFormEncodedRequest(
+            to: .postWebAuthnAuthenticateChallenge(
+                tenantId: appState.tenantId
+            ),
+            with: nil,
+            data: data
+        )
+    }
+
     func getUserInfo(
         accessToken: String,
         timeout: TimeInterval? = nil

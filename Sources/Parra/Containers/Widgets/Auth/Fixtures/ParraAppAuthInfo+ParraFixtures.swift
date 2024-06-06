@@ -15,8 +15,13 @@ extension ParraAppAuthInfo: ParraFixture {
                 database: AppInfoDatabaseConfig(
                     password: .validStates()[0],
                     username: nil,
-                    email: nil,
-                    phoneNumber: nil
+                    email: .init(
+                        required: true,
+                        requireVerification: false,
+                        allowSignup: true
+                    ),
+                    phoneNumber: nil,
+                    passkeys: AppInfoPasskeysConfig()
                 ),
                 passwordless: ParraAuthInfoPasswordlessConfig(
                     sms: AuthInfoPasswordlessSmsConfig(

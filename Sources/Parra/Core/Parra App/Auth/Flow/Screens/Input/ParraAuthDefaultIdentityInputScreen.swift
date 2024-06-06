@@ -6,6 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import AuthenticationServices
 import SwiftUI
 
 public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
@@ -70,6 +71,14 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 onSubmit: submit
             )
 
+            SecureField(
+                text: $identity,
+                label: {
+                    Text("Password")
+                }
+            )
+            .textContentType(.password)
+
             componentFactory.buildContainedButton(
                 config: ParraTextButtonConfig(
                     type: .primary,
@@ -93,6 +102,14 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             continueButtonContent = TextButtonContent(
                 text: continueButtonContent.text,
                 isDisabled: identity.isEmpty
+            )
+        }
+        .task {
+            await flowManager.triggerPasskey(
+                username: nil,
+                presentationMode: .autofill,
+                using: parraAppInfo,
+                authService: parra.parraInternal.authService
             )
         }
         .onChange(of: identity) { _, newValue in
@@ -123,6 +140,8 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var navigationState: NavigationState
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
+    @EnvironmentObject private var flowManager: AuthenticationFlowManager
+    @Environment(\.parra) private var parra
 
     private var availablePasswordlessMethods: [
         ParraAuthenticationMethod

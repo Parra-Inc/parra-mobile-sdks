@@ -421,3 +421,330 @@ public struct ListUsersQuery: Codable, Equatable, Hashable {
     public let expand: String?
     public let search: String?
 }
+
+struct WebAuthnAuthenticateChallengeRequest: Codable, Equatable, Hashable {
+    let username: String?
+}
+
+struct WebAuthnRegisterChallengeRequest: Codable, Equatable, Hashable {
+    let username: String
+}
+
+public struct AuthenticatorSelection: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        authenticatorAttachment: String,
+        requireResidentKey: Bool,
+        residentKey: String,
+        userVerification: String
+    ) {
+        self.authenticatorAttachment = authenticatorAttachment
+        self.requireResidentKey = requireResidentKey
+        self.residentKey = residentKey
+        self.userVerification = userVerification
+    }
+
+    // MARK: - Public
+
+    public let authenticatorAttachment: String
+    public let requireResidentKey: Bool
+    public let residentKey: String
+    public let userVerification: String
+}
+
+public struct ExcludedCredential: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        type: String,
+        id: String,
+        transports: [String]?
+    ) {
+        self.type = type
+        self.id = id
+        self.transports = transports
+    }
+
+    // MARK: - Public
+
+    public let type: String
+    public let id: String
+    public let transports: [String]?
+}
+
+public struct PublicKeyCredParam: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        type: String,
+        alg: Int
+    ) {
+        self.type = type
+        self.alg = alg
+    }
+
+    // MARK: - Public
+
+    public let type: String
+    public let alg: Int
+}
+
+public struct RelyingParty: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        name: String?
+    ) {
+        self.id = id
+        self.name = name
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let name: String?
+}
+
+public struct PublicKeyCredentialUser: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        name: String,
+        displayName: String
+    ) {
+        self.id = id
+        self.name = name
+        self.displayName = displayName
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let name: String
+    public let displayName: String
+}
+
+public struct PublicKeyCredentialCreationOptions: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        attestation: String?,
+        attestationFormats: [String]?,
+        authenticatorSelection: AuthenticatorSelection?,
+        challenge: String,
+        excludeCredentials: [ExcludedCredential]?,
+        extensions: [String: AnyCodable]?,
+        pubKeyCredParams: [PublicKeyCredParam],
+        rp: RelyingParty,
+        user: PublicKeyCredentialUser,
+        timeout: Int?,
+        hints: [String]?
+    ) {
+        self.attestation = attestation
+        self.attestationFormats = attestationFormats
+        self.authenticatorSelection = authenticatorSelection
+        self.challenge = challenge
+        self.excludeCredentials = excludeCredentials
+        self.extensions = extensions
+        self.pubKeyCredParams = pubKeyCredParams
+        self.rp = rp
+        self.user = user
+        self.timeout = timeout
+        self.hints = hints
+    }
+
+    // MARK: - Public
+
+    public let attestation: String?
+    public let attestationFormats: [String]?
+    public let authenticatorSelection: AuthenticatorSelection?
+    public let challenge: String
+    public let excludeCredentials: [ExcludedCredential]?
+    public let extensions: [String: AnyCodable]?
+    public let pubKeyCredParams: [PublicKeyCredParam]
+    public let rp: RelyingParty
+    public let user: PublicKeyCredentialUser
+    public let timeout: Int?
+    public let hints: [String]?
+}
+
+public struct PublicKeyCredentialRequestOptions: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        challenge: String,
+        allowCredentials: [ExcludedCredential]?,
+        extensions: [String: AnyCodable]?,
+        rpId: String?,
+        timeout: Int?,
+        userVerification: String?
+    ) {
+        self.challenge = challenge
+        self.allowCredentials = allowCredentials
+        self.extensions = extensions
+        self.rpId = rpId
+        self.timeout = timeout
+        self.userVerification = userVerification
+    }
+
+    // MARK: - Public
+
+    public let challenge: String
+    public let allowCredentials: [ExcludedCredential]?
+    public let extensions: [String: AnyCodable]?
+    public let rpId: String?
+    public let timeout: Int?
+    public let userVerification: String?
+}
+
+public struct AuthenticatorResponse: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        clientDataJSON: String
+    ) {
+        self.clientDataJSON = clientDataJSON
+    }
+
+    // MARK: - Public
+
+    public let clientDataJSON: String
+}
+
+public struct AuthenticatorAttestationResponse: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        clientDataJSON: String,
+        attestationObject: String
+    ) {
+        self.clientDataJSON = clientDataJSON
+        self.attestationObject = attestationObject
+    }
+
+    // MARK: - Public
+
+    public let clientDataJSON: String
+    public let attestationObject: String
+}
+
+public struct WebauthnRegisterRequestBody: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        rawId: String,
+        response: AuthenticatorAttestationResponse,
+        type: String,
+        user: PublicKeyCredentialUser?
+    ) {
+        self.id = id
+        self.rawId = rawId
+        self.response = response
+        self.type = type
+        self.user = user
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let rawId: String
+    public let response: AuthenticatorAttestationResponse
+    public let type: String
+    public let user: PublicKeyCredentialUser?
+}
+
+public struct WebauthnRegisterResponseBody: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        status: String,
+        message: String
+    ) {
+        self.status = status
+        self.message = message
+    }
+
+    // MARK: - Public
+
+    public let status: String
+    public let message: String
+}
+
+public struct AuthenticatorAssertionResponse: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        clientDataJSON: String,
+        authenticatorData: String,
+        signature: String,
+        userHandle: String
+    ) {
+        self.clientDataJSON = clientDataJSON
+        self.authenticatorData = authenticatorData
+        self.signature = signature
+        self.userHandle = userHandle
+    }
+
+    // MARK: - Public
+
+    public let clientDataJSON: String
+    public let authenticatorData: String
+    public let signature: String
+    public let userHandle: String
+}
+
+public struct WebauthnAuthenticateRequestBody: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        rawId: String,
+        response: AuthenticatorAssertionResponse,
+        type: String,
+        authenticatorAttachment: String?
+    ) {
+        self.id = id
+        self.rawId = rawId
+        self.response = response
+        self.type = type
+        self.authenticatorAttachment = authenticatorAttachment
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let rawId: String
+    public let response: AuthenticatorAssertionResponse
+    public let type: String
+    public let authenticatorAttachment: String?
+}
+
+public struct WebauthnAuthenticateResponseBody: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        status: String,
+        message: String,
+        token: String
+    ) {
+        self.status = status
+        self.message = message
+        self.token = token
+    }
+
+    // MARK: - Public
+
+    public let status: String
+    public let message: String
+    public let token: String
+}

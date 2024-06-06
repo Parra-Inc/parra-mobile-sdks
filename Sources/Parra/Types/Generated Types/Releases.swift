@@ -956,12 +956,14 @@ public struct AppInfoDatabaseConfig: Codable, Equatable, Hashable {
         password: PasswordConfig?,
         username: UsernameConfig?,
         email: EmailConfig?,
-        phoneNumber: PhoneNumberConfig?
+        phoneNumber: PhoneNumberConfig?,
+        passkeys: AppInfoPasskeysConfig?
     ) {
         self.password = password
         self.username = username
         self.email = email
         self.phoneNumber = phoneNumber
+        self.passkeys = passkeys
     }
 
     // MARK: - Public
@@ -971,12 +973,14 @@ public struct AppInfoDatabaseConfig: Codable, Equatable, Hashable {
         case username
         case email
         case phoneNumber
+        case passkeys
     }
 
     public let password: PasswordConfig?
     public let username: UsernameConfig?
     public let email: EmailConfig?
     public let phoneNumber: PhoneNumberConfig?
+    public let passkeys: AppInfoPasskeysConfig?
 }
 
 public struct AuthInfoPasswordlessSmsConfig: Codable, Equatable, Hashable {
@@ -1010,6 +1014,8 @@ public struct ParraAuthInfoPasswordlessConfig: Codable, Equatable, Hashable {
 
     public let sms: AuthInfoPasswordlessSmsConfig?
 }
+
+public struct AppInfoPasskeysConfig: Codable, Equatable, Hashable {}
 
 public final class ParraAppAuthInfo: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
@@ -1065,6 +1071,10 @@ public struct LegalInfo: Codable, Equatable, Hashable {
     }
 
     static let empty = LegalInfo()
+
+    var hasDouments: Bool {
+        return privacyPolicy != nil || termsOfService != nil
+    }
 }
 
 public struct LegalDocument: Codable, Equatable, Hashable, Identifiable {

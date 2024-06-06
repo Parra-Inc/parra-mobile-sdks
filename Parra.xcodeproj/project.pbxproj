@@ -355,6 +355,7 @@
 		00A413D72BE2AB7F003E4E56 /* ProfileWidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A413D62BE2AB7F003E4E56 /* ProfileWidgetConfig.swift */; };
 		00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B982932D35E00B7168A /* ParraConfiguration.swift */; };
 		00A60B9B2932D37000B7168A /* ParraAuthType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B9A2932D37000B7168A /* ParraAuthType.swift */; };
+		00A724812C1224B600FD726F /* AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A724802C1224B600FD726F /* AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift */; };
 		00A970FD2C060D9D00AB3436 /* CodeEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A970FC2C060D9D00AB3436 /* CodeEntryView.swift */; };
 		00AB95A12BE4524C00B27091 /* ParraPaddingSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A02BE4524C00B27091 /* ParraPaddingSize.swift */; };
 		00AB95A32BE4529900B27091 /* ParraPaddingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A22BE4529900B27091 /* ParraPaddingConfig.swift */; };
@@ -1065,6 +1066,7 @@
 		00A413D62BE2AB7F003E4E56 /* ProfileWidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWidgetConfig.swift; sourceTree = "<group>"; };
 		00A60B982932D35E00B7168A /* ParraConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraConfiguration.swift; sourceTree = "<group>"; };
 		00A60B9A2932D37000B7168A /* ParraAuthType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAuthType.swift; sourceTree = "<group>"; };
+		00A724802C1224B600FD726F /* AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift"; sourceTree = "<group>"; };
 		00A970FC2C060D9D00AB3436 /* CodeEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEntryView.swift; sourceTree = "<group>"; };
 		00AB95A02BE4524C00B27091 /* ParraPaddingSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddingSize.swift; sourceTree = "<group>"; };
 		00AB95A22BE4529900B27091 /* ParraPaddingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddingConfig.swift; sourceTree = "<group>"; };
@@ -2758,6 +2760,7 @@
 			children = (
 				00BB36142BEBBACF007B6B13 /* Screens */,
 				0095D3DC2BF69FE500F62EAF /* AuthenticationFlowManager.swift */,
+				00A724802C1224B600FD726F /* AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift */,
 				00BB361E2BEBD6F2007B6B13 /* ParraAuthenticationFlowConfig.swift */,
 				00BB36202BEBD74C007B6B13 /* Providers.swift */,
 			);
@@ -3929,6 +3932,7 @@
 				00E15A2D293276940049C2C7 /* Thread.swift in Sources */,
 				0087CA6E2A57B308007D72FA /* ParraLogMarker.swift in Sources */,
 				003962402A48B51100B8655F /* Int.swift in Sources */,
+				00A724812C1224B600FD726F /* AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift in Sources */,
 				00FCB13F2B91496E00635DC8 /* SegmentConfig.swift in Sources */,
 				001B7B2927DE3AC800DEEECD /* ParraSyncManager.swift in Sources */,
 				00AB95A62BE4546000B27091 /* ParraAttributes.swift in Sources */,

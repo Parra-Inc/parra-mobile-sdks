@@ -31,6 +31,13 @@ class AuthenticationFlowManager: ObservableObject {
         case identityVerificationScreen
     }
 
+    // MARK: - Passkeys
+
+    enum PasskeyPresentationMode {
+        case modal
+        case autofill
+    }
+
     let navigationState: NavigationState
 
     @ViewBuilder
@@ -85,7 +92,71 @@ class AuthenticationFlowManager: ObservableObject {
         }
     }
 
+    func triggerPasskey(
+        username: String?,
+        presentationMode: PasskeyPresentationMode,
+        using appInfo: ParraAppInfo,
+        authService: AuthService
+    ) async {
+        if appInfo.auth.database?.passkeys == nil {
+            logger.debug("Passkeys not enabled for this app")
+
+            return
+        }
+
+        do {
+            let challengeResponse = try await authService.authServer
+                .postWebAuthnAuthenticateChallenge(
+                    requestData: WebAuthnAuthenticateChallengeRequest(
+                        username: username
+                    )
+                )
+
+            let challenge = Data(challengeResponse.challenge.utf8)
+            let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
+                relyingPartyIdentifier: "parra.io" // TODO: Which domain?
+            )
+
+            let request = provider.createCredentialAssertionRequest(
+                challenge: challenge
+            )
+
+            // used when we have context about the user, like when they've typed in their username
+            // request.allowedCredentials should be derived from the challenge response
+
+            let controller = ASAuthorizationController(
+                authorizationRequests: [request]
+            )
+
+            authorizationDelegateProxy.authenticationFlowManager = self
+            controller.delegate = authorizationDelegateProxy
+
+            switch presentationMode {
+            case .modal:
+                // This will display the passkey prompt, only if the user
+                // already has a passkey. If they don't an error will be sent
+                // to the delegate, which we will ignore. If the user didn't
+                // have a passkey, they probably don't want the popup, and they
+                // will have the opportunity to create one later.
+                controller.performRequests(
+                    options: .preferImmediatelyAvailableCredentials
+                )
+            case .autofill:
+                // to display in quicktype
+                controller.performAutoFillAssistedRequests()
+            }
+        } catch {
+            logger.error(
+                "Error obtaining challenge for use with passkey",
+                error
+            )
+        }
+    }
+
     // MARK: - Private
+
+    private let authorizationDelegateProxy =
+        AuthorizationControllerDelegateProxy()
 
     private let flowConfig: ParraAuthenticationFlowConfig
     private var challengeParamStack =

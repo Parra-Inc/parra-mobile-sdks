@@ -61,7 +61,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
                 request.url?
                 .absoluteString ?? "unknown"
                 )
-                Message: \(serverMessage ?? "unknow")
+                Message: \(serverMessage ?? "Server did not provide a message.")
                 Request: \(request)
                 Response: \(response)
                 """

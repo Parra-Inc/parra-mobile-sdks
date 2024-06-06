@@ -57,6 +57,9 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                 authService: parra.parraInternal.authService,
                 using: parraAppInfo
             )
+            .environmentObject(parraAppInfo)
+            .environmentObject(navigationState)
+            .environmentObject(flowManager)
             .navigationDestination(
                 for: AuthenticationFlowManager.AuthScreen.self
             ) { destination in

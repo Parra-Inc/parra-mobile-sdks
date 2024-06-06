@@ -12,10 +12,6 @@ public struct ParraAuthenticationFlowConfig {
     // MARK: - Lifecycle
 
     public init(
-        supportedMethods: [ParraAuthenticationMethod] = [
-            .passkey,
-            .passwordless(.sms)
-        ],
         landingScreenProvider: ParraAuthLandingScreenProvider? = nil,
         identityInputScreenProvider: ParraAuthIdentityInputScreenProvider? =
             nil,

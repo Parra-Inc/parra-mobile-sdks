@@ -54,7 +54,19 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         .applyDefaultWidgetAttributes(
             using: themeObserver.theme
         )
+        .task {
+            await flowManager.triggerPasskey(
+                username: nil,
+                presentationMode: .modal,
+                using: parraAppInfo,
+                authService: parra.parraInternal.authService
+            )
+        }
     }
+
+    // MARK: - Internal
+
+    @EnvironmentObject var parraAppInfo: ParraAppInfo
 
     // MARK: - Private
 
@@ -63,6 +75,8 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var navigationState: NavigationState
+    @EnvironmentObject private var flowManager: AuthenticationFlowManager
+    @Environment(\.parra) private var parra
 
     private var continueButtonTitle: String {
         let methods = params.availableAuthMethods
