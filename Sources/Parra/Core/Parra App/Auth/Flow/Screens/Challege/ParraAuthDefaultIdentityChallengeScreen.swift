@@ -29,8 +29,18 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     // MARK: - Public
 
     public var body: some View {
+        let defaultWidgetAttributes = ParraAttributes.Widget.default(
+            with: themeObserver.theme
+        )
+
+        let contentPadding = themeObserver.theme.padding.value(
+            for: defaultWidgetAttributes.contentPadding
+        )
+
         ScrollView {
             challengeContent
+
+            Spacer()
 
             if !params.userExists, params.legalInfo.hasDouments {
                 Spacer()
@@ -45,10 +55,15 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             maxWidth: .infinity,
             maxHeight: .infinity
         )
-        .applyDefaultWidgetAttributes(
+        .contentMargins(
+            [.horizontal, .bottom],
+            contentPadding,
+            for: .scrollContent
+        )
+        .applyWidgetAttributes(
+            attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: themeObserver.theme
         )
-        .navigationTitle(primaryActionName)
         .onAppear {
             continueButtonContent = TextButtonContent(
                 text: continueButtonContent.text,
@@ -217,12 +232,12 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     }
 
     private var title: String {
-        if params.userExists {
-            if passwordChallengeAvailable {
+        if passwordChallengeAvailable {
+            if params.userExists {
                 return "Your password"
             }
 
-            return ""
+            return "Create a password"
         }
 
         return ""

@@ -25,62 +25,81 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     // MARK: - Public
 
     public var body: some View {
-        VStack {
-            VStack(alignment: .leading) {
-                componentFactory.buildLabel(
-                    text: "Confirm your identity",
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            style: .title
+        let defaultWidgetAttributes = ParraAttributes.Widget.default(
+            with: themeObserver.theme
+        )
+
+        let contentPadding = themeObserver.theme.padding.value(
+            for: defaultWidgetAttributes.contentPadding
+        )
+
+        ScrollView {
+            VStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 12) {
+                    componentFactory.buildLabel(
+                        text: "Confirm your identity",
+                        localAttributes: ParraAttributes.Label(
+                            text: ParraAttributes.Text(
+                                style: .title
+                            )
                         )
                     )
-                )
+                    .layoutPriority(20)
 
-                componentFactory.buildLabel(
-                    text: "We'll send a \(requiredLength)-digit code to \(params.identity) verify your identity.",
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            style: .subheadline
+                    componentFactory.buildLabel(
+                        text: "We'll send a \(requiredLength)-digit code to \(params.identity) verify your identity.",
+                        localAttributes: ParraAttributes.Label(
+                            text: ParraAttributes.Text(
+                                style: .subheadline
+                            )
                         )
                     )
-                )
-            }
-
-            ChallengeVerificationView(
-                passwordlessConfig: params.passwordlessConfig,
-                // ignore input before we've sent a code
-                disabled: challengeResponse == nil
-            ) { challenge, _ in
-                if challengeResponse != nil {
-                    currentCode = challenge.trimmingCharacters(
-                        in: .whitespacesAndNewlines
-                    )
-
-                    continueButtonContent = TextButtonContent(
-                        text: continueButtonContent.text,
-                        isDisabled: currentCode.count < requiredLength
-                    )
+                    .layoutPriority(20)
                 }
-            } onSubmit: { _, _ in }
-                .applyPadding(
-                    size: .md,
-                    from: themeObserver.theme
-                )
+                .layoutPriority(20)
 
-            actions
+                ChallengeVerificationView(
+                    passwordlessConfig: params.passwordlessConfig,
+                    // ignore input before we've sent a code
+                    disabled: challengeResponse == nil
+                ) { challenge, _ in
+                    if challengeResponse != nil {
+                        currentCode = challenge.trimmingCharacters(
+                            in: .whitespacesAndNewlines
+                        )
 
-            componentFactory.buildLabel(
-                text: disclaimerText,
-                localAttributes: ParraAttributes.Label(
-                    text: ParraAttributes.Text(
-                        style: .footnote,
-                        color: themeObserver.theme.palette.secondaryText
-                            .toParraColor(),
-                        alignment: .center
-                    ),
-                    padding: .md
+                        continueButtonContent = TextButtonContent(
+                            text: continueButtonContent.text,
+                            isDisabled: currentCode.count < requiredLength
+                        )
+                    }
+                } onSubmit: { _, _ in }
+                    .applyPadding(
+                        size: .md,
+                        from: themeObserver.theme
+                    )
+                    .layoutPriority(15)
+
+                actions
+                    .layoutPriority(10)
+
+                Spacer()
+                    .layoutPriority(1)
+
+                componentFactory.buildLabel(
+                    text: disclaimerText,
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            style: .footnote,
+                            color: themeObserver.theme.palette.secondaryText
+                                .toParraColor(),
+                            alignment: .center
+                        ),
+                        padding: .md
+                    )
                 )
-            )
+                .layoutPriority(10)
+            }
         }
         .frame(
             maxWidth: .infinity,
@@ -94,10 +113,15 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                 )
             }
         }
-        .applyDefaultWidgetAttributes(
+        .contentMargins(
+            [.horizontal, .bottom],
+            contentPadding,
+            for: .scrollContent
+        )
+        .applyWidgetAttributes(
+            attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: themeObserver.theme
         )
-        .navigationTitle("Confirm it's you")
         .onAppear {
             continueButtonContent = continueButtonContent.withLoading(false)
         }
@@ -129,7 +153,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
             return "Code expired. Tap '\(resendCodeTitle)' to try again."
         }
 
-        return "\(prefix) Code expires in \(expiresAt.timeFromNowDisplay())"
+        return "\(prefix) Code expires \(expiresAt.timeFromNowDisplay())"
     }
 
     var requiredLength: Int {
@@ -196,8 +220,8 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
 
                 componentFactory.buildPlainButton(
                     config: ParraTextButtonConfig(
-                        type: .secondary,
-                        size: .small,
+                        type: .primary,
+                        size: .medium,
                         isMaxWidth: false
                     ),
                     content: content

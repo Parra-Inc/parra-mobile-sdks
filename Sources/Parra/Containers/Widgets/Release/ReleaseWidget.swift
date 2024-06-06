@@ -8,43 +8,6 @@
 
 import SwiftUI
 
-// struct ParraUsernameView: View {
-//
-//    @EnvironmentObject var componentFactory: ComponentFactory
-//    @EnvironmentObject private var themeObserver: ParraThemeObserver
-//
-//    @Environment(\.parraAuthState) var parraAuth
-//
-//    let fontStyle: Font.TextStyle
-//    let localAttributes: LabelAttributes?
-//
-//    var body: some View {
-//        switch parraAuth.current {
-//        case .authenticated(let user):
-//            componentFactory.buildLabel(
-//                config: .init(fontStyle: fontStyle),
-//                content: LabelContent(text: user.userInfo?.name ?? "-"),
-//                localAttributes: localAttributes
-//            )
-//        case .unauthenticated:
-//            Text("-")
-//        }
-//    }
-//
-// }
-//
-// HStack {
-////    ParraAvatarView()
-//
-//    VStack {
-//        ParraUsernameView(fontStyle: .title)
-//            .background(.red)
-//            .font(.headline)
-//
-//        //.. Email
-//    }
-// }
-
 struct ReleaseWidget: Container {
     // MARK: - Lifecycle
 

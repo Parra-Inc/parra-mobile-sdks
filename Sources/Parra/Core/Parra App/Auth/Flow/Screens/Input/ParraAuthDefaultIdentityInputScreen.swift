@@ -71,14 +71,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 onSubmit: submit
             )
 
-            SecureField(
-                text: $identity,
-                label: {
-                    Text("Password")
-                }
-            )
-            .textContentType(.password)
-
             componentFactory.buildContainedButton(
                 config: ParraTextButtonConfig(
                     type: .primary,
