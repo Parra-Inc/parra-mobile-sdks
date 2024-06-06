@@ -356,6 +356,7 @@
 		00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B982932D35E00B7168A /* ParraConfiguration.swift */; };
 		00A60B9B2932D37000B7168A /* ParraAuthType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A60B9A2932D37000B7168A /* ParraAuthType.swift */; };
 		00A724812C1224B600FD726F /* AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A724802C1224B600FD726F /* AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift */; };
+		00A724832C12516800FD726F /* CameraPermissionDeniedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A724822C12516800FD726F /* CameraPermissionDeniedView.swift */; };
 		00A970FD2C060D9D00AB3436 /* CodeEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A970FC2C060D9D00AB3436 /* CodeEntryView.swift */; };
 		00AB95A12BE4524C00B27091 /* ParraPaddingSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A02BE4524C00B27091 /* ParraPaddingSize.swift */; };
 		00AB95A32BE4529900B27091 /* ParraPaddingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A22BE4529900B27091 /* ParraPaddingConfig.swift */; };
@@ -1067,6 +1068,7 @@
 		00A60B982932D35E00B7168A /* ParraConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraConfiguration.swift; sourceTree = "<group>"; };
 		00A60B9A2932D37000B7168A /* ParraAuthType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAuthType.swift; sourceTree = "<group>"; };
 		00A724802C1224B600FD726F /* AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationFlowManager+ASAuthorizationControllerDelegate.swift"; sourceTree = "<group>"; };
+		00A724822C12516800FD726F /* CameraPermissionDeniedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionDeniedView.swift; sourceTree = "<group>"; };
 		00A970FC2C060D9D00AB3436 /* CodeEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEntryView.swift; sourceTree = "<group>"; };
 		00AB95A02BE4524C00B27091 /* ParraPaddingSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddingSize.swift; sourceTree = "<group>"; };
 		00AB95A22BE4529900B27091 /* ParraPaddingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddingConfig.swift; sourceTree = "<group>"; };
@@ -2239,6 +2241,7 @@
 				008434552BDC068200700881 /* Camera.swift */,
 				008434592BDC06D000700881 /* CameraDataModel.swift */,
 				008434572BDC06A100700881 /* CameraView.swift */,
+				00A724822C12516800FD726F /* CameraPermissionDeniedView.swift */,
 				0084345B2BDC076200700881 /* ViewfinderView.swift */,
 			);
 			path = Camera;
@@ -3732,6 +3735,7 @@
 				00E8A42D2BF3E0CD00991D7C /* View+applyWidgetAttributes.swift in Sources */,
 				00D143C32BB2106E00BDB8C4 /* Bundle+Parra.swift in Sources */,
 				003962422A48B51100B8655F /* UIEdgeInsets.swift in Sources */,
+				00A724832C12516800FD726F /* CameraPermissionDeniedView.swift in Sources */,
 				001B7B2327DE3AC200DEEECD /* Models.swift in Sources */,
 				00ABF1D02B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift in Sources */,
 				004F3EEB2BA4BF4F00424802 /* ChangelogWidget+ContentObserver.swift in Sources */,

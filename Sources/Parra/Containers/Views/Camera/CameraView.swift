@@ -19,6 +19,8 @@ struct CameraView: View {
 
     // MARK: - Internal
 
+    @State var permissionGranted: Bool? = nil
+
     let onComplete: (UIImage?) -> Void
 
     @ViewBuilder var renderCamera: some View {
@@ -50,14 +52,21 @@ struct CameraView: View {
                         .safeAreaPadding(.bottom)
                 }
                 .overlay(alignment: .center) {
-                    Color.clear
-                        .frame(
-                            height: geometry.size
-                                .height * (1 - (Self.barHeightFactor * 2))
-                        )
-                        .accessibilityElement()
-                        .accessibilityLabel("View Finder")
-                        .accessibilityAddTraits([.isImage])
+                    if permissionGranted == true {
+                        Color.clear
+                            .frame(
+                                height: geometry.size
+                                    .height * (1 - (Self.barHeightFactor * 2))
+                            )
+                            .accessibilityElement()
+                            .accessibilityLabel("View Finder")
+                            .accessibilityAddTraits([.isImage])
+                    } else if permissionGranted == false {
+                        renderPermissionView
+                            .padding()
+                    } else {
+                        EmptyView()
+                    }
                 }
                 .background(.black)
         }
@@ -79,7 +88,7 @@ struct CameraView: View {
         .ignoresSafeArea()
         .statusBar(hidden: true)
         .task {
-            await model.camera.start()
+            permissionGranted = await model.camera.checkAuthorization()
 
             for await photo in model.camera.photoStream {
                 guard let data = photo.fileDataRepresentation() else {
@@ -97,6 +106,19 @@ struct CameraView: View {
                 }
             }
         }
+        .onChange(of: permissionGranted) { _, newValue in
+            Task {
+                if newValue == true {
+                    await model.camera.start()
+                } else if newValue == false {
+                    model.camera.stop()
+                }
+            }
+        }
+    }
+
+    @ViewBuilder var renderPermissionView: some View {
+        CameraPermissionDeniedView()
     }
 
     @ViewBuilder
@@ -139,50 +161,53 @@ struct CameraView: View {
 
         Spacer()
 
-        Button {
-            model.camera.takePhoto()
-        } label: {
-            Label {
-                Text("Take Photo")
-            } icon: {
-                ZStack {
-                    Circle()
-                        .strokeBorder(.white, lineWidth: 3)
-                        .frame(width: 62, height: 62)
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 50, height: 50)
-                        .scaleEffect(captureButtonScale)
-                        .animation(
-                            .linear(duration: 0.1), value: captureButtonScale
-                        )
-                }
-            }
-        }
-        .simultaneousGesture(
-            LongPressGesture(minimumDuration: 0)
-                .onChanged { pressing in
-                    withAnimation {
-                        if pressing {
-                            captureButtonScale = 0.9
-                        } else {
-                            captureButtonScale = 1.0
-                        }
+        if permissionGranted == true {
+            Button {
+                model.camera.takePhoto()
+            } label: {
+                Label {
+                    Text("Take Photo")
+                } icon: {
+                    ZStack {
+                        Circle()
+                            .strokeBorder(.white, lineWidth: 3)
+                            .frame(width: 62, height: 62)
+                        Circle()
+                            .fill(.white)
+                            .frame(width: 50, height: 50)
+                            .scaleEffect(captureButtonScale)
+                            .animation(
+                                .linear(duration: 0.1),
+                                value: captureButtonScale
+                            )
                     }
                 }
-        )
-
-        Spacer()
-
-        Button {
-            model.camera.switchCaptureDevice()
-        } label: {
-            Label(
-                "Switch Camera",
-                systemImage: "arrow.triangle.2.circlepath"
+            }
+            .simultaneousGesture(
+                LongPressGesture(minimumDuration: 0)
+                    .onChanged { pressing in
+                        withAnimation {
+                            if pressing {
+                                captureButtonScale = 0.9
+                            } else {
+                                captureButtonScale = 1.0
+                            }
+                        }
+                    }
             )
-            .font(.system(size: 30))
-            .foregroundColor(.white)
+
+            Spacer()
+
+            Button {
+                model.camera.switchCaptureDevice()
+            } label: {
+                Label(
+                    "Switch Camera",
+                    systemImage: "arrow.triangle.2.circlepath"
+                )
+                .font(.system(size: 30))
+                .foregroundColor(.white)
+            }
         }
     }
 
