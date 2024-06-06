@@ -143,15 +143,15 @@ class AuthenticationFlowManager: ObservableObject {
                 return challenge.id.isPasswordless
             }
 
-        guard let passwordlessConfig = appInfo.auth.passwordless else {
-            throw ParraError.authenticationFailed(
-                "No passwordless config found for passwordless-only flow"
-            )
-        }
-
         // If the user has only one passwordless method available, skip the
         // challenge screen and go straight to the verification screen.
         if isPasswordlessOnly {
+            guard let passwordlessConfig = appInfo.auth.passwordless else {
+                throw ParraError.authenticationFailed(
+                    "No passwordless config found for passwordless-only flow"
+                )
+            }
+
             navigateToIdentityVerificationScreen(
                 identity: identity,
                 userExists: response.exists,
@@ -177,7 +177,7 @@ class AuthenticationFlowManager: ObservableObject {
                         with: appInfo.auth,
                         identity: identity,
                         userExists: response.exists,
-                        passwordlessConfig: passwordlessConfig,
+                        passwordlessConfig: appInfo.auth.passwordless,
                         legalInfo: appInfo.legal,
                         authService: authService
                     )
@@ -234,7 +234,7 @@ class AuthenticationFlowManager: ObservableObject {
         with authInfo: ParraAppAuthInfo,
         identity: String,
         userExists: Bool,
-        passwordlessConfig: ParraAuthInfoPasswordlessConfig,
+        passwordlessConfig: ParraAuthInfoPasswordlessConfig?,
         legalInfo: LegalInfo,
         authService: AuthService
     ) async throws {
@@ -253,6 +253,12 @@ class AuthenticationFlowManager: ObservableObject {
                 authService: authService
             )
         case .passwordlessSms(let phoneNumber):
+            guard let passwordlessConfig else {
+                throw ParraError.authenticationFailed(
+                    "No passwordless config found for SMS"
+                )
+            }
+
             navigateToIdentityVerificationScreen(
                 identity: phoneNumber,
                 userExists: userExists,
@@ -261,6 +267,12 @@ class AuthenticationFlowManager: ObservableObject {
                 authService: authService
             )
         case .passwordlessEmail(let email):
+            guard let passwordlessConfig else {
+                throw ParraError.authenticationFailed(
+                    "No passwordless config found for email"
+                )
+            }
+
             navigateToIdentityVerificationScreen(
                 identity: email,
                 userExists: userExists,
