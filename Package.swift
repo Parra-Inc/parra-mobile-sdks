@@ -8,16 +8,21 @@ let package = Package(
         .iOS("17.0")
     ],
     products: [
-        .library(name: "Parra", targets: ["Parra"]) // type: .static, .dynamic
+        .library(
+            name: "Parra",
+            targets: ["Parra"]
+            // type: .static, .dynamic
+        )
     ],
     targets: [
         .target(
             name: "Parra",
             dependencies: [],
-            // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk
+            exclude: ["Resources/TODO.md"],
             resources: [
+                // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk
                 .process("PrivacyInfo.xcprivacy"),
-                .copy("CountryCodes.json")
+                .process("Resources")
             ]
         ),
         .testTarget(

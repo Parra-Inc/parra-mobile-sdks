@@ -100,8 +100,8 @@ struct ParraLogo: View {
 
 #Preview("Parra Logos", traits: .sizeThatFitsLayout) {
     ParraViewPreview { _ in
-        VStack(alignment: .center, spacing: 100) {
-            VStack(alignment: .center, spacing: 40) {
+        VStack(alignment: .center, spacing: 70) {
+            VStack(alignment: .center, spacing: 20) {
                 ParraLogo(type: .logo)
                 ParraLogo(type: .logoAndText)
                 ParraLogo(type: .poweredBy)
@@ -110,7 +110,7 @@ struct ParraLogo: View {
             .environment(\.colorScheme, .light)
             .background(.white)
 
-            VStack(alignment: .center, spacing: 40) {
+            VStack(alignment: .center, spacing: 20) {
                 ParraLogo(type: .logo)
                 ParraLogo(type: .logoAndText)
                 ParraLogo(type: .poweredBy)
@@ -119,5 +119,6 @@ struct ParraLogo: View {
             .environment(\.colorScheme, .dark)
             .background(.black)
         }
+        .padding()
     }
 }
