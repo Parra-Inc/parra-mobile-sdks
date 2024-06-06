@@ -1404,6 +1404,7 @@
 				001286F7277F50A20090CDB5 /* Managers */,
 				0036D5EF27CD9BC90016DE97 /* PersistentStorage */,
 				009538912BC861F400420316 /* Networking */,
+				0080BC8C2C113BFF00AE87A2 /* Resources */,
 				0087CA9D2A59E4DE007D72FA /* Sessions */,
 				006DE9842A4738F000521F5D /* State */,
 				001B7A9A27DE34F200DEEECD /* Supporting Files */,
@@ -1688,7 +1689,6 @@
 		001B7A9A27DE34F200DEEECD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				00D151302C0796A40049D88F /* CountryCodes.json */,
 				001B7AF427DE3A7600DEEECD /* Parra.h */,
 				003621DC2B5B592D009EFE53 /* ParraAssets.xcassets */,
 			);
@@ -2210,6 +2210,14 @@
 				007ED4752A6C8BDF0077E446 /* CallStackParser.swift */,
 			);
 			path = CallStackParser;
+			sourceTree = "<group>";
+		};
+		0080BC8C2C113BFF00AE87A2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				00D151302C0796A40049D88F /* CountryCodes.json */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		0082DFBE2A53733600E7A91D /* Mocks */ = {

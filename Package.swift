@@ -16,7 +16,8 @@ let package = Package(
             dependencies: [],
             // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk
             resources: [
-                .process("PrivacyInfo.xcprivacy")
+                .process("PrivacyInfo.xcprivacy"),
+                .copy("Resources/CountryCodes.json")
             ]
         ),
         .testTarget(
