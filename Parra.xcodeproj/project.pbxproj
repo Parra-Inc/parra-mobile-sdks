@@ -478,7 +478,6 @@
 		00D1512B2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D1512A2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift */; };
 		00D1512D2C0766C60049D88F /* PasswordConfig+ParraFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D1512C2C0766C60049D88F /* PasswordConfig+ParraFixture.swift */; };
 		00D1512F2C076E7A0049D88F /* PasswordEntropyCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D1512E2C076E7A0049D88F /* PasswordEntropyCalculator.swift */; };
-		00D151312C0796A40049D88F /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 00D151302C0796A40049D88F /* CountryCodes.json */; };
 		00D151332C0796DE0049D88F /* PhoneOrEmailTextInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D151322C0796DE0049D88F /* PhoneOrEmailTextInputView.swift */; };
 		00D5DD912BD163EF002E09B7 /* String+matchesPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD902BD163EF002E09B7 /* String+matchesPattern.swift */; };
 		00D5DD932BD16D27002E09B7 /* TextValidatorRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD922BD16D27002E09B7 /* TextValidatorRule.swift */; };
@@ -1174,7 +1173,6 @@
 		00D1512A2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAppAuthInfo+ParraFixtures.swift"; sourceTree = "<group>"; };
 		00D1512C2C0766C60049D88F /* PasswordConfig+ParraFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PasswordConfig+ParraFixture.swift"; sourceTree = "<group>"; };
 		00D1512E2C076E7A0049D88F /* PasswordEntropyCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordEntropyCalculator.swift; sourceTree = "<group>"; };
-		00D151302C0796A40049D88F /* CountryCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CountryCodes.json; sourceTree = "<group>"; };
 		00D151322C0796DE0049D88F /* PhoneOrEmailTextInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneOrEmailTextInputView.swift; sourceTree = "<group>"; };
 		00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Constants.swift"; sourceTree = "<group>"; };
 		00D5156427D4376500C4F2CC /* ParraSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSyncManager.swift; sourceTree = "<group>"; };
@@ -1404,7 +1402,6 @@
 				001286F7277F50A20090CDB5 /* Managers */,
 				0036D5EF27CD9BC90016DE97 /* PersistentStorage */,
 				009538912BC861F400420316 /* Networking */,
-				0080BC8C2C113BFF00AE87A2 /* Resources */,
 				0087CA9D2A59E4DE007D72FA /* Sessions */,
 				006DE9842A4738F000521F5D /* State */,
 				001B7A9A27DE34F200DEEECD /* Supporting Files */,
@@ -2210,14 +2207,6 @@
 				007ED4752A6C8BDF0077E446 /* CallStackParser.swift */,
 			);
 			path = CallStackParser;
-			sourceTree = "<group>";
-		};
-		0080BC8C2C113BFF00AE87A2 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				00D151302C0796A40049D88F /* CountryCodes.json */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		0082DFBE2A53733600E7A91D /* Mocks */ = {
@@ -3511,7 +3500,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				003621DD2B5B592D009EFE53 /* ParraAssets.xcassets in Resources */,
-				00D151312C0796A40049D88F /* CountryCodes.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

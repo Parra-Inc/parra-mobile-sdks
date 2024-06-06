@@ -141,7 +141,7 @@ struct PhoneOrEmailTextInputView: View {
                         Spacer()
 
                         componentFactory.buildLabel(
-                            text: country.dial_code,
+                            text: country.dialCode,
                             localAttributes: .init(
                                 text: .init(
                                     color: themeObserver.theme.palette
@@ -180,7 +180,7 @@ struct PhoneOrEmailTextInputView: View {
 
                 return country.name.lowercased().contains(comp)
                     || country.code.lowercased() == comp
-                    || country.dial_code.hasSuffix(comp)
+                    || country.dialCode.hasSuffix(comp)
             }
         }
     }
@@ -265,13 +265,13 @@ struct PhoneOrEmailTextInputView: View {
                         .trimmingCharacters(
                             in: .whitespacesAndNewlines
                         )
-                        .trimmingPrefix(selectedCountry.dial_code)
+                        .trimmingPrefix(selectedCountry.dialCode)
 
                     return String(val)
                 },
                 set: { val in
                     if currentMode == .phone {
-                        entry = (selectedCountry.dial_code + val)
+                        entry = (selectedCountry.dialCode + val)
                             .replacingOccurrences(of: " ", with: "")
                     } else {
                         entry = val.replacingOccurrences(of: " ", with: "")
@@ -298,7 +298,7 @@ struct PhoneOrEmailTextInputView: View {
             using: themeObserver.theme
         )
         .onChange(of: selectedCountry) { oldValue, _ in
-            entry.trimPrefix(oldValue.dial_code)
+            entry.trimPrefix(oldValue.dialCode)
         }
         .onChange(of: entry) { _, newValue in
             // If the mode isn't auto, don't change it
