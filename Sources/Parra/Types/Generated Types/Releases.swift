@@ -813,7 +813,7 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
     // MARK: - Lifecycle
 
     public init(
-        versionToken: String,
+        versionToken: String?,
         newInstalledVersionInfo: NewInstalledVersionInfo?,
         auth: ParraAppAuthInfo,
         legal: LegalInfo
@@ -833,7 +833,7 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
         case legal
     }
 
-    public let versionToken: String
+    public let versionToken: String?
     public let newInstalledVersionInfo: NewInstalledVersionInfo?
     public let auth: ParraAppAuthInfo
     public let legal: LegalInfo

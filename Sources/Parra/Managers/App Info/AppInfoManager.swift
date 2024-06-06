@@ -120,12 +120,13 @@ final class AppInfoManager {
             timeout: timeout
         )
 
-        let newVersionToken = response.versionToken
-
         // Only update the token if it changed, since updating will bump the
         // updated date field on the version info.
-        if let versionToken, versionToken != newVersionToken {
-            try await updateLatestSeenVersionToken(response.versionToken)
+        if let versionToken,
+           let newVersionToken = response.versionToken,
+           versionToken != newVersionToken
+        {
+            try await updateLatestSeenVersionToken(newVersionToken)
         }
 
         return response

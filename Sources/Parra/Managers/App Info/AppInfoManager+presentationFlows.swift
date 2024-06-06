@@ -178,9 +178,17 @@ extension AppInfoManager {
             return
         }
 
+        guard let latestVersionToken = latestAppInfo.versionToken else {
+            logger.debug(
+                "No version token available."
+            )
+
+            return
+        }
+
         // Found a new version token, so cache it so we don't present the
         // what's new screen twice for the same release.
-        try await updateLatestSeenVersionToken(latestAppInfo.versionToken)
+        try await updateLatestSeenVersionToken(latestVersionToken)
 
         let contentObserver = ReleaseContentObserver(
             initialParams: ReleaseContentObserver.InitialParams(
