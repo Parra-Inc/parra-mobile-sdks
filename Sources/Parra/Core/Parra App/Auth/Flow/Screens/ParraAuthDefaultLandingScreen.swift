@@ -8,12 +8,6 @@
 
 import SwiftUI
 
-// TODO: Temp until server updates!!!
-public enum ParraIdentityType {
-    case email
-    case phone
-}
-
 public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     // MARK: - Lifecycle
 
@@ -30,7 +24,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
 
         public init(
             availableAuthMethods: [ParraAuthenticationMethod],
-            selectAuthMethod: @escaping (ParraAuthenticationMethod) -> Void
+            selectAuthMethod: @escaping (ParraAuthenticationType) -> Void
         ) {
             self.availableAuthMethods = availableAuthMethods
             self.selectAuthMethod = selectAuthMethod
@@ -39,7 +33,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         // MARK: - Public
 
         public let availableAuthMethods: [ParraAuthenticationMethod]
-        public let selectAuthMethod: (ParraAuthenticationMethod) -> Void
+        public let selectAuthMethod: (ParraAuthenticationType) -> Void
     }
 
     public var body: some View {
@@ -49,6 +43,10 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
             subtitleLabel
 
             continueButton
+
+            if parraAppInfo.auth.supportsPasskeys {
+                continueWithPasskeyButton
+            }
         }
         .frame(maxWidth: .infinity)
         .applyDefaultWidgetAttributes(
@@ -137,7 +135,24 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
             )
         ) {
             params.selectAuthMethod(
-                .password
+                .credentials
+            )
+        }
+    }
+
+    @ViewBuilder private var continueWithPasskeyButton: some View {
+        componentFactory.buildPlainButton(
+            config: ParraTextButtonConfig(
+                type: .primary,
+                size: .large,
+                isMaxWidth: true
+            ),
+            content: TextButtonContent(
+                text: "Continue with passkey"
+            )
+        ) {
+            params.selectAuthMethod(
+                .passkey
             )
         }
     }

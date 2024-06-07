@@ -8,6 +8,15 @@
 
 import SwiftUI
 
+public enum ParraAuthenticationType {
+    /// Covers any case where you enter some kind of username to authenticate.
+    /// This includes username as well as email and phone number, both when
+    /// used as a username and when used with passwordless authentication.
+    case credentials
+    case passkey
+    case sso
+}
+
 public enum ParraAuthenticationMethod: Equatable {
     case passwordless(PasswordlessType)
     case password // implies email
@@ -28,6 +37,13 @@ public enum ParraAuthenticationMethod: Equatable {
     }
 }
 
+public enum ParraIdentityInputType {
+    case email
+    case phone
+    case emailOrPhone
+    case passkey
+}
+
 public enum ChallengeResponse {
     case password(String)
     case passwordlessSms(String)
@@ -35,8 +51,6 @@ public enum ChallengeResponse {
     case verificationSms(String)
     case verificationEmail(String)
 }
-
-// app info endpoint will contain list of available login methods
 
 public protocol ParraAuthScreenParams {}
 public protocol ParraAuthScreen: View {
@@ -51,15 +65,9 @@ public typealias ParraAuthScreenProvider<T> = (T.Params) -> T
 public typealias ParraAuthLandingScreenProvider =
     ParraAuthScreenProvider<ParraAuthDefaultLandingScreen>
 
-// collects email or phone number. has continue button. server will respond to
-// continue action with info necessary to draw the next page
 public typealias ParraAuthIdentityInputScreenProvider =
     ParraAuthScreenProvider<ParraAuthDefaultIdentityInputScreen>
-// --> identity from server after this ^^^
 
-// if password and passwordless -> show password field and "login with out password" button which navigates to passwordless screen
-// if password only, don't show "login without password"
-// if passwordless only show the passwordless screen
 public typealias ParraAuthIdentityChallengeScreenProvider =
     ParraAuthScreenProvider<ParraAuthDefaultIdentityChallengeScreen>
 

@@ -230,7 +230,7 @@ struct PhoneOrEmailTextInputView: View {
         case .phone:
             "Phone number"
         case .email:
-            "Email"
+            "Email address"
         case .auto:
             "Email or phone number"
         }

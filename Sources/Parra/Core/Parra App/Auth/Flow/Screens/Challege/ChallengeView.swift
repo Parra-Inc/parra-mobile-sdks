@@ -29,8 +29,15 @@ struct ChallengeView: View {
     let onUpdate: (_ challenge: String, _ isValid: Bool) -> Void
     let onSubmit: () -> Void
 
+    @State private var id = "mickm@hey.com"
+
     var body: some View {
         VStack(spacing: 16) {
+            TextField(text: $id) {
+                EmptyView()
+            }
+            .textContentType(.username)
+
             componentFactory.buildTextInput(
                 config: challengeFieldConfig,
                 content: TextInputContent(

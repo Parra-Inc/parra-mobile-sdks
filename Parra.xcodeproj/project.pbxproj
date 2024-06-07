@@ -2487,8 +2487,8 @@
 			isa = PBXGroup;
 			children = (
 				009538962BC86A0500420316 /* AuthService.swift */,
-				00A724862C134D2000FD726F /* AuthService+PasskeyPresentationMode.swift */,
 				00A724842C134C3B00FD726F /* AuthService+ASAuthorizationControllerDelegate.swift */,
+				00A724862C134D2000FD726F /* AuthService+PasskeyPresentationMode.swift */,
 				009538A12BC8760B00420316 /* AuthServer.swift */,
 				00285D8E2BC9821E00508DC8 /* OAuth2Service.swift */,
 				00285D902BC9825C00508DC8 /* OAuth2Service+ResponseTypes.swift */,

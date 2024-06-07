@@ -51,7 +51,32 @@ extension AuthService {
         controller: ASAuthorizationController,
         didCompleteWithError error: any Error
     ) {
+        let addr = Unmanaged.passUnretained(controller).toOpaque()
+
+        guard let (_, completion) = activeAuthorizationRequests[addr] else {
+            logger.warn(
+                "Received authorization error callback for unknown request",
+                [
+                    "controller": controller,
+                    "error": error
+                ]
+            )
+
+            return
+        }
+
         guard let error = error as? ASAuthorizationError else {
+            completion(
+                .failure(
+                    ASAuthorizationError(
+                        _nsError: NSError(
+                            domain: "\(ParraInternal.errorDomain).authorization",
+                            code: 1_082
+                        )
+                    )
+                )
+            )
+
             return
         }
 
@@ -75,38 +100,33 @@ extension AuthService {
         default:
             logger.error("Unhandled authorization error")
         }
+
+        completion(.failure(error))
     }
 
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithAuthorization authorization: ASAuthorization
     ) {
-        if let credential = authorization
-            .credential as? ASAuthorizationPlatformPublicKeyCredentialRegistration
-        {
-            // Take steps to handle the registration.
-            let dataString = String(
-                data: credential.rawClientDataJSON,
-                encoding: .utf8
-            )!
+        let addr = Unmanaged.passUnretained(controller).toOpaque()
 
-            print("++++++++++++++++++++++++++++")
-            print(dataString)
-        } else if let credential = authorization
-            .credential as? ASAuthorizationPlatformPublicKeyCredentialAssertion
-        {
-            // Take steps to verify the challenge.
-            let dataString = String(
-                data: credential.rawClientDataJSON,
-                encoding: .utf8
-            )!
+        guard let (_, completion) = activeAuthorizationRequests[addr] else {
+            logger.warn(
+                "Received authorization error callback for unknown request",
+                [
+                    "controller": controller,
+                    "authorization": String(describing: authorization)
+                ]
+            )
 
-            print("-------------------------------")
-            print(dataString)
-        } else {
-            logger.error("Unhandled authorization credential")
-            print(authorization)
+            return
         }
+
+        logger.info("Authorization completed", [
+            "authorization": String(describing: authorization)
+        ])
+
+        completion(.success(authorization))
     }
 
     func presentationAnchor(

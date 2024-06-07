@@ -53,9 +53,12 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
             path: $navigationState.navigationPath
         ) {
             flowManager.provideAuthScreen(
-                authScreen: .landingScreen,
-                authService: parra.parraInternal.authService,
-                using: parraAppInfo
+                authScreen: .landingScreen(
+                    flowManager.getLandingScreenParams(
+                        authService: parra.parraInternal.authService,
+                        using: parraAppInfo
+                    )
+                )
             )
             .environmentObject(parraAppInfo)
             .environmentObject(navigationState)
@@ -64,9 +67,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                 for: AuthenticationFlowManager.AuthScreen.self
             ) { destination in
                 flowManager.provideAuthScreen(
-                    authScreen: destination,
-                    authService: parra.parraInternal.authService,
-                    using: parraAppInfo
+                    authScreen: destination
                 )
                 .environmentObject(parraAppInfo)
                 .environmentObject(navigationState)

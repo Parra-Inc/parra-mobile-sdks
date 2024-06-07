@@ -11,6 +11,9 @@ import Foundation
 
 private let logger = Logger()
 
+typealias AppleAuthCompletion = (Result<ASAuthorization, ASAuthorizationError>)
+    -> Void
+
 final class AuthService {
     // MARK: - Lifecycle
 
@@ -38,6 +41,13 @@ final class AuthService {
     let dataManager: DataManager
     let authServer: AuthServer
     let authenticationMethod: ParraAuthType
+
+    private(set) var activeAuthorizationRequests: [
+        UnsafeMutableRawPointer: (
+            ASAuthorizationController,
+            AppleAuthCompletion
+        )
+    ] = [:]
 
     // https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow
 
@@ -69,10 +79,16 @@ final class AuthService {
             for: username
         )
 
-        beginAuthorization(
+        // begin authorization needs to be promise, return result. Look at result
+        // to determine if proceed to login or navigate
+
+        let authorization = try await beginAuthorization(
             for: [request],
             using: presentationMode
         )
+
+        // TODO: Handle the authorization result
+//        await applyUserUpdate(.authenticated(user))
     }
 
     func registerWithPasskey(
@@ -82,22 +98,31 @@ final class AuthService {
             for: username
         )
 
-        beginAuthorization(
+        let authorization = try await beginAuthorization(
             for: [request],
             using: .modal
         )
+
+        // TODO: If user already exists error, login?
+
+        try await processPasskeyAuthorization(
+            authorization: authorization
+        )
+
+        // TODO: Handle the authorization result
+        //        await applyUserUpdate(.authenticated(user))
     }
 
     func linkPasskeyToAccount() async throws {}
 
     func cancelPasskeyRequests() {
-        guard let activeAuthorizationController else {
-            return
+        // Cancel active requests by calling cancel on the authorization
+        // controllers they are attached to. This will cause the authorization
+        // delegate to fire an error -> cancelled, which will resolve the
+        // completion handlers and remove the requests.
+        for (_, value) in activeAuthorizationRequests {
+            value.0.cancel()
         }
-
-        activeAuthorizationController.cancel()
-
-        self.activeAuthorizationController = nil
     }
 
     func signUp(
@@ -350,27 +375,88 @@ final class AuthService {
 
     // The actual cached token.
     private var _cachedToken: ParraUser.Credential?
-    private var activeAuthorizationController: ASAuthorizationController?
     private let authorizationDelegateProxy =
         AuthorizationControllerDelegateProxy()
+
+    private func processPasskeyAuthorization(
+        authorization: ASAuthorization
+    ) async throws {
+        if let credential = authorization
+            .credential as? ASAuthorizationPlatformPublicKeyCredentialRegistration
+        {
+            let id = credential.credentialID.base64EncodedString()
+            let clientData = credential.rawClientDataJSON.base64EncodedString()
+
+            guard let rawAttestationObject = credential.rawAttestationObject else {
+                throw ParraError.message("Failed to decode attestation object")
+            }
+
+            let attestationObject = rawAttestationObject.base64EncodedString()
+
+            let response = try await authServer.postWebAuthnRegister(
+                requestData: WebauthnRegisterRequestBody(
+                    id: id,
+                    rawId: id,
+                    response: AuthenticatorAttestationResponse(
+                        clientDataJSON: clientData,
+                        attestationObject: attestationObject
+                    ),
+                    type: "public-key",
+                    user: nil
+                )
+            )
+
+            print("Registration response:")
+            print(response)
+        } else if let credential = authorization
+            .credential as? ASAuthorizationPlatformPublicKeyCredentialAssertion
+        {
+            // Take steps to verify the challenge.
+            let dataString = String(
+                data: credential.rawClientDataJSON,
+                encoding: .utf8
+            )!
+
+            print("-------------------------------")
+            print(dataString)
+        } else {
+            logger.error("Unhandled authorization credential")
+            print(authorization)
+        }
+    }
 
     private func beginAuthorization(
         for authorizationRequests: [ASAuthorizationRequest],
         using presentationMode: PasskeyPresentationMode
-    ) {
-        if activeAuthorizationController != nil {
+    ) async throws -> ASAuthorization {
+        if !activeAuthorizationRequests.isEmpty {
             logger.debug("Apple authorization requests already in progress")
 
             cancelPasskeyRequests()
         }
 
-        activeAuthorizationController = ASAuthorizationController(
+        return try await withCheckedThrowingContinuation { continuation in
+            performAuthorization(
+                for: authorizationRequests,
+                using: .modal
+            ) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    private func performAuthorization(
+        for authorizationRequests: [ASAuthorizationRequest],
+        using presentationMode: PasskeyPresentationMode,
+        completion: @escaping AppleAuthCompletion
+    ) {
+        let activeAuthorizationController = ASAuthorizationController(
             authorizationRequests: authorizationRequests
         )
 
         authorizationDelegateProxy.authService = self
-        activeAuthorizationController!.delegate = authorizationDelegateProxy
-        activeAuthorizationController!
+        activeAuthorizationController.delegate = authorizationDelegateProxy
+        activeAuthorizationController
             .presentationContextProvider = authorizationDelegateProxy
 
         switch presentationMode {
@@ -380,13 +466,21 @@ final class AuthService {
             // to the delegate, which we will ignore. If the user didn't
             // have a passkey, they probably don't want the popup, and they
             // will have the opportunity to create one later.
-            activeAuthorizationController!.performRequests(
+            activeAuthorizationController.performRequests(
                 options: .preferImmediatelyAvailableCredentials
             )
         case .autofill:
             // to display in quicktype
-            activeAuthorizationController!.performAutoFillAssistedRequests()
+            activeAuthorizationController.performAutoFillAssistedRequests()
         }
+
+        let addr = Unmanaged.passUnretained(activeAuthorizationController)
+            .toOpaque()
+
+        activeAuthorizationRequests[addr] = (
+            activeAuthorizationController,
+            completion
+        )
     }
 
     private func createPublicKeyCredentialRegistrationRequest(

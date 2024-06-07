@@ -17,7 +17,8 @@ extension ParraEndpoint {
             case .getUserInfo, .postLogin, .postLogout, .postUpdateAvatar,
                  .postAuthChallenges, .postPasswordless,
                  .postWebAuthnRegisterChallenge,
-                 .postWebAuthnAuthenticateChallenge:
+                 .postWebAuthnAuthenticateChallenge,
+                 .postWebAuthnRegister, .postWebAuthnAuthenticate:
                 fatalError()
             case .postCreateUser:
                 UserInfoResponse.validStates()[0]

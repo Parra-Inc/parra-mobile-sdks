@@ -1045,6 +1045,12 @@ public final class ParraAppAuthInfo: Codable, Equatable, Hashable {
         hasher.combine(database)
         hasher.combine(passwordless)
     }
+
+    // MARK: - Internal
+
+    var supportsPasskeys: Bool {
+        return database?.passkeys != nil
+    }
 }
 
 public struct LegalInfo: Codable, Equatable, Hashable {

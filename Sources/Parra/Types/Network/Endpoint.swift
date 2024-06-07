@@ -18,6 +18,8 @@ enum ParraEndpoint {
     case postPasswordless(tenantId: String)
     case postWebAuthnRegisterChallenge(tenantId: String)
     case postWebAuthnAuthenticateChallenge(tenantId: String)
+    case postWebAuthnRegister(tenantId: String)
+    case postWebAuthnAuthenticate(tenantId: String)
 
     // Feedback
     case getCards
@@ -62,7 +64,9 @@ enum ParraEndpoint {
              .postAuthChallenges(let tenantId),
              .postPasswordless(let tenantId),
              .postWebAuthnRegisterChallenge(let tenantId),
-             .postWebAuthnAuthenticateChallenge(let tenantId):
+             .postWebAuthnAuthenticateChallenge(let tenantId),
+             .postWebAuthnRegister(let tenantId),
+             .postWebAuthnAuthenticate(let tenantId):
 
             let baseHost = ParraInternal.Constants.parraApiHost
             let host = "tenant-\(tenantId).\(baseHost)"
@@ -84,7 +88,8 @@ enum ParraEndpoint {
              .postPushTokens, .postAuthentication, .postVoteForTicket,
              .postLogin, .postLogout, .postUpdateAvatar, .postAuthChallenges,
              .postPasswordless, .postWebAuthnRegisterChallenge,
-             .postWebAuthnAuthenticateChallenge:
+             .postWebAuthnAuthenticateChallenge, .postWebAuthnRegister,
+             .postWebAuthnAuthenticate:
             return .post
         case .deleteVoteForTicket:
             return .delete
@@ -130,6 +135,10 @@ enum ParraEndpoint {
             return "auth/webauthn/register/challenge"
         case .postWebAuthnAuthenticateChallenge:
             return "auth/webauthn/authenticate/challenge"
+        case .postWebAuthnRegister:
+            return "auth/webauthn/register"
+        case .postWebAuthnAuthenticate:
+            return "auth/webauthn/authenticate"
         case .postCreateUser:
             return "auth/signup"
         case .postAuthChallenges:
@@ -177,6 +186,10 @@ enum ParraEndpoint {
             return "auth/webauthn/register/challenge"
         case .postWebAuthnAuthenticateChallenge:
             return "auth/webauthn/authenticate/challenge"
+        case .postWebAuthnRegister:
+            return "auth/webauthn/register"
+        case .postWebAuthnAuthenticate:
+            return "auth/webauthn/authenticate"
 
         // Feedback
         case .getCards:

@@ -25,6 +25,8 @@ extension ParraEndpoint: CaseIterable {
             .postLogout(tenantId: ""),
             .postWebAuthnRegisterChallenge(tenantId: ""),
             .postWebAuthnAuthenticateChallenge(tenantId: ""),
+            .postWebAuthnRegister(tenantId: ""),
+            .postWebAuthnAuthenticate(tenantId: ""),
             .postBulkAnswerQuestions,
             .postBulkSubmitSessions(tenantId: ""),
             .postPushTokens(tenantId: ""),
@@ -54,7 +56,8 @@ extension ParraEndpoint: CaseIterable {
                  .getAppInfo, .postCreateUser, .postLogin, .postLogout,
                  .postUpdateAvatar, .postAuthChallenges, .postPasswordless,
                  .postWebAuthnRegisterChallenge,
-                 .postWebAuthnAuthenticateChallenge:
+                 .postWebAuthnAuthenticateChallenge,
+                 .postWebAuthnRegister, .postWebAuthnAuthenticate:
                 finalCases.append(testCase)
             }
         }

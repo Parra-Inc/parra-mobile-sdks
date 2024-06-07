@@ -24,37 +24,20 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         // MARK: - Lifecycle
 
         public init(
-            // basically whether to show "email" "phone number" or "email or phone number" in the placeholder
-            availableAuthMethods: [ParraAuthenticationMethod],
+            inputType: ParraIdentityInputType,
             submit: @escaping (_ identity: String) async throws -> Void
         ) {
-            self.availableAuthMethods = availableAuthMethods
+            self.inputType = inputType
             self.submit = submit
         }
 
         // MARK: - Public
 
-        public let availableAuthMethods: [ParraAuthenticationMethod]
+        public let inputType: ParraIdentityInputType
         public let submit: (_ identity: String) async throws -> Void
     }
 
     public var body: some View {
-        let allowsPhone = availablePasswordlessMethods.contains(.sms)
-        let allowsEmail = params.availableAuthMethods.contains(.password)
-            || availablePasswordlessMethods.contains(.email)
-
-        let inputMode: PhoneOrEmailTextInputView.Mode = if allowsEmail,
-                                                           allowsPhone
-        {
-            .auto
-        } else if allowsEmail {
-            .email
-        } else if allowsPhone {
-            .phone
-        } else {
-            .auto
-        }
-
         VStack(alignment: .leading) {
             componentFactory.buildLabel(
                 content: LabelContent(text: identityFieldTitle),
@@ -64,12 +47,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 )
             )
 
-            PhoneOrEmailTextInputView(
-                entry: $identity,
-                mode: inputMode,
-                currendMode: $emailPhoneFieldCurrentMode,
-                onSubmit: submit
-            )
+            primaryField
 
             componentFactory.buildContainedButton(
                 config: ParraTextButtonConfig(
@@ -97,12 +75,18 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             )
         }
         .task {
-            await flowManager.triggerPasskeyLoginRequest(
-                username: nil,
-                presentationMode: .autofill,
-                using: parraAppInfo,
-                authService: parra.parraInternal.authService
-            )
+            // This is for getting the passkey option in the quick type bar
+            // when you're logging in without a passkey to get you to use one.
+            // If you're on this screen to create a passkey it shouldn't
+            // be shown.
+            if params.inputType != .passkey {
+                await flowManager.triggerPasskeyLoginRequest(
+                    username: nil,
+                    presentationMode: .autofill,
+                    using: parraAppInfo,
+                    authService: parra.parraInternal.authService
+                )
+            }
         }
         .onChange(of: identity) { _, newValue in
             let trimmed = newValue.trimmingCharacters(
@@ -112,6 +96,50 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             continueButtonContent = TextButtonContent(
                 text: continueButtonContent.text,
                 isDisabled: trimmed.isEmpty
+            )
+        }
+    }
+
+    // MARK: - Internal
+
+    @ViewBuilder var primaryField: some View {
+        if params.inputType == .passkey {
+            componentFactory.buildTextInput(
+                config: TextInputConfig(
+                    validationRules: [.email],
+                    keyboardType: .emailAddress,
+                    textContentType: .username,
+                    textInputAutocapitalization: .never
+                ),
+                content: TextInputContent(
+                    placeholder: "Email address",
+                    textChanged: { newValue in
+                        identity = newValue ?? ""
+                    }
+                )
+            )
+            .onSubmit(of: .text) {
+                submit()
+            }
+        } else {
+            let inputMode: PhoneOrEmailTextInputView.Mode = switch params
+                .inputType
+            {
+            case .emailOrPhone:
+                .auto
+            case .email:
+                .email
+            case .phone:
+                .phone
+            default:
+                .auto
+            }
+
+            PhoneOrEmailTextInputView(
+                entry: $identity,
+                mode: inputMode,
+                currendMode: $emailPhoneFieldCurrentMode,
+                onSubmit: submit
             )
         }
     }
@@ -135,76 +163,16 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     @EnvironmentObject private var flowManager: AuthenticationFlowManager
     @Environment(\.parra) private var parra
 
-    private var availablePasswordlessMethods: [
-        ParraAuthenticationMethod
-            .PasswordlessType
-    ] {
-        params.availableAuthMethods.filter { method in
-            switch method {
-            case .passwordless:
-                return true
-            default:
-                return false
-            }
-        }.compactMap { method in
-            switch method {
-            case .passwordless(let passwordlessType):
-                return passwordlessType
-            default:
-                return nil
-            }
-        }
-    }
-
-    private var identityFieldConfig: TextInputConfig {
-        let availableAuthMethods = params.availableAuthMethods
-
-        let emailConfig = TextInputConfig(
-            validationRules: [.email],
-            keyboardType: .emailAddress,
-            textContentType: .emailAddress,
-            textInputAutocapitalization: .never
-        )
-
-        return if availableAuthMethods.contains(where: { method in
-            method == .password
-        }) {
-            emailConfig
-        } else if let firstPasswordlessMethod = availablePasswordlessMethods
-            .first
-        {
-            switch firstPasswordlessMethod {
-            case .email:
-                emailConfig
-            case .sms:
-                TextInputConfig(
-                    validationRules: [.phone],
-                    keyboardType: .phonePad,
-                    textContentType: .telephoneNumber
-                )
-            }
-        } else {
-            emailConfig
-        }
-    }
-
     private var identityFieldTitle: String {
-        let methods = availablePasswordlessMethods
-
-        if methods.isEmpty {
+        switch params.inputType {
+        case .email:
             return "Email"
-        }
-
-        let canUseEmail = params.availableAuthMethods.contains(.password)
-            || methods.contains(.email)
-        let canUseSms = methods.contains(.sms)
-
-        if canUseEmail, canUseSms {
-            return "Email or phone number"
-        } else if canUseSms {
+        case .phone:
             return "Phone number"
-        } else {
-            return "Email"
+        case .emailOrPhone:
+            return "Email or phone number"
+        case .passkey:
+            return "Passkey"
         }
     }
 
