@@ -453,7 +453,9 @@ public struct AuthenticatorSelection: Codable, Equatable, Hashable {
     public let userVerification: String
 }
 
-public struct ExcludedCredential: Codable, Equatable, Hashable, Identifiable {
+public struct PublicKeyCredentialDescriptor: Codable, Equatable, Hashable,
+    Identifiable
+{
     // MARK: - Lifecycle
 
     public init(
@@ -537,7 +539,7 @@ public struct PublicKeyCredentialCreationOptions: Codable, Equatable, Hashable {
         attestationFormats: [String]?,
         authenticatorSelection: AuthenticatorSelection?,
         challenge: String,
-        excludeCredentials: [ExcludedCredential]?,
+        excludeCredentials: [PublicKeyCredentialDescriptor]?,
         extensions: [String: AnyCodable]?,
         pubKeyCredParams: [PublicKeyCredParam],
         rp: RelyingParty,
@@ -564,7 +566,7 @@ public struct PublicKeyCredentialCreationOptions: Codable, Equatable, Hashable {
     public let attestationFormats: [String]?
     public let authenticatorSelection: AuthenticatorSelection?
     public let challenge: String
-    public let excludeCredentials: [ExcludedCredential]?
+    public let excludeCredentials: [PublicKeyCredentialDescriptor]?
     public let extensions: [String: AnyCodable]?
     public let pubKeyCredParams: [PublicKeyCredParam]
     public let rp: RelyingParty
@@ -578,7 +580,7 @@ public struct PublicKeyCredentialRequestOptions: Codable, Equatable, Hashable {
 
     public init(
         challenge: String,
-        allowCredentials: [ExcludedCredential]?,
+        allowCredentials: [PublicKeyCredentialDescriptor]?,
         extensions: [String: AnyCodable]?,
         rpId: String?,
         timeout: Int?,
@@ -595,7 +597,7 @@ public struct PublicKeyCredentialRequestOptions: Codable, Equatable, Hashable {
     // MARK: - Public
 
     public let challenge: String
-    public let allowCredentials: [ExcludedCredential]?
+    public let allowCredentials: [PublicKeyCredentialDescriptor]?
     public let extensions: [String: AnyCodable]?
     public let rpId: String?
     public let timeout: Int?

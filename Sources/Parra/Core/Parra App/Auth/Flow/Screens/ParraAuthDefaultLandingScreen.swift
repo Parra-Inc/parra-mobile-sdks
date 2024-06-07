@@ -55,7 +55,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
             using: themeObserver.theme
         )
         .task {
-            await flowManager.triggerPasskey(
+            await flowManager.triggerPasskeyLoginRequest(
                 username: nil,
                 presentationMode: .modal,
                 using: parraAppInfo,

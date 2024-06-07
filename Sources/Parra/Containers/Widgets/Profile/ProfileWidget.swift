@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+private let logger = Logger()
+
 struct ProfileWidget: Container {
     // MARK: - Lifecycle
 
@@ -31,7 +33,7 @@ struct ProfileWidget: Container {
     @EnvironmentObject var parraAuthState: ParraAuthState
 
     var body: some View {
-        VStack {
+        VStack(spacing: 16) {
             Text("Profile")
 
             switch parraAuthState.current {
@@ -53,6 +55,20 @@ struct ProfileWidget: Container {
 
             Button("Logout") {
                 parra.logout()
+            }
+
+            Button("Add Passkey") {
+                Task {
+                    do {
+                        try await parra.parraInternal.authService
+                            .linkPasskeyToAccount()
+                    } catch {
+                        logger
+                            .error(
+                                "Failed to link passkey to account: \(error)"
+                            )
+                    }
+                }
             }
         }
     }

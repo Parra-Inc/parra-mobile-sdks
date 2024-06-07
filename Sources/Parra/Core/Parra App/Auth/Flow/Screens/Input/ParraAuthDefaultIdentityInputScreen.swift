@@ -97,7 +97,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             )
         }
         .task {
-            await flowManager.triggerPasskey(
+            await flowManager.triggerPasskeyLoginRequest(
                 username: nil,
                 presentationMode: .autofill,
                 using: parraAppInfo,

@@ -6,6 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import AuthenticationServices
 import Foundation
 
 private let logger = Logger()
@@ -57,6 +58,46 @@ final class AuthService {
         } catch {
             return .unauthenticated(error)
         }
+    }
+
+    func loginWithPasskey(
+        username: String?,
+        presentationMode: PasskeyPresentationMode,
+        using appInfo: ParraAppInfo
+    ) async throws {
+        let request = try await createPublicKeyCredentialAssertionRequest(
+            for: username
+        )
+
+        beginAuthorization(
+            for: [request],
+            using: presentationMode
+        )
+    }
+
+    func registerWithPasskey(
+        username: String
+    ) async throws {
+        let request = try await createPublicKeyCredentialRegistrationRequest(
+            for: username
+        )
+
+        beginAuthorization(
+            for: [request],
+            using: .modal
+        )
+    }
+
+    func linkPasskeyToAccount() async throws {}
+
+    func cancelPasskeyRequests() {
+        guard let activeAuthorizationController else {
+            return
+        }
+
+        activeAuthorizationController.cancel()
+
+        self.activeAuthorizationController = nil
     }
 
     func signUp(
@@ -309,6 +350,106 @@ final class AuthService {
 
     // The actual cached token.
     private var _cachedToken: ParraUser.Credential?
+    private var activeAuthorizationController: ASAuthorizationController?
+    private let authorizationDelegateProxy =
+        AuthorizationControllerDelegateProxy()
+
+    private func beginAuthorization(
+        for authorizationRequests: [ASAuthorizationRequest],
+        using presentationMode: PasskeyPresentationMode
+    ) {
+        if activeAuthorizationController != nil {
+            logger.debug("Apple authorization requests already in progress")
+
+            cancelPasskeyRequests()
+        }
+
+        activeAuthorizationController = ASAuthorizationController(
+            authorizationRequests: authorizationRequests
+        )
+
+        authorizationDelegateProxy.authService = self
+        activeAuthorizationController!.delegate = authorizationDelegateProxy
+        activeAuthorizationController!
+            .presentationContextProvider = authorizationDelegateProxy
+
+        switch presentationMode {
+        case .modal:
+            // This will display the passkey prompt, only if the user
+            // already has a passkey. If they don't an error will be sent
+            // to the delegate, which we will ignore. If the user didn't
+            // have a passkey, they probably don't want the popup, and they
+            // will have the opportunity to create one later.
+            activeAuthorizationController!.performRequests(
+                options: .preferImmediatelyAvailableCredentials
+            )
+        case .autofill:
+            // to display in quicktype
+            activeAuthorizationController!.performAutoFillAssistedRequests()
+        }
+    }
+
+    private func createPublicKeyCredentialRegistrationRequest(
+        for username: String
+    ) async throws
+        -> ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest
+    {
+        let challengeResponse = try await authServer
+            .postWebAuthnRegisterChallenge(
+                requestData: WebAuthnRegisterChallengeRequest(
+                    username: username
+                )
+            )
+
+        let relyingPartyIdentifier = challengeResponse.rp.id
+        let userId = Data(challengeResponse.user.id.utf8)
+        let challenge = Data(challengeResponse.challenge.utf8)
+        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
+            relyingPartyIdentifier: relyingPartyIdentifier
+        )
+
+        return provider.createCredentialRegistrationRequest(
+            challenge: challenge,
+            name: username,
+            userID: userId
+        )
+    }
+
+    private func createPublicKeyCredentialAssertionRequest(
+        for username: String?
+    ) async throws
+        -> ASAuthorizationPlatformPublicKeyCredentialAssertionRequest
+    {
+        let challengeResponse = try await authServer
+            .postWebAuthnAuthenticateChallenge(
+                requestData: WebAuthnAuthenticateChallengeRequest(
+                    username: username
+                )
+            )
+
+        guard let relyingPartyIdentifier = challengeResponse.rpId else {
+            throw ParraError.message("Missing relying party identifier")
+        }
+
+        let challenge = Data(challengeResponse.challenge.utf8)
+        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
+            relyingPartyIdentifier: relyingPartyIdentifier
+        )
+
+        let request = provider.createCredentialAssertionRequest(
+            challenge: challenge
+        )
+
+        // used when we have context about the user, like when they've typed in their username
+        let allowCredentials = challengeResponse.allowCredentials ?? []
+        request.allowedCredentials = allowCredentials.map { credential in
+            return ASAuthorizationPlatformPublicKeyCredentialDescriptor(
+                credentialID: Data(credential.id.utf8)
+            )
+        }
+
+        return request
+    }
 
     // Lazy wrapper around the cached token that will access it or try to load
     // it from disk.
