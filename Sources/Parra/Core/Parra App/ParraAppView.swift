@@ -146,7 +146,9 @@ struct ParraAppView<Content>: View where Content: ParraAppContent {
                                 error
                             )
 
-                            // TODO: Handle this better? Maybe transition to unauth'd state
+                            // This is unrecoverable. Force a logout.
+
+                            parraAuthState.forceLogout(from: error)
 
                             fatalError()
                         }
