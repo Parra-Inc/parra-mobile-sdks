@@ -201,7 +201,9 @@ class ParraInternal {
                 "versionToken": String(describing: appInfo.versionToken)
             ])
 
-            appState.appInfo = appInfo
+            await MainActor.run {
+                appState.appInfo = appInfo
+            }
 
             return appInfo
         } catch {
