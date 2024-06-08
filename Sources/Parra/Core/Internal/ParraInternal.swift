@@ -198,7 +198,7 @@ class ParraInternal {
             )
 
             logger.debug("Fetched latest app info", [
-                "versionToken": appInfo.versionToken
+                "versionToken": String(describing: appInfo.versionToken)
             ])
 
             appState.appInfo = appInfo
