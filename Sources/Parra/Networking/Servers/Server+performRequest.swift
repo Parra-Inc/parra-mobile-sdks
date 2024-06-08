@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if DEBUG
+import WebKit
+#endif
 
 private let logger = Logger()
 
@@ -181,6 +184,32 @@ extension Server {
                     "Unexpected networking error. HTTP response was unexpected class"
                 )
         }
+
+        #if DEBUG
+        // Auto display HTML errors like those from Cloudflare in a popup
+        // webview.
+        if httpResponse.statusCode >= 400 {
+            if let bodyString = String(data: data, encoding: .utf8) {
+                if let contentType = httpResponse.value(
+                    forHTTPHeaderField: "Content-Type"
+                ), contentType.lowercased().contains("text/html") {
+                    await MainActor.run {
+                        let webview = WKWebView()
+                        webview.loadHTMLString(bodyString, baseURL: nil)
+
+                        let vc = UIViewController()
+                        vc.view = webview
+
+                        UIViewController.topMostViewController()?.present(
+                            vc,
+                            animated: true
+                        )
+                    }
+                }
+            }
+        }
+
+        #endif
 
         return (data, httpResponse)
     }
