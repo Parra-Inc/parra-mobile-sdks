@@ -13,7 +13,7 @@ private let logger = Logger(category: "Server")
 extension Server {
     func addHeaders(
         to request: inout URLRequest,
-        endpoint: ParraEndpoint,
+        endpoint: Endpoint,
         for appState: ParraAppState,
         with headerFactory: HeaderFactory
     ) {
@@ -42,7 +42,7 @@ extension Server {
 
     private func addTrackingHeaders(
         toRequest request: inout URLRequest,
-        for endpoint: ParraEndpoint,
+        for endpoint: Endpoint,
         with headerFactory: HeaderFactory
     ) {
         let headers = if endpoint.isTrackingEnabled {

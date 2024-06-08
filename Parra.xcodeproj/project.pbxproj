@@ -358,6 +358,9 @@
 		00A724832C12516800FD726F /* CameraPermissionDeniedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A724822C12516800FD726F /* CameraPermissionDeniedView.swift */; };
 		00A724852C134C3B00FD726F /* AuthService+ASAuthorizationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A724842C134C3B00FD726F /* AuthService+ASAuthorizationControllerDelegate.swift */; };
 		00A724872C134D2000FD726F /* AuthService+PasskeyPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A724862C134D2000FD726F /* AuthService+PasskeyPresentationMode.swift */; };
+		00A724892C14890300FD726F /* EndpointResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A724882C14890300FD726F /* EndpointResolver.swift */; };
+		00A7248C2C14CDBE00FD726F /* IssuerEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A7248B2C14CDBE00FD726F /* IssuerEndpoint.swift */; };
+		00A7248E2C14CDCB00FD726F /* ApiEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A7248D2C14CDCB00FD726F /* ApiEndpoint.swift */; };
 		00A970FD2C060D9D00AB3436 /* CodeEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A970FC2C060D9D00AB3436 /* CodeEntryView.swift */; };
 		00AB95A12BE4524C00B27091 /* ParraPaddingSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A02BE4524C00B27091 /* ParraPaddingSize.swift */; };
 		00AB95A32BE4529900B27091 /* ParraPaddingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB95A22BE4529900B27091 /* ParraPaddingConfig.swift */; };
@@ -1071,6 +1074,9 @@
 		00A724822C12516800FD726F /* CameraPermissionDeniedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionDeniedView.swift; sourceTree = "<group>"; };
 		00A724842C134C3B00FD726F /* AuthService+ASAuthorizationControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthService+ASAuthorizationControllerDelegate.swift"; sourceTree = "<group>"; };
 		00A724862C134D2000FD726F /* AuthService+PasskeyPresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthService+PasskeyPresentationMode.swift"; sourceTree = "<group>"; };
+		00A724882C14890300FD726F /* EndpointResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointResolver.swift; sourceTree = "<group>"; };
+		00A7248B2C14CDBE00FD726F /* IssuerEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuerEndpoint.swift; sourceTree = "<group>"; };
+		00A7248D2C14CDCB00FD726F /* ApiEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiEndpoint.swift; sourceTree = "<group>"; };
 		00A970FC2C060D9D00AB3436 /* CodeEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEntryView.swift; sourceTree = "<group>"; };
 		00AB95A02BE4524C00B27091 /* ParraPaddingSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddingSize.swift; sourceTree = "<group>"; };
 		00AB95A22BE4529900B27091 /* ParraPaddingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraPaddingConfig.swift; sourceTree = "<group>"; };
@@ -2610,6 +2616,18 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
+		00A7248A2C14CDB100FD726F /* Endpoints */ = {
+			isa = PBXGroup;
+			children = (
+				006DE9812A472F9C00521F5D /* Endpoint.swift */,
+				00A7248D2C14CDCB00FD726F /* ApiEndpoint.swift */,
+				00A7248B2C14CDBE00FD726F /* IssuerEndpoint.swift */,
+				00A724882C14890300FD726F /* EndpointResolver.swift */,
+				00E269F42A526770001A0F50 /* Endpoint+Mocks.swift */,
+			);
+			path = Endpoints;
+			sourceTree = "<group>";
+		};
 		00A970F82BFB829700AB3436 /* App Info */ = {
 			isa = PBXGroup;
 			children = (
@@ -2901,8 +2919,7 @@
 				001230072B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift */,
 				00BD2FF52A47772A00B4BEB2 /* AuthenticatedRequestResult.swift */,
 				00E269ED2A5257DC001A0F50 /* AuthorizationType.swift */,
-				006DE9812A472F9C00521F5D /* Endpoint.swift */,
-				00E269F42A526770001A0F50 /* Endpoint+Mocks.swift */,
+				00A7248A2C14CDB100FD726F /* Endpoints */,
 				001B7A8B27DD883500DEEECD /* HttpMethod.swift */,
 				00E269EF2A525803001A0F50 /* Mimetype.swift */,
 				00DA7FFD296367E400109081 /* HeaderFactory.swift */,
@@ -3586,6 +3603,7 @@
 				009D84372BEAE9D1005EBFEB /* ParraGlobalComponentAttributes+Image.swift in Sources */,
 				00FCB1762B962DC400635DC8 /* FrameAttributes.swift in Sources */,
 				00916A732B75CDC7009C87DC /* View+FeedbackForm.swift in Sources */,
+				00A724892C14890300FD726F /* EndpointResolver.swift in Sources */,
 				0036221E2B5D966B009EFE53 /* ButtonComponents.swift in Sources */,
 				00995C082BB6F9E200384D94 /* Feedback.swift in Sources */,
 				00374CF72B9F5CFA0028EDA8 /* RoadmapWidget+ContentObserver+Voting.swift in Sources */,
@@ -3634,6 +3652,7 @@
 				00A724852C134C3B00FD726F /* AuthService+ASAuthorizationControllerDelegate.swift in Sources */,
 				00FCB1322B902E3D00635DC8 /* FeedbackQuestionViewKind+SingleOptionAnswer.swift in Sources */,
 				001B7B0E27DE3A9B00DEEECD /* Parra.swift in Sources */,
+				00A7248C2C14CDBE00FD726F /* IssuerEndpoint.swift in Sources */,
 				009D842B2BEA692E005EBFEB /* ParraAttributes+Button.swift in Sources */,
 				0027FB6B2BD6D30200558E51 /* ParraDefaultAuthenticationFlowView.swift in Sources */,
 				0079EDDF2BDAE2F20045EEE5 /* MultipartFormField.swift in Sources */,
@@ -3903,6 +3922,7 @@
 				00374D062BA0B1E20028EDA8 /* BadgeComponent.swift in Sources */,
 				004F3F1A2BA8A19300424802 /* ParraInternal+Links.swift in Sources */,
 				00374D102BA0CA890028EDA8 /* RoadmapTicketDisplayStatusBadge.swift in Sources */,
+				00A7248E2C14CDCB00FD726F /* ApiEndpoint.swift in Sources */,
 				00C1191B2BB05D550013FD03 /* ParraAppInfoOptions.swift in Sources */,
 				0087CA7A2A58FAA2007D72FA /* Logger+StaticLevels.swift in Sources */,
 				00ABF1452B7851BF00A054A2 /* ParraInternal+SyncManagerDelegate.swift in Sources */,

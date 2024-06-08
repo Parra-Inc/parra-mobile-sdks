@@ -27,7 +27,7 @@ final class API {
     let apiResourceServer: ApiResourceServer
 
     func hitEndpoint<Response>(
-        _ endpoint: ParraEndpoint,
+        _ endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
         cachePolicy: URLRequest.CachePolicy? = nil,
         body: some Encodable = EmptyRequestObject()
@@ -49,7 +49,7 @@ final class API {
     }
 
     func hitUploadEndpoint<Response>(
-        _ endpoint: ParraEndpoint,
+        _ endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
         cachePolicy: URLRequest.CachePolicy? = nil,
         formFields: [MultipartFormField]

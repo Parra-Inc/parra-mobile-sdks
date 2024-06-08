@@ -49,11 +49,13 @@ final class AuthServer: Server {
         userId: String,
         timeout: TimeInterval? = nil
     ) async throws -> String {
-        let endpoint = ParraEndpoint.postAuthentication(
-            tenantId: appState.tenantId
+        let endpoint = IssuerEndpoint.postAuthentication
+        let url = try EndpointResolver.resolve(
+            endpoint: endpoint,
+            using: appState
         )
 
-        var request = URLRequest(url: endpoint.url)
+        var request = URLRequest(url: url)
 
         request.httpMethod = endpoint.method.rawValue
         request.httpBody = try configuration.jsonEncoder
@@ -97,10 +99,8 @@ final class AuthServer: Server {
     ) async throws -> User {
         let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performOptionalAuthRequest(
-            to: .postCreateUser(
-                tenantId: appState.tenantId
-            ),
+        return try await performUnauthenticatedRequest(
+            to: .postCreateUser,
             with: nil,
             body: body
         )
@@ -110,9 +110,7 @@ final class AuthServer: Server {
         accessToken: String
     ) async throws -> UserInfoResponse {
         return try await performOptionalAuthRequest(
-            to: .postLogin(
-                tenantId: appState.tenantId
-            ),
+            to: .postLogin,
             with: accessToken
         )
     }
@@ -121,9 +119,7 @@ final class AuthServer: Server {
         accessToken: String
     ) async throws {
         let _: EmptyResponseObject = try await performOptionalAuthRequest(
-            to: .postLogout(
-                tenantId: appState.tenantId
-            ),
+            to: .postLogout,
             with: accessToken
         )
     }
@@ -133,10 +129,8 @@ final class AuthServer: Server {
     ) async throws -> AuthChallengeResponse {
         let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performOptionalAuthRequest(
-            to: .postAuthChallenges(
-                tenantId: appState.tenantId
-            ),
+        return try await performUnauthenticatedRequest(
+            to: .postAuthChallenges,
             with: nil,
             body: body
         )
@@ -147,10 +141,8 @@ final class AuthServer: Server {
     ) async throws -> ParraPasswordlessChallengeResponse {
         let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performOptionalAuthRequest(
-            to: .postPasswordless(
-                tenantId: appState.tenantId
-            ),
+        return try await performUnauthenticatedRequest(
+            to: .postPasswordless,
             with: nil,
             body: body
         )
@@ -159,33 +151,24 @@ final class AuthServer: Server {
     func postWebAuthnRegisterChallenge(
         requestData: WebAuthnRegisterChallengeRequest
     ) async throws -> PublicKeyCredentialCreationOptions {
-        let data: [String: String] = [
-            "username": requestData.username
-        ]
+        let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performOptionalAuthFormEncodedRequest(
-            to: .postWebAuthnRegisterChallenge(
-                tenantId: appState.tenantId
-            ),
+        return try await performUnauthenticatedRequest(
+            to: .postWebAuthnRegisterChallenge,
             with: nil,
-            data: data
+            body: body
         )
     }
 
     func postWebAuthnAuthenticateChallenge(
         requestData: WebAuthnAuthenticateChallengeRequest
     ) async throws -> PublicKeyCredentialRequestOptions {
-        var data: [String: String] = [:]
-        if let username = requestData.username {
-            data["username"] = username
-        }
+        let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performOptionalAuthFormEncodedRequest(
-            to: .postWebAuthnAuthenticateChallenge(
-                tenantId: appState.tenantId
-            ),
+        return try await performUnauthenticatedRequest(
+            to: .postWebAuthnAuthenticateChallenge,
             with: nil,
-            data: data
+            body: body
         )
     }
 
@@ -194,10 +177,8 @@ final class AuthServer: Server {
     ) async throws -> WebauthnRegisterResponseBody {
         let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performOptionalAuthRequest(
-            to: .postWebAuthnRegister(
-                tenantId: appState.tenantId
-            ),
+        return try await performUnauthenticatedRequest(
+            to: .postWebAuthnRegister,
             with: nil,
             body: body
         )
@@ -208,9 +189,7 @@ final class AuthServer: Server {
         timeout: TimeInterval? = nil
     ) async throws -> UserInfoResponse {
         return try await performOptionalAuthRequest(
-            to: .getUserInfo(
-                tenantId: appState.tenantId
-            ),
+            to: .getUserInfo,
             with: accessToken,
             timeout: timeout
         )
@@ -252,10 +231,7 @@ final class AuthServer: Server {
         }
 
         return try await performOptionalAuthRequest(
-            to: .getAppInfo(
-                tenantId: appState.tenantId,
-                applicationId: appState.applicationId
-            ),
+            to: .getAppInfo,
             with: accessToken,
             queryItems: queryItems,
             timeout: timeout
@@ -265,18 +241,75 @@ final class AuthServer: Server {
     // MARK: - Private
 
     private func performOptionalAuthRequest<T>(
-        to endpoint: ParraEndpoint,
+        to endpoint: ApiEndpoint,
         with accessToken: String?,
         queryItems: [String: String] = [:],
         body: Data? = nil,
         timeout: TimeInterval? = nil
     ) async throws -> T where T: Codable {
+        let url = try EndpointResolver.resolve(
+            endpoint: endpoint,
+            using: appState
+        )
+
         guard var urlComponents = URLComponents(
-            url: endpoint.url,
+            url: url,
             resolvingAgainstBaseURL: false
         ) else {
             throw ParraError.generic(
-                "Failed to create components for url: \(endpoint.url)",
+                "Failed to create components for url: \(url)",
+                nil
+            )
+        }
+
+        urlComponents.setQueryItems(with: queryItems)
+
+        var request = URLRequest(url: urlComponents.url!)
+
+        request.httpMethod = endpoint.method.rawValue
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        request.timeoutInterval = timeout ?? configuration.urlSession
+            .configuration.timeoutIntervalForRequest
+
+        if let accessToken {
+            request.setValue(for: .authorization(.bearer(accessToken)))
+        }
+
+        if let body {
+            request.httpBody = body
+        }
+
+        addHeaders(
+            to: &request,
+            endpoint: endpoint,
+            for: appState,
+            with: headerFactory
+        )
+
+        return try await performRequest(
+            request: request,
+            timeout: timeout
+        )
+    }
+
+    private func performUnauthenticatedRequest<T>(
+        to endpoint: IssuerEndpoint,
+        with accessToken: String?,
+        queryItems: [String: String] = [:],
+        body: Data? = nil,
+        timeout: TimeInterval? = nil
+    ) async throws -> T where T: Codable {
+        let url = try EndpointResolver.resolve(
+            endpoint: endpoint,
+            using: appState
+        )
+
+        guard var urlComponents = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: false
+        ) else {
+            throw ParraError.generic(
+                "Failed to create components for url: \(url)",
                 nil
             )
         }
@@ -312,13 +345,18 @@ final class AuthServer: Server {
     }
 
     private func performOptionalAuthFormEncodedRequest<T>(
-        to endpoint: ParraEndpoint,
+        to endpoint: IssuerEndpoint,
         with accessToken: String?,
         data: [String: String],
         timeout: TimeInterval? = nil
     ) async throws -> T where T: Codable {
+        let url = try EndpointResolver.resolve(
+            endpoint: endpoint,
+            using: appState
+        )
+
         return try await performFormPostRequest(
-            to: endpoint.url,
+            to: url,
             data: data,
             cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
             timeout: timeout

@@ -38,7 +38,7 @@ final class ApiResourceServer: Server {
     let configuration: ServerConfiguration
 
     func hitApiEndpoint<T: Decodable>(
-        endpoint: ParraEndpoint,
+        endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
         cachePolicy: URLRequest.CachePolicy? = nil
@@ -53,7 +53,7 @@ final class ApiResourceServer: Server {
     }
 
     func hitApiEndpoint<T: Decodable>(
-        endpoint: ParraEndpoint,
+        endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
         cachePolicy: URLRequest.CachePolicy? = nil,
@@ -77,7 +77,9 @@ final class ApiResourceServer: Server {
             let accessToken = try await authService
                 .getAccessTokenRefreshingIfNeeded()
 
-            initialRequest.setValue(for: .authorization(.bearer(accessToken)))
+            initialRequest.setValue(
+                for: .authorization(.bearer(accessToken))
+            )
 
             let (
                 result,
@@ -119,7 +121,7 @@ final class ApiResourceServer: Server {
     }
 
     func hitUploadEndpoint<T: Decodable>(
-        endpoint: ParraEndpoint,
+        endpoint: ApiEndpoint,
         formFields: [MultipartFormField],
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
@@ -141,7 +143,9 @@ final class ApiResourceServer: Server {
             let accessToken = try await authService
                 .getAccessTokenRefreshingIfNeeded()
 
-            initialRequest.setValue(for: .authorization(.bearer(accessToken)))
+            initialRequest.setValue(
+                for: .authorization(.bearer(accessToken))
+            )
 
             let (
                 result,

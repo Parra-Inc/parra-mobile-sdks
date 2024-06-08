@@ -10,6 +10,8 @@ import SwiftUI
 
 private let logger = Logger()
 
+// Must be a class. Needs observability and relies on reference semantics
+// for up to date info to be accessed.
 public class ParraAppState: ObservableObject, Equatable {
     // MARK: - Lifecycle
 
@@ -41,7 +43,8 @@ public class ParraAppState: ObservableObject, Equatable {
 
     // MARK: - Internal
 
-    var appInfo: ParraAppInfo?
+    /// Exists after GET app-info is called during the launch screen.
+    @Published var appInfo: ParraAppInfo?
 
     private(set) var tenantId: String
     private(set) var applicationId: String

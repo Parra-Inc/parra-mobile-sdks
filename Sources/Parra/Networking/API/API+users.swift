@@ -19,9 +19,7 @@ extension API {
         )
 
         return try await hitUploadEndpoint(
-            .postUpdateAvatar(
-                tenantId: appState.tenantId
-            ),
+            .postUpdateAvatar,
             cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
             formFields: [imageField]
         )

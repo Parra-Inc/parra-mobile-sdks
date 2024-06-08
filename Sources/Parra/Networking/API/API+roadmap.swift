@@ -10,12 +10,7 @@ import Foundation
 
 extension API {
     func getRoadmap() async throws -> AppRoadmapConfiguration {
-        return try await hitEndpoint(
-            .getRoadmap(
-                tenantId: appState.tenantId,
-                applicationId: appState.applicationId
-            )
-        )
+        return try await hitEndpoint(.getRoadmap)
     }
 
     func paginateTickets(
@@ -24,10 +19,7 @@ extension API {
         filter: String
     ) async throws -> UserTicketCollectionResponse {
         return try await hitEndpoint(
-            .getPaginateTickets(
-                tenantId: appState.tenantId,
-                applicationId: appState.applicationId
-            ),
+            .getPaginateTickets,
             queryItems: [
                 "limit": String(limit),
                 "offset": String(offset),
@@ -41,7 +33,6 @@ extension API {
     ) async -> AuthenticatedRequestResult<UserTicket> {
         return await apiResourceServer.hitApiEndpoint(
             endpoint: .postVoteForTicket(
-                tenantId: appState.tenantId,
                 ticketId: ticketId
             )
         )
@@ -52,7 +43,6 @@ extension API {
     ) async -> AuthenticatedRequestResult<UserTicket> {
         return await apiResourceServer.hitApiEndpoint(
             endpoint: .deleteVoteForTicket(
-                tenantId: appState.tenantId,
                 ticketId: ticketId
             )
         )

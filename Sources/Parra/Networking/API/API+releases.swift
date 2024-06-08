@@ -14,9 +14,7 @@ extension API {
     ) async throws -> AppRelease {
         return try await hitEndpoint(
             .getRelease(
-                releaseId: releaseId,
-                tenantId: appState.tenantId,
-                applicationId: appState.applicationId
+                releaseId: releaseId
             )
         )
     }
@@ -26,10 +24,7 @@ extension API {
         offset: Int
     ) async throws -> AppReleaseCollectionResponse {
         return try await hitEndpoint(
-            .getPaginateReleases(
-                tenantId: appState.tenantId,
-                applicationId: appState.applicationId
-            ),
+            .getPaginateReleases,
             queryItems: [
                 "limit": String(limit),
                 "offset": String(offset)

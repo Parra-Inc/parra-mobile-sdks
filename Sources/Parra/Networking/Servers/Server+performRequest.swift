@@ -12,7 +12,7 @@ private let logger = Logger()
 
 extension Server {
     func createRequest(
-        to endpoint: ParraEndpoint,
+        to endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
         cachePolicy: URLRequest.CachePolicy? = nil,
@@ -25,7 +25,10 @@ extension Server {
             appConfig: appConfig
         )
 
-        let url = endpoint.url
+        let url = try EndpointResolver.resolve(
+            endpoint: endpoint,
+            using: appState
+        )
 
         guard var urlComponents = URLComponents(
             url: url,

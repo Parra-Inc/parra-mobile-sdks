@@ -26,6 +26,7 @@ extension ParraAppInfo: ParraFixture {
                     updatedAt: .now,
                     deletedAt: nil,
                     name: "My org",
+                    issuer: URL(string: "https://parra-demo.com")!,
                     subdomain: "mick",
                     isTest: false,
                     parentTenantId: nil,

@@ -16,7 +16,7 @@ extension API {
         ]
 
         let _: EmptyResponseObject = try await hitEndpoint(
-            .postPushTokens(tenantId: appState.tenantId),
+            .postPushTokens,
             body: body
         )
     }

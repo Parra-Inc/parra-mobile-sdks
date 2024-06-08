@@ -13,9 +13,7 @@ extension API {
         _ sessionUpload: ParraSessionUpload
     ) async -> AuthenticatedRequestResult<ParraSessionsResponse> {
         return await apiResourceServer.hitApiEndpoint(
-            endpoint: .postBulkSubmitSessions(
-                tenantId: appState.tenantId
-            ),
+            endpoint: .postBulkSubmitSessions,
             config: .defaultWithRetries,
             body: sessionUpload
         )

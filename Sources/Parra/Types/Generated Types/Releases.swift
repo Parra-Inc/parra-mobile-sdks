@@ -916,6 +916,7 @@ public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
         updatedAt: String,
         deletedAt: String?,
         name: String,
+        issuer: URL,
         subdomain: String?,
         isTest: Bool,
         parentTenantId: String?,
@@ -929,6 +930,7 @@ public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
         self.name = name
+        self.issuer = issuer
         self.subdomain = subdomain
         self.isTest = isTest
         self.parentTenantId = parentTenantId
@@ -946,6 +948,7 @@ public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
         case updatedAt
         case deletedAt
         case name
+        case issuer
         case subdomain
         case isTest
         case parentTenantId
@@ -960,6 +963,9 @@ public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
     public let updatedAt: String
     public let deletedAt: String?
     public let name: String
+    /// The url of the preferred domain for this tenant to be used in issuer
+    /// routes.
+    public let issuer: URL
     public let subdomain: String?
     public let isTest: Bool
     public let parentTenantId: String?
