@@ -807,6 +807,168 @@ public struct NewInstalledVersionInfo: Codable, Equatable, Hashable {
     public let release: AppRelease
 }
 
+public enum DomainType: String, Codable {
+    case managed
+    case external
+    case subdomain
+    case fallback
+}
+
+public enum DomainStatus: String, Codable {
+    case setup
+    case pending
+    case error
+    case disabled
+    case deleted
+}
+
+public struct ExternalDomainData: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        status: DomainStatus,
+        domain: String,
+        disabled: Bool
+    ) {
+        self.status = status
+        self.domain = domain
+        self.disabled = disabled
+    }
+
+    // MARK: - Public
+
+    public let status: DomainStatus
+    public let domain: String
+    public let disabled: Bool
+}
+
+public enum DomainData: Codable, Equatable, Hashable {
+    case externalDomainData(ExternalDomainData)
+}
+
+public struct Domain: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        type: DomainType,
+        name: String,
+        title: String,
+        host: String,
+        url: URL,
+        data: DomainData?
+    ) {
+        self.id = id
+        self.type = type
+        self.name = name
+        self.title = title
+        self.host = host
+        self.url = url
+        self.data = data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.type = try container.decode(DomainType.self, forKey: .type)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.host = try container.decode(String.self, forKey: .host)
+        self.url = try container.decode(URL.self, forKey: .url)
+
+        switch type {
+        case .external:
+            self.data = try .externalDomainData(container.decode(
+                ExternalDomainData.self,
+                forKey: .data
+            ))
+        case .fallback:
+            self.data = nil
+        case .managed:
+            self.data = nil
+        case .subdomain:
+            self.data = nil
+        }
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let type: DomainType
+    public let name: String
+    public let title: String
+    public let host: String
+    public let url: URL
+    public let data: DomainData?
+}
+
+public struct Entitlement: Codable, Equatable, Hashable {
+    public init(
+    ) {}
+}
+
+public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    public init(
+        id: String,
+        createdAt: String,
+        updatedAt: String,
+        deletedAt: String?,
+        name: String,
+        subdomain: String?,
+        isTest: Bool,
+        parentTenantId: String?,
+        logo: ImageAssetStub?,
+        domains: [Domain]?,
+        urls: [URL]?,
+        entitlements: [Entitlement]?
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.name = name
+        self.subdomain = subdomain
+        self.isTest = isTest
+        self.parentTenantId = parentTenantId
+        self.logo = logo
+        self.domains = domains
+        self.urls = urls
+        self.entitlements = entitlements
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case name
+        case subdomain
+        case isTest
+        case parentTenantId
+        case logo
+        case domains
+        case urls
+        case entitlements
+    }
+
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let name: String
+    public let subdomain: String?
+    public let isTest: Bool
+    public let parentTenantId: String?
+    public let logo: ImageAssetStub?
+    public let domains: [Domain]?
+    public let urls: [URL]?
+    public let entitlements: [Entitlement]?
+}
+
 public final class ParraAppInfo: ObservableObject, Codable, Equatable,
     Hashable
 {
@@ -815,11 +977,13 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
     public init(
         versionToken: String?,
         newInstalledVersionInfo: NewInstalledVersionInfo?,
+        tenant: TenantAppInfoStub,
         auth: ParraAppAuthInfo,
         legal: LegalInfo
     ) {
         self.versionToken = versionToken
         self.newInstalledVersionInfo = newInstalledVersionInfo
+        self.tenant = tenant
         self.auth = auth
         self.legal = legal
     }
@@ -829,12 +993,14 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
     public enum CodingKeys: String, CodingKey {
         case versionToken
         case newInstalledVersionInfo
+        case tenant
         case auth
         case legal
     }
 
     public let versionToken: String?
     public let newInstalledVersionInfo: NewInstalledVersionInfo?
+    public let tenant: TenantAppInfoStub
     public let auth: ParraAppAuthInfo
     public let legal: LegalInfo
 
@@ -844,6 +1010,7 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
     ) -> Bool {
         return lhs.versionToken == rhs.versionToken
             && lhs.newInstalledVersionInfo == rhs.newInstalledVersionInfo
+            && lhs.tenant == rhs.tenant
             && lhs.auth == rhs.auth
             && lhs.legal == rhs.legal
     }
@@ -853,6 +1020,7 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
     ) {
         hasher.combine(versionToken)
         hasher.combine(newInstalledVersionInfo)
+        hasher.combine(tenant)
         hasher.combine(auth)
         hasher.combine(legal)
     }

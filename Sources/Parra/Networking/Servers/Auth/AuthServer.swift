@@ -203,20 +203,6 @@ final class AuthServer: Server {
         )
     }
 
-    func postWebAuthnAuthenticate(
-        requestData: WebauthnAuthenticateRequestBody
-    ) async throws -> WebauthnAuthenticateResponseBody {
-        let body = try configuration.jsonEncoder.encode(requestData)
-
-        return try await performOptionalAuthRequest(
-            to: .postWebAuthnAuthenticate(
-                tenantId: appState.tenantId
-            ),
-            with: nil,
-            body: body
-        )
-    }
-
     func getUserInfo(
         accessToken: String,
         timeout: TimeInterval? = nil
