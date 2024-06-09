@@ -146,8 +146,7 @@ extension Server {
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> T {
         let (data, response) = try await performAsyncDataTask(
-            request: request,
-            delegate: delegate
+            request: request
         )
 
         guard response.statusCode == 200 else {
@@ -165,15 +164,14 @@ extension Server {
     }
 
     func performAsyncDataTask(
-        request: URLRequest,
-        delegate: URLSessionTaskDelegate? = nil
+        request: URLRequest
     ) async throws -> (Data, HTTPURLResponse) {
         try await sleepInDebug()
 
         let (data, response) = try await configuration.urlSession
             .dataForRequest(
                 for: request,
-                delegate: delegate
+                delegate: urlSessionDelegateProxy
             )
 
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -193,17 +191,19 @@ extension Server {
                 if let contentType = httpResponse.value(
                     forHTTPHeaderField: "Content-Type"
                 ), contentType.lowercased().contains("text/html") {
-                    await MainActor.run {
-                        let webview = WKWebView()
-                        webview.loadHTMLString(bodyString, baseURL: nil)
+                    if bodyString.hasPrefix("<") {
+                        await MainActor.run {
+                            let webview = WKWebView()
+                            webview.loadHTMLString(bodyString, baseURL: nil)
 
-                        let vc = UIViewController()
-                        vc.view = webview
+                            let vc = UIViewController()
+                            vc.view = webview
 
-                        UIViewController.topMostViewController()?.present(
-                            vc,
-                            animated: true
-                        )
+                            UIViewController.topMostViewController()?.present(
+                                vc,
+                                animated: true
+                            )
+                        }
                     }
                 }
             }
@@ -216,8 +216,7 @@ extension Server {
 
     func performAsyncMultipartUploadTask(
         request: URLRequest,
-        formFields: [MultipartFormField],
-        delegate: URLSessionTaskDelegate? = nil
+        formFields: [MultipartFormField]
     ) async throws -> (Data, HTTPURLResponse) {
         try await sleepInDebug()
 
@@ -253,7 +252,7 @@ extension Server {
             .dataForUploadRequest(
                 for: urlRequest,
                 from: data,
-                delegate: delegate
+                delegate: urlSessionDelegateProxy
             )
 
         guard let httpResponse = response as? HTTPURLResponse else {

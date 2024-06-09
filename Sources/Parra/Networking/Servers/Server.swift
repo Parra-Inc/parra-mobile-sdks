@@ -14,4 +14,6 @@ protocol Server {
     var appConfig: ParraConfiguration { get }
 
     var delegate: ServerDelegate? { get }
+
+    var urlSessionDelegateProxy: UrlSessionDelegateProxy { get }
 }

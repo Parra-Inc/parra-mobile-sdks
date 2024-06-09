@@ -37,6 +37,11 @@ final class ApiResourceServer: Server {
 
     let configuration: ServerConfiguration
 
+    lazy var urlSessionDelegateProxy: UrlSessionDelegateProxy =
+        .init(
+            delegate: self
+        )
+
     func hitApiEndpoint<T: Decodable>(
         endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
@@ -188,11 +193,6 @@ final class ApiResourceServer: Server {
     }
 
     // MARK: - Private
-
-    private lazy var urlSessionDelegateProxy: UrlSessionDelegateProxy =
-        .init(
-            delegate: self
-        )
 
     // Perform request wrapper that automatically handles reauthentication and
     // retrying if the request fails unauthenticated/unauthorized.

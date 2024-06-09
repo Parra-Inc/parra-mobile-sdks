@@ -29,4 +29,9 @@ final class ExternalResourceServer: Server {
     let appConfig: ParraConfiguration
 
     weak var delegate: ServerDelegate?
+
+    lazy var urlSessionDelegateProxy: UrlSessionDelegateProxy =
+        .init(
+            delegate: self
+        )
 }

@@ -44,6 +44,11 @@ final class AuthServer: Server {
     let headerFactory: HeaderFactory
     weak var delegate: ServerDelegate?
 
+    lazy var urlSessionDelegateProxy: UrlSessionDelegateProxy =
+        .init(
+            delegate: self
+        )
+
     func performPublicApiKeyAuthenticationRequest(
         apiKeyId: String,
         userId: String,
