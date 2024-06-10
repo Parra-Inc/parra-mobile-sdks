@@ -10,6 +10,11 @@ import Foundation
 
 private let logger = Logger()
 
+// Only refresh on launch if about to expire
+// also update the api resource refresh logic to check
+// if it is expired and trigger a refresh before relying on
+// a 401 to indicate that the refresh should be performed.
+
 final class OAuth2Service {
     // MARK: - Lifecycle
 
@@ -20,15 +25,11 @@ final class OAuth2Service {
     ) {
         self.clientId = clientId
         self.authServer = authServer
-        self.tokenUrl = URL(
-            string: "https://tenant-\(tenantId).parra.io/auth/token"
-        )!
     }
 
     // MARK: - Internal
 
     let clientId: String
-    let tokenUrl: URL
     let authServer: AuthServer
 
     func authenticate(
@@ -55,6 +56,7 @@ final class OAuth2Service {
             data["code"] = code
         }
 
+        let tokenUrl = try createTokenUrl()
         let response: TokenResponse = try await authServer
             .performFormPostRequest(
                 to: tokenUrl,
@@ -83,6 +85,7 @@ final class OAuth2Service {
             "client_id": clientId
         ]
 
+        let tokenUrl = try createTokenUrl()
         let response: RefreshResponse = try await authServer
             .performFormPostRequest(
                 to: tokenUrl,
@@ -118,8 +121,16 @@ final class OAuth2Service {
         return token
     }
 
-    // Only refresh on launch if about to expire
-    // also update the api resource refresh logic to check
-    // if it is expired and trigger a refresh before relying on
-    // a 401 to indicate that the refresh should be performed.
+    // MARK: - Private
+
+    private func createTokenUrl() throws -> URL {
+        guard
+            let issuer = authServer.appState.appInfo?.tenant.issuer,
+            let tokenUrl = URL(string: "\(issuer)/auth/token") else
+        {
+            throw ParraError.message("Failed to construct token URL")
+        }
+
+        return tokenUrl
+    }
 }
