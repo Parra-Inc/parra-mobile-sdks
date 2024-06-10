@@ -10,6 +10,8 @@ import Foundation
 
 private let logger = Logger()
 
+private let parraWebauthnSessionHeader = "PARRA-WEBAUTHN-SESSION"
+
 /// Intentionally separated from ``ApiResourceServer`` to avoid any of the auto
 /// inclusion of headers/etc from interferring with authentication standards.
 final class AuthServer: Server {
@@ -104,11 +106,16 @@ final class AuthServer: Server {
     ) async throws -> User {
         let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performUnauthenticatedRequest(
+        let (data, _): (
+            User,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
             to: .postCreateUser,
             with: nil,
             body: body
         )
+
+        return data
     }
 
     func postLogin(
@@ -134,11 +141,16 @@ final class AuthServer: Server {
     ) async throws -> AuthChallengeResponse {
         let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performUnauthenticatedRequest(
+        let (data, _): (
+            AuthChallengeResponse,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
             to: .postAuthChallenges,
             with: nil,
             body: body
         )
+
+        return data
     }
 
     func postPasswordless(
@@ -146,47 +158,71 @@ final class AuthServer: Server {
     ) async throws -> ParraPasswordlessChallengeResponse {
         let body = try configuration.jsonEncoder.encode(requestData)
 
-        return try await performUnauthenticatedRequest(
+        let (data, _): (
+            ParraPasswordlessChallengeResponse,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
             to: .postPasswordless,
             with: nil,
             body: body
         )
+
+        return data
     }
 
     func postWebAuthnRegisterChallenge(
         requestData: WebAuthnRegisterChallengeRequest
-    ) async throws -> PublicKeyCredentialCreationOptions {
-        let body = try configuration.jsonEncoder.encode(requestData)
+    ) async throws -> (PublicKeyCredentialCreationOptions, String) {
+        let body = try JSONEncoder.parraWebauthEncoder.encode(requestData)
 
-        return try await performUnauthenticatedRequest(
+        let (data, response): (
+            PublicKeyCredentialCreationOptions,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
             to: .postWebAuthnRegisterChallenge,
             with: nil,
             body: body
         )
+
+        return try (data, webauthnSessionHeader(from: response))
     }
 
     func postWebAuthnAuthenticateChallenge(
         requestData: WebAuthnAuthenticateChallengeRequest
-    ) async throws -> PublicKeyCredentialRequestOptions {
-        let body = try configuration.jsonEncoder.encode(requestData)
+    ) async throws -> (PublicKeyCredentialRequestOptions, String) {
+        let body = try JSONEncoder.parraWebauthEncoder.encode(requestData)
 
-        return try await performUnauthenticatedRequest(
+        let (data, response): (
+            PublicKeyCredentialRequestOptions,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
             to: .postWebAuthnAuthenticateChallenge,
             with: nil,
             body: body
         )
+
+        return try (data, webauthnSessionHeader(from: response))
     }
 
     func postWebAuthnRegister(
-        requestData: WebauthnRegisterRequestBody
+        requestData: WebauthnRegisterRequestBody,
+        session: String
     ) async throws -> WebauthnRegisterResponseBody {
-        let body = try configuration.jsonEncoder.encode(requestData)
+        let body = try JSONEncoder.parraWebauthEncoder.encode(requestData)
 
-        return try await performUnauthenticatedRequest(
+        let (data, _): (
+            WebauthnRegisterResponseBody,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
             to: .postWebAuthnRegister,
             with: nil,
+            extraHeaders: [
+                parraWebauthnSessionHeader: session
+            ],
             body: body
         )
+
+        return data
     }
 
     func getUserInfo(
@@ -245,6 +281,21 @@ final class AuthServer: Server {
 
     // MARK: - Private
 
+    private func webauthnSessionHeader(
+        from response: HTTPURLResponse
+    ) throws -> String {
+        guard let value = response.value(
+            forHTTPHeaderField: parraWebauthnSessionHeader
+        ) else {
+            throw ParraError
+                .message(
+                    "Missing expected \(parraWebauthnSessionHeader) header"
+                )
+        }
+
+        return value
+    }
+
     private func performOptionalAuthRequest<T>(
         to endpoint: ApiEndpoint,
         with accessToken: String?,
@@ -291,19 +342,21 @@ final class AuthServer: Server {
             with: headerFactory
         )
 
-        return try await performRequest(
-            request: request,
-            timeout: timeout
+        let (data, _): (T, HTTPURLResponse) = try await performRequest(
+            request: request
         )
+
+        return data
     }
 
     private func performUnauthenticatedRequest<T>(
         to endpoint: IssuerEndpoint,
         with accessToken: String?,
         queryItems: [String: String] = [:],
+        extraHeaders: [String: String] = [:],
         body: Data? = nil,
         timeout: TimeInterval? = nil
-    ) async throws -> T where T: Codable {
+    ) async throws -> (T, HTTPURLResponse) where T: Codable {
         let url = try EndpointResolver.resolve(
             endpoint: endpoint,
             using: appState
@@ -343,9 +396,14 @@ final class AuthServer: Server {
             with: headerFactory
         )
 
+        if !extraHeaders.isEmpty {
+            for (key, value) in extraHeaders {
+                request.setValue(value, forHTTPHeaderField: key)
+            }
+        }
+
         return try await performRequest(
-            request: request,
-            timeout: timeout
+            request: request
         )
     }
 
@@ -369,24 +427,27 @@ final class AuthServer: Server {
     }
 
     private func performRequest<T>(
-        request: URLRequest,
-        timeout: TimeInterval? = nil
-    ) async throws -> T where T: Codable {
+        request: URLRequest
+    ) async throws -> (T, HTTPURLResponse) where T: Codable {
         let (data, response) = try await performAsyncDataTask(
             request: request
         )
 
         switch response.statusCode {
         case 204:
-            return try configuration.jsonDecoder.decode(
+            let body = try configuration.jsonDecoder.decode(
                 T.self,
                 from: EmptyJsonObjectData
             )
+
+            return (body, response)
         case 200 ..< 300:
-            return try configuration.jsonDecoder.decode(
+            let body = try configuration.jsonDecoder.decode(
                 T.self,
                 from: data
             )
+
+            return (body, response)
         default:
             throw ParraError.networkError(
                 request: request,
@@ -394,5 +455,46 @@ final class AuthServer: Server {
                 responseData: data
             )
         }
+    }
+}
+
+public extension Data {
+    internal func prettyPrintedJSONString() -> String {
+        guard let object = try? JSONSerialization.jsonObject(
+            with: self,
+            options: []
+        ) else {
+            return "Failed to parse JSON data"
+        }
+
+        guard let data = try? JSONSerialization.data(
+            withJSONObject: object,
+            options: [.prettyPrinted]
+        ) else {
+            return "Failed to re-serialize JSON object"
+        }
+
+        return String(data: data, encoding: .utf8) ??
+            "Failed to convert JSON data to string"
+    }
+
+    func base64urlEncodedString() -> String {
+        var result = base64EncodedString()
+
+        result = result.replacingOccurrences(of: "+", with: "-")
+        result = result.replacingOccurrences(of: "/", with: "_")
+        result = result.replacingOccurrences(of: "=", with: "")
+
+        return result
+    }
+
+    init?(base64urlEncoded input: String) {
+        var base64 = input
+        base64 = base64.replacingOccurrences(of: "-", with: "+")
+        base64 = base64.replacingOccurrences(of: "_", with: "/")
+        while base64.count % 4 != 0 {
+            base64 = base64.appending("=")
+        }
+        self.init(base64Encoded: base64)
     }
 }

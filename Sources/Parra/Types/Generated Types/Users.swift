@@ -668,16 +668,19 @@ public struct WebauthnRegisterResponseBody: Codable, Equatable, Hashable {
 
     public init(
         status: String,
-        message: String
+        message: String,
+        token: String
     ) {
         self.status = status
         self.message = message
+        self.token = token
     }
 
     // MARK: - Public
 
     public let status: String
     public let message: String
+    public let token: String
 }
 
 public struct AuthenticatorAssertionResponse: Codable, Equatable, Hashable {

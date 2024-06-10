@@ -17,6 +17,14 @@ extension JSONDecoder {
         return decoder
     }()
 
+    private(set) static var parraWebauthDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+
+        decoder.dateDecodingStrategy = .custom(dateDecoder)
+
+        return decoder
+    }()
+
     private(set) static var spaceOptimizedDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
 

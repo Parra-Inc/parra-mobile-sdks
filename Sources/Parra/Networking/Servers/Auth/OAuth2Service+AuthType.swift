@@ -17,5 +17,7 @@ extension OAuth2Service {
 
         case passwordlessEmail(code: String)
         case passwordlessSms(code: String)
+
+        case webauthn(code: String)
     }
 }

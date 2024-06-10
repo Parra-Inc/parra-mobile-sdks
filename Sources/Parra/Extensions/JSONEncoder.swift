@@ -21,6 +21,18 @@ extension JSONEncoder {
         return encoder
     }()
 
+    private(set) static var parraWebauthEncoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+
+        encoder.dateEncodingStrategy = .custom(dateEncoder)
+
+        #if DEBUG
+        encoder.outputFormatting = .prettyPrinted
+        #endif
+
+        return encoder
+    }()
+
     // ! Important: can never use pretty printing. It is required by consumers
     // of this encoder that JSON all be on the same line.
     private(set) static var spaceOptimizedEncoder: JSONEncoder = {

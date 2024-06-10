@@ -75,7 +75,10 @@ final class AuthService {
         presentationMode: PasskeyPresentationMode,
         using appInfo: ParraAppInfo
     ) async throws {
-        let request = try await createPublicKeyCredentialAssertionRequest(
+        let (
+            request,
+            session
+        ) = try await createPublicKeyCredentialAssertionRequest(
             for: username
         )
 
@@ -94,7 +97,10 @@ final class AuthService {
     func registerWithPasskey(
         username: String
     ) async throws {
-        let request = try await createPublicKeyCredentialRegistrationRequest(
+        let (
+            request,
+            session
+        ) = try await createPublicKeyCredentialRegistrationRequest(
             for: username
         )
 
@@ -103,14 +109,18 @@ final class AuthService {
             using: .modal
         )
 
-        // TODO: If user already exists error, login?
+        // TODO: If user already exists error, login? 409 from server or apple error?
 
-        try await processPasskeyAuthorization(
-            authorization: authorization
+        let accessToken = try await processPasskeyAuthorization(
+            authorization: authorization,
+            session: session
         )
 
-        // TODO: Handle the authorization result
-        //        await applyUserUpdate(.authenticated(user))
+        let authResult = await login(
+            authType: .webauthn(code: accessToken)
+        )
+
+        await applyUserUpdate(authResult)
     }
 
     func linkPasskeyToAccount() async throws {}
@@ -379,19 +389,22 @@ final class AuthService {
         AuthorizationControllerDelegateProxy()
 
     private func processPasskeyAuthorization(
-        authorization: ASAuthorization
-    ) async throws {
+        authorization: ASAuthorization,
+        session: String
+    ) async throws -> String {
         if let credential = authorization
             .credential as? ASAuthorizationPlatformPublicKeyCredentialRegistration
         {
-            let id = credential.credentialID.base64EncodedString()
-            let clientData = credential.rawClientDataJSON.base64EncodedString()
+            let id = credential.credentialID.base64urlEncodedString()
+            let clientData = credential.rawClientDataJSON
+                .base64urlEncodedString()
 
             guard let rawAttestationObject = credential.rawAttestationObject else {
                 throw ParraError.message("Failed to decode attestation object")
             }
 
-            let attestationObject = rawAttestationObject.base64EncodedString()
+            let attestationObject = rawAttestationObject
+                .base64urlEncodedString()
 
             let response = try await authServer.postWebAuthnRegister(
                 requestData: WebauthnRegisterRequestBody(
@@ -403,11 +416,11 @@ final class AuthService {
                     ),
                     type: "public-key",
                     user: nil
-                )
+                ),
+                session: session
             )
 
-            print("Registration response:")
-            print(response)
+            return response.token
         } else if let credential = authorization
             .credential as? ASAuthorizationPlatformPublicKeyCredentialAssertion
         {
@@ -419,9 +432,12 @@ final class AuthService {
 
             print("-------------------------------")
             print(dataString)
+
+            return ""
         } else {
-            logger.error("Unhandled authorization credential")
-            print(authorization)
+            throw ParraError.message(
+                "Unhandled authorization credential type"
+            )
         }
     }
 
@@ -486,9 +502,12 @@ final class AuthService {
     private func createPublicKeyCredentialRegistrationRequest(
         for username: String
     ) async throws
-        -> ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest
+        -> (
+            ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest,
+            String
+        )
     {
-        let challengeResponse = try await authServer
+        let (challengeResponse, session) = try await authServer
             .postWebAuthnRegisterChallenge(
                 requestData: WebAuthnRegisterChallengeRequest(
                     username: username
@@ -497,33 +516,51 @@ final class AuthService {
 
         let relyingPartyIdentifier = challengeResponse.rp.id
         let userId = Data(challengeResponse.user.id.utf8)
-        let challenge = Data(challengeResponse.challenge.utf8)
+
+        guard let challengeData = Data(
+            base64urlEncoded: challengeResponse.challenge
+        ) else {
+            throw ParraError.message("Failed to decode challenge")
+        }
+
         let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
             relyingPartyIdentifier: relyingPartyIdentifier
         )
 
-        return provider.createCredentialRegistrationRequest(
-            challenge: challenge,
+        let request = provider.createCredentialRegistrationRequest(
+            challenge: challengeData,
             name: username,
             userID: userId
         )
+
+        return (request, session)
     }
 
     private func createPublicKeyCredentialAssertionRequest(
         for username: String?
     ) async throws
-        -> ASAuthorizationPlatformPublicKeyCredentialAssertionRequest
+        -> (ASAuthorizationPlatformPublicKeyCredentialAssertionRequest, String)
     {
-        let challengeResponse = try await authServer
+        let (challengeResponse, session) = try await authServer
             .postWebAuthnAuthenticateChallenge(
                 requestData: WebAuthnAuthenticateChallengeRequest(
                     username: username
                 )
             )
 
-        guard let relyingPartyIdentifier = challengeResponse.rpId else {
+        guard
+            let relyingPartyIdentifier = challengeResponse.rpId,
+            let rpUrl = URL(string: relyingPartyIdentifier) else
+        {
             throw ParraError.message("Missing relying party identifier")
         }
+
+        // Server should return rpId as a host string but we've had issues where
+        // this has changed to include a scheme. It MUST be a host string when
+        // we pass it to the ASAuthorizationPlatformPublicKeyCredentialProvider.
+//        guard let rpHost = rpUrl.host(percentEncoded: false) else {
+//            throw ParraError.message("Failed to extract host from rpId")
+//        }
 
         let challenge = Data(challengeResponse.challenge.utf8)
         let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
@@ -542,7 +579,7 @@ final class AuthService {
             )
         }
 
-        return request
+        return (request, session)
     }
 
     // Lazy wrapper around the cached token that will access it or try to load

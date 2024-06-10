@@ -35,7 +35,7 @@ final class OAuth2Service {
         using signupType: AuthType
     ) async throws -> Token {
         var data: [String: String] = [
-            "scope": "offline_access",
+            "scope": "parra openid offline_access profile email phone",
             "client_id": clientId
         ]
 
@@ -49,6 +49,9 @@ final class OAuth2Service {
             data["code"] = code
         case .passwordlessSms(let code):
             data["grant_type"] = "passwordless_otp"
+            data["code"] = code
+        case .webauthn(let code):
+            data["grant_type"] = "webauthn_token"
             data["code"] = code
         }
 
