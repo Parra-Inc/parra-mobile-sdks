@@ -16,17 +16,23 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     // MARK: - Lifecycle
 
     public init(
-        params: Params
+        params: Params,
+        config: Config
     ) {
+        self.params = params
+        self.config = config
         self.primaryActionName = params.userExists ? "Log in" : "Sign Up"
         self.continueButtonContent = TextButtonContent(
             text: primaryActionName,
             isDisabled: true
         )
-        self.params = params
     }
 
     // MARK: - Public
+
+    public struct Config: ParraAuthScreenConfig {
+        public static var `default`: Config = .init()
+    }
 
     public var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
@@ -81,6 +87,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     private let primaryActionName: String
 
     private let params: Params
+    private let config: Config
 
     @State private var challengeResponse: ChallengeResponse?
     @State private var continueButtonContent: TextButtonContent
@@ -89,7 +96,6 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var navigationState: NavigationState
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
-    @EnvironmentObject private var flowManager: AuthenticationFlowManager
 
     private var challengeContent: some View {
         VStack(alignment: .center, spacing: 16) {
@@ -289,7 +295,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 ],
                 legalInfo: LegalInfo.validStates()[0],
                 submit: { _ in }
-            )
+            ),
+            config: .init()
         )
         .environmentObject(
             AuthenticationFlowManager(
@@ -315,7 +322,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 ],
                 legalInfo: LegalInfo.validStates()[0],
                 submit: { _ in }
-            )
+            ),
+            config: .init()
         )
         .environmentObject(
             AuthenticationFlowManager(
@@ -341,7 +349,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 ],
                 legalInfo: LegalInfo.validStates()[0],
                 submit: { _ in }
-            )
+            ),
+            config: .init()
         )
         .environmentObject(
             AuthenticationFlowManager(
@@ -367,13 +376,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 ],
                 legalInfo: LegalInfo.validStates()[0],
                 submit: { _ in }
-            )
-        )
-        .environmentObject(
-            AuthenticationFlowManager(
-                flowConfig: .default,
-                navigationState: .init()
-            )
+            ),
+            config: .init()
         )
     }
 }

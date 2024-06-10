@@ -25,15 +25,20 @@ class AuthenticationFlowManager: ObservableObject {
     // MARK: - Internal
 
     enum AuthScreen: CustomStringConvertible, Hashable {
-        case landingScreen(ParraAuthDefaultLandingScreen.Params)
-        case identityInputScreen(ParraAuthDefaultIdentityInputScreen.Params)
-        case identityChallengeScreen(
-            ParraAuthDefaultIdentityChallengeScreen
-                .Params
+        case landingScreen(
+            ParraAuthDefaultLandingScreen.Params
         )
+
+        case identityInputScreen(
+            ParraAuthDefaultIdentityInputScreen.Params
+        )
+
+        case identityChallengeScreen(
+            ParraAuthDefaultIdentityChallengeScreen.Params
+        )
+
         case identityVerificationScreen(
-            ParraAuthDefaultIdentityVerificationScreen
-                .Params
+            ParraAuthDefaultIdentityVerificationScreen.Params
         )
 
         // MARK: - Internal
@@ -72,7 +77,9 @@ class AuthenticationFlowManager: ObservableObject {
 
         switch authScreen {
         case .landingScreen(let params):
-            flowConfig.landingScreenProvider(params)
+            flowConfig.landingScreenProvider(
+                params
+            )
         case .identityInputScreen(let params):
             flowConfig.identityInputScreenProvider(
                 params
@@ -144,11 +151,19 @@ class AuthenticationFlowManager: ObservableObject {
                         to: .identityInputScreen(
                             ParraAuthDefaultIdentityInputScreen.Params(
                                 inputType: inputType,
-                                submit: { identity in
+                                submitIdentity: { identity in
                                     return try await self.onIdentitySubmitted(
                                         identity: identity,
                                         inputType: inputType,
                                         with: appInfo,
+                                        authService: authService
+                                    )
+                                },
+                                attemptPasskeyAutofill: {
+                                    try await self.triggerPasskeyLoginRequest(
+                                        username: nil,
+                                        presentationMode: .autofill,
+                                        using: appInfo,
                                         authService: authService
                                     )
                                 }
@@ -158,6 +173,14 @@ class AuthenticationFlowManager: ObservableObject {
                 case .sso:
                     fatalError("SSO unimplemented")
                 }
+            },
+            attemptPasskeyLogin: {
+                try await self.triggerPasskeyLoginRequest(
+                    username: nil,
+                    presentationMode: .modal,
+                    using: appInfo,
+                    authService: authService
+                )
             }
         )
     }
@@ -190,14 +213,15 @@ class AuthenticationFlowManager: ObservableObject {
                 to: .identityInputScreen(
                     ParraAuthDefaultIdentityInputScreen.Params(
                         inputType: .passkey,
-                        submit: { identity in
+                        submitIdentity: { identity in
                             return try await self.onIdentitySubmitted(
                                 identity: identity,
                                 inputType: .passkey,
                                 with: appInfo,
                                 authService: authService
                             )
-                        }
+                        },
+                        attemptPasskeyAutofill: nil
                     )
                 )
             )
@@ -210,7 +234,7 @@ class AuthenticationFlowManager: ObservableObject {
         presentationMode: AuthService.PasskeyPresentationMode,
         using appInfo: ParraAppInfo,
         authService: AuthService
-    ) async {
+    ) async throws {
         if !appInfo.auth.supportsPasskeys {
             logger.debug("Passkeys not enabled for this app")
 
@@ -223,11 +247,25 @@ class AuthenticationFlowManager: ObservableObject {
                 presentationMode: presentationMode,
                 using: appInfo
             )
+        } catch let error as ASAuthorizationError {
+            switch error.code {
+            case .canceled:
+                logger.debug("Passkey request canceled by user")
+            default:
+                logger.error(
+                    "Authorization error obtaining challenge for use with passkey",
+                    error
+                )
+
+                throw error
+            }
         } catch {
             logger.error(
-                "Error obtaining challenge for use with passkey",
+                "Unexpected error obtaining challenge for use with passkey",
                 error
             )
+
+            throw error
         }
     }
 
@@ -379,9 +417,18 @@ class AuthenticationFlowManager: ObservableObject {
         with appInfo: ParraAppInfo,
         authService: AuthService
     ) async throws {
-        try await authService.registerWithPasskey(
-            username: identity
-        )
+        do {
+            try await authService.registerWithPasskey(
+                username: identity
+            )
+
+        } catch let error as ASAuthorizationError {
+//            switch error {
+//
+//            }
+        } catch {
+            throw error
+        }
     }
 
     private func navigateToIdentityVerificationScreen(

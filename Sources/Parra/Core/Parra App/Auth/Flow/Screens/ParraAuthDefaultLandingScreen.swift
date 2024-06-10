@@ -12,28 +12,17 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     // MARK: - Lifecycle
 
     public init(
-        params: Params
+        params: Params,
+        config: Config
     ) {
         self.params = params
+        self.config = config
     }
 
     // MARK: - Public
 
-    public struct Params: ParraAuthScreenParams {
-        // MARK: - Lifecycle
-
-        public init(
-            availableAuthMethods: [ParraAuthenticationMethod],
-            selectAuthMethod: @escaping (ParraAuthenticationType) -> Void
-        ) {
-            self.availableAuthMethods = availableAuthMethods
-            self.selectAuthMethod = selectAuthMethod
-        }
-
-        // MARK: - Public
-
-        public let availableAuthMethods: [ParraAuthenticationMethod]
-        public let selectAuthMethod: (ParraAuthenticationType) -> Void
+    public struct Config: ParraAuthScreenConfig {
+        public static var `default`: Config = .init()
     }
 
     public var body: some View {
@@ -53,12 +42,14 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
             using: themeObserver.theme
         )
         .task {
-            await flowManager.triggerPasskeyLoginRequest(
-                username: nil,
-                presentationMode: .modal,
-                using: parraAppInfo,
-                authService: parra.parraInternal.authService
-            )
+            do {
+                try await params.attemptPasskeyLogin()
+            } catch {
+                Logger.error(
+                    "Failed passkey auto login on landing screen",
+                    error
+                )
+            }
         }
     }
 
@@ -69,11 +60,11 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     // MARK: - Private
 
     private let params: Params
+    private let config: Config
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var navigationState: NavigationState
-    @EnvironmentObject private var flowManager: AuthenticationFlowManager
     @Environment(\.parra) private var parra
 
     private var continueButtonTitle: String {
@@ -144,7 +135,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         componentFactory.buildPlainButton(
             config: ParraTextButtonConfig(
                 type: .primary,
-                size: .large,
+                size: .small,
                 isMaxWidth: true
             ),
             content: TextButtonContent(

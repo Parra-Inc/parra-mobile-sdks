@@ -42,19 +42,24 @@ final class AuthService {
     let authServer: AuthServer
     let authenticationMethod: ParraAuthType
 
-    private(set) var activeAuthorizationRequests: [
+    var activeAuthorizationRequests: [
         UnsafeMutableRawPointer: (
             ASAuthorizationController,
             AppleAuthCompletion
         )
     ] = [:]
 
+    let authorizationDelegateProxy =
+        AuthorizationControllerDelegateProxy()
+
     // https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow
 
     func login(
         authType: OAuth2Service.AuthType
     ) async -> ParraAuthResult {
-        logger.debug("Logging in with username/password")
+        logger.debug("Performing login", [
+            "authType": authType.description
+        ])
 
         do {
             let oauthToken = try await oauth2Service.authenticate(
@@ -62,76 +67,11 @@ final class AuthService {
             )
 
             // On login, get user info via login route instead of GET user-info
-            return await completeLogin(
+            return await _completeLogin(
                 with: oauthToken
             )
         } catch {
             return .unauthenticated(error)
-        }
-    }
-
-    func loginWithPasskey(
-        username: String?,
-        presentationMode: PasskeyPresentationMode,
-        using appInfo: ParraAppInfo
-    ) async throws {
-        let (
-            request,
-            session
-        ) = try await createPublicKeyCredentialAssertionRequest(
-            for: username
-        )
-
-        // begin authorization needs to be promise, return result. Look at result
-        // to determine if proceed to login or navigate
-
-        let authorization = try await beginAuthorization(
-            for: [request],
-            using: presentationMode
-        )
-
-        // TODO: Handle the authorization result
-//        await applyUserUpdate(.authenticated(user))
-    }
-
-    func registerWithPasskey(
-        username: String
-    ) async throws {
-        let (
-            request,
-            session
-        ) = try await createPublicKeyCredentialRegistrationRequest(
-            for: username
-        )
-
-        let authorization = try await beginAuthorization(
-            for: [request],
-            using: .modal
-        )
-
-        // TODO: If user already exists error, login? 409 from server or apple error?
-
-        let accessToken = try await processPasskeyAuthorization(
-            authorization: authorization,
-            session: session
-        )
-
-        let authResult = await login(
-            authType: .webauthn(code: accessToken)
-        )
-
-        await applyUserUpdate(authResult)
-    }
-
-    func linkPasskeyToAccount() async throws {}
-
-    func cancelPasskeyRequests() {
-        // Cancel active requests by calling cancel on the authorization
-        // controllers they are attached to. This will cause the authorization
-        // delegate to fire an error -> cancelled, which will resolve the
-        // completion handlers and remove the requests.
-        for (_, value) in activeAuthorizationRequests {
-            value.0.cancel()
         }
     }
 
@@ -167,7 +107,7 @@ final class AuthService {
             )
             logger.debug("Finished auth endpoint")
 
-            return await completeLogin(
+            return await _completeLogin(
                 with: oauthToken
             )
         } catch {
@@ -207,59 +147,6 @@ final class AuthService {
         return try await authServer.postAuthChallenges(
             requestData: body
         )
-    }
-
-    func passwordlessSendCode(
-        email: String? = nil,
-        phoneNumber: String? = nil
-    ) async throws -> ParraPasswordlessChallengeResponse {
-        logger.debug("Sending passwordless code", [
-            "email": email ?? "nil",
-            "phoneNumber": phoneNumber ?? "nil"
-        ])
-
-        if email == nil, phoneNumber == nil {
-            throw ParraError.message(
-                "Either email or phone number must be provided"
-            )
-        }
-
-        let body = PasswordlessChallengeRequestBody(
-            clientId: authServer.appState.applicationId,
-            email: email,
-            phoneNumber: phoneNumber
-        )
-
-        return try await authServer.postPasswordless(
-            requestData: body
-        )
-    }
-
-    func passwordlessVerifyCode(
-        type: ParraAuthenticationMethod.PasswordlessType,
-        code: String
-    ) async throws -> ParraAuthResult {
-        logger.debug("Confirming passwordless code")
-
-        let authType: OAuth2Service.AuthType = switch type {
-        case .sms:
-            .passwordlessSms(code: code)
-        case .email:
-            .passwordlessEmail(code: code)
-        }
-
-        do {
-            let oauthToken = try await oauth2Service.authenticate(
-                using: authType
-            )
-
-            // On login, get user info via login route instead of GET user-info
-            return await completeLogin(
-                with: oauthToken
-            )
-        } catch {
-            return .unauthenticated(error)
-        }
     }
 
     func getCurrentUser() async -> ParraUser? {
@@ -381,206 +268,31 @@ final class AuthService {
         )
     }
 
+    func _completeLogin(
+        with oauthToken: OAuth2Service.Token
+    ) async -> ParraAuthResult {
+        do {
+            let userInfo = try await authServer.postLogin(
+                accessToken: oauthToken.accessToken
+            )
+
+            let user = ParraUser(
+                credential: .oauth2(oauthToken),
+                info: userInfo
+            )
+
+            return .authenticated(user)
+        } catch {
+            logger.error("Failed to login with oauth token", error)
+
+            return .unauthenticated(error)
+        }
+    }
+
     // MARK: - Private
 
     // The actual cached token.
     private var _cachedToken: ParraUser.Credential?
-    private let authorizationDelegateProxy =
-        AuthorizationControllerDelegateProxy()
-
-    private func processPasskeyAuthorization(
-        authorization: ASAuthorization,
-        session: String
-    ) async throws -> String {
-        if let credential = authorization
-            .credential as? ASAuthorizationPlatformPublicKeyCredentialRegistration
-        {
-            let id = credential.credentialID.base64urlEncodedString()
-            let clientData = credential.rawClientDataJSON
-                .base64urlEncodedString()
-
-            guard let rawAttestationObject = credential.rawAttestationObject else {
-                throw ParraError.message("Failed to decode attestation object")
-            }
-
-            let attestationObject = rawAttestationObject
-                .base64urlEncodedString()
-
-            let response = try await authServer.postWebAuthnRegister(
-                requestData: WebauthnRegisterRequestBody(
-                    id: id,
-                    rawId: id,
-                    response: AuthenticatorAttestationResponse(
-                        clientDataJSON: clientData,
-                        attestationObject: attestationObject
-                    ),
-                    type: "public-key",
-                    user: nil
-                ),
-                session: session
-            )
-
-            return response.token
-        } else if let credential = authorization
-            .credential as? ASAuthorizationPlatformPublicKeyCredentialAssertion
-        {
-            // Take steps to verify the challenge.
-            let dataString = String(
-                data: credential.rawClientDataJSON,
-                encoding: .utf8
-            )!
-
-            print("-------------------------------")
-            print(dataString)
-
-            return ""
-        } else {
-            throw ParraError.message(
-                "Unhandled authorization credential type"
-            )
-        }
-    }
-
-    private func beginAuthorization(
-        for authorizationRequests: [ASAuthorizationRequest],
-        using presentationMode: PasskeyPresentationMode
-    ) async throws -> ASAuthorization {
-        if !activeAuthorizationRequests.isEmpty {
-            logger.debug("Apple authorization requests already in progress")
-
-            cancelPasskeyRequests()
-        }
-
-        return try await withCheckedThrowingContinuation { continuation in
-            performAuthorization(
-                for: authorizationRequests,
-                using: .modal
-            ) { result in
-                continuation.resume(with: result)
-            }
-        }
-    }
-
-    private func performAuthorization(
-        for authorizationRequests: [ASAuthorizationRequest],
-        using presentationMode: PasskeyPresentationMode,
-        completion: @escaping AppleAuthCompletion
-    ) {
-        let activeAuthorizationController = ASAuthorizationController(
-            authorizationRequests: authorizationRequests
-        )
-
-        authorizationDelegateProxy.authService = self
-        activeAuthorizationController.delegate = authorizationDelegateProxy
-        activeAuthorizationController
-            .presentationContextProvider = authorizationDelegateProxy
-
-        switch presentationMode {
-        case .modal:
-            // This will display the passkey prompt, only if the user
-            // already has a passkey. If they don't an error will be sent
-            // to the delegate, which we will ignore. If the user didn't
-            // have a passkey, they probably don't want the popup, and they
-            // will have the opportunity to create one later.
-            activeAuthorizationController.performRequests(
-                options: .preferImmediatelyAvailableCredentials
-            )
-        case .autofill:
-            // to display in quicktype
-            activeAuthorizationController.performAutoFillAssistedRequests()
-        }
-
-        let addr = Unmanaged.passUnretained(activeAuthorizationController)
-            .toOpaque()
-
-        activeAuthorizationRequests[addr] = (
-            activeAuthorizationController,
-            completion
-        )
-    }
-
-    private func createPublicKeyCredentialRegistrationRequest(
-        for username: String
-    ) async throws
-        -> (
-            ASAuthorizationPlatformPublicKeyCredentialRegistrationRequest,
-            String
-        )
-    {
-        let (challengeResponse, session) = try await authServer
-            .postWebAuthnRegisterChallenge(
-                requestData: WebAuthnRegisterChallengeRequest(
-                    username: username
-                )
-            )
-
-        let relyingPartyIdentifier = challengeResponse.rp.id
-        let userId = Data(challengeResponse.user.id.utf8)
-
-        guard let challengeData = Data(
-            base64urlEncoded: challengeResponse.challenge
-        ) else {
-            throw ParraError.message("Failed to decode challenge")
-        }
-
-        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
-            relyingPartyIdentifier: relyingPartyIdentifier
-        )
-
-        let request = provider.createCredentialRegistrationRequest(
-            challenge: challengeData,
-            name: username,
-            userID: userId
-        )
-
-        return (request, session)
-    }
-
-    private func createPublicKeyCredentialAssertionRequest(
-        for username: String?
-    ) async throws
-        -> (ASAuthorizationPlatformPublicKeyCredentialAssertionRequest, String)
-    {
-        let (challengeResponse, session) = try await authServer
-            .postWebAuthnAuthenticateChallenge(
-                requestData: WebAuthnAuthenticateChallengeRequest(
-                    username: username
-                )
-            )
-
-        guard
-            let relyingPartyIdentifier = challengeResponse.rpId,
-            let rpUrl = URL(string: relyingPartyIdentifier) else
-        {
-            throw ParraError.message("Missing relying party identifier")
-        }
-
-        // Server should return rpId as a host string but we've had issues where
-        // this has changed to include a scheme. It MUST be a host string when
-        // we pass it to the ASAuthorizationPlatformPublicKeyCredentialProvider.
-//        guard let rpHost = rpUrl.host(percentEncoded: false) else {
-//            throw ParraError.message("Failed to extract host from rpId")
-//        }
-
-        let challenge = Data(challengeResponse.challenge.utf8)
-        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
-            relyingPartyIdentifier: relyingPartyIdentifier
-        )
-
-        let request = provider.createCredentialAssertionRequest(
-            challenge: challenge
-        )
-
-        // used when we have context about the user, like when they've typed in their username
-        let allowCredentials = challengeResponse.allowCredentials ?? []
-        request.allowedCredentials = allowCredentials.map { credential in
-            return ASAuthorizationPlatformPublicKeyCredentialDescriptor(
-                credentialID: Data(credential.id.utf8)
-            )
-        }
-
-        return (request, session)
-    }
 
     // Lazy wrapper around the cached token that will access it or try to load
     // it from disk.
@@ -691,26 +403,5 @@ final class AuthService {
         }
 
         await dataManager.updateCurrentUserCredential(credential)
-    }
-
-    private func completeLogin(
-        with oauthToken: OAuth2Service.Token
-    ) async -> ParraAuthResult {
-        do {
-            let userInfo = try await authServer.postLogin(
-                accessToken: oauthToken.accessToken
-            )
-
-            let user = ParraUser(
-                credential: .oauth2(oauthToken),
-                info: userInfo
-            )
-
-            return .authenticated(user)
-        } catch {
-            logger.error("Failed to login with oauth token", error)
-
-            return .unauthenticated(error)
-        }
     }
 }

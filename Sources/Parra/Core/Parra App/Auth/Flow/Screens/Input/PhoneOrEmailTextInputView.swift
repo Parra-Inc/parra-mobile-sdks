@@ -206,7 +206,7 @@ struct PhoneOrEmailTextInputView: View {
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
 
-    @ViewBuilder private var content: some View {
+    @ViewBuilder private var textField: some View {
         let keyboardType: UIKeyboardType = switch defaultMode {
         case .phone:
             .phonePad
@@ -233,27 +233,6 @@ struct PhoneOrEmailTextInputView: View {
             "Email address"
         case .auto:
             "Email or phone number"
-        }
-
-        let textInputAttributes = componentFactory.attributeProvider
-            .textInputAttributes(
-                config: .default,
-                localAttributes: attributes,
-                theme: themeObserver.theme
-            )
-
-        if currentMode == .phone {
-            Button {
-                presentSheet = true
-                keyIsFocused = false
-            } label: {
-                Text("\(selectedCountry.flag) \(selectedCountry.code)")
-                    .frame(minWidth: 56)
-            }
-            .applyTextInputAttributes(
-                textInputAttributes,
-                using: themeObserver.theme
-            )
         }
 
         TextField(
@@ -294,46 +273,71 @@ struct PhoneOrEmailTextInputView: View {
         .autocorrectionDisabled(true)
         .textContentType(contentType)
         .textInputAutocapitalization(.never)
-        .applyTextInputAttributes(
-            textInputAttributes,
-            using: themeObserver.theme
-        )
-        .onChange(of: selectedCountry) { oldValue, _ in
-            entry.trimPrefix(oldValue.dialCode)
-        }
-        .onChange(of: entry) { _, newValue in
-            // If the mode isn't auto, don't change it
-            guard defaultMode == .auto else {
-                return
-            }
+    }
 
-            let trimmed = newValue.trimmingCharacters(
-                in: .whitespacesAndNewlines
+    @ViewBuilder private var content: some View {
+        let textInputAttributes = componentFactory.attributeProvider
+            .textInputAttributes(
+                config: .default,
+                localAttributes: attributes,
+                theme: themeObserver.theme
             )
 
-            // Let the user enter a few characters before potentially
-            // changing the UI
-            guard trimmed.count >= 3 else {
-                // If the text input is cleared, we have to reset which
-                // mode it was last known to be in.
-                if trimmed.isEmpty {
-                    withAnimation(.snappy) {
-                        currentMode = .auto
-                    }
+        if currentMode == .phone {
+            Button {
+                presentSheet = true
+                keyIsFocused = false
+            } label: {
+                Text("\(selectedCountry.flag) \(selectedCountry.code)")
+                    .frame(minWidth: 56)
+            }
+            .applyTextInputAttributes(
+                textInputAttributes,
+                using: themeObserver.theme
+            )
+        }
+
+        textField
+            .applyTextInputAttributes(
+                textInputAttributes,
+                using: themeObserver.theme
+            )
+            .onChange(of: selectedCountry) { oldValue, _ in
+                entry.trimPrefix(oldValue.dialCode)
+            }
+            .onChange(of: entry) { _, newValue in
+                // If the mode isn't auto, don't change it
+                guard defaultMode == .auto else {
+                    return
                 }
 
-                return
-            }
+                let trimmed = newValue.trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                )
 
-            withAnimation(.snappy) {
-                currentMode = trimmed.matches(
-                    pattern: /^.*[a-zA-Z]+.*$/
-                ) ? .email : .phone
+                // Let the user enter a few characters before potentially
+                // changing the UI
+                guard trimmed.count >= 3 else {
+                    // If the text input is cleared, we have to reset which
+                    // mode it was last known to be in.
+                    if trimmed.isEmpty {
+                        withAnimation(.snappy) {
+                            currentMode = .auto
+                        }
+                    }
+
+                    return
+                }
+
+                withAnimation(.snappy) {
+                    currentMode = trimmed.matches(
+                        pattern: /^.*[a-zA-Z]+.*$/
+                    ) ? .email : .phone
+                }
             }
-        }
-        .onSubmit(of: .text) {
-            onSubmit?()
-        }
+            .onSubmit(of: .text) {
+                onSubmit?()
+            }
     }
 }
 

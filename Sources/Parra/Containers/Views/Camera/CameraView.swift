@@ -23,11 +23,80 @@ struct CameraView: View {
 
     let onComplete: (UIImage?) -> Void
 
-    @ViewBuilder var renderCamera: some View {
+    var body: some View {
+        primaryContent
+            .onAppear {
+                UIDevice.current.setValue(
+                    UIInterfaceOrientation.portrait.rawValue,
+                    forKey: "orientation"
+                ) // Forcing the rotation to portrait
+
+                ParraAppDelegate
+                    .orientationLock =
+                    .portrait // And making sure it stays that way
+            }
+            .onDisappear {
+                ParraAppDelegate
+                    .orientationLock =
+                    .all // Unlocking the rotation when leaving the view
+            }
+            .ignoresSafeArea()
+            .statusBar(hidden: true)
+            .task {
+                permissionGranted = await model.camera.checkAuthorization()
+
+                for await photo in model.camera.photoStream {
+                    guard let data = photo.fileDataRepresentation() else {
+                        continue
+                    }
+
+                    guard let image = UIImage(data: data) else {
+                        continue
+                    }
+
+                    Task { @MainActor in
+                        withAnimation {
+                            previewImage = image
+                        }
+                    }
+                }
+            }
+            .onChange(of: permissionGranted) { _, newValue in
+                Task {
+                    if newValue == true {
+                        await model.camera.start()
+                    } else if newValue == false {
+                        model.camera.stop()
+                    }
+                }
+            }
+    }
+
+    @ViewBuilder var renderPermissionView: some View {
+        CameraPermissionDeniedView()
+    }
+
+    @ViewBuilder
+    func renderPreview(with image: UIImage) -> some View {
+        ViewfinderView(
+            image: .constant(Image(uiImage: image))
+        )
+    }
+
+    // MARK: - Private
+
+    private static let barHeightFactor = 0.15
+
+    @State private var previewImage: UIImage?
+
+    @StateObject private var model = CameraDataModel()
+    @State private var captureButtonScale = 1.0
+
+    @ViewBuilder private var renderCamera: some View {
         ViewfinderView(image: $model.viewfinderImage)
     }
 
-    @ViewBuilder var main: some View {
+    @ViewBuilder private var main: some View {
         if let previewImage {
             renderPreview(with: previewImage)
         } else {
@@ -35,7 +104,7 @@ struct CameraView: View {
         }
     }
 
-    var body: some View {
+    @ViewBuilder private var primaryContent: some View {
         GeometryReader { geometry in
             main
                 .overlay(alignment: .top) {
@@ -70,72 +139,7 @@ struct CameraView: View {
                 }
                 .background(.black)
         }
-        .onAppear {
-            UIDevice.current.setValue(
-                UIInterfaceOrientation.portrait.rawValue,
-                forKey: "orientation"
-            ) // Forcing the rotation to portrait
-
-            ParraAppDelegate
-                .orientationLock =
-                .portrait // And making sure it stays that way
-        }
-        .onDisappear {
-            ParraAppDelegate
-                .orientationLock =
-                .all // Unlocking the rotation when leaving the view
-        }
-        .ignoresSafeArea()
-        .statusBar(hidden: true)
-        .task {
-            permissionGranted = await model.camera.checkAuthorization()
-
-            for await photo in model.camera.photoStream {
-                guard let data = photo.fileDataRepresentation() else {
-                    continue
-                }
-
-                guard let image = UIImage(data: data) else {
-                    continue
-                }
-
-                Task { @MainActor in
-                    withAnimation {
-                        previewImage = image
-                    }
-                }
-            }
-        }
-        .onChange(of: permissionGranted) { _, newValue in
-            Task {
-                if newValue == true {
-                    await model.camera.start()
-                } else if newValue == false {
-                    model.camera.stop()
-                }
-            }
-        }
     }
-
-    @ViewBuilder var renderPermissionView: some View {
-        CameraPermissionDeniedView()
-    }
-
-    @ViewBuilder
-    func renderPreview(with image: UIImage) -> some View {
-        ViewfinderView(
-            image: .constant(Image(uiImage: image))
-        )
-    }
-
-    // MARK: - Private
-
-    private static let barHeightFactor = 0.15
-
-    @State private var previewImage: UIImage?
-
-    @StateObject private var model = CameraDataModel()
-    @State private var captureButtonScale = 1.0
 
     @ViewBuilder
     private func buttonsView() -> some View {

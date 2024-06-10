@@ -14,15 +14,21 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     // MARK: - Lifecycle
 
     public init(
-        params: Params
+        params: Params,
+        config: Config
     ) {
         self.params = params
+        self.config = config
         self.continueButtonContent = .init(
             text: "Send code"
         )
     }
 
     // MARK: - Public
+
+    public struct Config: ParraAuthScreenConfig {
+        public static var `default`: Config = .init()
+    }
 
     public var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
@@ -34,72 +40,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
         )
 
         ScrollView {
-            VStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 12) {
-                    componentFactory.buildLabel(
-                        text: "Confirm your identity",
-                        localAttributes: ParraAttributes.Label(
-                            text: ParraAttributes.Text(
-                                style: .title
-                            )
-                        )
-                    )
-                    .layoutPriority(20)
-
-                    componentFactory.buildLabel(
-                        text: "We'll send a \(requiredLength)-digit code to \(params.identity) verify your identity.",
-                        localAttributes: ParraAttributes.Label(
-                            text: ParraAttributes.Text(
-                                style: .subheadline
-                            )
-                        )
-                    )
-                    .layoutPriority(20)
-                }
-                .layoutPriority(20)
-
-                ChallengeVerificationView(
-                    passwordlessConfig: params.passwordlessConfig,
-                    // ignore input before we've sent a code
-                    disabled: challengeResponse == nil
-                ) { challenge, _ in
-                    if challengeResponse != nil {
-                        currentCode = challenge.trimmingCharacters(
-                            in: .whitespacesAndNewlines
-                        )
-
-                        continueButtonContent = TextButtonContent(
-                            text: continueButtonContent.text,
-                            isDisabled: currentCode.count < requiredLength
-                        )
-                    }
-                } onSubmit: { _, _ in }
-                    .applyPadding(
-                        size: .md,
-                        from: themeObserver.theme
-                    )
-                    .layoutPriority(15)
-
-                actions
-                    .layoutPriority(10)
-
-                Spacer()
-                    .layoutPriority(1)
-
-                componentFactory.buildLabel(
-                    text: disclaimerText,
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            style: .footnote,
-                            color: themeObserver.theme.palette.secondaryText
-                                .toParraColor(),
-                            alignment: .center
-                        ),
-                        padding: .md
-                    )
-                )
-                .layoutPriority(10)
-            }
+            primaryContent
         }
         .frame(
             maxWidth: .infinity,
@@ -163,6 +104,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     // MARK: - Private
 
     private let params: Params
+    private let config: Config
 
     // Presence of this indicates that a code has been sent.
     @State private var challengeResponse: ParraPasswordlessChallengeResponse?
@@ -181,7 +123,75 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var navigationState: NavigationState
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
-    @EnvironmentObject private var flowManager: AuthenticationFlowManager
+
+    @ViewBuilder private var primaryContent: some View {
+        VStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 12) {
+                componentFactory.buildLabel(
+                    text: "Confirm your identity",
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            style: .title
+                        )
+                    )
+                )
+                .layoutPriority(20)
+
+                componentFactory.buildLabel(
+                    text: "We'll send a \(requiredLength)-digit code to \(params.identity) verify your identity.",
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            style: .subheadline
+                        )
+                    )
+                )
+                .layoutPriority(20)
+            }
+            .layoutPriority(20)
+
+            ChallengeVerificationView(
+                passwordlessConfig: params.passwordlessConfig,
+                // ignore input before we've sent a code
+                disabled: challengeResponse == nil
+            ) { challenge, _ in
+                if challengeResponse != nil {
+                    currentCode = challenge.trimmingCharacters(
+                        in: .whitespacesAndNewlines
+                    )
+
+                    continueButtonContent = TextButtonContent(
+                        text: continueButtonContent.text,
+                        isDisabled: currentCode.count < requiredLength
+                    )
+                }
+            } onSubmit: { _, _ in }
+                .applyPadding(
+                    size: .md,
+                    from: themeObserver.theme
+                )
+                .layoutPriority(15)
+
+            actions
+                .layoutPriority(10)
+
+            Spacer()
+                .layoutPriority(1)
+
+            componentFactory.buildLabel(
+                text: disclaimerText,
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        style: .footnote,
+                        color: themeObserver.theme.palette.secondaryText
+                            .toParraColor(),
+                        alignment: .center
+                    ),
+                    padding: .md
+                )
+            )
+            .layoutPriority(10)
+        }
+    }
 
     @ViewBuilder private var actions: some View {
         if let challengeResponse {
@@ -356,13 +366,8 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                 },
                 verifyCode: { _ in
                 }
-            )
-        )
-        .environmentObject(
-            AuthenticationFlowManager(
-                flowConfig: .default,
-                navigationState: .init()
-            )
+            ),
+            config: .init()
         )
     }
 }

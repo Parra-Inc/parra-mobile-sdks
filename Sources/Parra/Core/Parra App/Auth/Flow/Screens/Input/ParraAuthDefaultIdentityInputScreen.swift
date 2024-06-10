@@ -13,53 +13,22 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     // MARK: - Lifecycle
 
     public init(
-        params: Params
+        params: Params,
+        config: Config
     ) {
         self.params = params
+        self.config = config
     }
 
     // MARK: - Public
 
-    public struct Params: ParraAuthScreenParams {
-        // MARK: - Lifecycle
-
-        public init(
-            inputType: ParraIdentityInputType,
-            submit: @escaping (_ identity: String) async throws -> Void
-        ) {
-            self.inputType = inputType
-            self.submit = submit
-        }
-
-        // MARK: - Public
-
-        public let inputType: ParraIdentityInputType
-        public let submit: (_ identity: String) async throws -> Void
+    public struct Config: ParraAuthScreenConfig {
+        public static var `default`: Config = .init()
     }
 
     public var body: some View {
         VStack(alignment: .leading) {
-            componentFactory.buildLabel(
-                content: LabelContent(text: identityFieldTitle),
-                localAttributes: ParraAttributes.Label(
-                    text: .default(with: .title),
-                    padding: .md
-                )
-            )
-
-            primaryField
-
-            componentFactory.buildContainedButton(
-                config: ParraTextButtonConfig(
-                    type: .primary,
-                    size: .large,
-                    isMaxWidth: true
-                ),
-                content: continueButtonContent,
-                onPress: submit
-            )
-
-            Spacer()
+            primaryContent
         }
         .frame(
             maxWidth: .infinity,
@@ -73,6 +42,10 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 text: continueButtonContent.text,
                 isDisabled: identity.isEmpty
             )
+
+            if params.inputType == .passkey {
+                focusState = .passkeyEmail
+            }
         }
         .task {
             // This is for getting the passkey option in the quick type bar
@@ -80,12 +53,11 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             // If you're on this screen to create a passkey it shouldn't
             // be shown.
             if params.inputType != .passkey {
-                await flowManager.triggerPasskeyLoginRequest(
-                    username: nil,
-                    presentationMode: .autofill,
-                    using: parraAppInfo,
-                    authService: parra.parraInternal.authService
-                )
+                do {
+                    try await params.attemptPasskeyAutofill?()
+                } catch {
+                    Logger.error("Failed to attempt passkey autofill", error)
+                }
             }
         }
         .onChange(of: identity) { _, newValue in
@@ -101,6 +73,16 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     }
 
     // MARK: - Internal
+
+    enum Error {
+        case invalidEmail
+        case invalidPhone
+        case networkFailure
+    }
+
+    enum Field {
+        case passkeyEmail
+    }
 
     @ViewBuilder var primaryField: some View {
         if params.inputType == .passkey {
@@ -118,6 +100,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                     }
                 )
             )
+            .focused($focusState, equals: .passkeyEmail)
             .onSubmit(of: .text) {
                 submit()
             }
@@ -153,15 +136,54 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     )
     @State private var emailPhoneFieldCurrentMode: PhoneOrEmailTextInputView
         .Mode = .auto
+    @State private var errorMessage: String?
+
+    @FocusState private var focusState: Field?
 
     private let params: Params
+    private let config: Config
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var navigationState: NavigationState
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
-    @EnvironmentObject private var flowManager: AuthenticationFlowManager
     @Environment(\.parra) private var parra
+
+    @ViewBuilder private var primaryContent: some View {
+        componentFactory.buildLabel(
+            content: LabelContent(text: identityFieldTitle),
+            localAttributes: ParraAttributes.Label(
+                text: .default(with: .title),
+                padding: .md
+            )
+        )
+
+        primaryField
+
+        if let errorMessage {
+            componentFactory.buildLabel(
+                content: LabelContent(text: errorMessage),
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        color: themeObserver.theme.palette.error.toParraColor()
+                    ),
+                    padding: .md
+                )
+            )
+        }
+
+        componentFactory.buildContainedButton(
+            config: ParraTextButtonConfig(
+                type: .primary,
+                size: .large,
+                isMaxWidth: true
+            ),
+            content: continueButtonContent,
+            onPress: submit
+        )
+
+        Spacer()
+    }
 
     private var identityFieldTitle: String {
         switch params.inputType {
@@ -172,22 +194,35 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         case .emailOrPhone:
             return "Email or phone number"
         case .passkey:
-            return "Passkey"
+            // With other input types we don't know if the user is logging in
+            // or registering. With this one, we do, because they will have been
+            // prompted to use existing passkeys by this point.
+            return "Register with passkey"
         }
     }
 
     private func submit() {
-        continueButtonContent = continueButtonContent.withLoading(true)
+        withAnimation {
+            errorMessage = nil
+            continueButtonContent = continueButtonContent.withLoading(true)
+        }
 
         Task {
             do {
-                try await params.submit(identity)
+                try await params.submitIdentity(identity)
             } catch {
-                print(error)
+                withAnimation {
+                    errorMessage = error.localizedDescription
+                }
+
+                Logger.error("Failed to submit identity", error)
             }
 
             Task { @MainActor in
-                continueButtonContent = continueButtonContent.withLoading(false)
+                withAnimation {
+                    continueButtonContent = continueButtonContent
+                        .withLoading(false)
+                }
             }
         }
     }
