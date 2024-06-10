@@ -80,10 +80,6 @@ extension AuthService {
             return
         }
 
-        logger.error("Error from authorization controller", error, [
-            "code": error.code.rawValue
-        ])
-
         switch error.code {
         case .canceled:
             logger.info("Authorization was canceled")
@@ -102,6 +98,8 @@ extension AuthService {
         }
 
         completion(.failure(error))
+
+        activeAuthorizationRequests.removeValue(forKey: addr)
     }
 
     func authorizationController(
@@ -127,6 +125,8 @@ extension AuthService {
         ])
 
         completion(.success(authorization))
+
+        activeAuthorizationRequests.removeValue(forKey: addr)
     }
 
     func presentationAnchor(

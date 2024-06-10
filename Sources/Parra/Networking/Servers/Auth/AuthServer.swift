@@ -225,6 +225,27 @@ final class AuthServer: Server {
         return data
     }
 
+    func postWebAuthnAuthenticate(
+        requestData: WebauthnAuthenticateRequestBody,
+        session: String
+    ) async throws -> WebauthnAuthenticateResponseBody {
+        let body = try JSONEncoder.parraWebauthEncoder.encode(requestData)
+
+        let (data, _): (
+            WebauthnAuthenticateResponseBody,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
+            to: .postWebAuthnAuthenticate,
+            with: nil,
+            extraHeaders: [
+                parraWebauthnSessionHeader: session
+            ],
+            body: body
+        )
+
+        return data
+    }
+
     func getUserInfo(
         accessToken: String,
         timeout: TimeInterval? = nil
