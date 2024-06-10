@@ -138,7 +138,11 @@ class ParraInternal {
     func performActionsRequiredForAppLaunch() async throws
         -> LaunchActionsResult
     {
+        let start = Logger.info("Started launch screen actions")
+
         let appInfo = try await fetchLatestAppInfo()
+
+        Logger.measureTime(since: start, "Launch screen actions completed")
 
         return LaunchActionsResult(
             appInfo: appInfo
@@ -201,7 +205,8 @@ class ParraInternal {
                 "versionToken": String(describing: appInfo.versionToken)
             ])
 
-            await MainActor.run {
+            // Do NOT await this. We don't want to block the splash screen.
+            Task { @MainActor in
                 appState.appInfo = appInfo
             }
 
