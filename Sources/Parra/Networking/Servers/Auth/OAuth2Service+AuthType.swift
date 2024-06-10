@@ -9,7 +9,7 @@
 import Foundation
 
 extension OAuth2Service {
-    enum AuthType {
+    enum AuthType: CustomStringConvertible {
         case usernamePassword(
             username: String,
             password: String
@@ -19,5 +19,20 @@ extension OAuth2Service {
         case passwordlessSms(code: String)
 
         case webauthn(code: String)
+
+        // MARK: - Internal
+
+        var description: String {
+            switch self {
+            case .usernamePassword:
+                return "usernamePassword"
+            case .passwordlessEmail:
+                return "passwordlessEmail"
+            case .passwordlessSms:
+                return "passwordlessSms"
+            case .webauthn:
+                return "webauthn"
+            }
+        }
     }
 }
