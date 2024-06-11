@@ -9,19 +9,13 @@
 import Foundation
 @testable import Parra
 
-extension ParraEndpoint {
+extension ApiEndpoint {
     func getMockResponseData(for status: Int = 200) throws -> Data {
         let object: Codable = switch status {
         case 200 ..< 300:
             switch self {
-            case .getUserInfo, .postLogin, .postLogout, .postUpdateAvatar,
-                 .postAuthChallenges, .postPasswordless,
-                 .postWebAuthnRegisterChallenge,
-                 .postWebAuthnAuthenticateChallenge,
-                 .postWebAuthnRegister, .postWebAuthnAuthenticate:
+            case .getUserInfo, .postLogin, .postLogout, .postUpdateAvatar:
                 fatalError()
-            case .postCreateUser:
-                UserInfoResponse.validStates()[0]
             case .getCards:
                 ParraCardItemFixtures.cardsResponse
             case .getFeedbackForm(let formId):
@@ -34,8 +28,6 @@ extension ParraEndpoint {
                 ParraSessionsResponse.successResponse
             case .postPushTokens:
                 EmptyResponseObject()
-            case .postAuthentication:
-                ParraUser.Credential.successResponse
             case .getRoadmap:
                 AppRoadmapConfiguration.validStates()[0]
             case .getPaginateTickets:

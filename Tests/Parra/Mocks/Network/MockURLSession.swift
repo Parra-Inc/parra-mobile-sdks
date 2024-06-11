@@ -76,7 +76,7 @@ class MockURLSession: URLSessionType {
     }
 
     func expectInvocation(
-        of endpoint: ParraEndpoint,
+        of endpoint: ApiEndpoint,
         times: Int = 1,
         matching predicate: ((URLRequest) throws -> Bool)? = nil,
         toReturn responder: (() throws -> (Int, Data))? = nil
@@ -98,7 +98,7 @@ class MockURLSession: URLSessionType {
     }
 
     func expectInvocation(
-        of endpoint: ParraEndpoint,
+        of endpoint: ApiEndpoint,
         times: Int = 1,
         matching predicate: ((URLRequest) throws -> Bool)? = nil,
         toReturn value: (Int, some Codable)
@@ -146,7 +146,7 @@ class MockURLSession: URLSessionType {
 
         do {
             let responseStatus = 200
-            let responseData = try ParraEndpoint.getMock3rdPartyResponseData(
+            let responseData = try ApiEndpoint.getMock3rdPartyResponseData(
                 for: url,
                 status: responseStatus
             )
@@ -155,22 +155,30 @@ class MockURLSession: URLSessionType {
                 request: request,
                 status: responseStatus,
                 slug: absoluteUrl,
-                route: absoluteUrl,
+                url: url,
                 data: responseData
             )
         } catch {
             return handleRequestResolutionError(
                 error,
                 request: request,
-                route: absoluteUrl
+                url: url
             )
         }
     }
 
     private func resolveParraApiRequest(
         _ request: URLRequest,
-        endpoint: ParraEndpoint
+        endpoint: ApiEndpoint
     ) -> DataTaskResponse {
+        let url = try! EndpointResolver.resolve(
+            endpoint: endpoint,
+            using: ParraAppState(
+                tenantId: .uuid,
+                applicationId: .uuid
+            )
+        )
+
         do {
             let responseStatus = 200
             let responseData = try endpoint.getMockResponseData(
@@ -181,7 +189,7 @@ class MockURLSession: URLSessionType {
                 request: request,
                 status: responseStatus,
                 slug: endpoint.slug,
-                route: endpoint.route,
+                url: url,
                 data: responseData
             )
 
@@ -189,7 +197,7 @@ class MockURLSession: URLSessionType {
             return handleRequestResolutionError(
                 error,
                 request: request,
-                route: endpoint.route
+                url: url
             )
         }
     }
@@ -198,7 +206,7 @@ class MockURLSession: URLSessionType {
         request: URLRequest,
         status: Int,
         slug: String,
-        route: String,
+        url: URL,
         data: Data
     ) throws -> DataTaskResponse {
         var responseStatus = status
@@ -250,7 +258,7 @@ class MockURLSession: URLSessionType {
         return (
             responseData,
             createTestResponse(
-                route: route,
+                url: url,
                 statusCode: responseStatus
             ),
             nil
@@ -260,7 +268,7 @@ class MockURLSession: URLSessionType {
     private func handleRequestResolutionError(
         _ error: Error,
         request: URLRequest,
-        route: String
+        url: URL
     ) -> DataTaskResponse {
         if let body = request.httpBody {
             testCase.addJsonAttachment(
@@ -279,7 +287,7 @@ class MockURLSession: URLSessionType {
         return (
             nil,
             createTestResponse(
-                route: route,
+                url: url,
                 statusCode: 400
             ),
             error
@@ -290,7 +298,9 @@ class MockURLSession: URLSessionType {
     /// request url. This is done by iterating over the path components of both
     /// the request url, and the expected url components of each endpoint and
     /// comparing non-variable components.
-    private func matchingEndpoint(for request: URLRequest) -> ParraEndpoint? {
+    private func matchingEndpoint(
+        for request: URLRequest
+    ) -> ApiEndpoint? {
         guard let url = request.url else {
             return nil
         }
@@ -307,7 +317,7 @@ class MockURLSession: URLSessionType {
         let suffix = urlString.dropFirst(rootString.count)
         let remainingComponents = suffix.split(separator: "/")
 
-        for endpoint in ParraEndpoint.allCases {
+        for endpoint in ApiEndpoint.allCases {
             let slugComponents = endpoint.slug.split(separator: "/")
 
             // If they don't have the same path component count, it's
@@ -343,13 +353,10 @@ class MockURLSession: URLSessionType {
     }
 
     private func createTestResponse(
-        route: String,
+        url: URL,
         statusCode: Int = 200,
         additionalHeaders: [String: String] = [:]
     ) -> HTTPURLResponse {
-        let url = ParraInternal.Constants.parraApiRoot
-            .appendingPathComponent(route)
-
         return HTTPURLResponse(
             url: url,
             statusCode: statusCode,
