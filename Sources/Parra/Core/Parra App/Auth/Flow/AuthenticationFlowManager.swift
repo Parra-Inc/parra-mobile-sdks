@@ -312,6 +312,10 @@ class AuthenticationFlowManager: ObservableObject {
             methods.append(.password)
         }
 
+        if authInfo.supportsPasskeys {
+            methods.append(.passkey)
+        }
+
         return methods
     }
 

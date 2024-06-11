@@ -21,23 +21,28 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
 
     // MARK: - Public
 
-    public struct Config: ParraAuthScreenConfig {
-        public static var `default`: Config = .init()
-    }
-
     public var body: some View {
         VStack(alignment: .leading) {
-            titleLabel
-
-            subtitleLabel
+            if let topView = config.topView {
+                AnyView(topView)
+            } else {
+                defaultTopView
+            }
 
             continueButton
 
-            if parraAppInfo.auth.supportsPasskeys {
+            if params.availableAuthMethods.contains(.passkey) {
                 continueWithPasskeyButton
+            }
+
+            if let bottomView = config.bottomView {
+                AnyView(bottomView)
+            } else {
+                defaultBottomView
             }
         }
         .frame(maxWidth: .infinity)
+        .applyBackground(background)
         .applyDefaultWidgetAttributes(
             using: themeObserver.theme
         )
@@ -56,6 +61,11 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     // MARK: - Internal
 
     @EnvironmentObject var parraAppInfo: ParraAppInfo
+
+    var background: any ShapeStyle {
+        return config.background
+            ?? themeObserver.theme.palette.primaryBackground.toParraColor()
+    }
 
     // MARK: - Private
 
@@ -91,26 +101,42 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         return "Welcome\nto \(name)"
     }
 
+    @ViewBuilder private var defaultTopView: some View {
+        titleLabel
+
+        subtitleLabel
+
+        Spacer()
+    }
+
+    @ViewBuilder private var defaultBottomView: some View {
+        EmptyView()
+    }
+
     @ViewBuilder private var titleLabel: some View {
+        let titleAttributes = ParraAttributes.Label(
+            text: ParraAttributes.Text(
+                font: .systemFont(ofSize: 50, weight: .heavy),
+                alignment: .leading
+            ),
+            padding: .md
+        )
+
         componentFactory.buildLabel(
             content: LabelContent(text: title),
-            localAttributes: ParraAttributes.Label(
-                text: ParraAttributes.Text(
-                    font: .systemFont(ofSize: 50, weight: .heavy),
-                    alignment: .leading
-                ),
-                padding: .md
-            )
+            localAttributes: titleAttributes
         )
     }
 
     @ViewBuilder private var subtitleLabel: some View {
+        let subtitleAttributes = ParraAttributes.Label(
+            text: .default(with: .subheadline),
+            padding: .md
+        )
+
         componentFactory.buildLabel(
             content: LabelContent(text: "Sign up or log in to continue."),
-            localAttributes: ParraAttributes.Label(
-                text: .default(with: .subheadline),
-                padding: .md
-            )
+            localAttributes: subtitleAttributes
         )
     }
 
@@ -146,5 +172,51 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
                 .passkey
             )
         }
+    }
+}
+
+#Preview("Credential and passkey") {
+    ParraViewPreview { _ in
+        ParraAuthDefaultLandingScreen(
+            params: ParraAuthDefaultLandingScreen.Params(
+                availableAuthMethods: [
+                    .password,
+                    .passwordless(.sms),
+                    .passkey
+                ],
+                selectAuthMethod: { _ in },
+                attemptPasskeyLogin: {}
+            ),
+            config: .default
+        )
+    }
+}
+
+#Preview("No auth methods") {
+    ParraViewPreview { _ in
+        ParraAuthDefaultLandingScreen(
+            params: ParraAuthDefaultLandingScreen.Params(
+                availableAuthMethods: [
+                ],
+                selectAuthMethod: { _ in },
+                attemptPasskeyLogin: {}
+            ),
+            config: .default
+        )
+    }
+}
+
+#Preview("Passkey") {
+    ParraViewPreview { _ in
+        ParraAuthDefaultLandingScreen(
+            params: ParraAuthDefaultLandingScreen.Params(
+                availableAuthMethods: [
+                    .passkey
+                ],
+                selectAuthMethod: { _ in },
+                attemptPasskeyLogin: {}
+            ),
+            config: .default
+        )
     }
 }

@@ -22,10 +22,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
     // MARK: - Public
 
-    public struct Config: ParraAuthScreenConfig {
-        public static var `default`: Config = .init()
-    }
-
     public var body: some View {
         VStack(alignment: .leading) {
             primaryContent
@@ -150,13 +146,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     @Environment(\.parra) private var parra
 
     @ViewBuilder private var primaryContent: some View {
-        componentFactory.buildLabel(
-            content: LabelContent(text: identityFieldTitle),
-            localAttributes: ParraAttributes.Label(
-                text: .default(with: .title),
-                padding: .md
-            )
-        )
+        defaultTopView
 
         primaryField
 
@@ -182,6 +172,24 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             onPress: submit
         )
 
+        defaultBottomView
+    }
+
+    @ViewBuilder private var defaultTopView: some View {
+        if let topView = config.topView {
+            AnyView(topView)
+        } else {
+            componentFactory.buildLabel(
+                content: LabelContent(text: identityFieldTitle),
+                localAttributes: ParraAttributes.Label(
+                    text: .default(with: .title),
+                    padding: .md
+                )
+            )
+        }
+    }
+
+    @ViewBuilder private var defaultBottomView: some View {
         Spacer()
     }
 
@@ -225,5 +233,53 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 }
             }
         }
+    }
+}
+
+#Preview("Email") {
+    ParraViewPreview { _ in
+        ParraAuthDefaultIdentityInputScreen(
+            params: ParraAuthDefaultIdentityInputScreen.Params(
+                inputType: .email,
+                submitIdentity: { _ in }
+            ),
+            config: .default
+        )
+    }
+}
+
+#Preview("Email or Phone") {
+    ParraViewPreview { _ in
+        ParraAuthDefaultIdentityInputScreen(
+            params: ParraAuthDefaultIdentityInputScreen.Params(
+                inputType: .emailOrPhone,
+                submitIdentity: { _ in }
+            ),
+            config: .default
+        )
+    }
+}
+
+#Preview("Phone") {
+    ParraViewPreview { _ in
+        ParraAuthDefaultIdentityInputScreen(
+            params: ParraAuthDefaultIdentityInputScreen.Params(
+                inputType: .phone,
+                submitIdentity: { _ in }
+            ),
+            config: .default
+        )
+    }
+}
+
+#Preview("Passkey") {
+    ParraViewPreview { _ in
+        ParraAuthDefaultIdentityInputScreen(
+            params: ParraAuthDefaultIdentityInputScreen.Params(
+                inputType: .passkey,
+                submitIdentity: { _ in }
+            ),
+            config: .default
+        )
     }
 }
