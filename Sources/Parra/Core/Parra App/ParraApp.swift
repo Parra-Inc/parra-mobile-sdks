@@ -58,7 +58,7 @@ open class ParraApp<
 
     public var body: some Scene {
         WindowGroup {
-            if let appContent {
+            if let appContent = self.appContent {
                 AnyView(appContent)
             } else {
                 fatalError()

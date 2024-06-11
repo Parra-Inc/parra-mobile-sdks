@@ -45,29 +45,7 @@ struct CodeEntryView: View {
                 .opacity(0.00001)
                 .blendMode(.screen)
                 .focused($isKeyboardShowing)
-                .onChange(of: otpText) { _, newValue in
-                    // When this is disabled, we still want to be able to
-                    // display the keyboard but just want to ignore any input.
-                    if disabled, newValue != "" {
-                        otpText = ""
-
-                        return
-                    }
-
-                    let next = String(newValue.unicodeScalars.filter(
-                        CharacterSet.decimalDigits.contains
-                    ))
-
-                    onChange(next)
-
-                    if next.count == length {
-                        onComplete(next)
-                    }
-
-                    if next != newValue {
-                        otpText = next
-                    }
-                }
+                .onChange(of: otpText, onOtpTextChanged)
                 .onAppear {
                     DispatchQueue.main.async {
                         isKeyboardShowing = true
@@ -133,6 +111,33 @@ struct CodeEntryView: View {
     @FocusState private var isKeyboardShowing: Bool
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
+
+    private func onOtpTextChanged(
+        oldValue: String,
+        newValue: String
+    ) {
+        // When this is disabled, we still want to be able to
+        // display the keyboard but just want to ignore any input.
+        if disabled, newValue != "" {
+            otpText = ""
+
+            return
+        }
+
+        let next = String(newValue.unicodeScalars.filter(
+            CharacterSet.decimalDigits.contains
+        ))
+
+        onChange(next)
+
+        if next.count == length {
+            onComplete(next)
+        }
+
+        if next != newValue {
+            otpText = next
+        }
+    }
 }
 
 extension Binding where Value == String {
