@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+private let logger = Logger()
+
 private let resendCodeTitle = "Resend code"
 
 public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
@@ -294,6 +296,8 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
 
         Task {
             do {
+                logger.debug("Sending one time code")
+
                 let result = try await params.requestCodeResend()
 
                 Task { @MainActor in
@@ -311,7 +315,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     }
                 }
             } catch {
-                print("Error sending code: \(error)")
+                logger.error("Error sending code: \(error)")
 
                 Task { @MainActor in
                     continueButtonContent = continueButtonContent
@@ -333,9 +337,11 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
 
         Task {
             do {
+                logger.debug("Verifing one time code")
+
                 try await params.verifyCode(currentCode)
             } catch {
-                print("Error verifying code: \(error)")
+                logger.error("Error verifying code: \(error)")
             }
 
             Task { @MainActor in

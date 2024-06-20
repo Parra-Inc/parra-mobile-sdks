@@ -8,9 +8,7 @@
 
 import SwiftUI
 
-// 1. Signing up or logging in?
-// 2. Identity type?
-// 3. Is in code entry mode?
+private let logger = Logger()
 
 public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     // MARK: - Lifecycle
@@ -263,12 +261,14 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
 
         Task {
             do {
+                logger.debug("Submitting challenge response")
+
                 try await params.submit(
                     response
                 )
 
             } catch {
-                print(error)
+                logger.error("Error submitting challenge response", error)
             }
 
             Task { @MainActor in
