@@ -10,25 +10,27 @@ import Parra
 import SwiftUI
 
 @main
-final class SampleApp: ParraApp<ParraAppDelegate, ParraSceneDelegate> {
-    required init() {
-        super.init()
+struct SampleApp: App {
+    @UIApplicationDelegateAdaptor(ParraAppDelegate.self) var appDelegate
 
-        configureParra(
+    var body: some Scene {
+        ParraApp(
             workspaceId: Parra.Demo.workspaceId,
             applicationId: Parra.Demo.applicationId,
-            appContent: {
-                ParraRequiredAuthView(
+            appDelegate: appDelegate
+        ) {
+            WindowGroup {
+                ParraRequiredAuthWindow(
                     authenticatedContent: { _ in
                         ContentView()
                     },
-                    unauthenticatedContent: { _ in
+                    unauthenticatedContent: {
                         ParraDefaultAuthenticationFlowView(
                             flowConfig: .default
                         )
                     }
                 )
             }
-        )
+        }
     }
 }

@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+private let logger = Logger()
+
 /// A top level wrapper around your SwiftUI app's content. When creating a
 /// ``ParraApp``, you should supply it with an authentication provider and any
 /// options that you would like to customize. The authentication provider is a
@@ -41,29 +43,14 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-///
 @MainActor
-open class ParraApp<
-    AppDelegateType: ParraAppDelegate,
-    SceneDelegateType: ParraSceneDelegate
->: App {
+public struct ParraApp<Content: Scene>: Scene {
     // MARK: - Lifecycle
 
-    /// This initializer must be overriden and used to invoke the
-    /// ``configureParra(authConfiguration:configuration:launchScreenConfig:appContent:)``
-    /// method.
-    public required init() {}
-
-    // MARK: - Public
-
-    public var body: some Scene {
-        WindowGroup {
-            if let appContent = self.appContent {
-                AnyView(appContent)
-            } else {
-                fatalError()
-            }
-        }
+    public init() {
+        fatalError(
+            "Parra must be initialized using init(workspaceId:applicationId:appDelegate:)"
+        )
     }
 
     /// <#Description#>
@@ -81,44 +68,204 @@ open class ParraApp<
     ///   entry is found, its child values will be used to layout the launch
     ///   screen. Next we look for the `UILaunchStoryboardName` key. If this is
     ///   not found, a blank white screen will be rendered.
-    ///   - appContent: <#appContent description#>
-    public func configureParra(
+    ///   - makeScene: <#appContent description#>
+    public init(
         workspaceId: String,
         applicationId: String,
+        appDelegate: ParraAppDelegate,
+        sceneDelegateType: ParraSceneDelegate.Type = ParraSceneDelegate.self,
         authenticationMethod: ParraAuthType = .parraAuth,
         configuration: ParraConfiguration = .init(),
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
-        appContent: @MainActor @escaping () -> some ParraAppContent
+        @SceneBuilder makeScene: @MainActor @escaping () -> Content
     ) {
-        guard self.appContent == nil else {
-            fatalError("ParraApp content has already been set")
-        }
-
         let appState = ParraAppState(
             tenantId: workspaceId,
             applicationId: applicationId
         )
 
-        self.appContent = ParraAppView(
-            target: .app(
-                authenticationMethod,
-                appState,
-                launchScreenConfig
-            ),
-            configuration: configuration,
-            viewContent: { _ in
-                appContent()
-            }
+        self.makeScene = makeScene
+        self.authenticationMethod = authenticationMethod
+
+        let mergedLaunchScreenConfig = ParraApp.configureLaunchScreen(
+            with: launchScreenConfig
         )
 
-        _appDelegate.wrappedValue.sceneDelegateClass = SceneDelegateType.self
+        self.launchScreenConfig = mergedLaunchScreenConfig
+
+        let parra = ParraInternal.createParraInstance(
+            appState: appState,
+            authenticationMethod: authenticationMethod,
+            configuration: configuration
+        )
+
+        // Must be set before initializing app delegate instances, which rely
+        // on it.
+        Parra.default.parraInternal = parra
+
+        self.parra = parra
+
+        self._alertManager = StateObject(
+            wrappedValue: parra.alertManager
+        )
+
+        self._parraAppState = StateObject(
+            wrappedValue: appState
+        )
+
+        self._themeObserver = StateObject(
+            wrappedValue: ParraThemeObserver(
+                theme: parra.configuration.theme,
+                notificationCenter: parra.notificationCenter
+            )
+        )
+
+        self._launchScreenState = StateObject(
+            wrappedValue: LaunchScreenStateManager(
+                state: .initial(mergedLaunchScreenConfig)
+            )
+        )
+
+        appDelegate.sceneDelegateClass = sceneDelegateType.self
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    @UIApplicationDelegateAdaptor(AppDelegateType.self) var appDelegate
+    public var body: some Scene {
+        makeScene()
+            .environment(\.parra, Parra.default)
+            .environmentObject(parraAuthState)
+            .environmentObject(launchScreenState)
+            .environmentObject(alertManager)
+            .environmentObject(themeObserver)
+            .environmentObject(parra.globalComponentFactory)
+            .onChange(
+                of: launchScreenState.current,
+                initial: true
+            ) { oldValue, newValue in
+                switch (oldValue, newValue) {
+                case (.initial, .initial):
+                    // Should only run once on app launch.
+                    performAppLaunchTasks()
+                default:
+                    break
+                }
+            }
+            .onChange(
+                of: parraAuthState.current
+            ) { _, newValue in
+                Task { @MainActor in
+                    await parra.authStateDidChange(
+                        to: newValue
+                    )
+                }
+            }
+    }
 
     // MARK: - Private
 
-    private var appContent: (any View)?
+    @SceneBuilder private let makeScene: @MainActor () -> Content
+
+    @StateObject private var parraAppState: ParraAppState
+    @StateObject private var parraAuthState: ParraAuthState = .init()
+    @StateObject private var launchScreenState: LaunchScreenStateManager
+
+    @StateObject private var themeObserver: ParraThemeObserver
+    @StateObject private var alertManager: AlertManager
+
+    private let parra: ParraInternal
+    private let authenticationMethod: ParraAuthType
+    private let launchScreenConfig: ParraLaunchScreen.Config
+
+    private static func configureLaunchScreen(
+        with overrides: ParraLaunchScreen.Config?
+    ) -> ParraLaunchScreen.Config {
+        if let overrides {
+            // If an override is provided, check its type. The default type
+            // should only override Info.plist keys that are specified. Other
+            // types should be used outright.
+
+            if case .default(let config) = overrides.type {
+                let finalConfig = ParraDefaultLaunchScreen.Config
+                    .fromInfoDictionary(
+                        in: config.bundle
+                    )?.merging(overrides: config) ?? config
+
+                return ParraLaunchScreen.Config(
+                    type: .default(finalConfig),
+                    fadeDuration: overrides.fadeDuration
+                )
+            } else {
+                return overrides
+            }
+        }
+
+        // If overrides are not provided, look for a default configuration in
+        // the Info.plist, then look for a Storyboard configuration, then
+        // finally use a default empty configuration.
+
+        let bundle = Bundle.main // default
+        let type: LaunchScreenType = if let config = ParraDefaultLaunchScreen
+            .Config.fromInfoDictionary(
+                in: bundle
+            )
+        {
+            .default(config)
+        } else if let config = ParraStoryboardLaunchScreen.Config
+            .fromInfoDictionary(in: bundle)
+        {
+            .storyboard(config)
+        } else {
+            .default(ParraDefaultLaunchScreen.Config())
+        }
+
+        return ParraLaunchScreen.Config(
+            type: type,
+            fadeDuration: ParraLaunchScreen.Config.defaultFadeDuration
+        )
+    }
+
+    private func performAppLaunchTasks() {
+        Task(priority: .userInitiated) {
+            guard case .initial = launchScreenState.current else {
+                return
+            }
+
+            // After the splash screen
+            await parraAuthState.performInitialAuthCheck(
+                using: parra.authService
+            )
+
+            logger.debug("Initial auth check complete")
+
+            do {
+                let result = try await parra
+                    .performActionsRequiredForAppLaunch()
+
+                logger.debug("Post app launch actions complete")
+
+                logger.info("Parra SDK Initialized")
+
+                launchScreenState.dismiss(
+                    with: result.appInfo,
+                    launchScreenConfig: launchScreenConfig
+                )
+
+                logger.debug("Launch screen dismissed")
+            } catch {
+                logger.fatal(
+                    "Failed to perform post app launch actions",
+                    error
+                )
+
+                // This is unrecoverable. Force a logout.
+
+                parraAuthState.forceLogout(from: error)
+
+                #if DEBUG
+//                fatalError()
+                #endif
+            }
+        }
+    }
 }

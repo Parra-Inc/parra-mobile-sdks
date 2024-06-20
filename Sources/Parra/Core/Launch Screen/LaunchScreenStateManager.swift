@@ -8,46 +8,34 @@
 
 import Foundation
 
+@MainActor
 final class LaunchScreenStateManager: ObservableObject {
+    // MARK: - Lifecycle
+
+    init(state: State) {
+        self.current = state
+    }
+
+    // MARK: - Internal
+
     enum State: Equatable {
-        case initial
-        case transitioning(ParraAppInfo)
+        case initial(ParraLaunchScreen.Config)
+        case transitioning(ParraAppInfo, ParraLaunchScreen.Config)
         case complete(ParraAppInfo)
-
-        // MARK: - Internal
-
-        var showLaunchScreen: Bool {
-            switch self {
-            case .initial, .transitioning:
-                return true
-            case .complete:
-                return false
-            }
-        }
-
-        var showAppContent: Bool {
-            switch self {
-            case .transitioning, .complete:
-                return true
-            case .initial:
-                return false
-            }
-        }
     }
 
-    @MainActor @Published private(set) var state: State = .initial
+    @Published private(set) var current: State
 
-    @MainActor
     func dismiss(
-        with appInfo: ParraAppInfo
+        with appInfo: ParraAppInfo,
+        launchScreenConfig: ParraLaunchScreen.Config
     ) {
-        state = .transitioning(appInfo)
+        current = .transitioning(appInfo, launchScreenConfig)
     }
 
-    @MainActor
     func complete(
         with authInfo: ParraAppInfo
     ) {
-        state = .complete(authInfo)
+        current = .complete(authInfo)
     }
 }

@@ -25,10 +25,10 @@ public struct ParraLaunchScreen: View {
         renderLaunchScreen(by: config.type)
             .opacity(shouldFade ? 1 : 0)
             .onChange(
-                of: launchScreenState.state,
+                of: launchScreenState.current,
                 initial: true
             ) { _, newValue in
-                if case .transitioning(let authInfo) = newValue, shouldFade {
+                if case .transitioning(let authInfo, _) = newValue, shouldFade {
                     withAnimation(.linear(duration: config.fadeDuration)) {
                         shouldFade = false
                     } completion: {

@@ -49,24 +49,41 @@ public struct ParraAppPreview<Content, DelegateType>: View
     ) {
         self.configuration = configuration
         self.previewContent = previewContent
+        self._parraAuthState = StateObject(
+            wrappedValue: ParraAuthState()
+        )
+
+        let appState = ParraAppState(
+            tenantId: Parra.Demo.workspaceId,
+            applicationId: Parra.Demo.applicationId
+        )
+
+        self.parra = Parra(
+            parraInternal: ParraInternal
+                .createParraSwiftUIPreviewsInstance(
+                    appState: appState,
+                    authenticationMethod: .preview,
+                    configuration: configuration
+                )
+        )
     }
 
     // MARK: - Public
 
     public var body: some View {
-        ParraAppView(
-            target: .preview,
-            configuration: configuration,
-            viewContent: { _ in
-                ParraOptionalAuthView { _ in
-                    previewContent()
-                }
-            }
-        )
+        ParraOptionalAuthWindow { _ in
+            previewContent()
+        }
+        .environment(\.parra, parra)
+        .environmentObject(parraAuthState)
+//        .environmentObject(ParraAppInfo) // TODO: Need this?
     }
 
     // MARK: - Private
 
     private let configuration: ParraConfiguration
     private let previewContent: () -> Content
+    private let parra: Parra
+
+    @StateObject private var parraAuthState: ParraAuthState
 }

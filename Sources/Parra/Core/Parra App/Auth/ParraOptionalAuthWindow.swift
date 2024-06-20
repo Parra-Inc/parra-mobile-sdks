@@ -1,5 +1,5 @@
 //
-//  ParraOptionalAuthView.swift
+//  ParraOptionalAuthWindow.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 4/15/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ParraOptionalAuthView<Content>: ParraAppContent
+public struct ParraOptionalAuthWindow<Content>: ParraAppContent
     where Content: View
 {
     // MARK: - Lifecycle
@@ -28,11 +28,13 @@ public struct ParraOptionalAuthView<Content>: ParraAppContent
     ) -> Content
 
     @ViewBuilder public var body: some View {
-        switch parraAuthState.current {
-        case .authenticated(let user):
-            authenticatedContent(for: user)
-        case .unauthenticated:
-            unauthenticatedContent(with: parraAppInfo)
+        LaunchScreenWindow {
+            switch parraAuthState.current {
+            case .authenticated(let user):
+                AnyView(authenticatedContent(for: user))
+            case .unauthenticated:
+                AnyView(unauthenticatedContent())
+            }
         }
     }
 
@@ -42,9 +44,7 @@ public struct ParraOptionalAuthView<Content>: ParraAppContent
         return content(.authenticated(user))
     }
 
-    public func unauthenticatedContent(
-        with appInfo: ParraAppInfo
-    ) -> some View {
+    public func unauthenticatedContent() -> some View {
         return content(.unauthenticated(nil))
     }
 

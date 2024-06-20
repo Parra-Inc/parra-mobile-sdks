@@ -28,56 +28,70 @@ struct ParraCardViewPreview<Content>: View where Content: View {
             attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
+        self._parraAuthState = StateObject(
+            wrappedValue: ParraAuthState()
+        )
+
+        let appState = ParraAppState(
+            tenantId: Parra.Demo.workspaceId,
+            applicationId: Parra.Demo.applicationId
+        )
+
+        self.parra = Parra(
+            parraInternal: ParraInternal
+                .createParraSwiftUIPreviewsInstance(
+                    appState: appState,
+                    authenticationMethod: .preview,
+                    configuration: configuration
+                )
+        )
     }
 
     // MARK: - Internal
 
     var body: some View {
-        ParraAppView(
-            target: .preview,
-            configuration: configuration,
-            viewContent: { parra in
-                ParraOptionalAuthView { _ in
-                    GeometryReader { geometry in
-                        ZStack {
-                            Rectangle()
-                                .ignoresSafeArea()
-                                .foregroundStyle(
-                                    ParraTheme.default.palette
-                                        .secondaryBackground
-                                )
-                                .frame(
-                                    width: geometry.size.width,
-                                    height: geometry.size.height
-                                )
-
-                            VStack {
-                                Spacer()
-
-                                content()
-                                    .padding()
-
-                                Spacer()
-                            }
-                        }
-                    }
-                    .environmentObject(
-                        FeedbackCardWidget.ContentObserver(
-                            initialParams: .init(
-                                cards: cards,
-                                notificationCenter: parra.parraInternal
-                                    .notificationCenter,
-                                dataManager: parra.parraInternal.feedback
-                                    .dataManager,
-                                syncHandler: nil
-                            )
+        ParraOptionalAuthWindow { _ in
+            GeometryReader { geometry in
+                ZStack {
+                    Rectangle()
+                        .ignoresSafeArea()
+                        .foregroundStyle(
+                            ParraTheme.default.palette
+                                .secondaryBackground
                         )
-                    )
+                        .frame(
+                            width: geometry.size.width,
+                            height: geometry.size.height
+                        )
+
+                    VStack {
+                        Spacer()
+
+                        content()
+                            .padding()
+
+                        Spacer()
+                    }
                 }
             }
-        )
+            .environmentObject(
+                FeedbackCardWidget.ContentObserver(
+                    initialParams: .init(
+                        cards: cards,
+                        notificationCenter: parra.parraInternal
+                            .notificationCenter,
+                        dataManager: parra.parraInternal.feedback
+                            .dataManager,
+                        syncHandler: nil
+                    )
+                )
+            )
+        }
         .environmentObject(factory)
         .environment(config)
+        .environment(\.parra, parra)
+        .environmentObject(parraAuthState)
+        //        .environmentObject(ParraAppInfo) // TODO: Need this?
     }
 
     // MARK: - Private
@@ -88,4 +102,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
     private let config: FeedbackCardWidgetConfig
     private let factory: ComponentFactory
     private let configuration: ParraConfiguration
+    private let parra: Parra
+
+    @StateObject private var parraAuthState: ParraAuthState
 }

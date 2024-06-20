@@ -15,8 +15,8 @@ struct ParraViewPreview<Content>: View where Content: View {
     // MARK: - Lifecycle
 
     init(
-        content: @escaping (_ factory: ComponentFactory) -> Content,
-        theme: ParraTheme = .default
+        theme: ParraTheme = .default,
+        content: @escaping (_ factory: ComponentFactory) -> Content
     ) {
         self.content = content
         self.configuration = .init(themeOptions: theme)
@@ -24,20 +24,35 @@ struct ParraViewPreview<Content>: View where Content: View {
             attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
+
+        self._parraAuthState = StateObject(
+            wrappedValue: ParraAuthState()
+        )
+
+        let appState = ParraAppState(
+            tenantId: Parra.Demo.workspaceId,
+            applicationId: Parra.Demo.applicationId
+        )
+
+        self.parra = Parra(
+            parraInternal: ParraInternal
+                .createParraSwiftUIPreviewsInstance(
+                    appState: appState,
+                    authenticationMethod: .preview,
+                    configuration: configuration
+                )
+        )
     }
 
     // MARK: - Internal
 
     var body: some View {
-        ParraAppView(
-            target: .preview,
-            configuration: configuration,
-            viewContent: { _ in
-                ParraOptionalAuthView { _ in
-                    content(factory)
-                }
-            }
-        )
+        ParraOptionalAuthWindow { _ in
+            content(factory)
+        }
+        .environment(\.parra, parra)
+        .environmentObject(parraAuthState)
+        //        .environmentObject(ParraAppInfo) // TODO: Need this?
         .environmentObject(factory)
     }
 
@@ -47,4 +62,7 @@ struct ParraViewPreview<Content>: View where Content: View {
 
     private let factory: ComponentFactory
     private let configuration: ParraConfiguration
+    private let parra: Parra
+
+    @StateObject private var parraAuthState: ParraAuthState
 }

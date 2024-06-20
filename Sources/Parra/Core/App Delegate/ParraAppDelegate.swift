@@ -97,7 +97,15 @@ open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
 
     // MARK: - Public
 
-    public internal(set) var sceneDelegateClass: ParraSceneDelegate.Type!
+    public internal(set) var sceneDelegateClass: ParraSceneDelegate.Type! {
+        willSet {
+            if sceneDelegateClass != nil {
+                fatalError(
+                    "ParraSceneDelegate can not be set multiple times per execution."
+                )
+            }
+        }
+    }
 
     // MARK: - Internal
 

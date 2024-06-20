@@ -16,7 +16,5 @@ public protocol ParraAppContent: View {
         for user: ParraUser
     ) -> AuthenticatedContent
 
-    func unauthenticatedContent(
-        with appInfo: ParraAppInfo
-    ) -> UnauthenticatedContent
+    func unauthenticatedContent() -> UnauthenticatedContent
 }

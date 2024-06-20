@@ -9,7 +9,7 @@
 import SwiftUI
 
 public extension ParraDefaultLaunchScreen {
-    struct Config {
+    struct Config: Equatable {
         // MARK: - Lifecycle
 
         public init(
@@ -32,7 +32,7 @@ public extension ParraDefaultLaunchScreen {
 
         // MARK: - Public
 
-        public struct BarConfig {
+        public struct BarConfig: Equatable {
             // MARK: - Lifecycle
 
             public init(replacementImage: String?) {

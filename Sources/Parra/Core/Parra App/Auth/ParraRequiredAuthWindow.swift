@@ -1,5 +1,5 @@
 //
-//  ParraRequiredAuthView.swift
+//  ParraRequiredAuthWindow.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 4/15/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ParraRequiredAuthView<
+public struct ParraRequiredAuthWindow<
     AuthenticatedContent, UnauthenticatedContent
 >: ParraAppContent where AuthenticatedContent: View,
     UnauthenticatedContent: ParraAuthenticationFlow
@@ -19,35 +19,31 @@ public struct ParraRequiredAuthView<
         authenticatedContent: @escaping (
             _ user: ParraUser
         ) -> AuthenticatedContent,
-        unauthenticatedContent: @escaping (
-            _ appInfo: ParraAppInfo
-        ) -> UnauthenticatedContent
+        unauthenticatedContent: @escaping () -> UnauthenticatedContent
     ) {
         self.authenticatedContent = authenticatedContent
-        self.unauthenticatedContent = unauthenticatedContent
+        self.unauthContent = unauthenticatedContent
     }
 
     // MARK: - Public
 
-    public let unauthenticatedContent: (
-        _ appInfo: ParraAppInfo
-    ) -> UnauthenticatedContent
-
     public var body: some View {
-        content
-            .onChange(
-                of: parraAuthState.current,
-                initial: true
-            ) { oldValue, newValue in
-                switch (oldValue, newValue) {
-                case (.unauthenticated, .authenticated):
-                    withAnimation {
+        LaunchScreenWindow {
+            content
+                .onChange(
+                    of: parraAuthState.current,
+                    initial: true
+                ) { oldValue, newValue in
+                    switch (oldValue, newValue) {
+                    case (.unauthenticated, .authenticated):
+                        withAnimation {
+                            currentUserMirror = newValue
+                        }
+                    default:
                         currentUserMirror = newValue
                     }
-                default:
-                    currentUserMirror = newValue
                 }
-            }
+        }
     }
 
     public func authenticatedContent(
@@ -56,10 +52,8 @@ public struct ParraRequiredAuthView<
         return authenticatedContent(user)
     }
 
-    public func unauthenticatedContent(
-        with appInfo: ParraAppInfo
-    ) -> UnauthenticatedContent {
-        var authView = unauthenticatedContent(appInfo)
+    public func unauthenticatedContent() -> UnauthenticatedContent {
+        var authView = unauthContent()
 
         authView.delegate = self
 
@@ -70,14 +64,13 @@ public struct ParraRequiredAuthView<
 
     @Environment(\.parra) var parra
     @EnvironmentObject var parraAuthState: ParraAuthState
-    @EnvironmentObject var parraAppInfo: ParraAppInfo
 
     @ViewBuilder var content: some View {
         switch currentUserMirror {
         case .authenticated(let user):
             authenticatedContent(for: user)
         case .unauthenticated:
-            unauthenticatedContent(parraAppInfo)
+            unauthenticatedContent()
                 .transition(
                     .push(from: .top)
                         .animation(.easeIn(duration: 0.35))
@@ -87,9 +80,11 @@ public struct ParraRequiredAuthView<
 
     // MARK: - Private
 
-    private var authenticatedContent: (
+    private let authenticatedContent: (
         _ user: ParraUser
     ) -> AuthenticatedContent
+
+    private let unauthContent: () -> UnauthenticatedContent
 
     @State private var currentUserMirror: ParraAuthResult =
         .unauthenticated(nil)
@@ -97,7 +92,7 @@ public struct ParraRequiredAuthView<
 
 // MARK: ParraAuthenticationFlowDelegate
 
-extension ParraRequiredAuthView: ParraAuthenticationFlowDelegate {
+extension ParraRequiredAuthWindow: ParraAuthenticationFlowDelegate {
     public func completeAuthentication(
         with user: ParraUser
     ) {

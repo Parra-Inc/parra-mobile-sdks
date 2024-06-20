@@ -32,6 +32,23 @@ struct ParraContainerPreview<ContainerType>: View
             attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
+        self._parraAuthState = StateObject(
+            wrappedValue: ParraAuthState()
+        )
+
+        let appState = ParraAppState(
+            tenantId: Parra.Demo.workspaceId,
+            applicationId: Parra.Demo.applicationId
+        )
+
+        self.parra = Parra(
+            parraInternal: ParraInternal
+                .createParraSwiftUIPreviewsInstance(
+                    appState: appState,
+                    authenticationMethod: .preview,
+                    configuration: configuration
+                )
+        )
     }
 
     // MARK: - Internal
@@ -41,17 +58,14 @@ struct ParraContainerPreview<ContainerType>: View
         // here but this will only work for previews. At runtime, the app
         // wrapper won't have provided this object since it is specific to the
         // individual containers.
-        ParraAppView(
-            target: .preview,
-            configuration: configuration,
-            viewContent: { parra in
-                ParraOptionalAuthView { _ in
-                    AnyView(content(parra, factory, config))
-                }
-            }
-        )
+        ParraOptionalAuthWindow { _ in
+            AnyView(content(parra, factory, config))
+        }
         .environment(config)
         .environmentObject(factory)
+        .environment(\.parra, parra)
+        .environmentObject(parraAuthState)
+        //        .environmentObject(ParraAppInfo) // TODO: Need this?
     }
 
     // MARK: - Private
@@ -65,4 +79,7 @@ struct ParraContainerPreview<ContainerType>: View
     private let factory: ComponentFactory
     private let config: ContainerType.Config
     private let configuration: ParraConfiguration
+    private let parra: Parra
+
+    @StateObject private var parraAuthState: ParraAuthState
 }

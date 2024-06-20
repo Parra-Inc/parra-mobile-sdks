@@ -9,7 +9,7 @@
 import Foundation
 
 public extension ParraLaunchScreen {
-    struct Config {
+    struct Config: Equatable {
         // MARK: - Lifecycle
 
         public init(

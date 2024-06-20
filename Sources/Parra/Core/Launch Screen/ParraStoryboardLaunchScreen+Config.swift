@@ -9,7 +9,7 @@
 import SwiftUI
 
 public extension ParraStoryboardLaunchScreen {
-    struct Config {
+    struct Config: Equatable {
         // MARK: - Lifecycle
 
         public init(
