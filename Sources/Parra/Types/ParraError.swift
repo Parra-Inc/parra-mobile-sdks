@@ -18,6 +18,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         response: HTTPURLResponse,
         responseData: Data
     )
+    case apiError(ParraApiErrorResponse)
     case fileSystem(path: URL, message: String)
     case jsonError(String)
     case system(Error)
@@ -30,10 +31,11 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         return description
     }
 
-    /// A simple error description string for cases where we don't have more complete control
-    /// over the output formatting. Interally, we want to always use `Parra/ParraErrorWithExtra`
-    /// in combination with the `ParraError/errorDescription` and ``ParraError/description``
-    /// fields instead of this.
+    /// A simple error description string for cases where we don't have more
+    /// complete control over the output formatting. Interally, we want to
+    /// always use `Parra/ParraErrorWithExtra` in combination with the
+    /// `ParraError/errorDescription` and ``ParraError/description`` fields
+    /// instead of this.
     public var description: String {
         let baseMessage = errorDescription
 
@@ -49,6 +51,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return baseMessage
         case .authenticationFailed(let error):
             return "\(baseMessage) Error: \(error)"
+        case .apiError(let error):
+            return "An API error occurred. Server provided message: \(error.message)"
         case .networkError(let request, let response, let data):
             let serverMessage = extractErrorMessage(from: data)
 
@@ -105,7 +109,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return "An authentication provider has not been set. Add Parra.initialize() to your applicationDidFinishLaunchingWithOptions method."
         case .authenticationFailed:
             return "Invoking the authentication provider passed to Parra.initialize() failed."
-        case .networkError:
+        case .networkError, .apiError:
             return "A network error occurred."
         case .jsonError(let string):
             return "JSON error occurred. Error: \(string)"
@@ -156,6 +160,10 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
         case .authenticationFailed(let error):
             return [
                 "authentication_error": error
+            ]
+        case .apiError(let error):
+            return [
+                "type": error.type
             ]
         case .networkError(let request, let response, let body):
             var bodyInfo: [String: Any] = [

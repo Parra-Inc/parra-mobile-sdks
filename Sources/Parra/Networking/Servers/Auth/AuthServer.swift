@@ -85,9 +85,9 @@ final class AuthServer: Server {
 
         switch response.statusCode {
         case 200:
-            let credential = try configuration.jsonDecoder.decode(
-                PublicAuthResponse.self,
-                from: data
+            let credential = try decodeResponse(
+                from: data,
+                as: PublicAuthResponse.self
             )
 
             return credential.accessToken
@@ -456,16 +456,16 @@ final class AuthServer: Server {
 
         switch response.statusCode {
         case 204:
-            let body = try configuration.jsonDecoder.decode(
-                T.self,
-                from: EmptyJsonObjectData
+            let body = try decodeResponse(
+                from: EmptyJsonObjectData,
+                as: T.self
             )
 
             return (body, response)
         case 200 ..< 300:
-            let body = try configuration.jsonDecoder.decode(
-                T.self,
-                from: data
+            let body = try decodeResponse(
+                from: data,
+                as: T.self
             )
 
             return (body, response)

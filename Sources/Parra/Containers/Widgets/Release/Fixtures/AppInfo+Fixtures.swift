@@ -26,7 +26,7 @@ extension ParraAppInfo: ParraFixture {
                     updatedAt: .now,
                     deletedAt: nil,
                     name: "My org",
-                    issuer: URL(string: "https://parra-demo.com")!,
+                    issuer: "parra-demo.com",
                     subdomain: "mick",
                     isTest: false,
                     parentTenantId: nil,
@@ -42,7 +42,7 @@ extension ParraAppInfo: ParraFixture {
                             data: .externalDomainData(
                                 ExternalDomainData(
                                     status: .error,
-                                    domain: "parra-demo.com",
+                                    name: "parra-demo.com",
                                     disabled: false
                                 )
                             )

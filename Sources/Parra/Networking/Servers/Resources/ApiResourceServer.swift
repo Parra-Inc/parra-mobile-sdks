@@ -102,9 +102,9 @@ final class ApiResourceServer: Server {
             case .success(let data):
                 logger.trace("Parra client received success response")
 
-                let response = try configuration.jsonDecoder.decode(
-                    T.self,
-                    from: data
+                let response = try decodeResponse(
+                    from: data,
+                    as: T.self
                 )
 
                 return AuthenticatedRequestResult(
@@ -169,9 +169,9 @@ final class ApiResourceServer: Server {
             case .success(let data):
                 logger.trace("Parra client received success response")
 
-                let response = try configuration.jsonDecoder.decode(
-                    T.self,
-                    from: data
+                let response = try decodeResponse(
+                    from: data,
+                    as: T.self
                 )
 
                 return AuthenticatedRequestResult(

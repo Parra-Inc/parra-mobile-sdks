@@ -157,9 +157,9 @@ extension Server {
             )
         }
 
-        return try configuration.jsonDecoder.decode(
-            T.self,
-            from: data
+        return try decodeResponse(
+            from: data,
+            as: T.self
         )
     }
 
