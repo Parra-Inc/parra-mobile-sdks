@@ -126,7 +126,7 @@ final class OAuth2Service {
     private func createTokenUrl() throws -> URL {
         guard
             let issuer = authServer.appState.appInfo?.tenant.issuer,
-            let tokenUrl = URL(string: "\(issuer)/auth/token") else
+            let tokenUrl = URL(string: "https://\(issuer)/auth/token") else
         {
             throw ParraError.message("Failed to construct token URL")
         }

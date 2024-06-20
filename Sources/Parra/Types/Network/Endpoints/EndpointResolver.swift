@@ -21,7 +21,13 @@ enum EndpointResolver {
 
         let path = path(for: endpoint)
 
-        return appInfo.tenant.issuer.appending(
+        guard let issuerUrl = URL(string: "https://\(appInfo.tenant.issuer)") else {
+            throw ParraError.message(
+                "Issuer host name could not be converted to URL."
+            )
+        }
+
+        return issuerUrl.appending(
             path: path
         )
     }
