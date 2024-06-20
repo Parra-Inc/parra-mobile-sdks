@@ -22,34 +22,40 @@ struct LaunchScreenWindow<Content>: View where Content: View {
 
     var body: some View {
         ZStack {
+            // During this phase, initialization has finished so the primary
+            // content view can be created, but the launch screen can not be
+            // destroyed until its animation off screen has completed.
+
+            let (appInfo, launchConfig): (
+                ParraAppInfo?,
+                ParraLaunchScreen.Config?
+            ) = switch launchScreenState.current {
+            case .initial(let config):
+                (nil, config)
+            case .transitioning(let parraAppInfo, let config):
+                (parraAppInfo, config)
+            case .complete(let parraAppInfo):
+                (parraAppInfo, nil)
+            }
+
             // Important: Seperate conditions determine when the launch
             // screen and primary app content should be displayed. This
             // allows the the launch screen to be removed without needing to
             // trigger a re-render on the primary app content.
 
-            // During this phase, initialization has finished so the primary
-            // content view can be created, but the launch screen can not be
-            // destroyed until its animation off screen has completed.
-
-            switch launchScreenState.current {
-            case .initial(let config):
+            if let launchConfig {
                 // When the app first launches, default to displaying the launch
                 // screen without rendering the main app content. This will
                 // prevent any logic within the app that may depend on Parra
                 // being initialized from running until we're ready.
                 renderLaunchScreen(
-                    launchScreenConfig: config
+                    launchScreenConfig: launchConfig
                 )
-            case .transitioning(let parraAppInfo, let config):
-                renderLaunchScreen(
-                    launchScreenConfig: config
-                )
+            }
 
+            if let appInfo {
                 renderPrimaryContent()
-                    .environmentObject(parraAppInfo)
-            case .complete(let parraAppInfo):
-                renderPrimaryContent()
-                    .environmentObject(parraAppInfo)
+                    .environmentObject(appInfo)
             }
         }
     }

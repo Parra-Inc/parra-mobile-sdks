@@ -17,7 +17,8 @@ struct SampleApp: App {
         ParraApp(
             workspaceId: Parra.Demo.workspaceId,
             applicationId: Parra.Demo.applicationId,
-            appDelegate: appDelegate
+            appDelegate: appDelegate,
+            authenticationMethod: .parraAuth
         ) {
             WindowGroup {
                 ParraRequiredAuthWindow(
