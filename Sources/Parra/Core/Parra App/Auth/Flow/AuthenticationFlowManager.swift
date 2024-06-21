@@ -407,6 +407,10 @@ class AuthenticationFlowManager: ObservableObject {
                         legalInfo: appInfo.legal,
                         authService: authService
                     )
+                },
+                forgotPassword: {
+                    // TODO: Forgot password
+                    // Will get 429 response if limited
                 }
             )
 

@@ -144,6 +144,33 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 }
             }
 
+            if params.userExists, params.passwordAvailable {
+                componentFactory
+                    .buildPlainButton(
+                        config: ParraTextButtonConfig(
+                            type: .primary,
+                            size: .medium,
+                            isMaxWidth: false
+                        ),
+                        text: "Forgot password?",
+                        localAttributes: ParraAttributes.PlainButton(
+                            normal: ParraAttributes.PlainButton
+                                .StatefulAttributes(
+                                    label: ParraAttributes.Label(
+                                        text: ParraAttributes.Text(
+                                            alignment: .center
+                                        )
+                                    )
+                                )
+                        ),
+                        onPress: {
+                            Task {
+                                await params.forgotPassword()
+                            }
+                        }
+                    )
+            }
+
             if passwordlessChallengesAvailable,
                ![.uknownIdentity, .username].contains(params.identityType)
             {
@@ -294,7 +321,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     .init(id: .passwordlessEmail)
                 ],
                 legalInfo: LegalInfo.validStates()[0],
-                submit: { _ in }
+                submit: { _ in },
+                forgotPassword: {}
             ),
             config: .init()
         )
@@ -321,7 +349,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     .init(id: .password)
                 ],
                 legalInfo: LegalInfo.validStates()[0],
-                submit: { _ in }
+                submit: { _ in },
+                forgotPassword: {}
             ),
             config: .init()
         )
@@ -348,7 +377,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     .init(id: .passwordlessSms)
                 ],
                 legalInfo: LegalInfo.validStates()[0],
-                submit: { _ in }
+                submit: { _ in },
+                forgotPassword: {}
             ),
             config: .init()
         )
@@ -375,7 +405,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     .init(id: .passwordlessSms)
                 ],
                 legalInfo: LegalInfo.validStates()[0],
-                submit: { _ in }
+                submit: { _ in },
+                forgotPassword: {}
             ),
             config: .init()
         )

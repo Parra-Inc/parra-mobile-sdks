@@ -22,7 +22,8 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
             submit: @escaping (
                 _ challengeResponse: ChallengeResponse
             ) async throws
-                -> Void
+                -> Void,
+            forgotPassword: @escaping () async -> Void
         ) {
             self.identity = identity
             self.identityType = identityType
@@ -31,6 +32,7 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
             self.supportedChallenges = supportedChallenges
             self.legalInfo = legalInfo
             self.submit = submit
+            self.forgotPassword = forgotPassword
         }
 
         // MARK: - Public
@@ -43,6 +45,7 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
         public let legalInfo: LegalInfo
         public let submit: (_ challengeResponse: ChallengeResponse) async throws
             -> Void
+        public let forgotPassword: () async -> Void
 
         // MARK: - Internal
 
