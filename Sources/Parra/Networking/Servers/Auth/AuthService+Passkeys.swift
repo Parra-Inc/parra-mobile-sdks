@@ -143,10 +143,10 @@ extension AuthService {
                 nil
             }
 
-            let userHandle = credential.userID.base64EncodedString()
-            let signature = credential.signature.base64EncodedString()
+            let userHandle = credential.userID.base64urlEncodedString()
+            let signature = credential.signature.base64urlEncodedString()
             let authenticatorData = credential.rawAuthenticatorData
-                .base64EncodedString()
+                .base64urlEncodedString()
 
             let response = try await authServer.postWebAuthnAuthenticate(
                 requestData: WebauthnAuthenticateRequestBody(
@@ -283,13 +283,18 @@ extension AuthService {
             throw ParraError.message("Missing relying party identifier")
         }
 
-        let challenge = Data(challengeResponse.challenge.utf8)
+        guard let challengeData = Data(
+            base64urlEncoded: challengeResponse.challenge
+        ) else {
+            throw ParraError.message("Failed to decode challenge")
+        }
+
         let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
             relyingPartyIdentifier: relyingPartyIdentifier
         )
 
         let request = provider.createCredentialAssertionRequest(
-            challenge: challenge
+            challenge: challengeData
         )
 
         // used when we have context about the user, like when they've typed in their username
