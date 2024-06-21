@@ -34,13 +34,24 @@ struct ParraViewPreview<Content>: View where Content: View {
             applicationId: Parra.Demo.applicationId
         )
 
-        self.parra = Parra(
-            parraInternal: ParraInternal
-                .createParraSwiftUIPreviewsInstance(
-                    appState: appState,
-                    authenticationMethod: .preview,
-                    configuration: configuration
-                )
+        let parraInternal = ParraInternal
+            .createParraSwiftUIPreviewsInstance(
+                appState: appState,
+                authenticationMethod: .preview,
+                configuration: configuration
+            )
+
+        self.parra = Parra(parraInternal: parraInternal)
+
+        self._alertManager = StateObject(
+            wrappedValue: parraInternal.alertManager
+        )
+
+        self._themeObserver = StateObject(
+            wrappedValue: ParraThemeObserver(
+                theme: parraInternal.configuration.theme,
+                notificationCenter: parraInternal.notificationCenter
+            )
         )
     }
 
@@ -52,7 +63,16 @@ struct ParraViewPreview<Content>: View where Content: View {
         }
         .environment(\.parra, parra)
         .environmentObject(parraAuthState)
+        .environmentObject(alertManager)
+        .environmentObject(themeObserver)
         //        .environmentObject(ParraAppInfo) // TODO: Need this?
+        .environmentObject(
+            LaunchScreenStateManager(
+                state: .complete(
+                    ParraAppInfo.validStates()[0]
+                )
+            )
+        )
         .environmentObject(factory)
     }
 
@@ -64,5 +84,7 @@ struct ParraViewPreview<Content>: View where Content: View {
     private let configuration: ParraConfiguration
     private let parra: Parra
 
+    @StateObject private var alertManager: AlertManager
     @StateObject private var parraAuthState: ParraAuthState
+    @StateObject private var themeObserver: ParraThemeObserver
 }
