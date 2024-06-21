@@ -6,6 +6,7 @@
 	<string>production</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
+		<string>webcredentials:parra-demo.com</string>
 		<string>webcredentials:parra-public-demo.parra.io</string>
 		<string>webcredentials:tenant-201cbcf0-b5d6-4079-9e4d-177ae04cc9f4.parra.io</string>
 	</array>
