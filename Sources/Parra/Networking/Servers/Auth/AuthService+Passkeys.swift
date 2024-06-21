@@ -69,10 +69,8 @@ extension AuthService {
 
         let authorization = try await beginAuthorization(
             for: requests,
-            using: .modal
+            using: presentationMode
         )
-
-        // TODO: If user already exists error, login? 409 from server or apple error?
 
         let accessToken = try await processPasskeyAuthorization(
             authorization: authorization,
