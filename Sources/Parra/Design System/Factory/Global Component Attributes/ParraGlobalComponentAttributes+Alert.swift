@@ -131,6 +131,44 @@ public extension ParraGlobalComponentAttributes {
         ).mergingOverrides(localAttributes)
     }
 
+    func loadingIndicatorAlertAttributes(
+        content: ParraLoadingIndicatorContent,
+        localAttributes: ParraAttributes.LoadingIndicator?,
+        theme: ParraTheme
+    ) -> ParraAttributes.LoadingIndicator {
+        let palette = theme.palette
+
+        return ParraAttributes.LoadingIndicator(
+            title: ParraAttributes.Label(
+                text: ParraAttributes.Text(
+                    style: .headline,
+                    alignment: .center
+                ),
+                padding: .custom(
+                    .padding(bottom: 2)
+                )
+            ),
+            subtitle: ParraAttributes.Label(
+                text: ParraAttributes.Text(
+                    style: .subheadline,
+                    alignment: .center
+                )
+            ),
+            cancelButton: .init(
+                normal: ParraAttributes.PlainButton.StatefulAttributes(
+                    padding: .xs
+                )
+            ),
+            border: ParraAttributes.Border(
+                width: 0.5,
+                color: palette.primarySeparator.toParraColor()
+            ),
+            cornerRadius: .xxl,
+            padding: .xxl,
+            background: palette.primaryBackground.toParraColor()
+        )
+    }
+
     private func defaultDismissButton(
         cornerPadding: CGFloat
     ) -> ParraAttributes.ImageButton {

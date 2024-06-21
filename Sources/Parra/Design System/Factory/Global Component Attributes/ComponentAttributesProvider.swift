@@ -54,6 +54,12 @@ public protocol ComponentAttributesProvider {
         theme: ParraTheme
     ) -> ParraAttributes.ToastAlert
 
+    func loadingIndicatorAlertAttributes(
+        content: ParraLoadingIndicatorContent,
+        localAttributes: ParraAttributes.LoadingIndicator?,
+        theme: ParraTheme
+    ) -> ParraAttributes.LoadingIndicator
+
     // MARK: Text Inputs
 
     func textInputAttributes(

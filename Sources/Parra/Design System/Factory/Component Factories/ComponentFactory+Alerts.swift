@@ -50,4 +50,25 @@ extension ComponentFactory {
             primaryAction: primaryAction
         )
     }
+
+    @ViewBuilder
+    func buildLoadingIndicator(
+        content: ParraLoadingIndicatorContent,
+        onDismiss: @escaping () -> Void,
+        cancel: (() -> Void)? = nil,
+        localAttributes: ParraAttributes.LoadingIndicator? = nil
+    ) -> some View {
+        let attributes = attributeProvider.loadingIndicatorAlertAttributes(
+            content: content,
+            localAttributes: localAttributes,
+            theme: theme
+        )
+
+        LoadingIndicatorComponent(
+            content: content,
+            attributes: attributes,
+            onDismiss: onDismiss,
+            cancel: cancel
+        )
+    }
 }

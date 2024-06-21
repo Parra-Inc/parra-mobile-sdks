@@ -23,6 +23,55 @@ final class ModalScreenManager {
 
     // MARK: - Internal
 
+    func presentLoadingIndicatorModal(
+        component: LoadingIndicatorComponent,
+        completion: (() -> Void)? = nil
+    ) {
+        Task { @MainActor in
+            guard currentProgressIndicatorModal == nil else {
+                return
+            }
+
+            guard
+                let scene = UIViewController.safeGetKeyWindow()?.windowScene?
+                .delegate as? ParraSceneDelegate else
+            {
+                return
+            }
+
+            guard
+                let viewController = scene.modalOverlayWindow?
+                .rootViewController else
+            {
+                return
+            }
+
+            let modalViewController = UIHostingController(
+                rootView: VStack {
+                    component
+                }
+            )
+            modalViewController.modalPresentationStyle = .overCurrentContext
+
+            viewController
+                .present(modalViewController, animated: true) {
+                    completion?()
+                }
+
+            self.currentProgressIndicatorModal = modalViewController
+        }
+    }
+
+    func dismissLoadingIndicatorModal(
+        completion: (() -> Void)? = nil
+    ) {
+        Task { @MainActor in
+            currentProgressIndicatorModal?.dismiss(animated: true) {
+                completion?()
+            }
+        }
+    }
+
     func presentModalView<ContainerType>(
         of type: ContainerType.Type,
         with config: ContainerType.Config = .init(),
@@ -32,7 +81,23 @@ final class ModalScreenManager {
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) where ContainerType: Container {
         Task { @MainActor in
-            guard let viewController = UIViewController.topMostViewController() else {
+            guard
+                let scene = UIViewController.safeGetKeyWindow()?.windowScene?
+                .delegate as? ParraSceneDelegate else
+            {
+                onDismiss?(
+                    .failed(
+                        "Could not locate primary scene delegate"
+                    )
+                )
+
+                return
+            }
+
+            guard
+                let viewController = scene.modalOverlayWindow?
+                .rootViewController else
+            {
                 onDismiss?(
                     .failed(
                         "Could not establish root view controller to present modal."
@@ -86,6 +151,8 @@ final class ModalScreenManager {
     }
 
     // MARK: - Private
+
+    @MainActor private var currentProgressIndicatorModal: UIViewController?
 
     private let containerRenderer: ContainerRenderer
     private let configuration: ParraConfiguration

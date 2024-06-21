@@ -32,4 +32,27 @@ extension View {
             from: theme
         )
     }
+
+    @ViewBuilder
+    func applyLoadingIndicatorAlertAttributes(
+        _ attributes: ParraAttributes.LoadingIndicator,
+        using theme: ParraTheme
+    ) -> some View {
+        let palette = theme.palette
+
+        applyPadding(
+            size: attributes.padding,
+            from: theme
+        )
+        .background(attributes.background ?? palette.primaryBackground)
+        .applyCornerRadii(
+            size: attributes.cornerRadius,
+            from: theme
+        )
+        .applyBorder(
+            attributes.border,
+            with: attributes.cornerRadius,
+            from: theme
+        )
+    }
 }
