@@ -14,7 +14,7 @@
 		00069BC32BECF9B1003C447A /* ParraAttributes+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00069BC22BECF9B1003C447A /* ParraAttributes+Alert.swift */; };
 		00069BC52BECFC4E003C447A /* View+applyAlertAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00069BC42BECFC4E003C447A /* View+applyAlertAttributes.swift */; };
 		00069BC72BECFD2B003C447A /* ParraGlobalComponentAttributes+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00069BC62BECFD2B003C447A /* ParraGlobalComponentAttributes+Alert.swift */; };
-		0011C7DC2B9B5A8E0095EAE8 /* ToastPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0011C7DB2B9B5A8E0095EAE8 /* ToastPresenter.swift */; };
+		0011C7DC2B9B5A8E0095EAE8 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0011C7DB2B9B5A8E0095EAE8 /* AlertPresenter.swift */; };
 		0011C7DE2B9B7DCC0095EAE8 /* UIDevice++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0011C7DD2B9B7DCC0095EAE8 /* UIDevice++.swift */; };
 		001230082B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001230072B98EDF4007E5632 /* AuthenticatedRequestResponseContext.swift */; };
 		0012300D2B990485007E5632 /* View+emptyPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012300C2B990485007E5632 /* View+emptyPlaceholder.swift */; };
@@ -216,6 +216,11 @@
 		006654392A89AFB000CD04E6 /* ParraSessionUploadGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006654382A89AFB000CD04E6 /* ParraSessionUploadGenerator.swift */; };
 		0066543B2A8A5F0E00CD04E6 /* LoggerFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066543A2A8A5F0E00CD04E6 /* LoggerFormatters.swift */; };
 		006BEFC62C24677C001484C2 /* LaunchScreenWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFC52C24677C001484C2 /* LaunchScreenWindow.swift */; };
+		006BEFC82C25BC34001484C2 /* AlertManager+Toasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFC72C25BC34001484C2 /* AlertManager+Toasts.swift */; };
+		006BEFCA2C25BC6E001484C2 /* AlertManager+Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFC92C25BC6E001484C2 /* AlertManager+Loading.swift */; };
+		006BEFCC2C25BE2E001484C2 /* LoadingIndicatorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFCB2C25BE2E001484C2 /* LoadingIndicatorComponent.swift */; };
+		006BEFCE2C25BE86001484C2 /* ParraLoadingIndicatorContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFCD2C25BE86001484C2 /* ParraLoadingIndicatorContent.swift */; };
+		006BEFD02C25BEDB001484C2 /* ParraAttributes+LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFCF2C25BEDB001484C2 /* ParraAttributes+LoadingIndicator.swift */; };
 		006DE9802A472F1B00521F5D /* Parra+Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006DE97F2A472F1B00521F5D /* Parra+Push.swift */; };
 		006DE9822A472F9C00521F5D /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006DE9812A472F9C00521F5D /* Endpoint.swift */; };
 		006DE9882A47547900521F5D /* ParraLazyLogParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006DE9872A47547900521F5D /* ParraLazyLogParam.swift */; };
@@ -700,7 +705,7 @@
 		00069BC62BECFD2B003C447A /* ParraGlobalComponentAttributes+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraGlobalComponentAttributes+Alert.swift"; sourceTree = "<group>"; };
 		000AF4C2283AE6E7008A17A3 /* ParraShadowConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraShadowConfig.swift; sourceTree = "<group>"; };
 		000AF4C4283AE6FF008A17A3 /* ParraTextConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTextConfig.swift; sourceTree = "<group>"; };
-		0011C7DB2B9B5A8E0095EAE8 /* ToastPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastPresenter.swift; sourceTree = "<group>"; };
+		0011C7DB2B9B5A8E0095EAE8 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		0011C7DD2B9B7DCC0095EAE8 /* UIDevice++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice++.swift"; sourceTree = "<group>"; };
 		00120EF2274D1EEE00CA3247 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		00120EF8274D9CFC00CA3247 /* ParraCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardView.swift; sourceTree = "<group>"; };
@@ -920,6 +925,11 @@
 		006654382A89AFB000CD04E6 /* ParraSessionUploadGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionUploadGenerator.swift; sourceTree = "<group>"; };
 		0066543A2A8A5F0E00CD04E6 /* LoggerFormatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerFormatters.swift; sourceTree = "<group>"; };
 		006BEFC52C24677C001484C2 /* LaunchScreenWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenWindow.swift; sourceTree = "<group>"; };
+		006BEFC72C25BC34001484C2 /* AlertManager+Toasts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertManager+Toasts.swift"; sourceTree = "<group>"; };
+		006BEFC92C25BC6E001484C2 /* AlertManager+Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertManager+Loading.swift"; sourceTree = "<group>"; };
+		006BEFCB2C25BE2E001484C2 /* LoadingIndicatorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorComponent.swift; sourceTree = "<group>"; };
+		006BEFCD2C25BE86001484C2 /* ParraLoadingIndicatorContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLoadingIndicatorContent.swift; sourceTree = "<group>"; };
+		006BEFCF2C25BEDB001484C2 /* ParraAttributes+LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+LoadingIndicator.swift"; sourceTree = "<group>"; };
 		006DE97F2A472F1B00521F5D /* Parra+Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Push.swift"; sourceTree = "<group>"; };
 		006DE9812A472F9C00521F5D /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		006DE9872A47547900521F5D /* ParraLazyLogParam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLazyLogParam.swift; sourceTree = "<group>"; };
@@ -2718,6 +2728,7 @@
 				00E8A4362BF3F3EB00991D7C /* ParraAttributes+EmptyState.swift */,
 				009D84262BEA6921005EBFEB /* ParraAttributes+Image.swift */,
 				009D84282BEA6926005EBFEB /* ParraAttributes+Label.swift */,
+				006BEFCF2C25BEDB001484C2 /* ParraAttributes+LoadingIndicator.swift */,
 				00E8A4212BF3BE5100991D7C /* ParraAttributes+Menu.swift */,
 				00E8A4192BED641A00991D7C /* ParraAttributes+Segment.swift */,
 				00AB95A72BE4547400B27091 /* ParraAttributes+Shadow.swift */,
@@ -3108,6 +3119,7 @@
 			isa = PBXGroup;
 			children = (
 				00F7C48C2B99FE8200DBDF5A /* ParraAlertContent.swift */,
+				006BEFCD2C25BE86001484C2 /* ParraLoadingIndicatorContent.swift */,
 				009D84142BE92069005EBFEB /* BadgeContent.swift */,
 				00374D7C2BA1EC3E0028EDA8 /* EmptyStateContent.swift */,
 				00FCB1672B96271700635DC8 /* ImageButtonContent.swift */,
@@ -3294,7 +3306,9 @@
 			isa = PBXGroup;
 			children = (
 				00F7C4912B9A0E8200DBDF5A /* AlertManager.swift */,
-				0011C7DB2B9B5A8E0095EAE8 /* ToastPresenter.swift */,
+				006BEFC92C25BC6E001484C2 /* AlertManager+Loading.swift */,
+				006BEFC72C25BC34001484C2 /* AlertManager+Toasts.swift */,
+				0011C7DB2B9B5A8E0095EAE8 /* AlertPresenter.swift */,
 			);
 			path = Alerts;
 			sourceTree = "<group>";
@@ -3304,6 +3318,7 @@
 			children = (
 				00F7C4942B9A111B00DBDF5A /* InlineAlertComponent.swift */,
 				00F7C4AD2B9A5B6C00DBDF5A /* ToastAlertComponent.swift */,
+				006BEFCB2C25BE2E001484C2 /* LoadingIndicatorComponent.swift */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -3738,7 +3753,7 @@
 				00995BEF2BB4C99600384D94 /* ViewDataLoader+Release.swift in Sources */,
 				00DA7FF0295DD28700109081 /* Parra+Analytics.swift in Sources */,
 				00E76D342B66E3FD00B01DD8 /* Container.swift in Sources */,
-				0011C7DC2B9B5A8E0095EAE8 /* ToastPresenter.swift in Sources */,
+				0011C7DC2B9B5A8E0095EAE8 /* AlertPresenter.swift in Sources */,
 				0029AD392A4925D000E30CCD /* ParraInternalEvent.swift in Sources */,
 				004F3EED2BA4BF8300424802 /* ChangelogWidget+ContentObserver+Content.swift in Sources */,
 				00FCB1962B97B87F00635DC8 /* RoadmapWidget+ContentObserver+InitialParams.swift in Sources */,
@@ -3818,6 +3833,7 @@
 				004F3EEB2BA4BF4F00424802 /* ChangelogWidget+ContentObserver.swift in Sources */,
 				00ABF1762B7D344C00A054A2 /* ParraDefaultLaunchScreen.swift in Sources */,
 				00AB95A82BE4547400B27091 /* ParraAttributes+Shadow.swift in Sources */,
+				006BEFCE2C25BE86001484C2 /* ParraLoadingIndicatorContent.swift in Sources */,
 				0039623D2A48B51100B8655F /* CAShapeLayer.swift in Sources */,
 				009D84172BE9271C005EBFEB /* Font+toUIFont.swift in Sources */,
 				00FCB1682B96271700635DC8 /* ImageButtonContent.swift in Sources */,
@@ -3934,6 +3950,7 @@
 				00588FC92C15D87000A5E435 /* Server+logTaskMetrics.swift in Sources */,
 				00F7C4AE2B9A5B6C00DBDF5A /* ToastAlertComponent.swift in Sources */,
 				00ABF1C22B87AEC000A054A2 /* ParraContainerPreview.swift in Sources */,
+				006BEFCA2C25BC6E001484C2 /* AlertManager+Loading.swift in Sources */,
 				00F7C4AA2B9A439000DBDF5A /* ComponentFactory+Segments.swift in Sources */,
 				002C77192BAA2EA700DCEBD8 /* AppInfo+Fixtures.swift in Sources */,
 				00374D7D2BA1EC3E0028EDA8 /* EmptyStateContent.swift in Sources */,
@@ -4040,6 +4057,7 @@
 				00AB95AC2BE455D100B27091 /* ParraAttributes+Text.swift in Sources */,
 				00FCB1862B9779F000635DC8 /* View+SheetWithLoader.swift in Sources */,
 				00FCB1842B9779D200635DC8 /* SheetWithLoader.swift in Sources */,
+				006BEFCC2C25BE2E001484C2 /* LoadingIndicatorComponent.swift in Sources */,
 				00497D7929F88CC4004EF5AB /* ParraSessionsResponse.swift in Sources */,
 				00285DA22BCDF1FD00508DC8 /* ParraRequiredAuthWindow.swift in Sources */,
 				00D151272C06BB710049D88F /* LegalInfoView.swift in Sources */,
@@ -4164,12 +4182,14 @@
 				001779B22BC08A4F000AF0BB /* String+now.swift in Sources */,
 				004F3EE52BA4B21100424802 /* ChangelogWidget.swift in Sources */,
 				00ABF1782B7D346500A054A2 /* ParraStoryboardLaunchScreen.swift in Sources */,
+				006BEFD02C25BEDB001484C2 /* ParraAttributes+LoadingIndicator.swift in Sources */,
 				001677532B6ABFB700674001 /* TextButton+RenderStorybook.swift in Sources */,
 				00D1512B2C0765DC0049D88F /* ParraAppAuthInfo+ParraFixtures.swift in Sources */,
 				00E15A1F2929B7C10049C2C7 /* ParraSessionManager.swift in Sources */,
 				00995C042BB6F9AE00384D94 /* Tenants.swift in Sources */,
 				003298762C08B8A50018A94A /* Bundle+decode.swift in Sources */,
 				007ED46D2A6BFBF50077E446 /* ParraLogProcessedData.swift in Sources */,
+				006BEFC82C25BC34001484C2 /* AlertManager+Toasts.swift in Sources */,
 				0087CA962A59D82D007D72FA /* UIDeviceBatteryState+ParraLogStringConvertible.swift in Sources */,
 				00E8A41C2BED679B00991D7C /* ParraGlobalComponentAttributes+Segment.swift in Sources */,
 				00EAE2FB2AA0C196003FB41C /* ParraSessionGenerator.swift in Sources */,
@@ -4451,7 +4471,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sample/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Parra SDK";
+				INFOPLIST_KEY_CFBundleDisplayName = "Parra Demo";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -4491,7 +4511,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sample/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Parra SDK";
+				INFOPLIST_KEY_CFBundleDisplayName = "Parra Demo";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
