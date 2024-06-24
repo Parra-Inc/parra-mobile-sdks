@@ -47,14 +47,6 @@ public class ParraAuthState: ObservableObject {
         }
     }
 
-    func forceLogout(
-        from error: Error
-    ) {
-        logger.error("Forcing logout due to error", error)
-
-        current = .unauthenticated(error)
-    }
-
     // MARK: - Private
 
     private var authObserver: NSObjectProtocol?

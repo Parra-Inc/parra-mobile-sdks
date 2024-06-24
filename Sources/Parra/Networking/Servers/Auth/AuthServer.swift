@@ -296,7 +296,8 @@ final class AuthServer: Server {
             to: .getAppInfo,
             with: accessToken,
             queryItems: queryItems,
-            timeout: timeout
+            timeout: timeout,
+            cachePolicy: .reloadRevalidatingCacheData
         )
     }
 
@@ -322,7 +323,9 @@ final class AuthServer: Server {
         with accessToken: String?,
         queryItems: [String: String] = [:],
         body: Data? = nil,
-        timeout: TimeInterval? = nil
+        timeout: TimeInterval? = nil,
+        cachePolicy: NSURLRequest
+            .CachePolicy = .reloadIgnoringLocalAndRemoteCacheData
     ) async throws -> T where T: Codable {
         let url = try EndpointResolver.resolve(
             endpoint: endpoint,
@@ -344,7 +347,7 @@ final class AuthServer: Server {
         var request = URLRequest(url: urlComponents.url!)
 
         request.httpMethod = endpoint.method.rawValue
-        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        request.cachePolicy = cachePolicy
         request.timeoutInterval = timeout ?? configuration.urlSession
             .configuration.timeoutIntervalForRequest
 

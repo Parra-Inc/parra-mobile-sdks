@@ -37,6 +37,8 @@ final class AppInfoManager {
         static let versionTokenKey = "version_token_info"
 
         static let currentVersionKey = "current_version"
+        static let appInfoCacheKey = "app_info_cache"
+        static let fullAppInfoKey = "full_app_info"
     }
 
     struct AppVersionInfo: Codable {
@@ -65,6 +67,12 @@ final class AppInfoManager {
 
     let versionTokenCache = ParraStorageModule<VersionTokenInfo>(
         dataStorageMedium: .userDefaults(key: Constant.versionTokenKey),
+        jsonEncoder: .parraEncoder,
+        jsonDecoder: .parraDecoder
+    )
+
+    let appInfoCache = ParraStorageModule<ParraAppInfo>(
+        dataStorageMedium: .userDefaults(key: Constant.appInfoCacheKey),
         jsonEncoder: .parraEncoder,
         jsonDecoder: .parraDecoder
     )
@@ -115,21 +123,40 @@ final class AppInfoManager {
             await cachedVersionToken()?.token
         }
 
-        let response = try await authServer.getAppInfo(
-            versionToken: versionToken,
-            timeout: timeout
-        )
+        let appInfo: ParraAppInfo
+
+        do {
+            appInfo = try await authServer.getAppInfo(
+                versionToken: versionToken,
+                timeout: timeout
+            )
+        } catch {
+            logger.error("Error fetching latest app info", error)
+
+            if let cached = await cachedAppInfo() {
+                logger.debug("Falling back on cached app info.")
+
+                appInfo = cached
+            } else {
+                logger.debug("No cached app info existed to fall back on.")
+
+                throw error
+            }
+        }
+
+        // Persist a copy of the entire app info response.
+        try await updateCachedAppInfo(appInfo)
 
         // Only update the token if it changed, since updating will bump the
         // updated date field on the version info.
         if let versionToken,
-           let newVersionToken = response.versionToken,
+           let newVersionToken = appInfo.versionToken,
            versionToken != newVersionToken
         {
             try await updateLatestSeenVersionToken(newVersionToken)
         }
 
-        return response
+        return appInfo
     }
 
     func fetchLatestAppStoreUpdate(
@@ -173,6 +200,16 @@ final class AppInfoManager {
         return cached
     }
 
+    func cachedAppInfo() async -> ParraAppInfo? {
+        guard let cached = await appInfoCache.read(
+            name: Constant.fullAppInfoKey
+        ) else {
+            return nil
+        }
+
+        return cached
+    }
+
     func updateLatestAppVersion(
         _ version: String,
         versionShort: String
@@ -194,6 +231,13 @@ final class AppInfoManager {
                 token: token,
                 date: .now
             )
+        )
+    }
+
+    func updateCachedAppInfo(_ appInfo: ParraAppInfo) async throws {
+        try await appInfoCache.write(
+            name: Constant.fullAppInfoKey,
+            value: appInfo
         )
     }
 }

@@ -135,6 +135,14 @@ final class AuthService {
         await applyUserUpdate(.unauthenticated(nil))
     }
 
+    func forceLogout(
+        from error: Error
+    ) async {
+        logger.error("Forcing logout due to error", error)
+
+        await applyUserUpdate(.unauthenticated(error))
+    }
+
     func getAuthChallenges(
         for identity: String,
         with identityType: IdentityType?
@@ -152,20 +160,6 @@ final class AuthService {
     func getCurrentUser() async -> ParraUser? {
         return await dataManager.getCurrentUser()
     }
-
-    // App launches
-    // Show launch while loading state
-    // when state loads, check if auth'd
-    // if auth'd show app and refresh auth
-    // if refresh fails, stay logged in unless 401, then logout
-
-    // parra auth ->
-
-    // public key -> 401 -> retry -> 401 -> logout
-    // public key -> user id provider fails -> logout after retry (any error)
-
-    // custom -> 401 -> logout
-    // custom -> other error -> retry logout if failed
 
     /// Fetches the cached token, or refreshes the cached token and returns the
     /// result if the current token is expired. Does **not** refresh user info

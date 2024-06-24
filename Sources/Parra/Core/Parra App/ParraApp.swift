@@ -260,7 +260,7 @@ public struct ParraApp<
 
                 // This is unrecoverable. Force a logout.
 
-                parraAuthState.forceLogout(from: error)
+                await parra.authService.forceLogout(from: error)
 
                 launchScreenState.fail(
                     userMessage: "Failed to perform actions necessary to launch app.",
