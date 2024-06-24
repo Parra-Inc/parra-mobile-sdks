@@ -14,7 +14,7 @@ public struct ParraErrorBoundary: View {
     // MARK: - Public
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 50) {
+        VStack(alignment: .center, spacing: 12) {
             VStack {
                 componentFactory.buildImage(
                     content: .symbol("exclamationmark.triangle.fill"),
@@ -28,7 +28,7 @@ public struct ParraErrorBoundary: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
 
-            VStack(alignment: .leading) {
+            VStack(alignment: .center, spacing: 8) {
                 componentFactory.buildLabel(
                     text: "Oops!",
                     localAttributes: .default(with: .largeTitle)
@@ -56,10 +56,6 @@ public struct ParraErrorBoundary: View {
 //                }
 //            )
         }
-        .frame(
-            maxWidth: .infinity,
-            alignment: .leading
-        )
         .applyDefaultWidgetAttributes(
             using: themeObserver.theme
         )
