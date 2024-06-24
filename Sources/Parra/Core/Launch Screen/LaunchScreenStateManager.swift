@@ -22,9 +22,22 @@ final class LaunchScreenStateManager: ObservableObject {
         case initial(ParraLaunchScreen.Config)
         case transitioning(ParraAppInfo, ParraLaunchScreen.Config)
         case complete(ParraAppInfo)
+        case failed(ParraErrorWithUserInfo)
     }
 
     @Published private(set) var current: State
+
+    func fail(
+        userMessage: String,
+        underlyingError: Error
+    ) {
+        current = .failed(
+            ParraErrorWithUserInfo(
+                userMessage: userMessage,
+                underlyingError: underlyingError
+            )
+        )
+    }
 
     func dismiss(
         with appInfo: ParraAppInfo,

@@ -262,9 +262,10 @@ public struct ParraApp<
 
                 parraAuthState.forceLogout(from: error)
 
-                #if DEBUG
-//                fatalError()
-                #endif
+                launchScreenState.fail(
+                    userMessage: "Failed to perform actions necessary to launch app.",
+                    underlyingError: error
+                )
             }
         }
     }
