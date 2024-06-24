@@ -24,7 +24,7 @@ final class ModalScreenManager {
     // MARK: - Internal
 
     func presentLoadingIndicatorModal(
-        component: LoadingIndicatorComponent,
+        content: ParraLoadingIndicatorContent,
         completion: (() -> Void)? = nil
     ) {
         Task { @MainActor in
@@ -33,24 +33,33 @@ final class ModalScreenManager {
             }
 
             guard
-                let scene = UIViewController.safeGetKeyWindow()?.windowScene?
-                .delegate as? ParraSceneDelegate else
+                let viewController = UIViewController
+                .safeGetFirstNoTouchWindow()?.rootViewController else
             {
                 return
             }
 
-            guard
-                let viewController = scene.modalOverlayWindow?
-                .rootViewController else
-            {
-                return
-            }
+            let themeObserver = ParraThemeObserver(
+                theme: configuration.theme,
+                notificationCenter: notificationCenter
+            )
+
+            let container: ModalLoadingIndicatorContainer = containerRenderer
+                .renderContainer(
+                    contentObserver: ModalLoadingIndicatorContainer
+                        .ContentObserver(
+                            initialParams: .init(
+                                indicatorContent: content
+                            )
+                        ),
+                    config: .init()
+                )
 
             let modalViewController = UIHostingController(
-                rootView: VStack {
-                    component
-                }
+                rootView: container
+                    .environmentObject(themeObserver)
             )
+            modalViewController.view.backgroundColor = .clear
             modalViewController.modalPresentationStyle = .overCurrentContext
 
             viewController
@@ -82,21 +91,8 @@ final class ModalScreenManager {
     ) where ContainerType: Container {
         Task { @MainActor in
             guard
-                let scene = UIViewController.safeGetKeyWindow()?.windowScene?
-                .delegate as? ParraSceneDelegate else
-            {
-                onDismiss?(
-                    .failed(
-                        "Could not locate primary scene delegate"
-                    )
-                )
-
-                return
-            }
-
-            guard
-                let viewController = scene.modalOverlayWindow?
-                .rootViewController else
+                let viewController = UIViewController
+                .safeGetFirstNoTouchWindow()?.rootViewController else
             {
                 onDismiss?(
                     .failed(

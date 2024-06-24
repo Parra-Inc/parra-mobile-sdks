@@ -21,4 +21,13 @@ extension UIViewController {
             .compactMap { ($0 as? UIWindowScene)?.keyWindow }
             .first
     }
+
+    static func safeGetFirstNoTouchWindow() -> UIWindow? {
+        return UIViewController.safeGetKeyWindow()?
+            .windowScene?
+            .windows
+            .first {
+                $0 is NoTouchEventWindow
+            }
+    }
 }

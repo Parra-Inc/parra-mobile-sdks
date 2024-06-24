@@ -18,13 +18,20 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
 
         self.flowConfig = flowConfig
 
-        _navigationState = StateObject(wrappedValue: navigationState)
-        _flowManager = StateObject(
-            wrappedValue: AuthenticationFlowManager(
-                flowConfig: flowConfig,
-                navigationState: navigationState
-            )
+        _navigationState = StateObject(
+            wrappedValue: navigationState
         )
+
+        let flowManager = AuthenticationFlowManager(
+            flowConfig: flowConfig,
+            navigationState: navigationState
+        )
+
+        _flowManager = StateObject(
+            wrappedValue: flowManager
+        )
+
+        flowManager.delegate = self
     }
 
     // MARK: - Public
@@ -84,4 +91,25 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
     @StateObject private var navigationState = NavigationState()
 
     @Environment(\.parra) private var parra
+
+    private func getModalScreenManager() -> ModalScreenManager {
+        return parra.parraInternal.modalScreenManager
+    }
+}
+
+// MARK: AuthenticationFlowManagerDelegate
+
+extension ParraDefaultAuthenticationFlowView: AuthenticationFlowManagerDelegate {
+    func presentModalLoadingIndicator(
+        content: ParraLoadingIndicatorContent,
+        completion: (() -> Void)?
+    ) {
+        let modalScreenManager = parra.parraInternal.modalScreenManager
+
+        modalScreenManager
+            .presentLoadingIndicatorModal(
+                content: content,
+                completion: completion
+            )
+    }
 }

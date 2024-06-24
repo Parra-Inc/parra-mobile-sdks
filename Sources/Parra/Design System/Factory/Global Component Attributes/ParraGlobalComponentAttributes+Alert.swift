@@ -161,11 +161,11 @@ public extension ParraGlobalComponentAttributes {
             ),
             border: ParraAttributes.Border(
                 width: 0.5,
-                color: palette.primarySeparator.toParraColor()
+                color: palette.secondarySeparator.toParraColor()
             ),
             cornerRadius: .xxl,
             padding: .xxl,
-            background: palette.primaryBackground.toParraColor()
+            background: palette.secondaryBackground.toParraColor()
         )
     }
 

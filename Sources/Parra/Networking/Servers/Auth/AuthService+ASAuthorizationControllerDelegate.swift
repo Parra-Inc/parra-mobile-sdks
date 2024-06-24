@@ -79,6 +79,7 @@ extension AuthService {
 
             return
         }
+        //   - _nsError : Error Domain=com.apple.AuthenticationServices.AuthorizationError Code=1001 "No credentials available for login." UserInfo={NSLocalizedFailureReason=No credentials available for login.}
 
         switch error.code {
         case .canceled:
