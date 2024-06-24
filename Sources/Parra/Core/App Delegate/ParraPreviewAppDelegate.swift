@@ -9,7 +9,7 @@
 import UIKit
 
 @MainActor
-open class ParraPreviewAppDelegate: ParraAppDelegate {
+open class ParraPreviewAppDelegate: ParraAppDelegate<ParraSceneDelegate> {
     override open func application(
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data

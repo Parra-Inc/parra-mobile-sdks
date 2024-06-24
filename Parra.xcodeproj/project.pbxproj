@@ -221,6 +221,8 @@
 		006BEFCC2C25BE2E001484C2 /* LoadingIndicatorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFCB2C25BE2E001484C2 /* LoadingIndicatorComponent.swift */; };
 		006BEFCE2C25BE86001484C2 /* ParraLoadingIndicatorContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFCD2C25BE86001484C2 /* ParraLoadingIndicatorContent.swift */; };
 		006BEFD02C25BEDB001484C2 /* ParraAttributes+LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFCF2C25BEDB001484C2 /* ParraAttributes+LoadingIndicator.swift */; };
+		006BEFD22C25FAB5001484C2 /* ParraOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFD12C25FAB5001484C2 /* ParraOrientation.swift */; };
+		006BEFD42C2605C7001484C2 /* ModalLoadingIndicatorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006BEFD32C2605C7001484C2 /* ModalLoadingIndicatorContainer.swift */; };
 		006DE9802A472F1B00521F5D /* Parra+Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006DE97F2A472F1B00521F5D /* Parra+Push.swift */; };
 		006DE9822A472F9C00521F5D /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006DE9812A472F9C00521F5D /* Endpoint.swift */; };
 		006DE9882A47547900521F5D /* ParraLazyLogParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006DE9872A47547900521F5D /* ParraLazyLogParam.swift */; };
@@ -930,6 +932,8 @@
 		006BEFCB2C25BE2E001484C2 /* LoadingIndicatorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorComponent.swift; sourceTree = "<group>"; };
 		006BEFCD2C25BE86001484C2 /* ParraLoadingIndicatorContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLoadingIndicatorContent.swift; sourceTree = "<group>"; };
 		006BEFCF2C25BEDB001484C2 /* ParraAttributes+LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAttributes+LoadingIndicator.swift"; sourceTree = "<group>"; };
+		006BEFD12C25FAB5001484C2 /* ParraOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraOrientation.swift; sourceTree = "<group>"; };
+		006BEFD32C2605C7001484C2 /* ModalLoadingIndicatorContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalLoadingIndicatorContainer.swift; sourceTree = "<group>"; };
 		006DE97F2A472F1B00521F5D /* Parra+Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+Push.swift"; sourceTree = "<group>"; };
 		006DE9812A472F9C00521F5D /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		006DE9872A47547900521F5D /* ParraLazyLogParam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraLazyLogParam.swift; sourceTree = "<group>"; };
@@ -2139,6 +2143,7 @@
 				004F3ED92BA49D2D00424802 /* ParraPreviewAppDelegate.swift */,
 				00D143C42BB21BF400BDB8C4 /* ParraSceneDelegate.swift */,
 				00D143C62BB22E1500BDB8C4 /* NoTouchEventWindow.swift */,
+				006BEFD12C25FAB5001484C2 /* ParraOrientation.swift */,
 			);
 			path = "App Delegate";
 			sourceTree = "<group>";
@@ -3319,6 +3324,7 @@
 				00F7C4942B9A111B00DBDF5A /* InlineAlertComponent.swift */,
 				00F7C4AD2B9A5B6C00DBDF5A /* ToastAlertComponent.swift */,
 				006BEFCB2C25BE2E001484C2 /* LoadingIndicatorComponent.swift */,
+				006BEFD32C2605C7001484C2 /* ModalLoadingIndicatorContainer.swift */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -3689,6 +3695,7 @@
 				005AFE2F2BE2F32F00B0C29A /* API+sessions.swift in Sources */,
 				00D151232C0661670049D88F /* ChallengeView.swift in Sources */,
 				00F7C4B02B9A609D00DBDF5A /* ImageComponent.swift in Sources */,
+				006BEFD42C2605C7001484C2 /* ModalLoadingIndicatorContainer.swift in Sources */,
 				0087CA9C2A59E166007D72FA /* URL+diskUsage.swift in Sources */,
 				0029AD372A4925C000E30CCD /* ParraStandardEvent.swift in Sources */,
 				007ED4682A6BFBDC0077E446 /* ParraLoggerContext+ParraDictionaryConvertible.swift in Sources */,
@@ -3855,6 +3862,7 @@
 				00588FDA2C17582200A5E435 /* ParraAuthenticationType.swift in Sources */,
 				007ED4702A6BFC020077E446 /* Logger+scope.swift in Sources */,
 				0087CA762A57B3C0007D72FA /* Logger+Timers.swift in Sources */,
+				006BEFD22C25FAB5001484C2 /* ParraOrientation.swift in Sources */,
 				00E76D482B66E89C00B01DD8 /* ContainerContent.swift in Sources */,
 				0087CA982A59DEC8007D72FA /* ProcessInfoThermalState+ParraLogStringConvertible.swift in Sources */,
 				0087CA902A59B435007D72FA /* ParraLoggerOptions.swift in Sources */,

@@ -31,12 +31,12 @@ struct CameraView: View {
                     forKey: "orientation"
                 ) // Forcing the rotation to portrait
 
-                ParraAppDelegate
+                ParraOrientation
                     .orientationLock =
                     .portrait // And making sure it stays that way
             }
             .onDisappear {
-                ParraAppDelegate
+                ParraOrientation
                     .orientationLock =
                     .all // Unlocking the rotation when leaving the view
             }

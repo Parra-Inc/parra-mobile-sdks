@@ -18,7 +18,9 @@ import UIKit
 /// unintended behavior, be sure to invoke the super implementation of any
 /// delegate methods that require the `override` keyword.
 @MainActor
-open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
+open class ParraAppDelegate<SceneDelegateClass: ParraSceneDelegate>: NSObject,
+    ObservableObject, UIApplicationDelegate
+{
     // MARK: - Open
 
     open func application(
@@ -82,7 +84,7 @@ open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
         )
 
         if connectingSceneSession.role == .windowApplication {
-            configuration.delegateClass = sceneDelegateClass
+            configuration.delegateClass = SceneDelegateClass.self
         }
 
         return configuration
@@ -92,7 +94,7 @@ open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
         _ application: UIApplication,
         supportedInterfaceOrientationsFor window: UIWindow?
     ) -> UIInterfaceOrientationMask {
-        return ParraAppDelegate.orientationLock
+        return ParraOrientation.orientationLock
     }
 
     // MARK: - Public
@@ -108,27 +110,6 @@ open class ParraAppDelegate: NSObject, ObservableObject, UIApplicationDelegate {
     }
 
     // MARK: - Internal
-
-    static var orientationLock = UIInterfaceOrientationMask.all {
-        didSet {
-            let isPortrait = orientationLock == .portrait || orientationLock ==
-                .portraitUpsideDown
-            let isLandscape = orientationLock == .landscapeLeft ||
-                orientationLock == .landscapeRight
-            let isSingleOrientation = isPortrait || isLandscape
-
-            if isSingleOrientation, let windowScene =
-                UIApplication.shared.connectedScenes.first as? UIWindowScene
-            {
-                windowScene.requestGeometryUpdate(
-                    .iOS(interfaceOrientations: orientationLock)
-                )
-            }
-
-            UIViewController.topMostViewController()?
-                .setNeedsUpdateOfSupportedInterfaceOrientations()
-        }
-    }
 
     /// Not exposed publicly. Should only ever be set once from the
     /// ``Parra/ParraApp`` initializer as a means of passing the Parra instance

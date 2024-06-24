@@ -44,7 +44,10 @@ private let logger = Logger()
 /// }
 /// ```
 @MainActor
-public struct ParraApp<Content: Scene>: Scene {
+public struct ParraApp<
+    Content: Scene,
+    SceneDelegateClass: ParraSceneDelegate
+>: Scene {
     // MARK: - Lifecycle
 
     public init() {
@@ -72,8 +75,7 @@ public struct ParraApp<Content: Scene>: Scene {
     public init(
         workspaceId: String,
         applicationId: String,
-        appDelegate: ParraAppDelegate,
-        sceneDelegateType: ParraSceneDelegate.Type = ParraSceneDelegate.self,
+        appDelegate: ParraAppDelegate<SceneDelegateClass>,
         authenticationMethod: ParraAuthType = .parraAuth,
         configuration: ParraConfiguration = .init(),
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
@@ -125,8 +127,6 @@ public struct ParraApp<Content: Scene>: Scene {
                 state: .initial(mergedLaunchScreenConfig)
             )
         )
-
-        appDelegate.sceneDelegateClass = sceneDelegateType.self
     }
 
     // MARK: - Public

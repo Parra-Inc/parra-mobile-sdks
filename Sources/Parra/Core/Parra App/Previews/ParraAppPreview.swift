@@ -39,7 +39,7 @@ import SwiftUI
 ///
 @MainActor
 public struct ParraAppPreview<Content, DelegateType>: View
-    where Content: View, DelegateType: ParraAppDelegate
+    where Content: View, DelegateType: ParraAppDelegate<ParraSceneDelegate>
 {
     // MARK: - Lifecycle
 

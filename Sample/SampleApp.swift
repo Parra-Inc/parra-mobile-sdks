@@ -11,7 +11,9 @@ import SwiftUI
 
 @main
 struct SampleApp: App {
-    @UIApplicationDelegateAdaptor(ParraAppDelegate.self) var appDelegate
+    @UIApplicationDelegateAdaptor(
+        ParraAppDelegate<ParraSceneDelegate>.self
+    ) var appDelegate
 
     var body: some Scene {
         ParraApp(
