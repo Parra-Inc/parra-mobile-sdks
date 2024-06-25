@@ -22,7 +22,7 @@ actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
 
     // MARK: - Internal
 
-    func read<T>(name: String) async throws -> T? where T: Codable {
+    nonisolated func read<T>(name: String) throws -> T? where T: Codable {
         guard let data = userDefaults.data(forKey: name) else {
             return nil
         }
@@ -30,13 +30,13 @@ actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
         return try jsonDecoder.decode(T.self, from: data)
     }
 
-    func write(name: String, value: some Codable) async throws {
+    nonisolated func write(name: String, value: some Codable) throws {
         let data = try jsonEncoder.encode(value)
 
         userDefaults.set(data, forKey: name)
     }
 
-    func delete(name: String) async throws {
+    nonisolated func delete(name: String) throws {
         userDefaults.removeObject(forKey: name)
     }
 

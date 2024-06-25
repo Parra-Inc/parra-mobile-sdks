@@ -60,32 +60,27 @@ extension ParraInternal {
 
         // Common
 
-        let credentialStorageModule = ParraStorageModule<ParraUser>(
-            dataStorageMedium: .fileSystem(
-                baseUrl: instanceConfiguration.storageConfiguration
-                    .baseDirectory,
-                folder: instanceConfiguration.storageConfiguration
-                    .storageDirectoryName,
-                fileName: DataManager.Key.userCredentialsKey,
-                storeItemsSeparately: false,
-                fileManager: fileManager
-            ),
-            jsonEncoder: instanceConfiguration.storageConfiguration
-                .sessionJsonEncoder,
-            jsonDecoder: instanceConfiguration.storageConfiguration
-                .sessionJsonDecoder
-        )
+        let storageConfig = instanceConfiguration.storageConfiguration
 
-        let sessionStorageUrl = instanceConfiguration.storageConfiguration
+        let sessionStorageUrl = storageConfig
             .baseDirectory
             .appendDirectory(
-                instanceConfiguration.storageConfiguration
-                    .storageDirectoryName
+                storageConfig.storageDirectoryName
             )
             .appendDirectory("sessions")
 
-        let notificationCenter = ParraNotificationCenter.default
+        let credentialStorageModule = ParraStorageModule<ParraUser>(
+            dataStorageMedium: .fileSystemEncrypted(
+                baseUrl: storageConfig.baseDirectory,
+                folder: "credentials",
+                fileName: DataManager.Key.userCredentialsKey,
+                fileManager: fileManager
+            ),
+            jsonEncoder: storageConfig.sessionJsonEncoder,
+            jsonDecoder: storageConfig.sessionJsonDecoder
+        )
 
+        let notificationCenter = ParraNotificationCenter.default
         let credentialStorage = CredentialStorage(
             storageModule: credentialStorageModule
         )
@@ -180,7 +175,9 @@ extension ParraInternal {
             alertManager: alertManager,
             api: api,
             authServer: authServer,
-            externalResourceServer: externalResourceServer
+            externalResourceServer: externalResourceServer,
+            dataManager: dataManager,
+            fileManager: fileManager
         )
 
         // Parra Modules

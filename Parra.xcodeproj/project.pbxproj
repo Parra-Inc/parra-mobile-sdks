@@ -316,6 +316,11 @@
 		00916DCC2AD35D9D00B4856F /* ServerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916DCB2AD35D9D00B4856F /* ServerConfiguration.swift */; };
 		009270C12C29B53C00471A91 /* ParraErrorBoundary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009270C02C29B53C00471A91 /* ParraErrorBoundary.swift */; };
 		009270C32C29BA5A00471A91 /* ParraErrorWithUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009270C22C29BA5A00471A91 /* ParraErrorWithUserInfo.swift */; };
+		009270C52C29E6CE00471A91 /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009270C42C29E6CE00471A91 /* KeychainStorage.swift */; };
+		009270C72C29F29400471A91 /* EncryptedFileSystemStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009270C62C29F29400471A91 /* EncryptedFileSystemStorage.swift */; };
+		009270C92C2A00BB00471A91 /* CryptoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009270C82C2A00BB00471A91 /* CryptoUtils.swift */; };
+		009270CB2C2A021000471A91 /* KeychainUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009270CA2C2A021000471A91 /* KeychainUtils.swift */; };
+		009270CD2C2B070F00471A91 /* CryptoUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009270CC2C2B070E00471A91 /* CryptoUtilsTests.swift */; };
 		009538952BC869E700420316 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009538942BC869E700420316 /* API.swift */; };
 		009538972BC86A0500420316 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009538962BC86A0500420316 /* AuthService.swift */; };
 		009538992BC8748900420316 /* ExternalResourceServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009538982BC8748900420316 /* ExternalResourceServer.swift */; };
@@ -1053,6 +1058,11 @@
 		00916DCB2AD35D9D00B4856F /* ServerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfiguration.swift; sourceTree = "<group>"; };
 		009270C02C29B53C00471A91 /* ParraErrorBoundary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraErrorBoundary.swift; sourceTree = "<group>"; };
 		009270C22C29BA5A00471A91 /* ParraErrorWithUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraErrorWithUserInfo.swift; sourceTree = "<group>"; };
+		009270C42C29E6CE00471A91 /* KeychainStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorage.swift; sourceTree = "<group>"; };
+		009270C62C29F29400471A91 /* EncryptedFileSystemStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedFileSystemStorage.swift; sourceTree = "<group>"; };
+		009270C82C2A00BB00471A91 /* CryptoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoUtils.swift; sourceTree = "<group>"; };
+		009270CA2C2A021000471A91 /* KeychainUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainUtils.swift; sourceTree = "<group>"; };
+		009270CC2C2B070E00471A91 /* CryptoUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoUtilsTests.swift; sourceTree = "<group>"; };
 		009538942BC869E700420316 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		009538962BC86A0500420316 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		009538982BC8748900420316 /* ExternalResourceServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalResourceServer.swift; sourceTree = "<group>"; };
@@ -1814,6 +1824,7 @@
 			isa = PBXGroup;
 			children = (
 				0029AD2D2A48E11300E30CCD /* LoggerHelpersTests.swift */,
+				009270CC2C2B070E00471A91 /* CryptoUtilsTests.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -2011,7 +2022,9 @@
 			children = (
 				0036D5F427CD9E460016DE97 /* PersistentStorageMedium.swift */,
 				0036D5F627CDB0040016DE97 /* FileSystemStorage.swift */,
+				009270C62C29F29400471A91 /* EncryptedFileSystemStorage.swift */,
 				0036D5F827CDB0170016DE97 /* UserDefaultsStorage.swift */,
+				009270C42C29E6CE00471A91 /* KeychainStorage.swift */,
 			);
 			path = PersistentStorageMedium;
 			sourceTree = "<group>";
@@ -2599,6 +2612,8 @@
 			children = (
 				00995BF52BB5C97900384D94 /* AppEnvironment.swift */,
 				00D1512E2C076E7A0049D88F /* PasswordEntropyCalculator.swift */,
+				009270C82C2A00BB00471A91 /* CryptoUtils.swift */,
+				009270CA2C2A021000471A91 /* KeychainUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -3702,6 +3717,7 @@
 				00D151232C0661670049D88F /* ChallengeView.swift in Sources */,
 				00F7C4B02B9A609D00DBDF5A /* ImageComponent.swift in Sources */,
 				006BEFD42C2605C7001484C2 /* ModalLoadingIndicatorContainer.swift in Sources */,
+				009270C92C2A00BB00471A91 /* CryptoUtils.swift in Sources */,
 				0087CA9C2A59E166007D72FA /* URL+diskUsage.swift in Sources */,
 				0029AD372A4925C000E30CCD /* ParraStandardEvent.swift in Sources */,
 				007ED4682A6BFBDC0077E446 /* ParraLoggerContext+ParraDictionaryConvertible.swift in Sources */,
@@ -3768,6 +3784,7 @@
 				00E76D342B66E3FD00B01DD8 /* Container.swift in Sources */,
 				0011C7DC2B9B5A8E0095EAE8 /* AlertPresenter.swift in Sources */,
 				0029AD392A4925D000E30CCD /* ParraInternalEvent.swift in Sources */,
+				009270CB2C2A021000471A91 /* KeychainUtils.swift in Sources */,
 				004F3EED2BA4BF8300424802 /* ChangelogWidget+ContentObserver+Content.swift in Sources */,
 				00FCB1962B97B87F00635DC8 /* RoadmapWidget+ContentObserver+InitialParams.swift in Sources */,
 				00F7C4922B9A0E8200DBDF5A /* AlertManager.swift in Sources */,
@@ -4155,6 +4172,7 @@
 				0087CA662A56114C007D72FA /* Logger.swift in Sources */,
 				001B7B1827DE3AA900DEEECD /* Users.swift in Sources */,
 				00E8A43B2BF3FCBF00991D7C /* View+applyEmptyStateAttributes.swift in Sources */,
+				009270C52C29E6CE00471A91 /* KeychainStorage.swift in Sources */,
 				00E76D562B68287B00B01DD8 /* ContainedButtonComponent.swift in Sources */,
 				00E8A4242BF3BF8A00991D7C /* MenuConfig.swift in Sources */,
 				00DEF7262A3FE659006B0DF3 /* UIDevice+modelCode.swift in Sources */,
@@ -4179,6 +4197,7 @@
 				00EAE2F52A9BC3DB003FB41C /* FileHandleType.swift in Sources */,
 				009D84152BE92069005EBFEB /* BadgeContent.swift in Sources */,
 				00ABF1472B7852D700A054A2 /* SyncManagerDelegate.swift in Sources */,
+				009270C72C29F29400471A91 /* EncryptedFileSystemStorage.swift in Sources */,
 				009D841F2BE94F7B005EBFEB /* ContainedButtonStyle.swift in Sources */,
 				00588FCD2C15DAC500A5E435 /* ExternalResourceServer+UrlSessionDelegate.swift in Sources */,
 				003621EE2B5C769A009EFE53 /* ParraTheme.swift in Sources */,
@@ -4245,6 +4264,7 @@
 				00ABF18C2B83AFD800A054A2 /* UserDefaultsStorageTests.swift in Sources */,
 				00ABF18E2B83B02600A054A2 /* GeneratedTypes+Swift.swift in Sources */,
 				004E04682BCEE8C500301617 /* AuthServerTests.swift in Sources */,
+				009270CD2C2B070F00471A91 /* CryptoUtilsTests.swift in Sources */,
 				00ABF1612B7AB83800A054A2 /* ParraEndpoint+CaseIterable.swift in Sources */,
 				00ABF18D2B83B00900A054A2 /* PersistentStorageTestHelpers.swift in Sources */,
 				00ABF1692B7AB8DF00A054A2 /* ParraBaseMock.swift in Sources */,

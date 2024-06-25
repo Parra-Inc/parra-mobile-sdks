@@ -8,7 +8,7 @@
 import Foundation
 
 protocol PersistentStorageMedium {
-    func read<T: Codable>(name: String) async throws -> T?
-    func write<T: Codable>(name: String, value: T) async throws
-    func delete(name: String) async throws
+    func read<T: Codable>(name: String) throws -> T?
+    func write<T: Codable>(name: String, value: T) throws
+    func delete(name: String) throws
 }

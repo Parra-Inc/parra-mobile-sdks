@@ -20,7 +20,9 @@ final class AppInfoManager {
         alertManager: AlertManager,
         api: API,
         authServer: AuthServer,
-        externalResourceServer: ExternalResourceServer
+        externalResourceServer: ExternalResourceServer,
+        dataManager: DataManager,
+        fileManager: FileManager
     ) {
         self.configuration = configuration
         self.modalScreenManager = modalScreenManager
@@ -28,6 +30,18 @@ final class AppInfoManager {
         self.api = api
         self.authServer = authServer
         self.externalResourceServer = externalResourceServer
+
+        self.appInfoCache = ParraStorageModule<ParraAppInfo>(
+            dataStorageMedium: .fileSystem(
+                baseUrl: dataManager.baseDirectory,
+                folder: "app_info",
+                fileName: Constant.appInfoCacheKey,
+                storeItemsSeparately: true,
+                fileManager: fileManager
+            ),
+            jsonEncoder: .parraEncoder,
+            jsonDecoder: .parraDecoder
+        )
     }
 
     // MARK: - Internal
@@ -71,11 +85,7 @@ final class AppInfoManager {
         jsonDecoder: .parraDecoder
     )
 
-    let appInfoCache = ParraStorageModule<ParraAppInfo>(
-        dataStorageMedium: .userDefaults(key: Constant.appInfoCacheKey),
-        jsonEncoder: .parraEncoder,
-        jsonDecoder: .parraDecoder
-    )
+    let appInfoCache: ParraStorageModule<ParraAppInfo>
 
     func checkAndPresentWhatsNew(
         against appInfo: ParraAppInfo,
@@ -235,8 +245,10 @@ final class AppInfoManager {
     }
 
     func updateCachedAppInfo(_ appInfo: ParraAppInfo) async throws {
+        logger.debug("Updating app info cache")
+
         try await appInfoCache.write(
-            name: Constant.fullAppInfoKey,
+            name: Constant.appInfoCacheKey,
             value: appInfo
         )
     }

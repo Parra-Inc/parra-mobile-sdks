@@ -27,14 +27,28 @@ class ParraStorageModule<DataType: Codable> {
             _,
             let fileManager
         ):
-            let fileSystemStorage = FileSystemStorage(
+            let storage = FileSystemStorage(
                 baseUrl: baseUrl.appendDirectory(folder),
                 jsonEncoder: jsonEncoder,
                 jsonDecoder: jsonDecoder,
                 fileManager: fileManager
             )
 
-            self.persistentStorage = (fileSystemStorage, fileName)
+            self.persistentStorage = (storage, fileName)
+        case .fileSystemEncrypted(
+            let baseUrl,
+            let folder,
+            let fileName,
+            let fileManager
+        ):
+            let storage = EncryptedFileSystemStorage(
+                baseUrl: baseUrl.appendDirectory(folder),
+                jsonEncoder: jsonEncoder,
+                jsonDecoder: jsonDecoder,
+                fileManager: fileManager
+            )
+
+            self.persistentStorage = (storage, fileName)
         case .userDefaults(key: let key):
             let userDefaults = UserDefaults(
                 suiteName: ParraInternal.appUserDefaultsSuite(
@@ -42,13 +56,20 @@ class ParraStorageModule<DataType: Codable> {
                 )
             ) ?? .standard
 
-            let userDefaultsStorage = UserDefaultsStorage(
+            let storage = UserDefaultsStorage(
                 userDefaults: userDefaults,
                 jsonEncoder: jsonEncoder,
                 jsonDecoder: jsonDecoder
             )
 
-            self.persistentStorage = (userDefaultsStorage, key)
+            self.persistentStorage = (storage, key)
+        case .keychain(let key):
+            let storage = KeychainStorage(
+                jsonEncoder: jsonEncoder,
+                jsonDecoder: jsonDecoder
+            )
+
+            self.persistentStorage = (storage, key)
         }
     }
 
@@ -92,11 +113,11 @@ class ParraStorageModule<DataType: Codable> {
         if let fileSystem = persistentStorage.medium as? FileSystemStorage,
            storeItemsSeparately
         {
-            storageCache = await fileSystem.readAllInDirectory()
+            storageCache = fileSystem.readAllInDirectory()
         } else {
             do {
                 if let existingData: [String: DataType] =
-                    try await persistentStorage.medium.read(
+                    try persistentStorage.medium.read(
                         name: persistentStorage.key
                     )
                 {
@@ -134,14 +155,24 @@ class ParraStorageModule<DataType: Codable> {
             return cached
         }
 
-        if let persistentStorage, storeItemsSeparately {
+        if let persistentStorage {
             do {
-                if let loadedData: [String: DataType] =
-                    try await persistentStorage.medium.read(name: name)
-                {
-                    storageCache.merge(loadedData) { _, new in new }
+                if storeItemsSeparately {
+                    if let loadedData: DataType =
+                        try persistentStorage.medium.read(name: name)
+                    {
+                        storageCache[name] = loadedData
 
-                    return storageCache[name]
+                        return storageCache[name]
+                    }
+                } else {
+                    if let loadedData: [String: DataType] =
+                        try persistentStorage.medium.read(name: name)
+                    {
+                        storageCache.merge(loadedData) { _, new in new }
+
+                        return storageCache[name]
+                    }
                 }
             } catch {
                 Logger.error(
@@ -183,12 +214,12 @@ class ParraStorageModule<DataType: Codable> {
         }
 
         if storeItemsSeparately {
-            try await persistentStorage.medium.write(
+            try persistentStorage.medium.write(
                 name: name,
                 value: value
             )
         } else {
-            try await persistentStorage.medium.write(
+            try persistentStorage.medium.write(
                 name: persistentStorage.key,
                 value: storageCache
             )
@@ -208,11 +239,11 @@ class ParraStorageModule<DataType: Codable> {
 
         do {
             if storeItemsSeparately {
-                try await persistentStorage.medium.delete(
+                try persistentStorage.medium.delete(
                     name: name
                 )
             } else {
-                try await persistentStorage.medium.write(
+                try persistentStorage.medium.write(
                     name: persistentStorage.key,
                     value: storageCache
                 )
@@ -234,12 +265,12 @@ class ParraStorageModule<DataType: Codable> {
         do {
             if storeItemsSeparately {
                 for (name, _) in storageCache {
-                    try await persistentStorage.medium.delete(
+                    try persistentStorage.medium.delete(
                         name: name
                     )
                 }
             } else {
-                try await persistentStorage.medium.delete(
+                try persistentStorage.medium.delete(
                     name: persistentStorage.key
                 )
             }
@@ -254,8 +285,10 @@ class ParraStorageModule<DataType: Codable> {
 
     private var storeItemsSeparately: Bool {
         switch dataStorageMedium {
-        case .memory, .userDefaults:
+        case .memory, .userDefaults, .keychain:
             return false
+        case .fileSystemEncrypted:
+            return true
         case .fileSystem(_, _, _, let storeItemsSeparately, _):
             return storeItemsSeparately
         }

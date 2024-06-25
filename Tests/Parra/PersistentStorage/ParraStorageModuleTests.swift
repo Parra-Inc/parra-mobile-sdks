@@ -75,13 +75,24 @@ class ParraStorageModuleTests: ParraBaseMock {
 
                 let readData = await storageModule.read(name: testKey)
                 XCTAssertEqual(readData, testValue)
-            case .fileSystem:
+            case .fileSystem, .fileSystemEncrypted:
                 let (medium, key) = storageModule.persistentStorage!
                 try await medium.write(name: key, value: data)
                 await storageModule.loadData()
 
                 let cache = storageModule.storageCache
                 XCTAssertEqual([:], cache)
+            case .keychain:
+                let (medium, key) = storageModule.persistentStorage!
+
+                try await medium.write(name: key, value: data)
+                await storageModule.loadData()
+
+                let cache = storageModule.storageCache
+                XCTAssertEqual(data, cache)
+
+                let readData = await storageModule.read(name: testKey)
+                XCTAssertEqual(readData, testValue)
             }
         }
     }
@@ -112,7 +123,7 @@ class ParraStorageModuleTests: ParraBaseMock {
             switch storageModule.dataStorageMedium {
             case .memory:
                 await storageModule.loadData()
-            case .userDefaults:
+            case .userDefaults, .keychain:
                 let (medium, key) = storageModule.persistentStorage!
                 try await medium.write(name: key, value: testData)
 
@@ -127,7 +138,7 @@ class ParraStorageModuleTests: ParraBaseMock {
                     let description = storageModule.description
                     XCTFail("load data not correct for \(description)")
                 }
-            case .fileSystem:
+            case .fileSystem, .fileSystemEncrypted:
                 let (medium, _) = storageModule.persistentStorage!
                 try await medium.write(name: testKey, value: testData)
 

@@ -18,16 +18,12 @@ final class CredentialStorage: ItemStorage {
 
     // MARK: - Internal
 
-    enum Key {
-        static let currentUser = "current_user_credential"
-    }
-
     let storageModule: ParraStorageModule<ParraUser>
 
     func updateCredential(credential: ParraUser?) async {
         do {
             try await storageModule.write(
-                name: Key.currentUser,
+                name: DataManager.Key.userCredentialsKey,
                 value: credential
             )
         } catch {
@@ -37,7 +33,7 @@ final class CredentialStorage: ItemStorage {
 
     func currentUser() async -> ParraUser? {
         return await storageModule.read(
-            name: Key.currentUser,
+            name: DataManager.Key.userCredentialsKey,
             deleteOnError: true
         )
     }

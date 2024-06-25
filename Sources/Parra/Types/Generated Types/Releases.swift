@@ -893,6 +893,16 @@ public struct Domain: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case type
+        case name
+        case title
+        case host
+        case url
+        case data
+    }
+
     public let id: String
     public let type: DomainType
     public let name: String
@@ -900,6 +910,26 @@ public struct Domain: Codable, Equatable, Hashable, Identifiable {
     public let host: String
     public let url: URL
     public let data: DomainData?
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        try container.encode(id, forKey: .id)
+        try container.encode(type, forKey: .type)
+        try container.encode(name, forKey: .name)
+        try container.encode(title, forKey: .title)
+        try container.encode(host, forKey: .host)
+        try container.encode(url, forKey: .url)
+
+        switch data {
+        case .externalDomainData(let externalDomainData):
+            try container.encode(externalDomainData, forKey: .data)
+        default:
+            break
+        }
+    }
 }
 
 public struct Entitlement: Codable, Equatable, Hashable {
