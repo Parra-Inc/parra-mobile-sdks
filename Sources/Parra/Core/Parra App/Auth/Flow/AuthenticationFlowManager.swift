@@ -11,6 +11,13 @@ import SwiftUI
 
 private let logger = Logger()
 
+protocol AuthenticationFlowManagerDelegate {
+    func presentModalLoadingIndicator(
+        content: ParraLoadingIndicatorContent,
+        completion: (() -> Void)?
+    )
+}
+
 class AuthenticationFlowManager: ObservableObject {
     // MARK: - Lifecycle
 
@@ -65,6 +72,8 @@ class AuthenticationFlowManager: ObservableObject {
         }
     }
 
+    var delegate: AuthenticationFlowManagerDelegate?
+
     let navigationState: NavigationState
 
     @ViewBuilder
@@ -111,41 +120,29 @@ class AuthenticationFlowManager: ObservableObject {
                 )
 
                 switch authenticationType {
-                case .passkey:
-                    Task {
-                        await self.attemptExistingPasskeyLogin(
-                            using: appInfo,
-                            authService: authService
-                        )
-                    }
                 case .credentials:
-                    let inputType: ParraIdentityInputType =
-                        if authenticationType == .passkey {
-                            .passkey
+                    let inputType: ParraIdentityInputType = {
+                        let passwordlessMethods = self
+                            .supportedPasswordlessMethods(
+                                for: appInfo.auth
+                            )
+
+                        let allowsPhone = passwordlessMethods
+                            .contains(.sms)
+                        let allowsEmail = availableAuthMethods
+                            .contains(.password)
+                            || passwordlessMethods.contains(.email)
+
+                        if allowsEmail, allowsPhone {
+                            return .emailOrPhone
+                        } else if allowsEmail {
+                            return .email
+                        } else if allowsPhone {
+                            return .phone
                         } else {
-                            {
-                                let passwordlessMethods = self
-                                    .supportedPasswordlessMethods(
-                                        for: appInfo.auth
-                                    )
-
-                                let allowsPhone = passwordlessMethods
-                                    .contains(.sms)
-                                let allowsEmail = availableAuthMethods
-                                    .contains(.password)
-                                    || passwordlessMethods.contains(.email)
-
-                                if allowsEmail, allowsPhone {
-                                    return .emailOrPhone
-                                } else if allowsEmail {
-                                    return .email
-                                } else if allowsPhone {
-                                    return .phone
-                                } else {
-                                    return .email
-                                }
-                            }()
+                            return .email
                         }
+                    }()
 
                     self.navigate(
                         to: .identityInputScreen(
@@ -160,6 +157,8 @@ class AuthenticationFlowManager: ObservableObject {
                                     )
                                 },
                                 attemptPasskeyAutofill: {
+                                    logger.info("Attempting passkey autofill")
+
                                     try await self.triggerPasskeyLoginRequest(
                                         username: nil,
                                         presentationMode: .autofill,
@@ -175,6 +174,8 @@ class AuthenticationFlowManager: ObservableObject {
                 }
             },
             attemptPasskeyLogin: {
+                logger.info("Attempting passkey login")
+
                 try await self.triggerPasskeyLoginRequest(
                     username: nil,
                     presentationMode: .modal,
@@ -189,43 +190,6 @@ class AuthenticationFlowManager: ObservableObject {
         on authService: AuthService
     ) {
         authService.cancelPasskeyRequests()
-    }
-
-    // The user has tapped the passkey option on the landing screen
-    // We want to attempt this login method, and if there isn't a passkey
-    // available, we navigate to the next screen where one can be created.
-    func attemptExistingPasskeyLogin(
-        using appInfo: ParraAppInfo,
-        authService: AuthService
-    ) async {
-        do {
-            try await authService.loginWithPasskey(
-                username: nil,
-                presentationMode: .modal,
-                using: appInfo
-            )
-        } catch {
-            logger.debug(
-                "User tapped passkey option but non exists. Navigating to identity input screen"
-            )
-
-            navigate(
-                to: .identityInputScreen(
-                    ParraAuthDefaultIdentityInputScreen.Params(
-                        inputType: .passkey,
-                        submitIdentity: { identity in
-                            return try await self.onIdentitySubmitted(
-                                identity: identity,
-                                inputType: .passkey,
-                                with: appInfo,
-                                authService: authService
-                            )
-                        },
-                        attemptPasskeyAutofill: nil
-                    )
-                )
-            )
-        }
     }
 
     /// Silent requests when screens appear that _may_ result in prompts
@@ -329,27 +293,6 @@ class AuthenticationFlowManager: ObservableObject {
             "identity": identity
         ])
 
-        switch inputType {
-        case .passkey:
-            try await onPasskeyIdentitySubmitted(
-                identity: identity,
-                with: appInfo,
-                authService: authService
-            )
-        case .email, .emailOrPhone, .phone:
-            try await onCredentialIdentitySubmitted(
-                identity: identity,
-                with: appInfo,
-                authService: authService
-            )
-        }
-    }
-
-    private func onCredentialIdentitySubmitted(
-        identity: String,
-        with appInfo: ParraAppInfo,
-        authService: AuthService
-    ) async throws {
         let authMethods = supportedAuthMethods(
             for: appInfo.auth
         )
@@ -358,12 +301,42 @@ class AuthenticationFlowManager: ObservableObject {
             from: authMethods
         )
 
-        let response = try await authService.getAuthChallenges(
+        let authChallengeResponse = try await authService.getAuthChallenges(
             for: identity,
             with: identityType
         )
 
-        let isPasswordlessOnly = response.currentChallenges
+        if authChallengeResponse.hasAvailableChallenge(with: .passkeys) {
+            try await triggerPasskeyLoginRequest(
+                username: identity,
+                presentationMode: .modal,
+                using: appInfo,
+                authService: authService
+            )
+//            try await onPasskeyIdentitySubmitted(
+//                identity: identity,
+//                with: appInfo,
+//                authService: authService
+//            )
+        } else {
+            try await onCredentialIdentitySubmitted(
+                identity: identity,
+                with: appInfo,
+                authService: authService,
+                authChallengeResponse: authChallengeResponse,
+                identityType: identityType
+            )
+        }
+    }
+
+    private func onCredentialIdentitySubmitted(
+        identity: String,
+        with appInfo: ParraAppInfo,
+        authService: AuthService,
+        authChallengeResponse: AuthChallengeResponse,
+        identityType: IdentityType?
+    ) async throws {
+        let isPasswordlessOnly = authChallengeResponse.currentChallenges
             .allSatisfy { challenge in
                 return challenge.id.isPasswordless
             }
@@ -379,7 +352,7 @@ class AuthenticationFlowManager: ObservableObject {
 
             navigateToIdentityVerificationScreen(
                 identity: identity,
-                userExists: response.exists,
+                userExists: authChallengeResponse.exists,
                 passwordlessConfig: passwordlessConfig,
                 legalInfo: appInfo.legal,
                 authService: authService
@@ -391,17 +364,18 @@ class AuthenticationFlowManager: ObservableObject {
 
             let nextParams = ParraAuthDefaultIdentityChallengeScreen.Params(
                 identity: identity,
-                identityType: response.type,
-                userExists: response.exists,
-                availableChallenges: response.availableChallenges ?? [],
-                supportedChallenges: response.supportedChallenges,
+                identityType: authChallengeResponse.type,
+                userExists: authChallengeResponse.exists,
+                availableChallenges: authChallengeResponse
+                    .availableChallenges ?? [],
+                supportedChallenges: authChallengeResponse.supportedChallenges,
                 legalInfo: appInfo.legal,
                 submit: { challengeResponse in
                     try await self.onChallengeResponseSubmitted(
                         challengeResponse,
                         with: appInfo.auth,
                         identity: identity,
-                        userExists: response.exists,
+                        userExists: authChallengeResponse.exists,
                         identityType: identityType,
                         passwordlessConfig: appInfo.auth.passwordless,
                         legalInfo: appInfo.legal,
@@ -409,6 +383,15 @@ class AuthenticationFlowManager: ObservableObject {
                     )
                 },
                 forgotPassword: {
+                    self.delegate?
+                        .presentModalLoadingIndicator(
+                            content: ParraLoadingIndicatorContent(
+                                title: LabelContent(text: "yo"),
+                                subtitle: LabelContent(text: "something"),
+                                cancel: nil
+                            ),
+                            completion: {}
+                        )
                     // TODO: Forgot password
                     // Will get 429 response if limited
                 }
@@ -425,6 +408,11 @@ class AuthenticationFlowManager: ObservableObject {
         with appInfo: ParraAppInfo,
         authService: AuthService
     ) async throws {
+        // Refactor:
+        // 1. Remove continue with passkey button on welcome screen
+        // 2. On id input screen, hit challenges endpoint upon submission
+        // 3. If passkey is an available method for ID, attempt assersion flow
+        // 4. If it isn't, follow whatever other flow.
         do {
             try await authService.registerWithPasskey(
                 username: identity
@@ -602,21 +590,21 @@ class AuthenticationFlowManager: ObservableObject {
     }
 
     private func determineIdentityType(
-        from authMethod: [ParraAuthenticationMethod]
+        from authMethods: [ParraAuthenticationMethod]
     ) -> IdentityType? {
         // If the identity could have been 1 of multiple mismatching types,
         // leave it to the server to work out what the string is.
-        if authMethod.contains(.password),
-           authMethod.contains(.passwordless(.sms))
+        if authMethods.contains(.password),
+           authMethods.contains(.passwordless(.sms))
         {
             return nil
         }
 
-        if authMethod.contains(.password) {
+        if authMethods.contains(.password) || authMethods.contains(.passkey) {
             return .email
         }
 
-        if authMethod.contains(.passwordless(.sms)) {
+        if authMethods.contains(.passwordless(.sms)) {
             return .phoneNumber
         }
 

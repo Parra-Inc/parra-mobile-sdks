@@ -282,6 +282,16 @@ struct AuthChallengeResponse: Codable, Equatable, Hashable {
 
         return supportedChallenges
     }
+
+    func hasAvailableChallenge(
+        with type: ParraAuthChallengeType
+    ) -> Bool {
+        guard let availableChallenges else {
+            return false
+        }
+
+        return availableChallenges.contains { $0.id == type }
+    }
 }
 
 enum PasswordlessStrategy: String, Codable, Equatable, Hashable {

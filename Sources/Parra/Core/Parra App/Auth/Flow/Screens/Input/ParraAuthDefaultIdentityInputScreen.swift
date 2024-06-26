@@ -38,22 +38,16 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 text: continueButtonContent.text,
                 isDisabled: identity.isEmpty
             )
-
-            if params.inputType == .passkey {
-                focusState = .passkeyEmail
-            }
         }
         .task {
             // This is for getting the passkey option in the quick type bar
             // when you're logging in without a passkey to get you to use one.
             // If you're on this screen to create a passkey it shouldn't
             // be shown.
-            if params.inputType != .passkey {
-                do {
-                    try await params.attemptPasskeyAutofill?()
-                } catch {
-                    Logger.error("Failed to attempt passkey autofill", error)
-                }
+            do {
+                try await params.attemptPasskeyAutofill?()
+            } catch {
+                Logger.error("Failed to attempt passkey autofill", error)
             }
         }
         .onChange(of: identity) { _, newValue in
@@ -76,51 +70,26 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         case networkFailure
     }
 
-    enum Field {
-        case passkeyEmail
-    }
-
     @ViewBuilder var primaryField: some View {
-        if params.inputType == .passkey {
-            componentFactory.buildTextInput(
-                config: TextInputConfig(
-                    validationRules: [.email],
-                    keyboardType: .emailAddress,
-                    textContentType: .username,
-                    textInputAutocapitalization: .never
-                ),
-                content: TextInputContent(
-                    placeholder: "Email address",
-                    textChanged: { newValue in
-                        identity = newValue ?? ""
-                    }
-                )
-            )
-            .focused($focusState, equals: .passkeyEmail)
-            .onSubmit(of: .text) {
-                submit()
-            }
-        } else {
-            let inputMode: PhoneOrEmailTextInputView.Mode = switch params
-                .inputType
-            {
-            case .emailOrPhone:
-                .auto
-            case .email:
-                .email
-            case .phone:
-                .phone
-            default:
-                .auto
-            }
-
-            PhoneOrEmailTextInputView(
-                entry: $identity,
-                mode: inputMode,
-                currendMode: $emailPhoneFieldCurrentMode,
-                onSubmit: submit
-            )
+        let inputMode: PhoneOrEmailTextInputView.Mode = switch params
+            .inputType
+        {
+        case .emailOrPhone:
+            .auto
+        case .email:
+            .email
+        case .phone:
+            .phone
+        default:
+            .auto
         }
+
+        PhoneOrEmailTextInputView(
+            entry: $identity,
+            mode: inputMode,
+            currendMode: $emailPhoneFieldCurrentMode,
+            onSubmit: submit
+        )
     }
 
     // MARK: - Private
@@ -133,8 +102,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     @State private var emailPhoneFieldCurrentMode: PhoneOrEmailTextInputView
         .Mode = .auto
     @State private var errorMessage: String?
-
-    @FocusState private var focusState: Field?
 
     private let params: Params
     private let config: Config
@@ -201,11 +168,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             return "Phone number"
         case .emailOrPhone:
             return "Email or phone number"
-        case .passkey:
-            // With other input types we don't know if the user is logging in
-            // or registering. With this one, we do, because they will have been
-            // prompted to use existing passkeys by this point.
-            return "Register with passkey"
         }
     }
 
@@ -265,18 +227,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         ParraAuthDefaultIdentityInputScreen(
             params: ParraAuthDefaultIdentityInputScreen.Params(
                 inputType: .phone,
-                submitIdentity: { _ in }
-            ),
-            config: .default
-        )
-    }
-}
-
-#Preview("Passkey") {
-    ParraViewPreview { _ in
-        ParraAuthDefaultIdentityInputScreen(
-            params: ParraAuthDefaultIdentityInputScreen.Params(
-                inputType: .passkey,
                 submitIdentity: { _ in }
             ),
             config: .default

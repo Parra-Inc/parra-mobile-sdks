@@ -12,5 +12,4 @@ public enum ParraIdentityInputType {
     case email
     case phone
     case emailOrPhone
-    case passkey
 }

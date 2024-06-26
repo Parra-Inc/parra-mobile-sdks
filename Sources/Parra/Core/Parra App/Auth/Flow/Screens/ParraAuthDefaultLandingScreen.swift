@@ -31,10 +31,6 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
 
             continueButton
 
-            if params.availableAuthMethods.contains(.passkey) {
-                continueWithPasskeyButton
-            }
-
             if let bottomView = config.bottomView {
                 AnyView(bottomView)
             } else {
@@ -153,23 +149,6 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         ) {
             params.selectAuthMethod(
                 .credentials
-            )
-        }
-    }
-
-    @ViewBuilder private var continueWithPasskeyButton: some View {
-        componentFactory.buildPlainButton(
-            config: ParraTextButtonConfig(
-                type: .primary,
-                size: .small,
-                isMaxWidth: true
-            ),
-            content: TextButtonContent(
-                text: "Continue with passkey"
-            )
-        ) {
-            params.selectAuthMethod(
-                .passkey
             )
         }
     }

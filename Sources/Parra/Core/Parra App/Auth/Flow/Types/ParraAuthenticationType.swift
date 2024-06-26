@@ -13,6 +13,5 @@ public enum ParraAuthenticationType {
     /// This includes username as well as email and phone number, both when
     /// used as a username and when used with passwordless authentication.
     case credentials
-    case passkey
     case sso
 }
