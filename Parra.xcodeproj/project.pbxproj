@@ -519,6 +519,7 @@
 		00D5DD972BD19CDD002E09B7 /* Server+headers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD962BD19CDD002E09B7 /* Server+headers.swift */; };
 		00D5DD992BD205AC002E09B7 /* SampleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD982BD205AC002E09B7 /* SampleTab.swift */; };
 		00D5DD9B2BD205F4002E09B7 /* ProfileTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD9A2BD205F4002E09B7 /* ProfileTab.swift */; };
+		00D669DC2C2C5A1B001EA43F /* UIApplication+resignFirstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D669DB2C2C5A1B001EA43F /* UIApplication+resignFirstResponder.swift */; };
 		00DA7FE5295C95C400109081 /* SyncTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE4295C95C400109081 /* SyncTarget.swift */; };
 		00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE7295CAB8F00109081 /* AnyCodable.swift */; };
 		00DA7FEA295CAB9700109081 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE9295CAB9700109081 /* AnyEncodable.swift */; };
@@ -1253,6 +1254,7 @@
 		00D5DD962BD19CDD002E09B7 /* Server+headers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Server+headers.swift"; sourceTree = "<group>"; };
 		00D5DD982BD205AC002E09B7 /* SampleTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTab.swift; sourceTree = "<group>"; };
 		00D5DD9A2BD205F4002E09B7 /* ProfileTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTab.swift; sourceTree = "<group>"; };
+		00D669DB2C2C5A1B001EA43F /* UIApplication+resignFirstResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+resignFirstResponder.swift"; sourceTree = "<group>"; };
 		00DA7FE4295C95C400109081 /* SyncTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTarget.swift; sourceTree = "<group>"; };
 		00DA7FE7295CAB8F00109081 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		00DA7FE9295CAB9700109081 /* AnyEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
@@ -1509,6 +1511,7 @@
 				00E8B32D27878C3400FC3FFD /* Models.swift */,
 				00374CFC2B9FF5630028EDA8 /* Publisher+asyncMap.swift */,
 				0019CBC828FB37BC0015E703 /* Sequence+asyncMap.swift */,
+				00D669DB2C2C5A1B001EA43F /* UIApplication+resignFirstResponder.swift */,
 				0011C7DD2B9B7DCC0095EAE8 /* UIDevice++.swift */,
 				005AFE272BE2BC1C00B0C29A /* UIImage+resize.swift */,
 				00E15A28293269100049C2C7 /* UIViewController.swift */,
@@ -3889,6 +3892,7 @@
 				006BEFD22C25FAB5001484C2 /* ParraOrientation.swift in Sources */,
 				00E76D482B66E89C00B01DD8 /* ContainerContent.swift in Sources */,
 				0087CA982A59DEC8007D72FA /* ProcessInfoThermalState+ParraLogStringConvertible.swift in Sources */,
+				00D669DC2C2C5A1B001EA43F /* UIApplication+resignFirstResponder.swift in Sources */,
 				0087CA902A59B435007D72FA /* ParraLoggerOptions.swift in Sources */,
 				0066540A2A7EAAFA00CD04E6 /* URLRequest+ParraDictionaryConvertible.swift in Sources */,
 				007ED4742A6C458A0077E446 /* ParraSessionEvent.swift in Sources */,

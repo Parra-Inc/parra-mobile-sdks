@@ -59,12 +59,7 @@ extension AuthService {
         if presentationMode == .modal {
             // If we're about to open a modal passkey menu, dismiss the
             // keyboard.
-            await UIApplication.shared.sendAction(
-                #selector(UIResponder.resignFirstResponder),
-                to: nil,
-                from: nil,
-                for: nil
-            )
+            await UIApplication.resignFirstResponder()
         }
 
         let authorization = try await beginAuthorization(

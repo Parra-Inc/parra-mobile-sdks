@@ -328,12 +328,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     private func triggerVerifyCode() {
         continueButtonContent = continueButtonContent.withLoading(true)
 
-        UIApplication.shared.sendAction(
-            #selector(UIResponder.resignFirstResponder),
-            to: nil,
-            from: nil,
-            for: nil
-        )
+        UIApplication.resignFirstResponder()
 
         Task {
             do {
