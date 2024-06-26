@@ -62,6 +62,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
 
     @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
     @EnvironmentObject private var alertManager: AlertManager
+    @EnvironmentObject private var parraAuthState: ParraAuthState
 
     @ViewBuilder
     private func renderFailure(
@@ -100,6 +101,10 @@ struct LaunchScreenWindow<Content>: View where Content: View {
 
     private func renderPrimaryContent() -> some View {
         content()
+            .transition(
+                .opacity
+                    .animation(.easeIn(duration: 0.35))
+            )
             .renderToast(
                 toast: $alertManager.currentToast
             )
