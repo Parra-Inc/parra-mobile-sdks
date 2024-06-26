@@ -56,10 +56,7 @@ extension AuthService {
         guard let (_, completion) = activeAuthorizationRequests[addr] else {
             logger.warn(
                 "Received authorization error callback for unknown request",
-                [
-                    "controller": controller,
-                    "error": error
-                ]
+                error
             )
 
             return
@@ -111,9 +108,8 @@ extension AuthService {
 
         guard let (_, completion) = activeAuthorizationRequests[addr] else {
             logger.warn(
-                "Received authorization error callback for unknown request",
+                "Received authorization complete callback for unknown request",
                 [
-                    "controller": controller,
                     "authorization": String(describing: authorization)
                 ]
             )

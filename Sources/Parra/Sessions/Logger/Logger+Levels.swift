@@ -194,6 +194,7 @@ public extension Logger {
     @inlinable
     func warn(
         _ message: String,
+        _ error: Error? = nil,
         _ fileId: String = #fileID,
         _ function: String = #function,
         _ line: Int = #line,
@@ -206,6 +207,7 @@ public extension Logger {
         return logToBackend(
             level: .warn,
             message: .string(message),
+            extraError: error,
             extra: nil,
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
@@ -234,6 +236,36 @@ public extension Logger {
         return logToBackend(
             level: .warn,
             message: .string(message),
+            extra: extra,
+            callSiteContext: ParraLoggerCallSiteContext(
+                fileId: fileId,
+                function: function,
+                line: line,
+                column: column,
+                threadInfo: threadInfo
+            )
+        )
+    }
+
+    @discardableResult
+    @inlinable
+    func warn(
+        _ message: String,
+        _ error: Error? = nil,
+        _ extra: [String: Any],
+        _ fileId: String = #fileID,
+        _ function: String = #function,
+        _ line: Int = #line,
+        _ column: Int = #column
+    ) -> ParraLogMarker {
+        let threadInfo = ParraLoggerThreadInfo(
+            thread: .current
+        )
+
+        return logToBackend(
+            level: .warn,
+            message: .string(message),
+            extraError: error,
             extra: extra,
             callSiteContext: ParraLoggerCallSiteContext(
                 fileId: fileId,
