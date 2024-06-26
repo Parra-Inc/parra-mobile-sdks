@@ -80,8 +80,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             .email
         case .phone:
             .phone
-        default:
-            .auto
         }
 
         PhoneOrEmailTextInputView(
@@ -110,7 +108,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var navigationState: NavigationState
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
-    @Environment(\.parra) private var parra
 
     @ViewBuilder private var primaryContent: some View {
         defaultTopView

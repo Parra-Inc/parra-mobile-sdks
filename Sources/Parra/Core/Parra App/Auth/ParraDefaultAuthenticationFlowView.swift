@@ -63,6 +63,8 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                 authScreen: .landingScreen(
                     flowManager.getLandingScreenParams(
                         authService: parra.parraInternal.authService,
+                        modalScreenManager: parra.parraInternal
+                            .modalScreenManager,
                         using: parraAppInfo
                     )
                 )
@@ -102,14 +104,22 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
 extension ParraDefaultAuthenticationFlowView: AuthenticationFlowManagerDelegate {
     func presentModalLoadingIndicator(
         content: ParraLoadingIndicatorContent,
+        with modalScreenManager: ModalScreenManager,
         completion: (() -> Void)?
     ) {
-        let modalScreenManager = parra.parraInternal.modalScreenManager
-
         modalScreenManager
             .presentLoadingIndicatorModal(
                 content: content,
                 completion: completion
             )
+    }
+
+    func dismissModalLoadingIndicator(
+        with modalScreenManager: ModalScreenManager,
+        completion: (() -> Void)?
+    ) {
+        modalScreenManager.dismissLoadingIndicatorModal(
+            completion: completion
+        )
     }
 }

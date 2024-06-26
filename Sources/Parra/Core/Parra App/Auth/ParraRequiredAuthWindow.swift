@@ -73,6 +73,7 @@ public struct ParraRequiredAuthWindow<
             authenticatedContent(for: user)
         case .unauthenticated:
             unauthenticatedContent()
+                .environment(parra)
                 .transition(
                     .push(from: .top)
                         .animation(.easeIn(duration: 0.35))

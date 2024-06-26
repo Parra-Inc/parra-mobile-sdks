@@ -75,8 +75,12 @@ final class ModalScreenManager {
         completion: (() -> Void)? = nil
     ) {
         Task { @MainActor in
-            currentProgressIndicatorModal?.dismiss(animated: true) {
+            currentProgressIndicatorModal?.dismiss(
+                animated: true
+            ) {
                 completion?()
+
+                self.currentProgressIndicatorModal = nil
             }
         }
     }

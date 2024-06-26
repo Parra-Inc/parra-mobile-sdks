@@ -14,6 +14,12 @@ private let logger = Logger()
 protocol AuthenticationFlowManagerDelegate {
     func presentModalLoadingIndicator(
         content: ParraLoadingIndicatorContent,
+        with modalScreenManager: ModalScreenManager,
+        completion: (() -> Void)?
+    )
+
+    func dismissModalLoadingIndicator(
+        with modalScreenManager: ModalScreenManager,
         completion: (() -> Void)?
     )
 }
@@ -106,6 +112,7 @@ class AuthenticationFlowManager: ObservableObject {
 
     func getLandingScreenParams(
         authService: AuthService,
+        modalScreenManager: ModalScreenManager,
         using appInfo: ParraAppInfo
     ) -> ParraAuthDefaultLandingScreen.Params {
         let availableAuthMethods = supportedAuthMethods(
@@ -153,6 +160,7 @@ class AuthenticationFlowManager: ObservableObject {
                                         identity: identity,
                                         inputType: inputType,
                                         with: appInfo,
+                                        modalScreenManager: modalScreenManager,
                                         authService: authService
                                     )
                                 },
@@ -163,7 +171,8 @@ class AuthenticationFlowManager: ObservableObject {
                                         username: nil,
                                         presentationMode: .autofill,
                                         using: appInfo,
-                                        authService: authService
+                                        authService: authService,
+                                        modalScreenManager: modalScreenManager
                                     )
                                 }
                             )
@@ -180,7 +189,8 @@ class AuthenticationFlowManager: ObservableObject {
                     username: nil,
                     presentationMode: .modal,
                     using: appInfo,
-                    authService: authService
+                    authService: authService,
+                    modalScreenManager: modalScreenManager
                 )
             }
         )
@@ -197,7 +207,8 @@ class AuthenticationFlowManager: ObservableObject {
         username: String?,
         presentationMode: AuthService.PasskeyPresentationMode,
         using appInfo: ParraAppInfo,
-        authService: AuthService
+        authService: AuthService,
+        modalScreenManager: ModalScreenManager
     ) async throws {
         if !appInfo.auth.supportsPasskeys {
             logger.debug("Passkeys not enabled for this app")
@@ -287,6 +298,7 @@ class AuthenticationFlowManager: ObservableObject {
         identity: String,
         inputType: ParraIdentityInputType,
         with appInfo: ParraAppInfo,
+        modalScreenManager: ModalScreenManager,
         authService: AuthService
     ) async throws {
         logger.debug("Submitting identity", [
@@ -311,18 +323,15 @@ class AuthenticationFlowManager: ObservableObject {
                 username: identity,
                 presentationMode: .modal,
                 using: appInfo,
-                authService: authService
+                authService: authService,
+                modalScreenManager: modalScreenManager
             )
-//            try await onPasskeyIdentitySubmitted(
-//                identity: identity,
-//                with: appInfo,
-//                authService: authService
-//            )
         } else {
             try await onCredentialIdentitySubmitted(
                 identity: identity,
                 with: appInfo,
                 authService: authService,
+                modalScreenManager: modalScreenManager,
                 authChallengeResponse: authChallengeResponse,
                 identityType: identityType
             )
@@ -333,6 +342,7 @@ class AuthenticationFlowManager: ObservableObject {
         identity: String,
         with appInfo: ParraAppInfo,
         authService: AuthService,
+        modalScreenManager: ModalScreenManager,
         authChallengeResponse: AuthChallengeResponse,
         identityType: IdentityType?
     ) async throws {
@@ -383,15 +393,28 @@ class AuthenticationFlowManager: ObservableObject {
                     )
                 },
                 forgotPassword: {
-                    self.delegate?
-                        .presentModalLoadingIndicator(
-                            content: ParraLoadingIndicatorContent(
-                                title: LabelContent(text: "yo"),
-                                subtitle: LabelContent(text: "something"),
-                                cancel: nil
-                            ),
-                            completion: {}
+                    Task { @MainActor in
+                        UIApplication.resignFirstResponder()
+
+                        self.delegate?
+                            .presentModalLoadingIndicator(
+                                content: ParraLoadingIndicatorContent(
+                                    title: LabelContent(text: "yo"),
+                                    subtitle: LabelContent(text: "something"),
+                                    cancel: nil
+                                ),
+                                with: modalScreenManager,
+                                completion: {}
+                            )
+
+                        try! await Task.sleep(ms: 2_000)
+
+                        self.delegate?.dismissModalLoadingIndicator(
+                            with: modalScreenManager,
+                            completion: nil
                         )
+                    }
+
                     // TODO: Forgot password
                     // Will get 429 response if limited
                 }
