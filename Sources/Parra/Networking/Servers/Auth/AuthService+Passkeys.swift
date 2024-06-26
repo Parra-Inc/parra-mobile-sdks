@@ -67,6 +67,14 @@ extension AuthService {
             using: presentationMode
         )
 
+        modalScreenManager.presentLoadingIndicatorModal(
+            content: ParraLoadingIndicatorContent(
+                title: LabelContent(text: "Logging in with passkey"),
+                subtitle: nil,
+                cancel: nil
+            )
+        )
+
         let accessToken = try await processPasskeyAuthorization(
             authorization: authorization,
             session: session
@@ -75,6 +83,8 @@ extension AuthService {
         let authResult = await login(
             authType: .webauthn(code: accessToken)
         )
+
+        modalScreenManager.dismissLoadingIndicatorModal()
 
         await applyUserUpdate(authResult)
     }

@@ -21,12 +21,14 @@ final class AuthService {
         oauth2Service: OAuth2Service,
         dataManager: DataManager,
         authServer: AuthServer,
-        authenticationMethod: ParraAuthType
+        authenticationMethod: ParraAuthType,
+        modalScreenManager: ModalScreenManager
     ) {
         self.oauth2Service = oauth2Service
         self.dataManager = dataManager
         self.authServer = authServer
         self.authenticationMethod = authenticationMethod
+        self.modalScreenManager = modalScreenManager
     }
 
     // MARK: - Internal
@@ -41,6 +43,7 @@ final class AuthService {
     let dataManager: DataManager
     let authServer: AuthServer
     let authenticationMethod: ParraAuthType
+    let modalScreenManager: ModalScreenManager
 
     var activeAuthorizationRequests: [
         UnsafeMutableRawPointer: (

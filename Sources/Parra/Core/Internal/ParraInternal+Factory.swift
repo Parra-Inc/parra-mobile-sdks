@@ -85,6 +85,16 @@ extension ParraInternal {
             storageModule: credentialStorageModule
         )
 
+        let containerRenderer = ContainerRenderer(
+            configuration: configuration
+        )
+
+        let modalScreenManager = ModalScreenManager(
+            containerRenderer: containerRenderer,
+            configuration: configuration,
+            notificationCenter: notificationCenter
+        )
+
         let sessionStorage = SessionStorage(
             forceDisabled: forceDisabled,
             sessionReader: SessionReader(
@@ -127,7 +137,8 @@ extension ParraInternal {
             oauth2Service: oauth2Service,
             dataManager: dataManager,
             authServer: authServer,
-            authenticationMethod: authenticationMethod
+            authenticationMethod: authenticationMethod,
+            modalScreenManager: modalScreenManager
         )
 
         let apiResourceServer = ApiResourceServer(
@@ -154,16 +165,6 @@ extension ParraInternal {
             forceDisabled: forceDisabled,
             syncState: syncState,
             sessionManager: sessionManager,
-            notificationCenter: notificationCenter
-        )
-
-        let containerRenderer = ContainerRenderer(
-            configuration: configuration
-        )
-
-        let modalScreenManager = ModalScreenManager(
-            containerRenderer: containerRenderer,
-            configuration: configuration,
             notificationCenter: notificationCenter
         )
 
