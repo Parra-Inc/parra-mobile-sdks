@@ -32,7 +32,7 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
             switch parraAuthState.current {
             case .authenticated(let user):
                 AnyView(authenticatedContent(for: user))
-            case .unauthenticated:
+            case .unauthenticated, .undetermined:
                 AnyView(unauthenticatedContent())
             }
         }

@@ -14,8 +14,7 @@ private let logger = Logger()
 public class ParraAuthState: ObservableObject {
     // MARK: - Public
 
-    @Published
-    public private(set) var current: ParraAuthResult = .unauthenticated(nil)
+    @Published public private(set) var current: ParraAuthResult = .undetermined
 
     // MARK: - Internal
 

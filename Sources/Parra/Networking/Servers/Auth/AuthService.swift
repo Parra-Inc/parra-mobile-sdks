@@ -251,6 +251,14 @@ final class AuthService {
             await dataManager.removeCurrentUser()
 
             _cachedToken = nil
+        case .undetermined:
+            // shouldn't ever change _to_ this state. If it does, treat it like
+            // an unauth
+            logger.warn("User updated changed TO undetermined state.")
+
+            await dataManager.removeCurrentUser()
+
+            _cachedToken = nil
         }
 
         ParraNotificationCenter.default.post(
@@ -314,7 +322,7 @@ final class AuthService {
 
         let performRefresh = { [self] () -> ParraUser.Credential? in
             switch authenticationMethod {
-            case .parraAuth:
+            case .parra:
 
                 // If a token already exists, attempt to refresh it. If no token
                 // exists, then we need to reauthenticate but lack the

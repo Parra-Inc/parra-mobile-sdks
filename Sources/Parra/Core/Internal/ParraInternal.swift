@@ -125,13 +125,11 @@ class ParraInternal {
             removeEventObservers()
 
             syncManager.stopSyncTimer()
+        case .undetermined:
+            // shouldn't ever change _to_ this.
+            break
         }
     }
-
-    // 1. Post app launch, before splash dismisses
-    // 2. Post auth refresh
-    //    a. authenticated
-    //    b. unauthenticated
 
     /// Must be completed before the splash screen is dismissed!
     /// Keep this as lean as possible!!!!

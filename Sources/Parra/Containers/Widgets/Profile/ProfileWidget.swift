@@ -51,6 +51,8 @@ struct ProfileWidget: Container {
                 Text(user.userInfo?.email ?? "unknown")
             case .unauthenticated(let error):
                 Text("Error: \(String(describing: error))")
+            case .undetermined:
+                Text("Unknown")
             }
 
             Button("Logout") {

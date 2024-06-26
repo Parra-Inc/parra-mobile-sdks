@@ -76,7 +76,7 @@ public struct ParraApp<
         workspaceId: String,
         applicationId: String,
         appDelegate: ParraAppDelegate<SceneDelegateClass>,
-        authenticationMethod: ParraAuthType = .parraAuth,
+        authenticationMethod: ParraAuthType = .parra,
         configuration: ParraConfiguration = .init(),
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
         @SceneBuilder makeScene: @MainActor @escaping () -> Content
@@ -147,6 +147,12 @@ public struct ParraApp<
                 case (.initial, .initial):
                     // Should only run once on app launch.
                     performAppLaunchTasks()
+                case (.initial, .transitioning):
+                    Task {
+                        await parraAuthState.performInitialAuthCheck(
+                            using: parra.authService
+                        )
+                    }
                 default:
                     break
                 }
@@ -154,11 +160,7 @@ public struct ParraApp<
             .onChange(
                 of: parraAuthState.current
             ) { _, newValue in
-                Task { @MainActor in
-                    await parra.authStateDidChange(
-                        to: newValue
-                    )
-                }
+                onAuthStateChanged(newValue)
             }
     }
 
@@ -225,16 +227,21 @@ public struct ParraApp<
         )
     }
 
+    private func onAuthStateChanged(
+        _ authResult: ParraAuthResult
+    ) {
+        Task {
+            await parra.authStateDidChange(
+                to: authResult
+            )
+        }
+    }
+
     private func performAppLaunchTasks() {
         Task(priority: .userInitiated) {
             guard case .initial = launchScreenState.current else {
                 return
             }
-
-            // After the splash screen
-            await parraAuthState.performInitialAuthCheck(
-                using: parra.authService
-            )
 
             logger.debug("Initial auth check complete")
 

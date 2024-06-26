@@ -28,13 +28,13 @@ public enum ParraAuthType {
         userIdProvider: ParraUserIdProvider
     )
 
-    case parraAuth
+    case parra
 
     // MARK: - Internal
 
     var supportsParraLoginScreen: Bool {
         switch self {
-        case .parraAuth:
+        case .parra:
             return true
         default:
             return false

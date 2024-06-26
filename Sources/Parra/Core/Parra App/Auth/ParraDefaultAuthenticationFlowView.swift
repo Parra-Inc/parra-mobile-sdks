@@ -43,7 +43,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
             .onAppear {
                 let authService = parra.parraInternal.authService
 
-                guard case .parraAuth = authService.authenticationMethod else {
+                guard case .parra = authService.authenticationMethod else {
                     fatalError(
                         "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
                     )

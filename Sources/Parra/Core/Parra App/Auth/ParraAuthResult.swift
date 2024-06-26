@@ -9,6 +9,7 @@
 import SwiftUI
 
 public enum ParraAuthResult: Equatable {
+    case undetermined
     case authenticated(ParraUser)
     case unauthenticated(Error?)
 
@@ -19,6 +20,8 @@ public enum ParraAuthResult: Equatable {
         rhs: ParraAuthResult
     ) -> Bool {
         switch (lhs, rhs) {
+        case (.undetermined, .undetermined):
+            return true
         case (.authenticated(let lhsUser), .authenticated(let rhsUser)):
             return lhsUser == rhsUser
         case (.unauthenticated(let lhsError), .unauthenticated(let rhsError)):
