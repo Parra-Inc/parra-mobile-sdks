@@ -119,7 +119,7 @@ public struct ParraColorPalette {
         primaryBackground: Color(UIColor.systemBackground),
         secondaryBackground: Color(UIColor.secondarySystemBackground),
         primaryText: ParraColorSwatch(
-            primary: Color(hex: 0x000000),
+            primary: Color(hex: 0x111827),
             name: "Primary Text"
         ),
         secondaryText: ParraColorSwatch(
@@ -149,7 +149,7 @@ public struct ParraColorPalette {
         primaryBackground: Color(UIColor.systemBackground),
         secondaryBackground: Color(UIColor.secondarySystemBackground),
         primaryText: ParraColorSwatch(
-            primary: Color(hex: 0xFFFFFF),
+            primary: Color(hex: 0xF3F4F6),
             name: "Primary Text"
         ),
         secondaryText: ParraColorSwatch(
