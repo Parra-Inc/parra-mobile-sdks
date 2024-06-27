@@ -75,18 +75,24 @@ extension AuthService {
             )
         )
 
-        let accessToken = try await processPasskeyAuthorization(
-            authorization: authorization,
-            session: session
-        )
+        do {
+            defer {
+                modalScreenManager.dismissLoadingIndicatorModal()
+            }
 
-        let authResult = await login(
-            authType: .webauthn(code: accessToken)
-        )
+            let accessToken = try await processPasskeyAuthorization(
+                authorization: authorization,
+                session: session
+            )
 
-        modalScreenManager.dismissLoadingIndicatorModal()
+            let authResult = await login(
+                authType: .webauthn(code: accessToken)
+            )
 
-        await applyUserUpdate(authResult)
+            await applyUserUpdate(authResult)
+        } catch {
+            throw error
+        }
     }
 
     func linkPasskeyToAccount() async throws {
