@@ -11,9 +11,6 @@ import Foundation
 
 private let logger = Logger()
 
-typealias AppleAuthCompletion = (Result<ASAuthorization, ASAuthorizationError>)
-    -> Void
-
 final class AuthService {
     // MARK: - Lifecycle
 
@@ -33,11 +30,16 @@ final class AuthService {
 
     // MARK: - Internal
 
+    struct AuthorizationRequestContext {
+        let controller: ASAuthorizationController
+        let completion: AppleAuthCompletion
+    }
+
     typealias MultiTokenProvider = () async throws -> ParraUser.Credential?
     typealias AuthProvider = () async throws -> ParraAuthResult
-
-    // 1. Function to convert an authentication method to a token provider.
-    // 2. Function to invoke a token provider and get an auth result.
+    typealias AppleAuthCompletion = (
+        Result<ASAuthorization, ASAuthorizationError>
+    ) -> Void
 
     let oauth2Service: OAuth2Service
     let dataManager: DataManager
