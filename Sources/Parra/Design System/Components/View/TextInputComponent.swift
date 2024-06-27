@@ -34,12 +34,25 @@ struct TextInputComponent: View {
         let prompt = Text(content.placeholder?.text ?? "")
 
         if config.isSecure {
+            // When Apple is suggesting a strong password, they highlight the
+            // field yellow. In dark mode this means that the font color doesn't
+            // have enough contrast to actually be visible. Using a grey in this
+            // situation is a compromise to be visible with and without the
+            // yellow banner. This isn't an issue in light mode since the font
+            // color contrasts both with white and yellow backgrounds.
+            let textColorOverride = colorScheme == .dark
+                ? ParraColorSwatch.gray.shade400 : attributes.text.color
+
             SecureField(
                 text: $text,
                 prompt: prompt
             ) {
                 EmptyView()
             }
+            .foregroundStyle(
+                textColorOverride ?? themeObserver.theme.palette.primaryText
+                    .toParraColor()
+            )
             .onAppear {
                 if let passwordRuleDescriptor = config.passwordRuleDescriptor,
                    config.isSecure
@@ -93,7 +106,9 @@ struct TextInputComponent: View {
 
     @FocusState private var isFocused: Bool
 
+    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var themeObserver: ParraThemeObserver
+
     @State private var text: String
     @State private var hasReceivedInput = false
 
