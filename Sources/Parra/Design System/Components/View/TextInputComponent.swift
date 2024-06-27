@@ -46,8 +46,7 @@ struct TextInputComponent: View {
                 {
                     UITextField.appearance()
                         .passwordRules = UITextInputPasswordRules(
-                            //                            descriptor: passwordRuleDescriptor
-                            descriptor: "required: digit; allowed: digit; minlength: 4; maxlength: 6;"
+                            descriptor: passwordRuleDescriptor
                         )
                 }
             }
