@@ -33,6 +33,11 @@ extension View {
             size: attributes.cornerRadius,
             from: theme
         )
+        .applyBorder(
+            attributes.border,
+            with: attributes.cornerRadius,
+            from: theme
+        )
         .applyPadding(
             size: attributes.padding,
             from: theme

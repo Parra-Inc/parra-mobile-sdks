@@ -12,16 +12,33 @@ import SwiftUI
 public extension ParraGlobalComponentAttributes {
     // MARK: - Common
 
-    @inlinable
-    func buttonPadding(
-        for size: ParraButtonSize
+    internal func buttonPadding(
+        for size: ParraButtonSize,
+        theme: ParraTheme
     ) -> ParraPaddingSize {
-        switch size {
+        let horizontalPadding = theme.padding.value(
+            for: .md
+        )
+
+        let verticalPaddingSize: ParraPaddingSize = switch size {
         case .small, .medium:
-            return .sm
+            .sm
         case .large:
-            return .md
+            .md
         }
+
+        let verticalPadding = theme.padding.value(
+            for: verticalPaddingSize
+        )
+
+        return .custom(
+            .padding(
+                top: verticalPadding.top,
+                leading: horizontalPadding.leading,
+                bottom: verticalPadding.bottom,
+                trailing: horizontalPadding.trailing
+            )
+        )
     }
 
     @inlinable
@@ -113,7 +130,10 @@ public extension ParraGlobalComponentAttributes {
         let size = config.size
 
         let cornerRadius = buttonCornerRadius(for: size)
-        let padding = buttonPadding(for: size)
+        let padding = buttonPadding(
+            for: size,
+            theme: theme
+        )
 
         return ParraAttributes.PlainButton(
             normal: ParraAttributes.PlainButton.StatefulAttributes(
@@ -233,7 +253,10 @@ public extension ParraGlobalComponentAttributes {
         let size = config.size
 
         let cornerRadius = buttonCornerRadius(for: size)
-        let padding = buttonPadding(for: size)
+        let padding = buttonPadding(
+            for: size,
+            theme: theme
+        )
         let border = ParraAttributes.Border(
             width: 1,
             color: theme.palette.primary.toParraColor()
@@ -372,7 +395,10 @@ public extension ParraGlobalComponentAttributes {
 
         let border = ParraAttributes.Border()
         let cornerRadius = buttonCornerRadius(for: size)
-        let padding = buttonPadding(for: size)
+        let padding = buttonPadding(
+            for: size,
+            theme: theme
+        )
 
         return ParraAttributes.ContainedButton(
             normal: ParraAttributes.ContainedButton.StatefulAttributes(

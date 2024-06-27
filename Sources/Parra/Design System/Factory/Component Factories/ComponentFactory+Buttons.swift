@@ -10,6 +10,35 @@ import SwiftUI
 
 extension ComponentFactory {
     @ViewBuilder
+    func buildButton(
+        variant: ParraButtonVariant,
+        config: ParraTextButtonConfig,
+        content: TextButtonContent,
+        onPress: @escaping () -> Void
+    ) -> some View {
+        switch variant {
+        case .plain:
+            buildPlainButton(
+                config: config,
+                content: content,
+                onPress: onPress
+            )
+        case .outlined:
+            buildOutlinedButton(
+                config: config,
+                content: content,
+                onPress: onPress
+            )
+        case .contained:
+            buildContainedButton(
+                config: config,
+                content: content,
+                onPress: onPress
+            )
+        }
+    }
+
+    @ViewBuilder
     func buildPlainButton(
         config: ParraTextButtonConfig,
         content: TextButtonContent,
