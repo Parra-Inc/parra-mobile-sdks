@@ -13,86 +13,12 @@ import SwiftUI
 // Keep internal copy of state and mirror externally, removing phone number
 // formatting and adding county code prefix
 
-class PhoneNumberFormatter: Formatter {
-    // MARK: - Lifecycle
-
-    required init(
-        pattern: String,
-        replacementCharacter: Character = "#",
-        enabled: Bool = true
-    ) {
-        self.pattern = pattern
-        self.replacementCharacter = replacementCharacter
-        self.enabled = enabled
-
-        super.init()
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Internal
-
-    let pattern: String
-    let replacementCharacter: Character
-    let enabled: Bool
-
-    override func string(for obj: Any?) -> String? {
-        guard let value = obj as? String else {
-            return nil
-        }
-
-        guard enabled else {
-            return value
-        }
-
-        return applyPhoneNumberPattern(
-            on: value
-        )
-    }
-
-    override func getObjectValue(
-        _ obj: AutoreleasingUnsafeMutablePointer<AnyObject?>?,
-        for string: String,
-        errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?
-    ) -> Bool {
-        obj?.pointee = string as NSString
-        return true
-    }
-
-    func applyPhoneNumberPattern(
-        on input: String
-    ) -> String {
-        var pureNumber = input.replacingOccurrences(
-            of: "[^0-9\\+]",
-            with: "",
-            options: .regularExpression
-        )
-
-        for index in 0 ..< pattern.count {
-            guard index < pureNumber.count else {
-                return pureNumber
-            }
-
-            let stringIndex = String.Index(utf16Offset: index, in: pattern)
-            let patternCharacter = pattern[stringIndex]
-            guard patternCharacter != replacementCharacter else {
-                continue
-            }
-            pureNumber.insert(patternCharacter, at: stringIndex)
-        }
-
-        return pureNumber
-    }
-}
-
 struct PhoneOrEmailTextInputView: View {
     // MARK: - Lifecycle
 
     init(
         entry: Binding<String>,
+        isFocused: FocusState<Bool>.Binding,
         mode: Mode = .auto,
         currendMode: Binding<Mode>,
         country: CountryCode = .usa,
@@ -100,6 +26,7 @@ struct PhoneOrEmailTextInputView: View {
         onSubmit: (() -> Void)? = nil
     ) {
         self._entry = entry
+        self.isFocused = isFocused
         self._currentMode = currendMode
 
         self.defaultMode = mode
@@ -118,14 +45,11 @@ struct PhoneOrEmailTextInputView: View {
             size: .md,
             from: themeObserver.theme
         )
-        .animation(.easeInOut(duration: 0.6), value: keyIsFocused)
-        .onAppear {
-            keyIsFocused = true
-        }
+        .animation(.easeInOut(duration: 0.6), value: isFocused.wrappedValue)
         .sheet(
             isPresented: $presentSheet,
             onDismiss: {
-                keyIsFocused = true
+                isFocused.wrappedValue = true
             }
         ) {
             NavigationView {
@@ -201,7 +125,7 @@ struct PhoneOrEmailTextInputView: View {
     @Binding private var entry: String
     @State private var searchCountry: String = ""
 
-    @FocusState private var keyIsFocused: Bool
+    private var isFocused: FocusState<Bool>.Binding
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
@@ -268,7 +192,7 @@ struct PhoneOrEmailTextInputView: View {
         ) {
             EmptyView()
         }
-        .focused($keyIsFocused)
+        .focused(isFocused)
         .keyboardType(keyboardType)
         .autocorrectionDisabled(true)
         .textContentType(contentType)
@@ -286,7 +210,7 @@ struct PhoneOrEmailTextInputView: View {
         if currentMode == .phone {
             Button {
                 presentSheet = true
-                keyIsFocused = false
+                isFocused.wrappedValue = false
             } label: {
                 Text("\(selectedCountry.flag) \(selectedCountry.code)")
                     .frame(minWidth: 56)
@@ -338,14 +262,5 @@ struct PhoneOrEmailTextInputView: View {
             .onSubmit(of: .text) {
                 onSubmit?()
             }
-    }
-}
-
-#Preview {
-    ParraViewPreview { _ in
-        PhoneOrEmailTextInputView(
-            entry: .constant(""),
-            currendMode: .constant(.auto)
-        )
     }
 }
