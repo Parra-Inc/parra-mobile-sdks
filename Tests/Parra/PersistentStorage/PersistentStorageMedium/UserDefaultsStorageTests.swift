@@ -20,7 +20,7 @@ class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testReadDoesNotExist() async throws {
-        let file: [String: String]? = try await userDefaultsStorage.read(
+        let file: [String: String]? = try userDefaultsStorage.read(
             name: "key1"
         )
 
@@ -35,7 +35,7 @@ class UserDefaultsStorageTests: XCTestCase {
 
         try userDefaults.set(JSONEncoder().encode(data), forKey: key)
 
-        let readData: [String: String]? = try await userDefaultsStorage.read(
+        let readData: [String: String]? = try userDefaultsStorage.read(
             name: key
         )
 
@@ -49,7 +49,7 @@ class UserDefaultsStorageTests: XCTestCase {
             "key": "val"
         ]
 
-        try await userDefaultsStorage.write(
+        try userDefaultsStorage.write(
             name: key,
             value: data
         )
@@ -68,12 +68,12 @@ class UserDefaultsStorageTests: XCTestCase {
             "key": "val"
         ]
 
-        try await userDefaultsStorage.write(
+        try userDefaultsStorage.write(
             name: key,
             value: data
         )
 
-        try await userDefaultsStorage.delete(
+        try userDefaultsStorage.delete(
             name: key
         )
 

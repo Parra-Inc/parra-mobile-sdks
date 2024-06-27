@@ -90,7 +90,9 @@ class MockedParraTestCase: ParraBaseMock {
             alertManager: alertManager,
             api: api,
             authServer: mockAuthServer.resourceServer,
-            externalResourceServer: mockExternalResourceServer.resourceServer
+            externalResourceServer: mockExternalResourceServer.resourceServer,
+            dataManager: dataManager,
+            fileManager: .default
         )
 
         let authService = AuthService(
@@ -101,7 +103,10 @@ class MockedParraTestCase: ParraBaseMock {
             ),
             dataManager: dataManager,
             authServer: mockAuthServer.resourceServer,
-            authenticationMethod: .custom(tokenProvider: authenticationProvider)
+            authenticationMethod: .custom(
+                tokenProvider: authenticationProvider
+            ),
+            modalScreenManager: modalScreenManager
         )
 
         let feedback = ParraFeedback(
@@ -225,6 +230,14 @@ class MockedParraTestCase: ParraBaseMock {
             dataManager: dataManager
         )
 
+        let modalScreenManager = ModalScreenManager(
+            containerRenderer: ContainerRenderer(
+                configuration: appConfig
+            ),
+            configuration: appConfig,
+            notificationCenter: .default
+        )
+
         let authService = AuthService(
             oauth2Service: OAuth2Service(
                 clientId: appState.applicationId,
@@ -233,7 +246,10 @@ class MockedParraTestCase: ParraBaseMock {
             ),
             dataManager: dataManager,
             authServer: authServer,
-            authenticationMethod: .custom(tokenProvider: authenticationProvider)
+            authenticationMethod: .custom(
+                tokenProvider: authenticationProvider
+            ),
+            modalScreenManager: modalScreenManager
         )
 
         let apiResourceServer = ApiResourceServer(
@@ -318,7 +334,9 @@ class MockedParraTestCase: ParraBaseMock {
             alertManager: alertManager,
             api: api,
             authServer: mockAuthServer.resourceServer,
-            externalResourceServer: mockExternalResourceServer.resourceServer
+            externalResourceServer: mockExternalResourceServer.resourceServer,
+            dataManager: dataManager,
+            fileManager: .default
         )
     }
 }

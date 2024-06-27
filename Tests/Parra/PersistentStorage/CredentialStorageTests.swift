@@ -38,7 +38,7 @@ class CredentialStorageTests: XCTestCase {
         await credentialStorage.updateCredential(credential: user)
 
         let value = await storageModule
-            .read(name: CredentialStorage.Key.currentUser)
+            .read(name: DataManager.Key.userCredentialsKey)
 
         XCTAssertEqual(value, user)
     }

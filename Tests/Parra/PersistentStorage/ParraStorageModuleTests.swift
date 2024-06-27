@@ -67,7 +67,7 @@ class ParraStorageModuleTests: ParraBaseMock {
                 break
             case .userDefaults:
                 let (medium, key) = storageModule.persistentStorage!
-                try await medium.write(name: key, value: data)
+                try medium.write(name: key, value: data)
                 await storageModule.loadData()
 
                 let cache = storageModule.storageCache
@@ -77,7 +77,7 @@ class ParraStorageModuleTests: ParraBaseMock {
                 XCTAssertEqual(readData, testValue)
             case .fileSystem, .fileSystemEncrypted:
                 let (medium, key) = storageModule.persistentStorage!
-                try await medium.write(name: key, value: data)
+                try medium.write(name: key, value: data)
                 await storageModule.loadData()
 
                 let cache = storageModule.storageCache
@@ -85,7 +85,7 @@ class ParraStorageModuleTests: ParraBaseMock {
             case .keychain:
                 let (medium, key) = storageModule.persistentStorage!
 
-                try await medium.write(name: key, value: data)
+                try medium.write(name: key, value: data)
                 await storageModule.loadData()
 
                 let cache = storageModule.storageCache
@@ -125,7 +125,7 @@ class ParraStorageModuleTests: ParraBaseMock {
                 await storageModule.loadData()
             case .userDefaults, .keychain:
                 let (medium, key) = storageModule.persistentStorage!
-                try await medium.write(name: key, value: testData)
+                try medium.write(name: key, value: testData)
 
                 await checkLoadedState(
                     storageModule: storageModule,
@@ -140,7 +140,7 @@ class ParraStorageModuleTests: ParraBaseMock {
                 }
             case .fileSystem, .fileSystemEncrypted:
                 let (medium, _) = storageModule.persistentStorage!
-                try await medium.write(name: testKey, value: testData)
+                try medium.write(name: testKey, value: testData)
 
                 await checkLoadedState(
                     storageModule: storageModule,

@@ -23,7 +23,7 @@ class FileSystemStorageTests: ParraBaseMock {
     }
 
     func testReadDoesNotExist() async throws {
-        let file: [String: String]? = try await fileSystemStorage.read(
+        let file: [String: String]? = try fileSystemStorage.read(
             name: "file.txt"
         )
 
@@ -46,7 +46,7 @@ class FileSystemStorageTests: ParraBaseMock {
             contents: JSONEncoder().encode(data)
         )
 
-        let file: [String: String]? = try await fileSystemStorage.read(
+        let file: [String: String]? = try fileSystemStorage.read(
             name: fileName
         )
 
@@ -64,7 +64,7 @@ class FileSystemStorageTests: ParraBaseMock {
             "key": "val"
         ]
 
-        try await fileSystemStorage.write(
+        try fileSystemStorage.write(
             name: name,
             value: data
         )
@@ -88,12 +88,12 @@ class FileSystemStorageTests: ParraBaseMock {
             "key": "val"
         ]
 
-        try await fileSystemStorage.write(
+        try fileSystemStorage.write(
             name: name,
             value: data
         )
 
-        try await fileSystemStorage.delete(name: name)
+        try fileSystemStorage.delete(name: name)
 
         XCTAssertFalse(fileManager.fileExists(atPath: filePath.path))
     }
