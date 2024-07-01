@@ -90,7 +90,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
         }
 
         let expiresAt = challengeResponse.expiresAt
-        let now = Date.now
+        let now = Date()
 
         if expiresAt < now {
             return "Code expired. Tap '\(resendCodeTitle)' to try again."
@@ -167,10 +167,6 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     )
                 }
             } onSubmit: { _, _ in }
-                .applyPadding(
-                    size: .md,
-                    from: themeObserver.theme
-                )
                 .layoutPriority(15)
 
             actions
@@ -268,7 +264,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
             return
         }
 
-        let now = Date.now
+        let now = Date()
 
         withAnimation {
             if response.expiresAt < now {
