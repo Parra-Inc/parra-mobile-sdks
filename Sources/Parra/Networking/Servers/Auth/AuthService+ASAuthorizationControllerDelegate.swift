@@ -77,23 +77,6 @@ extension AuthService {
             return
         }
 
-        switch error.code {
-        case .canceled:
-            logger.info("Authorization was canceled")
-        case .unknown:
-            logger.error("An unknown error occurred")
-        case .invalidResponse:
-            logger.error("Invalid response")
-        case .notHandled:
-            logger.error("Authorization request not handled")
-        case .failed:
-            logger.error("Authorization request failed")
-        case .notInteractive:
-            logger.error("Authorization request not interactive")
-        default:
-            logger.error("Unhandled authorization error")
-        }
-
         completion(.failure(error))
 
         activeAuthorizationRequests.removeValue(forKey: addr)

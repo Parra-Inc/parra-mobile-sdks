@@ -19,11 +19,6 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     ) {
         self.params = params
         self.config = config
-        self.primaryActionName = params.userExists ? "Log in" : "Sign Up"
-        self.continueButtonContent = TextButtonContent(
-            text: primaryActionName,
-            isDisabled: true
-        )
     }
 
     // MARK: - Public
@@ -69,10 +64,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             using: themeObserver.theme
         )
         .onAppear {
-            continueButtonContent = TextButtonContent(
-                text: continueButtonContent.text,
-                isDisabled: challengeResponse == nil
-            )
+            shouldDisableSubmitWithPassword = passwordChallengeResponse == nil
         }
     }
 
@@ -82,13 +74,11 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
 
     // MARK: - Private
 
-    private let primaryActionName: String
-
     private let params: Params
     private let config: Config
 
-    @State private var challengeResponse: ChallengeResponse?
-    @State private var continueButtonContent: TextButtonContent
+    @State private var passwordChallengeResponse: ChallengeResponse?
+    @State private var shouldDisableSubmitWithPassword: Bool = true
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeObserver: ParraThemeObserver
@@ -111,130 +101,39 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             )
 
             ChallengeView(
+                identity: params.identity,
                 passwordChallengeAvailable: passwordChallengeAvailable,
                 userExists: params.userExists,
                 onUpdate: { challenge, isValid in
-                    challengeResponse = .password(challenge)
+                    passwordChallengeResponse = .password(challenge)
 
-                    continueButtonContent = continueButtonContent.withDisabled(
-                        !isValid
-                    )
+                    shouldDisableSubmitWithPassword = !isValid
                 },
                 onSubmit: {
-                    if let challengeResponse {
-                        submitChallengeResponse(challengeResponse)
+                    if let passwordChallengeResponse {
+                        try await submitChallengeResponse(
+                            passwordChallengeResponse
+                        )
+                    }
+                },
+                forgotPassword: {
+                    Task {
+                        await params.forgotPassword()
                     }
                 }
             )
 
-            componentFactory.buildContainedButton(
-                config: ParraTextButtonConfig(
-                    size: .large,
-                    isMaxWidth: true
-                ),
-                content: continueButtonContent,
-                localAttributes: ParraAttributes.ContainedButton(
-                    normal: ParraAttributes.ContainedButton.StatefulAttributes(
-                        padding: .zero
-                    )
-                )
-            ) {
-                if let challengeResponse {
-                    submitChallengeResponse(challengeResponse)
-                }
-            }
-
-            if params.userExists, params.passwordAvailable {
-                componentFactory
-                    .buildPlainButton(
-                        config: ParraTextButtonConfig(
-                            type: .primary,
-                            size: .medium,
-                            isMaxWidth: false
-                        ),
-                        text: "Forgot password?",
-                        localAttributes: ParraAttributes.PlainButton(
-                            normal: ParraAttributes.PlainButton
-                                .StatefulAttributes(
-                                    label: ParraAttributes.Label(
-                                        text: ParraAttributes.Text(
-                                            alignment: .center
-                                        )
-                                    )
-                                )
-                        ),
-                        onPress: {
-                            Task {
-                                await params.forgotPassword()
-                            }
-                        }
-                    )
-            }
-
-            if passwordlessChallengesAvailable,
-               ![.uknownIdentity, .username].contains(params.identityType)
-            {
-                let passwordlessLoginTitle: String =
-                    if passwordChallengeAvailable {
-                        "\(primaryActionName) without password"
-                    } else if let challenge =
-                        firstAvailablePasswordlessChallenge
-                    {
-                        // If there isn't a password challenge available, we
-                        //
-                        switch challenge.id {
-                        case .passwordlessEmail:
-                            "\(primaryActionName) with email"
-                        case .passwordlessSms:
-                            "\(primaryActionName) with SMS"
-                        default:
-                            primaryActionName
-                        }
-                    } else {
-                        // shouldn't happen
-                        primaryActionName
-                    }
-
-                componentFactory.buildPlainButton(
-                    config: .default,
-                    content: TextButtonContent(
-                        text: passwordlessLoginTitle
-                    ),
-                    localAttributes: ParraAttributes.PlainButton(
-                        normal: ParraAttributes.PlainButton.StatefulAttributes(
-                            padding: .zero
-                        )
-                    )
-                ) {
-                    let challengeResponse: ChallengeResponse? = switch params
-                        .identityType
-                    {
-                    case .email:
-                        .passwordlessEmail(params.identity)
-                    case .phoneNumber:
-                        .passwordlessSms(params.identity)
-                    default:
-                        // shound't happen
-                        nil
-                    }
-
-                    if let challengeResponse {
-                        submitChallengeResponse(challengeResponse)
-                    }
-                }
-            }
+            SubmissionOptions(
+                params: params,
+                shouldDisableSubmitWithPassword: $shouldDisableSubmitWithPassword,
+                passwordChallengeResponse: $passwordChallengeResponse,
+                submitResponse: submitChallengeResponse
+            )
         }
         .applyPadding(
             size: .md,
             from: themeObserver.theme
         )
-    }
-
-    private var firstAvailablePasswordlessChallenge: ParraAuthChallenge? {
-        return params.availableChallenges.first { challenge in
-            return challenge.id == .passwordlessEmail || challenge
-                .id == .passwordlessSms
-        }
     }
 
     private var passwordChallengeAvailable: Bool {
@@ -249,54 +148,24 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
         }
     }
 
-    private var passwordlessChallengesAvailable: Bool {
-        let challenges = if params.userExists {
-            params.availableChallenges
-        } else {
-            params.supportedChallenges
-        }
-
-        return challenges.contains { challenge in
-            return challenge.id == .passwordlessEmail || challenge
-                .id == .passwordlessSms
-        }
-    }
-
     private var title: String {
-        if passwordChallengeAvailable {
-            if params.userExists {
-                return "Your password"
-            }
-
-            return "Create a password"
+        if params.userExists {
+            return "Login"
         }
 
-        return ""
+        return "Create an account"
     }
 
     private func submitChallengeResponse(
         _ response: ChallengeResponse
-    ) {
-        continueButtonContent = continueButtonContent.withLoading(true)
-
+    ) async throws {
         UIApplication.resignFirstResponder()
 
-        Task {
-            do {
-                logger.debug("Submitting challenge response")
+        logger.debug("Submitting challenge response")
 
-                try await params.submit(
-                    response
-                )
-
-            } catch {
-                logger.error("Error submitting challenge response", error)
-            }
-
-            Task { @MainActor in
-                continueButtonContent = continueButtonContent.withLoading(false)
-            }
-        }
+        try await params.submit(
+            response
+        )
     }
 }
 

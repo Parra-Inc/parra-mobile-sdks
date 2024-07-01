@@ -9,6 +9,7 @@
 import Foundation
 
 public enum ChallengeResponse {
+    case passkey
     case password(String)
     case passwordlessSms(String)
     case passwordlessEmail(String)

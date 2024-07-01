@@ -90,6 +90,17 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
 
     // MARK: - Internal
 
+    var userMessage: String? {
+        switch self {
+        case .apiError(let response):
+            return response.message
+        case .networkError(_, _, let data):
+            return extractErrorMessage(from: data)
+        default:
+            return nil
+        }
+    }
+
     var errorDescription: String {
         switch self {
         case .message(let string):

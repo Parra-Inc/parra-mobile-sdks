@@ -42,16 +42,6 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         .applyDefaultWidgetAttributes(
             using: themeObserver.theme
         )
-        .task {
-            do {
-                try await params.attemptPasskeyLogin()
-            } catch {
-                Logger.error(
-                    "Failed passkey auto login on landing screen",
-                    error
-                )
-            }
-        }
     }
 
     // MARK: - Internal

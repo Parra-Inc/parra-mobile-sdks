@@ -187,6 +187,7 @@
 		0054F9212C2DA5B800E63C31 /* ASAuthorizationError+noCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054F9202C2DA5B800E63C31 /* ASAuthorizationError+noCredential.swift */; };
 		0054F9232C2DA96100E63C31 /* PhoneNumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054F9222C2DA96100E63C31 /* PhoneNumberFormatter.swift */; };
 		0054F9252C2DCE3B00E63C31 /* SubmissionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054F9242C2DCE3B00E63C31 /* SubmissionOptions.swift */; };
+		0054F9272C2DFB8F00E63C31 /* SubmissionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054F9262C2DFB8F00E63C31 /* SubmissionButton.swift */; };
 		00588FC92C15D87000A5E435 /* Server+logTaskMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00588FC82C15D87000A5E435 /* Server+logTaskMetrics.swift */; };
 		00588FCB2C15D8F000A5E435 /* AuthServer+UrlSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00588FCA2C15D8F000A5E435 /* AuthServer+UrlSessionDelegate.swift */; };
 		00588FCD2C15DAC500A5E435 /* ExternalResourceServer+UrlSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00588FCC2C15DAC500A5E435 /* ExternalResourceServer+UrlSessionDelegate.swift */; };
@@ -895,6 +896,7 @@
 		0054F9202C2DA5B800E63C31 /* ASAuthorizationError+noCredential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ASAuthorizationError+noCredential.swift"; sourceTree = "<group>"; };
 		0054F9222C2DA96100E63C31 /* PhoneNumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberFormatter.swift; sourceTree = "<group>"; };
 		0054F9242C2DCE3B00E63C31 /* SubmissionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionOptions.swift; sourceTree = "<group>"; };
+		0054F9262C2DFB8F00E63C31 /* SubmissionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionButton.swift; sourceTree = "<group>"; };
 		00588FC82C15D87000A5E435 /* Server+logTaskMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Server+logTaskMetrics.swift"; sourceTree = "<group>"; };
 		00588FCA2C15D8F000A5E435 /* AuthServer+UrlSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthServer+UrlSessionDelegate.swift"; sourceTree = "<group>"; };
 		00588FCC2C15DAC500A5E435 /* ExternalResourceServer+UrlSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExternalResourceServer+UrlSessionDelegate.swift"; sourceTree = "<group>"; };
@@ -2741,6 +2743,7 @@
 				00D151202C0661340049D88F /* ParraAuthDefaultIdentityChallengeScreen+Params.swift */,
 				00D151222C0661670049D88F /* ChallengeView.swift */,
 				0054F9242C2DCE3B00E63C31 /* SubmissionOptions.swift */,
+				0054F9262C2DFB8F00E63C31 /* SubmissionButton.swift */,
 				00D151282C0764AD0049D88F /* PasswordStrengthView.swift */,
 			);
 			path = Challege;
@@ -3690,6 +3693,7 @@
 				00706B192B71A6E600C28F66 /* TextEditorConfig.swift in Sources */,
 				005AFE352BE2F38200B0C29A /* API+releases.swift in Sources */,
 				00C119172BAFAE170013FD03 /* ParraPushNotificationOptions.swift in Sources */,
+				0054F9272C2DFB8F00E63C31 /* SubmissionButton.swift in Sources */,
 				00D143C12BB1F89500BDB8C4 /* View+Release.swift in Sources */,
 				008434582BDC06A100700881 /* CameraView.swift in Sources */,
 				00FCB18C2B9791C000635DC8 /* ViewDataLoader+FeedbackForms.swift in Sources */,

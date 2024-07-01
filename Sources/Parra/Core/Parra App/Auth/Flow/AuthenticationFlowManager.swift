@@ -158,7 +158,6 @@ class AuthenticationFlowManager: ObservableObject {
                                 submitIdentity: { identity in
                                     return try await self.onIdentitySubmitted(
                                         identity: identity,
-                                        inputType: inputType,
                                         with: appInfo,
                                         modalScreenManager: modalScreenManager,
                                         authService: authService
@@ -174,6 +173,9 @@ class AuthenticationFlowManager: ObservableObject {
                                         authService: authService,
                                         modalScreenManager: modalScreenManager
                                     )
+                                },
+                                cancelPasskeyAutofillAttempt: {
+                                    self.cancelPasskeyRequests(on: authService)
                                 }
                             )
                         )
@@ -225,11 +227,19 @@ class AuthenticationFlowManager: ObservableObject {
         } catch let error as ASAuthorizationError {
             switch error.code {
             case .canceled:
-                logger.debug("Passkey request canceled by user")
+                if error.noPasskeysAvailable {
+                    logger.debug("No passkeys available")
+                } else {
+                    logger.debug("Passkey request canceled by user")
+                }
             default:
                 logger.error(
                     "Authorization error obtaining challenge for use with passkey",
-                    error
+                    error,
+                    [
+                        "code": error.code,
+                        "user_info": error.userInfo
+                    ]
                 )
 
                 throw error
@@ -296,7 +306,6 @@ class AuthenticationFlowManager: ObservableObject {
 
     private func onIdentitySubmitted(
         identity: String,
-        inputType: ParraIdentityInputType,
         with appInfo: ParraAppInfo,
         modalScreenManager: ModalScreenManager,
         authService: AuthService
@@ -309,14 +318,12 @@ class AuthenticationFlowManager: ObservableObject {
             for: appInfo.auth
         )
 
-        let identityType = determineIdentityType(
-            from: authMethods
-        )
-
         let authChallengeResponse = try await authService.getAuthChallenges(
             for: identity,
-            with: identityType
+            with: .uknownIdentity
         )
+
+        let identityType = authChallengeResponse.type
 
         if authChallengeResponse.hasAvailableChallenge(with: .passkeys) {
             try await triggerPasskeyLoginRequest(
@@ -428,23 +435,19 @@ class AuthenticationFlowManager: ObservableObject {
 
     private func onPasskeyIdentitySubmitted(
         identity: String,
-        with appInfo: ParraAppInfo,
         authService: AuthService
     ) async throws {
-        // Refactor:
-        // 1. Remove continue with passkey button on welcome screen
-        // 2. On id input screen, hit challenges endpoint upon submission
-        // 3. If passkey is an available method for ID, attempt assersion flow
-        // 4. If it isn't, follow whatever other flow.
         do {
             try await authService.registerWithPasskey(
                 username: identity
             )
-
         } catch let error as ASAuthorizationError {
-//            switch error {
-//
-//            }
+            switch error.code {
+            case .canceled:
+                logger.debug("Passkey request canceled by user")
+            default:
+                throw error
+            }
         } catch {
             throw error
         }
@@ -500,7 +503,20 @@ class AuthenticationFlowManager: ObservableObject {
         authService: AuthService
     ) async throws {
         switch challengeResponse {
+        case .passkey:
+            cancelPasskeyRequests(
+                on: authService
+            )
+
+            try await onPasskeyIdentitySubmitted(
+                identity: identity,
+                authService: authService
+            )
         case .password(let password):
+            cancelPasskeyRequests(
+                on: authService
+            )
+
             try await authenticate(
                 with: identity,
                 password: password,
@@ -516,6 +532,10 @@ class AuthenticationFlowManager: ObservableObject {
                 )
             }
 
+            cancelPasskeyRequests(
+                on: authService
+            )
+
             navigateToIdentityVerificationScreen(
                 identity: phoneNumber,
                 userExists: userExists,
@@ -529,6 +549,10 @@ class AuthenticationFlowManager: ObservableObject {
                     "No passwordless config found for email"
                 )
             }
+
+            cancelPasskeyRequests(
+                on: authService
+            )
 
             navigateToIdentityVerificationScreen(
                 identity: email,
@@ -610,28 +634,6 @@ class AuthenticationFlowManager: ObservableObject {
         await authService.applyUserUpdate(
             authResult
         )
-    }
-
-    private func determineIdentityType(
-        from authMethods: [ParraAuthenticationMethod]
-    ) -> IdentityType? {
-        // If the identity could have been 1 of multiple mismatching types,
-        // leave it to the server to work out what the string is.
-        if authMethods.contains(.password),
-           authMethods.contains(.passwordless(.sms))
-        {
-            return nil
-        }
-
-        if authMethods.contains(.password) || authMethods.contains(.passkey) {
-            return .email
-        }
-
-        if authMethods.contains(.passwordless(.sms)) {
-            return .phoneNumber
-        }
-
-        return nil
     }
 
     private func navigate(

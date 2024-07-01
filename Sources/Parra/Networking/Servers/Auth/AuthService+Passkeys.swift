@@ -34,6 +34,7 @@ extension AuthService {
         try await startAuthorizationRequests(
             requests: [result.request],
             session: result.session,
+            existingUser: true,
             presentationMode: presentationMode
         )
     }
@@ -47,15 +48,21 @@ extension AuthService {
 
         try await startAuthorizationRequests(
             requests: [result.request],
-            session: result.session
+            session: result.session,
+            existingUser: false
         )
     }
 
     private func startAuthorizationRequests(
         requests: [ASAuthorizationRequest],
         session: String,
+        existingUser: Bool,
         presentationMode: PasskeyPresentationMode = .modal
     ) async throws {
+        logger.debug("Starting auth request", [
+            "preentationMode": presentationMode.description
+        ])
+
         if presentationMode == .modal {
             // If we're about to open a modal passkey menu, dismiss the
             // keyboard.
@@ -67,17 +74,21 @@ extension AuthService {
             using: presentationMode
         )
 
-        modalScreenManager.presentLoadingIndicatorModal(
-            content: ParraLoadingIndicatorContent(
-                title: LabelContent(text: "Logging in with passkey"),
-                subtitle: nil,
-                cancel: nil
+        if existingUser {
+            modalScreenManager.presentLoadingIndicatorModal(
+                content: ParraLoadingIndicatorContent(
+                    title: LabelContent(text: "Logging in with passkey"),
+                    subtitle: nil,
+                    cancel: nil
+                )
             )
-        )
+        }
 
         do {
             defer {
-                modalScreenManager.dismissLoadingIndicatorModal()
+                if existingUser {
+                    modalScreenManager.dismissLoadingIndicatorModal()
+                }
             }
 
             let accessToken = try await processPasskeyAuthorization(

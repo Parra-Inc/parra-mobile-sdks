@@ -9,8 +9,19 @@
 import Foundation
 
 extension AuthService {
-    enum PasskeyPresentationMode {
+    enum PasskeyPresentationMode: CustomStringConvertible {
         case modal
         case autofill
+
+        // MARK: - Internal
+
+        var description: String {
+            switch self {
+            case .modal:
+                return "modal"
+            case .autofill:
+                return "autofill"
+            }
+        }
     }
 }

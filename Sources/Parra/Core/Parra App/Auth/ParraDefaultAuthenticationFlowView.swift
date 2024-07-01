@@ -54,24 +54,42 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
     // MARK: - Internal
 
     @EnvironmentObject var parraAppInfo: ParraAppInfo
+    @EnvironmentObject var parraAuthInfo: ParraAuthState
 
-    var container: some View {
+    @ViewBuilder var container: some View {
+        let params = flowManager.getLandingScreenParams(
+            authService: parra.parraInternal.authService,
+            modalScreenManager: parra.parraInternal
+                .modalScreenManager,
+            using: parraAppInfo
+        )
+
         NavigationStack(
             path: $navigationState.navigationPath
         ) {
             flowManager.provideAuthScreen(
                 authScreen: .landingScreen(
-                    flowManager.getLandingScreenParams(
-                        authService: parra.parraInternal.authService,
-                        modalScreenManager: parra.parraInternal
-                            .modalScreenManager,
-                        using: parraAppInfo
-                    )
+                    params
                 )
             )
             .environmentObject(parraAppInfo)
             .environmentObject(navigationState)
             .environmentObject(flowManager)
+            .task {
+                switch parraAuthInfo.current {
+                case .authenticated, .undetermined:
+                    break
+                case .unauthenticated:
+                    do {
+                        try await params.attemptPasskeyLogin()
+                    } catch {
+                        Logger.error(
+                            "Failed passkey auto login on landing screen",
+                            error
+                        )
+                    }
+                }
+            }
             .navigationDestination(
                 for: AuthenticationFlowManager.AuthScreen.self
             ) { destination in

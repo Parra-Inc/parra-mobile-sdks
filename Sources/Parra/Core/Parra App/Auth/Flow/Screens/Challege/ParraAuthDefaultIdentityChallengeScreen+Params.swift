@@ -55,10 +55,74 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
             }
         }
 
+        var passwordSupported: Bool {
+            return supportedChallenges.contains { challenge in
+                return challenge.id == .password
+            }
+        }
+
+        var passwordCurrentlyAvailable: Bool {
+            if userExists {
+                return passwordAvailable
+            }
+
+            return passwordSupported
+        }
+
+        var passkeySupported: Bool {
+            return supportedChallenges.contains { challenge in
+                return challenge.id == .passkeys
+            }
+        }
+
         var passwordlessAvailable: Bool {
             return availableChallenges.contains { challenge in
                 return challenge.id == .passwordlessEmail || challenge
                     .id == .passwordlessSms
+            }
+        }
+
+        var passwordlessChallengesAvailable: Bool {
+            return availableChallenges.contains { challenge in
+                return challenge.id == .passwordlessEmail || challenge
+                    .id == .passwordlessSms
+            }
+        }
+
+        var passwordlessChallengesSupported: Bool {
+            return supportedChallenges.contains { challenge in
+                return challenge.id == .passwordlessEmail || challenge
+                    .id == .passwordlessSms
+            }
+        }
+
+        var passwordlessChallengesCurrentlyAvailable: Bool {
+            if userExists {
+                passwordlessChallengesAvailable
+            } else {
+                passwordlessChallengesSupported
+            }
+        }
+
+        var firstAvailablePasswordlessChallenge: ParraAuthChallenge? {
+            return supportedChallenges.first { challenge in
+                return challenge.id == .passwordlessEmail || challenge
+                    .id == .passwordlessSms
+            }
+        }
+
+        var firstSupportedPasswordlessChallenge: ParraAuthChallenge? {
+            return supportedChallenges.first { challenge in
+                return challenge.id == .passwordlessEmail || challenge
+                    .id == .passwordlessSms
+            }
+        }
+
+        var firstCurrentlyAvailablePasswordlessChallenge: ParraAuthChallenge? {
+            if userExists {
+                firstAvailablePasswordlessChallenge
+            } else {
+                firstSupportedPasswordlessChallenge
             }
         }
     }

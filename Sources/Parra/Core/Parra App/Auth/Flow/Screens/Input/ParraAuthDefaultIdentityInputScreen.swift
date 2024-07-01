@@ -26,6 +26,22 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         VStack(alignment: .leading) {
             primaryContent
         }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: {
+                    params.cancelPasskeyAutofillAttempt?()
+
+                    dismiss()
+                }) {
+                    Label {
+                        Text("Back")
+                    } icon: {
+                        Image(systemName: "chevron.left")
+                    }
+                }
+            }
+        }
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity
@@ -38,6 +54,8 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 text: continueButtonContent.text,
                 isDisabled: identity.isEmpty
             )
+
+            isFocused = true
         }
         .task {
             // This is for getting the passkey option in the quick type bar
@@ -84,6 +102,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
         PhoneOrEmailTextInputView(
             entry: $identity,
+            isFocused: $isFocused,
             mode: inputMode,
             currendMode: $emailPhoneFieldCurrentMode,
             onSubmit: submit
@@ -92,6 +111,9 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
     // MARK: - Private
 
+    @Environment(\.dismiss) private var dismiss
+
+    @FocusState private var isFocused: Bool
     @State private var identity = ""
     @State private var continueButtonContent: TextButtonContent = .init(
         text: "Continue",
@@ -121,7 +143,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                     text: ParraAttributes.Text(
                         color: themeObserver.theme.palette.error.toParraColor()
                     ),
-                    padding: .md
+                    padding: .lg
                 )
             )
         }
@@ -177,12 +199,22 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         Task {
             do {
                 try await params.submitIdentity(identity)
+
+                withAnimation {
+                    errorMessage = nil
+                }
+            } catch let error as ParraError {
+                withAnimation {
+                    errorMessage = error.userMessage
+                }
+
+                Logger.error("Failed to submit identity", error)
             } catch {
                 withAnimation {
                     errorMessage = error.localizedDescription
                 }
 
-                Logger.error("Failed to submit identity", error)
+                Logger.error("Failed to submit identity. Unknown error", error)
             }
 
             Task { @MainActor in

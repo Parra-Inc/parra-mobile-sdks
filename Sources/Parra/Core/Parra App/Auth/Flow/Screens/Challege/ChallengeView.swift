@@ -24,39 +24,89 @@ struct ChallengeView: View {
 
     @FocusState private var focusState: Field?
 
+    let identity: String
     let passwordChallengeAvailable: Bool
     let userExists: Bool
     let onUpdate: (_ challenge: String, _ isValid: Bool) -> Void
-    let onSubmit: () -> Void
+    let onSubmit: () async throws -> Void
+    let forgotPassword: () -> Void
 
-    @State private var id = "mickm@hey.com"
+    @State private var errorMessage: String?
 
     var body: some View {
         VStack(spacing: 16) {
-            TextField(text: $id) {
-                EmptyView()
-            }
-            .textContentType(.username)
-
             componentFactory.buildTextInput(
-                config: challengeFieldConfig,
+                config: .default,
                 content: TextInputContent(
-                    placeholder: "Password",
-                    errorMessage: nil
-                ) { newText in
-                    validate(
-                        password: newText ?? ""
-                    )
-                },
+                    defaultText: identity,
+                    placeholder: ""
+                ),
                 localAttributes: ParraAttributes.TextInput(
                     padding: .zero
                 )
             )
-            .onChange(of: passwordState) { _, newValue in
-                onUpdate(newValue.password, newValue.isValid)
+            .textContentType(.username)
+            .disabled(true)
+            .selectionDisabled()
+
+            VStack(alignment: .trailing, spacing: 8) {
+                componentFactory.buildTextInput(
+                    config: challengeFieldConfig,
+                    content: TextInputContent(
+                        placeholder: "Password",
+                        errorMessage: nil
+                    ) { newText in
+                        validate(
+                            password: newText ?? ""
+                        )
+                    },
+                    localAttributes: ParraAttributes.TextInput(
+                        padding: .zero
+                    )
+                )
+                .onChange(of: passwordState) { _, newValue in
+                    onUpdate(newValue.password, newValue.isValid)
+                }
+                .onSubmit(of: .text, onReceiveSubmit)
+                .focused($focusState, equals: .password)
+
+                if let errorMessage {
+                    componentFactory.buildLabel(
+                        content: LabelContent(text: errorMessage),
+                        localAttributes: ParraAttributes.Label(
+                            text: ParraAttributes.Text(
+                                color: themeObserver.theme.palette.error
+                                    .toParraColor()
+                            ),
+                            padding: .lg
+                        )
+                    )
+                }
+
+                componentFactory
+                    .buildPlainButton(
+                        config: ParraTextButtonConfig(
+                            type: .primary,
+                            size: .medium,
+                            isMaxWidth: false
+                        ),
+                        text: "Forgot password?",
+                        localAttributes: ParraAttributes.PlainButton(
+                            normal: ParraAttributes.PlainButton
+                                .StatefulAttributes(
+                                    label: ParraAttributes.Label(
+                                        text: ParraAttributes.Text(
+                                            alignment: .center
+                                        ),
+                                        padding: .zero
+                                    )
+                                )
+                        ),
+                        onPress: {
+                            forgotPassword()
+                        }
+                    )
             }
-            .onSubmit(of: .text, onSubmit)
-            .focused($focusState, equals: .password)
 
             // Password strength view only shows up for create account flow
             // that supports password challenges.
@@ -73,6 +123,30 @@ struct ChallengeView: View {
             validate(
                 password: passwordState.password
             )
+        }
+    }
+
+    private func onReceiveSubmit() {
+        Task {
+            do {
+                try await onSubmit()
+
+                withAnimation {
+                    errorMessage = nil
+                }
+            } catch let error as ParraError {
+                withAnimation {
+                    errorMessage = error.userMessage
+                }
+
+                Logger.error("Failed to submit identity", error)
+            } catch {
+                withAnimation {
+                    errorMessage = error.localizedDescription
+                }
+
+                Logger.error("Failed to submit identity. Unknown error", error)
+            }
         }
     }
 
@@ -195,16 +269,22 @@ struct ChallengeView: View {
     ParraViewPreview { _ in
         VStack(spacing: 30) {
             ChallengeView(
+                identity: "mickm@hey.com",
                 passwordChallengeAvailable: true,
-                userExists: true
-            ) { _, _ in
-            } onSubmit: {}
+                userExists: true,
+                onUpdate: { _, _ in },
+                onSubmit: {},
+                forgotPassword: {}
+            )
 
             ChallengeView(
+                identity: "mickm@hey.com",
                 passwordChallengeAvailable: true,
-                userExists: false
-            ) { _, _ in
-            } onSubmit: {}
+                userExists: false,
+                onUpdate: { _, _ in },
+                onSubmit: {},
+                forgotPassword: {}
+            )
         }
         .padding()
     }
