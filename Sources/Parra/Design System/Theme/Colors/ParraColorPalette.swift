@@ -13,29 +13,18 @@ public struct ParraColorPalette {
     // MARK: - Lifecycle
 
     public init(
-        primary: ParraColorSwatchConvertible = ParraColorPalette.defaultLight
-            .primary,
-        secondary: ParraColorSwatchConvertible = ParraColorPalette.defaultLight
-            .secondary,
-        primaryBackground: ParraColor = ParraColorPalette.defaultLight
-            .primaryBackground,
-        secondaryBackground: ParraColor = ParraColorPalette.defaultLight
-            .secondaryBackground,
-        primaryText: ParraColorSwatchConvertible = ParraColorPalette
-            .defaultLight.primaryText,
-        secondaryText: ParraColorSwatchConvertible = ParraColorPalette
-            .defaultLight.secondaryText,
-        primarySeparator: ParraColorSwatch = ParraColorPalette
-            .defaultLight.primarySeparator,
-        secondarySeparator: ParraColorSwatch = ParraColorPalette
-            .defaultLight.secondarySeparator,
-        error: ParraColorSwatchConvertible = ParraColorPalette.defaultLight
-            .error,
-        warning: ParraColorSwatchConvertible = ParraColorPalette.defaultLight
-            .warning,
-        info: ParraColorSwatchConvertible = ParraColorPalette.defaultLight.info,
-        success: ParraColorSwatchConvertible = ParraColorPalette.defaultLight
-            .success
+        primary: ParraColorSwatchConvertible,
+        secondary: ParraColorSwatchConvertible,
+        primaryBackground: ParraColor,
+        secondaryBackground: ParraColor,
+        primaryText: ParraColorSwatchConvertible,
+        secondaryText: ParraColorSwatchConvertible,
+        primarySeparator: ParraColorSwatch,
+        secondarySeparator: ParraColorSwatch,
+        error: ParraColorSwatchConvertible,
+        warning: ParraColorSwatchConvertible,
+        info: ParraColorSwatchConvertible,
+        success: ParraColorSwatchConvertible
     ) {
         self.primary = primary.toSwatch()
         self.secondary = secondary.toSwatch()

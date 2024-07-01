@@ -32,7 +32,20 @@ public struct ParraTheme: ParraConfigurationOptionType {
         color: Color
     ) {
         let lightPalette = ParraColorPalette(
-            primary: color
+            primary: color,
+            secondary: ParraColorPalette.defaultLight.secondary,
+            primaryBackground: ParraColorPalette.defaultLight.primaryBackground,
+            secondaryBackground: ParraColorPalette.defaultLight
+                .secondaryBackground,
+            primaryText: ParraColorPalette.defaultLight.primaryText,
+            secondaryText: ParraColorPalette.defaultLight.secondaryText,
+            primarySeparator: ParraColorPalette.defaultLight.primarySeparator,
+            secondarySeparator: ParraColorPalette.defaultLight
+                .secondarySeparator,
+            error: ParraColorPalette.defaultLight.error,
+            warning: ParraColorPalette.defaultLight.warning,
+            info: ParraColorPalette.defaultLight.info,
+            success: ParraColorPalette.defaultLight.success
         )
 
         let darkPalette = ParraColorPalette(
@@ -43,6 +56,9 @@ public struct ParraTheme: ParraConfigurationOptionType {
                 .secondaryBackground,
             primaryText: ParraColorPalette.defaultDark.primaryText,
             secondaryText: ParraColorPalette.defaultDark.secondaryText,
+            primarySeparator: ParraColorPalette.defaultDark.primarySeparator,
+            secondarySeparator: ParraColorPalette.defaultDark
+                .secondarySeparator,
             error: ParraColorPalette.defaultDark.error,
             warning: ParraColorPalette.defaultDark.warning,
             info: ParraColorPalette.defaultDark.info,
