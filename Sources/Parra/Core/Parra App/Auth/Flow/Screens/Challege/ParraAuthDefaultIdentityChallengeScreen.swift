@@ -36,33 +36,33 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             for: defaultWidgetAttributes.contentPadding
         )
 
-        ScrollView {
-            challengeContent
+        GeometryReader { geometry in
+            ScrollView {
+                challengeContent
 
-            Spacer()
+                if !params.userExists, params.legalInfo.hasDouments {
+                    Spacer()
 
-            if !params.userExists, params.legalInfo.hasDouments {
-                Spacer()
-
-                LegalInfoView(
-                    legalInfo: params.legalInfo,
-                    theme: themeObserver.theme
-                )
+                    LegalInfoView(
+                        legalInfo: params.legalInfo,
+                        theme: themeObserver.theme
+                    )
+                }
             }
+            .frame(
+                width: geometry.size.width,
+                height: geometry.size.height
+            )
+            .contentMargins(
+                [.horizontal, .bottom],
+                contentPadding,
+                for: .scrollContent
+            )
+            .applyWidgetAttributes(
+                attributes: defaultWidgetAttributes.withoutContentPadding(),
+                using: themeObserver.theme
+            )
         }
-        .frame(
-            maxWidth: .infinity,
-            maxHeight: .infinity
-        )
-        .contentMargins(
-            [.horizontal, .bottom],
-            contentPadding,
-            for: .scrollContent
-        )
-        .applyWidgetAttributes(
-            attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: themeObserver.theme
-        )
         .onAppear {
             shouldDisableSubmitWithPassword = passwordChallengeResponse == nil
         }
@@ -85,7 +85,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     @EnvironmentObject private var navigationState: NavigationState
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
-    private var challengeContent: some View {
+    @ViewBuilder private var challengeContent: some View {
         VStack(alignment: .center, spacing: 16) {
             componentFactory.buildLabel(
                 content: LabelContent(text: title),
