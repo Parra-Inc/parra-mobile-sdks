@@ -9,18 +9,24 @@
 import SwiftUI
 
 public struct ParraLegalInfoView: View {
+    // MARK: - Lifecycle
+
+    public init() {}
+
     // MARK: - Public
 
     public var body: some View {
+//        NavigationStack {
         List(parraAppInfo.legal.allDocuments) { document in
-            NavigationLink(value: document) {
+            NavigationLink {
+                ParraLegalDocumentView(legalDocument: document)
+            } label: {
                 Text(document.title)
             }
+            .id(document.id)
         }
         .navigationTitle("Legal Info")
-        .navigationDestination(for: LegalDocument.self) { item in
-            ParraLegalDocumentView(legalDocument: item)
-        }
+//        }
     }
 
     // MARK: - Private
@@ -30,8 +36,6 @@ public struct ParraLegalInfoView: View {
 
 #Preview {
     ParraViewPreview { _ in
-        NavigationStack {
-            ParraLegalInfoView()
-        }
+        ParraLegalInfoView()
     }
 }

@@ -23,6 +23,5 @@ public struct ParraLegalDocumentView: View {
         WebView(
             url: legalDocument.url
         )
-        .navigationTitle(legalDocument.title)
     }
 }
