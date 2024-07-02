@@ -65,7 +65,6 @@ struct ParraViewPreview<Content>: View where Content: View {
         .environmentObject(parraAuthState)
         .environmentObject(alertManager)
         .environmentObject(themeObserver)
-        //        .environmentObject(ParraAppInfo) // TODO: Need this?
         .environmentObject(
             LaunchScreenStateManager(
                 state: .complete(

@@ -58,13 +58,26 @@ public struct ParraAppPreview<Content, DelegateType>: View
             applicationId: Parra.Demo.applicationId
         )
 
+        let parraInternal = ParraInternal
+            .createParraSwiftUIPreviewsInstance(
+                appState: appState,
+                authenticationMethod: .preview,
+                configuration: configuration
+            )
+
         self.parra = Parra(
-            parraInternal: ParraInternal
-                .createParraSwiftUIPreviewsInstance(
-                    appState: appState,
-                    authenticationMethod: .preview,
-                    configuration: configuration
-                )
+            parraInternal: parraInternal
+        )
+
+        self._alertManager = StateObject(
+            wrappedValue: parraInternal.alertManager
+        )
+
+        self._themeObserver = StateObject(
+            wrappedValue: ParraThemeObserver(
+                theme: parraInternal.configuration.theme,
+                notificationCenter: parraInternal.notificationCenter
+            )
         )
     }
 
@@ -76,7 +89,15 @@ public struct ParraAppPreview<Content, DelegateType>: View
         }
         .environment(\.parra, parra)
         .environmentObject(parraAuthState)
-//        .environmentObject(ParraAppInfo) // TODO: Need this?
+        .environmentObject(alertManager)
+        .environmentObject(themeObserver)
+        .environmentObject(
+            LaunchScreenStateManager(
+                state: .complete(
+                    ParraAppInfo.validStates()[0]
+                )
+            )
+        )
     }
 
     // MARK: - Private
@@ -86,4 +107,6 @@ public struct ParraAppPreview<Content, DelegateType>: View
     private let parra: Parra
 
     @StateObject private var parraAuthState: ParraAuthState
+    @StateObject private var alertManager: AlertManager
+    @StateObject private var themeObserver: ParraThemeObserver
 }
