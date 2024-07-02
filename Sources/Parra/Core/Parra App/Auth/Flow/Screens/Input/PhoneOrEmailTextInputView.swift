@@ -192,6 +192,21 @@ struct PhoneOrEmailTextInputView: View {
         ) {
             EmptyView()
         }
+        .overlay {
+            if !entry.isEmpty {
+                HStack {
+                    Spacer()
+
+                    Button {
+                        entry = ""
+                    } label: {
+                        Image(systemName: "multiply.circle.fill")
+                    }
+                    .foregroundColor(.secondary.opacity(0.8))
+                    .padding(.trailing, 3)
+                }
+            }
+        }
         .focused(isFocused)
         .keyboardType(keyboardType)
         .autocorrectionDisabled(true)

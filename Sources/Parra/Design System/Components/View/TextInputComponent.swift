@@ -79,6 +79,21 @@ struct TextInputComponent: View {
             titleLabel
 
             baseView
+                .overlay {
+                    if !text.isEmpty {
+                        HStack {
+                            Spacer()
+
+                            Button {
+                                text = ""
+                            } label: {
+                                Image(systemName: "multiply.circle.fill")
+                            }
+                            .foregroundColor(.secondary.opacity(0.8))
+                            .padding(.trailing, 3)
+                        }
+                    }
+                }
                 .applyTextInputAttributes(
                     attributes,
                     using: themeObserver.theme
