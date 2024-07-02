@@ -119,15 +119,21 @@ struct PhotoWell: View {
                     )
             })
             .overlay(alignment: .bottomTrailing) {
-                Image(systemName: "photo.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 24, height: 24, alignment: .bottomTrailing)
-                    .foregroundStyle(ParraColorSwatch.slate.shade700)
-                    .background(palette.secondaryBackground)
-                    .clipShape(.circle)
-                    .padding(.bottom, 4)
-                    .padding(.trailing, 4)
+                if onSelectionChanged != nil {
+                    Image(systemName: "photo.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(
+                            width: 24,
+                            height: 24,
+                            alignment: .bottomTrailing
+                        )
+                        .foregroundStyle(ParraColorSwatch.slate.shade700)
+                        .background(palette.secondaryBackground)
+                        .clipShape(.circle)
+                        .padding(.bottom, 4)
+                        .padding(.trailing, 4)
+                }
             }
 
             if state.isLoading {
@@ -255,10 +261,14 @@ struct PhotoWell: View {
                 asset: Asset(
                     id: UUID().uuidString,
                     url: URL(string: "https://i.imgur.com/bA8JXya.png")!
-                )
+                ),
+                onSelectionChanged: { _ in }
             )
 
-            PhotoWell(image: UIImage(systemName: "swift")!)
+            PhotoWell(
+                image: UIImage(systemName: "swift")!,
+                onSelectionChanged: { _ in }
+            )
         }
     }
 }
