@@ -81,7 +81,14 @@ extension ParraAppInfo: ParraFixture {
                     entitlements: []
                 ),
                 auth: ParraAppAuthInfo.validStates()[0],
-                legal: LegalInfo.validStates()[0]
+                legal: LegalInfo.validStates()[0],
+                application: ParraApplicationIosConfig(
+                    name: "Parra iOS Demo App",
+                    description: "The Parra iOS Demo app using the native Swift SDK.",
+                    appId: "6479621013",
+                    teamId: "6D44Q764PG",
+                    bundleId: "com.parra.parra-ios-client"
+                )
             )
         ]
     }

@@ -1005,6 +1005,40 @@ public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
     public let entitlements: [Entitlement]?
 }
 
+public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        name: String,
+        description: String?,
+        appId: String?,
+        teamId: String?,
+        bundleId: String
+    ) {
+        self.name = name
+        self.description = description
+        self.appId = appId
+        self.teamId = teamId
+        self.bundleId = bundleId
+    }
+
+    // MARK: - Public
+
+    public enum CodingKeys: String, CodingKey {
+        case name
+        case description
+        case appId
+        case teamId
+        case bundleId
+    }
+
+    public let name: String
+    public let description: String?
+    public let appId: String?
+    public let teamId: String?
+    public let bundleId: String
+}
+
 public final class ParraAppInfo: ObservableObject, Codable, Equatable,
     Hashable
 {
@@ -1015,18 +1049,21 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
         newInstalledVersionInfo: NewInstalledVersionInfo?,
         tenant: TenantAppInfoStub,
         auth: ParraAppAuthInfo,
-        legal: LegalInfo
+        legal: LegalInfo,
+        application: ParraApplicationIosConfig
     ) {
         self.versionToken = versionToken
         self.newInstalledVersionInfo = newInstalledVersionInfo
         self.tenant = tenant
         self.auth = auth
         self.legal = legal
+        self.application = application
     }
 
     // MARK: - Public
 
     public enum CodingKeys: String, CodingKey {
+        case application
         case versionToken
         case newInstalledVersionInfo
         case tenant
@@ -1034,6 +1071,7 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
         case legal
     }
 
+    public let application: ParraApplicationIosConfig
     public let versionToken: String?
     public let newInstalledVersionInfo: NewInstalledVersionInfo?
     public let tenant: TenantAppInfoStub
@@ -1049,6 +1087,7 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
             && lhs.tenant == rhs.tenant
             && lhs.auth == rhs.auth
             && lhs.legal == rhs.legal
+            && lhs.application == rhs.application
     }
 
     public func hash(
@@ -1059,6 +1098,7 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
         hasher.combine(tenant)
         hasher.combine(auth)
         hasher.combine(legal)
+        hasher.combine(application)
     }
 }
 
