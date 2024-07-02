@@ -106,10 +106,6 @@ extension AuthService {
         }
     }
 
-    func linkPasskeyToAccount() async throws {
-        // TODO: this
-    }
-
     func cancelPasskeyRequests() {
         // Cancel active requests by calling cancel on the authorization
         // controllers they are attached to. This will cause the authorization

@@ -120,6 +120,10 @@ final class AuthService {
         }
     }
 
+    func deleteAccount() async throws {
+        // TODO: implement
+    }
+
     func logout() async {
         guard case .parra = authenticationMethod else {
             logger

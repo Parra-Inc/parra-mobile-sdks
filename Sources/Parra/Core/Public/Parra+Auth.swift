@@ -46,10 +46,24 @@ public final class ParraAuth {
             return
         }
 
-        // TODO: What here?
+        try await parraInternal.authService.deleteAccount()
 
         // Don't perform sync steps first.
         await parraInternal.authService.logout()
+    }
+
+    public func deleteAccount(
+        _ completion: ((Error?) -> Void)? = nil
+    ) {
+        Task {
+            do {
+                try await deleteAccount()
+
+                completion?(nil)
+            } catch {
+                completion?(error)
+            }
+        }
     }
 
     // MARK: - Logout
