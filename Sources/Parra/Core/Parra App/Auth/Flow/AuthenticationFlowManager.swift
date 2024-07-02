@@ -406,8 +406,10 @@ class AuthenticationFlowManager: ObservableObject {
                         self.delegate?
                             .presentModalLoadingIndicator(
                                 content: ParraLoadingIndicatorContent(
-                                    title: LabelContent(text: "yo"),
-                                    subtitle: LabelContent(text: "something"),
+                                    title: LabelContent(text: "TODO"),
+                                    subtitle: LabelContent(
+                                        text: "Implement forgot password"
+                                    ),
                                     cancel: nil
                                 ),
                                 with: modalScreenManager,

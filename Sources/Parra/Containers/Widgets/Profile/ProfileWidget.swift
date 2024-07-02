@@ -56,7 +56,7 @@ struct ProfileWidget: Container {
             }
 
             Button("Logout") {
-                parra.logout()
+                parra.auth.logout()
             }
 
             Button("Add Passkey") {

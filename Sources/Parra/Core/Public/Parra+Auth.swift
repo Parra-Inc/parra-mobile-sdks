@@ -8,7 +8,17 @@
 
 import UIKit
 
-public extension Parra {
+public final class ParraAuth {
+    // MARK: - Lifecycle
+
+    init(parraInternal: ParraInternal) {
+        self.parraInternal = parraInternal
+    }
+
+    // MARK: - Internal
+
+    let parraInternal: ParraInternal
+
     // MARK: - Authentication
 
     /// Used to clear any cached credentials for the current user. After calling
@@ -53,6 +63,8 @@ public extension Parra {
             completion?()
         }
     }
+
+    // MARK: - Private
 
     private func confirmLogout() async -> Bool {
         await withCheckedContinuation { continuation in
