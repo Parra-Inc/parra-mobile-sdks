@@ -117,17 +117,23 @@ class ParraInternal {
         }
 
         switch result {
-        case .authenticated:
+        case .authenticated(let user):
+            Parra.default.user = user
+
             addEventObservers()
 
             syncManager.startSyncTimer()
         case .unauthenticated:
+            Parra.default.user = nil
+
             removeEventObservers()
 
             syncManager.stopSyncTimer()
         case .undetermined:
+            Parra.default.user = nil
+
+            assertionFailure()
             // shouldn't ever change _to_ this.
-            break
         }
     }
 
