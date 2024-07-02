@@ -13,19 +13,13 @@ import SwiftUI
 public final class Parra: Observable {
     // MARK: - Lifecycle
 
-    private init() {
-        fatalError()
-    }
+    private init() {}
 
-    /// For us in test suites to create a mock instance that won't run in a
+    /// For use in test suites to create a mock instance that won't run in a
     /// ``ParraApp`` which creates an injects the inner ``ParraInternal``
     /// instance.
     init(parraInternal: ParraInternal) {
         self.parraInternal = parraInternal
-
-        self.auth = ParraAuth(
-            parraInternal: parraInternal
-        )
     }
 
     // MARK: - Public
@@ -33,7 +27,9 @@ public final class Parra: Observable {
     public private(set) lazy var feedback: ParraFeedback = parraInternal
         .feedback
 
-    public let auth: ParraAuth
+    public private(set) lazy var auth: ParraAuth = .init(
+        parraInternal: parraInternal
+    )
 
     @Published public internal(set) var user: ParraUser?
 

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ProfileTab: View {
     var body: some View {
-        ParraProfileView()
+        ParraDefaultProfileView()
     }
 }
 

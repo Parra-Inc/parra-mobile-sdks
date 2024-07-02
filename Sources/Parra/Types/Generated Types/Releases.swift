@@ -1282,8 +1282,22 @@ public struct LegalInfo: Codable, Equatable, Hashable {
 
     static let empty = LegalInfo()
 
+    var allDocuments: [LegalDocument] {
+        var documents = [LegalDocument]()
+
+        if let privacyPolicy {
+            documents.append(privacyPolicy)
+        }
+
+        if let termsOfService {
+            documents.append(termsOfService)
+        }
+
+        return documents
+    }
+
     var hasDouments: Bool {
-        return privacyPolicy != nil || termsOfService != nil
+        return !allDocuments.isEmpty
     }
 }
 

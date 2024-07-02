@@ -122,7 +122,7 @@ extension ParraSessionManager {
                     error
                 )
 
-                return nil
+                return String(describing: extra)
             }
         }
     }

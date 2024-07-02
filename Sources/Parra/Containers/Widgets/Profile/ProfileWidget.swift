@@ -25,9 +25,9 @@ struct ProfileWidget: Container {
 
     // MARK: - Internal
 
+    let config: ProfileWidgetConfig
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
-    let config: ProfileWidgetConfig
 
     @EnvironmentObject var themeObserver: ParraThemeObserver
     @EnvironmentObject var parraAuthState: ParraAuthState

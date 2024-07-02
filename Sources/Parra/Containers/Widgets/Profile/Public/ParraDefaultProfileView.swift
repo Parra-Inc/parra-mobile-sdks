@@ -1,5 +1,5 @@
 //
-//  ParraProfileView.swift
+//  ParraDefaultProfileView.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 4/30/24.
@@ -16,7 +16,7 @@ struct ProfileSettingsWidget: View {
     }
 }
 
-public struct ParraProfileView: View {
+public struct ParraDefaultProfileView: View {
     // MARK: - Lifecycle
 
     public init(
@@ -61,4 +61,10 @@ public struct ParraProfileView: View {
     @Environment(\.parra) private var parra
 
     private let config: ProfileWidgetConfig
+}
+
+#Preview {
+    ParraViewPreview { _ in
+        ParraDefaultProfileView()
+    }
 }

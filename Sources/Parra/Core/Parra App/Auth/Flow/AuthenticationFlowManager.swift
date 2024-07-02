@@ -11,19 +11,6 @@ import SwiftUI
 
 private let logger = Logger()
 
-protocol AuthenticationFlowManagerDelegate {
-    func presentModalLoadingIndicator(
-        content: ParraLoadingIndicatorContent,
-        with modalScreenManager: ModalScreenManager,
-        completion: (() -> Void)?
-    )
-
-    func dismissModalLoadingIndicator(
-        with modalScreenManager: ModalScreenManager,
-        completion: (() -> Void)?
-    )
-}
-
 class AuthenticationFlowManager: ObservableObject {
     // MARK: - Lifecycle
 
@@ -237,7 +224,7 @@ class AuthenticationFlowManager: ObservableObject {
                     "Authorization error obtaining challenge for use with passkey",
                     error,
                     [
-                        "code": error.code,
+                        "code": error.code.rawValue,
                         "user_info": error.userInfo
                     ]
                 )
@@ -313,10 +300,6 @@ class AuthenticationFlowManager: ObservableObject {
         logger.debug("Submitting identity", [
             "identity": identity
         ])
-
-        let authMethods = supportedAuthMethods(
-            for: appInfo.auth
-        )
 
         let authChallengeResponse = try await authService.getAuthChallenges(
             for: identity,
