@@ -1037,6 +1037,30 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
     public let appId: String?
     public let teamId: String?
     public let bundleId: String
+
+    /// Computed using the value from ``appId`` in the format
+    /// `itms-apps://itunes.apple.com/app/id\(appId)`.
+    public var appStoreUrl: URL? {
+        guard let appId else {
+            return nil
+        }
+
+        return URL(
+            string: "https://apps.apple.com/us/app/id\(appId)"
+        )
+    }
+
+    /// Computed using the value from ``appId`` in the format
+    /// `itms-apps://itunes.apple.com/app/id\(appId)`.
+    public var appStoreWriteReviewUrl: URL? {
+        guard let appId else {
+            return nil
+        }
+
+        return URL(
+            string: "https://apps.apple.com/app/id\(appId)?action=write-review"
+        )
+    }
 }
 
 public final class ParraAppInfo: ObservableObject, Codable, Equatable,
