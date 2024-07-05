@@ -16,7 +16,6 @@ public struct ParraLegalInfoView: View {
     // MARK: - Public
 
     public var body: some View {
-//        NavigationStack {
         List(parraAppInfo.legal.allDocuments) { document in
             NavigationLink {
                 ParraLegalDocumentView(legalDocument: document)
@@ -26,7 +25,7 @@ public struct ParraLegalInfoView: View {
             .id(document.id)
         }
         .navigationTitle("Legal Info")
-//        }
+        .navigationBarTitleDisplayMode(.automatic)
     }
 
     // MARK: - Private

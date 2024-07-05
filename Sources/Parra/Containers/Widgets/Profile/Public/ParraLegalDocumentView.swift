@@ -23,5 +23,6 @@ public struct ParraLegalDocumentView: View {
         WebView(
             url: legalDocument.url
         )
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
