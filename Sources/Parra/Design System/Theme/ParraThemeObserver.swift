@@ -6,14 +6,16 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import Combine
 import SwiftUI
 
 private let logger = Logger(category: "Parra Theme Observer")
 
 @MainActor
-/// Listens for changes to the configured ParraTheme and provides a @Published property ``palette``
-/// for SwiftUI views to use to respond to theme changes.
-class ParraThemeObserver: ObservableObject {
+/// Listens for changes to the configured ParraTheme and provides a @Published
+/// property ``ParraThemeObserver/theme`` to obtain the current theme options
+/// and color palette.
+public class ParraThemeObserver: ObservableObject {
     // MARK: - Lifecycle
 
     init(
@@ -22,9 +24,30 @@ class ParraThemeObserver: ObservableObject {
     ) {
         self.theme = theme
         self.notificationCenter = notificationCenter
+
+        if let options = themeOptionsCache.read() {
+            self.preferredAppearance = switch options.preferredColorScheme {
+            case .light:
+                .light
+            case .dark:
+                .dark
+            default:
+                .system
+            }
+        } else {
+            self.preferredAppearance = .system
+        }
+
+        // Set the default
+        self.preferredColorScheme = preferredAppearance.colorScheme
+
         self.themeWillChangeObserver = addThemeWillChangeObserver(
             with: notificationCenter
         )
+
+        $preferredAppearance
+            .sink(receiveValue: onReceiveAppearanceChange)
+            .store(in: &appearanceChangeBag)
     }
 
     deinit {
@@ -33,65 +56,87 @@ class ParraThemeObserver: ObservableObject {
         }
     }
 
+    // MARK: - Public
+
+    /// A color palette representative of the configured ``ParraTheme``. If a
+    /// dark mode palette was provided, this will automatically update to
+    /// provide those colors when the system appearance changes.
+    @Published public var theme: ParraTheme
+
+    /// The user's preference for whether the app should render in light, dark,
+    /// or system appearance mode. By default, this will be ``system``,
+    /// indicating that the default system light/dark mode preference will be
+    /// used.
+    @Published public var preferredAppearance: ParraAppearance
+
     // MARK: - Internal
 
-    /// A color palette representative of the configured ``ParraTheme``. If a dark mode palette was provided,
-    /// this will automatically update to provide those colors when the system appearance changes.
-    @Published var theme: ParraTheme
+    enum Constant {
+        static let themeOptionsKey = "theme_options"
+    }
+
+    let themeOptionsCache = ParraUserDefaultsStorageModule<ThemeOptions>(
+        key: Constant.themeOptionsKey,
+        jsonEncoder: .parraEncoder,
+        jsonDecoder: .parraDecoder
+    )
+
+    let notificationCenter: NotificationCenterType
+
+    @Published var preferredColorScheme: ColorScheme?
+
+    var themeWillChangeObserver: NSObjectProtocol?
 
     // MARK: - Private
 
-    private let notificationCenter: NotificationCenterType
+    private var appearanceChangeBag = Set<AnyCancellable>()
 
-    private var themeWillChangeObserver: NSObjectProtocol!
+    private func onReceiveAppearanceChange(
+        _ appearance: ParraAppearance
+    ) {
+        let userInfo = makeNotificationUserInfo(
+            from: preferredAppearance.colorScheme,
+            to: appearance.colorScheme
+        )
 
-    private func addThemeWillChangeObserver(
-        with notificationCenter: NotificationCenterType
-    ) -> NSObjectProtocol {
-        return notificationCenter.addObserver(
-            forName: Parra.themeWillChangeNotification,
-            object: nil,
-            queue: .main
-        ) { notification in
-            logger.info("Received \(notification.name.rawValue)")
+        do {
+            try themeOptionsCache.write(
+                value: ThemeOptions(
+                    preferredColorScheme: appearance.colorScheme
+                )
+            )
 
-            let userInfo = notification.userInfo ?? [:]
-
-            guard let oldTheme = userInfo["oldTheme"] as? ParraTheme,
-                  let newTheme = userInfo["newTheme"] as? ParraTheme else
-            {
-                logger
-                    .warn(
-                        "oldTheme or newTheme was missing from theme change notification."
-                    )
-
-                return
-            }
-
-            Task {
-                await self.receivedThemeWillChange(
-                    from: oldTheme,
-                    to: newTheme
+            withAnimation { [self] in
+                preferredColorScheme = appearance.colorScheme
+            } completion: { [self] in
+                notificationCenter.post(
+                    name: Parra.preferredAppearanceDidChangeNotification,
+                    object: nil,
+                    userInfo: userInfo
                 )
             }
+        } catch {
+            Logger.error(
+                "Error processing preferred app appearance change",
+                error
+            )
         }
     }
 
-    private func receivedThemeWillChange(
-        from oldTheme: ParraTheme,
-        to newTheme: ParraTheme
-    ) {
-        withAnimation { [self] in
-            theme = newTheme
-        } completion: { [self] in
-            notificationCenter.post(
-                name: Parra.themeDidChangeNotification,
-                object: nil,
-                userInfo: [
-                    "oldTheme": oldTheme,
-                    "newTheme": newTheme
-                ]
-            )
+    private func makeNotificationUserInfo(
+        from oldPreferredColorScheme: ColorScheme?,
+        to newPreferredColorScheme: ColorScheme?
+    ) -> [String: Any] {
+        var userInfo = [String: Any]()
+
+        if let oldPreferredColorScheme = preferredAppearance.colorScheme {
+            userInfo["oldPreferredColorScheme"] = oldPreferredColorScheme
         }
+
+        if let newPreferredColorScheme {
+            userInfo["newPreferredColorScheme"] = newPreferredColorScheme
+        }
+
+        return userInfo
     }
 }

@@ -6,11 +6,12 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 public extension Parra {
     // MARK: - Theme
 
+    @MainActor
     func updateTheme(to newTheme: ParraTheme) {
         let oldTheme = parraInternal.configuration.theme
         parraInternal.configuration.theme = newTheme

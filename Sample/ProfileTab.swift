@@ -28,12 +28,13 @@ struct ProfileTab: View {
                     .frame(maxWidth: .infinity)
                 }
 
+                Section("Appearance") {
+                    ThemeCell()
+                }
+
                 Section {
-                    // logout
-                    // delete account
-                    // share
-                    // rate
                     ReviewAppCell()
+                    ShareCell()
                     LegalInfoCell()
                 }
 
@@ -70,6 +71,71 @@ struct ProfileUserInfoView: View {
         Text(identity)
             .font(.headline)
     }
+}
+
+struct ThemeCell: View {
+    // MARK: - Internal
+
+    var body: some View {
+        Text(
+            "Choose if \(parraAppInfo.application.name)'s appearance should be light or dark, or follow your device's settings."
+        )
+
+        Picker("Theme", selection: $themeObserver.preferredAppearance) {
+            ForEach(ParraAppearance.allCases) { option in
+                Text(option.description).tag(option)
+            }
+        }
+    }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var parraAppInfo: ParraAppInfo
+    @Environment(\.parra) private var parra
+}
+
+struct ShareCell: View {
+    // MARK: - Internal
+
+    var body: some View {
+        if let appStoreUrl = parraAppInfo.application.appStoreUrl {
+            ShareLink(
+                item: appStoreUrl,
+                message: Text(
+                    "Check out this awesome new app that I'm building using Parra!"
+                )
+            )
+            .foregroundStyle(.blue)
+        }
+    }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var parraAppInfo: ParraAppInfo
+}
+
+struct ReviewAppCell: View {
+    // MARK: - Internal
+
+    var body: some View {
+        if let writeReviewUrl = parraAppInfo.application
+            .appStoreWriteReviewUrl
+        {
+            Link(
+                destination: writeReviewUrl
+            ) {
+                Label(
+                    title: { Text("Review") },
+                    icon: { Image(systemName: "star") }
+                )
+            }
+        }
+    }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var parraAppInfo: ParraAppInfo
 }
 
 struct LegalInfoCell: View {
@@ -118,31 +184,6 @@ struct DeleteAccountCell: View {
             )
         }
     }
-}
-
-struct ReviewAppCell: View {
-    // MARK: - Internal
-
-    var body: some View {
-        if let appId = parraAppInfo.application.appId {
-            Link(
-                destination: URL(
-                    string: "https://apps.apple.com/app/id\(appId)?action=write-review"
-                )!
-            ) {
-                Label(
-                    title: { Text("Rate") },
-                    icon: { Image(systemName: "star") }
-                )
-            }
-        } else {
-            EmptyView()
-        }
-    }
-
-    // MARK: - Private
-
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
 }
 
 #Preview {
