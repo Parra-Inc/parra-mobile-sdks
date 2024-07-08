@@ -34,6 +34,7 @@ actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
         let data = try jsonEncoder.encode(value)
 
         userDefaults.set(data, forKey: name)
+        userDefaults.synchronize()
     }
 
     nonisolated func delete(name: String) throws {
