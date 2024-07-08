@@ -6,7 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 public struct ParraColorSwatch: Hashable, Identifiable {
     // MARK: - Lifecycle
@@ -526,5 +526,13 @@ public struct ParraColorSwatch: Hashable, Identifiable {
             shade950: shade950,
             name: name
         )
+    }
+}
+
+// MARK: ShapeStyle
+
+extension ParraColorSwatch: ShapeStyle {
+    public func resolve(in environment: EnvironmentValues) -> some ShapeStyle {
+        return toParraColor()
     }
 }

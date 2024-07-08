@@ -79,7 +79,7 @@ struct CodeEntryView: View {
                     Text("|")
                         .font(.title3)
                         .fontWeight(.light)
-                        .foregroundStyle(palette.primary.toParraColor())
+                        .foregroundStyle(palette.primary)
                 } else {
                     Text(" ")
                 }

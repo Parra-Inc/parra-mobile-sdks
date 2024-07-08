@@ -69,7 +69,7 @@ struct AsyncImageComponent: View {
                 Color(theme.palette.secondaryBackground)
 
                 Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(theme.palette.error.toParraColor())
+                    .foregroundStyle(theme.palette.error)
             }
         @unknown default:
             EmptyView()

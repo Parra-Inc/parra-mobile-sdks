@@ -17,7 +17,7 @@ struct LogView: View {
         VStack(alignment: .leading) {
             Text(log.timestamp)
                 .font(.caption)
-                .foregroundStyle(palette.secondaryText.toParraColor())
+                .foregroundStyle(palette.secondaryText)
 
             Text(log.message)
                 .font(.footnote)

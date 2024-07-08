@@ -39,7 +39,7 @@ struct RoadmapListItem: View {
                 content: ticketContent.createdAt,
                 localAttributes: .default(with: .caption)
             )
-            .foregroundStyle(theme.palette.secondaryText.toParraColor())
+            .foregroundStyle(theme.palette.secondaryText)
             .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity)

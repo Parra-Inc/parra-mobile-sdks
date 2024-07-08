@@ -121,7 +121,7 @@ struct PasswordStrengthView: View {
             )
         } icon: {
             Image(systemName: symbol)
-                .foregroundStyle(color.toParraColor())
+                .foregroundStyle(color)
                 .padding(.trailing, 8)
         }
         .contentTransition(.symbolEffect(.automatic))
