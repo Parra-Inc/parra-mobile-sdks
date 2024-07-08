@@ -36,7 +36,7 @@ extension AppInfoManager {
 
         // Cache the current app version since we've launched once without
         // it being set. This will allow the next launch to proceed further.
-        try await updateLatestAppVersion(
+        try updateLatestAppVersion(
             bundleVersion,
             versionShort: bundleVersionShort
         )
@@ -86,7 +86,7 @@ extension AppInfoManager {
 
         // Cache the current app version since we've launched once without
         // it being set. This will allow the next launch to proceed further.
-        try await updateLatestAppVersion(
+        try updateLatestAppVersion(
             bundleVersion,
             versionShort: bundleVersionShort
         )
@@ -188,7 +188,7 @@ extension AppInfoManager {
 
         // Found a new version token, so cache it so we don't present the
         // what's new screen twice for the same release.
-        try await updateLatestSeenVersionToken(latestVersionToken)
+        try updateLatestSeenVersionToken(latestVersionToken)
 
         let contentObserver = ReleaseContentObserver(
             initialParams: ReleaseContentObserver.InitialParams(
