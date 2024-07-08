@@ -94,7 +94,9 @@ public struct ParraAppPreview<Content, DelegateType>: View
         .environmentObject(
             LaunchScreenStateManager(
                 state: .complete(
-                    ParraAppInfo.validStates()[0]
+                    .init(
+                        appInfo: ParraAppInfo.validStates()[0]
+                    )
                 )
             )
         )

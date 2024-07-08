@@ -29,8 +29,6 @@ struct AlertPresenter: ViewModifier {
 
     // MARK: - Internal
 
-    @EnvironmentObject var componentFactory: ComponentFactory
-
     @Binding var alert: AlertManager.Toast?
     @Binding var loadingIndicator: AlertManager.LoadingIndicator?
 
@@ -76,6 +74,8 @@ struct AlertPresenter: ViewModifier {
     }
 
     // MARK: - Private
+
+    @EnvironmentObject private var componentFactory: ComponentFactory
 
     @Environment(\.defaultSafeAreaInsets) private var defaultSafeAreaInsets
     @EnvironmentObject private var themeObserver: ParraThemeObserver

@@ -68,7 +68,9 @@ struct ParraViewPreview<Content>: View where Content: View {
         .environmentObject(
             LaunchScreenStateManager(
                 state: .complete(
-                    ParraAppInfo.validStates()[0]
+                    .init(
+                        appInfo: ParraAppInfo.validStates()[0]
+                    )
                 )
             )
         )

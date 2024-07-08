@@ -20,8 +20,8 @@ final class LaunchScreenStateManager: ObservableObject {
 
     enum State: Equatable {
         case initial(ParraLaunchScreen.Config)
-        case transitioning(ParraAppInfo, ParraLaunchScreen.Config)
-        case complete(ParraAppInfo)
+        case transitioning(LaunchActionsResult, ParraLaunchScreen.Config)
+        case complete(LaunchActionsResult)
         case failed(ParraErrorWithUserInfo)
     }
 
@@ -40,15 +40,15 @@ final class LaunchScreenStateManager: ObservableObject {
     }
 
     func dismiss(
-        with appInfo: ParraAppInfo,
+        with result: LaunchActionsResult,
         launchScreenConfig: ParraLaunchScreen.Config
     ) {
-        current = .transitioning(appInfo, launchScreenConfig)
+        current = .transitioning(result, launchScreenConfig)
     }
 
     func complete(
-        with authInfo: ParraAppInfo
+        with result: LaunchActionsResult
     ) {
-        current = .complete(authInfo)
+        current = .complete(result)
     }
 }

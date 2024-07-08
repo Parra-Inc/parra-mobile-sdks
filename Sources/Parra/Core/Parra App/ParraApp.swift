@@ -254,7 +254,7 @@ public struct ParraApp<
                 logger.info("Parra SDK Initialized")
 
                 launchScreenState.dismiss(
-                    with: result.appInfo,
+                    with: result,
                     launchScreenConfig: launchScreenConfig
                 )
 

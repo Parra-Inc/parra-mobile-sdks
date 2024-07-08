@@ -10,7 +10,7 @@ import Foundation
 import os
 import UIKit
 
-struct LaunchActionsResult {
+struct LaunchActionsResult: Equatable {
     let appInfo: ParraAppInfo
 }
 

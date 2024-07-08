@@ -26,17 +26,17 @@ struct LaunchScreenWindow<Content>: View where Content: View {
             // content view can be created, but the launch screen can not be
             // destroyed until its animation off screen has completed.
 
-            let (appInfo, launchConfig, errorInfo): (
-                ParraAppInfo?,
+            let (launchResult, launchConfig, errorInfo): (
+                LaunchActionsResult?,
                 ParraLaunchScreen.Config?,
                 ParraErrorWithUserInfo?
             ) = switch launchScreenState.current {
             case .initial(let config):
                 (nil, config, nil)
-            case .transitioning(let parraAppInfo, let config):
-                (parraAppInfo, config, nil)
-            case .complete(let parraAppInfo):
-                (parraAppInfo, nil, nil)
+            case .transitioning(let result, let config):
+                (result, config, nil)
+            case .complete(let result):
+                (result, nil, nil)
             case .failed(let errorInfo):
                 (nil, nil, errorInfo)
             }
@@ -47,7 +47,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                 )
             } else {
                 renderNonFailure(
-                    appInfo: appInfo,
+                    launchResult: launchResult,
                     launchConfig: launchConfig
                 )
             }
@@ -60,9 +60,11 @@ struct LaunchScreenWindow<Content>: View where Content: View {
 
     @State private var showLogs = false
 
+    @Environment(\.parra) private var parra
     @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
     @EnvironmentObject private var alertManager: AlertManager
     @EnvironmentObject private var parraAuthState: ParraAuthState
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 
     @ViewBuilder
     private func renderFailure(
@@ -75,7 +77,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
 
     @ViewBuilder
     private func renderNonFailure(
-        appInfo: ParraAppInfo?,
+        launchResult: LaunchActionsResult?,
         launchConfig: ParraLaunchScreen.Config?
     ) -> some View {
         // Important: Seperate conditions determine when the launch
@@ -91,11 +93,13 @@ struct LaunchScreenWindow<Content>: View where Content: View {
             renderLaunchScreen(
                 launchScreenConfig: launchConfig
             )
+            .preferredColorScheme(themeObserver.preferredColorScheme)
         }
 
-        if let appInfo {
+        if let launchResult {
             renderPrimaryContent()
-                .environmentObject(appInfo)
+                .environmentObject(launchResult.appInfo)
+                .preferredColorScheme(themeObserver.preferredColorScheme)
         }
     }
 
