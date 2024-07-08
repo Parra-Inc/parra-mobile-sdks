@@ -98,12 +98,10 @@ public struct ParraTheme: ParraConfigurationOptionType {
         color: .accentColor
     )
 
-    // MARK: - Internal
-
-    let palette: ParraColorPalette
-    let typography: ParraTypography
-    let cornerRadius: ParraCornerRadiusConfig
-    let padding: ParraPaddingConfig
+    public let palette: ParraColorPalette
+    public let typography: ParraTypography
+    public let cornerRadius: ParraCornerRadiusConfig
+    public let padding: ParraPaddingConfig
 
     // MARK: - Private
 
