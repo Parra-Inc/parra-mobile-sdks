@@ -34,7 +34,8 @@ public enum TicketType: String, Codable, Equatable, CaseIterable {
 public enum TicketStatus: String, Codable, Equatable, CaseIterable {
     case open
     case planning
-    case inProgress
+    case inProgress =
+        "in_progress" // Keep the underscore. Enums decode differently!
     case done
     case live
     case closed
@@ -43,7 +44,8 @@ public enum TicketStatus: String, Codable, Equatable, CaseIterable {
 
 public enum TicketDisplayStatus: String, Codable, Equatable, CaseIterable {
     case pending
-    case inProgress
+    case inProgress =
+        "in_progress" // Keep the underscore. Enums decode differently!
     case live
     case rejected
 }
