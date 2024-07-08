@@ -162,6 +162,7 @@ struct CameraView: View {
         Button("Cancel") {
             onComplete(nil)
         }
+        .foregroundStyle(.white)
 
         Spacer()
 
@@ -171,6 +172,7 @@ struct CameraView: View {
             } label: {
                 Label {
                     Text("Take Photo")
+                        .foregroundStyle(.white)
                 } icon: {
                     ZStack {
                         Circle()
@@ -222,11 +224,13 @@ struct CameraView: View {
                 previewImage = nil
             }
         }
+        .foregroundStyle(.white)
 
         Spacer()
 
         Button("Use photo") {
             onComplete(previewImage)
         }
+        .foregroundStyle(.white)
     }
 }
