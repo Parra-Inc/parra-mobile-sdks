@@ -49,20 +49,6 @@ class ParraStorageModule<DataType: Codable> {
             )
 
             self.persistentStorage = (storage, fileName)
-        case .userDefaults(key: let key):
-            let userDefaults = UserDefaults(
-                suiteName: ParraInternal.appUserDefaultsSuite(
-                    bundle: .parraBundle
-                )
-            ) ?? .standard
-
-            let storage = UserDefaultsStorage(
-                userDefaults: userDefaults,
-                jsonEncoder: jsonEncoder,
-                jsonDecoder: jsonDecoder
-            )
-
-            self.persistentStorage = (storage, key)
         case .keychain(let key):
             let storage = KeychainStorage(
                 jsonEncoder: jsonEncoder,
@@ -285,7 +271,7 @@ class ParraStorageModule<DataType: Codable> {
 
     private var storeItemsSeparately: Bool {
         switch dataStorageMedium {
-        case .memory, .userDefaults, .keychain:
+        case .memory, .keychain:
             return false
         case .fileSystemEncrypted:
             return true

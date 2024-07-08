@@ -39,11 +39,6 @@ class ParraStorageModuleTests: ParraBaseMock {
                 ),
                 jsonEncoder: .parraEncoder,
                 jsonDecoder: .parraDecoder
-            ),
-            .init(
-                dataStorageMedium: .userDefaults(key: file),
-                jsonEncoder: .parraEncoder,
-                jsonDecoder: .parraDecoder
             )
         ]
     }
@@ -65,16 +60,6 @@ class ParraStorageModuleTests: ParraBaseMock {
             switch storageModule.dataStorageMedium {
             case .memory:
                 break
-            case .userDefaults:
-                let (medium, key) = storageModule.persistentStorage!
-                try medium.write(name: key, value: data)
-                await storageModule.loadData()
-
-                let cache = storageModule.storageCache
-                XCTAssertEqual(data, cache)
-
-                let readData = await storageModule.read(name: testKey)
-                XCTAssertEqual(readData, testValue)
             case .fileSystem, .fileSystemEncrypted:
                 let (medium, key) = storageModule.persistentStorage!
                 try medium.write(name: key, value: data)
@@ -123,7 +108,7 @@ class ParraStorageModuleTests: ParraBaseMock {
             switch storageModule.dataStorageMedium {
             case .memory:
                 await storageModule.loadData()
-            case .userDefaults, .keychain:
+            case .keychain:
                 let (medium, key) = storageModule.persistentStorage!
                 try medium.write(name: key, value: testData)
 

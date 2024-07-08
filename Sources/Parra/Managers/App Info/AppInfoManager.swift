@@ -50,7 +50,6 @@ final class AppInfoManager {
         static let appVersionKey = "app_version_info"
         static let versionTokenKey = "version_token_info"
 
-        static let currentVersionKey = "current_version"
         static let appInfoCacheKey = "app_info_cache"
         static let fullAppInfoKey = "full_app_info"
     }
@@ -73,14 +72,14 @@ final class AppInfoManager {
     let alertManager: AlertManager
     let configuration: ParraConfiguration
 
-    let appVersionCache = ParraStorageModule<AppVersionInfo>(
-        dataStorageMedium: .userDefaults(key: Constant.appVersionKey),
+    let appVersionCache = ParraUserDefaultsStorageModule<AppVersionInfo>(
+        key: Constant.appVersionKey,
         jsonEncoder: .parraEncoder,
         jsonDecoder: .parraDecoder
     )
 
-    let versionTokenCache = ParraStorageModule<VersionTokenInfo>(
-        dataStorageMedium: .userDefaults(key: Constant.versionTokenKey),
+    let versionTokenCache = ParraUserDefaultsStorageModule<VersionTokenInfo>(
+        key: Constant.versionTokenKey,
         jsonEncoder: .parraEncoder,
         jsonDecoder: .parraDecoder
     )
@@ -163,7 +162,7 @@ final class AppInfoManager {
            let newVersionToken = appInfo.versionToken,
            versionToken != newVersionToken
         {
-            try await updateLatestSeenVersionToken(newVersionToken)
+            try updateLatestSeenVersionToken(newVersionToken)
         }
 
         return appInfo
@@ -191,9 +190,7 @@ final class AppInfoManager {
     }
 
     func cachedAppVersion() async -> AppVersionInfo? {
-        guard let cached = await appVersionCache.read(
-            name: Constant.currentVersionKey
-        ) else {
+        guard let cached = await appVersionCache.read() else {
             return nil
         }
 
@@ -201,9 +198,7 @@ final class AppInfoManager {
     }
 
     func cachedVersionToken() async -> VersionTokenInfo? {
-        guard let cached = await versionTokenCache.read(
-            name: Constant.currentVersionKey
-        ) else {
+        guard let cached = await versionTokenCache.read() else {
             return nil
         }
 
@@ -223,9 +218,8 @@ final class AppInfoManager {
     func updateLatestAppVersion(
         _ version: String,
         versionShort: String
-    ) async throws {
-        try await appVersionCache.write(
-            name: Constant.currentVersionKey,
+    ) throws {
+        try appVersionCache.write(
             value: AppVersionInfo(
                 version: version,
                 versionShort: versionShort,
@@ -234,9 +228,8 @@ final class AppInfoManager {
         )
     }
 
-    func updateLatestSeenVersionToken(_ token: String) async throws {
-        try await versionTokenCache.write(
-            name: Constant.currentVersionKey,
+    func updateLatestSeenVersionToken(_ token: String) throws {
+        try versionTokenCache.write(
             value: VersionTokenInfo(
                 token: token,
                 date: .now

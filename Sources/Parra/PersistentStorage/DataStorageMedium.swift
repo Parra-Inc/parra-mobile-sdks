@@ -22,6 +22,5 @@ enum DataStorageMedium {
         fileName: String,
         fileManager: FileManager
     )
-    case userDefaults(key: String)
     case keychain(key: String)
 }
