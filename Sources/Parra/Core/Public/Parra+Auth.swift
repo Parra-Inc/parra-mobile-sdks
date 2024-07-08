@@ -35,11 +35,16 @@ public final class ParraAuth {
         newPassword: String
     ) async throws {}
 
-    public func deleteAccount() async throws {
+    public func deleteAccount(
+        title: String = "Delete account",
+        message: String =
+            "This will permanently delete your account and any identifying data associated with your account. You can not undo this action.",
+        primaryAction: String = "Confirm"
+    ) async throws {
         let confirmed = await confirmAction(
-            title: "Delete account",
-            message: "This will permanently delete your account. You can not undo this action.",
-            primaryAction: "Confirm"
+            title: title,
+            message: message,
+            primaryAction: primaryAction
         )
 
         guard confirmed else {
