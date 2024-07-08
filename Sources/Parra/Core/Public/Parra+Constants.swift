@@ -30,12 +30,9 @@ public extension Parra {
         /// your own key at https://parra.io/dashboard/developer/api-keys
         public static let apiKeyId = "27300ac2-6ea9-4fd0-b337-9efa4d756d90"
 
-        /// A user ID to use for demo purposes. This is just the
-        /// identifierForVendor so that it is mostly stable but falls back on a
-        /// UUID if the vendor ID can not be obtained.
-        public static let demoUserId = (
-            UIDevice.current.identifierForVendor ?? .init()
-        ).uuidString
+        /// A user ID to use for demo purposes. This is just a UUID generated
+        /// and attached to this device.
+        public static let demoUserId = ParraDeviceInfoManager.current.id
     }
 
     enum Constants {

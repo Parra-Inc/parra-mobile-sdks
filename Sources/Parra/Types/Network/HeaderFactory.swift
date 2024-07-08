@@ -64,21 +64,21 @@ struct HeaderFactory {
         case .applicationBundleVersionShort:
             return ParraInternal.appBundleVersionShort()
         case .device:
-            return UIDevice.modelCode
+            return ParraDeviceInfoManager.current.modelCode
         case .deviceId:
-            return UIDevice.current.identifierForVendor?.uuidString
+            return ParraDeviceInfoManager.current.id
         case .deviceLocale:
-            return NSLocale.current.language.languageCode?.identifier
+            return ParraDeviceInfoManager.current.locale
         case .deviceManufacturer:
-            return "Apple"
+            return ParraDeviceInfoManager.current.manufacturer
         case .deviceTimeZoneAbbreviation:
-            return TimeZone.current.abbreviation()
+            return ParraDeviceInfoManager.current.timeZoneAbbreviation
         case .deviceTimeZoneOffset:
-            return String(TimeZone.current.secondsFromGMT())
+            return ParraDeviceInfoManager.current.timeZoneOffset
         case .environment:
             return AppEnvironment.appConfiguration.headerName
         case .platform:
-            return UIDevice.current.systemName
+            return ParraDeviceInfoManager.current.systemName
         case .platformAgent:
             return "parra-ios-swift"
         case .platformSdkVersion:

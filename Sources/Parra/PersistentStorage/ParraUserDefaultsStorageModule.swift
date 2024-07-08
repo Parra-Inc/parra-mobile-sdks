@@ -16,15 +16,9 @@ class ParraUserDefaultsStorageModule<DataType: Codable> {
         jsonEncoder: JSONEncoder,
         jsonDecoder: JSONDecoder
     ) {
-        let userDefaults = UserDefaults(
-            suiteName: ParraInternal.appUserDefaultsSuite(
-                bundle: .parraBundle
-            )
-        ) ?? .standard
-
         self.key = "parra_\(key)"
         self.storage = UserDefaultsStorage(
-            userDefaults: userDefaults,
+            userDefaults: .parra,
             jsonEncoder: jsonEncoder,
             jsonDecoder: jsonDecoder
         )
