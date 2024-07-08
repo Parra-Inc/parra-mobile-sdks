@@ -6,7 +6,7 @@
 //  Copyright © 2022 Parra, Inc. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 public struct ParraConfiguration {
     // MARK: - Lifecycle
