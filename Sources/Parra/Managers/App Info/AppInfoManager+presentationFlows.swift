@@ -30,7 +30,7 @@ extension AppInfoManager {
             throw ParraError.message("Could not load app version for app")
         }
 
-        let currentAppVersion = await cachedAppVersion()
+        let currentAppVersion = cachedAppVersion()
         // The internal build/longform version string.
         let currentBuild = currentAppVersion?.version
 
@@ -80,7 +80,7 @@ extension AppInfoManager {
             throw ParraError.message("Could not load app version for app")
         }
 
-        let currentAppVersion = await cachedAppVersion()
+        let currentAppVersion = cachedAppVersion()
         // The user-facing version string
         let currentVersion = currentAppVersion?.versionShort
 
@@ -124,7 +124,7 @@ extension AppInfoManager {
         }
 
         let latestAppInfo = try await fetchLatestAppInfo()
-        let currentVersionInfo = await cachedVersionToken()
+        let currentVersionInfo = cachedVersionToken()
 
         guard latestAppInfo.versionToken != currentVersionInfo?.token else {
             logger.debug(

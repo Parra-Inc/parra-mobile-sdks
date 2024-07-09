@@ -129,7 +129,7 @@ final class AppInfoManager {
         let versionToken: String? = if force {
             nil
         } else {
-            await cachedVersionToken()?.token
+            cachedVersionToken()?.token
         }
 
         let appInfo: ParraAppInfo
@@ -189,16 +189,16 @@ final class AppInfoManager {
         return response.results.first
     }
 
-    func cachedAppVersion() async -> AppVersionInfo? {
-        guard let cached = await appVersionCache.read() else {
+    func cachedAppVersion() -> AppVersionInfo? {
+        guard let cached = appVersionCache.read() else {
             return nil
         }
 
         return cached
     }
 
-    func cachedVersionToken() async -> VersionTokenInfo? {
-        guard let cached = await versionTokenCache.read() else {
+    func cachedVersionToken() -> VersionTokenInfo? {
+        guard let cached = versionTokenCache.read() else {
             return nil
         }
 
