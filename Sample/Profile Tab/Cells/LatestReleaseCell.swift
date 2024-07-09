@@ -24,7 +24,7 @@ struct LatestReleaseCell: View {
     // MARK: - Internal
 
     var showLatestRelease: Bool {
-        return true
+        return parra.releases.updateAvailable()
     }
 
     var body: some View {

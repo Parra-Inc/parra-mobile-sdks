@@ -39,13 +39,17 @@ public final class ParraReleases {
         return appInfo.newInstalledVersionInfo
     }
 
-    // MARK: - Changelog
-
-    public func hasChangelog() -> Bool {
-        print("has changelog")
-
+    /// Whether a newer version of the app is available. In DEBUG mode this
+    /// always returns true.
+    public func updateAvailable() -> Bool {
+        #if DEBUG
         return true
+        #else
+        return appInfoManager.isAwareOfNewerRelease
+        #endif
     }
+
+    // MARK: - Changelog
 
     public func fetchChangelog() async throws -> ParraChangelogInfo? {
         let params = ChangelogParams(

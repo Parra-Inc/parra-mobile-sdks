@@ -72,6 +72,10 @@ final class AppInfoManager {
     let alertManager: AlertManager
     let configuration: ParraConfiguration
 
+    /// Whether the app info manager has encountered a newer app version
+    /// during fetches.
+    var isAwareOfNewerRelease = false
+
     let appVersionCache = ParraUserDefaultsStorageModule<AppVersionInfo>(
         key: Constant.appVersionKey,
         jsonEncoder: .parraEncoder,
@@ -162,6 +166,8 @@ final class AppInfoManager {
            let newVersionToken = appInfo.versionToken,
            versionToken != newVersionToken
         {
+            isAwareOfNewerRelease = true
+
             try updateLatestSeenVersionToken(newVersionToken)
         }
 
