@@ -100,7 +100,10 @@ public struct ParraColorPalette {
     // MARK: - Public
 
     public static let defaultLight = ParraColorPalette(
-        primary: ParraColorSwatch(primary: Color.accentColor, name: "Primary"),
+        primary: ParraColorSwatch(
+            primary: Color.accentColor,
+            name: "Primary"
+        ),
         secondary: ParraColorSwatch(
             primary: Color.secondary,
             name: "Secondary"
@@ -130,7 +133,10 @@ public struct ParraColorPalette {
     )
 
     public static let defaultDark = ParraColorPalette(
-        primary: ParraColorSwatch(primary: Color.accentColor, name: "Primary"),
+        primary: ParraColorSwatch(
+            primary: Color.accentColor,
+            name: "Primary"
+        ),
         secondary: ParraColorSwatch(
             primary: Color.secondary,
             name: "Secondary"
