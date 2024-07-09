@@ -30,6 +30,7 @@ struct ProfileTab: View {
                 Section("Samples") {
                     FeedbackCell()
                     RoadmapCell()
+                    ChangelogCell()
                 }
 
                 Section("Appearance") {

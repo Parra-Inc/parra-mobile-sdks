@@ -122,6 +122,12 @@ class MockedParraTestCase: ParraBaseMock {
             apiResourceServer: mockApiResourceServer.resourceServer
         )
 
+        let releases = ParraReleases(
+            api: api,
+            apiResourceServer: mockApiResourceServer.resourceServer,
+            appInfoManager: appInfoManager
+        )
+
         Logger.loggerBackend = sessionManager
 
         let parraInternal = ParraInternal(
@@ -137,6 +143,7 @@ class MockedParraTestCase: ParraBaseMock {
             api: api,
             notificationCenter: notificationCenter,
             feedback: feedback,
+            releases: releases,
             appInfoManager: appInfoManager,
             containerRenderer: containerRenderer,
             alertManager: alertManager,

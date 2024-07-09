@@ -34,7 +34,7 @@ class ParraInternal {
         api: API,
         notificationCenter: NotificationCenterType,
         feedback: ParraFeedback,
-        roadmap: ParraRoadmap,
+        releases: ParraReleases,
         appInfoManager: AppInfoManager,
         containerRenderer: ContainerRenderer,
         alertManager: AlertManager,
@@ -50,7 +50,7 @@ class ParraInternal {
         self.api = api
         self.notificationCenter = notificationCenter
         self.feedback = feedback
-        self.roadmap = roadmap
+        self.releases = releases
         self.appInfoManager = appInfoManager
         self.containerRenderer = containerRenderer
         self.alertManager = alertManager
@@ -76,7 +76,7 @@ class ParraInternal {
     // MARK: - Parra Modules
 
     let feedback: ParraFeedback
-    let roadmap: ParraRoadmap
+    let releases: ParraReleases
 
     var configuration: ParraConfiguration
     let authenticationMethod: ParraAuthType

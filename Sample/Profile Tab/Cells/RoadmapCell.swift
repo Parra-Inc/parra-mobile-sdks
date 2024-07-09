@@ -55,7 +55,7 @@ struct RoadmapCell: View {
         Task {
             do {
                 errorMessage = nil
-                roadmapInfo = try await parra.roadmap.fetchRoadmap()
+                roadmapInfo = try await parra.releases.fetchRoadmap()
             } catch {
                 errorMessage = String(describing: error)
                 roadmapInfo = nil

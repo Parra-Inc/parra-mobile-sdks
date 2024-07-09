@@ -196,9 +196,10 @@ extension ParraInternal {
             apiResourceServer: apiResourceServer
         )
 
-        let roadmap = ParraRoadmap(
+        let releases = ParraReleases(
             api: api,
-            apiResourceServer: apiResourceServer
+            apiResourceServer: apiResourceServer,
+            appInfoManager: appInfoManager
         )
 
         Logger.loggerBackend = sessionManager
@@ -214,7 +215,7 @@ extension ParraInternal {
             api: api,
             notificationCenter: notificationCenter,
             feedback: feedback,
-            roadmap: roadmap,
+            releases: releases,
             appInfoManager: appInfoManager,
             containerRenderer: containerRenderer,
             alertManager: alertManager,

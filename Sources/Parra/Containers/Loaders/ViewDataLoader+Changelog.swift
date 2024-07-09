@@ -13,7 +13,7 @@ struct ChangelogParams: Equatable {
     let offset: Int
 }
 
-struct ChangelogLoaderResult: Equatable {
+public struct ParraChangelogInfo: Equatable {
     let appReleaseCollection: AppReleaseCollectionResponse
 }
 
@@ -23,13 +23,13 @@ extension ViewDataLoader {
     )
         -> ViewDataLoader<
             ChangelogParams,
-            ChangelogLoaderResult,
+            ParraChangelogInfo,
             ChangelogWidget
         >
     {
         return ViewDataLoader<
             ChangelogParams,
-            ChangelogLoaderResult,
+            ParraChangelogInfo,
             ChangelogWidget
         >(
             renderer: { parra, params, _ in

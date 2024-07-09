@@ -27,8 +27,8 @@ public final class Parra: Observable {
     public private(set) lazy var feedback: ParraFeedback = parraInternal
         .feedback
 
-    public private(set) lazy var roadmap: ParraRoadmap = parraInternal
-        .roadmap
+    public private(set) lazy var releases: ParraReleases = parraInternal
+        .releases
 
     public private(set) lazy var auth: ParraAuth = .init(
         parraInternal: parraInternal

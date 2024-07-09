@@ -53,7 +53,7 @@ struct LatestReleaseSample: View {
         isLoading = true
 
         Task {
-            if let appVersionInfo = try? await parra
+            if let appVersionInfo = try? await parra.releases
                 .fetchLatestRelease()
             { // #2
                 self.appVersionInfo = appVersionInfo

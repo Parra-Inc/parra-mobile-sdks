@@ -1,5 +1,5 @@
 //
-//  ParraRoadmap.swift
+//  ParraReleases.swift
 //  Sample
 //
 //  Created by Mick MacCallum on 7/8/24.
@@ -10,18 +10,64 @@ import Foundation
 
 private let logger = Logger(category: "Roadmap Mobile")
 
-public final class ParraRoadmap {
+public final class ParraReleases {
     // MARK: - Lifecycle
 
     init(
         api: API,
-        apiResourceServer: ApiResourceServer
+        apiResourceServer: ApiResourceServer,
+        appInfoManager: AppInfoManager
     ) {
         self.api = api
         self.apiResourceServer = apiResourceServer
+        self.appInfoManager = appInfoManager
     }
 
     // MARK: - Public
+
+    // MARK: - What's New?
+
+    /// Fetches information about the most recent release of your app from
+    /// Parra. This information can be used to render custom UI, or with Parra's
+    /// ``SwiftUI/View/presentParraRelease(with:config:onDismiss:)``
+    /// modifier to present a sheet showing off the details of the release.
+    public func fetchLatestRelease() async throws -> NewInstalledVersionInfo? {
+        let appInfo = try await appInfoManager.fetchLatestAppInfo(
+            force: true
+        )
+
+        return appInfo.newInstalledVersionInfo
+    }
+
+    // MARK: - Changelog
+
+    public func hasChangelog() -> Bool {
+        print("has changelog")
+
+        return true
+    }
+
+    public func fetchChangelog() async throws -> ParraChangelogInfo? {
+        let params = ChangelogParams(
+            limit: 15,
+            offset: 0
+        )
+
+        let response = try await api.paginateReleases(
+            limit: params.limit,
+            offset: params.offset
+        )
+
+        if response.data.isEmpty {
+            return nil
+        }
+
+        return ParraChangelogInfo(
+            appReleaseCollection: response
+        )
+    }
+
+    // MARK: - Roadmap
 
     public func fetchRoadmap() async throws -> ParraRoadmapInfo {
         return try await withCheckedThrowingContinuation { continuation in
@@ -83,4 +129,5 @@ public final class ParraRoadmap {
 
     let api: API
     let apiResourceServer: ApiResourceServer
+    let appInfoManager: AppInfoManager
 }

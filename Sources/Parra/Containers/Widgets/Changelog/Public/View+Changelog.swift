@@ -24,7 +24,7 @@ public extension View {
 
         let transformer: ViewDataLoader<
             ChangelogParams,
-            ChangelogLoaderResult,
+            ParraChangelogInfo,
             ChangelogWidget
         >.Transformer = { parra, transformParams in
             let response = try await parra.parraInternal.api
@@ -33,7 +33,7 @@ public extension View {
                     offset: transformParams.offset
                 )
 
-            return ChangelogLoaderResult(
+            return ParraChangelogInfo(
                 appReleaseCollection: response
             )
         }
@@ -62,8 +62,8 @@ public extension View {
 
     @MainActor
     func presentParraChangelog(
-        with resultBinding: Binding<ParraRoadmapInfo?>,
-        config: RoadmapWidgetConfig = .default,
+        with resultBinding: Binding<ParraChangelogInfo?>,
+        config: ChangelogWidgetConfig = .default,
         onDismiss: ((SheetDismissType) -> Void)? = nil
     ) -> some View {
         return loadAndPresentSheet(
@@ -81,7 +81,7 @@ public extension View {
                     }
                 }
             ),
-            with: .roadmapLoader(
+            with: .changelogLoader(
                 config: config
             ),
             onDismiss: onDismiss
