@@ -32,20 +32,6 @@ public class RoadmapWidgetConfig: ContainerConfig {
     // MARK: - Public
 
     public static let `default` = RoadmapWidgetConfig(
-        //        addRequestButton: TextButtonConfig(
-//            style: .primary,
-//            size: .large,
-//            isMaxWidth: true
-//        ),
-//        requestTitles: LabelConfig(
-//            fontStyle: .headline
-//        ),
-//        requestDescriptions: LabelConfig(
-//            fontStyle: .subheadline
-//        ),
-//        voteCount: LabelConfig(
-//            fontStyle: .callout
-//        ),
         addRequestSuccessToastTitle: "Request confirmed!",
         addRequestSuccessToastSubtitle: "Thank you for your input! We've noted your suggestion and will consider it for our roadmap after a thorough review."
     )

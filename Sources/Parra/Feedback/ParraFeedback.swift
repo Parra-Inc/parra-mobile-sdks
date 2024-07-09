@@ -13,7 +13,7 @@ private let logger = Logger(category: "Feedback module")
 /// Parra API. Once data is fetched, it will be displayed automatically in any
 /// `ParraCardView`s that you add to your view hierarchy. To handle
 /// authentication, see the Parra module.
-public class ParraFeedback {
+public final class ParraFeedback {
     // MARK: - Lifecycle
 
     init(
@@ -27,11 +27,6 @@ public class ParraFeedback {
     }
 
     // MARK: - Public
-
-    public static var shared: ParraFeedback! {
-//        return Parra.getExistingInstance().feedback
-        return nil
-    }
 
     /// Fetch any available cards from the Parra API. Once cards are
     /// successfully fetched, they will automatically be cached by the
