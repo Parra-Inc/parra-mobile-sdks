@@ -151,6 +151,8 @@ struct PhotoWell: View {
                 showingCamera = true
             }
         }
+        // TODO: Would be nice if this allowed us to specify that we don't want
+        // location metadata.
         .photosPicker(
             isPresented: $showingPhotoPicker,
             selection: $selectedPhoto,
