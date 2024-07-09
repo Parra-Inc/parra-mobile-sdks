@@ -19,16 +19,16 @@ public final class ParraAuth {
 
     // MARK: - Account Management
 
-    /// Create a new passkey and link it to the current account.
-    public func addPasskey() async throws {
-        guard case .parra = parraInternal.authService.authenticationMethod else {
-            throw ParraError.message(
-                "Parra authentication was not used. Parra can not add a passkey to this account automatically."
-            )
-        }
-
-        // TODO: This
-    }
+//    /// Create a new passkey and link it to the current account.
+//    public func addPasskey() async throws {
+//        guard case .parra = parraInternal.authService.authenticationMethod else {
+//            throw ParraError.message(
+//                "Parra authentication was not used. Parra can not add a passkey to this account automatically."
+//            )
+//        }
+//
+//        // TODO: This
+//    }
 
     public func updatePassword(
         currentPassword: String,
@@ -51,7 +51,7 @@ public final class ParraAuth {
             return
         }
 
-        try await parraInternal.authService.deleteAccount()
+        try await parraInternal.api.deleteAccount()
 
         // Don't perform sync steps first.
         await parraInternal.authService.logout()

@@ -57,7 +57,8 @@ class MockedParraTestCase: ParraBaseMock {
 
         let api = API(
             appState: appState,
-            apiResourceServer: mockApiResourceServer.resourceServer
+            apiResourceServer: mockApiResourceServer.resourceServer,
+            dataManager: dataManager
         )
 
         let sessionManager = ParraSessionManager(
@@ -332,7 +333,8 @@ class MockedParraTestCase: ParraBaseMock {
 
         let api = API(
             appState: appState,
-            apiResourceServer: mockApiResourceServer.resourceServer
+            apiResourceServer: mockApiResourceServer.resourceServer,
+            dataManager: dataManager
         )
 
         return AppInfoManager(

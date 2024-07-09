@@ -14,8 +14,6 @@ extension ApiEndpoint {
         let object: Codable = switch status {
         case 200 ..< 300:
             switch self {
-            case .getUserInfo, .postLogin, .postLogout, .postUpdateAvatar:
-                fatalError()
             case .getCards:
                 ParraCardItemFixtures.cardsResponse
             case .getFeedbackForm(let formId):
@@ -42,6 +40,8 @@ extension ApiEndpoint {
                 AppReleaseCollectionResponse.validStates()[0]
             case .getAppInfo:
                 ParraAppInfo.validStates()[0]
+            default:
+                fatalError()
             }
         default:
             throw ParraError.generic(

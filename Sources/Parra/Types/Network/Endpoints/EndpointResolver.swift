@@ -126,6 +126,8 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/auth/user-info"
         case .postUpdateAvatar:
             return "tenants/\(tenantId)/users/avatar"
+        case .deleteUser(let userId):
+            return "tenants/\(tenantId)/users/\(userId)"
         }
     }
 }

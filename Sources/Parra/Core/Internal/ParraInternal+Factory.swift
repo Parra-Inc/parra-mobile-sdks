@@ -151,7 +151,8 @@ extension ParraInternal {
 
         let api = API(
             appState: appState,
-            apiResourceServer: apiResourceServer
+            apiResourceServer: apiResourceServer,
+            dataManager: dataManager
         )
 
         let sessionManager = ParraSessionManager(

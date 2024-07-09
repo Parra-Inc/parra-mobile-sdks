@@ -43,6 +43,7 @@ enum ApiEndpoint: Endpoint {
     // Users
     case getUserInfo
     case postUpdateAvatar
+    case deleteUser(userId: String)
 
     // MARK: - Internal
 
@@ -56,7 +57,7 @@ enum ApiEndpoint: Endpoint {
              .postPushTokens, .postVoteForTicket,
              .postLogin, .postLogout, .postUpdateAvatar:
             return .post
-        case .deleteVoteForTicket:
+        case .deleteVoteForTicket, .deleteUser:
             return .delete
         }
     }
@@ -95,6 +96,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/applications/:applicationId/releases/:releaseId"
         case .getPaginateReleases:
             return "tenants/:tenantId/applications/:applicationId/releases"
+        case .deleteUser:
+            return "tenants/:tenantId/users/:userId"
         }
     }
 

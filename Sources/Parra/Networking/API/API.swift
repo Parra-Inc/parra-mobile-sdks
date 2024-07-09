@@ -15,16 +15,19 @@ final class API {
 
     init(
         appState: ParraAppState,
-        apiResourceServer: ApiResourceServer
+        apiResourceServer: ApiResourceServer,
+        dataManager: DataManager
     ) {
         self.appState = appState
         self.apiResourceServer = apiResourceServer
+        self.dataManager = dataManager
     }
 
     // MARK: - Internal
 
     let appState: ParraAppState
     let apiResourceServer: ApiResourceServer
+    let dataManager: DataManager
 
     func hitEndpoint<Response>(
         _ endpoint: ApiEndpoint,
