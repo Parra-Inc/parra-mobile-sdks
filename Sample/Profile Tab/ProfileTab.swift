@@ -31,6 +31,7 @@ struct ProfileTab: View {
                     FeedbackCell()
                     RoadmapCell()
                     ChangelogCell()
+                    LatestReleaseCell()
                 }
 
                 Section("Appearance") {

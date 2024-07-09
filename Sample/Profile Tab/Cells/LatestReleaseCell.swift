@@ -1,8 +1,8 @@
 //
-//  LatestReleaseSample.swift
+//  LatestReleaseCell.swift
 //  Sample
 //
-//  Created by Mick MacCallum on 3/23/24.
+//  Created by Mick MacCallum on 7/9/24.
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
@@ -20,42 +20,51 @@ import SwiftUI
 /// 4. Use the `presentParraRelease` modifier and pass the app version state as
 ///    a parameter. When it becomes non nil, the release details screen will be
 ///    presented.
-struct LatestReleaseSample: View {
+struct LatestReleaseCell: View {
     // MARK: - Internal
 
-    @State var appVersionInfo: NewInstalledVersionInfo? // #3
-    @State var errorMessage: String?
-    @State var isLoading = false
-
-    @Environment(\.parra) var parra // #1
+    var showLatestRelease: Bool {
+        return true
+    }
 
     var body: some View {
-        VStack {
+        if showLatestRelease {
             Button(action: {
-                fetchLatestRelease()
-            }, label: {
-                HStack(spacing: 12) {
-                    Text("Fetch and present latest release")
-
-                    if isLoading {
-                        ProgressView()
+                loadLatestRelease()
+            }) {
+                Label(
+                    title: { Text("Update available") },
+                    icon: {
+                        if isLoading {
+                            ProgressView()
+                        } else {
+                            Image(systemName: "sparkles")
+                        }
                     }
-                }
-            })
+                )
+            }
             .disabled(isLoading)
+            .presentParraRelease(with: $appVersionInfo)
         }
-        .presentParraReleaseModal(with: $appVersionInfo)
     }
 
     // MARK: - Private
 
-    private func fetchLatestRelease() {
+    @Environment(\.parra) private var parra // #1
+    @State private var isLoading = false
+    @State private var errorMessage: String?
+    @State private var appVersionInfo: NewInstalledVersionInfo? // #3
+
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var appInfo: ParraAppInfo
+
+    private func loadLatestRelease() {
         isLoading = true
 
         Task {
             if let appVersionInfo = try? await parra.releases
-                .fetchLatestRelease()
-            { // #2
+                .fetchLatestRelease() // #2
+            {
                 self.appVersionInfo = appVersionInfo
                 errorMessage = nil
             } else {
@@ -70,6 +79,6 @@ struct LatestReleaseSample: View {
 
 #Preview {
     ParraAppPreview {
-        LatestReleaseSample()
+        LatestReleaseCell()
     }
 }

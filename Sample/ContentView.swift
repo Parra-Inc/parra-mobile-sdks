@@ -6,14 +6,20 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import Parra
 import SwiftUI
 
 struct ContentView: View {
+    // MARK: - Internal
+
     var body: some View {
         TabView {
             SampleTab()
                 .tabItem {
-                    Label("Features", systemImage: "bird.circle.fill")
+                    Label(
+                        appInfo.application.name,
+                        systemImage: "wand.and.stars"
+                    )
                 }
 
             ProfileTab()
@@ -22,8 +28,14 @@ struct ContentView: View {
                 }
         }
     }
+
+    // MARK: - Private
+
+    @EnvironmentObject private var appInfo: ParraAppInfo
 }
 
 #Preview {
-    ContentView()
+    ParraAppPreview {
+        ContentView()
+    }
 }

@@ -283,6 +283,7 @@
 		007ED4762A6C8BDF0077E446 /* CallStackParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007ED4752A6C8BDF0077E446 /* CallStackParser.swift */; };
 		007ED4802A6C9D370077E446 /* CallStackFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007ED47F2A6C9D370077E446 /* CallStackFrame.swift */; };
 		0080E2DC2C3D724200DBE1AE /* ChangelogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2DB2C3D724200DBE1AE /* ChangelogCell.swift */; };
+		0080E2DE2C3D7D1E00DBE1AE /* LatestReleaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2DD2C3D7D1E00DBE1AE /* LatestReleaseCell.swift */; };
 		0082DFBD2A535FDD00E7A91D /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFBC2A535FDD00E7A91D /* Data.swift */; };
 		0082DFCE2A53BA6700E7A91D /* Date+now.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFCD2A53BA6700E7A91D /* Date+now.swift */; };
 		008434562BDC068200700881 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008434552BDC068200700881 /* Camera.swift */; };
@@ -503,7 +504,6 @@
 		00C118FD2BAC89270013FD03 /* AsyncImageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C118FC2BAC89270013FD03 /* AsyncImageComponent.swift */; };
 		00C118FF2BAC94DE0013FD03 /* ReleaseHeaderContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C118FE2BAC94DE0013FD03 /* ReleaseHeaderContent.swift */; };
 		00C119022BACD04E0013FD03 /* AppInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C119012BACD04E0013FD03 /* AppInfoManager.swift */; };
-		00C119082BAF116E0013FD03 /* LatestReleaseSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C119072BAF116E0013FD03 /* LatestReleaseSample.swift */; };
 		00C1190A2BAF11FA0013FD03 /* ParraEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C119092BAF11FA0013FD03 /* ParraEnvironmentKey.swift */; };
 		00C1190C2BAF1E7C0013FD03 /* ParraInternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C1190B2BAF1E7C0013FD03 /* ParraInternal.swift */; };
 		00C119102BAF206A0013FD03 /* ParraInternal+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C1190F2BAF206A0013FD03 /* ParraInternal+Constants.swift */; };
@@ -1030,6 +1030,7 @@
 		007FBEF3277A34C700BD9E37 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		007FBEF5277A700200BD9E37 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		0080E2DB2C3D724200DBE1AE /* ChangelogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangelogCell.swift; sourceTree = "<group>"; };
+		0080E2DD2C3D7D1E00DBE1AE /* LatestReleaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestReleaseCell.swift; sourceTree = "<group>"; };
 		0082DFBC2A535FDD00E7A91D /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		0082DFC02A53736F00E7A91D /* MockResourceServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockResourceServer.swift; sourceTree = "<group>"; };
 		0082DFC52A5374BD00E7A91D /* MockParra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParra.swift; sourceTree = "<group>"; };
@@ -1246,7 +1247,6 @@
 		00C118FC2BAC89270013FD03 /* AsyncImageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageComponent.swift; sourceTree = "<group>"; };
 		00C118FE2BAC94DE0013FD03 /* ReleaseHeaderContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseHeaderContent.swift; sourceTree = "<group>"; };
 		00C119012BACD04E0013FD03 /* AppInfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoManager.swift; sourceTree = "<group>"; };
-		00C119072BAF116E0013FD03 /* LatestReleaseSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestReleaseSample.swift; sourceTree = "<group>"; };
 		00C119092BAF11FA0013FD03 /* ParraEnvironmentKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraEnvironmentKey.swift; sourceTree = "<group>"; };
 		00C1190B2BAF1E7C0013FD03 /* ParraInternal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraInternal.swift; sourceTree = "<group>"; };
 		00C1190F2BAF206A0013FD03 /* ParraInternal+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraInternal+Constants.swift"; sourceTree = "<group>"; };
@@ -2244,7 +2244,6 @@
 			children = (
 				00D5DD9A2BD205F4002E09B7 /* ProfileTab.swift */,
 				005BE4872C3C83BD00663AF4 /* Cells */,
-				00C119062BAF114B0013FD03 /* Releases */,
 			);
 			path = "Profile Tab";
 			sourceTree = "<group>";
@@ -2262,6 +2261,7 @@
 				0080E2DB2C3D724200DBE1AE /* ChangelogCell.swift */,
 				005BE48E2C3C844500663AF4 /* DeleteAccountCell.swift */,
 				005BE4942C3C89C500663AF4 /* FeedbackCell.swift */,
+				0080E2DD2C3D7D1E00DBE1AE /* LatestReleaseCell.swift */,
 				005BE48A2C3C83DF00663AF4 /* LegalInfoCell.swift */,
 				005BE48C2C3C83F000663AF4 /* LogoutCell.swift */,
 				005BE4882C3C83C100663AF4 /* ReviewAppCell.swift */,
@@ -2965,14 +2965,6 @@
 				00F7C4AF2B9A609D00DBDF5A /* ImageComponent.swift */,
 			);
 			path = Images;
-			sourceTree = "<group>";
-		};
-		00C119062BAF114B0013FD03 /* Releases */ = {
-			isa = PBXGroup;
-			children = (
-				00C119072BAF116E0013FD03 /* LatestReleaseSample.swift */,
-			);
-			path = Releases;
 			sourceTree = "<group>";
 		};
 		00C1190D2BAF1EAA0013FD03 /* Public */ = {
@@ -4353,6 +4345,7 @@
 				005BE48F2C3C844500663AF4 /* DeleteAccountCell.swift in Sources */,
 				0080E2DC2C3D724200DBE1AE /* ChangelogCell.swift in Sources */,
 				005BE48B2C3C83DF00663AF4 /* LegalInfoCell.swift in Sources */,
+				0080E2DE2C3D7D1E00DBE1AE /* LatestReleaseCell.swift in Sources */,
 				005BE4952C3C89C500663AF4 /* FeedbackCell.swift in Sources */,
 				005BE48D2C3C83F000663AF4 /* LogoutCell.swift in Sources */,
 				005BE4912C3C846900663AF4 /* ShareCell.swift in Sources */,
@@ -4361,7 +4354,6 @@
 				00D5DD9B2BD205F4002E09B7 /* ProfileTab.swift in Sources */,
 				005BE4932C3C848F00663AF4 /* ThemeCell.swift in Sources */,
 				005BE4892C3C83C100663AF4 /* ReviewAppCell.swift in Sources */,
-				00C119082BAF116E0013FD03 /* LatestReleaseSample.swift in Sources */,
 				00916A602B75C81A009C87DC /* SampleApp.swift in Sources */,
 				005BE4972C3C949600663AF4 /* RoadmapCell.swift in Sources */,
 			);
