@@ -59,4 +59,32 @@ public extension View {
             onDismiss: onDismiss
         )
     }
+
+    @MainActor
+    func presentParraChangelog(
+        with resultBinding: Binding<ParraRoadmapInfo?>,
+        config: RoadmapWidgetConfig = .default,
+        onDismiss: ((SheetDismissType) -> Void)? = nil
+    ) -> some View {
+        return loadAndPresentSheet(
+            loadType: .init(
+                get: {
+                    if let result = resultBinding.wrappedValue {
+                        return .raw(result)
+                    } else {
+                        return nil
+                    }
+                },
+                set: { type in
+                    if type == nil {
+                        resultBinding.wrappedValue = nil
+                    }
+                }
+            ),
+            with: .roadmapLoader(
+                config: config
+            ),
+            onDismiss: onDismiss
+        )
+    }
 }
