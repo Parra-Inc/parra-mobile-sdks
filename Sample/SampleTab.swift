@@ -24,34 +24,6 @@ struct SampleTab: View {
     var body: some View {
         NavigationSplitView {
             List {
-                Section("Feedback Forms") {
-                    NavigationLink {
-                        FeedbackFormByIdSample()
-                    } label: {
-                        SampleItemRow(
-                            title: "Forms by ID",
-                            iconName: "list.clipboard"
-                        )
-                    }
-
-                    NavigationLink {
-                        FeedbackFormCustomLoadingSample()
-                    } label: {
-                        SampleItemRow(
-                            title: "Forms with custom loader",
-                            iconName: "list.bullet.clipboard"
-                        )
-                    }
-                }
-
-                Section("Roadmap") {
-                    NavigationLink {
-                        RoadmapSample()
-                    } label: {
-                        SampleItemRow(title: "Roadmap", iconName: "map")
-                    }
-                }
-
                 Section("Releases") {
                     NavigationLink {
                         ChangelogSample()

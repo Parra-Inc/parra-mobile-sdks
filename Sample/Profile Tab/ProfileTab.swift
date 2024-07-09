@@ -27,6 +27,11 @@ struct ProfileTab: View {
                     .frame(maxWidth: .infinity)
                 }
 
+                Section("Samples") {
+                    FeedbackCell()
+                    RoadmapCell()
+                }
+
                 Section("Appearance") {
                     ThemeCell()
                 }
