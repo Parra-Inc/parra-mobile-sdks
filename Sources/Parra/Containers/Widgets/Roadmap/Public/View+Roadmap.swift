@@ -24,7 +24,7 @@ public extension View {
 
         let transformer: ViewDataLoader<
             RoadmapParams,
-            RoadmapLoaderResult,
+            ParraRoadmapInfo,
             RoadmapWidget
         >.Transformer = { parra, transformParams in
             let roadmapConfig = try await parra.parraInternal.api.getRoadmap()
@@ -43,7 +43,7 @@ public extension View {
                     filter: tab.key
                 )
 
-            return RoadmapLoaderResult(
+            return ParraRoadmapInfo(
                 roadmapConfig: roadmapConfig,
                 selectedTab: tab,
                 ticketResponse: ticketResponse
@@ -62,6 +62,34 @@ public extension View {
                 set: { type in
                     if type == nil {
                         isPresented.wrappedValue = false
+                    }
+                }
+            ),
+            with: .roadmapLoader(
+                config: config
+            ),
+            onDismiss: onDismiss
+        )
+    }
+
+    @MainActor
+    func presentParraRoadmap(
+        with resultBinding: Binding<ParraRoadmapInfo?>,
+        config: RoadmapWidgetConfig = .default,
+        onDismiss: ((SheetDismissType) -> Void)? = nil
+    ) -> some View {
+        return loadAndPresentSheet(
+            loadType: .init(
+                get: {
+                    if let result = resultBinding.wrappedValue {
+                        return .raw(result)
+                    } else {
+                        return nil
+                    }
+                },
+                set: { type in
+                    if type == nil {
+                        resultBinding.wrappedValue = nil
                     }
                 }
             ),
