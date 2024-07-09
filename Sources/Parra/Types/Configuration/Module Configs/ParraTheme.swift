@@ -19,6 +19,8 @@ public struct ParraTheme: ParraConfigurationOptionType {
         cornerRadius: ParraCornerRadiusConfig = .default,
         padding: ParraPaddingConfig = .default
     ) {
+        self.lightPalette = lightPalette
+        self.darkPalette = darkPalette
         self.palette = ParraTheme.createDynamicPalette(
             lightPalette: lightPalette,
             darkPalette: darkPalette
@@ -99,6 +101,8 @@ public struct ParraTheme: ParraConfigurationOptionType {
     )
 
     public let palette: ParraColorPalette
+    public let lightPalette: ParraColorPalette
+    public let darkPalette: ParraColorPalette?
     public let typography: ParraTypography
     public let cornerRadius: ParraCornerRadiusConfig
     public let padding: ParraPaddingConfig
