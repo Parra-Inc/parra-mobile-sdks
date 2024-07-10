@@ -23,7 +23,7 @@ extension ParraThemeObserver {
                 keyedBy: CodingKeys.self
             )
 
-            let optionId = try container.decode(
+            let optionId = try container.decodeIfPresent(
                 Int.self,
                 forKey: .preferredColorScheme
             )
