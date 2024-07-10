@@ -90,6 +90,15 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
 
     // MARK: - Internal
 
+    var isUnauthenticated: Bool {
+        switch self {
+        case .networkError(_, let response, _):
+            return response.statusCode == 401
+        default:
+            return false
+        }
+    }
+
     var userMessage: String? {
         switch self {
         case .apiError(let response):

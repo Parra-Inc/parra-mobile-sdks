@@ -100,7 +100,14 @@ extension AuthService {
                 authType: .webauthn(code: accessToken)
             )
 
-            await applyUserUpdate(authResult)
+            switch authResult {
+            case .authenticated, .undetermined:
+                await applyUserUpdate(authResult)
+            case .unauthenticated(let error):
+                if let error {
+                    throw error
+                }
+            }
         } catch {
             throw error
         }

@@ -82,9 +82,31 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                 case .unauthenticated:
                     do {
                         try await params.attemptPasskeyLogin()
+                    } catch let error as ParraError {
+                        if error.isUnauthenticated {
+                            parra.parraInternal.alertManager.showErrorToast(
+                                userFacingMessage: "No account found matching this passkey. You can delete this passkey from your preferred password manager.",
+                                underlyingError: error
+                            )
+                        } else {
+                            parra.parraInternal.alertManager.showErrorToast(
+                                userFacingMessage: "Error signing in with passkey. Please try again.",
+                                underlyingError: error
+                            )
+
+                            Logger.error(
+                                "Failed passkey auto login on landing screen",
+                                error
+                            )
+                        }
                     } catch {
+                        parra.parraInternal.alertManager.showErrorToast(
+                            userFacingMessage: "Error signing in with passkey. Please try again.",
+                            underlyingError: .system(error)
+                        )
+
                         Logger.error(
-                            "Failed passkey auto login on landing screen",
+                            "Failed passkey auto login on landing screen with uknown error",
                             error
                         )
                     }
