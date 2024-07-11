@@ -47,6 +47,11 @@ struct ParraSession: Codable, Equatable {
     /// been synchronized.
     private(set) var eventsHandleOffsetAtSync: UInt64?
 
+    mutating func end(at date: Date) {
+        updatedAt = date
+        endedAt = date
+    }
+
     func hasBeenUpdated(since date: Date?) -> Bool {
         guard let updatedAt else {
             // If updatedAt isn't set, it hasn't been updated since it was created.

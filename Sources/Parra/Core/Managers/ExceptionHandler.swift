@@ -22,6 +22,10 @@ enum ExceptionHandler {
         SIGABRT, SIGILL, SIGSEGV, SIGFPE, SIGBUS, SIGPIPE, SIGTRAP
     ]
 
+    static func setCurrentSessionId(_ sessionId: String) {
+        currentSessionId = sessionId
+    }
+
     static func addSignalListeners() {
         for sig in signals {
             signal(sig, ExceptionHandler.handleSignal)
@@ -49,6 +53,7 @@ enum ExceptionHandler {
         ).frameStrings
 
         let crash = CrashInfo(
+            sessionId: currentSessionId,
             type: .exception,
             name: exception.name.rawValue,
             reason: exception.reason ?? "",
@@ -60,6 +65,8 @@ enum ExceptionHandler {
 
     // MARK: - Private
 
+    private static var currentSessionId: String?
+
     private static let handleSignal: @convention(c) (Int32) -> Void = {
         signal in
 
@@ -70,6 +77,7 @@ enum ExceptionHandler {
         let reason = "Signal \(signalName)(\(signal)) was raised.\n"
 
         let crash = CrashInfo(
+            sessionId: currentSessionId,
             type: .signal,
             name: signalName,
             reason: reason,
@@ -97,7 +105,7 @@ enum ExceptionHandler {
             .applicationSupportDirectory,
             .userDomainMask,
             true
-        ).first!.appending("/parra-crash-report-\(timestamp).txt")
+        ).first!.appending("/\(Constant.crashFilePrefix)\(timestamp).json")
 
         do {
             let data = try JSONEncoder.parraEncoder.encode(crashInfo)

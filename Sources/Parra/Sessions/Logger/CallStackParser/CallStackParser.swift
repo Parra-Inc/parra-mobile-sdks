@@ -114,12 +114,8 @@ enum CallStackParser {
             count: Int(frameCount)
         )
 
-        logger.trace("backtrace buffer created (\(frameCount)")
-
         let stackFrames: [CallStackFrame] = buffer.enumerated()
             .compactMap { index, address in
-                logger.trace("backtrace frame: \(address)")
-
                 guard let address else {
                     return nil
                 }
@@ -163,8 +159,6 @@ enum CallStackParser {
                     lineNumber: nil
                 )
             }
-
-        logger.trace("finished generating frames")
 
         return .demangled(stackFrames)
     }

@@ -10,6 +10,6 @@ import Foundation
 
 extension ExceptionHandler {
     enum Constant {
-        static let crashFilePrefix = "parra-crash-report"
+        static let crashFilePrefix = "parra-crash-report-"
     }
 }

@@ -46,8 +46,9 @@ class ParraSessionManager {
         self.api = api
         self.loggerOptions = loggerOptions
 
-        // Set this in init after assigning the loggerOptions to ensure reads from the event queue couldn't
-        // possibly start happening until after the initial write of these options is complete.
+        // Set this in init after assigning the loggerOptions to ensure reads
+        // from the event queue couldn't possibly start happening until after
+        // the initial write of these options is complete.
         self.eventQueue = DispatchQueue(
             label: "com.parra.sessions.event-queue",
             qos: .utility
@@ -62,6 +63,10 @@ class ParraSessionManager {
         }
 
         await sessionStorage.initializeSessions()
+
+        if let currentSession = try? await sessionStorage.getCurrentSession() {
+            ExceptionHandler.setCurrentSessionId(currentSession.sessionId)
+        }
     }
 
     func hasDataToSync(since date: Date?) async -> Bool {
@@ -75,6 +80,12 @@ class ParraSessionManager {
         // 3. There are previous sessions
 
         return await logger.withScope { logger in
+            if hasCrashes() {
+                logger.trace("has crashes from previous sessions")
+
+                return true
+            }
+
             if await sessionStorage.hasSessionUpdates(since: date) {
                 logger.trace("has updates to current session")
 
@@ -100,60 +111,6 @@ class ParraSessionManager {
         }
     }
 
-    func syncCrashReport(
-        metadata: [String: Any]
-    ) async throws {
-        if forceDisabled {
-            return
-        }
-
-        var currentSession = try await sessionStorage.getCurrentSession()
-
-        let crashEvent = ParraSessionEvent(
-            createdAt: .now,
-            // if changed, must be snake case
-            name: "crash",
-            metadata: AnyCodable(metadata)
-        )
-
-        sessionStorage.writeEvent(
-            event: crashEvent,
-            context: ParraSessionEventContext(
-                isClientGenerated: true,
-                syncPriority: .critical
-            )
-        )
-
-        currentSession.end()
-
-        let sessionUpload = ParraSessionUpload(
-            session: currentSession,
-            events: [crashEvent]
-        )
-
-        let response = await api.submitSession(
-            sessionUpload
-        )
-
-        switch response.result {
-        case .success(let payload):
-            logger.debug("Successfully uploaded crash report")
-        case .failure(let error):
-            logger.error("Failed to upload crash report", error)
-
-            // If any of the sessions fail to upload afty rerying, fail the entire operation
-            // returning the sessions that have been completed so far.
-            if response.context.attributes
-                .contains(.exceededRetryLimit)
-            {
-                logger.debug(
-                    "Network retry limited exceeded. Will not attempt to sync additional sessions."
-                )
-                break
-            }
-        }
-    }
-
     func synchronizeData() async throws -> ParraSessionsResponse? {
         if forceDisabled {
             return nil
@@ -162,6 +119,7 @@ class ParraSessionManager {
         return try await logger.withScope { logger in
             let currentSession = try await sessionStorage.getCurrentSession()
             let sessionIterator = try await sessionStorage.getAllSessions()
+            var crashReports = readCrashReports()
 
             var removableSessionIds = Set<String>()
             var erroredSessionIds = Set<String>()
@@ -175,11 +133,12 @@ class ParraSessionManager {
                 let sessionId = directory.deletingPathExtension()
                     .lastPathComponent
 
-                // A session directory being prefixed with an underscore indicates that we
-                // have already made an attempt to synchronize it, which has failed.
-                // If the session has failed to synchronize again, we want to cut our
-                // losses and delete it, so it doesn't cause the sync manager to think
-                // there are more sessions to sync.
+                // A session directory being prefixed with an underscore
+                // indicates that we have already made an attempt to synchronize
+                // it, which has failed. If the session has failed to
+                // synchronize again, we want to cut our losses and delete it,
+                // so it doesn't cause the sync manager to think there are more
+                // sessions to sync.
 
                 if sessionId
                     .hasPrefix(ParraSession.Constant.erroredSessionPrefix)
@@ -197,8 +156,9 @@ class ParraSessionManager {
                 }
             }
 
-            // It's possible that multiple sessions that are uploaded could receive a response indicating that polling
-            // should occur. If this happens, we'll honor the most recent of these.
+            // It's possible that multiple sessions that are uploaded could
+            // receive a response indicating that polling should occur. If this
+            // happens, we'll honor the most recent of these.
             var sessionResponse: ParraSessionsResponse?
 
             for await nextSession in sessionIterator {
@@ -209,22 +169,57 @@ class ParraSessionManager {
                             .sessionId)
                     ])
 
-                    // Reference the session ID from the path instead of from reading the session
-                    // object, since this one will include the deletion marker.
+                    // Reference the session ID from the path instead of from
+                    // reading the session object, since this one will include
+                    // the deletion marker.
                     let sessionId = sessionDirectory.deletingPathExtension()
                         .lastPathComponent
 
                     if currentSession.sessionId == sessionId {
-                        // Sets a marker on the current session to indicate the offset of the file handle that stores events
-                        // just before the sync starts. This is necessary to make sure that any new events that roll in
-                        // while the sync is in progress aren't deleted as part of post-sync cleanup.
+                        // Sets a marker on the current session to indicate the
+                        // offset of the file handle that stores events just
+                        // before the sync starts. This is necessary to make
+                        // sure that any new events that roll in while the sync
+                        // is in progress aren't deleted as part of post-sync
+                        // cleanup.
                         await sessionStorage.recordSyncBegan()
                     }
 
                     logger.debug("Uploading session: \(sessionId)")
 
+                    let relevantCrashes = crashReports.filter { crash in
+                        // If there is a matching session id, keep the crash
+                        if crash.sessionId == sessionUpload.session.sessionId {
+                            return true
+                        }
+
+                        // if there isn't a session id, and the timestamps align
+                        // with the session, keep the crash.
+                        if crash.sessionId != nil {
+                            return false
+                        }
+
+                        let crashDate = Date(
+                            timeIntervalSince1970: crash.timestamp
+                        )
+
+                        if let endedAt = currentSession.endedAt {
+                            if crashDate > currentSession.createdAt,
+                               crashDate < endedAt
+                            {
+                                return true
+                            }
+                        }
+
+                        return false
+                    }
+                    crashReports.subtract(relevantCrashes)
+
                     let response = await api.submitSession(
-                        sessionUpload
+                        attachCrashReports(
+                            to: sessionUpload,
+                            from: relevantCrashes
+                        )
                     )
 
                     switch response.result {
@@ -234,7 +229,8 @@ class ParraSessionManager {
                                 "Successfully uploaded session: \(sessionId)"
                             )
 
-                        // Don't override the session response unless it's another one with shouldPoll enabled.
+                        // Don't override the session response unless it's
+                        // another one with shouldPoll enabled.
                         if payload.shouldPoll {
                             sessionResponse = payload
                         }
@@ -248,8 +244,9 @@ class ParraSessionManager {
 
                         markSessionForDirectoryAsErrored(sessionDirectory)
 
-                        // If any of the sessions fail to upload afty rerying, fail the entire operation
-                        // returning the sessions that have been completed so far.
+                        // If any of the sessions fail to upload afty rerying,
+                        // fail the entire operation returning the sessions that
+                        // have been completed so far.
                         if response.context.attributes
                             .contains(.exceededRetryLimit)
                         {
@@ -270,6 +267,8 @@ class ParraSessionManager {
                 for: removableSessionIds,
                 erroredSessions: erroredSessionIds
             )
+
+            deleteCrashReports()
 
             return sessionResponse
         }
@@ -306,8 +305,8 @@ class ParraSessionManager {
         }
 
         let environment = loggerOptions.environment
-        // When normal behavior isn't bypassed, debug behavior is to send logs to the console.
-        // Production behavior is to write events.
+        // When normal behavior isn't bypassed, debug behavior is to send logs
+        // to the console. Production behavior is to write events.
 
         let writeToConsole = { [self] in
             writeEventToConsoleSync(
@@ -334,8 +333,8 @@ class ParraSessionManager {
             } else {
                 writeToSession()
                 #if DEBUG
-                // If we're running tests, honor the configured behavior, but also write
-                // to console, if we weren't already going to.
+                // If we're running tests, honor the configured behavior, but
+                // also write to console, if we weren't already going to.
                 if NSClassFromString("XCTestCase") != nil {
                     writeToConsole()
                 }
@@ -435,14 +434,17 @@ extension ParraSessionManager: ParraLoggerBackend {
         }
     }
 
-    /// Any newly created log is required to pass through this method in order to ensure consistent
-    /// filtering and processing. This method should always be called from the eventQueue.
+    /// Any newly created log is required to pass through this method in order
+    /// to ensure consistent filtering and processing. This method should always
+    /// be called from the eventQueue.
     /// - Parameters:
-    ///   - bypassEventCreation: This flag should be used for cases where we need to write logs
-    ///   that can not trigger the creation of log events, and should instead just be written directly to
-    ///   the console. This is primarily for places where writing events for logs would create recursion,
-    ///   like logs generated by the services that store log events, for example. For now we will have a
-    ///   blind spot in these places until a better solution is implemented.
+    ///   - bypassEventCreation: This flag should be used for cases where we
+    ///   need to write logs that can not trigger the creation of log events,
+    ///   and should instead just be written directly to the console. This is
+    ///   primarily for places where writing events for logs would create
+    ///   recursion, like logs generated by the services that store log events,
+    ///   for example. For now we will have a blind spot in these places until
+    ///   a better solution is implemented.
     private func logEventReceivedSync(
         logData: ParraLogData
     ) {
@@ -450,7 +452,8 @@ extension ParraSessionManager: ParraLoggerBackend {
             return
         }
 
-        // At this point, the autoclosures passed to the logger functions are finally invoked.
+        // At this point, the autoclosures passed to the logger functions are
+        // finally invoked.
         let processedLogData = ParraLogProcessedData(
             logData: logData
         )
@@ -461,17 +464,23 @@ extension ParraSessionManager: ParraLoggerBackend {
             )
         )
 
-        // 1. The flag to bypass event creation takes precedence, since this is used in cases like logs
-        // within the logging infrastructure that could cause recursion in error cases. If it is set
-        // we send logs to the console instead of the session in DEBUG mode. Since the automatic behavior
-        // in RELEASE is to write to sessions, we skip writing entirely in this case.
-        // TODO: This will eventually need to be addressed to help catch errors in this part of our code.
+        // 1. The flag to bypass event creation takes precedence, since this is
+        //    used in cases like logs within the logging infrastructure that
+        //    could cause recursion in error cases. If it is set we send logs to
+        //    the console instead of the session in DEBUG mode. Since the
+        //    automatic behavior in RELEASE is to write to sessions, we skip
+        //    writing entirely in this case.
         //
-        // 2. The next check is for the event debug logging override flag, which is set by any environmental
-        // variable. This is used to allow us to force writing to both sessions and the consoles during
-        // development for testing purposes.
+        // TODO: This will eventually need to be addressed to help catch errors
+        //       in this part of our code.
         //
-        // 3. Fall back on the default behavior that takes scheme and user preferences into consideration.
+        // 2. The next check is for the event debug logging override flag, which
+        //    is set by any environmental variable. This is used to allow us to
+        //    force writing to both sessions and the consoles during development
+        //    for testing purposes.
+        //
+        // 3. Fall back on the default behavior that takes scheme and user
+        //    preferences into consideration.
 
         let target: ParraSessionEventTarget
         if logData.logContext.bypassEventCreation {
@@ -492,5 +501,170 @@ extension ParraSessionManager: ParraLoggerBackend {
             // Special case. Call site context is that of the origin of the log.
             callSiteContext: logData.logContext.callSiteContext
         )
+    }
+
+    private func attachCrashReports(
+        to sessionUpload: ParraSessionUpload,
+        from crashes: Set<ExceptionHandler.CrashInfo>
+    ) -> ParraSessionUpload {
+        if crashes.isEmpty {
+            logger.trace(
+                "No relevant crash reports found to attach to session"
+            )
+
+            return sessionUpload
+        }
+
+        var session = sessionUpload.session
+        var events = sessionUpload.events
+
+        logger.debug("Attaching crashes from previous session", [
+            "sessionId": session.sessionId
+        ])
+
+        for crash in crashes {
+            let crashDate = Date(timeIntervalSince1970: crash.timestamp)
+            let event = ParraSessionEvent(
+                createdAt: crashDate,
+                name: "crash",
+                metadata: [
+                    "stack": crash.callStack,
+                    "name": crash.name,
+                    "reason": crash.reason,
+                    "type": crash.type.description
+                ]
+            )
+
+            events.append(event)
+
+            // Bump the end date of the session to the timestamp where the
+            // crash occurred.
+            session.end(
+                at: crashDate
+            )
+        }
+
+        return ParraSessionUpload(
+            session: session,
+            events: events
+        )
+    }
+
+    private func hasCrashes() -> Bool {
+        let fileManager = FileManager.default
+        let appSupportURL = DataManager.Base.applicationSupportDirectory
+
+        do {
+            // Get the contents of the Application Support directory
+            let contents = try fileManager.contentsOfDirectory(
+                atPath: appSupportURL.path
+            )
+
+            // Filter the files that start with "parra-crash-report"
+            let crashReportFiles = contents.filter {
+                $0.hasPrefix(ExceptionHandler.Constant.crashFilePrefix)
+            }
+
+            return !crashReportFiles.isEmpty
+        } catch {
+            logger.error(
+                "Error checking if has crashes",
+                error
+            )
+
+            return false
+        }
+    }
+
+    private func readCrashReports() -> Set<ExceptionHandler.CrashInfo> {
+        // Get the Application Support directory URL
+        let fileManager = FileManager.default
+        let appSupportURL = DataManager.Base.applicationSupportDirectory
+
+        do {
+            // Get the contents of the Application Support directory
+            let contents = try fileManager.contentsOfDirectory(
+                atPath: appSupportURL.path
+            )
+
+            // Filter the files that start with "parra-crash-report"
+            let crashReportFiles = contents.filter {
+                $0.hasPrefix(ExceptionHandler.Constant.crashFilePrefix)
+            }
+
+            var crashes = Set<ExceptionHandler.CrashInfo>()
+
+            for fileName in crashReportFiles {
+                let fileURL = appSupportURL.appendingPathComponent(fileName)
+
+                guard let fileContents = try? Data(contentsOf: fileURL) else {
+                    continue
+                }
+
+                guard let crash = try? JSONDecoder.parraDecoder.decode(
+                    ExceptionHandler.CrashInfo.self,
+                    from: fileContents
+                ) else {
+                    continue
+                }
+
+                crashes.insert(crash)
+            }
+
+            logger.trace(
+                "Found \(crashes.count) crash report(s) from previous sessions"
+            )
+
+            return crashes
+        } catch {
+            logger.error(
+                "Error reading contents of Application Support directory",
+                error
+            )
+
+            return []
+        }
+    }
+
+    func deleteCrashReports() {
+        logger.trace("Deleting previous session's crash reports")
+
+        let fileManager = FileManager.default
+        let appSupportURL = DataManager.Base.applicationSupportDirectory
+
+        do {
+            // Get the contents of the Application Support directory
+            let contents = try fileManager.contentsOfDirectory(
+                atPath: appSupportURL.path
+            )
+
+            // Filter the files that start with "parra-crash-report"
+            let crashReportFiles = contents.filter {
+                $0.hasPrefix(ExceptionHandler.Constant.crashFilePrefix)
+            }
+
+            for file in crashReportFiles {
+                let path = appSupportURL.appending(
+                    component: file
+                )
+
+                do {
+                    try fileManager.removeItem(at: path)
+                } catch {
+                    logger.error(
+                        "Error deleting crash report",
+                        error,
+                        [
+                            "path": path.relativeString
+                        ]
+                    )
+                }
+            }
+        } catch {
+            logger.error(
+                "Error deleting crash reports",
+                error
+            )
+        }
     }
 }
