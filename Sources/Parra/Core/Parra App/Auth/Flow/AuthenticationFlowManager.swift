@@ -619,6 +619,12 @@ class AuthenticationFlowManager: ObservableObject {
         await authService.applyUserUpdate(
             authResult
         )
+
+        if case .unauthenticated(let error) = authResult {
+            if let error {
+                throw ParraError.system(error)
+            }
+        }
     }
 
     private func navigate(
