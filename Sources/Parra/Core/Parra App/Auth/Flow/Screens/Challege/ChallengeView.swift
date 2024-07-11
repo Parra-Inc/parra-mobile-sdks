@@ -131,18 +131,24 @@ struct ChallengeView: View {
             do {
                 try await onSubmit()
 
-                withAnimation {
-                    errorMessage = nil
+                Task { @MainActor in
+                    withAnimation {
+                        errorMessage = nil
+                    }
                 }
             } catch let error as ParraError {
-                withAnimation {
-                    errorMessage = error.userMessage
+                Task { @MainActor in
+                    withAnimation {
+                        errorMessage = error.userMessage
+                    }
                 }
 
                 Logger.error("Failed to submit identity", error)
             } catch {
-                withAnimation {
-                    errorMessage = error.localizedDescription
+                Task { @MainActor in
+                    withAnimation {
+                        errorMessage = error.localizedDescription
+                    }
                 }
 
                 Logger.error("Failed to submit identity. Unknown error", error)

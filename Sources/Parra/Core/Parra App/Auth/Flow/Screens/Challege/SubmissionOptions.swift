@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+private let logger = Logger()
+
 struct SubmissionOptions: View {
     // MARK: - Lifecycle
 
@@ -28,7 +30,7 @@ struct SubmissionOptions: View {
 
     struct SubmissionOptionInfo: Identifiable {
         let content: TextButtonContent
-        let onPress: () async throws -> Void
+        let onPress: () async -> Void
 
         var id: String {
             return content.text.text
@@ -38,16 +40,30 @@ struct SubmissionOptions: View {
     let params: ParraAuthDefaultIdentityChallengeScreen.Params
     @Binding var shouldDisableSubmitWithPassword: Bool
     @Binding var passwordChallengeResponse: ChallengeResponse?
-
     let submitResponse: (_ response: ChallengeResponse) async throws -> Void
 
     var body: some View {
         VStack {
+            if let errorMessage {
+                componentFactory.buildLabel(
+                    content: LabelContent(text: errorMessage),
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            color: themeObserver.theme.palette.error
+                                .toParraColor()
+                        ),
+                        padding: .lg
+                    )
+                )
+            }
+
             buttons
         }
     }
 
     // MARK: - Private
+
+    @State private var errorMessage: String?
 
     private let primaryActionName: String
 
@@ -152,8 +168,12 @@ struct SubmissionOptions: View {
                         text: "\(primaryActionName) with password"
                     ),
                     onPress: {
-                        if let passwordChallengeResponse {
-                            try await submitResponse(passwordChallengeResponse)
+                        await attemptSubmission {
+                            if let passwordChallengeResponse {
+                                try await submitResponse(
+                                    passwordChallengeResponse
+                                )
+                            }
                         }
                     }
                 )
@@ -183,21 +203,23 @@ struct SubmissionOptions: View {
                         text: passwordlessLoginTitle
                     ),
                     onPress: {
-                        let challengeResponse: ChallengeResponse? =
-                            switch params
-                                .identityType
-                            {
-                            case .email:
-                                .passwordlessEmail(params.identity)
-                            case .phoneNumber:
-                                .passwordlessSms(params.identity)
-                            default:
-                                // shound't happen
-                                nil
-                            }
+                        await attemptSubmission {
+                            let challengeResponse: ChallengeResponse? =
+                                switch params
+                                    .identityType
+                                {
+                                case .email:
+                                    .passwordlessEmail(params.identity)
+                                case .phoneNumber:
+                                    .passwordlessSms(params.identity)
+                                default:
+                                    // shound't happen
+                                    nil
+                                }
 
-                        if let challengeResponse {
-                            try await submitResponse(challengeResponse)
+                            if let challengeResponse {
+                                try await submitResponse(challengeResponse)
+                            }
                         }
                     }
                 )
@@ -211,13 +233,46 @@ struct SubmissionOptions: View {
                         text: "Create a passkey"
                     ),
                     onPress: {
-                        try await submitResponse(.passkey)
+                        await attemptSubmission {
+                            try await submitResponse(.passkey)
+                        }
                     }
                 )
             )
         }
 
         return buttonInfo
+    }
+
+    private func attemptSubmission(
+        _ fn: () async throws -> Void
+    ) async {
+        do {
+            Task { @MainActor in
+                withAnimation {
+                    errorMessage = nil
+                }
+            }
+
+            try await fn()
+        } catch let error as ParraError {
+            // TODO: Need hard coded error message, per submission type
+            Task { @MainActor in
+                withAnimation {
+                    errorMessage = error.userMessage
+                }
+            }
+
+            logger.error("Error submiting auth challenge", error)
+        } catch {
+            Task { @MainActor in
+                withAnimation {
+                    errorMessage = error.localizedDescription
+                }
+            }
+
+            logger.error("Unknown error submiting auth challenge", error)
+        }
     }
 }
 
