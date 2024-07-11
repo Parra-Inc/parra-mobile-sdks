@@ -223,6 +223,9 @@ extension ParraInternal {
             modalScreenManager: modalScreenManager
         )
 
+        ExceptionHandler.addExceptionHandlers()
+        ExceptionHandler.addSignalListeners()
+
         apiResourceServer.delegate = parra
         syncManager.delegate = parra
 

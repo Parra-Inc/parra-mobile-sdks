@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Parra/CrashWriter.h>
 
 //! Project version number for Parra.
 FOUNDATION_EXPORT double ParraVersionNumber;
@@ -14,5 +15,3 @@ FOUNDATION_EXPORT double ParraVersionNumber;
 FOUNDATION_EXPORT const unsigned char ParraVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <Parra/PublicHeader.h>
-
-

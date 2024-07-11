@@ -22,11 +22,6 @@ private typealias Swift_Demangle = @convention(c) (
     _ flags: UInt32
 ) -> UnsafeMutablePointer<Int8>?
 
-private typealias Swift_Backtrace = @convention(c) (
-    _ address: UnsafeMutablePointer<UnsafeMutableRawPointer?>,
-    _ stackSize: Int32
-) -> Int32
-
 // https://developer.apple.com/documentation/xcode/adding-identifiable-symbol-names-to-a-crash-report/
 
 enum CallStackParser {
@@ -35,7 +30,7 @@ enum CallStackParser {
     static func parse(
         frames: [String]
     ) -> [CallStackFrame] {
-        return frames.compactMap { (frame: String) in
+        return frames.compactMap { (frame: String) -> CallStackFrame? in
             let components = frame.split { char in
                 return char.isWhitespace || char.isNewline
             }
@@ -56,7 +51,7 @@ enum CallStackParser {
                 return nil
             }
 
-            guard let byteOffset = UInt16(components[plusIndex + 1]) else {
+            guard let byteOffset = UInt64(components[plusIndex + 1]) else {
                 return nil
             }
 
@@ -97,26 +92,123 @@ enum CallStackParser {
     }
 
     static func printBacktrace() {
-        do {
-            let symbols = try backtrace()
+        let symbols = backtrace()
 
-            switch symbols {
-            case .none:
-                logger.info("Symbol type is none")
-            case .raw(let frames):
-                logger.info(frames.joined(separator: "\n"))
-            case .demangled(let frames):
-                let stringFrames = frames.map { frame in
-                    return "\(frame.frameNumber)\t\(frame.binaryName)\t\(frame.address)\t\(frame.symbol) + \(frame.byteOffset)"
-                }.joined(separator: "\n")
+        logger.info(symbols.frameStrings.joined(separator: "\n"))
+    }
 
-                logger.info(stringFrames)
+    static func backtrace(
+        stackSize: Int = 16
+    ) -> ParraLoggerStackSymbols {
+        let addresses = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(
+            capacity: stackSize
+        )
+
+        defer {
+            addresses.deallocate()
+        }
+
+        let frameCount = backtrace_async(addresses, Int(stackSize), nil)
+        let buffer = UnsafeBufferPointer(
+            start: addresses,
+            count: Int(frameCount)
+        )
+
+        logger.trace("backtrace buffer created (\(frameCount)")
+
+        let stackFrames: [CallStackFrame] = buffer.enumerated()
+            .compactMap { index, address in
+                logger.trace("backtrace frame: \(address)")
+
+                guard let address else {
+                    return nil
+                }
+
+                let dlInfoPrt = UnsafeMutablePointer<Dl_info>.allocate(
+                    capacity: 1
+                )
+
+                defer {
+                    dlInfoPrt.deallocate()
+                }
+
+                guard dladdr(address, dlInfoPrt) != 0 else {
+                    return nil
+                }
+
+                let info = dlInfoPrt.pointee
+
+                // Name of nearest symbol
+                let rawSymbol = String(cString: info.dli_sname)
+                // Pathname of shared object
+                let fileName = String(cString: info.dli_fname)
+                // Address of nearest symbol
+                let symbolAddressValue = unsafeBitCast(
+                    info.dli_saddr,
+                    to: UInt64.self
+                )
+
+                let addressValue = UInt64(UInt(bitPattern: address))
+
+                let symbol = demangleSymbolIfNeeded(symbol: rawSymbol)
+
+                // TODO: Review these values
+                return CallStackFrame(
+                    frameNumber: UInt8(index),
+                    binaryName: "",
+                    address: symbolAddressValue,
+                    symbol: symbol,
+                    byteOffset: addressValue,
+                    fileName: fileName,
+                    lineNumber: nil
+                )
             }
 
-        } catch {
-            logger.error(error)
-        }
+        logger.trace("finished generating frames")
+
+        return .demangled(stackFrames)
     }
+
+    // TODO: When doing crash handlers for real, note that it is undefined behavior to malloc after SIGKILL
+    //       in this case it is important to use backtrace_symbols_fd to write the symbols to a file to be
+    //       read on the next app launch.
+    // https://github.com/getsentry/sentry-cocoa/issues/1919#issuecomment-1360987627
+
+    //    @_silgen_name("backtrace")
+    //    fileprivate func backtrace(_: UnsafeMutablePointer<UnsafeMutableRawPointer?>!, _: UInt32) -> UInt32
+    //    internal static func addSigKillHandler() {
+    //        setupHandler(for: SIGKILL) { _ in
+    //            // this is all undefined behaviour, not allowed to malloc or call backtrace here...
+    //
+    //            let maxFrames = 50
+    //            let stackSymbols: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = .allocate(capacity: maxFrames)
+    //            stackSymbols.initialize(repeating: nil)
+    //            let howMany = backtrace(stackSymbols.baseAddress!, UInt32(CInt(maxFrames)))
+    //            let ptr = backtrace_symbols(stackSymbols.baseAddress!, howMany)
+    //            let realAddresses = Array(UnsafeBufferPointer(start: ptr, count: Int(howMany))).compactMap { $0 }
+    //            realAddresses.forEach {
+    //                print(String(cString: $0))
+    //            }
+    //        }
+    //    }
+    //
+    //    internal static func setupHandler(
+    //        for signal: Int32,
+    //        handler: @escaping @convention(c) (CInt) -> Void
+    //    ) {
+    //        typealias SignalAction = sigaction
+    //
+    //        let flags = CInt(SA_NODEFER) | CInt(bitPattern: CUnsignedInt(SA_RESETHAND))
+    //        var signalAction = SignalAction(
+    //            __sigaction_u: unsafeBitCast(handler, to: __sigaction_u.self),
+    //            sa_mask: sigset_t(),
+    //            sa_flags: flags
+    //        )
+    //
+    //        withUnsafePointer(to: &signalAction) { ptr in
+    //            sigaction(signal, ptr, nil)
+    //        }
+    //    }
 
     // MARK: - Fileprivate
 
@@ -180,118 +272,4 @@ enum CallStackParser {
 
         return String(cString: cString)
     }
-
-    private static func backtrace(
-        stackSize: Int = 256
-    ) throws -> ParraLoggerStackSymbols {
-        let RTLD_DEFAULT = dlopen(nil, RTLD_NOW)
-
-        guard let sym = dlsym(RTLD_DEFAULT, "backtrace") else {
-            throw ParraError.generic("Error linking backtrace function.", nil)
-        }
-
-        let backtrace = unsafeBitCast(sym, to: Swift_Backtrace.self)
-
-        let addresses = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(
-            capacity: stackSize
-        )
-
-        defer {
-            addresses.deallocate()
-        }
-
-        let frameCount = backtrace_async(addresses, Int(stackSize), nil)
-        let buffer = UnsafeBufferPointer(
-            start: addresses,
-            count: Int(frameCount)
-        )
-
-        let stackFrames: [CallStackFrame] = buffer.enumerated()
-            .compactMap { index, address in
-                guard let address else {
-                    return nil
-                }
-
-                let dlInfoPrt = UnsafeMutablePointer<Dl_info>.allocate(
-                    capacity: 1
-                )
-
-                defer {
-                    dlInfoPrt.deallocate()
-                }
-
-                guard dladdr(address, dlInfoPrt) != 0 else {
-                    return nil
-                }
-
-                let info = dlInfoPrt.pointee
-
-                // Name of nearest symbol
-                let rawSymbol = String(cString: info.dli_sname)
-                // Pathname of shared object
-                let fileName = String(cString: info.dli_fname)
-                // Address of nearest symbol
-                let symbolAddressValue = unsafeBitCast(
-                    info.dli_saddr,
-                    to: UInt64.self
-                )
-                let addressValue = UInt16(UInt(bitPattern: address))
-
-                let symbol = demangleSymbolIfNeeded(symbol: rawSymbol)
-
-                // TODO: Review these values
-                return CallStackFrame(
-                    frameNumber: UInt8(index),
-                    binaryName: "",
-                    address: symbolAddressValue,
-                    symbol: symbol,
-                    byteOffset: addressValue,
-                    fileName: fileName,
-                    lineNumber: nil
-                )
-            }
-
-        return .demangled(stackFrames)
-    }
-
-    // TODO: When doing crash handlers for real, note that it is undefined behavior to malloc after SIGKILL
-    //       in this case it is important to use backtrace_symbols_fd to write the symbols to a file to be
-    //       read on the next app launch.
-    // https://github.com/getsentry/sentry-cocoa/issues/1919#issuecomment-1360987627
-
-    //    @_silgen_name("backtrace")
-    //    fileprivate func backtrace(_: UnsafeMutablePointer<UnsafeMutableRawPointer?>!, _: UInt32) -> UInt32
-    //    internal static func addSigKillHandler() {
-    //        setupHandler(for: SIGKILL) { _ in
-    //            // this is all undefined behaviour, not allowed to malloc or call backtrace here...
-    //
-    //            let maxFrames = 50
-    //            let stackSymbols: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = .allocate(capacity: maxFrames)
-    //            stackSymbols.initialize(repeating: nil)
-    //            let howMany = backtrace(stackSymbols.baseAddress!, UInt32(CInt(maxFrames)))
-    //            let ptr = backtrace_symbols(stackSymbols.baseAddress!, howMany)
-    //            let realAddresses = Array(UnsafeBufferPointer(start: ptr, count: Int(howMany))).compactMap { $0 }
-    //            realAddresses.forEach {
-    //                print(String(cString: $0))
-    //            }
-    //        }
-    //    }
-    //
-    //    internal static func setupHandler(
-    //        for signal: Int32,
-    //        handler: @escaping @convention(c) (CInt) -> Void
-    //    ) {
-    //        typealias SignalAction = sigaction
-    //
-    //        let flags = CInt(SA_NODEFER) | CInt(bitPattern: CUnsignedInt(SA_RESETHAND))
-    //        var signalAction = SignalAction(
-    //            __sigaction_u: unsafeBitCast(handler, to: __sigaction_u.self),
-    //            sa_mask: sigset_t(),
-    //            sa_flags: flags
-    //        )
-    //
-    //        withUnsafePointer(to: &signalAction) { ptr in
-    //            sigaction(signal, ptr, nil)
-    //        }
-    //    }
 }

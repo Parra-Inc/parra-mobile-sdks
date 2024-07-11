@@ -100,6 +100,60 @@ class ParraSessionManager {
         }
     }
 
+    func syncCrashReport(
+        metadata: [String: Any]
+    ) async throws {
+        if forceDisabled {
+            return
+        }
+
+        var currentSession = try await sessionStorage.getCurrentSession()
+
+        let crashEvent = ParraSessionEvent(
+            createdAt: .now,
+            // if changed, must be snake case
+            name: "crash",
+            metadata: AnyCodable(metadata)
+        )
+
+        sessionStorage.writeEvent(
+            event: crashEvent,
+            context: ParraSessionEventContext(
+                isClientGenerated: true,
+                syncPriority: .critical
+            )
+        )
+
+        currentSession.end()
+
+        let sessionUpload = ParraSessionUpload(
+            session: currentSession,
+            events: [crashEvent]
+        )
+
+        let response = await api.submitSession(
+            sessionUpload
+        )
+
+        switch response.result {
+        case .success(let payload):
+            logger.debug("Successfully uploaded crash report")
+        case .failure(let error):
+            logger.error("Failed to upload crash report", error)
+
+            // If any of the sessions fail to upload afty rerying, fail the entire operation
+            // returning the sessions that have been completed so far.
+            if response.context.attributes
+                .contains(.exceededRetryLimit)
+            {
+                logger.debug(
+                    "Network retry limited exceeded. Will not attempt to sync additional sessions."
+                )
+                break
+            }
+        }
+    }
+
     func synchronizeData() async throws -> ParraSessionsResponse? {
         if forceDisabled {
             return nil

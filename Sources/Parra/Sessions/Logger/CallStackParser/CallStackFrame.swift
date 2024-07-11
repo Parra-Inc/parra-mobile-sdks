@@ -29,7 +29,7 @@ struct CallStackFrame: Codable {
     let symbol: String
 
     /// The byte offset from the function’s entry point to the current instruction in the function.
-    let byteOffset: UInt16
+    let byteOffset: UInt64
 
     /// The file name and line number containing the code, if you have a dSYM file for the binary.
     let fileName: String?
