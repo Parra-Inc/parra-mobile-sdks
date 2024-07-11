@@ -80,7 +80,7 @@ struct TextInputComponent: View {
 
             baseView
                 .overlay {
-                    if !text.isEmpty {
+                    if !text.isEmpty, isFocused {
                         HStack {
                             Spacer()
 
