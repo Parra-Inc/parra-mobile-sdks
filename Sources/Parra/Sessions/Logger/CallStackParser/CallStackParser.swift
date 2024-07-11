@@ -200,7 +200,7 @@ enum CallStackParser {
             addresses.deallocate()
         }
 
-        let frameCount = backtrace(addresses, Int32(stackSize))
+        let frameCount = backtrace_async(addresses, Int(stackSize), nil)
         let buffer = UnsafeBufferPointer(
             start: addresses,
             count: Int(frameCount)
