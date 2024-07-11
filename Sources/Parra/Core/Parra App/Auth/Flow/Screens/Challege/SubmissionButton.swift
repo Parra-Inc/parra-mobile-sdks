@@ -15,7 +15,7 @@ struct SubmissionButton: View {
         config: ParraTextButtonConfig,
         variant: ParraButtonVariant,
         content: TextButtonContent,
-        onPress: @escaping () async throws -> Void
+        onPress: @escaping () async -> Void
     ) {
         self.config = config
         self.variant = variant
@@ -29,15 +29,44 @@ struct SubmissionButton: View {
     let variant: ParraButtonVariant
     @State var content: TextButtonContent
 
-    let onPress: () async throws -> Void
+    let onPress: () async -> Void
 
     var body: some View {
-        componentFactory.buildButton(
-            variant: variant,
-            config: config,
-            content: content,
-            onPress: handlePress
-        )
+        switch variant {
+        case .plain:
+            componentFactory.buildPlainButton(
+                config: config,
+                content: content,
+                localAttributes: .init(
+                    normal: .init(
+                        padding: .zero
+                    )
+                ),
+                onPress: handlePress
+            )
+        case .outlined:
+            componentFactory.buildOutlinedButton(
+                config: config,
+                content: content,
+                localAttributes: .init(
+                    normal: .init(
+                        padding: .zero
+                    )
+                ),
+                onPress: handlePress
+            )
+        case .contained:
+            componentFactory.buildContainedButton(
+                config: config,
+                content: content,
+                localAttributes: .init(
+                    normal: .init(
+                        padding: .zero
+                    )
+                ),
+                onPress: handlePress
+            )
+        }
     }
 
     // MARK: - Private
@@ -48,14 +77,10 @@ struct SubmissionButton: View {
         content = content.withLoading(true)
 
         Task {
-            do {
-                defer {
-                    Task { @MainActor in
-                        content = content.withLoading(false)
-                    }
-                }
+            await onPress()
 
-                try await onPress()
+            Task { @MainActor in
+                content = content.withLoading(false)
             }
         }
     }
