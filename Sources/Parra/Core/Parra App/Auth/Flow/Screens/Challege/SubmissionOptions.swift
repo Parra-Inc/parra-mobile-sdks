@@ -168,7 +168,7 @@ struct SubmissionOptions: View {
                         text: "\(primaryActionName) with password"
                     ),
                     onPress: {
-                        await attemptSubmission {
+                        await attemptSubmission(for: .password) {
                             if let passwordChallengeResponse {
                                 try await submitResponse(
                                     passwordChallengeResponse
@@ -197,13 +197,23 @@ struct SubmissionOptions: View {
                 primaryActionName
             }
 
+            let passwordlessType: ParraAuthenticationMethod
+                .PasswordlessType = if params.identityType == .phoneNumber
+            {
+                .sms
+            } else {
+                .email
+            }
+
             buttonInfo.append(
                 SubmissionOptionInfo(
                     content: TextButtonContent(
                         text: passwordlessLoginTitle
                     ),
                     onPress: {
-                        await attemptSubmission {
+                        await attemptSubmission(
+                            for: .passwordless(passwordlessType)
+                        ) {
                             let challengeResponse: ChallengeResponse? =
                                 switch params
                                     .identityType
@@ -233,7 +243,7 @@ struct SubmissionOptions: View {
                         text: "Create a passkey"
                     ),
                     onPress: {
-                        await attemptSubmission {
+                        await attemptSubmission(for: .passkey) {
                             try await submitResponse(.passkey)
                         }
                     }
@@ -245,6 +255,7 @@ struct SubmissionOptions: View {
     }
 
     private func attemptSubmission(
+        for authMethod: ParraAuthenticationMethod,
         _ fn: () async throws -> Void
     ) async {
         do {
@@ -256,10 +267,26 @@ struct SubmissionOptions: View {
 
             try await fn()
         } catch let error as ParraError {
-            // TODO: Need hard coded error message, per submission type
             Task { @MainActor in
+                let userFacingMessage = if let message = error.userMessage,
+                                           message.contains("invalid")
+                {
+                    switch authMethod {
+                    case .passwordless(let passwordlessType):
+                        "Error sending \(passwordlessType.description) code"
+                    case .password:
+                        "The supplied password was incorrect"
+                    case .sso(let ssoType):
+                        "Error performing SSO login with \(ssoType.description)"
+                    case .passkey:
+                        "Error creating passkey"
+                    }
+                } else {
+                    "An unexpected error occurred"
+                }
+
                 withAnimation {
-                    errorMessage = error.userMessage
+                    errorMessage = userFacingMessage
                 }
             }
 

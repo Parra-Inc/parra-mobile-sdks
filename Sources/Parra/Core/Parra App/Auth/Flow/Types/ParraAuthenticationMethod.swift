@@ -16,14 +16,38 @@ public enum ParraAuthenticationMethod: Equatable {
 
     // MARK: - Public
 
-    public enum SsoType {
+    public enum SsoType: CustomStringConvertible {
         case google
         case apple
         case facebook
+
+        // MARK: - Public
+
+        public var description: String {
+            switch self {
+            case .google:
+                return "Google"
+            case .apple:
+                return "Apple"
+            case .facebook:
+                return "Facebook"
+            }
+        }
     }
 
-    public enum PasswordlessType {
+    public enum PasswordlessType: CustomStringConvertible {
         case sms
         case email
+
+        // MARK: - Public
+
+        public var description: String {
+            switch self {
+            case .sms:
+                return "SMS"
+            case .email:
+                return "email"
+            }
+        }
     }
 }

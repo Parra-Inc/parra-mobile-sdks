@@ -616,13 +616,16 @@ class AuthenticationFlowManager: ObservableObject {
             )
         }
 
-        await authService.applyUserUpdate(
-            authResult
-        )
-
-        if case .unauthenticated(let error) = authResult {
+        switch authResult {
+        case .undetermined:
+            break
+        case .authenticated:
+            await authService.applyUserUpdate(
+                authResult
+            )
+        case .unauthenticated(let error):
             if let error {
-                throw ParraError.system(error)
+                throw error
             }
         }
     }
