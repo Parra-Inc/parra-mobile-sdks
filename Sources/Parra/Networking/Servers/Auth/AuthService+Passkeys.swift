@@ -235,37 +235,39 @@ extension AuthService {
         using presentationMode: PasskeyPresentationMode,
         completion: @escaping AppleAuthCompletion
     ) {
-        let activeAuthorizationController = ASAuthorizationController(
-            authorizationRequests: authorizationRequests
-        )
-
-        authorizationDelegateProxy.authService = self
-        activeAuthorizationController.delegate = authorizationDelegateProxy
-        activeAuthorizationController
-            .presentationContextProvider = authorizationDelegateProxy
-
-        switch presentationMode {
-        case .modal:
-            // This will display the passkey prompt, only if the user
-            // already has a passkey. If they don't an error will be sent
-            // to the delegate, which we will ignore. If the user didn't
-            // have a passkey, they probably don't want the popup, and they
-            // will have the opportunity to create one later.
-            activeAuthorizationController.performRequests(
-                options: .preferImmediatelyAvailableCredentials
+        Task { @MainActor in
+            let activeAuthorizationController = ASAuthorizationController(
+                authorizationRequests: authorizationRequests
             )
-        case .autofill:
-            // to display in quicktype
-            activeAuthorizationController.performAutoFillAssistedRequests()
+
+            authorizationDelegateProxy.authService = self
+            activeAuthorizationController.delegate = authorizationDelegateProxy
+            activeAuthorizationController
+                .presentationContextProvider = authorizationDelegateProxy
+
+            switch presentationMode {
+            case .modal:
+                // This will display the passkey prompt, only if the user
+                // already has a passkey. If they don't an error will be sent
+                // to the delegate, which we will ignore. If the user didn't
+                // have a passkey, they probably don't want the popup, and they
+                // will have the opportunity to create one later.
+                activeAuthorizationController.performRequests(
+                    options: .preferImmediatelyAvailableCredentials
+                )
+            case .autofill:
+                // to display in quicktype
+                activeAuthorizationController.performAutoFillAssistedRequests()
+            }
+
+            let addr = Unmanaged.passUnretained(activeAuthorizationController)
+                .toOpaque()
+
+            activeAuthorizationRequests[addr] = (
+                activeAuthorizationController,
+                completion
+            )
         }
-
-        let addr = Unmanaged.passUnretained(activeAuthorizationController)
-            .toOpaque()
-
-        activeAuthorizationRequests[addr] = (
-            activeAuthorizationController,
-            completion
-        )
     }
 
     private func createPublicKeyCredentialRegistrationRequest(
