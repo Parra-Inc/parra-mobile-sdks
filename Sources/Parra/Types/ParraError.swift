@@ -24,6 +24,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     case system(Error)
     case validationFailed(failures: [String: String])
     case unknown
+    case rateLimited
 
     // MARK: - Public
 
@@ -41,7 +42,7 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
 
         switch self {
         case .message, .unknown, .jsonError, .notInitialized,
-             .missingAuthentication:
+             .missingAuthentication, .rateLimited:
             return baseMessage
         case .generic(_, let error):
             if let error {
@@ -105,6 +106,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return response.message
         case .networkError(_, _, let data):
             return extractErrorMessage(from: data)
+        case .rateLimited:
+            return "Please wait before retrying"
         default:
             return nil
         }
@@ -143,6 +146,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return "\(formattedError)"
         case .validationFailed:
             return "Validation failed."
+        case .rateLimited:
+            return "Rate limited"
         }
     }
 
@@ -210,7 +215,7 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
                 "error_description": message
             ]
         case .notInitialized, .missingAuthentication, .message, .jsonError,
-             .unknown, .system:
+             .unknown, .system, .rateLimited:
 
             return [:]
         case .validationFailed(let failures):
