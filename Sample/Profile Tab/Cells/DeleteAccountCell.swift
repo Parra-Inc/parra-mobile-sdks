@@ -12,8 +12,6 @@ import SwiftUI
 struct DeleteAccountCell: View {
     // MARK: - Internal
 
-    @Environment(\.parra) var parra
-
     var body: some View {
         Button(action: {
             parra.auth.deleteAccount()
@@ -29,6 +27,8 @@ struct DeleteAccountCell: View {
     }
 
     // MARK: - Private
+
+    @Environment(\.parra) private var parra
 
     @EnvironmentObject private var themeObserver: ParraThemeObserver
 }
