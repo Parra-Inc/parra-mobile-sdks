@@ -290,6 +290,12 @@
 		0080E2EE2C401BB500DBE1AE /* ExceptionHandler+Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2ED2C401BB500DBE1AE /* ExceptionHandler+Constant.swift */; };
 		0080E2F02C401BD100DBE1AE /* ExceptionHandler+CrashType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2EF2C401BD100DBE1AE /* ExceptionHandler+CrashType.swift */; };
 		0080E2F22C401BF400DBE1AE /* ExceptionHandler+CrashInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2F12C401BF400DBE1AE /* ExceptionHandler+CrashInfo.swift */; };
+		0080E2F52C41BF9E00DBE1AE /* ParraAuthDefaultForgotPasswordScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2F42C41BF9E00DBE1AE /* ParraAuthDefaultForgotPasswordScreen.swift */; };
+		0080E2F72C41BFAE00DBE1AE /* ParraAuthDefaultForgotPasswordScreen+Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2F62C41BFAE00DBE1AE /* ParraAuthDefaultForgotPasswordScreen+Params.swift */; };
+		0080E2F92C4445AE00DBE1AE /* ForgotPasswordStateManager+ScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2F82C4445AE00DBE1AE /* ForgotPasswordStateManager+ScreenState.swift */; };
+		0080E2FC2C45683100DBE1AE /* ForgotPasswordInitialStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2FB2C45683100DBE1AE /* ForgotPasswordInitialStateView.swift */; };
+		0080E2FE2C456AC800DBE1AE /* ForgotPasswordStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2FD2C456AC800DBE1AE /* ForgotPasswordStateManager.swift */; };
+		0080E3002C456E5600DBE1AE /* ForgotPasswordCodeSentStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2FF2C456E5600DBE1AE /* ForgotPasswordCodeSentStateView.swift */; };
 		0082DFBD2A535FDD00E7A91D /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFBC2A535FDD00E7A91D /* Data.swift */; };
 		0082DFCE2A53BA6700E7A91D /* Date+now.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082DFCD2A53BA6700E7A91D /* Date+now.swift */; };
 		008434562BDC068200700881 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008434552BDC068200700881 /* Camera.swift */; };
@@ -482,6 +488,7 @@
 		00ABF1C62B87BC6F00A054A2 /* FeedbackFormField+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1C52B87BC6F00A054A2 /* FeedbackFormField+Fixtures.swift */; };
 		00ABF1C82B8905E900A054A2 /* ParraImageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1C72B8905E900A054A2 /* ParraImageContent.swift */; };
 		00ABF1D02B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABF1CF2B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift */; };
+		00B01EDA2C4578FC00BB5959 /* ForgotPasswordNewPasswordStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B01ED92C4578FC00BB5959 /* ForgotPasswordNewPasswordStateView.swift */; };
 		00B42EA72ADE176E00F365A5 /* Parra.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 00B42EA62ADE176E00F365A5 /* Parra.xctestplan */; };
 		00B42EB12ADE1BCB00F365A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B42EB02ADE1BCB00F365A5 /* AppDelegate.swift */; };
 		00B42EB32ADE1BCB00F365A5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B42EB22ADE1BCB00F365A5 /* SceneDelegate.swift */; };
@@ -501,6 +508,8 @@
 		00BD2FFA2A47778E00B4BEB2 /* NotificationCenterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FF92A47778E00B4BEB2 /* NotificationCenterType.swift */; };
 		00BD2FFC2A477D7700B4BEB2 /* ParraNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BD2FFB2A477D7700B4BEB2 /* ParraNotificationCenter.swift */; };
 		00BDB2B128BD822700C16649 /* URLRequest+headers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2B028BD822700C16649 /* URLRequest+headers.swift */; };
+		00BECFA72C46CD7B006CE0ED /* ForgotPasswordCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFA62C46CD7B006CE0ED /* ForgotPasswordCompleteView.swift */; };
+		00BECFA92C46D2C9006CE0ED /* ChangePasswordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFA82C46D2C9006CE0ED /* ChangePasswordCell.swift */; };
 		00BF36C72B59AB000097905C /* ParraFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36C62B59AB000097905C /* ParraFixture.swift */; };
 		00BF36D12B5AC3EE0097905C /* FormFieldWithState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36D02B5AC3EE0097905C /* FormFieldWithState.swift */; };
 		00BF36D52B5ACAD20097905C /* FieldState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36D42B5ACAD20097905C /* FieldState.swift */; };
@@ -1043,6 +1052,12 @@
 		0080E2ED2C401BB500DBE1AE /* ExceptionHandler+Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExceptionHandler+Constant.swift"; sourceTree = "<group>"; };
 		0080E2EF2C401BD100DBE1AE /* ExceptionHandler+CrashType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExceptionHandler+CrashType.swift"; sourceTree = "<group>"; };
 		0080E2F12C401BF400DBE1AE /* ExceptionHandler+CrashInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExceptionHandler+CrashInfo.swift"; sourceTree = "<group>"; };
+		0080E2F42C41BF9E00DBE1AE /* ParraAuthDefaultForgotPasswordScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAuthDefaultForgotPasswordScreen.swift; sourceTree = "<group>"; };
+		0080E2F62C41BFAE00DBE1AE /* ParraAuthDefaultForgotPasswordScreen+Params.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAuthDefaultForgotPasswordScreen+Params.swift"; sourceTree = "<group>"; };
+		0080E2F82C4445AE00DBE1AE /* ForgotPasswordStateManager+ScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForgotPasswordStateManager+ScreenState.swift"; sourceTree = "<group>"; };
+		0080E2FB2C45683100DBE1AE /* ForgotPasswordInitialStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordInitialStateView.swift; sourceTree = "<group>"; };
+		0080E2FD2C456AC800DBE1AE /* ForgotPasswordStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordStateManager.swift; sourceTree = "<group>"; };
+		0080E2FF2C456E5600DBE1AE /* ForgotPasswordCodeSentStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordCodeSentStateView.swift; sourceTree = "<group>"; };
 		0082DFBC2A535FDD00E7A91D /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		0082DFC02A53736F00E7A91D /* MockResourceServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockResourceServer.swift; sourceTree = "<group>"; };
 		0082DFC52A5374BD00E7A91D /* MockParra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParra.swift; sourceTree = "<group>"; };
@@ -1228,6 +1243,7 @@
 		00ABF1C52B87BC6F00A054A2 /* FeedbackFormField+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackFormField+Fixtures.swift"; sourceTree = "<group>"; };
 		00ABF1C72B8905E900A054A2 /* ParraImageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraImageContent.swift; sourceTree = "<group>"; };
 		00ABF1CF2B8ADB6C00A054A2 /* FeedbackCardViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCardViewDelegate.swift; sourceTree = "<group>"; };
+		00B01ED92C4578FC00BB5959 /* ForgotPasswordNewPasswordStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordNewPasswordStateView.swift; sourceTree = "<group>"; };
 		00B42EA62ADE176E00F365A5 /* Parra.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Parra.xctestplan; sourceTree = "<group>"; };
 		00B42EAE2ADE1BCB00F365A5 /* TestRunner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestRunner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B42EB02ADE1BCB00F365A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1250,6 +1266,8 @@
 		00BD2FFB2A477D7700B4BEB2 /* ParraNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraNotificationCenter.swift; sourceTree = "<group>"; };
 		00BDB2AE28BC24E700C16649 /* ParraCredentialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCredentialTests.swift; sourceTree = "<group>"; };
 		00BDB2B028BD822700C16649 /* URLRequest+headers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+headers.swift"; sourceTree = "<group>"; };
+		00BECFA62C46CD7B006CE0ED /* ForgotPasswordCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordCompleteView.swift; sourceTree = "<group>"; };
+		00BECFA82C46D2C9006CE0ED /* ChangePasswordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordCell.swift; sourceTree = "<group>"; };
 		00BF36C62B59AB000097905C /* ParraFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFixture.swift; sourceTree = "<group>"; };
 		00BF36D02B5AC3EE0097905C /* FormFieldWithState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldWithState.swift; sourceTree = "<group>"; };
 		00BF36D42B5ACAD20097905C /* FieldState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldState.swift; sourceTree = "<group>"; };
@@ -2271,6 +2289,7 @@
 			isa = PBXGroup;
 			children = (
 				0080E2DB2C3D724200DBE1AE /* ChangelogCell.swift */,
+				00BECFA82C46D2C9006CE0ED /* ChangePasswordCell.swift */,
 				005BE48E2C3C844500663AF4 /* DeleteAccountCell.swift */,
 				005BE4942C3C89C500663AF4 /* FeedbackCell.swift */,
 				0080E2DD2C3D7D1E00DBE1AE /* LatestReleaseCell.swift */,
@@ -2386,6 +2405,29 @@
 				007ED4752A6C8BDF0077E446 /* CallStackParser.swift */,
 			);
 			path = CallStackParser;
+			sourceTree = "<group>";
+		};
+		0080E2F32C41BF6000DBE1AE /* Forgot Password */ = {
+			isa = PBXGroup;
+			children = (
+				0080E2F42C41BF9E00DBE1AE /* ParraAuthDefaultForgotPasswordScreen.swift */,
+				0080E2F62C41BFAE00DBE1AE /* ParraAuthDefaultForgotPasswordScreen+Params.swift */,
+				0080E2FD2C456AC800DBE1AE /* ForgotPasswordStateManager.swift */,
+				0080E2F82C4445AE00DBE1AE /* ForgotPasswordStateManager+ScreenState.swift */,
+				0080E2FA2C45682200DBE1AE /* State Views */,
+			);
+			path = "Forgot Password";
+			sourceTree = "<group>";
+		};
+		0080E2FA2C45682200DBE1AE /* State Views */ = {
+			isa = PBXGroup;
+			children = (
+				0080E2FB2C45683100DBE1AE /* ForgotPasswordInitialStateView.swift */,
+				0080E2FF2C456E5600DBE1AE /* ForgotPasswordCodeSentStateView.swift */,
+				00B01ED92C4578FC00BB5959 /* ForgotPasswordNewPasswordStateView.swift */,
+				00BECFA62C46CD7B006CE0ED /* ForgotPasswordCompleteView.swift */,
+			);
+			path = "State Views";
 			sourceTree = "<group>";
 		};
 		0082DFBE2A53733600E7A91D /* Mocks */ = {
@@ -2949,6 +2991,7 @@
 		00BB361D2BEBD6DC007B6B13 /* Flow */ = {
 			isa = PBXGroup;
 			children = (
+				0080E2F32C41BF6000DBE1AE /* Forgot Password */,
 				00BB36142BEBBACF007B6B13 /* Screens */,
 				0095D3DC2BF69FE500F62EAF /* AuthenticationFlowManager.swift */,
 				0054F9282C344FA000E63C31 /* AuthenticationFlowManagerDelegate.swift */,
@@ -3956,7 +3999,9 @@
 				00E269F02A525803001A0F50 /* Mimetype.swift in Sources */,
 				00E76D4C2B66ED4300B01DD8 /* ContainerContentObserver.swift in Sources */,
 				00E76D462B66E88300B01DD8 /* FeedbackFormWidget+ContentObserver.swift in Sources */,
+				0080E3002C456E5600DBE1AE /* ForgotPasswordCodeSentStateView.swift in Sources */,
 				0054F9312C347A5700E63C31 /* ParraProfilePhotoWell.swift in Sources */,
+				0080E2FC2C45683100DBE1AE /* ForgotPasswordInitialStateView.swift in Sources */,
 				00FCB12F2B90299E00635DC8 /* FeedbackChoiceQuestionCard.swift in Sources */,
 				009D84132BE91D65005EBFEB /* ParraGlobalComponentAttributes+Badge.swift in Sources */,
 				00F7C48D2B99FE8200DBDF5A /* ParraAlertContent.swift in Sources */,
@@ -3997,6 +4042,7 @@
 				00ABF1A62B85284900A054A2 /* TextInputContent.swift in Sources */,
 				00ABF17E2B7D42F600A054A2 /* ParraStoryboardLaunchScreen+Config.swift in Sources */,
 				009538972BC86A0500420316 /* AuthService.swift in Sources */,
+				0080E2FE2C456AC800DBE1AE /* ForgotPasswordStateManager.swift in Sources */,
 				00F7C48B2B99FD3100DBDF5A /* AlertLevel.swift in Sources */,
 				00374D152BA0CAE70028EDA8 /* TicketDisplayStatus+badgeAttributes.swift in Sources */,
 				00E76D282B66D22000B01DD8 /* TextButtonContent.swift in Sources */,
@@ -4017,7 +4063,9 @@
 				004F3EE32BA4B1F100424802 /* ViewOffsetKey.swift in Sources */,
 				0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */,
 				00995C012BB609F700384D94 /* LogView.swift in Sources */,
+				00B01EDA2C4578FC00BB5959 /* ForgotPasswordNewPasswordStateView.swift in Sources */,
 				0080E2EE2C401BB500DBE1AE /* ExceptionHandler+Constant.swift in Sources */,
+				0080E2F92C4445AE00DBE1AE /* ForgotPasswordStateManager+ScreenState.swift in Sources */,
 				00EC6F7F2B61A64B00ABC8EC /* RectangleCornerRadii+Hashable.swift in Sources */,
 				00374CFB2B9F97250028EDA8 /* RoadmapDetailView.swift in Sources */,
 				00FCB13A2B91232B00635DC8 /* FeedbackRatingQuestionCard.swift in Sources */,
@@ -4046,6 +4094,7 @@
 				0087CAA02A59E4F1007D72FA /* ParraSanitizedDictionaryConvertible.swift in Sources */,
 				003622072B5C9D53009EFE53 /* ParraColor+ParraColorSwatchConvertible.swift in Sources */,
 				0079EDC82BD8110F0045EEE5 /* Parra+Auth.swift in Sources */,
+				00BECFA72C46CD7B006CE0ED /* ForgotPasswordCompleteView.swift in Sources */,
 				001779BD2BC08DA1000AF0BB /* ParraFeedbackForm+Fixtures.swift in Sources */,
 				0040DEAD2AA226A3007E2190 /* UIViewController+defaultLogger.swift in Sources */,
 				003298722C08B86C0018A94A /* PhoneOrEmailTextInputView+CountryCode.swift in Sources */,
@@ -4064,6 +4113,7 @@
 				00706B1D2B71A76600C28F66 /* TextEditorComponent.swift in Sources */,
 				003962372A48B4EF00B8655F /* ParraFeedback.swift in Sources */,
 				0029AD2B2A48DCE100E30CCD /* LoggerHelpers.swift in Sources */,
+				0080E2F72C41BFAE00DBE1AE /* ParraAuthDefaultForgotPasswordScreen+Params.swift in Sources */,
 				009538A22BC8760B00420316 /* AuthServer.swift in Sources */,
 				00588FC92C15D87000A5E435 /* Server+logTaskMetrics.swift in Sources */,
 				00F7C4AE2B9A5B6C00DBDF5A /* ToastAlertComponent.swift in Sources */,
@@ -4238,6 +4288,7 @@
 				00E15A212929BC790049C2C7 /* UIDeviceOrientation+ParraLogStringConvertible.swift in Sources */,
 				00995BED2BB4650D00384D94 /* ContainerRenderer.swift in Sources */,
 				00374CF92B9F61440028EDA8 /* ScrollToTopView.swift in Sources */,
+				0080E2F52C41BF9E00DBE1AE /* ParraAuthDefaultForgotPasswordScreen.swift in Sources */,
 				0087CA8A2A59B3F9007D72FA /* ParraLoggerTimestampStyle.swift in Sources */,
 				005AFE2C2BE2F2EA00B0C29A /* API+feedback.swift in Sources */,
 				00ABF1C42B87AED000A054A2 /* ParraViewPreview.swift in Sources */,
@@ -4369,6 +4420,7 @@
 				005BE48F2C3C844500663AF4 /* DeleteAccountCell.swift in Sources */,
 				0080E2DC2C3D724200DBE1AE /* ChangelogCell.swift in Sources */,
 				005BE48B2C3C83DF00663AF4 /* LegalInfoCell.swift in Sources */,
+				00BECFA92C46D2C9006CE0ED /* ChangePasswordCell.swift in Sources */,
 				0080E2DE2C3D7D1E00DBE1AE /* LatestReleaseCell.swift in Sources */,
 				005BE4952C3C89C500663AF4 /* FeedbackCell.swift in Sources */,
 				005BE48D2C3C83F000663AF4 /* LogoutCell.swift in Sources */,

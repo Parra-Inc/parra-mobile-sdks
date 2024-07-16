@@ -23,7 +23,7 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
                 _ challengeResponse: ChallengeResponse
             ) async throws
                 -> Void,
-            forgotPassword: @escaping () async -> Void
+            forgotPassword: @escaping () async throws -> Void
         ) {
             self.identity = identity
             self.identityType = identityType
@@ -45,7 +45,7 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
         public let legalInfo: LegalInfo
         public let submit: (_ challengeResponse: ChallengeResponse) async throws
             -> Void
-        public let forgotPassword: () async -> Void
+        public let forgotPassword: () async throws -> Void
 
         // MARK: - Internal
 

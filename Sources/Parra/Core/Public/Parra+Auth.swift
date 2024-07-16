@@ -30,11 +30,6 @@ public final class ParraAuth {
 //        // TODO: This
 //    }
 
-    public func updatePassword(
-        currentPassword: String,
-        newPassword: String
-    ) async throws {}
-
     public func deleteAccount(
         title: String = "Delete account",
         message: String =

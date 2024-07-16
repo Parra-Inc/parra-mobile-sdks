@@ -40,7 +40,10 @@ public struct ParraAuthenticationFlowConfig {
         identityVerificationScreen: ParraAuthScreenOption<
             ParraAuthDefaultIdentityVerificationScreen
         > =
-            .default(.default)
+            .default(.default),
+        forgotPasswordScreen: ParraAuthScreenOption<
+            ParraAuthDefaultForgotPasswordScreen
+        > = .default(.default)
     ) {
         self.landingScreenProvider = switch landingScreen {
         case .default(let config):
@@ -99,6 +102,20 @@ public struct ParraAuthenticationFlowConfig {
                         provider(params)
                     }
                 }
+
+        self.forgotPasswordScreenProvider = switch forgotPasswordScreen {
+        case .default(let config):
+            { params in
+                ParraAuthDefaultForgotPasswordScreen(
+                    params: params,
+                    config: config
+                )
+            }
+        case .custom(let provider):
+            { params in
+                provider(params)
+            }
+        }
     }
 
     // MARK: - Public
@@ -109,4 +126,5 @@ public struct ParraAuthenticationFlowConfig {
     public var identityInputScreenProvider: ParraAuthIdentityInputScreenProvider
     public var identityChallengeScreenProvider: ParraAuthIdentityChallengeScreenProvider
     public var identityVerificationScreenProvider: ParraAuthIdentityVerificationScreenProvider
+    public var forgotPasswordScreenProvider: ParraAuthForgotPasswordScreenProvider
 }

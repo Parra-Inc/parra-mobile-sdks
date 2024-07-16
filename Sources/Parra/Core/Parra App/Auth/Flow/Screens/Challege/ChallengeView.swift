@@ -29,7 +29,7 @@ struct ChallengeView: View {
     let userExists: Bool
     let onUpdate: (_ challenge: String, _ isValid: Bool) -> Void
     let onSubmit: () async throws -> Void
-    let forgotPassword: () -> Void
+    let forgotPassword: () async throws -> Void
 
     @State private var errorMessage: String?
 
@@ -103,7 +103,28 @@ struct ChallengeView: View {
                                 )
                         ),
                         onPress: {
-                            forgotPassword()
+                            Task {
+                                do {
+                                    try await forgotPassword()
+                                } catch let error as ParraError {
+                                    if case .rateLimited = error {
+                                        Logger.error(
+                                            "Rate limited on forgot password",
+                                            error
+                                        )
+                                    } else {
+                                        Logger.error(
+                                            "Error sending password reset code",
+                                            error
+                                        )
+                                    }
+                                } catch {
+                                    Logger.error(
+                                        "Error sending password reset code",
+                                        error
+                                    )
+                                }
+                            }
                         }
                     )
             }

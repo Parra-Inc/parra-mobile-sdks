@@ -13,7 +13,9 @@ struct ChangePasswordCell: View {
     // MARK: - Internal
 
     var body: some View {
-        Button(action: {}) {
+        Button(action: {
+            parra.auth.deleteAccount()
+        }) {
             Label(
                 title: { Text("Change password") },
                 icon: {

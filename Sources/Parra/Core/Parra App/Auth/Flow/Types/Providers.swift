@@ -35,6 +35,9 @@ public typealias ParraAuthIdentityChallengeScreenProvider =
 public typealias ParraAuthIdentityVerificationScreenProvider =
     ParraAuthScreenProvider<ParraAuthDefaultIdentityVerificationScreen>
 
+public typealias ParraAuthForgotPasswordScreenProvider =
+    ParraAuthScreenProvider<ParraAuthDefaultForgotPasswordScreen>
+
 public enum ParraAuthScreenOption<T: ParraAuthScreen> {
     case `default`(_ config: T.Config)
     case custom(_ provider: ParraAuthScreenProvider<T>)

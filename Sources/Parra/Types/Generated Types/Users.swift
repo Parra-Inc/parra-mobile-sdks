@@ -763,3 +763,77 @@ public struct WebauthnAuthenticateResponseBody: Codable, Equatable, Hashable {
     public let message: String
     public let token: String
 }
+
+struct PasswordResetChallengeRequestBody: Codable, Equatable, Hashable,
+    Sendable
+{
+    // MARK: - Lifecycle
+
+    init(
+        clientId: String? = nil,
+        email: String? = nil,
+        phoneNumber: String? = nil,
+        username: String? = nil,
+        unknownIdentity: String? = nil
+    ) {
+        self.clientId = clientId
+        self.email = email
+        self.phoneNumber = phoneNumber
+        self.username = username
+        self.unknownIdentity = unknownIdentity
+    }
+
+    init(
+        clientId: String?,
+        identity: String,
+        identityType: IdentityType?
+    ) {
+        self.clientId = clientId
+
+        guard let identityType else {
+            self.unknownIdentity = identity
+            self.email = nil
+            self.phoneNumber = nil
+            self.username = nil
+
+            return
+        }
+
+        switch identityType {
+        case .email:
+            self.email = identity
+            self.phoneNumber = nil
+            self.username = nil
+            self.unknownIdentity = nil
+        case .phoneNumber:
+            self.email = nil
+            self.phoneNumber = identity
+            self.username = nil
+            self.unknownIdentity = nil
+        case .username:
+            self.email = nil
+            self.phoneNumber = nil
+            self.username = identity
+            self.unknownIdentity = nil
+        case .uknownIdentity:
+            self.email = nil
+            self.phoneNumber = nil
+            self.username = nil
+            self.unknownIdentity = identity
+        }
+    }
+
+    // MARK: - Internal
+
+    let clientId: String?
+    let email: String?
+    let phoneNumber: String?
+    let username: String?
+    let unknownIdentity: String?
+}
+
+struct PasswordResetRequestBody: Codable, Equatable, Hashable, Sendable {
+    let clientId: String?
+    let code: String
+    let password: String
+}

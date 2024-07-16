@@ -90,7 +90,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             componentFactory.buildLabel(
                 content: LabelContent(text: title),
                 localAttributes: ParraAttributes.Label(
-                    text: .default(with: .largeTitle),
+                    text: .default(with: .title),
                     frame: .flexible(
                         .init(
                             maxWidth: .infinity,
@@ -117,9 +117,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     }
                 },
                 forgotPassword: {
-                    Task {
-                        await params.forgotPassword()
-                    }
+                    try await params.forgotPassword()
                 }
             )
 

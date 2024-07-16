@@ -1283,6 +1283,12 @@ public struct ParraAuthInfoPasswordlessConfig: Codable, Equatable, Hashable {
     // MARK: - Public
 
     public let sms: AuthInfoPasswordlessSmsConfig?
+
+    // MARK: - Internal
+
+    static let `default` = ParraAuthInfoPasswordlessConfig(
+        sms: AuthInfoPasswordlessSmsConfig(otpLength: 6)
+    )
 }
 
 public struct AppInfoPasskeysConfig: Codable, Equatable, Hashable {}

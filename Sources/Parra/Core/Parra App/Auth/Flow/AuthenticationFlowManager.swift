@@ -41,6 +41,10 @@ class AuthenticationFlowManager: ObservableObject {
             ParraAuthDefaultIdentityVerificationScreen.Params
         )
 
+        case forgotPasswordScreen(
+            ParraAuthDefaultForgotPasswordScreen.Params
+        )
+
         // MARK: - Internal
 
         var description: String {
@@ -53,6 +57,8 @@ class AuthenticationFlowManager: ObservableObject {
                 return "identityChallengeScreen"
             case .identityVerificationScreen:
                 return "identityVerificationScreen"
+            case .forgotPasswordScreen:
+                return "forgotPasswordScreen"
             }
         }
 
@@ -92,6 +98,10 @@ class AuthenticationFlowManager: ObservableObject {
             )
         case .identityVerificationScreen(let params):
             flowConfig.identityVerificationScreenProvider(
+                params
+            )
+        case .forgotPasswordScreen(let params):
+            flowConfig.forgotPasswordScreenProvider(
                 params
             )
         }
@@ -138,34 +148,11 @@ class AuthenticationFlowManager: ObservableObject {
                         }
                     }()
 
-                    self.navigate(
-                        to: .identityInputScreen(
-                            ParraAuthDefaultIdentityInputScreen.Params(
-                                inputType: inputType,
-                                submitIdentity: { identity in
-                                    return try await self.onIdentitySubmitted(
-                                        identity: identity,
-                                        with: appInfo,
-                                        modalScreenManager: modalScreenManager,
-                                        authService: authService
-                                    )
-                                },
-                                attemptPasskeyAutofill: {
-                                    logger.info("Attempting passkey autofill")
-
-                                    try await self.triggerPasskeyLoginRequest(
-                                        username: nil,
-                                        presentationMode: .autofill,
-                                        using: appInfo,
-                                        authService: authService,
-                                        modalScreenManager: modalScreenManager
-                                    )
-                                },
-                                cancelPasskeyAutofillAttempt: {
-                                    self.cancelPasskeyRequests(on: authService)
-                                }
-                            )
-                        )
+                    self.navigateToIdentityInputScreen(
+                        inputType: inputType,
+                        appInfo: appInfo,
+                        modalScreenManager: modalScreenManager,
+                        authService: authService
                     )
                 case .sso:
                     fatalError("SSO unimplemented")
@@ -244,6 +231,41 @@ class AuthenticationFlowManager: ObservableObject {
     // MARK: - Private
 
     private let flowConfig: ParraAuthenticationFlowConfig
+
+    private func navigateToIdentityInputScreen(
+        inputType: ParraIdentityInputType,
+        appInfo: ParraAppInfo,
+        modalScreenManager: ModalScreenManager,
+        authService: AuthService
+    ) {
+        let params = ParraAuthDefaultIdentityInputScreen.Params(
+            inputType: inputType,
+            submitIdentity: { identity in
+                return try await self.onIdentitySubmitted(
+                    identity: identity,
+                    with: appInfo,
+                    modalScreenManager: modalScreenManager,
+                    authService: authService
+                )
+            },
+            attemptPasskeyAutofill: {
+                logger.info("Attempting passkey autofill")
+
+                try await self.triggerPasskeyLoginRequest(
+                    username: nil,
+                    presentationMode: .autofill,
+                    using: appInfo,
+                    authService: authService,
+                    modalScreenManager: modalScreenManager
+                )
+            },
+            cancelPasskeyAutofillAttempt: {
+                self.cancelPasskeyRequests(on: authService)
+            }
+        )
+
+        navigate(to: .identityInputScreen(params))
+    }
 
     private func supportedPasswordlessMethods(
         for authInfo: ParraAppAuthInfo
@@ -383,32 +405,17 @@ class AuthenticationFlowManager: ObservableObject {
                     )
                 },
                 forgotPassword: {
-                    Task { @MainActor in
-                        UIApplication.resignFirstResponder()
-
-                        self.delegate?
-                            .presentModalLoadingIndicator(
-                                content: ParraLoadingIndicatorContent(
-                                    title: LabelContent(text: "TODO"),
-                                    subtitle: LabelContent(
-                                        text: "Implement forgot password"
-                                    ),
-                                    cancel: nil
-                                ),
-                                with: modalScreenManager,
-                                completion: {}
-                            )
-
-                        try! await Task.sleep(ms: 2_000)
-
-                        self.delegate?.dismissModalLoadingIndicator(
-                            with: modalScreenManager,
-                            completion: nil
-                        )
+                    self.navigateToForgotPasswordScreen(
+                        identity: identity,
+                        legalInfo: appInfo.legal,
+                        appInfo: appInfo,
+                        modalScreenManager: modalScreenManager,
+                        authService: authService
+                    ) {
+                        Task { @MainActor in
+                            self.navigationState.navigationPath.removeLast()
+                        }
                     }
-
-                    // TODO: Forgot password
-                    // Will get 429 response if limited
                 }
             )
 
@@ -436,6 +443,49 @@ class AuthenticationFlowManager: ObservableObject {
         } catch {
             throw error
         }
+    }
+
+    private func navigateToForgotPasswordScreen(
+        identity: String,
+        legalInfo: LegalInfo,
+        appInfo: ParraAppInfo,
+        modalScreenManager: ModalScreenManager,
+        authService: AuthService,
+        onCompletePasswordChanged: @escaping () -> Void
+    ) {
+        logger.debug("Navigating to forgot password screen", [
+            "identity": identity
+        ])
+
+        let nextParams = ParraAuthDefaultForgotPasswordScreen.Params(
+            identity: identity,
+            codeLength: 6
+        ) {
+            Task { @MainActor in
+                UIApplication.resignFirstResponder()
+            }
+
+            let responseCode = try await authService.forgotPassword(
+                identity: identity,
+                identityType: .email
+            )
+
+            // received rate limit proxied through sms/email service
+            return ParraForgotPasswordResponse(
+                rateLimited: responseCode == 429
+            )
+        } updatePassword: { code, newPassword in
+            try await authService.resetPassword(
+                code: code,
+                password: newPassword
+            )
+        } complete: {
+            onCompletePasswordChanged()
+        }
+
+        navigate(
+            to: .forgotPasswordScreen(nextParams)
+        )
     }
 
     private func navigateToIdentityVerificationScreen(
@@ -637,6 +687,17 @@ class AuthenticationFlowManager: ObservableObject {
             navigationState.navigationPath.append(
                 screen
             )
+        }
+    }
+
+    private func resetNavigation(
+        to screen: AuthenticationFlowManager.AuthScreen
+    ) {
+        Task { @MainActor in
+            var newPath = NavigationPath()
+            newPath.append(screen)
+
+            navigationState.navigationPath = newPath
         }
     }
 }
