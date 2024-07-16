@@ -458,7 +458,7 @@ final class AuthServer: Server {
         )
 
         switch response.statusCode {
-        case 204:
+        case 202, 204:
             let body = try decodeResponse(
                 from: EmptyJsonObjectData,
                 as: T.self
