@@ -44,6 +44,10 @@ struct ProfileTab: View {
                     LegalInfoCell()
                 }
 
+                Section("Account") {
+                    ChangePasswordCell()
+                }
+
                 Section("Danger Zone") {
                     LogoutCell()
                     DeleteAccountCell()
