@@ -120,6 +120,38 @@ final class AuthService {
         }
     }
 
+    func forgotPassword(
+        identity: String,
+        identityType: IdentityType?
+    ) async throws -> Int {
+        let requestData = PasswordResetChallengeRequestBody(
+            clientId: authServer.appState.applicationId,
+            identity: identity,
+            identityType: identityType
+        )
+
+        let response = try await authServer.postForgotPassword(
+            requestData: requestData
+        )
+
+        return response.statusCode
+    }
+
+    func resetPassword(
+        code: String,
+        password: String
+    ) async throws {
+        let requestData = PasswordResetRequestBody(
+            clientId: authServer.appState.applicationId,
+            code: code,
+            password: password
+        )
+
+        try await authServer.postResetPassword(
+            requestData: requestData
+        )
+    }
+
     func logout() async {
         guard case .parra = authenticationMethod else {
             logger

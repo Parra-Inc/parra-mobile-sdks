@@ -127,6 +127,38 @@ final class AuthServer: Server {
         )
     }
 
+    func postForgotPassword(
+        requestData: PasswordResetChallengeRequestBody
+    ) async throws -> HTTPURLResponse {
+        let body = try configuration.jsonEncoder.encode(requestData)
+
+        let (_, response): (
+            EmptyResponseObject,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
+            to: .postForgotPassword,
+            with: nil,
+            body: body
+        )
+
+        return response
+    }
+
+    func postResetPassword(
+        requestData: PasswordResetRequestBody
+    ) async throws {
+        let body = try configuration.jsonEncoder.encode(requestData)
+
+        let (_, _): (
+            EmptyResponseObject,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
+            to: .postResetPassword,
+            with: nil,
+            body: body
+        )
+    }
+
     func postLogout(
         accessToken: String
     ) async throws {

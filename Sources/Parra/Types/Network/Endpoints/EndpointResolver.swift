@@ -67,6 +67,10 @@ enum EndpointResolver {
             return "auth/webauthn/authenticate"
         case .postAuthentication:
             return "auth/issuers/public/token"
+        case .postForgotPassword:
+            return "auth/password/reset/challenge"
+        case .postResetPassword:
+            return "auth/password/reset"
         }
     }
 

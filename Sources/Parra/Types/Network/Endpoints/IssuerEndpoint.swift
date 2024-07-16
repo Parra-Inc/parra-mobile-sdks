@@ -17,6 +17,8 @@ enum IssuerEndpoint: Endpoint {
     case postWebAuthnRegister
     case postWebAuthnAuthenticate
     case postAuthentication
+    case postForgotPassword
+    case postResetPassword
 
     // MARK: - Internal
 
@@ -25,7 +27,7 @@ enum IssuerEndpoint: Endpoint {
         case .postAuthChallenges, .postCreateUser, .postPasswordless,
              .postWebAuthnAuthenticate, .postWebAuthnAuthenticateChallenge,
              .postWebAuthnRegister, .postWebAuthnRegisterChallenge,
-             .postAuthentication:
+             .postAuthentication, .postForgotPassword, .postResetPassword:
             return .post
         }
     }
@@ -48,6 +50,10 @@ enum IssuerEndpoint: Endpoint {
             return "auth/webauthn/authenticate"
         case .postAuthentication:
             return "auth/issuers/public/token"
+        case .postForgotPassword:
+            return "auth/password/reset/challenge"
+        case .postResetPassword:
+            return "auth/password/reset"
         }
     }
 
