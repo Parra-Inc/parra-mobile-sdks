@@ -159,13 +159,13 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
         }
 
         guard let decoded = try? JSONDecoder.parraDecoder.decode(
-            [String: String].self,
+            ParraApiErrorResponse.self,
             from: body
         ) else {
             return nil
         }
 
-        return decoded["message"]
+        return decoded.message
     }
 }
 

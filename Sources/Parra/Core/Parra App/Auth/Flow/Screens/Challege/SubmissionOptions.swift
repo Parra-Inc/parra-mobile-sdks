@@ -20,20 +20,32 @@ struct SubmissionOptions: View {
         submitResponse: @escaping (_: ChallengeResponse) async throws -> Void
     ) {
         self.params = params
+        self.primaryActionName = params.userExists ? "Log in" : "Sign up"
         self._shouldDisableSubmitWithPassword = shouldDisableSubmitWithPassword
         self._passwordChallengeResponse = passwordChallengeResponse
         self.submitResponse = submitResponse
-        self.primaryActionName = params.userExists ? "Log in" : "Sign up"
     }
 
     // MARK: - Internal
 
-    struct SubmissionOptionInfo: Identifiable {
+    struct SubmissionOptionInfo: Identifiable, Hashable {
         let content: TextButtonContent
         let onPress: () async -> Void
 
         var id: String {
             return content.text.text
+        }
+
+        static func == (
+            lhs: SubmissionOptions.SubmissionOptionInfo,
+            rhs: SubmissionOptions.SubmissionOptionInfo
+        ) -> Bool {
+            return lhs.content == rhs.content
+        }
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(content)
+            hasher.combine(id)
         }
     }
 
@@ -59,11 +71,20 @@ struct SubmissionOptions: View {
 
             buttons
         }
+        .onChange(
+            of: passwordChallengeResponse,
+            initial: true
+        ) { _, newValue in
+            if let newValue, case .password(let password) = newValue {
+                passwordLoginButtonDisabled = password.isEmpty
+            }
+        }
     }
 
     // MARK: - Private
 
     @State private var errorMessage: String?
+    @State private var passwordLoginButtonDisabled = true
 
     private let primaryActionName: String
 
@@ -72,7 +93,12 @@ struct SubmissionOptions: View {
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
     @ViewBuilder private var buttons: some View {
-        let buttonInfo = getActionButtonInfo()
+        let buttonInfo = getActionButtonInfo(
+            with: TextButtonContent(
+                text: "\(primaryActionName) with password",
+                isDisabled: passwordLoginButtonDisabled
+            )
+        )
 
         if buttonInfo.isEmpty {
             EmptyView()
@@ -89,6 +115,7 @@ struct SubmissionOptions: View {
                 content: info.content,
                 onPress: info.onPress
             )
+            .id(info)
         } else if buttonInfo.count == 2 {
             let info1 = buttonInfo[0]
             let info2 = buttonInfo[1]
@@ -103,6 +130,7 @@ struct SubmissionOptions: View {
                 content: info1.content,
                 onPress: info1.onPress
             )
+            .id(info1)
 
             SubmissionButton(
                 config: ParraTextButtonConfig(
@@ -114,6 +142,7 @@ struct SubmissionOptions: View {
                 content: info2.content,
                 onPress: info2.onPress
             )
+            .id(info2)
         } else {
             // For cases with 3 (or more) options, render contained first,
             // outlined second, all others plain.
@@ -131,6 +160,7 @@ struct SubmissionOptions: View {
                 content: info1.content,
                 onPress: info1.onPress
             )
+            .id(info1)
 
             SubmissionButton(
                 config: ParraTextButtonConfig(
@@ -142,6 +172,7 @@ struct SubmissionOptions: View {
                 content: info2.content,
                 onPress: info2.onPress
             )
+            .id(info2)
 
             ForEach(buttonInfo.dropFirst(2)) { info in
                 SubmissionButton(
@@ -154,19 +185,20 @@ struct SubmissionOptions: View {
                     content: info.content,
                     onPress: info.onPress
                 )
+                .id(info)
             }
         }
     }
 
-    private func getActionButtonInfo() -> [SubmissionOptionInfo] {
+    private func getActionButtonInfo(
+        with passwordLoginButtonContent: TextButtonContent
+    ) -> [SubmissionOptionInfo] {
         var buttonInfo = [SubmissionOptionInfo]()
 
         if params.passwordCurrentlyAvailable {
             buttonInfo.append(
                 SubmissionOptionInfo(
-                    content: TextButtonContent(
-                        text: "\(primaryActionName) with password"
-                    ),
+                    content: passwordLoginButtonContent,
                     onPress: {
                         await attemptSubmission(for: .password) {
                             if let passwordChallengeResponse {

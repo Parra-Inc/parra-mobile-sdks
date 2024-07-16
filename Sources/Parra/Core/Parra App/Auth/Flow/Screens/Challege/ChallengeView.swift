@@ -34,6 +34,8 @@ struct ChallengeView: View {
     @State private var errorMessage: String?
 
     var body: some View {
+        let palette = themeObserver.theme.palette
+
         VStack(spacing: 16) {
             componentFactory.buildTextInput(
                 config: .default,
@@ -41,7 +43,14 @@ struct ChallengeView: View {
                     defaultText: identity,
                     placeholder: ""
                 ),
-                localAttributes: ParraAttributes.TextInput(
+                localAttributes: .init(
+                    text: ParraAttributes.Text(
+                        color: palette.secondarySeparator.toParraColor()
+                    ),
+                    border: ParraAttributes.Border(
+                        width: 1,
+                        color: palette.secondarySeparator.toParraColor()
+                    ),
                     padding: .zero
                 )
             )
