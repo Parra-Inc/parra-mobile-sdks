@@ -14,12 +14,14 @@ struct CodeEntryView: View {
     public init(
         length: Int = 6,
         disabled: Bool = false,
+        autoSubmit: Bool = true,
         onChange: @escaping (String) -> Void,
         onComplete: @escaping (String) -> Void
     ) {
         self.length = length
         self.disabled = disabled
         self.onChange = onChange
+        self.autoSubmit = autoSubmit
         self.onComplete = onComplete
     }
 
@@ -46,6 +48,9 @@ struct CodeEntryView: View {
                 .blendMode(.screen)
                 .focused($isKeyboardShowing)
                 .onChange(of: otpText, onOtpTextChanged)
+                .onSubmit(of: .text) {
+                    onComplete(otpText)
+                }
                 .onAppear {
                     DispatchQueue.main.async {
                         isKeyboardShowing = true
@@ -106,6 +111,7 @@ struct CodeEntryView: View {
     private let onComplete: (String) -> Void
     private let length: Int
     private let disabled: Bool
+    private let autoSubmit: Bool
 
     @State private var otpText = ""
     @FocusState private var isKeyboardShowing: Bool
@@ -130,7 +136,7 @@ struct CodeEntryView: View {
 
         onChange(next)
 
-        if next.count == length {
+        if next.count == length, autoSubmit {
             onComplete(next)
         }
 

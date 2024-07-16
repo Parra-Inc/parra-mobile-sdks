@@ -14,6 +14,7 @@ struct ChallengeVerificationView: View {
     init(
         passwordlessConfig: ParraAuthInfoPasswordlessConfig,
         disabled: Bool = false,
+        autoSubmit: Bool = true,
         onUpdate: @escaping (
             _: String, _: ParraAuthenticationMethod.PasswordlessType
         ) -> Void,
@@ -23,6 +24,7 @@ struct ChallengeVerificationView: View {
     ) {
         self.passwordlessConfig = passwordlessConfig
         self.disabled = disabled
+        self.autoSubmit = autoSubmit
         self.onUpdate = onUpdate
         self.onSubmit = onSubmit
     }
@@ -32,6 +34,7 @@ struct ChallengeVerificationView: View {
     let passwordlessConfig: ParraAuthInfoPasswordlessConfig
 
     let disabled: Bool
+    let autoSubmit: Bool
 
     let onUpdate: (
         _ challenge: String,
@@ -47,7 +50,8 @@ struct ChallengeVerificationView: View {
         if let sms = passwordlessConfig.sms {
             CodeEntryView(
                 length: sms.otpLength,
-                disabled: disabled
+                disabled: disabled,
+                autoSubmit: autoSubmit
             ) { code in
                 onUpdate(code, .sms)
             } onComplete: { code in
