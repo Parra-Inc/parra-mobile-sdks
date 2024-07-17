@@ -547,7 +547,7 @@ class AuthenticationFlowManager: ObservableObject {
                 identity: identity,
                 authService: authService
             )
-        case .password(let password):
+        case .password(let password, _):
             cancelPasskeyRequests(
                 on: authService
             )

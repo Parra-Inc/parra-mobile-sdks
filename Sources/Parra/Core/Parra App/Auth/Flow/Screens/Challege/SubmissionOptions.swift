@@ -16,66 +16,36 @@ struct SubmissionOptions: View {
     init(
         params: ParraAuthDefaultIdentityChallengeScreen.Params,
         shouldDisableSubmitWithPassword: Binding<Bool>,
-        passwordChallengeResponse: Binding<ChallengeResponse?>,
-        submitResponse: @escaping (_: ChallengeResponse) async throws -> Void
+        challengeResponse: Binding<ChallengeResponse?>,
+        loadingAuthMethod: Binding<ParraAuthenticationMethod?>,
+        submit: @escaping () -> Void
     ) {
         self.params = params
         self.primaryActionName = params.userExists ? "Log in" : "Sign up"
         self._shouldDisableSubmitWithPassword = shouldDisableSubmitWithPassword
-        self._passwordChallengeResponse = passwordChallengeResponse
-        self.submitResponse = submitResponse
+        self._loadingAuthMethod = loadingAuthMethod
+        self._challengeResponse = challengeResponse
+        self.submit = submit
     }
 
     // MARK: - Internal
 
-    struct SubmissionOptionInfo: Identifiable, Hashable {
-        let content: TextButtonContent
-        let onPress: () async -> Void
-
-        var id: String {
-            return content.text.text
-        }
-
-        static func == (
-            lhs: SubmissionOptions.SubmissionOptionInfo,
-            rhs: SubmissionOptions.SubmissionOptionInfo
-        ) -> Bool {
-            return lhs.content == rhs.content
-        }
-
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(content)
-            hasher.combine(id)
-        }
-    }
-
     let params: ParraAuthDefaultIdentityChallengeScreen.Params
+
     @Binding var shouldDisableSubmitWithPassword: Bool
-    @Binding var passwordChallengeResponse: ChallengeResponse?
-    let submitResponse: (_ response: ChallengeResponse) async throws -> Void
+    @Binding var challengeResponse: ChallengeResponse?
+
+    let submit: () -> Void
 
     var body: some View {
         VStack {
-            if let errorMessage {
-                componentFactory.buildLabel(
-                    content: LabelContent(text: errorMessage),
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            color: themeObserver.theme.palette.error
-                                .toParraColor()
-                        ),
-                        padding: .lg
-                    )
-                )
-            }
-
             buttons
         }
         .onChange(
-            of: passwordChallengeResponse,
+            of: challengeResponse,
             initial: true
         ) { _, newValue in
-            if let newValue, case .password(let password) = newValue {
+            if let newValue, case .password(let password, _) = newValue {
                 passwordLoginButtonDisabled = password.isEmpty
             }
         }
@@ -83,8 +53,10 @@ struct SubmissionOptions: View {
 
     // MARK: - Private
 
-    @State private var errorMessage: String?
     @State private var passwordLoginButtonDisabled = true
+
+    /// The auth method that should be rendered with a loading spinner.
+    @Binding private var loadingAuthMethod: ParraAuthenticationMethod?
 
     private let primaryActionName: String
 
@@ -96,7 +68,9 @@ struct SubmissionOptions: View {
         let buttonInfo = getActionButtonInfo(
             with: TextButtonContent(
                 text: "\(primaryActionName) with password",
-                isDisabled: passwordLoginButtonDisabled
+                isDisabled: passwordLoginButtonDisabled || loadingAuthMethod ==
+                    .password,
+                isLoading: loadingAuthMethod == .password
             )
         )
 
@@ -200,13 +174,9 @@ struct SubmissionOptions: View {
                 SubmissionOptionInfo(
                     content: passwordLoginButtonContent,
                     onPress: {
-                        await attemptSubmission(for: .password) {
-                            if let passwordChallengeResponse {
-                                try await submitResponse(
-                                    passwordChallengeResponse
-                                )
-                            }
-                        }
+                        attemptSubmission(
+                            for: .password
+                        )
                     }
                 )
             )
@@ -237,32 +207,20 @@ struct SubmissionOptions: View {
                 .email
             }
 
+            let authMethod: ParraAuthenticationMethod = .passwordless(
+                passwordlessType
+            )
+
             buttonInfo.append(
                 SubmissionOptionInfo(
                     content: TextButtonContent(
-                        text: passwordlessLoginTitle
+                        text: passwordlessLoginTitle,
+                        isLoading: loadingAuthMethod == authMethod
                     ),
                     onPress: {
-                        await attemptSubmission(
-                            for: .passwordless(passwordlessType)
-                        ) {
-                            let challengeResponse: ChallengeResponse? =
-                                switch params
-                                    .identityType
-                                {
-                                case .email:
-                                    .passwordlessEmail(params.identity)
-                                case .phoneNumber:
-                                    .passwordlessSms(params.identity)
-                                default:
-                                    // shound't happen
-                                    nil
-                                }
-
-                            if let challengeResponse {
-                                try await submitResponse(challengeResponse)
-                            }
-                        }
+                        attemptSubmission(
+                            for: authMethod
+                        )
                     }
                 )
             )
@@ -272,12 +230,11 @@ struct SubmissionOptions: View {
             buttonInfo.append(
                 SubmissionOptionInfo(
                     content: TextButtonContent(
-                        text: "Create a passkey"
+                        text: "Create a passkey",
+                        isLoading: loadingAuthMethod == .passkey
                     ),
                     onPress: {
-                        await attemptSubmission(for: .passkey) {
-                            try await submitResponse(.passkey)
-                        }
+                        attemptSubmission(for: .passkey)
                     }
                 )
             )
@@ -287,51 +244,28 @@ struct SubmissionOptions: View {
     }
 
     private func attemptSubmission(
-        for authMethod: ParraAuthenticationMethod,
-        _ fn: () async throws -> Void
-    ) async {
-        do {
-            Task { @MainActor in
-                withAnimation {
-                    errorMessage = nil
-                }
+        for authMethod: ParraAuthenticationMethod
+    ) {
+        let nextChallengeResponse: ChallengeResponse? = switch authMethod {
+        case .passwordless(let passwordlessType):
+            switch passwordlessType {
+            case .email:
+                .passwordlessEmail(params.identity)
+            case .sms:
+                .passwordlessSms(params.identity)
             }
-
-            try await fn()
-        } catch let error as ParraError {
-            Task { @MainActor in
-                let userFacingMessage = if let message = error.userMessage,
-                                           message.contains("invalid")
-                {
-                    switch authMethod {
-                    case .passwordless(let passwordlessType):
-                        "Error sending \(passwordlessType.description) code"
-                    case .password:
-                        "The supplied password was incorrect"
-                    case .sso(let ssoType):
-                        "Error performing SSO login with \(ssoType.description)"
-                    case .passkey:
-                        "Error creating passkey"
-                    }
-                } else {
-                    "An unexpected error occurred"
-                }
-
-                withAnimation {
-                    errorMessage = userFacingMessage
-                }
-            }
-
-            logger.error("Error submiting auth challenge", error)
-        } catch {
-            Task { @MainActor in
-                withAnimation {
-                    errorMessage = error.localizedDescription
-                }
-            }
-
-            logger.error("Unknown error submiting auth challenge", error)
+        case .password:
+            // Special case. Will already be set before submission
+            challengeResponse
+        case .sso:
+            nil
+        case .passkey:
+            .passkey
         }
+
+        challengeResponse = nextChallengeResponse
+
+        submit()
     }
 }
 
@@ -355,8 +289,9 @@ struct SubmissionOptions: View {
                     forgotPassword: {}
                 ),
                 shouldDisableSubmitWithPassword: .constant(false),
-                passwordChallengeResponse: .constant(nil),
-                submitResponse: { _ in }
+                challengeResponse: .constant(nil),
+                loadingAuthMethod: .constant(nil),
+                submit: {}
             )
 
             Spacer()
@@ -378,8 +313,9 @@ struct SubmissionOptions: View {
                     forgotPassword: {}
                 ),
                 shouldDisableSubmitWithPassword: .constant(false),
-                passwordChallengeResponse: .constant(nil),
-                submitResponse: { _ in }
+                challengeResponse: .constant(nil),
+                loadingAuthMethod: .constant(nil),
+                submit: {}
             )
 
             Spacer()
@@ -402,8 +338,9 @@ struct SubmissionOptions: View {
                     forgotPassword: {}
                 ),
                 shouldDisableSubmitWithPassword: .constant(false),
-                passwordChallengeResponse: .constant(nil),
-                submitResponse: { _ in }
+                challengeResponse: .constant(nil),
+                loadingAuthMethod: .constant(nil),
+                submit: {}
             )
 
             Spacer()
@@ -425,8 +362,9 @@ struct SubmissionOptions: View {
                     forgotPassword: {}
                 ),
                 shouldDisableSubmitWithPassword: .constant(false),
-                passwordChallengeResponse: .constant(nil),
-                submitResponse: { _ in }
+                challengeResponse: .constant(nil),
+                loadingAuthMethod: .constant(nil),
+                submit: {}
             )
         }
     }

@@ -63,8 +63,15 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 using: themeObserver.theme
             )
         }
-        .onAppear {
-            shouldDisableSubmitWithPassword = passwordChallengeResponse == nil
+        .onChange(
+            of: challengeResponse,
+            initial: true
+        ) { _, newValue in
+            if case .password(_, let isValid) = newValue {
+                shouldDisableSubmitWithPassword = !isValid
+            } else if newValue == nil {
+                shouldDisableSubmitWithPassword = true
+            }
         }
     }
 
@@ -77,8 +84,12 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     private let params: Params
     private let config: Config
 
-    @State private var passwordChallengeResponse: ChallengeResponse?
+    @State private var challengeResponse: ChallengeResponse?
     @State private var shouldDisableSubmitWithPassword: Bool = true
+    @State private var errorMessage: String?
+
+    /// The auth method that should be rendered with a loading spinner.
+    @State private var loadingAuthMethod: ParraAuthenticationMethod?
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeObserver: ParraThemeObserver
@@ -104,18 +115,9 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 identity: params.identity,
                 passwordChallengeAvailable: passwordChallengeAvailable,
                 userExists: params.userExists,
-                onUpdate: { challenge, isValid in
-                    passwordChallengeResponse = .password(challenge)
-
-                    shouldDisableSubmitWithPassword = !isValid
-                },
-                onSubmit: {
-                    if let passwordChallengeResponse {
-                        try await submitChallengeResponse(
-                            passwordChallengeResponse
-                        )
-                    }
-                },
+                challengeResponse: $challengeResponse,
+                loadingAuthMethod: $loadingAuthMethod,
+                submit: submit,
                 forgotPassword: {
                     try await params.forgotPassword()
                 }
@@ -124,9 +126,23 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             SubmissionOptions(
                 params: params,
                 shouldDisableSubmitWithPassword: $shouldDisableSubmitWithPassword,
-                passwordChallengeResponse: $passwordChallengeResponse,
-                submitResponse: submitChallengeResponse
+                challengeResponse: $challengeResponse,
+                loadingAuthMethod: $loadingAuthMethod,
+                submit: submit
             )
+
+            if let errorMessage {
+                componentFactory.buildLabel(
+                    content: LabelContent(text: errorMessage),
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            color: themeObserver.theme.palette.error
+                                .toParraColor()
+                        ),
+                        padding: .lg
+                    )
+                )
+            }
         }
         .applyPadding(
             size: .md,
@@ -154,16 +170,83 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
         return "Create an account"
     }
 
-    private func submitChallengeResponse(
-        _ response: ChallengeResponse
-    ) async throws {
-        UIApplication.resignFirstResponder()
+    private func submit() {
+        guard let challengeResponse,
+              let authMethod = challengeResponse.authMethod else
+        {
+            logger.warn(
+                "Unexpected submission of identity challenge without response set."
+            )
+
+            return
+        }
 
         logger.debug("Submitting challenge response")
 
-        try await params.submit(
-            response
-        )
+        UIApplication.resignFirstResponder()
+
+        withAnimation {
+            loadingAuthMethod = authMethod
+        }
+
+        Task {
+            do {
+                Task { @MainActor in
+                    withAnimation {
+                        errorMessage = nil
+                    }
+                }
+
+                try await params.submit(
+                    challengeResponse
+                )
+
+                Task { @MainActor in
+                    withAnimation {
+                        loadingAuthMethod = nil
+                    }
+                }
+            } catch let error as ParraError {
+                Task { @MainActor in
+                    let userFacingMessage = if let message = error.userMessage,
+                                               message.contains("invalid")
+                    {
+                        switch challengeResponse {
+                        case .passkey:
+                            "Error creating passkey"
+                        case .password(let password, let isValid):
+                            "The supplied password was incorrect"
+                        case .passwordlessSms:
+                            "Error sending login code via SMS"
+                        case .passwordlessEmail:
+                            "Error sending login code via email"
+                        case .verificationSms:
+                            "Error sending verification code via SMS"
+                        case .verificationEmail:
+                            "Error sending verification code via email"
+                        }
+                    } else {
+                        "An unexpected error occurred"
+                    }
+
+                    withAnimation {
+                        errorMessage = userFacingMessage
+                        loadingAuthMethod = nil
+                    }
+                }
+
+                logger.error("Error submiting auth challenge", error)
+            } catch {
+                Task { @MainActor in
+                    withAnimation {
+                        errorMessage = error.localizedDescription
+                        loadingAuthMethod = nil
+                    }
+                }
+
+                logger.error("Unknown error submiting auth challenge", error)
+            }
+        }
     }
 }
 

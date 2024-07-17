@@ -27,11 +27,12 @@ struct ChallengeView: View {
     let identity: String
     let passwordChallengeAvailable: Bool
     let userExists: Bool
-    let onUpdate: (_ challenge: String, _ isValid: Bool) -> Void
-    let onSubmit: () async throws -> Void
-    let forgotPassword: () async throws -> Void
+    let challengeResponse: Binding<ChallengeResponse?>
+    /// The auth method that should be rendered with a loading spinner.
+    @Binding var loadingAuthMethod: ParraAuthenticationMethod?
 
-    @State private var errorMessage: String?
+    let submit: () -> Void
+    let forgotPassword: () async throws -> Void
 
     var body: some View {
         let palette = themeObserver.theme.palette
@@ -74,23 +75,13 @@ struct ChallengeView: View {
                     )
                 )
                 .onChange(of: passwordState) { _, newValue in
-                    onUpdate(newValue.password, newValue.isValid)
-                }
-                .onSubmit(of: .text, onReceiveSubmit)
-                .focused($focusState, equals: .password)
-
-                if let errorMessage {
-                    componentFactory.buildLabel(
-                        content: LabelContent(text: errorMessage),
-                        localAttributes: ParraAttributes.Label(
-                            text: ParraAttributes.Text(
-                                color: themeObserver.theme.palette.error
-                                    .toParraColor()
-                            ),
-                            padding: .lg
-                        )
+                    challengeResponse.wrappedValue = .password(
+                        password: newValue.password,
+                        isValid: newValue.isValid
                     )
                 }
+                .onSubmit(of: .text, submit)
+                .focused($focusState, equals: .password)
 
                 componentFactory
                     .buildPlainButton(
@@ -153,36 +144,6 @@ struct ChallengeView: View {
             validate(
                 password: passwordState.password
             )
-        }
-    }
-
-    private func onReceiveSubmit() {
-        Task {
-            do {
-                try await onSubmit()
-
-                Task { @MainActor in
-                    withAnimation {
-                        errorMessage = nil
-                    }
-                }
-            } catch let error as ParraError {
-                Task { @MainActor in
-                    withAnimation {
-                        errorMessage = error.userMessage
-                    }
-                }
-
-                Logger.error("Failed to submit identity", error)
-            } catch {
-                Task { @MainActor in
-                    withAnimation {
-                        errorMessage = error.localizedDescription
-                    }
-                }
-
-                Logger.error("Failed to submit identity. Unknown error", error)
-            }
         }
     }
 
@@ -308,8 +269,9 @@ struct ChallengeView: View {
                 identity: "mickm@hey.com",
                 passwordChallengeAvailable: true,
                 userExists: true,
-                onUpdate: { _, _ in },
-                onSubmit: {},
+                challengeResponse: .constant(nil),
+                loadingAuthMethod: .constant(nil),
+                submit: {},
                 forgotPassword: {}
             )
 
@@ -317,8 +279,9 @@ struct ChallengeView: View {
                 identity: "mickm@hey.com",
                 passwordChallengeAvailable: true,
                 userExists: false,
-                onUpdate: { _, _ in },
-                onSubmit: {},
+                challengeResponse: .constant(nil),
+                loadingAuthMethod: .constant(nil),
+                submit: {},
                 forgotPassword: {}
             )
         }
