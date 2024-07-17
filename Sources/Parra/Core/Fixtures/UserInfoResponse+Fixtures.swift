@@ -39,13 +39,16 @@ extension UserInfoResponse: ParraFixture {
                             createdAt: .now,
                             updatedAt: .now,
                             deletedAt: nil,
-                            type: "idk",
+                            type: .email,
                             provider: nil,
                             providerUserId: nil,
                             email: "mickm@hey.com",
                             emailVerified: true,
                             phoneNumber: nil,
-                            phoneNumberVerified: false
+                            phoneNumberVerified: false,
+                            username: nil,
+                            externalId: "",
+                            hasPassword: true
                         )
                     ]
                 )

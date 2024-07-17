@@ -127,16 +127,19 @@ public struct Identity: Codable, Equatable, Hashable, Identifiable {
 
     public init(
         id: String,
-        createdAt: Date,
-        updatedAt: Date,
-        deletedAt: Date?,
-        type: String,
+        createdAt: String,
+        updatedAt: String,
+        deletedAt: String?,
+        type: IdentityType,
         provider: String?,
         providerUserId: String?,
         email: String?,
         emailVerified: Bool?,
         phoneNumber: String?,
-        phoneNumberVerified: Bool?
+        phoneNumberVerified: Bool?,
+        username: String?,
+        externalId: String?,
+        hasPassword: Bool?
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -149,35 +152,27 @@ public struct Identity: Codable, Equatable, Hashable, Identifiable {
         self.emailVerified = emailVerified
         self.phoneNumber = phoneNumber
         self.phoneNumberVerified = phoneNumberVerified
+        self.username = username
+        self.externalId = externalId
+        self.hasPassword = hasPassword
     }
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt
-        case updatedAt
-        case deletedAt
-        case type
-        case provider
-        case providerUserId
-        case email
-        case emailVerified
-        case phoneNumber
-        case phoneNumberVerified
-    }
-
     public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let type: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let type: IdentityType
     public let provider: String?
     public let providerUserId: String?
     public let email: String?
     public let emailVerified: Bool?
     public let phoneNumber: String?
     public let phoneNumberVerified: Bool?
+    public let username: String?
+    public let externalId: String?
+    public let hasPassword: Bool?
 }
 
 public struct User: Codable, Equatable, Hashable, Identifiable {
