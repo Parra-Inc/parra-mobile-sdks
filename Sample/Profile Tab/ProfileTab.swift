@@ -16,15 +16,11 @@ struct ProfileTab: View {
         NavigationStack {
             List {
                 Section {
-                    VStack(alignment: .center, spacing: 12) {
-                        ParraProfilePhotoWell()
-
-                        if let userInfo = parra.user?.userInfo {
-                            ProfileUserInfoView(userInfo: userInfo)
-                        }
+                    NavigationLink {
+                        AccountManagementView()
+                    } label: {
+                        UserProfileCell()
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity)
                 }
 
                 Section("Samples") {
@@ -44,13 +40,17 @@ struct ProfileTab: View {
                     LegalInfoCell()
                 }
 
-                Section("Account") {
-                    ChangePasswordCell()
-                }
-
-                Section("Danger Zone") {
+                Section {
                     LogoutCell()
                     DeleteAccountCell()
+                } header: {
+                    Text("Danger Zone")
+                } footer: {
+                    VStack(alignment: .center) {
+                        PoweredByParraButton()
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
                 }
             }
             .navigationTitle("Profile")

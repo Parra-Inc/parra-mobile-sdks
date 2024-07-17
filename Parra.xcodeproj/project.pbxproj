@@ -512,6 +512,8 @@
 		00BECFA92C46D2C9006CE0ED /* ChangePasswordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFA82C46D2C9006CE0ED /* ChangePasswordCell.swift */; };
 		00BECFAB2C473F9D006CE0ED /* View+ChangePassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFAA2C473F9D006CE0ED /* View+ChangePassword.swift */; };
 		00BECFAD2C481497006CE0ED /* SubmissionOptions+SubmissionOptionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFAC2C481497006CE0ED /* SubmissionOptions+SubmissionOptionInfo.swift */; };
+		00BECFAF2C483DCC006CE0ED /* AccountManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFAE2C483DCC006CE0ED /* AccountManagementView.swift */; };
+		00BECFB12C484899006CE0ED /* UserProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFB02C484899006CE0ED /* UserProfileCell.swift */; };
 		00BF36C72B59AB000097905C /* ParraFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36C62B59AB000097905C /* ParraFixture.swift */; };
 		00BF36D12B5AC3EE0097905C /* FormFieldWithState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36D02B5AC3EE0097905C /* FormFieldWithState.swift */; };
 		00BF36D52B5ACAD20097905C /* FieldState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36D42B5ACAD20097905C /* FieldState.swift */; };
@@ -1272,6 +1274,8 @@
 		00BECFA82C46D2C9006CE0ED /* ChangePasswordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordCell.swift; sourceTree = "<group>"; };
 		00BECFAA2C473F9D006CE0ED /* View+ChangePassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ChangePassword.swift"; sourceTree = "<group>"; };
 		00BECFAC2C481497006CE0ED /* SubmissionOptions+SubmissionOptionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubmissionOptions+SubmissionOptionInfo.swift"; sourceTree = "<group>"; };
+		00BECFAE2C483DCC006CE0ED /* AccountManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManagementView.swift; sourceTree = "<group>"; };
+		00BECFB02C484899006CE0ED /* UserProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileCell.swift; sourceTree = "<group>"; };
 		00BF36C62B59AB000097905C /* ParraFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFixture.swift; sourceTree = "<group>"; };
 		00BF36D02B5AC3EE0097905C /* FormFieldWithState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldWithState.swift; sourceTree = "<group>"; };
 		00BF36D42B5ACAD20097905C /* FieldState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldState.swift; sourceTree = "<group>"; };
@@ -2278,6 +2282,7 @@
 			isa = PBXGroup;
 			children = (
 				00D5DD9A2BD205F4002E09B7 /* ProfileTab.swift */,
+				00BECFAE2C483DCC006CE0ED /* AccountManagementView.swift */,
 				005BE4872C3C83BD00663AF4 /* Cells */,
 			);
 			path = "Profile Tab";
@@ -2304,6 +2309,7 @@
 				005BE4962C3C949600663AF4 /* RoadmapCell.swift */,
 				005BE4902C3C846900663AF4 /* ShareCell.swift */,
 				005BE4922C3C848E00663AF4 /* ThemeCell.swift */,
+				00BECFB02C484899006CE0ED /* UserProfileCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -4436,10 +4442,12 @@
 				00916A622B75C81A009C87DC /* ContentView.swift in Sources */,
 				00D5DD992BD205AC002E09B7 /* SampleTab.swift in Sources */,
 				00D5DD9B2BD205F4002E09B7 /* ProfileTab.swift in Sources */,
+				00BECFAF2C483DCC006CE0ED /* AccountManagementView.swift in Sources */,
 				005BE4932C3C848F00663AF4 /* ThemeCell.swift in Sources */,
 				005BE4892C3C83C100663AF4 /* ReviewAppCell.swift in Sources */,
 				00916A602B75C81A009C87DC /* SampleApp.swift in Sources */,
 				005BE4972C3C949600663AF4 /* RoadmapCell.swift in Sources */,
+				00BECFB12C484899006CE0ED /* UserProfileCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
