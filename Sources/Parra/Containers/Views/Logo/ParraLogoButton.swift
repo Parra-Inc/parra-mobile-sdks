@@ -8,6 +8,18 @@
 
 import SwiftUI
 
+public struct PoweredByParraButton: View {
+    // MARK: - Lifecycle
+
+    public init() {}
+
+    // MARK: - Public
+
+    public var body: some View {
+        ParraLogoButton(type: .poweredBy)
+    }
+}
+
 struct ParraLogoButton: View {
     @Environment(\.parra) var parra
 
