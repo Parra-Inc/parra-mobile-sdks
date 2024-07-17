@@ -22,7 +22,7 @@ struct ContentView: View {
                     )
                 }
 
-            ProfileTab()
+            SettingsTab()
                 .tabItem {
                     Label("Profile", systemImage: "person.circle.fill")
                 }

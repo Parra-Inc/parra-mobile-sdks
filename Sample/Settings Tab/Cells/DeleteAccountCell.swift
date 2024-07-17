@@ -29,7 +29,6 @@ struct DeleteAccountCell: View {
     // MARK: - Private
 
     @Environment(\.parra) private var parra
-
     @EnvironmentObject private var themeObserver: ParraThemeObserver
 }
 

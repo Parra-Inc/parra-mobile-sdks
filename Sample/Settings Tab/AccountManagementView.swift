@@ -11,11 +11,22 @@ import SwiftUI
 struct AccountManagementView: View {
     var body: some View {
         List {
+            Section {
+                NavigationLink {
+                    ProfileView()
+                } label: {
+                    Label(
+                        title: { Text("Edit profile") },
+                        icon: { Image(systemName: "person") }
+                    )
+                }
+            }
+
             Section("Account info") {
                 ChangePasswordCell()
             }
 
-            Section("Danger zone") {
+            Section {
                 LogoutCell()
                 DeleteAccountCell()
             }

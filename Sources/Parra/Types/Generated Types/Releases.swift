@@ -1345,16 +1345,7 @@ public struct LegalInfo: Codable, Equatable, Hashable {
     public let privacyPolicy: LegalDocument?
     public let termsOfService: LegalDocument?
 
-    // MARK: - Internal
-
-    enum CodingKeys: CodingKey {
-        case privacyPolicy
-        case termsOfService
-    }
-
-    static let empty = LegalInfo()
-
-    var allDocuments: [LegalDocument] {
+    public var allDocuments: [LegalDocument] {
         var documents = [LegalDocument]()
 
         if let privacyPolicy {
@@ -1368,9 +1359,18 @@ public struct LegalInfo: Codable, Equatable, Hashable {
         return documents
     }
 
-    var hasDouments: Bool {
+    public var hasDouments: Bool {
         return !allDocuments.isEmpty
     }
+
+    // MARK: - Internal
+
+    enum CodingKeys: CodingKey {
+        case privacyPolicy
+        case termsOfService
+    }
+
+    static let empty = LegalInfo()
 }
 
 public struct LegalDocument: Codable, Equatable, Hashable, Identifiable {

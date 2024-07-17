@@ -1,5 +1,5 @@
 //
-//  ProfileTab.swift
+//  SettingsTab.swift
 //  Sample
 //
 //  Created by Mick MacCallum on 4/18/24.
@@ -9,8 +9,8 @@
 import Parra
 import SwiftUI
 
-struct ProfileTab: View {
-    @Environment(\.parra) var parra
+struct SettingsTab: View {
+    // MARK: - Internal
 
     var body: some View {
         NavigationStack {
@@ -23,28 +23,31 @@ struct ProfileTab: View {
                     }
                 }
 
-                Section("Samples") {
+                Section("Appearance") {
+                    ThemeCell()
+                }
+
+                Section("General") {
                     FeedbackCell()
                     RoadmapCell()
                     ChangelogCell()
                     LatestReleaseCell()
                 }
 
-                Section("Appearance") {
-                    ThemeCell()
+                Section("Legal") {
+                    ForEach(parraAppInfo.legal.allDocuments) { document in
+                        NavigationLink {
+                            ParraLegalDocumentView(legalDocument: document)
+                        } label: {
+                            Text(document.title)
+                        }
+                        .id(document.id)
+                    }
                 }
 
                 Section {
                     ReviewAppCell()
                     ShareCell()
-                    LegalInfoCell()
-                }
-
-                Section {
-                    LogoutCell()
-                    DeleteAccountCell()
-                } header: {
-                    Text("Danger Zone")
                 } footer: {
                     VStack(alignment: .center) {
                         PoweredByParraButton()
@@ -56,6 +59,11 @@ struct ProfileTab: View {
             .navigationTitle("Profile")
         }
     }
+
+    // MARK: - Private
+
+    @Environment(\.parra) private var parra
+    @EnvironmentObject private var parraAppInfo: ParraAppInfo
 }
 
 struct ProfileUserInfoView: View {
@@ -85,6 +93,6 @@ struct ProfileUserInfoView: View {
 
 #Preview {
     ParraAppPreview {
-        ProfileTab()
+        SettingsTab()
     }
 }
