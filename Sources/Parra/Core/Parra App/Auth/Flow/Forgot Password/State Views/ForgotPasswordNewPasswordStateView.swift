@@ -77,6 +77,8 @@ struct ForgotPasswordNewPasswordStateView: View {
     }
 
     var body: some View {
+        let palette = themeObserver.theme.palette
+
         VStack(alignment: .leading, spacing: 12) {
             componentFactory.buildLabel(
                 text: "Update your password",
@@ -90,6 +92,27 @@ struct ForgotPasswordNewPasswordStateView: View {
                 )
             )
             .layoutPriority(20)
+
+            componentFactory.buildTextInput(
+                config: .default,
+                content: TextInputContent(
+                    defaultText: params.identity,
+                    placeholder: ""
+                ),
+                localAttributes: .init(
+                    text: ParraAttributes.Text(
+                        color: palette.secondarySeparator.toParraColor()
+                    ),
+                    border: ParraAttributes.Border(
+                        width: 1,
+                        color: palette.secondarySeparator.toParraColor()
+                    ),
+                    padding: .zero
+                )
+            )
+            .textContentType(.username)
+            .disabled(true)
+            .selectionDisabled()
 
             componentFactory.buildTextInput(
                 config: passwordFieldConfig,
