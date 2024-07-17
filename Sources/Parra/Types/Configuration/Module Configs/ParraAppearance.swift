@@ -31,11 +31,11 @@ public enum ParraAppearance: Equatable, CaseIterable, Identifiable,
     public var description: String {
         switch self {
         case .light:
-            return "Always light"
+            return "Light"
         case .dark:
-            return "Always dark"
+            return "Dark"
         case .system:
-            return "Follow system settings"
+            return "System"
         }
     }
 
