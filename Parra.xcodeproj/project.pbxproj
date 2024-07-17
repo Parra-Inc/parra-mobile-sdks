@@ -510,6 +510,8 @@
 		00BDB2B128BD822700C16649 /* URLRequest+headers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB2B028BD822700C16649 /* URLRequest+headers.swift */; };
 		00BECFA72C46CD7B006CE0ED /* ForgotPasswordCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFA62C46CD7B006CE0ED /* ForgotPasswordCompleteView.swift */; };
 		00BECFA92C46D2C9006CE0ED /* ChangePasswordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFA82C46D2C9006CE0ED /* ChangePasswordCell.swift */; };
+		00BECFAB2C473F9D006CE0ED /* View+ChangePassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFAA2C473F9D006CE0ED /* View+ChangePassword.swift */; };
+		00BECFAD2C481497006CE0ED /* SubmissionOptions+SubmissionOptionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BECFAC2C481497006CE0ED /* SubmissionOptions+SubmissionOptionInfo.swift */; };
 		00BF36C72B59AB000097905C /* ParraFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36C62B59AB000097905C /* ParraFixture.swift */; };
 		00BF36D12B5AC3EE0097905C /* FormFieldWithState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36D02B5AC3EE0097905C /* FormFieldWithState.swift */; };
 		00BF36D52B5ACAD20097905C /* FieldState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF36D42B5ACAD20097905C /* FieldState.swift */; };
@@ -1268,6 +1270,8 @@
 		00BDB2B028BD822700C16649 /* URLRequest+headers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+headers.swift"; sourceTree = "<group>"; };
 		00BECFA62C46CD7B006CE0ED /* ForgotPasswordCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordCompleteView.swift; sourceTree = "<group>"; };
 		00BECFA82C46D2C9006CE0ED /* ChangePasswordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordCell.swift; sourceTree = "<group>"; };
+		00BECFAA2C473F9D006CE0ED /* View+ChangePassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ChangePassword.swift"; sourceTree = "<group>"; };
+		00BECFAC2C481497006CE0ED /* SubmissionOptions+SubmissionOptionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubmissionOptions+SubmissionOptionInfo.swift"; sourceTree = "<group>"; };
 		00BF36C62B59AB000097905C /* ParraFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFixture.swift; sourceTree = "<group>"; };
 		00BF36D02B5AC3EE0097905C /* FormFieldWithState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldWithState.swift; sourceTree = "<group>"; };
 		00BF36D42B5ACAD20097905C /* FieldState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldState.swift; sourceTree = "<group>"; };
@@ -2154,6 +2158,7 @@
 			isa = PBXGroup;
 			children = (
 				00D1511D2C06577E0049D88F /* Fixtures */,
+				00BECFAA2C473F9D006CE0ED /* View+ChangePassword.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -2849,6 +2854,7 @@
 				00D151202C0661340049D88F /* ParraAuthDefaultIdentityChallengeScreen+Params.swift */,
 				00D151222C0661670049D88F /* ChallengeView.swift */,
 				0054F9242C2DCE3B00E63C31 /* SubmissionOptions.swift */,
+				00BECFAC2C481497006CE0ED /* SubmissionOptions+SubmissionOptionInfo.swift */,
 				0054F9262C2DFB8F00E63C31 /* SubmissionButton.swift */,
 				00D151282C0764AD0049D88F /* PasswordStrengthView.swift */,
 			);
@@ -4278,6 +4284,7 @@
 				0087CA702A57B331007D72FA /* ParraLoggerBackend.swift in Sources */,
 				00F7C4A02B9A42FA00DBDF5A /* ComponentFactory+Labels.swift in Sources */,
 				00BB36182BEBBECB007B6B13 /* ParraAuthDefaultIdentityInputScreen.swift in Sources */,
+				00BECFAB2C473F9D006CE0ED /* View+ChangePassword.swift in Sources */,
 				003622272B5EB103009EFE53 /* ParraColor+ParraColorConvertible.swift in Sources */,
 				00EC6F7D2B61A55F00ABC8EC /* RectangleCornerRadii+shortcuts.swift in Sources */,
 				00E76D522B68286E00B01DD8 /* PlainButtonComponent.swift in Sources */,
@@ -4371,6 +4378,7 @@
 				00E8A41C2BED679B00991D7C /* ParraGlobalComponentAttributes+Segment.swift in Sources */,
 				00EAE2FB2AA0C196003FB41C /* ParraSessionGenerator.swift in Sources */,
 				00F7C4A82B9A438500DBDF5A /* ComponentFactory+TextInputs.swift in Sources */,
+				00BECFAD2C481497006CE0ED /* SubmissionOptions+SubmissionOptionInfo.swift in Sources */,
 				00C1190A2BAF11FA0013FD03 /* ParraEnvironmentKey.swift in Sources */,
 				00DA7FEC295CAB9E00109081 /* AnyDecodable.swift in Sources */,
 				009D84272BEA6921005EBFEB /* ParraAttributes+Image.swift in Sources */,
