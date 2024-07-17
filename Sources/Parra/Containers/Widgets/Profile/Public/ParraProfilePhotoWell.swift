@@ -13,18 +13,29 @@ private let logger = Logger()
 public struct ParraProfilePhotoWell: View {
     // MARK: - Lifecycle
 
-    public init() {}
+    public init(
+        size: CGSize = CGSize(width: 70, height: 70)
+    ) {
+        self.size = size
+    }
 
     // MARK: - Public
 
     public var body: some View {
         switch parraAuthState.current {
         case .authenticated(let user):
-            PhotoWell(stub: user.userInfo?.avatar) { newAvatar in
+            PhotoWell(
+                stub: user.userInfo?.avatar,
+                size: size
+            ) { newAvatar in
                 await onAvatarSelected(newAvatar)
             }
         case .unauthenticated, .undetermined:
-            PhotoWell(stub: nil, onSelectionChanged: nil)
+            PhotoWell(
+                stub: nil,
+                size: size,
+                onSelectionChanged: nil
+            )
         }
     }
 
@@ -36,6 +47,8 @@ public struct ParraProfilePhotoWell: View {
     @Environment(\.parra) var parra
 
     // MARK: - Private
+
+    private let size: CGSize
 
     private func onAvatarSelected(
         _ image: UIImage

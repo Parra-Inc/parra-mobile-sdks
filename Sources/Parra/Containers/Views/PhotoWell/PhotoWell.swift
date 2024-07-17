@@ -14,6 +14,7 @@ struct PhotoWell: View {
 
     init(
         stub: ImageAssetStub? = nil,
+        size: CGSize = CGSize(width: 100, height: 100),
         onSelectionChanged: ((UIImage) async -> Void)? = nil
     ) {
         let asset: Asset? = if let id = stub?.id, let url = stub?.url {
@@ -27,12 +28,14 @@ struct PhotoWell: View {
 
         self.init(
             asset: asset,
+            size: size,
             onSelectionChanged: onSelectionChanged
         )
     }
 
     init(
         asset: Asset? = nil,
+        size: CGSize = CGSize(width: 100, height: 100),
         onSelectionChanged: ((UIImage) async -> Void)? = nil
     ) {
         if let asset {
@@ -41,18 +44,23 @@ struct PhotoWell: View {
             self.state = .empty
         }
 
+        self.size = size
         self.onSelectionChanged = onSelectionChanged
     }
 
     init(
         image: UIImage,
+        size: CGSize = CGSize(width: 100, height: 100),
         onSelectionChanged: ((UIImage) async -> Void)? = nil
     ) {
         self.state = .loaded(image)
+        self.size = size
         self.onSelectionChanged = onSelectionChanged
     }
 
     // MARK: - Internal
+
+    let size: CGSize
 
     // Invoked when user action changes the photo. So not when a pre-provided
     // url finishes loading, or when an image is provided initially.
@@ -110,12 +118,14 @@ struct PhotoWell: View {
             }, label: {
                 currentImageElement
                     .foregroundStyle(mainColor)
-                    .frame(width: 100, height: 100)
+                    .frame(width: size.width, height: size.height)
                     .background(palette.secondaryBackground)
                     .clipShape(.circle)
                     .overlay( /// apply a rounded border
-                        RoundedRectangle(cornerRadius: 100)
-                            .stroke(mainColor, lineWidth: 5)
+                        RoundedRectangle(
+                            cornerRadius: max(size.width, size.height)
+                        )
+                        .stroke(mainColor, lineWidth: 5)
                     )
             })
             .overlay(alignment: .bottomTrailing) {
