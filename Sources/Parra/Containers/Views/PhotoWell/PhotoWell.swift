@@ -114,7 +114,9 @@ struct PhotoWell: View {
 
     var body: some View {
         let palette = themeObserver.theme.palette
-        let mainColor = ParraColorSwatch.slate.shade300
+        let mainColor = colorScheme == .light
+            ? ParraColorSwatch.gray.shade300
+            : ParraColorSwatch.gray.shade500
 
         ZStack {
             Button(action: {
@@ -253,6 +255,7 @@ struct PhotoWell: View {
     @State private var showingCamera = false
     @State private var selectedPhoto: PhotosPickerItem?
 
+    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var themeObserver: ParraThemeObserver
 
     private func applyNewImage(_ image: UIImage) {
