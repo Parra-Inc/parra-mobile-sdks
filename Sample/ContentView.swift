@@ -18,13 +18,13 @@ struct ContentView: View {
                 .tabItem {
                     Label(
                         appInfo.application.name,
-                        systemImage: "wand.and.stars"
+                        systemImage: "app.dashed"
                     )
                 }
 
             SettingsTab()
                 .tabItem {
-                    Label("Profile", systemImage: "person.circle.fill")
+                    Label("Profile", systemImage: "person")
                 }
         }
     }

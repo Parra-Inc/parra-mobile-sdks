@@ -20,7 +20,18 @@ struct SampleTab: View {
                         string: "https://docs.parra.io/sdks/guides/quickstart/swiftui"
                     )!
                 ) {
-                    Text("Get started")
+                    Label(
+                        title: {
+                            Text("Get started")
+                                .font(.headline)
+                        },
+                        icon: {
+                            Image(systemName: "wand.and.stars")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 24)
+                        }
+                    )
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -38,7 +38,7 @@ struct LatestReleaseCell: View {
                         if isLoading {
                             ProgressView()
                         } else {
-                            Image(systemName: "sparkles")
+                            Image(systemName: "arrow.down.circle")
                         }
                     }
                 )

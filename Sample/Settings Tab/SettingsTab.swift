@@ -16,11 +16,7 @@ struct SettingsTab: View {
         NavigationStack {
             List {
                 Section {
-                    NavigationLink {
-                        AccountManagementView()
-                    } label: {
-                        UserProfileCell()
-                    }
+                    ProfileCell()
                 }
 
                 Section("Appearance") {
@@ -66,33 +62,14 @@ struct SettingsTab: View {
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
 }
 
-struct ProfileUserInfoView: View {
-    let userInfo: User
-
-    var identity: String {
-        if let name = userInfo.name {
-            return name
-        }
-
-        if let email = userInfo.email {
-            return email
-        }
-
-        if let phoneNumber = userInfo.phoneNumber {
-            return phoneNumber
-        }
-
-        return "unknown"
-    }
-
-    var body: some View {
-        Text(identity)
-            .font(.headline)
+#Preview {
+    ParraAppPreview(authState: .authenticatedPreview) {
+        SettingsTab()
     }
 }
 
 #Preview {
-    ParraAppPreview {
+    ParraAppPreview(authState: .unauthenticatedPreview) {
         SettingsTab()
     }
 }

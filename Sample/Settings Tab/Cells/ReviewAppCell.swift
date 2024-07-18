@@ -21,7 +21,7 @@ struct ReviewAppCell: View {
             ) {
                 Label(
                     title: { Text("Write a review") },
-                    icon: { Image(systemName: "heart") }
+                    icon: { Image(systemName: "pencil.line") }
                 )
             }
         }

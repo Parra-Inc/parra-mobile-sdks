@@ -21,7 +21,7 @@ struct ShareCell: View {
                 )
             ) {
                 Label(
-                    title: { Text("Share \(parraAppInfo.application.name)") },
+                    title: { Text("Share this app") },
                     icon: { Image(systemName: "square.and.arrow.up") }
                 )
             }
