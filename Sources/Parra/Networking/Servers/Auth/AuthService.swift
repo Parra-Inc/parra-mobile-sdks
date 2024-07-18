@@ -277,6 +277,28 @@ final class AuthService {
         await applyUserUpdate(.authenticated(user))
     }
 
+    func refreshUserInfo() async throws {
+        guard let credential = await dataManager.getCurrentCredential() else {
+            logger.debug("Can't refresh user info. No credential found.")
+
+            return
+        }
+
+        logger.debug("Refreshing user info")
+
+        let userInfo = try await authServer.getUserInfo(
+            accessToken: credential.accessToken,
+            timeout: 10.0
+        )
+
+        let user = ParraUser(
+            credential: credential,
+            info: userInfo
+        )
+
+        await applyUserUpdate(.authenticated(user))
+    }
+
     func applyUserUpdate(
         _ authResult: ParraAuthResult
     ) async {

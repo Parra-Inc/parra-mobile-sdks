@@ -30,6 +30,7 @@ public struct ParraProfilePhotoWell: View {
             ) { newAvatar in
                 await onAvatarSelected(newAvatar)
             }
+            .id(user.userInfo?.avatar?.id)
         case .unauthenticated, .undetermined:
             PhotoWell(
                 stub: nil,
@@ -64,6 +65,8 @@ public struct ParraProfilePhotoWell: View {
             } else {
                 try await parra.parraInternal.api.deleteAvatar()
             }
+
+            try await parra.parraInternal.authService.refreshUserInfo()
         } catch {
             logger.error("Error uploading avatar", error)
         }

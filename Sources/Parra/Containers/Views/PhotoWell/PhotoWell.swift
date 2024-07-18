@@ -167,11 +167,14 @@ struct PhotoWell: View {
                 showingCamera = true
             }
 
-            if case .loaded = state {
+            switch state {
+            case .loaded, .asset:
                 Button("Remove profile picture", role: .destructive) {
                     showingConfirmation = false
                     showingRemoveConfirmation = true
                 }
+            default:
+                EmptyView()
             }
         }
         .alert(
