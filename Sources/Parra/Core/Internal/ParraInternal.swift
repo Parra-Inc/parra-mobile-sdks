@@ -99,7 +99,7 @@ class ParraInternal {
     var globalComponentFactory: ComponentFactory
 
     static func libraryVersion() -> String {
-        return ParraInternal.appBundleVersionShort(
+        return Parra.appBundleVersionShort(
             bundle: .parraBundle
         ) ?? "unknown"
     }

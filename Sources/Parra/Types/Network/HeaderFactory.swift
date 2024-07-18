@@ -60,9 +60,9 @@ struct HeaderFactory {
         case .applicationBundleId:
             return appConfig.appInfoOptions.bundleId
         case .applicationBundleVersion:
-            return ParraInternal.appBundleVersion()
+            return Parra.appBundleVersion()
         case .applicationBundleVersionShort:
-            return ParraInternal.appBundleVersionShort()
+            return Parra.appBundleVersionShort()
         case .device:
             return ParraDeviceInfoManager.current.modelCode
         case .deviceId:

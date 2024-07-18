@@ -60,6 +60,8 @@
 		00214C6E2AB62510001C5313 /* String+prefixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00214C6D2AB62510001C5313 /* String+prefixes.swift */; };
 		0021A7562C178EC4002D3413 /* ParraAuthDefaultLandingScreen+Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0021A7552C178EC4002D3413 /* ParraAuthDefaultLandingScreen+Params.swift */; };
 		0021A7582C178EE5002D3413 /* ParraAuthDefaultIdentityInputScreen+Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0021A7572C178EE5002D3413 /* ParraAuthDefaultIdentityInputScreen+Params.swift */; };
+		0025ABCD2C499959005FDBC5 /* SettingsFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0025ABCC2C499959005FDBC5 /* SettingsFooter.swift */; };
+		0025ABD02C49AD1E005FDBC5 /* Parra+AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0025ABCE2C49AD12005FDBC5 /* Parra+AppInfo.swift */; };
 		0027FB6B2BD6D30200558E51 /* ParraDefaultAuthenticationFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0027FB6A2BD6D30200558E51 /* ParraDefaultAuthenticationFlowView.swift */; };
 		00285D8F2BC9821E00508DC8 /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285D8E2BC9821E00508DC8 /* OAuth2Service.swift */; };
 		00285D912BC9825C00508DC8 /* OAuth2Service+ResponseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00285D902BC9825C00508DC8 /* OAuth2Service+ResponseTypes.swift */; };
@@ -805,6 +807,8 @@
 		00214C6D2AB62510001C5313 /* String+prefixes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+prefixes.swift"; sourceTree = "<group>"; };
 		0021A7552C178EC4002D3413 /* ParraAuthDefaultLandingScreen+Params.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAuthDefaultLandingScreen+Params.swift"; sourceTree = "<group>"; };
 		0021A7572C178EE5002D3413 /* ParraAuthDefaultIdentityInputScreen+Params.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraAuthDefaultIdentityInputScreen+Params.swift"; sourceTree = "<group>"; };
+		0025ABCC2C499959005FDBC5 /* SettingsFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFooter.swift; sourceTree = "<group>"; };
+		0025ABCE2C49AD12005FDBC5 /* Parra+AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Parra+AppInfo.swift"; sourceTree = "<group>"; };
 		0027FB6A2BD6D30200558E51 /* ParraDefaultAuthenticationFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraDefaultAuthenticationFlowView.swift; sourceTree = "<group>"; };
 		00285D8E2BC9821E00508DC8 /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		00285D902BC9825C00508DC8 /* OAuth2Service+ResponseTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OAuth2Service+ResponseTypes.swift"; sourceTree = "<group>"; };
@@ -2301,6 +2305,7 @@
 			isa = PBXGroup;
 			children = (
 				00D5DD9A2BD205F4002E09B7 /* SettingsTab.swift */,
+				0025ABCC2C499959005FDBC5 /* SettingsFooter.swift */,
 				0025ABCA2C4989E8005FDBC5 /* Account Screen */,
 				0025ABCB2C4989F0005FDBC5 /* Edit Profile Screen */,
 				005BE4872C3C83BD00663AF4 /* Cells */,
@@ -3061,6 +3066,7 @@
 			children = (
 				003D2A74274C77BD001E067E /* Parra.swift */,
 				0079EDC72BD8110F0045EEE5 /* Parra+Auth.swift */,
+				0025ABCE2C49AD12005FDBC5 /* Parra+AppInfo.swift */,
 				00DA7FEF295DD28700109081 /* Parra+Analytics.swift */,
 				00D5155D27D4223D00C4F2CC /* Parra+Constants.swift */,
 				005E38A627FA3A8700F32F96 /* Parra+Notifications.swift */,
@@ -3993,6 +3999,7 @@
 				005D31EB29A83EC5001D0E0A /* CompletedCard.swift in Sources */,
 				009538992BC8748900420316 /* ExternalResourceServer.swift in Sources */,
 				00BB361A2BEBBF67007B6B13 /* ParraAuthDefaultIdentityChallengeScreen.swift in Sources */,
+				0025ABD02C49AD1E005FDBC5 /* Parra+AppInfo.swift in Sources */,
 				0054F9212C2DA5B800E63C31 /* ASAuthorizationError+noCredential.swift in Sources */,
 				0054F9292C344FA000E63C31 /* AuthenticationFlowManagerDelegate.swift in Sources */,
 				00E8A4262BF3BFE200991D7C /* ComponentFactory+Menus.swift in Sources */,
@@ -4462,6 +4469,7 @@
 				00BECFAF2C483DCC006CE0ED /* AccountView.swift in Sources */,
 				005BE4932C3C848F00663AF4 /* ThemeCell.swift in Sources */,
 				005BE4892C3C83C100663AF4 /* ReviewAppCell.swift in Sources */,
+				0025ABCD2C499959005FDBC5 /* SettingsFooter.swift in Sources */,
 				00916A602B75C81A009C87DC /* SampleApp.swift in Sources */,
 				005BE4972C3C949600663AF4 /* RoadmapCell.swift in Sources */,
 			);
