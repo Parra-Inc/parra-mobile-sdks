@@ -11,10 +11,39 @@ import SwiftUI
 
 private let logger = Logger()
 
-public class ParraAuthState: ObservableObject {
+public class ParraAuthState: ObservableObject, CustomStringConvertible {
+    // MARK: - Lifecycle
+
+    public init() {
+        self.current = .undetermined
+    }
+
+    init(
+        current: ParraAuthResult
+    ) {
+        self.current = current
+    }
+
     // MARK: - Public
 
-    @Published public private(set) var current: ParraAuthResult = .undetermined
+    public static let authenticatedPreview = ParraAuthState(
+        current: .authenticated(
+            ParraUser(
+                credential: .basic("invalid-preview-token"),
+                info: .publicFacingPreview
+            )
+        )
+    )
+
+    public static let unauthenticatedPreview = ParraAuthState(
+        current: .unauthenticated(nil)
+    )
+
+    @Published public private(set) var current: ParraAuthResult
+
+    public var description: String {
+        return "ParraAuthState: \(current.description)"
+    }
 
     // MARK: - Internal
 

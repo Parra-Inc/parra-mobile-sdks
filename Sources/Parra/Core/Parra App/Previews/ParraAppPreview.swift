@@ -45,12 +45,13 @@ public struct ParraAppPreview<Content, DelegateType>: View
 
     public init(
         configuration: ParraConfiguration = .init(),
+        authState: ParraAuthState = .init(),
         previewContent: @MainActor @escaping () -> Content
     ) {
         self.configuration = configuration
         self.previewContent = previewContent
         self._parraAuthState = StateObject(
-            wrappedValue: ParraAuthState()
+            wrappedValue: authState
         )
 
         let appState = ParraAppState(
@@ -79,6 +80,12 @@ public struct ParraAppPreview<Content, DelegateType>: View
                 notificationCenter: parraInternal.notificationCenter
             )
         )
+
+        if case .authenticated(let user) = authState.current {
+            parra.user = user
+        } else {
+            parra.user = nil
+        }
     }
 
     // MARK: - Public
