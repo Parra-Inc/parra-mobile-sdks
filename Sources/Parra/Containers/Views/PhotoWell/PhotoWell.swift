@@ -176,7 +176,15 @@ struct PhotoWell: View {
             "Remove profile picture",
             isPresented: $showingRemoveConfirmation,
             actions: {
-                EmptyView()
+                Button("Delete", role: .destructive) {
+                    showingRemoveConfirmation = false
+
+                    removeExistingImage()
+                }
+
+                Button("Cancel", role: .cancel) {
+                    showingRemoveConfirmation = false
+                }
             },
             message: {
                 Text("This will delete your existing profile picture")
