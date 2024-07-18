@@ -45,11 +45,7 @@ struct SettingsTab: View {
                     ReviewAppCell()
                     ShareCell()
                 } footer: {
-                    VStack(alignment: .center) {
-                        PoweredByParraButton()
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity)
+                    SettingsFooter()
                 }
             }
             .navigationTitle("Profile")
