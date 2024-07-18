@@ -8,12 +8,27 @@
 
 import SwiftUI
 
-public enum ParraAuthResult: Equatable {
+public enum ParraAuthResult: Equatable, CustomStringConvertible {
     case undetermined
     case authenticated(ParraUser)
     case unauthenticated(Error?)
 
     // MARK: - Public
+
+    public var description: String {
+        switch self {
+        case .undetermined:
+            return "undetermined"
+        case .authenticated:
+            return "authenticated"
+        case .unauthenticated(let error):
+            if error == nil {
+                return "unauthenticated"
+            }
+
+            return "unauthenticated with error"
+        }
+    }
 
     public static func == (
         lhs: ParraAuthResult,
