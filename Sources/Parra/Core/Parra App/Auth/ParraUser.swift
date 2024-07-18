@@ -15,6 +15,19 @@ public struct ParraUser: Equatable, Codable {
         return info.user
     }
 
+    public var identityNames: [String] {
+        guard let userInfo else {
+            return []
+        }
+
+        return [
+            userInfo.username,
+            userInfo.name,
+            userInfo.email,
+            userInfo.phoneNumber
+        ].compactMap { $0 }
+    }
+
     // MARK: - Internal
 
     enum Credential: Codable, Equatable {

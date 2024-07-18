@@ -187,6 +187,7 @@ public struct User: Codable, Equatable, Hashable, Identifiable {
         name: String?,
         avatar: ImageAssetStub?,
         identity: String?,
+        username: String?,
         email: String?,
         emailVerified: Bool?,
         phoneNumber: String?,
@@ -197,6 +198,7 @@ public struct User: Codable, Equatable, Hashable, Identifiable {
         signedUpAt: Date?,
         lastUpdatedAt: Date?,
         lastSeenAt: Date?,
+        lastLoginAt: Date?,
         properties: [String: AnyCodable],
         identities: [Identity]?
     ) {
@@ -208,6 +210,7 @@ public struct User: Codable, Equatable, Hashable, Identifiable {
         self.name = name
         self.avatar = avatar
         self.identity = identity
+        self.username = username
         self.email = email
         self.emailVerified = emailVerified
         self.phoneNumber = phoneNumber
@@ -218,34 +221,12 @@ public struct User: Codable, Equatable, Hashable, Identifiable {
         self.signedUpAt = signedUpAt
         self.lastUpdatedAt = lastUpdatedAt
         self.lastSeenAt = lastSeenAt
+        self.lastLoginAt = lastLoginAt
         self.properties = properties
         self.identities = identities
     }
 
     // MARK: - Public
-
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt
-        case updatedAt
-        case deletedAt
-        case tenantId
-        case name
-        case avatar
-        case identity
-        case email
-        case emailVerified
-        case phoneNumber
-        case phoneNumberVerified
-        case firstName
-        case lastName
-        case locale
-        case signedUpAt
-        case lastUpdatedAt
-        case lastSeenAt
-        case properties
-        case identities
-    }
 
     public let id: String
     public let createdAt: Date
@@ -255,6 +236,7 @@ public struct User: Codable, Equatable, Hashable, Identifiable {
     public let name: String?
     public let avatar: ImageAssetStub?
     public let identity: String?
+    public let username: String?
     public let email: String?
     public let emailVerified: Bool?
     public let phoneNumber: String?
@@ -265,6 +247,7 @@ public struct User: Codable, Equatable, Hashable, Identifiable {
     public let signedUpAt: Date?
     public let lastUpdatedAt: Date?
     public let lastSeenAt: Date?
+    public let lastLoginAt: Date?
     public let properties: [String: AnyCodable]
     public let identities: [Identity]?
 }

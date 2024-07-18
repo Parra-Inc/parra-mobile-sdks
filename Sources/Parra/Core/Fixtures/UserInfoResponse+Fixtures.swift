@@ -9,50 +9,54 @@
 import Foundation
 
 extension UserInfoResponse: ParraFixture {
-    static func validStates() -> [UserInfoResponse] {
-        return [
-            UserInfoResponse(
-                roles: ["user"],
-                user: User(
+    static let publicFacingPreview = UserInfoResponse(
+        roles: ["user"],
+        user: User(
+            id: .uuid,
+            createdAt: .now,
+            updatedAt: .now,
+            deletedAt: nil,
+            tenantId: .uuid,
+            name: "John Appleseed",
+            avatar: nil,
+            identity: nil,
+            username: "cool-user-92",
+            email: "swiftpreview@parra.io",
+            emailVerified: true,
+            phoneNumber: nil,
+            phoneNumberVerified: false,
+            firstName: "John",
+            lastName: "Appleseed",
+            locale: nil,
+            signedUpAt: nil,
+            lastUpdatedAt: nil,
+            lastSeenAt: nil,
+            lastLoginAt: nil,
+            properties: [:],
+            identities: [
+                Identity(
                     id: .uuid,
                     createdAt: .now,
                     updatedAt: .now,
                     deletedAt: nil,
-                    tenantId: .uuid,
-                    name: "Mick MacCallum",
-                    avatar: nil,
-                    identity: nil,
-                    email: "mickm@hey.com",
+                    type: .email,
+                    provider: nil,
+                    providerUserId: nil,
+                    email: "swiftpreview@parra.io",
                     emailVerified: true,
                     phoneNumber: nil,
                     phoneNumberVerified: false,
-                    firstName: "Mick",
-                    lastName: "MacCallum",
-                    locale: nil,
-                    signedUpAt: nil,
-                    lastUpdatedAt: nil,
-                    lastSeenAt: nil,
-                    properties: [:],
-                    identities: [
-                        Identity(
-                            id: .uuid,
-                            createdAt: .now,
-                            updatedAt: .now,
-                            deletedAt: nil,
-                            type: .email,
-                            provider: nil,
-                            providerUserId: nil,
-                            email: "mickm@hey.com",
-                            emailVerified: true,
-                            phoneNumber: nil,
-                            phoneNumberVerified: false,
-                            username: nil,
-                            externalId: "",
-                            hasPassword: true
-                        )
-                    ]
+                    username: nil,
+                    externalId: "",
+                    hasPassword: true
                 )
-            )
+            ]
+        )
+    )
+
+    static func validStates() -> [UserInfoResponse] {
+        return [
+            publicFacingPreview
         ]
     }
 
