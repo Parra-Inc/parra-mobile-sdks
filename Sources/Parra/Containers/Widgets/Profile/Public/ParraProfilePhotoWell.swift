@@ -51,15 +51,19 @@ public struct ParraProfilePhotoWell: View {
     private let size: CGSize
 
     private func onAvatarSelected(
-        _ image: UIImage
+        _ image: UIImage?
     ) async {
         do {
-            let resized = image.resized()
-            let asset = try await parra.parraInternal.api.uploadAvatar(
-                image: resized
-            )
+            if let image {
+                let resized = image.resized()
+                let asset = try await parra.parraInternal.api.uploadAvatar(
+                    image: resized
+                )
 
-            await parra.parraInternal.api.cacheAsset(asset)
+                await parra.parraInternal.api.cacheAsset(asset)
+            } else {
+                try await parra.parraInternal.api.deleteAvatar()
+            }
         } catch {
             logger.error("Error uploading avatar", error)
         }

@@ -43,6 +43,7 @@ enum ApiEndpoint: Endpoint {
     // Users
     case getUserInfo
     case postUpdateAvatar
+    case deleteAvatar(userId: String)
     case deleteUser(userId: String)
 
     // MARK: - Internal
@@ -57,7 +58,7 @@ enum ApiEndpoint: Endpoint {
              .postPushTokens, .postVoteForTicket,
              .postLogin, .postLogout, .postUpdateAvatar:
             return .post
-        case .deleteVoteForTicket, .deleteUser:
+        case .deleteVoteForTicket, .deleteUser, .deleteAvatar:
             return .delete
         }
     }
@@ -86,6 +87,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/push-tokens"
         case .postUpdateAvatar:
             return "tenants/:tenantId/users/avatar"
+        case .deleteAvatar:
+            return "tenants/:tenantId/users/:userId/avatar"
         case .getRoadmap:
             return "tenants/:tenantId/applications/:applicationId/roadmap"
         case .getPaginateTickets:

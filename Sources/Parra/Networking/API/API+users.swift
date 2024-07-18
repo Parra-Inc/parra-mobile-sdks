@@ -27,6 +27,19 @@ extension API {
         )
     }
 
+    func deleteAvatar() async throws {
+        logger.warn("Preparing to delete avatar")
+
+        guard let user = await dataManager.getCurrentUser()?.userInfo else {
+            throw ParraError.message("Can not delete account. Not logged in.")
+        }
+
+        let _: EmptyResponseObject = try await hitEndpoint(
+            .deleteAvatar(userId: user.id),
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
+        )
+    }
+
     func deleteAccount() async throws {
         logger.warn("Preparing to delete account")
 

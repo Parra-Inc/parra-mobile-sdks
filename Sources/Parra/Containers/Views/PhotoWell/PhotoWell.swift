@@ -15,7 +15,7 @@ struct PhotoWell: View {
     init(
         stub: ImageAssetStub? = nil,
         size: CGSize = CGSize(width: 100, height: 100),
-        onSelectionChanged: ((UIImage) async -> Void)? = nil
+        onSelectionChanged: ((UIImage?) async -> Void)? = nil
     ) {
         let asset: Asset? = if let id = stub?.id, let url = stub?.url {
             Asset(
@@ -36,7 +36,7 @@ struct PhotoWell: View {
     init(
         asset: Asset? = nil,
         size: CGSize = CGSize(width: 100, height: 100),
-        onSelectionChanged: ((UIImage) async -> Void)? = nil
+        onSelectionChanged: ((UIImage?) async -> Void)? = nil
     ) {
         if let asset {
             self.state = .asset(asset)
@@ -51,7 +51,7 @@ struct PhotoWell: View {
     init(
         image: UIImage,
         size: CGSize = CGSize(width: 100, height: 100),
-        onSelectionChanged: ((UIImage) async -> Void)? = nil
+        onSelectionChanged: ((UIImage?) async -> Void)? = nil
     ) {
         self.state = .loaded(image)
         self.size = size
@@ -63,8 +63,12 @@ struct PhotoWell: View {
     let size: CGSize
 
     // Invoked when user action changes the photo. So not when a pre-provided
-    // url finishes loading, or when an image is provided initially.
-    var onSelectionChanged: ((UIImage) async -> Void)?
+    // url finishes loading, or when an image is provided initially. If this is
+    // called with a nil image parameter, it means the user has opted to remove
+    // their existing photo.
+    var onSelectionChanged: ((UIImage?) async -> Void)?
+
+    @Environment(\.isEnabled) var isEnabled
 
     var failureImage: some View {
         Image(systemName: "person.crop.circle.badge.exclamationmark.fill")
@@ -129,7 +133,7 @@ struct PhotoWell: View {
                     )
             })
             .overlay(alignment: .bottomTrailing) {
-                if onSelectionChanged != nil {
+                if onSelectionChanged != nil, isEnabled {
                     Image(systemName: "photo.circle.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -160,7 +164,24 @@ struct PhotoWell: View {
                 showingConfirmation = false
                 showingCamera = true
             }
+
+            if case .loaded = state {
+                Button("Remove profile picture", role: .destructive) {
+                    showingConfirmation = false
+                    showingRemoveConfirmation = true
+                }
+            }
         }
+        .alert(
+            "Remove profile picture",
+            isPresented: $showingRemoveConfirmation,
+            actions: {
+                EmptyView()
+            },
+            message: {
+                Text("This will delete your existing profile picture")
+            }
+        )
         // TODO: Would be nice if this allowed us to specify that we don't want
         // location metadata.
         .photosPicker(
@@ -219,6 +240,7 @@ struct PhotoWell: View {
 
     @State private var state: WellState
     @State private var showingConfirmation = false
+    @State private var showingRemoveConfirmation = false
     @State private var showingPhotoPicker = false
     @State private var showingCamera = false
     @State private var selectedPhoto: PhotosPickerItem?
@@ -235,6 +257,16 @@ struct PhotoWell: View {
 
             Task { @MainActor in
                 state = .loaded(image)
+            }
+        }
+    }
+
+    private func removeExistingImage() {
+        state = .empty
+
+        Task {
+            if let onSelectionChanged {
+                await onSelectionChanged(nil)
             }
         }
     }

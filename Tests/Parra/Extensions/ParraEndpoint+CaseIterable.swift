@@ -46,7 +46,7 @@ extension ApiEndpoint: CaseIterable {
                  .getRoadmap, .getPaginateTickets, .postVoteForTicket,
                  .deleteVoteForTicket, .getRelease, .getPaginateReleases,
                  .getAppInfo, .postLogin, .postLogout,
-                 .postUpdateAvatar, .deleteUser:
+                 .postUpdateAvatar, .deleteAvatar, .deleteUser:
 
                 finalCases.append(testCase)
             }
