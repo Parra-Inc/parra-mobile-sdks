@@ -14,7 +14,7 @@ public struct ParraProfilePhotoWell: View {
     // MARK: - Lifecycle
 
     public init(
-        size: CGSize = CGSize(width: 70, height: 70)
+        size: CGSize = CGSize(width: 50, height: 50)
     ) {
         self.size = size
     }
