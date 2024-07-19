@@ -34,31 +34,33 @@ struct IdentityLabels: View {
     // MARK: - Internal
 
     var body: some View {
-        Group {
-            if identityNames.isEmpty {
-                Text("Unknown")
-                    .font(.headline)
-            } else if identityNames.count == 1 {
-                Text(identityNames[0])
-                    .font(.headline)
-            } else {
-                Text(identityNames[0])
-                    .font(.headline)
-
-                Text(identityNames[1])
-                    .font(.subheadline)
-                    .foregroundStyle(.gray)
+        labels
+            .onReceive(parra.user.$current) { user in
+                identityNames = user?.info.identityNames ?? []
             }
-        }
-        .onReceive(user.$current) { user in
-            identityNames = user?.info.identityNames ?? []
-        }
     }
 
     // MARK: - Private
 
-    @Environment(\.parraUser) private var user
+    @Environment(\.parra) private var parra
     @State private var identityNames: [String] = []
+
+    @ViewBuilder private var labels: some View {
+        if identityNames.isEmpty {
+            Text("Unknown")
+                .font(.headline)
+        } else if identityNames.count == 1 {
+            Text(identityNames[0])
+                .font(.headline)
+        } else {
+            Text(identityNames[0])
+                .font(.headline)
+
+            Text(identityNames[1])
+                .font(.subheadline)
+                .foregroundStyle(.gray)
+        }
+    }
 }
 
 struct AuthenticatedProfileInfoView: View {

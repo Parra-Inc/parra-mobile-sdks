@@ -17,13 +17,15 @@ struct ChangePasswordCell: View {
             isChangePasswordPresented = true
         }) {
             Label(
-                title: { Text("Change password") },
+                title: {
+                    Text("Change password")
+                        .foregroundStyle(Color.primary)
+                },
                 icon: {
                     Image(systemName: "key.fill")
                 }
             )
         }
-        .buttonStyle(.plain)
         .presentParraChangePasswordView(
             isPresented: $isChangePasswordPresented
         )

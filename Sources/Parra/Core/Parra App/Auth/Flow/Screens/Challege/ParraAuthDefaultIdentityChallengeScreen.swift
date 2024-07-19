@@ -214,7 +214,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                         switch challengeResponse {
                         case .passkey:
                             "Error creating passkey"
-                        case .password(let password, let isValid):
+                        case .password:
                             "The supplied password was incorrect"
                         case .passwordlessSms:
                             "Error sending login code via SMS"

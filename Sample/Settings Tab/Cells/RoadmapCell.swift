@@ -26,7 +26,10 @@ struct RoadmapCell: View {
             loadRoadmap()
         }) {
             Label(
-                title: { Text("Roadmap") },
+                title: {
+                    Text("Roadmap")
+                        .foregroundStyle(Color.primary)
+                },
                 icon: {
                     if isLoading {
                         ProgressView()
@@ -36,7 +39,6 @@ struct RoadmapCell: View {
                 }
             )
         }
-        .buttonStyle(.plain)
         .disabled(isLoading)
         .presentParraRoadmap(with: $roadmapInfo)
     }

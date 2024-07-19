@@ -21,11 +21,16 @@ struct ReviewAppCell: View {
                     destination: writeReviewUrl
                 ) {
                     Label(
-                        title: { Text("Write a review") },
-                        icon: { Image(systemName: "pencil.line") }
+                        title: {
+                            Text("Write a review")
+                        },
+                        icon: {
+                            Image(systemName: "pencil.line")
+                                .foregroundStyle(.tint)
+                        }
                     )
                 }
-                .buttonStyle(.plain)
+                .foregroundStyle(Color.primary)
 
                 Spacer()
 

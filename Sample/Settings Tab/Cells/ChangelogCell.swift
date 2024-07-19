@@ -35,7 +35,10 @@ struct ChangelogCell: View {
                 loadRoadmap()
             }) {
                 Label(
-                    title: { Text("Changelog") },
+                    title: {
+                        Text("Changelog")
+                            .foregroundStyle(Color.primary)
+                    },
                     icon: {
                         if isLoading {
                             ProgressView()
@@ -45,7 +48,6 @@ struct ChangelogCell: View {
                     }
                 )
             }
-            .buttonStyle(.plain)
             .disabled(isLoading)
             .presentParraChangelog(with: $changelogInfo)
         }

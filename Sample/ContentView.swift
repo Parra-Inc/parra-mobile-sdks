@@ -10,14 +10,12 @@ import Parra
 import SwiftUI
 
 struct ContentView: View {
-    // MARK: - Internal
-
     var body: some View {
         TabView {
             SampleTab()
                 .tabItem {
                     Label(
-                        appInfo.application.name,
+                        "App",
                         systemImage: "app.dashed"
                     )
                 }
@@ -28,14 +26,10 @@ struct ContentView: View {
                 }
         }
     }
-
-    // MARK: - Private
-
-    @EnvironmentObject private var appInfo: ParraAppInfo
 }
 
 #Preview {
-    ParraAppPreview {
+    ParraAppPreview(authState: .authenticatedPreview) {
         ContentView()
     }
 }

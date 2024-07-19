@@ -12,23 +12,27 @@ import SwiftUI
 struct AccountView: View {
     // MARK: - Internal
 
+    @Environment(\.parra) var parra
+
     var body: some View {
         List {
             Section {
                 AccountHeader()
             }
 
-            Section("Personal info") {
+            Section {
                 NavigationLink {
                     EditProfileView()
                 } label: {
                     HStack {
-                        Text("Name")
+                        Text("Edit profile")
                         Spacer()
                         Text(displayName)
                     }
                 }
+            }
 
+            Section("Login methods") {
                 NavigationLink {} label: {
                     HStack {
                         Text("Email")
@@ -38,25 +42,23 @@ struct AccountView: View {
                 }
             }
 
-            Section("Sign in & security") {
+            Section("Security") {
                 ChangePasswordCell()
             }
 
-            Section("Manage account") {
+            Section("Danger zone") {
                 LogoutCell()
                 DeleteAccountCell()
             }
         }
-        .navigationTitle("My account")
-        .onReceive(user.$current) { user in
+        .navigationTitle("Account")
+        .onReceive(parra.user.$current) { user in
             displayName = user?.info.displayName ?? "Unknown"
             email = user?.info.email ?? ""
         }
     }
 
     // MARK: - Private
-
-    @Environment(\.parraUser) private var user
 
     @State private var displayName = ""
     @State private var email = ""

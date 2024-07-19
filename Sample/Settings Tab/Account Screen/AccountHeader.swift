@@ -10,8 +10,6 @@ import Parra
 import SwiftUI
 
 struct AccountHeader: View {
-    // MARK: - Internal
-
     var body: some View {
         VStack {
             ParraProfilePhotoWell(
@@ -24,8 +22,4 @@ struct AccountHeader: View {
         .padding()
         .frame(maxWidth: .infinity)
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
 }

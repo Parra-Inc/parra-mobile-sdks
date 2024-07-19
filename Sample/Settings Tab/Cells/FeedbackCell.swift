@@ -26,7 +26,10 @@ struct FeedbackCell: View {
             loadFeedbackForm(with: "ff66b5d8-9030-4dc3-aca8-50eec3bb9a1e")
         }) {
             Label(
-                title: { Text("Leave feedback") },
+                title: {
+                    Text("Leave feedback")
+                        .foregroundStyle(Color.primary)
+                },
                 icon: {
                     if isLoading {
                         ProgressView()
@@ -36,7 +39,6 @@ struct FeedbackCell: View {
                 }
             )
         }
-        .buttonStyle(.plain)
         .disabled(isLoading)
         .presentParraFeedbackForm(with: $formData) // #4
     }

@@ -33,7 +33,10 @@ struct LatestReleaseCell: View {
                 loadLatestRelease()
             }) {
                 Label(
-                    title: { Text("Update available") },
+                    title: {
+                        Text("Update available")
+                            .foregroundStyle(Color.primary)
+                    },
                     icon: {
                         if isLoading {
                             ProgressView()
@@ -43,7 +46,6 @@ struct LatestReleaseCell: View {
                     }
                 )
             }
-            .buttonStyle(.plain)
             .disabled(isLoading)
             .presentParraRelease(with: $appVersionInfo)
         }

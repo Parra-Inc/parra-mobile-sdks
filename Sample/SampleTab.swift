@@ -14,28 +14,29 @@ struct SampleTab: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(spacing: 24) {
+                Image(systemName: "app.dashed")
+                    .resizable()
+                    .foregroundStyle(.gray)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 96)
+
+                Text("We can't wait to see\nwhat you build!")
+                    .font(.title)
+                    .bold()
+                    .multilineTextAlignment(.center)
+
                 Link(
                     destination: URL(
                         string: "https://docs.parra.io/sdks/guides/quickstart/swiftui"
                     )!
                 ) {
-                    Label(
-                        title: {
-                            Text("Get started")
-                                .font(.headline)
-                        },
-                        icon: {
-                            Image(systemName: "wand.and.stars")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: 24)
-                        }
-                    )
+                    Text("Get started")
+                        .font(.headline)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .navigationTitle("Your app")
+            .navigationTitle("App")
             .background(themeObserver.theme.palette.secondaryBackground)
         }
     }

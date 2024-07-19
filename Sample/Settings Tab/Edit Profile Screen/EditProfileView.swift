@@ -13,64 +13,75 @@ struct EditProfileView: View {
     // MARK: - Internal
 
     var body: some View {
-        Form {
-            Section {
-                HStack {
-                    Text("First name")
-                    Spacer()
-                        .frame(maxWidth: .infinity)
-                    TextField(
-                        "First name",
-                        text: $firstName,
-                        prompt: Text("First name")
-                    )
-                    .multilineTextAlignment(.trailing)
-                }
+        VStack {
+            Form {
+                Section {
+                    HStack {
+                        Text("First name")
+                        Spacer()
+                            .frame(maxWidth: .infinity)
+                        TextField(
+                            "First name",
+                            text: $firstName,
+                            prompt: Text("First name")
+                        )
+                        .multilineTextAlignment(.trailing)
+                    }
 
-                HStack {
-                    Text("Last name")
-                    Spacer()
-                        .frame(maxWidth: .infinity)
-                    TextField(
-                        "Last name",
-                        text: $lastName,
-                        prompt: Text("Last name")
-                    )
-                    .multilineTextAlignment(.trailing)
-                }
+                    HStack {
+                        Text("Last name")
+                        Spacer()
+                            .frame(maxWidth: .infinity)
+                        TextField(
+                            "Last name",
+                            text: $lastName,
+                            prompt: Text("Last name")
+                        )
+                        .multilineTextAlignment(.trailing)
+                    }
 
-                HStack {
-                    Text("Display name")
-                    Spacer()
-                        .frame(maxWidth: .infinity)
-                    TextField(
-                        "Display name",
-                        text: $displayName,
-                        prompt: Text("Display name")
-                    )
-                    .multilineTextAlignment(.trailing)
+                    HStack {
+                        Text("Display name")
+                        Spacer()
+                            .frame(maxWidth: .infinity)
+                        TextField(
+                            "Display name",
+                            text: $displayName,
+                            prompt: Text("Display name")
+                        )
+                        .multilineTextAlignment(.trailing)
+                    }
                 }
             }
+            .onSubmit(of: .text) {
+                saveChanges()
+            }
 
-            Section {
-                Button(
-                    action: saveChanges
-                ) {
-                    Label(
-                        title: { Text("Save changes") },
-                        icon: {
-                            if isLoading {
-                                ProgressView()
-                            }
+            Button(
+                action: saveChanges
+            ) {
+                Label(
+                    title: { Text("Save changes") },
+                    icon: {
+                        if isLoading {
+                            ProgressView()
+                                .tint(.white)
+                                .padding(.trailing, 5)
+                        } else if isShowingSuccess {
+                            Image(systemName: "checkmark")
                         }
-                    )
-                }
-                .disabled(isLoading)
+                    }
+                )
             }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(.blue)
+            .foregroundStyle(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .safeAreaPadding()
+            .disabled(isLoading)
         }
-        .onSubmit(of: .text) {
-            saveChanges()
-        }
+        .background(themeObserver.theme.palette.secondaryBackground)
         .navigationTitle("Edit profile")
         .onAppear {
             let userInfo = parra.user.current?.info
@@ -84,20 +95,27 @@ struct EditProfileView: View {
     // MARK: - Private
 
     @Environment(\.parra) private var parra
+    @EnvironmentObject private var themeObserver: ParraThemeObserver
 
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var displayName: String = ""
     @State private var isLoading = false
+    @State private var isShowingSuccess = false
 
     private func saveChanges() {
         if isLoading {
             return
         }
 
-        isLoading = true
+        withAnimation {
+            isLoading = true
+            isShowingSuccess = false
+        }
 
-        Task {
+        Task { @MainActor in
+            var success = true
+
             do {
                 try await parra.user.updatePersonalInfo(
                     name: displayName.isEmpty ? nil : displayName,
@@ -105,11 +123,18 @@ struct EditProfileView: View {
                     lastName: lastName.isEmpty ? nil : lastName
                 )
             } catch {
+                success = false
                 Logger.error("Error saving personal info", error)
             }
-
-            Task { @MainActor in
+            withAnimation {
                 isLoading = false
+                isShowingSuccess = success
+            } completion: {
+                if isShowingSuccess {
+                    withAnimation(.easeInOut.delay(1.0)) {
+                        isShowingSuccess = false
+                    }
+                }
             }
         }
     }

@@ -22,11 +22,16 @@ struct ShareCell: View {
                     )
                 ) {
                     Label(
-                        title: { Text("Share this app") },
-                        icon: { Image(systemName: "square.and.arrow.up") }
+                        title: {
+                            Text("Share this app")
+                        },
+                        icon: {
+                            Image(systemName: "square.and.arrow.up")
+                                .foregroundStyle(.tint)
+                        }
                     )
                 }
-                .buttonStyle(.plain)
+                .foregroundStyle(Color.primary)
 
                 Spacer()
 
