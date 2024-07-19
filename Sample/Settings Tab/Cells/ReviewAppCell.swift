@@ -16,13 +16,21 @@ struct ReviewAppCell: View {
         if let writeReviewUrl = parraAppInfo.application
             .appStoreWriteReviewUrl
         {
-            Link(
-                destination: writeReviewUrl
-            ) {
-                Label(
-                    title: { Text("Write a review") },
-                    icon: { Image(systemName: "pencil.line") }
-                )
+            HStack {
+                Link(
+                    destination: writeReviewUrl
+                ) {
+                    Label(
+                        title: { Text("Write a review") },
+                        icon: { Image(systemName: "pencil.line") }
+                    )
+                }
+                .buttonStyle(.plain)
+
+                Spacer()
+
+                Image(systemName: "arrow.up.right")
+                    .foregroundStyle(.gray)
             }
         }
     }
@@ -33,7 +41,8 @@ struct ReviewAppCell: View {
 }
 
 #Preview {
-    ParraAppPreview {
+    ParraAppPreview(authState: .authenticatedPreview) {
         ReviewAppCell()
+            .padding()
     }
 }

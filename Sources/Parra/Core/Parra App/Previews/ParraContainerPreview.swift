@@ -64,9 +64,7 @@ struct ParraContainerPreview<ContainerType>: View
         .environment(config)
         .environmentObject(factory)
         .environment(\.parra, parra)
-        .environment(\.parraUser, parra.user)
         .environmentObject(parraAuthState)
-        //        .environmentObject(ParraAppInfo) // TODO: Need this?
     }
 
     // MARK: - Private

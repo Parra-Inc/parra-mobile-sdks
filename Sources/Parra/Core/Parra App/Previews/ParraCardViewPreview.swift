@@ -90,7 +90,6 @@ struct ParraCardViewPreview<Content>: View where Content: View {
         .environmentObject(factory)
         .environment(config)
         .environment(\.parra, parra)
-        .environment(\.parraUser, parra.user)
         .environmentObject(parraAuthState)
     }
 

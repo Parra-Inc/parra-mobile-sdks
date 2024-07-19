@@ -48,7 +48,7 @@ class ApiResourceServerTests: MockedParraTestCase {
 
         let user = ParraUser(
             credential: ParraUser.Credential.basic(token),
-            info: UserInfoResponse.validStates()[0]
+            info: ParraUser.Info.validStates()[0]
         )
 
         let mockApiResourceServer = await createMockApiResourceServer {

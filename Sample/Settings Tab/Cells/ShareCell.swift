@@ -14,16 +14,24 @@ struct ShareCell: View {
 
     var body: some View {
         if let appStoreUrl = parraAppInfo.application.appStoreUrl {
-            ShareLink(
-                item: appStoreUrl,
-                message: Text(
-                    "Check out this awesome new app that I'm building using Parra!"
-                )
-            ) {
-                Label(
-                    title: { Text("Share this app") },
-                    icon: { Image(systemName: "square.and.arrow.up") }
-                )
+            HStack {
+                ShareLink(
+                    item: appStoreUrl,
+                    message: Text(
+                        "Check out this awesome new app that I'm building using Parra!"
+                    )
+                ) {
+                    Label(
+                        title: { Text("Share this app") },
+                        icon: { Image(systemName: "square.and.arrow.up") }
+                    )
+                }
+                .buttonStyle(.plain)
+
+                Spacer()
+
+                Image(systemName: "arrow.up.right")
+                    .foregroundStyle(.gray)
             }
         }
     }

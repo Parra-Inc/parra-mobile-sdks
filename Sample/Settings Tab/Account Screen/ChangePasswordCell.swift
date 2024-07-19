@@ -23,6 +23,7 @@ struct ChangePasswordCell: View {
                 }
             )
         }
+        .buttonStyle(.plain)
         .presentParraChangePasswordView(
             isPresented: $isChangePasswordPresented
         )

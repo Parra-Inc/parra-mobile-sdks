@@ -95,7 +95,6 @@ public struct ParraAppPreview<Content, DelegateType>: View
             previewContent()
         }
         .environment(\.parra, parra)
-        .environment(\.parraUser, parra.user)
         .environmentObject(parraAuthState)
         .environmentObject(alertManager)
         .environmentObject(themeObserver)
