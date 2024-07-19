@@ -20,6 +20,20 @@ struct ForgotPasswordCompleteView: View {
     let onComplete: () -> Void
 
     var body: some View {
+        // reset password in account settings vs. during the login flow.
+        let (subtitle, doneButtonTitle) = switch parraAuthState.current {
+        case .authenticated:
+            (
+                "Your password has been successfully updated.",
+                "Dismiss"
+            )
+        case .unauthenticated, .undetermined:
+            (
+                "Your password has been successfully updated. You can now use your new password to log in.",
+                "Return to login"
+            )
+        }
+
         VStack(alignment: .leading, spacing: 12) {
             componentFactory.buildLabel(
                 text: "Password updated",
@@ -35,7 +49,7 @@ struct ForgotPasswordCompleteView: View {
             .layoutPriority(20)
 
             componentFactory.buildLabel(
-                text: "Your password has been successfully updated. You can now use your new password to log in.",
+                text: subtitle,
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .subheadline
@@ -44,13 +58,15 @@ struct ForgotPasswordCompleteView: View {
             )
             .layoutPriority(20)
 
+            Spacer()
+
             componentFactory.buildContainedButton(
                 config: ParraTextButtonConfig(
                     type: .primary,
                     size: .large,
                     isMaxWidth: true
                 ),
-                text: "Return to login",
+                text: doneButtonTitle,
                 localAttributes: ParraAttributes.ContainedButton(
                     normal: ParraAttributes.ContainedButton.StatefulAttributes(
                         padding: .zero
@@ -66,6 +82,7 @@ struct ForgotPasswordCompleteView: View {
     // MARK: - Private
 
     @EnvironmentObject private var componentFactory: ComponentFactory
+    @EnvironmentObject private var parraAuthState: ParraAuthState
 }
 
 #Preview {

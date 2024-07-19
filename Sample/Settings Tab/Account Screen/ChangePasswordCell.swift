@@ -14,7 +14,7 @@ struct ChangePasswordCell: View {
 
     var body: some View {
         Button(action: {
-            parra.auth.deleteAccount()
+            isChangePasswordPresented = true
         }) {
             Label(
                 title: { Text("Change password") },
@@ -23,15 +23,20 @@ struct ChangePasswordCell: View {
                 }
             )
         }
+        .presentParraChangePasswordView(
+            isPresented: $isChangePasswordPresented
+        )
     }
 
     // MARK: - Private
 
     @Environment(\.parra) private var parra
+
+    @State private var isChangePasswordPresented = false
 }
 
 #Preview {
-    ParraAppPreview {
+    ParraAppPreview(authState: .authenticatedPreview) {
         ChangePasswordCell()
     }
 }
