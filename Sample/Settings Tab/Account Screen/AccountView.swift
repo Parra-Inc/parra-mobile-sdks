@@ -48,8 +48,11 @@ struct AccountView: View {
                 ChangePasswordCell()
             }
 
-            Section("Danger zone") {
+            Section {
                 LogoutCell()
+            }
+
+            Section("Danger zone") {
                 DeleteAccountCell()
             }
         }
