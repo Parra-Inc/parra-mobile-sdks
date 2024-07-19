@@ -25,7 +25,6 @@ struct ThemeCell: View {
                     title: { Text("Theme") },
                     icon: { Image(systemName: "paintbrush") }
                 )
-                .foregroundStyle(.blue)
             }
         )
     }

@@ -19,7 +19,7 @@ struct AccountHeader: View {
             )
             .padding(.bottom, 6)
 
-            IdentityLabels(user: parra.user!)
+            IdentityLabels(user: parra.currentUser!)
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -31,38 +31,59 @@ struct AccountHeader: View {
 }
 
 struct AccountView: View {
+    // MARK: - Internal
+
     var body: some View {
         List {
             Section {
                 AccountHeader()
             }
 
-            Section {
+            Section("Personal info") {
                 NavigationLink {
-                    ProfileView()
+                    EditProfileView()
                 } label: {
-                    Label(
-                        title: { Text("Edit profile") },
-                        icon: { Image(systemName: "person") }
-                    )
+                    HStack {
+                        Text("Name")
+
+                        Spacer()
+
+                        Text(parra.currentUser?.info.displayName ?? "Unknown")
+                    }
+                }
+
+                NavigationLink {} label: {
+                    HStack {
+                        Text("Email")
+                            .disabled(true)
+
+                        Spacer()
+
+                        Text(parra.currentUser?.info.email ?? "")
+                            .disabled(true)
+                    }
                 }
             }
 
-            Section("Account info") {
+            Section("Sign in & security") {
                 ChangePasswordCell()
             }
 
-            Section {
+            Section("Manage account") {
                 LogoutCell()
                 DeleteAccountCell()
             }
         }
         .navigationTitle("My account")
     }
+
+    // MARK: - Private
+
+    @Environment(\.parra) private var parra
 }
 
 #Preview {
-    ParraAppPreview {
+    ParraAppPreview(authState: .authenticatedPreview) {
         AccountView()
     }
 }

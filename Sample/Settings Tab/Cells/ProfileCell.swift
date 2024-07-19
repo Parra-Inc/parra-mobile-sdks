@@ -34,7 +34,7 @@ struct IdentityLabels: View {
     let user: ParraUser
 
     var body: some View {
-        let names = user.identityNames
+        let names = user.info.identityNames
 
         if names.isEmpty {
             Text("Unknown")

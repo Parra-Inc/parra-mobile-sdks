@@ -13,8 +13,6 @@ struct SettingsFooter: View {
     // MARK: - Internal
 
     @ViewBuilder var body: some View {
-        let device = UIDevice.current
-
         let version =
             "Version \(Parra.appBundleVersionShort()!) (\(Parra.appBundleVersion()!))"
 
@@ -27,7 +25,7 @@ struct SettingsFooter: View {
 
             PoweredByParraButton()
         }
-        .padding(.top, 36)
+        .padding(.vertical, 36)
         .frame(maxWidth: .infinity)
     }
 

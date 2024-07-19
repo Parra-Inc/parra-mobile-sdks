@@ -36,6 +36,7 @@ struct FeedbackCell: View {
                 }
             )
         }
+        .buttonStyle(.plain)
         .disabled(isLoading)
         .presentParraFeedbackForm(with: $formData) // #4
     }

@@ -45,6 +45,7 @@ struct ChangelogCell: View {
                     }
                 )
             }
+            .buttonStyle(.plain)
             .disabled(isLoading)
             .presentParraChangelog(with: $changelogInfo)
         }

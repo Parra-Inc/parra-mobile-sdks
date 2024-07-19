@@ -43,6 +43,7 @@ struct LatestReleaseCell: View {
                     }
                 )
             }
+            .buttonStyle(.plain)
             .disabled(isLoading)
             .presentParraRelease(with: $appVersionInfo)
         }

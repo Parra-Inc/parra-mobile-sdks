@@ -36,6 +36,7 @@ struct RoadmapCell: View {
                 }
             )
         }
+        .buttonStyle(.plain)
         .disabled(isLoading)
         .presentParraRoadmap(with: $roadmapInfo)
     }
