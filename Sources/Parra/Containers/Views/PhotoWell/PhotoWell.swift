@@ -83,7 +83,7 @@ struct PhotoWell: View {
     var loadingView: some View {
         ProgressView()
             .progressViewStyle(CircularProgressViewStyle())
-            .foregroundStyle(ParraColorSwatch.slate.shade300)
+            .foregroundStyle(ParraColorSwatch.gray.shade300)
     }
 
     @ViewBuilder var currentImageElement: some View {
@@ -113,6 +113,7 @@ struct PhotoWell: View {
     }
 
     var body: some View {
+        let longSide = max(size.width, size.height)
         let palette = themeObserver.theme.palette
         let mainColor = colorScheme == .light
             ? ParraColorSwatch.gray.shade300
@@ -129,9 +130,9 @@ struct PhotoWell: View {
                     .clipShape(.circle)
                     .overlay( /// apply a rounded border
                         RoundedRectangle(
-                            cornerRadius: max(size.width, size.height)
+                            cornerRadius: longSide
                         )
-                        .stroke(mainColor, lineWidth: 5)
+                        .stroke(mainColor, lineWidth: ceil(longSide * 0.04))
                     )
             })
             .overlay(alignment: .bottomTrailing) {
@@ -140,11 +141,11 @@ struct PhotoWell: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(
-                            width: 24,
-                            height: 24,
+                            width: ceil(longSide * 0.24),
+                            height: ceil(longSide * 0.24),
                             alignment: .bottomTrailing
                         )
-                        .foregroundStyle(ParraColorSwatch.slate.shade700)
+                        .foregroundStyle(ParraColorSwatch.gray.shade400)
                         .background(palette.secondaryBackground)
                         .clipShape(.circle)
                         .padding(.bottom, 4)
