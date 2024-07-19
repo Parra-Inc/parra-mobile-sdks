@@ -72,9 +72,9 @@ struct EditProfileView: View {
                         }
                     }
                 )
+                .frame(maxWidth: .infinity)
+                .padding()
             }
-            .frame(maxWidth: .infinity)
-            .padding()
             .background(.blue)
             .foregroundStyle(.white)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))

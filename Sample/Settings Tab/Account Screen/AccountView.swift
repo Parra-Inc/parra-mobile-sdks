@@ -28,6 +28,7 @@ struct AccountView: View {
                         Text("Edit profile")
                         Spacer()
                         Text(displayName)
+                            .foregroundStyle(.gray)
                     }
                 }
             }
@@ -38,6 +39,7 @@ struct AccountView: View {
                         Text("Email")
                         Spacer()
                         Text(email)
+                            .foregroundStyle(.gray)
                     }
                 }
             }
@@ -53,7 +55,7 @@ struct AccountView: View {
         }
         .navigationTitle("Account")
         .onReceive(parra.user.$current) { user in
-            displayName = user?.info.displayName ?? "Unknown"
+            displayName = user?.info.displayName ?? ""
             email = user?.info.email ?? ""
         }
     }

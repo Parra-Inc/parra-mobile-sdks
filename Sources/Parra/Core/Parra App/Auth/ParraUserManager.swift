@@ -33,9 +33,9 @@ public final class ParraUserManager: ObservableObject {
         }
 
         let updated = try await parraInternal.api.updateUserInfo(
-            name: name ?? "null",
-            firstName: firstName ?? "null",
-            lastName: lastName ?? "null"
+            name: name,
+            firstName: firstName,
+            lastName: lastName
         )
 
         try await parraInternal.authService.applyUserInfoUpdate(updated)

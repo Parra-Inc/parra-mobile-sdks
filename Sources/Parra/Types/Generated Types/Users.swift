@@ -95,6 +95,18 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     public let firstName: String?
     public let lastName: String?
     public let name: String?
+
+    public func encode(to encoder: any Encoder) throws {
+        // Overridden because we want to send null for each of these fields
+        // instead of ommitting them like the default implementation which uses
+        // encodeIfPresent for optionals.
+
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(firstName, forKey: .firstName)
+        try container.encode(lastName, forKey: .lastName)
+        try container.encode(name, forKey: .name)
+    }
 }
 
 struct AuthChallengesRequestBody: Codable, Equatable, Hashable {

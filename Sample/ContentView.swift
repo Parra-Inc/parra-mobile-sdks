@@ -14,10 +14,7 @@ struct ContentView: View {
         TabView {
             SampleTab()
                 .tabItem {
-                    Label(
-                        "App",
-                        systemImage: "app.dashed"
-                    )
+                    Label("App", systemImage: "app.dashed")
                 }
 
             SettingsTab()
