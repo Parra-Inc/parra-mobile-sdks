@@ -23,7 +23,7 @@ struct ShareCell: View {
                 ) {
                     Label(
                         title: {
-                            Text("Share this app")
+                            Text("Share This App")
                         },
                         icon: {
                             Image(systemName: "square.and.arrow.up")

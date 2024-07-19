@@ -18,7 +18,7 @@ struct ChangePasswordCell: View {
         }) {
             Label(
                 title: {
-                    Text("Change password")
+                    Text("Change Password")
                         .foregroundStyle(Color.primary)
                 },
                 icon: {

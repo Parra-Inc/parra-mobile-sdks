@@ -25,7 +25,7 @@ struct AccountView: View {
                     EditProfileView()
                 } label: {
                     HStack {
-                        Text("Edit profile")
+                        Text("Edit Profile")
                         Spacer()
                         Text(displayName)
                             .foregroundStyle(.gray)
@@ -33,7 +33,7 @@ struct AccountView: View {
                 }
             }
 
-            Section("Login methods") {
+            Section("Login Methods") {
                 NavigationLink {} label: {
                     HStack {
                         Text("Email")
@@ -52,7 +52,7 @@ struct AccountView: View {
                 LogoutCell()
             }
 
-            Section("Danger zone") {
+            Section("Danger Zone") {
                 DeleteAccountCell()
             }
         }

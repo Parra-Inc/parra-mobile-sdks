@@ -34,7 +34,7 @@ struct LatestReleaseCell: View {
             }) {
                 Label(
                     title: {
-                        Text("Update available")
+                        Text("Update Available")
                             .foregroundStyle(Color.primary)
                     },
                     icon: {

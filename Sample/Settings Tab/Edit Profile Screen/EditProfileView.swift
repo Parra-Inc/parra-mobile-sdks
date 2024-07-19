@@ -17,37 +17,37 @@ struct EditProfileView: View {
             Form {
                 Section {
                     HStack {
-                        Text("First name")
+                        Text("First Name")
                         Spacer()
                             .frame(maxWidth: .infinity)
                         TextField(
-                            "First name",
+                            "First Name",
                             text: $firstName,
-                            prompt: Text("First name")
+                            prompt: Text("First Name")
                         )
                         .multilineTextAlignment(.trailing)
                     }
 
                     HStack {
-                        Text("Last name")
+                        Text("Last Name")
                         Spacer()
                             .frame(maxWidth: .infinity)
                         TextField(
-                            "Last name",
+                            "Last Name",
                             text: $lastName,
-                            prompt: Text("Last name")
+                            prompt: Text("Last Name")
                         )
                         .multilineTextAlignment(.trailing)
                     }
 
                     HStack {
-                        Text("Display name")
+                        Text("Display Name")
                         Spacer()
                             .frame(maxWidth: .infinity)
                         TextField(
-                            "Display name",
+                            "Display Name",
                             text: $displayName,
-                            prompt: Text("Display name")
+                            prompt: Text("Display Name")
                         )
                         .multilineTextAlignment(.trailing)
                     }
@@ -61,7 +61,7 @@ struct EditProfileView: View {
                 action: saveChanges
             ) {
                 Label(
-                    title: { Text("Save changes") },
+                    title: { Text("Save") },
                     icon: {
                         if isLoading {
                             ProgressView()
@@ -82,7 +82,7 @@ struct EditProfileView: View {
             .disabled(isLoading)
         }
         .background(themeObserver.theme.palette.secondaryBackground)
-        .navigationTitle("Edit profile")
+        .navigationTitle("Edit Profile")
         .onAppear {
             let userInfo = parra.user.current?.info
 

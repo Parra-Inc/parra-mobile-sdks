@@ -17,7 +17,7 @@ struct DeleteAccountCell: View {
             parra.auth.deleteAccount()
         }) {
             Label(
-                title: { Text("Delete account") },
+                title: { Text("Delete Account") },
                 icon: {
                     Image(systemName: "trash")
                 }

@@ -27,7 +27,7 @@ struct FeedbackCell: View {
         }) {
             Label(
                 title: {
-                    Text("Leave feedback")
+                    Text("Leave Feedback")
                         .foregroundStyle(Color.primary)
                 },
                 icon: {

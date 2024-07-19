@@ -22,7 +22,7 @@ struct ReviewAppCell: View {
                 ) {
                     Label(
                         title: {
-                            Text("Write a review")
+                            Text("Write a Review")
                         },
                         icon: {
                             Image(systemName: "pencil.line")
