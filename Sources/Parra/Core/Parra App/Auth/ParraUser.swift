@@ -8,44 +8,21 @@
 
 import SwiftUI
 
-public struct ParraUser: Equatable, Codable {
+// ! Important: Changing keys will result in user logouts when the persisted
+//              info/credential objects are unable to be parsed on app launch.
+public struct ParraUser: Equatable, Codable, Hashable {
+    // MARK: - Lifecycle
+
+    init(
+        credential: Credential,
+        info: Info
+    ) {
+        self.credential = credential
+        self.info = info
+    }
+
     // MARK: - Public
 
-    public var userInfo: User? {
-        return info.user
-    }
-
-    public var identityNames: [String] {
-        guard let userInfo else {
-            return []
-        }
-
-        return [
-            userInfo.username,
-            userInfo.name,
-            userInfo.email,
-            userInfo.phoneNumber
-        ].compactMap { $0 }
-    }
-
-    // MARK: - Internal
-
-    enum Credential: Codable, Equatable {
-        case basic(String)
-        case oauth2(OAuth2Service.Token)
-
-        // MARK: - Internal
-
-        var accessToken: String {
-            switch self {
-            case .basic(let token):
-                return token
-            case .oauth2(let token):
-                return token.accessToken
-            }
-        }
-    }
-
-    let credential: Credential
-    let info: UserInfoResponse
+    public let credential: Credential
+    public let info: Info
 }

@@ -121,19 +121,33 @@ class ParraInternal {
 
         switch result {
         case .authenticated(let user):
-            Parra.default.user = user
+            var updatedUser = user
+
+            do {
+                logger.debug("Refreshing user info")
+
+                // If refresh was successful, we need to make sure this is the
+                // user that becomes immediately accessible outside the SDK.
+                if let next = try await authService.refreshUserInfo() {
+                    updatedUser = next
+                }
+            } catch {
+                logger.error("Failed to refresh user info on app launch", error)
+            }
+
+            Parra.default.user.current = updatedUser
 
             addEventObservers()
 
             syncManager.startSyncTimer()
         case .unauthenticated:
-            Parra.default.user = nil
+            Parra.default.user.current = nil
 
             removeEventObservers()
 
             syncManager.stopSyncTimer()
         case .undetermined:
-            Parra.default.user = nil
+            Parra.default.user.current = nil
 
             assertionFailure()
             // shouldn't ever change _to_ this.
@@ -174,6 +188,8 @@ class ParraInternal {
         await sessionManager.initializeSessions()
 
         if configuration.pushNotificationOptions.enabled {
+            logger.debug("Registering for remote notifications")
+
             await MainActor.run {
                 UIApplication.shared.registerForRemoteNotifications()
             }

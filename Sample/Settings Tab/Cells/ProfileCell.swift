@@ -14,8 +14,8 @@ public struct ProfileCell: View {
 
     public var body: some View {
         switch parraAuthState.current {
-        case .authenticated(let user):
-            AuthenticatedProfileInfoView(user: user)
+        case .authenticated:
+            AuthenticatedProfileInfoView()
         case .unauthenticated(let error):
             UnauthenticatedProfileInfoView(error: error)
         case .undetermined:
@@ -31,36 +31,42 @@ public struct ProfileCell: View {
 }
 
 struct IdentityLabels: View {
-    let user: ParraUser
+    // MARK: - Internal
 
     var body: some View {
-        let names = user.info.identityNames
+        Group {
+            if identityNames.isEmpty {
+                Text("Unknown")
+                    .font(.headline)
+            } else if identityNames.count == 1 {
+                Text(identityNames[0])
+                    .font(.headline)
+            } else {
+                Text(identityNames[0])
+                    .font(.headline)
 
-        if names.isEmpty {
-            Text("Unknown")
-                .font(.headline)
-        } else if names.count == 1 {
-            Text(names[0])
-                .font(.headline)
-        } else {
-            Text(names[0])
-                .font(.headline)
-
-            Text(names[1])
-                .font(.subheadline)
-                .foregroundStyle(.gray)
+                Text(identityNames[1])
+                    .font(.subheadline)
+                    .foregroundStyle(.gray)
+            }
+        }
+        .onReceive(user.$current) { user in
+            identityNames = user?.info.identityNames ?? []
         }
     }
+
+    // MARK: - Private
+
+    @Environment(\.parraUser) private var user
+    @State private var identityNames: [String] = []
 }
 
 struct AuthenticatedProfileInfoView: View {
     // MARK: - Internal
 
-    let user: ParraUser
-
     @ViewBuilder var labels: some View {
         VStack(alignment: .leading) {
-            IdentityLabels(user: user)
+            IdentityLabels()
         }
     }
 

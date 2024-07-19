@@ -82,9 +82,9 @@ public struct ParraAppPreview<Content, DelegateType>: View
         )
 
         if case .authenticated(let user) = authState.current {
-            parra.user = user
+            parra.user.current = user
         } else {
-            parra.user = nil
+            parra.user.current = nil
         }
     }
 
@@ -95,6 +95,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
             previewContent()
         }
         .environment(\.parra, parra)
+        .environment(\.parraUser, parra.user)
         .environmentObject(parraAuthState)
         .environmentObject(alertManager)
         .environmentObject(themeObserver)

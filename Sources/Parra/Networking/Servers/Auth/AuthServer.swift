@@ -103,11 +103,11 @@ final class AuthServer: Server {
     @discardableResult
     func postSignup(
         requestData: CreateUserRequestBody
-    ) async throws -> User {
+    ) async throws -> ParraUser.Info {
         let body = try configuration.jsonEncoder.encode(requestData)
 
         let (data, _): (
-            User,
+            ParraUser.Info,
             HTTPURLResponse
         ) = try await performUnauthenticatedRequest(
             to: .postCreateUser,

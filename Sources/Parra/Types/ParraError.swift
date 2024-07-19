@@ -11,8 +11,11 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     case message(String)
     case generic(String, Error?)
     case notInitialized
-    case missingAuthentication
     case authenticationFailed(String)
+    /// For actions that require the Parra Auth offering that the developer
+    /// attempted to invoke with a custom auth scheme.
+    case parraAuthenticationRequired
+    case unauthenticated
     case networkError(
         request: URLRequest,
         response: HTTPURLResponse,
@@ -42,7 +45,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
 
         switch self {
         case .message, .unknown, .jsonError, .notInitialized,
-             .missingAuthentication, .rateLimited:
+             .unauthenticated, .parraAuthenticationRequired, .rateLimited:
+
             return baseMessage
         case .generic(_, let error):
             if let error {
@@ -128,8 +132,10 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return string
         case .notInitialized:
             return "Parra has not been initialized. Call Parra.initialize() in applicationDidFinishLaunchingWithOptions."
-        case .missingAuthentication:
-            return "An authentication provider has not been set. Add Parra.initialize() to your applicationDidFinishLaunchingWithOptions method."
+        case .parraAuthenticationRequired:
+            return "This operation requires the use of Parra Auth instead of custom auth."
+        case .unauthenticated:
+            return "This operation requires a currently authenticated user."
         case .authenticationFailed:
             return "Invoking the authentication provider passed to Parra.initialize() failed."
         case .networkError, .apiError:
@@ -214,8 +220,8 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
                 "path": path.relativeString,
                 "error_description": message
             ]
-        case .notInitialized, .missingAuthentication, .message, .jsonError,
-             .unknown, .system, .rateLimited:
+        case .notInitialized, .message, .jsonError, .unknown, .system,
+             .rateLimited, .parraAuthenticationRequired, .unauthenticated:
 
             return [:]
         case .validationFailed(let failures):

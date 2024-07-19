@@ -25,7 +25,7 @@ struct ParraChangePasswordModal: View {
     let complete: () -> Void
 
     @ViewBuilder var body: some View {
-        if let email = parra.user?.userInfo?.email {
+        if let email = parra.user.current?.info.email {
             let params = ParraAuthDefaultForgotPasswordScreen.Params(
                 identity: email,
                 codeLength: 6,

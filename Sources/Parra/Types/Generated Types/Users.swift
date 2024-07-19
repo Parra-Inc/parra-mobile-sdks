@@ -75,13 +75,13 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        firstName: String,
-        lastName: String,
-        email: String
+        firstName: String?,
+        lastName: String?,
+        name: String?
     ) {
         self.firstName = firstName
         self.lastName = lastName
-        self.email = email
+        self.name = name
     }
 
     // MARK: - Public
@@ -89,12 +89,12 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case firstName
         case lastName
-        case email
+        case name
     }
 
-    public let firstName: String
-    public let lastName: String
-    public let email: String
+    public let firstName: String?
+    public let lastName: String?
+    public let name: String?
 }
 
 struct AuthChallengesRequestBody: Codable, Equatable, Hashable {
@@ -373,7 +373,7 @@ public struct UserInfoResponse: Codable, Equatable, Hashable {
 
     public init(
         roles: [String],
-        user: User?
+        user: ParraUser.Info
     ) {
         self.roles = roles
         self.user = user
@@ -387,7 +387,7 @@ public struct UserInfoResponse: Codable, Equatable, Hashable {
     }
 
     public let roles: [String]
-    public let user: User?
+    public let user: ParraUser.Info
 }
 
 public struct ListUsersQuery: Codable, Equatable, Hashable {

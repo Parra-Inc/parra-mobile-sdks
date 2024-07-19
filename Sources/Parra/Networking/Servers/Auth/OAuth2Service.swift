@@ -34,7 +34,7 @@ final class OAuth2Service {
 
     func authenticate(
         using signupType: AuthType
-    ) async throws -> Token {
+    ) async throws -> ParraUser.Credential.Token {
         var data: [String: String] = [
             "scope": "parra openid offline_access profile email phone",
             "client_id": clientId
@@ -65,7 +65,7 @@ final class OAuth2Service {
                 delegate: nil
             )
 
-        return OAuth2Service.Token(
+        return ParraUser.Credential.Token(
             accessToken: response.accessToken,
             tokenType: response.tokenType,
             expiresIn: response.expiresIn,
@@ -74,9 +74,9 @@ final class OAuth2Service {
     }
 
     func refreshToken(
-        _ token: Token,
+        _ token: ParraUser.Credential.Token,
         timeout: TimeInterval
-    ) async throws -> Token {
+    ) async throws -> ParraUser.Credential.Token {
         let refreshToken = token.refreshToken
 
         let data: [String: String] = [
@@ -94,7 +94,7 @@ final class OAuth2Service {
                 delegate: nil
             )
 
-        return OAuth2Service.Token(
+        return ParraUser.Credential.Token(
             accessToken: response.accessToken,
             tokenType: response.tokenType,
             expiresIn: response.expiresIn,
@@ -103,9 +103,9 @@ final class OAuth2Service {
     }
 
     func refreshTokenIfNeeded(
-        _ token: Token,
+        _ token: ParraUser.Credential.Token,
         timeout: TimeInterval
-    ) async throws -> Token {
+    ) async throws -> ParraUser.Credential.Token {
         if token.isNearlyExpired {
             if token.isExpired {
                 logger.trace("Token is expired, refreshing")

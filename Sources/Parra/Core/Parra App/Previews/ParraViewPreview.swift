@@ -62,6 +62,7 @@ struct ParraViewPreview<Content>: View where Content: View {
             content(factory)
         }
         .environment(\.parra, parra)
+        .environment(\.parraUser, parra.user)
         .environmentObject(parraAuthState)
         .environmentObject(alertManager)
         .environmentObject(themeObserver)

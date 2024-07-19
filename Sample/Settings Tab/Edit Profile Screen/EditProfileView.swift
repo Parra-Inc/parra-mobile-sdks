@@ -53,16 +53,27 @@ struct EditProfileView: View {
             }
 
             Section {
-                Button(action: {
-                    parra.currentUser
-                }, label: {
-                    Text("Save changes")
-                })
+                Button(
+                    action: saveChanges
+                ) {
+                    Label(
+                        title: { Text("Save changes") },
+                        icon: {
+                            if isLoading {
+                                ProgressView()
+                            }
+                        }
+                    )
+                }
+                .disabled(isLoading)
             }
+        }
+        .onSubmit(of: .text) {
+            saveChanges()
         }
         .navigationTitle("Edit profile")
         .onAppear {
-            let userInfo = parra.currentUser?.info
+            let userInfo = parra.user.current?.info
 
             firstName = userInfo?.firstName ?? ""
             lastName = userInfo?.lastName ?? ""
@@ -77,6 +88,31 @@ struct EditProfileView: View {
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var displayName: String = ""
+    @State private var isLoading = false
+
+    private func saveChanges() {
+        if isLoading {
+            return
+        }
+
+        isLoading = true
+
+        Task {
+            do {
+                try await parra.user.updatePersonalInfo(
+                    name: displayName.isEmpty ? nil : displayName,
+                    firstName: firstName.isEmpty ? nil : firstName,
+                    lastName: lastName.isEmpty ? nil : lastName
+                )
+            } catch {
+                Logger.error("Error saving personal info", error)
+            }
+
+            Task { @MainActor in
+                isLoading = false
+            }
+        }
+    }
 }
 
 #Preview {

@@ -264,39 +264,55 @@ final class AuthService {
             )
         }
 
-        let userInfo = try await authServer.getUserInfo(
+        let response = try await authServer.getUserInfo(
             accessToken: credential.accessToken,
             timeout: timeout
         )
 
         let user = ParraUser(
             credential: credential,
-            info: userInfo
+            info: response.user
         )
 
         await applyUserUpdate(.authenticated(user))
     }
 
-    func refreshUserInfo() async throws {
+    @discardableResult
+    func applyUserInfoUpdate(
+        _ info: ParraUser.Info
+    ) async throws -> ParraUser? {
+        guard let credential = await dataManager.getCurrentCredential() else {
+            logger.debug("Can't apply user info update. No credential found.")
+
+            return nil
+        }
+
+        let user = ParraUser(
+            credential: credential,
+            info: info
+        )
+
+        await applyUserUpdate(.authenticated(user))
+
+        return user
+    }
+
+    @discardableResult
+    func refreshUserInfo() async throws -> ParraUser? {
         guard let credential = await dataManager.getCurrentCredential() else {
             logger.debug("Can't refresh user info. No credential found.")
 
-            return
+            return nil
         }
 
         logger.debug("Refreshing user info")
 
-        let userInfo = try await authServer.getUserInfo(
+        let response = try await authServer.getUserInfo(
             accessToken: credential.accessToken,
             timeout: 10.0
         )
 
-        let user = ParraUser(
-            credential: credential,
-            info: userInfo
-        )
-
-        await applyUserUpdate(.authenticated(user))
+        return try await applyUserInfoUpdate(response.user)
     }
 
     func applyUserUpdate(
@@ -338,16 +354,16 @@ final class AuthService {
     }
 
     func _completeLogin(
-        with oauthToken: OAuth2Service.Token
+        with oauthToken: ParraUser.Credential.Token
     ) async -> ParraAuthResult {
         do {
-            let userInfo = try await authServer.postLogin(
+            let response = try await authServer.postLogin(
                 accessToken: oauthToken.accessToken
             )
 
             let user = ParraUser(
                 credential: .oauth2(oauthToken),
-                info: userInfo
+                info: response.user
             )
 
             return .authenticated(user)
@@ -406,7 +422,7 @@ final class AuthService {
 
                     return nil
                 case .oauth2(let token):
-                    let result: OAuth2Service.Token = if forceRefresh {
+                    let result: ParraUser.Credential.Token = if forceRefresh {
                         try await oauth2Service.refreshToken(
                             token,
                             timeout: timeout

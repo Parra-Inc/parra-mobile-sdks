@@ -34,7 +34,11 @@ public final class Parra: Observable {
         parraInternal: parraInternal
     )
 
-    @Published public internal(set) var user: ParraUser?
+    /// An object representing the currently logged in user, if one exists.
+    /// This is only relevant to Parra Auth.
+    public private(set) lazy var user: ParraUserManager = .init(
+        parraInternal: parraInternal
+    )
 
     // MARK: - Internal
 

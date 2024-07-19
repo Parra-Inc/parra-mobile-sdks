@@ -42,6 +42,7 @@ enum ApiEndpoint: Endpoint {
 
     // Users
     case getUserInfo
+    case updateUserInfo(userId: String)
     case postUpdateAvatar
     case deleteAvatar(userId: String)
     case deleteUser(userId: String)
@@ -58,6 +59,8 @@ enum ApiEndpoint: Endpoint {
              .postPushTokens, .postVoteForTicket,
              .postLogin, .postLogout, .postUpdateAvatar:
             return .post
+        case .updateUserInfo:
+            return .put
         case .deleteVoteForTicket, .deleteUser, .deleteAvatar:
             return .delete
         }
@@ -73,6 +76,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/auth/logout"
         case .getUserInfo:
             return "tenants/:tenantId/auth/user-info"
+        case .updateUserInfo:
+            return "tenants/:tenantId/users/:userId"
         case .getCards:
             return "cards"
         case .getFeedbackForm:

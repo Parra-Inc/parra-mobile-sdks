@@ -9,27 +9,6 @@
 import Parra
 import SwiftUI
 
-struct AccountHeader: View {
-    // MARK: - Internal
-
-    var body: some View {
-        VStack {
-            ParraProfilePhotoWell(
-                size: CGSize(width: 100, height: 100)
-            )
-            .padding(.bottom, 6)
-
-            IdentityLabels(user: parra.currentUser!)
-        }
-        .padding()
-        .frame(maxWidth: .infinity)
-    }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-}
-
 struct AccountView: View {
     // MARK: - Internal
 
@@ -45,22 +24,16 @@ struct AccountView: View {
                 } label: {
                     HStack {
                         Text("Name")
-
                         Spacer()
-
-                        Text(parra.currentUser?.info.displayName ?? "Unknown")
+                        Text(displayName)
                     }
                 }
 
                 NavigationLink {} label: {
                     HStack {
                         Text("Email")
-                            .disabled(true)
-
                         Spacer()
-
-                        Text(parra.currentUser?.info.email ?? "")
-                            .disabled(true)
+                        Text(email)
                     }
                 }
             }
@@ -75,11 +48,18 @@ struct AccountView: View {
             }
         }
         .navigationTitle("My account")
+        .onReceive(user.$current) { user in
+            displayName = user?.info.displayName ?? "Unknown"
+            email = user?.info.email ?? ""
+        }
     }
 
     // MARK: - Private
 
-    @Environment(\.parra) private var parra
+    @Environment(\.parraUser) private var user
+
+    @State private var displayName = ""
+    @State private var email = ""
 }
 
 #Preview {

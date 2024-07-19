@@ -30,25 +30,47 @@ extension API {
     func deleteAvatar() async throws {
         logger.debug("Deleting user avatar")
 
-        guard let user = await dataManager.getCurrentUser()?.userInfo else {
+        guard let userInfo = await dataManager.getCurrentUser()?.info else {
             throw ParraError.message("Can not delete account. Not logged in.")
         }
 
         let _: EmptyResponseObject = try await hitEndpoint(
-            .deleteAvatar(userId: user.id),
+            .deleteAvatar(userId: userInfo.id),
             cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
+        )
+    }
+
+    func updateUserInfo(
+        name: String? = nil,
+        firstName: String? = nil,
+        lastName: String? = nil
+    ) async throws -> ParraUser.Info {
+        let requestBody = UpdateUserRequestBody(
+            firstName: firstName,
+            lastName: lastName,
+            name: name
+        )
+
+        guard let userInfo = await dataManager.getCurrentUser()?.info else {
+            throw ParraError.message("Can not delete account. Not logged in.")
+        }
+
+        return try await hitEndpoint(
+            .updateUserInfo(userId: userInfo.id),
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+            body: requestBody
         )
     }
 
     func deleteAccount() async throws {
         logger.warn("Preparing to delete account")
 
-        guard let user = await dataManager.getCurrentUser()?.userInfo else {
+        guard let userInfo = await dataManager.getCurrentUser()?.info else {
             throw ParraError.message("Can not delete account. Not logged in.")
         }
 
         let _: EmptyResponseObject = try await hitEndpoint(
-            .deleteUser(userId: user.id),
+            .deleteUser(userId: userInfo.id),
             cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
         )
     }
