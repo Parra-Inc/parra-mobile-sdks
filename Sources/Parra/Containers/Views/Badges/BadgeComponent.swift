@@ -24,8 +24,6 @@ struct BadgeComponent: View {
     let content: BadgeContent
     let attributes: ParraAttributes.Badge
 
-    @Environment(\.redactionReasons) var redactionReasons
-
     var body: some View {
         let isPlaceholder = redactionReasons.contains(.placeholder)
 
@@ -33,15 +31,22 @@ struct BadgeComponent: View {
             ? attributes.mergingOverrides(ParraAttributes.Label(
                 text: ParraAttributes.Text(
                     font: attributes.text.fontType.font,
-                    color: ParraColorSwatch.gray.toParraColor()
+                    color: colorScheme == .light
+                        ? ParraColorSwatch.gray.toParraColor()
+                        : ParraColorSwatch.gray.shade400.toParraColor()
                 ),
                 icon: ParraAttributes.Image(
                     tint: ParraColorSwatch.gray.toParraColor()
                 ),
                 border: ParraAttributes.Border(
-                    color: ParraColorSwatch.gray.shade300.toParraColor()
+                    color: colorScheme == .light
+                        ? ParraColorSwatch.gray.shade300.toParraColor()
+                        : ParraColorSwatch.gray.shade600.toParraColor()
                 ),
-                background: ParraColorSwatch.gray.shade100.toParraColor()
+                background:
+                colorScheme == .light
+                    ? ParraColorSwatch.gray.shade100.toParraColor()
+                    : ParraColorSwatch.gray.shade800.toParraColor()
             ))
             : attributes
 
@@ -58,6 +63,9 @@ struct BadgeComponent: View {
     }
 
     // MARK: - Private
+
+    @Environment(\.redactionReasons) private var redactionReasons
+    @Environment(\.colorScheme) private var colorScheme
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeObserver: ParraThemeObserver
