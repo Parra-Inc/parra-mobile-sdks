@@ -29,12 +29,20 @@ struct CodeEntryView: View {
 
     public var body: some View {
         HStack(alignment: .center) {
+            if UIDevice.isIpad {
+                Spacer()
+            }
+
             ForEach(0 ... length - 1, id: \.self) { index in
                 makeDigitBox(index)
 
                 if index < length - 1 {
                     Spacer()
                 }
+            }
+
+            if UIDevice.isIpad {
+                Spacer()
             }
         }
         .background {

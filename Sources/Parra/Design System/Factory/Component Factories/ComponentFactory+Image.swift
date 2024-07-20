@@ -47,7 +47,7 @@ extension ComponentFactory {
         } else {
             if let originalSize = content.originalSize {
                 ParraImageConfig(
-                    aspectRatio: originalSize.height / originalSize.width
+                    aspectRatio: originalSize.width / originalSize.height
                 )
             } else {
                 ParraImageConfig()

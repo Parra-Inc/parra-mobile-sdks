@@ -184,11 +184,14 @@ struct ReleaseWidget: Container {
                     withContent(
                         content: content.header
                     ) { content in
-                        let aspectRatio = content.size.width / content.size
-                            .height
+                        let aspectRatio = UIDevice.isIpad ? 2.5
+                            : content.size.width / content.size.height
 
                         componentFactory.buildAsyncImage(
-                            config: .init(aspectRatio: 1.5),
+                            config: .init(
+                                aspectRatio: aspectRatio,
+                                contentMode: .fill
+                            ),
                             content: content.image,
                             localAttributes: ParraAttributes.AsyncImage(
                                 cornerRadius: .sm,
@@ -196,7 +199,6 @@ struct ReleaseWidget: Container {
                                     .secondaryBackground
                             )
                         )
-                        .aspectRatio(aspectRatio, contentMode: .fill)
                         .frame(
                             width: width,
                             height: (width / aspectRatio).rounded()
