@@ -36,7 +36,9 @@ struct AsyncImageComponent: View {
             url: content.url,
             urlCache: URLSessionConfiguration.apiConfiguration
                 .urlCache ?? .shared,
-            transaction: Transaction(animation: .easeIn(duration: 0.35)),
+            transaction: Transaction(
+                animation: .easeIn(duration: 0.35)
+            ),
             content: imageContent
         )
         .applyAsyncImageAttributes(attributes, using: theme)
@@ -55,7 +57,7 @@ struct AsyncImageComponent: View {
         switch phase {
         case .empty:
             ZStack {
-                Color(theme.palette.secondaryBackground)
+                Color(attributes.background ?? .clear)
 
                 ProgressView()
             }
@@ -73,7 +75,7 @@ struct AsyncImageComponent: View {
             ])
 
             ZStack {
-                Color(theme.palette.secondaryBackground)
+                Color(attributes.background ?? .clear)
 
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundStyle(theme.palette.error)

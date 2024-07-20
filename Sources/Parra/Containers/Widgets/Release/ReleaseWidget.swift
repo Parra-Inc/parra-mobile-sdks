@@ -191,7 +191,9 @@ struct ReleaseWidget: Container {
                             config: .init(aspectRatio: 1.5),
                             content: content.image,
                             localAttributes: ParraAttributes.AsyncImage(
-                                cornerRadius: .sm
+                                cornerRadius: .sm,
+                                background: themeObserver.theme.palette
+                                    .secondaryBackground
                             )
                         )
                         .aspectRatio(aspectRatio, contentMode: .fill)
