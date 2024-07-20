@@ -34,13 +34,11 @@ struct AccountView: View {
             }
 
             Section("Login Methods") {
-                NavigationLink {} label: {
-                    HStack {
-                        Text("Email")
-                        Spacer()
-                        Text(email)
-                            .foregroundStyle(.gray)
-                    }
+                HStack {
+                    Text("Email")
+                    Spacer()
+                    Text(email)
+                        .foregroundStyle(.gray)
                 }
             }
 
