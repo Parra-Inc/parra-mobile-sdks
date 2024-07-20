@@ -27,10 +27,16 @@ extension ParraAppInfo: ParraFixture {
                     deletedAt: nil,
                     name: "My org",
                     issuer: "parra-demo.com",
-                    subdomain: "mick",
+                    subdomain: "parra-public-demo",
                     isTest: false,
                     parentTenantId: nil,
-                    logo: nil,
+                    logo: .init(
+                        id: .uuid,
+                        size: .init(width: 512, height: 512),
+                        url: URL(
+                            string: "https://image-asset-bucket-production.s3.amazonaws.com/tenants/201cbcf0-b5d6-4079-9e4d-177ae04cc9f4/logo/b7eb15c1-7afe-4590-97c8-120b33ecdcc6.png"
+                        )!
+                    ),
                     domains: [
                         Domain(
                             id: .uuid,
@@ -71,6 +77,9 @@ extension ParraAppInfo: ParraFixture {
                         )
                     ],
                     urls: [
+                        URL(
+                            string: "https://parra-demo.com"
+                        )!,
                         URL(
                             string: "https://parra-public-demo.parra.io"
                         )!,
