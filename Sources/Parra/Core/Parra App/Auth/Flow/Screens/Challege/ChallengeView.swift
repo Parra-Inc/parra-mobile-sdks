@@ -15,11 +15,6 @@ struct ChallengeView: View {
         case password
     }
 
-    @State var passwordState: PasswordStrengthView.ValidityState = .init(
-        password: "",
-        isValid: false
-    )
-
     @State private var validatedRules: [(PasswordRule, Bool)] = []
 
     @FocusState private var focusState: Field?
@@ -30,6 +25,7 @@ struct ChallengeView: View {
     let challengeResponse: Binding<ChallengeResponse?>
     /// The auth method that should be rendered with a loading spinner.
     @Binding var loadingAuthMethod: ParraAuthenticationMethod?
+    @Binding var passwordState: PasswordStrengthView.ValidityState
 
     let submit: () -> Void
     let forgotPassword: () async throws -> Void
@@ -83,50 +79,9 @@ struct ChallengeView: View {
                 .onSubmit(of: .text, submit)
                 .focused($focusState, equals: .password)
 
-                componentFactory
-                    .buildPlainButton(
-                        config: ParraTextButtonConfig(
-                            type: .primary,
-                            size: .medium,
-                            isMaxWidth: false
-                        ),
-                        text: "Forgot password?",
-                        localAttributes: ParraAttributes.PlainButton(
-                            normal: ParraAttributes.PlainButton
-                                .StatefulAttributes(
-                                    label: ParraAttributes.Label(
-                                        text: ParraAttributes.Text(
-                                            alignment: .center
-                                        ),
-                                        padding: .zero
-                                    )
-                                )
-                        ),
-                        onPress: {
-                            Task {
-                                do {
-                                    try await forgotPassword()
-                                } catch let error as ParraError {
-                                    if case .rateLimited = error {
-                                        Logger.error(
-                                            "Rate limited on forgot password",
-                                            error
-                                        )
-                                    } else {
-                                        Logger.error(
-                                            "Error sending password reset code",
-                                            error
-                                        )
-                                    }
-                                } catch {
-                                    Logger.error(
-                                        "Error sending password reset code",
-                                        error
-                                    )
-                                }
-                            }
-                        }
-                    )
+                if userExists {
+                    forgotPasswordButton
+                }
             }
 
             // Password strength view only shows up for create account flow
@@ -260,6 +215,53 @@ struct ChallengeView: View {
             textInputAutocapitalization: .never
         )
     }
+
+    private var forgotPasswordButton: some View {
+        componentFactory
+            .buildPlainButton(
+                config: ParraTextButtonConfig(
+                    type: .primary,
+                    size: .medium,
+                    isMaxWidth: false
+                ),
+                text: "Forgot password?",
+                localAttributes: ParraAttributes.PlainButton(
+                    normal: ParraAttributes.PlainButton
+                        .StatefulAttributes(
+                            label: ParraAttributes.Label(
+                                text: ParraAttributes.Text(
+                                    alignment: .center
+                                ),
+                                padding: .zero
+                            )
+                        )
+                ),
+                onPress: {
+                    Task {
+                        do {
+                            try await forgotPassword()
+                        } catch let error as ParraError {
+                            if case .rateLimited = error {
+                                Logger.error(
+                                    "Rate limited on forgot password",
+                                    error
+                                )
+                            } else {
+                                Logger.error(
+                                    "Error sending password reset code",
+                                    error
+                                )
+                            }
+                        } catch {
+                            Logger.error(
+                                "Error sending password reset code",
+                                error
+                            )
+                        }
+                    }
+                }
+            )
+    }
 }
 
 #Preview {
@@ -271,6 +273,7 @@ struct ChallengeView: View {
                 userExists: true,
                 challengeResponse: .constant(nil),
                 loadingAuthMethod: .constant(nil),
+                passwordState: .constant(.init(password: "", isValid: false)),
                 submit: {},
                 forgotPassword: {}
             )
@@ -281,6 +284,7 @@ struct ChallengeView: View {
                 userExists: false,
                 challengeResponse: .constant(nil),
                 loadingAuthMethod: .constant(nil),
+                passwordState: .constant(.init(password: "", isValid: false)),
                 submit: {},
                 forgotPassword: {}
             )

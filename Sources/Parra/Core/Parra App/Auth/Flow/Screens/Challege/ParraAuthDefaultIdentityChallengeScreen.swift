@@ -79,6 +79,11 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
 
     @Environment(\.parra) var parra
 
+    @State var passwordState: PasswordStrengthView.ValidityState = .init(
+        password: "",
+        isValid: false
+    )
+
     // MARK: - Private
 
     private let params: Params
@@ -117,8 +122,14 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 userExists: params.userExists,
                 challengeResponse: $challengeResponse,
                 loadingAuthMethod: $loadingAuthMethod,
+                passwordState: $passwordState,
                 submit: submit,
                 forgotPassword: {
+                    // Force clearing the password before proceeding to
+                    // forgot password. Prevents the Apple "save password"
+                    // prompt from popping up when navigating away.
+                    passwordState = .init(password: "", isValid: false)
+
                     try await params.forgotPassword()
                 }
             )
