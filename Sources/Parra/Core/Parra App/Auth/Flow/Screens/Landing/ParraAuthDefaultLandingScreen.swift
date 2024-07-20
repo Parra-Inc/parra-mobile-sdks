@@ -22,12 +22,16 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     // MARK: - Public
 
     public var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
+            Spacer()
+
             if let topView = config.topView {
                 AnyView(topView)
             } else {
                 defaultTopView
             }
+
+            Spacer()
 
             continueButton
 
@@ -88,6 +92,18 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     }
 
     @ViewBuilder private var defaultTopView: some View {
+        if let logo = parraAppInfo.tenant.logo {
+            componentFactory.buildAsyncImage(
+                content: AsyncImageContent(
+                    url: logo.url
+                ),
+                localAttributes: ParraAttributes.AsyncImage(
+                    size: CGSize(width: 200, height: 200),
+                    padding: .zero
+                )
+            )
+        }
+
         titleLabel
 
         subtitleLabel
@@ -117,7 +133,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     @ViewBuilder private var subtitleLabel: some View {
         let subtitleAttributes = ParraAttributes.Label(
             text: .default(with: .subheadline),
-            padding: .md
+            padding: .zero
         )
 
         componentFactory.buildLabel(
