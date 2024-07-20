@@ -18,9 +18,19 @@ struct WebView: View {
 
     // MARK: - Internal
 
+    var themedUrl: URL {
+        let theme = colorScheme == .light ? "light" : "dark"
+
+        return url.appending(
+            queryItems: [
+                URLQueryItem(name: "theme", value: theme)
+            ]
+        )
+    }
+
     var body: some View {
         _WebView(
-            url: url,
+            url: themedUrl,
             isLoading: $isLoading,
             errorMessage: $errorMessage
         )
@@ -38,8 +48,11 @@ struct WebView: View {
     // MARK: - Private
 
     private let url: URL
+
     @State private var isLoading: Bool = true
     @State private var errorMessage: String?
+
+    @Environment(\.colorScheme) private var colorScheme
 }
 
 struct _WebView: UIViewRepresentable {
