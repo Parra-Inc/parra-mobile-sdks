@@ -11,6 +11,7 @@ import SwiftUI
 struct ImageComponent: View {
     // MARK: - Internal
 
+    let config: ParraImageConfig
     let content: ParraImageContent
     let attributes: ParraAttributes.Image
 
@@ -36,7 +37,10 @@ struct ImageComponent: View {
     var body: some View {
         baseImage
             .resizable()
-            .aspectRatio(contentMode: .fit)
+            .aspectRatio(
+                config.aspectRatio,
+                contentMode: config.contentMode
+            )
             .applyImageAttributes(
                 attributes,
                 using: themeObserver.theme

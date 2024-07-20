@@ -12,8 +12,8 @@ public struct Size: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        width: Int,
-        height: Int
+        width: CGFloat,
+        height: CGFloat
     ) {
         self.width = width
         self.height = height
@@ -21,8 +21,8 @@ public struct Size: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public let width: Int
-    public let height: Int
+    public let width: CGFloat
+    public let height: CGFloat
 }
 
 public enum TicketType: String, Codable, Equatable, CaseIterable {

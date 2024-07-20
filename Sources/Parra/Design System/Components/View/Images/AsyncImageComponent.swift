@@ -12,15 +12,18 @@ struct AsyncImageComponent: View {
     // MARK: - Lifecycle
 
     init(
+        config: ParraImageConfig,
         content: AsyncImageContent,
         attributes: ParraAttributes.AsyncImage
     ) {
+        self.config = config
         self.content = content
         self.attributes = attributes
     }
 
     // MARK: - Internal
 
+    let config: ParraImageConfig
     let content: AsyncImageContent
     let attributes: ParraAttributes.AsyncImage
 
@@ -60,6 +63,10 @@ struct AsyncImageComponent: View {
             image
                 .resizable()
                 .transition(.opacity)
+                .aspectRatio(
+                    config.aspectRatio,
+                    contentMode: config.contentMode
+                )
         case .failure(let error):
             let _ = Logger.error("Error loading image", error, [
                 "url": content.url.absoluteString
@@ -83,6 +90,7 @@ struct AsyncImageComponent: View {
             Spacer()
 
             componentFactory.buildAsyncImage(
+                config: .init(contentMode: .fill),
                 content: AsyncImageContent(
                     url: URL(
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
@@ -96,6 +104,7 @@ struct AsyncImageComponent: View {
             Spacer()
 
             componentFactory.buildAsyncImage(
+                config: .init(contentMode: .fill),
                 content: AsyncImageContent(
                     url: URL(
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100"

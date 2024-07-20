@@ -188,6 +188,7 @@ struct ReleaseWidget: Container {
                             .height
 
                         componentFactory.buildAsyncImage(
+                            config: .init(aspectRatio: 1.5),
                             content: content.image,
                             localAttributes: ParraAttributes.AsyncImage(
                                 cornerRadius: .sm

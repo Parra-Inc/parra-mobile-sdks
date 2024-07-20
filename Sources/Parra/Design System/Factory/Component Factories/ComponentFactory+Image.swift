@@ -11,6 +11,7 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildImage(
+        config: ParraImageConfig = ParraImageConfig(),
         content: ParraImageContent,
         localAttributes: ParraAttributes.Image? = nil
     ) -> some View {
@@ -21,6 +22,7 @@ extension ComponentFactory {
         )
 
         ImageComponent(
+            config: config,
             content: content,
             attributes: attributes
         )
@@ -28,6 +30,7 @@ extension ComponentFactory {
 
     @ViewBuilder
     func buildAsyncImage(
+        config: ParraImageConfig? = nil,
         content: AsyncImageContent,
         localAttributes: ParraAttributes.AsyncImage? = nil
     ) -> some View {
@@ -37,7 +40,22 @@ extension ComponentFactory {
             theme: theme
         )
 
+        // If a config wasn't provided, create a default one based on the
+        // image's expected aspect ratio.
+        let finalConfig: ParraImageConfig = if let config {
+            config
+        } else {
+            if let originalSize = content.originalSize {
+                ParraImageConfig(
+                    aspectRatio: originalSize.height / originalSize.width
+                )
+            } else {
+                ParraImageConfig()
+            }
+        }
+
         AsyncImageComponent(
+            config: finalConfig,
             content: content,
             attributes: attributes
         )
