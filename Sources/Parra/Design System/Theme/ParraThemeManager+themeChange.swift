@@ -1,5 +1,5 @@
 //
-//  ParraThemeObserver+themeChange.swift
+//  ParraThemeManager+themeChange.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/8/24.
@@ -10,7 +10,7 @@ import SwiftUI
 
 private let logger = Logger()
 
-extension ParraThemeObserver {
+extension ParraThemeManager {
     func addThemeWillChangeObserver(
         with notificationCenter: NotificationCenterType
     ) -> NSObjectProtocol {

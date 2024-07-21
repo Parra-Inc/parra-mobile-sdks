@@ -42,7 +42,7 @@ public struct ParraProfilePhotoWell: View {
 
     // MARK: - Internal
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
+    @EnvironmentObject var themeManager: ParraThemeManager
     @EnvironmentObject var parraAuthState: ParraAuthState
 
     @Environment(\.parra) var parra

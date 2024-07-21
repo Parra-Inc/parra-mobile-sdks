@@ -43,7 +43,7 @@ struct PhoneOrEmailTextInputView: View {
         }
         .applyPadding(
             size: .md,
-            from: themeObserver.theme
+            from: themeManager.theme
         )
         .animation(.easeInOut(duration: 0.6), value: isFocused.wrappedValue)
         .sheet(
@@ -68,7 +68,7 @@ struct PhoneOrEmailTextInputView: View {
                             text: country.dialCode,
                             localAttributes: .init(
                                 text: .init(
-                                    color: themeObserver.theme.palette
+                                    color: themeManager.theme.palette
                                         .secondaryText.toParraColor()
                                 )
                             )
@@ -110,7 +110,7 @@ struct PhoneOrEmailTextInputView: View {
     }
 
     var fieldBackgroundColor: Color {
-        return themeObserver.theme.palette.secondaryBackground
+        return themeManager.theme.palette.secondaryBackground
     }
 
     // MARK: - Private
@@ -127,7 +127,7 @@ struct PhoneOrEmailTextInputView: View {
 
     private var isFocused: FocusState<Bool>.Binding
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 
     @ViewBuilder private var textField: some View {
@@ -219,7 +219,7 @@ struct PhoneOrEmailTextInputView: View {
             .textInputAttributes(
                 config: .default,
                 localAttributes: attributes,
-                theme: themeObserver.theme
+                theme: themeManager.theme
             )
 
         if currentMode == .phone {
@@ -232,14 +232,14 @@ struct PhoneOrEmailTextInputView: View {
             }
             .applyTextInputAttributes(
                 textInputAttributes,
-                using: themeObserver.theme
+                using: themeManager.theme
             )
         }
 
         textField
             .applyTextInputAttributes(
                 textInputAttributes,
-                using: themeObserver.theme
+                using: themeManager.theme
             )
             .onChange(of: selectedCountry) { oldValue, _ in
                 entry.trimPrefix(oldValue.dialCode)

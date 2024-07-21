@@ -14,7 +14,7 @@ struct ThemeCell: View {
 
     var body: some View {
         Picker(
-            selection: $themeObserver.preferredAppearance,
+            selection: $themeManager.preferredAppearance,
             content: {
                 ForEach(ParraAppearance.allCases) { option in
                     Text(option.description).tag(option)
@@ -31,7 +31,7 @@ struct ThemeCell: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @Environment(\.parra) private var parra
 }
 

@@ -50,7 +50,7 @@ struct TextInputComponent: View {
                 EmptyView()
             }
             .foregroundStyle(
-                textColorOverride ?? themeObserver.theme.palette.primaryText
+                textColorOverride ?? themeManager.theme.palette.primaryText
                     .toParraColor()
             )
             .onAppear {
@@ -96,7 +96,7 @@ struct TextInputComponent: View {
                 }
                 .applyTextInputAttributes(
                     attributes,
-                    using: themeObserver.theme
+                    using: themeManager.theme
                 )
                 .focused($isFocused)
                 .onChange(of: text) { _, newValue in
@@ -110,7 +110,7 @@ struct TextInputComponent: View {
         .applyPadding(
             size: attributes.padding,
             on: [.horizontal, .bottom],
-            from: themeObserver.theme
+            from: themeManager.theme
         )
         .onTapGesture {
             isFocused = true
@@ -122,7 +122,7 @@ struct TextInputComponent: View {
     @FocusState private var isFocused: Bool
 
     @Environment(\.colorScheme) private var colorScheme
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     @State private var text: String
     @State private var hasReceivedInput = false

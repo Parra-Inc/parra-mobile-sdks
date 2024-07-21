@@ -26,12 +26,12 @@ struct RoadmapTicketTypeIcon: View {
         }
         .frame(width: type.size.width, height: type.size.height)
         .background(type.backgroundColor)
-        .applyCornerRadii(size: .xs, from: themeObserver.theme)
+        .applyCornerRadii(size: .xs, from: themeManager.theme)
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 }
 
 #Preview {

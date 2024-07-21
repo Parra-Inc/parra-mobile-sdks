@@ -39,7 +39,7 @@ final class ModalScreenManager {
                 return
             }
 
-            let themeObserver = ParraThemeObserver(
+            let themeManager = ParraThemeManager(
                 theme: configuration.theme,
                 notificationCenter: notificationCenter
             )
@@ -57,7 +57,7 @@ final class ModalScreenManager {
 
             let modalViewController = UIHostingController(
                 rootView: container
-                    .environmentObject(themeObserver)
+                    .environmentObject(themeManager)
             )
             modalViewController.view.backgroundColor = .clear
             modalViewController.modalPresentationStyle = .overCurrentContext
@@ -114,7 +114,7 @@ final class ModalScreenManager {
                 config: config
             )
 
-            let themeObserver = ParraThemeObserver(
+            let themeManager = ParraThemeManager(
                 theme: configuration.theme,
                 notificationCenter: notificationCenter
             )
@@ -132,7 +132,7 @@ final class ModalScreenManager {
                 container
                     .padding(.top, 30)
             }
-            .environmentObject(themeObserver)
+            .environmentObject(themeManager)
 
             let modalViewController = UIHostingController(
                 rootView: rootView

@@ -37,13 +37,13 @@ struct SampleTab: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationTitle("App")
-            .background(themeObserver.theme.palette.secondaryBackground)
+            .background(themeManager.theme.palette.secondaryBackground)
         }
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 }
 
 #Preview {

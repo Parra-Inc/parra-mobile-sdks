@@ -52,7 +52,7 @@ struct ModalLoadingIndicatorContainer: Container {
     var config: Config
     var componentFactory: ComponentFactory
     var contentObserver: ContentObserver
-    @EnvironmentObject var themeObserver: ParraThemeObserver
+    @EnvironmentObject var themeManager: ParraThemeManager
 
     var body: some View {
         ZStack {
@@ -67,7 +67,7 @@ struct ModalLoadingIndicatorContainer: Container {
         }
         .environmentObject(componentFactory)
         .environmentObject(contentObserver)
-        .environmentObject(themeObserver)
+        .environmentObject(themeManager)
     }
 }
 

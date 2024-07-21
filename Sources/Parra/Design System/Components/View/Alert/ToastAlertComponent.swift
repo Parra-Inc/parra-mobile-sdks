@@ -47,12 +47,12 @@ struct ToastAlertComponent: View {
         }
         .applyToastAlertAttributes(
             attributes,
-            using: themeObserver.theme
+            using: themeManager.theme
         )
         .overlay(
             ZStack {
                 UnevenRoundedRectangle(
-                    cornerRadii: themeObserver.theme.cornerRadius
+                    cornerRadii: themeManager.theme.cornerRadius
                         .value(for: attributes.cornerRadius)
                 )
                 .strokeBorder(
@@ -83,7 +83,7 @@ struct ToastAlertComponent: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 }
 

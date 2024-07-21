@@ -58,7 +58,7 @@ struct LatestReleaseCell: View {
     @State private var errorMessage: String?
     @State private var appVersionInfo: NewInstalledVersionInfo? // #3
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var appInfo: ParraAppInfo
 
     private func loadLatestRelease() {

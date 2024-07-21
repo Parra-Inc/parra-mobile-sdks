@@ -81,7 +81,7 @@ struct EditProfileView: View {
             .safeAreaPadding()
             .disabled(isLoading)
         }
-        .background(themeObserver.theme.palette.secondaryBackground)
+        .background(themeManager.theme.palette.secondaryBackground)
         .navigationTitle("Edit Profile")
         .onAppear {
             let userInfo = parra.user.current?.info
@@ -95,7 +95,7 @@ struct EditProfileView: View {
     // MARK: - Private
 
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     @State private var firstName: String = ""
     @State private var lastName: String = ""

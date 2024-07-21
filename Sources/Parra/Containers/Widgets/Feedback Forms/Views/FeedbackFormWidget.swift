@@ -27,14 +27,14 @@ struct FeedbackFormWidget: Container {
     @StateObject var contentObserver: ContentObserver
     let config: FeedbackFormWidgetConfig
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
+    @EnvironmentObject var themeManager: ParraThemeManager
 
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeObserver.theme
+            with: themeManager.theme
         )
 
-        let contentPadding = themeObserver.theme.padding.value(
+        let contentPadding = themeManager.theme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -74,7 +74,7 @@ struct FeedbackFormWidget: Container {
         }
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: themeObserver.theme
+            using: themeManager.theme
         )
         .environmentObject(contentObserver)
         .environmentObject(componentFactory)
@@ -96,7 +96,7 @@ struct FeedbackFormWidget: Container {
         }
         .applyPadding(
             size: .lg,
-            from: themeObserver.theme
+            from: themeManager.theme
         )
     }
 

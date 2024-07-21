@@ -115,8 +115,8 @@ public struct ParraApp<
             wrappedValue: appState
         )
 
-        self._themeObserver = StateObject(
-            wrappedValue: ParraThemeObserver(
+        self._themeManager = StateObject(
+            wrappedValue: ParraThemeManager(
                 theme: parra.configuration.theme,
                 notificationCenter: parra.notificationCenter
             )
@@ -137,7 +137,7 @@ public struct ParraApp<
             .environmentObject(parraAuthState)
             .environmentObject(launchScreenState)
             .environmentObject(alertManager)
-            .environmentObject(themeObserver)
+            .environmentObject(themeManager)
             .environmentObject(parra.globalComponentFactory)
             .onChange(
                 of: launchScreenState.current,
@@ -172,7 +172,7 @@ public struct ParraApp<
     @StateObject private var parraAuthState: ParraAuthState = .init()
     @StateObject private var launchScreenState: LaunchScreenStateManager
 
-    @StateObject private var themeObserver: ParraThemeObserver
+    @StateObject private var themeManager: ParraThemeManager
     @StateObject private var alertManager: AlertManager
 
     private let parra: ParraInternal

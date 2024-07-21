@@ -75,7 +75,7 @@ struct CodeEntryView: View {
 
     @ViewBuilder
     func makeDigitBox(_ index: Int) -> some View {
-        let palette = themeObserver.theme.palette
+        let palette = themeManager.theme.palette
         let isHighlighted = isKeyboardShowing && !disabled && otpText
             .count == index
 
@@ -124,7 +124,7 @@ struct CodeEntryView: View {
     @State private var otpText = ""
     @FocusState private var isKeyboardShowing: Bool
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     private func onOtpTextChanged(
         oldValue: String,

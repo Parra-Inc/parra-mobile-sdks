@@ -23,13 +23,13 @@ struct DeleteAccountCell: View {
                 }
             )
         }
-        .foregroundStyle(themeObserver.theme.palette.error)
+        .foregroundStyle(themeManager.theme.palette.error)
     }
 
     // MARK: - Private
 
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 }
 
 #Preview {

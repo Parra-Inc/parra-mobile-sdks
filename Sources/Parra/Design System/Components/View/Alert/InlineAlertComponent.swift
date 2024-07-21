@@ -41,13 +41,13 @@ struct InlineAlertComponent: View {
         }
         .applyInlineAlertAttributes(
             attributes,
-            using: themeObserver.theme
+            using: themeManager.theme
         )
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 }
 

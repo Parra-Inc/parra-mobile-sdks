@@ -31,7 +31,7 @@ struct PlainButtonStyle: ButtonStyle {
         )
         .applyPlainButtonAttributes(
             currentAttributes,
-            using: themeObserver.theme
+            using: themeManager.theme
         )
         .overlay(
             alignment: .leading
@@ -44,7 +44,7 @@ struct PlainButtonStyle: ButtonStyle {
                     .applyPadding(
                         size: currentAttributes.padding,
                         on: .leading,
-                        from: themeObserver.theme
+                        from: themeManager.theme
                     )
                     .padding(.leading, 12)
             }
@@ -53,6 +53,6 @@ struct PlainButtonStyle: ButtonStyle {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 }

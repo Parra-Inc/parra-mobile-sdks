@@ -38,7 +38,7 @@ struct TextEditorComponent: View {
                 TextEditor(text: $text)
                     .applyTextEditorAttributes(
                         attributes,
-                        using: themeObserver.theme
+                        using: themeManager.theme
                     )
                     .contentMargins(
                         .all,
@@ -58,7 +58,7 @@ struct TextEditorComponent: View {
 
             helperLabel
         }
-        .applyPadding(size: attributes.padding, from: themeObserver.theme)
+        .applyPadding(size: attributes.padding, from: themeManager.theme)
         .applyBackground(attributes.background)
     }
 
@@ -76,7 +76,7 @@ struct TextEditorComponent: View {
         )
     }
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @State private var text = ""
     @State private var hasReceivedInput = false
 
@@ -102,7 +102,7 @@ struct TextEditorComponent: View {
                 .padding(Constant.primaryTextPadding)
                 .applyTextAttributes(
                     attributes.placeholderText,
-                    using: themeObserver.theme
+                    using: themeManager.theme
                 )
                 .allowsHitTesting(false)
         }

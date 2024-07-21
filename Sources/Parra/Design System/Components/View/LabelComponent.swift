@@ -31,7 +31,7 @@ struct LabelComponent: View {
                     .applyFrame(attributes.frame)
                     .applyTextAttributes(
                         attributes.text,
-                        using: themeObserver.theme
+                        using: themeManager.theme
                     )
             },
             icon: {
@@ -55,14 +55,14 @@ struct LabelComponent: View {
         )
         .applyLabelAttributes(
             attributes,
-            using: themeObserver.theme
+            using: themeManager.theme
         )
         .contentShape(.rect)
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 }
 

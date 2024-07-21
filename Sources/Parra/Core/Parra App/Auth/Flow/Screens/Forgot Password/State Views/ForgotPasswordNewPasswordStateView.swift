@@ -77,7 +77,7 @@ struct ForgotPasswordNewPasswordStateView: View {
     }
 
     var body: some View {
-        let palette = themeObserver.theme.palette
+        let palette = themeManager.theme.palette
 
         VStack(alignment: .leading, spacing: 12) {
             componentFactory.buildLabel(
@@ -201,7 +201,7 @@ struct ForgotPasswordNewPasswordStateView: View {
     @State private var confirmationValidationErrorMessage: String?
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
     private func validate(

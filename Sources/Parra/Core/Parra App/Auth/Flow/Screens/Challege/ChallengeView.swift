@@ -31,7 +31,7 @@ struct ChallengeView: View {
     let forgotPassword: () async throws -> Void
 
     var body: some View {
-        let palette = themeObserver.theme.palette
+        let palette = themeManager.theme.palette
 
         VStack(spacing: 16) {
             componentFactory.buildTextInput(
@@ -175,7 +175,7 @@ struct ChallengeView: View {
     // MARK: - Private
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
     private var challengeFieldConfig: TextInputConfig {

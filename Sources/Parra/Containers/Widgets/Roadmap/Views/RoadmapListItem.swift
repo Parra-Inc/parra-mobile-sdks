@@ -14,7 +14,7 @@ struct RoadmapListItem: View {
     let ticketContent: TicketUserContent
 
     var theme: ParraTheme {
-        return themeObserver.theme
+        return themeManager.theme
     }
 
     @ViewBuilder var info: some View {
@@ -94,5 +94,5 @@ struct RoadmapListItem: View {
     @EnvironmentObject private var contentObserver: RoadmapWidget
         .ContentObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 }

@@ -80,7 +80,7 @@ extension FeedbackQuestionViewKind where AnswerType == MultiOptionAnswer {
 //        title: String,
 //        isSelected: Bool
 //    ) -> (TextButtonContent, TextButtonAttributes) {
-//        let palette = themeObserver.theme.palette
+//        let palette = themeManager.theme.palette
 //
 //        let content = TextButtonContent(
 //            text: LabelContent(text: title),

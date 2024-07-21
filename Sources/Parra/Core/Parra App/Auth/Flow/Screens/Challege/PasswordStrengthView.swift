@@ -33,7 +33,7 @@ struct PasswordStrengthView: View {
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .caption,
-                        color: themeObserver.theme.palette.primaryText
+                        color: themeManager.theme.palette.primaryText
                             .toParraColor()
                     )
                 )
@@ -48,7 +48,7 @@ struct PasswordStrengthView: View {
                         text: ParraAttributes.Text(
                             style: .caption2,
                             color: passwordStrength.color(
-                                for: themeObserver.theme
+                                for: themeManager.theme
                             )
                         )
                     )
@@ -76,12 +76,12 @@ struct PasswordStrengthView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .applyPadding(
                 size: .xl,
-                from: themeObserver.theme
+                from: themeManager.theme
             )
-            .applyBackground(themeObserver.theme.palette.secondaryBackground)
+            .applyBackground(themeManager.theme.palette.secondaryBackground)
             .applyCornerRadii(
                 size: .lg,
-                from: themeObserver.theme
+                from: themeManager.theme
             )
         }
         .frame(maxWidth: .infinity)
@@ -93,7 +93,7 @@ struct PasswordStrengthView: View {
     @Binding private var validatedRules: [(PasswordRule, Bool)]
     @State private var passwordStrength: PasswordEntropyCalculator.Strength?
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 
     @ViewBuilder
@@ -102,8 +102,8 @@ struct PasswordStrengthView: View {
         valid: Bool
     ) -> some View {
         let color = valid
-            ? themeObserver.theme.palette.success
-            : themeObserver.theme.palette.error
+            ? themeManager.theme.palette.success
+            : themeManager.theme.palette.error
 
         let symbol = valid
             ? "checkmark.circle.fill"

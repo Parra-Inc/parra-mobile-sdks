@@ -27,14 +27,14 @@ struct ChangelogWidget: Container {
     @StateObject var contentObserver: ContentObserver
     let config: ChangelogWidgetConfig
 
-    @EnvironmentObject var themeObserver: ParraThemeObserver
+    @EnvironmentObject var themeManager: ParraThemeManager
 
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeObserver.theme
+            with: themeManager.theme
         )
 
-        let contentPadding = themeObserver.theme.padding.value(
+        let contentPadding = themeManager.theme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -61,7 +61,7 @@ struct ChangelogWidget: Container {
                 width: 1,
                 edges: .bottom,
                 color: showNavigationDivider
-                    ? themeObserver.theme.palette
+                    ? themeManager.theme.palette
                     .secondaryBackground : .clear
             )
 
@@ -91,12 +91,12 @@ struct ChangelogWidget: Container {
         }
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: themeObserver.theme
+            using: themeManager.theme
         )
         .applyPadding(
             size: defaultWidgetAttributes.padding,
             on: [.horizontal, .bottom],
-            from: themeObserver.theme
+            from: themeManager.theme
         )
     }
 
@@ -142,7 +142,7 @@ struct ChangelogWidget: Container {
                 .frame(maxWidth: .infinity)
                 .applyPadding(
                     size: attributes.contentPadding,
-                    from: themeObserver.theme
+                    from: themeManager.theme
                 )
             }
         }
@@ -164,7 +164,7 @@ struct ChangelogWidget: Container {
     func list(
         with attributes: ParraAttributes.Widget
     ) -> some View {
-        let contentPadding = themeObserver.theme.padding.value(
+        let contentPadding = themeManager.theme.padding.value(
             for: attributes.contentPadding
         )
 

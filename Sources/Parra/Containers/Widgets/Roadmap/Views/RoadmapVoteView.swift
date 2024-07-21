@@ -14,7 +14,7 @@ struct RoadmapVoteView: View {
     let ticketContent: TicketUserContent
 
     var body: some View {
-        let palette = themeObserver.theme.palette
+        let palette = themeManager.theme.palette
         let voteHightlightColor = ticketContent.voted
             ? palette.primary : palette.secondary
 
@@ -70,5 +70,5 @@ struct RoadmapVoteView: View {
     @EnvironmentObject private var contentObserver: RoadmapWidget
         .ContentObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 }

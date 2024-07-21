@@ -1,5 +1,5 @@
 //
-//  ParraThemeObserver+userDefaults.swift
+//  ParraThemeManager+userDefaults.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 7/8/24.
@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-// MARK: - ParraThemeObserver.ThemeOptions
+// MARK: - ParraThemeManager.ThemeOptions
 
-extension ParraThemeObserver {
+extension ParraThemeManager {
     struct ThemeOptions: Codable, Equatable {
         // MARK: - Lifecycle
 

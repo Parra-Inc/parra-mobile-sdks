@@ -31,7 +31,7 @@ struct OutlinedButtonStyle: ButtonStyle {
         )
         .applyOutlinedButtonAttributes(
             currentAttributes,
-            using: themeObserver.theme
+            using: themeManager.theme
         )
         .overlay(
             alignment: .leading
@@ -44,7 +44,7 @@ struct OutlinedButtonStyle: ButtonStyle {
                     .applyPadding(
                         size: currentAttributes.padding,
                         on: .leading,
-                        from: themeObserver.theme
+                        from: themeManager.theme
                     )
                     .padding(.leading, 12)
             }
@@ -53,6 +53,6 @@ struct OutlinedButtonStyle: ButtonStyle {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 }

@@ -30,7 +30,7 @@ struct AsyncImageComponent: View {
     @Environment(\.parra) var parra
 
     var body: some View {
-        let theme = themeObserver.theme
+        let theme = themeManager.theme
 
         CachedAsyncImage(
             url: content.url,
@@ -46,13 +46,13 @@ struct AsyncImageComponent: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     @ViewBuilder
     private func imageContent(
         for phase: AsyncImagePhase
     ) -> some View {
-        let theme = themeObserver.theme
+        let theme = themeManager.theme
 
         switch phase {
         case .empty:

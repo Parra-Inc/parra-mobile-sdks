@@ -50,7 +50,7 @@ struct FeedbackCell: View {
     @State private var errorMessage: String?
     @State private var isLoading = false
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     private func loadFeedbackForm(
         with formId: String

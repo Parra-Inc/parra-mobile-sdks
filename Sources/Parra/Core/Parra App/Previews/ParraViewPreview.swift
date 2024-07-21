@@ -47,8 +47,8 @@ struct ParraViewPreview<Content>: View where Content: View {
             wrappedValue: parraInternal.alertManager
         )
 
-        self._themeObserver = StateObject(
-            wrappedValue: ParraThemeObserver(
+        self._themeManager = StateObject(
+            wrappedValue: ParraThemeManager(
                 theme: parraInternal.configuration.theme,
                 notificationCenter: parraInternal.notificationCenter
             )
@@ -64,7 +64,7 @@ struct ParraViewPreview<Content>: View where Content: View {
         .environment(\.parra, parra)
         .environmentObject(parraAuthState)
         .environmentObject(alertManager)
-        .environmentObject(themeObserver)
+        .environmentObject(themeManager)
         .environmentObject(
             LaunchScreenStateManager(
                 state: .complete(
@@ -87,5 +87,5 @@ struct ParraViewPreview<Content>: View where Content: View {
 
     @StateObject private var alertManager: AlertManager
     @StateObject private var parraAuthState: ParraAuthState
-    @StateObject private var themeObserver: ParraThemeObserver
+    @StateObject private var themeManager: ParraThemeManager
 }

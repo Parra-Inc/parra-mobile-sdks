@@ -1,5 +1,5 @@
 //
-//  ParraThemeObserver.swift
+//  ParraThemeManager.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/26/24.
@@ -13,9 +13,9 @@ private let logger = Logger(category: "Parra Theme Observer")
 
 @MainActor
 /// Listens for changes to the configured ParraTheme and provides a @Published
-/// property ``ParraThemeObserver/theme`` to obtain the current theme options
+/// property ``ParraThemeManager/current`` to obtain the current theme options
 /// and color palette.
-public class ParraThemeObserver: ObservableObject {
+public class ParraThemeManager: ObservableObject {
     // MARK: - Lifecycle
 
     init(

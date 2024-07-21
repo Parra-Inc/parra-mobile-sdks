@@ -64,7 +64,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
     @EnvironmentObject private var alertManager: AlertManager
     @EnvironmentObject private var parraAuthState: ParraAuthState
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     @ViewBuilder
     private func renderFailure(
@@ -93,13 +93,13 @@ struct LaunchScreenWindow<Content>: View where Content: View {
             renderLaunchScreen(
                 launchScreenConfig: launchConfig
             )
-            .preferredColorScheme(themeObserver.preferredColorScheme)
+            .preferredColorScheme(themeManager.preferredColorScheme)
         }
 
         if let launchResult {
             renderPrimaryContent()
                 .environmentObject(launchResult.appInfo)
-                .preferredColorScheme(themeObserver.preferredColorScheme)
+                .preferredColorScheme(themeManager.preferredColorScheme)
         }
     }
 

@@ -19,7 +19,7 @@ public struct ParraErrorBoundary: View {
                 componentFactory.buildImage(
                     content: .symbol("exclamationmark.triangle.fill"),
                     localAttributes: ParraAttributes.Image(
-                        tint: themeObserver.theme.palette.error.toParraColor(),
+                        tint: themeManager.theme.palette.error.toParraColor(),
                         opacity: 0.76,
                         size: CGSize(width: 100, height: 100),
                         padding: .lg
@@ -57,7 +57,7 @@ public struct ParraErrorBoundary: View {
 //            )
         }
         .applyDefaultWidgetAttributes(
-            using: themeObserver.theme
+            using: themeManager.theme
         )
         .onAppear {
             logger.error(
@@ -87,7 +87,7 @@ public struct ParraErrorBoundary: View {
 
     @State private var isShowingFeedbackForm = false
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 }
 

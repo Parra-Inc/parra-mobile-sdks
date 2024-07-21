@@ -27,7 +27,7 @@ struct FeedbackCheckboxQuestionCard: FeedbackQuestionViewKind {
 
     @Environment(FeedbackCardWidgetConfig.self) var config
     @EnvironmentObject var componentFactory: ComponentFactory
-    @EnvironmentObject var themeObserver: ParraThemeObserver
+    @EnvironmentObject var themeManager: ParraThemeManager
     @EnvironmentObject var contentObserver: FeedbackCardWidget.ContentObserver
 
     let bucketId: String

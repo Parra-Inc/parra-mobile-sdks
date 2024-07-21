@@ -30,7 +30,7 @@ struct ChangelogItemInfoView: View {
     let createdAt: LabelContent
 
     var body: some View {
-        let palette = themeObserver.theme.palette
+        let palette = themeManager.theme.palette
 
         HStack(alignment: .center, spacing: 4) {
             componentFactory.buildBadge(
@@ -62,6 +62,6 @@ struct ChangelogItemInfoView: View {
     // MARK: - Private
 
     @Environment(ChangelogWidgetConfig.self) private var config
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 }

@@ -575,7 +575,7 @@
 		00DA7FFE296367E400109081 /* HeaderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FFD296367E400109081 /* HeaderFactory.swift */; };
 		00DDBA192B61C21E00400761 /* EdgeInsets+hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DDBA182B61C21E00400761 /* EdgeInsets+hashable.swift */; };
 		00DDBA1D2B61D99D00400761 /* EdgeInsets+zero.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DDBA1C2B61D99D00400761 /* EdgeInsets+zero.swift */; };
-		00DDBA262B63FBBC00400761 /* ParraThemeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DDBA252B63FBBC00400761 /* ParraThemeObserver.swift */; };
+		00DDBA262B63FBBC00400761 /* ParraThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DDBA252B63FBBC00400761 /* ParraThemeManager.swift */; };
 		00DEF7262A3FE659006B0DF3 /* UIDevice+modelCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DEF7252A3FE659006B0DF3 /* UIDevice+modelCode.swift */; };
 		00E15A1F2929B7C10049C2C7 /* ParraSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A1E2929B7C10049C2C7 /* ParraSessionManager.swift */; };
 		00E15A212929BC790049C2C7 /* UIDeviceOrientation+ParraLogStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E15A202929BC790049C2C7 /* UIDeviceOrientation+ParraLogStringConvertible.swift */; };
@@ -1354,7 +1354,7 @@
 		00DA7FFD296367E400109081 /* HeaderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderFactory.swift; sourceTree = "<group>"; };
 		00DDBA182B61C21E00400761 /* EdgeInsets+hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+hashable.swift"; sourceTree = "<group>"; };
 		00DDBA1C2B61D99D00400761 /* EdgeInsets+zero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+zero.swift"; sourceTree = "<group>"; };
-		00DDBA252B63FBBC00400761 /* ParraThemeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraThemeObserver.swift; sourceTree = "<group>"; };
+		00DDBA252B63FBBC00400761 /* ParraThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraThemeManager.swift; sourceTree = "<group>"; };
 		00DEF7232A3FA77A006B0DF3 /* ParraCardModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardModalViewController.swift; sourceTree = "<group>"; };
 		00DEF7252A3FE659006B0DF3 /* UIDevice+modelCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+modelCode.swift"; sourceTree = "<group>"; };
 		00E15A1E2929B7C10049C2C7 /* ParraSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSessionManager.swift; sourceTree = "<group>"; };
@@ -2032,7 +2032,7 @@
 		003621EC2B5C7660009EFE53 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
-				00DDBA252B63FBBC00400761 /* ParraThemeObserver.swift */,
+				00DDBA252B63FBBC00400761 /* ParraThemeManager.swift */,
 				005BE4782C3C2FAE00663AF4 /* ParraThemeObserver+userDefaults.swift */,
 				005BE4762C3C299D00663AF4 /* ParraThemeObserver+themeChange.swift */,
 				00AB95A42BE4545900B27091 /* Attributes */,
@@ -3891,7 +3891,7 @@
 				00D143BD2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift in Sources */,
 				00A60B992932D35E00B7168A /* ParraConfiguration.swift in Sources */,
 				004F3EDE2BA4B0CC00424802 /* View+InternalFeedbackForm.swift in Sources */,
-				00DDBA262B63FBBC00400761 /* ParraThemeObserver.swift in Sources */,
+				00DDBA262B63FBBC00400761 /* ParraThemeManager.swift in Sources */,
 				005AFE2F2BE2F32F00B0C29A /* API+sessions.swift in Sources */,
 				00D151232C0661670049D88F /* ChallengeView.swift in Sources */,
 				00F7C4B02B9A609D00DBDF5A /* ImageComponent.swift in Sources */,

@@ -34,10 +34,10 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
 
     public var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeObserver.theme
+            with: themeManager.theme
         )
 
-        let contentPadding = themeObserver.theme.padding.value(
+        let contentPadding = themeManager.theme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -52,7 +52,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
             if !params.userExists, params.legalInfo.hasDouments {
                 LegalInfoView(
                     legalInfo: params.legalInfo,
-                    theme: themeObserver.theme
+                    theme: themeManager.theme
                 )
             }
         }
@@ -63,7 +63,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
         )
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: themeObserver.theme
+            using: themeManager.theme
         )
         .onAppear {
             continueButtonContent = continueButtonContent.withLoading(false)
@@ -122,7 +122,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     ).autoconnect()
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var navigationState: NavigationState
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
@@ -180,7 +180,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .footnote,
-                        color: themeObserver.theme.palette.secondaryText
+                        color: themeManager.theme.palette.secondaryText
                             .toParraColor(),
                         alignment: .center
                     ),

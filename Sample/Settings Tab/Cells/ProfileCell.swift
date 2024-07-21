@@ -26,7 +26,7 @@ public struct ProfileCell: View {
     // MARK: - Private
 
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var parraAuthState: ParraAuthState
 }
 

@@ -114,7 +114,7 @@ struct PhotoWell: View {
 
     var body: some View {
         let longSide = max(size.width, size.height)
-        let palette = themeObserver.theme.palette
+        let palette = themeManager.theme.palette
         let mainColor = colorScheme == .light
             ? ParraColorSwatch.gray.shade300
             : ParraColorSwatch.gray.shade500
@@ -260,7 +260,7 @@ struct PhotoWell: View {
     @State private var selectedPhoto: PhotosPickerItem?
 
     @Environment(\.colorScheme) private var colorScheme
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     private func applyNewImage(_ image: UIImage) {
         state = .processing(image)

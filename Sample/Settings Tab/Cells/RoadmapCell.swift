@@ -50,7 +50,7 @@ struct RoadmapCell: View {
     @State private var errorMessage: String?
     @State private var roadmapInfo: ParraRoadmapInfo?
 
-    @EnvironmentObject private var themeObserver: ParraThemeObserver
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     private func loadRoadmap() {
         isLoading = true
