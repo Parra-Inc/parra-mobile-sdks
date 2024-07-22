@@ -346,7 +346,6 @@
 		00916A602B75C81A009C87DC /* SampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A5F2B75C81A009C87DC /* SampleApp.swift */; };
 		00916A622B75C81A009C87DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A612B75C81A009C87DC /* ContentView.swift */; };
 		00916A642B75C81B009C87DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00916A632B75C81B009C87DC /* Assets.xcassets */; };
-		00916A672B75C81B009C87DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00916A662B75C81B009C87DC /* Preview Assets.xcassets */; };
 		00916A732B75CDC7009C87DC /* View+FeedbackForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A722B75CDC7009C87DC /* View+FeedbackForm.swift */; };
 		00916A752B769132009C87DC /* ParraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A742B769132009C87DC /* ParraApp.swift */; };
 		00916A772B76C483009C87DC /* ParraAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00916A762B76C483009C87DC /* ParraAppDelegate.swift */; };
@@ -1135,7 +1134,6 @@
 		00916A5F2B75C81A009C87DC /* SampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleApp.swift; sourceTree = "<group>"; };
 		00916A612B75C81A009C87DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		00916A632B75C81B009C87DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		00916A662B75C81B009C87DC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		00916A722B75CDC7009C87DC /* View+FeedbackForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+FeedbackForm.swift"; sourceTree = "<group>"; };
 		00916A742B769132009C87DC /* ParraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraApp.swift; sourceTree = "<group>"; };
 		00916A762B76C483009C87DC /* ParraAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAppDelegate.swift; sourceTree = "<group>"; };
@@ -2350,13 +2348,6 @@
 			path = "Settings Tab";
 			sourceTree = "<group>";
 		};
-		005BE4862C3C834400663AF4 /* Your App */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Your App";
-			sourceTree = "<group>";
-		};
 		005BE4872C3C83BD00663AF4 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -2694,23 +2685,13 @@
 				00ABF1812B7E6CCD00A054A2 /* Info.plist */,
 				00FCDF572BA9DBC700F10427 /* Debug.entitlements */,
 				0096A16F2C0FD05E006928DC /* Release.entitlements */,
-				005BE4862C3C834400663AF4 /* Your App */,
 				00916A5F2B75C81A009C87DC /* SampleApp.swift */,
 				00916A612B75C81A009C87DC /* ContentView.swift */,
 				00D5DD982BD205AC002E09B7 /* SampleTab.swift */,
 				005BE4852C3C832D00663AF4 /* Settings Tab */,
 				00916A632B75C81B009C87DC /* Assets.xcassets */,
-				00916A652B75C81B009C87DC /* Preview Content */,
 			);
 			path = Sample;
-			sourceTree = "<group>";
-		};
-		00916A652B75C81B009C87DC /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				00916A662B75C81B009C87DC /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		00916DC62AD35D7300B4856F /* Instance Config */ = {
@@ -3818,7 +3799,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00916A672B75C81B009C87DC /* Preview Assets.xcassets in Resources */,
 				00916A642B75C81B009C87DC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4733,7 +4713,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Sample/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6D44Q764PG;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -4773,7 +4753,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Sample/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6D44Q764PG;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
