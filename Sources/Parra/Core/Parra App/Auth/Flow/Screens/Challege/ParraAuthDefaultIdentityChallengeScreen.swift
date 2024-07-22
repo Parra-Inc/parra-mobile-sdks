@@ -226,7 +226,11 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                         case .passkey:
                             "Error creating passkey"
                         case .password:
-                            "The supplied password was incorrect"
+                            if params.userExists {
+                                "The supplied password was incorrect"
+                            } else {
+                                "Error creating account with the provided credentials"
+                            }
                         case .passwordlessSms:
                             "Error sending login code via SMS"
                         case .passwordlessEmail:
@@ -237,7 +241,11 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                             "Error sending verification code via email"
                         }
                     } else {
-                        "An unexpected error occurred"
+                        if params.userExists {
+                            "An unexpected error occurred logging in"
+                        } else {
+                            "An unexpected error occurred creating an account"
+                        }
                     }
 
                     withAnimation {
