@@ -61,7 +61,9 @@ struct EditProfileView: View {
                 action: saveChanges
             ) {
                 Label(
-                    title: { Text("Save") },
+                    title: {
+                        Text(isShowingSuccess ? "Saved" : "Save")
+                    },
                     icon: {
                         if isLoading {
                             ProgressView()
@@ -131,7 +133,7 @@ struct EditProfileView: View {
                 isShowingSuccess = success
             } completion: {
                 if isShowingSuccess {
-                    withAnimation(.easeInOut.delay(1.0)) {
+                    withAnimation(.easeInOut.delay(2.0)) {
                         isShowingSuccess = false
                     }
                 }
