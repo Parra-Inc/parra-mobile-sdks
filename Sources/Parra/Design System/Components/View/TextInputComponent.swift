@@ -24,6 +24,11 @@ struct TextInputComponent: View {
 
     // MARK: - Internal
 
+    enum SecureFocusState {
+        case normal
+        case visible
+    }
+
     var config: TextInputConfig
     var content: TextInputContent
     var attributes: ParraAttributes.TextInput
@@ -34,33 +39,73 @@ struct TextInputComponent: View {
         let prompt = Text(content.placeholder?.text ?? "")
 
         if config.isSecure {
-            // When Apple is suggesting a strong password, they highlight the
-            // field yellow. In dark mode this means that the font color doesn't
-            // have enough contrast to actually be visible. Using a grey in this
-            // situation is a compromise to be visible with and without the
-            // yellow banner. This isn't an issue in light mode since the font
-            // color contrasts both with white and yellow backgrounds.
-            let textColorOverride = colorScheme == .dark
-                ? ParraColorSwatch.gray.shade400 : attributes.text.color
+            if secureInputRevealingPassword {
+                TextField(
+                    text: $text,
+                    prompt: prompt
+                ) {
+                    EmptyView()
+                }
+                .overlay {
+                    if !text.isEmpty {
+                        HStack {
+                            Spacer()
 
-            SecureField(
-                text: $text,
-                prompt: prompt
-            ) {
-                EmptyView()
-            }
-            .foregroundStyle(
-                textColorOverride ?? themeManager.theme.palette.primaryText
-                    .toParraColor()
-            )
-            .onAppear {
-                if let passwordRuleDescriptor = config.passwordRuleDescriptor,
-                   config.isSecure
-                {
-                    UITextField.appearance()
-                        .passwordRules = UITextInputPasswordRules(
-                            descriptor: passwordRuleDescriptor
-                        )
+                            Button {
+                                secureInputRevealingPassword = false
+                            } label: {
+                                Image(systemName: "eye.slash.fill")
+                            }
+                            .foregroundColor(.secondary.opacity(0.8))
+                            .padding(.trailing, 3)
+                        }
+                    }
+                }
+            } else {
+                // When Apple is suggesting a strong password, they highlight the
+                // field yellow. In dark mode this means that the font color doesn't
+                // have enough contrast to actually be visible. Using a grey in this
+                // situation is a compromise to be visible with and without the
+                // yellow banner. This isn't an issue in light mode since the font
+                // color contrasts both with white and yellow backgrounds.
+                let textColorOverride = colorScheme == .dark
+                    ? ParraColorSwatch.gray.shade400 : attributes.text.color
+
+                SecureField(
+                    text: $text,
+                    prompt: prompt
+                ) {
+                    EmptyView()
+                }
+                .foregroundStyle(
+                    textColorOverride ?? themeManager.theme.palette.primaryText
+                        .toParraColor()
+                )
+                .onAppear {
+                    if let passwordRuleDescriptor = config
+                        .passwordRuleDescriptor,
+                        config.isSecure
+                    {
+                        UITextField.appearance()
+                            .passwordRules = UITextInputPasswordRules(
+                                descriptor: passwordRuleDescriptor
+                            )
+                    }
+                }
+                .overlay {
+                    if !text.isEmpty {
+                        HStack {
+                            Spacer()
+
+                            Button {
+                                secureInputRevealingPassword = true
+                            } label: {
+                                Image(systemName: "eye.fill")
+                            }
+                            .foregroundColor(.secondary.opacity(0.8))
+                            .padding(.trailing, 3)
+                        }
+                    }
                 }
             }
         } else {
@@ -69,6 +114,21 @@ struct TextInputComponent: View {
                 prompt: prompt
             ) {
                 EmptyView()
+            }
+            .overlay {
+                if !text.isEmpty, isFocused {
+                    HStack {
+                        Spacer()
+
+                        Button {
+                            text = ""
+                        } label: {
+                            Image(systemName: "multiply.circle.fill")
+                        }
+                        .foregroundColor(.secondary.opacity(0.8))
+                        .padding(.trailing, 3)
+                    }
+                }
             }
         }
     }
@@ -79,21 +139,6 @@ struct TextInputComponent: View {
             titleLabel
 
             baseView
-                .overlay {
-                    if !text.isEmpty, isFocused {
-                        HStack {
-                            Spacer()
-
-                            Button {
-                                text = ""
-                            } label: {
-                                Image(systemName: "multiply.circle.fill")
-                            }
-                            .foregroundColor(.secondary.opacity(0.8))
-                            .padding(.trailing, 3)
-                        }
-                    }
-                }
                 .applyTextInputAttributes(
                     attributes,
                     using: themeManager.theme
@@ -126,6 +171,7 @@ struct TextInputComponent: View {
 
     @State private var text: String
     @State private var hasReceivedInput = false
+    @State private var secureInputRevealingPassword = false
 
     @ViewBuilder private var titleLabel: some View {
         withContent(
