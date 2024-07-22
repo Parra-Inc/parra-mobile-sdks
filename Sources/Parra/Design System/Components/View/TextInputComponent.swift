@@ -29,6 +29,12 @@ struct TextInputComponent: View {
         case visible
     }
 
+    enum FocusField {
+        case normal
+        case secure
+        case secureRevealed
+    }
+
     var config: TextInputConfig
     var content: TextInputContent
     var attributes: ParraAttributes.TextInput
@@ -46,13 +52,15 @@ struct TextInputComponent: View {
                 ) {
                     EmptyView()
                 }
+                .focused($focusState, equals: .secureRevealed)
                 .overlay {
-                    if !text.isEmpty {
+                    if !text.isEmpty, focusState == .secureRevealed {
                         HStack {
                             Spacer()
 
                             Button {
                                 secureInputRevealingPassword = false
+                                focusState = .secure
                             } label: {
                                 Image(systemName: "eye.slash.fill")
                             }
@@ -77,6 +85,7 @@ struct TextInputComponent: View {
                 ) {
                     EmptyView()
                 }
+                .focused($focusState, equals: .secure)
                 .foregroundStyle(
                     textColorOverride ?? themeManager.theme.palette.primaryText
                         .toParraColor()
@@ -93,12 +102,13 @@ struct TextInputComponent: View {
                     }
                 }
                 .overlay {
-                    if !text.isEmpty {
+                    if !text.isEmpty, focusState == .secure {
                         HStack {
                             Spacer()
 
                             Button {
                                 secureInputRevealingPassword = true
+                                focusState = .secureRevealed
                             } label: {
                                 Image(systemName: "eye.fill")
                             }
@@ -115,8 +125,9 @@ struct TextInputComponent: View {
             ) {
                 EmptyView()
             }
+            .focused($focusState, equals: .normal)
             .overlay {
-                if !text.isEmpty, isFocused {
+                if !text.isEmpty, focusState == .normal {
                     HStack {
                         Spacer()
 
@@ -143,7 +154,6 @@ struct TextInputComponent: View {
                     attributes,
                     using: themeManager.theme
                 )
-                .focused($isFocused)
                 .onChange(of: text) { _, newValue in
                     hasReceivedInput = true
 
@@ -157,14 +167,23 @@ struct TextInputComponent: View {
             on: [.horizontal, .bottom],
             from: themeManager.theme
         )
+        .onAppear {
+            focusState = config.isSecure ? .secure : .normal
+        }
         .onTapGesture {
-            isFocused = true
+            if let lastFocusState {
+                focusState = lastFocusState
+            }
+        }
+        .onChange(of: focusState, initial: true) { _, newValue in
+            lastFocusState = newValue
         }
     }
 
     // MARK: - Private
 
-    @FocusState private var isFocused: Bool
+    @FocusState private var focusState: FocusField?
+    @State private var lastFocusState: FocusField?
 
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var themeManager: ParraThemeManager
