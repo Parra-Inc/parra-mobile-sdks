@@ -48,7 +48,8 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
             TextButtonContent(
                 text: LabelContent(
                     text: "Previous Releases"
-                )
+                ),
+                isLoading: true
             )
         } else {
             nil

@@ -98,6 +98,10 @@ struct ChangelogWidget: Container {
             on: [.horizontal, .bottom],
             from: themeManager.theme
         )
+        .task {
+            // Perform initial load
+            contentObserver.releasePaginator.loadMore(after: nil)
+        }
     }
 
     func headerSpace(

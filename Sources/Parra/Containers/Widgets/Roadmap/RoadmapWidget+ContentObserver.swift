@@ -213,6 +213,9 @@ extension RoadmapWidget {
                     data: newPageData,
                     pageFetcher: loadMoreTickets
                 )
+
+                // Tab didn't previously exist, so nothing is loaded yet.
+                ticketPaginator.loadMore(after: nil)
             }
 
             objectWillChange.send()

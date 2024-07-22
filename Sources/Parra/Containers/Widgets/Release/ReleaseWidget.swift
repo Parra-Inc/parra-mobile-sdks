@@ -49,6 +49,9 @@ struct ReleaseWidget: Container {
     let componentFactory: ComponentFactory
 
     @StateObject var contentObserver: ReleaseContentObserver
+    @StateObject var changelogContentObserver: ChangelogWidget
+        .ContentObserver
+
     let config: ChangelogWidgetConfig
 
     @EnvironmentObject var themeManager: ParraThemeManager
@@ -113,7 +116,9 @@ struct ReleaseWidget: Container {
                         size: .large,
                         isMaxWidth: true
                     ),
-                    content: content,
+                    content: content.withLoading(
+                        changelogContentObserver.releasePaginator.isLoading
+                    ),
                     onPress: {
                         navigationState.navigationPath.append("changelog")
                     }
@@ -143,6 +148,12 @@ struct ReleaseWidget: Container {
         )
         .task {
             await contentObserver.loadSections()
+
+            // If there isn't a button to navigate to other releases, don't load
+            // them.
+            if contentObserver.content.otherReleasesButton != nil {
+                changelogContentObserver.loadInitialReleases()
+            }
         }
         .environment(config)
         .environmentObject(contentObserver)
@@ -233,9 +244,6 @@ struct ReleaseWidget: Container {
     }
 
     // MARK: - Private
-
-    @StateObject private var changelogContentObserver: ChangelogWidget
-        .ContentObserver
 
     @EnvironmentObject private var navigationState: NavigationState
 }

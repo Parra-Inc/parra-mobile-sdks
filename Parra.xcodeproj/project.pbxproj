@@ -216,8 +216,8 @@
 		005AFE352BE2F38200B0C29A /* API+releases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE342BE2F38200B0C29A /* API+releases.swift */; };
 		005AFE372BE2F39800B0C29A /* API+users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE362BE2F39800B0C29A /* API+users.swift */; };
 		005AFE392BE3059A00B0C29A /* CachedAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005AFE382BE3059A00B0C29A /* CachedAsyncImage.swift */; };
-		005BE4772C3C299D00663AF4 /* ParraThemeObserver+themeChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005BE4762C3C299D00663AF4 /* ParraThemeObserver+themeChange.swift */; };
-		005BE4792C3C2FAE00663AF4 /* ParraThemeObserver+userDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005BE4782C3C2FAE00663AF4 /* ParraThemeObserver+userDefaults.swift */; };
+		005BE4772C3C299D00663AF4 /* ParraThemeManager+themeChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005BE4762C3C299D00663AF4 /* ParraThemeManager+themeChange.swift */; };
+		005BE4792C3C2FAE00663AF4 /* ParraThemeManager+userDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005BE4782C3C2FAE00663AF4 /* ParraThemeManager+userDefaults.swift */; };
 		005BE47B2C3C42FA00663AF4 /* ParraUserDefaultsStorageModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005BE47A2C3C42FA00663AF4 /* ParraUserDefaultsStorageModule.swift */; };
 		005BE47D2C3C49EA00663AF4 /* ParraAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005BE47C2C3C49EA00663AF4 /* ParraAppearance.swift */; };
 		005BE47F2C3C75EC00663AF4 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005BE47E2C3C75EC00663AF4 /* UserDefaults.swift */; };
@@ -418,6 +418,7 @@
 		009D84352BEAE871005EBFEB /* ComponentFactory+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D84342BEAE871005EBFEB /* ComponentFactory+Image.swift */; };
 		009D84372BEAE9D1005EBFEB /* ParraGlobalComponentAttributes+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009D84362BEAE9D1005EBFEB /* ParraGlobalComponentAttributes+Image.swift */; };
 		00A27A0A2C4BEF6A0058036E /* ParraImageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A092C4BEF6A0058036E /* ParraImageConfig.swift */; };
+		00A27A0C2C4E9E5C0058036E /* ReleaseType+userFacingString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A0B2C4E9E5C0058036E /* ReleaseType+userFacingString.swift */; };
 		00A2CEE52B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */; };
 		00A2CEE72B696AE600684DC0 /* ParraTextButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE62B696AE500684DC0 /* ParraTextButtonConfig.swift */; };
 		00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */; };
@@ -965,8 +966,8 @@
 		005AFE342BE2F38200B0C29A /* API+releases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+releases.swift"; sourceTree = "<group>"; };
 		005AFE362BE2F39800B0C29A /* API+users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+users.swift"; sourceTree = "<group>"; };
 		005AFE382BE3059A00B0C29A /* CachedAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedAsyncImage.swift; sourceTree = "<group>"; };
-		005BE4762C3C299D00663AF4 /* ParraThemeObserver+themeChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraThemeObserver+themeChange.swift"; sourceTree = "<group>"; };
-		005BE4782C3C2FAE00663AF4 /* ParraThemeObserver+userDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraThemeObserver+userDefaults.swift"; sourceTree = "<group>"; };
+		005BE4762C3C299D00663AF4 /* ParraThemeManager+themeChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraThemeManager+themeChange.swift"; sourceTree = "<group>"; };
+		005BE4782C3C2FAE00663AF4 /* ParraThemeManager+userDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraThemeManager+userDefaults.swift"; sourceTree = "<group>"; };
 		005BE47A2C3C42FA00663AF4 /* ParraUserDefaultsStorageModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraUserDefaultsStorageModule.swift; sourceTree = "<group>"; };
 		005BE47C2C3C49EA00663AF4 /* ParraAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraAppearance.swift; sourceTree = "<group>"; };
 		005BE47E2C3C75EC00663AF4 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
@@ -1207,6 +1208,7 @@
 		009D84342BEAE871005EBFEB /* ComponentFactory+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComponentFactory+Image.swift"; sourceTree = "<group>"; };
 		009D84362BEAE9D1005EBFEB /* ParraGlobalComponentAttributes+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraGlobalComponentAttributes+Image.swift"; sourceTree = "<group>"; };
 		00A27A092C4BEF6A0058036E /* ParraImageConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraImageConfig.swift; sourceTree = "<group>"; };
+		00A27A0B2C4E9E5C0058036E /* ReleaseType+userFacingString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReleaseType+userFacingString.swift"; sourceTree = "<group>"; };
 		00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraColorSwatch+ParraColorConvertible.swift"; sourceTree = "<group>"; };
 		00A2CEE62B696AE500684DC0 /* ParraTextButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTextButtonConfig.swift; sourceTree = "<group>"; };
 		00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+inits.swift"; sourceTree = "<group>"; };
@@ -2033,8 +2035,8 @@
 			isa = PBXGroup;
 			children = (
 				00DDBA252B63FBBC00400761 /* ParraThemeManager.swift */,
-				005BE4782C3C2FAE00663AF4 /* ParraThemeObserver+userDefaults.swift */,
-				005BE4762C3C299D00663AF4 /* ParraThemeObserver+themeChange.swift */,
+				005BE4782C3C2FAE00663AF4 /* ParraThemeManager+userDefaults.swift */,
+				005BE4762C3C299D00663AF4 /* ParraThemeManager+themeChange.swift */,
 				00AB95A42BE4545900B27091 /* Attributes */,
 				003621FD2B5C9CCC009EFE53 /* Colors */,
 				00EC6F7A2B61A1A600ABC8EC /* Corner Radius */,
@@ -2231,6 +2233,7 @@
 				004F3F112BA88FBB00424802 /* AppReleaseContent.swift */,
 				004F3F0F2BA88FA900424802 /* AppReleaseSectionContent.swift */,
 				00C118FE2BAC94DE0013FD03 /* ReleaseHeaderContent.swift */,
+				00A27A0B2C4E9E5C0058036E /* ReleaseType+userFacingString.swift */,
 			);
 			path = Changelog;
 			sourceTree = "<group>";
@@ -4303,7 +4306,7 @@
 				00C119192BAFAE250013FD03 /* ParraConfigurationOptionType.swift in Sources */,
 				00ABF16F2B7ABAFA00A054A2 /* ParraInternal+ServerDelegate.swift in Sources */,
 				00BDB2B128BD822700C16649 /* URLRequest+headers.swift in Sources */,
-				005BE4792C3C2FAE00663AF4 /* ParraThemeObserver+userDefaults.swift in Sources */,
+				005BE4792C3C2FAE00663AF4 /* ParraThemeManager+userDefaults.swift in Sources */,
 				00E7957E29A05CD6003FE68D /* ParraLogLevel.swift in Sources */,
 				009D84062BE547B6005EBFEB /* ParraGlobalComponentAttributes+Label.swift in Sources */,
 				0079EDD62BD987C50045EEE5 /* PhotoWell.swift in Sources */,
@@ -4332,6 +4335,7 @@
 				00731EFB2A182639004010A3 /* Task+sleep.swift in Sources */,
 				00057FA92B98C96A0022B875 /* TicketUserContent.swift in Sources */,
 				003298742C08B8820018A94A /* PhoneOrEmailTextInputView+Mode.swift in Sources */,
+				00A27A0C2C4E9E5C0058036E /* ReleaseType+userFacingString.swift in Sources */,
 				009D84022BE54782005EBFEB /* ComponentAttributesProvider.swift in Sources */,
 				0036225D2B601657009EFE53 /* ParraCornerRadiusSize.swift in Sources */,
 				00374D0A2BA0BA550028EDA8 /* ParraBadgeVariant.swift in Sources */,
@@ -4390,7 +4394,7 @@
 				001B7B1A27DE3ABC00DEEECD /* FileSystemStorage.swift in Sources */,
 				00BD2FEE2A4771D700B4BEB2 /* ParraSyncState.swift in Sources */,
 				00E76D3B2B66E4E000B01DD8 /* FeedbackFormWidget.swift in Sources */,
-				005BE4772C3C299D00663AF4 /* ParraThemeObserver+themeChange.swift in Sources */,
+				005BE4772C3C299D00663AF4 /* ParraThemeManager+themeChange.swift in Sources */,
 				00ABF16B2B7AB90B00A054A2 /* ParraAppState.swift in Sources */,
 				0025ABDE2C4AA24F005FDBC5 /* ParraUser+Info.swift in Sources */,
 				0087CA552A54670A007D72FA /* EmptyJsonObjects.swift in Sources */,

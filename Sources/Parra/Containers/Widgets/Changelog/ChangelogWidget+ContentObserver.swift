@@ -6,22 +6,8 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import Combine
 import SwiftUI
-
-extension ReleaseType {
-    var userFacingString: String {
-        switch self {
-        case .major:
-            return "major"
-        case .minor:
-            return "minor"
-        case .patch:
-            return "patch"
-        case .launch:
-            return "launch"
-        }
-    }
-}
 
 struct AppReleaseStubContent: Identifiable, Hashable {
     // MARK: - Lifecycle
@@ -130,23 +116,49 @@ extension ChangelogWidget {
 
         @Published private(set) var content: Content
 
+        let api: API
+
         // Using IUO because this object requires referencing self in a closure
         // in its init so we need all fields set. Post-init this should always
         // be set.
         @Published var releasePaginator: Paginator<
             AppReleaseStubContent,
             String
-        >!
+        >! {
+            willSet {
+                paginatorSink?.cancel()
+                paginatorSink = nil
+            }
 
-        let api: API
+            didSet {
+                paginatorSink = releasePaginator
+                    .objectWillChange
+                    .sink { [weak self] _ in
+                        self?.objectWillChange.send()
+                    }
+            }
+        }
+
+        @MainActor
+        func loadInitialReleases() {
+            releasePaginator.loadMore(after: nil)
+        }
 
         // MARK: - Private
+
+        private var paginatorSink: AnyCancellable? = nil
 
         private func loadMoreReleases(
             _ limit: Int,
             _ offset: Int,
             _ ctx: String
         ) async throws -> [AppReleaseStubContent] {
+            Logger.trace("Loading more releases", [
+                "limit": String(limit),
+                "offset": String(offset),
+                "ctx": ctx
+            ])
+
             let response = try await api.paginateReleases(
                 limit: limit,
                 offset: offset

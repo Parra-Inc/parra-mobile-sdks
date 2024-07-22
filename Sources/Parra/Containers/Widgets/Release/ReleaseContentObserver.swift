@@ -40,32 +40,27 @@ class ReleaseContentObserver: ContainerContentObserver {
         }
     }
 
+    @MainActor
     func loadSections() async {
         guard content.sections.isEmpty else {
             return
         }
 
         do {
-            await MainActor.run {
-                isLoading = true
-            }
+            isLoading = true
 
             let response = try await api.getRelease(
                 with: content.id
             )
 
-            await MainActor.run {
-                content = AppReleaseContent(response)
-            }
+            content = AppReleaseContent(response)
         } catch {
             Logger.error("Error loading sections for release", error, [
                 "releaseId": content.id
             ])
         }
 
-        await MainActor.run {
-            isLoading = false
-        }
+        isLoading = false
     }
 
     // MARK: - Private

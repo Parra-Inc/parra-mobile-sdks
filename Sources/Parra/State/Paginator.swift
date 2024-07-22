@@ -53,8 +53,6 @@ class Paginator<Item, Context>: ObservableObject
         if items.isEmpty {
             self.items = placeholderItems
             self.isShowingPlaceholders = true
-
-            loadMore(after: nil)
         } else {
             self.items = items
             self.isShowingPlaceholders = false
