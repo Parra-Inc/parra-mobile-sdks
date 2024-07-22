@@ -34,7 +34,7 @@ extension ParraAppInfo: ParraFixture {
                         id: .uuid,
                         size: .init(width: 512, height: 512),
                         url: URL(
-                            string: "https://image-asset-bucket-production.s3.amazonaws.com/tenants/201cbcf0-b5d6-4079-9e4d-177ae04cc9f4/logo/b7eb15c1-7afe-4590-97c8-120b33ecdcc6.png"
+                            string: "https://image-asset-bucket-production.s3.amazonaws.com/tenants/201cbcf0-b5d6-4079-9e4d-177ae04cc9f4/logo/52efae8d-53ec-42e1-9c04-f4aa733762b0.png"
                         )!
                     ),
                     domains: [
