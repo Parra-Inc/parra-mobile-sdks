@@ -35,15 +35,6 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
 
     // MARK: - Internal
 
-    enum LoadState {
-        // Initial state. Standing by and waiting for start signal
-        case ready
-        // Start signal received. In this state until complete or error
-        case started
-        case complete(Data)
-        case error(Error)
-    }
-
     @Environment(\.parra) var parra
 
     // Externally controlled state to use to determine when to kick off
@@ -89,14 +80,13 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 },
                 content: {
                     if case .complete(let data) = state {
-                        NavigationStack(path: $navigationState.navigationPath) {
-                            loader.render(parra, data, dismiss)
-                                .environmentObject(navigationState)
-                                .padding(.top, 30)
+                        SheetStateContainer(
+                            data: data
+                        ) {
+                            return loader.render(parra, data, dismiss)
                         }
                         .presentationDetents(detents)
                         .presentationDragIndicator(visibility)
-                        .navigationBarTitleDisplayMode(.inline)
                     }
                 }
             )
@@ -104,8 +94,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
 
     // MARK: - Private
 
-    @State private var state: LoadState = .ready
-    @StateObject private var navigationState = NavigationState()
+    @State private var state: SheetLoadState<Data> = .ready
 
     private let loader: ViewDataLoader<TransformParams, Data, SheetContent>
     private let detents: Set<PresentationDetent>
