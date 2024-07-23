@@ -33,21 +33,10 @@ extension Server {
             using: appState
         )
 
-        guard var urlComponents = URLComponents(
+        var request = try URLRequest(
+            with: queryItems,
             url: url,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw ParraError.generic(
-                "Failed to create components for url: \(url)",
-                nil
-            )
-        }
-
-        urlComponents.setQueryItems(with: queryItems)
-
-        var request = URLRequest(
-            url: urlComponents.url!,
-            cachePolicy: cachePolicy ?? .useProtocolCachePolicy
+            cachePolicy: cachePolicy
         )
 
         request.httpMethod = method.rawValue
@@ -73,7 +62,7 @@ extension Server {
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> T {
         var components = URLComponents()
-        components.percentEncodedQueryItems = data.queryItems
+        components.percentEncodedQueryItems = data.asCorrectlyEscapedQueryItems
 
         var request = URLRequest(
             url: url,
@@ -123,9 +112,10 @@ extension Server {
         timeout: TimeInterval?,
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> T {
-        var request = URLRequest(
+        var request = try URLRequest(
+            with: queryItems,
             url: url,
-            cachePolicy: cachePolicy ?? .useProtocolCachePolicy
+            cachePolicy: cachePolicy
         )
 
         request.httpMethod = method.rawValue
@@ -184,6 +174,19 @@ extension Server {
         }
 
         #if DEBUG
+        if let query = request.url?.query(percentEncoded: true),
+           let decoded = query.removingPercentEncoding,
+           let reencoded = decoded.addingPercentEncoding(
+               withAllowedCharacters: .rfc3986Unreserved
+           )
+        {
+            if query != reencoded {
+                assertionFailure(
+                    "Request to: \(request.url!) contains reserved characters in query: \(query)"
+                )
+            }
+        }
+
         // Auto display HTML errors like those from Cloudflare in a popup
         // webview.
         if httpResponse.statusCode >= 400 {

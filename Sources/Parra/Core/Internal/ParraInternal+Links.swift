@@ -48,7 +48,7 @@ extension ParraInternal {
             return
         }
 
-        components.queryItems = params.queryItems
+        components.queryItems = params.asCorrectlyEscapedQueryItems
 
         guard let url = components.url else {
             Logger.warn("Failed to create link to open site")

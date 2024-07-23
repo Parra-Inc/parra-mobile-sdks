@@ -29,7 +29,6 @@
 		001779BD2BC08DA1000AF0BB /* ParraFeedbackForm+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001779BC2BC08DA1000AF0BB /* ParraFeedbackForm+Fixtures.swift */; };
 		001779C02BC08E47000AF0BB /* ParraSessionsResponse+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001779BF2BC08E47000AF0BB /* ParraSessionsResponse+Fixtures.swift */; };
 		001779C22BC08E8C000AF0BB /* ParraCredential+Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001779C12BC08E8C000AF0BB /* ParraCredential+Fixtures.swift */; };
-		0018A60E28D77FF2008CC97E /* URLComponents+queryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0018A60D28D77FF2008CC97E /* URLComponents+queryItems.swift */; };
 		0019CBC328F639040015E703 /* ParraQuestionAppArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC228F639040015E703 /* ParraQuestionAppArea.swift */; };
 		0019CBC528FAE0E80015E703 /* FailableDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC428FAE0E80015E703 /* FailableDecodable.swift */; };
 		0019CBC928FB37BC0015E703 /* Sequence+asyncMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0019CBC828FB37BC0015E703 /* Sequence+asyncMap.swift */; };
@@ -422,6 +421,8 @@
 		00A27A102C4EA2900058036E /* SheetLoadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A0F2C4EA2900058036E /* SheetLoadState.swift */; };
 		00A27A142C4FEC9E0058036E /* Data+prettyJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A132C4FEC9E0058036E /* Data+prettyJson.swift */; };
 		00A27A162C4FECA80058036E /* Data+base64String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A152C4FECA80058036E /* Data+base64String.swift */; };
+		00A27A182C4FEF320058036E /* CharacterSet+allowedUrlChars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A172C4FEF320058036E /* CharacterSet+allowedUrlChars.swift */; };
+		00A27A1A2C4FF3D40058036E /* URLRequest+safeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A192C4FF3D40058036E /* URLRequest+safeQuery.swift */; };
 		00A2CEE52B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */; };
 		00A2CEE72B696AE600684DC0 /* ParraTextButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE62B696AE500684DC0 /* ParraTextButtonConfig.swift */; };
 		00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */; };
@@ -791,7 +792,6 @@
 		001779BC2BC08DA1000AF0BB /* ParraFeedbackForm+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedbackForm+Fixtures.swift"; sourceTree = "<group>"; };
 		001779BF2BC08E47000AF0BB /* ParraSessionsResponse+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraSessionsResponse+Fixtures.swift"; sourceTree = "<group>"; };
 		001779C12BC08E8C000AF0BB /* ParraCredential+Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraCredential+Fixtures.swift"; sourceTree = "<group>"; };
-		0018A60D28D77FF2008CC97E /* URLComponents+queryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLComponents+queryItems.swift"; sourceTree = "<group>"; };
 		0019CBC228F639040015E703 /* ParraQuestionAppArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraQuestionAppArea.swift; sourceTree = "<group>"; };
 		0019CBC428FAE0E80015E703 /* FailableDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableDecodable.swift; sourceTree = "<group>"; };
 		0019CBC628FB1B580015E703 /* ParraImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraImageButton.swift; sourceTree = "<group>"; };
@@ -1215,6 +1215,8 @@
 		00A27A0F2C4EA2900058036E /* SheetLoadState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetLoadState.swift; sourceTree = "<group>"; };
 		00A27A132C4FEC9E0058036E /* Data+prettyJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+prettyJson.swift"; sourceTree = "<group>"; };
 		00A27A152C4FECA80058036E /* Data+base64String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+base64String.swift"; sourceTree = "<group>"; };
+		00A27A172C4FEF320058036E /* CharacterSet+allowedUrlChars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CharacterSet+allowedUrlChars.swift"; sourceTree = "<group>"; };
+		00A27A192C4FF3D40058036E /* URLRequest+safeQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+safeQuery.swift"; sourceTree = "<group>"; };
 		00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraColorSwatch+ParraColorConvertible.swift"; sourceTree = "<group>"; };
 		00A2CEE62B696AE500684DC0 /* ParraTextButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTextButtonConfig.swift; sourceTree = "<group>"; };
 		00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+inits.swift"; sourceTree = "<group>"; };
@@ -1586,6 +1588,7 @@
 			children = (
 				003298752C08B8A50018A94A /* Bundle+decode.swift */,
 				00D143C22BB2106E00BDB8C4 /* Bundle+Parra.swift */,
+				00A27A172C4FEF320058036E /* CharacterSet+allowedUrlChars.swift */,
 				00A27A152C4FECA80058036E /* Data+base64String.swift */,
 				00A27A132C4FEC9E0058036E /* Data+prettyJson.swift */,
 				0082DFCD2A53BA6700E7A91D /* Date+now.swift */,
@@ -1610,8 +1613,8 @@
 				00E15A2A29326FBE0049C2C7 /* UIWindow+topViewController.swift */,
 				00DA7FF8295F2A1600109081 /* URL+safePaths.swift */,
 				00EAE2F62A9BE71F003FB41C /* URL+helpers.swift */,
-				0018A60D28D77FF2008CC97E /* URLComponents+queryItems.swift */,
 				00BDB2B028BD822700C16649 /* URLRequest+headers.swift */,
+				00A27A192C4FF3D40058036E /* URLRequest+safeQuery.swift */,
 				006654112A80573400CD04E6 /* URLRequest.Attribution+CustomStringConvertible.swift */,
 				006654092A7EAAFA00CD04E6 /* URLRequest+ParraDictionaryConvertible.swift */,
 				005BE47E2C3C75EC00663AF4 /* UserDefaults.swift */,
@@ -3959,6 +3962,7 @@
 				00DA7FF0295DD28700109081 /* Parra+Analytics.swift in Sources */,
 				00E76D342B66E3FD00B01DD8 /* Container.swift in Sources */,
 				0011C7DC2B9B5A8E0095EAE8 /* AlertPresenter.swift in Sources */,
+				00A27A1A2C4FF3D40058036E /* URLRequest+safeQuery.swift in Sources */,
 				0029AD392A4925D000E30CCD /* ParraInternalEvent.swift in Sources */,
 				009270CB2C2A021000471A91 /* KeychainUtils.swift in Sources */,
 				004F3EED2BA4BF8300424802 /* ChangelogWidget+ContentObserver+Content.swift in Sources */,
@@ -4179,6 +4183,7 @@
 				00ABF1C22B87AEC000A054A2 /* ParraContainerPreview.swift in Sources */,
 				006BEFCA2C25BC6E001484C2 /* AlertManager+Loading.swift in Sources */,
 				00F7C4AA2B9A439000DBDF5A /* ComponentFactory+Segments.swift in Sources */,
+				00A27A182C4FEF320058036E /* CharacterSet+allowedUrlChars.swift in Sources */,
 				002C77192BAA2EA700DCEBD8 /* AppInfo+Fixtures.swift in Sources */,
 				00374D7D2BA1EC3E0028EDA8 /* EmptyStateContent.swift in Sources */,
 				00DA7FF9295F2A1600109081 /* URL+safePaths.swift in Sources */,
@@ -4198,7 +4203,6 @@
 				00DDBA1D2B61D99D00400761 /* EdgeInsets+zero.swift in Sources */,
 				00995C062BB6F9D700384D94 /* ApiKeys.swift in Sources */,
 				00BB36162BEBBC98007B6B13 /* ParraAuthDefaultLandingScreen.swift in Sources */,
-				0018A60E28D77FF2008CC97E /* URLComponents+queryItems.swift in Sources */,
 				00FCB1882B977CBC00635DC8 /* SheetDismissType.swift in Sources */,
 				0066543B2A8A5F0E00CD04E6 /* LoggerFormatters.swift in Sources */,
 				00285DA62BCDF22200508DC8 /* ParraAppContent.swift in Sources */,

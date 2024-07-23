@@ -17,7 +17,7 @@ extension ApiResourceServer {
             "url": asset.url
         ])
 
-        let request = request(for: asset)
+        let request = try request(for: asset)
 
         let (data, response) = try await configuration.urlSession
             .dataForRequest(
@@ -62,8 +62,8 @@ extension ApiResourceServer {
             return false
         }
 
-        guard let cachedResponse = cache
-            .cachedResponse(for: request(for: asset)) else
+        guard let request = try? request(for: asset),
+              let cachedResponse = cache.cachedResponse(for: request) else
         {
             logger.trace("Cache miss for asset: \(asset.id)")
             return false
@@ -80,11 +80,12 @@ extension ApiResourceServer {
         return true
     }
 
-    private func request(for asset: Asset) -> URLRequest {
-        var request = URLRequest(
+    private func request(for asset: Asset) throws -> URLRequest {
+        var request = try URLRequest(
+            with: [:],
             url: asset.url,
             cachePolicy: .returnCacheDataElseLoad,
-            timeoutInterval: 10.0
+            timeout: 10.0
         )
         request.httpMethod = HttpMethod.get.rawValue
 

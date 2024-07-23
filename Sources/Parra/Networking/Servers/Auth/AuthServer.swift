@@ -62,12 +62,15 @@ final class AuthServer: Server {
             using: appState
         )
 
-        var request = URLRequest(url: url)
+        var request = try URLRequest(
+            with: [:],
+            url: url,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
+        )
 
         request.httpMethod = endpoint.method.rawValue
         request.httpBody = try configuration.jsonEncoder
             .encode(["user_id": userId])
-        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         request.timeoutInterval = timeout ?? configuration.urlSession
             .configuration.timeoutIntervalForRequest
 
@@ -364,19 +367,11 @@ final class AuthServer: Server {
             using: appState
         )
 
-        guard var urlComponents = URLComponents(
+        var request = try URLRequest(
+            with: queryItems,
             url: url,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw ParraError.generic(
-                "Failed to create components for url: \(url)",
-                nil
-            )
-        }
-
-        urlComponents.setQueryItems(with: queryItems)
-
-        var request = URLRequest(url: urlComponents.url!)
+            cachePolicy: cachePolicy
+        )
 
         request.httpMethod = endpoint.method.rawValue
         request.cachePolicy = cachePolicy
@@ -418,22 +413,13 @@ final class AuthServer: Server {
             using: appState
         )
 
-        guard var urlComponents = URLComponents(
+        var request = try URLRequest(
+            with: queryItems,
             url: url,
-            resolvingAgainstBaseURL: false
-        ) else {
-            throw ParraError.generic(
-                "Failed to create components for url: \(url)",
-                nil
-            )
-        }
-
-        urlComponents.setQueryItems(with: queryItems)
-
-        var request = URLRequest(url: urlComponents.url!)
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
+        )
 
         request.httpMethod = endpoint.method.rawValue
-        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         request.timeoutInterval = timeout ?? configuration.urlSession
             .configuration.timeoutIntervalForRequest
 
