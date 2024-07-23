@@ -94,7 +94,9 @@ extension ParraSessionGeneratorType {
     }
 
     func readSessionSync(at path: URL) throws -> ParraSession {
-        let fileHandle = try FileHandle(forReadingFrom: path)
+        let fileHandle = try FileHandle(
+            forReadingFrom: path
+        )
 
         defer {
             do {

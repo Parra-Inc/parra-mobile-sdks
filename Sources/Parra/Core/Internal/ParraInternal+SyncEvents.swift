@@ -95,6 +95,10 @@ extension ParraInternal {
     @MainActor
     @objc
     func applicationDidBecomeActive(notification: Notification) {
+        Task {
+            await sessionManager.startSessionIfAvailable()
+        }
+
         if let taskId = ParraInternal.backgroundTaskId,
            let app = notification.object as? UIApplication
         {
@@ -127,7 +131,7 @@ extension ParraInternal {
             logger
                 .debug("Background task: \(taskId) triggering session end")
 
-            await sessionManager.endSession()
+            sessionManager.endSession()
 
             UIApplication.shared.endBackgroundTask(taskId)
         }
@@ -139,7 +143,7 @@ extension ParraInternal {
                 logger.debug("Background task expiration handler invoked")
 
                 Task { @MainActor in
-                    await endSession()
+                    endSession()
                 }
             }
 
@@ -157,7 +161,7 @@ extension ParraInternal {
                 )
 
             Task { @MainActor in
-                await endSession()
+                endSession()
             }
         }
     }

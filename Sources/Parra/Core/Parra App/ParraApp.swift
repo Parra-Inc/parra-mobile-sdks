@@ -158,10 +158,9 @@ public struct ParraApp<
                 }
             }
             .onChange(
-                of: parraAuthState.current
-            ) { _, newValue in
-                onAuthStateChanged(newValue)
-            }
+                of: parraAuthState.current,
+                onAuthStateChanged
+            )
     }
 
     // MARK: - Private
@@ -228,10 +227,12 @@ public struct ParraApp<
     }
 
     private func onAuthStateChanged(
-        _ authResult: ParraAuthResult
+        from oldAuthResult: ParraAuthResult,
+        to authResult: ParraAuthResult
     ) {
         Task {
             await parra.authStateDidChange(
+                from: oldAuthResult,
                 to: authResult
             )
         }

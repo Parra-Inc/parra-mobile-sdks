@@ -257,14 +257,34 @@ class SessionStorage {
 
     // MARK: Ending Sessions
 
-    func endSession() async {
+    func endSession() {
         if forceDisabled {
             return
         }
 
-        // TODO: Need to be consistent with deinit. Both should mark session as
-        // ended, write the update, then close the session reader
-//        sessionReader.closeCurrentSessionSync()
+        logger.debug("Ending session")
+
+        withCurrentSessionHandle(
+            handler: { handle, session in
+
+                var updatedSession = session
+                updatedSession.end(at: .now)
+
+                try self.writeSessionSync(
+                    session: updatedSession,
+                    with: handle
+                )
+            }
+        ) { _ in
+            do {
+                try self.sessionReader.closeCurrentSessionSync()
+            } catch {
+                logger.error(
+                    "Error closing session reader/file handles",
+                    error
+                )
+            }
+        }
     }
 
     // MARK: Deleting Sessions

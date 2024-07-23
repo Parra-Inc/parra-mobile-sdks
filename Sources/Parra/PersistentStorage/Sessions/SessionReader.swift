@@ -207,7 +207,7 @@ class SessionReader {
             logger.error(error)
         }
 
-        if let existingSession {
+        if let existingSession, existingSession.endedAt == nil {
             let existingSessionContext = SessionStorageContext(
                 session: existingSession,
                 sessionPath: sessionPath,

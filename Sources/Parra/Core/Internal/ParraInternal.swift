@@ -106,51 +106,24 @@ class ParraInternal {
 
     @MainActor
     func authStateDidChange(
-        to result: ParraAuthResult
+        from oldAuthResult: ParraAuthResult,
+        to authResult: ParraAuthResult
     ) async {
-        // These actions should be completed before the success conditional ones
-        if !hasPerformedSingleInitActions {
-            hasPerformedSingleInitActions = true
-
-            await performPostLaunchAuthOptionalActions()
-
-            if case .authenticated = result {
-                await performPostLaunchAuthRequiredActions()
-            }
-        }
-
-        switch result {
-        case .authenticated(let user):
-            var updatedUser = user
-
-            do {
-                logger.debug("Refreshing user info")
-
-                // If refresh was successful, we need to make sure this is the
-                // user that becomes immediately accessible outside the SDK.
-                if let next = try await authService.refreshUserInfo() {
-                    updatedUser = next
-                }
-            } catch {
-                logger.error("Failed to refresh user info on app launch", error)
-            }
-
-            Parra.default.user.current = updatedUser
-
-            addEventObservers()
-
-            syncManager.startSyncTimer()
-        case .unauthenticated:
-            Parra.default.user.current = nil
-
-            removeEventObservers()
-
-            syncManager.stopSyncTimer()
-        case .undetermined:
+        switch (oldAuthResult, authResult) {
+        case (.undetermined, .authenticated(let user)),
+             (.unauthenticated, .authenticated(let user)):
+            // Changes from not logged in to logged in
+            await handleLogin(for: user)
+        case (.authenticated(let user), .unauthenticated):
+            // Changes from logged in to not logged in
+            handleLogout(for: user)
+        case (_, .undetermined):
             Parra.default.user.current = nil
 
             assertionFailure()
-            // shouldn't ever change _to_ this.
+        // shouldn't ever change _to_ this.
+        default:
+            break
         }
     }
 
@@ -178,14 +151,65 @@ class ParraInternal {
     /// place when this is false.
     private var hasPerformedSingleInitActions = false
 
-    private func performPostLaunchAuthOptionalActions() async {
-        logger.debug("Performing first launch auth optional actions.")
+    @MainActor
+    private func handleLogout(
+        for user: ParraUser
+    ) {
+        sessionManager.endSession()
+
+        Parra.default.user.current = nil
+
+        removeEventObservers()
+
+        syncManager.stopSyncTimer()
+
+        logger.info("User logged out", [
+            "userId": user.info.id
+        ])
     }
 
-    private func performPostLaunchAuthRequiredActions() async {
-        logger.debug("Performing first launch auth required actions.")
+    @MainActor
+    private func handleLogin(
+        for user: ParraUser
+    ) async {
+        // Set the user immediately so it can be used within services
+        // invoked below.
+        Parra.default.user.current = user
+
+        var updatedUser = user
 
         await sessionManager.initializeSessions()
+
+        do {
+            logger.debug("Refreshing user info")
+
+            // If refresh was successful, we need to make sure this is the
+            // user that becomes immediately accessible outside the SDK.
+            if let next = try await authService.refreshUserInfo() {
+                updatedUser = next
+            }
+        } catch {
+            logger.error("Failed to refresh user info on app launch", error)
+        }
+
+        // Update the user again after refreshing over the network.
+        Parra.default.user.current = updatedUser
+
+        addEventObservers()
+
+        syncManager.startSyncTimer()
+
+        // Actions that should only happen once per app launch even if the user
+        // logs in/out multiple times.
+        if !hasPerformedSingleInitActions {
+            hasPerformedSingleInitActions = true
+
+            await performPostLoginSingleRunActions()
+        }
+    }
+
+    private func performPostLoginSingleRunActions() async {
+        logger.debug("Performing post login actions")
 
         if configuration.pushNotificationOptions.enabled {
             logger.debug("Registering for remote notifications")

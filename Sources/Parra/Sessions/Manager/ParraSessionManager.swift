@@ -364,12 +364,22 @@ class ParraSessionManager {
         )
     }
 
-    func endSession() async {
+    /// If there isn't a session started yet and there is a user logged in,
+    /// start a new session.
+    func startSessionIfAvailable() async {
         if forceDisabled {
             return
         }
 
-        await sessionStorage.endSession()
+        await sessionStorage.initializeSessions()
+    }
+
+    func endSession() {
+        if forceDisabled {
+            return
+        }
+
+        sessionStorage.endSession()
     }
 
     // MARK: - Private
