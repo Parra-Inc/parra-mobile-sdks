@@ -24,6 +24,10 @@ let package = Package(
             resources: [
                 // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk
                 .process("PrivacyInfo.xcprivacy")
+            ],
+            cSettings: [
+                .headerSearchPath("."),
+                .unsafeFlags(["-O3"], .when(configuration: .release))
             ]
         ),
         .testTarget(
@@ -33,7 +37,8 @@ let package = Package(
             ]
         )
     ],
-    swiftLanguageVersions: [.version("5.9")]
+    swiftLanguageVersions: [.version("5.9")],
+    cLanguageStandard: .c17
 )
 
 let swiftSettings: [SwiftSetting] = [
