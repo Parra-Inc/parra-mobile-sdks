@@ -420,6 +420,8 @@
 		00A27A0C2C4E9E5C0058036E /* ReleaseType+userFacingString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A0B2C4E9E5C0058036E /* ReleaseType+userFacingString.swift */; };
 		00A27A0E2C4EA2660058036E /* SheetStateContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A0D2C4EA2660058036E /* SheetStateContainer.swift */; };
 		00A27A102C4EA2900058036E /* SheetLoadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A0F2C4EA2900058036E /* SheetLoadState.swift */; };
+		00A27A142C4FEC9E0058036E /* Data+prettyJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A132C4FEC9E0058036E /* Data+prettyJson.swift */; };
+		00A27A162C4FECA80058036E /* Data+base64String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A27A152C4FECA80058036E /* Data+base64String.swift */; };
 		00A2CEE52B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */; };
 		00A2CEE72B696AE600684DC0 /* ParraTextButtonConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEE62B696AE500684DC0 /* ParraTextButtonConfig.swift */; };
 		00A2CEEC2B69753800684DC0 /* EdgeInsets+inits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */; };
@@ -1211,6 +1213,8 @@
 		00A27A0B2C4E9E5C0058036E /* ReleaseType+userFacingString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReleaseType+userFacingString.swift"; sourceTree = "<group>"; };
 		00A27A0D2C4EA2660058036E /* SheetStateContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetStateContainer.swift; sourceTree = "<group>"; };
 		00A27A0F2C4EA2900058036E /* SheetLoadState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetLoadState.swift; sourceTree = "<group>"; };
+		00A27A132C4FEC9E0058036E /* Data+prettyJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+prettyJson.swift"; sourceTree = "<group>"; };
+		00A27A152C4FECA80058036E /* Data+base64String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+base64String.swift"; sourceTree = "<group>"; };
 		00A2CEE42B6967EC00684DC0 /* ParraColorSwatch+ParraColorConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraColorSwatch+ParraColorConvertible.swift"; sourceTree = "<group>"; };
 		00A2CEE62B696AE500684DC0 /* ParraTextButtonConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraTextButtonConfig.swift; sourceTree = "<group>"; };
 		00A2CEEB2B69753800684DC0 /* EdgeInsets+inits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EdgeInsets+inits.swift"; sourceTree = "<group>"; };
@@ -1582,6 +1586,8 @@
 			children = (
 				003298752C08B8A50018A94A /* Bundle+decode.swift */,
 				00D143C22BB2106E00BDB8C4 /* Bundle+Parra.swift */,
+				00A27A152C4FECA80058036E /* Data+base64String.swift */,
+				00A27A132C4FEC9E0058036E /* Data+prettyJson.swift */,
 				0082DFCD2A53BA6700E7A91D /* Date+now.swift */,
 				0012300E2B994CD4007E5632 /* Date+timeAgo.swift */,
 				00D143BC2BB1DAE400BDB8C4 /* Date+fromIso8601String.swift */,
@@ -3904,6 +3910,7 @@
 				00D143C72BB22E1500BDB8C4 /* NoTouchEventWindow.swift in Sources */,
 				00ABF1BE2B87A79A00A054A2 /* ParraCardItem+Fixtures.swift in Sources */,
 				00214C6A2AB3E2BC001C5313 /* ParraSanitizedDictionary.swift in Sources */,
+				00A27A142C4FEC9E0058036E /* Data+prettyJson.swift in Sources */,
 				00285D912BC9825C00508DC8 /* OAuth2Service+ResponseTypes.swift in Sources */,
 				00FCB1342B90F69C00635DC8 /* FeedbackCheckboxQuestionCard.swift in Sources */,
 				003621F92B5C92E4009EFE53 /* Color+Luminosity.swift in Sources */,
@@ -4286,6 +4293,7 @@
 				00285DA22BCDF1FD00508DC8 /* ParraRequiredAuthWindow.swift in Sources */,
 				00D151272C06BB710049D88F /* LegalInfoView.swift in Sources */,
 				001B7B8827DE712200DEEECD /* ParraStorageModule.swift in Sources */,
+				00A27A162C4FECA80058036E /* Data+base64String.swift in Sources */,
 				00BD2FFA2A47778E00B4BEB2 /* NotificationCenterType.swift in Sources */,
 				001779B72BC08C59000AF0BB /* TextValidator.swift in Sources */,
 				00D1512F2C076E7A0049D88F /* PasswordEntropyCalculator.swift in Sources */,
