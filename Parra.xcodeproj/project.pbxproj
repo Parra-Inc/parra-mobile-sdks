@@ -291,8 +291,6 @@
 		0080E2DC2C3D724200DBE1AE /* ChangelogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2DB2C3D724200DBE1AE /* ChangelogCell.swift */; };
 		0080E2DE2C3D7D1E00DBE1AE /* LatestReleaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2DD2C3D7D1E00DBE1AE /* LatestReleaseCell.swift */; };
 		0080E2E42C3EDDDB00DBE1AE /* ExceptionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2E22C3EDDBD00DBE1AE /* ExceptionHandler.swift */; };
-		0080E2E92C3F00DD00DBE1AE /* CrashWriter.c in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2E82C3F00DD00DBE1AE /* CrashWriter.c */; };
-		0080E2EC2C3F02A400DBE1AE /* CrashWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 0080E2EB2C3F021200DBE1AE /* CrashWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0080E2EE2C401BB500DBE1AE /* ExceptionHandler+Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2ED2C401BB500DBE1AE /* ExceptionHandler+Constant.swift */; };
 		0080E2F02C401BD100DBE1AE /* ExceptionHandler+CrashType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2EF2C401BD100DBE1AE /* ExceptionHandler+CrashType.swift */; };
 		0080E2F22C401BF400DBE1AE /* ExceptionHandler+CrashInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080E2F12C401BF400DBE1AE /* ExceptionHandler+CrashInfo.swift */; };
@@ -1070,8 +1068,6 @@
 		0080E2DB2C3D724200DBE1AE /* ChangelogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangelogCell.swift; sourceTree = "<group>"; };
 		0080E2DD2C3D7D1E00DBE1AE /* LatestReleaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestReleaseCell.swift; sourceTree = "<group>"; };
 		0080E2E22C3EDDBD00DBE1AE /* ExceptionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExceptionHandler.swift; sourceTree = "<group>"; };
-		0080E2E82C3F00DD00DBE1AE /* CrashWriter.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CrashWriter.c; sourceTree = "<group>"; };
-		0080E2EB2C3F021200DBE1AE /* CrashWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CrashWriter.h; sourceTree = "<group>"; };
 		0080E2ED2C401BB500DBE1AE /* ExceptionHandler+Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExceptionHandler+Constant.swift"; sourceTree = "<group>"; };
 		0080E2EF2C401BD100DBE1AE /* ExceptionHandler+CrashType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExceptionHandler+CrashType.swift"; sourceTree = "<group>"; };
 		0080E2F12C401BF400DBE1AE /* ExceptionHandler+CrashInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExceptionHandler+CrashInfo.swift"; sourceTree = "<group>"; };
@@ -1486,6 +1482,7 @@
 		00FCB1972B97BC5800635DC8 /* FeedbackCardWidget+ContentObserver+InitialParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackCardWidget+ContentObserver+InitialParams.swift"; sourceTree = "<group>"; };
 		00FCDF572BA9DBC700F10427 /* Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Debug.entitlements; sourceTree = "<group>"; };
 		00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardCollectionViewCell.swift; sourceTree = "<group>"; };
+		00FFF2F12C5038EC0098FC88 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2778,8 +2775,6 @@
 				0080E2ED2C401BB500DBE1AE /* ExceptionHandler+Constant.swift */,
 				0080E2F12C401BF400DBE1AE /* ExceptionHandler+CrashInfo.swift */,
 				0080E2EF2C401BD100DBE1AE /* ExceptionHandler+CrashType.swift */,
-				0080E2EB2C3F021200DBE1AE /* CrashWriter.h */,
-				0080E2E82C3F00DD00DBE1AE /* CrashWriter.c */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -3196,6 +3191,7 @@
 			isa = PBXGroup;
 			children = (
 				001B7A0A27DD266500DEEECD /* Parra.podspec */,
+				00FFF2F12C5038EC0098FC88 /* Package.swift */,
 				00916A5E2B75C81A009C87DC /* Sample */,
 				001B7AF327DE3A7600DEEECD /* Sources */,
 				001B7AFF27DE3A7600DEEECD /* Tests */,
@@ -3654,7 +3650,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				001B7B0227DE3A7600DEEECD /* Parra.h in Headers */,
-				0080E2EC2C3F02A400DBE1AE /* CrashWriter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4401,7 +4396,6 @@
 				0099EB0B2B8D1FC40053F366 /* FeedbackCardWidget+Navigation.swift in Sources */,
 				0025ABDB2C4A9E45005FDBC5 /* ParraUser+Credential+Token.swift in Sources */,
 				0025ABDC2C4A9E45005FDBC5 /* ParraUser+Credential.swift in Sources */,
-				0080E2E92C3F00DD00DBE1AE /* CrashWriter.c in Sources */,
 				0087CA872A59A0D5007D72FA /* ParraLoggerThreadInfo.swift in Sources */,
 				009D84082BE547BB005EBFEB /* ParraGlobalComponentAttributes+Button.swift in Sources */,
 				00285DA42BCDF20700508DC8 /* ParraOptionalAuthWindow.swift in Sources */,

@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Parra/CrashWriter.h>
 
 //! Project version number for Parra.
 FOUNDATION_EXPORT double ParraVersionNumber;

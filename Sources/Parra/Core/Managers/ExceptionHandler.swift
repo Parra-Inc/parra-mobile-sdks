@@ -101,24 +101,17 @@ enum ExceptionHandler {
         _ crashInfo: ExceptionHandler.CrashInfo
     ) {
         let timestamp = Date.now.timeIntervalSince1970
-        let crashReportPath = NSSearchPathForDirectoriesInDomains(
-            .applicationSupportDirectory,
-            .userDomainMask,
-            true
-        ).first!.appending("/\(Constant.crashFilePrefix)\(timestamp).json")
-
+        let crashReportPath = DataManager.Base.applicationSupportDirectory
+            .appending(
+                component: "/\(Constant.crashFilePrefix)\(timestamp).json"
+            )
         do {
             let data = try JSONEncoder.parraEncoder.encode(crashInfo)
-            let dataString = String(data: data, encoding: .utf8)!
 
-            crashReportPath.withCString { pathPtr in
-                dataString.withCString { dataPtr in
-                    writeCrashInfo(
-                        pathPtr,
-                        dataPtr
-                    )
-                }
-            }
+            try data.write(
+                to: crashReportPath,
+                options: .noFileProtection
+            )
         } catch {
             Logger.fatal("Failed to create crash report", error)
         }
