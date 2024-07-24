@@ -51,6 +51,7 @@ pub async fn execute_bootstrap(
     application_id: Option<String>,
     workspace_id: Option<String>,
     project_path: Option<String>,
+    template_name: String,
 ) -> Result<(), Box<dyn Error>> {
     let tenant = get_tenant(workspace_id).await?;
     let mut application = get_application(application_id, &tenant).await?;

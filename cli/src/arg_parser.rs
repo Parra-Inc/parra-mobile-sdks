@@ -32,6 +32,9 @@ pub enum Commands {
         /// value, you will be prompted to enter a path.
         #[arg(short = 'p', long = "project-path")]
         project_path: Option<String>,
+
+        #[arg(short = 't', long = "template", default_value = "default")]
+        template_name: String,
     },
 }
 

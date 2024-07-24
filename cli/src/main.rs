@@ -18,11 +18,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
             application_id,
             workspace_id,
             project_path,
+            template_name,
         } => {
             commands::bootstrap::execute_bootstrap(
                 application_id,
                 workspace_id,
                 project_path,
+                template_name,
             )
             .await?
         }
