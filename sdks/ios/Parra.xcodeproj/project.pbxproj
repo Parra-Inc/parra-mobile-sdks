@@ -545,6 +545,10 @@
 		00D5DD952BD19864002E09B7 /* TrackingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD942BD19864002E09B7 /* TrackingHeader.swift */; };
 		00D5DD972BD19CDD002E09B7 /* Server+headers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5DD962BD19CDD002E09B7 /* Server+headers.swift */; };
 		00D669DC2C2C5A1B001EA43F /* UIApplication+resignFirstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D669DB2C2C5A1B001EA43F /* UIApplication+resignFirstResponder.swift */; };
+		00D76B552C516A5400D5B9ED /* DevApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D76B542C516A5400D5B9ED /* DevApp.swift */; };
+		00D76B572C516A5400D5B9ED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D76B562C516A5400D5B9ED /* ContentView.swift */; };
+		00D76B592C516A5500D5B9ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00D76B582C516A5500D5B9ED /* Assets.xcassets */; };
+		00D76B5D2C516A5500D5B9ED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00D76B5C2C516A5500D5B9ED /* Preview Assets.xcassets */; };
 		00DA7FE5295C95C400109081 /* SyncTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE4295C95C400109081 /* SyncTarget.swift */; };
 		00DA7FE8295CAB8F00109081 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE7295CAB8F00109081 /* AnyCodable.swift */; };
 		00DA7FEA295CAB9700109081 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DA7FE9295CAB9700109081 /* AnyEncodable.swift */; };
@@ -688,6 +692,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 001B7AF827DE3A7600DEEECD;
 			remoteInfo = Tests;
+		};
+		00D76B612C516A6600D5B9ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00DECFED274C69F800DAF301 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 001B7AF127DE3A7600DEEECD;
+			remoteInfo = Parra;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1279,6 +1290,12 @@
 		00D5DD942BD19864002E09B7 /* TrackingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingHeader.swift; sourceTree = "<group>"; };
 		00D5DD962BD19CDD002E09B7 /* Server+headers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Server+headers.swift"; sourceTree = "<group>"; };
 		00D669DB2C2C5A1B001EA43F /* UIApplication+resignFirstResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+resignFirstResponder.swift"; sourceTree = "<group>"; };
+		00D76B522C516A5400D5B9ED /* Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dev.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00D76B542C516A5400D5B9ED /* DevApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevApp.swift; sourceTree = "<group>"; };
+		00D76B562C516A5400D5B9ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		00D76B582C516A5500D5B9ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		00D76B5A2C516A5500D5B9ED /* Dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Dev.entitlements; sourceTree = "<group>"; };
+		00D76B5C2C516A5500D5B9ED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		00DA7FE4295C95C400109081 /* SyncTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTarget.swift; sourceTree = "<group>"; };
 		00DA7FE7295CAB8F00109081 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		00DA7FE9295CAB9700109081 /* AnyEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
@@ -1436,6 +1453,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				00374D702BA1414C0028EDA8 /* Parra.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00D76B4F2C516A5400D5B9ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3003,6 +3027,26 @@
 			path = State;
 			sourceTree = "<group>";
 		};
+		00D76B532C516A5400D5B9ED /* Dev */ = {
+			isa = PBXGroup;
+			children = (
+				00D76B542C516A5400D5B9ED /* DevApp.swift */,
+				00D76B562C516A5400D5B9ED /* ContentView.swift */,
+				00D76B582C516A5500D5B9ED /* Assets.xcassets */,
+				00D76B5A2C516A5500D5B9ED /* Dev.entitlements */,
+				00D76B5B2C516A5500D5B9ED /* Preview Content */,
+			);
+			path = Dev;
+			sourceTree = "<group>";
+		};
+		00D76B5B2C516A5500D5B9ED /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				00D76B5C2C516A5500D5B9ED /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		00DA7FE3295C95AF00109081 /* Sync */ = {
 			isa = PBXGroup;
 			children = (
@@ -3049,6 +3093,7 @@
 			isa = PBXGroup;
 			children = (
 				001BF9C02C516A02008B0571 /* Package.swift */,
+				00D76B532C516A5400D5B9ED /* Dev */,
 				001B7AF327DE3A7600DEEECD /* Sources */,
 				001B7AFF27DE3A7600DEEECD /* Tests */,
 				00B42EAF2ADE1BCB00F365A5 /* TestRunner */,
@@ -3063,6 +3108,7 @@
 				001B7AF227DE3A7600DEEECD /* Parra.framework */,
 				001B7AF927DE3A7600DEEECD /* Tests.xctest */,
 				00B42EAE2ADE1BCB00F365A5 /* TestRunner.app */,
+				00D76B522C516A5400D5B9ED /* Dev.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3559,6 +3605,24 @@
 			productReference = 00B42EAE2ADE1BCB00F365A5 /* TestRunner.app */;
 			productType = "com.apple.product-type.application";
 		};
+		00D76B512C516A5400D5B9ED /* Dev */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00D76B602C516A5500D5B9ED /* Build configuration list for PBXNativeTarget "Dev" */;
+			buildPhases = (
+				00D76B4E2C516A5400D5B9ED /* Sources */,
+				00D76B4F2C516A5400D5B9ED /* Frameworks */,
+				00D76B502C516A5400D5B9ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00D76B622C516A6600D5B9ED /* PBXTargetDependency */,
+			);
+			name = Dev;
+			productName = Dev;
+			productReference = 00D76B522C516A5400D5B9ED /* Dev.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3567,7 +3631,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				CLASSPREFIX = PAR;
-				LastSwiftUpdateCheck = 1520;
+				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1530;
 				ORGANIZATIONNAME = "Parra, Inc.";
 				TargetAttributes = {
@@ -3581,6 +3645,9 @@
 					};
 					00B42EAD2ADE1BCB00F365A5 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					00D76B512C516A5400D5B9ED = {
+						CreatedOnToolsVersion = 15.4;
 					};
 				};
 			};
@@ -3601,6 +3668,7 @@
 				001B7AF127DE3A7600DEEECD /* Parra */,
 				001B7AF827DE3A7600DEEECD /* Tests */,
 				00B42EAD2ADE1BCB00F365A5 /* TestRunner */,
+				00D76B512C516A5400D5B9ED /* Dev */,
 			);
 		};
 /* End PBXProject section */
@@ -3629,6 +3697,15 @@
 				00B42EBD2ADE1BCC00F365A5 /* LaunchScreen.storyboard in Resources */,
 				00B42EBA2ADE1BCC00F365A5 /* Assets.xcassets in Resources */,
 				00B42EB82ADE1BCB00F365A5 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00D76B502C516A5400D5B9ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00D76B5D2C516A5500D5B9ED /* Preview Assets.xcassets in Resources */,
+				00D76B592C516A5500D5B9ED /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4303,6 +4380,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00D76B4E2C516A5400D5B9ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00D76B572C516A5400D5B9ED /* ContentView.swift in Sources */,
+				00D76B552C516A5400D5B9ED /* DevApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -4320,6 +4406,11 @@
 			isa = PBXTargetDependency;
 			target = 001B7AF827DE3A7600DEEECD /* Tests */;
 			targetProxy = 00BF36C02B56CC9B0097905C /* PBXContainerItemProxy */;
+		};
+		00D76B622C516A6600D5B9ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 001B7AF127DE3A7600DEEECD /* Parra */;
+			targetProxy = 00D76B612C516A6600D5B9ED /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4569,6 +4660,85 @@
 			};
 			name = Release;
 		};
+		00D76B5E2C516A5500D5B9ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = Dev/Dev.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Dev/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parra.Dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		00D76B5F2C516A5500D5B9ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = Dev/Dev.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Dev/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parra.Dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		00DED007274C69FA00DAF301 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4719,6 +4889,15 @@
 			buildConfigurations = (
 				00B42EC02ADE1BCC00F365A5 /* Debug */,
 				00B42EC12ADE1BCC00F365A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00D76B602C516A5500D5B9ED /* Build configuration list for PBXNativeTarget "Dev" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00D76B5E2C516A5500D5B9ED /* Debug */,
+				00D76B5F2C516A5500D5B9ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
