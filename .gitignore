@@ -431,3 +431,4 @@ Dependencies/
 /.vscode/settings.json
 /buildlog
 /artifacts
+/package-lock.json
