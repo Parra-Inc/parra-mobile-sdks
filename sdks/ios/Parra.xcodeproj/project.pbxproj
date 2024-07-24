@@ -747,7 +747,6 @@
 		0019CBC428FAE0E80015E703 /* FailableDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableDecodable.swift; sourceTree = "<group>"; };
 		0019CBC628FB1B580015E703 /* ParraImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraImageButton.swift; sourceTree = "<group>"; };
 		0019CBC828FB37BC0015E703 /* Sequence+asyncMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+asyncMap.swift"; sourceTree = "<group>"; };
-		001B7A0A27DD266500DEEECD /* Parra.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Parra.podspec; sourceTree = "<group>"; };
 		001B7A8B27DD883500DEEECD /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
 		001B7A8F27DD8D6700DEEECD /* ParraFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraFeedback.swift; sourceTree = "<group>"; };
 		001B7AF227DE3A7600DEEECD /* Parra.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Parra.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -763,6 +762,7 @@
 		001B7B8327DE6E2400DEEECD /* ParraFeedback+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParraFeedback+Constants.swift"; sourceTree = "<group>"; };
 		001B7B8727DE712200DEEECD /* ParraStorageModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraStorageModule.swift; sourceTree = "<group>"; };
 		001B7B8D27DE806100DEEECD /* DataStorageMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageMedium.swift; sourceTree = "<group>"; };
+		001BF9C02C516A02008B0571 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
 		00214C692AB3E2BC001C5313 /* ParraSanitizedDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraSanitizedDictionary.swift; sourceTree = "<group>"; };
 		00214C6B2AB3E3A0001C5313 /* ParraDataSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraDataSanitizer.swift; sourceTree = "<group>"; };
 		00214C6D2AB62510001C5313 /* String+prefixes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+prefixes.swift"; sourceTree = "<group>"; };
@@ -1411,7 +1411,6 @@
 		00FCB1952B97B87F00635DC8 /* RoadmapWidget+ContentObserver+InitialParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoadmapWidget+ContentObserver+InitialParams.swift"; sourceTree = "<group>"; };
 		00FCB1972B97BC5800635DC8 /* FeedbackCardWidget+ContentObserver+InitialParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackCardWidget+ContentObserver+InitialParams.swift"; sourceTree = "<group>"; };
 		00FD310A28329F5B0080689C /* ParraCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraCardCollectionViewCell.swift; sourceTree = "<group>"; };
-		00FFF2F12C5038EC0098FC88 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3049,13 +3048,11 @@
 		00DECFEC274C69F800DAF301 = {
 			isa = PBXGroup;
 			children = (
-				001B7A0A27DD266500DEEECD /* Parra.podspec */,
-				00FFF2F12C5038EC0098FC88 /* Package.swift */,
+				001BF9C02C516A02008B0571 /* Package.swift */,
 				001B7AF327DE3A7600DEEECD /* Sources */,
 				001B7AFF27DE3A7600DEEECD /* Tests */,
 				00B42EAF2ADE1BCB00F365A5 /* TestRunner */,
 				00DECFF6274C69F800DAF301 /* Products */,
-				02A060188E5CD1963038AE8C /* Pods */,
 				39DADA99F3B351D04A5CD522 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -3480,13 +3477,6 @@
 				00FCB1782B963DA800635DC8 /* ImageButton+RenderStorybook.swift */,
 			);
 			path = "Image Buttons";
-			sourceTree = "<group>";
-		};
-		02A060188E5CD1963038AE8C /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		39DADA99F3B351D04A5CD522 /* Frameworks */ = {
