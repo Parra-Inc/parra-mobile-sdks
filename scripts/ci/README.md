@@ -1,6 +1,6 @@
 # CI Scripts
 
-This directory contains scripts that intended to be used from within a CI environment for things like running tests and building/shipping releases. Most of the scripts within this directory will be invoked automatically from [.circle/config.yml](https://github.com/Parra-Inc/parra-ios-sdk/blob/main/.circleci/config.yml).
+This directory contains scripts that intended to be used from within a CI environment for things like running tests and building/shipping releases. Most of the scripts within this directory will be invoked automatically from [.circle/config.yml](https://github.com/Parra-Inc/parra-mobile-sdks/blob/main/.circleci/config.yml).
 
 ## Philosophy
 

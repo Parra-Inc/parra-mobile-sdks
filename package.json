@@ -1,11 +1,11 @@
 {
-  "name": "parra-ios-sdk",
+  "name": "parra-mobile-sdks",
   "version": "0.1.0",
   "license": "MIT",
-  "homepage": "https://github.com/Parra-Inc/parra-ios-sdk",
+  "homepage": "https://github.com/Parra-Inc/parra-mobile-sdks",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Parra-Inc/parra-ios-sdk.git"
+    "url": "https://github.com/Parra-Inc/parra-mobile-sdks.git"
   },
   "main": "dist/index.ts",
   "type": "module",

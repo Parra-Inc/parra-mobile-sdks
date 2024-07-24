@@ -1,6 +1,6 @@
 # Parra iOS SDK CLI
 
-This CLI contains tools that are useful for the development and deployment of the Parra iOS SDK. If you're looking to integrate Parra into your iOS project, the contents of this directory can be ignored. The Parra CLI is designed to be flexible enough to be invoked locally during development, as well as during CI. The configuration for the latter can be found in [.circle/config.yml](https://github.com/Parra-Inc/parra-ios-sdk/blob/main/.circleci/config.yml).
+This CLI contains tools that are useful for the development and deployment of the Parra iOS SDK. If you're looking to integrate Parra into your iOS project, the contents of this directory can be ignored. The Parra CLI is designed to be flexible enough to be invoked locally during development, as well as during CI. The configuration for the latter can be found in [.circle/config.yml](https://github.com/Parra-Inc/parra-mobile-sdks/blob/main/.circleci/config.yml).
 
 ## Philosophy
 
