@@ -3,15 +3,15 @@
 
 orbs:
   # ruby: circleci/ruby@2.1.0
-  macos: circleci/macos@2.4.1
-  git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
+  # macos: circleci/macos@2.5.2
+  advanced-checkout: vsco/advanced-checkout@1.1.0
   bun: ksylvest/bun@1.0.1
   rust: circleci/rust@1.6.1
 
 commands:
   common:
     steps:
-      - git-shallow-clone/checkout:
+      - advanced-checkout/shallow-checkout:
           depth: 1
           fetch_depth: 1
           # Enable this if we get errors related to GitHub RSA failure during clone.
@@ -23,44 +23,44 @@ commands:
           name: Install NPM Dependencies
           command: bun install --frozen-lockfile
 
-  load-env-vars:
-    steps:
-      - run:
-          name: Loading Environment Variables
-          command: |
-            cat bash.env >> $BASH_ENV
-            printenv
+  # load-env-vars:
+  #   steps:
+  #     - run:
+  #         name: Loading Environment Variables
+  #         command: |
+  #           cat bash.env >> $BASH_ENV
+  #           printenv
 
-  run-command-and-persist-variables:
-    parameters:
-      title:
-        type: string
-      command:
-        type: string
-      variables:
-        type: string # CSV of variables to persist
-      background:
-        type: boolean
-        default: false
-    steps:
-      - run:
-          name: << parameters.title >>
-          command: |
-            # Important to source from the command that we're executing to store env vars that are
-            # exported in the command.
-            . << parameters.command >>
+  # run-command-and-persist-variables:
+  #   parameters:
+  #     title:
+  #       type: string
+  #     command:
+  #       type: string
+  #     variables:
+  #       type: string # CSV of variables to persist
+  #     background:
+  #       type: boolean
+  #       default: false
+  #   steps:
+  #     - run:
+  #         name: << parameters.title >>
+  #         command: |
+  #           # Important to source from the command that we're executing to store env vars that are
+  #           # exported in the command.
+  #           . << parameters.command >>
 
-            # Iterate over variables and persist them
-            IFS=',' read -ra ADDR \<<< "<< parameters.variables >>"
-            for i in "${ADDR[@]}"; do
-              value=$(eval echo \$$i)
-              echo "Persisting variable: $i with value: $value"
-              echo "export $i=$value" >> $BASH_ENV
-            done
+  #           # Iterate over variables and persist them
+  #           IFS=',' read -ra ADDR \<<< "<< parameters.variables >>"
+  #           for i in "${ADDR[@]}"; do
+  #             value=$(eval echo \$$i)
+  #             echo "Persisting variable: $i with value: $value"
+  #             echo "export $i=$value" >> $BASH_ENV
+  #           done
 
-            printenv
-            cp $BASH_ENV bash.env
-          background: << parameters.background >>
+  #           printenv
+  #           cp $BASH_ENV bash.env
+  #         background: << parameters.background >>
 
   prepare_ios_prerequisites:
     steps:
@@ -141,6 +141,9 @@ jobs:
           name: Prepare CLI Release
           command: |            
             cd cli; ./release_update.sh $CIRCLE_TAG
+      - run:
+          name: Install Brew Dependencies
+          command: ./cli.sh ci --install-brew-dependencies
 
       # Triggered by tag. New tag has been created at this point
       # 0. Re-run sample app verification steps

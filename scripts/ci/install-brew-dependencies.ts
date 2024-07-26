@@ -25,6 +25,10 @@ export const installBrewDependencies = async () => {
     echo "Installing xcbeautify..."
     # Used for pretty printing xcodebuild output.
     brew install xcbeautify --quiet
+
+    echo "Installing GitHub utils..."
+    # Used creating GitHub releases.
+    brew install gh --quiet
     `
   );
 };
