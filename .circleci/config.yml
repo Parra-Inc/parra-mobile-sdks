@@ -133,9 +133,16 @@ jobs:
           command: echo "Preparing release $CIRCLE_TAG"
       - rust/install
       - run:
+          name: Install Rust x86_64 Support
+          command: rustup target install x86_64-apple-darwin
+      - run:
           name: Prepare CLI Release
           command: |            
             cd cli; ./release_update.sh $CIRCLE_TAG
+      - run:
+          name: Create Sample App
+          command: |
+            ./target/aarch64-apple-darwin/release/parra --template parra-sample-remote
       - run:
           name: Install Brew Dependencies
           command: |
@@ -149,16 +156,12 @@ jobs:
 
       # Triggered by tag. New tag has been created at this point
       # 0. Re-run sample app verification steps
-      # 1. Update SDK version
+      # 1. Update SDK version (don't need to do this, it's based on the already created tag)
       # 2. Update CLI version and create new build (cache artifacts dir) ([skip ci])
       # 3. Generate new sample app directory
       # 4. Create new commit and GitHub release "v${VERSION}" and attach CLI binaries (cache version, SHAs)
       # 5. Initiate webhook on tap repo
       # 6. (probably needs delay before starting) force merge to `parra-build-sample-app`
-      - run:
-          name: Stuff
-          command: |
-            echo "stuff"
 
 
 workflows:
