@@ -138,7 +138,14 @@ jobs:
             cd cli; ./release_update.sh $CIRCLE_TAG
       - run:
           name: Install Brew Dependencies
-          command: ./cli.sh ci --install-brew-dependencies
+          command: |
+            # Only install the brew deps we need for this step.
+            export HOMEBREW_NO_AUTO_UPDATE=1
+            export HOMEBREW_NO_INSTALL_CLEANUP=1
+            export HOMEBREW_NO_INSTALL_UPGRADE=1
+            export HOMEBREW_NO_ANALYTICS=1
+
+            brew install gh --quiet
 
       # Triggered by tag. New tag has been created at this point
       # 0. Re-run sample app verification steps
