@@ -1,4 +1,5 @@
 use crate::dependencies::DerivedDependency;
+use crate::project_generator::sample_generator;
 use crate::types::api::{ApplicationResponse, TenantResponse};
 use crate::types::dependency::XcodeVersion;
 use crate::{api, dependencies, project_generator};
@@ -45,6 +46,30 @@ impl Display for XcodeVersion {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}.{}.{}", self.major, self.minor, self.patch)
     }
+}
+
+pub async fn get_template(template_name: String, is_local: bool) {
+    // If the template is local, it means we assume this script is running from within
+    // the sdk repo as part of sample app regeneration. Otherwise, we assume a developer
+    // who installed the CLI is running this to generate their app. In this case, we need
+    // to fetch the template from the remote sdks repo from a commit matching the release of
+    // the CLI.
+
+    // built_info::GIT_COMMIT_HASH;
+
+    // git clone -n --depth=1 --filter=tree:0  https://github.com/Parra-Inc/parra-ios-sdk
+    // git sparse-checkout set --no-cone docs
+    // git checkout
+}
+
+pub async fn execute_sample_bootstrap(
+    sample_name: &str,
+    project_path: Option<String>,
+    use_local_packages: bool,
+) -> Result<(), Box<dyn Error>> {
+    println!("Preparing to generate Parra Sample project. Will link packages locally: {}", use_local_packages);
+
+    Ok(())
 }
 
 pub async fn execute_bootstrap(
