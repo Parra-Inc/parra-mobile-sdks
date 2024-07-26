@@ -4,19 +4,13 @@
 orbs:
   # ruby: circleci/ruby@2.1.0
   # macos: circleci/macos@2.5.2
-  # advanced-checkout: vsco/advanced-checkout@1.1.0
   bun: ksylvest/bun@1.0.1
   rust: circleci/rust@1.6.1
 
 commands:
   common:
     steps:
-      - checkout
-      # - advanced-checkout/shallow-checkout:
-      #     depth: 1
-      #     fetch_depth: 1
-      #     # Enable this if we get errors related to GitHub RSA failure during clone.
-      #     # keyscan_github: true
+      - checkout # Can't use shallow clone orbs because circle repo url env var isn't being set for some reason.
       - attach_workspace:
           at: .
       - bun/install
@@ -67,10 +61,10 @@ commands:
     steps:
       - run:
           name: Install Brew Dependencies
-          command: ./cli.sh ci --install-brew-dependencies
+          command: ./scripts.sh ci --install-brew-dependencies
       # - run-command-and-persist-variables:
       #     title: Preboot Simulator
-      #     command: ./cli/bin/preboot-simulator.sh
+      #     command: ./scripts/bin/preboot-simulator.sh
       #     variables: PARRA_TEST_DEVICE_UDID
       #     # The time saved by running this in the background is negated by the increased time the
       #     # build-for-testing script will take if a simulator is mid booted when it starts.
@@ -82,7 +76,7 @@ commands:
             echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
       # - run:
       #     name: Disable Simulator Hardware Keyboard
-      #     command: ./cli.sh ci --disable-simulator-hardware-keyboard
+      #     command: ./scripts.sh ci --disable-simulator-hardware-keyboard
       # - ruby/install-deps: # Don't need to set bundler-version, ORB looks for Gemfile.lock by default.
       #     path: /tmp/workspace/vendor
       #     include-branch-in-cache-key: false
