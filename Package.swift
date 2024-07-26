@@ -2,43 +2,47 @@
 
 import PackageDescription
 
+let iosSdkDir = "sdks/ios"
+
 let package = Package(
     name: "Parra",
     platforms: [
-        .iOS("17.0")
+        .iOS("17.0"),
     ],
     products: [
         .library(
             name: "Parra",
             targets: [
-                "Parra"
+                "Parra",
             ]
             // type: .static, .dynamic
-        )
+        ),
     ],
     targets: [
         .target(
             name: "Parra",
             dependencies: [],
+            path: iosSdkDir,
             exclude: [],
             resources: [
                 // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk
-                .process("PrivacyInfo.xcprivacy")
+                .process("PrivacyInfo.xcprivacy"),
             ]
         ),
         .testTarget(
             name: "ParraTests",
             dependencies: [
-                "Parra"
-            ]
-        )
+                "Parra",
+            ],
+            path: iosSdkDir
+        ),
     ],
     swiftLanguageVersions: [.version("5.9")]
 )
 
 let swiftSettings: [SwiftSetting] = [
     // -enable-bare-slash-regex becomes
-    .enableUpcomingFeature("BareSlashRegexLiterals")
+    .enableUpcomingFeature("BareSlashRegexLiterals"),
     // -warn-concurrency becomes
     // .enableUpcomingFeature("StrictConcurrency"),
     // .unsafeFlags(["-enable-actor-data-race-checks"],
