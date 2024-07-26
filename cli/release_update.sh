@@ -5,6 +5,7 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+cargo install cargo-edit
 cargo set-version --workspace "$1"
 
 echo "Building release for all targets"
@@ -12,10 +13,10 @@ echo "Building release for all targets"
 rm -rf target
 
 echo "Building for macOS ARM"
-cargo build --release --target aarch64-apple-darwin --quiet --frozen --locked
+cargo build --release --target aarch64-apple-darwin --quiet --locked
 
 echo "Building for macOS Intel"
-cargo build --release --target x86_64-apple-darwin --quiet --frozen --locked
+cargo build --release --target x86_64-apple-darwin --quiet --locked
 
 echo "Build complete. Artifacts are in target/release"
 
