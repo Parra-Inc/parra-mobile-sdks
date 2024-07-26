@@ -4,18 +4,19 @@
 orbs:
   # ruby: circleci/ruby@2.1.0
   # macos: circleci/macos@2.5.2
-  advanced-checkout: vsco/advanced-checkout@1.1.0
+  # advanced-checkout: vsco/advanced-checkout@1.1.0
   bun: ksylvest/bun@1.0.1
   rust: circleci/rust@1.6.1
 
 commands:
   common:
     steps:
-      - advanced-checkout/shallow-checkout:
-          depth: 1
-          fetch_depth: 1
-          # Enable this if we get errors related to GitHub RSA failure during clone.
-          # keyscan_github: true
+      - checkout
+      # - advanced-checkout/shallow-checkout:
+      #     depth: 1
+      #     fetch_depth: 1
+      #     # Enable this if we get errors related to GitHub RSA failure during clone.
+      #     # keyscan_github: true
       - attach_workspace:
           at: .
       - bun/install
