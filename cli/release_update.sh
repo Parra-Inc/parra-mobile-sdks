@@ -31,17 +31,17 @@ chmod +x artifacts/*
 
 echo "Artifact preparation complete"
 
-git add --all
-git commit -m "Release v$1"
+# git add --all
+# git commit -m "Release v$1"
 
-git tag "$1"
-git push
-git push --tags
+# git tag "$1"
+# git push
+# git push --tags
 
-gh release create "v$1" ./artifacts/*.tar.gz --generate-notes
+# gh release create "v$1" ./artifacts/*.tar.gz --generate-notes
 
-echo "Release created on GitHub"
-printf "Update the CLI Formula for the Parra Homebrew tap here: https://github.com/Parra-Inc/homebrew-parra\n\n"
+# echo "Release created on GitHub"
+# printf "Update the CLI Formula for the Parra Homebrew tap here: https://github.com/Parra-Inc/homebrew-parra\n\n"
 
 printf "Artifact URLs:\n"
 echo "https://github.com/Parra-Inc/parra-cli/releases/download/v$1/parra-cli-$1.aarch64_apple_darwin.tar.gz"

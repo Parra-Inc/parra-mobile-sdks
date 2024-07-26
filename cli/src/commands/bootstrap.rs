@@ -58,8 +58,10 @@ pub async fn get_template(template_name: String, is_local: bool) {
     // built_info::GIT_COMMIT_HASH;
 
     // git clone -n --depth=1 --filter=tree:0  https://github.com/Parra-Inc/parra-ios-sdk
+    // cd parra-ios-sdk
     // git sparse-checkout set --no-cone docs
-    // git checkout
+    // git fetch origin tag 0.1.17
+    // git checkout tags/0.1.17
 }
 
 pub async fn execute_sample_bootstrap(

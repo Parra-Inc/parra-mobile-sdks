@@ -6,6 +6,7 @@ orbs:
   macos: circleci/macos@2.4.1
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
   bun: ksylvest/bun@1.0.1
+  rust: circleci/rust@1.6.1
 
 commands:
   common:
@@ -15,13 +16,13 @@ commands:
           fetch_depth: 1
           # Enable this if we get errors related to GitHub RSA failure during clone.
           # keyscan_github: true
-          no_tags: true
       - attach_workspace:
           at: .
       - bun/install
       - run:
           name: Install NPM Dependencies
           command: bun install --frozen-lockfile
+
   load-env-vars:
     steps:
       - run:
@@ -88,7 +89,7 @@ commands:
 executors:
   macos-m1-test-runner:
     macos:
-      xcode: 15.3.0
+      xcode: 15.4.0
     resource_class: macos.m1.medium.gen1
     environment:
       PARRA_TEST_DERIVED_DATA_DIRECTORY: build/unit-tests/derivedData
@@ -100,6 +101,12 @@ executors:
       PARRA_TEST_DEVICE_OS_VERSION: 17.4
       PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.4
       PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
+    working_directory: /tmp/workspace
+
+  macos-m1-release-runner:
+    macos:
+      xcode: 15.4.0
+    resource_class: macos.m1.medium.gen1
     working_directory: /tmp/workspace
 
 version: 2.1
@@ -120,7 +127,45 @@ jobs:
       - store_test_results:
           path: build/unit-tests/derivedData/Logs/Test
 
+
+
+  release-ios-sdk:
+    executor: macos-m1-release-runner
+    steps:
+      - common
+      - run:
+          name: Determining Version
+          command: echo "Preparing release $CIRCLE_TAG"
+      - rust/install
+      - run:
+          name: Prepare CLI Release
+          command: |            
+            cd cli; ./release_update.sh $CIRCLE_TAG
+
+      # Triggered by tag. New tag has been created at this point
+      # 0. Re-run sample app verification steps
+      # 1. Update SDK version
+      # 2. Update CLI version and create new build (cache artifacts dir) ([skip ci])
+      # 3. Generate new sample app directory
+      # 4. Create new commit and GitHub release "v${VERSION}" and attach CLI binaries (cache version, SHAs)
+      # 5. Initiate webhook on tap repo
+      # 6. (probably needs delay before starting) force merge to `parra-build-sample-app`
+      - run:
+          name: Stuff
+          command: |
+            echo "stuff"
+
+
 workflows:
   run-unit-tests:
     jobs:
       - build-and-test
+  release-sdk:
+    jobs:
+      - release-ios-sdk:
+          filters: 
+            tags:
+              only: # x.y.z
+                - /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+            branches:
+              ignore: /.*/
