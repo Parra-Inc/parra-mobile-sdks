@@ -5,6 +5,12 @@ import { loadReleaseOptionsFromEnvironment } from './utils.js';
 
 const logger = new Logger('build-tests');
 
+export const regenerateSampleProject = async () => {
+    await runCommand(
+        `cd cli; cargo run bootstrap --template sample --project-path`
+    )
+};
+
 export const createRelease = async (options: ReleaseOptions) => {
     const envOptions = await loadReleaseOptionsFromEnvironment();
     logger.debug('Finished loading options from environment');
