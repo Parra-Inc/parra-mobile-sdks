@@ -142,7 +142,7 @@ jobs:
       - run:
           name: Create Sample App
           command: |
-            ./target/aarch64-apple-darwin/release/parra --template parra-sample-remote
+            ./cli/target/aarch64-apple-darwin/release/parra --template parra-sample-remote
       - run:
           name: Install Brew Dependencies
           command: |
