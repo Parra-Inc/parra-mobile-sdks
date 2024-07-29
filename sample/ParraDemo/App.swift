@@ -1,6 +1,6 @@
 //
 //  App.swift
-//  rawParra Demoupper_camelParraDemokebabparra-demo
+//  Parra Demo
 //
 //  Bootstrapped with ❤️ by Parra on 07/29/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
