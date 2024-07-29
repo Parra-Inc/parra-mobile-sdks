@@ -85,6 +85,10 @@ fn run_xcodegen(
     let stdout = String::from_utf8_lossy(&cwd.stdout);
     println!("++++++++++++ {}", stdout);
 
+    let ls = Command::new("ls").output()?;
+    let lsstdout = String::from_utf8_lossy(&ls.stdout);
+    println!("++++++++++++ {}", lsstdout);
+
     let result = Command::new("xcodegen")
         .arg("--spec")
         .arg(tmp_project_yaml_path.to_str().unwrap())
