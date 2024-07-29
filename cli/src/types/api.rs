@@ -55,10 +55,7 @@ pub enum TenantDomainType {
 
 #[derive(Debug, Deserialize)]
 pub struct TenantDomain {
-    pub id: String,
-    pub url: String,
     pub host: String,
-    pub name: String,
     #[serde(rename = "type")]
     pub domain_type: TenantDomainType,
 }
