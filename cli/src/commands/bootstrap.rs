@@ -105,7 +105,6 @@ pub async fn execute_sample_bootstrap(
         get_sample_path()?
     };
 
-    println!("Finished fetching template: {}", template);
     println!("Will generate sample in: {}", project_dir.display());
 
     let demo_app_id = "edec3a6c-a375-4a9d-bce8-eb00860ef228";

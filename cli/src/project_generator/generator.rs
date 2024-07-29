@@ -77,9 +77,13 @@ fn run_xcodegen(
     println!("Running xcodegen");
     println!("project path: {}", project_path.display());
 
-    let tmp_project_yaml_path = Path::new("/tmp/parra_project.yml");
+    let tmp_project_yaml_path = Path::new("/private/tmp/parra_project.yml");
     fs::write(tmp_project_yaml_path, template)?;
     println!("tmp path: {}", tmp_project_yaml_path.display());
+
+    let cwd = Command::new("pwd").output()?;
+    let stdout = String::from_utf8_lossy(&cwd.stdout);
+    println!("++++++++++++ {}", stdout);
 
     let result = Command::new("xcodegen")
         .arg("--spec")
