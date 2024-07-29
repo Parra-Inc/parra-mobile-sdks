@@ -104,9 +104,6 @@ jobs:
 
             git add sample
             git add cli
-            git commit -m "Release v$1"
-
-            git add --all
             git commit -m "Released version $CIRCLE_TAG [skip ci]"
 
             # Quiet push so key isn't shown in logs
