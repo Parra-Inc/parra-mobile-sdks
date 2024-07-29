@@ -152,7 +152,7 @@ jobs:
             export HOMEBREW_NO_INSTALL_UPGRADE=1
             export HOMEBREW_NO_ANALYTICS=1
 
-            brew install gh --quiet
+            brew install xcodegen gh --quiet
 
       # Triggered by tag. New tag has been created at this point
       # 0. Re-run sample app verification steps
