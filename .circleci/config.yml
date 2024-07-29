@@ -115,6 +115,9 @@ jobs:
             git add cli
             git commit -m "Released version $CIRCLE_TAG [skip ci]"
 
+            # Same token
+            export GITHUB_TOKEN="$SDKS_REPO_ACCESS_TOKEN"
+
             # Quiet push so key isn't shown in logs
             # git push -q git@github.com:Parra-Inc/tap.git main
             git push -q https://${SDKS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git main
