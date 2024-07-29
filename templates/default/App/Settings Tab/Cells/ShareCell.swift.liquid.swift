@@ -1,5 +1,5 @@
 //
-//  ReviewAppCell.swift
+//  ShareCell.swift.liquid.swift
 //  {{ app.name }}
 //
 //  Bootstrapped with ❤️ by Parra on {{ "now" | date: "%m/%d/%Y" }}.
@@ -9,23 +9,24 @@
 import Parra
 import SwiftUI
 
-struct ReviewAppCell: View {
+struct ShareCell: View {
     // MARK: - Internal
 
     var body: some View {
-        if let writeReviewUrl = parraAppInfo.application
-            .appStoreWriteReviewUrl
-        {
+        if let appStoreUrl = parraAppInfo.application.appStoreUrl {
             HStack {
-                Link(
-                    destination: writeReviewUrl
+                ShareLink(
+                    item: appStoreUrl,
+                    message: Text(
+                        "Check out this awesome new app that I'm building using Parra!"
+                    )
                 ) {
                     Label(
                         title: {
-                            Text("Write a Review")
+                            Text("Share This App")
                         },
                         icon: {
-                            Image(systemName: "pencil.line")
+                            Image(systemName: "square.and.arrow.up")
                                 .foregroundStyle(.tint)
                         }
                     )
@@ -46,8 +47,7 @@ struct ReviewAppCell: View {
 }
 
 #Preview {
-    ParraAppPreview(authState: .authenticatedPreview) {
-        ReviewAppCell()
-            .padding()
+    ParraAppPreview {
+        ShareCell()
     }
 }

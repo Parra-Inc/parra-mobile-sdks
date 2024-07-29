@@ -1,5 +1,5 @@
 //
-//  RoadmapCell.swift
+//  FeedbackCell.swift.liquid.swift
 //  {{ app.name }}
 //
 //  Bootstrapped with ❤️ by Parra on {{ "now" | date: "%m/%d/%Y" }}.
@@ -12,56 +12,60 @@ import SwiftUI
 /// This example shows how you can use your own custom logic for determining how
 /// and when to present a Parra Feedback Form. The steps to achieve this are:
 ///
-/// 1. Create an `@State` variable to control the presentation state of the
-///    roadmap.
-/// 2. Pass the `isPresented` binding to the `presentParraRoadmap` modifier.
-/// 3. When you're ready to present the roadmap, update the value of
-///    `isPresented` to `true`. The roadmap will be fetched and
-///    presented automatically.
-struct RoadmapCell: View {
+/// 1. Access the Parra instance attached to your app using `@Environment`.
+/// 2. Use the ``parra`` instance to fetch the form data for the provided
+///    form id.
+/// 3. Store the feedback form data in `@State`
+/// 4. Use the `presentParraFeedbackForm` modifier and pass the form state as a
+///    parameter. When it becomes non nil, the form is presented.
+struct FeedbackCell: View {
     // MARK: - Internal
 
     var body: some View {
         Button(action: {
-            loadRoadmap()
+            loadFeedbackForm(with: "ff66b5d8-9030-4dc3-aca8-50eec3bb9a1e")
         }) {
             Label(
                 title: {
-                    Text("Roadmap")
+                    Text("Leave Feedback")
                         .foregroundStyle(Color.primary)
                 },
                 icon: {
                     if isLoading {
                         ProgressView()
                     } else {
-                        Image(systemName: "map")
+                        Image(systemName: "quote.bubble")
                     }
                 }
             )
         }
         .disabled(isLoading)
-        .presentParraRoadmap(with: $roadmapInfo)
+        .presentParraFeedbackForm(with: $formData) // #4
     }
 
     // MARK: - Private
 
     @Environment(\.parra) private var parra
-    @State private var isLoading = false
+    @State private var formData: ParraFeedbackForm? // #3
     @State private var errorMessage: String?
-    @State private var roadmapInfo: ParraRoadmapInfo?
+    @State private var isLoading = false
 
     @EnvironmentObject private var themeManager: ParraThemeManager
 
-    private func loadRoadmap() {
+    private func loadFeedbackForm(
+        with formId: String
+    ) {
         isLoading = true
 
         Task {
             do {
                 errorMessage = nil
-                roadmapInfo = try await parra.releases.fetchRoadmap()
+                formData = try await parra.feedback.fetchFeedbackForm( // #2
+                    formId: formId
+                )
             } catch {
                 errorMessage = String(describing: error)
-                roadmapInfo = nil
+                formData = nil
 
                 Logger.error(error)
             }
@@ -73,6 +77,6 @@ struct RoadmapCell: View {
 
 #Preview {
     ParraAppPreview {
-        RoadmapCell()
+        FeedbackCell()
     }
 }

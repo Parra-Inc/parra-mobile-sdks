@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  ContentView.swift.liquid.swift
 //  {{ app.name }}
 //
 //  Bootstrapped with ❤️ by Parra on {{ "now" | date: "%m/%d/%Y" }}.
