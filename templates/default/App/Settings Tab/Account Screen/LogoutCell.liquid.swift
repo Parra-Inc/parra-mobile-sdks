@@ -1,5 +1,5 @@
 //
-//  LogoutCell.liquid.swift
+//  LogoutCell.swift
 //  {{ app.name.raw }}
 //
 //  Bootstrapped with ❤️ by Parra on {{ "now" | date: "%m/%d/%Y" }}.

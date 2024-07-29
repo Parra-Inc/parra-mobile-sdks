@@ -34,7 +34,6 @@
 		1134A5FE14CD2823DB7E08F5 /* ThemeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeCell.swift; sourceTree = "<group>"; };
 		288DEB20ABF100C79524336F /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
 		358387095818310D6D65C019 /* SettingsFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFooter.swift; sourceTree = "<group>"; };
-		3852367795857725086868F4 /* parra-mobile-sdks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "parra-mobile-sdks"; path = ..; sourceTree = SOURCE_ROOT; };
 		3A9991FA86FFA6584F2B8D9B /* FeedbackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCell.swift; sourceTree = "<group>"; };
 		413C0E1F6059108AB6658A2C /* AccountHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeader.swift; sourceTree = "<group>"; };
 		45555D93836503142EEF5524 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
@@ -88,7 +87,6 @@
 		464BE92488E63E76D1954977 = {
 			isa = PBXGroup;
 			children = (
-				863FD33592A0A060E546EFD3 /* Packages */,
 				F804827A5D37E8AB62227EF1 /* ParraDemo */,
 				62EF6BB729274E8FB2A8CBAE /* Products */,
 			);
@@ -112,14 +110,6 @@
 				E9465C9353FD24C459E4FAF6 /* Edit Profile Screen */,
 			);
 			path = "Settings Tab";
-			sourceTree = "<group>";
-		};
-		863FD33592A0A060E546EFD3 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				3852367795857725086868F4 /* parra-mobile-sdks */,
-			);
-			name = Packages;
 			sourceTree = "<group>";
 		};
 		E9465C9353FD24C459E4FAF6 /* Edit Profile Screen */ = {
@@ -203,6 +193,9 @@
 				en,
 			);
 			mainGroup = 464BE92488E63E76D1954977;
+			packageReferences = (
+				E0267D2E3469B61D724F542F /* XCRemoteSwiftPackageReference "parra-mobile-sdks" */,
+			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -444,9 +437,21 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		E0267D2E3469B61D724F542F /* XCRemoteSwiftPackageReference "parra-mobile-sdks" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.1.19;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		921495FEF04989E8E2CDD817 /* Parra */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = E0267D2E3469B61D724F542F /* XCRemoteSwiftPackageReference "parra-mobile-sdks" */;
 			productName = Parra;
 		};
 /* End XCSwiftPackageProductDependency section */

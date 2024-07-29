@@ -1,5 +1,5 @@
 //
-//  App.swift
+//  ParraDemoApp.swift
 //  Parra Demo
 //
 //  Bootstrapped with ❤️ by Parra on 07/29/2024.
