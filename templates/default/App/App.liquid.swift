@@ -1,6 +1,6 @@
 //
-//  {{ app.camel_name }}App.swift
-//  {{ app.name }}
+//  App.liquid.swift
+//  {{ app.name.raw }}
 //
 //  Bootstrapped with ❤️ by Parra on {{ "now" | date: "%m/%d/%Y" }}.
 //  Copyright © {{ "now" | date: "%Y" }} {{ tenant.name }}. All rights reserved.
@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 @main
-struct MyApp: App {
+struct App: App {
     @UIApplicationDelegateAdaptor(
         ParraAppDelegate<ParraSceneDelegate>.self
     ) var appDelegate

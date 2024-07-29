@@ -1,6 +1,6 @@
 //
 //  AccountHeader.liquid.swift
-//  {{ app.name }}
+//  {{ app.name.raw }}
 //
 //  Bootstrapped with ❤️ by Parra on {{ "now" | date: "%m/%d/%Y" }}.
 //  Copyright © {{ "now" | date: "%Y" }} {{ tenant.name }}. All rights reserved.
