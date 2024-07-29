@@ -7,17 +7,17 @@ pub struct AppNameInfo {
     pub upper_camel: String,
 }
 
-// #[derive(Debug, Deserialize, Clone, Serialize)]
-// pub struct AppEntitlementInfo {
-//     pub aps_environment: String,
-//     pub associated_domains: String,
-// }
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct AppEntitlementInfo {
+    pub aps_environment: String,
+    pub associated_domains: Vec<String>,
+}
 
-// #[derive(Debug, Deserialize, Clone, Serialize)]
-// pub struct AppEntitlementSchemes {
-//     pub debug: AppEntitlementInfo,
-//     pub release: AppEntitlementInfo,
-// }
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct AppEntitlementSchemes {
+    pub debug: AppEntitlementInfo,
+    pub release: AppEntitlementInfo,
+}
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct CodeSigningConfig {
@@ -37,7 +37,7 @@ pub struct AppContextInfo {
     pub name: AppNameInfo,
     pub bundle_id: String,
     pub deployment_target: String,
-    // pub entitlements: AppEntitlementSchemes,
+    pub entitlements: AppEntitlementSchemes,
     pub code_sign: CodeSigningConfigs,
     // team id or "-"
     pub team_id: String,
