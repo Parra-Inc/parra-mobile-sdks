@@ -116,7 +116,7 @@ jobs:
             git commit -m "Released version $CIRCLE_TAG [skip ci]"
 
             # Same token
-            export GITHUB_TOKEN="$SDKS_REPO_ACCESS_TOKEN"
+            export GH_TOKEN="$SDKS_REPO_ACCESS_TOKEN"
 
             # Quiet push so key isn't shown in logs
             # git push -q git@github.com:Parra-Inc/tap.git main
