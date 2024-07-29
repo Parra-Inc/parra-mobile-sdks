@@ -1,5 +1,3 @@
-# TODO:
-# 1. PARRA_TEST_OUTPUT_DIRECTORY not working
 
 orbs:
   # ruby: circleci/ruby@2.1.0
@@ -18,68 +16,16 @@ commands:
           name: Install NPM Dependencies
           command: bun install --frozen-lockfile
 
-  # load-env-vars:
+  # prepare_ios_prerequisites:
   #   steps:
   #     - run:
-  #         name: Loading Environment Variables
-  #         command: |
-  #           cat bash.env >> $BASH_ENV
-  #           printenv
-
-  # run-command-and-persist-variables:
-  #   parameters:
-  #     title:
-  #       type: string
-  #     command:
-  #       type: string
-  #     variables:
-  #       type: string # CSV of variables to persist
-  #     background:
-  #       type: boolean
-  #       default: false
-  #   steps:
+  #         name: Install Brew Dependencies
+  #         command: ./scripts.sh ci --install-brew-dependencies
   #     - run:
-  #         name: << parameters.title >>
+  #         name: Extract ASC Credential
   #         command: |
-  #           # Important to source from the command that we're executing to store env vars that are
-  #           # exported in the command.
-  #           . << parameters.command >>
-
-  #           # Iterate over variables and persist them
-  #           IFS=',' read -ra ADDR \<<< "<< parameters.variables >>"
-  #           for i in "${ADDR[@]}"; do
-  #             value=$(eval echo \$$i)
-  #             echo "Persisting variable: $i with value: $value"
-  #             echo "export $i=$value" >> $BASH_ENV
-  #           done
-
-  #           printenv
-  #           cp $BASH_ENV bash.env
-  #         background: << parameters.background >>
-
-  prepare_ios_prerequisites:
-    steps:
-      - run:
-          name: Install Brew Dependencies
-          command: ./scripts.sh ci --install-brew-dependencies
-      # - run-command-and-persist-variables:
-      #     title: Preboot Simulator
-      #     command: ./scripts/bin/preboot-simulator.sh
-      #     variables: PARRA_TEST_DEVICE_UDID
-      #     # The time saved by running this in the background is negated by the increased time the
-      #     # build-for-testing script will take if a simulator is mid booted when it starts.
-      #     background: false
-      - run:
-          name: Extract ASC Credential
-          command: |
-            dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
-            echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
-      # - run:
-      #     name: Disable Simulator Hardware Keyboard
-      #     command: ./scripts.sh ci --disable-simulator-hardware-keyboard
-      # - ruby/install-deps: # Don't need to set bundler-version, ORB looks for Gemfile.lock by default.
-      #     path: /private/tmp/workspace/vendor
-      #     include-branch-in-cache-key: false
+  #           dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
+  #           echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
 
 executors:
   macos-m1-test-runner:
@@ -96,38 +42,38 @@ executors:
       PARRA_TEST_DEVICE_OS_VERSION: 17.4
       PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.4
       PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
-    working_directory: /private/tmp/workspace
+    working_directory: /tmp/workspace
 
   macos-m1-release-runner:
     macos:
       xcode: 15.4.0
     resource_class: macos.m1.medium.gen1
-    working_directory: /private/tmp/workspace
+    working_directory: /tmp/workspace
 
 version: 2.1
 jobs:
-  build-and-test:
-    executor: macos-m1-test-runner
-    steps:
-      - common
-      - prepare_ios_prerequisites
-      - run:
-          name: Build for Testing
-          command: ./cli.sh tests --build --log-level debug
-      # - macos/wait-until-simulator-booted:
-      #     device-udid-var: PARRA_TEST_DEVICE_UDID
-      - run:
-          name: Run Unit Tests
-          command: ./cli.sh tests --run --log-level debug
-      - store_test_results:
-          path: build/unit-tests/derivedData/Logs/Test
-
-
+  # build-and-test:
+  #   executor: macos-m1-test-runner
+  #   steps:
+  #     - common
+  #     - prepare_ios_prerequisites
+  #     - run:
+  #         name: Build for Testing
+  #         command: ./cli.sh tests --build --log-level debug
+  #     - run:
+  #         name: Run Unit Tests
+  #         command: ./cli.sh tests --run --log-level debug
+  #     - store_test_results:
+  #         path: build/unit-tests/derivedData/Logs/Test
 
   release-ios-sdk:
     executor: macos-m1-release-runner
     steps:
       - common
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:6lSvuV68FjDCEY0ooSGyTWzAw9ryBq4JfhUdSN8XZ/Q"
+
       - run:
           name: Determining Version
           command: echo "Preparing release $CIRCLE_TAG"
@@ -149,6 +95,27 @@ jobs:
           name: Prepare CLI Release
           command: |            
             cd cli; ./release_update.sh $CIRCLE_TAG
+      - run:
+          name: Committing Updated CLI and Sample
+          command: |
+            git add sample
+            git add cli
+            git commit -m "Release v$1"
+
+            git config credential.helper 'cache --timeout=120'
+            git config --global user.name "$GH_USER"
+            git config --global user.email "$GH_EMAIL"
+
+            git add --all
+            git commit -m "Released version $CIRCLE_TAG [skip ci]"
+
+            # Quiet push so key isn't shown in logs
+            # git push -q git@github.com:Parra-Inc/tap.git main
+            git push -q https://${TAPS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git main
+
+            gh release create "v$1" ./artifacts/*.tar.gz --generate-notes
+
+            echo "Release created on GitHub"
       - run:
           name: Create Sample App
           command: |
