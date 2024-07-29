@@ -10,7 +10,9 @@ pub struct AppNameInfo {
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct AppEntitlementInfo {
     pub aps_environment: String,
-    pub associated_domains: Vec<String>,
+    /// Expected to be ready to be inserted into a plist. Should be
+    /// newline delimited with each entry wrapped in <string></string>
+    pub associated_domains: String,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
@@ -34,6 +36,7 @@ pub struct CodeSigningConfigs {
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct AppContextInfo {
+    pub id: String,
     pub name: AppNameInfo,
     pub bundle_id: String,
     pub deployment_target: String,
@@ -43,11 +46,11 @@ pub struct AppContextInfo {
     pub team_id: String,
 }
 
-// #[derive(Debug, Deserialize, Clone, Serialize)]
-// pub struct TenantContextInfo {
-//     pub id: String,
-//     pub name: String,
-// }
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct TenantContextInfo {
+    pub id: String,
+    pub name: String,
+}
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct SdkContextInfo {
@@ -60,6 +63,6 @@ pub struct SdkContextInfo {
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct ProjectContext {
     pub app: AppContextInfo,
-    // pub tenant: TenantContextInfo,
+    pub tenant: TenantContextInfo,
     pub sdk: SdkContextInfo,
 }

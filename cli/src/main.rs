@@ -42,7 +42,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 }
 
                 commands::bootstrap::execute_sample_bootstrap(
-                    sample_name,
                     project_path,
                     sample_name == PARRA_LOCAL_SAMPLE_NAME,
                 )

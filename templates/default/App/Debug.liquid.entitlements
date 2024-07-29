@@ -6,7 +6,7 @@
 	<string>{{ app.entitlements.debug.aps_environment }}</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-    {{ app.entitlements.debug.associated_domains }}
+		{{ app.entitlements.debug.associated_domains }}
 	</array>
 </dict>
 </plist>

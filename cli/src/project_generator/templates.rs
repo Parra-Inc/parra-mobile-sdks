@@ -89,7 +89,7 @@ pub fn get_entitlements_xml() -> String {
 pub fn get_content_view_swift_template() -> String {
     return r#"//
 //  ContentView.swift
-//  {{ app.name }}
+//  {{ app.name.raw }}
 //
 //  Bootstrapped with ❤️ by Parra on {{ "now" | date: "%m/%d/%Y" }}.
 //  Copyright © {{ "now" | date: "%Y" }} {{ tenant.name }}. All rights reserved.

@@ -1,15 +1,24 @@
 use crate::dependencies::DerivedDependency;
-use crate::project_generator::sample_generator;
-use crate::types::api::{ApplicationResponse, TenantResponse};
+use crate::types::api::{
+    ApplicationResponse, TenantDomain, TenantDomainType, TenantResponse,
+};
 use crate::types::dependency::XcodeVersion;
+use crate::types::templates::{
+    AppContextInfo, AppEntitlementInfo, AppEntitlementSchemes, AppNameInfo,
+    CodeSigningConfig, CodeSigningConfigs, ProjectContext, SdkContextInfo,
+    TenantContextInfo,
+};
 use crate::{api, dependencies, project_generator};
 use convert_case::{Case, Casing};
+use git2::Repository;
 use inquire::validator::{MaxLengthValidator, MinLengthValidator, Validation};
 use inquire::{Confirm, InquireError, Select, Text};
 use regex::Regex;
 use slugify::slugify;
+use std::env;
 use std::error::Error;
 use std::fmt::Display;
+use std::fs::read_to_string;
 use std::path::{Path, PathBuf};
 use std::process::{exit, Command};
 use std::str::FromStr;
@@ -48,30 +57,134 @@ impl Display for XcodeVersion {
     }
 }
 
-pub async fn get_template(template_name: String, is_local: bool) {
-    // If the template is local, it means we assume this script is running from within
-    // the sdk repo as part of sample app regeneration. Otherwise, we assume a developer
-    // who installed the CLI is running this to generate their app. In this case, we need
-    // to fetch the template from the remote sdks repo from a commit matching the release of
-    // the CLI.
+fn get_local_template(
+    template_dir: &PathBuf,
+    use_local_packages: bool,
+) -> Result<String, Box<dyn Error>> {
+    let project_template_path = template_dir.join("project.yml");
+    let template = read_to_string(project_template_path)?;
 
-    // built_info::GIT_COMMIT_HASH;
+    let package_template: String = if use_local_packages {
+        read_to_string(template_dir.join("package_local.yml"))?
+    } else {
+        read_to_string(template_dir.join("package_remote.yml"))?
+    };
 
-    // git clone -n --depth=1 --filter=tree:0  https://github.com/Parra-Inc/parra-ios-sdk
-    // cd parra-ios-sdk
-    // git sparse-checkout set --no-cone docs
-    // git fetch origin tag 0.1.17
-    // git checkout tags/0.1.17
+    Ok(format!("{}\n{}", template, package_template))
 }
 
+async fn get_remote_template() -> Result<String, Box<dyn Error>> {
+    Ok(String::new())
+}
+
+// built_info::GIT_COMMIT_HASH;
+
+// git clone -n --depth=1 --filter=tree:0  https://github.com/Parra-Inc/parra-ios-sdk
+// cd parra-ios-sdk
+// git sparse-checkout set --no-cone docs
+// git fetch origin tag 0.1.17 --no-tags // no tags so that other tags aren't pulled
+// git checkout tags/0.1.17
+
 pub async fn execute_sample_bootstrap(
-    sample_name: &str,
     project_path: Option<String>,
     use_local_packages: bool,
 ) -> Result<(), Box<dyn Error>> {
     println!("Preparing to generate Parra Sample project. Will link packages locally: {}", use_local_packages);
 
+    let template_dir = get_template_path("default")?;
+    let template_app_dir = template_dir.join("App/");
+    // Sample app generation will always use the local template. Even in CI, the template
+    // is accessible and should have already been updated for any necessary SDK changes by
+    // this point.
+    let template = get_local_template(&template_dir, use_local_packages)?;
+
+    let project_dir: PathBuf = if let Some(project_path) = project_path {
+        normalized_project_path(Some(project_path), "ParraSample")?
+    } else {
+        get_sample_path()?
+    };
+
+    println!("Finished fetching template: {}", template);
+    println!("Will generate sample in: {}", project_dir.display());
+
+    let demo_app_id = "edec3a6c-a375-4a9d-bce8-eb00860ef228";
+    let demo_tenant_id = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4";
+
+    let context: ProjectContext = ProjectContext {
+        app: AppContextInfo {
+            id: demo_app_id.to_owned(),
+            name: AppNameInfo {
+                raw: "Parra Demo".to_owned(),
+                kebab: "parra-demo".to_owned(),
+                upper_camel: "ParraDemo".to_owned(),
+            },
+            bundle_id: "com.parra.parra-ios-client".to_owned(),
+            deployment_target: "17.0".to_owned(),
+            code_sign: CodeSigningConfigs {
+                debug: CodeSigningConfig {
+                    identity: "Apple Development".to_owned(),
+                    required: "YES".to_owned(),
+                    allowed: "YES".to_owned(),
+                },
+                release: CodeSigningConfig {
+                    identity: "Apple Distribution".to_owned(),
+                    required: "YES".to_owned(),
+                    allowed: "YES".to_owned(),
+                },
+            },
+            team_id: "6D44Q764PG".to_owned(),
+            entitlements: get_entitlement_schemes(vec![
+                TenantDomain {
+                    host: "parra-demo.com".to_owned(),
+                    domain_type: TenantDomainType::External,
+                },
+                TenantDomain {
+                    host: "parra-public-demo.parra.io".to_owned(),
+                    domain_type: TenantDomainType::Subdomain,
+                },
+                TenantDomain {
+                    host: format!("tenant-{}.parra.io", demo_tenant_id)
+                        .to_owned(),
+                    domain_type: TenantDomainType::Fallback,
+                },
+            ]),
+        },
+        sdk: SdkContextInfo {
+            version: "0.1.20".to_owned(),
+        },
+        tenant: TenantContextInfo {
+            id: demo_tenant_id.to_owned(),
+            name: "Parra Inc.".to_owned(),
+        },
+    };
+
+    let xcode_project_path =
+        project_generator::generator::generate_xcode_project(
+            &project_dir,
+            &template_app_dir,
+            &template,
+            &context,
+            false,
+        )?;
+
     Ok(())
+}
+
+fn normalized_project_path(
+    project_path: Option<String>,
+    app_name: &str,
+) -> Result<PathBuf, Box<dyn Error>> {
+    let kebab_name = app_name.to_case(Case::Kebab);
+    let relative_path = get_project_path(project_path, &kebab_name);
+
+    let mut project_path = PathBuf::from_str(&relative_path)?;
+    if !project_path.ends_with(&kebab_name) {
+        project_path.push(&kebab_name);
+    }
+
+    let expanded_path = expand_tilde(&project_path).unwrap();
+
+    return Ok(expanded_path);
 }
 
 pub async fn execute_bootstrap(
@@ -89,21 +202,58 @@ pub async fn execute_bootstrap(
             application.name.trim_end_matches("app").trim().to_string();
     }
 
-    let kebab_name = application.name.to_case(Case::Kebab);
-    let relative_path = get_project_path(project_path, &kebab_name);
+    let expanded_path =
+        normalized_project_path(project_path, &application.name)?;
 
-    let mut project_path = PathBuf::from_str(&relative_path)?;
-    if !project_path.ends_with(&kebab_name) {
-        project_path.push(&kebab_name);
-    }
-    let expanded_path = expand_tilde(&project_path).unwrap();
+    let template_dir = get_template_path(&template_name)?;
+    let template_app_dir = template_dir.join("App/");
+    let template = get_remote_template().await?;
+
+    let app_name = &application.name;
+    let ios_config = application.ios.unwrap();
 
     println!("Generating project...");
 
+    let context: ProjectContext = ProjectContext {
+        app: AppContextInfo {
+            id: application.id,
+            name: AppNameInfo {
+                raw: app_name.to_owned(),
+                kebab: app_name.to_case(Case::Kebab),
+                upper_camel: app_name.to_case(Case::UpperCamel),
+            },
+            bundle_id: ios_config.bundle_id,
+            deployment_target: "17.0".to_owned(),
+            code_sign: CodeSigningConfigs {
+                debug: CodeSigningConfig {
+                    identity: "-".to_owned(),
+                    required: "NO".to_owned(),
+                    allowed: "NO".to_owned(),
+                },
+                release: CodeSigningConfig {
+                    identity: "-".to_owned(),
+                    required: "NO".to_owned(),
+                    allowed: "NO".to_owned(),
+                },
+            },
+            team_id: ios_config.team_id.unwrap_or("-".to_owned()),
+            entitlements: get_entitlement_schemes(tenant.domains),
+        },
+        sdk: SdkContextInfo {
+            version: "0.1.20".to_owned(),
+        },
+        tenant: TenantContextInfo {
+            id: tenant.id,
+            name: tenant.name,
+        },
+    };
+
     let xcode_project = project_generator::generator::generate_xcode_project(
         &expanded_path,
-        tenant,
-        application,
+        &template_app_dir,
+        &template,
+        &context,
+        true,
     )?;
 
     let xcode_target_dir = &xcode_project;
@@ -125,6 +275,43 @@ pub async fn execute_bootstrap(
     }
 
     Ok(())
+}
+
+fn get_entitlement_schemes(
+    allowed_domains: Vec<TenantDomain>,
+) -> AppEntitlementSchemes {
+    // Put the domains in order by priority that they appear in the Apple entitlements
+    // file. This is done by looking at the order of the domain type enum cases.
+    let mut domains = allowed_domains;
+    domains.sort_by_key(|domain| domain.domain_type);
+
+    let debug_web_credential_hosts: Vec<String> = domains
+        .iter()
+        .map(|domain| {
+            return format!(
+                "<string>webcredentials:{}?mode=developer</string>",
+                domain.host
+            );
+        })
+        .collect();
+
+    let release_web_credential_hosts: Vec<String> = domains
+        .iter()
+        .map(|domain| {
+            return format!("<string>webcredentials:{}</string>", domain.host);
+        })
+        .collect();
+
+    return AppEntitlementSchemes {
+        debug: AppEntitlementInfo {
+            aps_environment: "development".to_owned(),
+            associated_domains: debug_web_credential_hosts.join("\n\t\t"),
+        },
+        release: AppEntitlementInfo {
+            aps_environment: "production".to_owned(),
+            associated_domains: release_web_credential_hosts.join("\n\t\t"),
+        },
+    };
 }
 
 fn missing_dependencies() -> Vec<DerivedDependency> {
@@ -326,4 +513,34 @@ fn expand_tilde<P: AsRef<Path>>(path_user_input: P) -> Option<PathBuf> {
             h
         }
     })
+}
+
+fn get_template_path(template_name: &str) -> Result<PathBuf, Box<dyn Error>> {
+    let repo_path = get_repo_root_path()?;
+    let relative_path = PathBuf::from(format!("templates/{}/", template_name));
+    let full_path = repo_path.join(&relative_path);
+
+    println!("Full template path: {}", full_path.display());
+
+    return Ok(full_path);
+}
+
+fn get_sample_path() -> Result<PathBuf, Box<dyn Error>> {
+    let repo_path = get_repo_root_path()?;
+    let relative_path = PathBuf::from("sample/");
+    let full_path = repo_path.join(&relative_path);
+
+    println!("Full template path: {}", full_path.display());
+
+    return Ok(full_path);
+}
+
+fn get_repo_root_path() -> Result<PathBuf, Box<dyn Error>> {
+    let current_dir = env::current_dir()?;
+    let repo = Repository::discover(&current_dir)?;
+    let repo_path = repo
+        .workdir()
+        .ok_or("Could not find the working directory for the repo.")?;
+
+    return Ok(repo_path.to_path_buf());
 }

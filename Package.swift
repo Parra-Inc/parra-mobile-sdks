@@ -6,6 +6,7 @@ let iosSdkDir = "sdks/ios"
 
 let package = Package(
     name: "Parra",
+    defaultLocalization: "en",
     platforms: [
         .iOS("17.0"),
     ],
@@ -22,7 +23,7 @@ let package = Package(
         .target(
             name: "Parra",
             dependencies: [],
-            path: iosSdkDir,
+            path: "\(iosSdkDir)/Sources/Parra",
             exclude: [],
             resources: [
                 // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk
@@ -34,7 +35,7 @@ let package = Package(
             dependencies: [
                 "Parra",
             ],
-            path: iosSdkDir
+            path: "\(iosSdkDir)/Tests"
         ),
     ],
     swiftLanguageVersions: [.version("5.9")]
