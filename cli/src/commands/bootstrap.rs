@@ -531,7 +531,7 @@ fn get_sample_path() -> Result<PathBuf, Box<dyn Error>> {
     let relative_path = PathBuf::from("sample/");
     let full_path = repo_path.join(&relative_path);
 
-    println!("Full template path: {}", full_path.display());
+    println!("Full sample path: {}", full_path.display());
 
     return Ok(full_path);
 }
