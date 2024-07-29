@@ -1,3 +1,4 @@
+use crate::constants::built;
 use crate::dependencies::DerivedDependency;
 use crate::types::api::{
     ApplicationResponse, TenantDomain, TenantDomainType, TenantResponse,
@@ -150,7 +151,7 @@ pub async fn execute_sample_bootstrap(
             ]),
         },
         sdk: SdkContextInfo {
-            version: "0.1.20".to_owned(),
+            version: built::built_info::PKG_VERSION.to_owned(),
         },
         tenant: TenantContextInfo {
             id: demo_tenant_id.to_owned(),
