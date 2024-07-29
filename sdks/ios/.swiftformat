@@ -2,6 +2,11 @@
 
 --exclude Pods
 --exclude node_modules
+--exclude sdks/ios/Sources/Legacy
+--exclude templates
+--exclude sample
+--exclude cli
+--exclude docs
 --swiftversion 5.9
 
 ## Enabled rules
