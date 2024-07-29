@@ -21,16 +21,9 @@ pub fn render_templates_in_dir(
     for entry in WalkDir::new(target_dir) {
         match entry {
             Ok(entry) => {
-                println!("Processing: {:?}", entry.file_name().to_str());
-
                 if entry.file_type().is_file()
                     && entry.file_name().to_str().unwrap().contains(".liquid")
                 {
-                    println!(
-                        "Applying template to: {}",
-                        entry.path().display()
-                    );
-
                     let template = read_to_string(entry.path())?;
 
                     let rendered_template =
@@ -70,8 +63,6 @@ pub fn render_template(
 fn remove_liquid_extension(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
     if let Some(str_path) = path.to_str() {
         let without_liquid = str_path.replace(".liquid", "");
-
-        println!("Writing to: {}", without_liquid);
 
         return Ok(PathBuf::from(without_liquid));
     }

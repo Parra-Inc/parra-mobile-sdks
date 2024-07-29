@@ -4,11 +4,8 @@ use std::{error::Error, fs, io};
 
 use inquire::Confirm;
 
+use crate::project_generator::renderer;
 use crate::types::templates::ProjectContext;
-use crate::{
-    project_generator::{renderer, templates},
-    types::api::{ApplicationResponse, TenantResponse},
-};
 
 pub fn generate_xcode_project(
     project_dir: &PathBuf,
@@ -77,8 +74,12 @@ fn run_xcodegen(
     project_path: &PathBuf,
     template: &str,
 ) -> Result<(), Box<dyn Error>> {
+    println!("Running xcodegen");
+    println!("project path: {}", project_path.display());
+
     let tmp_project_yaml_path = Path::new("/tmp/parra_project.yml");
     fs::write(tmp_project_yaml_path, template)?;
+    println!("tmp path: {}", tmp_project_yaml_path.display());
 
     let result = Command::new("xcodegen")
         .arg("--spec")
