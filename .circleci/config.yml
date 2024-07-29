@@ -69,11 +69,20 @@ jobs:
   release-ios-sdk:
     executor: macos-m1-release-runner
     steps:
-      - common
+      - checkout # Can't use shallow clone orbs because circle repo url env var isn't being set for some reason.
+      - run: # Triggered by a tag. Switch to the main branch to do work on the commit associated with the tag.
+          name: Switch to main branch
+          command: |
+            git switch -B -f main
+      - attach_workspace:
+          at: .
+      - bun/install
+      - run:
+          name: Install NPM Dependencies
+          command: bun install --frozen-lockfile
       - add_ssh_keys:
           fingerprints:
             - "SHA256:6lSvuV68FjDCEY0ooSGyTWzAw9ryBq4JfhUdSN8XZ/Q"
-
       - run:
           name: Determining Version
           command: echo "Preparing release $CIRCLE_TAG"
