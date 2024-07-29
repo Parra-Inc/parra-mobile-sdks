@@ -98,20 +98,20 @@ jobs:
       - run:
           name: Committing Updated CLI and Sample
           command: |
-            git add sample
-            git add cli
-            git commit -m "Release v$1"
-
             git config credential.helper 'cache --timeout=120'
             git config --global user.name "$GH_USER"
             git config --global user.email "$GH_EMAIL"
+
+            git add sample
+            git add cli
+            git commit -m "Release v$1"
 
             git add --all
             git commit -m "Released version $CIRCLE_TAG [skip ci]"
 
             # Quiet push so key isn't shown in logs
             # git push -q git@github.com:Parra-Inc/tap.git main
-            git push -q https://${TAPS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git main
+            git push -q https://${SDKS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git main
 
             gh release create "v$1" ./artifacts/*.tar.gz --generate-notes
 
