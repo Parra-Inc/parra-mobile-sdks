@@ -3652,7 +3652,7 @@
 				};
 			};
 			buildConfigurationList = 00DECFF0274C69F800DAF301 /* Build configuration list for PBXProject "Parra" */;
-			compatibilityVersion = "Xcode 15.3";
+			compatibilityVersion = "Xcode 15.4";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (

@@ -9,7 +9,7 @@ pub fn get_project_yaml_template() -> String {
     return r#"
 name: {{ app.name }}
 options:
-  xcodeVersion: 15.3
+  xcodeVersion: 15.4
   minimumXcodeGenVersion: 2.39.0
   createIntermediateGroups: true
   generateEmptyDirectories: true
