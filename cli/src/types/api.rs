@@ -89,6 +89,8 @@ pub struct ApplicationRequest {
 #[derive(Debug, Deserialize, Clone)]
 pub struct ApplicationIosConfig {
     pub bundle_id: String,
+    pub app_id: Option<String>,
+    pub team_id: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Clone)]
