@@ -181,6 +181,7 @@
 				TargetAttributes = {
 					C6F8FBFC6CB3ECC9DB55E0BA = {
 						DevelopmentTeam = 6D44Q764PG;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -252,7 +253,8 @@
 				CODE_SIGNING_ALLOWED = YES;
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_ENTITLEMENTS = ParraDemo/Release.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6D44Q764PG;
 				INFOPLIST_FILE = ParraDemo/Info.plist;
@@ -263,6 +265,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-client";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_ENABLE_BARE_SLASH_REGEX = YES;
 				SWIFT_VERSION = 5.9;
@@ -334,6 +337,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_ENTITLEMENTS = ParraDemo/Debug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6D44Q764PG;
 				INFOPLIST_FILE = ParraDemo/Info.plist;
@@ -344,6 +348,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-client";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_ENABLE_BARE_SLASH_REGEX = YES;
 				SWIFT_VERSION = 5.9;
@@ -443,7 +448,7 @@
 			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.1.19;
+				minimumVersion = 0.1.38;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

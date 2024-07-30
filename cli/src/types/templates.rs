@@ -26,6 +26,8 @@ pub struct CodeSigningConfig {
     pub identity: String,
     pub required: String,
     pub allowed: String,
+    pub style: String,
+    pub profile_specifier: String,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
