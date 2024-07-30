@@ -124,10 +124,15 @@ jobs:
 
             gh release create "v$1" ./cli/artifacts/*.tar.gz --generate-notes
 
+            echo "Release created on GitHub"
+
             # Switch to or create sample app branch.
             git switch parra-build-sample-app || git switch -c parra-build-sample-app
+
+            git rebase --autosquash main
+            git push -q -f https://${SDKS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git parra-build-sample-app
             
-            echo "Release created on GitHub"
+            echo "Kicked off sample app builds"
       - run:
           name: Create Sample App
           command: |
