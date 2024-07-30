@@ -167,7 +167,6 @@ jobs:
             
             echo "Kicked off sample app builds"
 
-
       # Triggered by tag. New tag has been created at this point
       # 0. Re-run sample app verification steps
       # 1. Update SDK version (don't need to do this, it's based on the already created tag)
