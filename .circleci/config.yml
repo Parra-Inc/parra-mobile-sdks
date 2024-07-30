@@ -150,7 +150,8 @@ jobs:
                 "x86_sha": "$X86_SHA",
               }'
 
-              curl -X POST -H "content-type: application/json" -d "$json_body" "https://internal.circleci.com/private/soc/e/8f8e9e21-6ab3-42ac-9921-9ed140a500ba?secret=P0Lro4VEdwK7KZxjsVR0z6enIPZm6yKlIhlSsiWl7lE="
+              curl -X POST -H "content-type: application/json" -d "$json_body" "https://internal.circleci.com/private/soc/e/5a81ac9b-8c4e-48b3-a84c-7620380b4305?secret=P0Lro4VEdwK7KZxjsVR0z6enIPZm6yKlIhlSsiWl7lE="
+
       # Triggered by tag. New tag has been created at this point
       # 0. Re-run sample app verification steps
       # 1. Update SDK version (don't need to do this, it's based on the already created tag)
