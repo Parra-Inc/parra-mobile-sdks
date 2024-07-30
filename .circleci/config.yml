@@ -124,6 +124,9 @@ jobs:
 
             gh release create "v$1" ./cli/artifacts/*.tar.gz --generate-notes
 
+            # Switch to or create sample app branch.
+            git switch parra-build-sample-app || git switch -c parra-build-sample-app
+            
             echo "Release created on GitHub"
       - run:
           name: Create Sample App
