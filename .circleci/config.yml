@@ -93,6 +93,7 @@ jobs:
       - run:
           name: Install Rust x86_64 Support
           command: rustup target install x86_64-apple-darwin
+
       - run:
           name: Install Brew Dependencies
           command: |
