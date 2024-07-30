@@ -122,7 +122,7 @@ jobs:
             # git push -q git@github.com:Parra-Inc/tap.git main
             git push -q https://${SDKS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git main
 
-            gh release create "v$1" ./artifacts/*.tar.gz --generate-notes
+            gh release create "v$1" ./cli/artifacts/*.tar.gz --generate-notes
 
             echo "Release created on GitHub"
       - run:
