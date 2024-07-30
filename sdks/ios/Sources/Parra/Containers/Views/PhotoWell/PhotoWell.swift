@@ -71,8 +71,9 @@ struct PhotoWell: View {
     @Environment(\.isEnabled) var isEnabled
 
     var failureImage: some View {
-        Image(systemName: "person.crop.circle.badge.exclamationmark.fill")
+        Image(systemName: "network.slash")
             .resizable()
+            .frame(width: size.width / 2, height: size.height / 2)
     }
 
     var emptyImage: some View {
@@ -326,6 +327,14 @@ struct PhotoWell: View {
 
             PhotoWell(
                 image: UIImage(systemName: "swift")!,
+                onSelectionChanged: { _ in }
+            )
+
+            PhotoWell(
+                asset: Asset(
+                    id: UUID().uuidString,
+                    url: URL(string: "https://i.imgur.com/invalid-url.png")!
+                ),
                 onSelectionChanged: { _ in }
             )
         }
