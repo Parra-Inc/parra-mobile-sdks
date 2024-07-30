@@ -138,6 +138,19 @@ jobs:
           command: |
             ./cli/target/aarch64-apple-darwin/release/parra bootstrap --template parra-sample-remote
 
+      - run:
+          name: Publish Brew Tap Update
+          command: |
+              ARM_SHA=$(find cli/artifacts -type f -name "*aarch*"  | xargs shasum --algorithm 256 | awk '{print $1}')
+              X86_SHA=$(find cli/artifacts -type f -name "*x86_64*" | xargs shasum --algorithm 256 | awk '{print $1}')
+
+              json_body='{
+                "version": "$GIT_TAG",
+                "arm_sha": "$ARM_SHA",
+                "x86_sha": "$X86_SHA",
+              }'
+
+              curl -X POST -H "content-type: application/json" -d "$json_body" "https://internal.circleci.com/private/soc/e/8f8e9e21-6ab3-42ac-9921-9ed140a500ba?secret=P0Lro4VEdwK7KZxjsVR0z6enIPZm6yKlIhlSsiWl7lE="
       # Triggered by tag. New tag has been created at this point
       # 0. Re-run sample app verification steps
       # 1. Update SDK version (don't need to do this, it's based on the already created tag)
