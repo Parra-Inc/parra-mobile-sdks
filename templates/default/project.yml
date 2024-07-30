@@ -49,3 +49,14 @@ targets:
           PROVISIONING_PROFILE_SPECIFIER: {{ app.code_sign.debug.profile_specifier }}
     dependencies:
       - package: Parra
+
+schemes:
+  {{ app.name.upper_camel }}:
+    build:
+      targets:
+        {{ app.name.upper_camel }}: all
+      parallelizeBuild: true
+      buildImplicitDependencies: true
+    run:
+      environmentVariables:
+        IDEPreferLogStreaming: YES # Silence warning in Xcode console
