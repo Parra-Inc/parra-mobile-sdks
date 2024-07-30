@@ -28,6 +28,9 @@ commands:
   #           echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
 
 executors:
+  # m1.medium -> 150 credits/min
+  # m1.large -> 250 credits/min
+
   macos-m1-test-runner:
     macos:
       xcode: 15.4.0
@@ -137,13 +140,23 @@ jobs:
               ARM_SHA=$(find cli/artifacts -type f -name "*aarch*"  | xargs shasum --algorithm 256 | awk '{print $1}')
               X86_SHA=$(find cli/artifacts -type f -name "*x86_64*" | xargs shasum --algorithm 256 | awk '{print $1}')
 
-              json_body=$(jq -n --arg version "$GIT_TAG" --arg arm_sha "$ARM_SHA" --arg x86_sha "$X86_SHA" '{version: $version, arm_sha: $arm_sha, x86_sha: $x86_sha}')
+              json_body=$(jq -n --arg version "$CIRCLE_TAG" --arg arm_sha "$ARM_SHA" --arg x86_sha "$X86_SHA" '{version: $version, arm_sha: $arm_sha, x86_sha: $x86_sha}')
 
               echo "Sending body:\n$json_body"
 
               curl -X POST -H "Content-Type: application/json" --data-raw "$json_body" "https://internal.circleci.com/private/soc/e/30933490-5852-4d4d-b5a4-09b0973599c3?secret=$TAP_WEBHOOK_SECRET" --fail-with-body
+
       - run:
-          name: Stuff
+          name: Wait for taps versioning
+          command: |
+            # This is necessary since the publish brew tap update job triggers a pipeline for a different repo
+            # which may take a few seconds to boot up and run. The sample app build step below depends on having
+            # the newest SDK version available to it, so we have to wait. In the future, this could be refactored
+            # to an incoming webhook triggered by the taps repo when it is finished creating the release.
+            sleep 30;
+
+      - run:
+          name: Trigger Sample App Build
           command: |
             # Switch to or create sample app branch.
             git switch parra-build-sample-app || git switch -c parra-build-sample-app
