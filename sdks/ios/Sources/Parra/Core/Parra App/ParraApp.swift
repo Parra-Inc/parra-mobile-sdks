@@ -161,9 +161,22 @@ public struct ParraApp<
                 of: parraAuthState.current,
                 onAuthStateChanged
             )
+            .onChange(
+                of: scenePhase
+            ) { oldPhase, newPhase in
+                // If the launch screen is in the failed state, retry performing
+                // launch actions each time the app enters the foreground.
+                if newPhase == .active && oldPhase != .active {
+                    if case .failed = launchScreenState.current {
+                        performAppLaunchTasks()
+                    }
+                }
+            }
     }
 
     // MARK: - Private
+
+    @Environment(\.scenePhase) private var scenePhase
 
     @SceneBuilder private let makeScene: @MainActor () -> Content
 
