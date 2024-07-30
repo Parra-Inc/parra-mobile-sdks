@@ -19,7 +19,7 @@ public struct ParraErrorBoundary: View {
                 componentFactory.buildImage(
                     content: .symbol("exclamationmark.triangle.fill"),
                     localAttributes: ParraAttributes.Image(
-                        tint: themeManager.theme.palette.error.toParraColor(),
+                        tint: themeManager.theme.palette.warning.toParraColor(),
                         opacity: 0.76,
                         size: CGSize(width: 100, height: 100),
                         padding: .lg
@@ -31,14 +31,27 @@ public struct ParraErrorBoundary: View {
             VStack(alignment: .center, spacing: 8) {
                 componentFactory.buildLabel(
                     text: "Oops!",
-                    localAttributes: .default(with: .largeTitle)
+                    localAttributes: .init(
+                        text: ParraAttributes.Text(
+                            style: .largeTitle,
+                            color: themeManager.theme.palette.primaryText.toParraColor(),
+                            alignment: .leading
+                        )
+                    )
                 )
 
                 componentFactory.buildLabel(
                     text: errorInfo.userMessage,
-                    localAttributes: .default(with: .body)
+                    localAttributes: .init(
+                        text: ParraAttributes.Text(
+                            style: .body,
+                            color: themeManager.theme.palette.secondaryText.toParraColor(),
+                            alignment: .leading
+                        )
+                    )
                 )
             }
+            .padding()
 
             // TODO: Come back to this when we can support form submission:
             // a) without a pre-defined ID in the dashboard.
@@ -95,7 +108,7 @@ public struct ParraErrorBoundary: View {
     ParraViewPreview { _ in
         ParraErrorBoundary(
             errorInfo: ParraErrorWithUserInfo(
-                userMessage: "Something went mad wrong, bro.",
+                userMessage: "Failed to perform action necessary to launch the app. Check your connection and try again.",
                 underlyingError: ParraError.jsonError("decoding broke")
             )
         )
