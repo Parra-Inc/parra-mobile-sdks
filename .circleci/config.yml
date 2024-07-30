@@ -99,11 +99,17 @@ jobs:
             export HOMEBREW_NO_INSTALL_UPGRADE=1
             export HOMEBREW_NO_ANALYTICS=1
 
-            brew install xcodegen gh --quiet
+            brew install xcodegen gh jq --quiet
       - run:
           name: Prepare CLI Release
           command: |            
             cd cli; ./release_update.sh $CIRCLE_TAG
+
+      - run:
+          name: Create Sample App
+          command: |
+            ./cli/target/aarch64-apple-darwin/release/parra bootstrap --template parra-sample-remote
+
       - run:
           name: Committing Updated CLI and Sample
           command: |
@@ -125,7 +131,20 @@ jobs:
             gh release create "$CIRCLE_TAG" ./cli/artifacts/*.tar.gz --generate-notes --verify-tag
 
             echo "Release created on GitHub"
+      - run:
+          name: Publish Brew Tap Update
+          command: |
+              ARM_SHA=$(find cli/artifacts -type f -name "*aarch*"  | xargs shasum --algorithm 256 | awk '{print $1}')
+              X86_SHA=$(find cli/artifacts -type f -name "*x86_64*" | xargs shasum --algorithm 256 | awk '{print $1}')
 
+              json_body=$(jq -n --arg version "$GIT_TAG" --arg arm_sha "$ARM_SHA" --arg x86_sha "$X86_SHA" '{version: $version, arm_sha: $arm_sha, x86_sha: $x86_sha}')
+
+              echo "Sending body:\n$json_body"
+
+              curl -X POST -H "Content-Type: application/json" --data-raw "$json_body" "https://internal.circleci.com/private/soc/e/30933490-5852-4d4d-b5a4-09b0973599c3?secret=$TAP_WEBHOOK_SECRET" --fail-with-body
+      - run:
+          name: Stuff
+          command: |
             # Switch to or create sample app branch.
             git switch parra-build-sample-app || git switch -c parra-build-sample-app
 
@@ -133,24 +152,7 @@ jobs:
             git push -q -f https://${SDKS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git parra-build-sample-app
             
             echo "Kicked off sample app builds"
-      - run:
-          name: Create Sample App
-          command: |
-            ./cli/target/aarch64-apple-darwin/release/parra bootstrap --template parra-sample-remote
 
-      - run:
-          name: Publish Brew Tap Update
-          command: |
-              ARM_SHA=$(find cli/artifacts -type f -name "*aarch*"  | xargs shasum --algorithm 256 | awk '{print $1}')
-              X86_SHA=$(find cli/artifacts -type f -name "*x86_64*" | xargs shasum --algorithm 256 | awk '{print $1}')
-
-              json_body='{
-                "version": "$GIT_TAG",
-                "arm_sha": "$ARM_SHA",
-                "x86_sha": "$X86_SHA",
-              }'
-
-              curl -X POST -H "content-type: application/json" -d "$json_body" "https://internal.circleci.com/private/soc/e/30933490-5852-4d4d-b5a4-09b0973599c3?secret=$TAP_WEBHOOK_SECRET"
 
       # Triggered by tag. New tag has been created at this point
       # 0. Re-run sample app verification steps
