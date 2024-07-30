@@ -43,8 +43,6 @@ DerivedData/
 *.dSYM.zip
 *.dSYM
 
-*.xcworkspace
-
 # Generated files
 /bin/
 gen/
@@ -79,10 +77,14 @@ playground.xcworkspace
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
+sdks/**/*.xcworkspace
 !*.xcworkspace/contents.xcworkspacedata
+!*.xcworkspace/xcshareddata/swiftpm
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 /.vscode/settings.json
 /buildlog
 /artifacts
 /package-lock.json
+/sample/ParraDemo.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+/sample/ParraDemo.xcodeproj/project.xcworkspace/contents.xcworkspacedata
