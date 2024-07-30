@@ -176,7 +176,6 @@ jobs:
       # 5. Initiate webhook on tap repo
       # 6. (probably needs delay before starting) force merge to `parra-build-sample-app`
 
-
 workflows:
   # run-unit-tests:
   #   jobs:
