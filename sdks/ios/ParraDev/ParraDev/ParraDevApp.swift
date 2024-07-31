@@ -1,9 +1,8 @@
 //
-//  DevApp.swift
-//  Dev
+//  ParraDevApp.swift
+//  ParraDev
 //
-//  Created by Mick MacCallum on 7/24/24.
-//  Copyright © 2024 Parra, Inc. All rights reserved.
+//  Created by Mick MacCallum on 7/31/24.
 //
 
 import Parra

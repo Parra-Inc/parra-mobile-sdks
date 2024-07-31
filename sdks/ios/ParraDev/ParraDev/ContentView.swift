@@ -1,12 +1,12 @@
 //
 //  ContentView.swift
-//  Dev
+//  ParraDev
 //
-//  Created by Mick MacCallum on 7/24/24.
-//  Copyright © 2024 Parra, Inc. All rights reserved.
+//  Created by Mick MacCallum on 7/31/24.
 //
 
 import SwiftUI
+import Parra
 
 struct ContentView: View {
     var body: some View {
@@ -15,6 +15,8 @@ struct ContentView: View {
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Text("Hello, world!")
+
+            PoweredByParraButton()
         }
         .padding()
     }
