@@ -1505,6 +1505,7 @@
 				001286F7277F50A20090CDB5 /* Managers */,
 				0036D5EF27CD9BC90016DE97 /* PersistentStorage */,
 				009538912BC861F400420316 /* Networking */,
+				000A760A2C5ABCB000DC0046 /* Resources */,
 				0087CA9D2A59E4DE007D72FA /* Sessions */,
 				006DE9842A4738F000521F5D /* State */,
 				001B7A9A27DE34F200DEEECD /* Supporting Files */,
@@ -1512,6 +1513,14 @@
 				00995BF42BB5C96A00384D94 /* Utils */,
 			);
 			path = Parra;
+			sourceTree = "<group>";
+		};
+		000A760A2C5ABCB000DC0046 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				003621DC2B5B592D009EFE53 /* ParraAssets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		000AF4C1283AE6D8008A17A3 /* Config */ = {
@@ -1799,7 +1808,6 @@
 			isa = PBXGroup;
 			children = (
 				001B7AF427DE3A7600DEEECD /* Parra.h */,
-				003621DC2B5B592D009EFE53 /* ParraAssets.xcassets */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";

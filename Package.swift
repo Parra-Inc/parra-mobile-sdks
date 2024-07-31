@@ -27,7 +27,7 @@ let package = Package(
             resources: [
                 // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk
                 .process("PrivacyInfo.xcprivacy"),
-                .process("Supporting Files/ParraAssets.xcassets")
+                .process("Resources/ParraAssets.xcassets")
             ]
         ),
         .testTarget(
