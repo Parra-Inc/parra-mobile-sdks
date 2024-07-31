@@ -1,4 +1,3 @@
-use serde_json::to_string_pretty;
 use std::{
     error::Error,
     fs::{self, read_to_string},
@@ -14,10 +13,6 @@ pub fn render_templates_in_dir(
     target_dir: &PathBuf,
     globals: &liquid::Object,
 ) -> Result<(), Box<dyn Error>> {
-    let json_string = to_string_pretty(&globals).unwrap();
-
-    println!("Rendering template with globals: {}", json_string);
-
     for entry in WalkDir::new(target_dir) {
         match entry {
             Ok(entry) => {
