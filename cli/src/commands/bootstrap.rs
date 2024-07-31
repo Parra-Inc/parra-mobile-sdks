@@ -1,4 +1,4 @@
-use crate::constants::built;
+use crate::constants::built::{self, built_info};
 use crate::dependencies::DerivedDependency;
 use crate::types::api::{
     ApplicationResponse, TenantDomain, TenantDomainType, TenantResponse,
@@ -16,7 +16,7 @@ use inquire::validator::{MaxLengthValidator, MinLengthValidator, Validation};
 use inquire::{Confirm, InquireError, Select, Text};
 use regex::Regex;
 use slugify::slugify;
-use std::env;
+use std::env::{self};
 use std::error::Error;
 use std::fmt::Display;
 use std::fs::read_to_string;
@@ -74,17 +74,62 @@ fn get_local_template(
     Ok(format!("{}\n{}", template, package_template))
 }
 
-async fn get_remote_template() -> Result<String, Box<dyn Error>> {
-    Ok(String::new())
+async fn get_remote_template(
+    template_name: &str,
+) -> Result<(String, PathBuf), Box<dyn Error>> {
+    let version = built_info::PKG_VERSION;
+
+    let tmp_dir_output = Command::new("mktemp")
+        .arg("-d")
+        .output()
+        .expect("Error creating temporary directory");
+    let tmp_dir = String::from_utf8(tmp_dir_output.stdout)?.trim().to_string();
+
+    Command::new("git")
+        .arg("clone")
+        .arg("--no-checkout")
+        .arg("--depth=1")
+        .arg("--filter=tree:0")
+        .arg("https://github.com/Parra-Inc/parra-mobile-sdks")
+        .arg(tmp_dir.clone())
+        .output()
+        .expect("Failed to clone template repo");
+
+    Command::new("git")
+        .arg("sparse-checkout")
+        .arg("set")
+        .arg("--no-cone")
+        .arg("templates")
+        .current_dir(tmp_dir.clone())
+        .output()
+        .expect("Failed to perform template sparse checkout");
+
+    Command::new("git")
+        .arg("fetch")
+        .arg("origin")
+        .arg("tag")
+        .arg(version)
+        // --no-tags ensures no additional tags are pulled.
+        .arg("--no-tags")
+        .current_dir(tmp_dir.clone())
+        .output()
+        .expect("Failed to perform template tag fetch");
+
+    Command::new("git")
+        .arg("checkout")
+        .arg(format!("tags/{}", version))
+        .current_dir(tmp_dir.clone())
+        .output()
+        .expect("Failed to perform checkout at tag");
+
+    let template_dir =
+        Path::new(&tmp_dir).join("templates").join(template_name);
+
+    let template = get_local_template(&template_dir, false)?;
+    let app_dir = template_dir.join("App");
+
+    return Ok((template, app_dir));
 }
-
-// built_info::GIT_COMMIT_HASH;
-
-// git clone -n --depth=1 --filter=tree:0  https://github.com/Parra-Inc/parra-ios-sdk
-// cd parra-ios-sdk
-// git sparse-checkout set --no-cone docs
-// git fetch origin tag 0.1.17 --no-tags // no tags so that other tags aren't pulled
-// git checkout tags/0.1.17
 
 pub async fn execute_sample_bootstrap(
     project_path: Option<String>,
@@ -172,6 +217,11 @@ pub async fn execute_sample_bootstrap(
             false,
         )?;
 
+    println!(
+        "Parra project generated at {}!",
+        xcode_project_path.to_str().unwrap()
+    );
+
     Ok(())
 }
 
@@ -210,9 +260,8 @@ pub async fn execute_bootstrap(
     let expanded_path =
         normalized_project_path(project_path, &application.name)?;
 
-    let template_dir = get_template_path(&template_name)?;
-    let template_app_dir = template_dir.join("App/");
-    let template = get_remote_template().await?;
+    let (template, template_app_dir) =
+        get_remote_template(&template_name).await?;
 
     let app_name = &application.name;
     let ios_config = application.ios.unwrap();
@@ -231,21 +280,21 @@ pub async fn execute_bootstrap(
             deployment_target: "17.0".to_owned(),
             code_sign: CodeSigningConfigs {
                 debug: CodeSigningConfig {
-                    identity: "-".to_owned(),
+                    identity: "".to_owned(),
                     required: "NO".to_owned(),
                     allowed: "NO".to_owned(),
                     style: "Automatic".to_owned(),
                     profile_specifier: "".to_owned(),
                 },
                 release: CodeSigningConfig {
-                    identity: "-".to_owned(),
+                    identity: "".to_owned(),
                     required: "NO".to_owned(),
                     allowed: "NO".to_owned(),
                     style: "Automatic".to_owned(),
                     profile_specifier: "".to_owned(),
                 },
             },
-            team_id: ios_config.team_id.unwrap_or("-".to_owned()),
+            team_id: ios_config.team_id.unwrap_or("".to_owned()),
             entitlements: get_entitlement_schemes(tenant.domains),
         },
         sdk: SdkContextInfo {

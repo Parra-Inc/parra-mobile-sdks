@@ -44,7 +44,6 @@ pub struct AppContextInfo {
     pub deployment_target: String,
     pub entitlements: AppEntitlementSchemes,
     pub code_sign: CodeSigningConfigs,
-    // team id or "-"
     pub team_id: String,
 }
 
