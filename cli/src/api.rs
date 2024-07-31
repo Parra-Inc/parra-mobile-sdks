@@ -4,7 +4,7 @@ use crate::{
         api::{
             ApplicationCollectionResponse, ApplicationRequest,
             ApplicationResponse, ApplicationType, AuthorizedUser,
-            TenantRequest, TenantResponse, UserInfoResponse,
+            TenantRequest, TenantResponse, UserInfoResponse, UserResponse,
         },
         auth::Credental,
     },
@@ -126,15 +126,23 @@ pub async fn create_application(
     Ok(response)
 }
 
-async fn ensure_auth() -> Result<AuthorizedUser, Box<dyn Error>> {
-    let credential = auth::perform_device_authentication().await?;
-
+pub async fn get_current_user(
+    credential: &Credental,
+) -> Result<UserResponse, Box<dyn Error>> {
     let response: UserInfoResponse =
         perform_get_request(&credential, "/user-info", vec![]).await?;
 
+    return Ok(response.user);
+}
+
+async fn ensure_auth() -> Result<AuthorizedUser, Box<dyn Error>> {
+    let credential = auth::perform_device_authentication().await?;
+
+    let user = get_current_user(&credential).await?;
+
     Ok(AuthorizedUser {
         credential,
-        user: response.user,
+        user: user,
     })
 }
 

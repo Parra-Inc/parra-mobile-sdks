@@ -13,21 +13,20 @@ use constants::sample::{
     PARRA_SAMPLE_TEMPLATE_PREFIX,
 };
 
-use crate::arg_parser::Commands;
+use crate::arg_parser::Command;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let cli = arg_parser::parse_args();
 
     match cli.command {
-        Commands::Bootstrap {
-            application_id,
-            workspace_id,
-            project_path,
-            template_name,
-        } => {
-            if template_name.starts_with(PARRA_SAMPLE_TEMPLATE_PREFIX) {
-                let sample_name = template_name
+        Command::Bootstrap(bootstrap_args) => {
+            if bootstrap_args
+                .template_name
+                .starts_with(PARRA_SAMPLE_TEMPLATE_PREFIX)
+            {
+                let sample_name = bootstrap_args
+                    .template_name
                     .strip_prefix(PARRA_SAMPLE_TEMPLATE_PREFIX)
                     .unwrap();
 
@@ -42,20 +41,24 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 }
 
                 commands::bootstrap::execute_sample_bootstrap(
-                    project_path,
+                    bootstrap_args.project_path,
                     sample_name == PARRA_LOCAL_SAMPLE_NAME,
                 )
                 .await?;
             } else {
                 commands::bootstrap::execute_bootstrap(
-                    application_id,
-                    workspace_id,
-                    project_path,
-                    template_name,
+                    bootstrap_args.application_id,
+                    bootstrap_args.workspace_id,
+                    bootstrap_args.project_path,
+                    bootstrap_args.template_name,
                 )
                 .await?
             }
         }
+        Command::Login(_) => {
+            commands::login::execute_login().await;
+        }
+        Command::Logout(_) => commands::logout::execute_logout(),
     }
 
     Ok(())

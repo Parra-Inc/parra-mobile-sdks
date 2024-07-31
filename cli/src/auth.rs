@@ -7,7 +7,21 @@ use std::error::Error;
 use std::ops::Add;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
+const SERVICE_NAME: &str = "parra_cli";
 const AUTH0_CLIENT_ID: &str = "nD9GTUvvqCT0oWi34L2IdJiK0YjupSjY";
+
+pub fn logout() -> Result<(), Box<dyn Error>> {
+    let result = security_framework::passwords::delete_generic_password(
+        SERVICE_NAME,
+        AUTH0_CLIENT_ID,
+    );
+
+    match result {
+        Ok(_) => Ok(()),
+
+        Err(error) => Err(error.into()),
+    }
+}
 
 pub async fn perform_device_authentication() -> Result<Credental, Box<dyn Error>>
 {
@@ -126,7 +140,7 @@ async fn perform_normal_authentication() -> Result<Credental, Box<dyn Error>> {
 
 fn get_persisted_credential() -> Result<Credental, Box<dyn Error>> {
     let data = security_framework::passwords::get_generic_password(
-        "parra_cli",
+        SERVICE_NAME,
         AUTH0_CLIENT_ID,
     )?;
 
@@ -170,7 +184,7 @@ fn persist_credential(
     let serialized = serde_json::to_string(&credential).unwrap();
 
     security_framework::passwords::set_generic_password(
-        "parra_cli",
+        SERVICE_NAME,
         AUTH0_CLIENT_ID,
         serialized.as_bytes(),
     )?;
