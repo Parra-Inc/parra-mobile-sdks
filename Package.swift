@@ -16,7 +16,6 @@ let package = Package(
             targets: [
                 "Parra",
             ]
-            // type: .static, .dynamic
         ),
     ],
     targets: [
@@ -42,12 +41,7 @@ let package = Package(
 )
 
 let swiftSettings: [SwiftSetting] = [
-    // -enable-bare-slash-regex becomes
     .enableUpcomingFeature("BareSlashRegexLiterals"),
-    // -warn-concurrency becomes
-    // .enableUpcomingFeature("StrictConcurrency"),
-    // .unsafeFlags(["-enable-actor-data-race-checks"],
-    //     .when(configuration: .debug)),
 ]
 
 for target in package.targets {
