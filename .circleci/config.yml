@@ -4,6 +4,7 @@ orbs:
   macos: circleci/macos@2.5.2
   bun: ksylvest/bun@1.0.1
   rust: circleci/rust@1.6.1
+  slack: circleci/slack@4.13.3
 
 commands:
   common:
@@ -81,6 +82,11 @@ jobs:
       - run:
           name: Build Sample App
           command: ./scripts.sh utils --build-sample
+
+      - slack/notify:
+          event: fail
+          mentions: '@mick'
+          template: basic_fail_1
 
   release-ios-sdk:
     executor: macos-m1-runner
@@ -192,6 +198,14 @@ jobs:
             git push -q -f https://${SDKS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git parra-build-sample-app
             
             echo "Kicked off sample app builds"
+      
+      - slack/notify:
+          event: fail
+          mentions: '@mick'
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
 
 workflows:
   build-sample-app:
