@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		002BC29C2C5BCAE20022F37E /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 002BC29B2C5BCAE20022F37E /* Parra */; };
 		00727F4A2C5AE43D00973122 /* ParraDevApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00727F492C5AE43D00973122 /* ParraDevApp.swift */; };
 		00727F4C2C5AE43D00973122 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00727F4B2C5AE43D00973122 /* ContentView.swift */; };
 		00727F4E2C5AE43D00973122 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00727F4D2C5AE43D00973122 /* Assets.xcassets */; };
@@ -29,6 +30,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00727F5A2C5AE5BD00973122 /* Parra in Frameworks */,
+				002BC29C2C5BCAE20022F37E /* Parra in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +91,7 @@
 			name = ParraDev;
 			packageProductDependencies = (
 				00727F592C5AE5BD00973122 /* Parra */,
+				002BC29B2C5BCAE20022F37E /* Parra */,
 			);
 			productName = ParraDev;
 			productReference = 00727F462C5AE43D00973122 /* ParraDev.app */;
@@ -119,7 +122,7 @@
 			);
 			mainGroup = 00727F3D2C5AE43D00973122;
 			packageReferences = (
-				00727F582C5AE5BD00973122 /* XCLocalSwiftPackageReference "../Parra" */,
+				002BC29A2C5BCAE20022F37E /* XCLocalSwiftPackageReference "../../parra-mobile-sdks" */,
 			);
 			productRefGroup = 00727F472C5AE43D00973122 /* Products */;
 			projectDirPath = "";
@@ -371,13 +374,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		00727F582C5AE5BD00973122 /* XCLocalSwiftPackageReference "../Parra" */ = {
+		002BC29A2C5BCAE20022F37E /* XCLocalSwiftPackageReference "../../parra-mobile-sdks" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Parra;
+			relativePath = "../../parra-mobile-sdks";
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		002BC29B2C5BCAE20022F37E /* Parra */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Parra;
+		};
 		00727F592C5AE5BD00973122 /* Parra */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Parra;

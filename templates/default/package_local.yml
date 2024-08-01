@@ -1,4 +1,4 @@
 # https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#local-package
 packages:
   Parra:
-    path: "../sdks/ios/Parra"
+    path: ".."
