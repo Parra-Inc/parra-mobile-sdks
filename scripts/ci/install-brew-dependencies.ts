@@ -15,13 +15,6 @@ export const installBrewDependencies = async () => {
 
     export HOMEBREW_NO_ANALYTICS=1
 
-    
-
-    echo "Installing applesimutils..."
-    # Used for scripts that query for specific simulators via simctl.
-    brew install wix/brew/applesimutils
-
-
     echo "Installing xcbeautify..."
     # Used for pretty printing xcodebuild output.
     brew install xcbeautify --quiet
