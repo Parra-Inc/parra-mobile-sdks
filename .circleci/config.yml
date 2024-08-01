@@ -16,16 +16,16 @@ commands:
           name: Install NPM Dependencies
           command: bun install --frozen-lockfile
 
-  # prepare_ios_prerequisites:
-  #   steps:
-  #     - run:
-  #         name: Install Brew Dependencies
-  #         command: ./scripts.sh ci --install-brew-dependencies
-  #     - run:
-  #         name: Extract ASC Credential
-  #         command: |
-  #           dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
-  #           echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
+  prepare_ios_prerequisites:
+    steps:
+      - run:
+          name: Install Brew Dependencies
+          command: ./scripts.sh ci --install-brew-dependencies
+      - run:
+          name: Extract ASC Credential
+          command: |
+            dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
+            echo $PARRA_ASC_API_KEY | base64 --decode > $PARRA_ASC_API_KEY_PATH
 
 executors:
   # m1.medium -> 150 credits/min
@@ -62,12 +62,21 @@ jobs:
   #     - prepare_ios_prerequisites
   #     - run:
   #         name: Build for Testing
-  #         command: ./cli.sh tests --build --log-level debug
+  #         command: ./scripts.sh tests --build --log-level debug
   #     - run:
   #         name: Run Unit Tests
-  #         command: ./cli.sh tests --run --log-level debug
+  #         command: ./scripts.sh tests --run --log-level debug
   #     - store_test_results:
   #         path: build/unit-tests/derivedData/Logs/Test
+
+  build-and-run-sample:
+    executor: macos-m1-release-runner
+    steps:
+      - common
+      - prepare_ios_prerequisites
+      - run:
+          name: Build Sample App
+          command: ./scripts.sh utils --build-sample
 
   release-ios-sdk:
     executor: macos-m1-release-runner
@@ -176,9 +185,12 @@ jobs:
       # 6. (probably needs delay before starting) force merge to `parra-build-sample-app`
 
 workflows:
-  # run-unit-tests:
-  #   jobs:
-  #     - build-and-test
+  build-sample-app:
+    jobs:
+      - build-and-run-sample:
+          filters: 
+            branches:
+              only: main
   release-sdk:
     jobs:
       - release-ios-sdk:
@@ -188,3 +200,7 @@ workflows:
                 - /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
             branches:
               ignore: /.*/
+
+  # run-unit-tests:
+  #   jobs:
+  #     - build-and-test

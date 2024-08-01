@@ -6,6 +6,7 @@ import {
 } from '../utils/openAppContainer.js';
 import { runBootstrap } from '../utils/runBootstrap.js';
 import { runFormatter } from '../utils/runFormatter.js';
+import { runBuildSample } from '../utils/buildSample.js';
 
 export const command = (logger: Logger): Command => {
   return new Command('utils')
@@ -34,9 +35,15 @@ export const command = (logger: Logger): Command => {
         'Opens a new Finder window to the app data directory for the Parra Test Runner app in the currently booted simulator.'
       )
     )
+    .addOption(
+      new Option(
+        '--build-sample',
+        'Builds the Xcode project in the sample directory.'
+      )
+    )
     .action(async (options) => {
       Logger.setGlobalLogLevel(options.silent ? 'silent' : options.logLevel);
-      const { openAppData, openTestData, format, bootstrap } = options;
+      const { openAppData, openTestData, format, bootstrap, buildSample } = options;
 
       try {
         if (bootstrap) {
@@ -54,6 +61,10 @@ export const command = (logger: Logger): Command => {
 
           if (format) {
             await runFormatter();
+          }
+
+          if (buildSample) {
+            await runBuildSample();
           }
         }
 
