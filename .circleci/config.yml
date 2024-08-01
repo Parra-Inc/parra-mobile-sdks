@@ -19,9 +19,6 @@ commands:
   prepare_ios_prerequisites:
     steps:
       - run:
-          name: Install Brew Dependencies
-          command: ./scripts.sh ci --install-brew-dependencies
-      - run:
           name: Extract ASC Credential
           command: |
             dirname $PARRA_ASC_API_KEY_PATH | xargs mkdir -p
@@ -73,6 +70,10 @@ jobs:
     executor: macos-m1-test-runner
     steps:
       - common
+    
+      - run:
+          name: Install Brew Dependencies
+          command: brew install xcbeautify --quiet
 
       - prepare_ios_prerequisites
 
@@ -132,6 +133,20 @@ jobs:
           command: |
             ./cli/target/aarch64-apple-darwin/release/parra bootstrap --template parra-sample-remote
 
+      - prepare_ios_prerequisites
+
+      - macos/preboot-simulator:
+          device: iPhone 15
+          platform: iOS
+          version: "17.5"
+
+      - macos/wait-until-simulator-booted
+
+      - run:
+          name: Build Sample App
+          command: ./scripts.sh utils --build-sample
+
+      # Don't continue to committing CLI updates/etc until the sample app builds successfully.
       - run:
           name: Committing Updated CLI and Sample
           command: |
@@ -174,7 +189,7 @@ jobs:
             sleep 30;
 
       - run:
-          name: Trigger Sample App Build
+          name: Send sample app to TestFlight
           command: |
             # Switch to or create sample app branch.
             git switch parra-build-sample-app || git switch -c parra-build-sample-app
@@ -183,15 +198,6 @@ jobs:
             git push -q -f https://${SDKS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git parra-build-sample-app
             
             echo "Kicked off sample app builds"
-
-      # Triggered by tag. New tag has been created at this point
-      # 0. Re-run sample app verification steps
-      # 1. Update SDK version (don't need to do this, it's based on the already created tag)
-      # 2. Update CLI version and create new build (cache artifacts dir) ([skip ci])
-      # 3. Generate new sample app directory
-      # 4. Create new commit and GitHub release "v${VERSION}" and attach CLI binaries (cache version, SHAs)
-      # 5. Initiate webhook on tap repo
-      # 6. (probably needs delay before starting) force merge to `parra-build-sample-app`
 
 workflows:
   build-sample-app:
