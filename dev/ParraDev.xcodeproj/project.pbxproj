@@ -8,7 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		002BC29C2C5BCAE20022F37E /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 002BC29B2C5BCAE20022F37E /* Parra */; };
-		00727F4A2C5AE43D00973122 /* ParraDevApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00727F492C5AE43D00973122 /* ParraDevApp.swift */; };
+		0063024B2C5C1FE8006BB9DC /* SampleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302482C5C1FE8006BB9DC /* SampleTab.swift */; };
+		0063024C2C5C1FE8006BB9DC /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302492C5C1FE8006BB9DC /* App.swift */; };
+		006302622C5C2022006BB9DC /* AccountHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063024E2C5C2022006BB9DC /* AccountHeader.swift */; };
+		006302632C5C2022006BB9DC /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063024F2C5C2022006BB9DC /* AccountView.swift */; };
+		006302642C5C2022006BB9DC /* ChangePasswordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302502C5C2022006BB9DC /* ChangePasswordCell.swift */; };
+		006302652C5C2022006BB9DC /* DeleteAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302512C5C2022006BB9DC /* DeleteAccountCell.swift */; };
+		006302662C5C2022006BB9DC /* LogoutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302522C5C2022006BB9DC /* LogoutCell.swift */; };
+		006302672C5C2022006BB9DC /* ChangelogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302542C5C2022006BB9DC /* ChangelogCell.swift */; };
+		006302682C5C2022006BB9DC /* FeedbackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302552C5C2022006BB9DC /* FeedbackCell.swift */; };
+		006302692C5C2022006BB9DC /* LatestReleaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302562C5C2022006BB9DC /* LatestReleaseCell.swift */; };
+		0063026A2C5C2022006BB9DC /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302572C5C2022006BB9DC /* ProfileCell.swift */; };
+		0063026B2C5C2022006BB9DC /* ReviewAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302582C5C2022006BB9DC /* ReviewAppCell.swift */; };
+		0063026C2C5C2022006BB9DC /* RoadmapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302592C5C2022006BB9DC /* RoadmapCell.swift */; };
+		0063026D2C5C2022006BB9DC /* ShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063025A2C5C2022006BB9DC /* ShareCell.swift */; };
+		0063026E2C5C2022006BB9DC /* ThemeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063025B2C5C2022006BB9DC /* ThemeCell.swift */; };
+		0063026F2C5C2022006BB9DC /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063025D2C5C2022006BB9DC /* EditProfileView.swift */; };
+		006302702C5C2022006BB9DC /* SettingsFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063025F2C5C2022006BB9DC /* SettingsFooter.swift */; };
+		006302712C5C2022006BB9DC /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302602C5C2022006BB9DC /* SettingsTab.swift */; };
 		00727F4C2C5AE43D00973122 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00727F4B2C5AE43D00973122 /* ContentView.swift */; };
 		00727F4E2C5AE43D00973122 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00727F4D2C5AE43D00973122 /* Assets.xcassets */; };
 		00727F522C5AE43D00973122 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00727F512C5AE43D00973122 /* Preview Assets.xcassets */; };
@@ -16,8 +33,25 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		006302482C5C1FE8006BB9DC /* SampleTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTab.swift; sourceTree = "<group>"; };
+		006302492C5C1FE8006BB9DC /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		0063024E2C5C2022006BB9DC /* AccountHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountHeader.swift; sourceTree = "<group>"; };
+		0063024F2C5C2022006BB9DC /* AccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		006302502C5C2022006BB9DC /* ChangePasswordCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordCell.swift; sourceTree = "<group>"; };
+		006302512C5C2022006BB9DC /* DeleteAccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteAccountCell.swift; sourceTree = "<group>"; };
+		006302522C5C2022006BB9DC /* LogoutCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoutCell.swift; sourceTree = "<group>"; };
+		006302542C5C2022006BB9DC /* ChangelogCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangelogCell.swift; sourceTree = "<group>"; };
+		006302552C5C2022006BB9DC /* FeedbackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackCell.swift; sourceTree = "<group>"; };
+		006302562C5C2022006BB9DC /* LatestReleaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LatestReleaseCell.swift; sourceTree = "<group>"; };
+		006302572C5C2022006BB9DC /* ProfileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
+		006302582C5C2022006BB9DC /* ReviewAppCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewAppCell.swift; sourceTree = "<group>"; };
+		006302592C5C2022006BB9DC /* RoadmapCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoadmapCell.swift; sourceTree = "<group>"; };
+		0063025A2C5C2022006BB9DC /* ShareCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareCell.swift; sourceTree = "<group>"; };
+		0063025B2C5C2022006BB9DC /* ThemeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeCell.swift; sourceTree = "<group>"; };
+		0063025D2C5C2022006BB9DC /* EditProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		0063025F2C5C2022006BB9DC /* SettingsFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFooter.swift; sourceTree = "<group>"; };
+		006302602C5C2022006BB9DC /* SettingsTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTab.swift; sourceTree = "<group>"; };
 		00727F462C5AE43D00973122 /* ParraDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParraDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		00727F492C5AE43D00973122 /* ParraDevApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParraDevApp.swift; sourceTree = "<group>"; };
 		00727F4B2C5AE43D00973122 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		00727F4D2C5AE43D00973122 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00727F4F2C5AE43D00973122 /* ParraDev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ParraDev.entitlements; sourceTree = "<group>"; };
@@ -37,6 +71,53 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		006302532C5C2022006BB9DC /* Account Screen */ = {
+			isa = PBXGroup;
+			children = (
+				0063024E2C5C2022006BB9DC /* AccountHeader.swift */,
+				0063024F2C5C2022006BB9DC /* AccountView.swift */,
+				006302502C5C2022006BB9DC /* ChangePasswordCell.swift */,
+				006302512C5C2022006BB9DC /* DeleteAccountCell.swift */,
+				006302522C5C2022006BB9DC /* LogoutCell.swift */,
+			);
+			path = "Account Screen";
+			sourceTree = "<group>";
+		};
+		0063025C2C5C2022006BB9DC /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				006302542C5C2022006BB9DC /* ChangelogCell.swift */,
+				006302552C5C2022006BB9DC /* FeedbackCell.swift */,
+				006302562C5C2022006BB9DC /* LatestReleaseCell.swift */,
+				006302572C5C2022006BB9DC /* ProfileCell.swift */,
+				006302582C5C2022006BB9DC /* ReviewAppCell.swift */,
+				006302592C5C2022006BB9DC /* RoadmapCell.swift */,
+				0063025A2C5C2022006BB9DC /* ShareCell.swift */,
+				0063025B2C5C2022006BB9DC /* ThemeCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		0063025E2C5C2022006BB9DC /* Edit Profile Screen */ = {
+			isa = PBXGroup;
+			children = (
+				0063025D2C5C2022006BB9DC /* EditProfileView.swift */,
+			);
+			path = "Edit Profile Screen";
+			sourceTree = "<group>";
+		};
+		006302612C5C2022006BB9DC /* Settings Tab */ = {
+			isa = PBXGroup;
+			children = (
+				006302532C5C2022006BB9DC /* Account Screen */,
+				0063025C2C5C2022006BB9DC /* Cells */,
+				0063025E2C5C2022006BB9DC /* Edit Profile Screen */,
+				0063025F2C5C2022006BB9DC /* SettingsFooter.swift */,
+				006302602C5C2022006BB9DC /* SettingsTab.swift */,
+			);
+			path = "Settings Tab";
+			sourceTree = "<group>";
+		};
 		00727F3D2C5AE43D00973122 = {
 			isa = PBXGroup;
 			children = (
@@ -56,8 +137,10 @@
 		00727F482C5AE43D00973122 /* ParraDev */ = {
 			isa = PBXGroup;
 			children = (
-				00727F492C5AE43D00973122 /* ParraDevApp.swift */,
+				006302492C5C1FE8006BB9DC /* App.swift */,
 				00727F4B2C5AE43D00973122 /* ContentView.swift */,
+				006302482C5C1FE8006BB9DC /* SampleTab.swift */,
+				006302612C5C2022006BB9DC /* Settings Tab */,
 				00727F4D2C5AE43D00973122 /* Assets.xcassets */,
 				00727F4F2C5AE43D00973122 /* ParraDev.entitlements */,
 				00727F502C5AE43D00973122 /* Preview Content */,
@@ -150,8 +233,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006302682C5C2022006BB9DC /* FeedbackCell.swift in Sources */,
+				0063026F2C5C2022006BB9DC /* EditProfileView.swift in Sources */,
+				006302642C5C2022006BB9DC /* ChangePasswordCell.swift in Sources */,
+				006302622C5C2022006BB9DC /* AccountHeader.swift in Sources */,
+				006302692C5C2022006BB9DC /* LatestReleaseCell.swift in Sources */,
 				00727F4C2C5AE43D00973122 /* ContentView.swift in Sources */,
-				00727F4A2C5AE43D00973122 /* ParraDevApp.swift in Sources */,
+				0063024C2C5C1FE8006BB9DC /* App.swift in Sources */,
+				0063026B2C5C2022006BB9DC /* ReviewAppCell.swift in Sources */,
+				0063024B2C5C1FE8006BB9DC /* SampleTab.swift in Sources */,
+				006302662C5C2022006BB9DC /* LogoutCell.swift in Sources */,
+				006302712C5C2022006BB9DC /* SettingsTab.swift in Sources */,
+				006302652C5C2022006BB9DC /* DeleteAccountCell.swift in Sources */,
+				0063026C2C5C2022006BB9DC /* RoadmapCell.swift in Sources */,
+				0063026A2C5C2022006BB9DC /* ProfileCell.swift in Sources */,
+				006302672C5C2022006BB9DC /* ChangelogCell.swift in Sources */,
+				0063026E2C5C2022006BB9DC /* ThemeCell.swift in Sources */,
+				006302702C5C2022006BB9DC /* SettingsFooter.swift in Sources */,
+				006302632C5C2022006BB9DC /* AccountView.swift in Sources */,
+				0063026D2C5C2022006BB9DC /* ShareCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

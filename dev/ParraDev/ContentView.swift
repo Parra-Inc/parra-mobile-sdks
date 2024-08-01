@@ -1,27 +1,32 @@
 //
 //  ContentView.swift
-//  ParraDev
+//  Parra Demo
 //
-//  Created by Mick MacCallum on 7/31/24.
+//  Bootstrapped with ❤️ by Parra on 08/01/2024.
+//  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
-import SwiftUI
 import Parra
+import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            SampleTab()
+                .tabItem {
+                    Label("App", systemImage: "app.dashed")
+                }
 
-            PoweredByParraButton()
+            SettingsTab()
+                .tabItem {
+                    Label("Profile", systemImage: "person")
+                }
         }
-        .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    ParraAppPreview(authState: .authenticatedPreview) {
+        ContentView()
+    }
 }
