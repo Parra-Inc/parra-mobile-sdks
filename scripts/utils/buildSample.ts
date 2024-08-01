@@ -29,12 +29,6 @@ export const runBuildSample = async () => {
 
     await build(fullOptions);
 
-    const sim = await runCommand(`./scripts/bin/obtain-simulator-device-id.sh "${process.env.PARRA_TEST_DEVICE_NAME}" "${process.env.PARRA_TEST_DEVICE_OS_VERSION}"`)
-    const deviceId = sim.stdout;
-
-    logger.info(`Booting device: ${deviceId}`);
-    await runCommand(`xcrun simctl boot "${deviceId}" --arch=arm64`);
-
     logger.info(`Installing app on booted device`);
     await runCommand(`xcrun simctl install booted "build/unit-tests/derivedData/Build/Products/Debug-iphonesimulator/ParraDemo.app"`)
     logger.info(`Launching app...`);

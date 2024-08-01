@@ -1,7 +1,7 @@
 
 orbs:
   # ruby: circleci/ruby@2.1.0
-  # macos: circleci/macos@2.5.2
+  macos: circleci/macos@2.5.2
   bun: ksylvest/bun@1.0.1
   rust: circleci/rust@1.6.1
 
@@ -73,7 +73,16 @@ jobs:
     executor: macos-m1-test-runner
     steps:
       - common
+
       - prepare_ios_prerequisites
+
+      - macos/preboot-simulator:
+          device: iPhone 15
+          platform: iOS
+          version: 17.5
+
+      - macos/wait-until-simulator-booted
+
       - run:
           name: Build Sample App
           command: ./scripts.sh utils --build-sample
