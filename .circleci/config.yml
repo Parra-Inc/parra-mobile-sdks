@@ -79,7 +79,7 @@ jobs:
       - macos/preboot-simulator:
           device: iPhone 15
           platform: iOS
-          version: 17.5
+          version: "17.5"
 
       - macos/wait-until-simulator-booted
 
