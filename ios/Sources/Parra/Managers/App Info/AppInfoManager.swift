@@ -117,8 +117,6 @@ final class AppInfoManager {
 
                 return
             }
-
-            logger.info("Finished fetching and presenting What's New.")
         } catch {
             logger.error("Fetch and present what's new error", error)
         }

@@ -155,11 +155,15 @@ extension AppInfoManager {
                 style: style,
                 after: delay
             )
+
+            logger.info("Finished fetching and presenting What's New.")
         case .beta:
             try await handleBetaWhatsNewFlow(
                 style: style,
                 after: delay
             )
+
+            logger.info("Finished fetching and presenting What's New.")
         case .debug:
             handleDebugWhatsNewFlow()
         }
