@@ -1,7 +1,7 @@
 /**
  * Common to all commands
  */
-export type XcodeBuildOptions = {
+export type CommonXcodeBuildOptions = {
   derivedDataPath: string;
 
   project: string;
@@ -10,7 +10,7 @@ export type XcodeBuildOptions = {
   destination: string;
 };
 
-const DEFAULT_XCODE_BUILD_OPTIONS: XcodeBuildOptions = {
+const DEFAULT_XCODE_BUILD_OPTIONS: CommonXcodeBuildOptions = {
   configuration: 'Debug',
   scheme: 'Parra',
   project: 'Parra.xcodeproj',
@@ -18,7 +18,7 @@ const DEFAULT_XCODE_BUILD_OPTIONS: XcodeBuildOptions = {
   derivedDataPath: 'build/unit-tests/derivedData',
 };
 
-export type BuildForTestingEnvOptions = XcodeBuildOptions & {
+export type XcodeBuildOptions = CommonXcodeBuildOptions & {
   /**
    * Must be a relative path when passed here. It will be converted to an absolute path before being
    * passed to `xcodebuild`. Also must be a path to a file containing a private key obtained from ASC.
@@ -28,18 +28,18 @@ export type BuildForTestingEnvOptions = XcodeBuildOptions & {
   authenticationKeyIssuerId?: string;
 };
 
-export type BuildForTestingOptions = BuildForTestingEnvOptions & {
+export type BuildForTestingOptions = XcodeBuildOptions & {
   allowProvisioningUpdates: boolean;
   allowProvisioningDeviceRegistration: boolean;
 };
 
-export const DEFAULT_BUILD_FOR_TESTING_ENV_OPTIONS: BuildForTestingEnvOptions =
-  {
-    ...DEFAULT_XCODE_BUILD_OPTIONS,
-    authenticationKeyPath: 'artifacts/asc-key.p8',
-  };
+export const DEFAULT_BUILD_FOR_TESTING_ENV_OPTIONS: XcodeBuildOptions =
+{
+  ...DEFAULT_XCODE_BUILD_OPTIONS,
+  authenticationKeyPath: 'artifacts/asc-key.p8',
+};
 
-export type TestWithoutBuildingEnvOptions = XcodeBuildOptions;
+export type TestWithoutBuildingEnvOptions = CommonXcodeBuildOptions;
 
 export type TestWithoutBuildingOptions = TestWithoutBuildingEnvOptions & {
   // -parallel-testing-enabled yes \

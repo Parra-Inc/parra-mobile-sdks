@@ -1,6 +1,6 @@
 import { BuildForTestingOptions } from '../tests/types.js';
 import { loadBuildForTestingOptionsFromEnvironment } from '../tests/utils.js';
-import { buildForTesting } from '../tests/xcode-build.js';
+import { build } from '../tests/xcode-build.js';
 import { runCommand } from './command.js';
 import Logger from './logger/logger.js';
 import { LogLevel } from './logger/types.js';
@@ -27,7 +27,7 @@ export const runBuildSample = async () => {
 
     logger.info("Building sample app...");
 
-    await buildForTesting(fullOptions);
+    await build(fullOptions);
 
     const sim = await runCommand(`./scripts/bin/obtain-simulator-device-id.sh "${process.env.PARRA_TEST_DEVICE_NAME}" "${process.env.PARRA_TEST_DEVICE_OS_VERSION}"`)
     const deviceId = sim.stdout;

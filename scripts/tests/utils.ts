@@ -1,16 +1,16 @@
 import { runThrowingCommand } from '../utils/command.js';
 import {
-  BuildForTestingEnvOptions,
+  XcodeBuildOptions,
   BuildForTestingOptions,
   DEFAULT_BUILD_FOR_TESTING_ENV_OPTIONS,
   DEFAULT_TEST_WITHOUT_BUILDING_ENV_OPTIONS,
   TestWithoutBuildingEnvOptions,
   TestWithoutBuildingOptions,
-  XcodeBuildOptions,
+  CommonXcodeBuildOptions,
 } from './types.js';
 
 export const loadBuildForTestingOptionsFromEnvironment =
-  async (): Promise<BuildForTestingEnvOptions> => {
+  async (): Promise<XcodeBuildOptions> => {
     const env = process.env;
     const defaults = DEFAULT_BUILD_FOR_TESTING_ENV_OPTIONS;
 
@@ -19,7 +19,7 @@ export const loadBuildForTestingOptionsFromEnvironment =
     // 2. Decode the key, since it is stored in base64 in CircleCI.
     // 3. Convert the relative path to an absolute path, since `xcodebuild` requires an absolute path.
     let authentication: Pick<
-      BuildForTestingEnvOptions,
+      XcodeBuildOptions,
       | 'authenticationKeyPath'
       | 'authenticationKeyId'
       | 'authenticationKeyIssuerId'
@@ -65,7 +65,7 @@ export const loadTestWithoutBuildingOptionsFromEnvironment =
   };
 
 export const loadCommonXcodeBuildOptionsFromEnvironment =
-  (): XcodeBuildOptions => {
+  (): CommonXcodeBuildOptions => {
     const env = process.env;
     const defaults = DEFAULT_TEST_WITHOUT_BUILDING_ENV_OPTIONS;
 
@@ -131,7 +131,7 @@ export const testWithoutBuildingArgStringFromOptions = async (
   return args.join(' ');
 };
 
-const commonArgsFromOptions = (options: XcodeBuildOptions) => {
+const commonArgsFromOptions = (options: CommonXcodeBuildOptions) => {
   const { project, scheme, configuration, destination, derivedDataPath } =
     options;
 

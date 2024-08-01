@@ -9,13 +9,24 @@ import {
 const logger = new Logger('xcode-build');
 const isCI = !!process.env.CI;
 
+export const build = async (options: BuildForTestingOptions): Promise<void> => {
+  const { derivedDataPath } = options;
+  const args = await buildWithoutTestingArgStringFromOptions(options);
+
+  await runXcodeBuildCommand(
+    args,
+    derivedDataPath,
+    '| tee buildlog'
+  );
+}
+
 export const buildForTesting = async (
   options: BuildForTestingOptions
 ): Promise<void> => {
   const { derivedDataPath } = options;
   const args = await buildWithoutTestingArgStringFromOptions(options);
 
-  await runXcodeBuildCommand(
+  await runXcodeBuildSubcommand(
     'build-for-testing',
     args,
     derivedDataPath,
@@ -34,7 +45,7 @@ export const testWithoutBuilding = async (
     commandSuffix += ' --is-ci';
   }
 
-  await runXcodeBuildCommand(
+  await runXcodeBuildSubcommand(
     'test-without-building',
     args,
     derivedDataPath,
@@ -42,17 +53,17 @@ export const testWithoutBuilding = async (
   );
 };
 
-const runXcodeBuildCommand = async (
-  command: string,
+const runXcodeBuildSubcommand = async (
+  subcommand: string,
   args: string,
   derivedDataPath: string,
   commandSuffix: string = ''
 ): Promise<void> => {
   // Don't print args in CI. They contain sensitive information.
   if (isCI) {
-    logger.debug(`Running command: xcodebuild ${command}`);
+    logger.debug(`Running command: xcodebuild ${subcommand}`);
   } else {
-    logger.debug(`Running command: xcodebuild ${command} ${args}`);
+    logger.debug(`Running command: xcodebuild ${subcommand} ${args}`);
   }
 
   await runCommand(
@@ -62,7 +73,31 @@ const runXcodeBuildCommand = async (
     export CONFIGURATION_BUILD_DIR="${derivedDataPath}";
     # Disable buffering to ensure that logs are printed in real time.
     NSUnbufferedIO=YES set -o pipefail \
-        && xcodebuild ${command} ${args} ${commandSuffix}
+        && xcodebuild ${subcommand} ${args} ${commandSuffix}
     `
   );
 };
+
+export const runXcodeBuildCommand = async (
+  args: string,
+  derivedDataPath: string,
+  commandSuffix: string = ''
+): Promise<void> => {
+  // Don't print args in CI. They contain sensitive information.
+  if (isCI) {
+    logger.debug(`Running command: xcodebuild`);
+  } else {
+    logger.debug(`Running command: xcodebuild`);
+  }
+
+  await runCommand(
+    `
+    set -xo pipefail;
+    
+    export CONFIGURATION_BUILD_DIR="${derivedDataPath}";
+    # Disable buffering to ensure that logs are printed in real time.
+    NSUnbufferedIO=YES set -o pipefail \
+        && xcodebuild ${args} ${commandSuffix}
+    `
+  );
+}
