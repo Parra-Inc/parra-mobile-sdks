@@ -28,7 +28,7 @@ executors:
   # m1.medium -> 150 credits/min
   # m1.large -> 250 credits/min
 
-  macos-m1-test-runner:
+  macos-m1-runner:
     macos:
       xcode: 15.4.0
     resource_class: macos.m1.medium.gen1
@@ -44,16 +44,10 @@ executors:
       PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
     working_directory: /tmp/workspace
 
-  macos-m1-release-runner:
-    macos:
-      xcode: 15.4.0
-    resource_class: macos.m1.medium.gen1
-    working_directory: /tmp/workspace
-
 version: 2.1
 jobs:
   # build-and-test:
-  #   executor: macos-m1-test-runner
+  #   executor: macos-m1-runner
   #   steps:
   #     - common
   #     - prepare_ios_prerequisites
@@ -67,7 +61,7 @@ jobs:
   #         path: build/unit-tests/derivedData/Logs/Test
 
   build-and-run-sample:
-    executor: macos-m1-test-runner
+    executor: macos-m1-runner
     steps:
       - common
     
@@ -89,7 +83,7 @@ jobs:
           command: ./scripts.sh utils --build-sample
 
   release-ios-sdk:
-    executor: macos-m1-release-runner
+    executor: macos-m1-runner
     steps:
       - checkout # Can't use shallow clone orbs because circle repo url env var isn't being set for some reason.
       - run: # Triggered by a tag. Switch to the main branch to do work on the commit associated with the tag.
@@ -215,7 +209,3 @@ workflows:
                 - /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
             branches:
               ignore: /.*/
-
-  # run-unit-tests:
-  #   jobs:
-  #     - build-and-test
