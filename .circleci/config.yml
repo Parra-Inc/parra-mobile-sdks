@@ -70,7 +70,7 @@ jobs:
   #         path: build/unit-tests/derivedData/Logs/Test
 
   build-and-run-sample:
-    executor: macos-m1-release-runner
+    executor: macos-m1-test-runner
     steps:
       - common
       - prepare_ios_prerequisites
