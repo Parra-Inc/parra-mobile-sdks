@@ -129,7 +129,6 @@ jobs:
             export GH_TOKEN="$SDKS_REPO_ACCESS_TOKEN"
 
             # Quiet push so key isn't shown in logs
-            # git push -q git@github.com:Parra-Inc/tap.git main
             git push -q https://${SDKS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git main
 
             gh release create "$CIRCLE_TAG" ./cli/artifacts/*.tar.gz --generate-notes --verify-tag
