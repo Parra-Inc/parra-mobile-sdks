@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>name</key>
+		<string>Parra SDK Files</string>
+		<key>predicate</key>
+		<dict>
+			<key>predicates</key>
+			<array>
+				<dict>
+					<key>path-components</key>
+					<array>
+						<string>ParraDev.xcodeproj</string>
+						<string>ParraDev</string>
+					</array>
+					<key>rule</key>
+					<string>workspace-location</string>
+				</dict>
+				<dict>
+					<key>path-components</key>
+					<array>
+						<string>Parra</string>
+						<string>ios</string>
+						<string>Sources</string>
+					</array>
+					<key>root</key>
+					<string>dynamic-content</string>
+					<key>rule</key>
+					<string>workspace-location</string>
+				</dict>
+				<dict>
+					<key>path-components</key>
+					<array>
+						<string>Parra</string>
+						<string>ios</string>
+						<string>Tests</string>
+					</array>
+					<key>root</key>
+					<string>dynamic-content</string>
+					<key>rule</key>
+					<string>workspace-location</string>
+				</dict>
+			</array>
+			<key>rule</key>
+			<string>any</string>
+		</dict>
+		<key>source</key>
+		<dict>
+			<key>base-path</key>
+			<string>/Users/mick/code/parra/parra-mobile-sdks</string>
+			<key>file-source</key>
+			<string>directory</string>
+		</dict>
+	</dict>
+</array>
+</plist>

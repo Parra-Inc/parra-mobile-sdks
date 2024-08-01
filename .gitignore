@@ -22,7 +22,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-xcuserdata/
+*.xcuserstate
+*xcschememanagement.plist
+*.xcbkptlist
 *.xcscmblueprint
 *.xccheckout
 
