@@ -199,12 +199,19 @@ class AuthenticationFlowManager: ObservableObject {
                 using: appInfo
             )
         } catch let error as ASAuthorizationError {
+            // TODO: iOS 18 ASAuthorizationError.matchedExcludedCredential
             switch error.code {
             case .canceled:
                 if error.noPasskeysAvailable {
                     logger.debug("No passkeys available")
                 } else {
                     logger.debug("Passkey request canceled by user")
+                }
+            case .failed:
+                if error.localizedDescription.contains("not associated with domain") {
+                    logger.warn("Passkey login prompt failed. \(error.localizedDescription). Your configuration may be correct and Apple's CDN hasn't picked up changes to your .well-known/apple-app-site-association file yet.")
+                } else {
+                    throw error
                 }
             default:
                 logger.error(
