@@ -39,7 +39,7 @@ export const loadBuildForTestingOptionsFromEnvironment =
         );
       }
 
-      const absoluteAuthenticationKeyPath = `/tmp/workspace/${defaults.authenticationKeyPath}`;
+      const absoluteAuthenticationKeyPath = `${process.cwd()}/${defaults.authenticationKeyPath}`;
 
       await runThrowingCommand(
         `echo "${ascApiKey}" | base64 --decode > ${absoluteAuthenticationKeyPath}`
