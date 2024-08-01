@@ -42,8 +42,8 @@ executors:
       PARRA_TEST_SCHEME_NAME: Parra
       PARRA_TEST_CONFIGURATION: Debug
       PARRA_TEST_DEVICE_NAME: iPhone 15
-      PARRA_TEST_DEVICE_OS_VERSION: 17.4
-      PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.4
+      PARRA_TEST_DEVICE_OS_VERSION: 17.5
+      PARRA_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.5
       PARRA_ASC_API_KEY_PATH: ./artifacts/asc-key.p8
     working_directory: /tmp/workspace
 
