@@ -1,0 +1,15 @@
+{
+  "originHash" : "49ebd897c474ecf80fd1e9d58119d29e576452285c1a24f5c635a1394f1d7a8e",
+  "pins" : [
+    {
+      "identity" : "parra-mobile-sdks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Parra-Inc/parra-mobile-sdks",
+      "state" : {
+        "revision" : "e8df7f22a05cfcda3fc021595333a3a175c30ae8",
+        "version" : "0.1.57"
+      }
+    }
+  ],
+  "version" : 3
+}
