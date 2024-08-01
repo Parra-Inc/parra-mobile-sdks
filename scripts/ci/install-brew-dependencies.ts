@@ -19,7 +19,7 @@ export const installBrewDependencies = async () => {
 
     echo "Installing applesimutils..."
     # Used for scripts that query for specific simulators via simctl.
-    brew tap wix/brew --quiet && brew install applesimutils --quiet
+    brew install wix/brew/applesimutils
 
 
     echo "Installing xcbeautify..."
