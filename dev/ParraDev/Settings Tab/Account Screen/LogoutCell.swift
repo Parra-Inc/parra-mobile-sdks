@@ -14,7 +14,11 @@ struct LogoutCell: View {
 
     var body: some View {
         Button(action: {
-            parra.auth.logout()
+            Task {
+                await parra.auth.logout()
+
+                presentationMode.wrappedValue.dismiss()
+            }
         }) {
             Label(
                 title: { Text("Logout") },
@@ -29,6 +33,7 @@ struct LogoutCell: View {
     // MARK: - Private
 
     @Environment(\.parra) private var parra
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     @EnvironmentObject private var themeManager: ParraThemeManager
 }
