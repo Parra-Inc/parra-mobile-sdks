@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0012B83A2C5C66400001F11D /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 0012B8392C5C66400001F11D /* Parra */; };
 		002BC29C2C5BCAE20022F37E /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 002BC29B2C5BCAE20022F37E /* Parra */; };
 		0063024B2C5C1FE8006BB9DC /* SampleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302482C5C1FE8006BB9DC /* SampleTab.swift */; };
 		0063024C2C5C1FE8006BB9DC /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302492C5C1FE8006BB9DC /* App.swift */; };
@@ -29,7 +30,6 @@
 		00727F4C2C5AE43D00973122 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00727F4B2C5AE43D00973122 /* ContentView.swift */; };
 		00727F4E2C5AE43D00973122 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00727F4D2C5AE43D00973122 /* Assets.xcassets */; };
 		00727F522C5AE43D00973122 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00727F512C5AE43D00973122 /* Preview Assets.xcassets */; };
-		00727F5A2C5AE5BD00973122 /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 00727F592C5AE5BD00973122 /* Parra */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,8 +63,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00727F5A2C5AE5BD00973122 /* Parra in Frameworks */,
 				002BC29C2C5BCAE20022F37E /* Parra in Frameworks */,
+				0012B83A2C5C66400001F11D /* Parra in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,11 +118,19 @@
 			path = "Settings Tab";
 			sourceTree = "<group>";
 		};
+		006302742C5C6511006BB9DC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		00727F3D2C5AE43D00973122 = {
 			isa = PBXGroup;
 			children = (
 				00727F482C5AE43D00973122 /* ParraDev */,
 				00727F472C5AE43D00973122 /* Products */,
+				006302742C5C6511006BB9DC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -173,8 +181,8 @@
 			);
 			name = ParraDev;
 			packageProductDependencies = (
-				00727F592C5AE5BD00973122 /* Parra */,
 				002BC29B2C5BCAE20022F37E /* Parra */,
+				0012B8392C5C66400001F11D /* Parra */,
 			);
 			productName = ParraDev;
 			productReference = 00727F462C5AE43D00973122 /* ParraDev.app */;
@@ -205,7 +213,7 @@
 			);
 			mainGroup = 00727F3D2C5AE43D00973122;
 			packageReferences = (
-				002BC29A2C5BCAE20022F37E /* XCLocalSwiftPackageReference "../../parra-mobile-sdks" */,
+				0012B8382C5C66400001F11D /* XCLocalSwiftPackageReference "../../parra-mobile-sdks" */,
 			);
 			productRefGroup = 00727F472C5AE43D00973122 /* Products */;
 			projectDirPath = "";
@@ -474,18 +482,18 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		002BC29A2C5BCAE20022F37E /* XCLocalSwiftPackageReference "../../parra-mobile-sdks" */ = {
+		0012B8382C5C66400001F11D /* XCLocalSwiftPackageReference "../../parra-mobile-sdks" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../parra-mobile-sdks";
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		002BC29B2C5BCAE20022F37E /* Parra */ = {
+		0012B8392C5C66400001F11D /* Parra */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Parra;
 		};
-		00727F592C5AE5BD00973122 /* Parra */ = {
+		002BC29B2C5BCAE20022F37E /* Parra */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Parra;
 		};
