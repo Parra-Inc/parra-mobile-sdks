@@ -21,12 +21,12 @@ public final class ParraDeviceInfoManager: ObservableObject {
 
     private(set) static var current: DeviceInfo = {
         do {
-            let info = try ParraDeviceInfoManager.getDeviceInfo(
-                from: .current,
-                with: ParraDeviceInfoManager.getDeviceId()
-            )
+            let deviceId = try ParraDeviceInfoManager.getDeviceId()
 
-            return info
+            return ParraDeviceInfoManager.getDeviceInfo(
+                from: .current,
+                with: deviceId
+            )
         } catch {
             let message = "Error extracting device id"
 
