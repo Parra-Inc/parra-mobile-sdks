@@ -24,52 +24,83 @@ final class OAuth2Service {
         authServer: AuthServer
     ) {
         self.clientId = clientId
+        self.tenantId = tenantId
         self.authServer = authServer
     }
 
     // MARK: - Internal
 
     let clientId: String
+    let tenantId: String
     let authServer: AuthServer
 
     func authenticate(
-        using signupType: AuthType
+        using authType: AuthType
     ) async throws -> ParraUser.Credential.Token {
-        var data: [String: String] = [
-            "scope": "parra openid offline_access profile email phone",
-            "client_id": clientId
-        ]
+        let tokenType = authType.tokenType
 
-        switch signupType {
-        case .usernamePassword(let email, let password):
-            data["grant_type"] = "password"
-            data["username"] = email
-            data["password"] = password
-        case .passwordlessEmail(let code):
-            data["grant_type"] = "passwordless_otp"
-            data["code"] = code
-        case .passwordlessSms(let code):
-            data["grant_type"] = "passwordless_otp"
-            data["code"] = code
-        case .webauthn(let code):
-            data["grant_type"] = "webauthn_token"
-            data["code"] = code
-        }
-
-        let tokenUrl = try createTokenUrl()
-        let response: TokenResponse = try await authServer
-            .performFormPostRequest(
-                to: tokenUrl,
-                data: data,
-                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                delegate: nil
+        let response: TokenResponse = switch authType {
+        case .usernamePassword, .passwordlessSms, .passwordlessEmail, .webauthn:
+            try await authenticateWithAccount(
+                endpoint: authType.issuerEndpoint,
+                authType: authType
             )
+        case .anonymous, .guest:
+            try await authServer.authenticateWithoutAccount(
+                endpoint: authType.issuerEndpoint,
+                authType: authType
+            )
+        }
 
         return ParraUser.Credential.Token(
             accessToken: response.accessToken,
             tokenType: response.tokenType,
             expiresIn: response.expiresIn,
-            refreshToken: response.refreshToken
+            refreshToken: response.refreshToken,
+            type: tokenType
+        )
+    }
+
+    private func authenticateWithAccount(
+        endpoint: IssuerEndpoint,
+        authType: AuthType
+    ) async throws -> TokenResponse {
+        var data: [String: String] = [
+            "scope": "parra openid offline_access profile email phone",
+            "client_id": clientId
+        ]
+
+        switch authType {
+        case .usernamePassword(let email, let password):
+            data["grant_type"] = "password"
+            data["username"] = email
+            data["password"] = password
+
+        case .passwordlessEmail(let code):
+            data["grant_type"] = "passwordless_otp"
+            data["code"] = code
+
+        case .passwordlessSms(let code):
+            data["grant_type"] = "passwordless_otp"
+            data["code"] = code
+
+        case .webauthn(let code):
+            data["grant_type"] = "webauthn_token"
+            data["code"] = code
+
+        default:
+            break
+        }
+
+        let tokenUrl = try createTokenUrl(
+            endpoint: endpoint
+        )
+
+        return try await authServer.performFormPostRequest(
+            to: tokenUrl,
+            data: data,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+            delegate: nil
         )
     }
 
@@ -79,13 +110,20 @@ final class OAuth2Service {
     ) async throws -> ParraUser.Credential.Token {
         let refreshToken = token.refreshToken
 
-        let data: [String: String] = [
+        var data: [String: String] = [
             "grant_type": "refresh_token",
-            "refresh_token": refreshToken,
             "client_id": clientId
         ]
 
-        let tokenUrl = try createTokenUrl()
+        // Will always exist, except for some anonymous auth flows.
+        if let refreshToken {
+            data["refresh_token"] = refreshToken
+        }
+
+        let tokenUrl = try createTokenUrl(
+            endpoint: token.type.issuerEndpoint
+        )
+
         let response: RefreshResponse = try await authServer
             .performFormPostRequest(
                 to: tokenUrl,
@@ -98,7 +136,8 @@ final class OAuth2Service {
             accessToken: response.accessToken,
             tokenType: response.tokenType,
             expiresIn: response.expiresIn,
-            refreshToken: refreshToken
+            refreshToken: refreshToken,
+            type: token.type
         )
     }
 
@@ -113,7 +152,10 @@ final class OAuth2Service {
                 logger.trace("Token is nearly expired, refreshing")
             }
 
-            return try await refreshToken(token, timeout: timeout)
+            return try await refreshToken(
+                token,
+                timeout: timeout
+            )
         }
 
         logger.trace("Token is still valid, skipping refresh")
@@ -123,14 +165,16 @@ final class OAuth2Service {
 
     // MARK: - Private
 
-    private func createTokenUrl() throws -> URL {
-        guard
-            let issuer = authServer.appState.appInfo?.tenant.issuer,
-            let tokenUrl = URL(string: "https://\(issuer)/auth/token") else
-        {
-            throw ParraError.message("Failed to construct token URL")
+    private func createTokenUrl(
+        endpoint: IssuerEndpoint
+    ) throws -> URL {
+        guard let tenant = authServer.appState.appInfo?.tenant else {
+            throw ParraError.message("Missing tenant to create token url")
         }
 
-        return tokenUrl
+        return try EndpointResolver.resolve(
+            endpoint: endpoint,
+            tenant: tenant
+        )
     }
 }

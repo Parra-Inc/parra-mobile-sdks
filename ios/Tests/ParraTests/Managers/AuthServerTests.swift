@@ -23,7 +23,7 @@ class AuthServerTests: MockedParraTestCase {
 //    func testPublicApiKeyAuthentication() async throws {
 //        let mockAuthServer = await createMockAuthServer()
 //
-//        let endpoint = ParraEndpoint.postAuthentication(
+//        let endpoint = ParraEndpoint.postPublicAuthentication(
 //            tenantId: mockAuthServer.appState.tenantId
 //        )
 //        let endpointExpectation = mockAuthServer.urlSession

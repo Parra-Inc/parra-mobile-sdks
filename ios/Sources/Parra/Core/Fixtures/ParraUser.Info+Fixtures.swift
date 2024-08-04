@@ -48,7 +48,8 @@ extension ParraUser.Info: ParraFixture {
                 externalId: "",
                 hasPassword: true
             )
-        ]
+        ],
+        isAnonymous: false
     )
 
     static func validStates() -> [ParraUser.Info] {

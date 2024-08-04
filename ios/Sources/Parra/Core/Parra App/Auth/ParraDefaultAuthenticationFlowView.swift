@@ -79,7 +79,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                 switch parraAuthInfo.current {
                 case .authenticated, .undetermined:
                     break
-                case .unauthenticated:
+                case .anonymous, .guest, .error:
                     do {
                         try await params.attemptPasskeyLogin()
                     } catch let error as ParraError {

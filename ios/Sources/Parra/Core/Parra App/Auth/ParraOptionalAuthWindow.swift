@@ -30,9 +30,9 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
     @ViewBuilder public var body: some View {
         LaunchScreenWindow {
             switch parraAuthState.current {
-            case .authenticated(let user):
+            case .authenticated(let user), .anonymous(let user):
                 AnyView(authenticatedContent(for: user))
-            case .unauthenticated, .undetermined:
+            case .undetermined, .error, .guest:
                 AnyView(unauthenticatedContent())
             }
         }
@@ -45,7 +45,7 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
     }
 
     public func unauthenticatedContent() -> some View {
-        return content(.unauthenticated(nil))
+        return content(parraAuthState.current)
     }
 
     // MARK: - Internal

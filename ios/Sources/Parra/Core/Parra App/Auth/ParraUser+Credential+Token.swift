@@ -11,31 +11,53 @@ import Foundation
 // ! Important: Changing keys will result in user logouts when the persisted
 //              info/credential objects are unable to be parsed on app launch.
 public extension ParraUser.Credential {
-    struct Token: Codable, Equatable, Hashable {
+    struct Token: Codable, Equatable, Hashable, Sendable {
+        public enum TokenType: Codable, Equatable, Hashable, Sendable {
+            case user
+            case anonymous
+            case guest
+
+            internal var issuerEndpoint: IssuerEndpoint {
+                switch self {
+                case .anonymous:
+                    return .postAnonymousAuthentication
+                case .guest:
+                    return .postGuestAuthentication
+                case .user:
+                    return .postAuthentication
+                }
+            }
+        }
+
+
         // MARK: - Lifecycle
 
         init(
             accessToken: String,
             tokenType: String,
             expiresAt: Date,
-            refreshToken: String
+            refreshToken: String?,
+            type: TokenType
         ) {
             self.accessToken = accessToken
             self.tokenType = tokenType
             self.expiresAt = expiresAt
             self.refreshToken = refreshToken
+            self.type = type
         }
 
         init(
             accessToken: String,
             tokenType: String,
             expiresIn: TimeInterval,
-            refreshToken: String
+            refreshToken: String?,
+            type: TokenType
         ) {
             self.accessToken = accessToken
             self.tokenType = tokenType
             self.expiresAt = Date.now.addingTimeInterval(expiresIn)
             self.refreshToken = refreshToken
+            self.type = type
         }
 
         // MARK: - Public
@@ -43,7 +65,12 @@ public extension ParraUser.Credential {
         public let accessToken: String
         public let tokenType: String
         public let expiresAt: Date
-        public let refreshToken: String
+        /// Refresh token can only be nil under anonyomus auth during the first
+        /// request to get a token. Subsequent requests will send this original
+        /// token in their body and will not receive a new one in their
+        /// responses.
+        public let refreshToken: String?
+        public let type: TokenType
 
         public var isExpired: Bool {
             Date.now > expiresAt

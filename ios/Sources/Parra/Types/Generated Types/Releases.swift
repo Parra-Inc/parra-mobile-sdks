@@ -1227,30 +1227,25 @@ public struct AppInfoDatabaseConfig: Codable, Equatable, Hashable {
         username: UsernameConfig?,
         email: EmailConfig?,
         phoneNumber: PhoneNumberConfig?,
-        passkeys: AppInfoPasskeysConfig?
+        passkeys: AppInfoPasskeysConfig?,
+        anonymousAuth: AppInfoAnonymousAuthConfig?
     ) {
         self.password = password
         self.username = username
         self.email = email
         self.phoneNumber = phoneNumber
         self.passkeys = passkeys
+        self.anonymousAuth = anonymousAuth
     }
 
     // MARK: - Public
-
-    public enum CodingKeys: String, CodingKey {
-        case password
-        case username
-        case email
-        case phoneNumber
-        case passkeys
-    }
 
     public let password: PasswordConfig?
     public let username: UsernameConfig?
     public let email: EmailConfig?
     public let phoneNumber: PhoneNumberConfig?
     public let passkeys: AppInfoPasskeysConfig?
+    public let anonymousAuth: AppInfoAnonymousAuthConfig?
 }
 
 public struct AuthInfoPasswordlessSmsConfig: Codable, Equatable, Hashable {
@@ -1293,6 +1288,8 @@ public struct ParraAuthInfoPasswordlessConfig: Codable, Equatable, Hashable {
 
 public struct AppInfoPasskeysConfig: Codable, Equatable, Hashable {}
 
+public struct AppInfoAnonymousAuthConfig: Codable, Equatable, Hashable {}
+
 public final class ParraAppAuthInfo: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
@@ -1326,6 +1323,10 @@ public final class ParraAppAuthInfo: Codable, Equatable, Hashable {
 
     var supportsPasskeys: Bool {
         return database?.passkeys != nil
+    }
+
+    var supportsAnonymous: Bool {
+        return database?.anonymousAuth != nil
     }
 }
 

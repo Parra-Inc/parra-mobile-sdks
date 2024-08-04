@@ -46,10 +46,18 @@ public final class ParraAuth {
             return
         }
 
+        guard let appInfo = parraInternal.appState.appInfo else {
+            throw ParraError.message(
+                "Failed to delete account. Can't retreive necessary app info."
+            )
+        }
+
         try await parraInternal.api.deleteAccount()
 
         // Don't perform sync steps first.
-        await parraInternal.authService.logout()
+        await parraInternal.authService.logout(
+            appInfo: appInfo
+        )
     }
 
     public func deleteAccount(
@@ -90,6 +98,10 @@ public final class ParraAuth {
             return
         }
 
+        guard let appInfo = parraInternal.appState.appInfo else {
+            return
+        }
+
         await parraInternal.syncManager.stopSyncTimer()
 
         await parraInternal.syncManager.enqueueSync(
@@ -97,7 +109,9 @@ public final class ParraAuth {
             waitUntilSyncCompletes: true
         )
 
-        await parraInternal.authService.logout()
+        await parraInternal.authService.logout(
+            appInfo: appInfo
+        )
     }
 
     /// Used to clear any cached credentials for the current user. After calling

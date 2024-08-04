@@ -157,6 +157,46 @@ public struct Identity: Codable, Equatable, Hashable, Identifiable {
         self.hasPassword = hasPassword
     }
 
+    public init(
+        from decoder: any Decoder
+    ) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.id = try container.decode(String.self, forKey: .id)
+        self.createdAt = try container.decode(String.self, forKey: .createdAt)
+        self.updatedAt = try container.decode(String.self, forKey: .updatedAt)
+        self.deletedAt = try container
+            .decodeIfPresent(String.self, forKey: .deletedAt)
+        self.provider = try container
+            .decodeIfPresent(String.self, forKey: .provider)
+        self.providerUserId = try container
+            .decodeIfPresent(String.self, forKey: .providerUserId)
+        self.email = try container.decodeIfPresent(String.self, forKey: .email)
+        self.emailVerified = try container
+            .decodeIfPresent(Bool.self, forKey: .emailVerified)
+        self.phoneNumber = try container
+            .decodeIfPresent(String.self, forKey: .phoneNumber)
+        self.phoneNumberVerified = try container
+            .decodeIfPresent(Bool.self, forKey: .phoneNumberVerified)
+        self.username = try container
+            .decodeIfPresent(String.self, forKey: .username)
+        self.externalId = try container
+            .decodeIfPresent(String.self, forKey: .externalId)
+        self.hasPassword = try container
+            .decodeIfPresent(Bool.self, forKey: .hasPassword)
+
+        do {
+            self.type = try container.decode(IdentityType.self, forKey: .type)
+        } catch {
+            Logger.warn(
+                "Error decoding identity. Found unexpected type",
+                error
+            )
+
+            self.type = .uknownIdentity
+        }
+    }
+
     // MARK: - Public
 
     public let id: String

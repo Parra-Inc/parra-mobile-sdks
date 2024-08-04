@@ -14,9 +14,9 @@ public struct ProfileCell: View {
 
     public var body: some View {
         switch parraAuthState.current {
-        case .authenticated:
+        case .authenticated, .anonymous, .guest:
             AuthenticatedProfileInfoView()
-        case let .unauthenticated(error):
+        case let .error(error):
             UnauthenticatedProfileInfoView(error: error)
         case .undetermined:
             EmptyView()

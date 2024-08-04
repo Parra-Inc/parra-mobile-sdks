@@ -19,8 +19,34 @@ extension OAuth2Service {
         case passwordlessSms(code: String)
 
         case webauthn(code: String)
+        case anonymous(refreshToken: String?)
+        case guest(refreshToken: String?)
 
         // MARK: - Internal
+
+        var issuerEndpoint: IssuerEndpoint {
+            switch self {
+            case .usernamePassword, .passwordlessSms, .passwordlessEmail,
+                    .webauthn:
+                return .postAuthentication
+            case .anonymous:
+                return .postAnonymousAuthentication
+            case .guest:
+                return .postGuestAuthentication
+            }
+        }
+
+        var tokenType: ParraUser.Credential.Token.TokenType {
+            switch self {
+            case .usernamePassword, .passwordlessSms, .passwordlessEmail,
+                    .webauthn:
+                return .user
+            case .anonymous:
+                return .anonymous
+            case .guest:
+                return .guest
+            }
+        }
 
         var description: String {
             switch self {
@@ -32,6 +58,10 @@ extension OAuth2Service {
                 return "passwordlessSms"
             case .webauthn:
                 return "webauthn"
+            case .anonymous:
+                return "anonymous"
+            case .guest:
+                return "guest"
             }
         }
     }

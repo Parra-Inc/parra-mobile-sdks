@@ -56,7 +56,7 @@ final class AuthServer: Server {
         userId: String,
         timeout: TimeInterval? = nil
     ) async throws -> String {
-        let endpoint = IssuerEndpoint.postAuthentication
+        let endpoint = IssuerEndpoint.postPublicAuthentication
         let url = try EndpointResolver.resolve(
             endpoint: endpoint,
             using: appState
@@ -124,9 +124,17 @@ final class AuthServer: Server {
     func postLogin(
         accessToken: String
     ) async throws -> UserInfoResponse {
+        // TODO: Access from where this is stored
+        let requestData = LoginUserRequestBody(
+            anonymousToken: ""
+        )
+
+        let body = try configuration.jsonEncoder.encode(requestData)
+
         return try await performOptionalAuthRequest(
             to: .postLogin,
-            with: accessToken
+            with: accessToken,
+            body: body
         )
     }
 
@@ -334,6 +342,35 @@ final class AuthServer: Server {
             timeout: timeout,
             cachePolicy: .reloadRevalidatingCacheData
         )
+    }
+
+    func authenticateWithoutAccount(
+        endpoint: IssuerEndpoint,
+        authType: OAuth2Service.AuthType
+    ) async throws -> OAuth2Service.TokenResponse {
+        let data: [String: String] = switch authType {
+        case .anonymous(let refreshToken), .guest(let refreshToken):
+            if let refreshToken {
+                ["token": refreshToken]
+            } else {
+                [:]
+            }
+        default:
+            [:]
+        }
+
+        let body = try JSONEncoder.parraWebauthEncoder.encode(data)
+
+        let (response, _): (
+            OAuth2Service.TokenResponse,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
+            to: endpoint,
+            with: nil,
+            body: body
+        )
+
+        return response
     }
 
     // MARK: - Private

@@ -6,7 +6,6 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import os
 import SwiftUI
 
 private let logger = Logger()
@@ -36,7 +35,7 @@ public class ParraAuthState: ObservableObject, CustomStringConvertible {
     )
 
     public static let unauthenticatedPreview = ParraAuthState(
-        current: .unauthenticated(nil)
+        current: .undetermined
     )
 
     @Published public private(set) var current: ParraAuthResult
@@ -49,30 +48,18 @@ public class ParraAuthState: ObservableObject, CustomStringConvertible {
 
     @MainActor
     func performInitialAuthCheck(
-        using authService: AuthService
+        using authService: AuthService,
+        appInfo: ParraAppInfo
     ) async {
         beginObservingAuth()
 
-        let cachedUser = await authService.getCurrentUser()
-
-        if let cachedUser {
-            logger.debug("Found cached user")
-
-            current = .authenticated(cachedUser)
-
-            do {
-                // Only try to refresh if auth state actually existed. We also
-                // only want to refresh the token if it's needed but always pull
-                // the user info so this is kept reasonably up to date.
-                try await authService.performAppLaunchTokenAndUserRefresh()
-            } catch {
-                printInvalidAuth(error: error)
-            }
-        } else {
-            logger.debug("No cached user found")
-
-            current = .unauthenticated(nil)
-        }
+        // Obtain the auth state. This will also trigger an async refresh of any
+        // user info or tokens that are necessary, which will be broadcast when
+        // they are complete. The return value will be the quickest possible
+        // user to obtain so that we can redraw.
+        current = await authService.getQuickestAuthState(
+            appInfo: appInfo
+        )
     }
 
     // MARK: - Private
@@ -86,40 +73,6 @@ public class ParraAuthState: ObservableObject, CustomStringConvertible {
             queue: .main
         ) { notification in
             self.handleAuthChange(notification: notification)
-        }
-    }
-
-    private func printInvalidAuth(error: Error) {
-        let printDefaultError: () -> Void = {
-            logger.error(
-                "Authentication handler in call to Parra.initialize failed",
-                error
-            )
-        }
-
-        guard let parraError = error as? ParraError else {
-            printDefaultError()
-
-            return
-        }
-
-        switch parraError {
-        case .authenticationFailed(let underlying):
-            let systemLogger = os.Logger(
-                subsystem: "Parra",
-                category: "initialization"
-            )
-
-            // Bypassing main logger here because we won't want to include the
-            // normal formatting/backtrace/etc. We want to display as clear of
-            // a message as is possible. Note the exclamations prevent
-            // whitespace trimming from removing the padding newlines.
-            systemLogger.log(
-                level: .fault,
-                "!\n\n\n\n\n\n\nERROR INITIALIZING PARRA!\nThe authentication provider passed to ParraApp returned an error. The user was unable to be verified.\n\nUnderlying error:\n\(underlying)\n\n\n\n\n\n\n!"
-            )
-        default:
-            printDefaultError()
         }
     }
 

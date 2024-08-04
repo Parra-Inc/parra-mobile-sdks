@@ -21,7 +21,8 @@ extension ParraAppAuthInfo: ParraFixture {
                         allowSignup: true
                     ),
                     phoneNumber: nil,
-                    passkeys: AppInfoPasskeysConfig()
+                    passkeys: AppInfoPasskeysConfig(),
+                    anonymousAuth: AppInfoAnonymousAuthConfig()
                 ),
                 passwordless: ParraAuthInfoPasswordlessConfig(
                     sms: AuthInfoPasswordlessSmsConfig(

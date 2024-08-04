@@ -110,19 +110,23 @@ class ParraInternal {
         to authResult: ParraAuthResult
     ) async {
         switch (oldAuthResult, authResult) {
-        case (.undetermined, .authenticated(let user)),
-             (.unauthenticated, .authenticated(let user)):
-            // Changes from not logged in to logged in
-            await handleLogin(for: user)
-        case (.authenticated(let user), .unauthenticated):
+        case (_, .anonymous(let user)), (_, .authenticated(let user)):
+            if !oldAuthResult.hasUser {
+                // Changes from not logged in to logged in
+                await handleLogin(for: user)
+            }
+
+        case (.anonymous(let user), _), (.authenticated(let user), _):
             // Changes from logged in to not logged in
             handleLogout(for: user)
         case (_, .undetermined):
             Parra.default.user.current = nil
 
             assertionFailure()
-        // shouldn't ever change _to_ this.
+            
+            // shouldn't ever change _to_ this.
         default:
+            // TODO: Should there be a transition into guest mode?
             break
         }
     }

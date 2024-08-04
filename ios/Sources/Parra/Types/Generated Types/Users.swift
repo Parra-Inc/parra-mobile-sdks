@@ -124,7 +124,10 @@ struct AuthChallengesRequestBody: Codable, Equatable, Hashable {
         self.unknownIdentity = unknownIdentity
     }
 
-    init(identity: String, identityType: IdentityType?) {
+    init(
+        identity: String,
+        identityType: IdentityType?
+    ) {
         guard let identityType else {
             self.unknownIdentity = identity
             self.email = nil
@@ -150,7 +153,7 @@ struct AuthChallengesRequestBody: Codable, Equatable, Hashable {
             self.phoneNumber = nil
             self.username = identity
             self.unknownIdentity = nil
-        case .uknownIdentity:
+        case .uknownIdentity, .anonymous:
             self.email = nil
             self.phoneNumber = nil
             self.username = nil
@@ -245,9 +248,10 @@ public struct ParraAuthChallenge: Codable, Equatable, Hashable {
 }
 
 public enum IdentityType: String, Codable {
-    case email
+    case username = "username"
+    case email = "email"
     case phoneNumber = "phone_number"
-    case username
+    case anonymous = "anonymous"
     case uknownIdentity = "unknown_identity"
 }
 
@@ -328,6 +332,26 @@ struct PasswordlessChallengeRequestBody: Codable, Equatable, Hashable {
     let clientId: String
     let email: String?
     let phoneNumber: String?
+}
+
+struct CreateAnonymousTokenRequestBody: Codable, Equatable, Hashable, Sendable {
+    let token: String?
+
+    public init(
+        token: String?
+    ) {
+        self.token = token
+    }
+}
+
+public struct LoginUserRequestBody: Codable, Equatable, Hashable {
+    public let anonymousToken: String?
+
+    public init(
+        anonymousToken: String?
+    ) {
+        self.anonymousToken = anonymousToken
+    }
 }
 
 struct CreateUserRequestBody: Codable, Equatable, Hashable {
@@ -827,7 +851,7 @@ struct PasswordResetChallengeRequestBody: Codable, Equatable, Hashable,
             self.phoneNumber = nil
             self.username = identity
             self.unknownIdentity = nil
-        case .uknownIdentity:
+        case .uknownIdentity, .anonymous:
             self.email = nil
             self.phoneNumber = nil
             self.username = nil

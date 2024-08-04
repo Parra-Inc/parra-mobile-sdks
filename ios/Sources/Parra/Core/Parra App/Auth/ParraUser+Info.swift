@@ -36,7 +36,8 @@ public extension ParraUser {
             lastSeenAt: Date?,
             lastLoginAt: Date?,
             properties: [String: AnyCodable],
-            identities: [Identity]?
+            identities: [Identity]?,
+            isAnonymous: Bool
         ) {
             self.id = id
             self.createdAt = createdAt
@@ -60,6 +61,7 @@ public extension ParraUser {
             self.lastLoginAt = lastLoginAt
             self.properties = properties
             self.identities = identities
+            self.isAnonymous = isAnonymous
         }
 
         // MARK: - Public
@@ -86,6 +88,7 @@ public extension ParraUser {
         public let lastLoginAt: Date?
         public let properties: [String: AnyCodable]
         public let identities: [Identity]?
+        public let isAnonymous: Bool
 
         public var displayName: String? {
             if let name {

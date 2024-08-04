@@ -17,6 +17,9 @@ enum IssuerEndpoint: Endpoint {
     case postWebAuthnRegister
     case postWebAuthnAuthenticate
     case postAuthentication
+    case postPublicAuthentication
+    case postAnonymousAuthentication
+    case postGuestAuthentication
     case postForgotPassword
     case postResetPassword
 
@@ -27,7 +30,9 @@ enum IssuerEndpoint: Endpoint {
         case .postAuthChallenges, .postCreateUser, .postPasswordless,
              .postWebAuthnAuthenticate, .postWebAuthnAuthenticateChallenge,
              .postWebAuthnRegister, .postWebAuthnRegisterChallenge,
-             .postAuthentication, .postForgotPassword, .postResetPassword:
+             .postPublicAuthentication, .postForgotPassword, .postResetPassword,
+             .postAnonymousAuthentication, .postGuestAuthentication,
+             .postAuthentication:
             return .post
         }
     }
@@ -49,7 +54,13 @@ enum IssuerEndpoint: Endpoint {
         case .postWebAuthnAuthenticate:
             return "auth/webauthn/authenticate"
         case .postAuthentication:
+            return "auth/token"
+        case .postPublicAuthentication:
             return "auth/issuers/public/token"
+        case .postAnonymousAuthentication:
+            return "auth/issuers/anonymous/token"
+        case .postGuestAuthentication:
+            return "auth/issuers/guest/token"
         case .postForgotPassword:
             return "auth/password/reset/challenge"
         case .postResetPassword:
@@ -60,7 +71,9 @@ enum IssuerEndpoint: Endpoint {
     var isTrackingEnabled: Bool {
         switch self {
         // MUST check backend before removing any from this list
-        case .postAuthentication:
+        case .postPublicAuthentication, .postAnonymousAuthentication,
+                .postGuestAuthentication, .postAuthentication:
+
             return true
         default:
             return false

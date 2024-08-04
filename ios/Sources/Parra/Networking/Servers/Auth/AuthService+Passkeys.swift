@@ -101,12 +101,10 @@ extension AuthService {
             )
 
             switch authResult {
-            case .authenticated, .undetermined:
+            case .error(let error):
+                throw error
+            default:
                 await applyUserUpdate(authResult)
-            case .unauthenticated(let error):
-                if let error {
-                    throw error
-                }
             }
         } catch {
             throw error

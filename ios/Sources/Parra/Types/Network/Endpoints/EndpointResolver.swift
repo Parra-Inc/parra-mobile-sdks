@@ -19,9 +19,19 @@ enum EndpointResolver {
             throw ParraError.message("App info is missing resolving endpoint")
         }
 
+        return try resolve(
+            endpoint: endpoint,
+            tenant: appInfo.tenant
+        )
+    }
+
+    static func resolve(
+        endpoint: IssuerEndpoint,
+        tenant: TenantAppInfoStub
+    ) throws -> URL {
         let path = path(for: endpoint)
 
-        guard let issuerUrl = URL(string: "https://\(appInfo.tenant.issuer)") else {
+        guard let issuerUrl = URL(string: "https://\(tenant.issuer)") else {
             throw ParraError.message(
                 "Issuer host name could not be converted to URL."
             )
@@ -66,7 +76,13 @@ enum EndpointResolver {
         case .postWebAuthnAuthenticate:
             return "auth/webauthn/authenticate"
         case .postAuthentication:
+            return "auth/token"
+        case .postPublicAuthentication:
             return "auth/issuers/public/token"
+        case .postAnonymousAuthentication:
+            return "auth/issuers/anonymous/token"
+        case .postGuestAuthentication:
+            return "auth/issuers/guest/token"
         case .postForgotPassword:
             return "auth/password/reset/challenge"
         case .postResetPassword:

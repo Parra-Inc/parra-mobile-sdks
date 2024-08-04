@@ -22,12 +22,12 @@ struct ForgotPasswordCompleteView: View {
     var body: some View {
         // reset password in account settings vs. during the login flow.
         let (subtitle, doneButtonTitle) = switch parraAuthState.current {
-        case .authenticated:
+        case .authenticated, .anonymous:
             (
                 "Your password has been successfully updated.",
                 "Dismiss"
             )
-        case .unauthenticated, .undetermined:
+        case .undetermined, .guest, .error:
             (
                 "Your password has been successfully updated. You can now use your new password to log in.",
                 "Return to login"

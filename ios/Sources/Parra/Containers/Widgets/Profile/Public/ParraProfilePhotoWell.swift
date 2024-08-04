@@ -23,7 +23,7 @@ public struct ParraProfilePhotoWell: View {
 
     public var body: some View {
         switch parraAuthState.current {
-        case .authenticated(let user):
+        case .authenticated(let user), .anonymous(let user):
             PhotoWell(
                 stub: user.info.avatar,
                 size: size
@@ -31,7 +31,7 @@ public struct ParraProfilePhotoWell: View {
                 await onAvatarSelected(newAvatar)
             }
             .id(user.info.avatar?.id)
-        case .unauthenticated, .undetermined:
+        case .undetermined, .guest, .error:
             PhotoWell(
                 stub: nil,
                 size: size,

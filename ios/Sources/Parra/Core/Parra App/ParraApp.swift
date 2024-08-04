@@ -147,10 +147,14 @@ public struct ParraApp<
                 case (.initial, .initial):
                     // Should only run once on app launch.
                     performAppLaunchTasks()
-                case (.initial, .transitioning):
+                case (.initial, .transitioning(let result, _)):
                     Task {
+                        parraAppState.appInfo
+                        // performAppLaunchTasks completing changes the launch
+                        // screen state to transitioning, allowing this to start
                         await parraAuthState.performInitialAuthCheck(
-                            using: parra.authService
+                            using: parra.authService,
+                            appInfo: result.appInfo
                         )
                     }
                 default:

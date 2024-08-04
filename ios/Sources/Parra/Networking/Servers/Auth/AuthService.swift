@@ -8,6 +8,7 @@
 
 import AuthenticationServices
 import Foundation
+import os
 
 private let logger = Logger()
 
@@ -71,12 +72,22 @@ final class AuthService {
                 using: authType
             )
 
-            // On login, get user info via login route instead of GET user-info
-            return await _completeLogin(
-                with: oauthToken
-            )
+            switch authType {
+            case .guest(let refreshToken):
+                // guests don't have user info to fetch, so we skip that step.
+                return .guest(
+                    ParraGuest(
+                        credential: .oauth2(oauthToken)
+                    )
+                )
+            default:
+                // On login, get user info via login route instead of GET user-info
+                return await _completeLogin(
+                    with: oauthToken
+                )
+            }
         } catch {
-            return .unauthenticated(error)
+            return .error(error)
         }
     }
 
@@ -116,7 +127,7 @@ final class AuthService {
                 with: oauthToken
             )
         } catch {
-            return .unauthenticated(error)
+            return .error(error)
         }
     }
 
@@ -152,7 +163,9 @@ final class AuthService {
         )
     }
 
-    func logout() async {
+    func logout(
+        appInfo: ParraAppInfo
+    ) async {
         guard case .parra = authenticationMethod else {
             logger
                 .warn(
@@ -167,17 +180,23 @@ final class AuthService {
             return
         }
 
-        Task.detached {
-            do {
-                try await self.authServer.postLogout(
-                    accessToken: credential.accessToken
-                )
-            } catch {
-                logger.error("Error sending logout request", error)
-            }
-        }
+        do {
+            // Invalidate the current login
+            try await self.authServer.postLogout(
+                accessToken: credential.accessToken
+            )
 
-        await applyUserUpdate(.unauthenticated(nil))
+            // Login as either anon or guest depending on config.
+            let result = try await performUnauthenticatedLogin(
+                appInfo: appInfo
+            )
+
+            await applyUserUpdate(result)
+        } catch {
+            logger.error("Error sending logout request", error)
+
+            await applyUserUpdate(.error(error))
+        }
     }
 
     func forceLogout(
@@ -185,7 +204,7 @@ final class AuthService {
     ) async {
         logger.error("Forcing logout due to error", error)
 
-        await applyUserUpdate(.unauthenticated(error))
+        await applyUserUpdate(.error(error))
     }
 
     func getAuthChallenges(
@@ -200,10 +219,6 @@ final class AuthService {
         return try await authServer.postAuthChallenges(
             requestData: body
         )
-    }
-
-    func getCurrentUser() async -> ParraUser? {
-        return await dataManager.getCurrentUser()
     }
 
     /// Fetches the cached token, or refreshes the cached token and returns the
@@ -238,43 +253,132 @@ final class AuthService {
         return newCredential.accessToken
     }
 
+    /// If there is a user cached, return what we already have
     /// Meant specifically for the case where the app is launching and we want
     /// to refresh credentials before proceeding. Very short timeouts are used
     /// for network requests so they can fail quickly and all the user to
     /// proceed into the app.
-    func performAppLaunchTokenAndUserRefresh() async throws {
-        logger.debug("Performing reauthentication for Parra")
+    func getQuickestAuthState(
+        appInfo: ParraAppInfo
+    ) async -> ParraAuthResult {
+        // If we encounter a state that requires refreshing user info or tokens
+        // asynchronously while allowing this method to return so app state
+        // may proceed.
+        var shouldRefresh = false
 
-        // Using a short timeout since these requests are made on app launch
-        let timeout: TimeInterval = 5.0
-
-        guard let credential = try await performCredentialRefresh(
-            forceRefresh: false,
-            timeout: timeout
-        ) else {
-            // The refresh token provider returning nil indicates that a
-            // logout should take place.
-
-            Task {
-                await logout()
+        defer {
+            if shouldRefresh {
+                performAuthStateRefresh(
+                    appInfo: appInfo
+                )
             }
-
-            throw ParraError.authenticationFailed(
-                "Failed to refresh token"
-            )
         }
 
-        let response = try await authServer.getUserInfo(
-            accessToken: credential.accessToken,
-            timeout: timeout
+        let currentUser = await dataManager.getCurrentUser()
+
+        if let currentUser {
+            logger.debug("Found cached user")
+
+            // There was a user persisted on disk at app launch. They could be
+            // out of date.
+            shouldRefresh = true
+
+            let result: ParraAuthResult = if currentUser.info.isAnonymous {
+                .anonymous(currentUser)
+            } else {
+                .authenticated(currentUser)
+            }
+
+            await applyUserUpdate(
+                result,
+                // Will cause double update of user state in this case.
+                shouldBroadcast: false
+            )
+
+            return result
+        }
+
+        // There wasn't a cached user. We have to determine an auth state. We
+        // will user the app info preference on whether anonymous users are
+        // supported to determine which kind of token to generate. If we fail
+        // to create a token, we fall into the global auth error state.
+
+        let result: ParraAuthResult
+        do {
+            result = try await performUnauthenticatedLogin(
+                appInfo: appInfo
+            )
+        } catch {
+            printInvalidAuth(error: error)
+
+            result = .error(error)
+        }
+
+        await applyUserUpdate(
+            result,
+            // Will cause double update of user state in this case.
+            shouldBroadcast: false
         )
 
-        let user = ParraUser(
-            credential: credential,
-            info: response.user
-        )
+        return result
+    }
 
-        await applyUserUpdate(.authenticated(user))
+    private func performUnauthenticatedLogin(
+        appInfo: ParraAppInfo
+    ) async throws -> ParraAuthResult {
+        let oauthType: OAuth2Service.AuthType = if appInfo.auth.supportsAnonymous {
+            .anonymous(refreshToken: nil)
+        } else {
+            .guest(refreshToken: nil)
+        }
+
+        return try await login(authType: oauthType)
+    }
+
+    /// If auth has been determined, refresh it. If it hasn't, aquire the
+    /// tokens.
+    private func performAuthStateRefresh(
+        appInfo: ParraAppInfo
+    ) {
+        Task {
+            guard let currentUser = await dataManager.getCurrentUser() else {
+                // The only way this will happen is if the getQuickestAuthState
+                // flow resulted in an error, in which case there's no valid
+                // state to refresh.
+
+                return
+            }
+
+            // printInvalidAuth(error: error)
+            logger.debug("Performing reauthentication for Parra")
+
+            // Using a short timeout since these requests are made on app launch
+            let timeout: TimeInterval = 5.0
+
+            guard let credential = try await performCredentialRefresh(
+                forceRefresh: false,
+                timeout: timeout
+            ) else {
+                // The refresh token provider returning nil indicates that a
+                // logout should take place.
+
+                await logout(appInfo: appInfo)
+
+                return
+            }
+
+            let response = try await authServer.getUserInfo(
+                accessToken: credential.accessToken,
+                timeout: timeout
+            )
+
+            let user = ParraUser(
+                credential: credential,
+                info: response.user
+            )
+
+            await applyUserUpdate(.authenticated(user))
+        }
     }
 
     @discardableResult
@@ -316,16 +420,29 @@ final class AuthService {
     }
 
     func applyUserUpdate(
-        _ authResult: ParraAuthResult
+        _ authResult: ParraAuthResult,
+        shouldBroadcast: Bool = true
     ) async {
         switch authResult {
-        case .authenticated(let parraUser):
-            logger.debug("User authenticated: \(parraUser)")
+        case .anonymous(let user):
+            logger.debug("Anonymous user authenticated")
 
-            await dataManager.updateCurrentUser(parraUser)
+            await dataManager.updateCurrentUser(user)
 
-            _cachedToken = parraUser.credential
-        case .unauthenticated(let error):
+            _cachedCredential = user.credential
+        case .authenticated(let user):
+            logger.debug("User authenticated")
+
+            await dataManager.updateCurrentUser(user)
+
+            _cachedCredential = user.credential
+        case .guest(let guest):
+            logger.debug("Guest authenticated")
+
+            await dataManager.removeCurrentUser()
+
+            _cachedCredential = guest.credential
+        case .error(let error):
             logger
                 .debug(
                     "User unauthenticated with error: \(String(describing: error))"
@@ -333,7 +450,7 @@ final class AuthService {
 
             await dataManager.removeCurrentUser()
 
-            _cachedToken = nil
+            _cachedCredential = nil
         case .undetermined:
             // shouldn't ever change _to_ this state. If it does, treat it like
             // an unauth
@@ -341,16 +458,18 @@ final class AuthService {
 
             await dataManager.removeCurrentUser()
 
-            _cachedToken = nil
+            _cachedCredential = nil
         }
 
-        ParraNotificationCenter.default.post(
-            name: Parra.authenticationStateDidChangeNotification,
-            object: nil,
-            userInfo: [
-                Parra.authenticationStateKey: authResult
-            ]
-        )
+        if shouldBroadcast {
+            ParraNotificationCenter.default.post(
+                name: Parra.authenticationStateDidChangeNotification,
+                object: nil,
+                userInfo: [
+                    Parra.authenticationStateKey: authResult
+                ]
+            )
+        }
     }
 
     func _completeLogin(
@@ -370,26 +489,26 @@ final class AuthService {
         } catch {
             logger.error("Failed to login with oauth token", error)
 
-            return .unauthenticated(error)
+            return .error(error)
         }
     }
 
     // MARK: - Private
 
     // The actual cached token.
-    private var _cachedToken: ParraUser.Credential?
+    private var _cachedCredential: ParraUser.Credential?
 
     // Lazy wrapper around the cached token that will access it or try to load
     // it from disk.
     private func getCachedCredential() async -> ParraUser.Credential? {
-        if let _cachedToken {
-            return _cachedToken
+        if let _cachedCredential {
+            return _cachedCredential
         }
 
         if let user = await dataManager.getCurrentUser() {
-            _cachedToken = user.credential
+            _cachedCredential = user.credential
 
-            return _cachedToken
+            return _cachedCredential
         }
 
         return nil
@@ -410,11 +529,11 @@ final class AuthService {
                 // If a token already exists, attempt to refresh it. If no token
                 // exists, then we need to reauthenticate but lack the
                 // credentials to handle this here.
-                guard let cachedToken = await getCachedCredential() else {
+                guard let cachedCredential = await getCachedCredential() else {
                     return nil
                 }
 
-                switch cachedToken {
+                switch cachedCredential {
                 case .basic:
                     // The cached token is not an OAuth2 token, so we cannot
                     // refresh it. This shouldn't happen, but returning nil
@@ -475,18 +594,52 @@ final class AuthService {
         _ credential: ParraUser.Credential?
     ) async {
         guard let credential else {
-            _cachedToken = nil
+            _cachedCredential = nil
 
             return
         }
 
         switch credential {
         case .basic(let token):
-            _cachedToken = .basic(token)
+            _cachedCredential = .basic(token)
         case .oauth2(let token):
-            _cachedToken = .oauth2(token)
+            _cachedCredential = .oauth2(token)
         }
 
         await dataManager.updateCurrentUserCredential(credential)
+    }
+
+    private func printInvalidAuth(error: Error) {
+        let printDefaultError: () -> Void = {
+            logger.error(
+                "Authentication handler in call to Parra.initialize failed",
+                error
+            )
+        }
+
+        guard let parraError = error as? ParraError else {
+            printDefaultError()
+
+            return
+        }
+
+        switch parraError {
+        case .authenticationFailed(let underlying):
+            let systemLogger = os.Logger(
+                subsystem: "Parra",
+                category: "initialization"
+            )
+
+            // Bypassing main logger here because we won't want to include the
+            // normal formatting/backtrace/etc. We want to display as clear of
+            // a message as is possible. Note the exclamations prevent
+            // whitespace trimming from removing the padding newlines.
+            systemLogger.log(
+                level: .fault,
+                "!\n\n\n\n\n\n\nERROR INITIALIZING PARRA!\nThe authentication provider passed to ParraApp returned an error. The user was unable to be verified.\n\nUnderlying error:\n\(underlying)\n\n\n\n\n\n\n!"
+            )
+        default:
+            printDefaultError()
+        }
     }
 }

@@ -60,7 +60,7 @@ extension AuthService {
                 with: oauthToken
             )
         } catch {
-            return .unauthenticated(error)
+            return .error(error)
         }
     }
 }

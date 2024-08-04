@@ -676,14 +676,12 @@ class AuthenticationFlowManager: ObservableObject {
         switch authResult {
         case .undetermined:
             break
-        case .authenticated:
+        case .authenticated, .anonymous, .guest:
             await authService.applyUserUpdate(
                 authResult
             )
-        case .unauthenticated(let error):
-            if let error {
-                throw error
-            }
+        case .error(let error):
+            throw error
         }
     }
 

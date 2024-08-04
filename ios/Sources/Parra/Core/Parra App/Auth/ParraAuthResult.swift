@@ -9,9 +9,48 @@
 import SwiftUI
 
 public enum ParraAuthResult: Equatable, CustomStringConvertible {
+    case authenticated(ParraUser) // unauthenticated == any other case
+    case anonymous(ParraUser)
+    /// Only available when anonymous auth is disabled for the tenant.
+    case guest(ParraGuest) // no sessions
+    case error(Error)
     case undetermined
-    case authenticated(ParraUser)
-    case unauthenticated(Error?)
+
+    public var isLoggedIn: Bool {
+        switch self {
+        case .authenticated:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public var hasUser: Bool {
+        switch self {
+        case .authenticated, .anonymous:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public var hasToken: Bool {
+        switch self {
+        case .authenticated, .anonymous, .guest:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public var hasResolvedAuth: Bool {
+        switch self {
+        case .authenticated, .anonymous, .guest, .error:
+            return true
+        default:
+            return false
+        }
+    }
 
     // MARK: - Public
 
@@ -21,11 +60,11 @@ public enum ParraAuthResult: Equatable, CustomStringConvertible {
             return "undetermined"
         case .authenticated:
             return "authenticated"
-        case .unauthenticated(let error):
-            if error == nil {
-                return "unauthenticated"
-            }
-
+        case .anonymous:
+            return "anonymous"
+        case .guest:
+            return "guest"
+        case .error:
             return "unauthenticated with error"
         }
     }
@@ -39,8 +78,12 @@ public enum ParraAuthResult: Equatable, CustomStringConvertible {
             return true
         case (.authenticated(let lhsUser), .authenticated(let rhsUser)):
             return lhsUser == rhsUser
-        case (.unauthenticated(let lhsError), .unauthenticated(let rhsError)):
-            return lhsError?.localizedDescription == rhsError?
+        case (.anonymous(let lhsUser), .anonymous(let rhsUser)):
+            return lhsUser == rhsUser
+        case (.guest(let lhsUser), .guest(let rhsUser)):
+            return lhsUser == rhsUser
+        case (.error(let lhsError), .error(let rhsError)):
+            return lhsError.localizedDescription == rhsError
                 .localizedDescription
         default:
             return false
