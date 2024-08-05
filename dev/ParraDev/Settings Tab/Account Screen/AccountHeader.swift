@@ -10,8 +10,6 @@ import Parra
 import SwiftUI
 
 struct AccountHeader: View {
-    let user: ParraUser?
-
     var body: some View {
         VStack {
             ParraProfilePhotoWell(
@@ -19,7 +17,7 @@ struct AccountHeader: View {
             )
             .padding(.bottom, 6)
 
-            IdentityLabels(user: user)
+            IdentityLabels()
         }
         .padding()
         .frame(maxWidth: .infinity)

@@ -13,14 +13,12 @@ struct AccountView: View {
     @EnvironmentObject private var parraAuthState: ParraAuthState
     @State private var isSigningIn = false
 
-    var user: ParraUser? {
-        return parraAuthState.current.user
-    }
-
     var body: some View {
+        let user = parraAuthState.current.user
+
         List {
             Section {
-                AccountHeader(user: user)
+                AccountHeader()
             }
 
             Section {
