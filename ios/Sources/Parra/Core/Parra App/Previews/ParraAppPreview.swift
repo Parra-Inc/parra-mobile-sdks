@@ -81,9 +81,10 @@ public struct ParraAppPreview<Content, DelegateType>: View
             )
         )
 
-        if case .authenticated(let user) = authState.current {
+        switch authState.current {
+        case .authenticated(let user), .anonymous(let user):
             parra.user.current = user
-        } else {
+        default:
             parra.user.current = nil
         }
     }

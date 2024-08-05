@@ -109,28 +109,48 @@ final class OAuth2Service {
         timeout: TimeInterval
     ) async throws -> ParraUser.Credential.Token {
         let refreshToken = token.refreshToken
-
-        var data: [String: String] = [
-            "grant_type": "refresh_token",
-            "client_id": clientId
-        ]
-
-        // Will always exist, except for some anonymous auth flows.
-        if let refreshToken {
-            data["refresh_token"] = refreshToken
-        }
-
+        let endpoint = token.type.issuerEndpoint
         let tokenUrl = try createTokenUrl(
-            endpoint: token.type.issuerEndpoint
+            endpoint: endpoint
         )
 
-        let response: RefreshResponse = try await authServer
-            .performFormPostRequest(
+        if token.type == .user {
+            var data: [String: String] = [
+                "grant_type": "refresh_token",
+                "client_id": clientId
+            ]
+
+            if let refreshToken {
+                // Will always exist, except for some anonymous auth flows.
+                data["refresh_token"] = refreshToken
+            }
+
+            let response: RefreshResponse = try await authServer.performFormPostRequest(
                 to: tokenUrl,
                 data: data,
                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                 delegate: nil
             )
+
+            return ParraUser.Credential.Token(
+                accessToken: response.accessToken,
+                tokenType: response.tokenType,
+                expiresIn: response.expiresIn,
+                refreshToken: refreshToken,
+                type: token.type
+            )
+        }
+
+        let oauthType: OAuth2Service.AuthType = if token.type == .anonymous {
+            .anonymous(refreshToken: refreshToken)
+        } else {
+            .guest(refreshToken: refreshToken)
+        }
+
+        let response = try await authServer.refreshWithoutAccount(
+            endpoint: endpoint,
+            authType: oauthType
+        )
 
         return ParraUser.Credential.Token(
             accessToken: response.accessToken,

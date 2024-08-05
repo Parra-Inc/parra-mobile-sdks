@@ -17,6 +17,10 @@ public extension ParraUser.Credential {
             case anonymous
             case guest
 
+            internal var isAuthenticated: Bool {
+                return self == .user
+            }
+
             internal var issuerEndpoint: IssuerEndpoint {
                 switch self {
                 case .anonymous:

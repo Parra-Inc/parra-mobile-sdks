@@ -14,6 +14,7 @@ private let parraWebauthnSessionHeader = "PARRA-WEBAUTHN-SESSION"
 
 /// Intentionally separated from ``ApiResourceServer`` to avoid any of the auto
 /// inclusion of headers/etc from interferring with authentication standards.
+@MainActor
 final class AuthServer: Server {
     // MARK: - Lifecycle
 
@@ -121,12 +122,16 @@ final class AuthServer: Server {
         return data
     }
 
+
+    ///   - anonymousToken: If the user was previously logged in as an anonymous
+    ///   or guest user, pass their refresh token so the identities can be
+    ///   associated.
     func postLogin(
-        accessToken: String
+        accessToken: String,
+        anonymousToken: String?
     ) async throws -> UserInfoResponse {
-        // TODO: Access from where this is stored
         let requestData = LoginUserRequestBody(
-            anonymousToken: ""
+            anonymousToken: anonymousToken
         )
 
         let body = try configuration.jsonEncoder.encode(requestData)
@@ -343,6 +348,35 @@ final class AuthServer: Server {
 
         let (response, _): (
             OAuth2Service.TokenResponse,
+            HTTPURLResponse
+        ) = try await performUnauthenticatedRequest(
+            to: endpoint,
+            with: nil,
+            body: body
+        )
+
+        return response
+    }
+
+    func refreshWithoutAccount(
+        endpoint: IssuerEndpoint,
+        authType: OAuth2Service.AuthType
+    ) async throws -> OAuth2Service.RefreshResponse {
+        let data: [String: String] = switch authType {
+        case .anonymous(let refreshToken), .guest(let refreshToken):
+            if let refreshToken {
+                ["token": refreshToken]
+            } else {
+                [:]
+            }
+        default:
+            [:]
+        }
+
+        let body = try JSONEncoder.parraWebauthEncoder.encode(data)
+
+        let (response, _): (
+            OAuth2Service.RefreshResponse,
             HTTPURLResponse
         ) = try await performUnauthenticatedRequest(
             to: endpoint,

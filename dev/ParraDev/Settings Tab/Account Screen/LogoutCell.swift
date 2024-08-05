@@ -15,14 +15,17 @@ struct LogoutCell: View {
 
     @EnvironmentObject private var themeManager: ParraThemeManager
 
+    @ViewBuilder
     var body: some View {
-        Button(action: {
-            Task {
-                await parra.auth.logout()
+        Button(
+            action: {
+                Task {
+                    await parra.auth.logout()
 
-                presentationMode.wrappedValue.dismiss()
+                    presentationMode.wrappedValue.dismiss()
+                }
             }
-        }) {
+        ) {
             Label(
                 title: { Text("Logout") },
                 icon: {

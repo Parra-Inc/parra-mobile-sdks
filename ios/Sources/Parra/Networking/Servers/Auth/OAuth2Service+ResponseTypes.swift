@@ -11,7 +11,7 @@ import Foundation
 extension OAuth2Service {
     struct TokenResponse: Codable {
         let accessToken: String
-        let scope: String
+        let scope: String?
         let tokenType: String
         let expiresIn: TimeInterval
         let refreshToken: String

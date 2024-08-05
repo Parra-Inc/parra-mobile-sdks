@@ -476,8 +476,23 @@ final class AuthService {
         with oauthToken: ParraUser.Credential.Token
     ) async -> ParraAuthResult {
         do {
+            // Convert anon users by passing their refresh token along with the
+            // login request.
+            let anonymousToken: String? = if let _cachedCredential, case let .oauth2(
+                token
+            ) = _cachedCredential {
+                if token.type.isAuthenticated {
+                    nil
+                } else {
+                    token.refreshToken
+                }
+            } else {
+                nil
+            }
+
             let response = try await authServer.postLogin(
-                accessToken: oauthToken.accessToken
+                accessToken: oauthToken.accessToken,
+                anonymousToken: anonymousToken
             )
 
             let user = ParraUser(

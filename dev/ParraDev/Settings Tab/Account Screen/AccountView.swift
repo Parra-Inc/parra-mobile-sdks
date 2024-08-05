@@ -15,6 +15,7 @@ struct AccountView: View {
     @State private var displayName = ""
     @State private var email = ""
     @State private var identities: [Identity] = []
+    @State private var isSigningIn = false
 
     var body: some View {
         List {
@@ -35,29 +36,46 @@ struct AccountView: View {
                 }
             }
 
-            Section("Login Methods") {
-                ForEach(identities) { identity in
-                    HStack {
-                        Text(identity.name)
+            // Anonymous users can't sign out, change password, etc.
+            if let user = parra.user.current {
+                if user.info.isAnonymous {
 
-                        Spacer()
+                    Section {
+                        Button(
+                            action: {
+                                isSigningIn = true
+                            }
+                        ) {
+                            Text("Link an email")
+                        }
+                    }
+                    .presentParraSignInView(isPresented: $isSigningIn)
+                } else {
+                    Section("Login Methods") {
+                        ForEach(identities) { identity in
+                            HStack {
+                                Text(identity.name)
 
-                        Text(identity.value ?? "")
-                            .foregroundStyle(.gray)
+                                Spacer()
+
+                                Text(identity.value ?? "")
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                    }
+
+                    Section("Security") {
+                        ChangePasswordCell()
+                    }
+
+                    Section {
+                        LogoutCell()
+                    }
+
+                    Section("Danger Zone") {
+                        DeleteAccountCell()
                     }
                 }
-            }
-
-            Section("Security") {
-                ChangePasswordCell()
-            }
-
-            Section {
-                LogoutCell()
-            }
-
-            Section("Danger Zone") {
-                DeleteAccountCell()
             }
         }
         .navigationTitle("Account")
