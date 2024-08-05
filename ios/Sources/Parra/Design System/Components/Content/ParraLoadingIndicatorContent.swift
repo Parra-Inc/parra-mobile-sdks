@@ -26,4 +26,16 @@ public struct ParraLoadingIndicatorContent: Hashable, Equatable {
     public let title: LabelContent
     public let subtitle: LabelContent?
     public private(set) var cancel: TextButtonContent?
+
+    public static let `default` = ParraLoadingIndicatorContent(
+        title: LabelContent(text: "Loading..."),
+        subtitle: nil,
+        cancel: nil
+    )
+
+    public static let `defaultWithCancel` = ParraLoadingIndicatorContent(
+        title: LabelContent(text: "Loading..."),
+        subtitle: nil,
+        cancel: .init(text: "Cancel")
+    )
 }

@@ -174,6 +174,15 @@ final class AuthService {
 
         logger.debug("Logging out")
 
+        modalScreenManager
+            .presentLoadingIndicatorModal(
+                content: .init(
+                    title: LabelContent(text: "Logging out..."),
+                    subtitle: nil,
+                    cancel: nil
+                )
+            )
+
         do {
             // Invalidate the current login
 
@@ -188,6 +197,10 @@ final class AuthService {
                 throw ParraError.message("Logout didn't produce valid token.")
             }
 
+            logger.debug("Logout resulted in unauthenticated account with type", [
+                "type": oauthToken.type.description
+            ])
+
             // Login as either anon or guest depending on config.
             let result = await _completeLogin(
                 with: oauthToken
@@ -199,6 +212,8 @@ final class AuthService {
 
             await applyUserUpdate(.error(error))
         }
+
+        modalScreenManager.dismissLoadingIndicatorModal()
     }
 
     func forceLogout(
