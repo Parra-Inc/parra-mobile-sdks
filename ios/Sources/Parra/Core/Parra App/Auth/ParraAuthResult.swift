@@ -9,6 +9,15 @@
 import SwiftUI
 
 public enum ParraAuthResult: Equatable, CustomStringConvertible {
+    public var user: ParraUser? {
+        switch self {
+        case .authenticated(let user), .anonymous(let user):
+            return user
+        case .guest, .error, .undetermined:
+            return nil
+        }
+    }
+
     case authenticated(ParraUser) // unauthenticated == any other case
     case anonymous(ParraUser)
     /// Only available when anonymous auth is disabled for the tenant.

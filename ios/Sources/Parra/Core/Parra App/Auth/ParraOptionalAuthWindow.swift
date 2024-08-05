@@ -41,7 +41,7 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
     public func authenticatedContent(
         for user: ParraUser
     ) -> Content {
-        return content(.authenticated(user))
+        return content(parraAuthState.current)
     }
 
     public func unauthenticatedContent() -> some View {

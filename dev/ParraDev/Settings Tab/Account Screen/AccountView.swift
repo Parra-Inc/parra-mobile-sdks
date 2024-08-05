@@ -10,17 +10,17 @@ import Parra
 import SwiftUI
 
 struct AccountView: View {
-    @Environment(\.parra) private var parra
-
-    @State private var displayName = ""
-    @State private var email = ""
-    @State private var identities: [Identity] = []
+    @EnvironmentObject private var parraAuthState: ParraAuthState
     @State private var isSigningIn = false
+
+    var user: ParraUser? {
+        return parraAuthState.current.user
+    }
 
     var body: some View {
         List {
             Section {
-                AccountHeader()
+                AccountHeader(user: user)
             }
 
             Section {
@@ -30,16 +30,15 @@ struct AccountView: View {
                     HStack {
                         Text("Edit Profile")
                         Spacer()
-                        Text(displayName)
+                        Text(user?.info.displayName ?? "")
                             .foregroundStyle(.gray)
                     }
                 }
             }
 
             // Anonymous users can't sign out, change password, etc.
-            if let user = parra.user.current {
+            if let user {
                 if user.info.isAnonymous {
-
                     Section {
                         Button(
                             action: {
@@ -52,7 +51,7 @@ struct AccountView: View {
                     .presentParraSignInView(isPresented: $isSigningIn)
                 } else {
                     Section("Login Methods") {
-                        ForEach(identities) { identity in
+                        ForEach(user.info.identities) { identity in
                             HStack {
                                 Text(identity.name)
 
@@ -79,12 +78,6 @@ struct AccountView: View {
             }
         }
         .navigationTitle("Account")
-        .onReceive(parra.user.$current) { user in
-            displayName = user?.info.displayName ?? ""
-            email = user?.info.email ?? ""
-
-            identities = user?.info.identities ?? []
-        }
     }
 }
 

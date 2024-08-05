@@ -80,13 +80,6 @@ public struct ParraAppPreview<Content, DelegateType>: View
                 notificationCenter: parraInternal.notificationCenter
             )
         )
-
-        switch authState.current {
-        case .authenticated(let user), .anonymous(let user):
-            parra.user.current = user
-        default:
-            parra.user.current = nil
-        }
     }
 
     // MARK: - Public

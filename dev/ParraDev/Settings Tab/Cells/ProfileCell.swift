@@ -14,31 +14,22 @@ public struct ProfileCell: View {
     @EnvironmentObject private var parraAuthState: ParraAuthState
 
     public var body: some View {
-        switch parraAuthState.current {
-        case .authenticated, .anonymous:
-            AuthenticatedProfileInfoView()
-        case .error, .guest:
+        if let user = parraAuthState.current.user {
+            AuthenticatedProfileInfoView(user: user)
+        } else {
             UnauthenticatedProfileInfoView()
-        case .undetermined:
-            EmptyView()
         }
     }
 }
 
 struct IdentityLabels: View {
-    @Environment(\.parra) private var parra
-    @State private var identityNames: [String] = []
+    let user: ParraUser?
 
     var body: some View {
-        labels
-            .onReceive(parra.user.$current) { user in
-                identityNames = user?.info.identityNames ?? []
-            }
-    }
+        let identityNames = user?.info.identityNames ?? []
 
-    @ViewBuilder private var labels: some View {
         if identityNames.isEmpty {
-            Text(parra.user.current?.info.displayName ?? "Anonymous")
+            Text(user?.info.displayName ?? "Anonymous")
                 .font(.headline)
         } else if identityNames.count == 1 {
             Text(identityNames[0])
@@ -55,9 +46,11 @@ struct IdentityLabels: View {
 }
 
 struct AuthenticatedProfileInfoView: View {
+    let user: ParraUser
+
     @ViewBuilder var labels: some View {
         VStack(alignment: .leading) {
-            IdentityLabels()
+            IdentityLabels(user: user)
         }
     }
 

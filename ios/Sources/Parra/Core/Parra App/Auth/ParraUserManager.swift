@@ -17,10 +17,6 @@ public final class ParraUserManager: ObservableObject {
 
     // MARK: - Public
 
-    /// An object representing the currently logged in user, if one exists.
-    /// This is only relevant to Parra Auth.
-    @Published public internal(set) var current: ParraUser?
-
     /// Updates the provided personal info on the current user. Any fields that
     /// are unset will be removed from the user.
     public func updatePersonalInfo(
@@ -28,10 +24,6 @@ public final class ParraUserManager: ObservableObject {
         firstName: String? = nil,
         lastName: String? = nil
     ) async throws {
-        guard current != nil else {
-            throw ParraError.unauthenticated
-        }
-
         let updated = try await parraInternal.api.updateUserInfo(
             name: name,
             firstName: firstName,
@@ -39,8 +31,6 @@ public final class ParraUserManager: ObservableObject {
         )
 
         try await parraInternal.authService.applyUserInfoUpdate(updated)
-
-        objectWillChange.send()
     }
 
     // MARK: - Internal

@@ -25,36 +25,41 @@ struct ParraChangePasswordModal: View {
     let complete: () -> Void
 
     @ViewBuilder var body: some View {
-        if let email = parra.user.current?.info.email {
-            let params = ParraAuthDefaultForgotPasswordScreen.Params(
-                identity: email,
-                codeLength: 6,
-                sendConfirmationCode: {
-                    let responseCode = try await parra.parraInternal.authService
-                        .forgotPassword(
-                            identity: email,
-                            identityType: .email
+        switch parraAuthState.current {
+        case .authenticated(let user), .anonymous(let user):
+            if let email = user.info.email {
+                let params = ParraAuthDefaultForgotPasswordScreen.Params(
+                    identity: email,
+                    codeLength: 6,
+                    sendConfirmationCode: {
+                        let responseCode = try await parra.parraInternal.authService
+                            .forgotPassword(
+                                identity: email,
+                                identityType: .email
+                            )
+
+                        // received rate limit proxied through sms/email service
+                        return ParraForgotPasswordResponse(
+                            rateLimited: responseCode == 429
                         )
+                    },
+                    updatePassword: { code, newPassword in
+                        try await parra.parraInternal.authService.resetPassword(
+                            code: code,
+                            password: newPassword
+                        )
+                    },
+                    complete: complete
+                )
 
-                    // received rate limit proxied through sms/email service
-                    return ParraForgotPasswordResponse(
-                        rateLimited: responseCode == 429
-                    )
-                },
-                updatePassword: { code, newPassword in
-                    try await parra.parraInternal.authService.resetPassword(
-                        code: code,
-                        password: newPassword
-                    )
-                },
-                complete: complete
-            )
-
-            ParraAuthDefaultForgotPasswordScreen(
-                params: params,
-                config: config
-            )
-        } else {
+                ParraAuthDefaultForgotPasswordScreen(
+                    params: params,
+                    config: config
+                )
+            } else {
+                EmptyView()
+            }
+        default:
             EmptyView()
         }
     }
@@ -63,6 +68,7 @@ struct ParraChangePasswordModal: View {
 
     @Environment(\.parra) private var parra
     @EnvironmentObject private var appInfo: ParraAppInfo
+    @EnvironmentObject private var parraAuthState: ParraAuthState
 }
 
 public extension View {

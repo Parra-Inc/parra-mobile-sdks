@@ -109,6 +109,11 @@ class ParraInternal {
         from oldAuthResult: ParraAuthResult,
         to authResult: ParraAuthResult
     ) async {
+        logger.debug("Auth state did change", [
+            "from": oldAuthResult.description,
+            "to": authResult.description
+        ])
+
         switch (oldAuthResult, authResult) {
         case (_, .anonymous(let user)), (_, .authenticated(let user)):
             if !oldAuthResult.hasUser {
@@ -119,14 +124,14 @@ class ParraInternal {
         case (.anonymous(let user), _), (.authenticated(let user), _):
             // Changes from logged in to not logged in
             handleLogout(for: user)
-        case (_, .undetermined):
-            Parra.default.user.current = nil
 
+        case (_, .undetermined):
             assertionFailure()
-            
+
             // shouldn't ever change _to_ this.
         default:
             // TODO: Should there be a transition into guest mode?
+            
             break
         }
     }
@@ -159,9 +164,9 @@ class ParraInternal {
     private func handleLogout(
         for user: ParraUser
     ) {
-        sessionManager.endSession()
+        logger.debug("Handle logout flow")
 
-        Parra.default.user.current = nil
+        sessionManager.endSession()
 
         removeEventObservers()
 
@@ -176,9 +181,7 @@ class ParraInternal {
     private func handleLogin(
         for user: ParraUser
     ) async {
-        // Set the user immediately so it can be used within services
-        // invoked below.
-        Parra.default.user.current = user
+        logger.debug("Handle login flow")
 
         var updatedUser = user
 
@@ -195,9 +198,6 @@ class ParraInternal {
         } catch {
             logger.error("Failed to refresh user info on app launch", error)
         }
-
-        // Update the user again after refreshing over the network.
-        Parra.default.user.current = updatedUser
 
         addEventObservers()
 
