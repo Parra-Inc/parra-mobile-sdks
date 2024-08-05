@@ -12,10 +12,21 @@ import Foundation
 //              info/credential objects are unable to be parsed on app launch.
 public extension ParraUser.Credential {
     struct Token: Codable, Equatable, Hashable, Sendable {
-        public enum TokenType: Codable, Equatable, Hashable, Sendable {
+        public enum TokenType: Codable, Equatable, Hashable, Sendable, CustomStringConvertible {
             case user
             case anonymous
             case guest
+
+            public var description: String {
+                switch self {
+                case .anonymous:
+                    return "anonymous"
+                case .guest:
+                    return "guest"
+                case .user:
+                    return "user"
+                }
+            }
 
             internal var isAuthenticated: Bool {
                 return self == .user

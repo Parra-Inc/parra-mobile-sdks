@@ -393,7 +393,11 @@ final class AuthService {
                 info: response.user
             )
 
-            await applyUserUpdate(.authenticated(user))
+            if user.info.isAnonymous {
+                await applyUserUpdate(.anonymous(user))
+            } else {
+                await applyUserUpdate(.authenticated(user))
+            }
         }
     }
 
@@ -412,7 +416,11 @@ final class AuthService {
             info: info
         )
 
-        await applyUserUpdate(.authenticated(user))
+        if user.info.isAnonymous {
+            await applyUserUpdate(.anonymous(user))
+        } else {
+            await applyUserUpdate(.authenticated(user))
+        }
 
         return user
     }
@@ -476,6 +484,10 @@ final class AuthService {
             _cachedCredential = nil
         }
 
+        logger.debug("User update applied", [
+            "broadcasting": String(shouldBroadcast)
+        ])
+
         if shouldBroadcast {
             ParraNotificationCenter.default.post(
                 name: Parra.authenticationStateDidChangeNotification,
@@ -515,7 +527,11 @@ final class AuthService {
                 info: response.user
             )
 
-            return .authenticated(user)
+            if response.user.isAnonymous {
+                return .anonymous(user)
+            } else {
+                return .authenticated(user)
+            }
         } catch {
             logger.error("Failed to login with oauth token", error)
 
