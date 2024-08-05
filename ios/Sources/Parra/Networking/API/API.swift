@@ -33,14 +33,16 @@ final class API {
         _ endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
         cachePolicy: URLRequest.CachePolicy? = nil,
-        body: some Encodable = EmptyRequestObject()
+        body: some Encodable = EmptyRequestObject(),
+        timeout: TimeInterval? = nil
     ) async throws -> Response where Response: Codable {
         let response: AuthenticatedRequestResult<Response> =
             await apiResourceServer.hitApiEndpoint(
                 endpoint: endpoint,
                 queryItems: queryItems,
                 cachePolicy: cachePolicy,
-                body: body
+                body: body,
+                timeout: timeout
             )
 
         switch response.result {
@@ -55,14 +57,16 @@ final class API {
         _ endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
         cachePolicy: URLRequest.CachePolicy? = nil,
-        formFields: [MultipartFormField]
+        formFields: [MultipartFormField],
+        timeout: TimeInterval? = nil
     ) async throws -> Response where Response: Codable {
         let response: AuthenticatedRequestResult<Response> =
             await apiResourceServer.hitUploadEndpoint(
                 endpoint: endpoint,
                 formFields: formFields,
                 queryItems: queryItems,
-                cachePolicy: cachePolicy
+                cachePolicy: cachePolicy,
+                timeout: timeout
             )
 
         switch response.result {

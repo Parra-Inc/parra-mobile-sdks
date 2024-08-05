@@ -170,15 +170,6 @@ final class AuthServer: Server {
         )
     }
 
-    func postLogout(
-        accessToken: String
-    ) async throws {
-        let _: EmptyResponseObject = try await performOptionalAuthRequest(
-            to: .postLogout,
-            with: accessToken
-        )
-    }
-
     func postAuthChallenges(
         requestData: AuthChallengesRequestBody
     ) async throws -> AuthChallengeResponse {
@@ -287,17 +278,6 @@ final class AuthServer: Server {
         )
 
         return data
-    }
-
-    func getUserInfo(
-        accessToken: String,
-        timeout: TimeInterval? = nil
-    ) async throws -> UserInfoResponse {
-        return try await performOptionalAuthRequest(
-            to: .getUserInfo,
-            with: accessToken,
-            timeout: timeout
-        )
     }
 
     func getAppInfo(

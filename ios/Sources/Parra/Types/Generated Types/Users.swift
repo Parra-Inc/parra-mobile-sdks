@@ -354,6 +354,41 @@ public struct LoginUserRequestBody: Codable, Equatable, Hashable {
     }
 }
 
+public struct AuthToken: Codable, Equatable, Hashable {
+    public let tokenType: String
+    public let accessToken: String
+    public let expiresIn: TimeInterval?
+    public let refreshToken: String?
+    public let scope: String?
+
+    public init(
+        tokenType: String,
+        accessToken: String,
+        expiresIn: TimeInterval?,
+        refreshToken: String?,
+        scope: String?
+    ) {
+        self.tokenType = tokenType
+        self.accessToken = accessToken
+        self.expiresIn = expiresIn
+        self.refreshToken = refreshToken
+        self.scope = scope
+    }
+}
+
+public struct AuthLogoutResponseBody: Codable, Equatable, Hashable {
+    public let anonymousToken: AuthToken?
+    public let guestToken: AuthToken?
+
+    public init(
+        anonymousToken: AuthToken?,
+        guestToken: AuthToken?
+    ) {
+        self.anonymousToken = anonymousToken
+        self.guestToken = guestToken
+    }
+}
+
 struct CreateUserRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 

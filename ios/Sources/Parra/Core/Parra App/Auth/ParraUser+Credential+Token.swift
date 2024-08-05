@@ -33,6 +33,21 @@ public extension ParraUser.Credential {
         // MARK: - Lifecycle
 
         init(
+            authToken: AuthToken,
+            type: TokenType
+        ) {
+            self.accessToken = authToken.accessToken
+            self.tokenType = authToken.tokenType
+            self.expiresAt =  if let expiresIn = authToken.expiresIn {
+                Date.now.addingTimeInterval(expiresIn)
+            } else {
+                nil
+            }
+            self.refreshToken = authToken.refreshToken
+            self.type = type
+        }
+
+        init(
             accessToken: String,
             tokenType: String,
             expiresAt: Date,
@@ -64,7 +79,7 @@ public extension ParraUser.Credential {
 
         public let accessToken: String
         public let tokenType: String
-        public let expiresAt: Date
+        public let expiresAt: Date?
         /// Refresh token can only be nil under anonyomus auth during the first
         /// request to get a token. Subsequent requests will send this original
         /// token in their body and will not receive a new one in their
@@ -73,11 +88,19 @@ public extension ParraUser.Credential {
         public let type: TokenType
 
         public var isExpired: Bool {
-            Date.now > expiresAt
+            guard let expiresAt else {
+                return false
+            }
+
+            return Date.now > expiresAt
         }
 
         public var isNearlyExpired: Bool {
-            Date.now > expiresAt.addingTimeInterval(-300)
+            guard let expiresAt else {
+                return false
+            }
+
+            return Date.now > expiresAt.addingTimeInterval(-300)
         }
     }
 }

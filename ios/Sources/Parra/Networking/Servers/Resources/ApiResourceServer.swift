@@ -46,14 +46,16 @@ final class ApiResourceServer: Server {
         endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
-        cachePolicy: URLRequest.CachePolicy? = nil
+        cachePolicy: URLRequest.CachePolicy? = nil,
+        timeout: TimeInterval? = nil
     ) async -> AuthenticatedRequestResult<T> {
         return await hitApiEndpoint(
             endpoint: endpoint,
             queryItems: queryItems,
             config: config,
             cachePolicy: cachePolicy,
-            body: EmptyRequestObject()
+            body: EmptyRequestObject(),
+            timeout: timeout
         )
     }
 
@@ -62,7 +64,8 @@ final class ApiResourceServer: Server {
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
         cachePolicy: URLRequest.CachePolicy? = nil,
-        body: some Encodable
+        body: some Encodable,
+        timeout: TimeInterval? = nil
     ) async -> AuthenticatedRequestResult<T> {
         logger
             .trace(
@@ -130,7 +133,8 @@ final class ApiResourceServer: Server {
         formFields: [MultipartFormField],
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
-        cachePolicy: URLRequest.CachePolicy? = nil
+        cachePolicy: URLRequest.CachePolicy? = nil,
+        timeout: TimeInterval? = nil
     ) async -> AuthenticatedRequestResult<T> {
         logger
             .trace(
@@ -142,7 +146,8 @@ final class ApiResourceServer: Server {
                 to: endpoint,
                 queryItems: queryItems,
                 config: config,
-                cachePolicy: cachePolicy
+                cachePolicy: cachePolicy,
+                timeout: timeout
             )
 
             let accessToken = try await authService

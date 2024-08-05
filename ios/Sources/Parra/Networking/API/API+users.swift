@@ -40,6 +40,12 @@ extension API {
         )
     }
 
+    func getUserInfo(
+        timeout: TimeInterval? = nil
+    ) async throws -> UserInfoResponse {
+        return try await hitEndpoint(.getUserInfo, timeout: timeout)
+    }
+
     func updateUserInfo(
         name: String? = nil,
         firstName: String? = nil,
@@ -59,6 +65,13 @@ extension API {
             .updateUserInfo(userId: userInfo.id),
             cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
             body: requestBody
+        )
+    }
+
+    func logout() async throws -> AuthLogoutResponseBody {
+        return try await hitEndpoint(
+            .postLogout,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
         )
     }
 

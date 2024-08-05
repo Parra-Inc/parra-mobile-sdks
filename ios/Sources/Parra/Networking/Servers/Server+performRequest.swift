@@ -19,7 +19,8 @@ extension Server {
         queryItems: [String: String] = [:],
         config: RequestConfig = .default,
         cachePolicy: URLRequest.CachePolicy? = nil,
-        body: Data? = nil
+        body: Data? = nil,
+        timeout: TimeInterval? = nil
     ) throws -> URLRequest {
         let method = endpoint.method
 
@@ -36,7 +37,8 @@ extension Server {
         var request = try URLRequest(
             with: queryItems,
             url: url,
-            cachePolicy: cachePolicy
+            cachePolicy: cachePolicy,
+            timeout: timeout
         )
 
         request.httpMethod = method.rawValue
