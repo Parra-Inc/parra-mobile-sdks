@@ -12,6 +12,7 @@ private let logger = Logger(category: "ApiResourceServer")
 
 typealias NetworkCompletionHandler<T> = (Result<T, ParraError>) -> Void
 
+@MainActor
 final class ApiResourceServer: Server {
     // MARK: - Lifecycle
 

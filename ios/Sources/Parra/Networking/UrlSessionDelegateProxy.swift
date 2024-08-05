@@ -8,7 +8,7 @@
 
 import Foundation
 
-class UrlSessionDelegateProxy: NSObject, URLSessionTaskDelegate {
+actor UrlSessionDelegateProxy: NSObject, URLSessionTaskDelegate {
     // MARK: - Lifecycle
 
     init(delegate: UrlSessionDelegate) {
@@ -21,7 +21,7 @@ class UrlSessionDelegateProxy: NSObject, URLSessionTaskDelegate {
         _ session: URLSession,
         task: URLSessionTask,
         didFinishCollecting metrics: URLSessionTaskMetrics
-    ) {
+    ) async {
         Task {
             await delegate?.urlSession(
                 session,

@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 final class ExternalResourceServer: Server {
     // MARK: - Lifecycle
 

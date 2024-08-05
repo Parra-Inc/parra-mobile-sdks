@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 protocol Server {
     var configuration: ServerConfiguration { get }
     var appState: ParraAppState { get }
