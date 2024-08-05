@@ -199,7 +199,12 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     size: .large,
                     isMaxWidth: true
                 ),
-                content: continueButtonContent
+                content: continueButtonContent,
+                localAttributes: ParraAttributes.ContainedButton(
+                    normal: ParraAttributes.ContainedButton.StatefulAttributes(
+                        padding: .custom(.padding(top: 8))
+                    )
+                )
             ) {
                 triggerVerifyCode()
             }
@@ -244,7 +249,12 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     size: .large,
                     isMaxWidth: true
                 ),
-                content: continueButtonContent
+                content: continueButtonContent,
+                localAttributes: ParraAttributes.ContainedButton(
+                    normal: ParraAttributes.ContainedButton.StatefulAttributes(
+                        padding: .custom(.padding(top: 8))
+                    )
+                )
             ) {
                 triggerCodeSend()
             }
