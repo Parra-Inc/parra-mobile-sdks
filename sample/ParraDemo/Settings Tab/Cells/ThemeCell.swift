@@ -2,7 +2,7 @@
 //  ThemeCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/01/2024.
+//  Bootstrapped with ❤️ by Parra on 08/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct ThemeCell: View {
-    // MARK: - Internal
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     var body: some View {
         Picker(
@@ -28,11 +28,6 @@ struct ThemeCell: View {
             }
         )
     }
-
-    // MARK: - Private
-
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @Environment(\.parra) private var parra
 }
 
 #Preview {

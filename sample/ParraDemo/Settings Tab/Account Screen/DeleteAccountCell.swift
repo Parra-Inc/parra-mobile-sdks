@@ -2,7 +2,7 @@
 //  DeleteAccountCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/01/2024.
+//  Bootstrapped with ❤️ by Parra on 08/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -10,7 +10,8 @@ import Parra
 import SwiftUI
 
 struct DeleteAccountCell: View {
-    // MARK: - Internal
+    @Environment(\.parra) private var parra
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     var body: some View {
         Button(action: {
@@ -25,11 +26,6 @@ struct DeleteAccountCell: View {
         }
         .foregroundStyle(themeManager.theme.palette.error)
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeManager: ParraThemeManager
 }
 
 #Preview {

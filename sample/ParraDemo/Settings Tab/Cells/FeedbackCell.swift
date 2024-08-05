@@ -2,7 +2,7 @@
 //  FeedbackCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/01/2024.
+//  Bootstrapped with ❤️ by Parra on 08/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -19,7 +19,11 @@ import SwiftUI
 /// 4. Use the `presentParraFeedbackForm` modifier and pass the form state as a
 ///    parameter. When it becomes non nil, the form is presented.
 struct FeedbackCell: View {
-    // MARK: - Internal
+    @Environment(\.parra) private var parra
+
+    @State private var formData: ParraFeedbackForm? // #3
+    @State private var errorMessage: String?
+    @State private var isLoading = false
 
     var body: some View {
         Button(action: {
@@ -42,15 +46,6 @@ struct FeedbackCell: View {
         .disabled(isLoading)
         .presentParraFeedbackForm(with: $formData) // #4
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @State private var formData: ParraFeedbackForm? // #3
-    @State private var errorMessage: String?
-    @State private var isLoading = false
-
-    @EnvironmentObject private var themeManager: ParraThemeManager
 
     private func loadFeedbackForm(
         with formId: String

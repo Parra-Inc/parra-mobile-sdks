@@ -2,7 +2,7 @@
 //  EditProfileView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/01/2024.
+//  Bootstrapped with ❤️ by Parra on 08/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -10,7 +10,19 @@ import Parra
 import SwiftUI
 
 struct EditProfileView: View {
-    // MARK: - Internal
+    @Environment(\.parra) private var parra
+    @EnvironmentObject private var themeManager: ParraThemeManager
+    @EnvironmentObject private var parraAuthState: ParraAuthState
+
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
+    @State private var displayName: String = ""
+    @State private var isLoading = false
+    @State private var isShowingSuccess = false
+
+    var user: ParraUser? {
+        return parraAuthState.current.user
+    }
 
     var body: some View {
         VStack {
@@ -86,24 +98,13 @@ struct EditProfileView: View {
         .background(themeManager.theme.palette.secondaryBackground)
         .navigationTitle("Edit Profile")
         .onAppear {
-            let userInfo = parra.user.current?.info
+            let userInfo = user?.info
 
             firstName = userInfo?.firstName ?? ""
             lastName = userInfo?.lastName ?? ""
             displayName = userInfo?.name ?? ""
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeManager: ParraThemeManager
-
-    @State private var firstName: String = ""
-    @State private var lastName: String = ""
-    @State private var displayName: String = ""
-    @State private var isLoading = false
-    @State private var isShowingSuccess = false
 
     private func saveChanges() {
         if isLoading {

@@ -2,7 +2,7 @@
 //  RoadmapCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/01/2024.
+//  Bootstrapped with ❤️ by Parra on 08/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -19,7 +19,11 @@ import SwiftUI
 ///    `isPresented` to `true`. The roadmap will be fetched and
 ///    presented automatically.
 struct RoadmapCell: View {
-    // MARK: - Internal
+    @Environment(\.parra) private var parra
+
+    @State private var isLoading = false
+    @State private var errorMessage: String?
+    @State private var roadmapInfo: ParraRoadmapInfo?
 
     var body: some View {
         Button(action: {
@@ -42,15 +46,6 @@ struct RoadmapCell: View {
         .disabled(isLoading)
         .presentParraRoadmap(with: $roadmapInfo)
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @State private var isLoading = false
-    @State private var errorMessage: String?
-    @State private var roadmapInfo: ParraRoadmapInfo?
-
-    @EnvironmentObject private var themeManager: ParraThemeManager
 
     private func loadRoadmap() {
         isLoading = true

@@ -2,7 +2,7 @@
 //  AccountView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/01/2024.
+//  Bootstrapped with ❤️ by Parra on 08/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -10,11 +10,12 @@ import Parra
 import SwiftUI
 
 struct AccountView: View {
-    // MARK: - Internal
-
-    @Environment(\.parra) var parra
+    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @State private var isSigningIn = false
 
     var body: some View {
+        let user = parraAuthState.current.user
+
         List {
             Section {
                 AccountHeader()
@@ -27,44 +28,55 @@ struct AccountView: View {
                     HStack {
                         Text("Edit Profile")
                         Spacer()
-                        Text(displayName)
+                        Text(user?.info.displayName ?? "")
                             .foregroundStyle(.gray)
                     }
                 }
             }
 
-            Section("Login Methods") {
-                HStack {
-                    Text("Email")
-                    Spacer()
-                    Text(email)
-                        .foregroundStyle(.gray)
+            // Anonymous users can't sign out, change password, etc.
+            if let user {
+                if user.info.isAnonymous {
+                    Section {
+                        Button(
+                            action: {
+                                isSigningIn = true
+                            }
+                        ) {
+                            Text("Link an email")
+                        }
+                    }
+                    .presentParraSignInView(isPresented: $isSigningIn)
+                } else {
+                    Section("Login Methods") {
+                        ForEach(user.info.identities) { identity in
+                            HStack {
+                                Text(identity.name)
+
+                                Spacer()
+
+                                Text(identity.value ?? "")
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                    }
+
+                    Section("Security") {
+                        ChangePasswordCell()
+                    }
+
+                    Section {
+                        LogoutCell()
+                    }
+
+                    Section("Danger Zone") {
+                        DeleteAccountCell()
+                    }
                 }
-            }
-
-            Section("Security") {
-                ChangePasswordCell()
-            }
-
-            Section {
-                LogoutCell()
-            }
-
-            Section("Danger Zone") {
-                DeleteAccountCell()
             }
         }
         .navigationTitle("Account")
-        .onReceive(parra.user.$current) { user in
-            displayName = user?.info.displayName ?? ""
-            email = user?.info.email ?? ""
-        }
     }
-
-    // MARK: - Private
-
-    @State private var displayName = ""
-    @State private var email = ""
 }
 
 #Preview {

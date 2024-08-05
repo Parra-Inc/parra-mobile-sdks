@@ -2,7 +2,7 @@
 //  ChangelogCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/01/2024.
+//  Bootstrapped with ❤️ by Parra on 08/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -19,7 +19,12 @@ import SwiftUI
 ///    `isPresented` to `true`. The changelog will be fetched and
 ///    presented automatically.
 struct ChangelogCell: View {
-    // MARK: - Internal
+    @Environment(\.parra) private var parra
+    @EnvironmentObject private var appInfo: ParraAppInfo
+
+    @State private var isLoading = false
+    @State private var errorMessage: String?
+    @State private var changelogInfo: ParraChangelogInfo?
 
     var showChangelog: Bool {
         guard let newInstalledVersionInfo = appInfo.newInstalledVersionInfo else {
@@ -52,16 +57,6 @@ struct ChangelogCell: View {
             .presentParraChangelog(with: $changelogInfo)
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @State private var isLoading = false
-    @State private var errorMessage: String?
-    @State private var changelogInfo: ParraChangelogInfo?
-
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var appInfo: ParraAppInfo
 
     private func loadRoadmap() {
         isLoading = true
