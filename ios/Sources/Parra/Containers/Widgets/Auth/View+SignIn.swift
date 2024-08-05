@@ -32,7 +32,7 @@ struct ParraSignInModal: View {
         .onChange(
             of: parraAuthState.current
         ) { oldValue, newValue in
-            if !oldValue.hasUser && newValue.hasUser {
+            if !oldValue.isLoggedIn && newValue.isLoggedIn {
                 complete()
             }
         }
