@@ -27,6 +27,8 @@ extension AuthService {
         presentationMode: PasskeyPresentationMode,
         using appInfo: ParraAppInfo
     ) async throws {
+        logger.debug("Login with passkey")
+
         let result = try await createPublicKeyCredentialAssertionRequest(
             for: username
         )
@@ -42,6 +44,8 @@ extension AuthService {
     func registerWithPasskey(
         username: String
     ) async throws {
+        logger.debug("Register with passkey")
+
         let result = try await createPublicKeyCredentialRegistrationRequest(
             for: username
         )
@@ -112,6 +116,8 @@ extension AuthService {
     }
 
     func cancelPasskeyRequests() {
+        logger.debug("cancel passkey requests")
+
         // Cancel active requests by calling cancel on the authorization
         // controllers they are attached to. This will cause the authorization
         // delegate to fire an error -> cancelled, which will resolve the
