@@ -10,16 +10,17 @@ import Parra
 import SwiftUI
 
 struct AccountView: View {
-    @Environment(\.parra) private var parra
+    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @State private var isSigningIn = false
 
-    @State private var displayName = ""
-    @State private var email = ""
-    @State private var identities: [Identity] = []
+    var user: ParraUser? {
+        return parraAuthState.current.user
+    }
 
     var body: some View {
         List {
             Section {
-                AccountHeader()
+                AccountHeader(user: user)
             }
 
             Section {
@@ -29,44 +30,54 @@ struct AccountView: View {
                     HStack {
                         Text("Edit Profile")
                         Spacer()
-                        Text(displayName)
+                        Text(user?.info.displayName ?? "")
                             .foregroundStyle(.gray)
                     }
                 }
             }
 
-            Section("Login Methods") {
-                ForEach(identities) { identity in
-                    HStack {
-                        Text(identity.name)
+            // Anonymous users can't sign out, change password, etc.
+            if let user {
+                if user.info.isAnonymous {
+                    Section {
+                        Button(
+                            action: {
+                                isSigningIn = true
+                            }
+                        ) {
+                            Text("Link an email")
+                        }
+                    }
+                    .presentParraSignInView(isPresented: $isSigningIn)
+                } else {
+                    Section("Login Methods") {
+                        ForEach(user.info.identities) { identity in
+                            HStack {
+                                Text(identity.name)
 
-                        Spacer()
+                                Spacer()
 
-                        Text(identity.value ?? "")
-                            .foregroundStyle(.gray)
+                                Text(identity.value ?? "")
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                    }
+
+                    Section("Security") {
+                        ChangePasswordCell()
+                    }
+
+                    Section {
+                        LogoutCell()
+                    }
+
+                    Section("Danger Zone") {
+                        DeleteAccountCell()
                     }
                 }
-            }
-
-            Section("Security") {
-                ChangePasswordCell()
-            }
-
-            Section {
-                LogoutCell()
-            }
-
-            Section("Danger Zone") {
-                DeleteAccountCell()
             }
         }
         .navigationTitle("Account")
-        .onReceive(parra.user.$current) { user in
-            displayName = user?.info.displayName ?? ""
-            email = user?.info.email ?? ""
-
-            identities = user?.info.identities ?? []
-        }
     }
 }
 
