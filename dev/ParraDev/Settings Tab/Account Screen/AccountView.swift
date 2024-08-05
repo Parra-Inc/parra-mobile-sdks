@@ -12,7 +12,8 @@ import SwiftUI
 struct AccountView: View {
     // MARK: - Internal
 
-    @Environment(\.parra) var parra
+    @Environment(\.parra) private var parra
+    @EnvironmentObject private var parraAuthState: ParraAuthState
 
     var body: some View {
         List {
@@ -34,11 +35,15 @@ struct AccountView: View {
             }
 
             Section("Login Methods") {
-                HStack {
-                    Text("Email")
-                    Spacer()
-                    Text(email)
-                        .foregroundStyle(.gray)
+                ForEach(identities) { identity in
+                    HStack {
+                        Text(identity.name)
+
+                        Spacer()
+
+                        Text(identity.value ?? "")
+                            .foregroundStyle(.gray)
+                    }
                 }
             }
 
@@ -58,6 +63,8 @@ struct AccountView: View {
         .onReceive(parra.user.$current) { user in
             displayName = user?.info.displayName ?? ""
             email = user?.info.email ?? ""
+
+            identities = user?.info.identities ?? []
         }
     }
 
@@ -65,6 +72,7 @@ struct AccountView: View {
 
     @State private var displayName = ""
     @State private var email = ""
+    @State private var identities: [Identity] = []
 }
 
 #Preview {

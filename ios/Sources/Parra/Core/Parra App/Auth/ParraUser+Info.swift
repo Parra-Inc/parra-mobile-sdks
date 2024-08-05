@@ -36,7 +36,7 @@ public extension ParraUser {
             lastSeenAt: Date?,
             lastLoginAt: Date?,
             properties: [String: AnyCodable],
-            identities: [Identity]?,
+            identities: [Identity],
             isAnonymous: Bool
         ) {
             self.id = id
@@ -87,8 +87,120 @@ public extension ParraUser {
         public let lastSeenAt: Date?
         public let lastLoginAt: Date?
         public let properties: [String: AnyCodable]
-        public let identities: [Identity]?
+        public let identities: [Identity]
         public let isAnonymous: Bool
+
+        public init(
+            from decoder: any Decoder
+        ) throws {
+            let container: KeyedDecodingContainer<ParraUser.Info.CodingKeys> = try decoder.container(
+                keyedBy: ParraUser.Info.CodingKeys.self
+            )
+            self.id = try container
+                .decode(String.self, forKey: .id)
+            self.createdAt = try container
+                .decode(Date.self, forKey: .createdAt)
+            self.updatedAt = try container
+                .decode(Date.self, forKey: .updatedAt)
+            self.deletedAt = try container
+                .decodeIfPresent(
+                    Date.self,
+                    forKey: .deletedAt
+                )
+            self.tenantId = try container
+                .decode(String.self, forKey: .tenantId)
+            self.name = try container
+                .decodeIfPresent(
+                    String.self,
+                    forKey: .name
+                )
+            self.avatar = try container
+                .decodeIfPresent(
+                    ImageAssetStub.self,
+                    forKey: .avatar
+                )
+            self.identity = try container
+                .decodeIfPresent(
+                    String.self,
+                    forKey: .identity
+                )
+            self.username = try container
+                .decodeIfPresent(
+                    String.self,
+                    forKey: .username
+                )
+            self.email = try container
+                .decodeIfPresent(
+                    String.self,
+                    forKey: .email
+                )
+            self.emailVerified = try container
+                .decodeIfPresent(
+                    Bool.self,
+                    forKey: .emailVerified
+                )
+            self.phoneNumber = try container
+                .decodeIfPresent(
+                    String.self,
+                    forKey: .phoneNumber
+                )
+            self.phoneNumberVerified = try container
+                .decodeIfPresent(
+                    Bool.self,
+                    forKey: .phoneNumberVerified
+                )
+            self.firstName = try container
+                .decodeIfPresent(
+                    String.self,
+                    forKey: .firstName
+                )
+            self.lastName = try container
+                .decodeIfPresent(
+                    String.self,
+                    forKey: .lastName
+                )
+            self.locale = try container
+                .decodeIfPresent(
+                    String.self,
+                    forKey: .locale
+                )
+            self.signedUpAt = try container
+                .decodeIfPresent(
+                    Date.self,
+                    forKey: .signedUpAt
+                )
+            self.lastUpdatedAt = try container
+                .decodeIfPresent(
+                    Date.self,
+                    forKey: .lastUpdatedAt
+                )
+            self.lastSeenAt = try container
+                .decodeIfPresent(
+                    Date.self,
+                    forKey: .lastSeenAt
+                )
+            self.lastLoginAt = try container
+                .decodeIfPresent(
+                    Date.self,
+                    forKey: .lastLoginAt
+                )
+            self.properties = try container
+                .decode(
+                    [String : AnyCodable].self,
+                    forKey: .properties
+                )
+            self.identities = try container
+                .decodeIfPresent(
+                    [Identity].self,
+                    forKey: .identities
+                ) ?? []
+
+            self.isAnonymous = try container
+                .decode(
+                    Bool.self,
+                    forKey: .isAnonymous
+                )
+        }
 
         public var displayName: String? {
             if let name {
@@ -107,9 +219,15 @@ public extension ParraUser {
         }
 
         public var identityNames: [String] {
-            return [
+            var ids = [
                 username, name, email, phoneNumber
             ].compactMap { $0 }
+
+            if isAnonymous {
+                ids.append("anonymous")
+            }
+
+            return ids
         }
     }
 }

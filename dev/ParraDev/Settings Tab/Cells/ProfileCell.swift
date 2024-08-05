@@ -47,7 +47,7 @@ struct IdentityLabels: View {
 
     @ViewBuilder private var labels: some View {
         if identityNames.isEmpty {
-            Text("Unknown")
+            Text(parra.user.current?.info.displayName ?? "Anonymous")
                 .font(.headline)
         } else if identityNames.count == 1 {
             Text(identityNames[0])

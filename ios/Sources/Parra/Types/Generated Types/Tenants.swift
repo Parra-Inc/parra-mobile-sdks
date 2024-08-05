@@ -213,4 +213,34 @@ public struct Identity: Codable, Equatable, Hashable, Identifiable {
     public let username: String?
     public let externalId: String?
     public let hasPassword: Bool?
+
+    public var name: String {
+        switch type {
+        case .username:
+            return "Username"
+        case .email:
+            return "Email"
+        case .phoneNumber:
+            return "Phone"
+        case .anonymous:
+            return "Anonymous"
+        case .uknownIdentity:
+            return "Unknown"
+        }
+    }
+
+    public var value: String? {
+        switch type {
+        case .username:
+            return username
+        case .email:
+            return email
+        case .phoneNumber:
+            return phoneNumber
+        case .anonymous:
+            return "N/A"
+        case .uknownIdentity:
+            return "N/A"
+        }
+    }
 }
