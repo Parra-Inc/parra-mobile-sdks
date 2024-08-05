@@ -10,8 +10,6 @@ import Parra
 import SwiftUI
 
 struct SettingsFooter: View {
-    // MARK: - Internal
-
     @ViewBuilder var body: some View {
         let version =
             "Version \(Parra.appBundleVersionShort()!) (\(Parra.appBundleVersion()!))"
@@ -28,10 +26,6 @@ struct SettingsFooter: View {
         .padding(.vertical, 36)
         .frame(maxWidth: .infinity)
     }
-
-    // MARK: - Private
-
-    @EnvironmentObject private var appInfo: ParraAppInfo
 }
 
 #Preview {

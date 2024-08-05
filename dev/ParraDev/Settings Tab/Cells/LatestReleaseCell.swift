@@ -21,7 +21,11 @@ import SwiftUI
 ///    a parameter. When it becomes non nil, the release details screen will be
 ///    presented.
 struct LatestReleaseCell: View {
-    // MARK: - Internal
+    @Environment(\.parra) private var parra // #1
+
+    @State private var isLoading = false
+    @State private var errorMessage: String?
+    @State private var appVersionInfo: NewInstalledVersionInfo? // #3
 
     var showLatestRelease: Bool {
         return parra.releases.updateAvailable()
@@ -50,16 +54,6 @@ struct LatestReleaseCell: View {
             .presentParraRelease(with: $appVersionInfo)
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra // #1
-    @State private var isLoading = false
-    @State private var errorMessage: String?
-    @State private var appVersionInfo: NewInstalledVersionInfo? // #3
-
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var appInfo: ParraAppInfo
 
     private func loadLatestRelease() {
         isLoading = true

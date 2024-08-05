@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct ThemeCell: View {
-    // MARK: - Internal
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     var body: some View {
         Picker(
@@ -28,11 +28,6 @@ struct ThemeCell: View {
             }
         )
     }
-
-    // MARK: - Private
-
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @Environment(\.parra) private var parra
 }
 
 #Preview {

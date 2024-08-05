@@ -10,7 +10,14 @@ import Parra
 import SwiftUI
 
 struct EditProfileView: View {
-    // MARK: - Internal
+    @Environment(\.parra) private var parra
+    @EnvironmentObject private var themeManager: ParraThemeManager
+
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
+    @State private var displayName: String = ""
+    @State private var isLoading = false
+    @State private var isShowingSuccess = false
 
     var body: some View {
         VStack {
@@ -93,17 +100,6 @@ struct EditProfileView: View {
             displayName = userInfo?.name ?? ""
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeManager: ParraThemeManager
-
-    @State private var firstName: String = ""
-    @State private var lastName: String = ""
-    @State private var displayName: String = ""
-    @State private var isLoading = false
-    @State private var isShowingSuccess = false
 
     private func saveChanges() {
         if isLoading {

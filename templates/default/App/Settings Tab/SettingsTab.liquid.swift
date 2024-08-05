@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct SettingsTab: View {
-    // MARK: - Internal
+    @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
     var body: some View {
         NavigationStack {
@@ -51,11 +51,6 @@ struct SettingsTab: View {
             .navigationTitle("Profile")
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
 }
 
 #Preview {

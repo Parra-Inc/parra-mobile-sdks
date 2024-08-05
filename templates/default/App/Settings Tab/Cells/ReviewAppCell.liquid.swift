@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct ReviewAppCell: View {
-    // MARK: - Internal
+    @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
     var body: some View {
         if let writeReviewUrl = parraAppInfo.application
@@ -39,10 +39,6 @@ struct ReviewAppCell: View {
             }
         }
     }
-
-    // MARK: - Private
-
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
 }
 
 #Preview {

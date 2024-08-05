@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct SampleTab: View {
-    // MARK: - Internal
+    @EnvironmentObject private var themeManager: ParraThemeManager
 
     var body: some View {
         NavigationStack {
@@ -40,10 +40,6 @@ struct SampleTab: View {
             .background(themeManager.theme.palette.secondaryBackground)
         }
     }
-
-    // MARK: - Private
-
-    @EnvironmentObject private var themeManager: ParraThemeManager
 }
 
 #Preview {

@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 public struct ProfileCell: View {
-    // MARK: - Public
+    @EnvironmentObject private var parraAuthState: ParraAuthState
 
     public var body: some View {
         switch parraAuthState.current {
@@ -22,16 +22,11 @@ public struct ProfileCell: View {
             EmptyView()
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var parraAuthState: ParraAuthState
 }
 
 struct IdentityLabels: View {
-    // MARK: - Internal
+    @Environment(\.parra) private var parra
+    @State private var identityNames: [String] = []
 
     var body: some View {
         labels
@@ -39,11 +34,6 @@ struct IdentityLabels: View {
                 identityNames = user?.info.identityNames ?? []
             }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @State private var identityNames: [String] = []
 
     @ViewBuilder private var labels: some View {
         if identityNames.isEmpty {
@@ -64,8 +54,6 @@ struct IdentityLabels: View {
 }
 
 struct AuthenticatedProfileInfoView: View {
-    // MARK: - Internal
-
     @ViewBuilder var labels: some View {
         VStack(alignment: .leading) {
             IdentityLabels()
@@ -87,10 +75,6 @@ struct AuthenticatedProfileInfoView: View {
             .padding(.vertical, 6)
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
 }
 
 struct UnauthenticatedProfileInfoView: View {

@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct ChangePasswordCell: View {
-    // MARK: - Internal
+    @State private var isChangePasswordPresented = false
 
     var body: some View {
         Button(action: {
@@ -30,12 +30,6 @@ struct ChangePasswordCell: View {
             isPresented: $isChangePasswordPresented
         )
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-
-    @State private var isChangePasswordPresented = false
 }
 
 #Preview {

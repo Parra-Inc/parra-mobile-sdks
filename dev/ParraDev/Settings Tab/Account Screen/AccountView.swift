@@ -10,10 +10,11 @@ import Parra
 import SwiftUI
 
 struct AccountView: View {
-    // MARK: - Internal
-
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+
+    @State private var displayName = ""
+    @State private var email = ""
+    @State private var identities: [Identity] = []
 
     var body: some View {
         List {
@@ -67,12 +68,6 @@ struct AccountView: View {
             identities = user?.info.identities ?? []
         }
     }
-
-    // MARK: - Private
-
-    @State private var displayName = ""
-    @State private var email = ""
-    @State private var identities: [Identity] = []
 }
 
 #Preview {

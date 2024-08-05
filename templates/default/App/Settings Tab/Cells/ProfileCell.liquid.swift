@@ -10,28 +10,23 @@ import Parra
 import SwiftUI
 
 public struct ProfileCell: View {
-    // MARK: - Public
+    @EnvironmentObject private var parraAuthState: ParraAuthState
 
     public var body: some View {
         switch parraAuthState.current {
-        case .authenticated:
+        case .authenticated, .anonymous, .guest:
             AuthenticatedProfileInfoView()
-        case let .unauthenticated(error):
+        case let .error(error):
             UnauthenticatedProfileInfoView(error: error)
         case .undetermined:
             EmptyView()
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var parraAuthState: ParraAuthState
 }
 
 struct IdentityLabels: View {
-    // MARK: - Internal
+    @Environment(\.parra) private var parra
+    @State private var identityNames: [String] = []
 
     var body: some View {
         labels
@@ -40,14 +35,9 @@ struct IdentityLabels: View {
             }
     }
 
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @State private var identityNames: [String] = []
-
     @ViewBuilder private var labels: some View {
         if identityNames.isEmpty {
-            Text("Unknown")
+            Text(parra.user.current?.info.displayName ?? "Anonymous")
                 .font(.headline)
         } else if identityNames.count == 1 {
             Text(identityNames[0])
@@ -64,8 +54,6 @@ struct IdentityLabels: View {
 }
 
 struct AuthenticatedProfileInfoView: View {
-    // MARK: - Internal
-
     @ViewBuilder var labels: some View {
         VStack(alignment: .leading) {
             IdentityLabels()
@@ -87,10 +75,6 @@ struct AuthenticatedProfileInfoView: View {
             .padding(.vertical, 6)
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
 }
 
 struct UnauthenticatedProfileInfoView: View {
