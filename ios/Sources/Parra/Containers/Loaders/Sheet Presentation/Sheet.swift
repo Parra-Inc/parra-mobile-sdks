@@ -38,10 +38,8 @@ struct Sheet<SheetContent>: ViewModifier where SheetContent: View {
                 onDismiss?(.cancelled)
             },
             content: {
-                NavigationStack(path: $navigationState.navigationPath) {
+                SheetStateContainer(data: Data()) {
                     self.content()
-                        .environmentObject(navigationState)
-                        .padding(.top, 30)
                 }
                 .presentationDetents(detents)
                 .presentationDragIndicator(visibility)
@@ -51,8 +49,6 @@ struct Sheet<SheetContent>: ViewModifier where SheetContent: View {
     }
 
     // MARK: - Private
-
-    @StateObject private var navigationState = NavigationState()
 
     private let detents: Set<PresentationDetent>
     private let visibility: Visibility

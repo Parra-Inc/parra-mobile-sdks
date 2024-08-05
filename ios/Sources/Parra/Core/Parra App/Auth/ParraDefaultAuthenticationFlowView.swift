@@ -34,6 +34,15 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
         flowManager.delegate = self
     }
 
+    private var landingScreenParams: ParraAuthDefaultLandingScreen.Params {
+        flowManager.getLandingScreenParams(
+            authService: parra.parraInternal.authService,
+            modalScreenManager: parra.parraInternal
+                .modalScreenManager,
+            using: parraAppInfo
+        )
+    }
+
     // MARK: - Public
 
     public var delegate: (any ParraAuthenticationFlowDelegate)?
@@ -49,39 +58,14 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                     )
                 }
             }
-    }
-
-    // MARK: - Internal
-
-    @EnvironmentObject var parraAppInfo: ParraAppInfo
-    @EnvironmentObject var parraAuthInfo: ParraAuthState
-
-    @ViewBuilder var container: some View {
-        let params = flowManager.getLandingScreenParams(
-            authService: parra.parraInternal.authService,
-            modalScreenManager: parra.parraInternal
-                .modalScreenManager,
-            using: parraAppInfo
-        )
-
-        NavigationStack(
-            path: $navigationState.navigationPath
-        ) {
-            flowManager.provideAuthScreen(
-                authScreen: .landingScreen(
-                    params
-                )
-            )
-            .environmentObject(parraAppInfo)
-            .environmentObject(navigationState)
-            .environmentObject(flowManager)
             .task {
                 switch parraAuthInfo.current {
                 case .authenticated, .undetermined:
                     break
                 case .anonymous, .guest, .error:
                     do {
-                        try await params.attemptPasskeyLogin()
+                        // TODO: Called multiple times?
+                        try await landingScreenParams.attemptPasskeyLogin()
                     } catch let error as ParraError {
                         if error.isUnauthenticated {
                             parra.parraInternal.alertManager.showErrorToast(
@@ -112,6 +96,33 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                     }
                 }
             }
+
+    }
+
+    // MARK: - Internal
+
+    @EnvironmentObject var parraAppInfo: ParraAppInfo
+    @EnvironmentObject var parraAuthInfo: ParraAuthState
+
+    @ViewBuilder var container: some View {
+        let params = flowManager.getLandingScreenParams(
+            authService: parra.parraInternal.authService,
+            modalScreenManager: parra.parraInternal
+                .modalScreenManager,
+            using: parraAppInfo
+        )
+
+        NavigationStack(
+            path: $navigationState.navigationPath
+        ) {
+            flowManager.provideAuthScreen(
+                authScreen: .landingScreen(
+                    params
+                )
+            )
+            .environmentObject(parraAppInfo)
+            .environmentObject(navigationState)
+            .environmentObject(flowManager)
             .navigationDestination(
                 for: AuthenticationFlowManager.AuthScreen.self
             ) { destination in

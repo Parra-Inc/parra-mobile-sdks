@@ -8,16 +8,17 @@
 
 import Parra
 import SwiftUI
+import UIKit
 
 public struct ProfileCell: View {
     @EnvironmentObject private var parraAuthState: ParraAuthState
 
     public var body: some View {
         switch parraAuthState.current {
-        case .authenticated, .anonymous, .guest:
+        case .authenticated, .anonymous:
             AuthenticatedProfileInfoView()
-        case let .error(error):
-            UnauthenticatedProfileInfoView(error: error)
+        case .error, .guest:
+            UnauthenticatedProfileInfoView()
         case .undetermined:
             EmptyView()
         }
@@ -78,12 +79,15 @@ struct AuthenticatedProfileInfoView: View {
 }
 
 struct UnauthenticatedProfileInfoView: View {
-    let error: Error?
+    @State private var isSigningIn = false
 
     var body: some View {
-        Button(action: {}, label: {
+        Button(action: {
+            isSigningIn = true
+        }, label: {
             Text("Sign in")
         })
+        .presentParraSignInView(isPresented: $isSigningIn)
     }
 }
 
