@@ -16,26 +16,17 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
     ) {
         let navigationState = NavigationState()
 
-        self.flowConfig = flowConfig
-
         _navigationState = StateObject(
             wrappedValue: navigationState
         )
 
-        let flowManager = AuthenticationFlowManager(
-            flowConfig: flowConfig,
-            navigationState: navigationState
-        )
-
-        _flowManager = StateObject(
-            wrappedValue: flowManager
-        )
-
-        flowManager.delegate = self
+        AuthenticationFlowManager.shared.flowConfig = flowConfig
+        AuthenticationFlowManager.shared.navigationState = navigationState
+        AuthenticationFlowManager.shared.delegate = self
     }
 
     private var landingScreenParams: ParraAuthDefaultLandingScreen.Params {
-        flowManager.getLandingScreenParams(
+        AuthenticationFlowManager.shared.getLandingScreenParams(
             authService: parra.parraInternal.authService,
             modalScreenManager: parra.parraInternal
                 .modalScreenManager,
@@ -63,37 +54,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                 case .authenticated, .undetermined:
                     break
                 case .anonymous, .guest, .error:
-                    do {
-                        // TODO: Called multiple times?
-                        try await landingScreenParams.attemptPasskeyLogin()
-                    } catch let error as ParraError {
-                        if error.isUnauthenticated {
-                            parra.parraInternal.alertManager.showErrorToast(
-                                userFacingMessage: "No account found matching this passkey. You can delete this passkey from your preferred password manager.",
-                                underlyingError: error
-                            )
-                        } else {
-                            parra.parraInternal.alertManager.showErrorToast(
-                                userFacingMessage: "Error signing in with passkey. Please try again.",
-                                underlyingError: error
-                            )
-
-                            Logger.error(
-                                "Failed passkey auto login on landing screen",
-                                error
-                            )
-                        }
-                    } catch {
-                        parra.parraInternal.alertManager.showErrorToast(
-                            userFacingMessage: "Error signing in with passkey. Please try again.",
-                            underlyingError: .system(error)
-                        )
-
-                        Logger.error(
-                            "Failed passkey auto login on landing screen with uknown error",
-                            error
-                        )
-                    }
+                    landingScreenParams.attemptPasskeyLogin()
                 }
             }
 
@@ -104,43 +65,47 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
     @EnvironmentObject var parraAppInfo: ParraAppInfo
     @EnvironmentObject var parraAuthInfo: ParraAuthState
 
-    @ViewBuilder var container: some View {
-        let params = flowManager.getLandingScreenParams(
+    @ViewBuilder
+    var landingScreen: some View {
+        let params = AuthenticationFlowManager.shared.getLandingScreenParams(
             authService: parra.parraInternal.authService,
             modalScreenManager: parra.parraInternal
                 .modalScreenManager,
             using: parraAppInfo
         )
 
+        AuthenticationFlowManager.shared.provideAuthScreen(
+            authScreen: .landingScreen(
+                params
+            )
+        )
+    }
+
+    @ViewBuilder var container: some View {
         NavigationStack(
             path: $navigationState.navigationPath
         ) {
-            flowManager.provideAuthScreen(
-                authScreen: .landingScreen(
-                    params
-                )
-            )
-            .environmentObject(parraAppInfo)
-            .environmentObject(navigationState)
-            .environmentObject(flowManager)
-            .navigationDestination(
-                for: AuthenticationFlowManager.AuthScreen.self
-            ) { destination in
-                flowManager.provideAuthScreen(
-                    authScreen: destination
-                )
+            landingScreen
                 .environmentObject(parraAppInfo)
                 .environmentObject(navigationState)
-                .environmentObject(flowManager)
-            }
+                .navigationDestination(
+                    for: AuthenticationFlowManager.AuthScreen.self
+                ) { destination in
+                    // Only reset passkey auto login when navigating away from
+                    // the landing screen.
+                    let _ = AuthenticationFlowManager.shared.hasPasskeyAutoLoginBeenRequested = false
+
+                    AuthenticationFlowManager.shared.provideAuthScreen(
+                        authScreen: destination
+                    )
+                    .environmentObject(parraAppInfo)
+                    .environmentObject(navigationState)
+                }
         }
     }
 
     // MARK: - Private
 
-    private let flowConfig: ParraAuthenticationFlowConfig
-
-    @StateObject private var flowManager: AuthenticationFlowManager
     @StateObject private var navigationState = NavigationState()
 
     @Environment(\.parra) private var parra

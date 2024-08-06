@@ -15,7 +15,7 @@ public extension ParraAuthDefaultLandingScreen {
         public init(
             availableAuthMethods: [ParraAuthenticationMethod],
             selectAuthMethod: @escaping (ParraAuthenticationType) -> Void,
-            attemptPasskeyLogin: @escaping () async throws -> Void
+            attemptPasskeyLogin: @escaping () -> Void
         ) {
             self.availableAuthMethods = availableAuthMethods
             self.selectAuthMethod = selectAuthMethod
@@ -39,6 +39,6 @@ public extension ParraAuthDefaultLandingScreen {
         /// default Apple passkey login UI for users who have existing passkeys.
         /// You will likely wish to invoke this in a `.task {}` when the screen
         /// loads.
-        public let attemptPasskeyLogin: () async throws -> Void
+        public let attemptPasskeyLogin: () -> Void
     }
 }

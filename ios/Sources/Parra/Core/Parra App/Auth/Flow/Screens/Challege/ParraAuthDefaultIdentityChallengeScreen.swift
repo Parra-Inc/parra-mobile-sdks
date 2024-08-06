@@ -290,12 +290,6 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             ),
             config: .init()
         )
-        .environmentObject(
-            AuthenticationFlowManager(
-                flowConfig: .default,
-                navigationState: .init()
-            )
-        )
     }
 }
 
@@ -318,12 +312,6 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             ),
             config: .init()
         )
-        .environmentObject(
-            AuthenticationFlowManager(
-                flowConfig: .default,
-                navigationState: .init()
-            )
-        )
     }
 }
 
@@ -345,12 +333,6 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 forgotPassword: {}
             ),
             config: .init()
-        )
-        .environmentObject(
-            AuthenticationFlowManager(
-                flowConfig: .default,
-                navigationState: .init()
-            )
         )
     }
 }

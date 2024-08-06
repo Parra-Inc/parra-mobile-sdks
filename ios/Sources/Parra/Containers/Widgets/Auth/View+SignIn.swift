@@ -64,7 +64,11 @@ public extension View {
                     }
                 )
             },
-            onDismiss: onDismiss
+            onDismiss: { sheetType in
+                AuthenticationFlowManager.shared.hasPasskeyAutoLoginBeenRequested = false
+
+                onDismiss?(sheetType)
+            }
         )
     }
 }

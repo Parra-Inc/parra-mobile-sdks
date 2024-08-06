@@ -11,18 +11,21 @@ import SwiftUI
 
 private let logger = Logger()
 
+// Working around a double rendering bug with sheet.
+// making this a singleton since it will never be used in more than
+// 1 place at a time.
 class AuthenticationFlowManager: ObservableObject {
     // MARK: - Lifecycle
 
-    init(
-        flowConfig: ParraAuthenticationFlowConfig,
-        navigationState: NavigationState
-    ) {
-        self.flowConfig = flowConfig
-        self.navigationState = navigationState
-    }
+    static let shared = AuthenticationFlowManager()
+
+    private init() {}
 
     // MARK: - Internal
+
+    var flowConfig: ParraAuthenticationFlowConfig = .default
+    var delegate: AuthenticationFlowManagerDelegate?
+    var navigationState: NavigationState?
 
     enum AuthScreen: CustomStringConvertible, Hashable {
         case landingScreen(
@@ -70,10 +73,6 @@ class AuthenticationFlowManager: ObservableObject {
             hasher.combine(description)
         }
     }
-
-    var delegate: AuthenticationFlowManagerDelegate?
-
-    let navigationState: NavigationState
 
     @ViewBuilder
     func provideAuthScreen(
@@ -159,15 +158,15 @@ class AuthenticationFlowManager: ObservableObject {
                 }
             },
             attemptPasskeyLogin: {
-                logger.info("Attempting passkey login")
-
-                try await self.triggerPasskeyLoginRequest(
-                    username: nil,
-                    presentationMode: .modal,
-                    using: appInfo,
-                    authService: authService,
-                    modalScreenManager: modalScreenManager
-                )
+                Task.detached {
+                    await self.triggerPasskeyLoginRequest(
+                        username: nil,
+                        presentationMode: .modal,
+                        using: appInfo,
+                        authService: authService,
+                        modalScreenManager: modalScreenManager
+                    )
+                }
             }
         )
     }
@@ -178,6 +177,13 @@ class AuthenticationFlowManager: ObservableObject {
         authService.cancelPasskeyRequests()
     }
 
+    /// Whether an auto login has been triggered, per this load of the sign in
+    /// view. There's a double render bug with sheet that requires us to only
+    /// run this flow once, and not allow it to retrigger until this variable
+    /// has been reset (when the flow manager is reconfigured for another
+    /// presentation).
+    var hasPasskeyAutoLoginBeenRequested = false
+
     /// Silent requests when screens appear that _may_ result in prompts
     func triggerPasskeyLoginRequest(
         username: String?,
@@ -185,7 +191,15 @@ class AuthenticationFlowManager: ObservableObject {
         using appInfo: ParraAppInfo,
         authService: AuthService,
         modalScreenManager: ModalScreenManager
-    ) async throws {
+    ) async {
+        if hasPasskeyAutoLoginBeenRequested {
+            return
+        }
+
+        hasPasskeyAutoLoginBeenRequested = true
+
+        logger.info("Triggered passkey login request")
+
         if !appInfo.auth.supportsPasskeys {
             logger.debug("Passkeys not enabled for this app")
 
@@ -211,7 +225,7 @@ class AuthenticationFlowManager: ObservableObject {
                 if error.localizedDescription.contains("not associated with domain") {
                     logger.warn("Passkey login prompt failed. \(error.localizedDescription). Your configuration may be correct and Apple's CDN hasn't picked up changes to your .well-known/apple-app-site-association file yet.")
                 } else {
-                    throw error
+                    logger.error("Passkey login prompt failed. \(error.localizedDescription)")
                 }
             default:
                 logger.error(
@@ -222,8 +236,23 @@ class AuthenticationFlowManager: ObservableObject {
                         "user_info": error.userInfo
                     ]
                 )
+            }
+        } catch let error as ParraError {
+            if error.isUnauthenticated {
+                Parra.default.parraInternal.alertManager.showErrorToast(
+                    userFacingMessage: "No account found matching this passkey. You can delete this passkey from your preferred password manager.",
+                    underlyingError: error
+                )
+            } else {
+                Parra.default.parraInternal.alertManager.showErrorToast(
+                    userFacingMessage: "Error signing in with passkey. Please try again.",
+                    underlyingError: error
+                )
 
-                throw error
+                Logger.error(
+                    "Failed passkey auto login on landing screen",
+                    error
+                )
             }
         } catch {
             logger.error(
@@ -231,13 +260,14 @@ class AuthenticationFlowManager: ObservableObject {
                 error
             )
 
-            throw error
+            Parra.default.parraInternal.alertManager.showErrorToast(
+                userFacingMessage: "Error signing in with passkey. Please try again.",
+                underlyingError: .system(error)
+            )
         }
     }
 
     // MARK: - Private
-
-    private let flowConfig: ParraAuthenticationFlowConfig
 
     private func navigateToIdentityInputScreen(
         inputType: ParraIdentityInputType,
@@ -420,7 +450,7 @@ class AuthenticationFlowManager: ObservableObject {
                         authService: authService
                     ) {
                         Task { @MainActor in
-                            self.navigationState.navigationPath.removeLast()
+                            self.navigationState?.navigationPath.removeLast()
                         }
                     }
                 }
@@ -689,7 +719,7 @@ class AuthenticationFlowManager: ObservableObject {
         to screen: AuthenticationFlowManager.AuthScreen
     ) {
         Task { @MainActor in
-            navigationState.navigationPath.append(
+            navigationState?.navigationPath.append(
                 screen
             )
         }
@@ -702,7 +732,7 @@ class AuthenticationFlowManager: ObservableObject {
             var newPath = NavigationPath()
             newPath.append(screen)
 
-            navigationState.navigationPath = newPath
+            navigationState?.navigationPath = newPath
         }
     }
 }
