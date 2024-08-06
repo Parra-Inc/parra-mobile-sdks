@@ -76,7 +76,6 @@ public struct ParraApp<
         workspaceId: String,
         applicationId: String,
         appDelegate: ParraAppDelegate<SceneDelegateClass>,
-        authenticationMethod: ParraAuthType = .parra,
         configuration: ParraConfiguration = .init(),
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
         @SceneBuilder makeScene: @MainActor @escaping () -> Content
@@ -87,7 +86,8 @@ public struct ParraApp<
         )
 
         self.makeScene = makeScene
-        self.authenticationMethod = authenticationMethod
+        // TODO: Support for other auth types
+        self.authenticationMethod = .parra
 
         let mergedLaunchScreenConfig = ParraApp.configureLaunchScreen(
             with: launchScreenConfig
@@ -149,7 +149,6 @@ public struct ParraApp<
                     performAppLaunchTasks()
                 case (.initial, .transitioning(let result, _)):
                     Task {
-                        parraAppState.appInfo
                         // performAppLaunchTasks completing changes the launch
                         // screen state to transitioning, allowing this to start
                         await parraAuthState.performInitialAuthCheck(
@@ -261,7 +260,7 @@ public struct ParraApp<
                 return
             }
 
-            logger.debug("Initial auth check complete")
+            logger.debug("Performing app launch tasks")
 
             do {
                 let result = try await parra

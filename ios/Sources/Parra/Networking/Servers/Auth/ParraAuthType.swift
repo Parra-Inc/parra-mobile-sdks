@@ -8,10 +8,10 @@
 
 import Foundation
 
-public typealias ParraTokenProvider = () async throws -> String?
-public typealias ParraUserIdProvider = () async throws -> String?
+typealias ParraTokenProvider = () async throws -> String?
+typealias ParraUserIdProvider = () async throws -> String?
 
-public enum ParraAuthType {
+enum ParraAuthType {
     /// The standard way of authenticating with Parra. You provide a provider
     /// function that interacts with your API to return a signed access token
     /// for your user.

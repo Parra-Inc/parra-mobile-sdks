@@ -51,6 +51,8 @@ public class ParraAuthState: ObservableObject, CustomStringConvertible {
         using authService: AuthService,
         appInfo: ParraAppInfo
     ) async {
+        logger.debug("performing initial auth check")
+
         beginObservingAuth()
 
         // Obtain the auth state. This will also trigger an async refresh of any
