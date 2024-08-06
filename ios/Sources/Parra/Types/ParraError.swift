@@ -202,12 +202,7 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
             ]
 
             #if DEBUG
-            let dataString = String(
-                data: body,
-                encoding: .utf8
-            ) ?? "unknown"
-
-            bodyInfo["data"] = dataString
+            bodyInfo["data"] = body.prettyPrintedJSONString()
             #endif
 
             return [

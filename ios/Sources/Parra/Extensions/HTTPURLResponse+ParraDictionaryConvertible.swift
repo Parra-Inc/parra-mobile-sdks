@@ -24,7 +24,8 @@ extension HTTPURLResponse: ParraSanitizedDictionaryConvertible {
         }
 
         if let headers = allHeaderFields as? [String: String] {
-            params["headers"] = ParraDataSanitizer.sanitize(
+            // field named this to indicate that it is safe.
+            params["sanitized_headers"] = ParraDataSanitizer.sanitize(
                 httpHeaders: headers
             )
         }

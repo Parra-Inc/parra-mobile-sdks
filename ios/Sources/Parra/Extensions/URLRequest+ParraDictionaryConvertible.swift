@@ -13,15 +13,15 @@ extension URLRequest: ParraSanitizedDictionaryConvertible {
         var params: [String: Any] = [
             "timeout_interval": timeoutInterval,
             "should_handle_cookies": httpShouldHandleCookies,
-            "should_use_pipelining": httpShouldUsePipelining,
+//            "should_use_pipelining": httpShouldUsePipelining,
             "allows_cellular_access": allowsCellularAccess,
             "allows_constrainted_network_access": allowsConstrainedNetworkAccess,
             "allows_expensive_network_access": allowsExpensiveNetworkAccess,
-            "network_service_type": networkServiceType.rawValue,
-            "attribution": attribution.description,
-            "assumes_http3_capable": assumesHTTP3Capable,
-            "cache_policy": cachePolicy.description,
-            "requires_dns_sec_validation": requiresDNSSECValidation
+//            "network_service_type": networkServiceType.rawValue,
+//            "attribution": attribution.description,
+//            "assumes_http3_capable": assumesHTTP3Capable,
+            "cache_policy": cachePolicy.description
+//            "requires_dns_sec_validation": requiresDNSSECValidation
         ]
 
         if let httpMethod {
@@ -33,12 +33,12 @@ extension URLRequest: ParraSanitizedDictionaryConvertible {
         }
 
         if let httpBody {
-            params["body"] = String(data: httpBody, encoding: .utf8) ?? httpBody
-                .base64EncodedString()
+            params["body"] = "\(httpBody.count) byte(s)"
         }
 
         if let allHTTPHeaderFields {
-            params["headers"] = ParraDataSanitizer.sanitize(
+            // field named this to indicate that it is safe.
+            params["sanitized_headers"] = ParraDataSanitizer.sanitize(
                 httpHeaders: allHTTPHeaderFields
             )
         }
