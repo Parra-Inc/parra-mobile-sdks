@@ -17,8 +17,8 @@ struct ParraDemoApp: App {
 
     var body: some Scene {
         ParraApp(
-            workspaceId: "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4",
-            applicationId: "edec3a6c-a375-4a9d-bce8-eb00860ef228",
+            workspaceId: "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4", // demo tenant
+            applicationId: "360b600d-a689-4ac0-8e57-1abcfeca4835", // dev app
             appDelegate: appDelegate,
             authenticationMethod: .parra
         ) {

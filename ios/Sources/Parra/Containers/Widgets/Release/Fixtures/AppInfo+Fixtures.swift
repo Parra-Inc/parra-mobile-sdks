@@ -21,7 +21,7 @@ extension ParraAppInfo: ParraFixture {
                     release: AppRelease.validStates()[0]
                 ),
                 tenant: TenantAppInfoStub(
-                    id: .uuid,
+                    id: Parra.Demo.workspaceId,
                     createdAt: .now,
                     updatedAt: .now,
                     deletedAt: nil,
@@ -34,7 +34,7 @@ extension ParraAppInfo: ParraFixture {
                         id: .uuid,
                         size: .init(width: 512, height: 512),
                         url: URL(
-                            string: "https://image-asset-bucket-production.s3.amazonaws.com/tenants/201cbcf0-b5d6-4079-9e4d-177ae04cc9f4/logo/52efae8d-53ec-42e1-9c04-f4aa733762b0.png"
+                            string: "https://image-asset-bucket-production.s3.amazonaws.com/tenants/\(Parra.Demo.workspaceId)/logo/52efae8d-53ec-42e1-9c04-f4aa733762b0.png"
                         )!
                     ),
                     domains: [
@@ -67,11 +67,11 @@ extension ParraAppInfo: ParraFixture {
                         Domain(
                             id: .uuid,
                             type: .fallback,
-                            name: "tenant-201cbcf0-b5d6-4079-9e4d-177ae04cc9f4",
+                            name: "tenant-\(Parra.Demo.workspaceId)",
                             title: "Fallback",
-                            host: "tenant-201cbcf0-b5d6-4079-9e4d-177ae04cc9f4.parra.io",
+                            host: "tenant-\(Parra.Demo.workspaceId).parra.io",
                             url: URL(
-                                string: "https://tenant-201cbcf0-b5d6-4079-9e4d-177ae04cc9f4.parra.io"
+                                string: "https://tenant-\(Parra.Demo.workspaceId).parra.io"
                             )!,
                             data: nil
                         )
@@ -84,7 +84,7 @@ extension ParraAppInfo: ParraFixture {
                             string: "https://parra-public-demo.parra.io"
                         )!,
                         URL(
-                            string: "https://tenant-201cbcf0-b5d6-4079-9e4d-177ae04cc9f4.parra.io"
+                            string: "https://tenant-\(Parra.Demo.workspaceId).parra.io"
                         )!
                     ],
                     entitlements: [],
