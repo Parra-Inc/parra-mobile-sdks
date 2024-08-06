@@ -64,7 +64,7 @@ extension AuthService {
         presentationMode: PasskeyPresentationMode = .modal
     ) async throws {
         logger.debug("Starting auth request", [
-            "preentationMode": presentationMode.description
+            "presentationMode": presentationMode.description
         ])
 
         if presentationMode == .modal {

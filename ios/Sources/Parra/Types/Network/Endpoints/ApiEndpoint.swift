@@ -66,6 +66,10 @@ enum ApiEndpoint: Endpoint {
         }
     }
 
+    var slugWithMethod: String {
+        return "\(method.rawValue) \(slug)"
+    }
+
     var slug: String {
         switch self {
         case .getAppInfo: // auth is optional for this one.

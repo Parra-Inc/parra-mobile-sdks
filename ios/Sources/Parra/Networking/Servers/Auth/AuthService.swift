@@ -484,7 +484,7 @@ final class AuthService {
             _cachedCredential = nil
         }
 
-        logger.debug("User update applied", [
+        logger.trace("User update applied", [
             "broadcasting": String(shouldBroadcast)
         ])
 

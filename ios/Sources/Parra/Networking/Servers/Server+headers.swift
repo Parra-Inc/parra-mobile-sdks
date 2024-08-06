@@ -35,8 +35,8 @@ extension Server {
         let headers = request.allHTTPHeaderFields ?? [:]
 
         logger.trace(
-            "Finished attaching request headers for endpoint: \(endpoint.displayName)",
-            headers
+            // Do NOT print the contents of heads. The may include access tokens
+            "Finished attaching request headers for endpoint: \(endpoint.displayName)"
         )
     }
 
@@ -51,10 +51,10 @@ extension Server {
             headerFactory.commonHeaderDictionary
         }
 
-        logger
-            .trace(
-                "Adding extra tracking headers to tracking enabled endpoint: \(endpoint.displayName)"
-            )
+        logger.trace(
+            // Do NOT print the contents of heads. The may include access tokens
+            "Adding extra tracking headers to tracking enabled endpoint: \(endpoint.displayName)"
+        )
 
         for (header, value) in headers {
             request.setValue(value, forHTTPHeaderField: header)

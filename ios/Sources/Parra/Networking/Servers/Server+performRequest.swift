@@ -60,8 +60,7 @@ extension Server {
         to url: URL,
         data: [String: String],
         cachePolicy: URLRequest.CachePolicy? = nil,
-        timeout: TimeInterval? = nil,
-        delegate: URLSessionTaskDelegate? = nil
+        timeout: TimeInterval? = nil
     ) async throws -> T {
         var components = URLComponents()
         components.percentEncodedQueryItems = data.asCorrectlyEscapedQueryItems
@@ -80,8 +79,7 @@ extension Server {
         request.setValue(for: .contentType(.applicationFormUrlEncoded))
 
         return try await performRequest(
-            request: request,
-            delegate: delegate
+            request: request
         )
     }
 
@@ -90,8 +88,7 @@ extension Server {
         method: HttpMethod = .get,
         queryItems: [String: String] = [:],
         cachePolicy: URLRequest.CachePolicy? = nil,
-        timeout: TimeInterval? = nil,
-        delegate: URLSessionTaskDelegate? = nil
+        timeout: TimeInterval? = nil
     ) async throws -> T {
         return try await performRequest(
             to: url,
@@ -99,8 +96,7 @@ extension Server {
             queryItems: queryItems,
             cachePolicy: cachePolicy,
             body: EmptyRequestObject(),
-            timeout: timeout,
-            delegate: delegate
+            timeout: timeout
         )
     }
 
@@ -111,8 +107,7 @@ extension Server {
         queryItems: [String: String] = [:],
         cachePolicy: URLRequest.CachePolicy? = nil,
         body: some Encodable,
-        timeout: TimeInterval?,
-        delegate: URLSessionTaskDelegate? = nil
+        timeout: TimeInterval?
     ) async throws -> T {
         var request = try URLRequest(
             with: queryItems,
@@ -128,14 +123,12 @@ extension Server {
         }
 
         return try await performRequest(
-            request: request,
-            delegate: delegate
+            request: request
         )
     }
 
     private func performRequest<T: Decodable>(
-        request: URLRequest,
-        delegate: URLSessionTaskDelegate? = nil
+        request: URLRequest
     ) async throws -> T {
         let (data, response) = try await performAsyncDataTask(
             request: request
@@ -218,6 +211,14 @@ extension Server {
             urlRequest.httpMethod?.uppercased() == "POST",
             "Multipart form upload only supports POST requests"
         )
+
+        guard let url = request.url else {
+            throw ParraError.message(
+                "Multipart upload request is missing a url"
+            )
+        }
+
+        logger.debug("Performing multipart upload to: \(url)")
 
         assert(
             urlRequest.httpBody == nil,

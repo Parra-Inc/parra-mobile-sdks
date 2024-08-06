@@ -99,8 +99,7 @@ final class OAuth2Service {
         return try await authServer.performFormPostRequest(
             to: tokenUrl,
             data: data,
-            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-            delegate: nil
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
         )
     }
 
@@ -128,8 +127,7 @@ final class OAuth2Service {
             let response: RefreshResponse = try await authServer.performFormPostRequest(
                 to: tokenUrl,
                 data: data,
-                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
-                delegate: nil
+                cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
             )
 
             return ParraUser.Credential.Token(
