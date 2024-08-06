@@ -70,7 +70,7 @@ class SessionStorage {
 
         logger
             .debug(
-                "initializing at path: \(sessionReader.basePath.lastComponents())"
+                "initializing session at path: \(sessionReader.basePath.lastComponents())"
             )
 
         // Attempting to access the current session will force the session reader to load

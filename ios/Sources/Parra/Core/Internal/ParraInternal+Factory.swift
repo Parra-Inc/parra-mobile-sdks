@@ -95,15 +95,17 @@ extension ParraInternal {
             notificationCenter: notificationCenter
         )
 
+        let sessionJsonEncoder = JSONEncoder.parraEncoder
         let sessionStorage = SessionStorage(
             forceDisabled: forceDisabled,
             sessionReader: SessionReader(
                 basePath: sessionStorageUrl,
                 sessionJsonDecoder: .parraDecoder,
+                sessionJsonEncoder: sessionJsonEncoder,
                 eventJsonDecoder: .spaceOptimizedDecoder,
                 fileManager: fileManager
             ),
-            sessionJsonEncoder: .parraEncoder,
+            sessionJsonEncoder: sessionJsonEncoder,
             eventJsonEncoder: .spaceOptimizedEncoder
         )
 

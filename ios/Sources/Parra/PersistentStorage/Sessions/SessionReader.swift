@@ -20,11 +20,13 @@ class SessionReader {
     init(
         basePath: URL,
         sessionJsonDecoder: JSONDecoder,
+        sessionJsonEncoder: JSONEncoder,
         eventJsonDecoder: JSONDecoder,
         fileManager: FileManager
     ) {
         self.basePath = basePath
         self.sessionJsonDecoder = sessionJsonDecoder
+        self.sessionJsonEncoder = sessionJsonEncoder
         self.eventJsonDecoder = eventJsonDecoder
         self.fileManager = fileManager
     }
@@ -219,18 +221,6 @@ class SessionReader {
             return existingSessionContext
         }
 
-        try fileManager.safeCreateDirectory(
-            at: sessionDir
-        )
-        try fileManager.safeCreateFile(
-            at: sessionPath,
-            overrideExisting: true
-        )
-        try fileManager.safeCreateFile(
-            at: eventsPath,
-            overrideExisting: true
-        )
-
         let nextSessionContext = SessionStorageContext(
             session: ParraSession(
                 sessionId: nextSessionId,
@@ -239,6 +229,23 @@ class SessionReader {
             ),
             sessionPath: sessionPath,
             eventsPath: eventsPath
+        )
+
+        let nextSessionData = try sessionJsonEncoder.encode(
+            nextSessionContext.session
+        )
+
+        try fileManager.safeCreateDirectory(
+            at: sessionDir
+        )
+        try fileManager.safeCreateFile(
+            at: sessionPath,
+            contents: nextSessionData,
+            overrideExisting: true
+        )
+        try fileManager.safeCreateFile(
+            at: eventsPath,
+            overrideExisting: true
         )
 
         _currentSessionContext = nextSessionContext
@@ -294,6 +301,7 @@ class SessionReader {
     // MARK: - Private
 
     private let sessionJsonDecoder: JSONDecoder
+    private let sessionJsonEncoder: JSONEncoder
     private let eventJsonDecoder: JSONDecoder
     private let fileManager: FileManager
 

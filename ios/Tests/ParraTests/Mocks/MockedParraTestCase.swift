@@ -193,14 +193,16 @@ class MockedParraTestCase: ParraBaseMock {
             storageModule: credentialStorageModule
         )
 
+        let sessionJsonEncoder = JSONEncoder.parraEncoder
         let sessionStorage = SessionStorage(
             sessionReader: SessionReader(
                 basePath: sessionStorageUrl,
                 sessionJsonDecoder: .parraDecoder,
+                sessionJsonEncoder: sessionJsonEncoder,
                 eventJsonDecoder: .spaceOptimizedDecoder,
                 fileManager: .default
             ),
-            sessionJsonEncoder: .parraEncoder,
+            sessionJsonEncoder: sessionJsonEncoder,
             eventJsonEncoder: .spaceOptimizedEncoder
         )
 
