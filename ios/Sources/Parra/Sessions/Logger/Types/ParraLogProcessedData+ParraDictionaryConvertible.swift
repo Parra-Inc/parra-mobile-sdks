@@ -29,10 +29,10 @@ extension ParraLogProcessedData: ParraSanitizedDictionaryConvertible {
             params["extra"] = extra
         }
 
-        let threadInfoDict = callSiteContext.threadInfo.sanitized.dictionary
-        if !threadInfoDict.isEmpty {
-            params["thread"] = threadInfoDict
-        }
+//        let threadInfoDict = callSiteContext.threadInfo.sanitized.dictionary
+//        if !threadInfoDict.isEmpty {
+//            params["thread"] = threadInfoDict
+//        }
 
         return ParraSanitizedDictionary(dictionary: params)
     }

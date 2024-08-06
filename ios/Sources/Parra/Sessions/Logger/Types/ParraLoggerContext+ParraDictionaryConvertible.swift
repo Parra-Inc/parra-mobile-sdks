@@ -10,30 +10,34 @@ import Foundation
 
 extension ParraLoggerContext: ParraSanitizedDictionaryConvertible {
     var sanitized: ParraSanitizedDictionary {
+
+        // Note: Many of these have been commented out since we're not using
+        // them yet.
+
         var params: [String: Any] = [
             "module": module,
-            "file_name": fileName
+//            "file_name": fileName
         ]
-
-        if let fiberId {
-            params["fiber_id"] = fiberId
-        }
-
-        if let fileExtension {
-            params["file_extension"] = fileExtension
-        }
+//
+//        if let fiberId {
+//            params["fiber_id"] = fiberId
+//        }
+//
+//        if let fileExtension {
+//            params["file_extension"] = fileExtension
+//        }
 
         if let category {
             params["category"] = category
         }
-
-        if !scopes.isEmpty {
-            params["scopes"] = scopes.map(\.name)
-        }
-
-        if let extra, !extra.isEmpty {
-            params["extra"] = extra
-        }
+//
+//        if !scopes.isEmpty {
+//            params["scopes"] = scopes.map(\.name)
+//        }
+//
+//        if let extra, !extra.isEmpty {
+//            params["extra"] = extra
+//        }
 
         return ParraSanitizedDictionary(dictionary: params)
     }
