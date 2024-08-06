@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+// The most that will be uploaded per request. Sessions that exceed this will
+// have their events chunked and uploaded in batches of this size.
+private let maxSessionEventsToUpload = 250
+
 // NOTE: Any logs used in here cause recursion in production
 
 private let logger = Logger(
@@ -161,7 +165,7 @@ class ParraSessionManager {
             // happens, we'll honor the most recent of these.
             var sessionResponse: ParraSessionsResponse?
 
-            for await nextSession in sessionIterator {
+            sessionLoop: for await nextSession in sessionIterator {
                 switch nextSession {
                 case .success(let sessionDirectory, let sessionUpload):
                     logger.trace("Session upload iterator produced session", [
@@ -213,47 +217,63 @@ class ParraSessionManager {
 
                         return false
                     }
+
                     crashReports.subtract(relevantCrashes)
 
-                    let response = await api.submitSession(
-                        attachCrashReports(
-                            to: sessionUpload,
-                            from: relevantCrashes
-                        )
+                    let sessionUploadWithCrashes = attachCrashReports(
+                        to: sessionUpload,
+                        from: relevantCrashes
                     )
 
-                    switch response.result {
-                    case .success(let payload):
-                        logger
-                            .debug(
-                                "Successfully uploaded session: \(sessionId)"
-                            )
-
-                        // Don't override the session response unless it's
-                        // another one with shouldPoll enabled.
-                        if payload.shouldPoll {
-                            sessionResponse = payload
-                        }
-
-                        removableSessionIds.insert(sessionId)
-                    case .failure(let error):
-                        logger.error(
-                            "Failed to upload session: \(sessionId)",
-                            error
+                    let chunkedSessions = sessionUploadWithCrashes.events.chunked(
+                        into: maxSessionEventsToUpload
+                    ).enumerated().map { (index, eventsChunk) in
+                        return sessionUploadWithCrashes.withChunkedEvents(
+                            newEvents: eventsChunk,
+                            chunkIndex: index
                         )
+                    }
 
-                        markSessionForDirectoryAsErrored(sessionDirectory)
+                    let totalChunks = chunkedSessions.count
 
-                        // If any of the sessions fail to upload afty rerying,
-                        // fail the entire operation returning the sessions that
-                        // have been completed so far.
-                        if response.context.attributes
-                            .contains(.exceededRetryLimit)
-                        {
-                            logger.debug(
-                                "Network retry limited exceeded. Will not attempt to sync additional sessions."
+                    for chunkedSession in chunkedSessions {
+                        let chunkNumber = chunkedSession.chunkIndex + 1
+                        let response = await api.submitSession(chunkedSession)
+
+                        switch response.result {
+                        case .success(let payload):
+                            logger
+                                .debug(
+                                    "Successfully uploaded session: \(sessionId) (\(chunkNumber)/\(totalChunks))"
+                                )
+
+                            // Don't override the session response unless it's
+                            // another one with shouldPoll enabled.
+                            if payload.shouldPoll {
+                                sessionResponse = payload
+                            }
+
+                            removableSessionIds.insert(sessionId)
+                        case .failure(let error):
+                            logger.error(
+                                "Failed to upload session: \(sessionId) (\(chunkNumber)/\(totalChunks))",
+                                error
                             )
-                            break
+
+                            markSessionForDirectoryAsErrored(sessionDirectory)
+
+                            // If any of the sessions fail to upload afty rerying,
+                            // fail the entire operation returning the sessions that
+                            // have been completed so far.
+                            if response.context.attributes
+                                .contains(.exceededRetryLimit)
+                            {
+                                logger.debug(
+                                    "Network retry limited exceeded. Will not attempt to sync additional sessions."
+                                )
+
+                                break sessionLoop
+                            }
                         }
                     }
                 case .error(let sessionDirectory, let error):

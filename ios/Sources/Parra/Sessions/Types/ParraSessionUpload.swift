@@ -16,10 +16,22 @@ struct ParraSessionUpload: Encodable {
         case userProperties
         case startedAt
         case endedAt
+        case chunkIndex
     }
 
     let session: ParraSession
     let events: [ParraSessionEvent]
+    let chunkIndex: Int
+
+    init(
+        session: ParraSession,
+        events: [ParraSessionEvent] = [],
+        chunkIndex: Int = 0
+    ) {
+        self.session = session
+        self.events = events
+        self.chunkIndex = chunkIndex
+    }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(
@@ -30,5 +42,17 @@ struct ParraSessionUpload: Encodable {
         try container.encode(session.userProperties, forKey: .userProperties)
         try container.encode(session.createdAt, forKey: .startedAt)
         try container.encode(session.endedAt, forKey: .endedAt)
+        try container.encode(chunkIndex, forKey: .chunkIndex)
+    }
+
+    func withChunkedEvents(
+        newEvents: [ParraSessionEvent],
+        chunkIndex: Int
+    ) -> ParraSessionUpload {
+        return ParraSessionUpload(
+            session: session,
+            events: newEvents,
+            chunkIndex: chunkIndex
+        )
     }
 }
