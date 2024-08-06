@@ -12,8 +12,24 @@ enum ParraDataSanitizer {
     // MARK: - Internal
 
     static func sanitize(httpHeaders: [String: String]) -> [String: String] {
+        // If any of the known naughty header words either exactly match
+        // any of the provided headers, or have a header that contains any of
+        // the naughty words in part.
+        
         return httpHeaders.filter { name, _ in
-            return !Constant.naughtyHeaders.contains(name.uppercased())
+            let upperName = name.uppercased()
+
+            if Constant.naughtyHeaders.contains(upperName) {
+                return false
+            }
+
+            for header in Constant.naughtyHeaders {
+                if upperName.contains(header) {
+                    return false
+                }
+            }
+
+            return true
         }
     }
 
@@ -33,7 +49,17 @@ enum ParraDataSanitizer {
                 "CSRFTOKEN",
                 "FORWARDED-FOR",
                 "REAL-IP",
-                "XSRF-TOKEN"
+                "XSRF-TOKEN",
+                "AUTH",
+                "TOKEN",
+                "ACCESS",
+                "KEY",
+                "ID",
+                "SECRET",
+                "CREDENTIAL",
+                "PASSWORD",
+                "USER",
+                "API"
             ]
         )
     }
