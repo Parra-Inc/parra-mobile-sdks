@@ -8,30 +8,21 @@
 
 import SwiftUI
 
-public struct PoweredByParraButton: View {
-    // MARK: - Lifecycle
-
-    public init() {}
-
-    // MARK: - Public
-
-    public var body: some View {
-        ParraLogoButton(type: .poweredBy)
-    }
-}
-
 struct ParraLogoButton: View {
-    @Environment(\.parra) var parra
+    @Environment(\.parra) private var parra
+    @EnvironmentObject private var appInfo: ParraAppInfo
 
     var type: ParraLogoType
 
     var body: some View {
-        Button {
-            parra.parraInternal.openTrackedSiteLink(
-                medium: type.utmMedium
-            )
-        } label: {
-            ParraLogo(type: type)
+        if !appInfo.tenant.hideBranding {
+            Button {
+                parra.parraInternal.openTrackedSiteLink(
+                    medium: type.utmMedium
+                )
+            } label: {
+                ParraLogo(type: type)
+            }
         }
     }
 }

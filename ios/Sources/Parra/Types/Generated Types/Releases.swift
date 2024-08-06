@@ -955,7 +955,8 @@ public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
         logo: ImageAssetStub?,
         domains: [Domain]?,
         urls: [URL]?,
-        entitlements: [Entitlement]?
+        entitlements: [Entitlement]?,
+        hideBranding: Bool
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -970,6 +971,7 @@ public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
         self.domains = domains
         self.urls = urls
         self.entitlements = entitlements
+        self.hideBranding = hideBranding
     }
 
     // MARK: - Public
@@ -988,6 +990,7 @@ public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
         case domains
         case urls
         case entitlements
+        case hideBranding
     }
 
     public let id: String
@@ -1005,6 +1008,7 @@ public struct TenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
     public let domains: [Domain]?
     public let urls: [URL]?
     public let entitlements: [Entitlement]?
+    public let hideBranding: Bool
 }
 
 public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {

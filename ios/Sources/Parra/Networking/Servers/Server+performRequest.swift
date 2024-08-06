@@ -176,19 +176,6 @@ extension Server {
         }
 
         #if DEBUG
-        if let query = request.url?.query(percentEncoded: true),
-           let decoded = query.removingPercentEncoding,
-           let reencoded = decoded.addingPercentEncoding(
-               withAllowedCharacters: .rfc3986Unreserved
-           )
-        {
-            if query != reencoded {
-                assertionFailure(
-                    "Request to: \(request.url!) contains reserved characters in query: \(query)"
-                )
-            }
-        }
-
         // Auto display HTML errors like those from Cloudflare in a popup
         // webview.
         if httpResponse.statusCode >= 400 {

@@ -87,7 +87,8 @@ extension ParraAppInfo: ParraFixture {
                             string: "https://tenant-201cbcf0-b5d6-4079-9e4d-177ae04cc9f4.parra.io"
                         )!
                     ],
-                    entitlements: []
+                    entitlements: [],
+                    hideBranding: false
                 ),
                 auth: ParraAppAuthInfo.validStates()[0],
                 legal: LegalInfo.validStates()[0],
