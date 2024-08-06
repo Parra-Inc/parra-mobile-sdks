@@ -19,8 +19,7 @@ struct {{ app.name.upper_camel }}App: App {
         ParraApp(
             workspaceId: "{{ tenant.id }}",
             applicationId: "{{ app.id }}",
-            appDelegate: appDelegate,
-            authenticationMethod: .parra
+            appDelegate: appDelegate
         ) {
             WindowGroup {
                 ParraOptionalAuthWindow { _ in
