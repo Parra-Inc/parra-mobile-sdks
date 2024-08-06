@@ -235,7 +235,10 @@ actor ParraStorageModule<DataType: Codable> {
                 )
             }
         } catch {
-            Logger.error("ParraStorageModule error deleting file", error)
+            Logger.debug("ParraStorageModule couldn't delete file", [
+                "name": name,
+                "reason": error.localizedDescription
+            ])
         }
     }
 

@@ -48,7 +48,9 @@ class DataManager {
         }
     }
 
-    func updateCurrentUserCredential(_ credential: ParraUser.Credential) async {
+    func updateCurrentUserCredential(
+        _ credential: ParraUser.Credential
+    ) async {
         if let user = await getCurrentUser() {
             let newUser = ParraUser(
                 credential: credential,
@@ -60,8 +62,10 @@ class DataManager {
     }
 
     func removeCurrentUser() async {
-        await credentialStorage.updateCredential(
-            credential: nil
-        )
+        if await getCurrentUser() != nil {
+            await credentialStorage.updateCredential(
+                credential: nil
+            )
+        }
     }
 }
