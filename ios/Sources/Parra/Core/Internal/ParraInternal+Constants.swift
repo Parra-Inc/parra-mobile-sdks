@@ -9,6 +9,18 @@
 import Foundation
 
 extension ParraInternal {
+    internal enum Demo {
+        /// The Parra sample app's workspace ID. You should not use this.
+        /// Instead, grab your workspace ID from
+        /// https://parra.io/dashboard/settings
+        static let workspaceId = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4"
+
+        /// The Parra sample app's application ID. You should not use this.
+        /// Instead, grab your application ID from
+        /// https://parra.io/dashboard/applications
+        static let applicationId = "edec3a6c-a375-4a9d-bce8-eb00860ef228"
+    }
+
     enum Constants {
         enum Formatters {
             /// Important! The exact settings of this formatter are critical for

@@ -33,8 +33,8 @@ struct ParraCardViewPreview<Content>: View where Content: View {
         )
 
         let appState = ParraAppState(
-            tenantId: Parra.Demo.workspaceId,
-            applicationId: Parra.Demo.applicationId
+            tenantId: ParraInternal.Demo.workspaceId,
+            applicationId: ParraInternal.Demo.applicationId
         )
 
         self.parra = Parra(
