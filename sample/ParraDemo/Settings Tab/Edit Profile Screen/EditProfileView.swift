@@ -2,7 +2,7 @@
 //  EditProfileView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/06/2024.
+//  Bootstrapped with ❤️ by Parra on 08/07/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -127,8 +127,10 @@ struct EditProfileView: View {
                 )
             } catch {
                 success = false
-                Logger.error("Error saving personal info", error)
+
+                ParraLogger.error("Error saving personal info", error)
             }
+
             withAnimation {
                 isLoading = false
                 isShowingSuccess = success
