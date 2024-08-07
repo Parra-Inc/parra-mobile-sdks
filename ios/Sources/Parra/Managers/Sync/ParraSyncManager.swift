@@ -8,9 +8,6 @@
 import Foundation
 import UIKit
 
-// TODO: What happens to the timer when the app goes to the background?
-// TODO: Timer should have exponential backoff. New eventual sync enqueued should reset this.
-
 private let logger = Logger(bypassEventCreation: true, category: "Sync Manager")
 
 /// Manager used to facilitate the synchronization of Parra data stored locally
@@ -255,8 +252,6 @@ class ParraSyncManager {
                     )
                 enqueuedSyncMode = .eventual
             }
-
-            // TODO: Maybe cancel the sync timer, double the countdown then start a new one?
         }
 
         guard let enqueuedSyncMode else {

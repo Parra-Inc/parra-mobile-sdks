@@ -37,10 +37,9 @@ extension ViewDataLoader {
                             ticketResponse: params.ticketResponse,
                             api: parra.parraInternal.api
                         ),
-                        config: config
-                    ) { _ in
-                        // TODO: Dismisser set on container.contentObserver?
-                    }
+                        config: config,
+                        contentTransformer: nil
+                    )
 
                 return container
             }

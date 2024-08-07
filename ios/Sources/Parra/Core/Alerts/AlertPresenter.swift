@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-// TODO: Top presentation from modal views results in too much top padding.
-
 struct AlertPresenter: ViewModifier {
     // MARK: - Lifecycle
 

@@ -8,9 +8,6 @@
 import Foundation
 import UIKit
 
-// TODO: Everything here that is updated via notification should be checked and reported in the params
-//       for significant events like app state change/session start/stop/etc.
-
 private let logger = Logger(category: "Sync Event Extensions")
 
 extension ParraInternal {
@@ -69,9 +66,6 @@ extension ParraInternal {
         }
 
         ParraInternal.hasStartedEventObservers = true
-
-        // TODO: Before adding observer, should we read the current values of everything and
-        // store them in user state?
 
         for (notificationName, selector) in notificationsToObserve {
             addObserver(for: notificationName, selector: selector)

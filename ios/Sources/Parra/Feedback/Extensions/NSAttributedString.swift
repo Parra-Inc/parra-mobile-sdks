@@ -33,7 +33,7 @@ extension NSAttributedString {
                 .self
         ] =
             UIFont(name: "Pacifico-Regular", size: 11) ?? UIFont
-                .boldSystemFont(ofSize: 11) // TODO: Delete
+                .boldSystemFont(ofSize: 11)
 
         let parraLogo = AttributedString(
             "Parra",

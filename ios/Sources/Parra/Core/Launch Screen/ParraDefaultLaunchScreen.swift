@@ -103,8 +103,6 @@ public struct ParraDefaultLaunchScreen: View {
 
     @ViewBuilder
     private func barOverlay(with geometry: GeometryProxy) -> some View {
-        // TODO: Figure this out without magic numbers.
-
         VStack {
             if let navigationBar = config.navigationBar {
                 renderImageOrBlurBar(

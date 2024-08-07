@@ -40,8 +40,6 @@ enum LoggerHelpers {
     static func splitFileId(
         fileId: String
     ) -> SplitFileId {
-        // TODO: Maybe this should be cached since it will be accessed frequently.
-
         let (module, fileName) = splitFileId(fileId: fileId)
 
         let fileParts = fileName.split(separator: ".")

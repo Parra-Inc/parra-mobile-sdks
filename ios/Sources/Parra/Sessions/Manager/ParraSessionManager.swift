@@ -501,9 +501,6 @@ extension ParraSessionManager: ParraLoggerBackend {
         //    automatic behavior in RELEASE is to write to sessions, we skip
         //    writing entirely in this case.
         //
-        // TODO: This will eventually need to be addressed to help catch errors
-        //       in this part of our code.
-        //
         // 2. The next check is for the event debug logging override flag, which
         //    is set by any environmental variable. This is used to allow us to
         //    force writing to both sessions and the consoles during development

@@ -8,12 +8,16 @@
 
 import Foundation
 
-// TODO: Document samples of each
-
 public enum ParraLoggerTimestampStyle {
     case custom(DateFormatter)
+    /// A Unix timestamp representing the number of seconds that have elapsed
+    /// since 00:00:00 UTC on 1 January 1970 (excluding leap seconds).
     case epoch
+
+    /// For example: 2021-07-01T00:00:00+00:00
     case iso8601
+
+    /// For example: 2021-10-01T00:00:00.000Z
     case rfc3339
 
     // MARK: - Public

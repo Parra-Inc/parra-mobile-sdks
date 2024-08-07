@@ -9,7 +9,8 @@
 import Foundation
 import os
 
-// TODO: Markers are wrapper around OSSignPoster https://developer.apple.com/documentation/os/logging/recording_performance_data
+// TODO: Markers are wrapper around OSSignPoster 
+// https://developer.apple.com/documentation/os/logging/recording_performance_data
 
 // TODO: Automatically create os activity when creating a logger instance
 //       auto apply events when logs happen. Auto handle child activities

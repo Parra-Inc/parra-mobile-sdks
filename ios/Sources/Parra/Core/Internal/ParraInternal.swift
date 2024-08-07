@@ -121,7 +121,7 @@ class ParraInternal {
                 await handleLogin(for: user)
             }
 
-        case (.anonymous(let user), _), (.authenticated(let user), _):
+        case (.anonymous(let user), _), (.authenticated(let user), _): // includes guest state
             // Changes from logged in to not logged in
             handleLogout(for: user)
 
@@ -129,9 +129,7 @@ class ParraInternal {
             assertionFailure()
 
             // shouldn't ever change _to_ this.
-        default:
-            // TODO: Should there be a transition into guest mode?
-            
+        default:            
             break
         }
     }

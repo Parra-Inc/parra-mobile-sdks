@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-// TODO: Update docs after SwiftUI
-
 /// A delegate for `ParraCardView`s that allows for additional customization,
 /// and to be informed of actions such as when particular cards are displayed
 /// or when all questions are answered.

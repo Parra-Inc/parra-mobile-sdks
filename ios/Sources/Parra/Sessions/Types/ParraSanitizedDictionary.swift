@@ -37,10 +37,25 @@ struct ParraSanitizedDictionary: ExpressibleByDictionaryLiteral {
 
     // MARK: - Private
 
-    private static func sanitize(url: URL) -> URL {
-        // TODO: This method and others like it...
-        // Maybe values of query params become ****
-        return url
+    private static func sanitize(url: URL) -> String {
+        let components = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: false
+        )
+
+        let split = url.absoluteString.split(separator: "?")
+        if split.count < 2 {
+            return url.absoluteString
+        }
+
+        // has a query string and split[0] is the full base url.
+
+        let base = split[0]
+        let queryItems = (components?.queryItems ?? []).map { item in
+            return "\(item.name)=*****"
+        }.joined(separator: "&")
+
+        return "\(base)?\(queryItems)"
     }
 }
 
