@@ -36,7 +36,7 @@ import Foundation
  let json = try! encoder.encode(dictionary)
  */
 @frozen
-public struct AnyEncodable: Encodable {
+public struct ParraAnyEncodable: Encodable {
     // MARK: - Lifecycle
 
     public init(_ value: (some Any)?) {
@@ -56,7 +56,7 @@ protocol _AnyEncodable {
 
 // MARK: - AnyEncodable + _AnyEncodable
 
-extension AnyEncodable: _AnyEncodable {}
+extension ParraAnyEncodable: _AnyEncodable {}
 
 // MARK: - Encodable
 
@@ -108,9 +108,9 @@ extension _AnyEncodable {
             try container.encode(url)
         #endif
         case let array as [Any?]:
-            try container.encode(array.map { AnyEncodable($0) })
+            try container.encode(array.map { ParraAnyEncodable($0) })
         case let dictionary as [String: Any?]:
-            try container.encode(dictionary.mapValues { AnyEncodable($0) })
+            try container.encode(dictionary.mapValues { ParraAnyEncodable($0) })
         case let encodable as Encodable:
             try encodable.encode(to: encoder)
         default:
@@ -163,8 +163,8 @@ extension _AnyEncodable {
 
 // MARK: - AnyEncodable + Equatable
 
-extension AnyEncodable: Equatable {
-    public static func == (lhs: AnyEncodable, rhs: AnyEncodable) -> Bool {
+extension ParraAnyEncodable: Equatable {
+    public static func == (lhs: ParraAnyEncodable, rhs: ParraAnyEncodable) -> Bool {
         switch (lhs.value, rhs.value) {
         case is (Void, Void):
             return true
@@ -197,11 +197,11 @@ extension AnyEncodable: Equatable {
         case (let lhs as String, let rhs as String):
             return lhs == rhs
         case (
-            let lhs as [String: AnyEncodable],
-            let rhs as [String: AnyEncodable]
+            let lhs as [String: ParraAnyEncodable],
+            let rhs as [String: ParraAnyEncodable]
         ):
             return lhs == rhs
-        case (let lhs as [AnyEncodable], let rhs as [AnyEncodable]):
+        case (let lhs as [ParraAnyEncodable], let rhs as [ParraAnyEncodable]):
             return lhs == rhs
         default:
             return false
@@ -211,7 +211,7 @@ extension AnyEncodable: Equatable {
 
 // MARK: - AnyEncodable + CustomStringConvertible
 
-extension AnyEncodable: CustomStringConvertible {
+extension ParraAnyEncodable: CustomStringConvertible {
     public var description: String {
         switch value {
         case is Void:
@@ -226,7 +226,7 @@ extension AnyEncodable: CustomStringConvertible {
 
 // MARK: - AnyEncodable + CustomDebugStringConvertible
 
-extension AnyEncodable: CustomDebugStringConvertible {
+extension ParraAnyEncodable: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch value {
         case let value as CustomDebugStringConvertible:
@@ -239,35 +239,35 @@ extension AnyEncodable: CustomDebugStringConvertible {
 
 // MARK: - AnyEncodable + ExpressibleByNilLiteral
 
-extension AnyEncodable: ExpressibleByNilLiteral {}
+extension ParraAnyEncodable: ExpressibleByNilLiteral {}
 
 // MARK: - AnyEncodable + ExpressibleByBooleanLiteral
 
-extension AnyEncodable: ExpressibleByBooleanLiteral {}
+extension ParraAnyEncodable: ExpressibleByBooleanLiteral {}
 
 // MARK: - AnyEncodable + ExpressibleByIntegerLiteral
 
-extension AnyEncodable: ExpressibleByIntegerLiteral {}
+extension ParraAnyEncodable: ExpressibleByIntegerLiteral {}
 
 // MARK: - AnyEncodable + ExpressibleByFloatLiteral
 
-extension AnyEncodable: ExpressibleByFloatLiteral {}
+extension ParraAnyEncodable: ExpressibleByFloatLiteral {}
 
 // MARK: - AnyEncodable + ExpressibleByStringLiteral
 
-extension AnyEncodable: ExpressibleByStringLiteral {}
+extension ParraAnyEncodable: ExpressibleByStringLiteral {}
 
 // MARK: - AnyEncodable + ExpressibleByStringInterpolation
 
-extension AnyEncodable: ExpressibleByStringInterpolation {}
+extension ParraAnyEncodable: ExpressibleByStringInterpolation {}
 
 // MARK: - AnyEncodable + ExpressibleByArrayLiteral
 
-extension AnyEncodable: ExpressibleByArrayLiteral {}
+extension ParraAnyEncodable: ExpressibleByArrayLiteral {}
 
 // MARK: - AnyEncodable + ExpressibleByDictionaryLiteral
 
-extension AnyEncodable: ExpressibleByDictionaryLiteral {}
+extension ParraAnyEncodable: ExpressibleByDictionaryLiteral {}
 
 extension _AnyEncodable {
     public init(nilLiteral _: ()) {
@@ -308,7 +308,7 @@ extension _AnyEncodable {
 
 // MARK: - AnyEncodable + Hashable
 
-extension AnyEncodable: Hashable {
+extension ParraAnyEncodable: Hashable {
     public func hash(into hasher: inout Hasher) {
         switch value {
         case let value as Bool:
@@ -339,9 +339,9 @@ extension AnyEncodable: Hashable {
             hasher.combine(value)
         case let value as String:
             hasher.combine(value)
-        case let value as [String: AnyEncodable]:
+        case let value as [String: ParraAnyEncodable]:
             hasher.combine(value)
-        case let value as [AnyEncodable]:
+        case let value as [ParraAnyEncodable]:
             hasher.combine(value)
         default:
             break

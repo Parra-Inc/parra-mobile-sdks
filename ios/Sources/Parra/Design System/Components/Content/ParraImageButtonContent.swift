@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ImageButtonContent: Hashable, Equatable {
+public struct ParraImageButtonContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(

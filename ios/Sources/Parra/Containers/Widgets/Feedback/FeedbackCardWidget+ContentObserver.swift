@@ -32,12 +32,12 @@ extension FeedbackCardWidget {
             self.cardDelegate = initialParams.cardDelegate
             self.syncHandler = initialParams.syncHandler
 
-            let backButton = ImageButtonContent(
+            let backButton = ParraImageButtonContent(
                 image: .symbol("arrow.backward"),
                 isDisabled: false
             )
 
-            let forwardButton = ImageButtonContent(
+            let forwardButton = ParraImageButtonContent(
                 image: .symbol("arrow.forward"),
                 isDisabled: false
             )
@@ -69,8 +69,8 @@ extension FeedbackCardWidget {
             // MARK: - Lifecycle
 
             init(
-                backButton: ImageButtonContent,
-                forwardButton: ImageButtonContent
+                backButton: ParraImageButtonContent,
+                forwardButton: ParraImageButtonContent
             ) {
                 self.backButton = backButton
                 self.forwardButton = forwardButton
@@ -78,8 +78,8 @@ extension FeedbackCardWidget {
 
             // MARK: - Internal
 
-            fileprivate(set) var backButton: ImageButtonContent
-            fileprivate(set) var forwardButton: ImageButtonContent
+            fileprivate(set) var backButton: ParraImageButtonContent
+            fileprivate(set) var forwardButton: ParraImageButtonContent
         }
 
         @Published private(set) var content: Content
@@ -111,7 +111,7 @@ extension FeedbackCardWidget {
 
         func commitAnswers(
             for bucketItemId: String,
-            question: Question
+            question: ParraQuestion
         ) {
             guard let answer = currentAnswerState[bucketItemId] else {
                 // This check is critical since it's possible that a card could commit a selection change

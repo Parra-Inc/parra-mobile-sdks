@@ -10,7 +10,7 @@ import SwiftUI
 
 extension ReleaseContentObserver {
     enum ReleaseContentType: Equatable {
-        case newInstalledVersion(NewInstalledVersionInfo)
+        case newInstalledVersion(ParraNewInstalledVersionInfo)
         case stub(AppReleaseStub)
     }
 }

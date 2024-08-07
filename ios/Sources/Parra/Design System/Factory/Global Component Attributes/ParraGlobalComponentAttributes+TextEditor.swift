@@ -10,7 +10,7 @@ import SwiftUI
 
 public extension ParraGlobalComponentAttributes {
     func textEditorAttributes(
-        config: TextEditorConfig,
+        config: ParraTextEditorConfig,
         localAttributes: ParraAttributes.TextEditor?,
         theme: ParraTheme
     ) -> ParraAttributes.TextEditor {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public extension Logger {
+public extension ParraLogger {
     // TODO: It is possible that multiple markers returned from `time()`
     // functions could be chained together to measure the times between multiple
     // events. It would be nice to detect that a start marker was itself a

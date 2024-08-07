@@ -84,7 +84,7 @@ enum QuestionAnswerKind: Codable, Equatable {
 struct QuestionAnswer: Codable, Equatable {
     // MARK: - Lifecycle
 
-    init(kind: QuestionKind, data: any AnswerOption) {
+    init(kind: ParraQuestionKind, data: any AnswerOption) {
         self.kind = kind
         self.data = data
     }
@@ -92,7 +92,7 @@ struct QuestionAnswer: Codable, Equatable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.kind = try container.decode(QuestionKind.self, forKey: .kind)
+        self.kind = try container.decode(ParraQuestionKind.self, forKey: .kind)
         switch kind {
         case .checkbox:
             self.data = try container.decode(
@@ -121,7 +121,7 @@ struct QuestionAnswer: Codable, Equatable {
         case data
     }
 
-    let kind: QuestionKind
+    let kind: ParraQuestionKind
     let data: any AnswerOption
 
     static func == (lhs: QuestionAnswer, rhs: QuestionAnswer) -> Bool {

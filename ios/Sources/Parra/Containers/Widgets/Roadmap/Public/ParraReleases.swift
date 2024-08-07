@@ -31,7 +31,7 @@ public final class ParraReleases {
     /// Parra. This information can be used to render custom UI, or with Parra's
     /// ``SwiftUI/View/presentParraRelease(with:config:onDismiss:)``
     /// modifier to present a sheet showing off the details of the release.
-    public func fetchLatestRelease() async throws -> NewInstalledVersionInfo? {
+    public func fetchLatestRelease() async throws -> ParraNewInstalledVersionInfo? {
         let appInfo = try await appInfoManager.fetchLatestAppInfo(
             force: true
         )

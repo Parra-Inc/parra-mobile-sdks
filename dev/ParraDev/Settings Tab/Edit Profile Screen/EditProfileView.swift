@@ -127,8 +127,10 @@ struct EditProfileView: View {
                 )
             } catch {
                 success = false
-                Logger.error("Error saving personal info", error)
+
+                ParraLogger.error("Error saving personal info", error)
             }
+            
             withAnimation {
                 isLoading = false
                 isShowingSuccess = success

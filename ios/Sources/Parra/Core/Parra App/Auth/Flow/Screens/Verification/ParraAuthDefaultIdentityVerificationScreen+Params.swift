@@ -18,7 +18,7 @@ public extension ParraAuthDefaultIdentityVerificationScreen {
                 .PasswordlessType,
             userExists: Bool,
             passwordlessConfig: ParraAuthInfoPasswordlessConfig,
-            legalInfo: LegalInfo,
+            legalInfo: ParraLegalInfo,
             requestCodeResend: @escaping () async throws
                 -> ParraPasswordlessChallengeResponse,
             verifyCode: @escaping (
@@ -41,7 +41,7 @@ public extension ParraAuthDefaultIdentityVerificationScreen {
             .PasswordlessType
         public let userExists: Bool
         public let passwordlessConfig: ParraAuthInfoPasswordlessConfig
-        public let legalInfo: LegalInfo
+        public let legalInfo: ParraLegalInfo
         public let requestCodeResend: () async throws
             -> ParraPasswordlessChallengeResponse
         public let verifyCode: (_ code: String) async throws -> Void

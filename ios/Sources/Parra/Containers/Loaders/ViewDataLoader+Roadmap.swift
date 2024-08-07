@@ -14,14 +14,14 @@ struct RoadmapParams: Equatable {
 }
 
 public struct ParraRoadmapInfo: Equatable {
-    public let roadmapConfig: AppRoadmapConfiguration
-    public let selectedTab: RoadmapConfigurationTab
-    public let ticketResponse: UserTicketCollectionResponse
+    public let roadmapConfig: ParraAppRoadmapConfiguration
+    public let selectedTab: ParraRoadmapConfigurationTab
+    public let ticketResponse: ParraUserTicketCollectionResponse
 }
 
 extension ViewDataLoader {
     static func roadmapLoader(
-        config: RoadmapWidgetConfig
+        config: ParraRoadmapWidgetConfig
     ) -> ViewDataLoader<RoadmapParams, ParraRoadmapInfo, RoadmapWidget> {
         return ViewDataLoader<
             RoadmapParams,

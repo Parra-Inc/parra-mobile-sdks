@@ -108,7 +108,7 @@ extension ParraSessionManager {
         case .pretty:
             do {
                 let data = try JSONEncoder.parraPrettyConsoleEncoder
-                    .encode(AnyCodable(extra))
+                    .encode(ParraAnyCodable(extra))
 
                 // NSString is necessary to prevent additional escapes of quotations from being
                 // added in the Xcode console.

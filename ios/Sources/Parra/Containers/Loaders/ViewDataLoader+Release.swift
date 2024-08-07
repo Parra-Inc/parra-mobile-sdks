@@ -12,7 +12,7 @@ private let logger = Logger()
 
 extension ViewDataLoader {
     static func releaseLoader(
-        config: ChangelogWidgetConfig
+        config: ParraChangelogWidgetConfig
     )
         -> ViewDataLoader<
             Never,

@@ -11,17 +11,17 @@ import SwiftUI
 struct FeedbackQuestionCard: View {
     // MARK: - Internal
 
-    @Environment(FeedbackCardWidgetConfig.self) var config
+    @Environment(ParraFeedbackCardWidgetConfig.self) var config
     @EnvironmentObject var componentFactory: ComponentFactory
 
     let bucketId: String
-    let question: Question
+    let question: ParraQuestion
 
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 2) {
                 componentFactory.buildLabel(
-                    content: LabelContent(text: question.title),
+                    content: ParraLabelContent(text: question.title),
                     localAttributes: .default(with: .headline)
                 )
                 .minimumScaleFactor(0.8)
@@ -32,7 +32,7 @@ struct FeedbackQuestionCard: View {
 
                 if let subtitle = question.subtitle {
                     componentFactory.buildLabel(
-                        content: LabelContent(text: subtitle),
+                        content: ParraLabelContent(text: subtitle),
                         localAttributes: .default(with: .subheadline)
                     )
                     .minimumScaleFactor(0.8)

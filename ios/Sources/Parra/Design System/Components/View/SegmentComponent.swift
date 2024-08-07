@@ -11,8 +11,8 @@ import SwiftUI
 struct SegmentComponent: View {
     // MARK: - Internal
 
-    var config: SegmentConfig
-    let content: SegmentContent
+    var config: ParraSegmentConfig
+    let content: ParraSegmentContent
     let attributes: ParraAttributes.Segment
 
     var body: some View {
@@ -41,10 +41,10 @@ struct SegmentComponent: View {
 #Preview {
     ParraViewPreview { factory in
         factory.buildSegment(
-            config: SegmentConfig(),
-            content: SegmentContent(
+            config: ParraSegmentConfig(),
+            content: ParraSegmentContent(
                 options: ParraCardItemFixtures.ratingQuestionData.options.map {
-                    SegmentContent.Option(
+                    ParraSegmentContent.Option(
                         id: $0.id,
                         text: $0.title
                     )

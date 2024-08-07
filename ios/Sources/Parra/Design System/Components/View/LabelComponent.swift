@@ -12,7 +12,7 @@ struct LabelComponent: View {
     // MARK: - Lifecycle
 
     init(
-        content: LabelContent,
+        content: ParraLabelContent,
         attributes: ParraAttributes.Label
     ) {
         self.content = content
@@ -21,7 +21,7 @@ struct LabelComponent: View {
 
     // MARK: - Internal
 
-    let content: LabelContent
+    let content: ParraLabelContent
     let attributes: ParraAttributes.Label
 
     var body: some View {
@@ -70,7 +70,7 @@ struct LabelComponent: View {
     ParraViewPreview { factory in
         VStack(alignment: .leading, spacing: 16) {
             factory.buildLabel(
-                content: LabelContent(text: "Default config"),
+                content: ParraLabelContent(text: "Default config"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .body
@@ -79,7 +79,7 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                content: LabelContent(text: "A large title"),
+                content: ParraLabelContent(text: "A large title"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .largeTitle,
@@ -89,12 +89,12 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                content: LabelContent(text: "A large title 2"),
+                content: ParraLabelContent(text: "A large title 2"),
                 localAttributes: .default(with: .largeTitle)
             )
 
             factory.buildLabel(
-                content: LabelContent(text: "A subheadline"),
+                content: ParraLabelContent(text: "A subheadline"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .subheadline
@@ -103,7 +103,7 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                content: LabelContent(
+                content: ParraLabelContent(
                     text: "A subheadline with icon",
                     icon: .symbol("sun.rain.circle.fill")
                 ),
@@ -115,7 +115,7 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                content: LabelContent(text: "With a background"),
+                content: ParraLabelContent(text: "With a background"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .body,
@@ -126,7 +126,7 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                content: LabelContent(text: "max width"),
+                content: ParraLabelContent(text: "max width"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         color: .white,
@@ -146,7 +146,7 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                content: LabelContent(text: "custom width"),
+                content: ParraLabelContent(text: "custom width"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         color: .white,
@@ -166,7 +166,7 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                content: LabelContent(text: "With a gradient background"),
+                content: ParraLabelContent(text: "With a gradient background"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .title,
@@ -186,7 +186,7 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                content: LabelContent(
+                content: ParraLabelContent(
                     text: "BG and icon",
                     icon: .symbol("fireworks")
                 ),
@@ -212,7 +212,7 @@ struct LabelComponent: View {
             )
 
             factory.buildLabel(
-                content: LabelContent(text: "With a corner radius"),
+                content: ParraLabelContent(text: "With a corner radius"),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .subheadline

@@ -11,7 +11,7 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildLabel(
-        content: LabelContent,
+        content: ParraLabelContent,
         localAttributes: ParraAttributes.Label? = nil
     ) -> LabelComponent {
         let attributes = attributeProvider.labelAttributes(
@@ -31,7 +31,7 @@ extension ComponentFactory {
         localAttributes: ParraAttributes.Label? = nil
     ) -> LabelComponent {
         buildLabel(
-            content: LabelContent(text: text),
+            content: ParraLabelContent(text: text),
             localAttributes: localAttributes
         )
     }

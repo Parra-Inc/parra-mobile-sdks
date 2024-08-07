@@ -12,7 +12,7 @@ struct ChangelogWidget: Container {
     // MARK: - Lifecycle
 
     init(
-        config: ChangelogWidgetConfig,
+        config: ParraChangelogWidgetConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
@@ -25,7 +25,7 @@ struct ChangelogWidget: Container {
 
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
-    let config: ChangelogWidgetConfig
+    let config: ParraChangelogWidgetConfig
 
     @EnvironmentObject var themeManager: ParraThemeManager
 
@@ -192,13 +192,13 @@ struct ChangelogWidget: Container {
         )
         .emptyPlaceholder(contentObserver.releasePaginator.items) {
             componentFactory.buildEmptyState(
-                config: EmptyStateConfig.default,
+                config: ParraEmptyStateConfig.default,
                 content: contentObserver.content.emptyStateView
             )
         }
         .errorPlaceholder(contentObserver.releasePaginator.error) {
             componentFactory.buildEmptyState(
-                config: EmptyStateConfig.errorDefault,
+                config: ParraEmptyStateConfig.errorDefault,
                 content: contentObserver.content.errorStateView
             )
         }

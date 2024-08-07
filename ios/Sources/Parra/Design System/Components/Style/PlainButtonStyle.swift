@@ -12,7 +12,7 @@ struct PlainButtonStyle: ButtonStyle {
     // MARK: - Internal
 
     let config: ParraTextButtonConfig
-    let content: TextButtonContent
+    let content: ParraTextButtonContent
     let attributes: ParraAttributes.PlainButton
 
     @ViewBuilder

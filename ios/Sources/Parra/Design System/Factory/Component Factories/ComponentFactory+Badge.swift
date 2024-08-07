@@ -33,7 +33,7 @@ extension ComponentFactory {
         }
 
         BadgeComponent(
-            content: BadgeContent(
+            content: ParraBadgeContent(
                 text: text,
                 icon: icon
             ),

@@ -15,7 +15,7 @@ struct ParraSessionEvent: Codable {
     init(
         createdAt: Date,
         name: String,
-        metadata: AnyCodable
+        metadata: ParraAnyCodable
     ) {
         self.createdAt = createdAt
         self.name = name
@@ -28,7 +28,7 @@ struct ParraSessionEvent: Codable {
     let name: String
 
     // Stop thinking this can be renamed. There is a server-side validation on this field name.
-    let metadata: AnyCodable
+    let metadata: ParraAnyCodable
 
     static func normalizedEventData(
         from wrappedEvent: ParraWrappedEvent
@@ -131,7 +131,7 @@ struct ParraSessionEvent: Codable {
                 name: StringManipulators.snakeCaseify(
                     text: name
                 ),
-                metadata: AnyCodable(combinedExtra)
+                metadata: ParraAnyCodable(combinedExtra)
             ),
             context: ParraSessionEventContext(
                 isClientGenerated: isClientGenerated,

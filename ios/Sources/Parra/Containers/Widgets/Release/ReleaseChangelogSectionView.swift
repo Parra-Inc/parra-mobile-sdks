@@ -11,7 +11,7 @@ import SwiftUI
 struct ReleaseChangelogSectionView: View {
     let content: AppReleaseSectionContent
 
-    @Environment(ChangelogWidgetConfig.self) var config
+    @Environment(ParraChangelogWidgetConfig.self) var config
     @EnvironmentObject var componentFactory: ComponentFactory
 
     var combinedText: String {
@@ -32,7 +32,7 @@ struct ReleaseChangelogSectionView: View {
             )
 
             componentFactory.buildLabel(
-                content: LabelContent(text: combinedText),
+                content: ParraLabelContent(text: combinedText),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .body,
@@ -57,17 +57,17 @@ struct ReleaseChangelogSectionView: View {
             Spacer()
             ReleaseChangelogSectionView(
                 content: AppReleaseSectionContent(
-                    AppReleaseSection.validStates()[0]
+                    ParraAppReleaseSection.validStates()[0]
                 )
             )
             ReleaseChangelogSectionView(
                 content: AppReleaseSectionContent(
-                    AppReleaseSection.validStates()[1]
+                    ParraAppReleaseSection.validStates()[1]
                 )
             )
             ReleaseChangelogSectionView(
                 content: AppReleaseSectionContent(
-                    AppReleaseSection.validStates()[2]
+                    ParraAppReleaseSection.validStates()[2]
                 )
             )
             Spacer()

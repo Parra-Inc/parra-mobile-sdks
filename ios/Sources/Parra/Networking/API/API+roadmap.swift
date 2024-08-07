@@ -9,7 +9,7 @@
 import Foundation
 
 extension API {
-    func getRoadmap() async throws -> AppRoadmapConfiguration {
+    func getRoadmap() async throws -> ParraAppRoadmapConfiguration {
         return try await hitEndpoint(.getRoadmap)
     }
 
@@ -17,7 +17,7 @@ extension API {
         limit: Int,
         offset: Int,
         filter: String
-    ) async throws -> UserTicketCollectionResponse {
+    ) async throws -> ParraUserTicketCollectionResponse {
         return try await hitEndpoint(
             .getPaginateTickets,
             queryItems: [
@@ -30,7 +30,7 @@ extension API {
 
     func voteForTicket(
         with ticketId: String
-    ) async -> AuthenticatedRequestResult<UserTicket> {
+    ) async -> AuthenticatedRequestResult<ParraUserTicket> {
         return await apiResourceServer.hitApiEndpoint(
             endpoint: .postVoteForTicket(
                 ticketId: ticketId
@@ -40,7 +40,7 @@ extension API {
 
     func removeVoteForTicket(
         with ticketId: String
-    ) async -> AuthenticatedRequestResult<UserTicket> {
+    ) async -> AuthenticatedRequestResult<ParraUserTicket> {
         return await apiResourceServer.hitApiEndpoint(
             endpoint: .deleteVoteForTicket(
                 ticketId: ticketId

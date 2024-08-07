@@ -81,7 +81,7 @@ extension AuthService {
         if existingUser {
             modalScreenManager.presentLoadingIndicatorModal(
                 content: ParraLoadingIndicatorContent(
-                    title: LabelContent(text: "Logging in with passkey"),
+                    title: ParraLabelContent(text: "Logging in with passkey"),
                     subtitle: nil,
                     cancel: nil
                 )

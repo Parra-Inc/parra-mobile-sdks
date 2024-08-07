@@ -6,7 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-public struct SegmentContent {
+public struct ParraSegmentContent {
     // MARK: - Lifecycle
 
     public init(

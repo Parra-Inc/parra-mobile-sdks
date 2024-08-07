@@ -24,23 +24,23 @@ extension RoadmapWidget {
             let roadmapConfig = initialParams.roadmapConfig
             let ticketResponse = initialParams.ticketResponse
 
-            let addRequestButton = TextButtonContent(
-                text: LabelContent(text: "Add request"),
+            let addRequestButton = ParraTextButtonContent(
+                text: ParraLabelContent(text: "Add request"),
                 isDisabled: false
             )
 
-            let emptyStateViewContent = EmptyStateContent(
-                title: LabelContent(
+            let emptyStateViewContent = ParraEmptyStateContent(
+                title: ParraLabelContent(
                     text: "No tickets yet"
                 ),
-                subtitle: LabelContent(
+                subtitle: ParraLabelContent(
                     text: "This is your opportunity to be the first 👀"
                 )
             )
 
-            let errorStateViewContent = EmptyStateContent(
-                title: EmptyStateContent.errorGeneric.title,
-                subtitle: LabelContent(
+            let errorStateViewContent = ParraEmptyStateContent(
+                title: ParraEmptyStateContent.errorGeneric.title,
+                subtitle: ParraLabelContent(
                     text: "Failed to load roadmap. Please try again later."
                 ),
                 icon: .symbol("network.slash", .monochrome)
@@ -60,7 +60,7 @@ extension RoadmapWidget {
 
             let initialPaginatorData = Paginator<
                 TicketUserContent,
-                RoadmapConfigurationTab
+                ParraRoadmapConfigurationTab
             >.Data(
                 items: ticketResponse.data.map { TicketUserContent($0) },
                 placeholderItems: [],
@@ -70,7 +70,7 @@ extension RoadmapWidget {
 
             let initialPaginator = Paginator<
                 TicketUserContent,
-                RoadmapConfigurationTab
+                ParraRoadmapConfigurationTab
             >(
                 context: initialTab,
                 data: initialPaginatorData,
@@ -108,17 +108,17 @@ extension RoadmapWidget {
         @Published var currentTicketToVote: String?
 
         private(set) var ticketCache = [
-            RoadmapConfigurationTab: Paginator<
+            ParraRoadmapConfigurationTab: Paginator<
                 TicketUserContent,
-                RoadmapConfigurationTab
+                ParraRoadmapConfigurationTab
             >.Data
         ]()
 
-        @Published private(set) var tabs: [RoadmapConfigurationTab]
+        @Published private(set) var tabs: [ParraRoadmapConfigurationTab]
 
         @Published var ticketPaginator: Paginator<
             TicketUserContent,
-            RoadmapConfigurationTab
+            ParraRoadmapConfigurationTab
                 // Using IUO because this object requires referencing self in a closure
                 // in its init so we need all fields set. Post-init this should always
                 // be set.
@@ -138,7 +138,7 @@ extension RoadmapWidget {
             }
         }
 
-        @Published var selectedTab: RoadmapConfigurationTab {
+        @Published var selectedTab: ParraRoadmapConfigurationTab {
             willSet(newTab) {
                 tabWillChange(to: newTab)
             }
@@ -169,7 +169,7 @@ extension RoadmapWidget {
 
         private var voteBag = Set<AnyCancellable>()
 
-        private let roadmapConfig: AppRoadmapConfiguration
+        private let roadmapConfig: ParraAppRoadmapConfiguration
 
         private func updateCacheForCurrentPaginator() {
             let tab = ticketPaginator.context
@@ -180,13 +180,13 @@ extension RoadmapWidget {
             )
         }
 
-        private func tabWillChange(to newTab: RoadmapConfigurationTab) {
+        private func tabWillChange(to newTab: ParraRoadmapConfigurationTab) {
             if let cachedData = ticketCache[newTab] {
                 logger.debug("tab will change to cached tab: \(newTab)")
 
                 ticketPaginator = Paginator<
                     TicketUserContent,
-                    RoadmapConfigurationTab
+                    ParraRoadmapConfigurationTab
                 >(
                     context: newTab,
                     data: cachedData,
@@ -197,7 +197,7 @@ extension RoadmapWidget {
 
                 let newPageData = Paginator<
                     TicketUserContent,
-                    RoadmapConfigurationTab
+                    ParraRoadmapConfigurationTab
                 >
                 .Data(
                     items: [],
@@ -207,7 +207,7 @@ extension RoadmapWidget {
 
                 ticketPaginator = Paginator<
                     TicketUserContent,
-                    RoadmapConfigurationTab
+                    ParraRoadmapConfigurationTab
                 >(
                     context: newTab,
                     data: newPageData,
@@ -224,7 +224,7 @@ extension RoadmapWidget {
         private func loadMoreTickets(
             _ limit: Int,
             _ offset: Int,
-            _ tab: RoadmapConfigurationTab
+            _ tab: ParraRoadmapConfigurationTab
         ) async throws -> [TicketUserContent] {
             let response = try await api.paginateTickets(
                 limit: limit,

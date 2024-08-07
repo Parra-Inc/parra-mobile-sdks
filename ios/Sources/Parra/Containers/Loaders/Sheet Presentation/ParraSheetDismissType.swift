@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum SheetDismissType: Equatable {
+public enum ParraSheetDismissType: Equatable {
     case cancelled
     case completed
     case failed(String)

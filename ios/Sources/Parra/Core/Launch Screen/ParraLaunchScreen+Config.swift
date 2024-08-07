@@ -13,7 +13,7 @@ public extension ParraLaunchScreen {
         // MARK: - Lifecycle
 
         public init(
-            type: LaunchScreenType,
+            type: ParraLaunchScreenType,
             fadeDuration: CGFloat = Config.defaultFadeDuration
         ) {
             self.type = type
@@ -24,7 +24,7 @@ public extension ParraLaunchScreen {
 
         public static let defaultFadeDuration: CGFloat = 0.5
 
-        public let type: LaunchScreenType
+        public let type: ParraLaunchScreenType
         public let fadeDuration: CGFloat
     }
 }

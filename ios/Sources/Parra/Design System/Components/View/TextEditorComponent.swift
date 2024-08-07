@@ -12,8 +12,8 @@ struct TextEditorComponent: View {
     // MARK: - Lifecycle
 
     init(
-        config: TextEditorConfig,
-        content: TextEditorContent,
+        config: ParraTextEditorConfig,
+        content: ParraTextEditorContent,
         attributes: ParraAttributes.TextEditor
     ) {
         self.config = config
@@ -23,8 +23,8 @@ struct TextEditorComponent: View {
 
     // MARK: - Internal
 
-    let config: TextEditorConfig
-    let content: TextEditorContent
+    let config: ParraTextEditorConfig
+    let content: ParraTextEditorContent
     let attributes: ParraAttributes.TextEditor
 
     @EnvironmentObject var componentFactory: ComponentFactory
@@ -127,9 +127,9 @@ struct TextEditorComponent: View {
         }
 
         let content = if let message {
-            LabelContent(text: message)
+            ParraLabelContent(text: message)
         } else {
-            LabelContent(text: "")
+            ParraLabelContent(text: "")
         }
 
         let helperAttributes = isError
@@ -149,7 +149,7 @@ struct TextEditorComponent: View {
 
             VStack {
                 componentFactory.buildLabel(
-                    content: LabelContent(text: count),
+                    content: ParraLabelContent(text: count),
                     localAttributes: attributes.characterCountLabel
                 )
             }
@@ -178,8 +178,8 @@ struct TextEditorComponent: View {
     ParraViewPreview { factory in
         VStack {
             factory.buildTextEditor(
-                config: TextEditorConfig(),
-                content: TextEditorContent(
+                config: ParraTextEditorConfig(),
+                content: ParraTextEditorContent(
                     title: "Some title",
                     placeholder: "Temp placeholder",
                     helper: "helper text woo",
@@ -189,8 +189,8 @@ struct TextEditorComponent: View {
             )
 
             factory.buildTextEditor(
-                config: TextEditorConfig(),
-                content: TextEditorContent(
+                config: ParraTextEditorConfig(),
+                content: ParraTextEditorContent(
                     title: "Some title",
                     placeholder: "temp placeholder",
                     helper: "helper text woo",
@@ -200,8 +200,8 @@ struct TextEditorComponent: View {
             )
 
             factory.buildTextEditor(
-                config: TextEditorConfig(),
-                content: TextEditorContent(
+                config: ParraTextEditorConfig(),
+                content: ParraTextEditorContent(
                     title: "Some title",
                     placeholder: "temp placeholder",
                     helper: "helper text woo",
@@ -211,8 +211,8 @@ struct TextEditorComponent: View {
             )
 
             factory.buildTextEditor(
-                config: TextEditorConfig(),
-                content: TextEditorContent(
+                config: ParraTextEditorConfig(),
+                content: ParraTextEditorContent(
                     title: "Some title",
                     placeholder: "temp placeholder",
                     helper: "helper text woo",

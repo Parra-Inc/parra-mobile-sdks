@@ -31,7 +31,7 @@ extension ComponentFactory {
     @ViewBuilder
     func buildAsyncImage(
         config: ParraImageConfig? = nil,
-        content: AsyncImageContent,
+        content: ParraAsyncImageContent,
         localAttributes: ParraAttributes.AsyncImage? = nil
     ) -> some View {
         let attributes = attributeProvider.asyncImageAttributes(

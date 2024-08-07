@@ -13,7 +13,7 @@ struct AsyncImageComponent: View {
 
     init(
         config: ParraImageConfig,
-        content: AsyncImageContent,
+        content: ParraAsyncImageContent,
         attributes: ParraAttributes.AsyncImage
     ) {
         self.config = config
@@ -24,7 +24,7 @@ struct AsyncImageComponent: View {
     // MARK: - Internal
 
     let config: ParraImageConfig
-    let content: AsyncImageContent
+    let content: ParraAsyncImageContent
     let attributes: ParraAttributes.AsyncImage
 
     @Environment(\.parra) var parra
@@ -93,7 +93,7 @@ struct AsyncImageComponent: View {
 
             componentFactory.buildAsyncImage(
                 config: .init(contentMode: .fill),
-                content: AsyncImageContent(
+                content: ParraAsyncImageContent(
                     url: URL(
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                     )!
@@ -107,7 +107,7 @@ struct AsyncImageComponent: View {
 
             componentFactory.buildAsyncImage(
                 config: .init(contentMode: .fill),
-                content: AsyncImageContent(
+                content: ParraAsyncImageContent(
                     url: URL(
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100"
                     )!
@@ -120,7 +120,7 @@ struct AsyncImageComponent: View {
             Spacer()
 
             componentFactory.buildAsyncImage(
-                content: AsyncImageContent(
+                content: ParraAsyncImageContent(
                     url: URL(
                         string: "https://images.unsplash.com/photo-1636819488524-1f019c4efsdfsd"
                     )!

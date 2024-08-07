@@ -9,7 +9,7 @@
 import SwiftUI
 
 @MainActor
-public struct ViewDataLoader<TransformParams, Data, ViewContent>
+struct ViewDataLoader<TransformParams, Data, ViewContent>
     where ViewContent: View, Data: Equatable, TransformParams: Equatable
 {
     // MARK: - Lifecycle
@@ -56,7 +56,7 @@ public struct ViewDataLoader<TransformParams, Data, ViewContent>
         }
     }
 
-    typealias Dismisser = @MainActor (SheetDismissType) -> Void
+    typealias Dismisser = @MainActor (ParraSheetDismissType) -> Void
 
     @ViewBuilder let render: @MainActor (Parra, Data, Dismisser?) -> ViewContent
 }

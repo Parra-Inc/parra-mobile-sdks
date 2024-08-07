@@ -50,7 +50,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             using: themeManager.theme
         )
         .onAppear {
-            continueButtonContent = TextButtonContent(
+            continueButtonContent = ParraTextButtonContent(
                 text: continueButtonContent.text,
                 isDisabled: identity.isEmpty
             )
@@ -73,7 +73,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 in: .whitespacesAndNewlines
             )
 
-            continueButtonContent = TextButtonContent(
+            continueButtonContent = ParraTextButtonContent(
                 text: continueButtonContent.text,
                 isDisabled: trimmed.isEmpty
             )
@@ -115,7 +115,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
     @FocusState private var isFocused: Bool
     @State private var identity = ""
-    @State private var continueButtonContent: TextButtonContent = .init(
+    @State private var continueButtonContent: ParraTextButtonContent = .init(
         text: "Continue",
         isDisabled: true
     )
@@ -138,7 +138,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
         if let errorMessage {
             componentFactory.buildLabel(
-                content: LabelContent(text: errorMessage),
+                content: ParraLabelContent(text: errorMessage),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         color: themeManager.theme.palette.error.toParraColor()
@@ -166,7 +166,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             AnyView(topView)
         } else {
             componentFactory.buildLabel(
-                content: LabelContent(text: identityFieldTitle),
+                content: ParraLabelContent(text: identityFieldTitle),
                 localAttributes: ParraAttributes.Label(
                     text: .default(with: .title),
                     padding: .md

@@ -12,7 +12,7 @@ struct BadgeComponent: View {
     // MARK: - Lifecycle
 
     init(
-        content: BadgeContent,
+        content: ParraBadgeContent,
         attributes: ParraAttributes.Badge
     ) {
         self.content = content
@@ -21,7 +21,7 @@ struct BadgeComponent: View {
 
     // MARK: - Internal
 
-    let content: BadgeContent
+    let content: ParraBadgeContent
     let attributes: ParraAttributes.Badge
 
     var body: some View {
@@ -51,7 +51,7 @@ struct BadgeComponent: View {
             : attributes
 
         componentFactory.buildLabel(
-            content: LabelContent(
+            content: ParraLabelContent(
                 text: content.text,
                 icon: content.icon
             ),

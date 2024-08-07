@@ -11,8 +11,8 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildTextEditor(
-        config: TextEditorConfig,
-        content: TextEditorContent,
+        config: ParraTextEditorConfig,
+        content: ParraTextEditorContent,
         localAttributes: ParraAttributes.TextEditor? = nil
     ) -> some View {
         let attributes = attributeProvider.textEditorAttributes(

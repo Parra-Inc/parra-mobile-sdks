@@ -12,21 +12,21 @@ struct TicketUserContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        _ userTicket: UserTicket
+        _ userTicket: ParraUserTicket
     ) {
         self.originalTicket = userTicket
         self.id = userTicket.id
         self.ticketNumber = userTicket.ticketNumber
-        self.createdAt = LabelContent(
+        self.createdAt = ParraLabelContent(
             text: userTicket.createdAt.timeAgo(
                 dateTimeStyle: .numeric,
                 unitStyle: .short
             )
         )
         self.type = userTicket.type
-        self.title = LabelContent(text: userTicket.title)
+        self.title = ParraLabelContent(text: userTicket.title)
         self.description = if let description = userTicket.description {
-            LabelContent(text: description)
+            ParraLabelContent(text: description)
         } else {
             nil
         }
@@ -39,7 +39,7 @@ struct TicketUserContent: Identifiable, Hashable {
         self.voteCount = TicketUserContent.voteCountLabelContent(
             from: userTicket.voteCount
         )
-        self.voteButton = ImageButtonContent(
+        self.voteButton = ParraImageButtonContent(
             image: .symbol("triangleshape.fill", .monochrome),
             isDisabled: false
         )
@@ -51,7 +51,7 @@ struct TicketUserContent: Identifiable, Hashable {
     /// redaction. Needs to be computed to have unique IDs for display in lists.
     static var redacted: TicketUserContent {
         return TicketUserContent(
-            UserTicket(
+            ParraUserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "23812",
                 createdAt: .now,
@@ -70,20 +70,20 @@ struct TicketUserContent: Identifiable, Hashable {
         )
     }
 
-    let originalTicket: UserTicket
+    let originalTicket: ParraUserTicket
     let id: String
     let ticketNumber: String
-    let createdAt: LabelContent
-    let type: TicketType
-    let title: LabelContent
-    let description: LabelContent?
-    let status: TicketStatus
-    let displayStatus: TicketDisplayStatus
+    let createdAt: ParraLabelContent
+    let type: ParraTicketType
+    let title: ParraLabelContent
+    let description: ParraLabelContent?
+    let status: ParraTicketStatus
+    let displayStatus: ParraTicketDisplayStatus
     let statusTitle: String
     let votingEnabled: Bool
     private(set) var voted: Bool
-    private(set) var voteCount: LabelContent
-    let voteButton: ImageButtonContent
+    private(set) var voteCount: ParraLabelContent
+    let voteButton: ParraImageButtonContent
 
     func withVoteToggled() -> TicketUserContent {
         let previouslyVoted = voted
@@ -112,8 +112,8 @@ struct TicketUserContent: Identifiable, Hashable {
 
     private static func voteCountLabelContent(
         from voteCount: Int
-    ) -> LabelContent {
-        return LabelContent(
+    ) -> ParraLabelContent {
+        return ParraLabelContent(
             text: voteCount.formatted(.number.notation(.compactName))
         )
     }

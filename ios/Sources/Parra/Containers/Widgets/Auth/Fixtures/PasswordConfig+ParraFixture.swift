@@ -8,25 +8,25 @@
 
 import SwiftUI
 
-extension PasswordConfig: ParraFixture {
-    static func validStates() -> [PasswordConfig] {
+extension ParraPasswordConfig: ParraFixture {
+    static func validStates() -> [ParraPasswordConfig] {
         return [
-            PasswordConfig(
+            ParraPasswordConfig(
                 iosPasswordRulesDescriptor: "required: upper, lower, digit; minlength: 8; maxlength: 128;",
                 rules: [
-                    PasswordRule(
+                    ParraPasswordRule(
                         regularExpression: "^.{8,128}$",
                         errorMessage: "between 8 and 128 characters"
                     ),
-                    PasswordRule(
+                    ParraPasswordRule(
                         regularExpression: "^.*[A-Z]+.*$",
                         errorMessage: "at least one uppercase letter"
                     ),
-                    PasswordRule(
+                    ParraPasswordRule(
                         regularExpression: "^.*[a-z]+.*$",
                         errorMessage: "at least one lowercase letter"
                     ),
-                    PasswordRule(
+                    ParraPasswordRule(
                         regularExpression: "^.*[0-9]+.*$",
                         errorMessage: "at least one number"
                     )
@@ -35,7 +35,7 @@ extension PasswordConfig: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [PasswordConfig] {
+    static func invalidStates() -> [ParraPasswordConfig] {
         return []
     }
 }

@@ -12,25 +12,25 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        _ newInstalledAppVersion: NewInstalledVersionInfo
+        _ newInstalledAppVersion: ParraNewInstalledVersionInfo
     ) {
         self.id = newInstalledAppVersion.release.id
-        self.title = LabelContent(
+        self.title = ParraLabelContent(
             text: newInstalledAppVersion.configuration.title
         )
-        self.subtitle = LabelContent(
+        self.subtitle = ParraLabelContent(
             text: newInstalledAppVersion.release.name
         )
-        self.version = LabelContent(
+        self.version = ParraLabelContent(
             text: newInstalledAppVersion.release.version
         )
-        self.description = LabelContent(
+        self.description = ParraLabelContent(
             text: newInstalledAppVersion.release.description
         )
-        self.type = LabelContent(
+        self.type = ParraLabelContent(
             text: newInstalledAppVersion.release.type.userFacingString
         )
-        self.createdAt = LabelContent(
+        self.createdAt = ParraLabelContent(
             text: newInstalledAppVersion.release.createdAt.timeAgo(
                 dateTimeStyle: .numeric
             )
@@ -45,8 +45,8 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
         self.otherReleasesButton = if newInstalledAppVersion.configuration
             .hasOtherReleases
         {
-            TextButtonContent(
-                text: LabelContent(
+            ParraTextButtonContent(
+                text: ParraLabelContent(
                     text: "Previous Releases"
                 ),
                 isLoading: true
@@ -57,15 +57,15 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
     }
 
     init(
-        _ release: AppRelease
+        _ release: ParraAppRelease
     ) {
         self.id = release.id
-        self.title = LabelContent(text: release.name)
+        self.title = ParraLabelContent(text: release.name)
         self.subtitle = nil
-        self.version = LabelContent(text: release.version)
-        self.description = LabelContent(text: release.description)
-        self.type = LabelContent(text: release.type.userFacingString)
-        self.createdAt = LabelContent(
+        self.version = ParraLabelContent(text: release.version)
+        self.description = ParraLabelContent(text: release.description)
+        self.type = ParraLabelContent(text: release.type.userFacingString)
+        self.createdAt = ParraLabelContent(
             text: release.createdAt.timeAgo(
                 dateTimeStyle: .numeric
             )
@@ -79,17 +79,17 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
         _ release: AppReleaseStub
     ) {
         self.id = release.id
-        self.title = LabelContent(text: release.name)
+        self.title = ParraLabelContent(text: release.name)
         self.subtitle = nil
-        self.version = LabelContent(text: release.version)
-        self.description = LabelContent(text: release.description)
-        self.type = LabelContent(text: release.type.userFacingString)
-        self.createdAt = LabelContent(
+        self.version = ParraLabelContent(text: release.version)
+        self.description = ParraLabelContent(text: release.description)
+        self.type = ParraLabelContent(text: release.type.userFacingString)
+        self.createdAt = ParraLabelContent(
             text: release.createdAt.timeAgo(
                 dateTimeStyle: .numeric
             )
         )
-        self.sections = AppReleaseSection.validStates()
+        self.sections = ParraAppReleaseSection.validStates()
             .map { AppReleaseSectionContent($0) }
         self.header = ReleaseHeaderContent(release.header)
         self.otherReleasesButton = nil
@@ -98,13 +98,13 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
     // MARK: - Internal
 
     let id: String
-    let title: LabelContent
-    let subtitle: LabelContent?
-    let version: LabelContent
-    let type: LabelContent
-    let createdAt: LabelContent
-    let description: LabelContent?
+    let title: ParraLabelContent
+    let subtitle: ParraLabelContent?
+    let version: ParraLabelContent
+    let type: ParraLabelContent
+    let createdAt: ParraLabelContent
+    let description: ParraLabelContent?
     let sections: [AppReleaseSectionContent]
     let header: ReleaseHeaderContent?
-    let otherReleasesButton: TextButtonContent?
+    let otherReleasesButton: ParraTextButtonContent?
 }

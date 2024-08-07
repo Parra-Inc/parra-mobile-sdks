@@ -8,12 +8,12 @@
 
 import SwiftUI
 
-public struct AsyncImageContent: Hashable, Equatable {
+public struct ParraAsyncImageContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     init(
         url: URL,
-        originalSize: Size? = nil
+        originalSize: ParraSize? = nil
     ) {
         self.url = url
         self.originalSize = originalSize
@@ -22,5 +22,5 @@ public struct AsyncImageContent: Hashable, Equatable {
     // MARK: - Internal
 
     let url: URL
-    let originalSize: Size?
+    let originalSize: ParraSize?
 }

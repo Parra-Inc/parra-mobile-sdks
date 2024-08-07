@@ -78,7 +78,7 @@ public extension View {
     func presentParraChangePasswordView(
         isPresented: Binding<Bool>,
         config: ParraAuthDefaultForgotPasswordScreen.Config = .default,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentSheet(
             isPresented: isPresented,

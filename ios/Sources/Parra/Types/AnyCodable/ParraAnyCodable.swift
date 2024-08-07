@@ -20,7 +20,7 @@ import Foundation
  - SeeAlso: `AnyDecodable`
  */
 @frozen
-public struct AnyCodable: Codable {
+public struct ParraAnyCodable: Codable {
     // MARK: - Lifecycle
 
     public init(_ value: (some Any)?) {
@@ -34,12 +34,12 @@ public struct AnyCodable: Codable {
 
 // MARK: _AnyEncodable, _AnyDecodable
 
-extension AnyCodable: _AnyEncodable, _AnyDecodable {}
+extension ParraAnyCodable: _AnyEncodable, _AnyDecodable {}
 
 // MARK: Equatable
 
-extension AnyCodable: Equatable {
-    public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {
+extension ParraAnyCodable: Equatable {
+    public static func == (lhs: ParraAnyCodable, rhs: ParraAnyCodable) -> Bool {
         switch (lhs.value, rhs.value) {
         case is (Void, Void):
             return true
@@ -71,9 +71,9 @@ extension AnyCodable: Equatable {
             return lhs == rhs
         case (let lhs as String, let rhs as String):
             return lhs == rhs
-        case (let lhs as [String: AnyCodable], let rhs as [String: AnyCodable]):
+        case (let lhs as [String: ParraAnyCodable], let rhs as [String: ParraAnyCodable]):
             return lhs == rhs
-        case (let lhs as [AnyCodable], let rhs as [AnyCodable]):
+        case (let lhs as [ParraAnyCodable], let rhs as [ParraAnyCodable]):
             return lhs == rhs
         case (let lhs as [String: Any], let rhs as [String: Any]):
             return NSDictionary(dictionary: lhs) ==
@@ -90,7 +90,7 @@ extension AnyCodable: Equatable {
 
 // MARK: CustomStringConvertible
 
-extension AnyCodable: CustomStringConvertible {
+extension ParraAnyCodable: CustomStringConvertible {
     public var description: String {
         switch value {
         case is Void:
@@ -105,7 +105,7 @@ extension AnyCodable: CustomStringConvertible {
 
 // MARK: CustomDebugStringConvertible
 
-extension AnyCodable: CustomDebugStringConvertible {
+extension ParraAnyCodable: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch value {
         case let value as CustomDebugStringConvertible:
@@ -118,39 +118,39 @@ extension AnyCodable: CustomDebugStringConvertible {
 
 // MARK: ExpressibleByNilLiteral
 
-extension AnyCodable: ExpressibleByNilLiteral {}
+extension ParraAnyCodable: ExpressibleByNilLiteral {}
 
 // MARK: ExpressibleByBooleanLiteral
 
-extension AnyCodable: ExpressibleByBooleanLiteral {}
+extension ParraAnyCodable: ExpressibleByBooleanLiteral {}
 
 // MARK: ExpressibleByIntegerLiteral
 
-extension AnyCodable: ExpressibleByIntegerLiteral {}
+extension ParraAnyCodable: ExpressibleByIntegerLiteral {}
 
 // MARK: ExpressibleByFloatLiteral
 
-extension AnyCodable: ExpressibleByFloatLiteral {}
+extension ParraAnyCodable: ExpressibleByFloatLiteral {}
 
 // MARK: ExpressibleByStringLiteral
 
-extension AnyCodable: ExpressibleByStringLiteral {}
+extension ParraAnyCodable: ExpressibleByStringLiteral {}
 
 // MARK: ExpressibleByStringInterpolation
 
-extension AnyCodable: ExpressibleByStringInterpolation {}
+extension ParraAnyCodable: ExpressibleByStringInterpolation {}
 
 // MARK: ExpressibleByArrayLiteral
 
-extension AnyCodable: ExpressibleByArrayLiteral {}
+extension ParraAnyCodable: ExpressibleByArrayLiteral {}
 
 // MARK: ExpressibleByDictionaryLiteral
 
-extension AnyCodable: ExpressibleByDictionaryLiteral {}
+extension ParraAnyCodable: ExpressibleByDictionaryLiteral {}
 
 // MARK: Hashable
 
-extension AnyCodable: Hashable {
+extension ParraAnyCodable: Hashable {
     public func hash(into hasher: inout Hasher) {
         switch value {
         case let value as Bool:
@@ -181,9 +181,9 @@ extension AnyCodable: Hashable {
             hasher.combine(value)
         case let value as String:
             hasher.combine(value)
-        case let value as [String: AnyCodable]:
+        case let value as [String: ParraAnyCodable]:
             hasher.combine(value)
-        case let value as [AnyCodable]:
+        case let value as [ParraAnyCodable]:
             hasher.combine(value)
         default:
             break

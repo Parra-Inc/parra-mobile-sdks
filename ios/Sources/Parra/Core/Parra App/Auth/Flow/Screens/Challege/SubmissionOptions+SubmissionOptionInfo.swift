@@ -10,7 +10,7 @@ import SwiftUI
 
 extension SubmissionOptions {
     struct SubmissionOptionInfo: Identifiable, Hashable {
-        let content: TextButtonContent
+        let content: ParraTextButtonContent
         let onPress: () async -> Void
 
         var id: String {

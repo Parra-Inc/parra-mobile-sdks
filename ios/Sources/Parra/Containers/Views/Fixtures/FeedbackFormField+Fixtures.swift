@@ -8,40 +8,40 @@
 
 import Foundation
 
-extension FeedbackFormField: ParraFixture {
-    static func validStates() -> [FeedbackFormField] {
+extension ParraFeedbackFormField: ParraFixture {
+    static func validStates() -> [ParraFeedbackFormField] {
         return [
-            FeedbackFormField(
+            ParraFeedbackFormField(
                 name: "type",
                 title: "Type of Feedback",
                 helperText: "Select one, please!",
                 type: .select,
                 required: true,
                 data: .feedbackFormSelectFieldData(
-                    FeedbackFormSelectFieldData(
+                    ParraFeedbackFormSelectFieldData(
                         placeholder: "Please select an option",
                         options: [
-                            FeedbackFormSelectFieldOption(
+                            ParraFeedbackFormSelectFieldOption(
                                 title: "General feedback",
                                 value: "general-feedback",
                                 isOther: nil
                             ),
-                            FeedbackFormSelectFieldOption(
+                            ParraFeedbackFormSelectFieldOption(
                                 title: "Bug report",
                                 value: "bug-report",
                                 isOther: nil
                             ),
-                            FeedbackFormSelectFieldOption(
+                            ParraFeedbackFormSelectFieldOption(
                                 title: "Feature request",
                                 value: "feature-request",
                                 isOther: nil
                             ),
-                            FeedbackFormSelectFieldOption(
+                            ParraFeedbackFormSelectFieldOption(
                                 title: "Idea",
                                 value: "idea",
                                 isOther: nil
                             ),
-                            FeedbackFormSelectFieldOption(
+                            ParraFeedbackFormSelectFieldOption(
                                 title: "Other",
                                 value: "other",
                                 isOther: nil
@@ -50,26 +50,26 @@ extension FeedbackFormField: ParraFixture {
                     )
                 )
             ),
-            FeedbackFormField(
+            ParraFeedbackFormField(
                 name: "response-input",
                 title: "Your Feedback",
                 helperText: nil,
                 type: .input,
                 required: true,
                 data: .feedbackFormInputFieldData(
-                    FeedbackFormInputFieldData(
+                    ParraFeedbackFormInputFieldData(
                         placeholder: "placeholder"
                     )
                 )
             ),
-            FeedbackFormField(
+            ParraFeedbackFormField(
                 name: "response-text",
                 title: "Your Feedback",
                 helperText: nil,
                 type: .text,
                 required: true,
                 data: .feedbackFormTextFieldData(
-                    FeedbackFormTextFieldData(
+                    ParraFeedbackFormTextFieldData(
                         placeholder: "placeholder",
                         lines: 5,
                         minCharacters: 20,
@@ -81,7 +81,7 @@ extension FeedbackFormField: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [FeedbackFormField] {
+    static func invalidStates() -> [ParraFeedbackFormField] {
         return []
     }
 }

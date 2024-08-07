@@ -13,14 +13,14 @@ extension ParraAppInfo: ParraFixture {
         return [
             ParraAppInfo(
                 versionToken: "1.0.0",
-                newInstalledVersionInfo: NewInstalledVersionInfo(
-                    configuration: AppReleaseConfiguration(
+                newInstalledVersionInfo: ParraNewInstalledVersionInfo(
+                    configuration: ParraAppReleaseConfiguration(
                         title: "My new release",
                         hasOtherReleases: false
                     ),
-                    release: AppRelease.validStates()[0]
+                    release: ParraAppRelease.validStates()[0]
                 ),
-                tenant: TenantAppInfoStub(
+                tenant: ParraTenantAppInfoStub(
                     id: ParraInternal.Demo.workspaceId,
                     createdAt: .now,
                     updatedAt: .now,
@@ -38,7 +38,7 @@ extension ParraAppInfo: ParraFixture {
                         )!
                     ),
                     domains: [
-                        Domain(
+                        ParraDomain(
                             id: .uuid,
                             type: .external,
                             name: "parra-demo.com",
@@ -46,14 +46,14 @@ extension ParraAppInfo: ParraFixture {
                             host: "parra-demo.com",
                             url: URL(string: "https://parra-demo.com")!,
                             data: .externalDomainData(
-                                ExternalDomainData(
+                                ParraExternalDomainData(
                                     status: .error,
                                     name: "parra-demo.com",
                                     disabled: false
                                 )
                             )
                         ),
-                        Domain(
+                        ParraDomain(
                             id: .uuid,
                             type: .subdomain,
                             name: "parra-public-demo",
@@ -64,7 +64,7 @@ extension ParraAppInfo: ParraFixture {
                             )!,
                             data: nil
                         ),
-                        Domain(
+                        ParraDomain(
                             id: .uuid,
                             type: .fallback,
                             name: "tenant-\(ParraInternal.Demo.workspaceId)",
@@ -91,7 +91,7 @@ extension ParraAppInfo: ParraFixture {
                     hideBranding: false
                 ),
                 auth: ParraAppAuthInfo.validStates()[0],
-                legal: LegalInfo.validStates()[0],
+                legal: ParraLegalInfo.validStates()[0],
                 application: ParraApplicationIosConfig(
                     name: "Parra iOS Demo App",
                     description: "The Parra iOS Demo app using the native Swift SDK.",

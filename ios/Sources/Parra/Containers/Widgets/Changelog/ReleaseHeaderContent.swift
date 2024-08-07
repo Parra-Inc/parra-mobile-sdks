@@ -11,7 +11,7 @@ import SwiftUI
 struct ReleaseHeaderContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
-    init?(_ releaseHeader: ReleaseHeader?) {
+    init?(_ releaseHeader: ParraReleaseHeader?) {
         guard let releaseHeader else {
             return nil
         }
@@ -21,7 +21,7 @@ struct ReleaseHeaderContent: Identifiable, Hashable {
         }
 
         self.id = releaseHeader.id
-        self.image = AsyncImageContent(url: url)
+        self.image = ParraAsyncImageContent(url: url)
         self.size = CGSize(
             width: releaseHeader.size.width,
             height: releaseHeader.size.height
@@ -32,7 +32,7 @@ struct ReleaseHeaderContent: Identifiable, Hashable {
 
     public let id: String
     public let size: CGSize
-    public let image: AsyncImageContent
+    public let image: ParraAsyncImageContent
 }
 
 // MARK: - CGSize + Hashable

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public enum LaunchScreenType: Equatable {
+public enum ParraLaunchScreenType: Equatable {
     case `default`(ParraDefaultLaunchScreen.Config)
     case storyboard(ParraStoryboardLaunchScreen.Config)
     case custom(any View)
@@ -16,8 +16,8 @@ public enum LaunchScreenType: Equatable {
     // MARK: - Public
 
     public static func == (
-        lhs: LaunchScreenType,
-        rhs: LaunchScreenType
+        lhs: ParraLaunchScreenType,
+        rhs: ParraLaunchScreenType
     ) -> Bool {
         switch (lhs, rhs) {
         case (.default(let lConfig), .default(let rConfig)):

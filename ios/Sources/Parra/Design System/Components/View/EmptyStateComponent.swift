@@ -11,8 +11,8 @@ import SwiftUI
 struct EmptyStateComponent: View {
     // MARK: - Internal
 
-    let config: EmptyStateConfig
-    let content: EmptyStateContent
+    let config: ParraEmptyStateConfig
+    let content: ParraEmptyStateContent
     let attributes: ParraAttributes.EmptyState
     let onPrimaryAction: (() -> Void)?
     let onSecondaryAction: (() -> Void)?

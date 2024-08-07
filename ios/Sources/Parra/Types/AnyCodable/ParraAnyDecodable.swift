@@ -38,7 +38,7 @@ import Foundation
  let dictionary = try! decoder.decode([String : AnyDecodable].self, from: json)
  */
 @frozen
-public struct AnyDecodable: Decodable {
+public struct ParraAnyDecodable: Decodable {
     // MARK: - Lifecycle
 
     public init(_ value: (some Any)?) {
@@ -58,7 +58,7 @@ protocol _AnyDecodable {
 
 // MARK: - AnyDecodable + _AnyDecodable
 
-extension AnyDecodable: _AnyDecodable {}
+extension ParraAnyDecodable: _AnyDecodable {}
 
 extension _AnyDecodable {
     public init(from decoder: Decoder) throws {
@@ -80,10 +80,10 @@ extension _AnyDecodable {
             self.init(double)
         } else if let string = try? container.decode(String.self) {
             self.init(string)
-        } else if let array = try? container.decode([AnyDecodable].self) {
+        } else if let array = try? container.decode([ParraAnyDecodable].self) {
             self.init(array.map(\.value))
         } else if let dictionary = try? container
-            .decode([String: AnyDecodable].self)
+            .decode([String: ParraAnyDecodable].self)
         {
             self.init(dictionary.mapValues { $0.value })
         } else {
@@ -97,8 +97,8 @@ extension _AnyDecodable {
 
 // MARK: - AnyDecodable + Equatable
 
-extension AnyDecodable: Equatable {
-    public static func == (lhs: AnyDecodable, rhs: AnyDecodable) -> Bool {
+extension ParraAnyDecodable: Equatable {
+    public static func == (lhs: ParraAnyDecodable, rhs: ParraAnyDecodable) -> Bool {
         switch (lhs.value, rhs.value) {
         #if canImport(Foundation)
         case is (NSNull, NSNull), is (Void, Void):
@@ -133,11 +133,11 @@ extension AnyDecodable: Equatable {
         case (let lhs as String, let rhs as String):
             return lhs == rhs
         case (
-            let lhs as [String: AnyDecodable],
-            let rhs as [String: AnyDecodable]
+            let lhs as [String: ParraAnyDecodable],
+            let rhs as [String: ParraAnyDecodable]
         ):
             return lhs == rhs
-        case (let lhs as [AnyDecodable], let rhs as [AnyDecodable]):
+        case (let lhs as [ParraAnyDecodable], let rhs as [ParraAnyDecodable]):
             return lhs == rhs
         default:
             return false
@@ -147,7 +147,7 @@ extension AnyDecodable: Equatable {
 
 // MARK: - AnyDecodable + CustomStringConvertible
 
-extension AnyDecodable: CustomStringConvertible {
+extension ParraAnyDecodable: CustomStringConvertible {
     public var description: String {
         switch value {
         case is Void:
@@ -162,7 +162,7 @@ extension AnyDecodable: CustomStringConvertible {
 
 // MARK: - AnyDecodable + CustomDebugStringConvertible
 
-extension AnyDecodable: CustomDebugStringConvertible {
+extension ParraAnyDecodable: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch value {
         case let value as CustomDebugStringConvertible:
@@ -175,7 +175,7 @@ extension AnyDecodable: CustomDebugStringConvertible {
 
 // MARK: - AnyDecodable + Hashable
 
-extension AnyDecodable: Hashable {
+extension ParraAnyDecodable: Hashable {
     public func hash(into hasher: inout Hasher) {
         switch value {
         case let value as Bool:
@@ -206,9 +206,9 @@ extension AnyDecodable: Hashable {
             hasher.combine(value)
         case let value as String:
             hasher.combine(value)
-        case let value as [String: AnyDecodable]:
+        case let value as [String: ParraAnyDecodable]:
             hasher.combine(value)
-        case let value as [AnyDecodable]:
+        case let value as [ParraAnyDecodable]:
             hasher.combine(value)
         default:
             break

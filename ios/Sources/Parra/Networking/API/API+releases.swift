@@ -11,7 +11,7 @@ import Foundation
 extension API {
     func getRelease(
         with releaseId: String
-    ) async throws -> AppRelease {
+    ) async throws -> ParraAppRelease {
         return try await hitEndpoint(
             .getRelease(
                 releaseId: releaseId

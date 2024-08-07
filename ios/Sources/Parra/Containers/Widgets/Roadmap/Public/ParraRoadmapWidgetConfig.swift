@@ -8,21 +8,21 @@
 
 import SwiftUI
 
-public class RoadmapWidgetConfig: ContainerConfig {
+public class ParraRoadmapWidgetConfig: ContainerConfig {
     // MARK: - Lifecycle
 
     required init() {
-        self.addRequestSuccessToastTitle = RoadmapWidgetConfig.default
+        self.addRequestSuccessToastTitle = ParraRoadmapWidgetConfig.default
             .addRequestSuccessToastTitle
 
-        self.addRequestSuccessToastSubtitle = RoadmapWidgetConfig.default
+        self.addRequestSuccessToastSubtitle = ParraRoadmapWidgetConfig.default
             .addRequestSuccessToastSubtitle
     }
 
     public required init(
-        addRequestSuccessToastTitle: String = RoadmapWidgetConfig.default
+        addRequestSuccessToastTitle: String = ParraRoadmapWidgetConfig.default
             .addRequestSuccessToastTitle,
-        addRequestSuccessToastSubtitle: String = RoadmapWidgetConfig.default
+        addRequestSuccessToastSubtitle: String = ParraRoadmapWidgetConfig.default
             .addRequestSuccessToastSubtitle
     ) {
         self.addRequestSuccessToastSubtitle = addRequestSuccessToastSubtitle
@@ -31,7 +31,7 @@ public class RoadmapWidgetConfig: ContainerConfig {
 
     // MARK: - Public
 
-    public static let `default` = RoadmapWidgetConfig(
+    public static let `default` = ParraRoadmapWidgetConfig(
         addRequestSuccessToastTitle: "Request confirmed!",
         addRequestSuccessToastSubtitle: "Thank you for your input! We've noted your suggestion and will consider it for our roadmap after a thorough review."
     )

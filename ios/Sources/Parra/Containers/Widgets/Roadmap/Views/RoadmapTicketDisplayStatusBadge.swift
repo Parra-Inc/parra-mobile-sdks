@@ -12,7 +12,7 @@ struct RoadmapTicketDisplayStatusBadge: View {
     // MARK: - Lifecycle
 
     init(
-        displayStatus: TicketDisplayStatus,
+        displayStatus: ParraTicketDisplayStatus,
         title: String,
         size: ParraBadgeSize = .sm,
         variant: ParraBadgeVariant = .outlined,
@@ -27,7 +27,7 @@ struct RoadmapTicketDisplayStatusBadge: View {
 
     // MARK: - Internal
 
-    let displayStatus: TicketDisplayStatus
+    let displayStatus: ParraTicketDisplayStatus
     let title: String
     let size: ParraBadgeSize
     let variant: ParraBadgeVariant

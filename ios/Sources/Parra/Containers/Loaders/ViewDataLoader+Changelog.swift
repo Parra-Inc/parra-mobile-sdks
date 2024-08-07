@@ -19,7 +19,7 @@ public struct ParraChangelogInfo: Equatable {
 
 extension ViewDataLoader {
     static func changelogLoader(
-        config: ChangelogWidgetConfig
+        config: ParraChangelogWidgetConfig
     )
         -> ViewDataLoader<
             ChangelogParams,

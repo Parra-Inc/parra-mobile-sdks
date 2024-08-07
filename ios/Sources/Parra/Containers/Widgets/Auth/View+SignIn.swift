@@ -52,7 +52,7 @@ public extension View {
     func presentParraSignInView(
         isPresented: Binding<Bool>,
         config: ParraAuthenticationFlowConfig = .default,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentSheet(
             isPresented: isPresented,

@@ -8,20 +8,20 @@
 
 import Foundation
 
-extension UserTicketCollectionResponse: ParraFixture {
-    static func validStates() -> [UserTicketCollectionResponse] {
+extension ParraUserTicketCollectionResponse: ParraFixture {
+    static func validStates() -> [ParraUserTicketCollectionResponse] {
         return [
-            UserTicketCollectionResponse(
+            ParraUserTicketCollectionResponse(
                 page: 1,
                 pageCount: 3,
                 pageSize: 4,
                 totalCount: 10,
-                data: UserTicket.validStates()
+                data: ParraUserTicket.validStates()
             )
         ]
     }
 
-    static func invalidStates() -> [UserTicketCollectionResponse] {
+    static func invalidStates() -> [ParraUserTicketCollectionResponse] {
         return []
     }
 }

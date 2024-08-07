@@ -64,29 +64,29 @@ private let fakeEnhancements = [
 
 // MARK: - AppReleaseSection + ParraFixture
 
-extension AppReleaseSection: ParraFixture {
-    static func validStates() -> [AppReleaseSection] {
+extension ParraAppReleaseSection: ParraFixture {
+    static func validStates() -> [ParraAppReleaseSection] {
         let features = fakeFeatures.shuffled().prefix(Int.random(in: 1 ... 5))
         let bugs = fakeBugs.shuffled().prefix(Int.random(in: 1 ... 5))
         let enhancements = fakeEnhancements.shuffled()
             .prefix(Int.random(in: 1 ... 5))
 
         return [
-            AppReleaseSection(
+            ParraAppReleaseSection(
                 id: "features",
                 title: "✨ Features",
                 items: features.map {
                     createAppReleaseItem(with: $0)
                 }
             ),
-            AppReleaseSection(
+            ParraAppReleaseSection(
                 id: "bugfixes",
                 title: "🐛 Bug Fixes",
                 items: bugs.map {
                     createAppReleaseItem(with: $0)
                 }
             ),
-            AppReleaseSection(
+            ParraAppReleaseSection(
                 id: "enhancements",
                 title: "🔧 Enhancements",
                 items: enhancements.map {
@@ -96,20 +96,20 @@ extension AppReleaseSection: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [AppReleaseSection] {
+    static func invalidStates() -> [ParraAppReleaseSection] {
         return []
     }
 
     private static func createAppReleaseItem(with title: String)
-        -> AppReleaseItem
+        -> ParraAppReleaseItem
     {
         let createdAt = Date.now
             .daysAgo(TimeInterval(Int.random(in: 1 ... 100)))
         let ticketId = UUID().uuidString
         let tenantId = UUID().uuidString
 
-        let icon: TicketIcon? = if let emoji = String.randomEmoji() {
-            TicketIcon(
+        let icon: ParraTicketIcon? = if let emoji = String.randomEmoji() {
+            ParraTicketIcon(
                 type: .emoji,
                 value: emoji
             )
@@ -117,7 +117,7 @@ extension AppReleaseSection: ParraFixture {
             nil
         }
 
-        return AppReleaseItem(
+        return ParraAppReleaseItem(
             id: UUID().uuidString,
             createdAt: createdAt,
             updatedAt: createdAt
@@ -125,16 +125,16 @@ extension AppReleaseSection: ParraFixture {
             deletedAt: nil,
             releaseId: UUID().uuidString,
             ticketId: ticketId,
-            ticket: TicketStub(
+            ticket: ParraTicketStub(
                 id: ticketId,
                 createdAt: .now,
                 updatedAt: .now.daysAgo(1.3),
                 deletedAt: nil,
                 title: title,
                 shortTitle: nil,
-                type: TicketType.allCases.randomElement()!,
-                status: TicketStatus.allCases.randomElement()!,
-                priority: TicketPriority.allCases.randomElement()!,
+                type: ParraTicketType.allCases.randomElement()!,
+                status: ParraTicketStatus.allCases.randomElement()!,
+                priority: ParraTicketPriority.allCases.randomElement()!,
                 description: nil,
                 votingEnabled: true,
                 isPublic: true,

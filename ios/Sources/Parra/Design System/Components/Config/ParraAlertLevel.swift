@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public enum AlertLevel: CaseIterable {
+public enum ParraAlertLevel: CaseIterable {
     case success
     case info
     case warn

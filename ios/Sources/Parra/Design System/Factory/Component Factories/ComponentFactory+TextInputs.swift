@@ -11,8 +11,8 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildTextInput(
-        config: TextInputConfig,
-        content: TextInputContent,
+        config: ParraTextInputConfig,
+        content: ParraTextInputContent,
         localAttributes: ParraAttributes.TextInput? = nil
     ) -> some View {
         let attributes = attributeProvider.textInputAttributes(

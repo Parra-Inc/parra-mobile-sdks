@@ -33,7 +33,7 @@ public protocol ComponentAttributesProvider {
     ) -> ParraAttributes.Image
 
     func asyncImageAttributes(
-        content: AsyncImageContent,
+        content: ParraAsyncImageContent,
         localAttributes: ParraAttributes.AsyncImage?,
         theme: ParraTheme
     ) -> ParraAttributes.AsyncImage
@@ -42,14 +42,14 @@ public protocol ComponentAttributesProvider {
 
     func inlineAlertAttributes(
         content: ParraAlertContent,
-        level: AlertLevel,
+        level: ParraAlertLevel,
         localAttributes: ParraAttributes.InlineAlert?,
         theme: ParraTheme
     ) -> ParraAttributes.InlineAlert
 
     func toastAlertAttributes(
         content: ParraAlertContent,
-        level: AlertLevel,
+        level: ParraAlertLevel,
         localAttributes: ParraAttributes.ToastAlert?,
         theme: ParraTheme
     ) -> ParraAttributes.ToastAlert
@@ -63,7 +63,7 @@ public protocol ComponentAttributesProvider {
     // MARK: Text Inputs
 
     func textInputAttributes(
-        config: TextInputConfig,
+        config: ParraTextInputConfig,
         localAttributes: ParraAttributes.TextInput?,
         theme: ParraTheme
     ) -> ParraAttributes.TextInput
@@ -71,7 +71,7 @@ public protocol ComponentAttributesProvider {
     // MARK: Text Editors
 
     func textEditorAttributes(
-        config: TextEditorConfig,
+        config: ParraTextEditorConfig,
         localAttributes: ParraAttributes.TextEditor?,
         theme: ParraTheme
     ) -> ParraAttributes.TextEditor

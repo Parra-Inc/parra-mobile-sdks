@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-public struct MenuContent {
+public struct ParraMenuContent {
     // MARK: - Lifecycle
 
     public init(
-        title: LabelContent? = nil,
-        placeholder: LabelContent? = nil,
-        helper: LabelContent? = nil,
+        title: ParraLabelContent? = nil,
+        placeholder: ParraLabelContent? = nil,
+        helper: ParraLabelContent? = nil,
         options: [Option],
         optionSelectionChanged: ((Option?) -> Void)? = nil
     ) {
@@ -33,17 +33,17 @@ public struct MenuContent {
         optionSelectionChanged: ((Option?) -> Void)? = nil
     ) {
         self.title = if let title {
-            LabelContent(text: title)
+            ParraLabelContent(text: title)
         } else {
             nil
         }
         self.placeholder = if let placeholder {
-            LabelContent(text: placeholder)
+            ParraLabelContent(text: placeholder)
         } else {
             nil
         }
         self.helper = if let helper {
-            LabelContent(text: helper)
+            ParraLabelContent(text: helper)
         } else {
             nil
         }
@@ -59,11 +59,11 @@ public struct MenuContent {
         public let value: String?
     }
 
-    public let title: LabelContent?
-    public let placeholder: LabelContent?
+    public let title: ParraLabelContent?
+    public let placeholder: ParraLabelContent?
 
     /// A string which is displayed below the menu to supply suplemental information.
-    public let helper: LabelContent?
+    public let helper: ParraLabelContent?
 
     public let options: [Option]
     public let optionSelectionChanged: ((Option?) -> Void)?

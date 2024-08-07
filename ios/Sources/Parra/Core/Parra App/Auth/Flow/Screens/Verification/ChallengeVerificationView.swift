@@ -67,7 +67,7 @@ struct ChallengeVerificationView: View {
     ParraViewPreview { _ in
         ChallengeVerificationView(
             passwordlessConfig: ParraAuthInfoPasswordlessConfig(
-                sms: AuthInfoPasswordlessSmsConfig(
+                sms: ParraAuthInfoPasswordlessSmsConfig(
                     otpLength: 6
                 )
             )

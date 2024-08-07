@@ -12,7 +12,7 @@ struct ReleaseWidget: Container {
     // MARK: - Lifecycle
 
     init(
-        config: ChangelogWidgetConfig,
+        config: ParraChangelogWidgetConfig,
         componentFactory: ComponentFactory,
         contentObserver: ReleaseContentObserver
     ) {
@@ -52,7 +52,7 @@ struct ReleaseWidget: Container {
     @StateObject var changelogContentObserver: ChangelogWidget
         .ContentObserver
 
-    let config: ChangelogWidgetConfig
+    let config: ParraChangelogWidgetConfig
 
     @EnvironmentObject var themeManager: ParraThemeManager
 

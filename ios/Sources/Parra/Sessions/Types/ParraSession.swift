@@ -39,7 +39,7 @@ struct ParraSession: Codable, Equatable {
 
     private(set) var updatedAt: Date?
     private(set) var endedAt: Date?
-    private(set) var userProperties: [String: AnyCodable]
+    private(set) var userProperties: [String: ParraAnyCodable]
 
     /// The byte offset of the file handle responsible for writing the events associated with this session
     /// at the point where the last sync was initiated. This will be used to determine which events were
@@ -84,7 +84,7 @@ struct ParraSession: Codable, Equatable {
     ) -> ParraSession {
         return withUpdates { session in
             if let value {
-                session.userProperties[key] = AnyCodable(value)
+                session.userProperties[key] = ParraAnyCodable(value)
             } else {
                 session.userProperties.removeValue(forKey: key)
             }
@@ -92,7 +92,7 @@ struct ParraSession: Codable, Equatable {
     }
 
     func withUpdatedProperties(
-        newProperties: [String: AnyCodable]
+        newProperties: [String: ParraAnyCodable]
     ) -> ParraSession {
         return withUpdates { session in
             session.userProperties = newProperties

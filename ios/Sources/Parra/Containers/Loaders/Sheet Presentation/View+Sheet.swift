@@ -13,7 +13,7 @@ extension View {
     func presentSheet(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> some View,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         modifier(
             Sheet(

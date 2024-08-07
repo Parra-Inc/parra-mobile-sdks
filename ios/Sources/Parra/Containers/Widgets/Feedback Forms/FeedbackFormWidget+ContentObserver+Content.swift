@@ -13,10 +13,10 @@ extension FeedbackFormWidget.ContentObserver {
         // MARK: - Lifecycle
 
         init(
-            title: LabelContent,
-            description: LabelContent?,
+            title: ParraLabelContent,
+            description: ParraLabelContent?,
             fields: [FormFieldWithState],
-            submitButton: TextButtonContent
+            submitButton: ParraTextButtonContent
         ) {
             self.title = title
             self.description = description
@@ -26,7 +26,7 @@ extension FeedbackFormWidget.ContentObserver {
             self.canSubmit = Content.areAllFieldsValid(
                 fields: fields
             )
-            self.submitButton = TextButtonContent(
+            self.submitButton = ParraTextButtonContent(
                 text: submitButton.text,
                 isDisabled: !canSubmit
             )
@@ -34,12 +34,12 @@ extension FeedbackFormWidget.ContentObserver {
 
         // MARK: - Internal
 
-        let title: LabelContent
-        let description: LabelContent?
+        let title: ParraLabelContent
+        let description: ParraLabelContent?
 
         var fields: [FormFieldWithState]
 
-        var submitButton: TextButtonContent
+        var submitButton: ParraTextButtonContent
 
         var canSubmit: Bool
 

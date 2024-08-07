@@ -62,7 +62,7 @@ extension API {
     /// Submits the provided data as answers for the form with the provided id.
     func submitFeedbackForm(
         with formId: String,
-        data: [FeedbackFormField: String]
+        data: [ParraFeedbackFormField: String]
     ) async throws {
         // Map of FeedbackFormField.name -> a String (or value if applicable)
         let body = data.reduce([String: String]()) { partialResult, entry in

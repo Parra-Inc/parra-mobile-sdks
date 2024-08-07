@@ -17,7 +17,7 @@ struct Sheet<SheetContent>: ViewModifier where SheetContent: View {
         @ViewBuilder content: @escaping () -> SheetContent,
         detents: Set<PresentationDetent> = [.large],
         visibility: Visibility = .visible,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) {
         _isPresented = isPresented
         self.content = content
@@ -52,5 +52,5 @@ struct Sheet<SheetContent>: ViewModifier where SheetContent: View {
 
     private let detents: Set<PresentationDetent>
     private let visibility: Visibility
-    private let onDismiss: ((SheetDismissType) -> Void)?
+    private let onDismiss: ((ParraSheetDismissType) -> Void)?
 }

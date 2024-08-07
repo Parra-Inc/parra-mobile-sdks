@@ -16,7 +16,7 @@ struct SubmissionOptions: View {
     init(
         params: ParraAuthDefaultIdentityChallengeScreen.Params,
         shouldDisableSubmitWithPassword: Binding<Bool>,
-        challengeResponse: Binding<ChallengeResponse?>,
+        challengeResponse: Binding<ParraChallengeResponse?>,
         loadingAuthMethod: Binding<ParraAuthenticationMethod?>,
         submit: @escaping () -> Void
     ) {
@@ -33,7 +33,7 @@ struct SubmissionOptions: View {
     let params: ParraAuthDefaultIdentityChallengeScreen.Params
 
     @Binding var shouldDisableSubmitWithPassword: Bool
-    @Binding var challengeResponse: ChallengeResponse?
+    @Binding var challengeResponse: ParraChallengeResponse?
 
     let submit: () -> Void
 
@@ -66,7 +66,7 @@ struct SubmissionOptions: View {
 
     @ViewBuilder private var buttons: some View {
         let buttonInfo = getActionButtonInfo(
-            with: TextButtonContent(
+            with: ParraTextButtonContent(
                 text: "\(primaryActionName) with password",
                 isDisabled: passwordLoginButtonDisabled || loadingAuthMethod ==
                     .password,
@@ -165,7 +165,7 @@ struct SubmissionOptions: View {
     }
 
     private func getActionButtonInfo(
-        with passwordLoginButtonContent: TextButtonContent
+        with passwordLoginButtonContent: ParraTextButtonContent
     ) -> [SubmissionOptionInfo] {
         var buttonInfo = [SubmissionOptionInfo]()
 
@@ -213,7 +213,7 @@ struct SubmissionOptions: View {
 
             buttonInfo.append(
                 SubmissionOptionInfo(
-                    content: TextButtonContent(
+                    content: ParraTextButtonContent(
                         text: passwordlessLoginTitle,
                         isLoading: loadingAuthMethod == authMethod
                     ),
@@ -229,7 +229,7 @@ struct SubmissionOptions: View {
         if !params.userExists, params.passkeySupported {
             buttonInfo.append(
                 SubmissionOptionInfo(
-                    content: TextButtonContent(
+                    content: ParraTextButtonContent(
                         text: "Create a passkey",
                         isLoading: loadingAuthMethod == .passkey
                     ),
@@ -246,7 +246,7 @@ struct SubmissionOptions: View {
     private func attemptSubmission(
         for authMethod: ParraAuthenticationMethod
     ) {
-        let nextChallengeResponse: ChallengeResponse? = switch authMethod {
+        let nextChallengeResponse: ParraChallengeResponse? = switch authMethod {
         case .passwordless(let passwordlessType):
             switch passwordlessType {
             case .email:

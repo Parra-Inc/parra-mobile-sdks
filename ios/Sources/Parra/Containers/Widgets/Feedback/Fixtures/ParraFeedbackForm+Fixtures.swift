@@ -28,18 +28,18 @@ extension ParraFeedbackForm: ParraFixture {
                 createdAt: .now,
                 updatedAt: .now,
                 deletedAt: nil,
-                data: FeedbackFormData(
+                data: ParraFeedbackFormData(
                     title: "Feedback form",
                     description: "some description",
                     fields: [
-                        FeedbackFormField(
+                        ParraFeedbackFormField(
                             name: "field 1",
                             title: "Field 1",
                             helperText: "fill this out",
                             type: .text,
                             required: true,
                             data: .feedbackFormTextFieldData(
-                                FeedbackFormTextFieldData(
+                                ParraFeedbackFormTextFieldData(
                                     placeholder: "placeholder",
                                     lines: 4,
                                     minCharacters: 20,

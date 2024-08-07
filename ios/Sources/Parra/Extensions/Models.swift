@@ -8,7 +8,7 @@
 import Foundation
 
 extension ParraCardItem {
-    func getAllAssets() -> [Asset] {
+    func getAllAssets() -> [ParraAsset] {
         switch data {
         case .question(let question):
             switch question.data {

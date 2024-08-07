@@ -10,7 +10,7 @@ import SwiftUI
 
 public extension ParraGlobalComponentAttributes {
     func textInputAttributes(
-        config: TextInputConfig,
+        config: ParraTextInputConfig,
         localAttributes: ParraAttributes.TextInput? = nil,
         theme: ParraTheme
     ) -> ParraAttributes.TextInput {
@@ -57,7 +57,7 @@ public extension ParraGlobalComponentAttributes {
 
 extension ParraAttributes.TextInput {
     static func fakeLabelAttributes(
-        config: TextInputConfig,
+        config: ParraTextInputConfig,
         theme: ParraTheme
     ) -> ParraAttributes.TextInput {
         let palette = theme.palette

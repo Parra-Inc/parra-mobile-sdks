@@ -13,9 +13,9 @@ public extension View {
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
     func presentParraRelease(
-        with appVersionInfoBinding: Binding<NewInstalledVersionInfo?>,
-        config: ChangelogWidgetConfig = .default,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        with appVersionInfoBinding: Binding<ParraNewInstalledVersionInfo?>,
+        config: ParraChangelogWidgetConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return loadAndPresentSheet(
             loadType: .init(

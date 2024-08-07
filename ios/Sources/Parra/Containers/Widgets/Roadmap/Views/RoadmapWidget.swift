@@ -12,7 +12,7 @@ struct RoadmapWidget: Container {
     // MARK: - Lifecycle
 
     init(
-        config: RoadmapWidgetConfig,
+        config: ParraRoadmapWidgetConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
@@ -25,7 +25,7 @@ struct RoadmapWidget: Container {
 
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
-    let config: RoadmapWidgetConfig
+    let config: ParraRoadmapWidgetConfig
 
     @EnvironmentObject var themeManager: ParraThemeManager
 
@@ -225,7 +225,7 @@ struct RoadmapWidget: Container {
 
             if let description = contentObserver.selectedTab.description {
                 componentFactory.buildLabel(
-                    content: LabelContent(text: description),
+                    content: ParraLabelContent(text: description),
                     localAttributes: .default(with: .subheadline)
                 )
                 .multilineTextAlignment(.leading)
@@ -258,10 +258,10 @@ struct RoadmapWidget: Container {
             componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: RoadmapWidget.ContentObserver.InitialParams(
-                    roadmapConfig: AppRoadmapConfiguration.validStates()[0],
-                    selectedTab: AppRoadmapConfiguration.validStates()[0]
+                    roadmapConfig: ParraAppRoadmapConfiguration.validStates()[0],
+                    selectedTab: ParraAppRoadmapConfiguration.validStates()[0]
                         .tabs[0],
-                    ticketResponse: UserTicketCollectionResponse
+                    ticketResponse: ParraUserTicketCollectionResponse
                         .validStates()[0],
                     api: parra.parraInternal.api
                 )

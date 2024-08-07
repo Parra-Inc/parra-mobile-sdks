@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension TicketDisplayStatus {
+extension ParraTicketDisplayStatus {
     var color: Color {
         switch self {
         case .pending:

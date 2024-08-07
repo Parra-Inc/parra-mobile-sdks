@@ -69,7 +69,7 @@ struct ChangelogCell: View {
                 errorMessage = String(describing: error)
                 changelogInfo = nil
 
-                Logger.error(error)
+                ParraLogger.error(error)
             }
 
             isLoading = false

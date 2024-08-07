@@ -12,7 +12,7 @@ struct RoadmapTicketTypeBadge: View {
     // MARK: - Lifecycle
 
     init(
-        type: TicketType,
+        type: ParraTicketType,
         size: ParraBadgeSize = .sm,
         variant: ParraBadgeVariant = .outlined,
         educationAlerts: Bool = false
@@ -25,7 +25,7 @@ struct RoadmapTicketTypeBadge: View {
 
     // MARK: - Internal
 
-    let type: TicketType
+    let type: ParraTicketType
     let size: ParraBadgeSize
     let variant: ParraBadgeVariant
 

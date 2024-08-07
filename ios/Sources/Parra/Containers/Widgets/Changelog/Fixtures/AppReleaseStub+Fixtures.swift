@@ -23,9 +23,9 @@ extension AppReleaseStub: ParraFixture {
                 tenantId: UUID().uuidString,
                 releaseNumber: 6,
                 status: .released,
-                header: ReleaseHeader(
+                header: ParraReleaseHeader(
                     id: "release-rocket-1",
-                    size: Size(width: 1_242, height: 699),
+                    size: ParraSize(width: 1_242, height: 699),
                     url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                 )
             ),
@@ -41,9 +41,9 @@ extension AppReleaseStub: ParraFixture {
                 tenantId: UUID().uuidString,
                 releaseNumber: 5,
                 status: .released,
-                header: ReleaseHeader(
+                header: ParraReleaseHeader(
                     id: "release-rocket-1",
-                    size: Size(width: 1_242, height: 699),
+                    size: ParraSize(width: 1_242, height: 699),
                     url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                 )
             ),
@@ -59,9 +59,9 @@ extension AppReleaseStub: ParraFixture {
                 tenantId: UUID().uuidString,
                 releaseNumber: 4,
                 status: .released,
-                header: ReleaseHeader(
+                header: ParraReleaseHeader(
                     id: "release-rocket-1",
-                    size: Size(width: 1_242, height: 699),
+                    size: ParraSize(width: 1_242, height: 699),
                     url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                 )
             ),
@@ -77,9 +77,9 @@ extension AppReleaseStub: ParraFixture {
                 tenantId: UUID().uuidString,
                 releaseNumber: 3,
                 status: .released,
-                header: ReleaseHeader(
+                header: ParraReleaseHeader(
                     id: "release-rocket-1",
-                    size: Size(width: 1_242, height: 699),
+                    size: ParraSize(width: 1_242, height: 699),
                     url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                 )
             ),
@@ -95,9 +95,9 @@ extension AppReleaseStub: ParraFixture {
                 tenantId: UUID().uuidString,
                 releaseNumber: 2,
                 status: .released,
-                header: ReleaseHeader(
+                header: ParraReleaseHeader(
                     id: "release-rocket-1",
-                    size: Size(width: 1_242, height: 699),
+                    size: ParraSize(width: 1_242, height: 699),
                     url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                 )
             ),
@@ -113,9 +113,9 @@ extension AppReleaseStub: ParraFixture {
                 tenantId: UUID().uuidString,
                 releaseNumber: 1,
                 status: .released,
-                header: ReleaseHeader(
+                header: ParraReleaseHeader(
                     id: "release-rocket-1",
-                    size: Size(width: 1_242, height: 699),
+                    size: ParraSize(width: 1_242, height: 699),
                     url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                 )
             ),
@@ -131,9 +131,9 @@ extension AppReleaseStub: ParraFixture {
                 tenantId: UUID().uuidString,
                 releaseNumber: 1,
                 status: .released,
-                header: ReleaseHeader(
+                header: ParraReleaseHeader(
                     id: "release-rocket-1",
-                    size: Size(width: 1_242, height: 699),
+                    size: ParraSize(width: 1_242, height: 699),
                     url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                 )
             )

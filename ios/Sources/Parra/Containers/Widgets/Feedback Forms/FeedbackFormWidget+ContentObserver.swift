@@ -21,21 +21,21 @@ extension FeedbackFormWidget {
         ) {
             let formData = initialParams.formData
 
-            let description: LabelContent? = if let formDescription = formData
+            let description: ParraLabelContent? = if let formDescription = formData
                 .description
             {
-                LabelContent(text: formDescription)
+                ParraLabelContent(text: formDescription)
             } else {
                 nil
             }
 
-            let submitButton = TextButtonContent(
-                text: LabelContent(text: "Submit"),
+            let submitButton = ParraTextButtonContent(
+                text: ParraLabelContent(text: "Submit"),
                 isDisabled: false
             )
 
             self.content = Content(
-                title: LabelContent(text: formData.title),
+                title: ParraLabelContent(text: formData.title),
                 description: description,
                 fields: formData.fields.map { FormFieldWithState(field: $0) },
                 submitButton: submitButton
@@ -46,10 +46,10 @@ extension FeedbackFormWidget {
 
         @Published var content: Content
 
-        var submissionHandler: (([FeedbackFormField: String]) -> Void)?
+        var submissionHandler: (([ParraFeedbackFormField: String]) -> Void)?
 
         func onFieldValueChanged(
-            field: FeedbackFormField,
+            field: ParraFeedbackFormField,
             value: String?
         ) {
             guard let updateIndex = content.fields.firstIndex(
@@ -75,7 +75,7 @@ extension FeedbackFormWidget {
         func submit() {
             let data = content.fields
                 .reduce(
-                    [FeedbackFormField: String]()
+                    [ParraFeedbackFormField: String]()
                 ) { accumulator, fieldWithState in
                     guard let value = fieldWithState.value else {
                         return accumulator

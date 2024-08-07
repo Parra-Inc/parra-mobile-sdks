@@ -13,7 +13,7 @@ public struct ParraFeedbackView: ParraPublicContainer {
 
     public init(
         cards: [ParraCardItem],
-        config: FeedbackCardWidgetConfig = .default,
+        config: ParraFeedbackCardWidgetConfig = .default,
         cardDelegate: ParraCardViewDelegate? = nil
     ) {
         self.cards = cards

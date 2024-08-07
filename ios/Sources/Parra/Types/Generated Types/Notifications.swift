@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct NotificationRecipient: Codable, Equatable, Hashable {
+struct NotificationRecipient: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -19,14 +19,14 @@ public struct NotificationRecipient: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case userId
     }
 
     public let userId: String?
 }
 
-public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
+struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -35,8 +35,8 @@ public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
         subtitle: String?,
         body: String?,
         imageUrl: String?,
-        data: [String: AnyCodable]?,
-        action: [String: AnyCodable]?,
+        data: [String: ParraAnyCodable]?,
+        action: [String: ParraAnyCodable]?,
         deduplicationId: String?,
         groupId: String?,
         visible: Bool?,
@@ -63,7 +63,7 @@ public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case type
         case title
         case subtitle
@@ -85,8 +85,8 @@ public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
     public let subtitle: String?
     public let body: String?
     public let imageUrl: String?
-    public let data: [String: AnyCodable]?
-    public let action: [String: AnyCodable]?
+    public let data: [String: ParraAnyCodable]?
+    public let action: [String: ParraAnyCodable]?
     public let deduplicationId: String?
     public let groupId: String?
     public let visible: Bool?
@@ -96,7 +96,7 @@ public struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
     public let recipients: [NotificationRecipient]
 }
 
-public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
+struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     public init(
@@ -105,8 +105,8 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
         subtitle: String?,
         body: String?,
         imageUrl: String?,
-        data: [String: AnyCodable]?,
-        action: [String: AnyCodable]?,
+        data: [String: ParraAnyCodable]?,
+        action: [String: ParraAnyCodable]?,
         deduplicationId: String?,
         groupId: String?,
         visible: Bool?,
@@ -145,7 +145,7 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case type
         case title
         case subtitle
@@ -173,8 +173,8 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
     public let subtitle: String?
     public let body: String?
     public let imageUrl: String?
-    public let data: [String: AnyCodable]?
-    public let action: [String: AnyCodable]?
+    public let data: [String: ParraAnyCodable]?
+    public let action: [String: ParraAnyCodable]?
     public let deduplicationId: String?
     public let groupId: String?
     public let visible: Bool?
@@ -190,7 +190,7 @@ public struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
     public let version: String?
 }
 
-public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
+struct NotificationCollectionResponse: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -209,7 +209,7 @@ public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case page
         case pageCount
         case pageSize
@@ -224,7 +224,7 @@ public struct NotificationCollectionResponse: Codable, Equatable, Hashable {
     public let data: [NotificationResponse]
 }
 
-public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
+struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -235,14 +235,14 @@ public struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case notificationIds
     }
 
     public let notificationIds: [String]
 }
 
-public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
+struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -255,7 +255,7 @@ public struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case userId
         case apnsToken
     }

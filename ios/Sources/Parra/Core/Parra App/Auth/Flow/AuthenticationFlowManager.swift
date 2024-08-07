@@ -393,7 +393,7 @@ class AuthenticationFlowManager: ObservableObject {
         authService: AuthService,
         modalScreenManager: ModalScreenManager,
         authChallengeResponse: AuthChallengeResponse,
-        identityType: IdentityType?
+        identityType: ParraIdentityType?
     ) async throws {
         let isPasswordlessOnly = authChallengeResponse.currentChallenges
             .allSatisfy { challenge in
@@ -484,7 +484,7 @@ class AuthenticationFlowManager: ObservableObject {
 
     private func navigateToForgotPasswordScreen(
         identity: String,
-        legalInfo: LegalInfo,
+        legalInfo: ParraLegalInfo,
         appInfo: ParraAppInfo,
         modalScreenManager: ModalScreenManager,
         authService: AuthService,
@@ -529,7 +529,7 @@ class AuthenticationFlowManager: ObservableObject {
         identity: String,
         userExists: Bool,
         passwordlessConfig: ParraAuthInfoPasswordlessConfig,
-        legalInfo: LegalInfo,
+        legalInfo: ParraLegalInfo,
         authService: AuthService
     ) {
         logger.debug("Navigating to passwordless verification screen", [
@@ -565,13 +565,13 @@ class AuthenticationFlowManager: ObservableObject {
     }
 
     private func onChallengeResponseSubmitted(
-        _ challengeResponse: ChallengeResponse,
+        _ challengeResponse: ParraChallengeResponse,
         with authInfo: ParraAppAuthInfo,
         identity: String,
         userExists: Bool,
-        identityType: IdentityType?,
+        identityType: ParraIdentityType?,
         passwordlessConfig: ParraAuthInfoPasswordlessConfig?,
-        legalInfo: LegalInfo,
+        legalInfo: ParraLegalInfo,
         authService: AuthService
     ) async throws {
         switch challengeResponse {
@@ -684,8 +684,8 @@ class AuthenticationFlowManager: ObservableObject {
         with identity: String,
         password: String,
         userExists: Bool,
-        identityType: IdentityType?,
-        challengeResponse: ChallengeResponse,
+        identityType: ParraIdentityType?,
+        challengeResponse: ParraChallengeResponse,
         authService: AuthService
     ) async throws {
         let authResult: ParraAuthResult = if userExists {

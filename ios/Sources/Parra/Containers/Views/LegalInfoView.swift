@@ -13,7 +13,7 @@ class _LegalInfoView: UIView, UITextViewDelegate {
     // MARK: - Lifecycle
 
     init(
-        legalInfo: LegalInfo,
+        legalInfo: ParraLegalInfo,
         theme: ParraTheme
     ) {
         super.init(frame: .zero)
@@ -54,7 +54,7 @@ class _LegalInfoView: UIView, UITextViewDelegate {
     }
 
     func updatedLegalInfo(
-        _ legalInfo: LegalInfo,
+        _ legalInfo: ParraLegalInfo,
         with theme: ParraTheme
     ) {
         let baseAttributes = AttributeContainer(
@@ -79,7 +79,7 @@ class _LegalInfoView: UIView, UITextViewDelegate {
             ]
         )
 
-        var agreements = [LegalDocument]()
+        var agreements = [ParraLegalDocument]()
         if let privacyPolicy = legalInfo.privacyPolicy {
             agreements.append(privacyPolicy)
         }
@@ -163,7 +163,7 @@ struct LegalInfoView: UIViewRepresentable {
     // MARK: - Lifecycle
 
     init(
-        legalInfo: LegalInfo,
+        legalInfo: ParraLegalInfo,
         theme: ParraTheme
     ) {
         self.legalInfo = legalInfo
@@ -172,7 +172,7 @@ struct LegalInfoView: UIViewRepresentable {
 
     // MARK: - Internal
 
-    let legalInfo: LegalInfo
+    let legalInfo: ParraLegalInfo
     let theme: ParraTheme
 
     func makeUIView(
@@ -209,7 +209,7 @@ struct LegalInfoView: UIViewRepresentable {
 #Preview {
     ParraViewPreview { _ in
         LegalInfoView(
-            legalInfo: LegalInfo.validStates()[0],
+            legalInfo: ParraLegalInfo.validStates()[0],
             theme: .default
         )
     }

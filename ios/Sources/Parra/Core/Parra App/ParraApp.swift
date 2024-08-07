@@ -222,7 +222,7 @@ public struct ParraApp<
         // finally use a default empty configuration.
 
         let bundle = Bundle.main // default
-        let type: LaunchScreenType = if let config = ParraDefaultLaunchScreen
+        let type: ParraLaunchScreenType = if let config = ParraDefaultLaunchScreen
             .Config.fromInfoDictionary(
                 in: bundle
             )

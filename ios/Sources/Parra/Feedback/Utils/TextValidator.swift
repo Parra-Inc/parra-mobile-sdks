@@ -13,7 +13,7 @@ private let logger = Logger()
 enum TextValidator {
     static func isValid(
         text: String?,
-        against rule: TextValidatorRule
+        against rule: ParraTextValidatorRule
     ) throws -> Bool {
         guard let text else {
             return false
@@ -59,7 +59,7 @@ enum TextValidator {
 
     static func isValid(
         text: String?,
-        against rules: [TextValidatorRule]
+        against rules: [ParraTextValidatorRule]
     ) throws -> Bool {
         return try rules.allSatisfy {
             try isValid(text: text, against: $0)
@@ -72,7 +72,7 @@ enum TextValidator {
     /// is encountered.
     static func validate(
         text: String?,
-        against rules: [TextValidatorRule]
+        against rules: [ParraTextValidatorRule]
     ) -> String? {
         guard let text, !text.isEmpty else {
             return "must not be empty"

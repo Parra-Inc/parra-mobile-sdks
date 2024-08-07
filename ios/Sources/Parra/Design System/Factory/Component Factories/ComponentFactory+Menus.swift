@@ -11,8 +11,8 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildMenu(
-        config: MenuConfig,
-        content: MenuContent,
+        config: ParraMenuConfig,
+        content: ParraMenuContent,
         localAttributes: ParraAttributes.Menu? = nil
     ) -> some View {
         let attributes = attributeProvider.menuAttributes(

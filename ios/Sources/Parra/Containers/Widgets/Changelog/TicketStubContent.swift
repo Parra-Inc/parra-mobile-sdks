@@ -12,7 +12,7 @@ struct TicketStubContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        _ ticket: TicketStub
+        _ ticket: ParraTicketStub
     ) {
         self.id = ticket.id
 
@@ -25,7 +25,7 @@ struct TicketStubContent: Identifiable, Hashable {
             titleText
         }
 
-        self.title = LabelContent(text: "\u{2022} \(fullTitleText)")
+        self.title = ParraLabelContent(text: "\u{2022} \(fullTitleText)")
     }
 
     // MARK: - Internal
@@ -34,7 +34,7 @@ struct TicketStubContent: Identifiable, Hashable {
     /// redaction. Needs to be computed to have unique IDs for display in lists.
     static var redacted: TicketStubContent {
         return TicketStubContent(
-            TicketStub(
+            ParraTicketStub(
                 id: UUID().uuidString,
                 createdAt: .now,
                 updatedAt: .now,
@@ -60,5 +60,5 @@ struct TicketStubContent: Identifiable, Hashable {
     }
 
     let id: String
-    let title: LabelContent
+    let title: ParraLabelContent
 }

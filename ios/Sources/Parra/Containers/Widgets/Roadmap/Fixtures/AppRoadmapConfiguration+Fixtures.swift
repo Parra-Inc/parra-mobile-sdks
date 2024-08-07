@@ -8,10 +8,10 @@
 
 import Foundation
 
-extension AppRoadmapConfiguration: ParraFixture {
-    static func validStates() -> [AppRoadmapConfiguration] {
+extension ParraAppRoadmapConfiguration: ParraFixture {
+    static func validStates() -> [ParraAppRoadmapConfiguration] {
         return [
-            AppRoadmapConfiguration(
+            ParraAppRoadmapConfiguration(
                 form: .init(
                     id: UUID().uuidString,
                     createdAt: .now,
@@ -20,17 +20,17 @@ extension AppRoadmapConfiguration: ParraFixture {
                     data: .init(
                         title: "Submit request",
                         description: "We love hearing your suggestions. Let us know about new feature ideas, or if we have any bugs!",
-                        fields: FeedbackFormField.validStates()
+                        fields: ParraFeedbackFormField.validStates()
                     )
                 ),
                 tabs: [
-                    RoadmapConfigurationTab(
+                    ParraRoadmapConfigurationTab(
                         id: "in-progress",
                         title: "In progress",
                         key: "in_progress",
                         description: "In progress tickets are actively being worked on."
                     ),
-                    RoadmapConfigurationTab(
+                    ParraRoadmapConfigurationTab(
                         id: "requests",
                         title: "Requests",
                         key: "requests",
@@ -41,7 +41,7 @@ extension AppRoadmapConfiguration: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [AppRoadmapConfiguration] {
+    static func invalidStates() -> [ParraAppRoadmapConfiguration] {
         return []
     }
 }

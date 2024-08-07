@@ -47,7 +47,7 @@ public struct ParraLaunchScreen: View {
     private let config: Config
 
     @ViewBuilder
-    private func renderLaunchScreen(by type: LaunchScreenType) -> some View {
+    private func renderLaunchScreen(by type: ParraLaunchScreenType) -> some View {
         switch type {
         case .default(let config):
             ParraDefaultLaunchScreen(config: config)
@@ -62,7 +62,7 @@ public struct ParraLaunchScreen: View {
 #Preview {
     ParraLaunchScreen(
         config: ParraLaunchScreen.Config(
-            type: LaunchScreenType.default(ParraDefaultLaunchScreen.Config()),
+            type: ParraLaunchScreenType.default(ParraDefaultLaunchScreen.Config()),
             fadeDuration: ParraLaunchScreen.Config.defaultFadeDuration
         )
     )

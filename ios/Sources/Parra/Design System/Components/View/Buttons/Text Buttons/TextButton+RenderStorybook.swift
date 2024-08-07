@@ -55,7 +55,7 @@ func renderStorybook(
 private func renderButtonComponent(
     type: (some View).Type,
     config: ParraTextButtonConfig,
-    content: TextButtonContent,
+    content: ParraTextButtonContent,
     theme: ParraTheme = .default
 ) -> some View {
     return Text("TODO: Implement renderButtonComponent")
@@ -111,8 +111,8 @@ private func renderColumn(
                         type: .primary,
                         size: size
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(text: title)
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(text: title)
                     )
                 )
 
@@ -122,8 +122,8 @@ private func renderColumn(
                         type: .secondary,
                         size: size
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(text: title)
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(text: title)
                     )
                 )
             }
@@ -137,8 +137,8 @@ private func renderColumn(
                         type: .primary,
                         size: size
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(
                             text: title,
                             icon: .symbol("fireworks")
                         )
@@ -151,8 +151,8 @@ private func renderColumn(
                         type: .secondary,
                         size: size
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(
                             text: title,
                             icon: .symbol("surfboard.fill")
                         )
@@ -170,8 +170,8 @@ private func renderColumn(
                         size: size,
                         isMaxWidth: true
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(text: title)
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(text: title)
                     )
                 )
 
@@ -182,8 +182,8 @@ private func renderColumn(
                         size: size,
                         isMaxWidth: true
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(text: title)
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(text: title)
                     )
                 )
             }
@@ -197,8 +197,8 @@ private func renderColumn(
                         type: .primary,
                         size: size
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(text: title),
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(text: title),
                         isDisabled: true
                     )
                 )
@@ -209,8 +209,8 @@ private func renderColumn(
                         type: .secondary,
                         size: size
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(text: title),
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(text: title),
                         isDisabled: true
                     )
                 )
@@ -225,8 +225,8 @@ private func renderColumn(
                         type: .primary,
                         size: size
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(
                             text: title,
                             icon: .symbol("fireworks")
                         ),
@@ -240,8 +240,8 @@ private func renderColumn(
                         type: .secondary,
                         size: size
                     ),
-                    content: TextButtonContent(
-                        text: LabelContent(
+                    content: ParraTextButtonContent(
+                        text: ParraLabelContent(
                             text: title,
                             icon: .symbol("fireworks")
                         ),

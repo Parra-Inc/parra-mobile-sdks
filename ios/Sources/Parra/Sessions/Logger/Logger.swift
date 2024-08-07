@@ -9,7 +9,9 @@
 import Foundation
 import os
 
-public class Logger {
+internal typealias Logger = ParraLogger
+
+public class ParraLogger {
     // MARK: - Lifecycle
 
     public init(

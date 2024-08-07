@@ -15,7 +15,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
     init(
         content: @escaping () -> Content,
         cards: [ParraCardItem] = ParraCardItem.validStates(),
-        config: FeedbackCardWidgetConfig = .default,
+        config: ParraFeedbackCardWidgetConfig = .default,
         theme: ParraTheme = .default
     ) {
         self.content = content
@@ -98,7 +98,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
     @ViewBuilder private var content: () -> Content
 
     private let cards: [ParraCardItem]
-    private let config: FeedbackCardWidgetConfig
+    private let config: ParraFeedbackCardWidgetConfig
     private let factory: ComponentFactory
     private let configuration: ParraConfiguration
     private let parra: Parra

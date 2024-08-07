@@ -12,10 +12,10 @@ public struct ParraAlertContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(
-        title: LabelContent,
-        subtitle: LabelContent?,
+        title: ParraLabelContent,
+        subtitle: ParraLabelContent?,
         icon: ParraImageContent?,
-        dismiss: ImageButtonContent?
+        dismiss: ParraImageButtonContent?
     ) {
         self.title = title
         self.subtitle = subtitle
@@ -25,13 +25,13 @@ public struct ParraAlertContent: Hashable, Equatable {
 
     // MARK: - Public
 
-    public let title: LabelContent
-    public let subtitle: LabelContent?
+    public let title: ParraLabelContent
+    public let subtitle: ParraLabelContent?
     public let icon: ParraImageContent?
-    public private(set) var dismiss: ImageButtonContent?
+    public private(set) var dismiss: ParraImageButtonContent?
 
     public static func defaultIcon(
-        for style: AlertLevel
+        for style: ParraAlertLevel
     ) -> ParraImageContent {
         let symbolName = switch style {
         case .success:
@@ -48,10 +48,10 @@ public struct ParraAlertContent: Hashable, Equatable {
     }
 
     public static func defaultDismiss(
-        for style: AlertLevel,
+        for style: ParraAlertLevel,
         onPress: (() -> Void)? = nil
-    ) -> ImageButtonContent {
-        return ImageButtonContent(
+    ) -> ParraImageButtonContent {
+        return ParraImageButtonContent(
             image: ParraImageContent.symbol("xmark", .monochrome),
             isDisabled: false
         )

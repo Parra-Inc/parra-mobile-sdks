@@ -12,7 +12,7 @@ struct FormFieldWithState: Identifiable {
     // MARK: - Lifecycle
 
     init(
-        field: FeedbackFormField
+        field: ParraFeedbackFormField
     ) {
         self.field = field
         self.state = Self.validateUpdate(value: nil, for: field)
@@ -21,7 +21,7 @@ struct FormFieldWithState: Identifiable {
 
     // MARK: - Internal
 
-    let field: FeedbackFormField
+    let field: ParraFeedbackFormField
 
     private(set) var state: FieldState
     private(set) var value: String?
@@ -39,7 +39,7 @@ struct FormFieldWithState: Identifiable {
 
     private static func validateUpdate(
         value: String?,
-        for field: FeedbackFormField
+        for field: ParraFeedbackFormField
     ) -> FieldState {
         switch field.data {
         case .feedbackFormInputFieldData:
@@ -49,7 +49,7 @@ struct FormFieldWithState: Identifiable {
                 .valid
             }
         case .feedbackFormTextFieldData(let data):
-            var rules = [TextValidatorRule]()
+            var rules = [ParraTextValidatorRule]()
 
             if let minCharacters = data.minCharacters {
                 rules.append(.minLength(minCharacters))

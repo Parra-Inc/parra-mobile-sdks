@@ -94,7 +94,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     @ViewBuilder private var defaultTopView: some View {
         if let logo = parraAppInfo.tenant.logo {
             componentFactory.buildAsyncImage(
-                content: AsyncImageContent(
+                content: ParraAsyncImageContent(
                     url: logo.url
                 ),
                 localAttributes: ParraAttributes.AsyncImage(
@@ -125,7 +125,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         )
 
         componentFactory.buildLabel(
-            content: LabelContent(text: title),
+            content: ParraLabelContent(text: title),
             localAttributes: titleAttributes
         )
     }
@@ -137,7 +137,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         )
 
         componentFactory.buildLabel(
-            content: LabelContent(text: "Sign up or log in to continue."),
+            content: ParraLabelContent(text: "Sign up or log in to continue."),
             localAttributes: subtitleAttributes
         )
     }
@@ -149,7 +149,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
                 size: .large,
                 isMaxWidth: true
             ),
-            content: TextButtonContent(
+            content: ParraTextButtonContent(
                 text: continueButtonTitle
             )
         ) {

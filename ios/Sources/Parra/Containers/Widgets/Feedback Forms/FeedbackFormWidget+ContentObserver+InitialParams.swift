@@ -10,6 +10,6 @@ import Foundation
 
 extension FeedbackFormWidget.ContentObserver {
     struct InitialParams {
-        let formData: FeedbackFormData
+        let formData: ParraFeedbackFormData
     }
 }

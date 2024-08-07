@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum TextValidatorRule: CustomStringConvertible {
+public enum ParraTextValidatorRule: CustomStringConvertible {
     case minLength(Int)
     case maxLength(Int)
     case email

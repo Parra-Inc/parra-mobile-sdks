@@ -12,7 +12,7 @@ private let logger = Logger()
 
 extension ViewDataLoader {
     static func feedbackFormLoader(
-        config: FeedbackFormWidgetConfig,
+        config: ParraFeedbackFormWidgetConfig,
         submissionType: FeedbackFormSubmissionType
     ) -> ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget> {
         return ViewDataLoader<String, ParraFeedbackForm, FeedbackFormWidget>(

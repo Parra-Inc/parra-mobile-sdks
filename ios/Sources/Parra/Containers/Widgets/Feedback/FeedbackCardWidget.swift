@@ -12,7 +12,7 @@ struct FeedbackCardWidget: Container {
     // MARK: - Lifecycle
 
     init(
-        config: FeedbackCardWidgetConfig,
+        config: ParraFeedbackCardWidgetConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
@@ -30,7 +30,7 @@ struct FeedbackCardWidget: Container {
 
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
-    let config: FeedbackCardWidgetConfig
+    let config: ParraFeedbackCardWidgetConfig
 
     @Environment(\.parra) var parra
     @EnvironmentObject var themeManager: ParraThemeManager

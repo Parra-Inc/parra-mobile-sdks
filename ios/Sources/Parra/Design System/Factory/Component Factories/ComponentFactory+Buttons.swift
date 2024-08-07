@@ -12,7 +12,7 @@ extension ComponentFactory {
     @ViewBuilder
     func buildPlainButton(
         config: ParraTextButtonConfig,
-        content: TextButtonContent,
+        content: ParraTextButtonContent,
         localAttributes: ParraAttributes.PlainButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
@@ -49,7 +49,7 @@ extension ComponentFactory {
             theme: theme
         )
 
-        let content = TextButtonContent(text: text)
+        let content = ParraTextButtonContent(text: text)
 
         let style = PlainButtonStyle(
             config: config,
@@ -68,7 +68,7 @@ extension ComponentFactory {
     @ViewBuilder
     func buildOutlinedButton(
         config: ParraTextButtonConfig,
-        content: TextButtonContent,
+        content: ParraTextButtonContent,
         localAttributes: ParraAttributes.OutlinedButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
@@ -105,7 +105,7 @@ extension ComponentFactory {
             theme: theme
         )
 
-        let content = TextButtonContent(text: text)
+        let content = ParraTextButtonContent(text: text)
 
         let style = OutlinedButtonStyle(
             config: config,
@@ -124,7 +124,7 @@ extension ComponentFactory {
     @ViewBuilder
     func buildContainedButton(
         config: ParraTextButtonConfig,
-        content: TextButtonContent,
+        content: ParraTextButtonContent,
         localAttributes: ParraAttributes.ContainedButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {
@@ -161,7 +161,7 @@ extension ComponentFactory {
             theme: theme
         )
 
-        let content = TextButtonContent(text: text)
+        let content = ParraTextButtonContent(text: text)
 
         let style = ContainedButtonStyle(
             config: config,
@@ -180,7 +180,7 @@ extension ComponentFactory {
     @ViewBuilder
     func buildImageButton(
         config: ParraImageButtonConfig,
-        content: ImageButtonContent,
+        content: ParraImageButtonContent,
         localAttributes: ParraAttributes.ImageButton? = nil,
         onPress: @escaping () -> Void
     ) -> some View {

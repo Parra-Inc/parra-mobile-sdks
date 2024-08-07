@@ -53,7 +53,7 @@ struct ForgotPasswordInitialStateView: View {
                     size: .large,
                     isMaxWidth: true
                 ),
-                content: TextButtonContent(
+                content: ParraTextButtonContent(
                     text: "Send code",
                     isDisabled: isSending,
                     isLoading: isSending

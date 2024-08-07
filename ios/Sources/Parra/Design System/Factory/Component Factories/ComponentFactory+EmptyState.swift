@@ -11,8 +11,8 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildEmptyState(
-        config: EmptyStateConfig,
-        content: EmptyStateContent,
+        config: ParraEmptyStateConfig,
+        content: ParraEmptyStateContent,
         localAttributes: ParraAttributes.EmptyState? = nil,
         onPrimaryAction: (() -> Void)? = nil,
         onSecondaryAction: (() -> Void)? = nil

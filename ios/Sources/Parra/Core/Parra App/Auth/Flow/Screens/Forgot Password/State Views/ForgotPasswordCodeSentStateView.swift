@@ -17,7 +17,7 @@ struct ForgotPasswordCodeSentStateView: View {
     ) {
         self.params = params
         self.onEnterCode = onEnterCode
-        self.continueButtonContent = TextButtonContent(
+        self.continueButtonContent = ParraTextButtonContent(
             text: "Continue",
             isDisabled: true,
             isLoading: false
@@ -70,7 +70,7 @@ struct ForgotPasswordCodeSentStateView: View {
                     in: .whitespacesAndNewlines
                 )
 
-                continueButtonContent = TextButtonContent(
+                continueButtonContent = ParraTextButtonContent(
                     text: continueButtonContent.text,
                     isDisabled: currentCode.count < params.codeLength
                 )
@@ -102,7 +102,7 @@ struct ForgotPasswordCodeSentStateView: View {
 
     // MARK: - Private
 
-    @State private var continueButtonContent: TextButtonContent
+    @State private var continueButtonContent: ParraTextButtonContent
     @State private var currentCode: String = ""
 
     @EnvironmentObject private var componentFactory: ComponentFactory

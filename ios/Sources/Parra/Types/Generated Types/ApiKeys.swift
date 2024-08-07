@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct CreateApiKeyRequestBody: Codable, Equatable, Hashable {
+struct CreateApiKeyRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -25,7 +25,7 @@ public struct CreateApiKeyRequestBody: Codable, Equatable, Hashable {
     public let description: String?
 }
 
-public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
+struct ApiKey: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     public init(
@@ -48,7 +48,7 @@ public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case createdAt
         case updatedAt
@@ -67,7 +67,7 @@ public struct ApiKey: Codable, Equatable, Hashable, Identifiable {
     public let tenantId: String
 }
 
-public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
+struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
     Identifiable
 {
     // MARK: - Lifecycle
@@ -94,7 +94,7 @@ public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case createdAt
         case updatedAt
@@ -115,7 +115,7 @@ public struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
     public let secret: String
 }
 
-public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
+struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -134,7 +134,7 @@ public struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case page
         case pageCount
         case pageSize

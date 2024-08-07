@@ -15,14 +15,14 @@ struct ChallengeView: View {
         case password
     }
 
-    @State private var validatedRules: [(PasswordRule, Bool)] = []
+    @State private var validatedRules: [(ParraPasswordRule, Bool)] = []
 
     @FocusState private var focusState: Field?
 
     let identity: String
     let passwordChallengeAvailable: Bool
     let userExists: Bool
-    let challengeResponse: Binding<ChallengeResponse?>
+    let challengeResponse: Binding<ParraChallengeResponse?>
     /// The auth method that should be rendered with a loading spinner.
     @Binding var loadingAuthMethod: ParraAuthenticationMethod?
     @Binding var passwordState: PasswordStrengthView.ValidityState
@@ -36,7 +36,7 @@ struct ChallengeView: View {
         VStack(spacing: 16) {
             componentFactory.buildTextInput(
                 config: .default,
-                content: TextInputContent(
+                content: ParraTextInputContent(
                     defaultText: identity,
                     placeholder: ""
                 ),
@@ -58,7 +58,7 @@ struct ChallengeView: View {
             VStack(alignment: .trailing, spacing: 8) {
                 componentFactory.buildTextInput(
                     config: challengeFieldConfig,
-                    content: TextInputContent(
+                    content: ParraTextInputContent(
                         placeholder: "Password",
                         errorMessage: nil
                     ) { newText in
@@ -178,7 +178,7 @@ struct ChallengeView: View {
     @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
-    private var challengeFieldConfig: TextInputConfig {
+    private var challengeFieldConfig: ParraTextInputConfig {
         let authInfo = parraAppInfo.auth
 
         if passwordChallengeAvailable {
@@ -186,13 +186,13 @@ struct ChallengeView: View {
             let rulesDescriptor = authInfo.database?.password?
                 .iosPasswordRulesDescriptor
             let validationRules = rules.map { rule in
-                TextValidatorRule.regex(
+                ParraTextValidatorRule.regex(
                     rule.regularExpression,
                     failureMessage: rule.errorMessage
                 )
             }
 
-            return TextInputConfig(
+            return ParraTextInputConfig(
                 validationRules: validationRules,
                 resizeWhenHelperMessageIsVisible: true,
                 isSecure: true,
@@ -205,7 +205,7 @@ struct ChallengeView: View {
 
         let otpLength = authInfo.passwordless?.sms?.otpLength ?? 6
 
-        return TextInputConfig(
+        return ParraTextInputConfig(
             validationRules: [
                 .minLength(otpLength),
                 .maxLength(otpLength)

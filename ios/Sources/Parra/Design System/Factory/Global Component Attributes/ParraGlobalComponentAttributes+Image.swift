@@ -18,7 +18,7 @@ public extension ParraGlobalComponentAttributes {
     }
 
     func asyncImageAttributes(
-        content: AsyncImageContent,
+        content: ParraAsyncImageContent,
         localAttributes: ParraAttributes.AsyncImage?,
         theme: ParraTheme
     ) -> ParraAttributes.AsyncImage {

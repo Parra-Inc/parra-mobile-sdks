@@ -11,7 +11,7 @@ import SwiftUI
 extension PhotoWell {
     enum WellState: Equatable {
         case empty
-        case asset(Asset)
+        case asset(ParraAsset)
         case loadingFromLibrary
         case loaded(UIImage)
         case processing(UIImage)

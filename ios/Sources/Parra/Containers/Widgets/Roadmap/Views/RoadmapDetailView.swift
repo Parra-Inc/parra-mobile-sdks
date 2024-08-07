@@ -13,7 +13,7 @@ struct RoadmapDetailView: View {
 
     @Binding var ticketContent: TicketUserContent
 
-    @Environment(RoadmapWidgetConfig.self) var config
+    @Environment(ParraRoadmapWidgetConfig.self) var config
     @EnvironmentObject var contentObserver: RoadmapWidget.ContentObserver
     @EnvironmentObject var componentFactory: ComponentFactory
 
@@ -62,7 +62,7 @@ struct RoadmapDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 componentFactory.buildLabel(
-                    content: LabelContent(
+                    content: ParraLabelContent(
                         text: "Created \(ticketContent.createdAt.text)"
                     ),
                     localAttributes: ParraAttributes.Label(

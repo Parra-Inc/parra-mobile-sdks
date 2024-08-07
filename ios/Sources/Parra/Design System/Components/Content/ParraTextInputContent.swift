@@ -1,24 +1,26 @@
 //
-//  TextEditorContent.swift
+//  TextInputContent.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 2/5/24.
+//  Created by Mick MacCallum on 2/20/24.
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
 import SwiftUI
 
-public struct TextEditorContent {
+public struct ParraTextInputContent {
     // MARK: - Lifecycle
 
     public init(
-        title: LabelContent? = nil,
-        placeholder: LabelContent? = nil,
-        helper: LabelContent? = nil,
+        title: ParraLabelContent? = nil,
+        defaultText: String = "",
+        placeholder: ParraLabelContent? = nil,
+        helper: ParraLabelContent? = nil,
         errorMessage: String? = nil,
         textChanged: ((String?) -> Void)? = nil
     ) {
         self.title = title
+        self.defaultText = defaultText
         self.placeholder = placeholder
         self.helper = helper
         self.errorMessage = errorMessage
@@ -27,25 +29,28 @@ public struct TextEditorContent {
 
     public init(
         title: String? = nil,
+        defaultText: String = "",
         placeholder: String? = nil,
         helper: String? = nil,
         errorMessage: String? = nil,
         textChanged: ((String?) -> Void)? = nil
     ) {
         self.title = if let title {
-            LabelContent(text: title)
+            ParraLabelContent(text: title)
         } else {
             nil
         }
 
+        self.defaultText = defaultText
+
         self.placeholder = if let placeholder {
-            LabelContent(text: placeholder)
+            ParraLabelContent(text: placeholder)
         } else {
             nil
         }
 
         self.helper = if let helper {
-            LabelContent(text: helper)
+            ParraLabelContent(text: helper)
         } else {
             nil
         }
@@ -58,17 +63,20 @@ public struct TextEditorContent {
 
     /// A string which is displayed in a label above the text editor to provide
     /// contextual information.
-    public let title: LabelContent?
+    public let title: ParraLabelContent?
+
+    /// Text that should be placed in the text field when it is first displayed.
+    public let defaultText: String
 
     /// A string which is displayed inside the text editor whenever the input
     /// string is empty.
-    public let placeholder: LabelContent?
+    public let placeholder: ParraLabelContent?
 
     /// A string which is displayed below the text editor to supply suplemental
     /// information. In the default implementation, helper text and error
     /// message are displayed using the same label, and ``errorMessage`` takes
     /// precedance over ``helper``.
-    public let helper: LabelContent?
-    public let errorMessage: String?
-    public let textChanged: ((String?) -> Void)?
+    public let helper: ParraLabelContent?
+    public internal(set) var errorMessage: String?
+    public internal(set) var textChanged: ((String?) -> Void)?
 }

@@ -8,17 +8,17 @@
 
 import SwiftUI
 
-extension LegalInfo: ParraFixture {
-    static func validStates() -> [LegalInfo] {
+extension ParraLegalInfo: ParraFixture {
+    static func validStates() -> [ParraLegalInfo] {
         return [
-            LegalInfo(
-                privacyPolicy: LegalDocument(
+            ParraLegalInfo(
+                privacyPolicy: ParraLegalDocument(
                     id: "710c75b9-3f52-4794-93c9-97a94f960683",
                     type: "privacy",
                     title: "Privacy Policy",
                     url: URL(string: "https://parra.io/privacy-policy")!
                 ),
-                termsOfService: LegalDocument(
+                termsOfService: ParraLegalDocument(
                     id: "d62b4abf-d331-4a24-b21a-10f63cafbc8e",
                     type: "terms",
                     title: "Terms of Service",
@@ -28,7 +28,7 @@ extension LegalInfo: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [LegalInfo] {
+    static func invalidStates() -> [ParraLegalInfo] {
         return []
     }
 }

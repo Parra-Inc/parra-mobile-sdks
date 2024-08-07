@@ -16,7 +16,7 @@ extension View {
                 .LoadType?
         >,
         with loader: ViewDataLoader<TransformParams, Data, SheetContent>,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         modifier(
             SheetWithLoader(

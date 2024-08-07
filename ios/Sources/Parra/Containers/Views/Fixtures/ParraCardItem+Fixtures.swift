@@ -34,7 +34,7 @@ enum ParraCardItemFixtures {
         data: .question(choiceQuestion)
     )
 
-    static let choiceQuestion = Question(
+    static let choiceQuestion = ParraQuestion(
         id: "1",
         createdAt: .now,
         updatedAt: .now,
@@ -51,22 +51,22 @@ enum ParraCardItemFixtures {
         answer: nil
     )
 
-    static let choiceQuestionData = ChoiceQuestionBody(
+    static let choiceQuestionData = ParraChoiceQuestionBody(
         options: [
-            ChoiceQuestionOption(
+            ParraChoiceQuestionOption(
                 title: "Taylor Swift",
                 value: "",
                 isOther: nil,
                 id: "taytay"
             ),
-            ChoiceQuestionOption(
+            ParraChoiceQuestionOption(
                 title: "Green Day",
                 value: "",
                 isOther: nil,
                 id: "green-day"
             ),
 
-            ChoiceQuestionOption(
+            ParraChoiceQuestionOption(
                 title: "Post Malone",
                 value: "",
                 isOther: nil,
@@ -88,7 +88,7 @@ enum ParraCardItemFixtures {
         data: .question(checkboxQuestion)
     )
 
-    static let checkboxQuestion = Question(
+    static let checkboxQuestion = ParraQuestion(
         id: "2",
         createdAt: .now,
         updatedAt: .now,
@@ -104,21 +104,21 @@ enum ParraCardItemFixtures {
         answer: nil
     )
 
-    static let checkboxQuestionData = CheckboxQuestionBody(
+    static let checkboxQuestionData = ParraCheckboxQuestionBody(
         options: [
-            CheckboxQuestionOption(
+            ParraCheckboxQuestionOption(
                 title: "Chocolate",
                 value: "",
                 isOther: nil,
                 id: "op1"
             ),
-            CheckboxQuestionOption(
+            ParraCheckboxQuestionOption(
                 title: "Vanilla",
                 value: "",
                 isOther: nil,
                 id: "op2"
             ),
-            CheckboxQuestionOption(
+            ParraCheckboxQuestionOption(
                 title: "Strawberry",
                 value: "",
                 isOther: nil,
@@ -140,7 +140,7 @@ enum ParraCardItemFixtures {
         data: .question(boolQuestion)
     )
 
-    static let boolQuestion = Question(
+    static let boolQuestion = ParraQuestion(
         id: "3",
         createdAt: .now,
         updatedAt: .now,
@@ -156,14 +156,14 @@ enum ParraCardItemFixtures {
         answer: nil
     )
 
-    static let boolQuestionData = BooleanQuestionBody(
+    static let boolQuestionData = ParraBooleanQuestionBody(
         options: [
-            BooleanQuestionOption(
+            ParraBooleanQuestionOption(
                 title: "Yes",
                 value: "yes",
                 id: "id1"
             ),
-            BooleanQuestionOption(
+            ParraBooleanQuestionOption(
                 title: "No",
                 value: "no",
                 id: "id2"
@@ -184,7 +184,7 @@ enum ParraCardItemFixtures {
         data: .question(starQuestion)
     )
 
-    static let starQuestion = Question(
+    static let starQuestion = ParraQuestion(
         id: "4",
         createdAt: .now,
         updatedAt: .now,
@@ -200,7 +200,7 @@ enum ParraCardItemFixtures {
         answer: nil
     )
 
-    static let starQuestionData = StarQuestionBody(
+    static let starQuestionData = ParraStarQuestionBody(
         starCount: 5,
         leadingLabel: "leading",
         centerLabel: "center",
@@ -220,7 +220,7 @@ enum ParraCardItemFixtures {
         data: .question(imageQuestion)
     )
 
-    static let imageQuestion = Question(
+    static let imageQuestion = ParraQuestion(
         id: "5",
         createdAt: .now,
         updatedAt: .now,
@@ -236,22 +236,22 @@ enum ParraCardItemFixtures {
         answer: nil
     )
 
-    static let imageQuestionData = ImageQuestionBody(
+    static let imageQuestionData = ParraImageQuestionBody(
         options: [
-            ImageQuestionOption(
+            ParraImageQuestionOption(
                 title: "title",
                 value: "val",
                 id: "id",
-                asset: Asset(
+                asset: ParraAsset(
                     id: "id",
                     url: URL(string: "parra.io/image.png")!
                 )
             ),
-            ImageQuestionOption(
+            ParraImageQuestionOption(
                 title: "title2",
                 value: "val2",
                 id: "id2",
-                asset: Asset(
+                asset: ParraAsset(
                     id: "id2222",
                     url: URL(string: "parra.io/image2.png")!
                 )
@@ -272,7 +272,7 @@ enum ParraCardItemFixtures {
         data: .question(ratingQuestion)
     )
 
-    static let ratingQuestion = Question(
+    static let ratingQuestion = ParraQuestion(
         id: "6",
         createdAt: .now,
         updatedAt: .now,
@@ -288,29 +288,29 @@ enum ParraCardItemFixtures {
         answer: nil
     )
 
-    static let ratingQuestionData = RatingQuestionBody(
+    static let ratingQuestionData = ParraRatingQuestionBody(
         options: [
-            RatingQuestionOption(
+            ParraRatingQuestionOption(
                 title: "title1",
                 value: 1,
                 id: "1"
             ),
-            RatingQuestionOption(
+            ParraRatingQuestionOption(
                 title: "title2",
                 value: 2,
                 id: "2"
             ),
-            RatingQuestionOption(
+            ParraRatingQuestionOption(
                 title: "title3",
                 value: 3,
                 id: "3"
             ),
-            RatingQuestionOption(
+            ParraRatingQuestionOption(
                 title: "title4",
                 value: 4,
                 id: "4"
             ),
-            RatingQuestionOption(
+            ParraRatingQuestionOption(
                 title: "title5",
                 value: 5,
                 id: "5"
@@ -334,7 +334,7 @@ enum ParraCardItemFixtures {
         data: .question(shortTextQuestion)
     )
 
-    static let shortTextQuestion = Question(
+    static let shortTextQuestion = ParraQuestion(
         id: "7",
         createdAt: .now,
         updatedAt: .now,
@@ -350,7 +350,7 @@ enum ParraCardItemFixtures {
         answer: nil
     )
 
-    static let shortTextQuestionData = ShortTextQuestionBody(
+    static let shortTextQuestionData = ParraShortTextQuestionBody(
         placeholder: "placeholder",
         minLength: 50
     )
@@ -368,7 +368,7 @@ enum ParraCardItemFixtures {
         data: .question(longTextQuestion)
     )
 
-    static let longTextQuestion = Question(
+    static let longTextQuestion = ParraQuestion(
         id: "7",
         createdAt: .now,
         updatedAt: .now,
@@ -384,7 +384,7 @@ enum ParraCardItemFixtures {
         answer: nil
     )
 
-    static let longTextQuestionData = LongTextQuestionBody(
+    static let longTextQuestionData = ParraLongTextQuestionBody(
         placeholder: "placeholder",
         minLength: 1,
         maxLength: 1_000

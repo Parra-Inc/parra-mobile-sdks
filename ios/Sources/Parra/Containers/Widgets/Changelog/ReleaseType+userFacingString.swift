@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension ReleaseType {
+extension ParraReleaseType {
     var userFacingString: String {
         switch self {
         case .major:

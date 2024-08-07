@@ -21,7 +21,7 @@ public extension ParraUser {
             deletedAt: Date?,
             tenantId: String,
             name: String?,
-            avatar: ImageAssetStub?,
+            avatar: ParraImageAssetStub?,
             identity: String?,
             username: String?,
             email: String?,
@@ -35,8 +35,8 @@ public extension ParraUser {
             lastUpdatedAt: Date?,
             lastSeenAt: Date?,
             lastLoginAt: Date?,
-            properties: [String: AnyCodable],
-            identities: [Identity],
+            properties: [String: ParraAnyCodable],
+            identities: [ParraIdentity],
             isAnonymous: Bool
         ) {
             self.id = id
@@ -72,7 +72,7 @@ public extension ParraUser {
         public let deletedAt: Date?
         public let tenantId: String
         public let name: String?
-        public let avatar: ImageAssetStub?
+        public let avatar: ParraImageAssetStub?
         public let identity: String?
         public let username: String?
         public let email: String?
@@ -86,8 +86,8 @@ public extension ParraUser {
         public let lastUpdatedAt: Date?
         public let lastSeenAt: Date?
         public let lastLoginAt: Date?
-        public let properties: [String: AnyCodable]
-        public let identities: [Identity]
+        public let properties: [String: ParraAnyCodable]
+        public let identities: [ParraIdentity]
         public let isAnonymous: Bool
 
         public init(
@@ -116,7 +116,7 @@ public extension ParraUser {
                 )
             self.avatar = try container
                 .decodeIfPresent(
-                    ImageAssetStub.self,
+                    ParraImageAssetStub.self,
                     forKey: .avatar
                 )
             self.identity = try container
@@ -186,12 +186,12 @@ public extension ParraUser {
                 )
             self.properties = try container
                 .decode(
-                    [String : AnyCodable].self,
+                    [String : ParraAnyCodable].self,
                     forKey: .properties
                 )
             self.identities = try container
                 .decodeIfPresent(
-                    [Identity].self,
+                    [ParraIdentity].self,
                     forKey: .identities
                 ) ?? []
 

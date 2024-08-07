@@ -112,7 +112,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     @State private var challengeResponse: ParraPasswordlessChallengeResponse?
     @State private var currentCode: String = ""
     @State private var retryTimeRemaining: TimeInterval?
-    @State private var continueButtonContent: TextButtonContent
+    @State private var continueButtonContent: ParraTextButtonContent
     @State private var errorMessage: String?
 
     private let timer = Timer.publish(
@@ -161,7 +161,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                         in: .whitespacesAndNewlines
                     )
 
-                    continueButtonContent = TextButtonContent(
+                    continueButtonContent = ParraTextButtonContent(
                         text: continueButtonContent.text,
                         isDisabled: currentCode.count < requiredLength
                     )
@@ -210,7 +210,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
             }
 
             HStack {
-                let content: TextButtonContent = if let retryTimeRemaining,
+                let content: ParraTextButtonContent = if let retryTimeRemaining,
                                                     challengeResponse
                                                     .retryAt != nil
                 {
@@ -220,13 +220,13 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                             attosecondsComponent: 0
                         ).formatted(.time(pattern: .minuteSecond))
 
-                        return TextButtonContent(
+                        return ParraTextButtonContent(
                             text: "\(resendCodeTitle) in \(duration)",
                             isDisabled: true
                         )
                     }()
                 } else {
-                    TextButtonContent(
+                    ParraTextButtonContent(
                         text: resendCodeTitle
                     )
                 }
@@ -310,11 +310,11 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     processResponseChange(result)
 
                     if challengeResponse == nil {
-                        continueButtonContent = TextButtonContent(
+                        continueButtonContent = ParraTextButtonContent(
                             text: "Send code"
                         )
                     } else {
-                        continueButtonContent = TextButtonContent(
+                        continueButtonContent = ParraTextButtonContent(
                             text: "Continue",
                             isDisabled: true
                         )
@@ -362,7 +362,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                 passwordlessConfig: .init(
                     sms: .init(otpLength: 6)
                 ),
-                legalInfo: LegalInfo.validStates()[0],
+                legalInfo: ParraLegalInfo.validStates()[0],
                 requestCodeResend: {
                     return .init(
                         strategy: .sms,

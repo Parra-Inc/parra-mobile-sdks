@@ -24,7 +24,7 @@ struct ForgotPasswordNewPasswordStateView: View {
         self.onSubmit = onSubmit
 
         self._continueButtonContent = State(
-            initialValue: TextButtonContent(
+            initialValue: ParraTextButtonContent(
                 text: "Save changes",
                 isDisabled: true,
                 isLoading: false
@@ -51,21 +51,21 @@ struct ForgotPasswordNewPasswordStateView: View {
         isValid: false
     )
 
-    var passwordFieldConfig: TextInputConfig {
+    var passwordFieldConfig: ParraTextInputConfig {
         guard let passwordConfig = parraAppInfo.auth.database?.password else {
-            return TextInputConfig()
+            return ParraTextInputConfig()
         }
 
         let rules = passwordConfig.rules
         let rulesDescriptor = passwordConfig.iosPasswordRulesDescriptor
         let validationRules = rules.map { rule in
-            TextValidatorRule.regex(
+            ParraTextValidatorRule.regex(
                 rule.regularExpression,
                 failureMessage: rule.errorMessage
             )
         }
 
-        return TextInputConfig(
+        return ParraTextInputConfig(
             validationRules: validationRules,
             resizeWhenHelperMessageIsVisible: true,
             isSecure: true,
@@ -95,7 +95,7 @@ struct ForgotPasswordNewPasswordStateView: View {
 
             componentFactory.buildTextInput(
                 config: .default,
-                content: TextInputContent(
+                content: ParraTextInputContent(
                     defaultText: params.identity,
                     placeholder: ""
                 ),
@@ -116,7 +116,7 @@ struct ForgotPasswordNewPasswordStateView: View {
 
             componentFactory.buildTextInput(
                 config: passwordFieldConfig,
-                content: TextInputContent(
+                content: ParraTextInputContent(
                     title: "New password",
                     placeholder: nil,
                     errorMessage: nil
@@ -141,7 +141,7 @@ struct ForgotPasswordNewPasswordStateView: View {
 
             componentFactory.buildTextInput(
                 config: passwordFieldConfig,
-                content: TextInputContent(
+                content: ParraTextInputContent(
                     title: "Confirm password",
                     placeholder: nil,
                     errorMessage: confirmationValidationErrorMessage
@@ -191,10 +191,10 @@ struct ForgotPasswordNewPasswordStateView: View {
 
     // MARK: - Private
 
-    @State private var continueButtonContent: TextButtonContent
+    @State private var continueButtonContent: ParraTextButtonContent
     @State private var passwordConfirmation: String = ""
 
-    @State private var validatedRules: [(PasswordRule, Bool)] = []
+    @State private var validatedRules: [(ParraPasswordRule, Bool)] = []
     @FocusState private var focusState: Field?
     @State private var showPasswordRules = false
     @State private var errorMessage: String?

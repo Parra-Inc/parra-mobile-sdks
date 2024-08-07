@@ -13,8 +13,8 @@ struct FeedbackChoiceQuestionCard: FeedbackQuestionViewKind {
 
     init(
         bucketId: String,
-        question: Question,
-        data: ChoiceQuestionBody
+        question: ParraQuestion,
+        data: ParraChoiceQuestionBody
     ) {
         self.bucketId = bucketId
         self.question = question
@@ -25,14 +25,14 @@ struct FeedbackChoiceQuestionCard: FeedbackQuestionViewKind {
 
     typealias AnswerType = SingleOptionAnswer
 
-    @Environment(FeedbackCardWidgetConfig.self) var config
+    @Environment(ParraFeedbackCardWidgetConfig.self) var config
     @EnvironmentObject var componentFactory: ComponentFactory
     @EnvironmentObject var themeManager: ParraThemeManager
     @EnvironmentObject var contentObserver: FeedbackCardWidget.ContentObserver
 
     let bucketId: String
-    let question: Question
-    let data: ChoiceQuestionBody
+    let question: ParraQuestion
+    let data: ParraChoiceQuestionBody
 
     @ViewBuilder var body: some View {
         VStack(spacing: 0) {

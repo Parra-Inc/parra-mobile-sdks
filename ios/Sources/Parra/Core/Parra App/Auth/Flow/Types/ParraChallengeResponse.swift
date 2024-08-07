@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ChallengeResponse: Equatable, Sendable {
+public enum ParraChallengeResponse: Equatable, Sendable {
     case passkey
     case password(password: String, isValid: Bool)
     case passwordlessSms(String)

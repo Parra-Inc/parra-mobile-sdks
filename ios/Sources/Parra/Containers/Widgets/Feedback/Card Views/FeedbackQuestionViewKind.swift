@@ -13,15 +13,15 @@ protocol FeedbackQuestionViewKind: View {
     associatedtype AnswerType: AnswerOption
 
     var bucketId: String { get }
-    var question: Question { get }
+    var question: ParraQuestion { get }
     var themeManager: ParraThemeManager { get }
     var contentObserver: FeedbackCardWidget.ContentObserver { get }
     var componentFactory: ComponentFactory { get }
-    var config: FeedbackCardWidgetConfig { get }
+    var config: ParraFeedbackCardWidgetConfig { get }
 
     init(
         bucketId: String,
-        question: Question,
+        question: ParraQuestion,
         data: DataType
     )
 

@@ -11,13 +11,13 @@ import SwiftUI
 public struct ParraLegalDocumentView: View {
     // MARK: - Lifecycle
 
-    public init(legalDocument: LegalDocument) {
+    public init(legalDocument: ParraLegalDocument) {
         self.legalDocument = legalDocument
     }
 
     // MARK: - Public
 
-    public let legalDocument: LegalDocument
+    public let legalDocument: ParraLegalDocument
 
     public var body: some View {
         WebView(

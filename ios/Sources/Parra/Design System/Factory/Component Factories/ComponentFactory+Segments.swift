@@ -11,8 +11,8 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildSegment(
-        config: SegmentConfig,
-        content: SegmentContent,
+        config: ParraSegmentConfig,
+        content: ParraSegmentContent,
         localAttributes: ParraAttributes.Segment? = nil
     ) -> some View {
         let attributes = attributeProvider.segmentedControlAttributes(

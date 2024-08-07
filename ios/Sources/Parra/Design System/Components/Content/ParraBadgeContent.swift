@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct BadgeContent: Hashable, Equatable {
+public struct ParraBadgeContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(

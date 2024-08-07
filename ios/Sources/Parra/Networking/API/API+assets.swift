@@ -11,7 +11,7 @@ import UIKit
 private let logger = Logger()
 
 extension API {
-    func performBulkAssetCachingRequest(assets: [Asset]) async {
+    func performBulkAssetCachingRequest(assets: [ParraAsset]) async {
         logger
             .trace(
                 "Performing bulk asset caching request for \(assets.count) asset(s)"
@@ -23,7 +23,7 @@ extension API {
     }
 
     func cacheAsset(
-        _ asset: Asset
+        _ asset: ParraAsset
     ) async {
         do {
             _ = try await apiResourceServer.fetchAsset(
@@ -38,9 +38,9 @@ extension API {
     }
 
     func cacheAsset(
-        _ assetStub: ImageAssetStub
+        _ assetStub: ParraImageAssetStub
     ) async {
-        let asset = Asset(
+        let asset = ParraAsset(
             id: assetStub.id,
             url: assetStub.url
         )

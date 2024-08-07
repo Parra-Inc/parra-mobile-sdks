@@ -27,7 +27,7 @@ enum EndpointResolver {
 
     static func resolve(
         endpoint: IssuerEndpoint,
-        tenant: TenantAppInfoStub
+        tenant: ParraTenantAppInfoStub
     ) throws -> URL {
         let path = path(for: endpoint)
 

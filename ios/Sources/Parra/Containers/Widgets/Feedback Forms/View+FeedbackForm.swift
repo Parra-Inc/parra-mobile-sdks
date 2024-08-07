@@ -15,8 +15,8 @@ public extension View {
     func presentParraFeedbackForm(
         by formId: String,
         isPresented: Binding<Bool>,
-        config: FeedbackFormWidgetConfig = .default,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        config: ParraFeedbackFormWidgetConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         let transformParams = formId
 
@@ -58,8 +58,8 @@ public extension View {
     @MainActor
     func presentParraFeedbackForm(
         with formBinding: Binding<ParraFeedbackForm?>,
-        config: FeedbackFormWidgetConfig = .default,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        config: ParraFeedbackFormWidgetConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return presentParraFeedbackForm(
             with: formBinding,

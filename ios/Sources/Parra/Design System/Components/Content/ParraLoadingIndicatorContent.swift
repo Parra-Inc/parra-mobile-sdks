@@ -12,9 +12,9 @@ public struct ParraLoadingIndicatorContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
     public init(
-        title: LabelContent,
-        subtitle: LabelContent?,
-        cancel: TextButtonContent?
+        title: ParraLabelContent,
+        subtitle: ParraLabelContent?,
+        cancel: ParraTextButtonContent?
     ) {
         self.title = title
         self.subtitle = subtitle
@@ -23,18 +23,18 @@ public struct ParraLoadingIndicatorContent: Hashable, Equatable {
 
     // MARK: - Public
 
-    public let title: LabelContent
-    public let subtitle: LabelContent?
-    public private(set) var cancel: TextButtonContent?
+    public let title: ParraLabelContent
+    public let subtitle: ParraLabelContent?
+    public private(set) var cancel: ParraTextButtonContent?
 
     public static let `default` = ParraLoadingIndicatorContent(
-        title: LabelContent(text: "Loading..."),
+        title: ParraLabelContent(text: "Loading..."),
         subtitle: nil,
         cancel: nil
     )
 
     public static let `defaultWithCancel` = ParraLoadingIndicatorContent(
-        title: LabelContent(text: "Loading..."),
+        title: ParraLabelContent(text: "Loading..."),
         subtitle: nil,
         cancel: .init(text: "Cancel")
     )

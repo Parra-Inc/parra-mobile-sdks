@@ -94,7 +94,7 @@ final class AuthService {
     func signUp(
         username: String,
         password: String,
-        type: IdentityType
+        type: ParraIdentityType
     ) async -> ParraAuthResult {
         logger.debug("Signing up with username/password")
 
@@ -133,7 +133,7 @@ final class AuthService {
 
     func forgotPassword(
         identity: String,
-        identityType: IdentityType?
+        identityType: ParraIdentityType?
     ) async throws -> Int {
         let requestData = PasswordResetChallengeRequestBody(
             clientId: authServer.appState.applicationId,
@@ -177,7 +177,7 @@ final class AuthService {
         modalScreenManager
             .presentLoadingIndicatorModal(
                 content: .init(
-                    title: LabelContent(text: "Logging out..."),
+                    title: ParraLabelContent(text: "Logging out..."),
                     subtitle: nil,
                     cancel: nil
                 )
@@ -226,7 +226,7 @@ final class AuthService {
 
     func getAuthChallenges(
         for identity: String,
-        with identityType: IdentityType?
+        with identityType: ParraIdentityType?
     ) async throws -> AuthChallengeResponse {
         let body = AuthChallengesRequestBody(
             identity: identity,

@@ -14,13 +14,13 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
 
         public init(
             identity: String,
-            identityType: IdentityType,
+            identityType: ParraIdentityType,
             userExists: Bool,
             availableChallenges: [ParraAuthChallenge],
             supportedChallenges: [ParraAuthChallenge],
-            legalInfo: LegalInfo,
+            legalInfo: ParraLegalInfo,
             submit: @escaping (
-                _ challengeResponse: ChallengeResponse
+                _ challengeResponse: ParraChallengeResponse
             ) async throws
                 -> Void,
             forgotPassword: @escaping () async throws -> Void
@@ -38,12 +38,12 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
         // MARK: - Public
 
         public let identity: String
-        public let identityType: IdentityType
+        public let identityType: ParraIdentityType
         public let userExists: Bool
         public let availableChallenges: [ParraAuthChallenge]
         public let supportedChallenges: [ParraAuthChallenge]
-        public let legalInfo: LegalInfo
-        public let submit: (_ challengeResponse: ChallengeResponse) async throws
+        public let legalInfo: ParraLegalInfo
+        public let submit: (_ challengeResponse: ParraChallengeResponse) async throws
             -> Void
         public let forgotPassword: () async throws -> Void
 

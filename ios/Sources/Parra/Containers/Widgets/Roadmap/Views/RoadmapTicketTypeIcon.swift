@@ -11,7 +11,7 @@ import SwiftUI
 struct RoadmapTicketTypeIcon: View {
     // MARK: - Internal
 
-    let type: TicketType
+    let type: ParraTicketType
 
     var body: some View {
         VStack {

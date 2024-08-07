@@ -13,12 +13,12 @@ struct PhotoWell: View {
     // MARK: - Lifecycle
 
     init(
-        stub: ImageAssetStub? = nil,
+        stub: ParraImageAssetStub? = nil,
         size: CGSize = CGSize(width: 100, height: 100),
         onSelectionChanged: ((UIImage?) async -> Void)? = nil
     ) {
-        let asset: Asset? = if let id = stub?.id, let url = stub?.url {
-            Asset(
+        let asset: ParraAsset? = if let id = stub?.id, let url = stub?.url {
+            ParraAsset(
                 id: id,
                 url: url
             )
@@ -34,7 +34,7 @@ struct PhotoWell: View {
     }
 
     init(
-        asset: Asset? = nil,
+        asset: ParraAsset? = nil,
         size: CGSize = CGSize(width: 100, height: 100),
         onSelectionChanged: ((UIImage?) async -> Void)? = nil
     ) {
@@ -318,7 +318,7 @@ struct PhotoWell: View {
             PhotoWell(asset: nil)
 
             PhotoWell(
-                asset: Asset(
+                asset: ParraAsset(
                     id: UUID().uuidString,
                     url: URL(string: "https://i.imgur.com/bA8JXya.png")!
                 ),
@@ -331,7 +331,7 @@ struct PhotoWell: View {
             )
 
             PhotoWell(
-                asset: Asset(
+                asset: ParraAsset(
                     id: UUID().uuidString,
                     url: URL(string: "https://i.imgur.com/invalid-url.png")!
                 ),

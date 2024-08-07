@@ -62,7 +62,7 @@ struct FeedbackCell: View {
                 errorMessage = String(describing: error)
                 formData = nil
 
-                Logger.error(error)
+                ParraLogger.error(error)
             }
 
             isLoading = false

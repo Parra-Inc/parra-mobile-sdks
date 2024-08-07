@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-public struct TextButtonContent: Equatable, Hashable {
+public struct ParraTextButtonContent: Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        text: LabelContent,
+        text: ParraLabelContent,
         isDisabled: Bool = false,
         isLoading: Bool = false
     ) {
@@ -26,14 +26,14 @@ public struct TextButtonContent: Equatable, Hashable {
         isDisabled: Bool = false,
         isLoading: Bool = false
     ) {
-        self.text = LabelContent(text: text)
+        self.text = ParraLabelContent(text: text)
         self.isDisabled = isDisabled
         self.isLoading = isLoading
     }
 
     // MARK: - Public
 
-    public internal(set) var text: LabelContent
+    public internal(set) var text: ParraLabelContent
     public internal(set) var isDisabled: Bool
     public internal(set) var isLoading: Bool
 
@@ -41,7 +41,7 @@ public struct TextButtonContent: Equatable, Hashable {
 
     func withDisabled(
         _ isDisabled: Bool
-    ) -> TextButtonContent {
+    ) -> ParraTextButtonContent {
         var copy = self
 
         copy.isDisabled = isDisabled
@@ -51,7 +51,7 @@ public struct TextButtonContent: Equatable, Hashable {
 
     func withLoading(
         _ isLoading: Bool
-    ) -> TextButtonContent {
+    ) -> ParraTextButtonContent {
         var copy = self
 
         copy.isLoading = isLoading

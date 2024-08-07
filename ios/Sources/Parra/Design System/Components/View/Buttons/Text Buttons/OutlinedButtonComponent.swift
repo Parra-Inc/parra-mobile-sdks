@@ -13,7 +13,7 @@ struct OutlinedButtonComponent: View {
 
     init(
         config: ParraTextButtonConfig,
-        content: TextButtonContent,
+        content: ParraTextButtonContent,
         style: OutlinedButtonStyle,
         onPress: @escaping () -> Void
     ) {
@@ -26,7 +26,7 @@ struct OutlinedButtonComponent: View {
     // MARK: - Internal
 
     let config: ParraTextButtonConfig
-    let content: TextButtonContent
+    let content: ParraTextButtonContent
     let style: OutlinedButtonStyle
     let onPress: () -> Void
 

@@ -91,7 +91,7 @@ final class ModalScreenManager {
         contentObserver: ContainerType.ContentObserver,
         detents: [UISheetPresentationController.Detent] = [.large()],
         prefersGrabberVisible: Bool = true,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) where ContainerType: Container {
         Task { @MainActor in
             guard

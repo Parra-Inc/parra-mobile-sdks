@@ -58,7 +58,7 @@ struct RoadmapCell: View {
                 errorMessage = String(describing: error)
                 roadmapInfo = nil
 
-                Logger.error(error)
+                ParraLogger.error(error)
             }
 
             isLoading = false

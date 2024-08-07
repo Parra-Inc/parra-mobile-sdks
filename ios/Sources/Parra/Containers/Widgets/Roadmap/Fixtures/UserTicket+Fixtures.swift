@@ -10,10 +10,10 @@ import Foundation
 
 // MARK: - UserTicket + ParraFixture
 
-extension UserTicket: ParraFixture {
-    static func validStates() -> [UserTicket] {
+extension ParraUserTicket: ParraFixture {
+    static func validStates() -> [ParraUserTicket] {
         return [
-            UserTicket(
+            ParraUserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "PAR-2349",
                 createdAt: .now.daysAgo(0.01),
@@ -29,7 +29,7 @@ extension UserTicket: ParraFixture {
                 votingEnabled: true,
                 voted: false
             ),
-            UserTicket(
+            ParraUserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "PAR-4",
                 createdAt: .now.daysAgo(8),
@@ -45,7 +45,7 @@ extension UserTicket: ParraFixture {
                 votingEnabled: false,
                 voted: false
             ),
-            UserTicket(
+            ParraUserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "PAR-991011",
                 createdAt: .now.daysAgo(30),
@@ -61,7 +61,7 @@ extension UserTicket: ParraFixture {
                 votingEnabled: true,
                 voted: true
             ),
-            UserTicket(
+            ParraUserTicket(
                 id: UUID().uuidString,
                 ticketNumber: "PAR-3493929892",
                 createdAt: .now.daysAgo(100),
@@ -80,7 +80,7 @@ extension UserTicket: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [UserTicket] {
+    static func invalidStates() -> [ParraUserTicket] {
         return []
     }
 }

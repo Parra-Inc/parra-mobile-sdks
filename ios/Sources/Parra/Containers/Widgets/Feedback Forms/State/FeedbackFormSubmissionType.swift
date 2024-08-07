@@ -10,5 +10,5 @@ import Foundation
 
 enum FeedbackFormSubmissionType {
     case `default`
-    case custom(([FeedbackFormField: String]) async -> Void)
+    case custom(([ParraFeedbackFormField: String]) async -> Void)
 }

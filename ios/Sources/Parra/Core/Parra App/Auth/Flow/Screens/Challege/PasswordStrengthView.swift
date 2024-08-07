@@ -13,7 +13,7 @@ struct PasswordStrengthView: View {
 
     init(
         passwordState: Binding<ValidityState>,
-        validatedRules: Binding<[(PasswordRule, Bool)]>
+        validatedRules: Binding<[(ParraPasswordRule, Bool)]>
     ) {
         self._state = passwordState
         self._validatedRules = validatedRules
@@ -90,7 +90,7 @@ struct PasswordStrengthView: View {
     // MARK: - Private
 
     @Binding private var state: ValidityState
-    @Binding private var validatedRules: [(PasswordRule, Bool)]
+    @Binding private var validatedRules: [(ParraPasswordRule, Bool)]
     @State private var passwordStrength: PasswordEntropyCalculator.Strength?
 
     @EnvironmentObject private var themeManager: ParraThemeManager
@@ -98,7 +98,7 @@ struct PasswordStrengthView: View {
 
     @ViewBuilder
     private func renderRule(
-        rule: PasswordRule,
+        rule: ParraPasswordRule,
         valid: Bool
     ) -> some View {
         let color = valid
@@ -134,7 +134,7 @@ struct PasswordStrengthView: View {
             PasswordStrengthView(
                 passwordState: .constant(.init(password: "", isValid: false)),
                 validatedRules: .constant(
-                    PasswordConfig.validStates()[0].rules
+                    ParraPasswordConfig.validStates()[0].rules
                         .map { (
                             $0,
                             false
@@ -148,7 +148,7 @@ struct PasswordStrengthView: View {
                     isValid: false
                 )),
                 validatedRules: .constant(
-                    PasswordConfig.validStates()[0].rules
+                    ParraPasswordConfig.validStates()[0].rules
                         .map { (
                             $0,
                             false
@@ -162,7 +162,7 @@ struct PasswordStrengthView: View {
                     isValid: false
                 )),
                 validatedRules: .constant(
-                    PasswordConfig.validStates()[0].rules
+                    ParraPasswordConfig.validStates()[0].rules
                         .map { (
                             $0,
                             false
@@ -176,7 +176,7 @@ struct PasswordStrengthView: View {
                     isValid: false
                 )),
                 validatedRules: .constant(
-                    PasswordConfig.validStates()[0].rules
+                    ParraPasswordConfig.validStates()[0].rules
                         .map { (
                             $0,
                             false

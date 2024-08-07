@@ -12,7 +12,7 @@ struct FeedbackFormWidget: Container {
     // MARK: - Lifecycle
 
     init(
-        config: FeedbackFormWidgetConfig,
+        config: ParraFeedbackFormWidgetConfig,
         componentFactory: ComponentFactory,
         contentObserver: ContentObserver
     ) {
@@ -25,7 +25,7 @@ struct FeedbackFormWidget: Container {
 
     let componentFactory: ComponentFactory
     @StateObject var contentObserver: ContentObserver
-    let config: FeedbackFormWidgetConfig
+    let config: ParraFeedbackFormWidgetConfig
 
     @EnvironmentObject var themeManager: ParraThemeManager
 
@@ -107,12 +107,12 @@ struct FeedbackFormWidget: Container {
 
                 switch field.data {
                 case .feedbackFormSelectFieldData(let data):
-                    let content = MenuContent(
+                    let content = ParraMenuContent(
                         title: field.title,
                         placeholder: data.placeholder,
                         helper: field.helperText,
                         options: data.options.map { fieldOption in
-                            MenuContent.Option(
+                            ParraMenuContent.Option(
                                 id: fieldOption.id,
                                 title: fieldOption.title,
                                 value: fieldOption.id
@@ -126,11 +126,11 @@ struct FeedbackFormWidget: Container {
                     }
 
                     componentFactory.buildMenu(
-                        config: MenuConfig(),
+                        config: ParraMenuConfig(),
                         content: content
                     )
                 case .feedbackFormTextFieldData(let data):
-                    let content = TextEditorContent(
+                    let content = ParraTextEditorContent(
                         title: field.title,
                         placeholder: data.placeholder,
                         helper: field.helperText,
@@ -143,13 +143,13 @@ struct FeedbackFormWidget: Container {
                     }
 
                     componentFactory.buildTextEditor(
-                        config: TextEditorConfig(
+                        config: ParraTextEditorConfig(
                             maxCharacters: 30
                         ),
                         content: content
                     )
                 case .feedbackFormInputFieldData(let data):
-                    let content = TextInputContent(
+                    let content = ParraTextInputContent(
                         title: field.title,
                         placeholder: data.placeholder,
                         helper: field.helperText,
@@ -162,7 +162,7 @@ struct FeedbackFormWidget: Container {
                     }
 
                     componentFactory.buildTextInput(
-                        config: TextInputConfig(),
+                        config: ParraTextInputConfig(),
                         content: content
                     )
                 }
@@ -173,7 +173,7 @@ struct FeedbackFormWidget: Container {
     // MARK: - Private
 
     private func onFieldValueChanged(
-        field: FeedbackFormField,
+        field: ParraFeedbackFormField,
         value: String?
     ) {
         contentObserver.onFieldValueChanged(
@@ -193,7 +193,7 @@ struct FeedbackFormWidget: Container {
                     formData: .init(
                         title: "Leave feedback",
                         description: "We'd love to hear from you. Your input helps us make our product better.",
-                        fields: FeedbackFormField.validStates()
+                        fields: ParraFeedbackFormField.validStates()
                     )
                 )
             )

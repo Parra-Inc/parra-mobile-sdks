@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct TextEditorConfig {
+public struct ParraTextEditorConfig {
     // MARK: - Lifecycle
 
     public init(
@@ -16,9 +16,9 @@ public struct TextEditorConfig {
         minCharacters: Int? = nil,
         maxCharacters: Int? = nil,
         maxHeight: Int? = nil,
-        showCharacterCountLabel: Bool = TextEditorConfig.default
+        showCharacterCountLabel: Bool = ParraTextEditorConfig.default
             .showCharacterCountLabel,
-        preferValidationErrorsToHelperMessage: Bool = TextEditorConfig.default
+        preferValidationErrorsToHelperMessage: Bool = ParraTextEditorConfig.default
             .preferValidationErrorsToHelperMessage,
         keyboardType: UIKeyboardType = .default,
         textCase: Text.Case? = nil,
@@ -44,7 +44,7 @@ public struct TextEditorConfig {
 
     // MARK: - Public
 
-    public static let `default` = TextEditorConfig(
+    public static let `default` = ParraTextEditorConfig(
         minLines: 3,
         minCharacters: 0,
         maxCharacters: nil,
@@ -76,10 +76,10 @@ public struct TextEditorConfig {
 
     // MARK: - Internal
 
-    func withFormTextFieldData(_ data: FeedbackFormTextFieldData)
-        -> TextEditorConfig
+    func withFormTextFieldData(_ data: ParraFeedbackFormTextFieldData)
+        -> ParraTextEditorConfig
     {
-        return TextEditorConfig(
+        return ParraTextEditorConfig(
             minLines: data.lines,
             minCharacters: data.minCharacters,
             maxCharacters: data.maxCharacters,

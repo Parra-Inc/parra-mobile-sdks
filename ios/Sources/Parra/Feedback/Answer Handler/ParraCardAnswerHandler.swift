@@ -47,7 +47,7 @@ class ParraCardAnswerHandler: ObservableObject {
 
     func commitAnswers(
         for bucketItemId: String,
-        question: Question
+        question: ParraQuestion
     ) {
         guard let answer = currentAnswerState[bucketItemId] else {
             // This check is critical since it's possible that a card could commit a selection change

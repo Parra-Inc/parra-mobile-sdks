@@ -12,7 +12,7 @@ import UIKit
 
 extension AlertManager {
     struct Toast: Equatable {
-        let level: AlertLevel
+        let level: ParraAlertLevel
         let content: ParraAlertContent
         let attributes: ParraAttributes.ToastAlert?
         let onDismiss: () -> Void
@@ -78,7 +78,7 @@ extension AlertManager {
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25,
         in location: ToastLocation = .topCenter,
-        level: AlertLevel,
+        level: ParraAlertLevel,
         content: ParraAlertContent,
         attributes: ParraAttributes.ToastAlert? = nil,
         primaryAction: (() -> Void)? = nil
@@ -103,7 +103,7 @@ extension AlertManager {
         animationDuration: TimeInterval = 0.25,
         primaryAction: (() -> Void)? = nil
     ) {
-        let level = AlertLevel.success
+        let level = ParraAlertLevel.success
 
         showToast(
             for: duration,
@@ -111,8 +111,8 @@ extension AlertManager {
             in: location,
             level: level,
             content: ParraAlertContent(
-                title: LabelContent(text: title),
-                subtitle: LabelContent(text: subtitle),
+                title: ParraLabelContent(text: title),
+                subtitle: ParraLabelContent(text: subtitle),
                 icon: ParraAlertContent.defaultIcon(for: level),
                 dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
@@ -129,7 +129,7 @@ extension AlertManager {
         animationDuration: TimeInterval = 0.25,
         primaryAction: (() -> Void)? = nil
     ) {
-        let level = AlertLevel.error
+        let level = ParraAlertLevel.error
 
         showToast(
             for: duration,
@@ -137,8 +137,8 @@ extension AlertManager {
             in: location,
             level: level,
             content: ParraAlertContent(
-                title: LabelContent(text: title),
-                subtitle: LabelContent(text: userFacingMessage),
+                title: ParraLabelContent(text: title),
+                subtitle: ParraLabelContent(text: userFacingMessage),
                 icon: ParraAlertContent.defaultIcon(for: level),
                 dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
@@ -147,23 +147,23 @@ extension AlertManager {
     }
 
     func showWhatsNewToast(
-        for newInstalledVersionInfo: NewInstalledVersionInfo,
+        for newInstalledVersionInfo: ParraNewInstalledVersionInfo,
         in location: ToastLocation = .bottomCenter,
         for duration: TimeInterval = 8.0,
         animationDuration: TimeInterval = 0.25,
         primaryAction: (() -> Void)? = nil
     ) {
-        let level = AlertLevel.info
+        let level = ParraAlertLevel.info
 
         showToast(
             for: duration,
             in: location,
             level: level,
             content: ParraAlertContent(
-                title: LabelContent(
+                title: ParraLabelContent(
                     text: "New Version Available!"
                 ),
-                subtitle: LabelContent(
+                subtitle: ParraLabelContent(
                     text: "Version \(newInstalledVersionInfo.release.version) is now available."
                 ),
                 icon: ParraAlertContent.defaultIcon(for: level),

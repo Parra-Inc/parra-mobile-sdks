@@ -11,15 +11,15 @@ import SwiftUI
 struct AppReleaseSectionContent: Identifiable, Hashable {
     // MARK: - Lifecycle
 
-    init(_ section: AppReleaseSection) {
+    init(_ section: ParraAppReleaseSection) {
         self.id = section.id
-        self.title = LabelContent(text: section.title)
+        self.title = ParraLabelContent(text: section.title)
         self.items = section.items.map { TicketStubContent($0.ticket) }
     }
 
     init(
         id: String,
-        title: LabelContent,
+        title: ParraLabelContent,
         items: [TicketStubContent]
     ) {
         self.id = id
@@ -34,7 +34,7 @@ struct AppReleaseSectionContent: Identifiable, Hashable {
     static var redacted: AppReleaseSectionContent {
         AppReleaseSectionContent(
             id: UUID().uuidString,
-            title: LabelContent(text: "Sample title!"),
+            title: ParraLabelContent(text: "Sample title!"),
             items: [
                 .redacted, .redacted, .redacted, .redacted, .redacted
             ]
@@ -42,6 +42,6 @@ struct AppReleaseSectionContent: Identifiable, Hashable {
     }
 
     let id: String
-    let title: LabelContent
+    let title: ParraLabelContent
     let items: [TicketStubContent]
 }

@@ -13,7 +13,7 @@ private let closeButtonSize: CGFloat = 12
 public extension ParraGlobalComponentAttributes {
     func inlineAlertAttributes(
         content: ParraAlertContent,
-        level: AlertLevel,
+        level: ParraAlertLevel,
         localAttributes: ParraAttributes.InlineAlert?,
         theme: ParraTheme
     ) -> ParraAttributes.InlineAlert {
@@ -66,7 +66,7 @@ public extension ParraGlobalComponentAttributes {
 
     func toastAlertAttributes(
         content: ParraAlertContent,
-        level: AlertLevel,
+        level: ParraAlertLevel,
         localAttributes: ParraAttributes.ToastAlert?,
         theme: ParraTheme
     ) -> ParraAttributes.ToastAlert {
@@ -240,7 +240,7 @@ public extension ParraGlobalComponentAttributes {
     }
 
     private func defaultBackground(
-        for level: AlertLevel,
+        for level: ParraAlertLevel,
         with theme: ParraTheme
     ) -> ParraColor {
         let palette = theme.palette
@@ -267,7 +267,7 @@ public extension ParraGlobalComponentAttributes {
     }
 
     private func defaultIcon(
-        for level: AlertLevel,
+        for level: ParraAlertLevel,
         with theme: ParraTheme
     ) -> ParraAttributes.Image {
         let iconTintColor = defaultIconTint(
@@ -282,7 +282,7 @@ public extension ParraGlobalComponentAttributes {
     }
 
     private func defaultIconTint(
-        for level: AlertLevel,
+        for level: ParraAlertLevel,
         with theme: ParraTheme
     ) -> ParraColor {
         let palette = theme.palette
@@ -312,7 +312,7 @@ public extension ParraGlobalComponentAttributes {
     }
 
     private func defaultBorder(
-        for level: AlertLevel,
+        for level: ParraAlertLevel,
         with theme: ParraTheme
     ) -> ParraAttributes.Border {
         let palette = theme.palette

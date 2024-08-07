@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct MenuConfig {
+public struct ParraMenuConfig {
     // MARK: - Lifecycle
 
     public init(
@@ -23,8 +23,8 @@ public struct MenuConfig {
 
     // MARK: - Internal
 
-    func withFormTextFieldData(_ data: FeedbackFormSelectFieldData)
-        -> MenuConfig
+    func withFormTextFieldData(_ data: ParraFeedbackFormSelectFieldData)
+        -> ParraMenuConfig
     {
         // There are currently no fields used in config from this data object
         // but this keeps with a pattern used for other field types.

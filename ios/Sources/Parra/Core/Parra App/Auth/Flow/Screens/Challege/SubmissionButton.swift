@@ -14,7 +14,7 @@ struct SubmissionButton: View {
     init(
         config: ParraTextButtonConfig,
         variant: ParraButtonVariant,
-        content: TextButtonContent,
+        content: ParraTextButtonContent,
         onPress: @escaping () async -> Void
     ) {
         self.config = config
@@ -27,7 +27,7 @@ struct SubmissionButton: View {
 
     let config: ParraTextButtonConfig
     let variant: ParraButtonVariant
-    @State var content: TextButtonContent
+    @State var content: ParraTextButtonContent
 
     let onPress: () async -> Void
 

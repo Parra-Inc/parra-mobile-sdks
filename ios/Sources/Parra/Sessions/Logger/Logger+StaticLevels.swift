@@ -25,7 +25,7 @@ import Foundation
 // the console, but later has its message accessed during a measurement. This may be unexpected for users
 // of the Logger if they added code that produced side effects in any of these closures.
 
-public extension Logger {
+public extension ParraLogger {
     @discardableResult
     @inlinable
     static func trace(

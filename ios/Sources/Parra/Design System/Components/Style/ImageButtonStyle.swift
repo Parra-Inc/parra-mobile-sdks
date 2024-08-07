@@ -12,7 +12,7 @@ struct ImageButtonStyle: ButtonStyle {
     // MARK: - Internal
 
     let config: ParraImageButtonConfig
-    let content: ImageButtonContent
+    let content: ParraImageButtonContent
     let attributes: ParraAttributes.ImageButton
 
     @ViewBuilder

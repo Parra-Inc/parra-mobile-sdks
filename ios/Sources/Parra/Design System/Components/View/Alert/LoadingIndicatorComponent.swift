@@ -68,12 +68,12 @@ struct LoadingIndicatorComponent: View {
             Spacer()
             Spacer()
 
-            ForEach(AlertLevel.allCases, id: \.self) { _ in
+            ForEach(ParraAlertLevel.allCases, id: \.self) { _ in
                 factory.buildLoadingIndicator(
                     content:
                     ParraLoadingIndicatorContent(
-                        title: LabelContent(text: "Loading..."),
-                        subtitle: LabelContent(
+                        title: ParraLabelContent(text: "Loading..."),
+                        subtitle: ParraLabelContent(
                             text: "This should only take a few seconds"
                         ),
                         cancel: .init(text: "Cancel")

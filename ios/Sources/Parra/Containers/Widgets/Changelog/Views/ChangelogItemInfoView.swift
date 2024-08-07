@@ -25,9 +25,9 @@ struct ChangelogItemInfoView: View {
 
     // MARK: - Internal
 
-    let version: LabelContent
-    let type: LabelContent
-    let createdAt: LabelContent
+    let version: ParraLabelContent
+    let type: ParraLabelContent
+    let createdAt: ParraLabelContent
 
     var body: some View {
         let palette = themeManager.theme.palette
@@ -61,7 +61,7 @@ struct ChangelogItemInfoView: View {
 
     // MARK: - Private
 
-    @Environment(ChangelogWidgetConfig.self) private var config
+    @Environment(ParraChangelogWidgetConfig.self) private var config
     @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 }

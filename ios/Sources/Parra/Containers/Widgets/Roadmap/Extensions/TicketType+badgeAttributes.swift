@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension TicketType {
+extension ParraTicketType {
     var symbolName: String {
         switch self {
         case .bug:

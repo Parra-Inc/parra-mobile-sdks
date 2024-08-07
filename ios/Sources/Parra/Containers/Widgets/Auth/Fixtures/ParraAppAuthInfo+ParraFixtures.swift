@@ -12,7 +12,7 @@ extension ParraAppAuthInfo: ParraFixture {
     static func validStates() -> [ParraAppAuthInfo] {
         return [
             ParraAppAuthInfo(
-                database: AppInfoDatabaseConfig(
+                database: ParraAppInfoDatabaseConfig(
                     password: .validStates()[0],
                     username: nil,
                     email: .init(
@@ -21,11 +21,11 @@ extension ParraAppAuthInfo: ParraFixture {
                         allowSignup: true
                     ),
                     phoneNumber: nil,
-                    passkeys: AppInfoPasskeysConfig(),
-                    anonymousAuth: AppInfoAnonymousAuthConfig()
+                    passkeys: ParraAppInfoPasskeysConfig(),
+                    anonymousAuth: ParraAppInfoAnonymousAuthConfig()
                 ),
                 passwordless: ParraAuthInfoPasswordlessConfig(
-                    sms: AuthInfoPasswordlessSmsConfig(
+                    sms: ParraAuthInfoPasswordlessSmsConfig(
                         otpLength: 6
                     )
                 )

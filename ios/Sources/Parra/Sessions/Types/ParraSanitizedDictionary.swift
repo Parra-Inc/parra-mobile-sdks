@@ -65,6 +65,6 @@ extension ParraSanitizedDictionary: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
 
-        try container.encode(AnyCodable(dictionary))
+        try container.encode(ParraAnyCodable(dictionary))
     }
 }

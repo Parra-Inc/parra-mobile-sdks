@@ -89,7 +89,7 @@ import SwiftUI
 ///     }
 ///
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
-public struct CachedAsyncImage<Content>: View where Content: View {
+struct CachedAsyncImage<Content>: View where Content: View {
     // MARK: - Lifecycle
 
     /// Loads and displays an image from the specified URL.
@@ -114,7 +114,7 @@ public struct CachedAsyncImage<Content>: View where Content: View {
     ///     different value when loading images designed for higher resolution
     ///     displays. For example, set a value of `2` for an image that you
     ///     would name with the `@2x` suffix if stored in a file on disk.
-    public init(url: URL?, urlCache: URLCache = .shared, scale: CGFloat = 1)
+    init(url: URL?, urlCache: URLCache = .shared, scale: CGFloat = 1)
         where Content == Image
     {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
@@ -143,7 +143,7 @@ public struct CachedAsyncImage<Content>: View where Content: View {
     ///     different value when loading images designed for higher resolution
     ///     displays. For example, set a value of `2` for an image that you
     ///     would name with the `@2x` suffix if stored in a file on disk.
-    public init(
+    init(
         urlRequest: URLRequest?,
         urlCache: URLCache = .shared,
         scale: CGFloat = 1
@@ -193,7 +193,7 @@ public struct CachedAsyncImage<Content>: View where Content: View {
     ///     modify it as needed before returning it.
     ///   - placeholder: A closure that returns the view to show until the
     ///     load operation completes successfully.
-    public init<I, P>(
+    init<I, P>(
         url: URL?,
         urlCache: URLCache = .shared,
         scale: CGFloat = 1,
@@ -241,7 +241,7 @@ public struct CachedAsyncImage<Content>: View where Content: View {
     ///     modify it as needed before returning it.
     ///   - placeholder: A closure that returns the view to show until the
     ///     load operation completes successfully.
-    public init<I, P>(
+    init<I, P>(
         urlRequest: URLRequest?,
         urlCache: URLCache = .shared,
         scale: CGFloat = 1,
@@ -297,7 +297,7 @@ public struct CachedAsyncImage<Content>: View where Content: View {
     ///   - transaction: The transaction to use when the phase changes.
     ///   - content: A closure that takes the load phase as an input, and
     ///     returns the view to display for the specified phase.
-    public init(
+    init(
         url: URL?,
         urlCache: URLCache = .shared,
         scale: CGFloat = 1,
@@ -349,7 +349,7 @@ public struct CachedAsyncImage<Content>: View where Content: View {
     ///   - transaction: The transaction to use when the phase changes.
     ///   - content: A closure that takes the load phase as an input, and
     ///     returns the view to display for the specified phase.
-    public init(
+    init(
         urlRequest: URLRequest?,
         urlCache: URLCache = .shared,
         scale: CGFloat = 1,
@@ -377,9 +377,7 @@ public struct CachedAsyncImage<Content>: View where Content: View {
         }
     }
 
-    // MARK: - Public
-
-    public var body: some View {
+    var body: some View {
         content(phase)
             .task(id: urlRequest) {
                 do {

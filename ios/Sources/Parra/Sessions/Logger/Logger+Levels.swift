@@ -24,7 +24,7 @@ import Foundation
 //       Related to ^, could we make use of @inlinable to do this, or to avoid having to parse Parra
 //       frames out of stack traces? Also maybe help with Xcode 15 console showing button to jump to wrong file.
 
-public extension Logger {
+public extension ParraLogger {
     @discardableResult
     @inlinable
     func trace(

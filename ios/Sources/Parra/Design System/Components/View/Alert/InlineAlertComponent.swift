@@ -57,12 +57,12 @@ struct InlineAlertComponent: View {
             Spacer()
             Spacer()
 
-            ForEach(AlertLevel.allCases, id: \.self) { level in
+            ForEach(ParraAlertLevel.allCases, id: \.self) { level in
                 factory.buildInlineAlert(
                     level: level,
                     content: ParraAlertContent(
-                        title: LabelContent(text: "The task was completed"),
-                        subtitle: LabelContent(
+                        title: ParraLabelContent(text: "The task was completed"),
+                        subtitle: ParraLabelContent(
                             text: "This is just an FYI. You can go about your day without worrying about anything."
                         ),
                         icon: ParraAlertContent.defaultIcon(for: level),

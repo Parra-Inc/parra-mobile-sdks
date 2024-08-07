@@ -62,7 +62,7 @@ struct ChangelogListItem: View {
 
     // MARK: - Private
 
-    @Environment(ChangelogWidgetConfig.self) private var config
+    @Environment(ParraChangelogWidgetConfig.self) private var config
 
     @EnvironmentObject private var contentObserver: ChangelogWidget
         .ContentObserver

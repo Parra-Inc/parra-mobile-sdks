@@ -8,12 +8,12 @@
 
 import SwiftUI
 
-public class FeedbackCardWidgetConfig: ContainerConfig {
+public class ParraFeedbackCardWidgetConfig: ContainerConfig {
     // MARK: - Lifecycle
 
     public required init() {}
 
     // MARK: - Public
 
-    public static let `default` = FeedbackCardWidgetConfig()
+    public static let `default` = ParraFeedbackCardWidgetConfig()
 }

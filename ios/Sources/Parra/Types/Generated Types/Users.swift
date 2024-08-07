@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
+struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -20,7 +20,7 @@ public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case provider
         case providerUserId
     }
@@ -29,7 +29,7 @@ public struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
     public let providerUserId: String
 }
 
-public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
+struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     public init(
@@ -52,7 +52,7 @@ public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case createdAt
         case updatedAt
@@ -71,7 +71,7 @@ public struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
     public let userId: String
 }
 
-public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
+struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -86,7 +86,7 @@ public struct UpdateUserRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case firstName
         case lastName
         case name
@@ -126,7 +126,7 @@ struct AuthChallengesRequestBody: Codable, Equatable, Hashable {
 
     init(
         identity: String,
-        identityType: IdentityType?
+        identityType: ParraIdentityType?
     ) {
         guard let identityType else {
             self.unknownIdentity = identity
@@ -247,7 +247,7 @@ public struct ParraAuthChallenge: Codable, Equatable, Hashable {
     }
 }
 
-public enum IdentityType: String, Codable {
+public enum ParraIdentityType: String, Codable {
     case username = "username"
     case email = "email"
     case phoneNumber = "phone_number"
@@ -260,7 +260,7 @@ struct AuthChallengeResponse: Codable, Equatable, Hashable {
 
     init(
         exists: Bool,
-        type: IdentityType,
+        type: ParraIdentityType,
         supportedChallenges: [ParraAuthChallenge],
         availableChallenges: [ParraAuthChallenge]?
     ) {
@@ -280,7 +280,7 @@ struct AuthChallengeResponse: Codable, Equatable, Hashable {
     }
 
     let exists: Bool
-    let type: IdentityType
+    let type: ParraIdentityType
 
     /// The types of challenges that are available per the `type` of identity,
     /// regardless of whether the user has completed them.
@@ -344,7 +344,7 @@ struct CreateAnonymousTokenRequestBody: Codable, Equatable, Hashable, Sendable {
     }
 }
 
-public struct LoginUserRequestBody: Codable, Equatable, Hashable {
+struct LoginUserRequestBody: Codable, Equatable, Hashable {
     public let anonymousToken: String?
 
     public init(
@@ -354,7 +354,7 @@ public struct LoginUserRequestBody: Codable, Equatable, Hashable {
     }
 }
 
-public struct AuthToken: Codable, Equatable, Hashable {
+struct AuthToken: Codable, Equatable, Hashable {
     public let tokenType: String
     public let accessToken: String
     public let expiresIn: TimeInterval?
@@ -376,7 +376,7 @@ public struct AuthToken: Codable, Equatable, Hashable {
     }
 }
 
-public struct AuthLogoutResponseBody: Codable, Equatable, Hashable {
+struct AuthLogoutResponseBody: Codable, Equatable, Hashable {
     public let anonymousToken: AuthToken?
     public let guestToken: AuthToken?
 
@@ -394,7 +394,7 @@ struct CreateUserRequestBody: Codable, Equatable, Hashable {
 
     init(
         identity: String? = nil,
-        type: IdentityType,
+        type: ParraIdentityType,
         name: String? = nil,
         properties: [String: String]? = nil,
         username: String? = nil,
@@ -425,7 +425,7 @@ struct CreateUserRequestBody: Codable, Equatable, Hashable {
     // MARK: - Internal
 
     let identity: String?
-    let type: IdentityType
+    let type: ParraIdentityType
     let name: String?
     let properties: [String: String]?
     let username: String?
@@ -439,7 +439,7 @@ struct CreateUserRequestBody: Codable, Equatable, Hashable {
     let locale: String?
 }
 
-public struct UserInfoResponse: Codable, Equatable, Hashable {
+struct UserInfoResponse: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -452,7 +452,7 @@ public struct UserInfoResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case roles
         case user
     }
@@ -461,7 +461,7 @@ public struct UserInfoResponse: Codable, Equatable, Hashable {
     public let user: ParraUser.Info
 }
 
-public struct ListUsersQuery: Codable, Equatable, Hashable {
+struct ListUsersQuery: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -484,7 +484,7 @@ public struct ListUsersQuery: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case select = "$select"
         case top = "$top"
         case skip = "$skip"
@@ -511,7 +511,7 @@ struct WebAuthnRegisterChallengeRequest: Codable, Equatable, Hashable {
     let username: String
 }
 
-public struct AuthenticatorSelection: Codable, Equatable, Hashable {
+struct AuthenticatorSelection: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -534,7 +534,7 @@ public struct AuthenticatorSelection: Codable, Equatable, Hashable {
     public let userVerification: String
 }
 
-public struct PublicKeyCredentialDescriptor: Codable, Equatable, Hashable,
+struct PublicKeyCredentialDescriptor: Codable, Equatable, Hashable,
     Identifiable
 {
     // MARK: - Lifecycle
@@ -556,7 +556,7 @@ public struct PublicKeyCredentialDescriptor: Codable, Equatable, Hashable,
     public let transports: [String]?
 }
 
-public struct PublicKeyCredParam: Codable, Equatable, Hashable {
+struct PublicKeyCredParam: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -573,7 +573,7 @@ public struct PublicKeyCredParam: Codable, Equatable, Hashable {
     public let alg: Int
 }
 
-public struct RelyingParty: Codable, Equatable, Hashable, Identifiable {
+struct RelyingParty: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     public init(
@@ -590,7 +590,7 @@ public struct RelyingParty: Codable, Equatable, Hashable, Identifiable {
     public let name: String?
 }
 
-public struct PublicKeyCredentialUser: Codable, Equatable, Hashable,
+struct PublicKeyCredentialUser: Codable, Equatable, Hashable,
     Identifiable
 {
     // MARK: - Lifecycle
@@ -612,7 +612,7 @@ public struct PublicKeyCredentialUser: Codable, Equatable, Hashable,
     public let displayName: String
 }
 
-public struct PublicKeyCredentialCreationOptions: Codable, Equatable, Hashable {
+struct PublicKeyCredentialCreationOptions: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -621,7 +621,7 @@ public struct PublicKeyCredentialCreationOptions: Codable, Equatable, Hashable {
         authenticatorSelection: AuthenticatorSelection?,
         challenge: String,
         excludeCredentials: [PublicKeyCredentialDescriptor]?,
-        extensions: [String: AnyCodable]?,
+        extensions: [String: ParraAnyCodable]?,
         pubKeyCredParams: [PublicKeyCredParam],
         rp: RelyingParty,
         user: PublicKeyCredentialUser,
@@ -648,7 +648,7 @@ public struct PublicKeyCredentialCreationOptions: Codable, Equatable, Hashable {
     public let authenticatorSelection: AuthenticatorSelection?
     public let challenge: String
     public let excludeCredentials: [PublicKeyCredentialDescriptor]?
-    public let extensions: [String: AnyCodable]?
+    public let extensions: [String: ParraAnyCodable]?
     public let pubKeyCredParams: [PublicKeyCredParam]
     public let rp: RelyingParty
     public let user: PublicKeyCredentialUser
@@ -656,13 +656,13 @@ public struct PublicKeyCredentialCreationOptions: Codable, Equatable, Hashable {
     public let hints: [String]?
 }
 
-public struct PublicKeyCredentialRequestOptions: Codable, Equatable, Hashable {
+struct PublicKeyCredentialRequestOptions: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
         challenge: String,
         allowCredentials: [PublicKeyCredentialDescriptor]?,
-        extensions: [String: AnyCodable]?,
+        extensions: [String: ParraAnyCodable]?,
         rpId: String?,
         timeout: Int?,
         userVerification: String?
@@ -679,13 +679,13 @@ public struct PublicKeyCredentialRequestOptions: Codable, Equatable, Hashable {
 
     public let challenge: String
     public let allowCredentials: [PublicKeyCredentialDescriptor]?
-    public let extensions: [String: AnyCodable]?
+    public let extensions: [String: ParraAnyCodable]?
     public let rpId: String?
     public let timeout: Int?
     public let userVerification: String?
 }
 
-public struct AuthenticatorResponse: Codable, Equatable, Hashable {
+struct AuthenticatorResponse: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -699,7 +699,7 @@ public struct AuthenticatorResponse: Codable, Equatable, Hashable {
     public let clientDataJSON: String
 }
 
-public struct AuthenticatorAttestationResponse: Codable, Equatable, Hashable {
+struct AuthenticatorAttestationResponse: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -716,7 +716,7 @@ public struct AuthenticatorAttestationResponse: Codable, Equatable, Hashable {
     public let attestationObject: String
 }
 
-public struct WebauthnRegisterRequestBody: Codable, Equatable, Hashable,
+struct WebauthnRegisterRequestBody: Codable, Equatable, Hashable,
     Identifiable
 {
     // MARK: - Lifecycle
@@ -744,7 +744,7 @@ public struct WebauthnRegisterRequestBody: Codable, Equatable, Hashable,
     public let user: PublicKeyCredentialUser?
 }
 
-public struct WebauthnRegisterResponseBody: Codable, Equatable, Hashable {
+struct WebauthnRegisterResponseBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -764,7 +764,7 @@ public struct WebauthnRegisterResponseBody: Codable, Equatable, Hashable {
     public let token: String
 }
 
-public struct AuthenticatorAssertionResponse: Codable, Equatable, Hashable {
+struct AuthenticatorAssertionResponse: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -787,7 +787,7 @@ public struct AuthenticatorAssertionResponse: Codable, Equatable, Hashable {
     public let userHandle: String
 }
 
-public struct WebauthnAuthenticateRequestBody: Codable, Equatable, Hashable,
+struct WebauthnAuthenticateRequestBody: Codable, Equatable, Hashable,
     Identifiable
 {
     // MARK: - Lifecycle
@@ -815,7 +815,7 @@ public struct WebauthnAuthenticateRequestBody: Codable, Equatable, Hashable,
     public let authenticatorAttachment: String?
 }
 
-public struct WebauthnAuthenticateResponseBody: Codable, Equatable, Hashable {
+struct WebauthnAuthenticateResponseBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -857,7 +857,7 @@ struct PasswordResetChallengeRequestBody: Codable, Equatable, Hashable,
     init(
         clientId: String?,
         identity: String,
-        identityType: IdentityType?
+        identityType: ParraIdentityType?
     ) {
         self.clientId = clientId
 

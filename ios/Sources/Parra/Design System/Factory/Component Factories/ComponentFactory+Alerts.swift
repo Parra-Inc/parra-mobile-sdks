@@ -11,7 +11,7 @@ import SwiftUI
 extension ComponentFactory {
     @ViewBuilder
     func buildInlineAlert(
-        level: AlertLevel,
+        level: ParraAlertLevel,
         content: ParraAlertContent,
         localAttributes: ParraAttributes.InlineAlert? = nil
     ) -> some View {
@@ -30,7 +30,7 @@ extension ComponentFactory {
 
     @ViewBuilder
     func buildToastAlert(
-        level: AlertLevel,
+        level: ParraAlertLevel,
         content: ParraAlertContent,
         onDismiss: @escaping () -> Void,
         primaryAction: (() -> Void)? = nil,

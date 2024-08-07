@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct EmptyStateConfig: Equatable {
+public struct ParraEmptyStateConfig: Equatable {
     // MARK: - Lifecycle
 
     public init(
@@ -33,12 +33,12 @@ public struct EmptyStateConfig: Equatable {
         isMaxWidth: true
     )
 
-    public static let `default` = EmptyStateConfig(
+    public static let `default` = ParraEmptyStateConfig(
         primaryAction: defaultPrimaryAction,
         secondaryAction: defaultSecondaryAction
     )
 
-    public static let errorDefault = EmptyStateConfig(
+    public static let errorDefault = ParraEmptyStateConfig(
         primaryAction: ParraTextButtonConfig(
             type: .primary,
             size: .large,

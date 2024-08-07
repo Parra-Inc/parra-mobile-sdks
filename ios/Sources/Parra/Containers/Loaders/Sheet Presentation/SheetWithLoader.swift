@@ -24,7 +24,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
         loader: ViewDataLoader<TransformParams, Data, SheetContent>,
         detents: Set<PresentationDetent> = [.large],
         visibility: Visibility = .visible,
-        onDismiss: ((SheetDismissType) -> Void)?
+        onDismiss: ((ParraSheetDismissType) -> Void)?
     ) {
         self._loadType = loadType
         self.loader = loader
@@ -99,10 +99,10 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     private let loader: ViewDataLoader<TransformParams, Data, SheetContent>
     private let detents: Set<PresentationDetent>
     private let visibility: Visibility
-    private let onDismiss: ((SheetDismissType) -> Void)?
+    private let onDismiss: ((ParraSheetDismissType) -> Void)?
 
     @MainActor
-    private func dismiss(_ type: SheetDismissType) {
+    private func dismiss(_ type: ParraSheetDismissType) {
         loadType = .none
         state = .ready
 

@@ -14,9 +14,9 @@ extension View {
     @MainActor
     func presentParraFeedbackForm(
         with formBinding: Binding<ParraFeedbackForm?>,
-        config: FeedbackFormWidgetConfig,
+        config: ParraFeedbackFormWidgetConfig,
         submissionType: FeedbackFormSubmissionType,
-        onDismiss: ((SheetDismissType) -> Void)?
+        onDismiss: ((ParraSheetDismissType) -> Void)?
     ) -> some View {
         loadAndPresentSheet(
             loadType: .init(

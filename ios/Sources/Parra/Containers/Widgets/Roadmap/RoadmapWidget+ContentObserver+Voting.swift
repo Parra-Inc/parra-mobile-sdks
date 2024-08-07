@@ -97,7 +97,7 @@ extension RoadmapWidget.ContentObserver {
 
     func handleVoteResponse(
         for ticket: TicketUserContent,
-        response: AuthenticatedRequestResult<UserTicket>
+        response: AuthenticatedRequestResult<ParraUserTicket>
     ) throws {
         if response.context.statusCode == 409 {
             // User had already removed their vote for this ticket

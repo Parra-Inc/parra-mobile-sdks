@@ -89,7 +89,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     private let params: Params
     private let config: Config
 
-    @State private var challengeResponse: ChallengeResponse?
+    @State private var challengeResponse: ParraChallengeResponse?
     @State private var shouldDisableSubmitWithPassword: Bool = true
     @State private var errorMessage: String?
 
@@ -104,7 +104,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     @ViewBuilder private var challengeContent: some View {
         VStack(alignment: .center, spacing: 16) {
             componentFactory.buildLabel(
-                content: LabelContent(text: title),
+                content: ParraLabelContent(text: title),
                 localAttributes: ParraAttributes.Label(
                     text: .default(with: .title),
                     frame: .flexible(
@@ -144,7 +144,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
 
             if let errorMessage {
                 componentFactory.buildLabel(
-                    content: LabelContent(text: errorMessage),
+                    content: ParraLabelContent(text: errorMessage),
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
                             color: themeManager.theme.palette.error
@@ -284,7 +284,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     .init(id: .password),
                     .init(id: .passwordlessEmail)
                 ],
-                legalInfo: LegalInfo.validStates()[0],
+                legalInfo: ParraLegalInfo.validStates()[0],
                 submit: { _ in },
                 forgotPassword: {}
             ),
@@ -306,7 +306,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 supportedChallenges: [
                     .init(id: .password)
                 ],
-                legalInfo: LegalInfo.validStates()[0],
+                legalInfo: ParraLegalInfo.validStates()[0],
                 submit: { _ in },
                 forgotPassword: {}
             ),
@@ -328,7 +328,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 supportedChallenges: [
                     .init(id: .passwordlessSms)
                 ],
-                legalInfo: LegalInfo.validStates()[0],
+                legalInfo: ParraLegalInfo.validStates()[0],
                 submit: { _ in },
                 forgotPassword: {}
             ),
@@ -350,7 +350,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 supportedChallenges: [
                     .init(id: .passwordlessSms)
                 ],
-                legalInfo: LegalInfo.validStates()[0],
+                legalInfo: ParraLegalInfo.validStates()[0],
                 submit: { _ in },
                 forgotPassword: {}
             ),

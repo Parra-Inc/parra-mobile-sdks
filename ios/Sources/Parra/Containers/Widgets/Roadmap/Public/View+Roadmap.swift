@@ -14,8 +14,8 @@ public extension View {
     @MainActor
     func presentParraRoadmap(
         isPresented: Binding<Bool>,
-        config: RoadmapWidgetConfig = .default,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        config: ParraRoadmapWidgetConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         let transformParams = RoadmapParams(
             limit: 15,
@@ -75,8 +75,8 @@ public extension View {
     @MainActor
     func presentParraRoadmap(
         with resultBinding: Binding<ParraRoadmapInfo?>,
-        config: RoadmapWidgetConfig = .default,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        config: ParraRoadmapWidgetConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return loadAndPresentSheet(
             loadType: .init(

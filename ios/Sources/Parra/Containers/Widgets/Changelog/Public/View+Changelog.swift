@@ -14,8 +14,8 @@ public extension View {
     @MainActor
     func presentParraChangelog(
         isPresented: Binding<Bool>,
-        config: ChangelogWidgetConfig = .default,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        config: ParraChangelogWidgetConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         let params = ChangelogParams(
             limit: 15,
@@ -63,8 +63,8 @@ public extension View {
     @MainActor
     func presentParraChangelog(
         with resultBinding: Binding<ParraChangelogInfo?>,
-        config: ChangelogWidgetConfig = .default,
-        onDismiss: ((SheetDismissType) -> Void)? = nil
+        config: ParraChangelogWidgetConfig = .default,
+        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         return loadAndPresentSheet(
             loadType: .init(

@@ -12,8 +12,8 @@ struct TextInputComponent: View {
     // MARK: - Lifecycle
 
     init(
-        config: TextInputConfig,
-        content: TextInputContent,
+        config: ParraTextInputConfig,
+        content: ParraTextInputContent,
         attributes: ParraAttributes.TextInput
     ) {
         self.config = config
@@ -35,8 +35,8 @@ struct TextInputComponent: View {
         case secureRevealed
     }
 
-    var config: TextInputConfig
-    var content: TextInputContent
+    var config: ParraTextInputConfig
+    var content: ParraTextInputContent
     var attributes: ParraAttributes.TextInput
 
     @EnvironmentObject var componentFactory: ComponentFactory
@@ -222,9 +222,9 @@ struct TextInputComponent: View {
         }
 
         let content = if let message {
-            LabelContent(text: message)
+            ParraLabelContent(text: message)
         } else {
-            LabelContent(text: "")
+            ParraLabelContent(text: "")
         }
 
         if content.text.isEmpty, config.resizeWhenHelperMessageIsVisible {
@@ -246,8 +246,8 @@ struct TextInputComponent: View {
     ParraViewPreview { factory in
         VStack {
             factory.buildTextInput(
-                config: TextInputConfig(),
-                content: TextInputContent(
+                config: ParraTextInputConfig(),
+                content: ParraTextInputContent(
                     title: "Some title",
                     placeholder: "temp placeholder",
                     helper: "helper text woo",
@@ -257,8 +257,8 @@ struct TextInputComponent: View {
             )
 
             factory.buildTextInput(
-                config: TextInputConfig(),
-                content: TextInputContent(
+                config: ParraTextInputConfig(),
+                content: ParraTextInputContent(
                     title: "Some title",
                     placeholder: "temp placeholder",
                     helper: "helper text woo",
@@ -268,8 +268,8 @@ struct TextInputComponent: View {
             )
 
             factory.buildTextInput(
-                config: TextInputConfig(),
-                content: TextInputContent(
+                config: ParraTextInputConfig(),
+                content: ParraTextInputContent(
                     title: "Some title",
                     placeholder: "",
                     helper: "helper text woo",
@@ -279,8 +279,8 @@ struct TextInputComponent: View {
             )
 
             factory.buildTextInput(
-                config: TextInputConfig(),
-                content: TextInputContent(
+                config: ParraTextInputConfig(),
+                content: ParraTextInputContent(
                     title: "Some title",
                     placeholder: nil,
                     helper: "helper text woo",
@@ -290,11 +290,11 @@ struct TextInputComponent: View {
             )
 
             factory.buildTextInput(
-                config: TextInputConfig(
+                config: ParraTextInputConfig(
                     validationRules: [.hasLowercase, .hasUppercase],
                     isSecure: true
                 ),
-                content: TextInputContent(
+                content: ParraTextInputContent(
                     title: "Some title",
                     placeholder: nil,
                     helper: "helper text woo",

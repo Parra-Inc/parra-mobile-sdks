@@ -14,18 +14,18 @@ extension ChangelogWidget.ContentObserver {
 
         init(
             title: String,
-            emptyStateView: EmptyStateContent,
-            errorStateView: EmptyStateContent
+            emptyStateView: ParraEmptyStateContent,
+            errorStateView: ParraEmptyStateContent
         ) {
-            self.title = LabelContent(text: title)
+            self.title = ParraLabelContent(text: title)
             self.emptyStateView = emptyStateView
             self.errorStateView = errorStateView
         }
 
         // MARK: - Internal
 
-        let title: LabelContent
-        let emptyStateView: EmptyStateContent
-        let errorStateView: EmptyStateContent
+        let title: ParraLabelContent
+        let emptyStateView: ParraEmptyStateContent
+        let errorStateView: ParraEmptyStateContent
     }
 }

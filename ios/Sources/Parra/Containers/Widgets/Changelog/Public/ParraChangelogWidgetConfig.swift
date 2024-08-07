@@ -8,14 +8,14 @@
 
 import SwiftUI
 
-public class ChangelogWidgetConfig: ContainerConfig {
+public class ParraChangelogWidgetConfig: ContainerConfig {
     // MARK: - Lifecycle
 
     public required init() {}
 
     // MARK: - Public
 
-    public static let `default` = ChangelogWidgetConfig()
+    public static let `default` = ParraChangelogWidgetConfig()
 }
 
 // public static let `default` = ChangelogWidgetConfig(

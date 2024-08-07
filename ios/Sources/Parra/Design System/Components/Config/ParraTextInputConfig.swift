@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-public struct TextInputConfig {
+public struct ParraTextInputConfig {
     // MARK: - Lifecycle
 
     public init(
-        validationRules: [TextValidatorRule] = TextInputConfig.default
+        validationRules: [ParraTextValidatorRule] = ParraTextInputConfig.default
             .validationRules,
-        preferValidationErrorsToHelperMessage: Bool = TextInputConfig.default
+        preferValidationErrorsToHelperMessage: Bool = ParraTextInputConfig.default
             .preferValidationErrorsToHelperMessage,
         resizeWhenHelperMessageIsVisible: Bool = false,
         isSecure: Bool = false,
@@ -40,12 +40,12 @@ public struct TextInputConfig {
 
     // MARK: - Public
 
-    public static let `default` = TextInputConfig(
+    public static let `default` = ParraTextInputConfig(
         validationRules: [],
         preferValidationErrorsToHelperMessage: true
     )
 
-    public let validationRules: [TextValidatorRule]
+    public let validationRules: [ParraTextValidatorRule]
 
     /// Whether or not to show validation errors if any exist in place of the
     /// helper text string. If you don't want to display anything below the text
@@ -75,8 +75,8 @@ public struct TextInputConfig {
     // MARK: - Internal
 
     func withFormTextFieldData(
-        _ data: FeedbackFormInputFieldData
-    ) -> TextInputConfig {
+        _ data: ParraFeedbackFormInputFieldData
+    ) -> ParraTextInputConfig {
         return self
     }
 }

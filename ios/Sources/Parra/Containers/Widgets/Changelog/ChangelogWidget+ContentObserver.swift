@@ -17,20 +17,20 @@ struct AppReleaseStubContent: Identifiable, Hashable {
     ) {
         self.originalStub = stub
         self.id = stub.id
-        self.createdAt = LabelContent(
+        self.createdAt = ParraLabelContent(
             text: stub.createdAt.timeAgo(
                 dateTimeStyle: .numeric
             )
         )
-        self.name = LabelContent(text: stub.name)
-        self.version = LabelContent(text: stub.version)
+        self.name = ParraLabelContent(text: stub.name)
+        self.version = ParraLabelContent(text: stub.version)
         if let description = stub.description {
-            self.description = LabelContent(text: description)
+            self.description = ParraLabelContent(text: description)
         } else {
             self.description = nil
         }
-        self.type = LabelContent(text: stub.type.userFacingString)
-        self.releaseNumber = LabelContent(text: String(stub.releaseNumber))
+        self.type = ParraLabelContent(text: stub.type.userFacingString)
+        self.releaseNumber = ParraLabelContent(text: String(stub.releaseNumber))
         self.status = stub.status
     }
 
@@ -42,13 +42,13 @@ struct AppReleaseStubContent: Identifiable, Hashable {
 
     let originalStub: AppReleaseStub
     let id: String
-    let createdAt: LabelContent
-    let name: LabelContent
-    let version: LabelContent
-    let description: LabelContent?
-    let type: LabelContent
-    let releaseNumber: LabelContent
-    let status: ReleaseStatus
+    let createdAt: ParraLabelContent
+    let name: ParraLabelContent
+    let version: ParraLabelContent
+    let description: ParraLabelContent?
+    let type: ParraLabelContent
+    let releaseNumber: ParraLabelContent
+    let status: ParraReleaseStatus
 }
 
 // MARK: - ChangelogWidget.ContentObserver
@@ -63,19 +63,19 @@ extension ChangelogWidget {
             self.api = initialParams.api
             let appReleaseCollection = initialParams.appReleaseCollection
 
-            let emptyStateViewContent = EmptyStateContent(
-                title: LabelContent(
+            let emptyStateViewContent = ParraEmptyStateContent(
+                title: ParraLabelContent(
                     text: "No new releases yet"
                 ),
-                subtitle: LabelContent(
+                subtitle: ParraLabelContent(
                     text: "Stay tuned for future updates!"
                 ),
                 icon: .symbol("text.append")
             )
 
-            let errorStateViewContent = EmptyStateContent(
-                title: EmptyStateContent.errorGeneric.title,
-                subtitle: LabelContent(
+            let errorStateViewContent = ParraEmptyStateContent(
+                title: ParraEmptyStateContent.errorGeneric.title,
+                subtitle: ParraLabelContent(
                     text: "Failed to load changelog. Please try again later."
                 ),
                 icon: .symbol("network.slash", .monochrome)

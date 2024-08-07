@@ -27,15 +27,15 @@ extension ApiEndpoint {
             case .postPushTokens:
                 EmptyResponseObject()
             case .getRoadmap:
-                AppRoadmapConfiguration.validStates()[0]
+                ParraAppRoadmapConfiguration.validStates()[0]
             case .getPaginateTickets:
-                UserTicketCollectionResponse.validStates()[0]
+                ParraUserTicketCollectionResponse.validStates()[0]
             case .postVoteForTicket:
-                UserTicket.validStates()[0]
+                ParraUserTicket.validStates()[0]
             case .deleteVoteForTicket:
-                UserTicket.validStates()[0]
+                ParraUserTicket.validStates()[0]
             case .getRelease:
-                AppRelease.validStates()[0]
+                ParraAppRelease.validStates()[0]
             case .getPaginateReleases:
                 AppReleaseCollectionResponse.validStates()[0]
             case .getAppInfo:

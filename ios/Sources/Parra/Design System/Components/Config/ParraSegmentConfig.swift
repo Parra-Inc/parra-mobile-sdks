@@ -8,6 +8,6 @@
 
 import SwiftUI
 
-public struct SegmentConfig {
+public struct ParraSegmentConfig {
     public init() {}
 }

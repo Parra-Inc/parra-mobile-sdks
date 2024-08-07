@@ -25,7 +25,7 @@ struct LatestReleaseCell: View {
 
     @State private var isLoading = false
     @State private var errorMessage: String?
-    @State private var appVersionInfo: NewInstalledVersionInfo? // #3
+    @State private var appVersionInfo: ParraNewInstalledVersionInfo? // #3
 
     var showLatestRelease: Bool {
         return parra.releases.updateAvailable()

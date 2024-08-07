@@ -12,8 +12,8 @@ import SwiftUI
 struct MenuComponent: View {
     // MARK: - Internal
 
-    let config: MenuConfig
-    let content: MenuContent
+    let config: ParraMenuConfig
+    let content: ParraMenuContent
     let attributes: ParraAttributes.Menu
 
     var body: some View {
@@ -47,7 +47,7 @@ struct MenuComponent: View {
     @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var componentFactory: ComponentFactory
 
-    @State private var selectedOption: MenuContent.Option?
+    @State private var selectedOption: ParraMenuContent.Option?
 
     private var elementOpacity: Double {
         return selectedOption != nil ? 1.0 : 0.6
@@ -66,19 +66,19 @@ struct MenuComponent: View {
 
     @ViewBuilder private var menuLabelText: some View {
         if let selectedOption {
-            let content = LabelContent(text: selectedOption.title)
+            let content = ParraLabelContent(text: selectedOption.title)
 
             componentFactory.buildLabel(
                 content: content,
                 localAttributes: attributes.selectedMenuItemLabels
             )
         } else {
-            let normalContent: LabelContent? = if let placeholder = content
+            let normalContent: ParraLabelContent? = if let placeholder = content
                 .placeholder
             {
                 placeholder
             } else if let firstOption = content.options.first {
-                LabelContent(text: firstOption.title)
+                ParraLabelContent(text: firstOption.title)
             } else {
                 nil
             }
@@ -141,7 +141,7 @@ struct MenuComponent: View {
         }
     }
 
-    private func didSelect(option: MenuContent.Option?) {
+    private func didSelect(option: ParraMenuContent.Option?) {
         selectedOption = option
 
         content.optionSelectionChanged?(option)
@@ -151,28 +151,28 @@ struct MenuComponent: View {
 #Preview {
     ParraViewPreview { factory in
         factory.buildMenu(
-            config: MenuConfig(),
-            content: MenuContent(
+            config: ParraMenuConfig(),
+            content: ParraMenuContent(
                 title: "We want to hear from you",
                 placeholder: "Please select an option",
                 helper: "You know, so we know which one you want!",
                 options: [
-                    MenuContent.Option(
+                    ParraMenuContent.Option(
                         id: "first",
                         title: "First option",
                         value: "first"
                     ),
-                    MenuContent.Option(
+                    ParraMenuContent.Option(
                         id: "second",
                         title: "Second option",
                         value: "second"
                     ),
-                    MenuContent.Option(
+                    ParraMenuContent.Option(
                         id: "third",
                         title: "Third option",
                         value: "third"
                     ),
-                    MenuContent.Option(
+                    ParraMenuContent.Option(
                         id: "fourth",
                         title: "Fourth option",
                         value: "fourth"
