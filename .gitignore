@@ -83,6 +83,7 @@ sdks/**/*.xcworkspace
 !*.xcworkspace/contents.xcworkspacedata
 !*.xcworkspace/xcshareddata/swiftpm
 **/xcshareddata/WorkspaceSettings.xcsettings
+**/xcuserdata/**/Bookmarks/bookmarks.plist
 
 /.vscode/settings.json
 /buildlog
@@ -90,3 +91,4 @@ sdks/**/*.xcworkspace
 /package-lock.json
 /sample/ParraDemo.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 /sample/ParraDemo.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+
