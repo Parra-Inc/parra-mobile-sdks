@@ -31,7 +31,7 @@ struct ContainedButtonStyle: ButtonStyle {
         )
         .applyContainedButtonAttributes(
             currentAttributes,
-            using: themeManager.theme
+            using: parraTheme
         )
         .overlay(
             alignment: .leading
@@ -44,7 +44,7 @@ struct ContainedButtonStyle: ButtonStyle {
                     .applyPadding(
                         size: currentAttributes.padding,
                         on: .leading,
-                        from: themeManager.theme
+                        from: parraTheme
                     )
                     .padding(.leading, 12)
             }
@@ -53,6 +53,6 @@ struct ContainedButtonStyle: ButtonStyle {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var componentFactory: ComponentFactory
 }

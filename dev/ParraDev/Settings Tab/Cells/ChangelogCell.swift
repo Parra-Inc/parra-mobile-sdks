@@ -20,14 +20,14 @@ import SwiftUI
 ///    presented automatically.
 struct ChangelogCell: View {
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var appInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var changelogInfo: ParraChangelogInfo?
 
     var showChangelog: Bool {
-        guard let newInstalledVersionInfo = appInfo.newInstalledVersionInfo else {
+        guard let newInstalledVersionInfo = parraAppInfo.newInstalledVersionInfo else {
             return false
         }
 

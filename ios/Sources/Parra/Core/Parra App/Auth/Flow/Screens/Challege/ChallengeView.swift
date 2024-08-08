@@ -31,7 +31,7 @@ struct ChallengeView: View {
     let forgotPassword: () async throws -> Void
 
     var body: some View {
-        let palette = themeManager.theme.palette
+        let palette = parraTheme.palette
 
         VStack(spacing: 16) {
             componentFactory.buildTextInput(
@@ -117,7 +117,7 @@ struct ChallengeView: View {
             return
         }
 
-        guard let passwordConfig = appInfo.auth.database?.password else {
+        guard let passwordConfig = parraAppInfo.auth.database?.password else {
             passwordState = .init(
                 password: password,
                 isValid: false
@@ -175,11 +175,11 @@ struct ChallengeView: View {
     // MARK: - Private
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var appInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
+    @Environment(\.parraTheme) private var parraTheme
 
     private var challengeFieldConfig: ParraTextInputConfig {
-        let authInfo = appInfo.auth
+        let authInfo = parraAppInfo.auth
 
         if passwordChallengeAvailable {
             let rules = authInfo.database?.password?.rules ?? []

@@ -31,7 +31,7 @@ public struct ParraRequiredAuthWindow<
         LaunchScreenWindow {
             content
                 .onChange(
-                    of: parraAuthState.current,
+                    of: parraAuthState,
                     initial: true
                 ) { oldValue, newValue in
                     switch (oldValue, newValue) {
@@ -66,7 +66,7 @@ public struct ParraRequiredAuthWindow<
     // MARK: - Internal
 
     @Environment(\.parra) var parra
-    @EnvironmentObject var parraAuthState: ParraAuthState
+    @Environment(\.parraAuthState) private var parraAuthState
 
     @ViewBuilder var content: some View {
         switch authStateMirror {
@@ -92,7 +92,7 @@ public struct ParraRequiredAuthWindow<
 
     private let unauthContent: () -> UnauthenticatedContent
 
-    @State private var authStateMirror: ParraAuthResult = .undetermined
+    @State private var authStateMirror: ParraAuthState = .undetermined
 }
 
 // MARK: ParraAuthenticationFlowDelegate

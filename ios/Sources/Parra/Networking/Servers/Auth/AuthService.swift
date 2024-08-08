@@ -37,7 +37,7 @@ final class AuthService {
     }
 
     typealias MultiTokenProvider = () async throws -> ParraUser.Credential?
-    typealias AuthProvider = () async throws -> ParraAuthResult
+    typealias AuthProvider = () async throws -> ParraAuthState
     typealias AppleAuthCompletion = (
         Result<ASAuthorization, ASAuthorizationError>
     ) -> Void
@@ -62,7 +62,7 @@ final class AuthService {
 
     func login(
         authType: OAuth2Service.AuthType
-    ) async -> ParraAuthResult {
+    ) async -> ParraAuthState {
         logger.debug("Performing login", [
             "authType": authType.description
         ])
@@ -95,7 +95,7 @@ final class AuthService {
         username: String,
         password: String,
         type: ParraIdentityType
-    ) async -> ParraAuthResult {
+    ) async -> ParraAuthState {
         logger.debug("Signing up with username/password")
 
         let authType = OAuth2Service.AuthType.usernamePassword(
@@ -277,7 +277,7 @@ final class AuthService {
     /// proceed into the app.
     func getQuickestAuthState(
         appInfo: ParraAppInfo
-    ) async -> ParraAuthResult {
+    ) async -> ParraAuthState {
         // If we encounter a state that requires refreshing user info or tokens
         // asynchronously while allowing this method to return so app state
         // may proceed.
@@ -298,7 +298,7 @@ final class AuthService {
             // out of date.
             shouldRefresh = true
 
-            let result: ParraAuthResult = if currentUser.info.isAnonymous {
+            let result: ParraAuthState = if currentUser.info.isAnonymous {
                 .anonymous(currentUser)
             } else {
                 .authenticated(currentUser)
@@ -318,7 +318,7 @@ final class AuthService {
         // supported to determine which kind of token to generate. If we fail
         // to create a token, we fall into the global auth error state.
 
-        let result: ParraAuthResult
+        let result: ParraAuthState
         do {
             result = try await performUnauthenticatedLogin(
                 appInfo: appInfo
@@ -340,7 +340,7 @@ final class AuthService {
 
     private func performUnauthenticatedLogin(
         appInfo: ParraAppInfo
-    ) async throws -> ParraAuthResult {
+    ) async throws -> ParraAuthState {
         let oauthType: OAuth2Service.AuthType = if appInfo.auth.supportsAnonymous {
             .anonymous(refreshToken: nil)
         } else {
@@ -443,7 +443,7 @@ final class AuthService {
     }
 
     func applyUserUpdate(
-        _ authResult: ParraAuthResult,
+        _ authResult: ParraAuthState,
         shouldBroadcast: Bool = true
     ) async {
         switch authResult {
@@ -501,7 +501,7 @@ final class AuthService {
 
     func _completeLogin(
         with oauthToken: ParraUser.Credential.Token
-    ) async -> ParraAuthResult {
+    ) async -> ParraAuthState {
         do {
             // Convert anon users by passing their refresh token along with the
             // login request.

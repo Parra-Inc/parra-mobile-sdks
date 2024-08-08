@@ -42,7 +42,7 @@ struct ImageButtonComponent: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 }
 
 #Preview("Image Button") {

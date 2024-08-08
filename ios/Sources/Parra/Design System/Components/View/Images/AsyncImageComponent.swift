@@ -30,8 +30,6 @@ struct AsyncImageComponent: View {
     @Environment(\.parra) var parra
 
     var body: some View {
-        let theme = themeManager.theme
-
         CachedAsyncImage(
             url: content.url,
             urlCache: URLSessionConfiguration.apiConfiguration
@@ -41,19 +39,18 @@ struct AsyncImageComponent: View {
             ),
             content: imageContent
         )
-        .applyAsyncImageAttributes(attributes, using: theme)
+        .applyAsyncImageAttributes(attributes, using: parraTheme)
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
+    @MainActor
     @ViewBuilder
     private func imageContent(
         for phase: AsyncImagePhase
     ) -> some View {
-        let theme = themeManager.theme
-
         switch phase {
         case .empty:
             ZStack {
@@ -78,7 +75,7 @@ struct AsyncImageComponent: View {
                 Color(attributes.background ?? .clear)
 
                 Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(theme.palette.error)
+                    .foregroundStyle(parraTheme.palette.error)
             }
         @unknown default:
             EmptyView()

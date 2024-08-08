@@ -44,13 +44,13 @@ struct WidgetFooter: View {
         .border(
             width: 1,
             edges: .top,
-            color: themeManager.theme.palette.secondaryBackground
+            color: parraTheme.palette.secondaryBackground
         )
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     private let contentPadding: EdgeInsets
 }

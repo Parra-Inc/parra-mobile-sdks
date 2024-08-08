@@ -48,7 +48,7 @@ extension ParraThemeManager {
         to newTheme: ParraTheme
     ) {
         withAnimation { [self] in
-            theme = newTheme
+            current = newTheme
         } completion: { [self] in
             notificationCenter.post(
                 name: Parra.themeDidChangeNotification,

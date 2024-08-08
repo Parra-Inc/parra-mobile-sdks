@@ -688,7 +688,7 @@ class AuthenticationFlowManager: ObservableObject {
         challengeResponse: ParraChallengeResponse,
         authService: AuthService
     ) async throws {
-        let authResult: ParraAuthResult = if userExists {
+        let authResult: ParraAuthState = if userExists {
             await authService.login(
                 authType: .usernamePassword(
                     username: identity,

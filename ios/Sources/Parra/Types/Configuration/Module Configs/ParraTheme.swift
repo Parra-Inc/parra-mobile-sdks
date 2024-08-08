@@ -100,6 +100,9 @@ public struct ParraTheme: ParraConfigurationOptionType {
         color: .accentColor
     )
 
+    /// A color palette representative of the configured composed of colors that
+    /// respect the user's preferred color appearance setting. Using this
+    /// palette will automatically toggle between light and dark modes.
     public let palette: ParraColorPalette
     public let lightPalette: ParraColorPalette
     public let darkPalette: ParraColorPalette?

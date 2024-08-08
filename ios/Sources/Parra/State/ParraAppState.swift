@@ -12,7 +12,8 @@ private let logger = Logger()
 
 // Must be a class. Needs observability and relies on reference semantics
 // for up to date info to be accessed.
-public class ParraAppState: ObservableObject, Equatable {
+@Observable
+public class ParraAppState: Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -44,7 +45,7 @@ public class ParraAppState: ObservableObject, Equatable {
     // MARK: - Internal
 
     /// Exists after GET app-info is called during the launch screen.
-    @Published var appInfo: ParraAppInfo?
+    var appInfo: ParraAppInfo?
 
     private(set) var tenantId: String
     private(set) var applicationId: String

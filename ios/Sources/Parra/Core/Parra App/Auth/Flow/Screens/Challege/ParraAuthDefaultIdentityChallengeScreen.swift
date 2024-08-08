@@ -29,10 +29,10 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
 
     public var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeManager.theme
+            with: parraTheme
         )
 
-        let contentPadding = themeManager.theme.padding.value(
+        let contentPadding = parraTheme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -45,7 +45,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
 
                     LegalInfoView(
                         legalInfo: params.legalInfo,
-                        theme: themeManager.theme
+                        theme: parraTheme
                     )
                 }
             }
@@ -60,7 +60,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
             )
             .applyWidgetAttributes(
                 attributes: defaultWidgetAttributes.withoutContentPadding(),
-                using: themeManager.theme
+                using: parraTheme
             )
         }
         .onChange(
@@ -97,7 +97,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
     @State private var loadingAuthMethod: ParraAuthenticationMethod?
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var navigationState: NavigationState
 
     @ViewBuilder private var challengeContent: some View {
@@ -146,7 +146,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                     content: ParraLabelContent(text: errorMessage),
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
-                            color: themeManager.theme.palette.error
+                            color: parraTheme.palette.error
                                 .toParraColor()
                         ),
                         padding: .lg
@@ -156,7 +156,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
         }
         .applyPadding(
             size: .md,
-            from: themeManager.theme
+            from: parraTheme
         )
     }
 

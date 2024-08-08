@@ -34,7 +34,7 @@ struct FeedbackCardView: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     private var card: some View {
         switch cardItem.data {

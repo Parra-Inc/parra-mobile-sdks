@@ -30,7 +30,7 @@ struct ParraSignInModal: View {
             )
         }
         .onChange(
-            of: parraAuthState.current
+            of: parraAuthState
         ) { oldValue, newValue in
             if !oldValue.isLoggedIn && newValue.isLoggedIn {
                 complete()
@@ -41,8 +41,7 @@ struct ParraSignInModal: View {
     // MARK: - Private
 
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var appInfo: ParraAppInfo
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @Environment(\.parraAuthState) private var parraAuthState
 }
 
 public extension View {

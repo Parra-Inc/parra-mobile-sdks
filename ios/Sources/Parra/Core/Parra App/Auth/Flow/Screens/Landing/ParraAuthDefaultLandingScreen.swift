@@ -44,17 +44,17 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         .frame(maxWidth: .infinity)
         .applyBackground(background)
         .applyDefaultWidgetAttributes(
-            using: themeManager.theme
+            using: parraTheme
         )
     }
 
     // MARK: - Internal
 
-    @EnvironmentObject var parraAppInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     var background: any ShapeStyle {
         return config.background
-            ?? themeManager.theme.palette.primaryBackground.toParraColor()
+            ?? parraTheme.palette.primaryBackground.toParraColor()
     }
 
     // MARK: - Private
@@ -63,7 +63,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
     private let config: Config
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var navigationState: NavigationState
     @Environment(\.parra) private var parra
 

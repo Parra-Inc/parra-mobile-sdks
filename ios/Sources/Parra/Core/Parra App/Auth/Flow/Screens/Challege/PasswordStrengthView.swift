@@ -33,7 +33,7 @@ struct PasswordStrengthView: View {
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .caption,
-                        color: themeManager.theme.palette.primaryText
+                        color: parraTheme.palette.primaryText
                             .toParraColor()
                     )
                 )
@@ -48,7 +48,7 @@ struct PasswordStrengthView: View {
                         text: ParraAttributes.Text(
                             style: .caption2,
                             color: passwordStrength.color(
-                                for: themeManager.theme
+                                for: parraTheme
                             )
                         )
                     )
@@ -76,12 +76,12 @@ struct PasswordStrengthView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .applyPadding(
                 size: .xl,
-                from: themeManager.theme
+                from: parraTheme
             )
-            .applyBackground(themeManager.theme.palette.secondaryBackground)
+            .applyBackground(parraTheme.palette.secondaryBackground)
             .applyCornerRadii(
                 size: .lg,
-                from: themeManager.theme
+                from: parraTheme
             )
         }
         .frame(maxWidth: .infinity)
@@ -93,7 +93,7 @@ struct PasswordStrengthView: View {
     @Binding private var validatedRules: [(ParraPasswordRule, Bool)]
     @State private var passwordStrength: PasswordEntropyCalculator.Strength?
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var componentFactory: ComponentFactory
 
     @ViewBuilder
@@ -102,8 +102,8 @@ struct PasswordStrengthView: View {
         valid: Bool
     ) -> some View {
         let color = valid
-            ? themeManager.theme.palette.success
-            : themeManager.theme.palette.error
+            ? parraTheme.palette.success
+            : parraTheme.palette.error
 
         let symbol = valid
             ? "checkmark.circle.fill"

@@ -30,10 +30,10 @@ public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen {
 
     public var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeManager.theme
+            with: parraTheme
         )
 
-        let contentPadding = themeManager.theme.padding.value(
+        let contentPadding = parraTheme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -51,7 +51,7 @@ public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen {
         )
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: themeManager.theme
+            using: parraTheme
         )
     }
 
@@ -67,7 +67,7 @@ public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen {
     @Environment(\.parra) private var parra
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var navigationState: NavigationState
 
     @ViewBuilder private var primaryContent: some View {

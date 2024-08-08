@@ -25,7 +25,7 @@ struct ParraChangePasswordModal: View {
     let complete: () -> Void
 
     @ViewBuilder var body: some View {
-        switch parraAuthState.current {
+        switch parraAuthState {
         case .authenticated(let user), .anonymous(let user):
             if let email = user.info.email {
                 let params = ParraAuthDefaultForgotPasswordScreen.Params(
@@ -67,8 +67,7 @@ struct ParraChangePasswordModal: View {
     // MARK: - Private
 
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var appInfo: ParraAppInfo
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @Environment(\.parraAuthState) private var parraAuthState
 }
 
 public extension View {

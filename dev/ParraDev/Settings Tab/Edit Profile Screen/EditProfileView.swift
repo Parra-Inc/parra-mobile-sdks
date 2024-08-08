@@ -11,18 +11,14 @@ import SwiftUI
 
 struct EditProfileView: View {
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var authState: ParraAuthState
+    @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraAuthState) private var parraAuthState
 
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var displayName: String = ""
     @State private var isLoading = false
     @State private var isShowingSuccess = false
-
-    var user: ParraUser? {
-        return authState.current.user
-    }
 
     var body: some View {
         VStack {
@@ -95,10 +91,10 @@ struct EditProfileView: View {
             .safeAreaPadding()
             .disabled(isLoading)
         }
-        .background(themeManager.theme.palette.secondaryBackground)
+        .background(parraTheme.palette.secondaryBackground)
         .navigationTitle("Edit Profile")
         .onAppear {
-            let userInfo = user?.info
+            let userInfo = parraAuthState.user?.info
 
             firstName = userInfo?.firstName ?? ""
             lastName = userInfo?.lastName ?? ""

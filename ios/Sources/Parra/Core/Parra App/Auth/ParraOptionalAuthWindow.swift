@@ -15,7 +15,7 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
 
     public init(
         content: @escaping (
-            _ result: ParraAuthResult
+            _ result: ParraAuthState
         ) -> Content
     ) {
         self.content = content
@@ -24,12 +24,12 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
     // MARK: - Public
 
     @ViewBuilder public var content: (
-        _ authResult: ParraAuthResult
+        _ authResult: ParraAuthState
     ) -> Content
 
     @ViewBuilder public var body: some View {
         LaunchScreenWindow {
-            switch parraAuthState.current {
+            switch parraAuthState {
             case .authenticated(let user), .anonymous(let user):
                 AnyView(authenticatedContent(for: user))
             case .undetermined, .error, .guest:
@@ -41,15 +41,15 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
     public func authenticatedContent(
         for user: ParraUser
     ) -> Content {
-        return content(parraAuthState.current)
+        return content(parraAuthState)
     }
 
     public func unauthenticatedContent() -> some View {
-        return content(parraAuthState.current)
+        return content(parraAuthState)
     }
 
     // MARK: - Internal
 
-    @EnvironmentObject var parraAuthState: ParraAuthState
-    @EnvironmentObject var parraAppInfo: ParraAppInfo
+    @Environment(\.parraAuthState) private var parraAuthState
+    @Environment(\.parraAppInfo) private var parraAppInfo
 }

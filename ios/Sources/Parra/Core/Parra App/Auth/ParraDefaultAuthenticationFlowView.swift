@@ -50,7 +50,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                 }
             }
             .task {
-                switch parraAuthInfo.current {
+                switch parraAuthState {
                 case .authenticated, .undetermined:
                     break
                 case .anonymous, .guest, .error:
@@ -62,8 +62,8 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
 
     // MARK: - Internal
 
-    @EnvironmentObject var parraAppInfo: ParraAppInfo
-    @EnvironmentObject var parraAuthInfo: ParraAuthState
+    @Environment(\.parraAppInfo) private var parraAppInfo
+    @Environment(\.parraAuthState) private var parraAuthState
 
     @ViewBuilder
     var landingScreen: some View {

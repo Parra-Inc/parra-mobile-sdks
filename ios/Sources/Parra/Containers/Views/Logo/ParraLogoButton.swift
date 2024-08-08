@@ -10,12 +10,12 @@ import SwiftUI
 
 struct ParraLogoButton: View {
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var appInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     var type: ParraLogoType
 
     var body: some View {
-        if !appInfo.tenant.hideBranding {
+        if !parraAppInfo.tenant.hideBranding {
             Button {
                 parra.parraInternal.openTrackedSiteLink(
                     medium: type.utmMedium

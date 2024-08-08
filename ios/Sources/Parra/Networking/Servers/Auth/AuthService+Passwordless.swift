@@ -40,7 +40,7 @@ extension AuthService {
     func passwordlessVerifyCode(
         type: ParraAuthenticationMethod.PasswordlessType,
         code: String
-    ) async throws -> ParraAuthResult {
+    ) async throws -> ParraAuthState {
         logger.debug("Confirming passwordless code")
 
         let authType: OAuth2Service.AuthType = switch type {

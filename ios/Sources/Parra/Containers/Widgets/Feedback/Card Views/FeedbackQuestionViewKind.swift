@@ -14,7 +14,6 @@ protocol FeedbackQuestionViewKind: View {
 
     var bucketId: String { get }
     var question: ParraQuestion { get }
-    var themeManager: ParraThemeManager { get }
     var contentObserver: FeedbackCardWidget.ContentObserver { get }
     var componentFactory: ComponentFactory { get }
     var config: ParraFeedbackCardWidgetConfig { get }

@@ -28,9 +28,6 @@ struct ParraCardViewPreview<Content>: View where Content: View {
             attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
-        self._parraAuthState = StateObject(
-            wrappedValue: ParraAuthState()
-        )
 
         let appState = ParraAppState(
             tenantId: ParraInternal.Demo.workspaceId,
@@ -90,7 +87,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
         .environmentObject(factory)
         .environment(config)
         .environment(\.parra, parra)
-        .environmentObject(parraAuthState)
+        .environment(\.parraAuthState, authStateManager.current)
     }
 
     // MARK: - Private
@@ -103,5 +100,5 @@ struct ParraCardViewPreview<Content>: View where Content: View {
     private let configuration: ParraConfiguration
     private let parra: Parra
 
-    @StateObject private var parraAuthState: ParraAuthState
+    @State private var authStateManager: ParraAuthStateManager = .default
 }

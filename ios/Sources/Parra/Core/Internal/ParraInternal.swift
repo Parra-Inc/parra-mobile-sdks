@@ -106,9 +106,13 @@ class ParraInternal {
 
     @MainActor
     func authStateDidChange(
-        from oldAuthResult: ParraAuthResult,
-        to authResult: ParraAuthResult
+        from oldAuthResult: ParraAuthState,
+        to authResult: ParraAuthState
     ) async {
+        if oldAuthResult == authResult {
+            return
+        }
+
         logger.debug("Auth state did change", [
             "from": oldAuthResult.description,
             "to": authResult.description
@@ -254,10 +258,7 @@ class ParraInternal {
                 "versionToken": String(describing: appInfo.versionToken)
             ])
 
-            // Do NOT await this. We don't want to block the splash screen.
-            Task { @MainActor in
-                appState.appInfo = appInfo
-            }
+            await appState.appInfo = appInfo
 
             return appInfo
         } catch {

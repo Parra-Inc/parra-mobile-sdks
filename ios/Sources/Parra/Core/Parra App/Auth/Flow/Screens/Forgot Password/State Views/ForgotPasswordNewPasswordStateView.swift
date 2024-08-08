@@ -52,7 +52,7 @@ struct ForgotPasswordNewPasswordStateView: View {
     )
 
     var passwordFieldConfig: ParraTextInputConfig {
-        guard let passwordConfig = appInfo.auth.database?.password else {
+        guard let passwordConfig = parraAppInfo.auth.database?.password else {
             return ParraTextInputConfig()
         }
 
@@ -77,7 +77,7 @@ struct ForgotPasswordNewPasswordStateView: View {
     }
 
     var body: some View {
-        let palette = themeManager.theme.palette
+        let palette = parraTheme.palette
 
         VStack(alignment: .leading, spacing: 12) {
             componentFactory.buildLabel(
@@ -201,13 +201,13 @@ struct ForgotPasswordNewPasswordStateView: View {
     @State private var confirmationValidationErrorMessage: String?
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var appInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
+    @Environment(\.parraTheme) private var parraTheme
 
     private func validate(
         password: String
     ) {
-        guard let passwordConfig = appInfo.auth.database?.password else {
+        guard let passwordConfig = parraAppInfo.auth.database?.password else {
             passwordState = .init(
                 password: password,
                 isValid: false

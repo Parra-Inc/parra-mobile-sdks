@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct SettingsTab: View {
-    @EnvironmentObject private var appInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     var body: some View {
         NavigationStack {
@@ -31,7 +31,7 @@ struct SettingsTab: View {
                 }
 
                 Section("Legal") {
-                    ForEach(appInfo.legal.allDocuments) { document in
+                    ForEach(parraAppInfo.legal.allDocuments) { document in
                         NavigationLink {
                             ParraLegalDocumentView(legalDocument: document)
                         } label: {

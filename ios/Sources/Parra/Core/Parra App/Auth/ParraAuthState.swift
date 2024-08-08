@@ -1,5 +1,5 @@
 //
-//  ParraAuthResult.swift
+//  ParraAuthState.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 4/15/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public enum ParraAuthResult: Equatable, CustomStringConvertible {
+public enum ParraAuthState: Equatable, CustomStringConvertible {
     public var user: ParraUser? {
         switch self {
         case .authenticated(let user), .anonymous(let user):
@@ -79,8 +79,8 @@ public enum ParraAuthResult: Equatable, CustomStringConvertible {
     }
 
     public static func == (
-        lhs: ParraAuthResult,
-        rhs: ParraAuthResult
+        lhs: ParraAuthState,
+        rhs: ParraAuthState
     ) -> Bool {
         switch (lhs, rhs) {
         case (.undetermined, .undetermined):

@@ -10,35 +10,27 @@ import SwiftUI
 
 private let logger = Logger()
 
-public class ParraAuthState: ObservableObject, CustomStringConvertible {
+@Observable
+public class ParraAuthStateManager: CustomStringConvertible {
     // MARK: - Lifecycle
+
+    internal static let `default` = ParraAuthStateManager(
+        current: .undetermined
+    )
 
     public init() {
         self.current = .undetermined
     }
 
     init(
-        current: ParraAuthResult
+        current: ParraAuthState
     ) {
         self.current = current
     }
 
     // MARK: - Public
 
-    public static let authenticatedPreview = ParraAuthState(
-        current: .authenticated(
-            ParraUser(
-                credential: .basic("invalid-preview-token"),
-                info: .publicFacingPreview
-            )
-        )
-    )
-
-    public static let unauthenticatedPreview = ParraAuthState(
-        current: .undetermined
-    )
-
-    @Published public private(set) var current: ParraAuthResult
+    public private(set) var current: ParraAuthState
 
     public var description: String {
         return "ParraAuthState: \(current.description)"
@@ -83,7 +75,7 @@ public class ParraAuthState: ObservableObject, CustomStringConvertible {
 
         guard let userInfo = notification.userInfo,
               let result =
-              userInfo[Parra.authenticationStateKey] as? ParraAuthResult else
+              userInfo[Parra.authenticationStateKey] as? ParraAuthState else
         {
             logger.error("Received invalid auth state change notification")
 

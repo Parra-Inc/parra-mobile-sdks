@@ -34,10 +34,10 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
 
     public var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeManager.theme
+            with: parraTheme
         )
 
-        let contentPadding = themeManager.theme.padding.value(
+        let contentPadding = parraTheme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -52,7 +52,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
             if !params.userExists, params.legalInfo.hasDouments {
                 LegalInfoView(
                     legalInfo: params.legalInfo,
-                    theme: themeManager.theme
+                    theme: parraTheme
                 )
             }
         }
@@ -63,7 +63,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
         )
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: themeManager.theme
+            using: parraTheme
         )
         .onAppear {
             continueButtonContent = continueButtonContent.withLoading(false)
@@ -122,7 +122,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     ).autoconnect()
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var navigationState: NavigationState
 
     @ViewBuilder private var primaryContent: some View {
@@ -179,7 +179,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
                         style: .footnote,
-                        color: themeManager.theme.palette.secondaryText
+                        color: parraTheme.palette.secondaryText
                             .toParraColor(),
                         alignment: .center
                     ),

@@ -22,7 +22,7 @@ public struct ParraProfilePhotoWell: View {
     // MARK: - Public
 
     public var body: some View {
-        switch parraAuthState.current {
+        switch parraAuthState {
         case .authenticated(let user), .anonymous(let user):
             PhotoWell(
                 stub: user.info.avatar,
@@ -42,10 +42,9 @@ public struct ParraProfilePhotoWell: View {
 
     // MARK: - Internal
 
-    @EnvironmentObject var themeManager: ParraThemeManager
-    @EnvironmentObject var parraAuthState: ParraAuthState
-
     @Environment(\.parra) var parra
+    @Environment(\.parraAuthState) private var parraAuthState
+    @Environment(\.parraTheme) private var parraTheme
 
     // MARK: - Private
 

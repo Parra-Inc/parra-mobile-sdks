@@ -21,7 +21,7 @@ struct ForgotPasswordCompleteView: View {
 
     var body: some View {
         // reset password in account settings vs. during the login flow.
-        let (subtitle, doneButtonTitle) = switch parraAuthState.current {
+        let (subtitle, doneButtonTitle) = switch parraAuthState {
         case .authenticated, .anonymous:
             (
                 "Your password has been successfully updated.",
@@ -82,7 +82,7 @@ struct ForgotPasswordCompleteView: View {
     // MARK: - Private
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @Environment(\.parraAuthState) private var parraAuthState
 }
 
 #Preview {

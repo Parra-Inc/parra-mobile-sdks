@@ -19,7 +19,7 @@ public struct ParraErrorBoundary: View {
                 componentFactory.buildImage(
                     content: .symbol("exclamationmark.triangle.fill"),
                     localAttributes: ParraAttributes.Image(
-                        tint: themeManager.theme.palette.warning.toParraColor(),
+                        tint: parraTheme.palette.warning.toParraColor(),
                         opacity: 0.76,
                         size: CGSize(width: 100, height: 100),
                         padding: .lg
@@ -34,7 +34,7 @@ public struct ParraErrorBoundary: View {
                     localAttributes: .init(
                         text: ParraAttributes.Text(
                             style: .largeTitle,
-                            color: themeManager.theme.palette.primaryText.toParraColor(),
+                            color: parraTheme.palette.primaryText.toParraColor(),
                             alignment: .leading
                         )
                     )
@@ -45,7 +45,7 @@ public struct ParraErrorBoundary: View {
                     localAttributes: .init(
                         text: ParraAttributes.Text(
                             style: .body,
-                            color: themeManager.theme.palette.secondaryText.toParraColor(),
+                            color: parraTheme.palette.secondaryText.toParraColor(),
                             alignment: .leading
                         )
                     )
@@ -70,7 +70,7 @@ public struct ParraErrorBoundary: View {
 //            )
         }
         .applyDefaultWidgetAttributes(
-            using: themeManager.theme
+            using: parraTheme
         )
         .onAppear {
             logger.error(
@@ -100,7 +100,7 @@ public struct ParraErrorBoundary: View {
 
     @State private var isShowingFeedbackForm = false
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var componentFactory: ComponentFactory
 }
 

@@ -31,12 +31,12 @@ struct ImageButtonStyle: ButtonStyle {
         )
         .applyImageButtonAttributes(
             currentAttributes,
-            using: themeManager.theme
+            using: parraTheme
         )
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var componentFactory: ComponentFactory
 }

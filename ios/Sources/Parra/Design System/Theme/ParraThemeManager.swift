@@ -9,20 +9,26 @@
 import Combine
 import SwiftUI
 
-private let logger = Logger(category: "Parra Theme Observer")
+private let logger = Logger(category: "Parra Theme Manager")
 
 @MainActor
 /// Listens for changes to the configured ParraTheme and provides a @Published
 /// property ``ParraThemeManager/current`` to obtain the current theme options
 /// and color palette.
-public class ParraThemeManager: ObservableObject {
+@Observable
+public class ParraThemeManager {
     // MARK: - Lifecycle
 
-    init(
+    static let shared = ParraThemeManager(
+        theme: .default,
+        notificationCenter: ParraNotificationCenter.default
+    )
+
+    private init(
         theme: ParraTheme,
         notificationCenter: NotificationCenterType
     ) {
-        self.theme = theme
+        self.current = theme
         self.notificationCenter = notificationCenter
 
         if let options = themeOptionsCache.read() {
@@ -44,30 +50,44 @@ public class ParraThemeManager: ObservableObject {
         self.themeWillChangeObserver = addThemeWillChangeObserver(
             with: notificationCenter
         )
-
-        $preferredAppearance
-            .sink(receiveValue: onReceiveAppearanceChange)
-            .store(in: &appearanceChangeBag)
-    }
-
-    deinit {
-        if let themeWillChangeObserver {
-            notificationCenter.removeObserver(themeWillChangeObserver)
-        }
     }
 
     // MARK: - Public
 
-    /// A color palette representative of the configured ``ParraTheme``. If a
-    /// dark mode palette was provided, this will automatically update to
-    /// provide those colors when the system appearance changes.
-    @Published public var theme: ParraTheme
+    public var current: ParraTheme
+
+    public var currentBinding: Binding<ParraTheme> {
+        Binding(
+            get: {
+                return self.current
+            },
+            set: { value in
+                self.current = value
+            }
+        )
+    }
+
 
     /// The user's preference for whether the app should render in light, dark,
     /// or system appearance mode. By default, this will be ``system``,
     /// indicating that the default system light/dark mode preference will be
     /// used.
-    @Published public var preferredAppearance: ParraAppearance
+    public var preferredAppearance: ParraAppearance {
+        didSet {
+            onReceiveAppearanceChange(preferredAppearance)
+        }
+    }
+
+    public var preferredAppearanceBinding: Binding<ParraAppearance> {
+        Binding(
+            get: {
+                return self.preferredAppearance
+            },
+            set: { value in
+                self.preferredAppearance = value
+            }
+        )
+    }
 
     // MARK: - Internal
 
@@ -83,7 +103,7 @@ public class ParraThemeManager: ObservableObject {
 
     let notificationCenter: NotificationCenterType
 
-    @Published var preferredColorScheme: ColorScheme?
+    var preferredColorScheme: ColorScheme?
 
     var themeWillChangeObserver: NSObjectProtocol?
 
@@ -94,6 +114,8 @@ public class ParraThemeManager: ObservableObject {
     private func onReceiveAppearanceChange(
         _ appearance: ParraAppearance
     ) {
+        logger.debug("Changing appearance preference to: \(appearance.description)")
+
         let userInfo = makeNotificationUserInfo(
             from: preferredAppearance.colorScheme,
             to: appearance.colorScheme

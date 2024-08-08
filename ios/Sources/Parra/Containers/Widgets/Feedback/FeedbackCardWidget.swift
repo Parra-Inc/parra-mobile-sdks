@@ -33,14 +33,14 @@ struct FeedbackCardWidget: Container {
     let config: ParraFeedbackCardWidgetConfig
 
     @Environment(\.parra) var parra
-    @EnvironmentObject var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeManager.theme
+            with: parraTheme
         )
 
-        let contentPadding = themeManager.theme.padding.value(
+        let contentPadding = parraTheme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -75,7 +75,7 @@ struct FeedbackCardWidget: Container {
                 .applyBackground(defaultWidgetAttributes.background)
                 .applyCornerRadii(
                     size: defaultWidgetAttributes.cornerRadius,
-                    from: themeManager.theme
+                    from: parraTheme
                 )
             }
             .frame(
@@ -98,10 +98,10 @@ struct FeedbackCardWidget: Container {
 
     @ViewBuilder private var content: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeManager.theme
+            with: parraTheme
         )
 
-        let contentPadding = themeManager.theme.padding.value(
+        let contentPadding = parraTheme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 

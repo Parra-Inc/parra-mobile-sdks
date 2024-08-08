@@ -77,7 +77,7 @@ struct EmptyStateComponent: View {
             }
             .applyEmptyStateAttributes(
                 attributes,
-                using: themeManager.theme
+                using: parraTheme
             )
 
             Spacer()
@@ -89,7 +89,7 @@ struct EmptyStateComponent: View {
     // MARK: - Private
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 }
 
 #Preview {

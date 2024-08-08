@@ -61,7 +61,7 @@ struct SubmissionOptions: View {
     private let primaryActionName: String
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     @ViewBuilder private var buttons: some View {
         let buttonInfo = getActionButtonInfo(

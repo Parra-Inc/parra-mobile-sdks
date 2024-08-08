@@ -27,14 +27,14 @@ struct ChangelogWidget: Container {
     @StateObject var contentObserver: ContentObserver
     let config: ParraChangelogWidgetConfig
 
-    @EnvironmentObject var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeManager.theme
+            with: parraTheme
         )
 
-        let contentPadding = themeManager.theme.padding.value(
+        let contentPadding = parraTheme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -61,7 +61,7 @@ struct ChangelogWidget: Container {
                 width: 1,
                 edges: .bottom,
                 color: showNavigationDivider
-                    ? themeManager.theme.palette
+                    ? parraTheme.palette
                     .secondaryBackground : .clear
             )
 
@@ -91,12 +91,12 @@ struct ChangelogWidget: Container {
         }
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: themeManager.theme
+            using: parraTheme
         )
         .applyPadding(
             size: defaultWidgetAttributes.padding,
             on: [.horizontal, .bottom],
-            from: themeManager.theme
+            from: parraTheme
         )
         .task {
             // Perform initial load
@@ -146,7 +146,7 @@ struct ChangelogWidget: Container {
                 .frame(maxWidth: .infinity)
                 .applyPadding(
                     size: attributes.contentPadding,
-                    from: themeManager.theme
+                    from: parraTheme
                 )
             }
         }
@@ -168,7 +168,7 @@ struct ChangelogWidget: Container {
     func list(
         with attributes: ParraAttributes.Widget
     ) -> some View {
-        let contentPadding = themeManager.theme.padding.value(
+        let contentPadding = parraTheme.padding.value(
             for: attributes.contentPadding
         )
 

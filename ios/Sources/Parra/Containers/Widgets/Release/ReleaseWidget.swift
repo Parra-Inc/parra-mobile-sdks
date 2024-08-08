@@ -54,7 +54,7 @@ struct ReleaseWidget: Container {
 
     let config: ParraChangelogWidgetConfig
 
-    @EnvironmentObject var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     var sections: some View {
         LazyVStack(alignment: .leading, spacing: 24) {
@@ -129,10 +129,10 @@ struct ReleaseWidget: Container {
 
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeManager.theme
+            with: parraTheme
         )
 
-        let contentPadding = themeManager.theme.padding.value(
+        let contentPadding = parraTheme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -144,7 +144,7 @@ struct ReleaseWidget: Container {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: themeManager.theme
+            using: parraTheme
         )
         .task {
             await contentObserver.loadSections()
@@ -206,7 +206,7 @@ struct ReleaseWidget: Container {
                             content: content.image,
                             localAttributes: ParraAttributes.AsyncImage(
                                 cornerRadius: .sm,
-                                background: themeManager.theme.palette
+                                background: parraTheme.palette
                                     .secondaryBackground
                             )
                         )

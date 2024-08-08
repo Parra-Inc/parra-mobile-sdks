@@ -91,7 +91,7 @@ struct ParraLogProcessedData {
             var errorExtra = errorWithExtra.extra ?? [:]
             errorExtra["$message"] = errorWithExtra.message
 
-            combinedExtra["$error"] = errorExtra
+            combinedExtra["$error"] = ParraAnyCodable(errorExtra)
         }
 
         if let callSiteExtra {

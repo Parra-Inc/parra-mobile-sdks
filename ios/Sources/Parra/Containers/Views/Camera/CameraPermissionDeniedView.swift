@@ -10,14 +10,14 @@ import SwiftUI
 
 struct CameraPermissionDeniedView: View {
     @EnvironmentObject var componentFactory: ComponentFactory
-    @EnvironmentObject var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
         VStack(spacing: 10) {
             componentFactory.buildImage(
                 content: .symbol("camera"),
                 localAttributes: ParraAttributes.Image(
-                    tint: themeManager.theme.palette.primary.toParraColor(),
+                    tint: parraTheme.palette.primary.toParraColor(),
                     size: CGSize(width: 100, height: 100)
                 )
             )
@@ -41,7 +41,7 @@ struct CameraPermissionDeniedView: View {
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
                             style: .callout,
-                            color: themeManager.theme.palette.primary
+                            color: parraTheme.palette.primary
                                 .toParraColor()
                         )
                     )

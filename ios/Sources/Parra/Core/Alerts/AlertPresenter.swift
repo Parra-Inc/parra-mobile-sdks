@@ -76,7 +76,7 @@ struct AlertPresenter: ViewModifier {
     @EnvironmentObject private var componentFactory: ComponentFactory
 
     @Environment(\.defaultSafeAreaInsets) private var defaultSafeAreaInsets
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @State private var workItem: DispatchWorkItem?
 
     private var toastAnimation: Animation {

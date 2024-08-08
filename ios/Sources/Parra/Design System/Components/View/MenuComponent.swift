@@ -31,20 +31,20 @@ struct MenuComponent: View {
             .menuOrder(config.sortOrder)
             .applyMenuAttributes(
                 attributes,
-                using: themeManager.theme
+                using: parraTheme
             )
 
             helperLabel
         }
         .applyPadding(
             size: attributes.padding,
-            from: themeManager.theme
+            from: parraTheme
         )
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var componentFactory: ComponentFactory
 
     @State private var selectedOption: ParraMenuContent.Option?
@@ -100,7 +100,7 @@ struct MenuComponent: View {
 
             Spacer()
 
-            let padding = themeManager.theme.padding.value(
+            let padding = parraTheme.padding.value(
                 for: attributes.padding
             )
 

@@ -42,14 +42,14 @@ struct ParraLogo: View {
     }
 
     var body: some View {
-        if !appInfo.tenant.hideBranding {
+        if !parraAppInfo.tenant.hideBranding {
             logo
         }
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var appInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     private var iconSize: Double {
         return switch type {

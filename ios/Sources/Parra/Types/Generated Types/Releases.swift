@@ -1072,6 +1072,38 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
 public final class ParraAppInfo: ObservableObject, Codable, Equatable,
     Hashable
 {
+    static let `default` = ParraAppInfo(
+        versionToken: nil,
+        newInstalledVersionInfo: nil,
+        tenant: ParraTenantAppInfoStub(
+            id: "",
+            createdAt: "",
+            updatedAt: "",
+            deletedAt: nil,
+            name: "",
+            issuer: "",
+            subdomain: nil,
+            isTest: false,
+            parentTenantId: nil,
+            logo: nil,
+            domains: nil,
+            urls: nil,
+            entitlements: nil,
+            hideBranding: false
+        ),
+        auth: ParraAppAuthInfo(
+            database: nil,
+            passwordless: nil
+        ),
+        legal: ParraLegalInfo(),
+        application: ParraApplicationIosConfig(
+            name: "",
+            description: nil,
+            appId: nil,
+            teamId: nil,
+            bundleId: ""
+        )
+    )
     // MARK: - Lifecycle
 
     public init(

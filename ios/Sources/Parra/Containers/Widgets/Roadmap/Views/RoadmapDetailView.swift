@@ -18,7 +18,7 @@ struct RoadmapDetailView: View {
     @EnvironmentObject var componentFactory: ComponentFactory
 
     var body: some View {
-        let palette = themeManager.theme.palette
+        let palette = parraTheme.palette
 
         VStack(spacing: 0) {
             VStack(spacing: 10) {
@@ -121,5 +121,5 @@ struct RoadmapDetailView: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 }

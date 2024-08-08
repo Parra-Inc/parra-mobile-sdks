@@ -87,7 +87,7 @@ struct TextInputComponent: View {
                 }
                 .focused($focusState, equals: .secure)
                 .foregroundStyle(
-                    textColorOverride ?? themeManager.theme.palette.primaryText
+                    textColorOverride ?? parraTheme.palette.primaryText
                         .toParraColor()
                 )
                 .onAppear {
@@ -152,7 +152,7 @@ struct TextInputComponent: View {
             baseView
                 .applyTextInputAttributes(
                     attributes,
-                    using: themeManager.theme
+                    using: parraTheme
                 )
                 .onChange(of: text) { _, newValue in
                     hasReceivedInput = true
@@ -165,7 +165,7 @@ struct TextInputComponent: View {
         .applyPadding(
             size: attributes.padding,
             on: [.horizontal, .bottom],
-            from: themeManager.theme
+            from: parraTheme
         )
         .onAppear {
             focusState = config.isSecure ? .secure : .normal
@@ -186,7 +186,7 @@ struct TextInputComponent: View {
     @State private var lastFocusState: FocusField?
 
     @Environment(\.colorScheme) private var colorScheme
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     @State private var text: String
     @State private var hasReceivedInput = false

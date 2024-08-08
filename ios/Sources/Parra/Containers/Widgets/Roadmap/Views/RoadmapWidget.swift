@@ -27,7 +27,7 @@ struct RoadmapWidget: Container {
     @StateObject var contentObserver: ContentObserver
     let config: ParraRoadmapWidgetConfig
 
-    @EnvironmentObject var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     var items: Binding<[TicketUserContent]> {
         return $contentObserver.ticketPaginator.items
@@ -78,10 +78,10 @@ struct RoadmapWidget: Container {
 
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
-            with: themeManager.theme
+            with: parraTheme
         )
 
-        let contentPadding = themeManager.theme.padding.value(
+        let contentPadding = parraTheme.padding.value(
             for: defaultWidgetAttributes.contentPadding
         )
 
@@ -92,7 +92,7 @@ struct RoadmapWidget: Container {
         }
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
-            using: themeManager.theme
+            using: parraTheme
         )
         .environment(config)
         .environmentObject(contentObserver)
@@ -240,7 +240,7 @@ struct RoadmapWidget: Container {
             width: 1,
             edges: .bottom,
             color: showNavigationDivider
-                ? themeManager.theme.palette.secondaryBackground : .clear
+                ? parraTheme.palette.secondaryBackground : .clear
         )
     }
 

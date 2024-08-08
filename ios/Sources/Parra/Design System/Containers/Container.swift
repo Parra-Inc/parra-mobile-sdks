@@ -17,9 +17,6 @@ protocol Container: View {
     var componentFactory: ComponentFactory { get }
     var contentObserver: ContentObserver { get }
 
-    // Expected via @Environment
-    var themeManager: ParraThemeManager { get }
-
     init(
         config: Config,
         componentFactory: ComponentFactory,

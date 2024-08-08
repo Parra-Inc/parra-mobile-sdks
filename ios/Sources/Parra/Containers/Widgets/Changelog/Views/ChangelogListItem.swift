@@ -14,7 +14,7 @@ struct ChangelogListItem: View {
     let content: AppReleaseStubContent
 
     var body: some View {
-        let palette = themeManager.theme.palette
+        let palette = parraTheme.palette
 
         VStack(alignment: .leading, spacing: 12) {
             componentFactory.buildLabel(
@@ -57,7 +57,7 @@ struct ChangelogListItem: View {
         .frame(maxWidth: .infinity)
         .padding()
         .applyBackground(palette.secondaryBackground)
-        .applyCornerRadii(size: .lg, from: themeManager.theme)
+        .applyCornerRadii(size: .lg, from: parraTheme)
     }
 
     // MARK: - Private
@@ -67,5 +67,5 @@ struct ChangelogListItem: View {
     @EnvironmentObject private var contentObserver: ChangelogWidget
         .ContentObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 }

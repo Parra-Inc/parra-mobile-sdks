@@ -25,8 +25,8 @@ struct ParraViewPreview<Content>: View where Content: View {
             theme: theme
         )
 
-        self._parraAuthState = StateObject(
-            wrappedValue: ParraAuthState()
+        self._authStateManager = State(
+            initialValue: ParraAuthStateManager.default
         )
 
         let appState = ParraAppState(
@@ -47,12 +47,7 @@ struct ParraViewPreview<Content>: View where Content: View {
             wrappedValue: parraInternal.alertManager
         )
 
-        self._themeManager = StateObject(
-            wrappedValue: ParraThemeManager(
-                theme: parraInternal.configuration.theme,
-                notificationCenter: parraInternal.notificationCenter
-            )
-        )
+        ParraThemeManager.shared.current = parraInternal.configuration.theme
     }
 
     // MARK: - Internal
@@ -62,9 +57,10 @@ struct ParraViewPreview<Content>: View where Content: View {
             content(factory)
         }
         .environment(\.parra, parra)
-        .environmentObject(parraAuthState)
+        .environment(\.parraAuthState, authStateManager.current)
+        .environment(\.parraTheme, themeManager.current)
+        .environment(\.parraAppearance, themeManager.preferredAppearanceBinding)
         .environmentObject(alertManager)
-        .environmentObject(themeManager)
         .environmentObject(
             LaunchScreenStateManager(
                 state: .complete(
@@ -86,6 +82,7 @@ struct ParraViewPreview<Content>: View where Content: View {
     private let parra: Parra
 
     @StateObject private var alertManager: AlertManager
-    @StateObject private var parraAuthState: ParraAuthState
-    @StateObject private var themeManager: ParraThemeManager
+    
+    @State private var authStateManager: ParraAuthStateManager
+    @State private var themeManager: ParraThemeManager = .shared
 }

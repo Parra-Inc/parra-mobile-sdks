@@ -111,15 +111,8 @@ public struct ParraApp<
             wrappedValue: parra.alertManager
         )
 
-        self._parraAppState = StateObject(
+        self._parraAppState = State(
             wrappedValue: appState
-        )
-
-        self._themeManager = StateObject(
-            wrappedValue: ParraThemeManager(
-                theme: parra.configuration.theme,
-                notificationCenter: parra.notificationCenter
-            )
         )
 
         self._launchScreenState = StateObject(
@@ -127,6 +120,8 @@ public struct ParraApp<
                 state: .initial(mergedLaunchScreenConfig)
             )
         )
+
+        ParraThemeManager.shared.current = parra.configuration.theme
     }
 
     // MARK: - Public
@@ -134,10 +129,11 @@ public struct ParraApp<
     public var body: some Scene {
         makeScene()
             .environment(\.parra, Parra.default)
-            .environmentObject(parraAuthState)
+            .environment(\.parraAuthState, authStateManager.current)
+            .environment(\.parraTheme, themeManager.current)
+            .environment(\.parraAppearance, themeManager.preferredAppearanceBinding)
             .environmentObject(launchScreenState)
             .environmentObject(alertManager)
-            .environmentObject(themeManager)
             .environmentObject(parra.globalComponentFactory)
             .onChange(
                 of: launchScreenState.current,
@@ -151,7 +147,7 @@ public struct ParraApp<
                     Task {
                         // performAppLaunchTasks completing changes the launch
                         // screen state to transitioning, allowing this to start
-                        await parraAuthState.performInitialAuthCheck(
+                        await authStateManager.performInitialAuthCheck(
                             using: parra.authService,
                             appInfo: result.appInfo
                         )
@@ -161,7 +157,7 @@ public struct ParraApp<
                 }
             }
             .onChange(
-                of: parraAuthState.current,
+                of: authStateManager.current,
                 onAuthStateChanged
             )
             .onChange(
@@ -183,12 +179,12 @@ public struct ParraApp<
 
     @SceneBuilder private let makeScene: @MainActor () -> Content
 
-    @StateObject private var parraAppState: ParraAppState
-    @StateObject private var parraAuthState: ParraAuthState = .init()
+    @State private var parraAppState: ParraAppState
     @StateObject private var launchScreenState: LaunchScreenStateManager
 
-    @StateObject private var themeManager: ParraThemeManager
     @StateObject private var alertManager: AlertManager
+    @State private var authStateManager: ParraAuthStateManager = .default
+    @State private var themeManager: ParraThemeManager = .shared
 
     private let parra: ParraInternal
     private let authenticationMethod: ParraAuthType
@@ -243,8 +239,8 @@ public struct ParraApp<
     }
 
     private func onAuthStateChanged(
-        from oldAuthResult: ParraAuthResult,
-        to authResult: ParraAuthResult
+        from oldAuthResult: ParraAuthState,
+        to authResult: ParraAuthState
     ) {
         Task {
             await parra.authStateDidChange(

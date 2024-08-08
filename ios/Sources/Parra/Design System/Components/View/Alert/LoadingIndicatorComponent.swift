@@ -52,13 +52,13 @@ struct LoadingIndicatorComponent: View {
         }
         .applyLoadingIndicatorAlertAttributes(
             attributes,
-            using: themeManager.theme
+            using: parraTheme
         )
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var componentFactory: ComponentFactory
 }
 

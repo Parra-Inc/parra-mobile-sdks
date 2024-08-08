@@ -13,10 +13,6 @@ struct RoadmapListItem: View {
 
     let ticketContent: TicketUserContent
 
-    var theme: ParraTheme {
-        return themeManager.theme
-    }
-
     @ViewBuilder var info: some View {
         HStack(alignment: .center, spacing: 4) {
             RoadmapTicketTypeBadge(
@@ -39,7 +35,7 @@ struct RoadmapListItem: View {
                 content: ticketContent.createdAt,
                 localAttributes: .default(with: .caption)
             )
-            .foregroundStyle(theme.palette.secondaryText)
+            .foregroundStyle(parraTheme.palette.secondaryText)
             .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity)
@@ -84,8 +80,8 @@ struct RoadmapListItem: View {
         .padding(.vertical, 16)
         .padding(.leading, ticketContent.votingEnabled ? 8 : 20)
         .padding(.trailing, 16)
-        .applyBackground(theme.palette.secondaryBackground)
-        .applyCornerRadii(size: .lg, from: theme)
+        .applyBackground(parraTheme.palette.secondaryBackground)
+        .applyCornerRadii(size: .lg, from: parraTheme)
     }
 
     // MARK: - Private
@@ -94,5 +90,5 @@ struct RoadmapListItem: View {
     @EnvironmentObject private var contentObserver: RoadmapWidget
         .ContentObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 }

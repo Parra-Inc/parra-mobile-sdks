@@ -74,7 +74,7 @@ final class AppInfoManager {
 
     /// Whether the app info manager has encountered a newer app version
     /// during fetches.
-    var isAwareOfNewerRelease = false
+    private var isAwareOfNewerRelease = false
 
     let appVersionCache = ParraUserDefaultsStorageModule<AppVersionInfo>(
         key: Constant.appVersionKey,

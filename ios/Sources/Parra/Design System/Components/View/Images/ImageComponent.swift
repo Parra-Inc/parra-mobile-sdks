@@ -43,11 +43,11 @@ struct ImageComponent: View {
             )
             .applyImageAttributes(
                 attributes,
-                using: themeManager.theme
+                using: parraTheme
             )
     }
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 }

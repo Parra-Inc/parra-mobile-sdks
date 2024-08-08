@@ -19,7 +19,7 @@ struct SegmentComponent: View {
         SegmentView(
             options: content.options.map { .init(id: $0.id, title: $0.text) },
             attributes: attributes,
-            theme: themeManager.theme,
+            theme: parraTheme,
             onSelect: { option in
                 content.optionSelected?(
                     .init(id: option.id, text: option.title)
@@ -35,7 +35,7 @@ struct SegmentComponent: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 }
 
 #Preview {

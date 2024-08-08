@@ -47,7 +47,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             maxHeight: .infinity
         )
         .applyDefaultWidgetAttributes(
-            using: themeManager.theme
+            using: parraTheme
         )
         .onAppear {
             continueButtonContent = ParraTextButtonContent(
@@ -127,7 +127,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     private let config: Config
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var navigationState: NavigationState
 
     @ViewBuilder private var primaryContent: some View {
@@ -140,7 +140,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 content: ParraLabelContent(text: errorMessage),
                 localAttributes: ParraAttributes.Label(
                     text: ParraAttributes.Text(
-                        color: themeManager.theme.palette.error.toParraColor()
+                        color: parraTheme.palette.error.toParraColor()
                     ),
                     padding: .lg
                 )

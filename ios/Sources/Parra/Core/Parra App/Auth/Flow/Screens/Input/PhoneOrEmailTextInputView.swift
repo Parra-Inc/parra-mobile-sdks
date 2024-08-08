@@ -43,7 +43,7 @@ struct PhoneOrEmailTextInputView: View {
         }
         .applyPadding(
             size: .md,
-            from: themeManager.theme
+            from: parraTheme
         )
         .animation(.easeInOut(duration: 0.6), value: isFocused.wrappedValue)
         .sheet(
@@ -68,7 +68,7 @@ struct PhoneOrEmailTextInputView: View {
                             text: country.dialCode,
                             localAttributes: .init(
                                 text: .init(
-                                    color: themeManager.theme.palette
+                                    color: parraTheme.palette
                                         .secondaryText.toParraColor()
                                 )
                             )
@@ -110,7 +110,7 @@ struct PhoneOrEmailTextInputView: View {
     }
 
     var fieldBackgroundColor: Color {
-        return themeManager.theme.palette.secondaryBackground
+        return parraTheme.palette.secondaryBackground
     }
 
     // MARK: - Private
@@ -127,7 +127,7 @@ struct PhoneOrEmailTextInputView: View {
 
     private var isFocused: FocusState<Bool>.Binding
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject private var componentFactory: ComponentFactory
 
     @ViewBuilder private var textField: some View {
@@ -219,7 +219,7 @@ struct PhoneOrEmailTextInputView: View {
             .textInputAttributes(
                 config: .default,
                 localAttributes: attributes,
-                theme: themeManager.theme
+                theme: parraTheme
             )
 
         if currentMode == .phone {
@@ -232,14 +232,14 @@ struct PhoneOrEmailTextInputView: View {
             }
             .applyTextInputAttributes(
                 textInputAttributes,
-                using: themeManager.theme
+                using: parraTheme
             )
         }
 
         textField
             .applyTextInputAttributes(
                 textInputAttributes,
-                using: themeManager.theme
+                using: parraTheme
             )
             .onChange(of: selectedCountry) { oldValue, _ in
                 entry.trimPrefix(oldValue.dialCode)

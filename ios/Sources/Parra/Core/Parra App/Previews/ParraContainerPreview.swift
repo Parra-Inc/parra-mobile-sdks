@@ -32,8 +32,8 @@ struct ParraContainerPreview<ContainerType>: View
             attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
-        self._parraAuthState = StateObject(
-            wrappedValue: ParraAuthState()
+        self._authStateManager = State(
+            initialValue: ParraAuthStateManager.default
         )
 
         let appState = ParraAppState(
@@ -64,7 +64,7 @@ struct ParraContainerPreview<ContainerType>: View
         .environment(config)
         .environmentObject(factory)
         .environment(\.parra, parra)
-        .environmentObject(parraAuthState)
+        .environment(\.parraAuthState, authStateManager.current)
     }
 
     // MARK: - Private
@@ -80,5 +80,5 @@ struct ParraContainerPreview<ContainerType>: View
     private let configuration: ParraConfiguration
     private let parra: Parra
 
-    @StateObject private var parraAuthState: ParraAuthState
+    @State private var authStateManager: ParraAuthStateManager
 }

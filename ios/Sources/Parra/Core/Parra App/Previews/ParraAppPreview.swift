@@ -45,13 +45,15 @@ public struct ParraAppPreview<Content, DelegateType>: View
 
     public init(
         configuration: ParraConfiguration = .init(),
-        authState: ParraAuthState = .init(),
+        authState: ParraAuthState = .undetermined,
         previewContent: @MainActor @escaping () -> Content
     ) {
         self.configuration = configuration
         self.previewContent = previewContent
-        self._parraAuthState = StateObject(
-            wrappedValue: authState
+        self._authStateManager = State(
+            initialValue: ParraAuthStateManager(
+                current: authState
+            )
         )
 
         let appState = ParraAppState(
@@ -74,12 +76,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
             wrappedValue: parraInternal.alertManager
         )
 
-        self._themeManager = StateObject(
-            wrappedValue: ParraThemeManager(
-                theme: parraInternal.configuration.theme,
-                notificationCenter: parraInternal.notificationCenter
-            )
-        )
+        ParraThemeManager.shared.current = parraInternal.configuration.theme
     }
 
     // MARK: - Public
@@ -89,9 +86,10 @@ public struct ParraAppPreview<Content, DelegateType>: View
             previewContent()
         }
         .environment(\.parra, parra)
-        .environmentObject(parraAuthState)
+        .environment(\.parraAuthState, authStateManager.current)
+        .environment(\.parraTheme, themeManager.current)
+        .environment(\.parraAppearance, themeManager.preferredAppearanceBinding)
         .environmentObject(alertManager)
-        .environmentObject(themeManager)
         .environmentObject(
             LaunchScreenStateManager(
                 state: .complete(
@@ -109,7 +107,8 @@ public struct ParraAppPreview<Content, DelegateType>: View
     private let previewContent: () -> Content
     private let parra: Parra
 
-    @StateObject private var parraAuthState: ParraAuthState
     @StateObject private var alertManager: AlertManager
-    @StateObject private var themeManager: ParraThemeManager
+
+    @State private var authStateManager: ParraAuthStateManager
+    @State private var themeManager: ParraThemeManager = .shared
 }

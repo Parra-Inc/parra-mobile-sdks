@@ -27,7 +27,7 @@ struct FeedbackBooleanQuestionCard: FeedbackQuestionViewKind {
 
     @Environment(ParraFeedbackCardWidgetConfig.self) var config
     @EnvironmentObject var componentFactory: ComponentFactory
-    @EnvironmentObject var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject var contentObserver: FeedbackCardWidget.ContentObserver
 
     let bucketId: String

@@ -60,7 +60,7 @@ public struct ParraFeedbackView: ParraPublicContainer {
 
     // MARK: - Private
 
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     private let cards: [ParraCardItem]
     private let config: Wrapped.Config
