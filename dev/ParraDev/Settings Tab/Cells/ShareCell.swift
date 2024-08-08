@@ -10,10 +10,10 @@ import Parra
 import SwiftUI
 
 struct ShareCell: View {
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
+    @EnvironmentObject private var appInfo: ParraAppInfo
 
     var body: some View {
-        if let appStoreUrl = parraAppInfo.application.appStoreUrl {
+        if let appStoreUrl = appInfo.application.appStoreUrl {
             HStack {
                 ShareLink(
                     item: appStoreUrl,

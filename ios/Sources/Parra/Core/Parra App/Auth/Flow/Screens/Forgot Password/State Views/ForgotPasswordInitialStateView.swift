@@ -41,7 +41,7 @@ struct ForgotPasswordInitialStateView: View {
             .layoutPriority(20)
 
             Text(
-                "For security reasons, we'll send a \(params.codeLength)-digit verification code to **\(params.identity)**.\n\nIf you're unable to access this email address, please contact \(parraAppInfo.application.name) support."
+                "For security reasons, we'll send a \(params.codeLength)-digit verification code to **\(params.identity)**.\n\nIf you're unable to access this email address, please contact \(appInfo.application.name) support."
             )
             .font(.subheadline)
             .padding(.bottom, 12)
@@ -74,7 +74,7 @@ struct ForgotPasswordInitialStateView: View {
     // MARK: - Private
 
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
+    @EnvironmentObject private var appInfo: ParraAppInfo
 }
 
 #Preview {

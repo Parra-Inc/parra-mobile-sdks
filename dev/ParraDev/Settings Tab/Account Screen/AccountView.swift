@@ -10,11 +10,11 @@ import Parra
 import SwiftUI
 
 struct AccountView: View {
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @EnvironmentObject private var authState: ParraAuthState
     @State private var isSigningIn = false
 
     var body: some View {
-        let user = parraAuthState.current.user
+        let user = authState.current.user
 
         List {
             Section {

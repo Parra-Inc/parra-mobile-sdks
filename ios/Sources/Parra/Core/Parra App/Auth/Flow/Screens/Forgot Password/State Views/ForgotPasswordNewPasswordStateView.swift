@@ -52,7 +52,7 @@ struct ForgotPasswordNewPasswordStateView: View {
     )
 
     var passwordFieldConfig: ParraTextInputConfig {
-        guard let passwordConfig = parraAppInfo.auth.database?.password else {
+        guard let passwordConfig = appInfo.auth.database?.password else {
             return ParraTextInputConfig()
         }
 
@@ -202,12 +202,12 @@ struct ForgotPasswordNewPasswordStateView: View {
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
+    @EnvironmentObject private var appInfo: ParraAppInfo
 
     private func validate(
         password: String
     ) {
-        guard let passwordConfig = parraAppInfo.auth.database?.password else {
+        guard let passwordConfig = appInfo.auth.database?.password else {
             passwordState = .init(
                 password: password,
                 isValid: false

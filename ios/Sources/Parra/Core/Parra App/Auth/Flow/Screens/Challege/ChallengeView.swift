@@ -117,7 +117,7 @@ struct ChallengeView: View {
             return
         }
 
-        guard let passwordConfig = parraAppInfo.auth.database?.password else {
+        guard let passwordConfig = appInfo.auth.database?.password else {
             passwordState = .init(
                 password: password,
                 isValid: false
@@ -176,10 +176,10 @@ struct ChallengeView: View {
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
+    @EnvironmentObject private var appInfo: ParraAppInfo
 
     private var challengeFieldConfig: ParraTextInputConfig {
-        let authInfo = parraAppInfo.auth
+        let authInfo = appInfo.auth
 
         if passwordChallengeAvailable {
             let rules = authInfo.database?.password?.rules ?? []

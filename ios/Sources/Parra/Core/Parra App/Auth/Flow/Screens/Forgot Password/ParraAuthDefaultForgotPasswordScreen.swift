@@ -69,7 +69,6 @@ public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen {
     @EnvironmentObject private var componentFactory: ComponentFactory
     @EnvironmentObject private var themeManager: ParraThemeManager
     @EnvironmentObject private var navigationState: NavigationState
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
 
     @ViewBuilder private var primaryContent: some View {
         VStack(spacing: 12) {

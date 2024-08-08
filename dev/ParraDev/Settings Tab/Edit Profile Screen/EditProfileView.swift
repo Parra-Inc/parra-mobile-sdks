@@ -12,7 +12,7 @@ import SwiftUI
 struct EditProfileView: View {
     @Environment(\.parra) private var parra
     @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @EnvironmentObject private var authState: ParraAuthState
 
     @State private var firstName: String = ""
     @State private var lastName: String = ""
@@ -21,7 +21,7 @@ struct EditProfileView: View {
     @State private var isShowingSuccess = false
 
     var user: ParraUser? {
-        return parraAuthState.current.user
+        return authState.current.user
     }
 
     var body: some View {
