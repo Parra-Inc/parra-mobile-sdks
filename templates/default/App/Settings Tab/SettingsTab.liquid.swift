@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct SettingsTab: View {
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     var body: some View {
         NavigationStack {

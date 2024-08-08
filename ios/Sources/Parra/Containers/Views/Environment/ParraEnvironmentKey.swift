@@ -53,7 +53,7 @@ public struct ParraAppearanceInstanceEnvironmentKey: EnvironmentKey {
 
 @MainActor
 public extension EnvironmentValues {
-    var parraAppearance: Binding<ParraAppearance> {
+    var parraPreferredAppearance: Binding<ParraAppearance> {
         get {
             self[ParraAppearanceInstanceEnvironmentKey.self]
         }

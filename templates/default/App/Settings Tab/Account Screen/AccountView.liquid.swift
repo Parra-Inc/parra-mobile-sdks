@@ -10,11 +10,11 @@ import Parra
 import SwiftUI
 
 struct AccountView: View {
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @Environment(\.parraAuthState) private var parraAuthState
     @State private var isSigningIn = false
 
     var body: some View {
-        let user = parraAuthState.current.user
+        let user = parraAuthState.user
 
         List {
             Section {
@@ -80,7 +80,7 @@ struct AccountView: View {
 }
 
 #Preview {
-    ParraAppPreview(authState: .authenticatedPreview) {
+    ParraAppPreview(authState: .undetermined) {
         AccountView()
     }
 }

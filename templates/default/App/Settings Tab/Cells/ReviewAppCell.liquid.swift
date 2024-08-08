@@ -10,12 +10,10 @@ import Parra
 import SwiftUI
 
 struct ReviewAppCell: View {
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     var body: some View {
-        if let writeReviewUrl = parraAppInfo.application
-            .appStoreWriteReviewUrl
-        {
+        if let writeReviewUrl = parraAppInfo.application.appStoreWriteReviewUrl {
             HStack {
                 Link(
                     destination: writeReviewUrl

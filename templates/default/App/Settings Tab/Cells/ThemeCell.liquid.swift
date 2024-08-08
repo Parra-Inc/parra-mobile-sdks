@@ -10,11 +10,11 @@ import Parra
 import SwiftUI
 
 struct ThemeCell: View {
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraPreferredAppearance) private var appearance
 
     var body: some View {
         Picker(
-            selection: $themeManager.preferredAppearance,
+            selection: appearance,
             content: {
                 ForEach(ParraAppearance.allCases) { option in
                     Text(option.description).tag(option)

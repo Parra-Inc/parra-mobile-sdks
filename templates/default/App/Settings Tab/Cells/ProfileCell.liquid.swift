@@ -11,10 +11,10 @@ import SwiftUI
 import UIKit
 
 public struct ProfileCell: View {
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @Environment(\.parraAuthState) private var parraAuthState
 
     public var body: some View {
-        switch parraAuthState.current {
+        switch parraAuthState {
         case .anonymous, .authenticated:
             AuthenticatedProfileInfoView()
         default:
@@ -24,10 +24,10 @@ public struct ProfileCell: View {
 }
 
 struct IdentityLabels: View {
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @Environment(\.parraAuthState) private var parraAuthState
 
     var body: some View {
-        let user = parraAuthState.current.user
+        let user = parraAuthState.user
         let identityNames = user?.info.identityNames ?? []
 
         if identityNames.isEmpty {

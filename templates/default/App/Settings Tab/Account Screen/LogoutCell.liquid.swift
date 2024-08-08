@@ -11,9 +11,8 @@ import SwiftUI
 
 struct LogoutCell: View {
     @Environment(\.parra) private var parra
+    @Environment(\.parraTheme) private var parraTheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
-    @EnvironmentObject private var themeManager: ParraThemeManager
 
     @ViewBuilder
     var body: some View {
@@ -33,7 +32,7 @@ struct LogoutCell: View {
                 }
             )
         }
-        .foregroundStyle(themeManager.theme.palette.error)
+        .foregroundStyle(parraTheme.palette.error)
     }
 }
 

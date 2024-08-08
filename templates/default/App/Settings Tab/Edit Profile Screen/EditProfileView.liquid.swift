@@ -11,58 +11,20 @@ import SwiftUI
 
 struct EditProfileView: View {
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var themeManager: ParraThemeManager
-    @EnvironmentObject private var parraAuthState: ParraAuthState
+    @Environment(\.parraAuthState) private var parraAuthState
+    @Environment(\.parraTheme) private var parraTheme
 
-    @State private var firstName: String = ""
-    @State private var lastName: String = ""
-    @State private var displayName: String = ""
+    @State private var data = ProfileData()
     @State private var isLoading = false
     @State private var isShowingSuccess = false
-
-    var user: ParraUser? {
-        return parraAuthState.current.user
-    }
 
     var body: some View {
         VStack {
             Form {
                 Section {
-                    HStack {
-                        Text("First Name")
-                        Spacer()
-                            .frame(maxWidth: .infinity)
-                        TextField(
-                            "First Name",
-                            text: $firstName,
-                            prompt: Text("First Name")
-                        )
-                        .multilineTextAlignment(.trailing)
-                    }
-
-                    HStack {
-                        Text("Last Name")
-                        Spacer()
-                            .frame(maxWidth: .infinity)
-                        TextField(
-                            "Last Name",
-                            text: $lastName,
-                            prompt: Text("Last Name")
-                        )
-                        .multilineTextAlignment(.trailing)
-                    }
-
-                    HStack {
-                        Text("Display Name")
-                        Spacer()
-                            .frame(maxWidth: .infinity)
-                        TextField(
-                            "Display Name",
-                            text: $displayName,
-                            prompt: Text("Display Name")
-                        )
-                        .multilineTextAlignment(.trailing)
-                    }
+                    formField(named: "First Name", fieldData: $data.firstName)
+                    formField(named: "Last Name", fieldData: $data.lastName)
+                    formField(named: "Display Name", fieldData: $data.displayName)
                 }
             }
             .onSubmit(of: .text) {
@@ -95,14 +57,35 @@ struct EditProfileView: View {
             .safeAreaPadding()
             .disabled(isLoading)
         }
-        .background(themeManager.theme.palette.secondaryBackground)
+        .background(parraTheme.palette.secondaryBackground)
         .navigationTitle("Edit Profile")
         .onAppear {
-            let userInfo = user?.info
+            let userInfo = parraAuthState.user?.info
 
-            firstName = userInfo?.firstName ?? ""
-            lastName = userInfo?.lastName ?? ""
-            displayName = userInfo?.name ?? ""
+            data = ProfileData(
+                firstName: userInfo?.firstName,
+                lastName: userInfo?.lastName,
+                displayName: userInfo?.displayName
+            )
+        }
+    }
+
+    private func formField(
+        named name: String,
+        fieldData: Binding<String>
+    ) -> some View {
+        HStack {
+            Text(name)
+
+            Spacer()
+                .frame(maxWidth: .infinity)
+
+            TextField(
+                name,
+                text: fieldData,
+                prompt: Text(name)
+            )
+            .multilineTextAlignment(.trailing)
         }
     }
 
@@ -121,16 +104,16 @@ struct EditProfileView: View {
 
             do {
                 try await parra.user.updatePersonalInfo(
-                    name: displayName.isEmpty ? nil : displayName,
-                    firstName: firstName.isEmpty ? nil : firstName,
-                    lastName: lastName.isEmpty ? nil : lastName
+                    name: data.displayName,
+                    firstName: data.firstName,
+                    lastName: data.lastName
                 )
             } catch {
                 success = false
 
                 ParraLogger.error("Error saving personal info", error)
             }
-
+            
             withAnimation {
                 isLoading = false
                 isShowingSuccess = success
@@ -142,6 +125,22 @@ struct EditProfileView: View {
                 }
             }
         }
+    }
+
+    private struct ProfileData {
+        init(
+            firstName: String? = nil,
+            lastName: String? = nil,
+            displayName: String? = nil
+        ) {
+            self.firstName = firstName ?? ""
+            self.lastName = lastName ?? ""
+            self.displayName = displayName ?? ""
+        }
+
+        var firstName: String
+        var lastName: String
+        var displayName: String
     }
 }
 

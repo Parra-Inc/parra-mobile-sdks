@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct SampleTab: View {
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
         NavigationStack {
@@ -37,7 +37,7 @@ struct SampleTab: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationTitle("App")
-            .background(themeManager.theme.palette.secondaryBackground)
+            .background(parraTheme.palette.secondaryBackground)
         }
     }
 }

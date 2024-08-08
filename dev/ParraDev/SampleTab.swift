@@ -10,7 +10,6 @@ import Parra
 import SwiftUI
 
 struct SampleTab: View {
-    @Environment(\.parra) var parra
     @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {

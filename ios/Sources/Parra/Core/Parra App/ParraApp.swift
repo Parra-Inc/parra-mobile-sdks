@@ -131,7 +131,7 @@ public struct ParraApp<
             .environment(\.parra, Parra.default)
             .environment(\.parraAuthState, authStateManager.current)
             .environment(\.parraTheme, themeManager.current)
-            .environment(\.parraAppearance, themeManager.preferredAppearanceBinding)
+            .environment(\.parraPreferredAppearance, themeManager.preferredAppearanceBinding)
             .environmentObject(launchScreenState)
             .environmentObject(alertManager)
             .environmentObject(parra.globalComponentFactory)

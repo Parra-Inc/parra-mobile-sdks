@@ -10,8 +10,7 @@ import Parra
 import SwiftUI
 
 struct ThemeCell: View {
-    @Environment(\.parraTheme) private var parraTheme
-    @Environment(\.parraAppearance) private var appearance
+    @Environment(\.parraPreferredAppearance) private var appearance
 
     var body: some View {
         Picker(
