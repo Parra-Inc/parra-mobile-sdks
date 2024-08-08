@@ -450,7 +450,7 @@
 			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.1.64;
+				minimumVersion = 0.1.65;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

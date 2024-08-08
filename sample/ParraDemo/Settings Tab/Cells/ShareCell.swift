@@ -2,7 +2,7 @@
 //  ShareCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/07/2024.
+//  Bootstrapped with ❤️ by Parra on 08/08/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 struct ShareCell: View {
-    @EnvironmentObject private var parraAppInfo: ParraAppInfo
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     var body: some View {
         if let appStoreUrl = parraAppInfo.application.appStoreUrl {

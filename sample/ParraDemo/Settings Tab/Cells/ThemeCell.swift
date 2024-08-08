@@ -2,7 +2,7 @@
 //  ThemeCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/07/2024.
+//  Bootstrapped with ❤️ by Parra on 08/08/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -10,11 +10,11 @@ import Parra
 import SwiftUI
 
 struct ThemeCell: View {
-    @EnvironmentObject private var themeManager: ParraThemeManager
+    @Environment(\.parraPreferredAppearance) private var appearance
 
     var body: some View {
         Picker(
-            selection: $themeManager.preferredAppearance,
+            selection: appearance,
             content: {
                 ForEach(ParraAppearance.allCases) { option in
                     Text(option.description).tag(option)

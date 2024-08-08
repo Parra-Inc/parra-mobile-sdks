@@ -2,7 +2,7 @@
 //  LogoutCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/07/2024.
+//  Bootstrapped with ❤️ by Parra on 08/08/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -11,9 +11,8 @@ import SwiftUI
 
 struct LogoutCell: View {
     @Environment(\.parra) private var parra
+    @Environment(\.parraTheme) private var parraTheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
-    @EnvironmentObject private var themeManager: ParraThemeManager
 
     @ViewBuilder
     var body: some View {
@@ -33,7 +32,7 @@ struct LogoutCell: View {
                 }
             )
         }
-        .foregroundStyle(themeManager.theme.palette.error)
+        .foregroundStyle(parraTheme.palette.error)
     }
 }
 
