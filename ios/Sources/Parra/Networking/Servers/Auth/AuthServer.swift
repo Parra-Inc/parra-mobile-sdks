@@ -122,7 +122,6 @@ final class AuthServer: Server {
         return data
     }
 
-
     ///   - anonymousToken: If the user was previously logged in as an anonymous
     ///   or guest user, pass their refresh token so the identities can be
     ///   associated.

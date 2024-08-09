@@ -41,7 +41,8 @@ enum CallStackParser {
             )
 
             guard let frameNumber = UInt8(components[0]),
-                  let address = UInt64(components[2].dropFirst(2), radix: 16) else {
+                  let address = UInt64(components[2].dropFirst(2), radix: 16) else
+            {
                 return nil
             }
 

@@ -53,8 +53,6 @@ struct ModalLoadingIndicatorContainer: Container {
     var componentFactory: ComponentFactory
     var contentObserver: ContentObserver
 
-    @Environment(\.parraTheme) private var parraTheme
-
     var body: some View {
         ZStack {
             Color.clear
@@ -70,6 +68,10 @@ struct ModalLoadingIndicatorContainer: Container {
         .environmentObject(componentFactory)
         .environmentObject(contentObserver)
     }
+
+    // MARK: - Private
+
+    @Environment(\.parraTheme) private var parraTheme
 }
 
 #Preview {

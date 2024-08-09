@@ -25,15 +25,6 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
         AuthenticationFlowManager.shared.delegate = self
     }
 
-    private var landingScreenParams: ParraAuthDefaultLandingScreen.Params {
-        AuthenticationFlowManager.shared.getLandingScreenParams(
-            authService: parra.parraInternal.authService,
-            modalScreenManager: parra.parraInternal
-                .modalScreenManager,
-            using: parraAppInfo
-        )
-    }
-
     // MARK: - Public
 
     public var delegate: (any ParraAuthenticationFlowDelegate)?
@@ -57,16 +48,11 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                     landingScreenParams.attemptPasskeyLogin()
                 }
             }
-
     }
 
     // MARK: - Internal
 
-    @Environment(\.parraAppInfo) private var parraAppInfo
-    @Environment(\.parraAuthState) private var parraAuthState
-
-    @ViewBuilder
-    var landingScreen: some View {
+    @ViewBuilder var landingScreen: some View {
         let params = AuthenticationFlowManager.shared.getLandingScreenParams(
             authService: parra.parraInternal.authService,
             modalScreenManager: parra.parraInternal
@@ -93,7 +79,8 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
                 ) { destination in
                     // Only reset passkey auto login when navigating away from
                     // the landing screen.
-                    let _ = AuthenticationFlowManager.shared.hasPasskeyAutoLoginBeenRequested = false
+                    let _ = AuthenticationFlowManager.shared
+                        .hasPasskeyAutoLoginBeenRequested = false
 
                     AuthenticationFlowManager.shared.provideAuthScreen(
                         authScreen: destination
@@ -106,9 +93,21 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
 
     // MARK: - Private
 
+    @Environment(\.parraAppInfo) private var parraAppInfo
+    @Environment(\.parraAuthState) private var parraAuthState
+
     @StateObject private var navigationState = NavigationState()
 
     @Environment(\.parra) private var parra
+
+    private var landingScreenParams: ParraAuthDefaultLandingScreen.Params {
+        AuthenticationFlowManager.shared.getLandingScreenParams(
+            authService: parra.parraInternal.authService,
+            modalScreenManager: parra.parraInternal
+                .modalScreenManager,
+            using: parraAppInfo
+        )
+    }
 
     private func getModalScreenManager() -> ModalScreenManager {
         return parra.parraInternal.modalScreenManager

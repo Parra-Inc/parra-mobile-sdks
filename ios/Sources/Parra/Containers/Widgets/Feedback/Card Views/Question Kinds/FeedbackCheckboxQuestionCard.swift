@@ -27,7 +27,6 @@ struct FeedbackCheckboxQuestionCard: FeedbackQuestionViewKind {
 
     @Environment(ParraFeedbackCardWidgetConfig.self) var config
     @EnvironmentObject var componentFactory: ComponentFactory
-    @Environment(\.parraTheme) private var parraTheme
     @EnvironmentObject var contentObserver: FeedbackCardWidget.ContentObserver
 
     let bucketId: String
@@ -47,6 +46,10 @@ struct FeedbackCheckboxQuestionCard: FeedbackQuestionViewKind {
             }
         }
     }
+
+    // MARK: - Private
+
+    @Environment(\.parraTheme) private var parraTheme
 }
 
 #Preview {

@@ -1,5 +1,5 @@
 //
-//  TextEditorContent.swift
+//  ParraTextEditorContent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/5/24.

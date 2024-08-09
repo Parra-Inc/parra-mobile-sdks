@@ -1,5 +1,5 @@
 //
-//  SegmentConfig.swift
+//  ParraSegmentConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/29/24.

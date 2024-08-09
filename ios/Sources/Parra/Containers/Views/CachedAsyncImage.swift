@@ -377,6 +377,8 @@ struct CachedAsyncImage<Content>: View where Content: View {
         }
     }
 
+    // MARK: - Internal
+
     var body: some View {
         content(phase)
             .task(id: urlRequest) {

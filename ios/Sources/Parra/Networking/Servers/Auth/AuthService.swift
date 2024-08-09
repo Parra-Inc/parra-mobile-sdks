@@ -189,7 +189,9 @@ final class AuthService {
             let response = try await Parra.default.parraInternal.api.logout()
 
             // Logout will result in a new token for anon/guest auth.
-            let oauthToken: ParraUser.Credential.Token = if let anonymousToken = response.anonymousToken {
+            let oauthToken: ParraUser.Credential.Token = if let anonymousToken = response
+                .anonymousToken
+            {
                 .init(authToken: anonymousToken, type: .anonymous)
             } else if let guestToken = response.guestToken {
                 .init(authToken: guestToken, type: .guest)
@@ -338,69 +340,6 @@ final class AuthService {
         return result
     }
 
-    private func performUnauthenticatedLogin(
-        appInfo: ParraAppInfo
-    ) async throws -> ParraAuthState {
-        let oauthType: OAuth2Service.AuthType = if appInfo.auth.supportsAnonymous {
-            .anonymous(refreshToken: nil)
-        } else {
-            .guest(refreshToken: nil)
-        }
-
-        return try await login(authType: oauthType)
-    }
-
-    /// If auth has been determined, refresh it. If it hasn't, aquire the
-    /// tokens.
-    private func performAuthStateRefresh() {
-        Task {
-            guard let currentUser = await dataManager.getCurrentUser() else {
-                // The only way this will happen is if the getQuickestAuthState
-                // flow resulted in an error, in which case there's no valid
-                // state to refresh.
-
-                return
-            }
-
-            // printInvalidAuth(error: error)
-            logger.debug("Performing reauthentication for Parra")
-
-            // Using a short timeout since these requests are made on app launch
-            let timeout: TimeInterval = 5.0
-
-            guard let credential = try await performCredentialRefresh(
-                forceRefresh: false,
-                timeout: timeout
-            ) else {
-                // The refresh token provider returning nil indicates that a
-                // logout should take place.
-
-                await logout()
-
-                return
-            }
-
-            // Must updated persisted credential before get user info api call
-            // since API service requires being able to load this value.
-            await dataManager.updateCurrentUserCredential(credential)
-
-            let response = try await Parra.default.parraInternal.api.getUserInfo(
-                timeout: timeout
-            )
-
-            let user = ParraUser(
-                credential: credential,
-                info: response.user
-            )
-
-            if user.info.isAnonymous {
-                await applyUserUpdate(.anonymous(user))
-            } else {
-                await applyUserUpdate(.authenticated(user))
-            }
-        }
-    }
-
     @discardableResult
     func applyUserInfoUpdate(
         _ info: ParraUser.Info
@@ -505,8 +444,8 @@ final class AuthService {
         do {
             // Convert anon users by passing their refresh token along with the
             // login request.
-            let anonymousToken: String? = if let _cachedCredential, case let .oauth2(
-                token
+            let anonymousToken: String? = if let _cachedCredential, case .oauth2(
+                let token
             ) = _cachedCredential {
                 if token.type.isAuthenticated {
                     nil
@@ -543,6 +482,69 @@ final class AuthService {
 
     // The actual cached token.
     private var _cachedCredential: ParraUser.Credential?
+
+    private func performUnauthenticatedLogin(
+        appInfo: ParraAppInfo
+    ) async throws -> ParraAuthState {
+        let oauthType: OAuth2Service.AuthType = if appInfo.auth.supportsAnonymous {
+            .anonymous(refreshToken: nil)
+        } else {
+            .guest(refreshToken: nil)
+        }
+
+        return try await login(authType: oauthType)
+    }
+
+    /// If auth has been determined, refresh it. If it hasn't, aquire the
+    /// tokens.
+    private func performAuthStateRefresh() {
+        Task {
+            guard let currentUser = await dataManager.getCurrentUser() else {
+                // The only way this will happen is if the getQuickestAuthState
+                // flow resulted in an error, in which case there's no valid
+                // state to refresh.
+
+                return
+            }
+
+            // printInvalidAuth(error: error)
+            logger.debug("Performing reauthentication for Parra")
+
+            // Using a short timeout since these requests are made on app launch
+            let timeout: TimeInterval = 5.0
+
+            guard let credential = try await performCredentialRefresh(
+                forceRefresh: false,
+                timeout: timeout
+            ) else {
+                // The refresh token provider returning nil indicates that a
+                // logout should take place.
+
+                await logout()
+
+                return
+            }
+
+            // Must updated persisted credential before get user info api call
+            // since API service requires being able to load this value.
+            await dataManager.updateCurrentUserCredential(credential)
+
+            let response = try await Parra.default.parraInternal.api.getUserInfo(
+                timeout: timeout
+            )
+
+            let user = ParraUser(
+                credential: credential,
+                info: response.user
+            )
+
+            if user.info.isAnonymous {
+                await applyUserUpdate(.anonymous(user))
+            } else {
+                await applyUserUpdate(.authenticated(user))
+            }
+        }
+    }
 
     // Lazy wrapper around the cached token that will access it or try to load
     // it from disk.

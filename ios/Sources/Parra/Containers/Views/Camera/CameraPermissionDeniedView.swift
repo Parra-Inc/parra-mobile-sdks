@@ -9,8 +9,9 @@
 import SwiftUI
 
 struct CameraPermissionDeniedView: View {
+    // MARK: - Internal
+
     @EnvironmentObject var componentFactory: ComponentFactory
-    @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
         VStack(spacing: 10) {
@@ -50,6 +51,10 @@ struct CameraPermissionDeniedView: View {
             .padding(.top, 20)
         }
     }
+
+    // MARK: - Private
+
+    @Environment(\.parraTheme) private var parraTheme
 }
 
 #Preview {

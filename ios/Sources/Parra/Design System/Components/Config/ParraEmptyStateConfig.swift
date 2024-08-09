@@ -1,5 +1,5 @@
 //
-//  EmptyStateConfig.swift
+//  ParraEmptyStateConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/13/24.

@@ -1,5 +1,5 @@
 //
-//  LaunchScreenType.swift
+//  ParraLaunchScreenType.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/14/24.

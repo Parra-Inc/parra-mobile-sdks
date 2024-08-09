@@ -209,8 +209,8 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
 
             HStack {
                 let content: ParraTextButtonContent = if let retryTimeRemaining,
-                                                    challengeResponse
-                                                    .retryAt != nil
+                                                         challengeResponse
+                                                         .retryAt != nil
                 {
                     {
                         let duration = Duration(

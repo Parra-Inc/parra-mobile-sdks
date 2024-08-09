@@ -27,8 +27,6 @@ struct FeedbackFormWidget: Container {
     @StateObject var contentObserver: ContentObserver
     let config: ParraFeedbackFormWidgetConfig
 
-    @Environment(\.parraTheme) private var parraTheme
-
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
             with: parraTheme
@@ -171,6 +169,8 @@ struct FeedbackFormWidget: Container {
     }
 
     // MARK: - Private
+
+    @Environment(\.parraTheme) private var parraTheme
 
     private func onFieldValueChanged(
         field: ParraFeedbackFormField,

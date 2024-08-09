@@ -273,7 +273,8 @@ class Camera: NSObject {
 
         guard
             let captureDevice,
-            let deviceInput = try? AVCaptureDeviceInput(device: captureDevice) else {
+            let deviceInput = try? AVCaptureDeviceInput(device: captureDevice) else
+        {
             logger.error("Failed to obtain video input.")
             return
         }

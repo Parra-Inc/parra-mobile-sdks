@@ -27,8 +27,6 @@ struct ChangelogWidget: Container {
     @StateObject var contentObserver: ContentObserver
     let config: ParraChangelogWidgetConfig
 
-    @Environment(\.parraTheme) private var parraTheme
-
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
             with: parraTheme
@@ -210,6 +208,8 @@ struct ChangelogWidget: Container {
     }
 
     // MARK: - Private
+
+    @Environment(\.parraTheme) private var parraTheme
 
     @EnvironmentObject private var navigationState: NavigationState
 

@@ -20,13 +20,15 @@ struct CreateIdentityRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let provider: String
+    public let providerUserId: String
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case provider
         case providerUserId
     }
-
-    public let provider: String
-    public let providerUserId: String
 }
 
 struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
@@ -52,6 +54,16 @@ struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let provider: String
+    public let providerUserId: String
+    public let userId: String
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -61,14 +73,6 @@ struct IdentityResponse: Codable, Equatable, Hashable, Identifiable {
         case providerUserId
         case userId
     }
-
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let provider: String
-    public let providerUserId: String
-    public let userId: String
 }
 
 struct UpdateUserRequestBody: Codable, Equatable, Hashable {
@@ -86,12 +90,6 @@ struct UpdateUserRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case firstName
-        case lastName
-        case name
-    }
-
     public let firstName: String?
     public let lastName: String?
     public let name: String?
@@ -106,6 +104,14 @@ struct UpdateUserRequestBody: Codable, Equatable, Hashable {
         try container.encode(firstName, forKey: .firstName)
         try container.encode(lastName, forKey: .lastName)
         try container.encode(name, forKey: .name)
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case firstName
+        case lastName
+        case name
     }
 }
 
@@ -248,10 +254,10 @@ public struct ParraAuthChallenge: Codable, Equatable, Hashable {
 }
 
 public enum ParraIdentityType: String, Codable {
-    case username = "username"
-    case email = "email"
+    case username
+    case email
     case phoneNumber = "phone_number"
-    case anonymous = "anonymous"
+    case anonymous
     case uknownIdentity = "unknown_identity"
 }
 
@@ -335,31 +341,35 @@ struct PasswordlessChallengeRequestBody: Codable, Equatable, Hashable {
 }
 
 struct CreateAnonymousTokenRequestBody: Codable, Equatable, Hashable, Sendable {
-    let token: String?
+    // MARK: - Lifecycle
 
     public init(
         token: String?
     ) {
         self.token = token
     }
+
+    // MARK: - Internal
+
+    let token: String?
 }
 
 struct LoginUserRequestBody: Codable, Equatable, Hashable {
-    public let anonymousToken: String?
+    // MARK: - Lifecycle
 
     public init(
         anonymousToken: String?
     ) {
         self.anonymousToken = anonymousToken
     }
+
+    // MARK: - Public
+
+    public let anonymousToken: String?
 }
 
 struct AuthToken: Codable, Equatable, Hashable {
-    public let tokenType: String
-    public let accessToken: String
-    public let expiresIn: TimeInterval?
-    public let refreshToken: String?
-    public let scope: String?
+    // MARK: - Lifecycle
 
     public init(
         tokenType: String,
@@ -374,11 +384,18 @@ struct AuthToken: Codable, Equatable, Hashable {
         self.refreshToken = refreshToken
         self.scope = scope
     }
+
+    // MARK: - Public
+
+    public let tokenType: String
+    public let accessToken: String
+    public let expiresIn: TimeInterval?
+    public let refreshToken: String?
+    public let scope: String?
 }
 
 struct AuthLogoutResponseBody: Codable, Equatable, Hashable {
-    public let anonymousToken: AuthToken?
-    public let guestToken: AuthToken?
+    // MARK: - Lifecycle
 
     public init(
         anonymousToken: AuthToken?,
@@ -387,6 +404,11 @@ struct AuthLogoutResponseBody: Codable, Equatable, Hashable {
         self.anonymousToken = anonymousToken
         self.guestToken = guestToken
     }
+
+    // MARK: - Public
+
+    public let anonymousToken: AuthToken?
+    public let guestToken: AuthToken?
 }
 
 struct CreateUserRequestBody: Codable, Equatable, Hashable {
@@ -452,13 +474,15 @@ struct UserInfoResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let roles: [String]
+    public let user: ParraUser.Info
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case roles
         case user
     }
-
-    public let roles: [String]
-    public let user: ParraUser.Info
 }
 
 struct ListUsersQuery: Codable, Equatable, Hashable {
@@ -484,6 +508,16 @@ struct ListUsersQuery: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let select: String?
+    public let top: Int?
+    public let skip: Int?
+    public let orderBy: String?
+    public let filter: String?
+    public let expand: String?
+    public let search: String?
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case select = "$select"
         case top = "$top"
@@ -493,14 +527,6 @@ struct ListUsersQuery: Codable, Equatable, Hashable {
         case expand = "$expand"
         case search = "$search"
     }
-
-    public let select: String?
-    public let top: Int?
-    public let skip: Int?
-    public let orderBy: String?
-    public let filter: String?
-    public let expand: String?
-    public let search: String?
 }
 
 struct WebAuthnAuthenticateChallengeRequest: Codable, Equatable, Hashable {

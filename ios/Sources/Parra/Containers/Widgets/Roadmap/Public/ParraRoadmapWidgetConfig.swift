@@ -1,5 +1,5 @@
 //
-//  RoadmapWidgetConfig.swift
+//  ParraRoadmapWidgetConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/2/24.

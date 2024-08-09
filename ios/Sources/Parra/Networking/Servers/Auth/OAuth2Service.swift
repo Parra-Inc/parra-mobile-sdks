@@ -61,48 +61,6 @@ final class OAuth2Service {
         )
     }
 
-    private func authenticateWithAccount(
-        endpoint: IssuerEndpoint,
-        authType: AuthType
-    ) async throws -> TokenResponse {
-        var data: [String: String] = [
-            "scope": "parra openid offline_access profile email phone",
-            "client_id": clientId
-        ]
-
-        switch authType {
-        case .usernamePassword(let email, let password):
-            data["grant_type"] = "password"
-            data["username"] = email
-            data["password"] = password
-
-        case .passwordlessEmail(let code):
-            data["grant_type"] = "passwordless_otp"
-            data["code"] = code
-
-        case .passwordlessSms(let code):
-            data["grant_type"] = "passwordless_otp"
-            data["code"] = code
-
-        case .webauthn(let code):
-            data["grant_type"] = "webauthn_token"
-            data["code"] = code
-
-        default:
-            break
-        }
-
-        let tokenUrl = try createTokenUrl(
-            endpoint: endpoint
-        )
-
-        return try await authServer.performFormPostRequest(
-            to: tokenUrl,
-            data: data,
-            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
-        )
-    }
-
     func refreshToken(
         _ token: ParraUser.Credential.Token,
         timeout: TimeInterval
@@ -182,6 +140,48 @@ final class OAuth2Service {
     }
 
     // MARK: - Private
+
+    private func authenticateWithAccount(
+        endpoint: IssuerEndpoint,
+        authType: AuthType
+    ) async throws -> TokenResponse {
+        var data: [String: String] = [
+            "scope": "parra openid offline_access profile email phone",
+            "client_id": clientId
+        ]
+
+        switch authType {
+        case .usernamePassword(let email, let password):
+            data["grant_type"] = "password"
+            data["username"] = email
+            data["password"] = password
+
+        case .passwordlessEmail(let code):
+            data["grant_type"] = "passwordless_otp"
+            data["code"] = code
+
+        case .passwordlessSms(let code):
+            data["grant_type"] = "passwordless_otp"
+            data["code"] = code
+
+        case .webauthn(let code):
+            data["grant_type"] = "webauthn_token"
+            data["code"] = code
+
+        default:
+            break
+        }
+
+        let tokenUrl = try createTokenUrl(
+            endpoint: endpoint
+        )
+
+        return try await authServer.performFormPostRequest(
+            to: tokenUrl,
+            data: data,
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData
+        )
+    }
 
     private func createTokenUrl(
         endpoint: IssuerEndpoint

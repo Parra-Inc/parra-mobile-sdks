@@ -66,7 +66,6 @@ public struct ParraRequiredAuthWindow<
     // MARK: - Internal
 
     @Environment(\.parra) var parra
-    @Environment(\.parraAuthState) private var parraAuthState
 
     @ViewBuilder var content: some View {
         switch authStateMirror {
@@ -85,6 +84,8 @@ public struct ParraRequiredAuthWindow<
     }
 
     // MARK: - Private
+
+    @Environment(\.parraAuthState) private var parraAuthState
 
     private let authenticatedContent: (
         _ user: ParraUser

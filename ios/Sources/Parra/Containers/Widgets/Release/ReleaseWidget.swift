@@ -54,8 +54,6 @@ struct ReleaseWidget: Container {
 
     let config: ParraChangelogWidgetConfig
 
-    @Environment(\.parraTheme) private var parraTheme
-
     var sections: some View {
         LazyVStack(alignment: .leading, spacing: 24) {
             ForEach(contentObserver.content.sections) { section in
@@ -244,6 +242,8 @@ struct ReleaseWidget: Container {
     }
 
     // MARK: - Private
+
+    @Environment(\.parraTheme) private var parraTheme
 
     @EnvironmentObject private var navigationState: NavigationState
 }

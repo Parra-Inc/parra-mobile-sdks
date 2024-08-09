@@ -15,7 +15,7 @@ enum ParraDataSanitizer {
         // If any of the known naughty header words either exactly match
         // any of the provided headers, or have a header that contains any of
         // the naughty words in part.
-        
+
         return httpHeaders.filter { name, _ in
             let upperName = name.uppercased()
 

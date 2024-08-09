@@ -111,7 +111,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
     // MARK: - Private
 
-
     @FocusState private var isFocused: Bool
     @State private var identity = ""
     @State private var continueButtonContent: ParraTextButtonContent = .init(

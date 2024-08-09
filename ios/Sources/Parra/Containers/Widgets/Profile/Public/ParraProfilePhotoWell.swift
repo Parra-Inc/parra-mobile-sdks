@@ -43,10 +43,11 @@ public struct ParraProfilePhotoWell: View {
     // MARK: - Internal
 
     @Environment(\.parra) var parra
-    @Environment(\.parraAuthState) private var parraAuthState
-    @Environment(\.parraTheme) private var parraTheme
 
     // MARK: - Private
+
+    @Environment(\.parraAuthState) private var parraAuthState
+    @Environment(\.parraTheme) private var parraTheme
 
     private let size: CGSize
 

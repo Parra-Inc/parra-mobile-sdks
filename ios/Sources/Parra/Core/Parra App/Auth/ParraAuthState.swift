@@ -9,6 +9,15 @@
 import SwiftUI
 
 public enum ParraAuthState: Equatable, CustomStringConvertible {
+    case authenticated(ParraUser) // unauthenticated == any other case
+    case anonymous(ParraUser)
+    /// Only available when anonymous auth is disabled for the tenant.
+    case guest(ParraGuest) // no sessions
+    case error(Error)
+    case undetermined
+
+    // MARK: - Public
+
     public var user: ParraUser? {
         switch self {
         case .authenticated(let user), .anonymous(let user):
@@ -17,13 +26,6 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
             return nil
         }
     }
-
-    case authenticated(ParraUser) // unauthenticated == any other case
-    case anonymous(ParraUser)
-    /// Only available when anonymous auth is disabled for the tenant.
-    case guest(ParraGuest) // no sessions
-    case error(Error)
-    case undetermined
 
     public var isLoggedIn: Bool {
         switch self {
@@ -60,8 +62,6 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
             return false
         }
     }
-
-    // MARK: - Public
 
     public var description: String {
         switch self {

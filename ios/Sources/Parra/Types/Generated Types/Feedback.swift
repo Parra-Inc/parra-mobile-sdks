@@ -31,6 +31,16 @@ struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let title: String
+    public let description: String?
+    public let data: ParraFeedbackFormData
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -40,14 +50,6 @@ struct FeedbackFormResponse: Codable, Equatable, Hashable, Identifiable {
         case description
         case data
     }
-
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let title: String
-    public let description: String?
-    public let data: ParraFeedbackFormData
 }
 
 /// User facing
@@ -145,6 +147,14 @@ public struct ParraFeedbackFormDataStub: Codable, Equatable, Hashable, Identifia
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let data: ParraFeedbackFormData
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -152,12 +162,6 @@ public struct ParraFeedbackFormDataStub: Codable, Equatable, Hashable, Identifia
         case deletedAt
         case data
     }
-
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let data: ParraFeedbackFormData
 }
 
 public enum ParraFeedbackFormFieldType: String, Codable {
@@ -222,15 +226,6 @@ public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case name
-        case title
-        case helperText
-        case type
-        case required
-        case data
-    }
-
     public let name: String
     public let title: String?
     public let helperText: String?
@@ -240,6 +235,17 @@ public struct ParraFeedbackFormField: Codable, Equatable, Hashable, Identifiable
 
     public var id: String {
         return name
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case title
+        case helperText
+        case type
+        case required
+        case data
     }
 }
 
@@ -288,6 +294,14 @@ public struct ParraFeedbackFormTextFieldData: Codable, Equatable, Hashable,
 
     // MARK: - Public
 
+    public let placeholder: String?
+    public let lines: Int?
+    public let minCharacters: Int?
+    public let maxCharacters: Int?
+    public let maxHeight: Int?
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case placeholder
         case lines
@@ -295,12 +309,6 @@ public struct ParraFeedbackFormTextFieldData: Codable, Equatable, Hashable,
         case maxCharacters
         case maxHeight
     }
-
-    public let placeholder: String?
-    public let lines: Int?
-    public let minCharacters: Int?
-    public let maxCharacters: Int?
-    public let maxHeight: Int?
 }
 
 public struct ParraFeedbackFormSelectFieldData: Codable, Equatable, Hashable,
@@ -340,18 +348,20 @@ public struct ParraFeedbackFormSelectFieldOption: Codable, Equatable, Hashable,
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case title
-        case value
-        case isOther
-    }
-
     public let title: String
     public let value: String
     public let isOther: Bool?
 
     public var id: String {
         value
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case title
+        case value
+        case isOther
     }
 }
 
@@ -376,6 +386,15 @@ struct FeedbackFormStub: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let title: String
+    public let description: String?
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -384,13 +403,6 @@ struct FeedbackFormStub: Codable, Equatable, Hashable, Identifiable {
         case title
         case description
     }
-
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let title: String
-    public let description: String?
 }
 
 struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
@@ -412,6 +424,14 @@ struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [FeedbackFormStub]
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -419,12 +439,6 @@ struct FeedbackFormCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
-
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: [FeedbackFormStub]
 }
 
 struct FeedbackMetrics: Codable, Equatable, Hashable {
@@ -444,17 +458,19 @@ struct FeedbackMetrics: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let userCount: Int
+    public let answerCount: Int
+    public let questionCount: Int
+    public let questionsCreatedThisMonth: Int
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case userCount
         case answerCount
         case questionCount
         case questionsCreatedThisMonth
     }
-
-    public let userCount: Int
-    public let answerCount: Int
-    public let questionCount: Int
-    public let questionsCreatedThisMonth: Int
 }
 
 public struct ParraAnswerData: Codable, Equatable, Hashable {
@@ -487,6 +503,17 @@ public struct ParraAnswer: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let questionId: String
+    public let userId: String
+    public let tenantId: String
+    public let data: ParraAnswerData
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -497,15 +524,6 @@ public struct ParraAnswer: Codable, Equatable, Hashable, Identifiable {
         case tenantId
         case data
     }
-
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let questionId: String
-    public let userId: String
-    public let tenantId: String
-    public let data: ParraAnswerData
 }
 
 struct AnswerQuestionBody: Codable, Equatable, Hashable {
@@ -585,17 +603,6 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case campaignId
-        case campaignActionId
-        case questionId
-        case type
-        case displayType
-        case version
-        case data
-    }
-
     public let id: String
     public let campaignId: String
     public let campaignActionId: String
@@ -620,6 +627,19 @@ public struct ParraCardItem: Codable, Equatable, Hashable {
         case .question(let question):
             try container.encode(question, forKey: .data)
         }
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case campaignId
+        case campaignActionId
+        case questionId
+        case type
+        case displayType
+        case version
+        case data
     }
 }
 
@@ -695,17 +715,19 @@ public struct ParraCheckboxQuestionOption: Codable, Equatable, Hashable,
 
     // MARK: - Public
 
+    public let title: String
+    public let value: String
+    public let isOther: Bool?
+    public let id: String
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case title
         case value
         case isOther
         case id
     }
-
-    public let title: String
-    public let value: String
-    public let isOther: Bool?
-    public let id: String
 }
 
 public struct ParraCheckboxQuestionBody: Codable, Equatable, Hashable {
@@ -766,14 +788,6 @@ public struct ParraImageQuestionOption: Codable, Equatable, Hashable, Identifiab
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case imageAssetId
-        case title
-        case value
-        case id
-        case imageAssetUrl
-    }
-
     public let title: String?
     public let value: String
     public let id: String
@@ -787,6 +801,16 @@ public struct ParraImageQuestionOption: Codable, Equatable, Hashable, Identifiab
         try container.encode(id, forKey: .id)
         try container.encode(asset.id, forKey: .imageAssetId)
         try container.encode(asset.url, forKey: .imageAssetUrl)
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case imageAssetId
+        case title
+        case value
+        case id
+        case imageAssetUrl
     }
 }
 
@@ -821,17 +845,19 @@ public struct ParraChoiceQuestionOption: Codable, Equatable, Hashable, Identifia
 
     // MARK: - Public
 
+    public let title: String
+    public let value: String
+    public let isOther: Bool?
+    public let id: String
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case title
         case value
         case isOther
         case id
     }
-
-    public let title: String
-    public let value: String
-    public let isOther: Bool?
-    public let id: String
 }
 
 public struct ParraChoiceQuestionBody: Codable, Equatable, Hashable {
@@ -880,15 +906,17 @@ public struct ParraShortTextQuestionBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let placeholder: String?
+    public let minLength: Int
+    public let maxLength: Int
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case placeholder
         case minLength
         case maxLength
     }
-
-    public let placeholder: String?
-    public let minLength: Int
-    public let maxLength: Int
 }
 
 public struct ParraLongTextQuestionBody: Codable, Equatable, Hashable {
@@ -923,15 +951,17 @@ public struct ParraLongTextQuestionBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let placeholder: String?
+    public let minLength: Int
+    public let maxLength: Int
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case placeholder
         case minLength
         case maxLength
     }
-
-    public let placeholder: String?
-    public let minLength: Int
-    public let maxLength: Int
 }
 
 public struct ParraBooleanQuestionOption: Codable, Equatable, Hashable,
@@ -1048,17 +1078,19 @@ public struct ParraRatingQuestionBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let options: [ParraRatingQuestionOption]
+    public let leadingLabel: String?
+    public let centerLabel: String?
+    public let trailingLabel: String?
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case options
         case leadingLabel
         case centerLabel
         case trailingLabel
     }
-
-    public let options: [ParraRatingQuestionOption]
-    public let leadingLabel: String?
-    public let centerLabel: String?
-    public let trailingLabel: String?
 }
 
 public enum ParraQuestionData: Codable, Equatable, Hashable {
@@ -1181,23 +1213,6 @@ public struct ParraQuestion: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt
-        case updatedAt
-        case deletedAt
-        case tenantId
-        case title
-        case subtitle
-        case type
-        case kind
-        case data
-        case active
-        case expiresAt
-        case answerQuota
-        case answer
-    }
-
     public let id: String
     public let createdAt: String
     public let updatedAt: String
@@ -1247,6 +1262,25 @@ public struct ParraQuestion: Codable, Equatable, Hashable, Identifiable {
             try container.encode(booleanBody, forKey: .data)
         }
     }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case tenantId
+        case title
+        case subtitle
+        case type
+        case kind
+        case data
+        case active
+        case expiresAt
+        case answerQuota
+        case answer
+    }
 }
 
 struct QuestionCollectionResponse: Codable, Equatable, Hashable {
@@ -1268,6 +1302,14 @@ struct QuestionCollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [ParraQuestion]
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -1275,10 +1317,4 @@ struct QuestionCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
-
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: [ParraQuestion]
 }

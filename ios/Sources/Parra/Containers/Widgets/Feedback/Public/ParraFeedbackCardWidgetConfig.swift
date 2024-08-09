@@ -1,5 +1,5 @@
 //
-//  FeedbackCardWidgetConfig.swift
+//  ParraFeedbackCardWidgetConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/21/24.

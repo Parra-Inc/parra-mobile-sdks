@@ -82,7 +82,7 @@ struct ParraViewPreview<Content>: View where Content: View {
     private let parra: Parra
 
     @StateObject private var alertManager: AlertManager
-    
+
     @State private var authStateManager: ParraAuthStateManager
     @State private var themeManager: ParraThemeManager = .shared
 }

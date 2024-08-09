@@ -38,7 +38,8 @@ public extension Parra {
         guard let icons = bundle.object(
             forInfoDictionaryKey: "CFBundleIcons"
         ) as? [String: Any],
-            let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any] else {
+            let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any] else
+        {
             return nil
         }
 

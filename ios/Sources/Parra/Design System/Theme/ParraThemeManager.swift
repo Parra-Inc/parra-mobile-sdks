@@ -19,11 +19,6 @@ private let logger = Logger(category: "Parra Theme Manager")
 public class ParraThemeManager {
     // MARK: - Lifecycle
 
-    static let shared = ParraThemeManager(
-        theme: .default,
-        notificationCenter: ParraNotificationCenter.default
-    )
-
     private init(
         theme: ParraTheme,
         notificationCenter: NotificationCenterType
@@ -67,7 +62,6 @@ public class ParraThemeManager {
         )
     }
 
-
     /// The user's preference for whether the app should render in light, dark,
     /// or system appearance mode. By default, this will be ``system``,
     /// indicating that the default system light/dark mode preference will be
@@ -94,6 +88,11 @@ public class ParraThemeManager {
     enum Constant {
         static let themeOptionsKey = "theme_options"
     }
+
+    static let shared = ParraThemeManager(
+        theme: .default,
+        notificationCenter: ParraNotificationCenter.default
+    )
 
     let themeOptionsCache = ParraUserDefaultsStorageModule<ThemeOptions>(
         key: Constant.themeOptionsKey,

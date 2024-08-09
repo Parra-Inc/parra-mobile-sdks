@@ -9,7 +9,7 @@
 import Foundation
 
 extension ParraInternal {
-    internal enum Demo {
+    enum Demo {
         /// The Parra sample app's workspace ID. You should not use this.
         /// Instead, grab your workspace ID from
         /// https://parra.io/dashboard/settings

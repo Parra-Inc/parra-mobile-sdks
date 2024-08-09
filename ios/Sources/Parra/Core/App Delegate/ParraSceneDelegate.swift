@@ -10,8 +10,7 @@ import SwiftUI
 import UIKit
 
 @MainActor
-open class ParraSceneDelegate: NSObject, ObservableObject, UIWindowSceneDelegate
-{
+open class ParraSceneDelegate: NSObject, ObservableObject, UIWindowSceneDelegate {
     // MARK: - Lifecycle
 
     override public init() {

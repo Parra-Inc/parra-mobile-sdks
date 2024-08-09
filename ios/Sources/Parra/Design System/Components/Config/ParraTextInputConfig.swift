@@ -1,5 +1,5 @@
 //
-//  TextInputConfig.swift
+//  ParraTextInputConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/20/24.

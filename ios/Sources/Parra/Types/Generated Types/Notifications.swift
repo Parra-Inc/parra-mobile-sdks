@@ -19,11 +19,13 @@ struct NotificationRecipient: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let userId: String?
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case userId
     }
-
-    public let userId: String?
 }
 
 struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
@@ -63,6 +65,23 @@ struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let type: String?
+    public let title: String
+    public let subtitle: String?
+    public let body: String?
+    public let imageUrl: String?
+    public let data: [String: ParraAnyCodable]?
+    public let action: [String: ParraAnyCodable]?
+    public let deduplicationId: String?
+    public let groupId: String?
+    public let visible: Bool?
+    public let silent: Bool?
+    public let contentAvailable: Bool?
+    public let expiresAt: String?
+    public let recipients: [NotificationRecipient]
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case type
         case title
@@ -79,21 +98,6 @@ struct CreateNotificationRequestBody: Codable, Equatable, Hashable {
         case expiresAt
         case recipients
     }
-
-    public let type: String?
-    public let title: String
-    public let subtitle: String?
-    public let body: String?
-    public let imageUrl: String?
-    public let data: [String: ParraAnyCodable]?
-    public let action: [String: ParraAnyCodable]?
-    public let deduplicationId: String?
-    public let groupId: String?
-    public let visible: Bool?
-    public let silent: Bool?
-    public let contentAvailable: Bool?
-    public let expiresAt: String?
-    public let recipients: [NotificationRecipient]
 }
 
 struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
@@ -145,6 +149,29 @@ struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let type: String?
+    public let title: String
+    public let subtitle: String?
+    public let body: String?
+    public let imageUrl: String?
+    public let data: [String: ParraAnyCodable]?
+    public let action: [String: ParraAnyCodable]?
+    public let deduplicationId: String?
+    public let groupId: String?
+    public let visible: Bool?
+    public let silent: Bool?
+    public let contentAvailable: Bool?
+    public let expiresAt: String?
+    public let userId: String?
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let viewedAt: String?
+    public let version: String?
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case type
         case title
@@ -167,27 +194,6 @@ struct NotificationResponse: Codable, Equatable, Hashable, Identifiable {
         case viewedAt
         case version
     }
-
-    public let type: String?
-    public let title: String
-    public let subtitle: String?
-    public let body: String?
-    public let imageUrl: String?
-    public let data: [String: ParraAnyCodable]?
-    public let action: [String: ParraAnyCodable]?
-    public let deduplicationId: String?
-    public let groupId: String?
-    public let visible: Bool?
-    public let silent: Bool?
-    public let contentAvailable: Bool?
-    public let expiresAt: String?
-    public let userId: String?
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let viewedAt: String?
-    public let version: String?
 }
 
 struct NotificationCollectionResponse: Codable, Equatable, Hashable {
@@ -209,6 +215,14 @@ struct NotificationCollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [NotificationResponse]
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -216,12 +230,6 @@ struct NotificationCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
-
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: [NotificationResponse]
 }
 
 struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
@@ -235,11 +243,13 @@ struct ReadNotificationsRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let notificationIds: [String]
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case notificationIds
     }
-
-    public let notificationIds: [String]
 }
 
 struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
@@ -255,11 +265,13 @@ struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let userId: String?
+    public let apnsToken: String
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case userId
         case apnsToken
     }
-
-    public let userId: String?
-    public let apnsToken: String
 }

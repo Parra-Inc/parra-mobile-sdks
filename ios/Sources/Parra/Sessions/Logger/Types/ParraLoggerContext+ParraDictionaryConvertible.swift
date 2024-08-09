@@ -10,12 +10,11 @@ import Foundation
 
 extension ParraLoggerContext: ParraSanitizedDictionaryConvertible {
     var sanitized: ParraSanitizedDictionary {
-
         // Note: Many of these have been commented out since we're not using
         // them yet.
 
         var params: [String: Any] = [
-            "module": module,
+            "module": module
 //            "file_name": fileName
         ]
 //

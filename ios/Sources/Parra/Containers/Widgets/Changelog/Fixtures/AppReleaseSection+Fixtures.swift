@@ -62,7 +62,7 @@ private let fakeEnhancements = [
     "Enhanced social media integration for smoother sharing and engagement."
 ]
 
-// MARK: - AppReleaseSection + ParraFixture
+// MARK: - ParraAppReleaseSection + ParraFixture
 
 extension ParraAppReleaseSection: ParraFixture {
     static func validStates() -> [ParraAppReleaseSection] {

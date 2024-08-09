@@ -12,39 +12,6 @@ import Foundation
 //              info/credential objects are unable to be parsed on app launch.
 public extension ParraUser.Credential {
     struct Token: Codable, Equatable, Hashable, Sendable {
-        public enum TokenType: Codable, Equatable, Hashable, Sendable, CustomStringConvertible {
-            case user
-            case anonymous
-            case guest
-
-            public var description: String {
-                switch self {
-                case .anonymous:
-                    return "anonymous"
-                case .guest:
-                    return "guest"
-                case .user:
-                    return "user"
-                }
-            }
-
-            internal var isAuthenticated: Bool {
-                return self == .user
-            }
-
-            internal var issuerEndpoint: IssuerEndpoint {
-                switch self {
-                case .anonymous:
-                    return .postAnonymousAuthentication
-                case .guest:
-                    return .postGuestAuthentication
-                case .user:
-                    return .postAuthentication
-                }
-            }
-        }
-
-
         // MARK: - Lifecycle
 
         init(
@@ -53,7 +20,7 @@ public extension ParraUser.Credential {
         ) {
             self.accessToken = authToken.accessToken
             self.tokenType = authToken.tokenType
-            self.expiresAt =  if let expiresIn = authToken.expiresIn {
+            self.expiresAt = if let expiresIn = authToken.expiresIn {
                 Date.now.addingTimeInterval(expiresIn)
             } else {
                 nil
@@ -91,6 +58,44 @@ public extension ParraUser.Credential {
         }
 
         // MARK: - Public
+
+        public enum TokenType: Codable, Equatable, Hashable, Sendable,
+            CustomStringConvertible
+        {
+            case user
+            case anonymous
+            case guest
+
+            // MARK: - Public
+
+            public var description: String {
+                switch self {
+                case .anonymous:
+                    return "anonymous"
+                case .guest:
+                    return "guest"
+                case .user:
+                    return "user"
+                }
+            }
+
+            // MARK: - Internal
+
+            var isAuthenticated: Bool {
+                return self == .user
+            }
+
+            var issuerEndpoint: IssuerEndpoint {
+                switch self {
+                case .anonymous:
+                    return .postAnonymousAuthentication
+                case .guest:
+                    return .postGuestAuthentication
+                case .user:
+                    return .postAuthentication
+                }
+            }
+        }
 
         public let accessToken: String
         public let tokenType: String

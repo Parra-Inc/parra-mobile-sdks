@@ -21,13 +21,15 @@ struct CreateTenantRequestBody: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let name: String
+    public let isTest: Bool
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case name
         case isTest
     }
-
-    public let name: String
-    public let isTest: Bool
 }
 
 public struct ParraTenant: Codable, Equatable, Hashable, Identifiable {
@@ -51,6 +53,15 @@ public struct ParraTenant: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let name: String
+    public let isTest: Bool
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -59,13 +70,6 @@ public struct ParraTenant: Codable, Equatable, Hashable, Identifiable {
         case name
         case isTest
     }
-
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let name: String
-    public let isTest: Bool
 }
 
 struct TenantCollectionResponse: Codable, Equatable, Hashable {
@@ -87,6 +91,14 @@ struct TenantCollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [ParraTenant]
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -94,12 +106,6 @@ struct TenantCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
-
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: [ParraTenant]
 }
 
 public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {

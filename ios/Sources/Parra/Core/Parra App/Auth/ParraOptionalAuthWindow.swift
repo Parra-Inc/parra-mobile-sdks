@@ -48,7 +48,7 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
         return content(parraAuthState)
     }
 
-    // MARK: - Internal
+    // MARK: - Private
 
     @Environment(\.parraAuthState) private var parraAuthState
     @Environment(\.parraAppInfo) private var parraAppInfo

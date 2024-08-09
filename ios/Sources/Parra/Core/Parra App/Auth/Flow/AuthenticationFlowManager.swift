@@ -17,15 +17,9 @@ private let logger = Logger()
 class AuthenticationFlowManager: ObservableObject {
     // MARK: - Lifecycle
 
-    static let shared = AuthenticationFlowManager()
-
     private init() {}
 
     // MARK: - Internal
-
-    var flowConfig: ParraAuthenticationFlowConfig = .default
-    var delegate: AuthenticationFlowManagerDelegate?
-    var navigationState: NavigationState?
 
     enum AuthScreen: CustomStringConvertible, Hashable {
         case landingScreen(
@@ -73,6 +67,19 @@ class AuthenticationFlowManager: ObservableObject {
             hasher.combine(description)
         }
     }
+
+    static let shared = AuthenticationFlowManager()
+
+    var flowConfig: ParraAuthenticationFlowConfig = .default
+    var delegate: AuthenticationFlowManagerDelegate?
+    var navigationState: NavigationState?
+
+    /// Whether an auto login has been triggered, per this load of the sign in
+    /// view. There's a double render bug with sheet that requires us to only
+    /// run this flow once, and not allow it to retrigger until this variable
+    /// has been reset (when the flow manager is reconfigured for another
+    /// presentation).
+    var hasPasskeyAutoLoginBeenRequested = false
 
     @ViewBuilder
     func provideAuthScreen(
@@ -177,13 +184,6 @@ class AuthenticationFlowManager: ObservableObject {
         authService.cancelPasskeyRequests()
     }
 
-    /// Whether an auto login has been triggered, per this load of the sign in
-    /// view. There's a double render bug with sheet that requires us to only
-    /// run this flow once, and not allow it to retrigger until this variable
-    /// has been reset (when the flow manager is reconfigured for another
-    /// presentation).
-    var hasPasskeyAutoLoginBeenRequested = false
-
     /// Silent requests when screens appear that _may_ result in prompts
     func triggerPasskeyLoginRequest(
         username: String?,
@@ -223,9 +223,15 @@ class AuthenticationFlowManager: ObservableObject {
                 }
             case .failed:
                 if error.localizedDescription.contains("not associated with domain") {
-                    logger.warn("Passkey login prompt failed. \(error.localizedDescription). Your configuration may be correct and Apple's CDN hasn't picked up changes to your .well-known/apple-app-site-association file yet.")
+                    logger
+                        .warn(
+                            "Passkey login prompt failed. \(error.localizedDescription). Your configuration may be correct and Apple's CDN hasn't picked up changes to your .well-known/apple-app-site-association file yet."
+                        )
                 } else {
-                    logger.error("Passkey login prompt failed. \(error.localizedDescription)")
+                    logger
+                        .error(
+                            "Passkey login prompt failed. \(error.localizedDescription)"
+                        )
                 }
             default:
                 logger.error(

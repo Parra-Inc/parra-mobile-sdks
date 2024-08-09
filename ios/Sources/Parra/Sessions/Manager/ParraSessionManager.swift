@@ -227,7 +227,7 @@ class ParraSessionManager {
 
                     let chunkedSessions = sessionUploadWithCrashes.events.chunked(
                         into: maxSessionEventsToUpload
-                    ).enumerated().map { (index, eventsChunk) in
+                    ).enumerated().map { index, eventsChunk in
                         return sessionUploadWithCrashes.withChunkedEvents(
                             newEvents: eventsChunk,
                             chunkIndex: index

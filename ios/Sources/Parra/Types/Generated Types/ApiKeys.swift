@@ -48,6 +48,16 @@ struct ApiKey: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let name: String
+    public let description: String?
+    public let tenantId: String
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -57,14 +67,6 @@ struct ApiKey: Codable, Equatable, Hashable, Identifiable {
         case description
         case tenantId
     }
-
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let name: String
-    public let description: String?
-    public let tenantId: String
 }
 
 struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
@@ -94,6 +96,17 @@ struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let deletedAt: String?
+    public let name: String
+    public let description: String?
+    public let tenantId: String
+    public let secret: String
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -104,15 +117,6 @@ struct ApiKeyWithSecretResponse: Codable, Equatable, Hashable,
         case tenantId
         case secret
     }
-
-    public let id: String
-    public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public let name: String
-    public let description: String?
-    public let tenantId: String
-    public let secret: String
 }
 
 struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
@@ -134,6 +138,14 @@ struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [ApiKey]
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -141,10 +153,4 @@ struct ApiKeyCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
-
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: [ApiKey]
 }

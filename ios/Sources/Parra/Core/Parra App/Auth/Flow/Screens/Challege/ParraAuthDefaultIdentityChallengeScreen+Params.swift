@@ -69,7 +69,7 @@ public extension ParraAuthDefaultIdentityChallengeScreen {
         /// data.
         public let submit: (_ challengeResponse: ParraChallengeResponse) async throws
             -> Void
-        
+
         /// Navigates to a forgot/reset password flow.
         public let forgotPassword: () async throws -> Void
 

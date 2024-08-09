@@ -56,7 +56,7 @@ protocol _AnyDecodable {
     init<T>(_ value: T?)
 }
 
-// MARK: - AnyDecodable + _AnyDecodable
+// MARK: - ParraAnyDecodable + _AnyDecodable
 
 extension ParraAnyDecodable: _AnyDecodable {}
 
@@ -95,7 +95,7 @@ extension _AnyDecodable {
     }
 }
 
-// MARK: - AnyDecodable + Equatable
+// MARK: - ParraAnyDecodable + Equatable
 
 extension ParraAnyDecodable: Equatable {
     public static func == (lhs: ParraAnyDecodable, rhs: ParraAnyDecodable) -> Bool {
@@ -145,7 +145,7 @@ extension ParraAnyDecodable: Equatable {
     }
 }
 
-// MARK: - AnyDecodable + CustomStringConvertible
+// MARK: - ParraAnyDecodable + CustomStringConvertible
 
 extension ParraAnyDecodable: CustomStringConvertible {
     public var description: String {
@@ -160,7 +160,7 @@ extension ParraAnyDecodable: CustomStringConvertible {
     }
 }
 
-// MARK: - AnyDecodable + CustomDebugStringConvertible
+// MARK: - ParraAnyDecodable + CustomDebugStringConvertible
 
 extension ParraAnyDecodable: CustomDebugStringConvertible {
     public var debugDescription: String {
@@ -173,7 +173,7 @@ extension ParraAnyDecodable: CustomDebugStringConvertible {
     }
 }
 
-// MARK: - AnyDecodable + Hashable
+// MARK: - ParraAnyDecodable + Hashable
 
 extension ParraAnyDecodable: Hashable {
     public func hash(into hasher: inout Hasher) {

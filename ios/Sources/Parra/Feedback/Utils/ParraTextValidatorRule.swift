@@ -1,5 +1,5 @@
 //
-//  TextValidatorRule.swift
+//  ParraTextValidatorRule.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 4/18/24.

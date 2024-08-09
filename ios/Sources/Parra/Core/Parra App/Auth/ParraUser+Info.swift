@@ -64,38 +64,13 @@ public extension ParraUser {
             self.isAnonymous = isAnonymous
         }
 
-        // MARK: - Public
-
-        public let id: String
-        public let createdAt: Date
-        public let updatedAt: Date
-        public let deletedAt: Date?
-        public let tenantId: String
-        public let name: String?
-        public let avatar: ParraImageAssetStub?
-        public let identity: String?
-        public let username: String?
-        public let email: String?
-        public let emailVerified: Bool?
-        public let phoneNumber: String?
-        public let phoneNumberVerified: Bool?
-        public let firstName: String?
-        public let lastName: String?
-        public let locale: String?
-        public let signedUpAt: Date?
-        public let lastUpdatedAt: Date?
-        public let lastSeenAt: Date?
-        public let lastLoginAt: Date?
-        public let properties: [String: ParraAnyCodable]
-        public let identities: [ParraIdentity]
-        public let isAnonymous: Bool
-
         public init(
             from decoder: any Decoder
         ) throws {
-            let container: KeyedDecodingContainer<ParraUser.Info.CodingKeys> = try decoder.container(
-                keyedBy: ParraUser.Info.CodingKeys.self
-            )
+            let container: KeyedDecodingContainer<ParraUser.Info.CodingKeys> = try decoder
+                .container(
+                    keyedBy: ParraUser.Info.CodingKeys.self
+                )
             self.id = try container
                 .decode(String.self, forKey: .id)
             self.createdAt = try container
@@ -186,7 +161,7 @@ public extension ParraUser {
                 )
             self.properties = try container
                 .decode(
-                    [String : ParraAnyCodable].self,
+                    [String: ParraAnyCodable].self,
                     forKey: .properties
                 )
             self.identities = try container
@@ -201,6 +176,32 @@ public extension ParraUser {
                     forKey: .isAnonymous
                 )
         }
+
+        // MARK: - Public
+
+        public let id: String
+        public let createdAt: Date
+        public let updatedAt: Date
+        public let deletedAt: Date?
+        public let tenantId: String
+        public let name: String?
+        public let avatar: ParraImageAssetStub?
+        public let identity: String?
+        public let username: String?
+        public let email: String?
+        public let emailVerified: Bool?
+        public let phoneNumber: String?
+        public let phoneNumberVerified: Bool?
+        public let firstName: String?
+        public let lastName: String?
+        public let locale: String?
+        public let signedUpAt: Date?
+        public let lastUpdatedAt: Date?
+        public let lastSeenAt: Date?
+        public let lastLoginAt: Date?
+        public let properties: [String: ParraAnyCodable]
+        public let identities: [ParraIdentity]
+        public let isAnonymous: Bool
 
         public var displayName: String? {
             if let name {

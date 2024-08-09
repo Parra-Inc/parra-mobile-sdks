@@ -11,6 +11,20 @@ import Foundation
 /// Events for a session are stored seperately and must be put together with the
 /// session object before uploading it.
 struct ParraSessionUpload: Encodable {
+    // MARK: - Lifecycle
+
+    init(
+        session: ParraSession,
+        events: [ParraSessionEvent] = [],
+        chunkIndex: Int = 0
+    ) {
+        self.session = session
+        self.events = events
+        self.chunkIndex = chunkIndex
+    }
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case events
         case userProperties
@@ -22,16 +36,6 @@ struct ParraSessionUpload: Encodable {
     let session: ParraSession
     let events: [ParraSessionEvent]
     let chunkIndex: Int
-
-    init(
-        session: ParraSession,
-        events: [ParraSessionEvent] = [],
-        chunkIndex: Int = 0
-    ) {
-        self.session = session
-        self.events = events
-        self.chunkIndex = chunkIndex
-    }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(

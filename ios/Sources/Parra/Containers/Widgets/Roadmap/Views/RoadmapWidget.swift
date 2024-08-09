@@ -27,8 +27,6 @@ struct RoadmapWidget: Container {
     @StateObject var contentObserver: ContentObserver
     let config: ParraRoadmapWidgetConfig
 
-    @Environment(\.parraTheme) private var parraTheme
-
     var items: Binding<[TicketUserContent]> {
         return $contentObserver.ticketPaginator.items
     }
@@ -245,6 +243,8 @@ struct RoadmapWidget: Container {
     }
 
     // MARK: - Private
+
+    @Environment(\.parraTheme) private var parraTheme
 
     @State private var showNavigationDivider = false
 

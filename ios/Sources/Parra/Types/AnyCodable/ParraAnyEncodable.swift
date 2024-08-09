@@ -54,7 +54,7 @@ protocol _AnyEncodable {
     init<T>(_ value: T?)
 }
 
-// MARK: - AnyEncodable + _AnyEncodable
+// MARK: - ParraAnyEncodable + _AnyEncodable
 
 extension ParraAnyEncodable: _AnyEncodable {}
 
@@ -161,7 +161,7 @@ extension _AnyEncodable {
     #endif
 }
 
-// MARK: - AnyEncodable + Equatable
+// MARK: - ParraAnyEncodable + Equatable
 
 extension ParraAnyEncodable: Equatable {
     public static func == (lhs: ParraAnyEncodable, rhs: ParraAnyEncodable) -> Bool {
@@ -209,7 +209,7 @@ extension ParraAnyEncodable: Equatable {
     }
 }
 
-// MARK: - AnyEncodable + CustomStringConvertible
+// MARK: - ParraAnyEncodable + CustomStringConvertible
 
 extension ParraAnyEncodable: CustomStringConvertible {
     public var description: String {
@@ -224,7 +224,7 @@ extension ParraAnyEncodable: CustomStringConvertible {
     }
 }
 
-// MARK: - AnyEncodable + CustomDebugStringConvertible
+// MARK: - ParraAnyEncodable + CustomDebugStringConvertible
 
 extension ParraAnyEncodable: CustomDebugStringConvertible {
     public var debugDescription: String {
@@ -237,35 +237,35 @@ extension ParraAnyEncodable: CustomDebugStringConvertible {
     }
 }
 
-// MARK: - AnyEncodable + ExpressibleByNilLiteral
+// MARK: - ParraAnyEncodable + ExpressibleByNilLiteral
 
 extension ParraAnyEncodable: ExpressibleByNilLiteral {}
 
-// MARK: - AnyEncodable + ExpressibleByBooleanLiteral
+// MARK: - ParraAnyEncodable + ExpressibleByBooleanLiteral
 
 extension ParraAnyEncodable: ExpressibleByBooleanLiteral {}
 
-// MARK: - AnyEncodable + ExpressibleByIntegerLiteral
+// MARK: - ParraAnyEncodable + ExpressibleByIntegerLiteral
 
 extension ParraAnyEncodable: ExpressibleByIntegerLiteral {}
 
-// MARK: - AnyEncodable + ExpressibleByFloatLiteral
+// MARK: - ParraAnyEncodable + ExpressibleByFloatLiteral
 
 extension ParraAnyEncodable: ExpressibleByFloatLiteral {}
 
-// MARK: - AnyEncodable + ExpressibleByStringLiteral
+// MARK: - ParraAnyEncodable + ExpressibleByStringLiteral
 
 extension ParraAnyEncodable: ExpressibleByStringLiteral {}
 
-// MARK: - AnyEncodable + ExpressibleByStringInterpolation
+// MARK: - ParraAnyEncodable + ExpressibleByStringInterpolation
 
 extension ParraAnyEncodable: ExpressibleByStringInterpolation {}
 
-// MARK: - AnyEncodable + ExpressibleByArrayLiteral
+// MARK: - ParraAnyEncodable + ExpressibleByArrayLiteral
 
 extension ParraAnyEncodable: ExpressibleByArrayLiteral {}
 
-// MARK: - AnyEncodable + ExpressibleByDictionaryLiteral
+// MARK: - ParraAnyEncodable + ExpressibleByDictionaryLiteral
 
 extension ParraAnyEncodable: ExpressibleByDictionaryLiteral {}
 
@@ -306,7 +306,7 @@ extension _AnyEncodable {
     }
 }
 
-// MARK: - AnyEncodable + Hashable
+// MARK: - ParraAnyEncodable + Hashable
 
 extension ParraAnyEncodable: Hashable {
     public func hash(into hasher: inout Hasher) {

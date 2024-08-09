@@ -72,7 +72,7 @@ enum IssuerEndpoint: Endpoint {
         switch self {
         // MUST check backend before removing any from this list
         case .postPublicAuthentication, .postAnonymousAuthentication,
-                .postGuestAuthentication, .postAuthentication:
+             .postGuestAuthentication, .postAuthentication:
 
             return true
         default:

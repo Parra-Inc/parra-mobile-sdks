@@ -33,7 +33,6 @@ struct FeedbackCardWidget: Container {
     let config: ParraFeedbackCardWidgetConfig
 
     @Environment(\.parra) var parra
-    @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(
@@ -95,6 +94,8 @@ struct FeedbackCardWidget: Container {
     }
 
     // MARK: - Private
+
+    @Environment(\.parraTheme) private var parraTheme
 
     @ViewBuilder private var content: some View {
         let defaultWidgetAttributes = ParraAttributes.Widget.default(

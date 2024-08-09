@@ -1,5 +1,5 @@
 //
-//  ParraAuthState.swift
+//  ParraAuthStateManager.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 4/15/24.
@@ -13,10 +13,6 @@ private let logger = Logger()
 @Observable
 public class ParraAuthStateManager: CustomStringConvertible {
     // MARK: - Lifecycle
-
-    internal static let `default` = ParraAuthStateManager(
-        current: .undetermined
-    )
 
     public init() {
         self.current = .undetermined
@@ -37,6 +33,10 @@ public class ParraAuthStateManager: CustomStringConvertible {
     }
 
     // MARK: - Internal
+
+    static let `default` = ParraAuthStateManager(
+        current: .undetermined
+    )
 
     @MainActor
     func performInitialAuthCheck(

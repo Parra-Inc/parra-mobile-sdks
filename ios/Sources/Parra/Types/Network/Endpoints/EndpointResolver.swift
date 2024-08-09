@@ -102,27 +102,22 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/auth/login"
         case .postLogout:
             return "tenants/\(tenantId)/auth/logout"
-
         // Feedback
         case .getCards:
             return "cards"
         case .postBulkAnswerQuestions:
             return "bulk/questions/answer"
-
         // Feedback Forms
         case .getFeedbackForm(let formId):
             return "feedback/forms/\(formId)"
         case .postSubmitFeedbackForm(let formId):
             return "feedback/forms/\(formId)/submit"
-
         // Sessions
         case .postBulkSubmitSessions:
             return "tenants/\(tenantId)/sessions"
-
         // Push
         case .postPushTokens:
             return "tenants/\(tenantId)/push-tokens"
-
         // Roadmap
         case .getRoadmap:
             return "tenants/\(tenantId)/applications/\(applicationId)/roadmap"
@@ -132,7 +127,6 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
         case .deleteVoteForTicket(let ticketId):
             return "tenants/\(tenantId)/tickets/\(ticketId)/vote"
-
         // Releases
         case .getRelease(let releaseId):
             return "tenants/\(tenantId)/applications/\(applicationId)/releases/\(releaseId)"
@@ -140,7 +134,6 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/applications/\(applicationId)/releases"
         case .getAppInfo:
             return "tenants/\(tenantId)/applications/\(applicationId)/app-info"
-
         // Users
         case .getUserInfo:
             return "tenants/\(tenantId)/auth/user-info"

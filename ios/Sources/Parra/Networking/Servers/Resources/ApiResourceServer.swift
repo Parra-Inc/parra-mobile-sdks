@@ -226,7 +226,6 @@ final class ApiResourceServer: Server {
                         statusCode: response.statusCode
                     )
                 )
-
             // If unauthenticated, we need to refresh the auth token and try
             // again to obtain a credential. If unauthorized, we want to do
             // the same to purge a potentially invalid token and replace it

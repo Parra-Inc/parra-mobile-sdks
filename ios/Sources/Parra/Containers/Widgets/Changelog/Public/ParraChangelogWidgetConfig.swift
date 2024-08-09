@@ -1,5 +1,5 @@
 //
-//  ChangelogWidgetConfig.swift
+//  ParraChangelogWidgetConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/15/24.

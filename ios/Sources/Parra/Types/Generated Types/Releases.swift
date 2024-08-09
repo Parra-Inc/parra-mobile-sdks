@@ -87,23 +87,6 @@ public struct ParraUserTicket: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case ticketNumber
-        case createdAt
-        case updatedAt
-        case deletedAt
-        case title
-        case type
-        case description
-        case status
-        case displayStatus
-        case displayStatusBadgeTitle
-        case voteCount
-        case votingEnabled
-        case voted
-    }
-
     public let id: String
     public let ticketNumber: String
     public let createdAt: Date
@@ -122,6 +105,25 @@ public struct ParraUserTicket: Codable, Equatable, Hashable, Identifiable {
     /// being set.
     public let votingEnabled: Bool
     public let voted: Bool
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case ticketNumber
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case title
+        case type
+        case description
+        case status
+        case displayStatus
+        case displayStatusBadgeTitle
+        case voteCount
+        case votingEnabled
+        case voted
+    }
 }
 
 struct CollectionResponse: Codable, Equatable, Hashable {
@@ -141,17 +143,19 @@ struct CollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case page
         case pageCount
         case pageSize
         case totalCount
     }
-
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
 }
 
 public struct ParraUserTicketCollectionResponse: Codable, Equatable, Hashable {
@@ -173,6 +177,14 @@ public struct ParraUserTicketCollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [ParraUserTicket]
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -180,12 +192,6 @@ public struct ParraUserTicketCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
-
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: [ParraUserTicket]
 }
 
 public struct ParraRoadmapConfigurationTab: Codable, Equatable, Hashable,
@@ -310,6 +316,29 @@ public struct ParraTicketStub: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let title: String
+    public let shortTitle: String?
+    public let type: ParraTicketType
+    public let status: ParraTicketStatus
+    public let priority: ParraTicketPriority?
+    public let description: String?
+    public let votingEnabled: Bool
+    public let isPublic: Bool
+    public let userNoteId: String?
+    public let estimatedStartDate: Date?
+    public let estimatedCompletionDate: Date?
+    public let icon: ParraTicketIcon?
+    public let ticketNumber: String
+    public let tenantId: String
+    public let voteCount: Int
+    public let releasedAt: String?
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -332,27 +361,6 @@ public struct ParraTicketStub: Codable, Equatable, Hashable, Identifiable {
         case voteCount
         case releasedAt
     }
-
-    public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let title: String
-    public let shortTitle: String?
-    public let type: ParraTicketType
-    public let status: ParraTicketStatus
-    public let priority: ParraTicketPriority?
-    public let description: String?
-    public let votingEnabled: Bool
-    public let isPublic: Bool
-    public let userNoteId: String?
-    public let estimatedStartDate: Date?
-    public let estimatedCompletionDate: Date?
-    public let icon: ParraTicketIcon?
-    public let ticketNumber: String
-    public let tenantId: String
-    public let voteCount: Int
-    public let releasedAt: String?
 }
 
 struct Ticket: Codable, Equatable, Hashable, Identifiable {
@@ -404,6 +412,29 @@ struct Ticket: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let title: String
+    public let shortTitle: String?
+    public let type: ParraTicketType
+    public let status: ParraTicketStatus
+    public let priority: ParraTicketPriority?
+    public let description: String?
+    public let votingEnabled: Bool
+    public let isPublic: Bool
+    public let userNoteId: String?
+    public let estimatedStartDate: Date?
+    public let estimatedCompletionDate: Date?
+    public let ticketNumber: String
+    public let tenantId: String
+    public let voteCount: Int
+    public let releasedAt: String?
+    public let release: ReleaseStub
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -426,27 +457,6 @@ struct Ticket: Codable, Equatable, Hashable, Identifiable {
         case releasedAt
         case release
     }
-
-    public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let title: String
-    public let shortTitle: String?
-    public let type: ParraTicketType
-    public let status: ParraTicketStatus
-    public let priority: ParraTicketPriority?
-    public let description: String?
-    public let votingEnabled: Bool
-    public let isPublic: Bool
-    public let userNoteId: String?
-    public let estimatedStartDate: Date?
-    public let estimatedCompletionDate: Date?
-    public let ticketNumber: String
-    public let tenantId: String
-    public let voteCount: Int
-    public let releasedAt: String?
-    public let release: ReleaseStub
 }
 
 public struct ParraAppReleaseItem: Codable, Equatable, Hashable, Identifiable {
@@ -472,6 +482,16 @@ public struct ParraAppReleaseItem: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let releaseId: String
+    public let ticketId: String
+    public let ticket: ParraTicketStub
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -481,14 +501,6 @@ public struct ParraAppReleaseItem: Codable, Equatable, Hashable, Identifiable {
         case ticketId
         case ticket
     }
-
-    public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let releaseId: String
-    public let ticketId: String
-    public let ticket: ParraTicketStub
 }
 
 public struct ParraAppReleaseSection: Codable, Identifiable, Equatable, Hashable {
@@ -546,6 +558,22 @@ public struct ParraAppRelease: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let name: String
+    public let version: String
+    public let description: String?
+    public let type: ParraReleaseType
+    public let tenantId: String
+    public let releaseNumber: Int
+    public let status: ParraReleaseStatus
+    public let sections: [ParraAppReleaseSection]
+    public let header: ParraReleaseHeader?
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -561,20 +589,6 @@ public struct ParraAppRelease: Codable, Equatable, Hashable, Identifiable {
         case sections
         case header
     }
-
-    public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let name: String
-    public let version: String
-    public let description: String?
-    public let type: ParraReleaseType
-    public let tenantId: String
-    public let releaseNumber: Int
-    public let status: ParraReleaseStatus
-    public let sections: [ParraAppReleaseSection]
-    public let header: ParraReleaseHeader?
 }
 
 public struct ParraReleaseHeader: Codable, Equatable, Hashable, Identifiable {
@@ -641,6 +655,20 @@ struct ReleaseStub: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let name: String
+    public let version: String
+    public let description: String?
+    public let type: ParraReleaseType
+    public let tenantId: String
+    public let releaseNumber: Int
+    public let status: ParraReleaseStatus
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -654,18 +682,6 @@ struct ReleaseStub: Codable, Equatable, Hashable, Identifiable {
         case releaseNumber
         case status
     }
-
-    public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let name: String
-    public let version: String
-    public let description: String?
-    public let type: ParraReleaseType
-    public let tenantId: String
-    public let releaseNumber: Int
-    public let status: ParraReleaseStatus
 }
 
 struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
@@ -701,6 +717,21 @@ struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let name: String
+    public let version: String
+    public let description: String?
+    public let type: ParraReleaseType
+    public let tenantId: String
+    public let releaseNumber: Int
+    public let status: ParraReleaseStatus
+    public let header: ParraReleaseHeader?
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt
@@ -715,19 +746,6 @@ struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
         case status
         case header
     }
-
-    public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let name: String
-    public let version: String
-    public let description: String?
-    public let type: ParraReleaseType
-    public let tenantId: String
-    public let releaseNumber: Int
-    public let status: ParraReleaseStatus
-    public let header: ParraReleaseHeader?
 }
 
 struct AppReleaseCollectionResponse: Codable, Equatable, Hashable {
@@ -749,6 +767,14 @@ struct AppReleaseCollectionResponse: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let page: Int
+    public let pageCount: Int
+    public let pageSize: Int
+    public let totalCount: Int
+    public let data: [AppReleaseStub]
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case page
         case pageCount
@@ -756,12 +782,6 @@ struct AppReleaseCollectionResponse: Codable, Equatable, Hashable {
         case totalCount
         case data
     }
-
-    public let page: Int
-    public let pageCount: Int
-    public let pageSize: Int
-    public let totalCount: Int
-    public let data: [AppReleaseStub]
 }
 
 public struct ParraAppReleaseConfiguration: Codable, Equatable, Hashable {
@@ -777,11 +797,6 @@ public struct ParraAppReleaseConfiguration: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case title
-        case hasOtherReleases
-    }
-
     /// Contextual title for full screen presentation "What's new" for example.
     /// When this is present, the name of the release will be displayed as the
     /// subtitle in the release details screen.
@@ -790,6 +805,13 @@ public struct ParraAppReleaseConfiguration: Codable, Equatable, Hashable {
     /// Indicates that releases other than the current one are present. Can be
     /// used to determine whether or not to show a button to push to a changelog
     public let hasOtherReleases: Bool
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case title
+        case hasOtherReleases
+    }
 }
 
 public struct ParraNewInstalledVersionInfo: Codable, Equatable, Hashable {
@@ -895,16 +917,6 @@ public struct ParraDomain: Codable, Equatable, Hashable, Identifiable {
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case type
-        case name
-        case title
-        case host
-        case url
-        case data
-    }
-
     public let id: String
     public let type: ParraDomainType
     public let name: String
@@ -931,6 +943,18 @@ public struct ParraDomain: Codable, Equatable, Hashable, Identifiable {
         default:
             break
         }
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case type
+        case name
+        case title
+        case host
+        case url
+        case data
     }
 }
 
@@ -976,23 +1000,6 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
 
     // MARK: - Public
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt
-        case updatedAt
-        case deletedAt
-        case name
-        case issuer
-        case subdomain
-        case isTest
-        case parentTenantId
-        case logo
-        case domains
-        case urls
-        case entitlements
-        case hideBranding
-    }
-
     public let id: String
     public let createdAt: String
     public let updatedAt: String
@@ -1009,6 +1016,25 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
     public let urls: [URL]?
     public let entitlements: [ParraEntitlement]?
     public let hideBranding: Bool
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case name
+        case issuer
+        case subdomain
+        case isTest
+        case parentTenantId
+        case logo
+        case domains
+        case urls
+        case entitlements
+        case hideBranding
+    }
 }
 
 public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
@@ -1029,14 +1055,6 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
     }
 
     // MARK: - Public
-
-    enum CodingKeys: String, CodingKey {
-        case name
-        case description
-        case appId
-        case teamId
-        case bundleId
-    }
 
     public let name: String
     public let description: String?
@@ -1067,11 +1085,82 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
             string: "https://apps.apple.com/app/id\(appId)?action=write-review"
         )
     }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case description
+        case appId
+        case teamId
+        case bundleId
+    }
 }
 
 public final class ParraAppInfo: ObservableObject, Codable, Equatable,
     Hashable
 {
+    // MARK: - Lifecycle
+
+    public init(
+        versionToken: String?,
+        newInstalledVersionInfo: ParraNewInstalledVersionInfo?,
+        tenant: ParraTenantAppInfoStub,
+        auth: ParraAppAuthInfo,
+        legal: ParraLegalInfo,
+        application: ParraApplicationIosConfig
+    ) {
+        self.versionToken = versionToken
+        self.newInstalledVersionInfo = newInstalledVersionInfo
+        self.tenant = tenant
+        self.auth = auth
+        self.legal = legal
+        self.application = application
+    }
+
+    // MARK: - Public
+
+    public let application: ParraApplicationIosConfig
+    public let versionToken: String?
+    public let newInstalledVersionInfo: ParraNewInstalledVersionInfo?
+    public let tenant: ParraTenantAppInfoStub
+    public let auth: ParraAppAuthInfo
+    public let legal: ParraLegalInfo
+
+    public static func == (
+        lhs: ParraAppInfo,
+        rhs: ParraAppInfo
+    ) -> Bool {
+        return lhs.versionToken == rhs.versionToken
+            && lhs.newInstalledVersionInfo == rhs.newInstalledVersionInfo
+            && lhs.tenant == rhs.tenant
+            && lhs.auth == rhs.auth
+            && lhs.legal == rhs.legal
+            && lhs.application == rhs.application
+    }
+
+    public func hash(
+        into hasher: inout Hasher
+    ) {
+        hasher.combine(versionToken)
+        hasher.combine(newInstalledVersionInfo)
+        hasher.combine(tenant)
+        hasher.combine(auth)
+        hasher.combine(legal)
+        hasher.combine(application)
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case application
+        case versionToken
+        case newInstalledVersionInfo
+        case tenant
+        case auth
+        case legal
+    }
+
     static let `default` = ParraAppInfo(
         versionToken: nil,
         newInstalledVersionInfo: nil,
@@ -1104,64 +1193,6 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
             bundleId: ""
         )
     )
-    // MARK: - Lifecycle
-
-    public init(
-        versionToken: String?,
-        newInstalledVersionInfo: ParraNewInstalledVersionInfo?,
-        tenant: ParraTenantAppInfoStub,
-        auth: ParraAppAuthInfo,
-        legal: ParraLegalInfo,
-        application: ParraApplicationIosConfig
-    ) {
-        self.versionToken = versionToken
-        self.newInstalledVersionInfo = newInstalledVersionInfo
-        self.tenant = tenant
-        self.auth = auth
-        self.legal = legal
-        self.application = application
-    }
-
-    // MARK: - Public
-
-    enum CodingKeys: String, CodingKey {
-        case application
-        case versionToken
-        case newInstalledVersionInfo
-        case tenant
-        case auth
-        case legal
-    }
-
-    public let application: ParraApplicationIosConfig
-    public let versionToken: String?
-    public let newInstalledVersionInfo: ParraNewInstalledVersionInfo?
-    public let tenant: ParraTenantAppInfoStub
-    public let auth: ParraAppAuthInfo
-    public let legal: ParraLegalInfo
-
-    public static func == (
-        lhs: ParraAppInfo,
-        rhs: ParraAppInfo
-    ) -> Bool {
-        return lhs.versionToken == rhs.versionToken
-            && lhs.newInstalledVersionInfo == rhs.newInstalledVersionInfo
-            && lhs.tenant == rhs.tenant
-            && lhs.auth == rhs.auth
-            && lhs.legal == rhs.legal
-            && lhs.application == rhs.application
-    }
-
-    public func hash(
-        into hasher: inout Hasher
-    ) {
-        hasher.combine(versionToken)
-        hasher.combine(newInstalledVersionInfo)
-        hasher.combine(tenant)
-        hasher.combine(auth)
-        hasher.combine(legal)
-        hasher.combine(application)
-    }
 }
 
 public struct ParraPasswordRule: Codable, Equatable, Hashable {
@@ -1295,11 +1326,13 @@ public struct ParraAuthInfoPasswordlessSmsConfig: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
+    public let otpLength: Int
+
+    // MARK: - Internal
+
     enum CodingKeys: String, CodingKey {
         case otpLength
     }
-
-    public let otpLength: Int
 }
 
 public struct ParraAuthInfoPasswordlessConfig: Codable, Equatable, Hashable {

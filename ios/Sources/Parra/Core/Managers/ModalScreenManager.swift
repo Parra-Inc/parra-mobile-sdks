@@ -53,7 +53,10 @@ final class ModalScreenManager {
             let modalViewController = UIHostingController(
                 rootView: container
                     .environment(\.parraTheme, ParraThemeManager.shared.current)
-                    .environment(\.parraPreferredAppearance, ParraThemeManager.shared.preferredAppearanceBinding)
+                    .environment(
+                        \.parraPreferredAppearance,
+                        ParraThemeManager.shared.preferredAppearanceBinding
+                    )
             )
             modalViewController.view.backgroundColor = .clear
             modalViewController.modalPresentationStyle = .overCurrentContext
@@ -124,7 +127,10 @@ final class ModalScreenManager {
                     .padding(.top, 30)
             }
             .environment(\.parraTheme, ParraThemeManager.shared.current)
-            .environment(\.parraPreferredAppearance, ParraThemeManager.shared.preferredAppearanceBinding)
+            .environment(
+                \.parraPreferredAppearance,
+                ParraThemeManager.shared.preferredAppearanceBinding
+            )
 
             let modalViewController = UIHostingController(
                 rootView: rootView
