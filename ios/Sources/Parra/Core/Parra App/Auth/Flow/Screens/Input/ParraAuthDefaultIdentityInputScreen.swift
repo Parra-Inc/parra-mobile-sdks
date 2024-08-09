@@ -111,7 +111,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
     // MARK: - Private
 
-    @Environment(\.dismiss) private var dismiss
 
     @FocusState private var isFocused: Bool
     @State private var identity = ""
@@ -128,7 +127,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @Environment(\.parraTheme) private var parraTheme
-    @EnvironmentObject private var navigationState: NavigationState
+    @Environment(\.dismiss) private var dismiss
 
     @ViewBuilder private var primaryContent: some View {
         defaultTopView

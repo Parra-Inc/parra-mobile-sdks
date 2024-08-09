@@ -50,8 +50,6 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
 
     // MARK: - Internal
 
-    @Environment(\.parraAppInfo) private var parraAppInfo
-
     var background: any ShapeStyle {
         return config.background
             ?? parraTheme.palette.primaryBackground.toParraColor()
@@ -64,8 +62,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @Environment(\.parraTheme) private var parraTheme
-    @EnvironmentObject private var navigationState: NavigationState
-    @Environment(\.parra) private var parra
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     private var continueButtonTitle: String {
         let methods = params.availableAuthMethods
