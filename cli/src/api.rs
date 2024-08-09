@@ -136,7 +136,7 @@ pub async fn get_current_user(
 }
 
 async fn ensure_auth() -> Result<AuthorizedUser, Box<dyn Error>> {
-    let credential = auth::perform_device_authentication().await?;
+    let (credential, _) = auth::perform_device_authentication().await?;
 
     let user = get_current_user(&credential).await?;
 

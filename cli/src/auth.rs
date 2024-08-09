@@ -10,21 +10,28 @@ use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 const SERVICE_NAME: &str = "parra_cli";
 const AUTH0_CLIENT_ID: &str = "nD9GTUvvqCT0oWi34L2IdJiK0YjupSjY";
 
-pub fn logout() -> Result<(), Box<dyn Error>> {
+pub fn logout() -> Result<bool, Box<dyn Error>> {
     let result = security_framework::passwords::delete_generic_password(
         SERVICE_NAME,
         AUTH0_CLIENT_ID,
     );
 
     match result {
-        Ok(_) => Ok(()),
+        Ok(_) => Ok(true),
 
-        Err(error) => Err(error.into()),
+        Err(error) => {
+            if error.code() == security_framework_sys::base::errSecItemNotFound
+            {
+                Ok(false)
+            } else {
+                Err(error.into())
+            }
+        }
     }
 }
 
-pub async fn perform_device_authentication() -> Result<Credental, Box<dyn Error>>
-{
+pub async fn perform_device_authentication(
+) -> Result<(Credental, bool), Box<dyn Error>> {
     match get_persisted_credential() {
         Ok(credential) => {
             let now = SystemTime::now();
@@ -32,13 +39,16 @@ pub async fn perform_device_authentication() -> Result<Credental, Box<dyn Error>
 
             // Token is either already expired or about to expire
             if timestamp > credential.expiry - 30 {
-                return perform_refresh_authentication(&credential).await;
+                return Ok((
+                    perform_refresh_authentication(&credential).await?,
+                    false,
+                ));
             } else {
-                return Ok(credential);
+                return Ok((credential, false));
             }
         }
         Err(_) => {
-            return perform_normal_authentication().await;
+            return Ok((perform_normal_authentication().await?, true));
         }
     }
 }
