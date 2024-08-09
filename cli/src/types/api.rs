@@ -5,7 +5,9 @@ use super::auth::Credental;
 #[derive(Debug, Deserialize)]
 pub struct UserResponse {
     pub id: String,
-    pub name: String,
+    /// Will be nil in cases where the user registered for a new account during auth
+    /// flow in the browser, since they won't have completed onboarding.
+    pub name: Option<String>,
     pub email: Option<String>,
 }
 

@@ -153,17 +153,31 @@ async fn perform_get_request<T: DeserializeOwned>(
 ) -> Result<T, Box<dyn Error>> {
     let url = format!("https://api.parra.io/v1{}", endpoint);
     let client = reqwest::Client::new();
-    let token = &credential.token;
+    let token = &credential.token.trim();
 
     let request = client
-        .request(reqwest::Method::GET, url)
+        .request(reqwest::Method::GET, url.clone())
         .query(&query)
         .bearer_auth(token);
 
     let response = request.send().await?;
-    let body = response.text().await?;
 
-    Ok(serde_json::from_str::<T>(&body)?)
+    match response.error_for_status() {
+        Ok(_res) => {
+            let body = _res.text().await?;
+
+            Ok(serde_json::from_str::<T>(&body)?)
+        }
+        Err(err) => {
+            eprintln!(
+                "Error performing request to: {} error: {}",
+                url.clone(),
+                err
+            );
+
+            Err(err.into())
+        }
+    }
 }
 
 async fn perform_request_with_body<T: DeserializeOwned, U: Serialize>(
