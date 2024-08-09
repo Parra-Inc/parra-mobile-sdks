@@ -1,0 +1,17 @@
+{
+  "spm_dependencies": [
+    {
+      "url": "https://github.com/RevenueCat/purchases-ios-spm",
+      "minor_version": "5.2.3"
+    }
+  ],
+  "cli_inputs": [
+    {
+      "required": false,
+      "prompt": "What is your RevenueCat API key?",
+      "help_message": "Obtain from https://revenuecat.com or press enter to skip for now",
+      "default": "<#REVENUE_CAT_API_KEY#>",
+      "key": "revenue_cat_api_key"
+    }
+  ]
+}

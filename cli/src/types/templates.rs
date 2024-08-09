@@ -1,6 +1,29 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct SpmDependency {
+    pub url: String,
+    /// Using SPM minor version to take a really averse stance to 3rd party library
+    /// updates potentially breaking our templates.
+    pub minor_version: String,
+}
+
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct CliInput {
+    pub required: bool,
+    pub prompt: String,
+    pub help_message: Option<String>,
+    pub default: Option<String>,
+    pub key: String,
+}
+
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct TemplateConfig {
+    pub spm_dependencies: Vec<SpmDependency>,
+    pub cli_inputs: Vec<CliInput>,
+}
+
+#[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct AppNameInfo {
     pub raw: String,
     pub kebab: String,
