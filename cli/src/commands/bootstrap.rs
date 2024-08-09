@@ -417,7 +417,7 @@ async fn get_tenant(
     let tenants = api::get_tenants().await?;
 
     if tenants.is_empty() {
-        return create_new_tenant().await;
+        return create_new_tenant(false).await;
     }
 
     let use_existing =
@@ -431,7 +431,7 @@ async fn get_tenant(
 
         return Ok(selected_tenant?);
     } else {
-        return create_new_tenant().await;
+        return create_new_tenant(true).await;
     }
 }
 
@@ -490,12 +490,18 @@ fn get_project_path(
     return project_path;
 }
 
-async fn create_new_tenant() -> Result<TenantResponse, Box<dyn Error>> {
-    let name = Text::new(
-        "No existing workspaces found. What would you like to call your workspace?",
-    )
-    .with_validator(MinLengthValidator::new(1))
-    .prompt()?;
+async fn create_new_tenant(
+    others_exist: bool,
+) -> Result<TenantResponse, Box<dyn Error>> {
+    let message = if others_exist {
+        "What would you like to call your workspace?"
+    } else {
+        "No existing workspaces found. What would you like to call your workspace?"
+    };
+
+    let name = Text::new(message)
+        .with_validator(MinLengthValidator::new(1))
+        .prompt()?;
 
     return api::create_tenant(&name.trim()).await;
 }
