@@ -27,6 +27,8 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
         }
     }
 
+    /// Whether the user is fully logged in via an authentication method like
+    /// email, phone, passkeys, etc. This does not include anonymous auth.
     public var isLoggedIn: Bool {
         switch self {
         case .authenticated:
@@ -36,6 +38,18 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
         }
     }
 
+    /// Whether the user is using guest auth.
+    public var isGuest: Bool {
+        switch self {
+        case .guest:
+            return true
+        default:
+            return false
+        }
+    }
+
+    /// Whether there is a user object associated with this user. This includes
+    /// users using anonymous auth and users who are fully logged in.
     public var hasUser: Bool {
         switch self {
         case .authenticated, .anonymous:
@@ -45,18 +59,12 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
         }
     }
 
+    /// The user has been issued a token and can interact with the Parra API in
+    /// some capacity. This includes fully authenticated, anonymous and guest
+    /// users.
     public var hasToken: Bool {
         switch self {
         case .authenticated, .anonymous, .guest:
-            return true
-        default:
-            return false
-        }
-    }
-
-    public var hasResolvedAuth: Bool {
-        switch self {
-        case .authenticated, .anonymous, .guest, .error:
             return true
         default:
             return false
@@ -94,6 +102,17 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
         case (.error(let lhsError), .error(let rhsError)):
             return lhsError.localizedDescription == rhsError
                 .localizedDescription
+        default:
+            return false
+        }
+    }
+
+    // MARK: - Internal
+
+    var hasResolvedAuth: Bool {
+        switch self {
+        case .authenticated, .anonymous, .guest, .error:
+            return true
         default:
             return false
         }
