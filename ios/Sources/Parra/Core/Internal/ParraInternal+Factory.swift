@@ -147,7 +147,6 @@ extension ParraInternal {
             authService: authService,
             appState: appState,
             appConfig: configuration,
-            dataManager: dataManager,
             configuration: instanceConfiguration.apiServerConfiguration
         )
 

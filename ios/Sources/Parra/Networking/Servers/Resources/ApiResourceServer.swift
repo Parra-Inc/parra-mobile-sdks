@@ -20,7 +20,6 @@ final class ApiResourceServer: Server {
         authService: AuthService,
         appState: ParraAppState,
         appConfig: ParraConfiguration,
-        dataManager: DataManager,
         configuration: ServerConfiguration
     ) {
         self.authService = authService
@@ -35,7 +34,6 @@ final class ApiResourceServer: Server {
     let authService: AuthService
     let appState: ParraAppState
     let appConfig: ParraConfiguration
-
     let configuration: ServerConfiguration
 
     lazy var urlSessionDelegateProxy: UrlSessionDelegateProxy =

@@ -266,7 +266,6 @@ class MockedParraTestCase: ParraBaseMock {
             authService: authService,
             appState: appState,
             appConfig: appConfig,
-            dataManager: dataManager,
             configuration: configuration
         )
 
