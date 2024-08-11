@@ -28,6 +28,11 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
     case validationFailed(failures: [String: String])
     case unknown
     case rateLimited
+    /// Thrown when an action is attempted by a user using guest auth, that
+    /// requires being authenticated anonymously or via login. The action
+    /// associated value is a string describing the action the user attempted
+    /// to take that wasn't permitted.
+    case guestNotPermitted(action: String)
 
     // MARK: - Public
 
@@ -90,6 +95,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return failures.reduce(baseMessage) { partialResult, next in
                 return "\(partialResult)\n\(next.key): \(next.value)"
             }
+        case .guestNotPermitted:
+            return "Not permitted to perform this action. Please login and try again."
         }
     }
 
@@ -154,6 +161,8 @@ public enum ParraError: LocalizedError, CustomStringConvertible {
             return "Validation failed."
         case .rateLimited:
             return "Rate limited"
+        case .guestNotPermitted(let action):
+            return "Guests are not permitted to perform the action: \(action)"
         }
     }
 
@@ -216,7 +225,8 @@ extension ParraError: ParraSanitizedDictionaryConvertible {
                 "error_description": message
             ]
         case .notInitialized, .message, .jsonError, .unknown, .system,
-             .rateLimited, .parraAuthenticationRequired, .unauthenticated:
+             .rateLimited, .parraAuthenticationRequired, .unauthenticated,
+             .guestNotPermitted:
 
             return [:]
         case .validationFailed(let failures):

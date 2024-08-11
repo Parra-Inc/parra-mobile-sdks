@@ -382,10 +382,10 @@ final class AuthService {
     }
 
     func applyUserUpdate(
-        _ authResult: ParraAuthState,
+        _ authState: ParraAuthState,
         shouldBroadcast: Bool = true
     ) async {
-        switch authResult {
+        switch authState {
         case .anonymous(let user):
             logger.debug("Anonymous user authenticated")
 
@@ -423,6 +423,8 @@ final class AuthService {
             _cachedCredential = nil
         }
 
+        _cachedAuthState = authState
+
         logger.trace("User update applied", [
             "broadcasting": String(shouldBroadcast)
         ])
@@ -432,7 +434,7 @@ final class AuthService {
                 name: Parra.authenticationStateDidChangeNotification,
                 object: nil,
                 userInfo: [
-                    Parra.authenticationStateKey: authResult
+                    Parra.authenticationStateKey: authState
                 ]
             )
         }
@@ -478,10 +480,15 @@ final class AuthService {
         }
     }
 
+    func getCachedAuthState() -> ParraAuthState? {
+        return _cachedAuthState
+    }
+
     // MARK: - Private
 
     // The actual cached token.
     private var _cachedCredential: ParraUser.Credential?
+    private var _cachedAuthState: ParraAuthState?
 
     private func performUnauthenticatedLogin(
         appInfo: ParraAppInfo
@@ -555,6 +562,11 @@ final class AuthService {
 
         if let user = await dataManager.getCurrentUser() {
             _cachedCredential = user.credential
+            _cachedAuthState = if user.info.isAnonymous {
+                .anonymous(user)
+            } else {
+                .authenticated(user)
+            }
 
             return _cachedCredential
         }

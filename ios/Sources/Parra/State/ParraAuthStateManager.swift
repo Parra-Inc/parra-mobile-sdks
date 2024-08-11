@@ -34,7 +34,7 @@ public class ParraAuthStateManager: CustomStringConvertible {
 
     // MARK: - Internal
 
-    static let `default` = ParraAuthStateManager(
+    static let shared = ParraAuthStateManager(
         current: .undetermined
     )
 

@@ -26,7 +26,7 @@ struct ParraViewPreview<Content>: View where Content: View {
         )
 
         self._authStateManager = State(
-            initialValue: ParraAuthStateManager.default
+            initialValue: ParraAuthStateManager.shared
         )
 
         let appState = ParraAppState(

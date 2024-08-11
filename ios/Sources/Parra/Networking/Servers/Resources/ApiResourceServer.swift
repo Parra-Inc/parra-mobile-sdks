@@ -66,6 +66,20 @@ final class ApiResourceServer: Server {
         body: some Encodable,
         timeout: TimeInterval? = nil
     ) async -> AuthenticatedRequestResult<T> {
+        guard await canHitEndpoint(endpoint) else {
+            return AuthenticatedRequestResult(
+                result: .failure(
+                    ParraError.guestNotPermitted(
+                        action: endpoint.displayName
+                    )
+                ),
+                responseContext: AuthenticatedRequestResponseContext(
+                    attributes: [],
+                    statusCode: nil
+                )
+            )
+        }
+
         logger
             .trace(
                 "Performing request to API endpoint: \(endpoint.slugWithMethod)"
@@ -197,6 +211,24 @@ final class ApiResourceServer: Server {
     }
 
     // MARK: - Private
+
+    private func canHitEndpoint(
+        _ endpoint: ApiEndpoint
+    ) async -> Bool {
+        guard let authState = await authService.getCachedAuthState() else {
+            return false
+        }
+
+        // Temporary until more advanced scope work is done.
+        switch authState {
+        case .authenticated, .anonymous:
+            return true
+        case .guest:
+            return endpoint.allowsGuestAuth
+        case .error, .undetermined:
+            return false
+        }
+    }
 
     // Perform request wrapper that automatically handles reauthentication and
     // retrying if the request fails unauthenticated/unauthorized.

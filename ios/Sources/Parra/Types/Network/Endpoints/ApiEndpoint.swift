@@ -123,4 +123,17 @@ enum ApiEndpoint: Endpoint {
             return false
         }
     }
+
+    var allowsGuestAuth: Bool {
+        // "scope": "guest parra:app:app_info.read parra:app:core:roadmap.read parra:app:core:tickets.read parra:app:core:releases.read parra:app:core:release.read parra:app:core:cards.read parra:app:core:feedback_form.read parra:app:core:feedback_form.submit"
+
+        switch self {
+        case .getAppInfo, .getRoadmap, .getPaginateTickets,
+             .getPaginateReleases, .getRelease, .getCards, .getFeedbackForm,
+             .postSubmitFeedbackForm:
+            return true
+        default:
+            return false
+        }
+    }
 }

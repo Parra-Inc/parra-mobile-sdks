@@ -186,7 +186,7 @@ public struct ParraApp<
     @StateObject private var launchScreenState: LaunchScreenStateManager
 
     @StateObject private var alertManager: AlertManager
-    @State private var authStateManager: ParraAuthStateManager = .default
+    @State private var authStateManager: ParraAuthStateManager = .shared
     @State private var themeManager: ParraThemeManager = .shared
 
     private let parra: ParraInternal

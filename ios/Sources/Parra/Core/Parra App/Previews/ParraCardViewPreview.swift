@@ -100,5 +100,5 @@ struct ParraCardViewPreview<Content>: View where Content: View {
     private let configuration: ParraConfiguration
     private let parra: Parra
 
-    @State private var authStateManager: ParraAuthStateManager = .default
+    @State private var authStateManager: ParraAuthStateManager = .shared
 }

@@ -117,4 +117,15 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
             return false
         }
     }
+
+    var credential: ParraUser.Credential? {
+        switch self {
+        case .authenticated(let user), .anonymous(let user):
+            return user.credential
+        case .guest(let guest):
+            return guest.credential
+        case .error, .undetermined:
+            return nil
+        }
+    }
 }

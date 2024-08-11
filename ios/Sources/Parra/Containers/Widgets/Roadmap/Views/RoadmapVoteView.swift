@@ -45,7 +45,16 @@ struct RoadmapVoteView: View {
                     )
                 ),
                 onPress: {
-                    contentObserver.currentTicketToVote = ticketContent.id
+                    if parraAuthState.isGuest {
+                        alertManager.showErrorToast(
+                            userFacingMessage: "You need to sign in to vote on roadmap items.",
+                            underlyingError: ParraError.guestNotPermitted(
+                                action: "Vote on roadmap"
+                            )
+                        )
+                    } else {
+                        contentObserver.currentTicketToVote = ticketContent.id
+                    }
                 }
             )
 
@@ -70,5 +79,9 @@ struct RoadmapVoteView: View {
     @EnvironmentObject private var contentObserver: RoadmapWidget
         .ContentObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
+    @EnvironmentObject private var alertManager: AlertManager
+
+    @Environment(\.parra) private var parra
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraAuthState) private var parraAuthState
 }

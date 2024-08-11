@@ -186,18 +186,12 @@ class ParraInternal {
     ) async {
         logger.debug("Handle login flow")
 
-        var updatedUser = user
-
         await sessionManager.initializeSessions()
 
         do {
             logger.debug("Refreshing user info")
 
-            // If refresh was successful, we need to make sure this is the
-            // user that becomes immediately accessible outside the SDK.
-            if let next = try await authService.refreshUserInfo() {
-                updatedUser = next
-            }
+            try await authService.refreshUserInfo()
         } catch {
             logger.error("Failed to refresh user info on app launch", error)
         }

@@ -33,7 +33,7 @@ struct ParraContainerPreview<ContainerType>: View
             theme: theme
         )
         self._authStateManager = State(
-            initialValue: ParraAuthStateManager.default
+            initialValue: ParraAuthStateManager.shared
         )
 
         let appState = ParraAppState(
