@@ -19,7 +19,7 @@ use slugify::slugify;
 use std::env::{self};
 use std::error::Error;
 use std::fmt::Display;
-use std::fs::read_to_string;
+use std::fs::{self, read_to_string};
 use std::path::{Path, PathBuf};
 use std::process::{exit, Command};
 use std::str::FromStr;
@@ -331,11 +331,11 @@ pub async fn execute_bootstrap(
     // If all dependencies are met, open the project. Otherwise, prompt the user to install them,
     // and then open the project on completion.
     if missing.is_empty() {
-        open_project(xcode_target_dir)?;
+        open_project(xcode_target_dir, &context)?;
     } else {
         dependencies(missing).await?;
 
-        open_project(xcode_target_dir)?;
+        open_project(xcode_target_dir, &context)?;
     }
 
     Ok(())
@@ -436,7 +436,9 @@ async fn get_tenant(
 
     if use_existing {
         let selected_tenant: Result<TenantResponse, InquireError> =
-            Select::new("Please select a workspace", tenants).prompt();
+            Select::new("Please select a workspace", tenants)
+                .with_help_message("Press enter to confirm selection.")
+                .prompt();
 
         return Ok(selected_tenant?);
     } else {
@@ -466,7 +468,9 @@ async fn get_application(
 
     if use_existing {
         let selected_application: Result<ApplicationResponse, InquireError> =
-            Select::new("Please select an application", applications).prompt();
+            Select::new("Please select an application", applications)
+                .with_help_message("Press enter to confirm selection.")
+                .prompt();
 
         match selected_application {
             Ok(application) => return Ok(application),
@@ -490,7 +494,7 @@ fn get_project_path(
 
     let project_path =
         Text::new("Where would you like to create your project?")
-            .with_default(&default_path)
+            .with_default(format!("defaults to {}", &default_path).as_str())
             .with_validator(MinLengthValidator::new(1))
             .with_help_message(&default_message)
             .prompt()
@@ -550,10 +554,11 @@ async fn create_new_application(
     return Ok(new_application);
 }
 
-fn open_project(path: &PathBuf) -> Result<(), Box<dyn Error>> {
-    println!("🚀 Launching project! 🚀");
-
-    let binding = path.to_str().unwrap().to_owned() + ".xcodeproj";
+fn open_project(
+    project_path: &PathBuf,
+    context: &ProjectContext,
+) -> Result<(), Box<dyn Error>> {
+    let binding = project_path.to_str().unwrap().to_owned() + ".xcodeproj";
 
     let full_path: String =
         if !binding.starts_with("/") && !binding.starts_with(".") {
@@ -561,7 +566,73 @@ fn open_project(path: &PathBuf) -> Result<(), Box<dyn Error>> {
         } else {
             binding
         };
-    let path_clone = full_path.clone();
+    let path_clone = &full_path.clone();
+    let relative_project_dir =
+        Path::new(&path_clone).parent().unwrap().to_string_lossy();
+
+    let absolute_path = fs::canonicalize(full_path)?;
+    let mut project_dir_path = absolute_path.clone();
+    project_dir_path.pop();
+
+    let dashboard_link = "https://parra.io/dashboard";
+    let doc_link = "https://docs.parra.io/sdks/guides/integration/swiftui";
+    let support_email = "help@parra.io";
+    let support_email_subject = format!(
+        "CLI help - workspace={}, application={}",
+        context.app.id, context.tenant.id
+    );
+
+    // project dir, dashboard
+
+    let mut complete_message = String::new();
+    complete_message.push_str(
+        "\n\n\n🎉🌟 \x1b[1;32mYour new project is ready!\x1b[0m 🌟🎉\n\n\n",
+    );
+    complete_message
+        .push_str("\x1b[1mJump right in and start building:\x1b[0m\n\n");
+    complete_message.push_str(
+        format!(
+            "🛠️  Open your new Xcode project: \x1b]8;;file://{}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            absolute_path.to_string_lossy(),
+            path_clone
+        )
+        .as_str(),
+    );
+    complete_message.push_str(
+        format!(
+            "📂 Reveal your project in Finder: \x1b]8;;file://{}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            project_dir_path.to_string_lossy(),
+            relative_project_dir
+        )
+        .as_str(),
+    );
+
+    complete_message
+        .push_str("\n\x1b[1mOr, if you aren't quite ready to code:\x1b[0m\n\n");
+
+    complete_message.push_str(
+        format!(
+            "📊 Configure your project in the dashboard: \x1b]8;;{}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            dashboard_link, dashboard_link
+        )
+        .as_str(),
+    );
+    complete_message.push_str(
+        format!(
+            "📚 Read the docs: \x1b]8;;{}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            doc_link, doc_link
+        )
+        .as_str(),
+    );
+    complete_message.push_str(
+        format!(
+            "📨 Reach out if you need help: \x1b]8;;mailto:{}?subject={}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            support_email, support_email_subject, support_email
+        )
+        .as_str(),
+    );
+
+    println!("{}", complete_message);
 
     let xcode_path_output = Command::new("xcrun")
         .arg("xcode-select")
@@ -578,10 +649,8 @@ fn open_project(path: &PathBuf) -> Result<(), Box<dyn Error>> {
         .to_owned()
         + ".app";
 
-    println!("{}", full_path);
-
     let output = Command::new("open")
-        .arg(full_path)
+        .arg(path_clone)
         .arg("-a")
         .arg(xcode_path)
         // .current_dir(path)
