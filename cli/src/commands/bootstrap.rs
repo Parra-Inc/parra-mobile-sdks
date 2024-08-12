@@ -264,13 +264,15 @@ pub async fn execute_bootstrap(
             application.name.trim_end_matches("app").trim().to_string();
     }
 
-    let expanded_path =
-        normalized_project_path(project_path, &application.name)?;
+    let safe_app_name = Regex::new(r"[^a-zA-Z0-9\s-]")
+        .unwrap()
+        .replace_all(&application.name, "");
+
+    let expanded_path = normalized_project_path(project_path, &safe_app_name)?;
 
     let (template, template_app_dir) =
         get_remote_template(&template_name).await?;
 
-    let app_name = &application.name;
     let ios_config = application.ios.unwrap();
 
     println!("Generating project...");
@@ -278,19 +280,19 @@ pub async fn execute_bootstrap(
     // If the user didn't include the word app, anywhere in the app name, add it to the end
     // of the name used for the main App struct. Creating a slug, then upper camel converting
     // the name ensures invalid chars will be stripped.
-    let upper_camel_app_name = if app_name.to_lowercase().contains("app") {
-        slugify!(app_name).to_case(Case::UpperCamel)
+    let upper_camel_app_name = if safe_app_name.to_lowercase().contains("app") {
+        slugify!(&safe_app_name).to_case(Case::UpperCamel)
     } else {
-        slugify!(app_name).to_case(Case::UpperCamel) + "App"
+        slugify!(&safe_app_name).to_case(Case::UpperCamel) + "App"
     };
 
     let context: ProjectContext = ProjectContext {
         app: AppContextInfo {
             id: application.id,
             name: AppNameInfo {
-                raw: app_name.to_owned(),
+                raw: safe_app_name.to_string(),
                 // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"
-                kebab: slugify!(app_name),
+                kebab: slugify!(&safe_app_name),
                 upper_camel: upper_camel_app_name,
             },
             bundle_id: ios_config.bundle_id,
@@ -315,7 +317,7 @@ pub async fn execute_bootstrap(
             entitlements: get_entitlement_schemes(tenant.domains),
         },
         sdk: SdkContextInfo {
-            version: "0.1.20".to_owned(),
+            version: built::built_info::PKG_VERSION.to_owned(),
         },
         tenant: TenantContextInfo {
             id: tenant.id,
@@ -540,7 +542,7 @@ async fn create_new_application(
     let name = Text::new("What would you like to call your application?")
         .with_validator(MinLengthValidator::new(1))
         .with_validator(|input: &str| {
-            let re =
+            let re: Regex =
                 Regex::new(r"[^a-zA-Z0-9\s-]").unwrap();
 
             if re.is_match(input) {
