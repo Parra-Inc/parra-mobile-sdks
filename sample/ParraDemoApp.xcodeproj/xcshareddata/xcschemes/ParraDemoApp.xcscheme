@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C6F8FBFC6CB3ECC9DB55E0BA"
-               BuildableName = "ParraDemo.app"
-               BlueprintName = "ParraDemo"
-               ReferencedContainer = "container:ParraDemo.xcodeproj">
+               BlueprintIdentifier = "8E22C18E6458F0C1A9561336"
+               BuildableName = "ParraDemoApp.app"
+               BlueprintName = "ParraDemoApp"
+               ReferencedContainer = "container:ParraDemoApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C6F8FBFC6CB3ECC9DB55E0BA"
-            BuildableName = "ParraDemo.app"
-            BlueprintName = "ParraDemo"
-            ReferencedContainer = "container:ParraDemo.xcodeproj">
+            BlueprintIdentifier = "8E22C18E6458F0C1A9561336"
+            BuildableName = "ParraDemoApp.app"
+            BlueprintName = "ParraDemoApp"
+            ReferencedContainer = "container:ParraDemoApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C6F8FBFC6CB3ECC9DB55E0BA"
-            BuildableName = "ParraDemo.app"
-            BlueprintName = "ParraDemo"
-            ReferencedContainer = "container:ParraDemo.xcodeproj">
+            BlueprintIdentifier = "8E22C18E6458F0C1A9561336"
+            BuildableName = "ParraDemoApp.app"
+            BlueprintName = "ParraDemoApp"
+            ReferencedContainer = "container:ParraDemoApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -81,10 +81,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C6F8FBFC6CB3ECC9DB55E0BA"
-            BuildableName = "ParraDemo.app"
-            BlueprintName = "ParraDemo"
-            ReferencedContainer = "container:ParraDemo.xcodeproj">
+            BlueprintIdentifier = "8E22C18E6458F0C1A9561336"
+            BuildableName = "ParraDemoApp.app"
+            BlueprintName = "ParraDemoApp"
+            ReferencedContainer = "container:ParraDemoApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
