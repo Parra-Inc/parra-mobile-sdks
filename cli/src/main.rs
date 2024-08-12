@@ -84,6 +84,8 @@ fn apply_cli_theme() {
         .error_message
         .with_prefix(Styled::new("❌").with_fg(Color::LightRed));
 
+    render_config.answered_prompt_prefix = Styled::new("✅");
+
     render_config.answer = StyleSheet::new()
         .with_attr(Attributes::ITALIC)
         .with_fg(Color::LightBlue);
