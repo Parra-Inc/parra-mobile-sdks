@@ -14,8 +14,6 @@ pub fn generate_xcode_project(
     context: &ProjectContext,
     prompt_for_override: bool,
 ) -> Result<PathBuf, Box<dyn Error>> {
-    println!("Entering Xcode project generation flow");
-
     let globals = liquid::to_object(&context)?;
 
     let camel_app_name = context.app.name.upper_camel.clone();
@@ -74,9 +72,6 @@ fn run_xcodegen(
     project_path: &PathBuf,
     template: &str,
 ) -> Result<(), Box<dyn Error>> {
-    println!("Running xcodegen");
-    println!("project path: {}", project_path.display());
-
     let tmp_project_yaml_path = Path::new("/tmp/parra_project.yml");
     fs::write(tmp_project_yaml_path, template)?;
 

@@ -1,4 +1,4 @@
-use crate::types::dependency::XcodeVersion;
+use crate::types::dependency::SemanticVersion;
 use semver::{Version, VersionReq};
 use std::process::Command;
 use std::process::Stdio;
@@ -12,18 +12,17 @@ pub enum DerivedDependency {
 /// xcodegen is expected to be installed on the system by homebrew since it is a
 /// project dependency. Other brew dependencies like xcodes and aria2 are installed
 /// manually at this point since they are not always used.
-pub fn install_missing_dependencies(desired_xcode_version: XcodeVersion) {
-    println!("Installing missing dependencies...");
-
+pub fn install_missing_dependencies(
+    desired_xcode_version: SemanticVersion,
+    desired_ios_runtime_version: SemanticVersion,
+) {
     install_brew_dependencies();
-    install_xcode(desired_xcode_version);
+    install_xcode(desired_xcode_version, desired_ios_runtime_version);
 }
 
 pub fn check_for_missing_dependencies(
-    min_xcode_version: XcodeVersion,
+    min_xcode_version: SemanticVersion,
 ) -> Vec<DerivedDependency> {
-    println!("Checking for missing dependencies");
-
     let mut missing_deps = Vec::<DerivedDependency>::new();
 
     let valid_version = check_xcode_version(min_xcode_version);
@@ -34,7 +33,7 @@ pub fn check_for_missing_dependencies(
     return missing_deps;
 }
 
-fn check_xcode_version(min_version: XcodeVersion) -> bool {
+fn check_xcode_version(min_version: SemanticVersion) -> bool {
     let output = Command::new("xcodebuild")
         .arg("-version")
         .stderr(Stdio::null())
@@ -86,6 +85,8 @@ fn check_xcode_version(min_version: XcodeVersion) -> bool {
 fn install_brew_dependencies() {
     let dependencies = vec!["xcodes", "aria2"];
 
+    println!("Installing Homebrew dependencies: {:?}", dependencies);
+
     let output = Command::new("brew")
         .env("HOMEBREW_NO_INSTALL_UPGRADE", "1")
         .env("HOMEBREW_NO_AUTO_UPDATE", "1")
@@ -100,35 +101,93 @@ fn install_brew_dependencies() {
     }
 }
 
-fn install_xcode(version: XcodeVersion) {
-    let version_string =
-        format!("{}.{}.{}", version.major, version.minor, version.patch);
-    let version_string_clone = version_string.clone();
+fn install_xcode(
+    xcode_version: SemanticVersion,
+    runtime_version: SemanticVersion,
+) {
+    let xcode_version_string = format!(
+        "{}.{}.{}",
+        xcode_version.major, xcode_version.minor, xcode_version.patch
+    );
+    let version_string_clone = xcode_version_string.clone();
 
-    println!("Installing Xcode version: {:?}", version_string);
+    println!("Installing Xcode version: {:?}", xcode_version_string);
 
     //  and if fail retry without
 
-    let output = Command::new("xcodes")
+    let xcode_install_output = Command::new("xcodes")
         .arg("install")
-        .arg(version_string)
+        .arg(xcode_version_string)
         // Will skip prompting for password but will result in user being prompted for password to install
         // additional tools when they launch Xcode. This will likely be more streamlined.
         .arg("--no-superuser")
         .arg("--experimental-unxip")
+        // .arg("--select")
         // Need to inherit stdio to allow the user to enter credentials when prompted by xcodes.
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
         .output()
-        .expect("Failed to execute command");
+        .expect("Failed to execute Xcode install command");
 
-    if !output.status.success() {
-        let stderr = String::from_utf8_lossy(&output.stderr);
-        eprintln!("Command failed. Error:\n{}", stderr);
+    if !xcode_install_output.status.success() {
+        let stderr = String::from_utf8_lossy(&xcode_install_output.stderr);
+        eprintln!("Xcode install failed. Error:\n{}", stderr);
+
+        return;
     }
 
     println!("Successfully installed Xcode: {}", version_string_clone);
+
+    let runtime_version_string =
+        format!("{}.{}", runtime_version.major, runtime_version.minor);
+    let runtime_version_string_clone = runtime_version_string.clone();
+
+    let latest_matching_runtime = Command::new("sh")
+        .arg("-c")
+        .arg(format!(
+            "xcodes runtimes | grep \"iOS {}\" | tail -n 1",
+            runtime_version_string
+        ))
+        .output()
+        .expect("Failed to execute command");
+
+    let binding = String::from_utf8_lossy(&latest_matching_runtime.stdout);
+    let runtime_to_install = binding.trim();
+
+    println!("Installing iOS {} runtime", runtime_to_install);
+
+    let xcode_runtime_install_output = Command::new("xcodes")
+        .arg("runtimes")
+        .arg("install")
+        .arg(runtime_to_install)
+        // Need to inherit stdio to allow the user to enter credentials when prompted by xcodes.
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .output();
+
+    match xcode_runtime_install_output {
+        Ok(output) => {
+            if !output.status.success() {
+                let stderr =
+                    String::from_utf8_lossy(&xcode_install_output.stderr);
+
+                eprintln!("iOS runtime install failed. Error:\n{}", stderr);
+            }
+        }
+        Err(error) => {
+            eprintln!(
+                "Failed to execute Xcode runtime install command. Error: {}",
+                error
+            )
+        }
+    }
+
+    println!(
+        "Successfully installed iOS {} runtime",
+        runtime_version_string_clone
+    );
 }
 
 fn ensure_full_semver(version: &str) -> String {
