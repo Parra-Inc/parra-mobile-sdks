@@ -3,7 +3,7 @@ use crate::dependencies::DerivedDependency;
 use crate::types::api::{
     ApplicationResponse, TenantDomain, TenantDomainType, TenantResponse,
 };
-use crate::types::dependency::XcodeVersion;
+use crate::types::dependency::SemanticVersion;
 use crate::types::templates::{
     AppContextInfo, AppEntitlementInfo, AppEntitlementSchemes, AppNameInfo,
     CodeSigningConfig, CodeSigningConfigs, ProjectContext, SdkContextInfo,
@@ -24,15 +24,21 @@ use std::path::{Path, PathBuf};
 use std::process::{exit, Command};
 use std::str::FromStr;
 
-static MIN_XCODE_VERSION: XcodeVersion = XcodeVersion {
+static MIN_XCODE_VERSION: SemanticVersion = SemanticVersion {
     major: 15,
     minor: 3,
     patch: 0,
 };
 
-static DESIRED_XCODE_VERSION: XcodeVersion = XcodeVersion {
+static DESIRED_XCODE_VERSION: SemanticVersion = SemanticVersion {
     major: 15,
-    minor: 3,
+    minor: 4,
+    patch: 0,
+};
+
+static DESIRED_IOS_RUNTIME_VERSION: SemanticVersion = SemanticVersion {
+    major: 17,
+    minor: 5,
     patch: 0,
 };
 
@@ -52,7 +58,7 @@ impl Display for ApplicationResponse {
     }
 }
 
-impl Display for XcodeVersion {
+impl Display for SemanticVersion {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}.{}.{}", self.major, self.minor, self.patch)
     }
@@ -386,9 +392,9 @@ async fn dependencies(
     let confirm_message = if missing
         .contains(&dependencies::DerivedDependency::Xcode)
     {
-        "We need to install a few dependencies, including an Xcode update. You will be prompted to enter your Apple ID and password in order to download it. Proceed?"
+        "\nWe need to install a few dependencies, including an Xcode update. This might take a few minutes depending on your internet connection. You may be prompted to enter your Apple ID and password in order to download Xcode. Proceed?"
     } else {
-        "We need to install a few dependencies first. Proceed?"
+        "\nWe need to install a few dependencies first. Proceed?"
     };
 
     let confirmed_install =
@@ -396,7 +402,10 @@ async fn dependencies(
 
     // Trim the input and check if it's an affirmative response
     if confirmed_install {
-        dependencies::install_missing_dependencies(DESIRED_XCODE_VERSION);
+        dependencies::install_missing_dependencies(
+            DESIRED_XCODE_VERSION,
+            DESIRED_IOS_RUNTIME_VERSION,
+        );
     } else {
         println!("Please install Xcode version {} or later before opening your new project.", MIN_XCODE_VERSION);
 
@@ -542,14 +551,46 @@ async fn create_new_application(
 }
 
 fn open_project(path: &PathBuf) -> Result<(), Box<dyn Error>> {
-    println!("🚀 Launching project! 🚀 ");
+    println!("🚀 Launching project! 🚀");
 
-    let full_path = path.to_str().unwrap().to_owned() + ".xcodeproj";
+    let binding = path.to_str().unwrap().to_owned() + ".xcodeproj";
 
-    Command::new("open")
+    let full_path: String =
+        if !binding.starts_with("/") && !binding.starts_with(".") {
+            format!("./{}", binding)
+        } else {
+            binding
+        };
+    let path_clone = full_path.clone();
+
+    let xcode_path_output = Command::new("xcrun")
+        .arg("xcode-select")
+        .arg("--print-path")
+        .output()
+        .expect("Failed to get Xcode install location");
+
+    let xcode_path = String::from_utf8(xcode_path_output.stdout)?
+        .trim()
+        .to_string()
+        .split(".app")
+        .next()
+        .unwrap()
+        .to_owned()
+        + ".app";
+
+    println!("{}", full_path);
+
+    let output = Command::new("open")
         .arg(full_path)
-        .current_dir(path)
-        .output()?;
+        .arg("-a")
+        .arg(xcode_path)
+        // .current_dir(path)
+        .output()
+        .expect("Failed to open project in Xcode");
+
+    if !output.status.success() {
+        println!("Couldn't open your project in Xcode automatically. Open your project at: {}", path_clone);
+    }
 
     Ok(())
 }
@@ -583,8 +624,6 @@ fn get_template_path(template_name: &str) -> Result<PathBuf, Box<dyn Error>> {
     let repo_path = get_repo_root_path()?;
     let relative_path = PathBuf::from(format!("templates/{}/", template_name));
     let full_path = repo_path.join(&relative_path);
-
-    println!("Full template path: {}", full_path.display());
 
     return Ok(full_path);
 }
