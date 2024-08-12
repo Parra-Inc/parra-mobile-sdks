@@ -10,7 +10,7 @@ import Parra
 import SwiftUI
 
 @main
-struct {{ app.name.upper_camel }}App: App {
+struct {{ app.name.upper_camel }}: App {
     @UIApplicationDelegateAdaptor(
         ParraAppDelegate<ParraSceneDelegate>.self
     ) var appDelegate

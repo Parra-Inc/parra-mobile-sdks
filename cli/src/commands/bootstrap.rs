@@ -167,7 +167,7 @@ pub async fn execute_sample_bootstrap(
             name: AppNameInfo {
                 raw: "Parra Demo".to_owned(),
                 kebab: "parra-demo".to_owned(),
-                upper_camel: "ParraDemo".to_owned(),
+                upper_camel: "ParraDemoApp".to_owned(),
             },
             bundle_id: "com.parra.parra-ios-client".to_owned(),
             deployment_target: "17.0".to_owned(),
@@ -235,7 +235,8 @@ fn normalized_project_path(
     project_path: Option<String>,
     app_name: &str,
 ) -> Result<PathBuf, Box<dyn Error>> {
-    let kebab_name = app_name.to_case(Case::Kebab);
+    // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"
+    let kebab_name = slugify!(app_name);
     let relative_path = get_project_path(project_path, &kebab_name);
 
     let mut project_path = PathBuf::from_str(&relative_path)?;
@@ -274,13 +275,23 @@ pub async fn execute_bootstrap(
 
     println!("Generating project...");
 
+    // If the user didn't include the word app, anywhere in the app name, add it to the end
+    // of the name used for the main App struct. Creating a slug, then upper camel converting
+    // the name ensures invalid chars will be stripped.
+    let upper_camel_app_name = if app_name.to_lowercase().contains("app") {
+        slugify!(app_name).to_case(Case::UpperCamel)
+    } else {
+        slugify!(app_name).to_case(Case::UpperCamel) + "App"
+    };
+
     let context: ProjectContext = ProjectContext {
         app: AppContextInfo {
             id: application.id,
             name: AppNameInfo {
                 raw: app_name.to_owned(),
-                kebab: app_name.to_case(Case::Kebab),
-                upper_camel: app_name.to_case(Case::UpperCamel),
+                // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"
+                kebab: slugify!(app_name),
+                upper_camel: upper_camel_app_name,
             },
             bundle_id: ios_config.bundle_id,
             deployment_target: "17.0".to_owned(),
@@ -437,7 +448,9 @@ async fn get_tenant(
     if use_existing {
         let selected_tenant: Result<TenantResponse, InquireError> =
             Select::new("Please select a workspace", tenants)
-                .with_help_message("Press enter to confirm selection.")
+                .with_help_message(
+                    "Press ↑/↓ to change selection. Press enter to confirm.",
+                )
                 .prompt();
 
         return Ok(selected_tenant?);
@@ -469,7 +482,9 @@ async fn get_application(
     if use_existing {
         let selected_application: Result<ApplicationResponse, InquireError> =
             Select::new("Please select an application", applications)
-                .with_help_message("Press enter to confirm selection.")
+                .with_help_message(
+                    "Press ↑/↓ to change selection. Press enter to confirm.",
+                )
                 .prompt();
 
         match selected_application {
@@ -490,11 +505,11 @@ fn get_project_path(
     }
 
     let default_path = format!("./{}", app_name);
-    let default_message = format!("For example: ~/Desktop/{}", app_name);
+    let default_message = format!("defaults to {}", default_path);
 
     let project_path =
         Text::new("Where would you like to create your project?")
-            .with_default(format!("defaults to {}", &default_path).as_str())
+            .with_default(&default_path)
             .with_validator(MinLengthValidator::new(1))
             .with_help_message(&default_message)
             .prompt()
@@ -524,6 +539,17 @@ async fn create_new_application(
 ) -> Result<ApplicationResponse, Box<dyn Error>> {
     let name = Text::new("What would you like to call your application?")
         .with_validator(MinLengthValidator::new(1))
+        .with_validator(|input: &str| {
+            let re =
+                Regex::new(r"[^a-zA-Z0-9\s-]").unwrap();
+
+            if re.is_match(input) {
+                Ok(Validation::Invalid("The app name must contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and spaces.".into()))
+            } else {
+                Ok(Validation::Valid)
+            }
+        })
+
         .prompt()?;
 
     let tenant_slug = slugify!(&tenant.name);
@@ -533,6 +559,7 @@ async fn create_new_application(
 
     let bundle_id = Text::new("What would you like your bundle ID to be?")
         .with_default(&suggested_bundle_id)
+        .with_help_message(format!("defaults to {}", &suggested_bundle_id).as_str())
         .with_validator(MinLengthValidator::new(5)) // min for x.y.z
         .with_validator(MaxLengthValidator::new(155))
         .with_validator(|input: &str| {
@@ -575,14 +602,14 @@ fn open_project(
     project_dir_path.pop();
 
     let dashboard_link = "https://parra.io/dashboard";
+    let tenant_dashboard_link =
+        format!("https://parra.io/tenants/{}", context.tenant.id);
     let doc_link = "https://docs.parra.io/sdks/guides/integration/swiftui";
     let support_email = "help@parra.io";
     let support_email_subject = format!(
         "CLI help - workspace={}, application={}",
         context.app.id, context.tenant.id
     );
-
-    // project dir, dashboard
 
     let mut complete_message = String::new();
     complete_message.push_str(
@@ -613,7 +640,7 @@ fn open_project(
     complete_message.push_str(
         format!(
             "📊 Configure your project in the dashboard: \x1b]8;;{}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
-            dashboard_link, dashboard_link
+            &tenant_dashboard_link, dashboard_link
         )
         .as_str(),
     );

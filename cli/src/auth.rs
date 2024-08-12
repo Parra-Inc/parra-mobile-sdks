@@ -95,7 +95,7 @@ async fn perform_normal_authentication() -> Result<Credental, Box<dyn Error>> {
     let confirm_message =
         format!("We need to confirm your identity in the browser. Press enter to open the browser.");
     let help_message = format!(
-        "If the browser doesn't open automatically, visit {} and enter the code: {} to confirm your login.",
+        "Please press \"Confirm\" in your browser. If the browser doesn't open automatically, visit {} and enter the code: {} to confirm your login.",
         device_auth.verification_uri, device_auth.user_code
     );
 
