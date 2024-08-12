@@ -21,8 +21,8 @@ export const runBuildSample = async () => {
         ...options,
         allowProvisioningUpdates: allowProvisioning,
         allowProvisioningDeviceRegistration: allowProvisioning,
-        scheme: 'ParraDemo',
-        project: 'sample/ParraDemo.xcodeproj',
+        scheme: 'ParraDemoApp',
+        project: 'sample/ParraDemoApp.xcodeproj',
     };
 
     logger.info("Building sample app...");
@@ -30,7 +30,7 @@ export const runBuildSample = async () => {
     await build(fullOptions);
 
     logger.info(`Installing app on booted device`);
-    await runCommand(`xcrun simctl install booted "build/unit-tests/derivedData/Build/Products/Debug-iphonesimulator/ParraDemo.app"`)
+    await runCommand(`xcrun simctl install booted "build/unit-tests/derivedData/Build/Products/Debug-iphonesimulator/ParraDemoApp.app"`)
     logger.info(`Launching app...`);
     await runCommand(`xcrun simctl launch booted "com.parra.parra-ios-client"`)
 }
