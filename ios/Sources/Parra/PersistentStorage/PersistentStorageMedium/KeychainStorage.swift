@@ -31,18 +31,15 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
     ) throws -> T? where T: Codable {
         var query = commonQueryAttributes(for: name)
         query[kSecMatchLimit as String] = kSecMatchLimitOne
-        query[kSecReturnAttributes as String] = true
         query[kSecReturnData as String] = true
 
         var item: CFTypeRef?
 
-        try? performSecOperation {
+        try performSecOperation {
             SecItemCopyMatching(query as CFDictionary, &item)
         }
 
-        if let existingItem = item as? [String: Any],
-           let data = existingItem[kSecValueData as String] as? Data
-        {
+        if let data = item as? Data {
             return try jsonDecoder.decode(T.self, from: data)
         }
 
@@ -55,11 +52,33 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
     ) throws {
         let data = try jsonEncoder.encode(value)
 
-        let attributes: [String: Any] = [kSecValueData as String: data]
-        let query = commonQueryAttributes(for: name)
+        let commonQuery = commonQueryAttributes(for: name)
+        var addQuery = commonQuery
+        addQuery[kSecValueData as String] = data as AnyObject
 
+        let addStatus = SecItemAdd(
+            addQuery as CFDictionary,
+            nil
+        )
+
+        if addStatus == errSecSuccess {
+            return
+        }
+
+        // If the item already existed, continue and update it instead.
+        // Otherwise, the status code was unexepected, throw an error.
+        if addStatus != errSecDuplicateItem {
+            throw error(for: addStatus)
+        }
+
+        let attributes: [String: AnyObject] = [
+            kSecValueData as String: data as AnyObject
+        ]
+
+        // SecItemUpdate attempts to update the item identified
+        // by query, overriding the previous value
         let updateStatus = SecItemUpdate(
-            query as CFDictionary,
+            commonQuery as CFDictionary,
             attributes as CFDictionary
         )
 
@@ -67,21 +86,7 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
             return
         }
 
-        // Can't update an entry if it doesn't exist yet. Have to explicitly
-        // add it first.
-
-        if updateStatus == errSecItemNotFound {
-            let newItem = query.merging(attributes, uniquingKeysWith: { $1 })
-            let addStatus = SecItemAdd(newItem as CFDictionary, nil)
-
-            if addStatus == errSecSuccess {
-                return
-            } else {
-                throw error(for: addStatus)
-            }
-        } else {
-            throw error(for: updateStatus)
-        }
+        throw error(for: updateStatus)
     }
 
     nonisolated func delete(
@@ -102,11 +107,18 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
     private nonisolated func commonQueryAttributes(
         for key: String
     ) -> [String: Any] {
-        let name = "parra_\(key)"
+        let account = "parra_\(key)"
+
+        guard let appBundleId = ParraInternal.appBundleIdentifier(
+            bundle: .main
+        ) else {
+            fatalError("Couldn't obtain app bundle id")
+        }
 
         return [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: name
+            kSecAttrService as String: appBundleId as AnyObject,
+            kSecAttrAccount as String: account as AnyObject,
+            kSecClass as String: kSecClassGenericPassword
         ]
     }
 
