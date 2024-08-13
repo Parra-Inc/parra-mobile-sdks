@@ -34,9 +34,14 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
         query[kSecReturnData as String] = true
 
         var item: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &item)
 
-        try performSecOperation {
-            SecItemCopyMatching(query as CFDictionary, &item)
+        if status == errSecItemNotFound {
+            return nil
+        }
+
+        if status != errSecSuccess {
+            throw error(for: status)
         }
 
         if let data = item as? Data {
@@ -94,9 +99,13 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
     ) throws {
         let query = commonQueryAttributes(for: name)
 
-        try performSecOperation {
-            SecItemDelete(query as CFDictionary)
+        let status = SecItemDelete(query as CFDictionary)
+
+        if status == errSecItemNotFound || status == errSecSuccess {
+            return
         }
+
+        throw error(for: status)
     }
 
     // MARK: - Private
@@ -122,19 +131,13 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
         ]
     }
 
-    private nonisolated func performSecOperation(
-        _ op: () -> OSStatus
-    ) throws {
-        let status = op()
-
-        if status != errSecSuccess {
-            throw error(for: status)
-        }
-    }
-
-    private nonisolated func error(for status: OSStatus) -> ParraError {
-        let message = SecCopyErrorMessageString(status, nil) as String?
-            ?? "unknown keychain error"
+    private nonisolated func error(
+        for status: OSStatus
+    ) -> ParraError {
+        let message = SecCopyErrorMessageString(
+            status,
+            nil
+        ) as String? ?? "unknown"
 
         return ParraError.message("Keychain error: \(message)")
     }
