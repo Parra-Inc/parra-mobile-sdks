@@ -116,17 +116,19 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
     private nonisolated func commonQueryAttributes(
         for key: String
     ) -> [String: Any] {
-        let account = "parra_\(key)"
-
         guard let appBundleId = ParraInternal.appBundleIdentifier(
             bundle: .main
+        ), let parraBundleId = ParraInternal.appBundleIdentifier(
+            bundle: .parraBundle
         ) else {
-            fatalError("Couldn't obtain app bundle id")
+            fatalError("Couldn't obtain app bundle ids")
         }
 
+        let account = "\(appBundleId)_\(key)"
+
         return [
-            kSecAttrService as String: appBundleId as AnyObject,
-            kSecAttrAccount as String: account as AnyObject,
+            kSecAttrService as String: parraBundleId as AnyObject,
+            kSecAttrAccount as String: appBundleId as AnyObject,
             kSecClass as String: kSecClassGenericPassword
         ]
     }
