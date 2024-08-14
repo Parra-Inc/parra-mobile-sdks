@@ -123,12 +123,14 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
         }
 
         let account = "parra_\(key)"
+        let accessGroup = "\(service).parra.sharedkeychain"
 
         return [
-            kSecAttrService as String: service as AnyObject,
-            kSecAttrAccount as String: account as AnyObject,
-            kSecClass as String: kSecClassGenericPassword
-        ]
+            kSecAttrService: service,
+            kSecAttrAccount: account,
+            kSecAttrAccessGroup: accessGroup,
+            kSecClass: kSecClassGenericPassword
+        ] as [String: Any]
     }
 
     private nonisolated func error(

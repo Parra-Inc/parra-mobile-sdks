@@ -8,5 +8,9 @@
 	<array>
 		{{ app.entitlements.release.associated_domains }}
 	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>{{ app.bundle_id}}.parra.sharedkeychain</string>
+	</array>
 </dict>
 </plist>
