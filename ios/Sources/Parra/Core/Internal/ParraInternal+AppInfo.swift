@@ -9,10 +9,8 @@
 import Foundation
 
 extension ParraInternal {
-    static func appBundleIdentifier(
-        bundle: Bundle = Bundle.main
-    ) -> String? {
-        return bundle.bundleIdentifier
+    static func appBundleIdentifier() -> String? {
+        return Bundle.main.bundleIdentifier
     }
 
     /// Whether the current app with Parra installed is the demo app in
@@ -21,17 +19,13 @@ extension ParraInternal {
         return appBundleIdentifier() == Constants.betaAppBundleId
     }
 
-    static func appUserDefaultsSuite(
-        bundle: Bundle = Bundle.main
-    ) -> String {
+    static func appUserDefaultsSuite() -> String {
         // ! The suite can not be the bundle id. This will result in warning:
         // _NSUserDefaults_Log_Nonsensical_Suites
 
         let suffix = "parra.defaults"
 
-        guard let bundleId = appBundleIdentifier(
-            bundle: bundle
-        ) else {
+        guard let bundleId = appBundleIdentifier() else {
             return suffix
         }
 

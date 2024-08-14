@@ -26,15 +26,13 @@ public extension Parra {
         public static let parraWebRoot = URL(string: "https://parra.io/")!
     }
 
-    static func appBundleName(
-        bundle: Bundle = Bundle.main
-    ) -> String? {
-        return bundle.infoDictionary?["CFBundleName"] as? String
+    static func appBundleName() -> String? {
+        return Bundle.main.infoDictionary?["CFBundleName"] as? String
     }
 
-    static func appIconFilePath(
-        bundle: Bundle = Bundle.main
-    ) -> URL? {
+    static func appIconFilePath() -> URL? {
+        let bundle = Bundle.main
+
         guard let icons = bundle.object(
             forInfoDictionaryKey: "CFBundleIcons"
         ) as? [String: Any],

@@ -116,9 +116,7 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
     private nonisolated func commonQueryAttributes(
         for key: String
     ) -> [String: Any] {
-        guard let service = ParraInternal.appBundleIdentifier(
-            bundle: .main
-        ) else {
+        guard let service = ParraInternal.appBundleIdentifier() else {
             fatalError("Couldn't obtain app bundle ids")
         }
 
