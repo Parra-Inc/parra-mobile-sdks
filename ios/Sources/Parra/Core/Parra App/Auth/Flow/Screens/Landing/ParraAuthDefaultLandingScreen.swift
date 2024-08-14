@@ -85,7 +85,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
             return "Welcome"
         }
 
-        return "Welcome\nto \(name)"
+        return "Welcome to\n\(name)"
     }
 
     @ViewBuilder private var defaultTopView: some View {
@@ -116,7 +116,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         let titleAttributes = ParraAttributes.Label(
             text: ParraAttributes.Text(
                 font: .systemFont(ofSize: 50, weight: .heavy),
-                alignment: .leading
+                alignment: .center
             ),
             padding: .md
         )
@@ -125,6 +125,8 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
             content: ParraLabelContent(text: title),
             localAttributes: titleAttributes
         )
+        .minimumScaleFactor(0.5)
+        .lineLimit(2)
     }
 
     @ViewBuilder private var subtitleLabel: some View {
@@ -134,7 +136,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         )
 
         componentFactory.buildLabel(
-            content: ParraLabelContent(text: "Sign up or log in to continue."),
+            content: ParraLabelContent(text: "Continue to sign up or log in."),
             localAttributes: subtitleAttributes
         )
     }
