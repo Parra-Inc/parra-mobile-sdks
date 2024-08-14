@@ -159,6 +159,7 @@ jobs:
             git config --global user.name "$GH_USER"
             git config --global user.email "$GH_EMAIL"
 
+            git add ios/Sources/Parra/GeneratedPackageInfo.swift
             git add sample
             git add cli
             git commit -m "Released version $CIRCLE_TAG [skip ci]"
