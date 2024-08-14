@@ -129,6 +129,11 @@ jobs:
             cd cli; ./release_update.sh $CIRCLE_TAG
 
       - run:
+          name: Update SPM package version
+          command: |
+            echo "enum ParraPackageInfo { static let version = \"$CIRCLE_TAG\" }\n" > ios/Sources/Parra/GeneratedPackageInfo.swift
+
+      - run:
           name: Create Sample App
           command: |
             ./cli/target/aarch64-apple-darwin/release/parra bootstrap --template parra-sample-remote
