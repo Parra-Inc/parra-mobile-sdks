@@ -121,12 +121,15 @@ actor KeychainStorage: PersistentStorageMedium, @unchecked Sendable {
         }
 
         let account = "parra_\(key)"
-        let accessGroup = "\(service).parra.sharedkeychain"
 
         return [
             kSecAttrService: service,
             kSecAttrAccount: account,
-            kSecAttrAccessGroup: accessGroup,
+            // "The data protection key affects operations only in macOS.
+            // Other platforms automatically behave as if the key is set to
+            // true, and ignore the key in the query dictionary. You can safely
+            // use the key on all platforms."
+            kSecUseDataProtectionKeychain: true,
             kSecClass: kSecClassGenericPassword
         ] as [String: Any]
     }
