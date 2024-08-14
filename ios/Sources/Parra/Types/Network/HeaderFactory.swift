@@ -82,7 +82,7 @@ struct HeaderFactory {
         case .platformAgent:
             return "parra-ios-swift"
         case .platformSdkVersion:
-            return ParraInternal.libraryVersion()
+            return ParraInternal.libraryVersion
         case .platformVersion:
             return ProcessInfo.processInfo.operatingSystemVersionString
         case .tenantId:

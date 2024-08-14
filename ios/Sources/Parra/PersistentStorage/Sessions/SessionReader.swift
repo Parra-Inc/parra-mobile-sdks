@@ -225,7 +225,7 @@ class SessionReader {
             session: ParraSession(
                 sessionId: nextSessionId,
                 createdAt: nextSessionStart,
-                sdkVersion: ParraInternal.libraryVersion()
+                sdkVersion: ParraInternal.libraryVersion
             ),
             sessionPath: sessionPath,
             eventsPath: eventsPath

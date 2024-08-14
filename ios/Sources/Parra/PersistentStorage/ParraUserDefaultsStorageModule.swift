@@ -18,7 +18,7 @@ class ParraUserDefaultsStorageModule<DataType: Codable> {
     ) {
         self.key = "parra_\(key)"
         self.storage = UserDefaultsStorage(
-            userDefaults: .parra,
+            userDefaults: .standard,
             jsonEncoder: jsonEncoder,
             jsonDecoder: jsonDecoder
         )

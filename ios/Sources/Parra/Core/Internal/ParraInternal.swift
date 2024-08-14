@@ -73,6 +73,8 @@ class ParraInternal {
     static let moduleName = "Parra"
     static let errorDomain = "com.parra.error"
 
+    static let libraryVersion = ParraPackageInfo.version
+
     // MARK: - Parra Modules
 
     let feedback: ParraFeedback
@@ -97,12 +99,6 @@ class ParraInternal {
     let modalScreenManager: ModalScreenManager
 
     var globalComponentFactory: ComponentFactory
-
-    static func libraryVersion() -> String {
-        return Parra.appBundleVersionShort(
-            bundle: .parraBundle
-        ) ?? "unknown"
-    }
 
     @MainActor
     func authStateDidChange(
