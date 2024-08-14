@@ -76,6 +76,7 @@ export const loadCommonXcodeBuildOptionsFromEnvironment =
       destination: env.PARRA_TEST_DESTINATION || defaults.destination,
       derivedDataPath:
         env.PARRA_TEST_DERIVED_DATA_DIRECTORY || defaults.derivedDataPath,
+      showBuildTimingSummary: defaults.showBuildTimingSummary,
     };
   };
 
@@ -135,11 +136,17 @@ const commonArgsFromOptions = (options: CommonXcodeBuildOptions) => {
   const { project, scheme, configuration, destination, derivedDataPath } =
     options;
 
-  return [
+  const args = [
     `-project "${project}"`,
     `-scheme "${scheme}"`,
     `-configuration "${configuration}"`,
     `-destination "${destination}"`,
     `-derivedDataPath "${derivedDataPath}"`,
   ];
+
+  if (options.showBuildTimingSummary) {
+    args.push(`-showBuildTimingSummary`);
+  }
+
+  return args;
 };

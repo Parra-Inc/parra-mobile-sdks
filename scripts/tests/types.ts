@@ -8,6 +8,7 @@ export type CommonXcodeBuildOptions = {
   scheme: string;
   configuration: string;
   destination: string;
+  showBuildTimingSummary: boolean;
 };
 
 const DEFAULT_XCODE_BUILD_OPTIONS: CommonXcodeBuildOptions = {
@@ -16,6 +17,7 @@ const DEFAULT_XCODE_BUILD_OPTIONS: CommonXcodeBuildOptions = {
   project: 'Parra.xcodeproj',
   destination: 'platform=iOS Simulator,name=iPhone 15,OS=17.5',
   derivedDataPath: 'build/unit-tests/derivedData',
+  showBuildTimingSummary: true,
 };
 
 export type XcodeBuildOptions = CommonXcodeBuildOptions & {

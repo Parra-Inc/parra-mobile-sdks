@@ -49,7 +49,7 @@ export const testWithoutBuilding = async (
     'test-without-building',
     args,
     derivedDataPath,
-    `| ${commandSuffix}`
+    `2>&1 | ${commandSuffix}`
   );
 };
 
@@ -57,7 +57,7 @@ const runXcodeBuildSubcommand = async (
   subcommand: string,
   args: string,
   derivedDataPath: string,
-  commandSuffix: string = ''
+  commandSuffix: string = '2>&1 | xcbeautify'
 ): Promise<void> => {
   // Don't print args in CI. They contain sensitive information.
   if (isCI) {
@@ -81,7 +81,7 @@ const runXcodeBuildSubcommand = async (
 export const runXcodeBuildCommand = async (
   args: string,
   derivedDataPath: string,
-  commandSuffix: string = ''
+  commandSuffix: string = '2>&1 | xcbeautify'
 ): Promise<void> => {
   // Don't print args in CI. They contain sensitive information.
   if (isCI) {
