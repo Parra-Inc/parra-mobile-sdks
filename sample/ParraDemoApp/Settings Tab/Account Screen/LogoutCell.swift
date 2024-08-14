@@ -2,7 +2,7 @@
 //  LogoutCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/13/2024.
+//  Bootstrapped with ❤️ by Parra on 08/14/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
