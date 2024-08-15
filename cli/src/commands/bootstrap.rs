@@ -455,6 +455,7 @@ async fn get_tenant(
                 .with_help_message(
                     "Press ↑/↓ to change selection. Press enter to confirm.",
                 )
+                .with_page_size(10)
                 .prompt();
 
         return Ok(selected_tenant?);
@@ -489,6 +490,7 @@ async fn get_application(
                 .with_help_message(
                     "Press ↑/↓ to change selection. Press enter to confirm.",
                 )
+                .with_page_size(10)
                 .prompt();
 
         match selected_application {
