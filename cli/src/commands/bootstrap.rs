@@ -619,13 +619,13 @@ fn open_project(
 
     let mut complete_message = String::new();
     complete_message.push_str(
-        "\n\n\n🎉🌟 \x1b[1;32mYour new project is ready!\x1b[0m 🌟🎉\n\n\n",
+        "\n\n\n🎉🌟 \x1b[1;95mYour new project is ready!\x1b[0m 🌟🎉\n\n\n",
     );
     complete_message
         .push_str("\x1b[1mJump right in and start building:\x1b[0m\n\n");
     complete_message.push_str(
         format!(
-            "🛠️  Open your new Xcode project: \x1b]8;;file://{}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            "🛠️  Open your new Xcode project: \x1b]8;;file://{}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
             absolute_path.to_string_lossy(),
             path_clone
         )
@@ -633,7 +633,7 @@ fn open_project(
     );
     complete_message.push_str(
         format!(
-            "📂 Reveal your project in Finder: \x1b]8;;file://{}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            "📂 Reveal your project in Finder: \x1b]8;;file://{}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
             project_dir_path.to_string_lossy(),
             relative_project_dir
         )
@@ -645,21 +645,21 @@ fn open_project(
 
     complete_message.push_str(
         format!(
-            "📊 Configure your project in the dashboard: \x1b]8;;{}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            "📊 Configure your project in the dashboard: \x1b]8;;{}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
             &tenant_dashboard_link, dashboard_link
         )
         .as_str(),
     );
     complete_message.push_str(
         format!(
-            "📚 Read the docs: \x1b]8;;{}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            "📚 Read the docs: \x1b]8;;{}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
             doc_link, doc_link
         )
         .as_str(),
     );
     complete_message.push_str(
         format!(
-            "📨 Reach out if you need help: \x1b]8;;mailto:{}?subject={}\x1b\\\x1b[34m{}\x1b[0m\x1b]8;;\x1b\\\n",
+            "📨 Reach out if you need help: \x1b]8;;mailto:{}?subject={}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
             support_email, support_email_subject, support_email
         )
         .as_str(),
