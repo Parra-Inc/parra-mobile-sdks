@@ -286,6 +286,8 @@ pub async fn execute_bootstrap(
         slugify!(&safe_app_name).to_case(Case::UpperCamel) + "App"
     };
 
+    let team_id = ios_config.team_id.unwrap_or("".to_owned());
+
     let context: ProjectContext = ProjectContext {
         app: AppContextInfo {
             id: application.id,
@@ -299,21 +301,21 @@ pub async fn execute_bootstrap(
             deployment_target: "17.0".to_owned(),
             code_sign: CodeSigningConfigs {
                 debug: CodeSigningConfig {
-                    identity: "".to_owned(),
-                    required: "NO".to_owned(),
-                    allowed: "NO".to_owned(),
+                    identity: "Apple Development".to_owned(),
+                    required: "YES".to_owned(),
+                    allowed: "YES".to_owned(),
                     style: "Automatic".to_owned(),
                     profile_specifier: "".to_owned(),
                 },
                 release: CodeSigningConfig {
-                    identity: "".to_owned(),
-                    required: "NO".to_owned(),
-                    allowed: "NO".to_owned(),
+                    identity: "Apple Development".to_owned(),
+                    required: "YES".to_owned(),
+                    allowed: "YES".to_owned(),
                     style: "Automatic".to_owned(),
                     profile_specifier: "".to_owned(),
                 },
             },
-            team_id: ios_config.team_id.unwrap_or("".to_owned()),
+            team_id: team_id.to_owned(),
             entitlements: get_entitlement_schemes(tenant.domains),
         },
         sdk: SdkContextInfo {
