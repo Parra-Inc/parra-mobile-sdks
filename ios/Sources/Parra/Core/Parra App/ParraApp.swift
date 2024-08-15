@@ -120,8 +120,6 @@ public struct ParraApp<
                 state: .initial(mergedLaunchScreenConfig)
             )
         )
-
-        ParraThemeManager.shared.current = parra.configuration.theme
     }
 
     // MARK: - Public
@@ -254,12 +252,14 @@ public struct ParraApp<
     }
 
     private func performAppLaunchTasks() {
-        Task(priority: .userInitiated) {
+        Task(priority: .userInitiated) { @MainActor in // must remain main actor
             guard case .initial = launchScreenState.current else {
                 return
             }
 
             logger.debug("Performing app launch tasks")
+
+            ParraThemeManager.shared.current = parra.configuration.theme
 
             do {
                 let result = try await parra
