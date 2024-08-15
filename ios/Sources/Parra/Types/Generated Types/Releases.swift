@@ -1015,6 +1015,7 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
     public let domains: [ParraDomain]?
     public let urls: [URL]?
     public let entitlements: [ParraEntitlement]?
+    /// Parra branding is hidden within the SDK for some paid plans.
     public let hideBranding: Bool
 
     // MARK: - Internal
