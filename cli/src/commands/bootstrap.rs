@@ -3,6 +3,7 @@ use crate::dependencies::DerivedDependency;
 use crate::types::api::{
     ApplicationResponse, TenantDomain, TenantDomainType, TenantResponse,
 };
+use crate::types::color_scheme::get_supported_parra_colored_color_scheme;
 use crate::types::dependency::SemanticVersion;
 use crate::types::templates::{
     AppContextInfo, AppEntitlementInfo, AppEntitlementSchemes, AppNameInfo,
@@ -10,7 +11,7 @@ use crate::types::templates::{
     TenantContextInfo,
 };
 use crate::{api, dependencies, project_generator};
-use colored::{Colorize, CustomColor};
+use colored::Colorize;
 use convert_case::{Case, Casing};
 use git2::Repository;
 use inquire::validator::{MaxLengthValidator, MinLengthValidator, Validation};
@@ -611,7 +612,6 @@ fn open_project(
     let mut project_dir_path = absolute_path.clone();
     project_dir_path.pop();
 
-    let dashboard_link = "https://parra.io/dashboard";
     let tenant_dashboard_link =
         format!("https://parra.io/tenants/{}", context.tenant.id);
     let doc_link = "https://docs.parra.io/sdks/guides/integration/swiftui";
@@ -621,8 +621,10 @@ fn open_project(
         context.app.id, context.tenant.id
     );
 
-    let parra_pink = CustomColor::new(219, 39, 119);
-    let parra_purple = CustomColor::new(162, 51, 234);
+    let color_scheme = get_supported_parra_colored_color_scheme();
+
+    // let parra_pink = CustomColor::new(219, 39, 119);
+    // let parra_purple = CustomColor::new(162, 51, 234);
 
     let complete_message = format!(
         "
@@ -643,18 +645,18 @@ fn open_project(
 📨 Reach out if you need help: \x1b]8;;mailto:{}?subject={}\x1b\\{}\x1b]8;;\x1b\\
 
         ",
-        "Your new project is ready!".bold().custom_color(parra_pink),
+        "Your new project is ready!".bold().color(color_scheme.highlight_color),
         "Jump right in and start building:".bold(),
         absolute_path.to_string_lossy(),
-        path_clone.custom_color(parra_purple).bold(),
+        path_clone.color(color_scheme.answer_color).bold(),
         project_dir_path.to_string_lossy(),
-        relative_project_dir.custom_color(parra_purple).bold(),
+        relative_project_dir.color(color_scheme.answer_color).bold(),
         "Or, if you aren't quite ready to code:".bold(),
-        dashboard_link.custom_color(parra_purple).bold(),
-        doc_link.custom_color(parra_purple).bold(),
+        tenant_dashboard_link.color(color_scheme.answer_color).bold(),
+        doc_link.color(color_scheme.answer_color).bold(),
         support_email,
         support_email_subject,
-        support_email.custom_color(parra_purple).bold()
+        support_email.color(color_scheme.answer_color).bold()
     );
 
     println!("{}", complete_message);

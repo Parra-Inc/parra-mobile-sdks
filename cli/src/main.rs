@@ -14,6 +14,7 @@ use constants::sample::{
     PARRA_SAMPLE_TEMPLATE_PREFIX,
 };
 use inquire::ui::{Attributes, Color, RenderConfig, StyleSheet, Styled};
+use types::color_scheme::get_supported_parra_inquire_color_scheme;
 
 use crate::arg_parser::Command;
 
@@ -71,38 +72,21 @@ async fn main() -> Result<(), Box<dyn Error>> {
 fn apply_cli_theme() {
     let render_config = match env::var("NO_COLOR") {
         Ok(_) => RenderConfig::empty(),
-        Err(_) => match env::var("COLORTERM") {
-            Ok(_) => parra_colors_render_config(),
-            Err(_) => reduced_colors_render_config(),
-        },
+        Err(_) => {
+            let scheme = get_supported_parra_inquire_color_scheme();
+
+            create_render_config(
+                &scheme.prefix_color,
+                &scheme.highlight_color,
+                &scheme.selection_color,
+                &scheme.answer_color,
+                &scheme.help_color,
+                &scheme.error_color,
+            )
+        }
     };
 
     inquire::set_global_render_config(render_config)
-}
-
-fn reduced_colors_render_config() -> RenderConfig<'static> {
-    return create_render_config(
-        &Color::DarkMagenta,
-        &Color::LightMagenta,
-        &Color::LightMagenta,
-        &Color::DarkMagenta,
-        &Color::DarkYellow,
-        &Color::LightRed,
-    );
-}
-
-fn parra_colors_render_config() -> RenderConfig<'static> {
-    let parra_pink = Color::rgb(219, 39, 119);
-    let parra_purple = Color::rgb(162, 51, 234);
-
-    return create_render_config(
-        &parra_purple,
-        &parra_pink,
-        &parra_pink,
-        &parra_purple,
-        &Color::DarkYellow,
-        &Color::LightRed,
-    );
 }
 
 fn create_render_config(
