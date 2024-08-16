@@ -1,10 +1,4 @@
 {
-  "spm_dependencies": [
-    {
-      "url": "https://github.com/RevenueCat/purchases-ios-spm",
-      "minor_version": "5.2.3"
-    }
-  ],
   "cli_inputs": [
     {
       "required": false,

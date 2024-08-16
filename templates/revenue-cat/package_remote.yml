@@ -1,0 +1,8 @@
+# https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md#remote-package
+packages:
+  Parra:
+    url: https://github.com/Parra-Inc/parra-mobile-sdks
+    minorVersion: {{ sdk.version }}
+  RevenueCat:
+    url: https://github.com/RevenueCat/purchases-ios-spm
+    minor_version: "5.2.3"
