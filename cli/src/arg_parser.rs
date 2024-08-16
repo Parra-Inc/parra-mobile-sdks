@@ -18,7 +18,12 @@ pub enum TemplateName {
 
 impl Display for TemplateName {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        Debug::fmt(self, f)
+        let output = match self {
+            TemplateName::Default => "default",
+            TemplateName::RevenueCat => "revenue-cat",
+        };
+
+        write!(f, "{}", output)
     }
 }
 
