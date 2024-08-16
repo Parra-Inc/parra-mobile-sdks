@@ -7,6 +7,7 @@ use std::vec;
 #[derive(Debug, PartialEq)]
 pub enum DerivedDependency {
     Xcode,
+    SimulatorRuntime,
 }
 
 /// xcodegen is expected to be installed on the system by homebrew since it is a
@@ -22,18 +23,103 @@ pub fn install_missing_dependencies(
 
 pub fn check_for_missing_dependencies(
     min_xcode_version: SemanticVersion,
+    desired_ios_runtime_version: SemanticVersion,
 ) -> Vec<DerivedDependency> {
     let mut missing_deps = Vec::<DerivedDependency>::new();
 
-    let valid_version = check_xcode_version(min_xcode_version);
-    if !valid_version {
-        missing_deps.push(DerivedDependency::Xcode)
+    match is_xcode_version_valid(min_xcode_version) {
+        Some(is_valid) => {
+            if !is_valid {
+                // Xcode is installed but it's the wrong version
+                missing_deps.push(DerivedDependency::Xcode);
+            }
+
+            // Regardless of Xcode being installed, check if a valid runtime is installed.
+            if !is_simulator_version_valid(desired_ios_runtime_version) {
+                missing_deps.push(DerivedDependency::SimulatorRuntime);
+            }
+        }
+        None => {
+            missing_deps.push(DerivedDependency::Xcode);
+            missing_deps.push(DerivedDependency::SimulatorRuntime);
+        }
     }
 
     return missing_deps;
 }
 
-fn check_xcode_version(min_version: SemanticVersion) -> bool {
+fn is_simulator_version_valid(min_version: SemanticVersion) -> bool {
+    // xcrun simctl list devices | grep "\-\- iOS" | awk '{print $3}'
+    // First command: `xcrun simctl list devices`
+    let list_devices = Command::new("xcrun")
+        .arg("simctl")
+        .arg("list")
+        .arg("devices")
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect("Failed to list iOS runtimes");
+
+    // Second command: `grep "\-\- iOS"`
+    let grep_for_ios_runtimes = Command::new("grep")
+        .arg("\\-\\- iOS")
+        .stdin(Stdio::from(
+            list_devices
+                .stdout
+                .expect("Failed to get search for iOS runtime"),
+        ))
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect("Failed to execute grep -- iOS");
+
+    // Third command: `awk '{print $3}'`
+    let format_results = Command::new("awk")
+        .arg("{print $3}")
+        .stdin(Stdio::from(
+            grep_for_ios_runtimes
+                .stdout
+                .expect("Failed to format matching iOS runtimes"),
+        ))
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect("Failed to execute awk '{print $3}'");
+
+    // Capture the final output
+    let output = format_results
+        .wait_with_output()
+        .expect("Failed to read stdout of third command");
+
+    if !output.status.success() {
+        return false;
+    }
+
+    return String::from_utf8_lossy(&output.stdout)
+        .lines()
+        .map(|line| {
+            let components: Vec<&str> = line.trim().split(".").collect();
+            let [major, minor] = components[..] else {
+                panic!("Major or minor component missing")
+            };
+
+            SemanticVersion {
+                major: major
+                    .parse()
+                    .expect("Major version component wasn't a valid int8"),
+                minor: minor
+                    .parse()
+                    .expect("Minor version component wasn't a valid int8"),
+                patch: 0,
+            }
+        })
+        .any(|version| {
+            return version.major > min_version.major
+                || (version.major == min_version.major
+                    && version.minor >= min_version.minor);
+        });
+}
+
+/// Returns true if Xcode is installed and valid version, false if installed and invalid version
+/// and None if Xcode isn't installed.
+fn is_xcode_version_valid(min_version: SemanticVersion) -> Option<bool> {
     let output = Command::new("xcodebuild")
         .arg("-version")
         .stderr(Stdio::null())
@@ -41,7 +127,7 @@ fn check_xcode_version(min_version: SemanticVersion) -> bool {
         .expect("Failed to execute xcodebuild -version");
 
     if !output.status.success() {
-        return false;
+        return None;
     }
 
     let stdout = String::from_utf8_lossy(&output.stdout);
@@ -54,7 +140,7 @@ fn check_xcode_version(min_version: SemanticVersion) -> bool {
     let min_version_req =
         match VersionReq::parse(&format!(">={}", min_version_string)) {
             Ok(req) => req,
-            Err(_) => return false, // Return false if the minimum version string is invalid
+            Err(_) => return Some(false), // Return false if the minimum version string is invalid
         };
 
     for line in stdout.lines() {
@@ -69,8 +155,12 @@ fn check_xcode_version(min_version: SemanticVersion) -> bool {
 
                 if let Ok(version) = Version::parse(&version_str) {
                     if min_version_req.matches(&version) {
-                        println!("Found installed Xcode version: {}", version);
-                        return true;
+                        println!(
+                            "Xcode version: {} is already installed",
+                            version
+                        );
+
+                        return Some(true);
                     }
                 }
             }
@@ -79,7 +169,7 @@ fn check_xcode_version(min_version: SemanticVersion) -> bool {
 
     println!("No installed Xcode version meets the minimum requirement");
 
-    return false;
+    return Some(false);
 }
 
 fn install_brew_dependencies() {

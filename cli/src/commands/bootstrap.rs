@@ -394,7 +394,10 @@ fn get_entitlement_schemes(
 }
 
 fn missing_dependencies() -> Vec<DerivedDependency> {
-    dependencies::check_for_missing_dependencies(MIN_XCODE_VERSION)
+    dependencies::check_for_missing_dependencies(
+        MIN_XCODE_VERSION,
+        DESIRED_IOS_RUNTIME_VERSION,
+    )
 }
 
 async fn dependencies(
