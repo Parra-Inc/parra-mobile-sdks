@@ -1,1 +1,1 @@
-default/App/Settings Tab/Account Screen/DeleteAccountCell.liquid.swift
+../../default/App/Settings Tab/Account Screen/DeleteAccountCell.liquid.swift

@@ -1,1 +1,1 @@
-default/App/Settings Tab/Cells/LatestReleaseCell.liquid.swift
+../../default/App/Settings Tab/Cells/LatestReleaseCell.liquid.swift

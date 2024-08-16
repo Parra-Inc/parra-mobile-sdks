@@ -1,1 +1,1 @@
-default/App/Settings Tab/Account Screen/ChangePasswordCell.liquid.swift
+../../default/App/Settings Tab/Account Screen/ChangePasswordCell.liquid.swift

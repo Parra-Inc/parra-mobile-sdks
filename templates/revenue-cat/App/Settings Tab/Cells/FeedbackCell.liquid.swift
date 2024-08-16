@@ -1,1 +1,1 @@
-default/App/Settings Tab/Cells/FeedbackCell.liquid.swift
+../../default/App/Settings Tab/Cells/FeedbackCell.liquid.swift

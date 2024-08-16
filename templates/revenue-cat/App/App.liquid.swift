@@ -1,1 +1,1 @@
-default/App/App.liquid.swift
+../../default/App/App.liquid.swift

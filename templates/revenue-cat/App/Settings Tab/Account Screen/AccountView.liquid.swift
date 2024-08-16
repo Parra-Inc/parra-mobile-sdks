@@ -1,1 +1,1 @@
-default/App/Settings Tab/Account Screen/AccountView.liquid.swift
+../../default/App/Settings Tab/Account Screen/AccountView.liquid.swift
