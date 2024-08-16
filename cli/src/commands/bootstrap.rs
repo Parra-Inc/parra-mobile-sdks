@@ -10,6 +10,7 @@ use crate::types::templates::{
     TenantContextInfo,
 };
 use crate::{api, dependencies, project_generator};
+use colored::{Colorize, CustomColor};
 use convert_case::{Case, Casing};
 use git2::Repository;
 use inquire::validator::{MaxLengthValidator, MinLengthValidator, Validation};
@@ -620,52 +621,40 @@ fn open_project(
         context.app.id, context.tenant.id
     );
 
-    let mut complete_message = String::new();
-    complete_message.push_str(
-        "\n\n\n🎉🌟 \x1b[1;95mYour new project is ready!\x1b[0m 🌟🎉\n\n\n",
-    );
-    complete_message
-        .push_str("\x1b[1mJump right in and start building:\x1b[0m\n\n");
-    complete_message.push_str(
-        format!(
-            "🛠️  Open your new Xcode project: \x1b]8;;file://{}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
-            absolute_path.to_string_lossy(),
-            path_clone
-        )
-        .as_str(),
-    );
-    complete_message.push_str(
-        format!(
-            "📂 Reveal your project in Finder: \x1b]8;;file://{}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
-            project_dir_path.to_string_lossy(),
-            relative_project_dir
-        )
-        .as_str(),
-    );
+    let parra_pink = CustomColor::new(219, 39, 119);
+    let parra_purple = CustomColor::new(162, 51, 234);
 
-    complete_message
-        .push_str("\n\x1b[1mOr, if you aren't quite ready to code:\x1b[0m\n\n");
+    let complete_message = format!(
+        "
+        
+        
+🎉🌟 {} 🌟🎉
 
-    complete_message.push_str(
-        format!(
-            "📊 Configure your project in the dashboard: \x1b]8;;{}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
-            &tenant_dashboard_link, dashboard_link
-        )
-        .as_str(),
-    );
-    complete_message.push_str(
-        format!(
-            "📚 Read the docs: \x1b]8;;{}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
-            doc_link, doc_link
-        )
-        .as_str(),
-    );
-    complete_message.push_str(
-        format!(
-            "📨 Reach out if you need help: \x1b]8;;mailto:{}?subject={}\x1b\\\x1b[35m{}\x1b[0m\x1b]8;;\x1b\\\n",
-            support_email, support_email_subject, support_email
-        )
-        .as_str(),
+
+{}
+
+🛠️  Open your new Xcode project: \x1b]8;;file://{}\x1b\\{}\x1b]8;;\x1b\\
+📂 Reveal your project in Finder: \x1b]8;;file://{}\x1b\\{}\x1b]8;;\x1b\\
+
+{}
+
+📊 Configure your project in the dashboard: {}
+📚 Read the docs: {}
+📨 Reach out if you need help: \x1b]8;;mailto:{}?subject={}\x1b\\{}\x1b]8;;\x1b\\
+
+        ",
+        "Your new project is ready!".bold().custom_color(parra_pink),
+        "Jump right in and start building:".bold(),
+        absolute_path.to_string_lossy(),
+        path_clone.custom_color(parra_purple).bold(),
+        project_dir_path.to_string_lossy(),
+        relative_project_dir.custom_color(parra_purple).bold(),
+        "Or, if you aren't quite ready to code:".bold(),
+        dashboard_link.custom_color(parra_purple).bold(),
+        doc_link.custom_color(parra_purple).bold(),
+        support_email,
+        support_email_subject,
+        support_email.custom_color(parra_purple).bold()
     );
 
     println!("{}", complete_message);
