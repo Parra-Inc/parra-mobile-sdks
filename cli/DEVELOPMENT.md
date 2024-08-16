@@ -19,4 +19,11 @@
 ### Notes
 
 1. When running the project using `cargo run`, you will see a prompt to access the system keychain every time the binary is modified and it tries to access an entry that was created by the CLI before modification. This Only happens when the binary changes and will not happen in production, except potentially after installing an update.
-2. If you're on Apple Silicon and plan to create releases for x86_64, you will need to run `rustup target install x86_64-apple-darwin` to enable cross compilation support for the x86_64 architecture.
+2. If you're on Apple Silicon and plan to create releases for x86\_64, you will need to run `rustup target install x86_64-apple-darwin` to enable cross compilation support for the x86\_64 architecture.
+
+### Generating the Parra Demo Project
+
+Invoke the bootstrap command with one of the local or remote demo app generation environmental variables set.
+
+* `PARRA_GENERATE_DEMO_LOCAL=1 cargo run bootstrap`
+* `PARRA_GENERATE_DEMO_REMOTE=1 cargo run bootstrap`
