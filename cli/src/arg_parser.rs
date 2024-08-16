@@ -1,10 +1,25 @@
-use clap::{Parser, Subcommand};
+use std::fmt::{Debug, Display};
+
+use clap::{Parser, Subcommand, ValueEnum};
 
 #[derive(Parser)]
 #[command(version, about, long_about = "")]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Command,
+}
+
+#[derive(Debug, Clone, ValueEnum)]
+// converted to/from kebab-case by default, which matches template directory names.
+pub enum TemplateName {
+    Default,
+    RevenueCat,
+}
+
+impl Display for TemplateName {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Debug::fmt(self, f)
+    }
 }
 
 #[derive(Parser, Debug)]
@@ -29,8 +44,8 @@ pub struct BootstrapCommandArgs {
     #[arg(short = 'p', long = "project-path")]
     pub project_path: Option<String>,
 
-    #[arg(short = 't', long = "template", default_value = "default")]
-    pub template_name: String,
+    #[arg(value_enum, short = 't', long = "template", default_value_t = TemplateName::Default)]
+    pub template_name: TemplateName,
 }
 
 #[derive(Parser, Debug)]

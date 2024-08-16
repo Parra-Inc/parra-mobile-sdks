@@ -9,10 +9,6 @@ mod dependencies;
 mod project_generator;
 mod types;
 
-use constants::sample::{
-    PARRA_LOCAL_SAMPLE_NAME, PARRA_REMOTE_SAMPLE_NAME,
-    PARRA_SAMPLE_TEMPLATE_PREFIX,
-};
 use inquire::ui::{Attributes, Color, RenderConfig, StyleSheet, Styled};
 use types::color_scheme::get_supported_parra_inquire_color_scheme;
 
@@ -26,28 +22,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     match cli.command {
         Command::Bootstrap(bootstrap_args) => {
-            if bootstrap_args
-                .template_name
-                .starts_with(PARRA_SAMPLE_TEMPLATE_PREFIX)
-            {
-                let sample_name = bootstrap_args
-                    .template_name
-                    .strip_prefix(PARRA_SAMPLE_TEMPLATE_PREFIX)
-                    .unwrap();
+            let (generate_demo, use_local_packages) = should_generate_demo();
 
-                if ![PARRA_LOCAL_SAMPLE_NAME, PARRA_REMOTE_SAMPLE_NAME]
-                    .contains(&sample_name)
-                {
-                    return Err(format!(
-                        "Unknown Parra sample app name provided: {}",
-                        sample_name
-                    )
-                    .into());
-                }
-
+            if generate_demo {
                 commands::bootstrap::execute_sample_bootstrap(
                     bootstrap_args.project_path,
-                    sample_name == PARRA_LOCAL_SAMPLE_NAME,
+                    use_local_packages,
                 )
                 .await?;
             } else {
@@ -55,7 +35,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     bootstrap_args.application_id,
                     bootstrap_args.workspace_id,
                     bootstrap_args.project_path,
-                    bootstrap_args.template_name,
+                    bootstrap_args.template_name.to_string(),
                 )
                 .await?
             }
@@ -125,4 +105,22 @@ fn create_render_config(
     render_config.help_message = StyleSheet::new().with_fg(*help_color);
 
     return render_config;
+}
+
+fn should_generate_demo() -> (bool, bool) {
+    match env::var("PARRA_GENERATE_DEMO_REMOTE") {
+        Ok(_) => {
+            return (true, false);
+        }
+        Err(_) => {}
+    };
+
+    match env::var("PARRA_GENERATE_DEMO_LOCAL") {
+        Ok(_) => {
+            return (true, true);
+        }
+        Err(_) => {}
+    };
+
+    return (false, false);
 }
