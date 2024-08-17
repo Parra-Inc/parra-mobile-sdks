@@ -22,6 +22,7 @@ use std::env::{self};
 use std::error::Error;
 use std::fmt::Display;
 use std::fs::{self, read_to_string};
+use std::io;
 use std::path::{Path, PathBuf};
 use std::process::{exit, Command};
 use std::str::FromStr;
@@ -130,13 +131,41 @@ async fn get_remote_template(
         .output()
         .expect("Failed to perform checkout at tag");
 
-    let template_dir =
-        Path::new(&tmp_dir).join("templates").join(template_name);
+    let templates_dir = Path::new(&tmp_dir).join("templates");
+    let template_dir = templates_dir.join(template_name);
+
+    resolve_template_symlinks(&templates_dir, &template_dir)?;
 
     let template = get_local_template(&template_dir, false)?;
     let app_dir = template_dir.join("App");
 
     return Ok((template, app_dir));
+}
+
+fn resolve_template_symlinks(
+    templates_dir: &PathBuf,
+    current_dir: &PathBuf,
+) -> io::Result<()> {
+    for entry in fs::read_dir(current_dir)? {
+        let entry = entry?;
+        let ty = entry.file_type()?;
+
+        if ty.is_dir() {
+            // recurse
+            resolve_template_symlinks(templates_dir, &entry.path())?;
+        } else if ty.is_symlink() {
+            let target_path = &fs::read_link(entry.path())?;
+            let full_target = templates_dir.join(target_path);
+
+            // replace the symlink with a copy of the linked file
+            fs::remove_file(entry.path())?;
+            fs::copy(full_target, entry.path())?;
+        } else {
+            // Do nothing
+        }
+    }
+
+    Ok(())
 }
 
 pub async fn execute_sample_bootstrap(
