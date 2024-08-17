@@ -5,4 +5,4 @@ packages:
     minorVersion: {{ sdk.version }}
   RevenueCat:
     url: https://github.com/RevenueCat/purchases-ios-spm
-    minor_version: "5.2.3"
+    minor_version: 5.2.3
