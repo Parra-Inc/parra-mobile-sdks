@@ -35,6 +35,8 @@ export const runBootstrap = async () => {
 
   // Homebrew
 
+  // Used for copying templates
+  await runCommand('brew install coreutils --quiet', commonOptions);
   await runCommand('brew install swiftformat --quiet', commonOptions);
   await runCommand(
     'brew install --cask swiftformat-for-xcode --quiet',

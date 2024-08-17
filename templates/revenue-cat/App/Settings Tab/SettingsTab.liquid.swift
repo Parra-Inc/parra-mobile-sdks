@@ -1,1 +1,1 @@
-../../default/App/Settings Tab/SettingsTab.liquid.swift
+default/App/Settings Tab/SettingsTab.liquid.swift

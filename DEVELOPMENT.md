@@ -11,6 +11,6 @@ Parra uses the default template from the `templates` directory when generating t
 Most templates build off of the default template. To facilitate this, the standard practice for creating new templates is to start by symlinking all the files within the default one and modifying it from there.
 
 1. Create a kebab-case folder name for the new template in the `templates` directory.
-2. Duplicate the structure of the default template with links to the original files `cd templates/new-template; cp -RLs ../default/* .`.
+2. Duplicate the structure of the default template with links to the original files `cd templates; cp -RLs default/* new-template/`.
 3. Delete and re-create, or otherwise modify the new template's files as needed.
 4. Update the arg parser in the `cli` to add a new case to the `TemplateName` enum for the new template.

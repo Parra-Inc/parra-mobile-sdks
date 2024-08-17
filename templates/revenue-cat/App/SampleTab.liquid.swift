@@ -1,1 +1,1 @@
-../../default/App/SampleTab.liquid.swift
+default/App/SampleTab.liquid.swift

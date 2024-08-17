@@ -1,1 +1,1 @@
-../../default/App/Settings Tab/Cells/ChangelogCell.liquid.swift
+default/App/Settings Tab/Cells/ChangelogCell.liquid.swift

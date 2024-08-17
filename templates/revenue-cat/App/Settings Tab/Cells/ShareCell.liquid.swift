@@ -1,1 +1,1 @@
-../../default/App/Settings Tab/Cells/ShareCell.liquid.swift
+default/App/Settings Tab/Cells/ShareCell.liquid.swift

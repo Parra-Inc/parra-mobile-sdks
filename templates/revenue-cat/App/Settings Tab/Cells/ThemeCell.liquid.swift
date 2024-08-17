@@ -1,1 +1,1 @@
-../../default/App/Settings Tab/Cells/ThemeCell.liquid.swift
+default/App/Settings Tab/Cells/ThemeCell.liquid.swift
