@@ -100,7 +100,7 @@ pub struct ApplicationResponse {
     pub id: String,
     pub name: String,
     pub description: Option<String>,
-    pub r#type: ApplicationType,
+    pub r#type: String,
     pub tenant_id: String,
     /// Will always be present when `type` is `ios`.
     pub ios: Option<ApplicationIosConfig>,
