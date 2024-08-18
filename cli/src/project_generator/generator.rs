@@ -2,10 +2,13 @@ use std::path::{Path, PathBuf};
 use std::process::{exit, Command};
 use std::{error::Error, fs, io};
 
-use inquire::Confirm;
+use inquire::validator::{MaxLengthValidator, MinLengthValidator};
+use inquire::{Confirm, Text};
+use liquid::model::Value;
+use liquid::Object;
 
 use crate::project_generator::renderer;
-use crate::types::templates::ProjectContext;
+use crate::types::templates::{CliInput, ProjectContext};
 
 pub fn generate_xcode_project(
     project_dir: &PathBuf,
@@ -14,7 +17,43 @@ pub fn generate_xcode_project(
     context: &ProjectContext,
     prompt_for_override: bool,
 ) -> Result<PathBuf, Box<dyn Error>> {
-    let globals = liquid::to_object(&context)?;
+    let mut globals = liquid::to_object(&context)?;
+
+    if let Some(input_config) = &context.config.cli_input {
+        if !input_config.inputs.is_empty() {
+            let mut liquid_map = Object::new();
+
+            for input in <Vec<CliInput> as Clone>::clone(&input_config.inputs)
+                .into_iter()
+            {
+                let mut text_input = Text::new(&input.prompt)
+                    .with_validator(MinLengthValidator::new(input.min_length))
+                    .with_validator(MaxLengthValidator::new(input.max_length));
+
+                text_input = if let Some(help_message) = &input.help_message {
+                    text_input.with_help_message(&help_message.as_str())
+                } else {
+                    text_input
+                };
+
+                text_input = if let Some(default) = &input.default {
+                    text_input.with_default(&default.as_str())
+                } else {
+                    text_input
+                };
+
+                let user_input = text_input.prompt()?;
+
+                liquid_map.insert(input.key.into(), Value::scalar(user_input));
+            }
+
+            globals.insert(
+                <std::string::String as Clone>::clone(&input_config.name)
+                    .into(),
+                Value::Object(liquid_map),
+            );
+        }
+    }
 
     let camel_app_name = context.app.name.upper_camel.clone();
     let target_dir = project_dir.join(camel_app_name);

@@ -1,26 +1,36 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
-pub struct SpmDependency {
-    pub url: String,
-    /// Using SPM minor version to take a really averse stance to 3rd party library
-    /// updates potentially breaking our templates.
-    pub minor_version: String,
-}
-
-#[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct CliInput {
-    pub required: bool,
     pub prompt: String,
     pub help_message: Option<String>,
     pub default: Option<String>,
     pub key: String,
+
+    #[serde(default = "default_min_length")]
+    pub min_length: usize,
+
+    #[serde(default = "default_max_length")]
+    pub max_length: usize,
+}
+
+fn default_min_length() -> usize {
+    return 1;
+}
+
+fn default_max_length() -> usize {
+    return 255;
+}
+
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct InputConfig {
+    pub name: String,
+    pub inputs: Vec<CliInput>,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct TemplateConfig {
-    pub spm_dependencies: Vec<SpmDependency>,
-    pub cli_inputs: Vec<CliInput>,
+    pub cli_input: Option<InputConfig>,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
@@ -89,4 +99,5 @@ pub struct ProjectContext {
     pub app: AppContextInfo,
     pub tenant: TenantContextInfo,
     pub sdk: SdkContextInfo,
+    pub config: TemplateConfig,
 }

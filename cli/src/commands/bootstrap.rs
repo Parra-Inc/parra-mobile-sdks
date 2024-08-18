@@ -8,7 +8,7 @@ use crate::types::dependency::SemanticVersion;
 use crate::types::templates::{
     AppContextInfo, AppEntitlementInfo, AppEntitlementSchemes, AppNameInfo,
     CodeSigningConfig, CodeSigningConfigs, ProjectContext, SdkContextInfo,
-    TenantContextInfo,
+    TemplateConfig, TenantContextInfo,
 };
 use crate::{api, dependencies, project_generator};
 use colored::Colorize;
@@ -65,6 +65,265 @@ impl Display for SemanticVersion {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}.{}.{}", self.major, self.minor, self.patch)
     }
+}
+
+pub async fn execute_sample_bootstrap(
+    project_path: Option<String>,
+    use_local_packages: bool,
+) -> Result<(), Box<dyn Error>> {
+    println!("Preparing to generate Parra Sample project. Will link packages locally: {}", use_local_packages);
+
+    let template_dir = get_template_path("default")?;
+    let template_app_dir = template_dir.join("App/");
+    // Sample app generation will always use the local template. Even in CI, the template
+    // is accessible and should have already been updated for any necessary SDK changes by
+    // this point.
+    let template = get_local_template(&template_dir, use_local_packages)?;
+
+    let project_dir: PathBuf = if let Some(project_path) = project_path {
+        normalized_project_path(Some(project_path), "ParraSample")?
+    } else {
+        get_sample_path()?
+    };
+
+    let project_config = read_template_config(&template_dir)?;
+
+    println!("Will generate sample in: {}", project_dir.display());
+
+    let demo_app_id = "edec3a6c-a375-4a9d-bce8-eb00860ef228";
+    let demo_tenant_id = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4";
+
+    let context: ProjectContext = ProjectContext {
+        app: AppContextInfo {
+            id: demo_app_id.to_owned(),
+            name: AppNameInfo {
+                raw: "Parra Demo".to_owned(),
+                kebab: "parra-demo".to_owned(),
+                upper_camel: "ParraDemoApp".to_owned(),
+            },
+            bundle_id: "com.parra.parra-ios-client".to_owned(),
+            deployment_target: "17.0".to_owned(),
+            code_sign: CodeSigningConfigs {
+                debug: CodeSigningConfig {
+                    identity: "Apple Development".to_owned(),
+                    required: "YES".to_owned(),
+                    allowed: "YES".to_owned(),
+                    style: "Automatic".to_owned(),
+                    profile_specifier: "".to_owned(),
+                },
+                release: CodeSigningConfig {
+                    // Should be Apple Development here too by default.
+                    identity: "Apple Development".to_owned(),
+                    required: "YES".to_owned(),
+                    allowed: "YES".to_owned(),
+                    style: "Automatic".to_owned(),
+                    profile_specifier: "".to_owned(),
+                },
+            },
+            team_id: "6D44Q764PG".to_owned(),
+            entitlements: get_entitlement_schemes(vec![
+                TenantDomain {
+                    host: "parra-demo.com".to_owned(),
+                    domain_type: TenantDomainType::External,
+                },
+                TenantDomain {
+                    host: "parra-public-demo.parra.io".to_owned(),
+                    domain_type: TenantDomainType::Subdomain,
+                },
+                TenantDomain {
+                    host: format!("tenant-{}.parra.io", demo_tenant_id)
+                        .to_owned(),
+                    domain_type: TenantDomainType::Fallback,
+                },
+            ]),
+        },
+        sdk: SdkContextInfo {
+            version: built::built_info::PKG_VERSION.to_owned(),
+        },
+        tenant: TenantContextInfo {
+            id: demo_tenant_id.to_owned(),
+            name: "Parra Inc.".to_owned(),
+        },
+        config: project_config,
+    };
+
+    let xcode_project_path =
+        project_generator::generator::generate_xcode_project(
+            &project_dir,
+            &template_app_dir,
+            &template,
+            &context,
+            false,
+        )?;
+
+    println!(
+        "Parra project generated at {}!",
+        xcode_project_path.to_str().unwrap()
+    );
+
+    Ok(())
+}
+
+pub async fn execute_bootstrap(
+    application_id: Option<String>,
+    workspace_id: Option<String>,
+    project_path: Option<String>,
+    template_name: String,
+) -> Result<(), Box<dyn Error>> {
+    let tenant = get_tenant(workspace_id).await?;
+    let mut application = get_application(application_id, &tenant).await?;
+
+    // If the app name ends with "App", remove it.
+    if application.name.to_lowercase().ends_with("app") {
+        application.name =
+            application.name.trim_end_matches("app").trim().to_string();
+    }
+
+    let safe_app_name = Regex::new(r"[^a-zA-Z0-9\s-]")
+        .unwrap()
+        .replace_all(&application.name, "");
+
+    let expanded_path = normalized_project_path(project_path, &safe_app_name)?;
+
+    let (template, template_dir) = get_remote_template(&template_name).await?;
+    let template_app_dir = template_dir.join("App");
+
+    let ios_config = application.ios.unwrap();
+
+    println!("Generating project...");
+
+    // If the user didn't include the word app, anywhere in the app name, add it to the end
+    // of the name used for the main App struct. Creating a slug, then upper camel converting
+    // the name ensures invalid chars will be stripped.
+    let upper_camel_app_name = if safe_app_name.to_lowercase().contains("app") {
+        slugify!(&safe_app_name).to_case(Case::UpperCamel)
+    } else {
+        slugify!(&safe_app_name).to_case(Case::UpperCamel) + "App"
+    };
+
+    let team_id = ios_config.team_id.unwrap_or("".to_owned());
+    let project_config = read_template_config(&template_dir)?;
+
+    let context: ProjectContext = ProjectContext {
+        app: AppContextInfo {
+            id: application.id,
+            name: AppNameInfo {
+                raw: safe_app_name.to_string(),
+                // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"
+                kebab: slugify!(&safe_app_name),
+                upper_camel: upper_camel_app_name,
+            },
+            bundle_id: ios_config.bundle_id,
+            deployment_target: "17.0".to_owned(),
+            code_sign: CodeSigningConfigs {
+                debug: CodeSigningConfig {
+                    identity: "Apple Development".to_owned(),
+                    required: "YES".to_owned(),
+                    allowed: "YES".to_owned(),
+                    style: "Automatic".to_owned(),
+                    profile_specifier: "".to_owned(),
+                },
+                release: CodeSigningConfig {
+                    identity: "Apple Development".to_owned(),
+                    required: "YES".to_owned(),
+                    allowed: "YES".to_owned(),
+                    style: "Automatic".to_owned(),
+                    profile_specifier: "".to_owned(),
+                },
+            },
+            team_id: team_id.to_owned(),
+            entitlements: get_entitlement_schemes(tenant.domains),
+        },
+        sdk: SdkContextInfo {
+            version: built::built_info::PKG_VERSION.to_owned(),
+        },
+        tenant: TenantContextInfo {
+            id: tenant.id,
+            name: tenant.name,
+        },
+        config: project_config,
+    };
+
+    let xcode_project = project_generator::generator::generate_xcode_project(
+        &expanded_path,
+        &template_app_dir,
+        &template,
+        &context,
+        true,
+    )?;
+
+    let xcode_target_dir = &xcode_project;
+
+    println!(
+        "Parra project generated at {}!",
+        expanded_path.to_str().unwrap()
+    );
+
+    let missing = missing_dependencies();
+    // If all dependencies are met, open the project. Otherwise, prompt the user to install them,
+    // and then open the project on completion.
+    if missing.is_empty() {
+        open_project(xcode_target_dir, &context)?;
+    } else {
+        dependencies(missing).await?;
+
+        open_project(xcode_target_dir, &context)?;
+    }
+
+    Ok(())
+}
+
+fn read_template_config(
+    template_dir: &PathBuf,
+) -> Result<TemplateConfig, Box<dyn Error>> {
+    let project_config_path = template_dir.join("config.json");
+    let config: String = read_to_string(project_config_path)?;
+
+    return Ok(serde_json::from_str::<TemplateConfig>(&config)?);
+}
+
+fn normalized_project_path(
+    project_path: Option<String>,
+    app_name: &str,
+) -> Result<PathBuf, Box<dyn Error>> {
+    // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"
+    let kebab_name = slugify!(app_name);
+    let relative_path = get_project_path(project_path, &kebab_name);
+
+    let mut project_path = PathBuf::from_str(&relative_path)?;
+    if !project_path.ends_with(&kebab_name) {
+        project_path.push(&kebab_name);
+    }
+
+    let expanded_path = expand_tilde(&project_path).unwrap();
+
+    return Ok(expanded_path);
+}
+
+fn resolve_template_symlinks(
+    templates_dir: &PathBuf,
+    current_dir: &PathBuf,
+) -> io::Result<()> {
+    for entry in fs::read_dir(current_dir)? {
+        let entry = entry?;
+        let ty = entry.file_type()?;
+
+        if ty.is_dir() {
+            // recurse
+            resolve_template_symlinks(templates_dir, &entry.path())?;
+        } else if ty.is_symlink() {
+            let target_path = &fs::read_link(entry.path())?;
+            let full_target = templates_dir.join(target_path);
+
+            // replace the symlink with a copy of the linked file
+            fs::remove_file(entry.path())?;
+            fs::copy(full_target, entry.path())?;
+        } else {
+            // Do nothing
+        }
+    }
+
+    Ok(())
 }
 
 fn get_local_template(
@@ -137,254 +396,8 @@ async fn get_remote_template(
     resolve_template_symlinks(&templates_dir, &template_dir)?;
 
     let template = get_local_template(&template_dir, false)?;
-    let app_dir = template_dir.join("App");
 
-    return Ok((template, app_dir));
-}
-
-fn resolve_template_symlinks(
-    templates_dir: &PathBuf,
-    current_dir: &PathBuf,
-) -> io::Result<()> {
-    for entry in fs::read_dir(current_dir)? {
-        let entry = entry?;
-        let ty = entry.file_type()?;
-
-        if ty.is_dir() {
-            // recurse
-            resolve_template_symlinks(templates_dir, &entry.path())?;
-        } else if ty.is_symlink() {
-            let target_path = &fs::read_link(entry.path())?;
-            let full_target = templates_dir.join(target_path);
-
-            // replace the symlink with a copy of the linked file
-            fs::remove_file(entry.path())?;
-            fs::copy(full_target, entry.path())?;
-        } else {
-            // Do nothing
-        }
-    }
-
-    Ok(())
-}
-
-pub async fn execute_sample_bootstrap(
-    project_path: Option<String>,
-    use_local_packages: bool,
-) -> Result<(), Box<dyn Error>> {
-    println!("Preparing to generate Parra Sample project. Will link packages locally: {}", use_local_packages);
-
-    let template_dir = get_template_path("default")?;
-    let template_app_dir = template_dir.join("App/");
-    // Sample app generation will always use the local template. Even in CI, the template
-    // is accessible and should have already been updated for any necessary SDK changes by
-    // this point.
-    let template = get_local_template(&template_dir, use_local_packages)?;
-
-    let project_dir: PathBuf = if let Some(project_path) = project_path {
-        normalized_project_path(Some(project_path), "ParraSample")?
-    } else {
-        get_sample_path()?
-    };
-
-    println!("Will generate sample in: {}", project_dir.display());
-
-    let demo_app_id = "edec3a6c-a375-4a9d-bce8-eb00860ef228";
-    let demo_tenant_id = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4";
-
-    let context: ProjectContext = ProjectContext {
-        app: AppContextInfo {
-            id: demo_app_id.to_owned(),
-            name: AppNameInfo {
-                raw: "Parra Demo".to_owned(),
-                kebab: "parra-demo".to_owned(),
-                upper_camel: "ParraDemoApp".to_owned(),
-            },
-            bundle_id: "com.parra.parra-ios-client".to_owned(),
-            deployment_target: "17.0".to_owned(),
-            code_sign: CodeSigningConfigs {
-                debug: CodeSigningConfig {
-                    identity: "Apple Development".to_owned(),
-                    required: "YES".to_owned(),
-                    allowed: "YES".to_owned(),
-                    style: "Automatic".to_owned(),
-                    profile_specifier: "".to_owned(),
-                },
-                release: CodeSigningConfig {
-                    // Should be Apple Development here too by default.
-                    identity: "Apple Development".to_owned(),
-                    required: "YES".to_owned(),
-                    allowed: "YES".to_owned(),
-                    style: "Automatic".to_owned(),
-                    profile_specifier: "".to_owned(),
-                },
-            },
-            team_id: "6D44Q764PG".to_owned(),
-            entitlements: get_entitlement_schemes(vec![
-                TenantDomain {
-                    host: "parra-demo.com".to_owned(),
-                    domain_type: TenantDomainType::External,
-                },
-                TenantDomain {
-                    host: "parra-public-demo.parra.io".to_owned(),
-                    domain_type: TenantDomainType::Subdomain,
-                },
-                TenantDomain {
-                    host: format!("tenant-{}.parra.io", demo_tenant_id)
-                        .to_owned(),
-                    domain_type: TenantDomainType::Fallback,
-                },
-            ]),
-        },
-        sdk: SdkContextInfo {
-            version: built::built_info::PKG_VERSION.to_owned(),
-        },
-        tenant: TenantContextInfo {
-            id: demo_tenant_id.to_owned(),
-            name: "Parra Inc.".to_owned(),
-        },
-    };
-
-    let xcode_project_path =
-        project_generator::generator::generate_xcode_project(
-            &project_dir,
-            &template_app_dir,
-            &template,
-            &context,
-            false,
-        )?;
-
-    println!(
-        "Parra project generated at {}!",
-        xcode_project_path.to_str().unwrap()
-    );
-
-    Ok(())
-}
-
-fn normalized_project_path(
-    project_path: Option<String>,
-    app_name: &str,
-) -> Result<PathBuf, Box<dyn Error>> {
-    // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"
-    let kebab_name = slugify!(app_name);
-    let relative_path = get_project_path(project_path, &kebab_name);
-
-    let mut project_path = PathBuf::from_str(&relative_path)?;
-    if !project_path.ends_with(&kebab_name) {
-        project_path.push(&kebab_name);
-    }
-
-    let expanded_path = expand_tilde(&project_path).unwrap();
-
-    return Ok(expanded_path);
-}
-
-pub async fn execute_bootstrap(
-    application_id: Option<String>,
-    workspace_id: Option<String>,
-    project_path: Option<String>,
-    template_name: String,
-) -> Result<(), Box<dyn Error>> {
-    let tenant = get_tenant(workspace_id).await?;
-    let mut application = get_application(application_id, &tenant).await?;
-
-    // If the app name ends with "App", remove it.
-    if application.name.to_lowercase().ends_with("app") {
-        application.name =
-            application.name.trim_end_matches("app").trim().to_string();
-    }
-
-    let safe_app_name = Regex::new(r"[^a-zA-Z0-9\s-]")
-        .unwrap()
-        .replace_all(&application.name, "");
-
-    let expanded_path = normalized_project_path(project_path, &safe_app_name)?;
-
-    let (template, template_app_dir) =
-        get_remote_template(&template_name).await?;
-
-    let ios_config = application.ios.unwrap();
-
-    println!("Generating project...");
-
-    // If the user didn't include the word app, anywhere in the app name, add it to the end
-    // of the name used for the main App struct. Creating a slug, then upper camel converting
-    // the name ensures invalid chars will be stripped.
-    let upper_camel_app_name = if safe_app_name.to_lowercase().contains("app") {
-        slugify!(&safe_app_name).to_case(Case::UpperCamel)
-    } else {
-        slugify!(&safe_app_name).to_case(Case::UpperCamel) + "App"
-    };
-
-    let team_id = ios_config.team_id.unwrap_or("".to_owned());
-
-    let context: ProjectContext = ProjectContext {
-        app: AppContextInfo {
-            id: application.id,
-            name: AppNameInfo {
-                raw: safe_app_name.to_string(),
-                // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"
-                kebab: slugify!(&safe_app_name),
-                upper_camel: upper_camel_app_name,
-            },
-            bundle_id: ios_config.bundle_id,
-            deployment_target: "17.0".to_owned(),
-            code_sign: CodeSigningConfigs {
-                debug: CodeSigningConfig {
-                    identity: "Apple Development".to_owned(),
-                    required: "YES".to_owned(),
-                    allowed: "YES".to_owned(),
-                    style: "Automatic".to_owned(),
-                    profile_specifier: "".to_owned(),
-                },
-                release: CodeSigningConfig {
-                    identity: "Apple Development".to_owned(),
-                    required: "YES".to_owned(),
-                    allowed: "YES".to_owned(),
-                    style: "Automatic".to_owned(),
-                    profile_specifier: "".to_owned(),
-                },
-            },
-            team_id: team_id.to_owned(),
-            entitlements: get_entitlement_schemes(tenant.domains),
-        },
-        sdk: SdkContextInfo {
-            version: built::built_info::PKG_VERSION.to_owned(),
-        },
-        tenant: TenantContextInfo {
-            id: tenant.id,
-            name: tenant.name,
-        },
-    };
-
-    let xcode_project = project_generator::generator::generate_xcode_project(
-        &expanded_path,
-        &template_app_dir,
-        &template,
-        &context,
-        true,
-    )?;
-
-    let xcode_target_dir = &xcode_project;
-
-    println!(
-        "Parra project generated at {}!",
-        expanded_path.to_str().unwrap()
-    );
-
-    let missing = missing_dependencies();
-    // If all dependencies are met, open the project. Otherwise, prompt the user to install them,
-    // and then open the project on completion.
-    if missing.is_empty() {
-        open_project(xcode_target_dir, &context)?;
-    } else {
-        dependencies(missing).await?;
-
-        open_project(xcode_target_dir, &context)?;
-    }
-
-    Ok(())
+    return Ok((template, template_dir));
 }
 
 fn get_entitlement_schemes(
