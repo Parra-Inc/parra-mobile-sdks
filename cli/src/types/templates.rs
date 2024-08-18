@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct CliInput {
     pub prompt: String,
     pub help_message: Option<String>,
+    pub default_message: Option<String>,
     pub default: Option<String>,
     pub key: String,
 

@@ -36,15 +36,21 @@ pub fn generate_xcode_project(
                     text_input
                 };
 
-                text_input = if let Some(default) = &input.default {
-                    text_input.with_default(&default.as_str())
-                } else {
-                    text_input
-                };
+                text_input =
+                    if let Some(default_message) = &input.default_message {
+                        text_input.with_default(&default_message.as_str())
+                    } else {
+                        text_input
+                    };
 
                 let user_input = text_input.prompt()?;
+                let value = if user_input.trim().is_empty() {
+                    input.default.unwrap_or("".into())
+                } else {
+                    user_input
+                };
 
-                liquid_map.insert(input.key.into(), Value::scalar(user_input));
+                liquid_map.insert(input.key.into(), Value::scalar(value));
             }
 
             globals.insert(
