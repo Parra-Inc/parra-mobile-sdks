@@ -2,6 +2,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct CliInput {
+    #[serde(default = "default_required")]
+    pub required: bool,
+
     pub prompt: String,
     pub help_message: Option<String>,
     pub default_message: Option<String>,
@@ -21,6 +24,10 @@ fn default_min_length() -> usize {
 
 fn default_max_length() -> usize {
     return 255;
+}
+
+fn default_required() -> bool {
+    return true;
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]

@@ -27,8 +27,15 @@ pub fn generate_xcode_project(
                 .into_iter()
             {
                 let mut text_input = Text::new(&input.prompt)
-                    .with_validator(MinLengthValidator::new(input.min_length))
                     .with_validator(MaxLengthValidator::new(input.max_length));
+
+                text_input = if input.required {
+                    text_input.with_validator(MinLengthValidator::new(
+                        input.min_length,
+                    ))
+                } else {
+                    text_input
+                };
 
                 text_input = if let Some(help_message) = &input.help_message {
                     text_input.with_help_message(&help_message.as_str())

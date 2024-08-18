@@ -3,6 +3,7 @@
     "name": "revenue_cat",
     "inputs": [
       {
+        "required": false,
         "prompt": "What is your RevenueCat API key?",
         "help_message": "Obtain from https://revenuecat.com or press enter to skip for now",
         "default_message": null,
