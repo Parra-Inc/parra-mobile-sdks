@@ -51,10 +51,12 @@ pub fn generate_xcode_project(
                     };
 
                 let user_input = text_input.prompt()?;
-                let value = if user_input.trim().is_empty() {
+                let trimmed = user_input.trim().trim_matches('"');
+
+                let value = if trimmed.is_empty() {
                     input.default.unwrap_or("".into())
                 } else {
-                    user_input
+                    trimmed.into()
                 };
 
                 liquid_map.insert(input.key.into(), Value::scalar(value));
