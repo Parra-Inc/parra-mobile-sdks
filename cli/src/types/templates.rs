@@ -99,6 +99,11 @@ pub struct SdkContextInfo {
     pub version: String,
 }
 
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct TemplateInfo {
+    pub name: String,
+}
+
 /// In order to be able to effectively recycle logic between the sample app
 /// and project generator, this object needs to contain a union of all fields
 /// required by both these use cases.
@@ -108,4 +113,5 @@ pub struct ProjectContext {
     pub tenant: TenantContextInfo,
     pub sdk: SdkContextInfo,
     pub config: TemplateConfig,
+    pub template: TemplateInfo,
 }

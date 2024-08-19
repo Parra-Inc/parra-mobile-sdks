@@ -8,7 +8,7 @@ use crate::types::dependency::SemanticVersion;
 use crate::types::templates::{
     AppContextInfo, AppEntitlementInfo, AppEntitlementSchemes, AppNameInfo,
     CodeSigningConfig, CodeSigningConfigs, ProjectContext, SdkContextInfo,
-    TemplateConfig, TenantContextInfo,
+    TemplateConfig, TemplateInfo, TenantContextInfo,
 };
 use crate::{api, dependencies, project_generator};
 use colored::Colorize;
@@ -73,7 +73,8 @@ pub async fn execute_sample_bootstrap(
 ) -> Result<(), Box<dyn Error>> {
     println!("Preparing to generate Parra Sample project. Will link packages locally: {}", use_local_packages);
 
-    let template_dir = get_template_path("default")?;
+    let template_name = "default";
+    let template_dir = get_template_path(&template_name)?;
     let template_app_dir = template_dir.join("App/");
     // Sample app generation will always use the local template. Even in CI, the template
     // is accessible and should have already been updated for any necessary SDK changes by
@@ -145,6 +146,9 @@ pub async fn execute_sample_bootstrap(
             name: "Parra Inc.".to_owned(),
         },
         config: project_config,
+        template: TemplateInfo {
+            name: template_name.into(),
+        },
     };
 
     let xcode_project_path =
@@ -242,6 +246,9 @@ pub async fn execute_bootstrap(
             name: tenant.name,
         },
         config: project_config,
+        template: TemplateInfo {
+            name: template_name,
+        },
     };
 
     let xcode_project = project_generator::generator::generate_xcode_project(
