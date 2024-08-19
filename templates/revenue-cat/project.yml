@@ -14,7 +14,7 @@ targets:
     deploymentTarget: {{ app.deployment_target }}
     sources: [{{ app.name.upper_camel }}]
     scheme:
-      storeKitConfiguration: Configuration.storekit
+      storeKitConfiguration: {{ app.name.upper_camel }}/Configuration.storekit
     info:
       path: {{ app.name.upper_camel }}/Info.plist
       properties:
