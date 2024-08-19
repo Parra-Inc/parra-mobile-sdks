@@ -4,8 +4,8 @@
     "inputs": [
       {
         "required": false,
-        "prompt": "What is your RevenueCat API key?",
-        "help_message": "Obtain from https://revenuecat.com or press enter to skip for now",
+        "prompt": "What is your RevenueCat Public API key?",
+        "help_message": "Obtain your \"Public app-specific API key\" from the Project settings -> API Keys section in the RevenueCat dashboard (https://app.revenuecat.com/projects) or press enter to skip for now",
         "default_message": null,
         "default": "<#REVENUE_CAT_API_KEY#>",
         "key": "api_key"
