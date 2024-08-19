@@ -166,7 +166,7 @@ async fn perform_get_request<T: DeserializeOwned>(
         Ok(_res) => {
             let body = _res.text().await?;
 
-            Ok(serde_json::from_str::<T>(&body)?)
+            parse_json_response(&body)
         }
         Err(err) => {
             eprintln!(
@@ -205,5 +205,18 @@ async fn perform_request_with_body<T: DeserializeOwned, U: Serialize>(
 
     let body = response.text().await?;
 
-    Ok(serde_json::from_str::<T>(&body)?)
+    parse_json_response(&body)
+}
+
+fn parse_json_response<T: DeserializeOwned>(
+    body: &String,
+) -> Result<T, Box<dyn Error>> {
+    match serde_json::from_str::<T>(&body) {
+        Ok(result) => Ok(result),
+        Err(err) => {
+            eprintln!("Error decoding JSON response: {}", err);
+
+            Err(Box::new(err))
+        }
+    }
 }
