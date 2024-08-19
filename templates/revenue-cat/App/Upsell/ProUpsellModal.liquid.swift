@@ -39,13 +39,12 @@ struct ProUpsellModal: View {
                 } else {
                     renderProducts(products)
                 }
-            case .error:
-                errorView
+            case .error(let message):
+                renderErrorView(with: message)
             }
 
             Spacer()
         }
-        .background(parraTheme.palette.secondaryBackground)
         .safeAreaPadding()
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
@@ -77,17 +76,19 @@ struct ProUpsellModal: View {
         }
     }
 
-    private var emptyView: some View {
+    private func renderErrorView(
+        with message: String
+    ) -> some View {
         Label(
-            title: { Text("No products found") },
+            title: { Text(message) },
             icon: { Image(systemName: "rectangle.on.rectangle.slash") }
         )
         .font(.callout)
     }
 
-    private var errorView: some View {
+    private var emptyView: some View {
         Label(
-            title: { Text("Error purchasing Pro membership") },
+            title: { Text("No products found") },
             icon: { Image(systemName: "rectangle.on.rectangle.slash") }
         )
         .font(.callout)

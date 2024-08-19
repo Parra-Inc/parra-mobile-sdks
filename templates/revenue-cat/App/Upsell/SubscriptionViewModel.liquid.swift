@@ -21,7 +21,7 @@ class SubscriptionViewModel {
         case loading
         case subscribed
         case unsubscribed([StoreProduct])
-        case error(Error)
+        case error(String)
     }
 
     var state: SubscriptionState = .loading
@@ -37,7 +37,7 @@ class SubscriptionViewModel {
             }
 
             if let error {
-                self.state = .error(error)
+                self.state = .error(error.localizedDescription)
 
                 return
             }
@@ -57,13 +57,10 @@ class SubscriptionViewModel {
             let customerInfo = try await revenueCat.customerInfo()
 
             await processCustomInfo(customerInfo)
+        } catch let error as RevenueCat.ErrorCode {
+            state = .error(error.description)
         } catch {
-            ParraLogger.error(
-                "Error fetching customer info from RevenueCat",
-                error
-            )
-
-            state = .error(error)
+            state = .error(error.localizedDescription)
         }
     }
 
