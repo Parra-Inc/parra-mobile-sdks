@@ -13,6 +13,8 @@ targets:
     platform: iOS
     deploymentTarget: {{ app.deployment_target }}
     sources: [{{ app.name.upper_camel }}]
+    scheme:
+      storeKitConfiguration: Configuration.storekit
     info:
       path: {{ app.name.upper_camel }}/Info.plist
       properties:
@@ -49,6 +51,7 @@ targets:
           CODE_SIGN_STYLE: {{ app.code_sign.debug.style }}
           PROVISIONING_PROFILE_SPECIFIER: {{ app.code_sign.debug.profile_specifier }}
     dependencies:
+      - sdk: StoreKit.framework
       - package: Parra
       - package: RevenueCat
         products:
