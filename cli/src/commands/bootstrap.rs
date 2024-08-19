@@ -194,8 +194,6 @@ pub async fn execute_bootstrap(
 
     let ios_config = application.ios.unwrap();
 
-    println!("Generating project...");
-
     // If the user didn't include the word app, anywhere in the app name, add it to the end
     // of the name used for the main App struct. Creating a slug, then upper camel converting
     // the name ensures invalid chars will be stripped.

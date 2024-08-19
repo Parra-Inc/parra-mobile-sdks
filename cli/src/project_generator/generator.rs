@@ -93,6 +93,8 @@ pub fn generate_xcode_project(
 
     copy_dir_all(template_app_dir, &target_dir)?;
 
+    println!("Generating project...");
+
     renderer::render_templates_in_dir(&target_dir, &globals)?;
 
     let rendered_project_template =
