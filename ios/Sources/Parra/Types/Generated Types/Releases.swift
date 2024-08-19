@@ -1046,13 +1046,15 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
         description: String?,
         appId: String?,
         teamId: String?,
-        bundleId: String
+        bundleId: String,
+        defaultFeedbackFormId: String?
     ) {
         self.name = name
         self.description = description
         self.appId = appId
         self.teamId = teamId
         self.bundleId = bundleId
+        self.defaultFeedbackFormId = defaultFeedbackFormId
     }
 
     // MARK: - Public
@@ -1062,6 +1064,7 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
     public let appId: String?
     public let teamId: String?
     public let bundleId: String
+    public let defaultFeedbackFormId: String?
 
     /// Computed using the value from ``appId`` in the format
     /// `itms-apps://itunes.apple.com/app/id\(appId)`.
@@ -1095,6 +1098,7 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
         case appId
         case teamId
         case bundleId
+        case defaultFeedbackFormId
     }
 }
 
@@ -1191,7 +1195,8 @@ public final class ParraAppInfo: ObservableObject, Codable, Equatable,
             description: nil,
             appId: nil,
             teamId: nil,
-            bundleId: ""
+            bundleId: "",
+            defaultFeedbackFormId: nil
         )
     )
 }

@@ -97,7 +97,8 @@ extension ParraAppInfo: ParraFixture {
                     description: "The Parra iOS Demo app using the native Swift SDK.",
                     appId: "6479621013",
                     teamId: "6D44Q764PG",
-                    bundleId: "com.parra.parra-ios-client"
+                    bundleId: "com.parra.parra-ios-client",
+                    defaultFeedbackFormId: "524906d9-bacc-4050-98c4-2cfa57a02bb9"
                 )
             )
         ]
