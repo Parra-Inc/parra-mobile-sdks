@@ -33,7 +33,7 @@ struct SampleTab: View {
 
                 Link(
                     destination: URL(
-                        string: "https://docs.parra.io/templates/{{ template.name }}/swiftui"
+                        string: "https://docs.parra.io/cli/templates/{{ template.name }}?platform=ios&sdk=swiftui"
                     )!
                 ) {
                     Text("Get started")
