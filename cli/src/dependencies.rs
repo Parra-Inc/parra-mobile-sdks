@@ -175,7 +175,10 @@ fn is_xcode_version_valid(min_version: SemanticVersion) -> Option<bool> {
 fn install_brew_dependencies() {
     let dependencies = vec!["xcodes", "aria2"];
 
-    println!("Installing Homebrew dependencies: {:?}", dependencies);
+    println!(
+        "Installing Homebrew dependencies: {:?}",
+        dependencies.join(", ")
+    );
 
     let output = Command::new("brew")
         .env("HOMEBREW_NO_INSTALL_UPGRADE", "1")
