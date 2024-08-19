@@ -2,7 +2,7 @@
 //  FeedbackCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/18/2024.
+//  Bootstrapped with ❤️ by Parra on 08/19/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
