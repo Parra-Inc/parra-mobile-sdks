@@ -30,14 +30,16 @@ struct SettingsTab: View {
                     LatestReleaseCell()
                 }
 
-                Section("Legal") {
-                    ForEach(parraAppInfo.legal.allDocuments) { document in
-                        NavigationLink {
-                            ParraLegalDocumentView(legalDocument: document)
-                        } label: {
-                            Text(document.title)
+                if parraAppInfo.legal.hasDouments {
+                    Section("Legal") {
+                        ForEach(parraAppInfo.legal.allDocuments) { document in
+                            NavigationLink {
+                                ParraLegalDocumentView(legalDocument: document)
+                            } label: {
+                                Text(document.title)
+                            }
+                            .id(document.id)
                         }
-                        .id(document.id)
                     }
                 }
 

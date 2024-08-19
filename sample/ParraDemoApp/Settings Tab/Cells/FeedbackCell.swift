@@ -20,31 +20,34 @@ import SwiftUI
 ///    parameter. When it becomes non nil, the form is presented.
 struct FeedbackCell: View {
     @Environment(\.parra) private var parra
+    @Environment(\.parraAppInfo) private var parraAppInfo
 
     @State private var formData: ParraFeedbackForm? // #3
     @State private var errorMessage: String?
     @State private var isLoading = false
 
     var body: some View {
-        Button(action: {
-            loadFeedbackForm(with: "ff66b5d8-9030-4dc3-aca8-50eec3bb9a1e")
-        }) {
-            Label(
-                title: {
-                    Text("Leave Feedback")
-                        .foregroundStyle(Color.primary)
-                },
-                icon: {
-                    if isLoading {
-                        ProgressView()
-                    } else {
-                        Image(systemName: "quote.bubble")
+        if let formId = parraAppInfo.application.defaultFeedbackFormId {
+            Button(action: {
+                loadFeedbackForm(with: formId)
+            }) {
+                Label(
+                    title: {
+                        Text("Leave Feedback")
+                            .foregroundStyle(Color.primary)
+                    },
+                    icon: {
+                        if isLoading {
+                            ProgressView()
+                        } else {
+                            Image(systemName: "quote.bubble")
+                        }
                     }
-                }
-            )
+                )
+            }
+            .disabled(isLoading)
+            .presentParraFeedbackForm(with: $formData) // #4
         }
-        .disabled(isLoading)
-        .presentParraFeedbackForm(with: $formData) // #4
     }
 
     private func loadFeedbackForm(
