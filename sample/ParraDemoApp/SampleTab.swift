@@ -28,7 +28,7 @@ struct SampleTab: View {
 
                 Link(
                     destination: URL(
-                        string: "https://docs.parra.io/sdks/guides/quickstart/swiftui"
+                        string: "https://docs.parra.io/templates/default/swiftui"
                     )!
                 ) {
                     Text("Get started")
