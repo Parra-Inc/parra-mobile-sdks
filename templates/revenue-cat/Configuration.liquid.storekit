@@ -8,6 +8,8 @@
   ],
   "settings" : {
     "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
     "_storeKitErrors" : [
       {
         "current" : null,
@@ -78,8 +80,8 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "",
-              "displayName" : "",
+              "description" : "Billed monthly.",
+              "displayName" : "Pro Mode Membership",
               "locale" : "en_US"
             }
           ],
@@ -103,8 +105,8 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "",
-              "displayName" : "",
+              "description" : "$2.50 per month, billed annually.",
+              "displayName" : "Pro Mode Membership",
               "locale" : "en_US"
             }
           ],
