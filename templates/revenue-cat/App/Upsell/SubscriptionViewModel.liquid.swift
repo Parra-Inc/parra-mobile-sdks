@@ -11,8 +11,8 @@ import RevenueCat
 import Parra
 
 private let PRODUCT_IDS = [
-    "com.myapp.pro.monthly",
-    "com.myapp.pro.yearly"
+    "{{ app.bundle_id }}.pro.monthly",
+    "{{ app.bundle_id }}.pro.yearly"
 ]
 
 @Observable
