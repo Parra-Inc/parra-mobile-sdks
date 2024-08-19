@@ -45,7 +45,12 @@ struct SampleTab: View {
             .background(parraTheme.palette.secondaryBackground)
         }
         .sheet(isPresented: $isDisplayingUpsell) {
-            ProUpsellModal()
+            ZStack {
+                Color(parraTheme.palette.secondaryBackground)
+                    .ignoresSafeArea()
+
+                ProUpsellModal()
+            }
         }
     }
 }
