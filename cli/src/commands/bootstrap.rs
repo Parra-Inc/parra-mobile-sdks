@@ -661,7 +661,7 @@ fn open_project(
 
     let tenant_dashboard_link =
         format!("https://parra.io/tenants/{}", context.tenant.id);
-    let doc_link = "https://docs.parra.io/sdks/guides/integration/swiftui";
+    let doc_link = "https://docs.parra.io/sdks/guides/configuration/ios";
     let support_email = "help@parra.io";
     let support_email_subject = format!(
         "CLI help - workspace={}, application={}",
