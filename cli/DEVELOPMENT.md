@@ -14,7 +14,7 @@
 3. Run `cargo build --release` to build the latest version of the CLI. This will create a binary at `target/release/parra`.
 4. Run `./release_update.sh <VERSION>` to create a new release on GitHub and update the Homebrew formulae. Replace `<VERSION>` with the new version number.
 5. Update the cli Formula in the [Parra Homebrew Tap](https://github.com/Parra-Inc/homebrew-tap) with the new version number and the new SHA256 hash. These can be found in the output from the previous step.
-6. Run `brew install parra-inc/parra/parra-cli` to install the latest version of the CLI to test with.
+6. Run `brew install parra-inc/tap/parra-cli` to install the latest version of the CLI to test with.
 
 ### Notes
 
