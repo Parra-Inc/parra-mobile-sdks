@@ -64,6 +64,14 @@ jobs:
   build-and-run-sample:
     executor: macos-m1-runner
     steps:
+      - run:
+          name: Check if should run
+          command: |
+            # If the tag is set, skip this job
+            if [ -n "${CIRCLE_TAG}" ]; then
+                circleci-agent step halt
+            fi
+
       - common
     
       - run:
