@@ -58,7 +58,7 @@ struct ParraContainerPreview<ContainerType>: View
         // here but this will only work for previews. At runtime, the app
         // wrapper won't have provided this object since it is specific to the
         // individual containers.
-        ParraOptionalAuthWindow { _ in
+        ParraOptionalAuthWindow {
             AnyView(content(parra, factory, config))
         }
         .environment(config)

@@ -22,7 +22,7 @@ struct ParraDemoApp: App {
             appDelegate: appDelegate
         ) {
             WindowGroup {
-                ParraOptionalAuthWindow { _ in
+                ParraOptionalAuthWindow {
                     ContentView()
                 }
             }

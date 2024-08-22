@@ -82,7 +82,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
     // MARK: - Public
 
     public var body: some View {
-        ParraOptionalAuthWindow { _ in
+        ParraOptionalAuthWindow {
             previewContent()
         }
         .environment(\.parra, parra)

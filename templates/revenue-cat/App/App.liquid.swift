@@ -20,7 +20,7 @@ struct {{ app.name.upper_camel }}: App {
             appDelegate: appDelegate
         ) {
             WindowGroup {
-                ParraOptionalAuthWindow { _ in
+                ParraOptionalAuthWindow {
                     ContentView()
                 }
             }

@@ -53,7 +53,7 @@ struct ParraViewPreview<Content>: View where Content: View {
     // MARK: - Internal
 
     var body: some View {
-        ParraOptionalAuthWindow { _ in
+        ParraOptionalAuthWindow {
             content(factory)
         }
         .environment(\.parra, parra)

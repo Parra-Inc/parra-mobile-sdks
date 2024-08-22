@@ -16,12 +16,12 @@ public struct ParraRequiredAuthWindow<
     // MARK: - Lifecycle
 
     public init(
-        authenticatedContent: @escaping (
-            _ user: ParraUser
-        ) -> AuthenticatedContent,
-        unauthenticatedContent: @escaping () -> UnauthenticatedContent
+        authenticatedContent: @escaping () -> AuthenticatedContent,
+        unauthenticatedContent: @escaping () -> UnauthenticatedContent = {
+            return ParraDefaultAuthenticationFlowView()
+        }
     ) {
-        self.authenticatedContent = authenticatedContent
+        self.authContent = authenticatedContent
         self.unauthContent = unauthenticatedContent
     }
 
@@ -49,10 +49,8 @@ public struct ParraRequiredAuthWindow<
         }
     }
 
-    public func authenticatedContent(
-        for user: ParraUser
-    ) -> AuthenticatedContent {
-        return authenticatedContent(user)
+    public func authenticatedContent() -> AuthenticatedContent {
+        return authenticatedContent()
     }
 
     public func unauthenticatedContent() -> UnauthenticatedContent {
@@ -71,8 +69,8 @@ public struct ParraRequiredAuthWindow<
         switch authStateMirror {
         case .undetermined:
             EmptyView()
-        case .authenticated(let user):
-            authenticatedContent(for: user)
+        case .authenticated:
+            authenticatedContent()
         case .guest, .error, .anonymous:
             unauthenticatedContent()
                 .environment(parra)
@@ -87,10 +85,7 @@ public struct ParraRequiredAuthWindow<
 
     @Environment(\.parraAuthState) private var parraAuthState
 
-    private let authenticatedContent: (
-        _ user: ParraUser
-    ) -> AuthenticatedContent
-
+    private let authContent: () -> AuthenticatedContent
     private let unauthContent: () -> UnauthenticatedContent
 
     @State private var authStateMirror: ParraAuthState = .undetermined

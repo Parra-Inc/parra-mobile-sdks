@@ -12,9 +12,6 @@ public protocol ParraAppContent: View {
     associatedtype AuthenticatedContent: View
     associatedtype UnauthenticatedContent: View
 
-    func authenticatedContent(
-        for user: ParraUser
-    ) -> AuthenticatedContent
-
+    func authenticatedContent() -> AuthenticatedContent
     func unauthenticatedContent() -> UnauthenticatedContent
 }
