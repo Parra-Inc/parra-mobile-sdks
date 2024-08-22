@@ -57,7 +57,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
         )
 
         let appState = ParraAppState(
-            tenantId: ParraInternal.Demo.workspaceId,
+            tenantId: ParraInternal.Demo.tenantId,
             applicationId: ParraInternal.Demo.applicationId
         )
 

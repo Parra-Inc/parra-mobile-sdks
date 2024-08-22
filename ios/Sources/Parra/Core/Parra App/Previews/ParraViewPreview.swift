@@ -30,7 +30,7 @@ struct ParraViewPreview<Content>: View where Content: View {
         )
 
         let appState = ParraAppState(
-            tenantId: ParraInternal.Demo.workspaceId,
+            tenantId: ParraInternal.Demo.tenantId,
             applicationId: ParraInternal.Demo.applicationId
         )
 

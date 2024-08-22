@@ -37,7 +37,7 @@ struct ParraContainerPreview<ContainerType>: View
         )
 
         let appState = ParraAppState(
-            tenantId: ParraInternal.Demo.workspaceId,
+            tenantId: ParraInternal.Demo.tenantId,
             applicationId: ParraInternal.Demo.applicationId
         )
 

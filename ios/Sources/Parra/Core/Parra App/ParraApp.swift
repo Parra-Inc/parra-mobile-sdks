@@ -52,13 +52,13 @@ public struct ParraApp<
 
     public init() {
         fatalError(
-            "Parra must be initialized using init(workspaceId:applicationId:appDelegate:)"
+            "Parra must be initialized using init(tenantId:applicationId:appDelegate:)"
         )
     }
 
     /// <#Description#>
     /// - Parameters:
-    ///   - workspaceId: <#workspaceId description#>
+    ///   - tenantId: <#tenantId description#>
     ///   - applicationId: <#applicationId description#>
     ///   - authenticationMethod: <#authenticationMethod description#>
     ///   - configuration: <#configuration description#>
@@ -73,7 +73,7 @@ public struct ParraApp<
     ///   not found, a blank white screen will be rendered.
     ///   - makeScene: <#appContent description#>
     public init(
-        workspaceId: String,
+        tenantId: String,
         applicationId: String,
         appDelegate: ParraAppDelegate<SceneDelegateClass>,
         configuration: ParraConfiguration = .init(),
@@ -81,7 +81,7 @@ public struct ParraApp<
         @SceneBuilder makeScene: @MainActor @escaping () -> Content
     ) {
         let appState = ParraAppState(
-            tenantId: workspaceId,
+            tenantId: tenantId,
             applicationId: applicationId
         )
 

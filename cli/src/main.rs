@@ -33,7 +33,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             } else {
                 commands::bootstrap::execute_bootstrap(
                     bootstrap_args.application_id,
-                    bootstrap_args.workspace_id,
+                    bootstrap_args.tenant_id,
                     bootstrap_args.project_path,
                     bootstrap_args.template_name.to_string(),
                 )

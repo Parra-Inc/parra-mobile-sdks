@@ -10,10 +10,10 @@ import Foundation
 
 extension ParraInternal {
     enum Demo {
-        /// The Parra sample app's workspace ID. You should not use this.
-        /// Instead, grab your workspace ID from
+        /// The Parra sample app's tenant ID. You should not use this.
+        /// Instead, grab your tenant ID from
         /// https://parra.io/dashboard/settings
-        static let workspaceId = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4"
+        static let tenantId = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4"
 
         /// The Parra sample app's application ID. You should not use this.
         /// Instead, grab your application ID from

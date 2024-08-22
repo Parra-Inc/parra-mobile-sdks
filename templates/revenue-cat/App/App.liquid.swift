@@ -15,7 +15,7 @@ struct {{ app.name.upper_camel }}: App {
     
     var body: some Scene {
         ParraApp(
-            workspaceId: "{{ tenant.id }}",
+            tenantId: "{{ tenant.id }}",
             applicationId: "{{ app.id }}",
             appDelegate: appDelegate
         ) {

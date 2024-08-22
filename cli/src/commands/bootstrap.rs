@@ -47,7 +47,7 @@ static DESIRED_IOS_RUNTIME_VERSION: SemanticVersion = SemanticVersion {
 
 impl Display for TenantResponse {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{} ({})", self.name, self.id)
+        write!(f, "{} (Tenant ID: {})", self.name, self.id)
     }
 }
 
@@ -170,11 +170,11 @@ pub async fn execute_sample_bootstrap(
 
 pub async fn execute_bootstrap(
     application_id: Option<String>,
-    workspace_id: Option<String>,
+    tenant_id: Option<String>,
     project_path: Option<String>,
     template_name: String,
 ) -> Result<(), Box<dyn Error>> {
-    let tenant = get_tenant(workspace_id).await?;
+    let tenant = get_tenant(tenant_id).await?;
     let mut application = get_application(application_id, &tenant).await?;
 
     // If the app name ends with "App", remove it.
@@ -664,8 +664,8 @@ fn open_project(
     let doc_link = "https://docs.parra.io/sdks/guides/configuration/ios";
     let support_email = "help@parra.io";
     let support_email_subject = format!(
-        "CLI help - workspace={}, application={}",
-        context.app.id, context.tenant.id
+        "CLI help - tenant={}, application={}",
+        context.tenant.id, context.app.id
     );
 
     let color_scheme = get_supported_parra_colored_color_scheme();
