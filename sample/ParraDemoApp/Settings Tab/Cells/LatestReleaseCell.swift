@@ -2,7 +2,7 @@
 //  LatestReleaseCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/20/2024.
+//  Bootstrapped with ❤️ by Parra on 08/22/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
