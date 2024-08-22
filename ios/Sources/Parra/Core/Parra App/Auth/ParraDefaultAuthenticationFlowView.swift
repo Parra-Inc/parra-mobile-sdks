@@ -12,7 +12,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
     // MARK: - Lifecycle
 
     public init(
-        flowConfig: ParraAuthenticationFlowConfig
+        flowConfig: ParraAuthenticationFlowConfig = .default
     ) {
         let navigationState = NavigationState()
 
