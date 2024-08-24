@@ -19,7 +19,7 @@ struct ParraViewPreview<Content>: View where Content: View {
         content: @escaping (_ factory: ComponentFactory) -> Content
     ) {
         self.content = content
-        self.configuration = .init(themeOptions: theme)
+        self.configuration = .init(theme: theme)
         self.factory = ComponentFactory(
             attributes: ParraGlobalComponentAttributes.default,
             theme: theme

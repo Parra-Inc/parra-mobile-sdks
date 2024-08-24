@@ -26,7 +26,7 @@ struct ParraContainerPreview<ContainerType>: View
         theme: ParraTheme = .default
     ) {
         self.content = content
-        self.configuration = .init(themeOptions: theme)
+        self.configuration = .init(theme: theme)
         self.config = config
         self.factory = ComponentFactory(
             attributes: ParraGlobalComponentAttributes.default,

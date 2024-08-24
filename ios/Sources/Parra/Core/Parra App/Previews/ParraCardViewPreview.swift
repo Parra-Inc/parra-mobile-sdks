@@ -22,7 +22,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
         self.cards = cards
         self.config = config
         self.configuration = ParraConfiguration(
-            themeOptions: theme
+            theme: theme
         )
         self.factory = ComponentFactory(
             attributes: ParraGlobalComponentAttributes.default,
