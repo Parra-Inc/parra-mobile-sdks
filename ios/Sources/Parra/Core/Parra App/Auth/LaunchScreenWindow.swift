@@ -91,12 +91,14 @@ struct LaunchScreenWindow<Content>: View where Content: View {
             renderLaunchScreen(
                 launchScreenConfig: launchConfig
             )
+            .tint(ParraThemeManager.shared.current.palette.primary)
             .preferredColorScheme(ParraThemeManager.shared.preferredColorScheme)
         }
 
         if let launchResult {
             renderPrimaryContent()
                 .environment(\.parraAppInfo, launchResult.appInfo)
+                .tint(ParraThemeManager.shared.current.palette.primary)
                 .preferredColorScheme(ParraThemeManager.shared.preferredColorScheme)
         }
     }
