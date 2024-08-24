@@ -50,6 +50,15 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                     launchResult: launchResult,
                     launchConfig: launchConfig
                 )
+                .task {
+                    UIView.appearance(
+                        whenContainedInInstancesOf: [UIAlertController.self]
+                    )
+                    .tintColor = UIColor(
+                        ParraThemeManager.shared.current.palette
+                            .primary.toParraColor()
+                    )
+                }
             }
         }
     }
