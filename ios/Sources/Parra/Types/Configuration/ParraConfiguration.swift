@@ -12,15 +12,15 @@ public struct ParraConfiguration {
     // MARK: - Lifecycle
 
     public init(
+        theme: ParraTheme = .default,
         appInfoOptions: ParraAppInfoOptions = .default,
-        themeOptions: ParraTheme = .default,
         globalComponentAttributes: ParraGlobalComponentAttributes = .default,
         loggerOptions: ParraLoggerOptions = .default,
         pushNotificationOptions: ParraPushNotificationOptions = .default,
         whatsNewOptions: ParraReleaseOptions = .default
     ) {
         self.appInfoOptions = appInfoOptions
-        self.theme = themeOptions
+        self.theme = theme
         self.globalComponentAttributes = globalComponentAttributes
         self.loggerOptions = ParraConfiguration.applyLoggerOptionsOverrides(
             loggerOptions: loggerOptions
