@@ -42,7 +42,7 @@ struct SampleTab: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationTitle("App")
-            .background(parraTheme.palette.secondaryBackground)
+            .background(parraTheme.palette.primaryBackground)
         }
         .sheet(isPresented: $isDisplayingUpsell) {
             ZStack {
