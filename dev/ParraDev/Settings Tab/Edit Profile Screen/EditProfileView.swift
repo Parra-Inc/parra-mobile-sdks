@@ -37,6 +37,7 @@ struct EditProfileView: View {
                 Label(
                     title: {
                         Text(isShowingSuccess ? "Saved" : "Save")
+                            .bold()
                     },
                     icon: {
                         if isLoading {
