@@ -2,7 +2,7 @@
 //  EditProfileView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/22/2024.
+//  Bootstrapped with ❤️ by Parra on 08/25/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -51,14 +51,15 @@ struct EditProfileView: View {
                 .frame(maxWidth: .infinity)
                 .padding()
             }
-            .background(.blue)
+            .background(parraTheme.palette.primary.toParraColor())
             .foregroundStyle(.white)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             .safeAreaPadding()
             .disabled(isLoading)
         }
-        .background(parraTheme.palette.secondaryBackground)
         .navigationTitle("Edit Profile")
+        .background(parraTheme.palette.primaryBackground)
+        .scrollContentBackground(.hidden)
         .onAppear {
             let userInfo = parraAuthState.user?.info
 

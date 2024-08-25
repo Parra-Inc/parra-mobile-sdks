@@ -2,7 +2,7 @@
 //  SettingsTab.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/22/2024.
+//  Bootstrapped with ❤️ by Parra on 08/25/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -11,6 +11,7 @@ import SwiftUI
 
 struct SettingsTab: View {
     @Environment(\.parraAppInfo) private var parraAppInfo
+    @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
         NavigationStack {
@@ -50,6 +51,8 @@ struct SettingsTab: View {
                     SettingsFooter()
                 }
             }
+            .background(parraTheme.palette.primaryBackground)
+            .scrollContentBackground(.hidden)
             .navigationTitle("Profile")
         }
     }

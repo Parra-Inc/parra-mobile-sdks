@@ -2,7 +2,7 @@
 //  AccountView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/22/2024.
+//  Bootstrapped with ❤️ by Parra on 08/25/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -11,6 +11,8 @@ import SwiftUI
 
 struct AccountView: View {
     @Environment(\.parraAuthState) private var parraAuthState
+    @Environment(\.parraTheme) private var parraTheme
+
     @State private var isSigningIn = false
 
     var body: some View {
@@ -75,6 +77,8 @@ struct AccountView: View {
                 }
             }
         }
+        .background(parraTheme.palette.primaryBackground)
+        .scrollContentBackground(.hidden)
         .navigationTitle("Account")
     }
 }
