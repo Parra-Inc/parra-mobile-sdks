@@ -39,9 +39,8 @@ struct BadgeComponent: View {
                     tint: ParraColorSwatch.gray.toParraColor()
                 ),
                 border: ParraAttributes.Border(
-                    color: colorScheme == .light
-                        ? ParraColorSwatch.gray.shade300.toParraColor()
-                        : ParraColorSwatch.gray.shade600.toParraColor()
+                    width: 0,
+                    color: .clear
                 ),
                 background:
                 colorScheme == .light
