@@ -160,8 +160,8 @@ public extension ParraGlobalComponentAttributes {
                 )
             ),
             border: ParraAttributes.Border(
-                width: 0.5,
-                color: palette.secondarySeparator.toParraColor()
+                width: 0.0,
+                color: nil
             ),
             cornerRadius: .xxl,
             padding: .xxl,
