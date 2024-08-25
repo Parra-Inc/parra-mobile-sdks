@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 class AlertManager: ObservableObject {
     @Published var currentLoadingIndicator: LoadingIndicator?
     @Published var currentToast: Toast?

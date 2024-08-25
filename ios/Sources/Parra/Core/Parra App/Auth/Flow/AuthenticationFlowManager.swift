@@ -113,6 +113,7 @@ class AuthenticationFlowManager: ObservableObject {
         }
     }
 
+    @MainActor
     func getLandingScreenParams(
         authService: AuthService,
         modalScreenManager: ModalScreenManager,
@@ -178,6 +179,7 @@ class AuthenticationFlowManager: ObservableObject {
         )
     }
 
+    @MainActor
     func cancelPasskeyRequests(
         on authService: AuthService
     ) {
@@ -245,12 +247,12 @@ class AuthenticationFlowManager: ObservableObject {
             }
         } catch let error as ParraError {
             if error.isUnauthenticated {
-                Parra.default.parraInternal.alertManager.showErrorToast(
+                await Parra.default.parraInternal.alertManager.showErrorToast(
                     userFacingMessage: "No account found matching this passkey. You can delete this passkey from your preferred password manager.",
                     underlyingError: error
                 )
             } else {
-                Parra.default.parraInternal.alertManager.showErrorToast(
+                await Parra.default.parraInternal.alertManager.showErrorToast(
                     userFacingMessage: "Error signing in with passkey. Please try again.",
                     underlyingError: error
                 )
@@ -266,7 +268,7 @@ class AuthenticationFlowManager: ObservableObject {
                 error
             )
 
-            Parra.default.parraInternal.alertManager.showErrorToast(
+            await Parra.default.parraInternal.alertManager.showErrorToast(
                 userFacingMessage: "Error signing in with passkey. Please try again.",
                 underlyingError: .system(error)
             )
@@ -275,6 +277,7 @@ class AuthenticationFlowManager: ObservableObject {
 
     // MARK: - Private
 
+    @MainActor
     private func navigateToIdentityInputScreen(
         inputType: ParraIdentityInputType,
         appInfo: ParraAppInfo,
@@ -570,6 +573,7 @@ class AuthenticationFlowManager: ObservableObject {
         )
     }
 
+    @MainActor
     private func onChallengeResponseSubmitted(
         _ challengeResponse: ParraChallengeResponse,
         with authInfo: ParraAppAuthInfo,

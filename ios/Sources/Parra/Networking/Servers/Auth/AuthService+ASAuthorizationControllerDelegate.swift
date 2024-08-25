@@ -17,6 +17,7 @@ class AuthorizationControllerDelegateProxy: NSObject,
 {
     weak var authService: AuthService?
 
+    @MainActor
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithError error: any Error
@@ -47,6 +48,7 @@ class AuthorizationControllerDelegateProxy: NSObject,
 }
 
 extension AuthService {
+    @MainActor
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithError error: any Error

@@ -15,7 +15,7 @@ public extension ParraAuthDefaultIdentityInputScreen {
         public init(
             inputType: ParraIdentityInputType,
             submitIdentity: @escaping (_ identity: String) async throws -> Void,
-            attemptPasskeyAutofill: (() async throws -> Void)? = nil,
+            attemptPasskeyAutofill: (() async -> Void)? = nil,
             cancelPasskeyAutofillAttempt: (() -> Void)? = nil
         ) {
             self.inputType = inputType

@@ -115,6 +115,7 @@ extension AuthService {
         }
     }
 
+    @MainActor
     func cancelPasskeyRequests() {
         logger.debug("cancel passkey requests")
 
@@ -210,6 +211,7 @@ extension AuthService {
         }
     }
 
+    @MainActor
     private func beginAuthorization(
         for authorizationRequests: [ASAuthorizationRequest],
         using presentationMode: PasskeyPresentationMode
