@@ -14,6 +14,7 @@ pub struct Cli {
 pub enum TemplateName {
     Default,
     RevenueCat,
+    YC,
 }
 
 impl Display for TemplateName {
@@ -21,6 +22,7 @@ impl Display for TemplateName {
         let output = match self {
             TemplateName::Default => "default",
             TemplateName::RevenueCat => "revenue-cat",
+            TemplateName::YC => "yc",
         };
 
         write!(f, "{}", output)
