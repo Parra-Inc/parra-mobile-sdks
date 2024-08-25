@@ -224,7 +224,11 @@ class Paginator<Item, Context>: ObservableObject
                     if isShowingPlaceholders {
                         items = nextPage
                     } else {
-                        items.append(contentsOf: nextPage)
+                        items.append(
+                            contentsOf: nextPage.filter {
+                                !items.contains($0)
+                            }
+                        )
                     }
 
                     isLoading = false
