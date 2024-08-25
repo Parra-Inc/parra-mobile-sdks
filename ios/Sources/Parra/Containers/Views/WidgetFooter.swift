@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct WidgetFooter: View {
+struct WidgetFooter<Primary>: View where Primary: View {
     // MARK: - Lifecycle
 
     init(
-        @ViewBuilder primaryActionBuilder: @escaping () -> any View,
+        @ViewBuilder primaryActionBuilder: @escaping () -> Primary,
         secondaryActionBuilder: (() -> any View)? = nil,
         contentPadding: EdgeInsets = EdgeInsets(vertical: 12, horizontal: 20)
     ) {
@@ -23,29 +23,31 @@ struct WidgetFooter: View {
 
     // MARK: - Internal
 
-    @ViewBuilder let primaryActionBuilder: () -> any View
+    @ViewBuilder let primaryActionBuilder: () -> Primary
     @ViewBuilder let secondaryActionBuilder: (() -> any View)?
 
     var body: some View {
-        VStack(alignment: .center, spacing: 16) {
-            AnyView(primaryActionBuilder())
+        if let primaryAction = primaryActionBuilder() as? AnyView {
+            VStack(alignment: .center, spacing: 16) {
+                primaryAction
 
-            if let secondaryActionBuilder {
-                AnyView(secondaryActionBuilder())
-            } else {
-                ParraLogoButton(type: .poweredBy)
+                if let secondaryActionBuilder {
+                    AnyView(secondaryActionBuilder())
+                } else {
+                    ParraLogoButton(type: .poweredBy)
+                }
             }
+            .frame(maxWidth: .infinity)
+            .padding([.leading, .trailing, .bottom], from: contentPadding)
+            // Using the leading padding of the container as the footer's top
+            // padding to keep the button square with its container
+            .padding(.top, contentPadding.leading)
+            .border(
+                width: 1,
+                edges: .top,
+                color: parraTheme.palette.secondarySeparator.toParraColor()
+            )
         }
-        .frame(maxWidth: .infinity)
-        .padding([.leading, .trailing, .bottom], from: contentPadding)
-        // Using the leading padding of the container as the footer's top
-        // padding to keep the button square with its container
-        .padding(.top, contentPadding.leading)
-        .border(
-            width: 1,
-            edges: .top,
-            color: parraTheme.palette.secondaryBackground
-        )
     }
 
     // MARK: - Private
