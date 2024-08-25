@@ -28,13 +28,13 @@ pub struct TenantRequest {
     pub is_test: bool,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Size {
     pub width: u32,
     pub height: u32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct TenantLogo {
     pub id: String,
     pub url: String,
@@ -55,14 +55,14 @@ pub enum TenantDomainType {
     Fallback,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct TenantDomain {
     pub host: String,
     #[serde(rename = "type")]
     pub domain_type: TenantDomainType,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct TenantResponse {
     pub id: String,
     pub name: String,

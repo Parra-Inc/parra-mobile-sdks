@@ -496,6 +496,23 @@ async fn get_tenant(
         return create_new_tenant(false).await;
     }
 
+    if tenants.len() == 1 {
+        let tenant = tenants.first().unwrap().clone();
+
+        let prompt = format!(
+            "Do you want to use the workspace \"{}\" ({})?",
+            tenant.name, tenant.id
+        );
+
+        let use_only = Confirm::new(&prompt).with_default(true).prompt()?;
+
+        if use_only {
+            return Ok(tenant);
+        } else {
+            return create_new_tenant(true).await;
+        }
+    }
+
     let use_existing =
         Confirm::new("Would you like to use an existing workspace?")
             .with_default(true)
@@ -529,6 +546,23 @@ async fn get_application(
 
     if applications.is_empty() {
         return create_new_application(&tenant).await;
+    }
+
+    if applications.len() == 1 {
+        let application = applications.first().unwrap().clone();
+
+        let prompt = format!(
+            "Do you want to use the application \"{}\" ({})?",
+            application.name, application.id
+        );
+
+        let use_only = Confirm::new(&prompt).with_default(true).prompt()?;
+
+        if use_only {
+            return Ok(application);
+        } else {
+            return create_new_application(&tenant).await;
+        }
     }
 
     let use_existing = Confirm::new("Would you like to use an existing application?")
