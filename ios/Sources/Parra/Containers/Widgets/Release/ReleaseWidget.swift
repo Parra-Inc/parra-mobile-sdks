@@ -140,6 +140,7 @@ struct ReleaseWidget: Container {
             footer
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, contentPadding.top)
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: parraTheme
@@ -165,7 +166,6 @@ struct ReleaseWidget: Container {
                     componentFactory: componentFactory,
                     contentObserver: changelogContentObserver
                 )
-                .padding(.top, 40)
                 .edgesIgnoringSafeArea([.top])
                 .environmentObject(navigationState)
             }

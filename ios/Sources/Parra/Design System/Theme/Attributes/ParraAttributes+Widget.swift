@@ -17,7 +17,6 @@ public extension ParraAttributes {
         public internal(set) var background: Color?
         public internal(set) var cornerRadius: ParraCornerRadiusSize?
         public internal(set) var contentPadding: ParraPaddingSize?
-        public internal(set) var padding: ParraPaddingSize?
 
         public static func `default`(with theme: ParraTheme) -> Widget {
             let palette = theme.palette
@@ -26,9 +25,8 @@ public extension ParraAttributes {
                 background: palette.primaryBackground,
                 cornerRadius: .zero,
                 contentPadding: .custom(
-                    EdgeInsets(vertical: 12, horizontal: 20)
-                ),
-                padding: .zero
+                    EdgeInsets(top: 34, leading: 20, bottom: 12, trailing: 20)
+                )
             )
         }
 
@@ -51,8 +49,7 @@ extension ParraAttributes.Widget: OverridableAttributes {
         return ParraAttributes.Widget(
             background: overrides?.background ?? background,
             cornerRadius: overrides?.cornerRadius,
-            contentPadding: overrides?.contentPadding,
-            padding: overrides?.padding
+            contentPadding: overrides?.contentPadding
         )
     }
 }

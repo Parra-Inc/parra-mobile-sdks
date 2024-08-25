@@ -23,8 +23,17 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
     // MARK: - Public
 
     public var body: some View {
+        let attributes = ParraAttributes.Widget.default(
+            with: parraTheme
+        )
+
         VStack(alignment: .leading) {
             primaryContent
+                .applyPadding(
+                    size: attributes.contentPadding,
+                    on: [.horizontal, .bottom],
+                    from: parraTheme
+                )
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -46,7 +55,8 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             maxWidth: .infinity,
             maxHeight: .infinity
         )
-        .applyDefaultWidgetAttributes(
+        .applyWidgetAttributes(
+            attributes: attributes.withoutContentPadding(),
             using: parraTheme
         )
         .onAppear {

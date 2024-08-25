@@ -199,7 +199,7 @@ struct RoadmapWidget: Container {
     func headerSpace(
         from contentPadding: EdgeInsets
     ) -> CGFloat {
-        return contentPadding.top
+        return contentPadding.bottom
     }
 
     func tabBar(

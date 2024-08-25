@@ -52,7 +52,7 @@ public extension ParraGlobalComponentAttributes {
             ),
             cornerRadius: .md,
             padding: .md,
-            background: nil
+            background: palette.secondaryBackground
         ).mergingOverrides(localAttributes)
     }
 }

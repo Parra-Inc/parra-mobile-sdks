@@ -60,7 +60,7 @@ public extension ParraGlobalComponentAttributes {
             ),
             cornerRadius: .lg,
             padding: .md,
-            background: nil,
+            background: palette.secondaryBackground,
             tint: palette.primary.toParraColor(),
             keyboardType: config.keyboardType,
             textCase: config.textCase,

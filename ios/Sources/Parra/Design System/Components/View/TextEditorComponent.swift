@@ -59,7 +59,6 @@ struct TextEditorComponent: View {
             helperLabel
         }
         .applyPadding(size: attributes.padding, from: parraTheme)
-        .applyBackground(attributes.background)
     }
 
     // MARK: - Private

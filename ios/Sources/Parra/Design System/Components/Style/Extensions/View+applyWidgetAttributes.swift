@@ -24,21 +24,32 @@ extension View {
     }
 
     @ViewBuilder
+    func applyDefaultWidgetAttributesWithoutPadding(
+        using theme: ParraTheme
+    ) -> some View {
+        let attributes = ParraAttributes.Widget.default(
+            with: theme
+        )
+
+        applyWidgetAttributes(
+            attributes: attributes.withoutContentPadding(),
+            using: theme
+        )
+    }
+
+    @ViewBuilder
     func applyWidgetAttributes(
         attributes: ParraAttributes.Widget,
         using theme: ParraTheme
     ) -> some View {
-        applyPadding(
-            size: attributes.contentPadding,
-            from: theme
-        )
-        .background(attributes.background ?? .clear)
-        .applyCornerRadii(
+        applyCornerRadii(
             size: attributes.cornerRadius,
             from: theme
         )
+        // background won't continue in safe area unless after corner radius
+        .background(attributes.background ?? .clear, ignoresSafeAreaEdges: .all)
         .applyPadding(
-            size: attributes.padding,
+            size: attributes.contentPadding,
             from: theme
         )
     }

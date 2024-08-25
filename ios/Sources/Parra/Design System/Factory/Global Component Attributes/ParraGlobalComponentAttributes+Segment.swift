@@ -26,7 +26,7 @@ public extension ParraGlobalComponentAttributes {
                     style: .body,
                     color: theme.palette.secondaryText.toParraColor()
                 ),
-                background: theme.palette.primaryBackground
+                background: theme.palette.secondaryBackground
             ),
             border: ParraAttributes.Border(
                 width: 1.5,

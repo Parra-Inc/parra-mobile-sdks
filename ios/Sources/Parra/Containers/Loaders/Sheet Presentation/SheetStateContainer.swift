@@ -20,7 +20,6 @@ struct SheetStateContainer<Data, Content>: View, Equatable
         NavigationStack(path: $navigationState.navigationPath) {
             content()
                 .environmentObject(navigationState)
-                .padding(.top, 30)
         }
         .navigationBarTitleDisplayMode(.inline)
     }

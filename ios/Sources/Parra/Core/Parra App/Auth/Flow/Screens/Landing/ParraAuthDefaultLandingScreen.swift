@@ -42,10 +42,10 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
             }
         }
         .frame(maxWidth: .infinity)
-        .applyBackground(background)
         .applyDefaultWidgetAttributes(
             using: parraTheme
         )
+        .applyBackground(background)
     }
 
     // MARK: - Internal
