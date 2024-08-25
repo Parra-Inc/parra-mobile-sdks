@@ -16,7 +16,7 @@ public extension ParraAttributes {
         // MARK: - Lifecycle
 
         public init(
-            style: Font.TextStyle = .body,
+            style: Font.TextStyle? = nil,
             width: Font.Width? = nil,
             weight: Font.Weight? = nil,
             design: Font.Design? = nil,
@@ -95,7 +95,7 @@ public extension ParraAttributes {
 
         public enum FontType {
             case style(
-                style: Font.TextStyle,
+                style: Font.TextStyle? = nil,
                 width: Font.Width? = nil,
                 weight: Font.Weight? = nil,
                 design: Font.Design? = nil
@@ -116,7 +116,7 @@ public extension ParraAttributes {
                 switch self {
                 case .style(let style, let width, let weight, let design):
                     return Font.system(
-                        style,
+                        style ?? .body,
                         design: design,
                         weight: weight
                     )
@@ -147,7 +147,7 @@ extension ParraAttributes.Text: OverridableAttributes {
     func mergingOverrides(
         _ overrides: ParraAttributes.Text?
     ) -> ParraAttributes.Text {
-        ParraAttributes.Text(
+        return ParraAttributes.Text(
             fontType: fontType.mergingOverrides(overrides?.fontType),
             color: overrides?.color ?? color,
             alignment: overrides?.alignment ?? alignment,
@@ -195,6 +195,14 @@ extension ParraAttributes.Text.FontType: OverridableAttributes {
             )
         case (.custom, .custom(let font)):
             return .custom(font)
+        case (_, .style(let style, let width, let weight, let design)):
+            // If a style font type was provided but it's in its initial state
+            // defer to the current attributes
+            if style == nil && width == nil && weight == nil && design == nil {
+                return self
+            }
+
+            return overrides ?? self
         default:
             return overrides ?? self
         }
