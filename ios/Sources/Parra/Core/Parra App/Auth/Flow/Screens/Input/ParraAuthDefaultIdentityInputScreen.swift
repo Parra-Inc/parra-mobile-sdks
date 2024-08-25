@@ -72,6 +72,10 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
             // when you're logging in without a passkey to get you to use one.
             // If you're on this screen to create a passkey it shouldn't
             // be shown.
+            if !identity.isEmpty {
+                return
+            }
+
             do {
                 try await params.attemptPasskeyAutofill?()
             } catch {
