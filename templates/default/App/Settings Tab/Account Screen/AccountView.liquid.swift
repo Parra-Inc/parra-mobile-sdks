@@ -63,8 +63,10 @@ struct AccountView: View {
                         }
                     }
 
-                    Section("Security") {
-                        ChangePasswordCell()
+                    if user.info.hasPassword {
+                        Section("Security") {
+                            ChangePasswordCell()
+                        }
                     }
 
                     Section {
