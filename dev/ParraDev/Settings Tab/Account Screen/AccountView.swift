@@ -11,6 +11,8 @@ import SwiftUI
 
 struct AccountView: View {
     @Environment(\.parraAuthState) private var parraAuthState
+    @Environment(\.parraTheme) private var parraTheme
+    
     @State private var isSigningIn = false
 
     var body: some View {
@@ -75,6 +77,8 @@ struct AccountView: View {
                 }
             }
         }
+        .background(parraTheme.palette.primaryBackground)
+        .scrollContentBackground(.hidden)
         .navigationTitle("Account")
     }
 }
