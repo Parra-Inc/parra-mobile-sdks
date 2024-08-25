@@ -131,23 +131,25 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     text: "Confirm your identity",
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
-                            style: .title
+                            style: .title,
+                            alignment: .leading
                         )
                     )
                 )
-                .layoutPriority(20)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 componentFactory.buildLabel(
                     text: "We'll send a \(requiredLength)-digit code to \(params.identity) verify your identity.",
                     localAttributes: ParraAttributes.Label(
                         text: ParraAttributes.Text(
-                            style: .subheadline
+                            style: .subheadline,
+                            alignment: .leading
                         )
                     )
                 )
-                .layoutPriority(20)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .layoutPriority(20)
+            .frame(maxWidth: .infinity)
 
             ChallengeVerificationView(
                 passwordlessConfig: params.passwordlessConfig,
@@ -173,19 +175,33 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
             Spacer()
                 .layoutPriority(1)
 
-            componentFactory.buildLabel(
-                text: disclaimerText,
-                localAttributes: ParraAttributes.Label(
-                    text: ParraAttributes.Text(
-                        style: .footnote,
-                        color: parraTheme.palette.secondaryText
-                            .toParraColor(),
-                        alignment: .center
-                    ),
-                    padding: .md
+            if let errorMessage {
+                componentFactory.buildLabel(
+                    content: ParraLabelContent(text: errorMessage),
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            color: parraTheme.palette.error
+                                .toParraColor()
+                        ),
+                        padding: .lg
+                    )
                 )
-            )
-            .layoutPriority(10)
+                .layoutPriority(10)
+            } else {
+                componentFactory.buildLabel(
+                    text: disclaimerText,
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            style: .footnote,
+                            color: parraTheme.palette.secondaryText
+                                .toParraColor(),
+                            alignment: .center
+                        ),
+                        padding: .md
+                    )
+                )
+                .layoutPriority(10)
+            }
         }
     }
 
@@ -197,15 +213,11 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     size: .large,
                     isMaxWidth: true
                 ),
-                content: continueButtonContent,
-                localAttributes: ParraAttributes.ContainedButton(
-                    normal: ParraAttributes.ContainedButton.StatefulAttributes(
-                        padding: .custom(.padding(top: 8))
-                    )
-                )
+                content: continueButtonContent
             ) {
                 triggerVerifyCode()
             }
+            .padding(.top, 8)
 
             HStack {
                 let content: ParraTextButtonContent = if let retryTimeRemaining,
@@ -239,6 +251,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                 ) {
                     triggerCodeSend()
                 }
+                .frame(alignment: .center)
             }
         } else {
             componentFactory.buildContainedButton(
@@ -247,15 +260,11 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                     size: .large,
                     isMaxWidth: true
                 ),
-                content: continueButtonContent,
-                localAttributes: ParraAttributes.ContainedButton(
-                    normal: ParraAttributes.ContainedButton.StatefulAttributes(
-                        padding: .custom(.padding(top: 8))
-                    )
-                )
+                content: continueButtonContent
             ) {
                 triggerCodeSend()
             }
+            .padding(.top, 8)
         }
     }
 
@@ -297,6 +306,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
     private func triggerCodeSend() {
         continueButtonContent = continueButtonContent.withLoading(true)
         currentCode = ""
+        errorMessage = nil
 
         Task {
             do {
@@ -341,6 +351,14 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
                 try await params.verifyCode(currentCode)
             } catch {
                 logger.error("Error verifying code: \(error)")
+
+                withAnimation {
+                    errorMessage = "Failed to verify SMS login code"
+                    processResponseChange(nil)
+                    continueButtonContent = ParraTextButtonContent(
+                        text: "Send code"
+                    )
+                }
             }
 
             Task { @MainActor in

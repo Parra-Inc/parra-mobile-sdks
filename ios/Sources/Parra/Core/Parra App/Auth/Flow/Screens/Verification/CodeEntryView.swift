@@ -102,6 +102,7 @@ struct CodeEntryView: View {
         .frame(width: 46, height: 60)
         .background {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(palette.secondaryBackground)
                 .stroke(
                     isHighlighted
                         ? palette.primary.toParraColor()

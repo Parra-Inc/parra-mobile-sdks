@@ -37,24 +37,21 @@ struct ChangelogWidget: Container {
         )
 
         VStack(spacing: 0) {
-            VStack(alignment: .leading) {
-                componentFactory.buildLabel(
-                    content: contentObserver.content.title,
-                    localAttributes: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            style: .title
-                        ),
-                        frame: .flexible(
-                            FlexibleFrameAttributes(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
+            componentFactory.buildLabel(
+                content: contentObserver.content.title,
+                localAttributes: ParraAttributes.Label(
+                    text: ParraAttributes.Text(
+                        style: .title
+                    ),
+                    frame: .flexible(
+                        FlexibleFrameAttributes(
+                            maxWidth: .infinity,
+                            alignment: .leading
                         )
                     )
                 )
-            }
+            )
             .padding([.horizontal, .top], from: contentPadding)
-            .padding(.bottom, headerSpace(with: contentPadding))
             .border(
                 width: 1,
                 edges: .bottom,
@@ -84,6 +81,7 @@ struct ChangelogWidget: Container {
                         componentFactory: componentFactory,
                         contentObserver: contentObserver
                     )
+                    .padding(.top, -contentPadding.top)
                     .environmentObject(navigationState)
                 }
         }
@@ -91,21 +89,10 @@ struct ChangelogWidget: Container {
             attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: parraTheme
         )
-        .applyPadding(
-            size: defaultWidgetAttributes.padding,
-            on: [.horizontal, .bottom],
-            from: parraTheme
-        )
         .task {
             // Perform initial load
             contentObserver.releasePaginator.loadMore(after: nil)
         }
-    }
-
-    func headerSpace(
-        with contentPadding: EdgeInsets
-    ) -> CGFloat {
-        return contentPadding.top
     }
 
     func items(
@@ -180,7 +167,7 @@ struct ChangelogWidget: Container {
         )
         .contentMargins(
             .top,
-            headerSpace(with: contentPadding),
+            contentPadding.bottom,
             for: .scrollContent
         )
         .contentMargins(
