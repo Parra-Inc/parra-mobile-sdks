@@ -37,7 +37,8 @@ public extension ParraUser {
             lastLoginAt: Date?,
             properties: [String: ParraAnyCodable],
             identities: [ParraIdentity],
-            isAnonymous: Bool
+            isAnonymous: Bool,
+            hasPassword: Bool
         ) {
             self.id = id
             self.createdAt = createdAt
@@ -62,6 +63,7 @@ public extension ParraUser {
             self.properties = properties
             self.identities = identities
             self.isAnonymous = isAnonymous
+            self.hasPassword = hasPassword
         }
 
         public init(
@@ -175,6 +177,12 @@ public extension ParraUser {
                     Bool.self,
                     forKey: .isAnonymous
                 )
+
+            self.hasPassword = try container
+                .decode(
+                    Bool.self,
+                    forKey: .hasPassword
+                )
         }
 
         // MARK: - Public
@@ -202,6 +210,9 @@ public extension ParraUser {
         public let properties: [String: ParraAnyCodable]
         public let identities: [ParraIdentity]
         public let isAnonymous: Bool
+
+        /// Whether or not the user has an associated identity with a password.
+        public let hasPassword: Bool
 
         public var displayName: String? {
             if let name {
