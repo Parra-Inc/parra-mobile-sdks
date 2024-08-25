@@ -297,7 +297,7 @@ class AuthenticationFlowManager: ObservableObject {
             attemptPasskeyAutofill: {
                 logger.info("Attempting passkey autofill")
 
-                try await self.triggerPasskeyLoginRequest(
+                await self.triggerPasskeyLoginRequest(
                     username: nil,
                     presentationMode: .autofill,
                     using: appInfo,
@@ -685,9 +685,16 @@ class AuthenticationFlowManager: ObservableObject {
             code: code
         )
 
-        await authService.applyUserUpdate(
-            authResult
-        )
+        switch authResult {
+        case .undetermined:
+            break
+        case .authenticated, .anonymous, .guest:
+            await authService.applyUserUpdate(
+                authResult
+            )
+        case .error(let error):
+            throw error
+        }
     }
 
     private func authenticate(
