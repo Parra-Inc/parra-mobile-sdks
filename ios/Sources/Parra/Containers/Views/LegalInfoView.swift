@@ -31,6 +31,7 @@ class _LegalInfoView: UIView, UITextViewDelegate {
         textView.isScrollEnabled = false
         textView.setContentHuggingPriority(.required, for: .vertical)
         textView.isUserInteractionEnabled = true
+        textView.backgroundColor = .clear
 
         translatesAutoresizingMaskIntoConstraints = false
         isUserInteractionEnabled = true
