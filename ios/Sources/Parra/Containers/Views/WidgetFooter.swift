@@ -12,7 +12,7 @@ struct WidgetFooter<Primary>: View where Primary: View {
     // MARK: - Lifecycle
 
     init(
-        @ViewBuilder primaryActionBuilder: @escaping () -> Primary,
+        primaryActionBuilder: @escaping () -> Primary?,
         secondaryActionBuilder: (() -> any View)? = nil,
         contentPadding: EdgeInsets = EdgeInsets(vertical: 12, horizontal: 20)
     ) {
@@ -23,11 +23,11 @@ struct WidgetFooter<Primary>: View where Primary: View {
 
     // MARK: - Internal
 
-    @ViewBuilder let primaryActionBuilder: () -> Primary
+    @ViewBuilder let primaryActionBuilder: () -> Primary?
     @ViewBuilder let secondaryActionBuilder: (() -> any View)?
 
     var body: some View {
-        if let primaryAction = primaryActionBuilder() as? AnyView {
+        if let primaryAction = primaryActionBuilder() {
             VStack(alignment: .center, spacing: 16) {
                 primaryAction
 

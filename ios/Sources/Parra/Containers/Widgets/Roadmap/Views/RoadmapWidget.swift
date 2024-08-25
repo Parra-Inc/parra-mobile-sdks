@@ -32,21 +32,23 @@ struct RoadmapWidget: Container {
     }
 
     var footer: some View {
-        WidgetFooter {
-            if contentObserver.canAddRequests {
-                componentFactory.buildContainedButton(
-                    config: ParraTextButtonConfig(
-                        type: .primary,
-                        size: .large,
-                        isMaxWidth: true
-                    ),
-                    content: contentObserver.content
-                        .addRequestButton,
-                    onPress: {
-                        contentObserver.addRequest()
-                    }
-                )
+        WidgetFooter { () -> ContainedButtonComponent? in
+            guard contentObserver.canAddRequests else {
+                return nil
             }
+
+            return componentFactory.buildContainedButton(
+                config: ParraTextButtonConfig(
+                    type: .primary,
+                    size: .large,
+                    isMaxWidth: true
+                ),
+                content: contentObserver.content
+                    .addRequestButton,
+                onPress: {
+                    contentObserver.addRequest()
+                }
+            )
         }
     }
 

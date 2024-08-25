@@ -15,7 +15,7 @@ extension ComponentFactory {
         content: ParraTextButtonContent,
         localAttributes: ParraAttributes.PlainButton? = nil,
         onPress: @escaping () -> Void
-    ) -> some View {
+    ) -> PlainButtonComponent {
         let attributes = attributeProvider.plainButtonAttributes(
             config: config,
             localAttributes: localAttributes,
@@ -42,7 +42,7 @@ extension ComponentFactory {
         text: String,
         localAttributes: ParraAttributes.PlainButton? = nil,
         onPress: @escaping () -> Void
-    ) -> some View {
+    ) -> PlainButtonComponent {
         let attributes = attributeProvider.plainButtonAttributes(
             config: config,
             localAttributes: localAttributes,
@@ -71,7 +71,7 @@ extension ComponentFactory {
         content: ParraTextButtonContent,
         localAttributes: ParraAttributes.OutlinedButton? = nil,
         onPress: @escaping () -> Void
-    ) -> some View {
+    ) -> OutlinedButtonComponent {
         let attributes = attributeProvider.outlinedButtonAttributes(
             config: config,
             localAttributes: localAttributes,
@@ -98,7 +98,7 @@ extension ComponentFactory {
         text: String,
         localAttributes: ParraAttributes.OutlinedButton? = nil,
         onPress: @escaping () -> Void
-    ) -> some View {
+    ) -> OutlinedButtonComponent {
         let attributes = attributeProvider.outlinedButtonAttributes(
             config: config,
             localAttributes: localAttributes,
@@ -127,7 +127,7 @@ extension ComponentFactory {
         content: ParraTextButtonContent,
         localAttributes: ParraAttributes.ContainedButton? = nil,
         onPress: @escaping () -> Void
-    ) -> some View {
+    ) -> ContainedButtonComponent {
         let attributes = attributeProvider.containedButtonAttributes(
             config: config,
             localAttributes: localAttributes,
@@ -154,7 +154,7 @@ extension ComponentFactory {
         text: String,
         localAttributes: ParraAttributes.ContainedButton? = nil,
         onPress: @escaping () -> Void
-    ) -> some View {
+    ) -> ContainedButtonComponent {
         let attributes = attributeProvider.containedButtonAttributes(
             config: config,
             localAttributes: localAttributes,
@@ -183,7 +183,7 @@ extension ComponentFactory {
         content: ParraImageButtonContent,
         localAttributes: ParraAttributes.ImageButton? = nil,
         onPress: @escaping () -> Void
-    ) -> some View {
+    ) -> ImageButtonComponent {
         let attributes = attributeProvider.imageButtonAttributes(
             config: config,
             localAttributes: localAttributes,
