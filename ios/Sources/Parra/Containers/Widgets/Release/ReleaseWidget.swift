@@ -166,6 +166,7 @@ struct ReleaseWidget: Container {
                     componentFactory: componentFactory,
                     contentObserver: changelogContentObserver
                 )
+                .padding(.top, contentPadding.top)
                 .edgesIgnoringSafeArea([.top])
                 .environmentObject(navigationState)
             }
