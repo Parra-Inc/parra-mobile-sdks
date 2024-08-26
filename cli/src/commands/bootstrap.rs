@@ -101,6 +101,7 @@ pub async fn execute_sample_bootstrap(
                 raw: "Parra Demo".to_owned(),
                 kebab: "parra-demo".to_owned(),
                 upper_camel: "ParraDemoApp".to_owned(),
+                display_name: "Parra Demo".to_owned(),
             },
             bundle_id: "com.parra.parra-ios-client".to_owned(),
             deployment_target: "17.0".to_owned(),
@@ -179,8 +180,12 @@ pub async fn execute_bootstrap(
 
     // If the app name ends with "App", remove it.
     if application.name.to_lowercase().ends_with("app") {
-        application.name =
-            application.name.trim_end_matches("app").trim().to_string();
+        application.name = application
+            .name
+            .trim_end_matches("app")
+            .trim_end_matches("App")
+            .trim()
+            .to_string();
     }
 
     let safe_app_name = Regex::new(r"[^a-zA-Z0-9\s-]")
@@ -189,7 +194,17 @@ pub async fn execute_bootstrap(
 
     let expanded_path = normalized_project_path(project_path, &safe_app_name)?;
 
-    let (template, template_dir) = get_remote_template(&template_name).await?;
+    let (template, template_dir): (String, PathBuf) = if cfg!(debug_assertions)
+    {
+        println!("Running in DEBUG mode. Using local templates!!!");
+        let template_dir = get_template_path(&template_name)?;
+        let template = get_local_template(&template_dir, false)?;
+
+        (template, template_dir)
+    } else {
+        get_remote_template(&template_name).await?
+    };
+
     let template_app_dir = template_dir.join("App");
 
     let ios_config = application.ios.unwrap();
@@ -214,6 +229,7 @@ pub async fn execute_bootstrap(
                 // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"
                 kebab: slugify!(&safe_app_name),
                 upper_camel: upper_camel_app_name,
+                display_name: safe_app_name.to_string(),
             },
             bundle_id: ios_config.bundle_id,
             deployment_target: "17.0".to_owned(),

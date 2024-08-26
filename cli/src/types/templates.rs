@@ -46,6 +46,7 @@ pub struct AppNameInfo {
     pub raw: String,
     pub kebab: String,
     pub upper_camel: String,
+    pub display_name: String,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
