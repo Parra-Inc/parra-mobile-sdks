@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use super::api::Icon;
+
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct CliInput {
     #[serde(default = "default_required")]
@@ -87,6 +89,7 @@ pub struct AppContextInfo {
     pub entitlements: AppEntitlementSchemes,
     pub code_sign: CodeSigningConfigs,
     pub team_id: String,
+    pub icon: Option<Icon>,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]

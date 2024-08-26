@@ -28,14 +28,14 @@ pub struct TenantRequest {
     pub is_test: bool,
 }
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct Size {
     pub width: u32,
     pub height: u32,
 }
 
-#[derive(Debug, Deserialize, Clone)]
-pub struct TenantLogo {
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct Icon {
     pub id: String,
     pub url: String,
     pub size: Size,
@@ -67,7 +67,7 @@ pub struct TenantResponse {
     pub id: String,
     pub name: String,
     pub subdomain: Option<String>,
-    pub logo: Option<TenantLogo>,
+    pub logo: Option<Icon>,
     pub domains: Vec<TenantDomain>,
 }
 
@@ -104,6 +104,7 @@ pub struct ApplicationResponse {
     pub tenant_id: String,
     /// Will always be present when `type` is `ios`.
     pub ios: Option<ApplicationIosConfig>,
+    pub icon: Option<Icon>,
 }
 
 #[derive(Debug, Deserialize)]

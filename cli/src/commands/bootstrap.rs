@@ -138,6 +138,7 @@ pub async fn execute_sample_bootstrap(
                     domain_type: TenantDomainType::Fallback,
                 },
             ]),
+            icon: None,
         },
         sdk: SdkContextInfo {
             version: built::built_info::PKG_VERSION.to_owned(),
@@ -159,7 +160,8 @@ pub async fn execute_sample_bootstrap(
             &template,
             &context,
             false,
-        )?;
+        )
+        .await?;
 
     println!(
         "Parra project generated at {}!",
@@ -264,6 +266,7 @@ pub async fn execute_bootstrap(
             },
             team_id: team_id.to_owned(),
             entitlements: get_entitlement_schemes(tenant.domains),
+            icon: application.icon.or(tenant.logo),
         },
         sdk: SdkContextInfo {
             version: built::built_info::PKG_VERSION.to_owned(),
@@ -284,7 +287,8 @@ pub async fn execute_bootstrap(
         &template,
         &context,
         true,
-    )?;
+    )
+    .await?;
 
     let xcode_target_dir = &xcode_project;
 

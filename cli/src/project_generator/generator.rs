@@ -2,15 +2,19 @@ use std::path::{Path, PathBuf};
 use std::process::{exit, Command};
 use std::{error::Error, fs, io};
 
+use image::imageops::FilterType;
+use image::ImageFormat;
 use inquire::validator::{MaxLengthValidator, MinLengthValidator};
 use inquire::{Confirm, Text};
 use liquid::model::Value;
 use liquid::Object;
+use reqwest::get;
 
 use crate::project_generator::renderer;
+use crate::types::api::Icon;
 use crate::types::templates::{CliInput, ProjectContext};
 
-pub fn generate_xcode_project(
+pub async fn generate_xcode_project(
     project_dir: &PathBuf,
     template_app_dir: &PathBuf,
     template: &str,
@@ -102,6 +106,15 @@ pub fn generate_xcode_project(
 
     run_xcodegen(&project_dir, &rendered_project_template)?;
 
+    if let Some(icon) = &context.app.icon {
+        match replace_app_icon(&target_dir, icon).await {
+            Ok(_) => {}
+            Err(err) => {
+                eprintln!("Error downloading app icon. Using default instead. Error: {}", err);
+            }
+        }
+    }
+
     install_spm_dependencies(&project_dir)?;
 
     return Ok(target_dir);
@@ -157,6 +170,35 @@ fn run_xcodegen(
             exit(1);
         }
     }
+}
+
+async fn replace_app_icon(
+    project_path: &PathBuf,
+    icon: &Icon,
+) -> Result<(), Box<dyn Error>> {
+    let output_path =
+        project_path.join("Assets.xcassets/AppIcon.appiconset/app-icon.png");
+
+    println!("Downloading app icon...");
+
+    // Download the image
+    let response = get(&icon.url).await?;
+    let bytes = response.bytes().await?;
+
+    // Load the image
+    let image = image::load_from_memory(&bytes)?;
+
+    let sized_image = if icon.size.width == 1024 && icon.size.height == 1024 {
+        image
+    } else {
+        // Resize the image to 1024x1024 using Lanczos3 filter for high-quality resizing
+        image.resize(1024, 1024, FilterType::Lanczos3)
+    };
+
+    // Save the resized image to a file
+    sized_image.save_with_format(output_path, ImageFormat::Png)?;
+
+    Ok(())
 }
 
 fn install_spm_dependencies(path: &PathBuf) -> Result<(), Box<dyn Error>> {
