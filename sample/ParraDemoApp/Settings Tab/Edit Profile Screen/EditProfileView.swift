@@ -2,7 +2,7 @@
 //  EditProfileView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/25/2024.
+//  Bootstrapped with ❤️ by Parra on 08/26/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -37,6 +37,7 @@ struct EditProfileView: View {
                 Label(
                     title: {
                         Text(isShowingSuccess ? "Saved" : "Save")
+                            .bold()
                     },
                     icon: {
                         if isLoading {
