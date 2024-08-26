@@ -56,6 +56,8 @@ struct ParraChangePasswordModal: View {
                     params: params,
                     config: config
                 )
+                .padding(.top, 34)
+                .background(parraTheme.palette.primaryBackground)
             } else {
                 EmptyView()
             }
@@ -68,6 +70,7 @@ struct ParraChangePasswordModal: View {
 
     @Environment(\.parra) private var parra
     @Environment(\.parraAuthState) private var parraAuthState
+    @Environment(\.parraTheme) private var parraTheme
 }
 
 public extension View {
