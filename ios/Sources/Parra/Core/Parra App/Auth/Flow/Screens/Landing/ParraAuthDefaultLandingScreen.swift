@@ -80,14 +80,6 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         }
     }
 
-    private var title: String {
-        guard let name = Parra.appBundleName() else {
-            return "Welcome"
-        }
-
-        return "Welcome to\n\(name)"
-    }
-
     @ViewBuilder private var defaultTopView: some View {
         if let logo = parraAppInfo.tenant.logo {
             componentFactory.buildAsyncImage(
@@ -122,7 +114,9 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
         )
 
         componentFactory.buildLabel(
-            content: ParraLabelContent(text: title),
+            content: ParraLabelContent(
+                text: "Welcome to\n\(parraAppInfo.tenant.name)"
+            ),
             localAttributes: titleAttributes
         )
         .minimumScaleFactor(0.5)
