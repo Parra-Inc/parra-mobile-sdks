@@ -179,10 +179,10 @@ public extension ParraUser {
                 )
 
             self.hasPassword = try container
-                .decode(
+                .decodeIfPresent(
                     Bool.self,
                     forKey: .hasPassword
-                )
+                ) ?? false
         }
 
         // MARK: - Public
