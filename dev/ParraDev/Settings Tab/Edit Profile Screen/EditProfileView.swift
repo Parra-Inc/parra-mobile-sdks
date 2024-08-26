@@ -80,7 +80,6 @@ struct EditProfileView: View {
             Text(name)
 
             Spacer()
-                .frame(maxWidth: .infinity)
 
             TextField(
                 name,
