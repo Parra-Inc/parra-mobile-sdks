@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use super::auth::Credental;
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct UserResponse {
     pub id: String,
@@ -62,6 +63,7 @@ pub struct TenantDomain {
     pub domain_type: TenantDomainType,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, Clone)]
 pub struct TenantResponse {
     pub id: String,
@@ -88,6 +90,7 @@ pub struct ApplicationRequest {
     pub is_new_project: bool,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, Clone)]
 pub struct ApplicationIosConfig {
     pub bundle_id: String,
@@ -95,6 +98,7 @@ pub struct ApplicationIosConfig {
     pub team_id: Option<String>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, Clone)]
 pub struct ApplicationResponse {
     pub id: String,

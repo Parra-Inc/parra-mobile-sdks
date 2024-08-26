@@ -737,9 +737,6 @@ fn open_project(
 
     let color_scheme = get_supported_parra_colored_color_scheme();
 
-    // let parra_pink = CustomColor::new(219, 39, 119);
-    // let parra_purple = CustomColor::new(162, 51, 234);
-
     let complete_message = format!(
         "
         
@@ -794,7 +791,6 @@ fn open_project(
         .arg(path_clone)
         .arg("-a")
         .arg(xcode_path)
-        // .current_dir(path)
         .output()
         .expect("Failed to open project in Xcode");
 

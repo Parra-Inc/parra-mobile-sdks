@@ -24,6 +24,7 @@ const PARRA_PURPLE: RGB = RGB {
     b: 234,
 };
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 pub struct ParraColorSchemeForColored {
     pub prefix_color: ColoredColor,
