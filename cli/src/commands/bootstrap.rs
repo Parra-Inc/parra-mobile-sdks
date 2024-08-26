@@ -178,6 +178,19 @@ pub async fn execute_bootstrap(
     let tenant = get_tenant(tenant_id).await?;
     let mut application = get_application(application_id, &tenant).await?;
 
+    let display_name: String = application
+        .name
+        .split(|c: char| c.is_whitespace() || c == '-' || c == '_')
+        .filter(|&word| {
+            let word_lowercase = word.to_lowercase();
+            word_lowercase != "ios"
+                && word_lowercase != "mobile"
+                && word_lowercase != "app"
+                && word_lowercase != "application"
+        })
+        .collect::<Vec<&str>>()
+        .join(" ");
+
     // If the app name ends with "App", remove it.
     if application.name.to_lowercase().ends_with("app") {
         application.name = application
@@ -229,7 +242,7 @@ pub async fn execute_bootstrap(
                 // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"
                 kebab: slugify!(&safe_app_name),
                 upper_camel: upper_camel_app_name,
-                display_name: safe_app_name.to_string(),
+                display_name: display_name,
             },
             bundle_id: ios_config.bundle_id,
             deployment_target: "17.0".to_owned(),
