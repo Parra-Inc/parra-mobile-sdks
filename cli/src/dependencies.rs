@@ -155,11 +155,6 @@ fn is_xcode_version_valid(min_version: SemanticVersion) -> Option<bool> {
 
                 if let Ok(version) = Version::parse(&version_str) {
                     if min_version_req.matches(&version) {
-                        println!(
-                            "Xcode version: {} is already installed",
-                            version
-                        );
-
                         return Some(true);
                     }
                 }
