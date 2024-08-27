@@ -2,7 +2,7 @@
 //  ShareCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/26/2024.
+//  Bootstrapped with ❤️ by Parra on 08/27/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 

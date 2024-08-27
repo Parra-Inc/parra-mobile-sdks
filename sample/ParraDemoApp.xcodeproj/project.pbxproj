@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		048ADBC78793B41DBD394C4F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = CE2C0816F30D7F5A1A9AA90E /* PrivacyInfo.xcprivacy */; };
 		1F19DE02BDA549DE968C0D83 /* ChangePasswordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE450960001563C208D94E3 /* ChangePasswordCell.swift */; };
 		21747ACB5EE558646C7FF23C /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3810DBD43B0EA840AD1CE7 /* AccountView.swift */; };
 		23B4F90D5D3801DC189A838C /* ChangelogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA58D7C85B5D914090C05A6 /* ChangelogCell.swift */; };
@@ -50,6 +51,7 @@
 		A64F4171821ACE6A076CE32C /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		AD37450ED3B2022F3C9CC692 /* RoadmapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapCell.swift; sourceTree = "<group>"; };
 		CA2CE81A679147AB7A245775 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CE2C0816F30D7F5A1A9AA90E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		E50031562D984DCD55B6471E /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		EE0B09EBFADFCCBB95417508 /* ParraDemoApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ParraDemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46F6C1573953F837FF9D7BA /* AccountHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeader.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				0ADADDC8AB29878AC84A7703 /* ContentView.swift */,
 				7E055784268973DD316EFB1C /* Debug.entitlements */,
 				8878392F62C62588A32BE472 /* Info.plist */,
+				CE2C0816F30D7F5A1A9AA90E /* PrivacyInfo.xcprivacy */,
 				47BE6B8CFA8FBFAB2416A07B /* Release.entitlements */,
 				FF27E8D3BFFABEC6016D0A1F /* SampleTab.swift */,
 				1A6FC969E5AC6E7E96B55660 /* Settings Tab */,
@@ -211,6 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1F51A638A4360CABEFBB3FC /* Assets.xcassets in Resources */,
+				048ADBC78793B41DBD394C4F /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,7 +454,7 @@
 			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.2.36;
+				minimumVersion = 0.2.37;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
