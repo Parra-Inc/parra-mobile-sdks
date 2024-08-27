@@ -138,7 +138,8 @@ final class AuthServer: Server {
         return try await performOptionalAuthRequest(
             to: .postLogin,
             with: accessToken,
-            body: body
+            body: body,
+            allowedRetries: 1
         )
     }
 
@@ -324,7 +325,8 @@ final class AuthServer: Server {
             with: accessToken,
             queryItems: queryItems,
             timeout: timeout,
-            cachePolicy: .reloadRevalidatingCacheData
+            cachePolicy: .reloadRevalidatingCacheData,
+            allowedRetries: 2
         )
     }
 
@@ -407,34 +409,28 @@ final class AuthServer: Server {
         to endpoint: ApiEndpoint,
         with accessToken: String?,
         queryItems: [String: String] = [:],
+        config: RequestConfig = .defaultWithRetries,
         body: Data? = nil,
         timeout: TimeInterval? = nil,
         cachePolicy: NSURLRequest
-            .CachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+            .CachePolicy = .reloadIgnoringLocalAndRemoteCacheData,
+        allowedRetries: Int
     ) async throws -> T where T: Codable {
         let url = try EndpointResolver.resolve(
             endpoint: endpoint,
             using: appState
         )
 
-        var request = try URLRequest(
-            with: queryItems,
-            url: url,
-            cachePolicy: cachePolicy
+        var request = try createRequest(
+            to: endpoint,
+            queryItems: queryItems,
+            config: config,
+            cachePolicy: cachePolicy,
+            body: body
         )
 
-        request.httpMethod = endpoint.method.rawValue
-        request.cachePolicy = cachePolicy
         request.timeoutInterval = timeout ?? configuration.urlSession
             .configuration.timeoutIntervalForRequest
-
-        if let accessToken {
-            request.setValue(for: .authorization(.bearer(accessToken)))
-        }
-
-        if let body {
-            request.httpBody = body
-        }
 
         addHeaders(
             to: &request,
@@ -443,8 +439,13 @@ final class AuthServer: Server {
             with: headerFactory
         )
 
+        if let accessToken {
+            request.setValue(for: .authorization(.bearer(accessToken)))
+        }
+
         let (data, _): (T, HTTPURLResponse) = try await performRequest(
-            request: request
+            request: request,
+            allowedRetries: allowedRetries
         )
 
         return data
@@ -456,7 +457,8 @@ final class AuthServer: Server {
         queryItems: [String: String] = [:],
         extraHeaders: [String: String] = [:],
         body: Data? = nil,
-        timeout: TimeInterval? = nil
+        timeout: TimeInterval? = nil,
+        allowedRetries: Int = 0
     ) async throws -> (T, HTTPURLResponse) where T: Codable {
         let url = try EndpointResolver.resolve(
             endpoint: endpoint,
@@ -495,7 +497,8 @@ final class AuthServer: Server {
         }
 
         return try await performRequest(
-            request: request
+            request: request,
+            allowedRetries: allowedRetries
         )
     }
 
@@ -519,7 +522,8 @@ final class AuthServer: Server {
     }
 
     private func performRequest<T>(
-        request: URLRequest
+        request: URLRequest,
+        allowedRetries: Int
     ) async throws -> (T, HTTPURLResponse) where T: Codable {
         let (data, response) = try await performAsyncDataTask(
             request: request
@@ -541,6 +545,13 @@ final class AuthServer: Server {
 
             return (body, response)
         default:
+            if allowedRetries > 0 {
+                return try await performRequest(
+                    request: request,
+                    allowedRetries: allowedRetries - 1
+                )
+            }
+
             throw ParraError.networkError(
                 request: request,
                 response: response,

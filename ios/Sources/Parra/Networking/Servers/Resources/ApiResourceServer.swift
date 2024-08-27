@@ -248,7 +248,7 @@ final class ApiResourceServer: Server {
             )
 
             switch (response.statusCode, config.shouldReauthenticate) {
-            case (204, _):
+            case (202, _), (204, _):
                 return (
                     .success(EmptyJsonObjectData),
                     AuthenticatedRequestResponseContext(
