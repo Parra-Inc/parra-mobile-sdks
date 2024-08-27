@@ -14,12 +14,17 @@ struct {{ app.name.upper_camel }}: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
+        // Visit Parra's configuration docs to learn what options are available.
+        // https://docs.parra.io/sdks/ios/configuration
         ParraApp(
             tenantId: "{{ tenant.id }}",
             applicationId: "{{ app.id }}",
             appDelegate: appDelegate
         ) {
             WindowGroup {
+                // Use the ParraOptionalAuthWindow if you don't support user sign-in
+                // or don't require that users be logged in to use your app. Use
+                // ParraRequiredAuthWindow if signing in is required.
                 ParraOptionalAuthWindow {
                     ContentView()
                 }

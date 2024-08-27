@@ -9,6 +9,9 @@
 import Parra
 import SwiftUI
 
+// Visit Parra's docs to learn about the features available to you.
+// https://docs.parra.io/sdks/ios
+
 struct SampleTab: View {
     @Environment(\.parraTheme) private var parraTheme
 
