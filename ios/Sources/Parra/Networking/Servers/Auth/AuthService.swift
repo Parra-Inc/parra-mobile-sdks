@@ -458,6 +458,14 @@ final class AuthService {
                 nil
             }
 
+            if oauthToken.type == .guest {
+                return .guest(
+                    ParraGuest(
+                        credential: .oauth2(oauthToken)
+                    )
+                )
+            }
+
             let response = try await authServer.postLogin(
                 accessToken: oauthToken.accessToken,
                 anonymousToken: anonymousToken
