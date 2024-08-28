@@ -38,7 +38,8 @@ class ParraInternal {
         appInfoManager: AppInfoManager,
         containerRenderer: ContainerRenderer,
         alertManager: AlertManager,
-        modalScreenManager: ModalScreenManager
+        modalScreenManager: ModalScreenManager,
+        authFlowManager: AuthenticationFlowManager
     ) {
         self.authenticationMethod = authenticationMethod
         self.configuration = configuration
@@ -59,6 +60,7 @@ class ParraInternal {
             attributes: configuration.globalComponentAttributes,
             theme: configuration.theme
         )
+        self.authFlowManager = authFlowManager
     }
 
     deinit {
@@ -97,6 +99,7 @@ class ParraInternal {
     let containerRenderer: ContainerRenderer
     let alertManager: AlertManager
     let modalScreenManager: ModalScreenManager
+    let authFlowManager: AuthenticationFlowManager
 
     var globalComponentFactory: ComponentFactory
 

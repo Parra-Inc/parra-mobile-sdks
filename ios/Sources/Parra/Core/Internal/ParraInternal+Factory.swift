@@ -204,6 +204,12 @@ extension ParraInternal {
             appInfoManager: appInfoManager
         )
 
+        let authFlowManager = AuthenticationFlowManager(
+            authService: authService,
+            alertManager: alertManager,
+            modalScreenManager: modalScreenManager
+        )
+
         Logger.loggerBackend = sessionManager
 
         let parra = ParraInternal(
@@ -221,7 +227,8 @@ extension ParraInternal {
             appInfoManager: appInfoManager,
             containerRenderer: containerRenderer,
             alertManager: alertManager,
-            modalScreenManager: modalScreenManager
+            modalScreenManager: modalScreenManager,
+            authFlowManager: authFlowManager
         )
 
         ExceptionHandler.addExceptionHandlers()

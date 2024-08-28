@@ -17,7 +17,15 @@ private let logger = Logger()
 class AuthenticationFlowManager: ObservableObject {
     // MARK: - Lifecycle
 
-    private init() {}
+    init(
+        authService: AuthService,
+        alertManager: AlertManager,
+        modalScreenManager: ModalScreenManager
+    ) {
+        self.authService = authService
+        self.alertManager = alertManager
+        self.modalScreenManager = modalScreenManager
+    }
 
     // MARK: - Internal
 
@@ -68,8 +76,6 @@ class AuthenticationFlowManager: ObservableObject {
         }
     }
 
-    static let shared = AuthenticationFlowManager()
-
     var flowConfig: ParraAuthenticationFlowConfig = .default
     var delegate: AuthenticationFlowManagerDelegate?
     var navigationState: NavigationState?
@@ -115,8 +121,6 @@ class AuthenticationFlowManager: ObservableObject {
 
     @MainActor
     func getLandingScreenParams(
-        authService: AuthService,
-        modalScreenManager: ModalScreenManager,
         using appInfo: ParraAppInfo
     ) -> ParraAuthDefaultLandingScreen.Params {
         let availableAuthMethods = supportedAuthMethods(
@@ -126,9 +130,7 @@ class AuthenticationFlowManager: ObservableObject {
         return ParraAuthDefaultLandingScreen.Params(
             availableAuthMethods: availableAuthMethods,
             selectAuthMethod: { authenticationType in
-                self.cancelPasskeyRequests(
-                    on: authService
-                )
+                self.cancelPasskeyRequests()
 
                 switch authenticationType {
                 case .credentials:
@@ -157,9 +159,7 @@ class AuthenticationFlowManager: ObservableObject {
 
                     self.navigateToIdentityInputScreen(
                         inputType: inputType,
-                        appInfo: appInfo,
-                        modalScreenManager: modalScreenManager,
-                        authService: authService
+                        appInfo: appInfo
                     )
                 case .sso:
                     fatalError("SSO unimplemented")
@@ -170,9 +170,7 @@ class AuthenticationFlowManager: ObservableObject {
                     await self.triggerPasskeyLoginRequest(
                         username: nil,
                         presentationMode: .modal,
-                        using: appInfo,
-                        authService: authService,
-                        modalScreenManager: modalScreenManager
+                        using: appInfo
                     )
                 }
             }
@@ -180,9 +178,7 @@ class AuthenticationFlowManager: ObservableObject {
     }
 
     @MainActor
-    func cancelPasskeyRequests(
-        on authService: AuthService
-    ) {
+    func cancelPasskeyRequests() {
         authService.cancelPasskeyRequests()
     }
 
@@ -190,9 +186,7 @@ class AuthenticationFlowManager: ObservableObject {
     func triggerPasskeyLoginRequest(
         username: String?,
         presentationMode: AuthService.PasskeyPresentationMode,
-        using appInfo: ParraAppInfo,
-        authService: AuthService,
-        modalScreenManager: ModalScreenManager
+        using appInfo: ParraAppInfo
     ) async {
         if hasPasskeyAutoLoginBeenRequested {
             return
@@ -247,12 +241,12 @@ class AuthenticationFlowManager: ObservableObject {
             }
         } catch let error as ParraError {
             if error.isUnauthenticated {
-                await Parra.default.parraInternal.alertManager.showErrorToast(
+                await alertManager.showErrorToast(
                     userFacingMessage: "No account found matching this passkey. You can delete this passkey from your preferred password manager.",
                     underlyingError: error
                 )
             } else {
-                await Parra.default.parraInternal.alertManager.showErrorToast(
+                await alertManager.showErrorToast(
                     userFacingMessage: "Error signing in with passkey. Please try again.",
                     underlyingError: error
                 )
@@ -268,7 +262,7 @@ class AuthenticationFlowManager: ObservableObject {
                 error
             )
 
-            await Parra.default.parraInternal.alertManager.showErrorToast(
+            await alertManager.showErrorToast(
                 userFacingMessage: "Error signing in with passkey. Please try again.",
                 underlyingError: .system(error)
             )
@@ -277,21 +271,21 @@ class AuthenticationFlowManager: ObservableObject {
 
     // MARK: - Private
 
+    private let authService: AuthService
+    private let alertManager: AlertManager
+    private let modalScreenManager: ModalScreenManager
+
     @MainActor
     private func navigateToIdentityInputScreen(
         inputType: ParraIdentityInputType,
-        appInfo: ParraAppInfo,
-        modalScreenManager: ModalScreenManager,
-        authService: AuthService
+        appInfo: ParraAppInfo
     ) {
         let params = ParraAuthDefaultIdentityInputScreen.Params(
             inputType: inputType,
             submitIdentity: { identity in
                 return try await self.onIdentitySubmitted(
                     identity: identity,
-                    with: appInfo,
-                    modalScreenManager: modalScreenManager,
-                    authService: authService
+                    with: appInfo
                 )
             },
             attemptPasskeyAutofill: {
@@ -300,13 +294,11 @@ class AuthenticationFlowManager: ObservableObject {
                 await self.triggerPasskeyLoginRequest(
                     username: nil,
                     presentationMode: .autofill,
-                    using: appInfo,
-                    authService: authService,
-                    modalScreenManager: modalScreenManager
+                    using: appInfo
                 )
             },
             cancelPasskeyAutofillAttempt: {
-                self.cancelPasskeyRequests(on: authService)
+                self.cancelPasskeyRequests()
             }
         )
 
@@ -361,9 +353,7 @@ class AuthenticationFlowManager: ObservableObject {
 
     private func onIdentitySubmitted(
         identity: String,
-        with appInfo: ParraAppInfo,
-        modalScreenManager: ModalScreenManager,
-        authService: AuthService
+        with appInfo: ParraAppInfo
     ) async throws {
         logger.debug("Submitting identity", [
             "identity": identity
@@ -380,16 +370,12 @@ class AuthenticationFlowManager: ObservableObject {
             try await triggerPasskeyLoginRequest(
                 username: identity,
                 presentationMode: .modal,
-                using: appInfo,
-                authService: authService,
-                modalScreenManager: modalScreenManager
+                using: appInfo
             )
         } else {
             try await onCredentialIdentitySubmitted(
                 identity: identity,
                 with: appInfo,
-                authService: authService,
-                modalScreenManager: modalScreenManager,
                 authChallengeResponse: authChallengeResponse,
                 identityType: identityType
             )
@@ -399,8 +385,6 @@ class AuthenticationFlowManager: ObservableObject {
     private func onCredentialIdentitySubmitted(
         identity: String,
         with appInfo: ParraAppInfo,
-        authService: AuthService,
-        modalScreenManager: ModalScreenManager,
         authChallengeResponse: AuthChallengeResponse,
         identityType: ParraIdentityType?
     ) async throws {
@@ -422,8 +406,7 @@ class AuthenticationFlowManager: ObservableObject {
                 identity: identity,
                 userExists: authChallengeResponse.exists,
                 passwordlessConfig: passwordlessConfig,
-                legalInfo: appInfo.legal,
-                authService: authService
+                legalInfo: appInfo.legal
             )
         } else {
             logger.debug("Navigating to identity challenge screen", [
@@ -446,17 +429,14 @@ class AuthenticationFlowManager: ObservableObject {
                         userExists: authChallengeResponse.exists,
                         identityType: identityType,
                         passwordlessConfig: appInfo.auth.passwordless,
-                        legalInfo: appInfo.legal,
-                        authService: authService
+                        legalInfo: appInfo.legal
                     )
                 },
                 forgotPassword: {
                     self.navigateToForgotPasswordScreen(
                         identity: identity,
                         legalInfo: appInfo.legal,
-                        appInfo: appInfo,
-                        modalScreenManager: modalScreenManager,
-                        authService: authService
+                        appInfo: appInfo
                     ) {
                         Task { @MainActor in
                             self.navigationState?.navigationPath.removeLast()
@@ -472,8 +452,7 @@ class AuthenticationFlowManager: ObservableObject {
     }
 
     private func onPasskeyIdentitySubmitted(
-        identity: String,
-        authService: AuthService
+        identity: String
     ) async throws {
         do {
             try await authService.registerWithPasskey(
@@ -495,8 +474,6 @@ class AuthenticationFlowManager: ObservableObject {
         identity: String,
         legalInfo: ParraLegalInfo,
         appInfo: ParraAppInfo,
-        modalScreenManager: ModalScreenManager,
-        authService: AuthService,
         onCompletePasswordChanged: @escaping () -> Void
     ) {
         logger.debug("Navigating to forgot password screen", [
@@ -511,7 +488,7 @@ class AuthenticationFlowManager: ObservableObject {
                 UIApplication.resignFirstResponder()
             }
 
-            let responseCode = try await authService.forgotPassword(
+            let responseCode = try await self.authService.forgotPassword(
                 identity: identity,
                 identityType: .email
             )
@@ -521,7 +498,7 @@ class AuthenticationFlowManager: ObservableObject {
                 rateLimited: responseCode == 429
             )
         } updatePassword: { code, newPassword in
-            try await authService.resetPassword(
+            try await self.authService.resetPassword(
                 code: code,
                 password: newPassword
             )
@@ -538,8 +515,7 @@ class AuthenticationFlowManager: ObservableObject {
         identity: String,
         userExists: Bool,
         passwordlessConfig: ParraAuthInfoPasswordlessConfig,
-        legalInfo: ParraLegalInfo,
-        authService: AuthService
+        legalInfo: ParraLegalInfo
     ) {
         logger.debug("Navigating to passwordless verification screen", [
             "identity": identity
@@ -557,14 +533,12 @@ class AuthenticationFlowManager: ObservableObject {
         ) {
             return try await self.sendLoginCode(
                 type: passwordlessType,
-                value: identity,
-                authService: authService
+                value: identity
             )
         } verifyCode: { code in
             try await self.confirmLoginCode(
                 type: passwordlessType,
-                code: code,
-                authService: authService
+                code: code
             )
         }
 
@@ -581,31 +555,24 @@ class AuthenticationFlowManager: ObservableObject {
         userExists: Bool,
         identityType: ParraIdentityType?,
         passwordlessConfig: ParraAuthInfoPasswordlessConfig?,
-        legalInfo: ParraLegalInfo,
-        authService: AuthService
+        legalInfo: ParraLegalInfo
     ) async throws {
         switch challengeResponse {
         case .passkey:
-            cancelPasskeyRequests(
-                on: authService
-            )
+            cancelPasskeyRequests()
 
             try await onPasskeyIdentitySubmitted(
-                identity: identity,
-                authService: authService
+                identity: identity
             )
         case .password(let password, _):
-            cancelPasskeyRequests(
-                on: authService
-            )
+            cancelPasskeyRequests()
 
             try await authenticate(
                 with: identity,
                 password: password,
                 userExists: userExists,
                 identityType: identityType,
-                challengeResponse: challengeResponse,
-                authService: authService
+                challengeResponse: challengeResponse
             )
         case .passwordlessSms(let phoneNumber):
             guard let passwordlessConfig else {
@@ -614,16 +581,13 @@ class AuthenticationFlowManager: ObservableObject {
                 )
             }
 
-            cancelPasskeyRequests(
-                on: authService
-            )
+            cancelPasskeyRequests()
 
             navigateToIdentityVerificationScreen(
                 identity: phoneNumber,
                 userExists: userExists,
                 passwordlessConfig: passwordlessConfig,
-                legalInfo: legalInfo,
-                authService: authService
+                legalInfo: legalInfo
             )
         case .passwordlessEmail(let email):
             guard let passwordlessConfig else {
@@ -632,36 +596,30 @@ class AuthenticationFlowManager: ObservableObject {
                 )
             }
 
-            cancelPasskeyRequests(
-                on: authService
-            )
+            cancelPasskeyRequests()
 
             navigateToIdentityVerificationScreen(
                 identity: email,
                 userExists: userExists,
                 passwordlessConfig: passwordlessConfig,
-                legalInfo: legalInfo,
-                authService: authService
+                legalInfo: legalInfo
             )
         case .verificationSms(let code):
             try await confirmLoginCode(
                 type: .sms,
-                code: code,
-                authService: authService
+                code: code
             )
         case .verificationEmail(let code):
             try await confirmLoginCode(
                 type: .email,
-                code: code,
-                authService: authService
+                code: code
             )
         }
     }
 
     private func sendLoginCode(
         type: ParraAuthenticationMethod.PasswordlessType,
-        value: String,
-        authService: AuthService
+        value: String
     ) async throws -> ParraPasswordlessChallengeResponse {
         switch type {
         case .sms:
@@ -677,8 +635,7 @@ class AuthenticationFlowManager: ObservableObject {
 
     private func confirmLoginCode(
         type: ParraAuthenticationMethod.PasswordlessType,
-        code: String,
-        authService: AuthService
+        code: String
     ) async throws {
         let authResult = try await authService.passwordlessVerifyCode(
             type: type,
@@ -702,8 +659,7 @@ class AuthenticationFlowManager: ObservableObject {
         password: String,
         userExists: Bool,
         identityType: ParraIdentityType?,
-        challengeResponse: ParraChallengeResponse,
-        authService: AuthService
+        challengeResponse: ParraChallengeResponse
     ) async throws {
         let authResult: ParraAuthState = if userExists {
             await authService.login(

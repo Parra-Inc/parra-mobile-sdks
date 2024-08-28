@@ -64,7 +64,9 @@ public extension View {
                 )
             },
             onDismiss: { sheetType in
-                AuthenticationFlowManager.shared.hasPasskeyAutoLoginBeenRequested = false
+                let authFlowManager = Parra.default.parraInternal.authFlowManager
+
+                authFlowManager.hasPasskeyAutoLoginBeenRequested = false
 
                 onDismiss?(sheetType)
             }
