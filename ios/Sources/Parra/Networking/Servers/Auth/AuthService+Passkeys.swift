@@ -22,6 +22,7 @@ extension AuthService {
         let session: String
     }
 
+    @MainActor
     func loginWithPasskey(
         username: String?,
         presentationMode: PasskeyPresentationMode,
@@ -32,15 +33,23 @@ extension AuthService {
         let result = try await createPublicKeyCredentialAssertionRequest(
             for: username
         )
+        let requests: [ASAuthorizationRequest] = [result.request]
 
-        try await startAuthorizationRequests(
-            requests: [result.request],
-            session: result.session,
-            existingUser: true,
-            presentationMode: presentationMode
-        )
+        switch presentationMode {
+        case .modal:
+            try await startAuthorizationRequests(
+                requests: requests,
+                session: result.session,
+                existingUser: true
+            )
+        case .autofill:
+            try await beginPasskeyAutofill(
+                for: requests
+            )
+        }
     }
 
+    @MainActor
     func registerWithPasskey(
         username: String
     ) async throws {
@@ -57,25 +66,20 @@ extension AuthService {
         )
     }
 
+    @MainActor
     private func startAuthorizationRequests(
         requests: [ASAuthorizationRequest],
         session: String,
-        existingUser: Bool,
-        presentationMode: PasskeyPresentationMode = .modal
+        existingUser: Bool
     ) async throws {
-        logger.debug("Starting auth request", [
-            "presentationMode": presentationMode.description
-        ])
+        logger.debug("Starting auth request")
 
-        if presentationMode == .modal {
-            // If we're about to open a modal passkey menu, dismiss the
-            // keyboard.
-            await UIApplication.resignFirstResponder()
-        }
+        // If we're about to open a modal passkey menu, dismiss the
+        // keyboard.
+        await UIApplication.resignFirstResponder()
 
         let authorization = try await beginAuthorization(
-            for: requests,
-            using: presentationMode
+            for: requests
         )
 
         if existingUser {
@@ -117,19 +121,31 @@ extension AuthService {
 
     @MainActor
     func cancelPasskeyRequests() {
-        logger.debug("cancel passkey requests")
-
-        // Cancel active requests by calling cancel on the authorization
-        // controllers they are attached to. This will cause the authorization
-        // delegate to fire an error -> cancelled, which will resolve the
-        // completion handlers and remove the requests.
-        for (_, value) in activeAuthorizationRequests {
-            value.0.cancel()
+        guard let activeAuthorizationRequest else {
+            logger.debug("no passkey request to cancel")
+            return
         }
 
-        activeAuthorizationRequests.removeAll()
+        logger.debug("cancel passkey requests")
+
+        if let completion = activeAuthorizationRequest.1 {
+            // complete and reset the instance varible storing the completion
+            // handler before calling cancel. Then the delegate method can
+            // ignore the event.
+            completion(
+                .failure(
+                    ASAuthorizationError(.canceled)
+                )
+            )
+        }
+
+        // Keep this before the cancel call.
+        self.activeAuthorizationRequest = nil
+
+        activeAuthorizationRequest.0.cancel()
     }
 
+    @MainActor
     private func processPasskeyAuthorization(
         authorization: ASAuthorization,
         session: String
@@ -213,69 +229,88 @@ extension AuthService {
 
     @MainActor
     private func beginAuthorization(
-        for authorizationRequests: [ASAuthorizationRequest],
-        using presentationMode: PasskeyPresentationMode
+        for authorizationRequests: [ASAuthorizationRequest]
     ) async throws -> ASAuthorization {
-        if !activeAuthorizationRequests.isEmpty {
+        if activeAuthorizationRequest != nil {
             logger.debug("Apple authorization requests already in progress")
 
             cancelPasskeyRequests()
 
-            throw ParraError.message(
-                "Authorization requests already in progress"
-            )
+            try await Task.sleep(ms: 1_000)
         }
 
         return try await withCheckedThrowingContinuation { continuation in
             performAuthorization(
-                for: authorizationRequests,
-                using: presentationMode
+                for: authorizationRequests
             ) { result in
                 continuation.resume(with: result)
             }
         }
     }
 
-    private func performAuthorization(
-        for authorizationRequests: [ASAuthorizationRequest],
-        using presentationMode: PasskeyPresentationMode,
-        completion: @escaping AppleAuthCompletion
-    ) {
-        Task { @MainActor in
-            let activeAuthorizationController = ASAuthorizationController(
-                authorizationRequests: authorizationRequests
-            )
+    @MainActor
+    private func beginPasskeyAutofill(
+        for authorizationRequests: [ASAuthorizationRequest]
+    ) async throws {
+        if activeAuthorizationRequest != nil {
+            logger.debug("Apple authorization requests already in progress")
 
-            authorizationDelegateProxy.authService = self
-            activeAuthorizationController.delegate = authorizationDelegateProxy
-            activeAuthorizationController
-                .presentationContextProvider = authorizationDelegateProxy
+            cancelPasskeyRequests()
 
-            switch presentationMode {
-            case .modal:
-                // This will display the passkey prompt, only if the user
-                // already has a passkey. If they don't an error will be sent
-                // to the delegate, which we will ignore. If the user didn't
-                // have a passkey, they probably don't want the popup, and they
-                // will have the opportunity to create one later.
-                activeAuthorizationController.performRequests(
-                    options: .preferImmediatelyAvailableCredentials
-                )
-            case .autofill:
-                // to display in quicktype
-                activeAuthorizationController.performAutoFillAssistedRequests()
-            }
-
-            let addr = Unmanaged.passUnretained(activeAuthorizationController)
-                .toOpaque()
-
-            activeAuthorizationRequests[addr] = (
-                activeAuthorizationController,
-                completion
-            )
+            try await Task.sleep(ms: 1_000)
         }
+
+        let activeAuthorizationController = ASAuthorizationController(
+            authorizationRequests: authorizationRequests
+        )
+
+        authorizationDelegateProxy.authService = self
+        activeAuthorizationController.delegate = authorizationDelegateProxy
+        activeAuthorizationController
+            .presentationContextProvider = authorizationDelegateProxy
+
+        activeAuthorizationRequest = (
+            activeAuthorizationController,
+            // autofill doesn't utilize completion handlers
+            nil
+        )
+
+        // to display in quicktype
+        activeAuthorizationController.performAutoFillAssistedRequests()
+
+        logger.debug("Performing passkey autofill without waiting")
     }
 
+    @MainActor
+    private func performAuthorization(
+        for authorizationRequests: [ASAuthorizationRequest],
+        completion: @escaping AppleAuthCompletion
+    ) {
+        let activeAuthorizationController = ASAuthorizationController(
+            authorizationRequests: authorizationRequests
+        )
+
+        authorizationDelegateProxy.authService = self
+        activeAuthorizationController.delegate = authorizationDelegateProxy
+        activeAuthorizationController
+            .presentationContextProvider = authorizationDelegateProxy
+
+        activeAuthorizationRequest = (
+            activeAuthorizationController,
+            completion
+        )
+
+        // This will display the passkey prompt, only if the user
+        // already has a passkey. If they don't an error will be sent
+        // to the delegate, which we will ignore. If the user didn't
+        // have a passkey, they probably don't want the popup, and they
+        // will have the opportunity to create one later.
+        activeAuthorizationController.performRequests(
+            options: .preferImmediatelyAvailableCredentials
+        )
+    }
+
+    @MainActor
     private func createPublicKeyCredentialRegistrationRequest(
         for username: String
     ) async throws -> PasskeyRegistrationResult {
@@ -311,6 +346,7 @@ extension AuthService {
         )
     }
 
+    @MainActor
     private func createPublicKeyCredentialAssertionRequest(
         for username: String?
     ) async throws -> PasskeyAssertionResult {

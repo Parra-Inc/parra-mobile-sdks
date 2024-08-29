@@ -53,19 +53,15 @@ extension AuthService {
         controller: ASAuthorizationController,
         didCompleteWithError error: any Error
     ) {
-        let addr = Unmanaged.passUnretained(controller).toOpaque()
+        let completion = activeAuthorizationRequest?.1
 
-        guard let (_, completion) = activeAuthorizationRequests[addr] else {
-            logger.warn(
-                "Received authorization error callback for unknown request",
+        guard let error = error as? ASAuthorizationError else {
+            logger.error(
+                "Received unexpected authorization error callback",
                 error
             )
 
-            return
-        }
-
-        guard let error = error as? ASAuthorizationError else {
-            completion(
+            completion?(
                 .failure(
                     ASAuthorizationError(
                         _nsError: NSError(
@@ -79,18 +75,23 @@ extension AuthService {
             return
         }
 
-        completion(.failure(error))
+        if completion == nil && error.code != .canceled {
+            logger.warn(
+                "Received authorization error callback for unknown request",
+                error
+            )
+        } else {
+            completion?(.failure(error))
 
-        activeAuthorizationRequests.removeValue(forKey: addr)
+            activeAuthorizationRequest = nil
+        }
     }
 
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithAuthorization authorization: ASAuthorization
     ) {
-        let addr = Unmanaged.passUnretained(controller).toOpaque()
-
-        guard let (_, completion) = activeAuthorizationRequests[addr] else {
+        guard let (_, completion) = activeAuthorizationRequest else {
             logger.warn(
                 "Received authorization complete callback for unknown request",
                 [
@@ -105,9 +106,9 @@ extension AuthService {
             "authorization": String(describing: authorization)
         ])
 
-        completion(.success(authorization))
+        completion?(.success(authorization))
 
-        activeAuthorizationRequests.removeValue(forKey: addr)
+        activeAuthorizationRequest = nil
     }
 
     func presentationAnchor(

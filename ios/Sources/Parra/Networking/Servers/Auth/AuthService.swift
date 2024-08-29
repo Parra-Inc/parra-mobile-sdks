@@ -48,12 +48,10 @@ final class AuthService {
     let authenticationMethod: ParraAuthType
     let modalScreenManager: ModalScreenManager
 
-    var activeAuthorizationRequests: [
-        UnsafeMutableRawPointer: (
-            ASAuthorizationController,
-            AppleAuthCompletion
-        )
-    ] = [:]
+    var activeAuthorizationRequest: (
+        ASAuthorizationController,
+        AppleAuthCompletion?
+    )?
 
     let authorizationDelegateProxy =
         AuthorizationControllerDelegateProxy()
