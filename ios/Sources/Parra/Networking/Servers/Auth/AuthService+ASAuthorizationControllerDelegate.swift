@@ -106,7 +106,7 @@ extension AuthService {
             "authorization": String(describing: authorization)
         ])
 
-        completion?(.success(authorization))
+        completion(.success(authorization))
 
         activeAuthorizationRequest = nil
     }

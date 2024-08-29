@@ -24,7 +24,24 @@ struct ParraChangePasswordModal: View {
     let config: ParraAuthDefaultForgotPasswordScreen.Config
     let complete: () -> Void
 
-    @ViewBuilder var body: some View {
+    var body: some View {
+        NavigationStack(path: $navigationState.navigationPath) {
+            content.environment(navigationState)
+        }
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    // MARK: - Private
+
+    @Environment(\.parra) private var parra
+    @Environment(\.parraAuthState) private var parraAuthState
+    @Environment(\.parraTheme) private var parraTheme
+
+    @State private var navigationState = NavigationState()
+
+    @ViewBuilder private var content: some View {
         switch parraAuthState {
         case .authenticated(let user), .anonymous(let user):
             if let email = user.info.email {
@@ -65,12 +82,6 @@ struct ParraChangePasswordModal: View {
             EmptyView()
         }
     }
-
-    // MARK: - Private
-
-    @Environment(\.parra) private var parra
-    @Environment(\.parraAuthState) private var parraAuthState
-    @Environment(\.parraTheme) private var parraTheme
 }
 
 public extension View {

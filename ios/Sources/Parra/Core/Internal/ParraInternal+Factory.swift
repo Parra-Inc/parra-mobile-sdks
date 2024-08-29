@@ -205,7 +205,6 @@ extension ParraInternal {
         )
 
         let authFlowManager = AuthenticationFlowManager(
-            alertManager: alertManager,
             authService: authService,
             modalScreenManager: modalScreenManager
         )

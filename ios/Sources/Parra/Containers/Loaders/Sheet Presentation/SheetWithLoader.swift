@@ -80,8 +80,8 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 },
                 content: {
                     if case .complete(let data) = state {
-                        SheetStateContainer {
-                            return loader.render(parra, data, dismiss)
+                        NavigationStack(path: $navigationState.navigationPath) {
+                            loader.render(parra, data, dismiss)
                         }
                         .presentationDetents(detents)
                         .presentationDragIndicator(visibility)
@@ -93,6 +93,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     // MARK: - Private
 
     @State private var state: SheetLoadState<Data> = .ready
+    @State private var navigationState = NavigationState()
 
     private let loader: ViewDataLoader<TransformParams, Data, SheetContent>
     private let detents: Set<PresentationDetent>

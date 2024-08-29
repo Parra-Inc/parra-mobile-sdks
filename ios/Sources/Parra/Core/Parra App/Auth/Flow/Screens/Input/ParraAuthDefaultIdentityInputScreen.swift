@@ -49,8 +49,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
                 text: continueButtonContent.text,
                 isDisabled: identity.isEmpty
             )
-
-            isFocused = true
         }
         .task {
             // This is for getting the passkey option in the quick type bar
@@ -66,7 +64,11 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
                 return
             }
 
-            await params.attemptPasskeyAutofill?()
+            isFocused = true
+
+            Task.detached {
+                await params.attemptPasskeyAutofill?()
+            }
         }
         .onChange(of: identity) { _, newValue in
             let trimmed = newValue.trimmingCharacters(

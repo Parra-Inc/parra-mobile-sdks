@@ -50,10 +50,12 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
                         authScreen: destination
                     )
                     .environmentObject(parraAppInfo)
+                    .renderToast(toast: $alertManager.currentToast)
                 }
                 // must be forced to inline because of a bug causing screens we
                 // push to to have an empty title bar in some cases.
                 .navigationBarTitleDisplayMode(.inline)
+                .renderToast(toast: $alertManager.currentToast)
         }
         .onAppear {
             guard let parraInternal = Parra.default.parraInternal else {
@@ -72,12 +74,18 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
             }
         }
         .task {
+            guard let parraInternal = Parra.default.parraInternal else {
+                return
+            }
+
             switch parraAuthState {
             case .authenticated, .undetermined:
                 break
             case .anonymous, .guest, .error:
                 // only do this when this first screen was initially presented
-                if navigationState.navigationPath.isEmpty {
+                if navigationState.navigationPath.isEmpty
+                    && parraInternal.authService.activeAuthorizationRequest == nil
+                {
                     landingScreenParams.attemptPasskeyLogin()
                 }
             }
@@ -106,7 +114,8 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
 
     @ViewBuilder var landingScreen: some View {
         let params = authFlowManager.getLandingScreenParams(
-            using: parraAppInfo
+            using: parraAppInfo,
+            alertManager: alertManager
         )
 
         provideAuthScreen(
@@ -126,11 +135,13 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
     @Environment(\.parraAppInfo) private var parraAppInfo
     @Environment(\.parraAuthState) private var parraAuthState
 
+    @State private var alertManager = AlertManager()
     @State private var navigationState = NavigationState()
 
     private var landingScreenParams: ParraAuthDefaultLandingScreen.Params {
         authFlowManager.getLandingScreenParams(
-            using: parraAppInfo
+            using: parraAppInfo,
+            alertManager: alertManager
         )
     }
 

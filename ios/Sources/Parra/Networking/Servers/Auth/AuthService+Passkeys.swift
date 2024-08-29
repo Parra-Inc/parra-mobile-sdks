@@ -35,18 +35,12 @@ extension AuthService {
         )
         let requests: [ASAuthorizationRequest] = [result.request]
 
-        switch presentationMode {
-        case .modal:
-            try await startAuthorizationRequests(
-                requests: requests,
-                session: result.session,
-                existingUser: true
-            )
-        case .autofill:
-            try await beginPasskeyAutofill(
-                for: requests
-            )
-        }
+        try await startAuthorizationRequests(
+            requests: requests,
+            session: result.session,
+            presentationMode: presentationMode,
+            existingUser: true
+        )
     }
 
     @MainActor
@@ -62,6 +56,7 @@ extension AuthService {
         try await startAuthorizationRequests(
             requests: [result.request],
             session: result.session,
+            presentationMode: .modal,
             existingUser: false
         )
     }
@@ -70,17 +65,27 @@ extension AuthService {
     private func startAuthorizationRequests(
         requests: [ASAuthorizationRequest],
         session: String,
+        presentationMode: PasskeyPresentationMode,
         existingUser: Bool
     ) async throws {
         logger.debug("Starting auth request")
 
-        // If we're about to open a modal passkey menu, dismiss the
-        // keyboard.
-        await UIApplication.resignFirstResponder()
+        if presentationMode == .modal {
+            // If we're about to open a modal passkey menu, dismiss the
+            // keyboard.
+            await UIApplication.resignFirstResponder()
+        }
 
-        let authorization = try await beginAuthorization(
-            for: requests
-        )
+        let authorization = switch presentationMode {
+        case .modal:
+            try await beginAuthorization(
+                for: requests
+            )
+        case .autofill:
+            try await beginPasskeyAutofill(
+                for: requests
+            )
+        }
 
         if existingUser {
             modalScreenManager.presentLoadingIndicatorModal(
@@ -128,21 +133,20 @@ extension AuthService {
 
         logger.debug("cancel passkey requests")
 
-        if let completion = activeAuthorizationRequest.1 {
-            // complete and reset the instance varible storing the completion
-            // handler before calling cancel. Then the delegate method can
-            // ignore the event.
-            completion(
-                .failure(
-                    ASAuthorizationError(.canceled)
-                )
+        let (request, completion) = activeAuthorizationRequest
+        // complete and reset the instance varible storing the completion
+        // handler before calling cancel. Then the delegate method can
+        // ignore the event.
+        completion(
+            .failure(
+                ASAuthorizationError(.canceled)
             )
-        }
+        )
 
         // Keep this before the cancel call.
         self.activeAuthorizationRequest = nil
 
-        activeAuthorizationRequest.0.cancel()
+        request.cancel()
     }
 
     @MainActor
@@ -251,7 +255,7 @@ extension AuthService {
     @MainActor
     private func beginPasskeyAutofill(
         for authorizationRequests: [ASAuthorizationRequest]
-    ) async throws {
+    ) async throws -> ASAuthorization {
         if activeAuthorizationRequest != nil {
             logger.debug("Apple authorization requests already in progress")
 
@@ -260,6 +264,20 @@ extension AuthService {
             try await Task.sleep(ms: 1_000)
         }
 
+        return try await withCheckedThrowingContinuation { continuation in
+            performPasskeyAutofill(
+                for: authorizationRequests
+            ) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    @MainActor
+    private func performPasskeyAutofill(
+        for authorizationRequests: [ASAuthorizationRequest],
+        completion: @escaping AppleAuthCompletion
+    ) {
         let activeAuthorizationController = ASAuthorizationController(
             authorizationRequests: authorizationRequests
         )
@@ -271,8 +289,7 @@ extension AuthService {
 
         activeAuthorizationRequest = (
             activeAuthorizationController,
-            // autofill doesn't utilize completion handlers
-            nil
+            completion
         )
 
         // to display in quicktype

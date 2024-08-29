@@ -18,11 +18,9 @@ class AuthenticationFlowManager: ObservableObject {
     // MARK: - Lifecycle
 
     init(
-        alertManager: AlertManager,
         authService: AuthService,
         modalScreenManager: ModalScreenManager
     ) {
-        self.alertManager = alertManager
         self.authService = authService
         self.modalScreenManager = modalScreenManager
     }
@@ -92,7 +90,8 @@ class AuthenticationFlowManager: ObservableObject {
 
     @MainActor
     func getLandingScreenParams(
-        using appInfo: ParraAppInfo
+        using appInfo: ParraAppInfo,
+        alertManager: AlertManager
     ) -> ParraAuthDefaultLandingScreen.Params {
         let availableAuthMethods = supportedAuthMethods(
             for: appInfo.auth
@@ -101,8 +100,6 @@ class AuthenticationFlowManager: ObservableObject {
         return ParraAuthDefaultLandingScreen.Params(
             availableAuthMethods: availableAuthMethods,
             selectAuthMethod: { authenticationType in
-                self.cancelPasskeyRequests()
-
                 switch authenticationType {
                 case .credentials:
                     let inputType: ParraIdentityInputType = {
@@ -130,7 +127,8 @@ class AuthenticationFlowManager: ObservableObject {
 
                     self.navigateToIdentityInputScreen(
                         inputType: inputType,
-                        appInfo: appInfo
+                        appInfo: appInfo,
+                        alertManager: alertManager
                     )
                 case .sso:
                     fatalError("SSO unimplemented")
@@ -141,7 +139,8 @@ class AuthenticationFlowManager: ObservableObject {
                     await self.triggerPasskeyLoginRequest(
                         username: nil,
                         presentationMode: .modal,
-                        using: appInfo
+                        using: appInfo,
+                        alertManager: alertManager
                     )
                 }
             }
@@ -157,7 +156,8 @@ class AuthenticationFlowManager: ObservableObject {
     func triggerPasskeyLoginRequest(
         username: String?,
         presentationMode: AuthService.PasskeyPresentationMode,
-        using appInfo: ParraAppInfo
+        using appInfo: ParraAppInfo,
+        alertManager: AlertManager
     ) async {
         if hasPasskeyAutoLoginBeenRequested {
             return
@@ -242,21 +242,22 @@ class AuthenticationFlowManager: ObservableObject {
 
     // MARK: - Private
 
-    private let alertManager: AlertManager
     private let authService: AuthService
     private let modalScreenManager: ModalScreenManager
 
     @MainActor
     private func navigateToIdentityInputScreen(
         inputType: ParraIdentityInputType,
-        appInfo: ParraAppInfo
+        appInfo: ParraAppInfo,
+        alertManager: AlertManager
     ) {
         let params = ParraAuthDefaultIdentityInputScreen.Params(
             inputType: inputType,
             submitIdentity: { identity in
                 return try await self.onIdentitySubmitted(
                     identity: identity,
-                    with: appInfo
+                    with: appInfo,
+                    alertManager: alertManager
                 )
             },
             attemptPasskeyAutofill: {
@@ -265,10 +266,15 @@ class AuthenticationFlowManager: ObservableObject {
                 await self.triggerPasskeyLoginRequest(
                     username: nil,
                     presentationMode: .autofill,
-                    using: appInfo
+                    using: appInfo,
+                    alertManager: alertManager
                 )
             },
             shouldAttemptPasskeyAutofill: {
+                if self.authService.activeAuthorizationRequest != nil {
+                    return false
+                }
+
                 return !self.hasPasskeyAutoLoginBeenRequested
             }
         )
@@ -328,7 +334,8 @@ class AuthenticationFlowManager: ObservableObject {
 
     private func onIdentitySubmitted(
         identity: String,
-        with appInfo: ParraAppInfo
+        with appInfo: ParraAppInfo,
+        alertManager: AlertManager
     ) async throws {
         logger.debug("Submitting identity", [
             "identity": identity
@@ -345,7 +352,8 @@ class AuthenticationFlowManager: ObservableObject {
             try await triggerPasskeyLoginRequest(
                 username: identity,
                 presentationMode: .modal,
-                using: appInfo
+                using: appInfo,
+                alertManager: alertManager
             )
         } else {
             try await onCredentialIdentitySubmitted(

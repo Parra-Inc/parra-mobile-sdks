@@ -50,7 +50,7 @@ final class AuthService {
 
     var activeAuthorizationRequest: (
         ASAuthorizationController,
-        AppleAuthCompletion?
+        AppleAuthCompletion
     )?
 
     let authorizationDelegateProxy =
