@@ -72,7 +72,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
             parraInternal: parraInternal
         )
 
-        self._alertManager = StateObject(
+        self._alertManager = State(
             wrappedValue: parraInternal.alertManager
         )
 
@@ -89,7 +89,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
         .environment(\.parraAuthState, authStateManager.current)
         .environment(\.parraTheme, themeManager.current)
         .environment(\.parraPreferredAppearance, themeManager.preferredAppearanceBinding)
-        .environmentObject(alertManager)
+        .environment(alertManager)
         .environmentObject(
             LaunchScreenStateManager(
                 state: .complete(
@@ -107,8 +107,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
     private let previewContent: () -> Content
     private let parra: Parra
 
-    @StateObject private var alertManager: AlertManager
-
+    @State private var alertManager: AlertManager
     @State private var authStateManager: ParraAuthStateManager
     @State private var themeManager: ParraThemeManager = .shared
 }

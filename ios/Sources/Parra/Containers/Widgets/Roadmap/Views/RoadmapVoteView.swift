@@ -76,10 +76,11 @@ struct RoadmapVoteView: View {
     // MARK: - Private
 
     @Environment(ParraRoadmapWidgetConfig.self) private var config
+    @Environment(AlertManager.self) var alertManager: AlertManager
+
     @EnvironmentObject private var contentObserver: RoadmapWidget
         .ContentObserver
     @EnvironmentObject private var componentFactory: ComponentFactory
-    @EnvironmentObject private var alertManager: AlertManager
 
     @Environment(\.parra) private var parra
     @Environment(\.parraTheme) private var parraTheme

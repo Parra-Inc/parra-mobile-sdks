@@ -20,6 +20,8 @@ struct LaunchScreenWindow<Content>: View where Content: View {
 
     // MARK: - Internal
 
+    @Environment(AlertManager.self) var alertManager: AlertManager
+
     var body: some View {
         ZStack {
             // During this phase, initialization has finished so the primary
@@ -71,7 +73,6 @@ struct LaunchScreenWindow<Content>: View where Content: View {
 
     @Environment(\.parra) private var parra
     @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
-    @EnvironmentObject private var alertManager: AlertManager
 
     @ViewBuilder
     private func renderFailure(
@@ -112,7 +113,10 @@ struct LaunchScreenWindow<Content>: View where Content: View {
         }
     }
 
+    @ViewBuilder
     private func renderPrimaryContent() -> some View {
+        @Bindable var alertManager = alertManager
+
         content()
             .transition(
                 .opacity

@@ -107,7 +107,7 @@ public struct ParraApp<
 
         self.parra = parra
 
-        self._alertManager = StateObject(
+        self._alertManager = State(
             wrappedValue: parra.alertManager
         )
 
@@ -129,12 +129,12 @@ public struct ParraApp<
             .environment(\.parra, Parra.default)
             .environment(\.parraAuthState, authStateManager.current)
             .environment(\.parraTheme, themeManager.current)
+            .environment(alertManager)
             .environment(
                 \.parraPreferredAppearance,
                 themeManager.preferredAppearanceBinding
             )
             .environmentObject(launchScreenState)
-            .environmentObject(alertManager)
             .environmentObject(parra.globalComponentFactory)
             .onChange(
                 of: launchScreenState.current,
@@ -183,7 +183,7 @@ public struct ParraApp<
     @State private var parraAppState: ParraAppState
     @StateObject private var launchScreenState: LaunchScreenStateManager
 
-    @StateObject private var alertManager: AlertManager
+    @State private var alertManager: AlertManager
     @State private var authStateManager: ParraAuthStateManager = .shared
     @State private var themeManager: ParraThemeManager = .shared
 
