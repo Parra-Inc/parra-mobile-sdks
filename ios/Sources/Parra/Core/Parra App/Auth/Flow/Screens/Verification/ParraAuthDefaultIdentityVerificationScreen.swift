@@ -44,6 +44,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equat
         ScrollView {
             primaryContent
         }
+        .scrollDismissesKeyboard(.immediately)
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity
