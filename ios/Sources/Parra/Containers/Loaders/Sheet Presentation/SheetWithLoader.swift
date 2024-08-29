@@ -80,9 +80,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 },
                 content: {
                     if case .complete(let data) = state {
-                        SheetStateContainer(
-                            data: data
-                        ) {
+                        SheetStateContainer {
                             return loader.render(parra, data, dismiss)
                         }
                         .presentationDetents(detents)

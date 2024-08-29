@@ -8,21 +8,29 @@
 
 import SwiftUI
 
+private let logger = Logger()
+
+@MainActor
 public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
     // MARK: - Lifecycle
 
     public init(
         flowConfig: ParraAuthenticationFlowConfig = .default
     ) {
-        let navigationState = NavigationState()
+        self.flowConfig = flowConfig
+        self.completion = nil
 
-        _navigationState = StateObject(
-            wrappedValue: navigationState
-        )
+        authFlowManager.delegate = self
+    }
 
-        parra.parraInternal.authFlowManager.flowConfig = flowConfig
-        parra.parraInternal.authFlowManager.navigationState = navigationState
-        parra.parraInternal.authFlowManager.delegate = self
+    public init(
+        flowConfig: ParraAuthenticationFlowConfig = .default,
+        completion: @escaping () -> Void
+    ) {
+        self.flowConfig = flowConfig
+        self.completion = completion
+
+        authFlowManager.delegate = self
     }
 
     // MARK: - Public
@@ -30,81 +38,124 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
     public var delegate: (any ParraAuthenticationFlowDelegate)?
 
     public var body: some View {
-        container
-            .onAppear {
-                let authService = parra.parraInternal.authService
+        NavigationStack(
+            path: $navigationState.navigationPath
+        ) {
+            landingScreen
+                .environmentObject(parraAppInfo)
+                .navigationDestination(
+                    for: AuthenticationFlowManager.AuthScreen.self
+                ) { destination in
+                    // Only reset passkey auto login when navigating away from
+                    // the landing screen.
+                    let _ = authFlowManager.hasPasskeyAutoLoginBeenRequested = false
 
-                guard case .parra = authService.authenticationMethod else {
-                    fatalError(
-                        "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
+                    provideAuthScreen(
+                        authScreen: destination
                     )
+                    .environmentObject(parraAppInfo)
                 }
+                .navigationBarTitleDisplayMode(.inline)
+        }
+        .onAppear {
+            guard let parraInternal = Parra.default.parraInternal else {
+                return
             }
-            .task {
-                switch parraAuthState {
-                case .authenticated, .undetermined:
-                    break
-                case .anonymous, .guest, .error:
-                    landingScreenParams.attemptPasskeyLogin()
-                }
+
+            let authService = parraInternal.authService
+            let authFlowManager = parraInternal.authFlowManager
+
+            authFlowManager.navigationState = $navigationState
+
+            guard case .parra = authService.authenticationMethod else {
+                fatalError(
+                    "ParraAuthenticationView used with an unsupported authentication method. If you want to use ParraAuthenticationView, you need to specify the ParraAuthenticationMethod as .parraAuth in the Parra configuration."
+                )
             }
+        }
+        .task {
+            switch parraAuthState {
+            case .authenticated, .undetermined:
+                break
+            case .anonymous, .guest, .error:
+                landingScreenParams.attemptPasskeyLogin()
+            }
+        }
+        .onChange(
+            of: parraAuthState
+        ) { oldValue, newValue in
+            if !oldValue.isLoggedIn && newValue.isLoggedIn {
+                completion?()
+            }
+        }
     }
 
     // MARK: - Internal
 
+    var authFlowManager: AuthenticationFlowManager {
+        return Parra.default.parraInternal.authFlowManager
+    }
+
     @ViewBuilder var landingScreen: some View {
-        let params = parra.parraInternal.authFlowManager.getLandingScreenParams(
+        let params = authFlowManager.getLandingScreenParams(
             using: parraAppInfo
         )
 
-        parra.parraInternal.authFlowManager.provideAuthScreen(
+        provideAuthScreen(
             authScreen: .landingScreen(
                 params
             )
         )
     }
 
-    @ViewBuilder var container: some View {
-        NavigationStack(
-            path: $navigationState.navigationPath
-        ) {
-            landingScreen
-                .environmentObject(parraAppInfo)
-                .environmentObject(navigationState)
-                .navigationDestination(
-                    for: AuthenticationFlowManager.AuthScreen.self
-                ) { destination in
-                    // Only reset passkey auto login when navigating away from
-                    // the landing screen.
-                    let _ = parra.parraInternal.authFlowManager
-                        .hasPasskeyAutoLoginBeenRequested = false
-
-                    parra.parraInternal.authFlowManager.provideAuthScreen(
-                        authScreen: destination
-                    )
-                    .environmentObject(parraAppInfo)
-                    .environmentObject(navigationState)
-                }
-        }
-    }
-
     // MARK: - Private
+
+    private let flowConfig: ParraAuthenticationFlowConfig
+    private let completion: (() -> Void)?
+
+    @State private var password: String = ""
 
     @Environment(\.parraAppInfo) private var parraAppInfo
     @Environment(\.parraAuthState) private var parraAuthState
 
     @State private var navigationState = NavigationState()
 
-    @Environment(\.parra) private var parra
-
     private var landingScreenParams: ParraAuthDefaultLandingScreen.Params {
-        parra.parraInternal.authFlowManager.getLandingScreenParams(
+        authFlowManager.getLandingScreenParams(
             using: parraAppInfo
         )
     }
 
-    private func getModalScreenManager() -> ModalScreenManager {
-        return parra.parraInternal.modalScreenManager
+    @ViewBuilder
+    private func provideAuthScreen(
+        authScreen: AuthenticationFlowManager.AuthScreen
+    ) -> some View {
+        let _ = logger.debug("Preparing to provide auth screen", [
+            "screen": authScreen.description
+        ])
+
+        switch authScreen {
+        case .landingScreen(let params):
+            flowConfig.landingScreenProvider(
+                params
+            )
+        case .identityInputScreen(let params):
+            flowConfig.identityInputScreenProvider(
+                params
+            )
+        case .identityChallengeScreen(let params):
+            flowConfig.identityChallengeScreenProvider(
+                params
+            )
+        case .identityVerificationScreen(let params):
+            flowConfig.identityVerificationScreenProvider(
+                params
+            )
+        case .forgotPasswordScreen(let params):
+            flowConfig.forgotPasswordScreenProvider(
+                params
+            )
+        }
     }
 }
 

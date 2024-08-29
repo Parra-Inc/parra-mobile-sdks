@@ -35,22 +35,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                     from: parraTheme
                 )
         }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {
-                    params.cancelPasskeyAutofillAttempt?()
-
-                    dismiss()
-                }) {
-                    Label {
-                        Text("Back")
-                    } icon: {
-                        Image(systemName: "chevron.left")
-                    }
-                }
-            }
-        }
+        .navigationBarTitleDisplayMode(.inline)
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity
@@ -92,6 +77,13 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 isDisabled: trimmed.isEmpty
             )
         }
+        .onChange(
+            of: isPresented
+        ) { newValue in
+            if !newValue {
+                params.cancelPasskeyAutofillAttempt?()
+            }
+        }
     }
 
     // MARK: - Internal
@@ -101,6 +93,8 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         case invalidPhone
         case networkFailure
     }
+
+    @Environment(\.isPresented) var isPresented
 
     @ViewBuilder var primaryField: some View {
         let inputMode: PhoneOrEmailTextInputView.Mode = switch params
@@ -140,7 +134,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(\.dismiss) private var dismiss
 
     @ViewBuilder private var primaryContent: some View {
         defaultTopView
@@ -186,7 +179,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
         }
     }
 
-    @ViewBuilder private var defaultBottomView: some View {
+    private var defaultBottomView: some View {
         Spacer()
     }
 

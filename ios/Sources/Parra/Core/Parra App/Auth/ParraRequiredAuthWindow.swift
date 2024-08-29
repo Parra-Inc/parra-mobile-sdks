@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 public struct ParraRequiredAuthWindow<
     AuthenticatedContent, UnauthenticatedContent
 >: ParraAppContent where AuthenticatedContent: View,
@@ -16,8 +17,8 @@ public struct ParraRequiredAuthWindow<
     // MARK: - Lifecycle
 
     public init(
-        authenticatedContent: @escaping () -> AuthenticatedContent,
-        unauthenticatedContent: @escaping () -> UnauthenticatedContent = {
+        authenticatedContent: @escaping @MainActor () -> AuthenticatedContent,
+        unauthenticatedContent: @escaping @MainActor () -> UnauthenticatedContent = {
             return ParraDefaultAuthenticationFlowView()
         }
     ) {

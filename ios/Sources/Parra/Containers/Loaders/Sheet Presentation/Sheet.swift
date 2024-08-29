@@ -15,14 +15,10 @@ struct Sheet<SheetContent>: ViewModifier where SheetContent: View {
     init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> SheetContent,
-        detents: Set<PresentationDetent> = [.large],
-        visibility: Visibility = .visible,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) {
         _isPresented = isPresented
         self.content = content
-        self.detents = detents
-        self.visibility = visibility
         self.onDismiss = onDismiss
     }
 
@@ -37,20 +33,11 @@ struct Sheet<SheetContent>: ViewModifier where SheetContent: View {
             onDismiss: {
                 onDismiss?(.cancelled)
             },
-            content: {
-                SheetStateContainer(data: Data()) {
-                    self.content()
-                }
-                .presentationDetents(detents)
-                .presentationDragIndicator(visibility)
-                .navigationBarTitleDisplayMode(.inline)
-            }
+            content: self.content
         )
     }
 
     // MARK: - Private
 
-    private let detents: Set<PresentationDetent>
-    private let visibility: Visibility
     private let onDismiss: ((ParraSheetDismissType) -> Void)?
 }

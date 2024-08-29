@@ -18,12 +18,12 @@ class AuthenticationFlowManager: ObservableObject {
     // MARK: - Lifecycle
 
     init(
-        authService: AuthService,
         alertManager: AlertManager,
+        authService: AuthService,
         modalScreenManager: ModalScreenManager
     ) {
-        self.authService = authService
         self.alertManager = alertManager
+        self.authService = authService
         self.modalScreenManager = modalScreenManager
     }
 
@@ -76,9 +76,8 @@ class AuthenticationFlowManager: ObservableObject {
         }
     }
 
-    var flowConfig: ParraAuthenticationFlowConfig = .default
     var delegate: AuthenticationFlowManagerDelegate?
-    var navigationState: NavigationState?
+    var navigationState: Binding<NavigationState>?
 
     /// Whether an auto login has been triggered, per this load of the sign in
     /// view. There's a double render bug with sheet that requires us to only
@@ -86,38 +85,6 @@ class AuthenticationFlowManager: ObservableObject {
     /// has been reset (when the flow manager is reconfigured for another
     /// presentation).
     var hasPasskeyAutoLoginBeenRequested = false
-
-    @ViewBuilder
-    func provideAuthScreen(
-        authScreen: AuthScreen
-    ) -> some View {
-        let _ = logger.debug("Preparing to provide auth screen", [
-            "screen": authScreen.description
-        ])
-
-        switch authScreen {
-        case .landingScreen(let params):
-            flowConfig.landingScreenProvider(
-                params
-            )
-        case .identityInputScreen(let params):
-            flowConfig.identityInputScreenProvider(
-                params
-            )
-        case .identityChallengeScreen(let params):
-            flowConfig.identityChallengeScreenProvider(
-                params
-            )
-        case .identityVerificationScreen(let params):
-            flowConfig.identityVerificationScreenProvider(
-                params
-            )
-        case .forgotPasswordScreen(let params):
-            flowConfig.forgotPasswordScreenProvider(
-                params
-            )
-        }
-    }
 
     @MainActor
     func getLandingScreenParams(
@@ -271,8 +238,8 @@ class AuthenticationFlowManager: ObservableObject {
 
     // MARK: - Private
 
-    private let authService: AuthService
     private let alertManager: AlertManager
+    private let authService: AuthService
     private let modalScreenManager: ModalScreenManager
 
     @MainActor
@@ -439,7 +406,7 @@ class AuthenticationFlowManager: ObservableObject {
                         appInfo: appInfo
                     ) {
                         Task { @MainActor in
-                            self.navigationState?.navigationPath.removeLast()
+                            self.navigationState?.navigationPath.wrappedValue.removeLast()
                         }
                     }
                 }
@@ -691,8 +658,12 @@ class AuthenticationFlowManager: ObservableObject {
     private func navigate(
         to screen: AuthenticationFlowManager.AuthScreen
     ) {
+        logger.debug("Navigating to auth screen", [
+            "screen": screen.description
+        ])
+
         Task { @MainActor in
-            navigationState?.navigationPath.append(
+            navigationState?.navigationPath.wrappedValue.append(
                 screen
             )
         }
@@ -701,11 +672,15 @@ class AuthenticationFlowManager: ObservableObject {
     private func resetNavigation(
         to screen: AuthenticationFlowManager.AuthScreen
     ) {
+        logger.debug("Resetting to auth screen", [
+            "screen": screen.description
+        ])
+
         Task { @MainActor in
             var newPath = NavigationPath()
             newPath.append(screen)
 
-            navigationState?.navigationPath = newPath
+            navigationState?.navigationPath.wrappedValue = newPath
         }
     }
 }

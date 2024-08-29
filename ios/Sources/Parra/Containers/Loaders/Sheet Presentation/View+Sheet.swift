@@ -12,7 +12,7 @@ extension View {
     @MainActor
     func presentSheet(
         isPresented: Binding<Bool>,
-        @ViewBuilder content: @escaping () -> some View,
+        content: @escaping () -> some View,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         modifier(
