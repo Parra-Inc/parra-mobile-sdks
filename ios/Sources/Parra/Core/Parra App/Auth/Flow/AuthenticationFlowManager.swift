@@ -84,7 +84,11 @@ class AuthenticationFlowManager: ObservableObject {
     /// run this flow once, and not allow it to retrigger until this variable
     /// has been reset (when the flow manager is reconfigured for another
     /// presentation).
-    var hasPasskeyAutoLoginBeenRequested = false
+    private(set) var hasPasskeyAutoLoginBeenRequested = false
+
+    func resetAutoLoginRequested() {
+        hasPasskeyAutoLoginBeenRequested = false
+    }
 
     @MainActor
     func getLandingScreenParams(
@@ -264,10 +268,14 @@ class AuthenticationFlowManager: ObservableObject {
                     using: appInfo
                 )
             },
-            cancelPasskeyAutofillAttempt: {
-                self.cancelPasskeyRequests()
+            shouldAttemptPasskeyAutofill: {
+                return !self.hasPasskeyAutoLoginBeenRequested
             }
         )
+
+        // Only reset passkey auto login when navigating away from
+        // the landing screen.
+        resetAutoLoginRequested()
 
         navigate(to: .identityInputScreen(params))
     }

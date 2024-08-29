@@ -46,15 +46,13 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
                 .navigationDestination(
                     for: AuthenticationFlowManager.AuthScreen.self
                 ) { destination in
-                    // Only reset passkey auto login when navigating away from
-                    // the landing screen.
-                    let _ = authFlowManager.hasPasskeyAutoLoginBeenRequested = false
-
                     provideAuthScreen(
                         authScreen: destination
                     )
                     .environmentObject(parraAppInfo)
                 }
+                // must be forced to inline because of a bug causing screens we
+                // push to to have an empty title bar in some cases.
                 .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear {
@@ -78,7 +76,10 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
             case .authenticated, .undetermined:
                 break
             case .anonymous, .guest, .error:
-                landingScreenParams.attemptPasskeyLogin()
+                // only do this when this first screen was initially presented
+                if navigationState.navigationPath.isEmpty {
+                    landingScreenParams.attemptPasskeyLogin()
+                }
             }
         }
         .onChange(

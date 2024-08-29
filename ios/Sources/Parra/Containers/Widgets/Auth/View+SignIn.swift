@@ -29,7 +29,7 @@ public extension View {
             onDismiss: { sheetType in
                 let authFlowManager = Parra.default.parraInternal.authFlowManager
 
-                authFlowManager.hasPasskeyAutoLoginBeenRequested = false
+                authFlowManager.resetAutoLoginRequested()
 
                 onDismiss?(sheetType)
             }

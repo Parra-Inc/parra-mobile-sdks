@@ -61,11 +61,12 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
                 return
             }
 
-            do {
-                try await params.attemptPasskeyAutofill?()
-            } catch {
-                Logger.error("Failed to attempt passkey autofill", error)
+            let shouldAutofill = params.shouldAttemptPasskeyAutofill?() ?? false
+            guard shouldAutofill else {
+                return
             }
+
+            await params.attemptPasskeyAutofill?()
         }
         .onChange(of: identity) { _, newValue in
             let trimmed = newValue.trimmingCharacters(
@@ -76,13 +77,6 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
                 text: continueButtonContent.text,
                 isDisabled: trimmed.isEmpty
             )
-        }
-        .onChange(
-            of: isPresented
-        ) { newValue in
-            if !newValue {
-                params.cancelPasskeyAutofillAttempt?()
-            }
         }
     }
 

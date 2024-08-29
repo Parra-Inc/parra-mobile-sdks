@@ -16,12 +16,12 @@ public extension ParraAuthDefaultIdentityInputScreen {
             inputType: ParraIdentityInputType,
             submitIdentity: @escaping (_ identity: String) async throws -> Void,
             attemptPasskeyAutofill: (() async -> Void)? = nil,
-            cancelPasskeyAutofillAttempt: (() -> Void)? = nil
+            shouldAttemptPasskeyAutofill: (() -> Bool)? = nil
         ) {
             self.inputType = inputType
             self.submitIdentity = submitIdentity
             self.attemptPasskeyAutofill = attemptPasskeyAutofill
-            self.cancelPasskeyAutofillAttempt = cancelPasskeyAutofillAttempt
+            self.shouldAttemptPasskeyAutofill = shouldAttemptPasskeyAutofill
         }
 
         // MARK: - Public
@@ -38,12 +38,9 @@ public extension ParraAuthDefaultIdentityInputScreen {
         /// Only provided when the input type is NOT `.passkey`. This method
         /// should be called as early as possible and is used to attempt to
         /// place passkey autofill suggestions in the QuickType bar.
-        public let attemptPasskeyAutofill: (() async throws -> Void)?
+        public let attemptPasskeyAutofill: (() async -> Void)?
 
-        /// Cancel the Passkey autofill request made by
-        /// ``attemptPasskeyAutofill``. This should be done when the user is
-        /// canceling input on this screen. Generally this means going back and
-        /// not confirming login with passkey.
-        public let cancelPasskeyAutofillAttempt: (() -> Void)?
+        /// Whether or not an attempt to autofill passkeys should be made.
+        public let shouldAttemptPasskeyAutofill: (() -> Bool)?
     }
 }
