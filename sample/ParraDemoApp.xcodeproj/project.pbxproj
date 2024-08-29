@@ -260,6 +260,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 6D44Q764PG;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				INFOPLIST_FILE = ParraDemoApp/Info.plist;
@@ -288,6 +289,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 6D44Q764PG;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				INFOPLIST_FILE = ParraDemoApp/Info.plist;
@@ -454,7 +456,7 @@
 			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.2.38;
+				minimumVersion = 0.2.39;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
