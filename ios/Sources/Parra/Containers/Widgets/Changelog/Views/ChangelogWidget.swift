@@ -82,7 +82,7 @@ struct ChangelogWidget: Container {
                         contentObserver: contentObserver
                     )
                     .padding(.top, -contentPadding.top)
-                    .environmentObject(navigationState)
+                    .environment(navigationState)
                 }
         }
         .applyWidgetAttributes(
@@ -197,8 +197,7 @@ struct ChangelogWidget: Container {
     // MARK: - Private
 
     @Environment(\.parraTheme) private var parraTheme
-
-    @EnvironmentObject private var navigationState: NavigationState
+    @Environment(NavigationState.self) private var navigationState
 
     @State private var showNavigationDivider = false
 }

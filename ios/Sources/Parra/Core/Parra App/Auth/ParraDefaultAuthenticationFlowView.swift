@@ -93,7 +93,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
     @Environment(\.parraAppInfo) private var parraAppInfo
     @Environment(\.parraAuthState) private var parraAuthState
 
-    @StateObject private var navigationState = NavigationState()
+    @State private var navigationState = NavigationState()
 
     @Environment(\.parra) private var parra
 

@@ -98,7 +98,6 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
 
     @EnvironmentObject private var componentFactory: ComponentFactory
     @Environment(\.parraTheme) private var parraTheme
-    @EnvironmentObject private var navigationState: NavigationState
 
     @ViewBuilder private var challengeContent: some View {
         VStack(alignment: .center, spacing: 16) {

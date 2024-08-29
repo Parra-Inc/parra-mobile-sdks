@@ -8,6 +8,7 @@
 
 import SwiftUI
 
-final class NavigationState: ObservableObject {
-    @Published var navigationPath = NavigationPath()
+@Observable
+final class NavigationState {
+    var navigationPath = NavigationPath()
 }

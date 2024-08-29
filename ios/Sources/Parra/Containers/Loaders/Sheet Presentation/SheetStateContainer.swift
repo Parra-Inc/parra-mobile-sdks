@@ -33,5 +33,5 @@ struct SheetStateContainer<Data, Content>: View, Equatable
 
     // MARK: - Private
 
-    @StateObject private var navigationState = NavigationState()
+    @State private var navigationState = NavigationState()
 }

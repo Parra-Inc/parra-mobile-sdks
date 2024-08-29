@@ -168,7 +168,7 @@ struct ReleaseWidget: Container {
                 )
                 .padding(.top, contentPadding.top)
                 .edgesIgnoringSafeArea([.top])
-                .environmentObject(navigationState)
+                .environment(navigationState)
             }
         }
     }
@@ -245,6 +245,5 @@ struct ReleaseWidget: Container {
     // MARK: - Private
 
     @Environment(\.parraTheme) private var parraTheme
-
-    @EnvironmentObject private var navigationState: NavigationState
+    @Environment(NavigationState.self) private var navigationState
 }
