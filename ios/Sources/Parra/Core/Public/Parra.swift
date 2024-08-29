@@ -10,7 +10,7 @@ import SwiftUI
 /// The primary module used to interact with the Parra SDK.
 /// Access this module via the `parra` `@Environment` object in SwiftUI after
 /// wrapping your `Scene` in the ``ParraApp`` View.
-public final class Parra: Observable {
+public final class Parra: Observable, Equatable {
     // MARK: - Lifecycle
 
     private init() {}
@@ -39,6 +39,11 @@ public final class Parra: Observable {
     public private(set) lazy var user: ParraUserManager = .init(
         parraInternal: parraInternal
     )
+
+    public static func == (lhs: Parra, rhs: Parra) -> Bool {
+        // References changing here should never cause re-renders.
+        return true
+    }
 
     // MARK: - Internal
 
