@@ -51,7 +51,7 @@ public struct ParraRequiredAuthWindow<
     }
 
     public func authenticatedContent() -> AuthenticatedContent {
-        return authenticatedContent()
+        return authContent()
     }
 
     public func unauthenticatedContent() -> UnauthenticatedContent {
