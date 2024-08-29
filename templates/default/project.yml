@@ -42,6 +42,7 @@ targets:
           CODE_SIGN_ENTITLEMENTS: {{ app.name.upper_camel }}/Debug.entitlements
           CODE_SIGN_STYLE: {{ app.code_sign.debug.style }}
           PROVISIONING_PROFILE_SPECIFIER: {{ app.code_sign.debug.profile_specifier }}
+          DEBUG_INFORMATION_FORMAT: dwarf
         release:
           CODE_SIGN_ENTITLEMENTS: {{ app.name.upper_camel }}/Release.entitlements
           CODE_SIGN_IDENTITY: {{ app.code_sign.release.identity }}
@@ -49,6 +50,7 @@ targets:
           CODE_SIGNING_ALLOWED: {{ app.code_sign.release.allowed }}
           CODE_SIGN_STYLE: {{ app.code_sign.debug.style }}
           PROVISIONING_PROFILE_SPECIFIER: {{ app.code_sign.debug.profile_specifier }}
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
     dependencies:
       - package: Parra
 
