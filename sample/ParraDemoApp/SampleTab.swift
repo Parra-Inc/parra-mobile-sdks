@@ -2,12 +2,15 @@
 //  SampleTab.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/27/2024.
+//  Bootstrapped with ❤️ by Parra on 08/29/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
 import Parra
 import SwiftUI
+
+// Visit Parra's docs to learn about the features available to you.
+// https://docs.parra.io/sdks/ios
 
 struct SampleTab: View {
     @Environment(\.parraTheme) private var parraTheme

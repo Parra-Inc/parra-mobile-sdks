@@ -2,7 +2,7 @@
 //  EditProfileView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 08/27/2024.
+//  Bootstrapped with ❤️ by Parra on 08/29/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -24,7 +24,7 @@ struct EditProfileView: View {
                 Section {
                     formField(named: "First Name", fieldData: $data.firstName)
                     formField(named: "Last Name", fieldData: $data.lastName)
-                    formField(named: "Display Name", fieldData: $data.displayName)
+                    formField(named: "Display Name", fieldData: $data.name)
                 }
             }
             .onSubmit(of: .text) {
@@ -67,7 +67,7 @@ struct EditProfileView: View {
             data = ProfileData(
                 firstName: userInfo?.firstName,
                 lastName: userInfo?.lastName,
-                displayName: userInfo?.displayName
+                name: userInfo?.name
             )
         }
     }
@@ -105,7 +105,7 @@ struct EditProfileView: View {
 
             do {
                 try await parra.user.updatePersonalInfo(
-                    name: data.displayName,
+                    name: data.name,
                     firstName: data.firstName,
                     lastName: data.lastName
                 )
@@ -132,16 +132,16 @@ struct EditProfileView: View {
         init(
             firstName: String? = nil,
             lastName: String? = nil,
-            displayName: String? = nil
+            name: String? = nil
         ) {
             self.firstName = firstName ?? ""
             self.lastName = lastName ?? ""
-            self.displayName = displayName ?? ""
+            self.name = name ?? ""
         }
 
         var firstName: String
         var lastName: String
-        var displayName: String
+        var name: String
     }
 }
 
