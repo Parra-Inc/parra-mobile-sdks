@@ -11,7 +11,7 @@ import SwiftUI
 private let logger = Logger()
 
 @MainActor
-public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
+public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equatable {
     // MARK: - Lifecycle
 
     public init(
@@ -90,6 +90,13 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
         }
     }
 
+    public static func == (
+        lhs: ParraDefaultAuthenticationFlowView,
+        rhs: ParraDefaultAuthenticationFlowView
+    ) -> Bool {
+        return true
+    }
+
     // MARK: - Internal
 
     var authFlowManager: AuthenticationFlowManager {
@@ -139,22 +146,27 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow {
             flowConfig.landingScreenProvider(
                 params
             )
+            .equatable()
         case .identityInputScreen(let params):
             flowConfig.identityInputScreenProvider(
                 params
             )
+            .equatable()
         case .identityChallengeScreen(let params):
             flowConfig.identityChallengeScreenProvider(
                 params
             )
+            .equatable()
         case .identityVerificationScreen(let params):
             flowConfig.identityVerificationScreenProvider(
                 params
             )
+            .equatable()
         case .forgotPasswordScreen(let params):
             flowConfig.forgotPasswordScreenProvider(
                 params
             )
+            .equatable()
         }
     }
 }

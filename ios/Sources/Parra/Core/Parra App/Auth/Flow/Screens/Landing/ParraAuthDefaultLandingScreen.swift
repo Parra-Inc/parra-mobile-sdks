@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
+public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
     // MARK: - Lifecycle
 
     public init(
@@ -46,6 +46,13 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen {
             using: parraTheme
         )
         .applyBackground(background)
+    }
+
+    public static func == (
+        lhs: Self,
+        rhs: Self
+    ) -> Bool {
+        return true
     }
 
     // MARK: - Internal

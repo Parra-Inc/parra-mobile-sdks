@@ -10,7 +10,7 @@ import SwiftUI
 
 private let logger = Logger()
 
-public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
+public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatable {
     // MARK: - Lifecycle
 
     public init(
@@ -73,6 +73,13 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen {
                 shouldDisableSubmitWithPassword = true
             }
         }
+    }
+
+    public static func == (
+        lhs: Self,
+        rhs: Self
+    ) -> Bool {
+        return true
     }
 
     // MARK: - Internal

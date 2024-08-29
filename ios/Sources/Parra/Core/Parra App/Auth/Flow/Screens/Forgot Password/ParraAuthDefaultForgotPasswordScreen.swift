@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen {
+public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen, Equatable {
     // MARK: - Lifecycle
 
     public init(
@@ -53,6 +53,13 @@ public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen {
             attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: parraTheme
         )
+    }
+
+    public static func == (
+        lhs: Self,
+        rhs: Self
+    ) -> Bool {
+        return true
     }
 
     // MARK: - Private

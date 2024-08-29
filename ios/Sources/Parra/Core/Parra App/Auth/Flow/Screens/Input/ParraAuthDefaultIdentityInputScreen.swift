@@ -9,7 +9,7 @@
 import AuthenticationServices
 import SwiftUI
 
-public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
+public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
     // MARK: - Lifecycle
 
     public init(
@@ -84,6 +84,13 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen {
                 params.cancelPasskeyAutofillAttempt?()
             }
         }
+    }
+
+    public static func == (
+        lhs: ParraAuthDefaultIdentityInputScreen,
+        rhs: ParraAuthDefaultIdentityInputScreen
+    ) -> Bool {
+        return true
     }
 
     // MARK: - Internal

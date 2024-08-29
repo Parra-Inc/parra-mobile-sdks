@@ -13,7 +13,7 @@ public protocol ParraAuthScreenConfig {
     static var `default`: Self { get }
 }
 
-public protocol ParraAuthScreen: View {
+public protocol ParraAuthScreen: View, Equatable {
     associatedtype Params: ParraAuthScreenParams
     associatedtype Config: ParraAuthScreenConfig
 
@@ -21,7 +21,7 @@ public protocol ParraAuthScreen: View {
 }
 
 public typealias ParraAuthScreenProvider<T> = (T.Params) -> T
-    where T: ParraAuthScreen
+    where T: ParraAuthScreen & Equatable
 
 public typealias ParraAuthLandingScreenProvider =
     ParraAuthScreenProvider<ParraAuthDefaultLandingScreen>

@@ -12,7 +12,7 @@ private let logger = Logger()
 
 private let resendCodeTitle = "Resend code"
 
-public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
+public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equatable {
     // MARK: - Lifecycle
 
     public init(
@@ -71,6 +71,13 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen {
         .onReceive(timer) { _ in
             processResponseChange(challengeResponse)
         }
+    }
+
+    public static func == (
+        lhs: Self,
+        rhs: Self
+    ) -> Bool {
+        return true
     }
 
     // MARK: - Internal
