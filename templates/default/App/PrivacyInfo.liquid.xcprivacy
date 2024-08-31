@@ -8,5 +8,9 @@
    Copyright (c) {{ "now" | date: "%Y" }} {{ tenant.name }}. All rights reserved.
 -->
 <plist version="1.0">
-<dict/>
+<dict>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array>
+   </array>
+</dict>
 </plist>
