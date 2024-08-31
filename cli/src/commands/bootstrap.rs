@@ -115,7 +115,7 @@ pub async fn execute_sample_bootstrap(
                 },
                 release: CodeSigningConfig {
                     // Should be Apple Development here too by default.
-                    identity: "Apple Development".to_owned(),
+                    identity: "Apple Distribution".to_owned(),
                     required: "YES".to_owned(),
                     allowed: "YES".to_owned(),
                     style: "Automatic".to_owned(),

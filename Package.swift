@@ -25,13 +25,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Parra",
-            path: "\(iosSdkDir)/Sources/Parra",
-            swiftSettings: [
-                // -g: Basic debug information
-                // -gline-tables-only: Minimal debug information (smaller binary size)
-                // -gdwarf-5: Full DWARF debug information
-                .unsafeFlags(["-gdwarf-5"]) // This flag enables debug symbol generation
-            ]
+            path: "\(iosSdkDir)/Sources/Parra"
         ),
         .testTarget(
             name: "ParraTests",
