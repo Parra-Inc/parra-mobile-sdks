@@ -40,6 +40,7 @@ public class ParraAppState: Equatable {
         return lhs.applicationId == rhs.applicationId
             && lhs.tenantId == rhs.tenantId
             && lhs.pushToken == rhs.pushToken
+            && lhs.appInfo == rhs.appInfo
     }
 
     // MARK: - Internal
