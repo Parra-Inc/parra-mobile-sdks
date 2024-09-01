@@ -9,8 +9,9 @@
 import Foundation
 
 public extension ParraLogger {
-    /// Creates a new scope with the provided name but does not immediately enter it. This scope can be used
-    /// to group multiple logs relevant to a given action. You can also automatically encapsulate a block of code
+    /// Creates a new scope with the provided name but does not immediately
+    /// enter it. This scope can be used to group multiple logs relevant to a
+    /// given action. You can also automatically encapsulate a block of code
     /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
     func scope(
         named name: String? = nil,
@@ -20,8 +21,9 @@ public extension ParraLogger {
         return scope(named: name, nil, function)
     }
 
-    /// Creates a new scope with the provided name but does not immediately enter it. This scope can be used
-    /// to group multiple logs relevant to a given action. You can also automatically encapsulate a block of code
+    /// Creates a new scope with the provided name but does not immediately
+    /// enter it. This scope can be used to group multiple logs relevant to a
+    /// given action. You can also automatically encapsulate a block of code
     /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
     func scope(
         named name: String? = nil,
@@ -43,10 +45,11 @@ public extension ParraLogger {
         )
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) -> T,
@@ -55,10 +58,11 @@ public extension ParraLogger {
         return withScope(named: name, nil, block, function)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ extra: [String: Any]?,
@@ -70,10 +74,11 @@ public extension ParraLogger {
         return block(scoped)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) throws -> T,
@@ -82,10 +87,11 @@ public extension ParraLogger {
         return try withScope(named: name, nil, block, function)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ extra: [String: Any]?,
@@ -102,10 +108,11 @@ public extension ParraLogger {
         }
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) async throws -> T,
@@ -114,10 +121,11 @@ public extension ParraLogger {
         return try await withScope(named: name, nil, block, function)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ extra: [String: Any]?,
@@ -134,10 +142,11 @@ public extension ParraLogger {
         }
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) async -> T,
@@ -146,10 +155,11 @@ public extension ParraLogger {
         return await withScope(named: name, nil, block, function)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     func withScope<T>(
         named name: String? = nil,
         _ extra: [String: Any]?,
@@ -161,8 +171,9 @@ public extension ParraLogger {
         return await block(scoped)
     }
 
-    /// Creates a new scope with the provided name but does not immediately enter it. This scope can be used
-    /// to group multiple logs relevant to a given action. You can also automatically encapsulate a block of code
+    /// Creates a new scope with the provided name but does not immediately
+    /// enter it. This scope can be used to group multiple logs relevant to a
+    /// given action. You can also automatically encapsulate a block of code
     /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
     static func scope(
         named name: String? = nil,
@@ -172,8 +183,9 @@ public extension ParraLogger {
         return scope(named: name, nil, function)
     }
 
-    /// Creates a new scope with the provided name but does not immediately enter it. This scope can be used
-    /// to group multiple logs relevant to a given action. You can also automatically encapsulate a block of code
+    /// Creates a new scope with the provided name but does not immediately
+    /// enter it. This scope can be used to group multiple logs relevant to a
+    /// given action. You can also automatically encapsulate a block of code
     /// within a scope by using ``Logger/withScope(named:_:_:)-29mab``
     static func scope(
         named name: String? = nil,
@@ -184,10 +196,11 @@ public extension ParraLogger {
             .scope(named: nil, function)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) -> T,
@@ -196,10 +209,11 @@ public extension ParraLogger {
         return withScope(named: name, nil, block, function)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
         _ extra: [String: Any]?,
@@ -211,10 +225,11 @@ public extension ParraLogger {
         return block(scoped)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) throws -> T,
@@ -223,10 +238,11 @@ public extension ParraLogger {
         return try withScope(named: name, nil, block, function)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
         _ extra: [String: Any]?,
@@ -243,10 +259,11 @@ public extension ParraLogger {
         }
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) async throws -> T,
@@ -255,10 +272,11 @@ public extension ParraLogger {
         return try await withScope(named: name, nil, block, function)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
         _ extra: [String: Any]?,
@@ -275,10 +293,11 @@ public extension ParraLogger {
         }
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) async -> T,
@@ -287,10 +306,11 @@ public extension ParraLogger {
         return await withScope(named: name, nil, block, function)
     }
 
-    /// Creates a new scope for the logger with the provided `name`. This scope will be entered before executing
-    /// the `block` function and will exit once the execution of `block` has completed. Any errors thrown
-    /// as a result of executing `block` are automatically logged and rethrown. The value returned by `block`
-    /// will be returned from the `withScope` function.
+    /// Creates a new scope for the logger with the provided `name`. This scope
+    /// will be entered before executing the `block` function and will exit once
+    /// the execution of `block` has completed. Any errors thrown as a result of
+    /// executing `block` are automatically logged and rethrown. The value
+    /// returned by `block` will be returned from the `withScope` function.
     static func withScope<T>(
         named name: String? = nil,
         _ extra: [String: Any]?,
