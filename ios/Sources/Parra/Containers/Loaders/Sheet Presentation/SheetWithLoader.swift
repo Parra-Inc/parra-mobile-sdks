@@ -83,6 +83,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                         NavigationStack(path: $navigationState.navigationPath) {
                             loader.render(parra, data, dismiss)
                         }
+                        .environment(navigationState)
                         .presentationDetents(detents)
                         .presentationDragIndicator(visibility)
                     }
