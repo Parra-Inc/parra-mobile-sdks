@@ -58,9 +58,10 @@ final class AuthServer: Server {
         timeout: TimeInterval? = nil
     ) async throws -> String {
         let endpoint = IssuerEndpoint.postPublicAuthentication
+        let appInfo = try await getAppInfo()
         let url = try EndpointResolver.resolve(
             endpoint: endpoint,
-            using: appState
+            tenant: appInfo.tenant
         )
 
         var request = try URLRequest(
@@ -390,6 +391,10 @@ final class AuthServer: Server {
 
     // MARK: - Private
 
+    private func getAppInfo() async throws -> ParraAppInfo {
+        return try await Parra.default.parraInternal.appInfoManager.getAppVersion()
+    }
+
     private func webauthnSessionHeader(
         from response: HTTPURLResponse
     ) throws -> String {
@@ -460,9 +465,10 @@ final class AuthServer: Server {
         timeout: TimeInterval? = nil,
         allowedRetries: Int = 0
     ) async throws -> (T, HTTPURLResponse) where T: Codable {
+        let appInfo = try await getAppInfo()
         let url = try EndpointResolver.resolve(
             endpoint: endpoint,
-            using: appState
+            tenant: appInfo.tenant
         )
 
         var request = try URLRequest(
@@ -508,9 +514,10 @@ final class AuthServer: Server {
         data: [String: String],
         timeout: TimeInterval? = nil
     ) async throws -> T where T: Codable {
+        let appInfo = try await getAppInfo()
         let url = try EndpointResolver.resolve(
             endpoint: endpoint,
-            using: appState
+            tenant: appInfo.tenant
         )
 
         return try await performFormPostRequest(

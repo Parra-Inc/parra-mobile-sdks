@@ -29,7 +29,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
             theme: theme
         )
 
-        let appState = ParraAppState(
+        ParraAppState.shared = ParraAppState(
             tenantId: ParraInternal.Demo.tenantId,
             applicationId: ParraInternal.Demo.applicationId
         )
@@ -37,7 +37,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
         self.parra = Parra(
             parraInternal: ParraInternal
                 .createParraSwiftUIPreviewsInstance(
-                    appState: appState,
+                    appState: ParraAppState.shared,
                     authenticationMethod: .preview,
                     configuration: configuration
                 )

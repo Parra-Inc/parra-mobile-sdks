@@ -13,22 +13,6 @@ enum EndpointResolver {
 
     static func resolve(
         endpoint: IssuerEndpoint,
-        using appState: ParraAppState
-    ) throws -> URL {
-        guard let appInfo = appState.appInfo else {
-            throw ParraError.message(
-                "App info is missing resolving endpoint: \(endpoint.displayName)"
-            )
-        }
-
-        return try resolve(
-            endpoint: endpoint,
-            tenant: appInfo.tenant
-        )
-    }
-
-    static func resolve(
-        endpoint: IssuerEndpoint,
         tenant: ParraTenantAppInfoStub
     ) throws -> URL {
         let path = path(for: endpoint)

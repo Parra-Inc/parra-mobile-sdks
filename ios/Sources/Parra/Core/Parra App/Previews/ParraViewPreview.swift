@@ -29,14 +29,14 @@ struct ParraViewPreview<Content>: View where Content: View {
             initialValue: ParraAuthStateManager.shared
         )
 
-        let appState = ParraAppState(
+        ParraAppState.shared = ParraAppState(
             tenantId: ParraInternal.Demo.tenantId,
             applicationId: ParraInternal.Demo.applicationId
         )
 
         let parraInternal = ParraInternal
             .createParraSwiftUIPreviewsInstance(
-                appState: appState,
+                appState: ParraAppState.shared,
                 authenticationMethod: .preview,
                 configuration: configuration
             )

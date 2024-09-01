@@ -52,15 +52,24 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                     launchResult: launchResult,
                     launchConfig: launchConfig
                 )
-                .task {
-                    UIView.appearance(
-                        whenContainedInInstancesOf: [UIAlertController.self]
-                    )
-                    .tintColor = UIColor(
-                        ParraThemeManager.shared.current.palette
-                            .primary.toParraColor()
-                    )
-                }
+            }
+        }
+        .onChange(of: launchScreenState.current) { oldValue, newValue in
+            switch (oldValue, newValue) {
+            case (.initial, _):
+                UIView.appearance(
+                    whenContainedInInstancesOf: [UIAlertController.self]
+                )
+                .tintColor = UIColor(
+                    ParraThemeManager.shared.current.palette
+                        .primary.toParraColor()
+                )
+            case (_, .complete(let result)):
+                // When the launch screen is complete, it is expected that app
+                // info be obtained at this point.
+                ParraAppState.shared.appInfo = result.appInfo
+            default:
+                break
             }
         }
     }

@@ -193,6 +193,14 @@ final class AppInfoManager {
         return response.results.first
     }
 
+    func getAppVersion() async throws -> ParraAppInfo {
+        if let cached = await cachedAppInfo() {
+            return cached
+        }
+
+        return try await fetchLatestAppInfo(force: true)
+    }
+
     func cachedAppVersion() -> AppVersionInfo? {
         guard let cached = appVersionCache.read() else {
             return nil
@@ -241,8 +249,11 @@ final class AppInfoManager {
         )
     }
 
+    @MainActor
     func updateCachedAppInfo(_ appInfo: ParraAppInfo) async throws {
         logger.debug("Updating app info cache")
+
+        ParraAppState.shared.appInfo = appInfo
 
         try await appInfoCache.write(
             name: Constant.appInfoCacheKey,

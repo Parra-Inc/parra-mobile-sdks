@@ -22,7 +22,6 @@ public class ParraAppState: Equatable {
     ) {
         self.tenantId = tenantId
         self.applicationId = applicationId
-        self.pushToken = nil
     }
 
     // MARK: - Public
@@ -44,6 +43,8 @@ public class ParraAppState: Equatable {
     }
 
     // MARK: - Internal
+
+    static var shared: ParraAppState!
 
     /// Exists after GET app-info is called during the launch screen.
     var appInfo: ParraAppInfo?

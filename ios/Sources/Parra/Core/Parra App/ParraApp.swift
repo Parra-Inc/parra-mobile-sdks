@@ -80,7 +80,7 @@ public struct ParraApp<
         launchScreenConfig: ParraLaunchScreen.Config? = nil,
         @SceneBuilder makeScene: @MainActor @escaping () -> Content
     ) {
-        let appState = ParraAppState(
+        ParraAppState.shared = ParraAppState(
             tenantId: tenantId,
             applicationId: applicationId
         )
@@ -96,7 +96,7 @@ public struct ParraApp<
         self.launchScreenConfig = mergedLaunchScreenConfig
 
         let parra = ParraInternal.createParraInstance(
-            appState: appState,
+            appState: ParraAppState.shared,
             authenticationMethod: authenticationMethod,
             configuration: configuration
         )
@@ -109,10 +109,6 @@ public struct ParraApp<
 
         self._alertManager = State(
             wrappedValue: parra.alertManager
-        )
-
-        self._parraAppState = State(
-            wrappedValue: appState
         )
 
         self._launchScreenState = State(
@@ -180,7 +176,6 @@ public struct ParraApp<
 
     @SceneBuilder private let makeScene: @MainActor () -> Content
 
-    @State private var parraAppState: ParraAppState
     @State private var launchScreenState: LaunchScreenStateManager
     @State private var alertManager: AlertManager
     @State private var authStateManager: ParraAuthStateManager = .shared
