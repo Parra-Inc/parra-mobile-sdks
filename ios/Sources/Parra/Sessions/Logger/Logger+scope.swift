@@ -71,6 +71,8 @@ public extension ParraLogger {
     ) -> T {
         let scoped = scope(named: name, extra, function)
 
+        scoped.trace("scope entered")
+
         return block(scoped)
     }
 
@@ -99,6 +101,8 @@ public extension ParraLogger {
         _ function: String = #function
     ) rethrows -> T {
         let scoped = scope(named: name, extra, function)
+
+        scoped.trace("scope entered")
 
         do {
             return try block(scoped)
@@ -134,6 +138,8 @@ public extension ParraLogger {
     ) async rethrows -> T {
         let scoped = scope(named: name, extra, function)
 
+        scoped.trace("scope entered")
+
         do {
             return try await block(scoped)
         } catch {
@@ -167,6 +173,8 @@ public extension ParraLogger {
         _ function: String = #function
     ) async -> T {
         let scoped = scope(named: name, extra, function)
+
+        scoped.trace("scope entered")
 
         return await block(scoped)
     }
@@ -222,6 +230,8 @@ public extension ParraLogger {
     ) -> T {
         let scoped = scope(named: name, extra, function)
 
+        scoped.trace("scope entered")
+
         return block(scoped)
     }
 
@@ -250,6 +260,8 @@ public extension ParraLogger {
         _ function: String = #function
     ) rethrows -> T {
         let scoped = scope(named: name, extra, function)
+
+        scoped.trace("scope entered")
 
         do {
             return try block(scoped)
@@ -285,6 +297,8 @@ public extension ParraLogger {
     ) async rethrows -> T {
         let scoped = scope(named: name, extra, function)
 
+        scoped.trace("scope entered")
+
         do {
             return try await block(scoped)
         } catch {
@@ -318,6 +332,8 @@ public extension ParraLogger {
         _ function: String = #function
     ) async -> T {
         let scoped = scope(named: name, extra, function)
+
+        scoped.trace("scope entered")
 
         return await block(scoped)
     }
