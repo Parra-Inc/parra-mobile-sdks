@@ -6,20 +6,21 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import Darwin
 import Dispatch
 import Foundation
 import ObjectiveC
 
-// Reference the existing handler, so that we don't override crash reporting
-// libraries that the developer may be using. This will be invoked after our own
-// crash handler.
-let existingHandler = NSGetUncaughtExceptionHandler()
+// Global function to handle uncaught exceptions
+func parraExceptionHandler(_ exception: NSException) {
+    ExceptionHandler.handleUncaughtException(exception)
+}
 
 enum ExceptionHandler {
     // MARK: - Internal
 
     static let signals: [Int32] = [
-        SIGABRT, SIGILL, SIGSEGV, SIGFPE, SIGBUS, SIGPIPE, SIGTRAP
+        SIGABRT, SIGILL, SIGSEGV, SIGFPE, SIGBUS, SIGPIPE, SIGTRAP, SIGTERM
     ]
 
     static func setCurrentSessionId(_ sessionId: String) {
@@ -27,18 +28,18 @@ enum ExceptionHandler {
     }
 
     static func addSignalListeners() {
-        for sig in signals {
-            signal(sig, ExceptionHandler.handleSignal)
+        for signal in signals {
+            existingSignalHandlers[signal] = Darwin.signal(signal) { signalReceived in
+                Darwin.signal(signalReceived, ExceptionHandler.handleSignal)
+            }
         }
     }
 
+    /// CAN NOT BE CALLED MORE THAN ONCE.
     static func addExceptionHandlers() {
-        NSSetUncaughtExceptionHandler { exception in
-            ExceptionHandler.handleUncaughtException(exception)
+        existingHandler = NSGetUncaughtExceptionHandler()
 
-            // Invoke the existing handler.
-            existingHandler?(exception)
-        }
+        NSSetUncaughtExceptionHandler(parraExceptionHandler)
     }
 
     static func handleUncaughtException(
@@ -61,9 +62,19 @@ enum ExceptionHandler {
         )
 
         persistCrash(crash)
+
+        // Forward to previous handler if it exists
+        existingHandler?(exception)
     }
 
     // MARK: - Private
+
+    // Reference the existing handler, so that we don't override crash reporting
+    // libraries that the developer may be using. This will be invoked after our own
+    // crash handler.
+    private static var existingHandler: NSUncaughtExceptionHandler?
+    private static var existingSignalHandlers: [Int32: @convention(c) (Int32) -> Void] =
+        [:]
 
     private static var currentSessionId: String?
 
@@ -85,6 +96,15 @@ enum ExceptionHandler {
         )
 
         persistCrash(crash)
+
+        // Forward to previous handler if it exists
+        if let previousHandler = existingSignalHandlers[signal] {
+            previousHandler(signal)
+        } else {
+            // Re-raise the signal to allow the app to crash
+            Darwin.signal(signal, SIG_DFL)
+            Darwin.raise(signal)
+        }
     }
 
     private static func name(
@@ -115,17 +135,5 @@ enum ExceptionHandler {
         } catch {
             Logger.fatal("Failed to create crash report", error)
         }
-
-        killApp()
-    }
-
-    private static func killApp() {
-        NSSetUncaughtExceptionHandler(nil)
-
-        for sig in signals {
-            signal(sig, SIG_DFL)
-        }
-
-        kill(getpid(), SIGKILL)
     }
 }

@@ -230,8 +230,8 @@ extension ParraInternal {
             authFlowManager: authFlowManager
         )
 
-//        ExceptionHandler.addExceptionHandlers()
-//        ExceptionHandler.addSignalListeners()
+        ExceptionHandler.addExceptionHandlers()
+        ExceptionHandler.addSignalListeners()
 
         apiResourceServer.delegate = parra
         syncManager.delegate = parra
