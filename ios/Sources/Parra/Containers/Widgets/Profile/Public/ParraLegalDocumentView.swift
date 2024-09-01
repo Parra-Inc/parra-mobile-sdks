@@ -21,7 +21,7 @@ public struct ParraLegalDocumentView: View {
 
     public var body: some View {
         WebView(
-            url: legalDocument.url
+            url: URL(string: "")!
         )
         .navigationBarTitleDisplayMode(.inline)
     }
