@@ -29,9 +29,7 @@ enum ExceptionHandler {
 
     static func addSignalListeners() {
         for signal in signals {
-            existingSignalHandlers[signal] = Darwin.signal(signal) { signalReceived in
-                Darwin.signal(signalReceived, ExceptionHandler.handleSignal)
-            }
+            Darwin.signal(signal, ExceptionHandler.handleSignal)
         }
     }
 
@@ -73,17 +71,12 @@ enum ExceptionHandler {
     // libraries that the developer may be using. This will be invoked after our own
     // crash handler.
     private static var existingHandler: NSUncaughtExceptionHandler?
-    private static var existingSignalHandlers: [Int32: @convention(c) (Int32) -> Void] =
-        [:]
-
     private static var currentSessionId: String?
 
     private static let handleSignal: @convention(c) (Int32) -> Void = {
         signal in
 
-        var frames = CallStackParser.backtrace().frameStrings
-        frames.removeFirst(3)
-
+        let frames = CallStackParser.backtrace().frameStrings
         let signalName = name(of: signal)
         let reason = "Signal \(signalName)(\(signal)) was raised.\n"
 
@@ -97,14 +90,9 @@ enum ExceptionHandler {
 
         persistCrash(crash)
 
-        // Forward to previous handler if it exists
-        if let previousHandler = existingSignalHandlers[signal] {
-            previousHandler(signal)
-        } else {
-            // Re-raise the signal to allow the app to crash
-            Darwin.signal(signal, SIG_DFL)
-            Darwin.raise(signal)
-        }
+        // Re-raise the signal to allow the app to crash
+        Darwin.signal(signal, SIG_DFL)
+        Darwin.raise(signal)
     }
 
     private static func name(
