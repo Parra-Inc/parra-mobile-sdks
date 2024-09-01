@@ -16,7 +16,9 @@ enum EndpointResolver {
         using appState: ParraAppState
     ) throws -> URL {
         guard let appInfo = appState.appInfo else {
-            throw ParraError.message("App info is missing resolving endpoint")
+            throw ParraError.message(
+                "App info is missing resolving endpoint: \(endpoint.displayName)"
+            )
         }
 
         return try resolve(
@@ -33,7 +35,7 @@ enum EndpointResolver {
 
         guard let issuerUrl = URL(string: "https://\(tenant.issuer)") else {
             throw ParraError.message(
-                "Issuer host name could not be converted to URL."
+                "Issuer host name could not be converted to URL resolving endpoint: \(endpoint.displayName)"
             )
         }
 
