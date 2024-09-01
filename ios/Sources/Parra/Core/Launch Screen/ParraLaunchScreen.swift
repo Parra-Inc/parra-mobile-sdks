@@ -40,7 +40,7 @@ public struct ParraLaunchScreen: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
+    @Environment(LaunchScreenStateManager.self) private var launchScreenState
 
     @State private var shouldFade = true
 

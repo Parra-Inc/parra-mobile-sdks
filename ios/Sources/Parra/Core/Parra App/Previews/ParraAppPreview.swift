@@ -90,7 +90,7 @@ public struct ParraAppPreview<Content, DelegateType>: View
         .environment(\.parraTheme, themeManager.current)
         .environment(\.parraPreferredAppearance, themeManager.preferredAppearanceBinding)
         .environment(alertManager)
-        .environmentObject(
+        .environment(
             LaunchScreenStateManager(
                 state: .complete(
                     .init(

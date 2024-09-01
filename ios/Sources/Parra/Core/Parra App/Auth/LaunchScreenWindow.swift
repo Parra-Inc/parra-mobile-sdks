@@ -72,7 +72,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     @State private var showLogs = false
 
     @Environment(\.parra) private var parra
-    @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
+    @Environment(LaunchScreenStateManager.self) private var launchScreenState
 
     @ViewBuilder
     private func renderFailure(

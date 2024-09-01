@@ -9,7 +9,8 @@
 import Foundation
 
 @MainActor
-final class LaunchScreenStateManager: ObservableObject {
+@Observable
+final class LaunchScreenStateManager {
     // MARK: - Lifecycle
 
     init(state: State) {
@@ -25,7 +26,7 @@ final class LaunchScreenStateManager: ObservableObject {
         case failed(ParraErrorWithUserInfo)
     }
 
-    @Published private(set) var current: State
+    private(set) var current: State
 
     func fail(
         userMessage: String,
