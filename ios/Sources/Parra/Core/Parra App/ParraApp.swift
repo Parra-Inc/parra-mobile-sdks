@@ -115,7 +115,7 @@ public struct ParraApp<
             wrappedValue: appState
         )
 
-        self._launchScreenState = StateObject(
+        self._launchScreenState = State(
             wrappedValue: LaunchScreenStateManager(
                 state: .initial(mergedLaunchScreenConfig)
             )
@@ -129,12 +129,12 @@ public struct ParraApp<
             .environment(\.parra, Parra.default)
             .environment(\.parraAuthState, authStateManager.current)
             .environment(\.parraTheme, themeManager.current)
-            .environment(alertManager)
             .environment(
                 \.parraPreferredAppearance,
                 themeManager.preferredAppearanceBinding
             )
-            .environmentObject(launchScreenState)
+            .environment(alertManager)
+            .environment(launchScreenState)
             .environmentObject(parra.globalComponentFactory)
             .onChange(
                 of: launchScreenState.current,
@@ -181,8 +181,7 @@ public struct ParraApp<
     @SceneBuilder private let makeScene: @MainActor () -> Content
 
     @State private var parraAppState: ParraAppState
-    @StateObject private var launchScreenState: LaunchScreenStateManager
-
+    @State private var launchScreenState: LaunchScreenStateManager
     @State private var alertManager: AlertManager
     @State private var authStateManager: ParraAuthStateManager = .shared
     @State private var themeManager: ParraThemeManager = .shared
