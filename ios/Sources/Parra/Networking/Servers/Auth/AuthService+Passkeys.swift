@@ -331,78 +331,82 @@ extension AuthService {
     private func createPublicKeyCredentialRegistrationRequest(
         for username: String
     ) async throws -> PasskeyRegistrationResult {
-        let (challengeResponse, session) = try await authServer
-            .postWebAuthnRegisterChallenge(
-                requestData: WebAuthnRegisterChallengeRequest(
-                    username: username
+        return try await logger.withScope { _ in
+            let (challengeResponse, session) = try await authServer
+                .postWebAuthnRegisterChallenge(
+                    requestData: WebAuthnRegisterChallengeRequest(
+                        username: username
+                    )
                 )
+
+            let relyingPartyIdentifier = challengeResponse.rp.id
+            let userId = Data(challengeResponse.user.id.utf8)
+
+            guard let challengeData = Data(
+                base64urlEncoded: challengeResponse.challenge
+            ) else {
+                throw ParraError.message("Failed to decode challenge")
+            }
+
+            let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
+                relyingPartyIdentifier: relyingPartyIdentifier
             )
 
-        let relyingPartyIdentifier = challengeResponse.rp.id
-        let userId = Data(challengeResponse.user.id.utf8)
+            let request = provider.createCredentialRegistrationRequest(
+                challenge: challengeData,
+                name: username,
+                userID: userId
+            )
 
-        guard let challengeData = Data(
-            base64urlEncoded: challengeResponse.challenge
-        ) else {
-            throw ParraError.message("Failed to decode challenge")
+            return PasskeyRegistrationResult(
+                request: request,
+                session: session
+            )
         }
-
-        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
-            relyingPartyIdentifier: relyingPartyIdentifier
-        )
-
-        let request = provider.createCredentialRegistrationRequest(
-            challenge: challengeData,
-            name: username,
-            userID: userId
-        )
-
-        return PasskeyRegistrationResult(
-            request: request,
-            session: session
-        )
     }
 
     @MainActor
     private func createPublicKeyCredentialAssertionRequest(
         for username: String?
     ) async throws -> PasskeyAssertionResult {
-        let (challengeResponse, session) = try await authServer
-            .postWebAuthnAuthenticateChallenge(
-                requestData: WebAuthnAuthenticateChallengeRequest(
-                    username: username
+        return try await logger.withScope { _ in
+            let (challengeResponse, session) = try await authServer
+                .postWebAuthnAuthenticateChallenge(
+                    requestData: WebAuthnAuthenticateChallengeRequest(
+                        username: username
+                    )
                 )
+
+            guard let relyingPartyIdentifier = challengeResponse.rpId else {
+                throw ParraError.message("Missing relying party identifier")
+            }
+
+            guard let challengeData = Data(
+                base64urlEncoded: challengeResponse.challenge
+            ) else {
+                throw ParraError.message("Failed to decode challenge")
+            }
+
+            let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
+                relyingPartyIdentifier: relyingPartyIdentifier
             )
 
-        guard let relyingPartyIdentifier = challengeResponse.rpId else {
-            throw ParraError.message("Missing relying party identifier")
-        }
+            let request = provider.createCredentialAssertionRequest(
+                challenge: challengeData
+            )
 
-        guard let challengeData = Data(
-            base64urlEncoded: challengeResponse.challenge
-        ) else {
-            throw ParraError.message("Failed to decode challenge")
-        }
+            // used when we have context about the user, like when they've typed in their username
+            let allowCredentials = challengeResponse.allowCredentials ?? []
+            request.allowedCredentials = allowCredentials.map { credential in
+                return ASAuthorizationPlatformPublicKeyCredentialDescriptor(
+                    credentialID: Data(credential.id.utf8)
+                )
+            }
 
-        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(
-            relyingPartyIdentifier: relyingPartyIdentifier
-        )
-
-        let request = provider.createCredentialAssertionRequest(
-            challenge: challengeData
-        )
-
-        // used when we have context about the user, like when they've typed in their username
-        let allowCredentials = challengeResponse.allowCredentials ?? []
-        request.allowedCredentials = allowCredentials.map { credential in
-            return ASAuthorizationPlatformPublicKeyCredentialDescriptor(
-                credentialID: Data(credential.id.utf8)
+            return PasskeyAssertionResult(
+                request: request,
+                session: session
             )
         }
-
-        return PasskeyAssertionResult(
-            request: request,
-            session: session
-        )
     }
 }
