@@ -230,7 +230,7 @@ extension ParraInternal {
             authFlowManager: authFlowManager
         )
 
-//        ExceptionHandler.addExceptionHandlers()
+        ExceptionHandler.addExceptionHandlers()
         ExceptionHandler.addSignalListeners()
 
         apiResourceServer.delegate = parra

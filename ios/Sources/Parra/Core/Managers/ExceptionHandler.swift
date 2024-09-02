@@ -91,7 +91,6 @@ enum ExceptionHandler {
         persistCrash(crash)
 
         // Re-raise the signal to allow the app to crash
-        Darwin.signal(signal, SIG_DFL)
         Darwin.raise(signal)
     }
 
