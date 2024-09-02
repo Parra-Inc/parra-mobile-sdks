@@ -92,3 +92,4 @@ sdks/**/*.xcworkspace
 /sample/ParraDemo.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 /sample/ParraDemo.xcodeproj/project.xcworkspace/contents.xcworkspacedata
 
+/sample/ParraDemoApp.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
