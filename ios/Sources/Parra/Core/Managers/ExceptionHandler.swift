@@ -125,9 +125,6 @@ enum ExceptionHandler {
         // If there was a previous handler, call it
         if let previousHandler = existingSignalHandlers[signal] {
             previousHandler(signal)
-        } else {
-            // No previous handler, so raise the signal
-            Darwin.raise(signal)
         }
 
         // If we somehow get here, forcibly exit
