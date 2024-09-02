@@ -1,5 +1,5 @@
 //
-//  ParraSessionManagerTests.swift
+//  SessionManagerTests.swift
 //  Tests
 //
 //  Created by Mick MacCallum on 7/3/23.
@@ -9,7 +9,7 @@
 @testable import Parra
 import XCTest
 
-final class ParraSessionManagerTests: MockedParraTestCase {
+final class SessionManagerTests: MockedParraTestCase {
     func testSessionStartsOnInit() async throws {
 //        let currentSession = mockParra.sessionManager..currentSession
 //        XCTAssertNotNil(currentSession)

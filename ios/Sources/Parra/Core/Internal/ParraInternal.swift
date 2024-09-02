@@ -30,7 +30,7 @@ class ParraInternal {
         dataManager: DataManager,
         syncManager: ParraSyncManager,
         authService: AuthService,
-        sessionManager: ParraSessionManager,
+        sessionManager: SessionManager,
         api: API,
         notificationCenter: NotificationCenterType,
         feedback: ParraFeedback,
@@ -92,7 +92,7 @@ class ParraInternal {
     let syncManager: ParraSyncManager
     let authService: AuthService
 
-    @usableFromInline let sessionManager: ParraSessionManager
+    @usableFromInline let sessionManager: SessionManager
     let api: API
     let notificationCenter: NotificationCenterType
     let appInfoManager: AppInfoManager

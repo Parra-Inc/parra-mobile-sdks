@@ -13,7 +13,7 @@ private let logger = Logger(
     category: "LogFormatters"
 )
 
-extension ParraSessionManager {
+extension SessionManager {
     enum Constant {
         static let maxValueLength: Int = 80
     }

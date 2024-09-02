@@ -1,5 +1,5 @@
 //
-//  ParraSessionManager.swift
+//  SessionManager.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 11/19/22.
@@ -36,19 +36,21 @@ private let logger = Logger(
 /// 1. For any method with the `Sync` suffix, you should always assume that it is a hard
 ///    requirement for it to be called on a specific queue. Usually ``eventQueue``.
 @usableFromInline
-class ParraSessionManager {
+class SessionManager {
     // MARK: - Lifecycle
 
     init(
-        forceDisabled: Bool = false,
-        dataManager: DataManager,
         api: API,
-        loggerOptions: ParraLoggerOptions
+        dataManager: DataManager,
+        loggerOptions: ParraLoggerOptions,
+        metricManager: MetricManager,
+        forceDisabled: Bool = false
     ) {
-        self.forceDisabled = forceDisabled
-        self.dataManager = dataManager
         self.api = api
+        self.dataManager = dataManager
         self.loggerOptions = loggerOptions
+        self.metricManager = metricManager
+        self.forceDisabled = forceDisabled
 
         // Set this in init after assigning the loggerOptions to ensure reads
         // from the event queue couldn't possibly start happening until after
@@ -67,10 +69,6 @@ class ParraSessionManager {
         }
 
         await sessionStorage.initializeSessions()
-
-        if let currentSession = try? await sessionStorage.getCurrentSession() {
-            ExceptionHandler.setCurrentSessionId(currentSession.sessionId)
-        }
     }
 
     func hasDataToSync(since date: Date?) async -> Bool {
@@ -84,7 +82,7 @@ class ParraSessionManager {
         // 3. There are previous sessions
 
         return await logger.withScope { logger in
-            if hasCrashes() {
+            if metricManager.hasCrashes() {
                 logger.trace("has crashes from previous sessions")
 
                 return true
@@ -121,9 +119,9 @@ class ParraSessionManager {
         }
 
         return try await logger.withScope { logger in
-            let currentSession = try await sessionStorage.getCurrentSession()
-            let sessionIterator = try await sessionStorage.getAllSessions()
-            var crashReports = readCrashReports()
+            let currentSession = try await self.sessionStorage.getCurrentSession()
+            let sessionIterator = try await self.sessionStorage.getAllSessions()
+            var crashReports = self.readCrashReports()
 
             var removableSessionIds = Set<String>()
             var erroredSessionIds = Set<String>()
@@ -189,27 +187,12 @@ class ParraSessionManager {
                         await sessionStorage.recordSyncBegan()
                     }
 
-                    logger.debug("Uploading session: \(sessionId)")
-
                     let relevantCrashes = crashReports.filter { crash in
-                        // If there is a matching session id, keep the crash
-                        if crash.sessionId == sessionUpload.session.sessionId {
-                            return true
-                        }
-
-                        // if there isn't a session id, and the timestamps align
-                        // with the session, keep the crash.
-                        if crash.sessionId != nil {
-                            return false
-                        }
-
-                        let crashDate = Date(
-                            timeIntervalSince1970: crash.timestamp
-                        )
+                        let crashDate = crash.createdAt
 
                         if let endedAt = currentSession.endedAt {
                             if crashDate > currentSession.createdAt,
-                               crashDate < endedAt
+                               crashDate <= endedAt
                             {
                                 return true
                             }
@@ -225,9 +208,13 @@ class ParraSessionManager {
                         from: relevantCrashes
                     )
 
-                    logger.info(
-                        "Uploading session with crash report"
-                    )
+                    if relevantCrashes.isEmpty {
+                        logger.debug("Uploading session: \(sessionId)")
+                    } else {
+                        logger.info(
+                            "Uploading session with crash report: \(sessionId)"
+                        )
+                    }
 
                     let chunkedSessions = sessionUploadWithCrashes.events.chunked(
                         into: maxSessionEventsToUpload
@@ -292,7 +279,19 @@ class ParraSessionManager {
                 erroredSessions: erroredSessionIds
             )
 
-            deleteCrashReports()
+            // crash reports don't need to be deleted. They will only be
+            // reported once per session.
+            if !crashReports.isEmpty {
+                for crashReport in crashReports {
+                    logger.warn(
+                        "Couldn't associate a previous crash with any sessions.", [
+                            "crash_timestamp": crashReport.createdAt
+                                .timeIntervalSince1970,
+                            "termination_reason": crashReport.terminationReason
+                        ]
+                    )
+                }
+            }
 
             return sessionResponse
         }
@@ -409,9 +408,10 @@ class ParraSessionManager {
     // MARK: - Private
 
     private let forceDisabled: Bool
-    private let dataManager: DataManager
     private let api: API
+    private let dataManager: DataManager
     private let loggerOptions: ParraLoggerOptions
+    private let metricManager: MetricManager
 
     private let eventQueue: DispatchQueue
 
@@ -437,7 +437,7 @@ class ParraSessionManager {
 
 // MARK: ParraLoggerBackend
 
-extension ParraSessionManager: ParraLoggerBackend {
+extension SessionManager: ParraLoggerBackend {
     func log(
         data: ParraLogData
     ) {
@@ -536,7 +536,7 @@ extension ParraSessionManager: ParraLoggerBackend {
 
     private func attachCrashReports(
         to sessionUpload: ParraSessionUpload,
-        from crashes: Set<ExceptionHandler.CrashInfo>
+        from crashes: Set<MetricManager.CrashInfo>
     ) -> ParraSessionUpload {
         if crashes.isEmpty {
             logger.trace(
@@ -554,16 +554,11 @@ extension ParraSessionManager: ParraLoggerBackend {
         ])
 
         for crash in crashes {
-            let crashDate = Date(timeIntervalSince1970: crash.timestamp)
+            let crashDate = crash.createdAt
             let event = ParraSessionEvent(
                 createdAt: crashDate,
                 name: "crash",
-                metadata: [
-                    "stack": crash.callStack,
-                    "name": crash.name,
-                    "reason": crash.reason,
-                    "type": crash.type.description
-                ]
+                metadata: ParraAnyCodable(crash.sanitized)
             )
 
             events.append(event)
@@ -581,121 +576,13 @@ extension ParraSessionManager: ParraLoggerBackend {
         )
     }
 
-    private func hasCrashes() -> Bool {
-        let fileManager = FileManager.default
-        let appSupportURL = DataManager.Base.applicationSupportDirectory
+    private func readCrashReports() -> Set<MetricManager.CrashInfo> {
+        let crashes = metricManager.readCrashes()
 
-        do {
-            // Get the contents of the Application Support directory
-            let contents = try fileManager.contentsOfDirectory(
-                atPath: appSupportURL.path
-            )
+        logger.trace(
+            "Found \(crashes.count) crash report(s) from previous sessions"
+        )
 
-            // Filter the files that start with "parra-crash-report"
-            let crashReportFiles = contents.filter {
-                $0.hasPrefix(ExceptionHandler.Constant.crashFilePrefix)
-            }
-
-            return !crashReportFiles.isEmpty
-        } catch {
-            logger.error(
-                "Error checking if has crashes",
-                error
-            )
-
-            return false
-        }
-    }
-
-    private func readCrashReports() -> Set<ExceptionHandler.CrashInfo> {
-        // Get the Application Support directory URL
-        let fileManager = FileManager.default
-        let appSupportURL = DataManager.Base.applicationSupportDirectory
-
-        do {
-            // Get the contents of the Application Support directory
-            let contents = try fileManager.contentsOfDirectory(
-                atPath: appSupportURL.path
-            )
-
-            // Filter the files that start with "parra-crash-report"
-            let crashReportFiles = contents.filter {
-                $0.hasPrefix(ExceptionHandler.Constant.crashFilePrefix)
-            }
-
-            var crashes = Set<ExceptionHandler.CrashInfo>()
-
-            for fileName in crashReportFiles {
-                let fileURL = appSupportURL.appendingPathComponent(fileName)
-
-                guard let fileContents = try? Data(contentsOf: fileURL) else {
-                    continue
-                }
-
-                guard let crash = try? JSONDecoder.parraDecoder.decode(
-                    ExceptionHandler.CrashInfo.self,
-                    from: fileContents
-                ) else {
-                    continue
-                }
-
-                crashes.insert(crash)
-            }
-
-            logger.trace(
-                "Found \(crashes.count) crash report(s) from previous sessions"
-            )
-
-            return crashes
-        } catch {
-            logger.error(
-                "Error reading contents of Application Support directory",
-                error
-            )
-
-            return []
-        }
-    }
-
-    func deleteCrashReports() {
-        logger.trace("Deleting previous session's crash reports")
-
-        let fileManager = FileManager.default
-        let appSupportURL = DataManager.Base.applicationSupportDirectory
-
-        do {
-            // Get the contents of the Application Support directory
-            let contents = try fileManager.contentsOfDirectory(
-                atPath: appSupportURL.path
-            )
-
-            // Filter the files that start with "parra-crash-report"
-            let crashReportFiles = contents.filter {
-                $0.hasPrefix(ExceptionHandler.Constant.crashFilePrefix)
-            }
-
-            for file in crashReportFiles {
-                let path = appSupportURL.appending(
-                    component: file
-                )
-
-                do {
-                    try fileManager.removeItem(at: path)
-                } catch {
-                    logger.error(
-                        "Error deleting crash report",
-                        error,
-                        [
-                            "path": path.relativeString
-                        ]
-                    )
-                }
-            }
-        } catch {
-            logger.error(
-                "Error deleting crash reports",
-                error
-            )
-        }
+        return crashes
     }
 }

@@ -156,11 +156,14 @@ extension ParraInternal {
             dataManager: dataManager
         )
 
-        let sessionManager = ParraSessionManager(
-            forceDisabled: forceDisabled,
-            dataManager: dataManager,
+        let metricManager = MetricManager()
+
+        let sessionManager = SessionManager(
             api: api,
-            loggerOptions: configuration.loggerOptions
+            dataManager: dataManager,
+            loggerOptions: configuration.loggerOptions,
+            metricManager: metricManager,
+            forceDisabled: forceDisabled
         )
 
         let syncManager = ParraSyncManager(
@@ -229,9 +232,6 @@ extension ParraInternal {
             modalScreenManager: modalScreenManager,
             authFlowManager: authFlowManager
         )
-
-        ExceptionHandler.addExceptionHandlers()
-        ExceptionHandler.addSignalListeners()
 
         apiResourceServer.delegate = parra
         syncManager.delegate = parra

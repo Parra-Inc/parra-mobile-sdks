@@ -18,7 +18,7 @@ struct MockParra {
 
     let dataManager: DataManager
     let syncManager: ParraSyncManager
-    let sessionManager: ParraSessionManager
+    let sessionManager: SessionManager
     let apiResourceServer: ApiResourceServer
     let notificationCenter: ParraNotificationCenter
 

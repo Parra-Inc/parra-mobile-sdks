@@ -18,7 +18,7 @@ class ParraSyncManager {
     init(
         forceDisabled: Bool = false,
         syncState: ParraSyncState,
-        sessionManager: ParraSessionManager,
+        sessionManager: SessionManager,
         notificationCenter: NotificationCenterType,
         syncDelay: TimeInterval = 30.0
     ) {
@@ -176,7 +176,7 @@ class ParraSyncManager {
 
     // MARK: - Private
 
-    private let sessionManager: ParraSessionManager
+    private let sessionManager: SessionManager
     private let notificationCenter: NotificationCenterType
 
     @MainActor private var syncTimer: Timer?

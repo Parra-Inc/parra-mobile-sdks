@@ -61,7 +61,7 @@ class MockedParraTestCase: ParraBaseMock {
             dataManager: dataManager
         )
 
-        let sessionManager = ParraSessionManager(
+        let sessionManager = SessionManager(
             dataManager: dataManager,
             api: api,
             loggerOptions: configuration.loggerOptions

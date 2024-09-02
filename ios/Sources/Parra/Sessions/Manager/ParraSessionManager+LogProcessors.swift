@@ -17,8 +17,8 @@ import os
 //       when child loggers are created.
 // https://developer.apple.com/documentation/os/logging/collecting_log_messages_in_activities
 
-extension ParraSessionManager {
-    /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
+extension SessionManager {
+    /// -requirement: Must only ever be invoked from ``SessionManager/eventQueue``
     func writeEventToConsoleSync(
         wrappedEvent: ParraWrappedEvent,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption],
@@ -47,7 +47,7 @@ extension ParraSessionManager {
         )
     }
 
-    /// -requirement: Must only ever be invoked from ``ParraSessionManager/eventQueue``
+    /// -requirement: Must only ever be invoked from ``SessionManager/eventQueue``
     private func writeLogEventToConsoleSync(
         processedLogData: ParraLogProcessedData,
         with consoleFormatOptions: [ParraLoggerConsoleFormatOption]
