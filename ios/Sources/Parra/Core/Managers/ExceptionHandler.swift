@@ -118,15 +118,7 @@ enum ExceptionHandler {
         let signalName = name(of: signal)
         log("ExceptionHandler: handleSignal \(signalName)")
 
-        var frames: [String] = []
-        let backtraceSucceeded = executeWithTimeout(seconds: 2) {
-            frames = CallStackParser.backtrace().frameStrings
-        }
-
-        if !backtraceSucceeded {
-            logError("Failed to get backtrace")
-        }
-
+        let frames = CallStackParser.backtrace().frameStrings
         let reason = "Signal \(signalName)(\(signal)) was raised.\n"
 
         let crash = CrashInfo(
@@ -138,7 +130,7 @@ enum ExceptionHandler {
         )
 
         // Attempt to persist crash, but with a timeout
-        let persistSucceeded = executeWithTimeout(seconds: 5) {
+        let persistSucceeded = executeWithTimeout(seconds: 1) {
             persistCrash(crash)
         }
 
@@ -154,6 +146,7 @@ enum ExceptionHandler {
             let previousHandlerSucceeded = executeWithTimeout(seconds: 2) {
                 previousHandler(signal)
             }
+
             if !previousHandlerSucceeded {
                 write(STDERR_FILENO, "Previous handler timed out\n", 27)
             }
@@ -177,10 +170,13 @@ enum ExceptionHandler {
         _ crashInfo: ExceptionHandler.CrashInfo
     ) {
         let timestamp = Date.now.timeIntervalSince1970
-        let crashReportPath = DataManager.Base.applicationSupportDirectory
-            .appending(
-                component: "\(Constant.crashFilePrefix)\(timestamp).json"
-            )
+        // Do NOT reference global data manager path.
+        let crashReportPath = FileManager.default.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask
+        ).first!.appending(
+            component: "\(Constant.crashFilePrefix)\(timestamp).json"
+        )
 
         log("ExceptionHandler: persistCrash \(crashReportPath.absoluteString)")
 
@@ -192,7 +188,9 @@ enum ExceptionHandler {
                 options: .noFileProtection
             )
         } catch {
-            Logger.fatal("Failed to create crash report", error)
+            logError(
+                "Failed to store crash report: \(error.localizedDescription)"
+            )
         }
     }
 
@@ -215,33 +213,3 @@ enum ExceptionHandler {
         return completed
     }
 }
-
-//
-// int ksmach_machExceptionForSignal(const int sigNum)
-// {
-//    switch(sigNum)
-//    {
-//    case SIGFPE:
-//        return EXC_ARITHMETIC;
-//    case SIGSEGV:
-//        return EXC_BAD_ACCESS;
-//    case SIGBUS:
-//        return EXC_BAD_ACCESS;
-//    case SIGILL:
-//        return EXC_BAD_INSTRUCTION;
-//    case SIGTRAP:
-//        return EXC_BREAKPOINT;
-//    case SIGEMT:
-//        return EXC_EMULATION;
-//    case SIGSYS:
-//        return EXC_UNIX_BAD_SYSCALL;
-//    case SIGPIPE:
-//        return EXC_UNIX_BAD_PIPE;
-//    case SIGABRT:
-//        // The Apple reporter uses EXC_CRASH instead of EXC_UNIX_ABORT
-//        return EXC_CRASH;
-//    case SIGKILL:
-//        return EXC_SOFT_SIGNAL;
-//    }
-//    return 0;
-// }

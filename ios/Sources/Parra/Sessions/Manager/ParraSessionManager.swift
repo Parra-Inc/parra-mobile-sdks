@@ -225,6 +225,10 @@ class ParraSessionManager {
                         from: relevantCrashes
                     )
 
+                    logger.info(
+                        "Uploading session with crash report"
+                    )
+
                     let chunkedSessions = sessionUploadWithCrashes.events.chunked(
                         into: maxSessionEventsToUpload
                     ).enumerated().map { index, eventsChunk in
