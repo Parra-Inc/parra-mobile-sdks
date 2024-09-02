@@ -11,8 +11,16 @@ import Dispatch
 import Foundation
 import ObjectiveC
 
+#if DEBUG
+// Can't work in production. Undefined behavior to do async actions within it
+// and many other things once a signal has already been raised.
+private let logger = Logger()
+#endif
+
 // Global function to handle uncaught exceptions
 func parraExceptionHandler(_ exception: NSException) {
+    ExceptionHandler.log("ExceptionHandler: parraExceptionHandler")
+
     ExceptionHandler.handleUncaughtException(exception)
 }
 
@@ -28,6 +36,8 @@ enum ExceptionHandler {
     }
 
     static func addSignalListeners() {
+        log("ExceptionHandler: addSignalListeners")
+
         for signal in signals {
             Darwin.signal(signal, ExceptionHandler.handleSignal)
         }
@@ -35,6 +45,8 @@ enum ExceptionHandler {
 
     /// CAN NOT BE CALLED MORE THAN ONCE.
     static func addExceptionHandlers() {
+        log("ExceptionHandler: addExceptionHandlers")
+
         existingHandler = NSGetUncaughtExceptionHandler()
 
         NSSetUncaughtExceptionHandler(parraExceptionHandler)
@@ -43,6 +55,8 @@ enum ExceptionHandler {
     static func handleUncaughtException(
         _ exception: NSException
     ) {
+        log("ExceptionHandler: handleUncaughtException")
+
         let demangledFrames = CallStackParser.parse(
             frames: exception.callStackSymbols
         )
@@ -65,6 +79,14 @@ enum ExceptionHandler {
         existingHandler?(exception)
     }
 
+    // MARK: - Fileprivate
+
+    fileprivate static func log(_ message: String) {
+        #if DEBUG
+        logger.debug(message)
+        #endif
+    }
+
     // MARK: - Private
 
     // Reference the existing handler, so that we don't override crash reporting
@@ -79,6 +101,8 @@ enum ExceptionHandler {
         let frames = CallStackParser.backtrace().frameStrings
         let signalName = name(of: signal)
         let reason = "Signal \(signalName)(\(signal)) was raised.\n"
+
+        log("ExceptionHandler: handleSignal \(signalName)")
 
         let crash = CrashInfo(
             sessionId: currentSessionId,
@@ -109,8 +133,11 @@ enum ExceptionHandler {
         let timestamp = Date.now.timeIntervalSince1970
         let crashReportPath = DataManager.Base.applicationSupportDirectory
             .appending(
-                component: "/\(Constant.crashFilePrefix)\(timestamp).json"
+                component: "\(Constant.crashFilePrefix)\(timestamp).json"
             )
+
+        log("ExceptionHandler: persistCrash \(crashReportPath.absoluteString)")
+
         do {
             let data = try JSONEncoder.parraEncoder.encode(crashInfo)
 
