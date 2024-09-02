@@ -86,6 +86,18 @@ enum ExceptionHandler {
     fileprivate static func log(_ message: String) {
         #if DEBUG
         logger.debug(message)
+        #else
+        let final = "[PARRA] " + message + "\n"
+        write(STDOUT_FILENO, final, final.count)
+        #endif
+    }
+
+    fileprivate static func logError(_ message: String) {
+        #if DEBUG
+        logger.error(message)
+        #else
+        let final = "[PARRA] " + message + "\n"
+        write(STDERR_FILENO, final, final.count)
         #endif
     }
 
@@ -103,11 +115,19 @@ enum ExceptionHandler {
     private static let handleSignal: @convention(c) (Int32) -> Void = {
         signal in
 
-        let frames = CallStackParser.backtrace().frameStrings
         let signalName = name(of: signal)
-        let reason = "Signal \(signalName)(\(signal)) was raised.\n"
-
         log("ExceptionHandler: handleSignal \(signalName)")
+
+        var frames: [String] = []
+        let backtraceSucceeded = executeWithTimeout(seconds: 2) {
+            frames = CallStackParser.backtrace().frameStrings
+        }
+
+        if !backtraceSucceeded {
+            logError("Failed to get backtrace")
+        }
+
+        let reason = "Signal \(signalName)(\(signal)) was raised.\n"
 
         let crash = CrashInfo(
             sessionId: currentSessionId,
@@ -117,18 +137,30 @@ enum ExceptionHandler {
             callStack: frames
         )
 
-        persistCrash(crash)
+        // Attempt to persist crash, but with a timeout
+        let persistSucceeded = executeWithTimeout(seconds: 5) {
+            persistCrash(crash)
+        }
+
+        if !persistSucceeded {
+            logError("Failed to persist crash info")
+        }
 
         // Remove our custom handler
         Darwin.signal(signal, SIG_DFL)
 
-        // If there was a previous handler, call it
+        // If there was a previous handler, call it with a timeout
         if let previousHandler = existingSignalHandlers[signal] {
-            previousHandler(signal)
+            let previousHandlerSucceeded = executeWithTimeout(seconds: 2) {
+                previousHandler(signal)
+            }
+            if !previousHandlerSucceeded {
+                write(STDERR_FILENO, "Previous handler timed out\n", 27)
+            }
         }
 
-        // If we somehow get here, forcibly exit
-        exit(signal)
+        // Forcibly exit
+        Darwin.kill(Darwin.getpid(), signal)
     }
 
     private static func name(
@@ -162,6 +194,25 @@ enum ExceptionHandler {
         } catch {
             Logger.fatal("Failed to create crash report", error)
         }
+    }
+
+    // Helper function to execute a block with a timeout
+    private static func executeWithTimeout(
+        seconds: Int,
+        block: @escaping () -> Void
+    ) -> Bool {
+        let semaphore = DispatchSemaphore(value: 0)
+        var completed = false
+
+        DispatchQueue.global().async {
+            block()
+            completed = true
+            semaphore.signal()
+        }
+
+        _ = semaphore.wait(timeout: .now() + .seconds(seconds))
+
+        return completed
     }
 }
 
