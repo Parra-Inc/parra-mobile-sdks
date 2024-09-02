@@ -48,7 +48,7 @@ public enum ParraAppearance: Equatable, CaseIterable, Identifiable,
         case .dark:
             return .dark
         case .system:
-            return .none
+            return nil
         }
     }
 }
