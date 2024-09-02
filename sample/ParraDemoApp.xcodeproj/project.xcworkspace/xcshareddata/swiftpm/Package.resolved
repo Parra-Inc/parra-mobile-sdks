@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Parra-Inc/parra-mobile-sdks",
       "state" : {
-        "revision" : "4086ed29a02ade1910ec2f1a05430792f476f6b3",
-        "version" : "0.2.49"
+        "revision" : "6f1546626b2fb48ab173007ce629f17c72b19ce5",
+        "version" : "0.2.50"
       }
     }
   ],
