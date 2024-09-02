@@ -90,8 +90,7 @@ enum ExceptionHandler {
 
         persistCrash(crash)
 
-        // Re-raise the signal to allow the app to crash
-        Darwin.raise(signal)
+        exit(signal)
     }
 
     private static func name(
