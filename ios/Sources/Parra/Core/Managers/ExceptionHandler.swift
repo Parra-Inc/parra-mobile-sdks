@@ -39,7 +39,9 @@ enum ExceptionHandler {
         log("ExceptionHandler: addSignalListeners")
 
         for signal in signals {
-            Darwin.signal(signal, ExceptionHandler.handleSignal)
+            existingSignalHandlers[signal] = Darwin.signal(signal) { signalReceived in
+                Darwin.signal(signalReceived, ExceptionHandler.handleSignal)
+            }
         }
     }
 
@@ -93,6 +95,9 @@ enum ExceptionHandler {
     // libraries that the developer may be using. This will be invoked after our own
     // crash handler.
     private static var existingHandler: NSUncaughtExceptionHandler?
+    private static var existingSignalHandlers: [
+        Int32: @convention(c) (Int32) -> Void
+    ] = [:]
     private static var currentSessionId: String?
 
     private static let handleSignal: @convention(c) (Int32) -> Void = {
@@ -114,6 +119,18 @@ enum ExceptionHandler {
 
         persistCrash(crash)
 
+        // Remove our custom handler
+        Darwin.signal(signal, SIG_DFL)
+
+        // If there was a previous handler, call it
+        if let previousHandler = existingSignalHandlers[signal] {
+            previousHandler(signal)
+        } else {
+            // No previous handler, so raise the signal
+            Darwin.raise(signal)
+        }
+
+        // If we somehow get here, forcibly exit
         exit(signal)
     }
 
@@ -150,3 +167,33 @@ enum ExceptionHandler {
         }
     }
 }
+
+//
+// int ksmach_machExceptionForSignal(const int sigNum)
+// {
+//    switch(sigNum)
+//    {
+//    case SIGFPE:
+//        return EXC_ARITHMETIC;
+//    case SIGSEGV:
+//        return EXC_BAD_ACCESS;
+//    case SIGBUS:
+//        return EXC_BAD_ACCESS;
+//    case SIGILL:
+//        return EXC_BAD_INSTRUCTION;
+//    case SIGTRAP:
+//        return EXC_BREAKPOINT;
+//    case SIGEMT:
+//        return EXC_EMULATION;
+//    case SIGSYS:
+//        return EXC_UNIX_BAD_SYSCALL;
+//    case SIGPIPE:
+//        return EXC_UNIX_BAD_PIPE;
+//    case SIGABRT:
+//        // The Apple reporter uses EXC_CRASH instead of EXC_UNIX_ABORT
+//        return EXC_CRASH;
+//    case SIGKILL:
+//        return EXC_SOFT_SIGNAL;
+//    }
+//    return 0;
+// }
