@@ -27,7 +27,9 @@ let package = Package(
             name: "Parra",
             path: "\(iosSdkDir)/Sources/Parra",
             resources: [
-                .process("../../Resources")
+                // Xcode doesn’t recognize privacy manifest files as resources by default.
+                // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk/
+                .process("PrivacyInfo.xcprivacy")
             ]
         ),
         .testTarget(

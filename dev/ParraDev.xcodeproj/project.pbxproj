@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0012B83A2C5C66400001F11D /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 0012B8392C5C66400001F11D /* Parra */; };
 		002BC29C2C5BCAE20022F37E /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 002BC29B2C5BCAE20022F37E /* Parra */; };
+		004D994E2C8787CA00EB6AA7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 004D994D2C87876000EB6AA7 /* PrivacyInfo.xcprivacy */; };
 		0063024B2C5C1FE8006BB9DC /* SampleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302482C5C1FE8006BB9DC /* SampleTab.swift */; };
 		0063024C2C5C1FE8006BB9DC /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302492C5C1FE8006BB9DC /* App.swift */; };
 		006302622C5C2022006BB9DC /* AccountHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063024E2C5C2022006BB9DC /* AccountHeader.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		004D994D2C87876000EB6AA7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		006302482C5C1FE8006BB9DC /* SampleTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTab.swift; sourceTree = "<group>"; };
 		006302492C5C1FE8006BB9DC /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		0063024E2C5C2022006BB9DC /* AccountHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountHeader.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				006302612C5C2022006BB9DC /* Settings Tab */,
 				00727F4D2C5AE43D00973122 /* Assets.xcassets */,
 				00727F4F2C5AE43D00973122 /* ParraDev.entitlements */,
+				004D994D2C87876000EB6AA7 /* PrivacyInfo.xcprivacy */,
 				00727F502C5AE43D00973122 /* Preview Content */,
 			);
 			path = ParraDev;
@@ -229,6 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				004D994E2C8787CA00EB6AA7 /* PrivacyInfo.xcprivacy in Resources */,
 				00727F522C5AE43D00973122 /* Preview Assets.xcassets in Resources */,
 				00727F4E2C5AE43D00973122 /* Assets.xcassets in Resources */,
 			);
