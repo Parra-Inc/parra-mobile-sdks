@@ -25,12 +25,15 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Parra",
-            path: "\(iosSdkDir)/Sources/Parra"
+            path: "\(iosSdkDir)/Sources/Parra",
+            resources: [
+                .process("../../Resources")
+            ]
         ),
         .testTarget(
             name: "ParraTests",
             dependencies: ["Parra"],
-            path: "\(iosSdkDir)/Tests"
+            path: "\(iosSdkDir)/Tests/ParraTests"
         ),
     ],
     swiftLanguageVersions: [.version("5.9")]
