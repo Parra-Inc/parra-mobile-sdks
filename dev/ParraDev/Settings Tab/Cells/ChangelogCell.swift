@@ -37,7 +37,7 @@ struct ChangelogCell: View {
     var body: some View {
         if showChangelog {
             Button(action: {
-                loadRoadmap()
+                loadChangelog()
             }) {
                 Label(
                     title: {
@@ -58,7 +58,7 @@ struct ChangelogCell: View {
         }
     }
 
-    private func loadRoadmap() {
+    private func loadChangelog() {
         isLoading = true
 
         Task {
