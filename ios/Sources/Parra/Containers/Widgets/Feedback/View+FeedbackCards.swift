@@ -6,27 +6,27 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
-import SwiftUI
-
-public extension View {
-    /// Automatically fetches the feedback form with the provided id and
-    /// presents it based on the value of `isPresented`.
-    @MainActor
-    @ViewBuilder
-    func presentParraFeedbackCards(
-        for appArea: ParraQuestionAppArea = .all,
-        isPresented: Binding<Bool>,
-        modalStyle: ParraCardModalType = .drawer,
-        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
-    ) -> some View {
+// import SwiftUI
+//
+// public extension View {
+//    /// Automatically fetches the feedback form with the provided id and
+//    /// presents it based on the value of `isPresented`.
+//    @MainActor
+//    @ViewBuilder
+//    func presentParraFeedbackCards(
+//        for appArea: ParraQuestionAppArea = .all,
+//        isPresented: Binding<Bool>,
+//        modalStyle: ParraCardModalType = .drawer,
+//        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
+//    ) -> some View {
 //        modifier(
 //            FeedbackFormLoader(
 //                initialState: Binding<FeedbackFormLoader.FormState>(get: {
-        ////                    if isPresented.wrappedValue {
-        ////                        FeedbackFormLoader.FormState.formId(id)
-        ////                    } else {
-//                    FeedbackFormLoader.FormState.initial
-        ////                    }
+//                    if isPresented.wrappedValue {
+//                        FeedbackFormLoader.FormState.formId(id)
+//                    } else {
+//                        FeedbackFormLoader.FormState.initial
+//                    }
 //                }, set: { state in
 //                    switch state {
 //                    case .form, .loading, .error:
@@ -38,33 +38,33 @@ public extension View {
 //                onDismiss: onDismiss
 //            )
 //        )
-    }
-
-    @MainActor
-    @ViewBuilder
-    func presentParraFeedbackCards(
-        _ cards: Binding<[ParraCardItem]?>,
-        modalStyle: ParraCardModalType = .drawer,
-        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
-    ) -> some View {
+//    }
+//
+//    @MainActor
+//    @ViewBuilder
+//    func presentParraFeedbackCards(
+//        _ cards: Binding<[ParraCardItem]?>,
+//        modalStyle: ParraCardModalType = .drawer,
+//        onDismiss: ((ParraSheetDismissType) -> Void)? = nil
+//    ) -> some View {
 //        modifier(
 //            FeedbackFormLoader(
 //                initialState: Binding<FeedbackFormLoader.FormState>(get: {
-        ////                    if let data = form.wrappedValue {
-        ////                        FeedbackFormLoader.FormState.form(data)
-        ////                    } else {
-//                    FeedbackFormLoader.FormState.initial
-        ////                    }
+//                    if let data = form.wrappedValue {
+//                        FeedbackFormLoader.FormState.form(data)
+//                    } else {
+//                        FeedbackFormLoader.FormState.initial
+//                    }
 //                }, set: { _ in
-        ////                    switch state {
-        ////                    case .form(let f):
-        ////                        form.wrappedValue = f
-        ////                    case .formId, .initial, .loading, .error:
-        ////                        form.wrappedValue = nil
-        ////                    }
+//                    switch state {
+//                    case .form(let f):
+//                        form.wrappedValue = f
+//                    case .formId, .initial, .loading, .error:
+//                        form.wrappedValue = nil
+//                    }
 //                }),
 //                onDismiss: onDismiss
 //            )
 //        )
-    }
-}
+//    }
+// }

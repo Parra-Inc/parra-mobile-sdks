@@ -36,30 +36,30 @@ public final class ParraFeedback {
     /// that were recevied. If you'd like, you can filter them yourself and only
     /// pass select card items view the `ParraCardView` initializer if you'd
     /// like to only display certain cards.
-    public func fetchFeedbackCards(
-        appArea: ParraQuestionAppArea = .all,
-        withCompletion completion: @escaping (Result<
-            [ParraCardItem],
-            ParraError
-        >) -> Void
-    ) {
-        Task {
-            do {
-                let cards = try await fetchFeedbackCards(appArea: appArea)
-
-                DispatchQueue.main.async {
-                    completion(.success(cards))
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(ParraError.generic(
-                        "Error fetching Parra Feedback cards",
-                        error
-                    )))
-                }
-            }
-        }
-    }
+//    public func fetchFeedbackCards(
+//        appArea: ParraQuestionAppArea = .all,
+//        withCompletion completion: @escaping (Result<
+//            [ParraCardItem],
+//            ParraError
+//        >) -> Void
+//    ) {
+//        Task {
+//            do {
+//                let cards = try await fetchFeedbackCards(appArea: appArea)
+//
+//                DispatchQueue.main.async {
+//                    completion(.success(cards))
+//                }
+//            } catch {
+//                DispatchQueue.main.async {
+//                    completion(.failure(ParraError.generic(
+//                        "Error fetching Parra Feedback cards",
+//                        error
+//                    )))
+//                }
+//            }
+//        }
+//    }
 
     /// Fetch any available cards from the Parra API. Once cards are
     /// successfully fetched, they will automatically be cached by the
@@ -69,28 +69,28 @@ public final class ParraFeedback {
     /// that were recevied. If you'd like, you can filter them yourself and only
     /// pass select card items view the `ParraCardView` initializer if you'd
     ///  like to only display certain cards.
-    public func fetchFeedbackCards(
-        appArea: ParraQuestionAppArea = .all,
-        withCompletion completion: @escaping ([ParraCardItem], Error?) -> Void
-    ) {
-        fetchFeedbackCards(appArea: appArea) { result in
-            switch result {
-            case .success(let cards):
-                completion(cards, nil)
-            case .failure(let parraError):
-                let error = NSError(
-                    domain: ParraInternal.errorDomain,
-                    code: 20,
-                    userInfo: [
-                        NSLocalizedDescriptionKey: parraError
-                            .localizedDescription
-                    ]
-                )
-
-                completion([], error)
-            }
-        }
-    }
+//    public func fetchFeedbackCards(
+//        appArea: ParraQuestionAppArea = .all,
+//        withCompletion completion: @escaping ([ParraCardItem], Error?) -> Void
+//    ) {
+//        fetchFeedbackCards(appArea: appArea) { result in
+//            switch result {
+//            case .success(let cards):
+//                completion(cards, nil)
+//            case .failure(let parraError):
+//                let error = NSError(
+//                    domain: ParraInternal.errorDomain,
+//                    code: 20,
+//                    userInfo: [
+//                        NSLocalizedDescriptionKey: parraError
+//                            .localizedDescription
+//                    ]
+//                )
+//
+//                completion([], error)
+//            }
+//        }
+//    }
 
     /// Fetch any available cards from the Parra API. Once cards are
     /// successfully fetched, they will automatically be cached by the
@@ -100,31 +100,31 @@ public final class ParraFeedback {
     /// that were recevied. If you'd like, you can filter them yourself and only
     /// pass select card items view the `ParraCardView` initializer if you'd
     /// like to only display certain cards.
-    public func fetchFeedbackCards(
-        appArea: ParraQuestionAppArea = .all
-    ) async throws -> [ParraCardItem] {
-        let cardsResponse = try await api.getCards(
-            appArea: appArea
-        )
-        let cards = cardsResponse.items
-
-        // Only keep cards that we don't already have an answer cached for. This
-        // isn't something that should ever even happen, but in event that new
-        // cards are retreived that include cards we already have an answer for,
-        // we'll keep the answered cards hidden and they'll be flushed the next
-        // time a sync is triggered.
-        var cardsToKeep = [ParraCardItem]()
-
-        for card in cards {
-            if await cachedCardPredicate(card: card) {
-                cardsToKeep.append(card)
-            }
-        }
-
-        applyNewCards(cards: cardsToKeep)
-
-        return cardsToKeep
-    }
+//    public func fetchFeedbackCards(
+//        appArea: ParraQuestionAppArea = .all
+//    ) async throws -> [ParraCardItem] {
+//        let cardsResponse = try await api.getCards(
+//            appArea: appArea
+//        )
+//        let cards = cardsResponse.items
+//
+//        // Only keep cards that we don't already have an answer cached for. This
+//        // isn't something that should ever even happen, but in event that new
+//        // cards are retreived that include cards we already have an answer for,
+//        // we'll keep the answered cards hidden and they'll be flushed the next
+//        // time a sync is triggered.
+//        var cardsToKeep = [ParraCardItem]()
+//
+//        for card in cards {
+//            if await cachedCardPredicate(card: card) {
+//                cardsToKeep.append(card)
+//            }
+//        }
+//
+//        applyNewCards(cards: cardsToKeep)
+//
+//        return cardsToKeep
+//    }
 
     /// Fetches the feedback form with the provided ID from the Parra API.
     /// If a form is returned, it is up to the caller to pass this response to
