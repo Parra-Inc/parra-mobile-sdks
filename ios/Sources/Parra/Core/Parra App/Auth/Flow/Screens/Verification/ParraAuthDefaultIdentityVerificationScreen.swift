@@ -50,7 +50,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equat
             maxHeight: .infinity
         )
         .overlay(alignment: .bottom) {
-            if !params.userExists, params.legalInfo.hasDouments {
+            if !params.userExists, params.legalInfo.hasDocuments {
                 LegalInfoView(
                     legalInfo: params.legalInfo,
                     theme: parraTheme

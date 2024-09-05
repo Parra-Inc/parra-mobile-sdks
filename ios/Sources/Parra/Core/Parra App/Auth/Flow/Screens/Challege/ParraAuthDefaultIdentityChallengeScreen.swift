@@ -40,7 +40,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatabl
             ScrollView {
                 challengeContent
 
-                if !params.userExists, params.legalInfo.hasDouments {
+                if !params.userExists, params.legalInfo.hasDocuments {
                     Spacer()
 
                     LegalInfoView(

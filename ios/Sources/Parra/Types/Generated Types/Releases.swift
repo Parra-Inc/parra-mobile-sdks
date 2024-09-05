@@ -1435,7 +1435,7 @@ public struct ParraLegalInfo: Codable, Equatable, Hashable {
         return documents
     }
 
-    public var hasDouments: Bool {
+    public var hasDocuments: Bool {
         return !allDocuments.isEmpty
     }
 

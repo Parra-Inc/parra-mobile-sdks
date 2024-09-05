@@ -31,7 +31,7 @@ struct SettingsTab: View {
                     LatestReleaseCell()
                 }
 
-                if parraAppInfo.legal.hasDouments {
+                if parraAppInfo.legal.hasDocuments {
                     Section("Legal") {
                         ForEach(parraAppInfo.legal.allDocuments) { document in
                             NavigationLink {
