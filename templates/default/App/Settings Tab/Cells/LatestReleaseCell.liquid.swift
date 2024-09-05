@@ -27,12 +27,8 @@ struct LatestReleaseCell: View {
     @State private var errorMessage: String?
     @State private var appVersionInfo: ParraNewInstalledVersionInfo? // #3
 
-    var showLatestRelease: Bool {
-        return parra.releases.updateAvailable()
-    }
-
     var body: some View {
-        if showLatestRelease {
+        if parra.releases.updateAvailable() {
             Button(action: {
                 loadLatestRelease()
             }) {
