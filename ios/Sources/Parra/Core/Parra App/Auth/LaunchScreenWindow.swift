@@ -28,9 +28,9 @@ struct LaunchScreenWindow<Content>: View where Content: View {
             // content view can be created, but the launch screen can not be
             // destroyed until its animation off screen has completed.
 
-            let (launchResult, launchConfig, errorInfo): (
+            let (launchResult, launchOptions, errorInfo): (
                 LaunchActionsResult?,
-                ParraLaunchScreen.Config?,
+                ParraLaunchScreen.Options?,
                 ParraErrorWithUserInfo?
             ) = switch launchScreenState.current {
             case .initial(let config):
@@ -50,7 +50,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
             } else {
                 renderNonFailure(
                     launchResult: launchResult,
-                    launchConfig: launchConfig
+                    launchOptions: launchOptions
                 )
             }
         }
@@ -95,20 +95,20 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     @ViewBuilder
     private func renderNonFailure(
         launchResult: LaunchActionsResult?,
-        launchConfig: ParraLaunchScreen.Config?
+        launchOptions: ParraLaunchScreen.Options?
     ) -> some View {
         // Important: Seperate conditions determine when the launch
         // screen and primary app content should be displayed. This
         // allows the the launch screen to be removed without needing to
         // trigger a re-render on the primary app content.
 
-        if let launchConfig {
+        if let launchOptions {
             // When the app first launches, default to displaying the launch
             // screen without rendering the main app content. This will
             // prevent any logic within the app that may depend on Parra
             // being initialized from running until we're ready.
             renderLaunchScreen(
-                launchScreenConfig: launchConfig
+                launchScreenOptions: launchOptions
             )
             .tint(ParraThemeManager.shared.current.palette.primary)
             .preferredColorScheme(ParraThemeManager.shared.preferredColorScheme)
@@ -150,10 +150,10 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     }
 
     private func renderLaunchScreen(
-        launchScreenConfig: ParraLaunchScreen.Config
+        launchScreenOptions: ParraLaunchScreen.Options
     ) -> some View {
         ParraLaunchScreen(
-            config: launchScreenConfig
+            options: launchScreenOptions
         )
     }
 }

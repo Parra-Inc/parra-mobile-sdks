@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-public extension ParraLaunchScreen.Config {
-    nonisolated static let preview = ParraLaunchScreen.Config(
+public extension ParraLaunchScreen.Options {
+    nonisolated static let preview = ParraLaunchScreen.Options(
         type: .default(
             ParraDefaultLaunchScreen.Config()
         ),

@@ -14,22 +14,22 @@ public struct ParraLaunchScreen: View {
     // MARK: - Lifecycle
 
     init(
-        config: Config
+        options: Options
     ) {
-        self.config = config
+        self.options = options
     }
 
     // MARK: - Public
 
     public var body: some View {
-        renderLaunchScreen(by: config.type)
+        renderLaunchScreen(by: options.type)
             .opacity(shouldFade ? 1 : 0)
             .onChange(
                 of: launchScreenState.current,
                 initial: true
             ) { _, newValue in
                 if case .transitioning(let result, _) = newValue, shouldFade {
-                    withAnimation(.linear(duration: config.fadeDuration)) {
+                    withAnimation(.linear(duration: options.fadeDuration)) {
                         shouldFade = false
                     } completion: {
                         launchScreenState.complete(with: result)
@@ -44,7 +44,7 @@ public struct ParraLaunchScreen: View {
 
     @State private var shouldFade = true
 
-    private let config: Config
+    private let options: Options
 
     @ViewBuilder
     private func renderLaunchScreen(by type: ParraLaunchScreenType) -> some View {
@@ -61,9 +61,9 @@ public struct ParraLaunchScreen: View {
 
 #Preview {
     ParraLaunchScreen(
-        config: ParraLaunchScreen.Config(
+        options: ParraLaunchScreen.Options(
             type: ParraLaunchScreenType.default(ParraDefaultLaunchScreen.Config()),
-            fadeDuration: ParraLaunchScreen.Config.defaultFadeDuration
+            fadeDuration: ParraLaunchScreen.Options.defaultFadeDuration
         )
     )
 }

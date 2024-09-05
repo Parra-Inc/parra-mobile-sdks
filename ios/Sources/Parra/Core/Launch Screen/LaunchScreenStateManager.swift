@@ -20,8 +20,8 @@ final class LaunchScreenStateManager {
     // MARK: - Internal
 
     enum State: Equatable {
-        case initial(ParraLaunchScreen.Config)
-        case transitioning(LaunchActionsResult, ParraLaunchScreen.Config)
+        case initial(ParraLaunchScreen.Options)
+        case transitioning(LaunchActionsResult, ParraLaunchScreen.Options)
         case complete(LaunchActionsResult)
         case failed(ParraErrorWithUserInfo)
     }
@@ -42,9 +42,9 @@ final class LaunchScreenStateManager {
 
     func dismiss(
         with result: LaunchActionsResult,
-        launchScreenConfig: ParraLaunchScreen.Config
+        launchScreenOptions: ParraLaunchScreen.Options
     ) {
-        current = .transitioning(result, launchScreenConfig)
+        current = .transitioning(result, launchScreenOptions)
     }
 
     func complete(

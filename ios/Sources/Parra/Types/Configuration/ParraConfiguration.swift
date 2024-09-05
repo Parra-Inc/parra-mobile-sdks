@@ -12,16 +12,20 @@ public struct ParraConfiguration {
     // MARK: - Lifecycle
 
     public init(
-        theme: ParraTheme = .default,
         appInfoOptions: ParraAppInfoOptions = .default,
         globalComponentAttributes: ParraGlobalComponentAttributes = .default,
+        launchScreenOptions: ParraLaunchScreen.Options? = nil,
         loggerOptions: ParraLoggerOptions = .default,
         pushNotificationOptions: ParraPushNotificationOptions = .default,
+        theme: ParraTheme = .default,
         whatsNewOptions: ParraReleaseOptions = .default
     ) {
         self.appInfoOptions = appInfoOptions
         self.theme = theme
         self.globalComponentAttributes = globalComponentAttributes
+        self.launchScreenOptions = ParraConfiguration.configureLaunchScreen(
+            with: launchScreenOptions
+        )
         self.loggerOptions = ParraConfiguration.applyLoggerOptionsOverrides(
             loggerOptions: loggerOptions
         )
@@ -36,11 +40,60 @@ public struct ParraConfiguration {
     public private(
         set
     ) var globalComponentAttributes: ParraGlobalComponentAttributes
+    public let launchScreenOptions: ParraLaunchScreen.Options
     public let loggerOptions: ParraLoggerOptions
     public let pushNotificationOptions: ParraPushNotificationOptions
     public let whatsNewOptions: ParraReleaseOptions
 
     // MARK: - Private
+
+    private static func configureLaunchScreen(
+        with overrides: ParraLaunchScreen.Options?
+    ) -> ParraLaunchScreen.Options {
+        if let overrides {
+            // If an override is provided, check its type. The default type
+            // should only override Info.plist keys that are specified. Other
+            // types should be used outright.
+
+            if case .default(let config) = overrides.type {
+                let finalConfig = ParraDefaultLaunchScreen.Config
+                    .fromInfoDictionary(
+                        in: config.bundle
+                    )?.merging(overrides: config) ?? config
+
+                return ParraLaunchScreen.Options(
+                    type: .default(finalConfig),
+                    fadeDuration: overrides.fadeDuration
+                )
+            } else {
+                return overrides
+            }
+        }
+
+        // If overrides are not provided, look for a default configuration in
+        // the Info.plist, then look for a Storyboard configuration, then
+        // finally use a default empty configuration.
+
+        let bundle = Bundle.main // default
+        let type: ParraLaunchScreenType = if let config = ParraDefaultLaunchScreen
+            .Config.fromInfoDictionary(
+                in: bundle
+            )
+        {
+            .default(config)
+        } else if let config = ParraStoryboardLaunchScreen.Config
+            .fromInfoDictionary(in: bundle)
+        {
+            .storyboard(config)
+        } else {
+            .default(ParraDefaultLaunchScreen.Config())
+        }
+
+        return ParraLaunchScreen.Options(
+            type: type,
+            fadeDuration: ParraLaunchScreen.Options.defaultFadeDuration
+        )
+    }
 
     private static func applyLoggerOptionsOverrides(
         loggerOptions initialOptions: ParraLoggerOptions
