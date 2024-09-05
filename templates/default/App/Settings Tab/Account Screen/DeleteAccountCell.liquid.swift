@@ -18,9 +18,9 @@ struct DeleteAccountCell: View {
         Button(action: {
             Task {
                 do {
-                    try await parra.auth.deleteAccount()
-
-                    presentationMode.wrappedValue.dismiss()
+                    if try await parra.auth.deleteAccount() {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 } catch {
                     ParraLogger.error("Error deleting account", error)
                 }

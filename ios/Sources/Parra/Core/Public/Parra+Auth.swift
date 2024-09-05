@@ -19,12 +19,13 @@ public final class ParraAuth {
 
     // MARK: - Account Management
 
+    @discardableResult
     public func deleteAccount(
         title: String = "Delete account",
         message: String =
             "This will permanently delete your account and any identifying data associated with your account. You can not undo this action.",
         primaryAction: String = "Confirm"
-    ) async throws {
+    ) async throws -> Bool {
         let confirmed = await confirmAction(
             title: title,
             message: message,
@@ -32,25 +33,27 @@ public final class ParraAuth {
         )
 
         guard confirmed else {
-            return
+            return false
         }
 
         try await parraInternal.api.deleteAccount()
 
         // Don't perform sync steps first.
         await parraInternal.authService.logout()
+
+        return true
     }
 
     public func deleteAccount(
-        _ completion: ((Error?) -> Void)? = nil
+        _ completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil
     ) {
         Task {
             do {
-                try await deleteAccount()
+                let result = try await deleteAccount()
 
-                completion?(nil)
+                completion?(result, nil)
             } catch {
-                completion?(error)
+                completion?(false, error)
             }
         }
     }
@@ -60,7 +63,8 @@ public final class ParraAuth {
     /// Used to clear any cached credentials for the current user. After calling
     /// ``Parra/Parra/logout()``, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
-    public func logout() async {
+    @discardableResult
+    public func logout() async -> Bool {
         // immediately kick off a sync that we don't wait for. Then present the
         // user the opportunity to confirm/cancel. If they confirm logout,
         // enqueue another sync and wait for it to complete before logging out.
@@ -76,7 +80,7 @@ public final class ParraAuth {
         let confirmed = await confirmAction()
 
         guard confirmed else {
-            return
+            return false
         }
 
         await parraInternal.syncManager.stopSyncTimer()
@@ -87,15 +91,17 @@ public final class ParraAuth {
         )
 
         await parraInternal.authService.logout()
+
+        return true
     }
 
     /// Used to clear any cached credentials for the current user. After calling
     /// ``Parra/Parra/logout()``, the authentication provider you configured
     /// will be invoked the very next time the Parra API is accessed.
-    public func logout(_ completion: (() -> Void)? = nil) {
+    public func logout(_ completion: ((_ success: Bool) -> Void)? = nil) {
         Task {
-            await logout()
-            completion?()
+            let result = await logout()
+            completion?(result)
         }
     }
 

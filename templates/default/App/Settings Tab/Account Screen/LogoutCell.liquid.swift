@@ -19,9 +19,9 @@ struct LogoutCell: View {
         Button(
             action: {
                 Task {
-                    await parra.auth.logout()
-
-                    presentationMode.wrappedValue.dismiss()
+                    if await parra.auth.logout() {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
             }
         ) {
