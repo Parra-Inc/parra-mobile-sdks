@@ -68,7 +68,7 @@ class Camera: NSObject {
 
         if isCaptureSessionConfigured {
             if !captureSession.isRunning {
-                sessionQueue.async { [self] in
+                sessionQueue?.async { [self] in
                     captureSession.startRunning()
                 }
             }
@@ -76,7 +76,7 @@ class Camera: NSObject {
             return
         }
 
-        sessionQueue.async { [self] in
+        sessionQueue?.async { [self] in
             configureCaptureSession { success in
                 guard success else {
                     return
@@ -92,7 +92,7 @@ class Camera: NSObject {
         }
 
         if captureSession.isRunning {
-            sessionQueue.async {
+            sessionQueue?.async {
                 self.captureSession.stopRunning()
             }
         }
@@ -117,7 +117,7 @@ class Camera: NSObject {
             return
         }
 
-        sessionQueue.async {
+        sessionQueue?.async {
             var photoSettings = AVCapturePhotoSettings()
 
             if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
@@ -160,9 +160,9 @@ class Camera: NSObject {
             return true
         case .notDetermined:
             logger.debug("Camera access not determined.")
-            sessionQueue.suspend()
+            sessionQueue?.suspend()
             let status = await AVCaptureDevice.requestAccess(for: .video)
-            sessionQueue.resume()
+            sessionQueue?.resume()
             return status
         case .denied:
             logger.debug("Camera access denied.")
@@ -182,7 +182,7 @@ class Camera: NSObject {
     private var deviceInput: AVCaptureDeviceInput?
     private var photoOutput: AVCapturePhotoOutput?
     private var videoOutput: AVCaptureVideoDataOutput?
-    private var sessionQueue: DispatchQueue!
+    private var sessionQueue: DispatchQueue?
 
     private var addToPhotoStream: ((AVCapturePhoto) -> Void)?
 
@@ -244,7 +244,7 @@ class Camera: NSObject {
 
             logger.debug("Using capture device: \(captureDevice.localizedName)")
 
-            sessionQueue.async {
+            sessionQueue?.async {
                 self.updateSessionForCaptureDevice(captureDevice)
             }
         }

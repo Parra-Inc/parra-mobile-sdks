@@ -114,11 +114,22 @@ struct CachedAsyncImage<Content>: View where Content: View {
     ///     different value when loading images designed for higher resolution
     ///     displays. For example, set a value of `2` for an image that you
     ///     would name with the `@2x` suffix if stored in a file on disk.
-    init(url: URL?, urlCache: URLCache = .shared, scale: CGFloat = 1)
-        where Content == Image
-    {
-        let urlRequest = url == nil ? nil : URLRequest(url: url!)
-        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale)
+    init(
+        url: URL?,
+        urlCache: URLCache = .shared,
+        scale: CGFloat = 1
+    ) where Content == Image {
+        let urlRequest: URLRequest? = if let url {
+            URLRequest(url: url)
+        } else {
+            nil
+        }
+
+        self.init(
+            urlRequest: urlRequest,
+            urlCache: urlCache,
+            scale: scale
+        )
     }
 
     /// Loads and displays an image from the specified URL.
@@ -200,7 +211,12 @@ struct CachedAsyncImage<Content>: View where Content: View {
         @ViewBuilder content: @escaping (Image) -> I,
         @ViewBuilder placeholder: @escaping () -> P
     ) where Content == _ConditionalContent<I, P>, I: View, P: View {
-        let urlRequest = url == nil ? nil : URLRequest(url: url!)
+        let urlRequest: URLRequest? = if let url {
+            URLRequest(url: url)
+        } else {
+            nil
+        }
+
         self.init(
             urlRequest: urlRequest,
             urlCache: urlCache,
@@ -304,7 +320,12 @@ struct CachedAsyncImage<Content>: View where Content: View {
         transaction: Transaction = Transaction(),
         @ViewBuilder content: @escaping (AsyncImagePhase) -> Content
     ) {
-        let urlRequest = url == nil ? nil : URLRequest(url: url!)
+        let urlRequest: URLRequest? = if let url {
+            URLRequest(url: url)
+        } else {
+            nil
+        }
+
         self.init(
             urlRequest: urlRequest,
             urlCache: urlCache,
@@ -388,7 +409,7 @@ struct CachedAsyncImage<Content>: View where Content: View {
                             from: urlRequest,
                             session: urlSession
                         )
-                        if metrics.transactionMetrics.last?
+                        if let metrics, metrics.transactionMetrics.last?
                             .resourceFetchType == .localCache
                         {
                             // WARNING: This does not behave well when the url is changed with another
@@ -440,23 +461,31 @@ private extension CachedAsyncImage {
     private func remoteImage(
         from request: URLRequest,
         session: URLSession
-    ) async throws -> (Image, URLSessionTaskMetrics) {
+    ) async throws -> (Image, URLSessionTaskMetrics?) {
         let (data, _, metrics) = try await session.data(for: request)
-        if metrics.redirectCount > 0,
+
+        if let metrics, metrics.redirectCount > 0,
            let lastResponse = metrics.transactionMetrics.last?.response
         {
             let requests = metrics.transactionMetrics.map(\.request)
-            requests
-                .forEach(session.configuration.urlCache!.removeCachedResponse)
-            let lastCachedResponse = CachedURLResponse(
-                response: lastResponse,
-                data: data
-            )
-            session.configuration.urlCache!.storeCachedResponse(
-                lastCachedResponse,
-                for: request
-            )
+
+            if let cache = session.configuration.urlCache {
+                for request in requests {
+                    cache.removeCachedResponse(for: request)
+                }
+
+                let lastCachedResponse = CachedURLResponse(
+                    response: lastResponse,
+                    data: data
+                )
+
+                cache.storeCachedResponse(
+                    lastCachedResponse,
+                    for: request
+                )
+            }
         }
+
         return try (image(from: data), metrics)
     }
 
@@ -503,14 +532,16 @@ private class URLSessionTaskController: NSObject, URLSessionTaskDelegate {
 
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 private extension URLSession {
-    func data(for request: URLRequest) async throws
-        -> (Data, URLResponse, URLSessionTaskMetrics)
-    {
+    func data(
+        for request: URLRequest
+    ) async throws -> (Data, URLResponse, URLSessionTaskMetrics?) {
         let controller = URLSessionTaskController()
+
         let (data, response) = try await data(
             for: request,
             delegate: controller
         )
-        return (data, response, controller.metrics!)
+
+        return (data, response, controller.metrics)
     }
 }

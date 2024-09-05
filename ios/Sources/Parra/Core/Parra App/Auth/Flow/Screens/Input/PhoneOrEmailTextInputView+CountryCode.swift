@@ -22,10 +22,16 @@ extension PhoneOrEmailTextInputView {
         static let allCountries: [CountryCode] = {
             let data = countryData
 
-            return try! JSONDecoder().decode(
-                [CountryCode].self,
-                from: data.data(using: .utf8)!
-            )
+            do {
+                return try JSONDecoder().decode(
+                    [CountryCode].self,
+                    from: data.data(using: .utf8)!
+                )
+            } catch {
+                Logger.error("Error decoding country list", error)
+
+                return []
+            }
         }()
 
         static let usa = allCountries.first(

@@ -532,7 +532,9 @@ public struct ParraColorSwatch: Hashable, Identifiable {
 // MARK: ShapeStyle
 
 extension ParraColorSwatch: ShapeStyle {
-    public func resolve(in environment: EnvironmentValues) -> some ShapeStyle {
+    public func resolve(
+        in environment: EnvironmentValues
+    ) -> some ShapeStyle {
         return toParraColor()
     }
 }

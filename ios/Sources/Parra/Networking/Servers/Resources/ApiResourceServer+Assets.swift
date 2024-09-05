@@ -24,7 +24,10 @@ extension ApiResourceServer {
                 for: request,
                 delegate: nil
             )
-        let httpResponse = response as! HTTPURLResponse
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.cannotParseResponse)
+        }
 
         defer {
             logger.trace("Caching asset: \(asset.id)")
