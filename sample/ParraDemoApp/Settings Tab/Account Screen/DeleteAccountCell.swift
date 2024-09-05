@@ -2,7 +2,7 @@
 //  DeleteAccountCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 09/03/2024.
+//  Bootstrapped with ❤️ by Parra on 09/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -18,9 +18,9 @@ struct DeleteAccountCell: View {
         Button(action: {
             Task {
                 do {
-                    try await parra.auth.deleteAccount()
-
-                    presentationMode.wrappedValue.dismiss()
+                    if try await parra.auth.deleteAccount() {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 } catch {
                     ParraLogger.error("Error deleting account", error)
                 }

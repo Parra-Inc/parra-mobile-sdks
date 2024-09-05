@@ -2,7 +2,7 @@
 //  ChangelogCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 09/03/2024.
+//  Bootstrapped with ❤️ by Parra on 09/05/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -37,7 +37,7 @@ struct ChangelogCell: View {
     var body: some View {
         if showChangelog {
             Button(action: {
-                loadRoadmap()
+                loadChangelog()
             }) {
                 Label(
                     title: {
@@ -58,7 +58,7 @@ struct ChangelogCell: View {
         }
     }
 
-    private func loadRoadmap() {
+    private func loadChangelog() {
         isLoading = true
 
         Task {
