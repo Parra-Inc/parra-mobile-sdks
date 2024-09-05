@@ -9,10 +9,12 @@
 import Foundation
 
 extension URLRequest {
+    @MainActor
     mutating func setValue(for field: URLRequestHeaderField) {
         setValue(field.value, forHTTPHeaderField: field.name)
     }
 
+    @MainActor
     mutating func setValue(
         for header: TrackingHeader,
         with headerFactory: HeaderFactory

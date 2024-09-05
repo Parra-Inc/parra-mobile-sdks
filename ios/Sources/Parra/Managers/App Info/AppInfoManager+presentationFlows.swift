@@ -25,8 +25,8 @@ extension AppInfoManager {
         after delay: TimeInterval
     ) async throws {
         guard
-            let bundleVersion = Parra.appBundleVersion(),
-            let bundleVersionShort = Parra.appBundleVersionShort() else
+            let bundleVersion = await Parra.appBundleVersion(),
+            let bundleVersionShort = await Parra.appBundleVersionShort() else
         {
             throw ParraError.message("Could not load app version for app")
         }
@@ -76,8 +76,8 @@ extension AppInfoManager {
         }
 
         guard
-            let bundleVersion = Parra.appBundleVersion(),
-            let bundleVersionShort = Parra.appBundleVersionShort() else
+            let bundleVersion = await Parra.appBundleVersion(),
+            let bundleVersionShort = await Parra.appBundleVersionShort() else
         {
             throw ParraError.message("Could not load app version for app")
         }

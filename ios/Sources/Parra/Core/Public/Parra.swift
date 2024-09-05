@@ -10,6 +10,7 @@ import SwiftUI
 /// The primary module used to interact with the Parra SDK.
 /// Access this module via the `parra` `@Environment` object in SwiftUI after
 /// wrapping your `Scene` in the ``ParraApp`` View.
+@MainActor
 public final class Parra: Observable, Equatable {
     // MARK: - Lifecycle
 
@@ -52,5 +53,24 @@ public final class Parra: Observable, Equatable {
     /// will actually never be nil in the context of a ``ParraApp``.
     static let `default` = Parra()
 
-    @usableFromInline var parraInternal: ParraInternal!
+    @MainActor
+    @usableFromInline var parraInternal: ParraInternal! {
+        get {
+            if _parraInternal == nil {
+                fatalError(
+                    "Tried to access Parra instance before it was initialized."
+                )
+            }
+
+            return _parraInternal!
+        }
+
+        set {
+            _parraInternal = newValue
+        }
+    }
+
+    // MARK: - Private
+
+    @MainActor private var _parraInternal: ParraInternal?
 }

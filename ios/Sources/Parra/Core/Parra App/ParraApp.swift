@@ -84,19 +84,14 @@ public struct ParraApp<
         )
 
         self.makeScene = makeScene
-
-        let parraInternal = ParraInternal.createParraInstance(
+        self.parraInternal = ParraInternal.createParraInstance(
             appState: ParraAppState.shared,
             // TODO: Support for other auth types
             authenticationMethod: .parra,
             configuration: configuration
         )
 
-        // Must be set before initializing app delegate instances, which rely
-        // on it.
         Parra.default.parraInternal = parraInternal
-
-        self.parraInternal = parraInternal
 
         self._alertManager = State(
             wrappedValue: parraInternal.alertManager

@@ -10,6 +10,7 @@ import AdSupport
 import Foundation
 import UIKit
 
+@MainActor
 struct HeaderFactory {
     // MARK: - Lifecycle
 

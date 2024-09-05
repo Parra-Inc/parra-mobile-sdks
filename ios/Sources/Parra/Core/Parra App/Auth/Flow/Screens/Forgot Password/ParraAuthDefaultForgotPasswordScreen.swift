@@ -18,7 +18,9 @@ public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen, Equatable {
         self.params = params
         self.config = config
         self._state = State(
-            wrappedValue: ForgotPasswordStateManager(params: params)
+            wrappedValue: ForgotPasswordStateManager(
+                params: params
+            )
         )
     }
 
