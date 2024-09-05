@@ -93,3 +93,4 @@ sdks/**/*.xcworkspace
 /sample/ParraDemo.xcodeproj/project.xcworkspace/contents.xcworkspacedata
 
 /sample/ParraDemoApp.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+/sample/ParraDemoApp.xcodeproj/project.xcworkspace/xcuserdata/mick.xcuserdatad/IDEFindNavigatorScopes.plist
