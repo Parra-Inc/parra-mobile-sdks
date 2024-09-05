@@ -8,77 +8,77 @@
 
 import SwiftUI
 
-public struct ParraFeedbackView: ParraPublicContainer {
-    // MARK: - Lifecycle
-
-    public init(
-        cards: [ParraCardItem],
-        config: ParraFeedbackCardWidgetConfig = .default,
-        cardDelegate: ParraCardViewDelegate? = nil
-    ) {
-        self.cards = cards
-        self.config = config
-        self.cardDelegate = cardDelegate
-    }
-
-    // MARK: - Public
-
-    public var body: some View {
-        let parraInstance = parra.parraInternal!
-
-        let theme = parraInstance.configuration.theme
-        let globalComponentAttributes = parraInstance.configuration
-            .globalComponentAttributes
-
-        FeedbackCardWidget(
-            config: config,
-            componentFactory: ComponentFactory(
-                attributes: globalComponentAttributes,
-                theme: theme
-            ),
-            contentObserver: Wrapped.ContentObserver(
-                initialParams: .init(
-                    cards: cards,
-                    notificationCenter: parraInstance.notificationCenter,
-                    dataManager: parraInstance.feedback.dataManager,
-                    cardDelegate: cardDelegate,
-                    syncHandler: {
-                        Task {
-                            await parraInstance.triggerSync()
-                        }
-                    }
-                )
-            )
-        )
-    }
-
-    // MARK: - Internal
-
-    typealias Wrapped = FeedbackCardWidget
-
-    @Environment(\.parra) var parra
-
-    // MARK: - Private
-
-    @Environment(\.parraTheme) private var parraTheme
-
-    private let cards: [ParraCardItem]
-    private let config: Wrapped.Config
-    private weak var cardDelegate: ParraCardViewDelegate?
-}
-
-#Preview {
-    GeometryReader { geometry in
-        ZStack {
-            Rectangle()
-                .ignoresSafeArea()
-                .foregroundStyle(ParraTheme.default.palette.secondaryBackground)
-                .frame(width: geometry.size.width, height: geometry.size.height)
-
-            ParraViewPreview { _ in
-                ParraFeedbackView(cards: ParraCardItem.validStates())
-            }
-            .padding()
-        }
-    }
-}
+// public struct ParraFeedbackView: ParraPublicContainer {
+//    // MARK: - Lifecycle
+//
+//    public init(
+//        cards: [ParraCardItem],
+//        config: ParraFeedbackCardWidgetConfig = .default,
+//        cardDelegate: ParraCardViewDelegate? = nil
+//    ) {
+//        self.cards = cards
+//        self.config = config
+//        self.cardDelegate = cardDelegate
+//    }
+//
+//    // MARK: - Public
+//
+//    public var body: some View {
+//        let parraInstance = parra.parraInternal!
+//
+//        let theme = parraInstance.configuration.theme
+//        let globalComponentAttributes = parraInstance.configuration
+//            .globalComponentAttributes
+//
+//        FeedbackCardWidget(
+//            config: config,
+//            componentFactory: ComponentFactory(
+//                attributes: globalComponentAttributes,
+//                theme: theme
+//            ),
+//            contentObserver: Wrapped.ContentObserver(
+//                initialParams: .init(
+//                    cards: cards,
+//                    notificationCenter: parraInstance.notificationCenter,
+//                    dataManager: parraInstance.feedback.dataManager,
+//                    cardDelegate: cardDelegate,
+//                    syncHandler: {
+//                        Task {
+//                            await parraInstance.triggerSync()
+//                        }
+//                    }
+//                )
+//            )
+//        )
+//    }
+//
+//    // MARK: - Internal
+//
+//    typealias Wrapped = FeedbackCardWidget
+//
+//    @Environment(\.parra) var parra
+//
+//    // MARK: - Private
+//
+//    @Environment(\.parraTheme) private var parraTheme
+//
+//    private let cards: [ParraCardItem]
+//    private let config: Wrapped.Config
+//    private weak var cardDelegate: ParraCardViewDelegate?
+// }
+//
+// #Preview {
+//    GeometryReader { geometry in
+//        ZStack {
+//            Rectangle()
+//                .ignoresSafeArea()
+//                .foregroundStyle(ParraTheme.default.palette.secondaryBackground)
+//                .frame(width: geometry.size.width, height: geometry.size.height)
+//
+//            ParraViewPreview { _ in
+//                ParraFeedbackView(cards: ParraCardItem.validStates())
+//            }
+//            .padding()
+//        }
+//    }
+// }
