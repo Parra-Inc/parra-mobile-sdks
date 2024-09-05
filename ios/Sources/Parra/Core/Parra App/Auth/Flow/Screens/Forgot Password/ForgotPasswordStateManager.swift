@@ -8,7 +8,8 @@
 
 import SwiftUI
 
-final class ForgotPasswordStateManager: ObservableObject {
+@Observable
+final class ForgotPasswordStateManager {
     // MARK: - Lifecycle
 
     init(
@@ -19,7 +20,7 @@ final class ForgotPasswordStateManager: ObservableObject {
 
     // MARK: - Internal
 
-    @Published private(set) var screen = ScreenState.initial
+    private(set) var screen = ScreenState.initial
 
     func sendCode() {
         transition(to: .codeSending)

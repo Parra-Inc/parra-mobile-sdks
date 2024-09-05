@@ -39,8 +39,6 @@ struct TextInputComponent: View {
     var content: ParraTextInputContent
     var attributes: ParraAttributes.TextInput
 
-    @EnvironmentObject var componentFactory: ComponentFactory
-
     @ViewBuilder var baseView: some View {
         let prompt = Text(content.placeholder?.text ?? "")
 
@@ -181,6 +179,8 @@ struct TextInputComponent: View {
     }
 
     // MARK: - Private
+
+    @Environment(ComponentFactory.self) private var componentFactory
 
     @FocusState private var focusState: FocusField?
     @State private var lastFocusState: FocusField?

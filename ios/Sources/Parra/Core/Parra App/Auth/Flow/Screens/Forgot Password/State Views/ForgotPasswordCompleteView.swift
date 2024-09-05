@@ -81,7 +81,7 @@ struct ForgotPasswordCompleteView: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraAuthState) private var parraAuthState
 }
 

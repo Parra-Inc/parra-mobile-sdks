@@ -27,7 +27,7 @@ struct RecentLogViewer: View {
 
     // MARK: - Private
 
-    @StateObject private var debugLogStore = DebugLogStore.shared
+    @State private var debugLogStore = DebugLogStore.shared
 }
 
 #Preview {

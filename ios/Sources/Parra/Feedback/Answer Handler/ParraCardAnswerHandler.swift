@@ -15,7 +15,8 @@ import Foundation
 /// Maps a question id to an answer for that question
 typealias AnswerStateMap = [String: QuestionAnswer]
 
-class ParraCardAnswerHandler: ObservableObject {
+@Observable
+class ParraCardAnswerHandler {
     // MARK: - Lifecycle
 
     required init(dataManager: ParraFeedbackDataManager) {
@@ -26,7 +27,7 @@ class ParraCardAnswerHandler: ObservableObject {
 
     weak var questionHandlerDelegate: ParraQuestionHandlerDelegate?
 
-    @Published private(set) var currentAnswerState: AnswerStateMap = [:]
+    private(set) var currentAnswerState: AnswerStateMap = [:]
 
     func currentAnswer<T: AnswerOption>(
         for bucketItemId: String

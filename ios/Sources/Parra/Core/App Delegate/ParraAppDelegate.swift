@@ -18,9 +18,9 @@ import UIKit
 /// unintended behavior, be sure to invoke the super implementation of any
 /// delegate methods that require the `override` keyword.
 @MainActor
-open class ParraAppDelegate<SceneDelegateClass: ParraSceneDelegate>: NSObject,
-    ObservableObject, UIApplicationDelegate
-{
+open class ParraAppDelegate<
+    SceneDelegateClass: ParraSceneDelegate
+>: NSObject, UIApplicationDelegate {
     // MARK: - Open
 
     open func application(

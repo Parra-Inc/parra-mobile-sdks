@@ -62,8 +62,8 @@ struct ChangelogWidget: Container {
 
             list(with: defaultWidgetAttributes)
                 .environment(config)
+                .environment(componentFactory)
                 .environmentObject(contentObserver)
-                .environmentObject(componentFactory)
                 .navigationDestination(
                     for: AppReleaseStubContent.self
                 ) { release in

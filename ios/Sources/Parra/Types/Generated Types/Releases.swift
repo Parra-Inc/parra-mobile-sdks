@@ -1102,7 +1102,8 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
     }
 }
 
-public final class ParraAppInfo: ObservableObject, Codable, Equatable,
+@Observable
+public final class ParraAppInfo: Codable, Equatable,
     Hashable
 {
     // MARK: - Lifecycle

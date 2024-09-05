@@ -65,7 +65,7 @@ struct ModalLoadingIndicatorContainer: Container {
             )
         }
         .environment(\.parraTheme, parraTheme)
-        .environmentObject(componentFactory)
+        .environment(componentFactory)
         .environmentObject(contentObserver)
     }
 

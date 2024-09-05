@@ -84,7 +84,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
                 )
             )
         }
-        .environmentObject(factory)
+        .environment(factory)
         .environment(config)
         .environment(\.parra, parra)
         .environment(\.parraAuthState, authStateManager.current)

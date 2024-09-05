@@ -122,7 +122,7 @@ public struct ParraApp<
             )
             .environment(alertManager)
             .environment(launchScreenState)
-            .environmentObject(parraInternal.globalComponentFactory)
+            .environment(parraInternal.globalComponentFactory)
             .onChange(
                 of: launchScreenState.current,
                 initial: true

@@ -103,7 +103,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatabl
     /// The auth method that should be rendered with a loading spinner.
     @State private var loadingAuthMethod: ParraAuthenticationMethod?
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
     @ViewBuilder private var challengeContent: some View {

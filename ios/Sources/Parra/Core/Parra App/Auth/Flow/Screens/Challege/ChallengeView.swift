@@ -174,7 +174,7 @@ struct ChallengeView: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraAppInfo) private var parraAppInfo
     @Environment(\.parraTheme) private var parraTheme
 
@@ -291,5 +291,5 @@ struct ChallengeView: View {
         }
         .padding()
     }
-    .environmentObject(ParraAppInfo.validStates()[0])
+    .environment(ParraAppInfo.validStates()[0])
 }

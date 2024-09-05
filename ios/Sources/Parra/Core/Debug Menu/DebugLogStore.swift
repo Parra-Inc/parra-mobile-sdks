@@ -8,7 +8,8 @@
 
 import SwiftUI
 
-final class DebugLogStore: ObservableObject {
+@Observable
+final class DebugLogStore {
     struct UniqueLog: Identifiable {
         let id: String
         let message: String
@@ -17,7 +18,7 @@ final class DebugLogStore: ObservableObject {
 
     static let shared = DebugLogStore()
 
-    @Published var logs: [UniqueLog] = []
+    var logs: [UniqueLog] = []
 
     @MainActor
     func write(_ message: String) {

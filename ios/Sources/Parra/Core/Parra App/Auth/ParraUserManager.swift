@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class ParraUserManager: ObservableObject {
+public final class ParraUserManager {
     // MARK: - Lifecycle
 
     init(parraInternal: ParraInternal) {

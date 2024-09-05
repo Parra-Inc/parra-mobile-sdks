@@ -71,7 +71,7 @@ struct SubmissionButton: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
 
     private func handlePress() {
         content = content.withLoading(true)

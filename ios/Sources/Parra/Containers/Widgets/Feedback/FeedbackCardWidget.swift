@@ -89,7 +89,7 @@ struct FeedbackCardWidget: Container {
             contentObserver.stopObservingCardChangeNotifications()
         }
         .environment(config)
-        .environmentObject(componentFactory)
+        .environment(componentFactory)
         .environmentObject(contentObserver)
     }
 

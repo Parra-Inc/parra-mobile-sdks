@@ -73,10 +73,10 @@ struct AlertPresenter: ViewModifier {
 
     // MARK: - Private
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
-
+    @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.defaultSafeAreaInsets) private var defaultSafeAreaInsets
     @Environment(\.parraTheme) private var parraTheme
+
     @State private var workItem: DispatchWorkItem?
 
     private var toastAnimation: Animation {

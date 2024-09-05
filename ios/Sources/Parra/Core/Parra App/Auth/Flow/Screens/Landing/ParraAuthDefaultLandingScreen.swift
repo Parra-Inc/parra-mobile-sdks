@@ -67,7 +67,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
     private let params: Params
     private let config: Config
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.parraAppInfo) private var parraAppInfo
 

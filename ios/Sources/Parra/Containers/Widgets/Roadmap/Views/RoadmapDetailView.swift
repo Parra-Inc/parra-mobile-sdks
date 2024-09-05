@@ -15,7 +15,6 @@ struct RoadmapDetailView: View {
 
     @Environment(ParraRoadmapWidgetConfig.self) var config
     @EnvironmentObject var contentObserver: RoadmapWidget.ContentObserver
-    @EnvironmentObject var componentFactory: ComponentFactory
 
     var body: some View {
         let palette = parraTheme.palette
@@ -120,6 +119,8 @@ struct RoadmapDetailView: View {
     }
 
     // MARK: - Private
+
+    @Environment(ComponentFactory.self) private var componentFactory
 
     @Environment(\.parraTheme) private var parraTheme
 }

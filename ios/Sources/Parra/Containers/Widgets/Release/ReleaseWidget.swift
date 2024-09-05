@@ -155,8 +155,8 @@ struct ReleaseWidget: Container {
             }
         }
         .environment(config)
+        .environment(componentFactory)
         .environmentObject(contentObserver)
-        .environmentObject(componentFactory)
         // required to prevent navigation bar from changing colors when scrolled
         .toolbarBackground(.hidden, for: .navigationBar)
         .navigationDestination(for: String.self) { destination in

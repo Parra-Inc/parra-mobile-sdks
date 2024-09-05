@@ -101,7 +101,7 @@ public struct ParraErrorBoundary: View {
     @State private var isShowingFeedbackForm = false
 
     @Environment(\.parraTheme) private var parraTheme
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
 }
 
 #Preview {

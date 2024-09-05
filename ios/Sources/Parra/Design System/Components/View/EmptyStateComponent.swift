@@ -88,7 +88,7 @@ struct EmptyStateComponent: View {
 
     // MARK: - Private
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 }
 

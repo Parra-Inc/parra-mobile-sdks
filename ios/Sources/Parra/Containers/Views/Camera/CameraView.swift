@@ -88,8 +88,7 @@ struct CameraView: View {
     private static let barHeightFactor = 0.15
 
     @State private var previewImage: UIImage?
-
-    @StateObject private var model = CameraDataModel()
+    @State private var model = CameraDataModel()
     @State private var captureButtonScale = 1.0
 
     @ViewBuilder private var renderCamera: some View {

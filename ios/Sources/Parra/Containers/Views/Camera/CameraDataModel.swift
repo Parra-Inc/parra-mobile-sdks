@@ -9,7 +9,8 @@
 import AVFoundation
 import SwiftUI
 
-final class CameraDataModel: ObservableObject {
+@Observable
+final class CameraDataModel {
     // MARK: - Lifecycle
 
     init() {
@@ -22,7 +23,7 @@ final class CameraDataModel: ObservableObject {
 
     let camera = Camera()
 
-    @Published var viewfinderImage: Image?
+    var viewfinderImage: Image?
 
     func handleCameraPreviews() async {
         let imageStream = camera.previewStream

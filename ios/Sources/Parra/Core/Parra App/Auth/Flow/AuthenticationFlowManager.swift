@@ -14,7 +14,8 @@ private let logger = Logger()
 // Working around a double rendering bug with sheet.
 // making this a singleton since it will never be used in more than
 // 1 place at a time.
-class AuthenticationFlowManager: ObservableObject {
+@Observable
+class AuthenticationFlowManager {
     // MARK: - Lifecycle
 
     init(

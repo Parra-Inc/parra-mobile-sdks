@@ -42,14 +42,14 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
             path: $navigationState.navigationPath
         ) {
             landingScreen
-                .environmentObject(parraAppInfo)
+                .environment(parraAppInfo)
                 .navigationDestination(
                     for: AuthenticationFlowManager.AuthScreen.self
                 ) { destination in
                     provideAuthScreen(
                         authScreen: destination
                     )
-                    .environmentObject(parraAppInfo)
+                    .environment(parraAppInfo)
                     .renderToast(toast: $alertManager.currentToast)
                 }
                 // must be forced to inline because of a bug causing screens we

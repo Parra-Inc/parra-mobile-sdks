@@ -54,5 +54,5 @@ struct PlainButtonStyle: ButtonStyle {
     // MARK: - Private
 
     @Environment(\.parraTheme) private var parraTheme
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
 }

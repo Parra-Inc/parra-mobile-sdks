@@ -96,8 +96,8 @@ struct RoadmapWidget: Container {
         )
         .environment(config)
         .environment(alertManager)
+        .environment(componentFactory)
         .environmentObject(contentObserver)
-        .environmentObject(componentFactory)
         .presentParraFeedbackForm(
             with: $contentObserver.addRequestForm,
             onDismiss: { dismissType in

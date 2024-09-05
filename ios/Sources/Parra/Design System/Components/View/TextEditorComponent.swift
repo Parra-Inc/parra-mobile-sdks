@@ -27,8 +27,6 @@ struct TextEditorComponent: View {
     let content: ParraTextEditorContent
     let attributes: ParraAttributes.TextEditor
 
-    @EnvironmentObject var componentFactory: ComponentFactory
-
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // spacing controlled by individual component padding.
@@ -74,6 +72,8 @@ struct TextEditorComponent: View {
             horizontal: contentInsets.leading + 6
         )
     }
+
+    @Environment(ComponentFactory.self) private var componentFactory
 
     @Environment(\.parraTheme) private var parraTheme
     @State private var text = ""

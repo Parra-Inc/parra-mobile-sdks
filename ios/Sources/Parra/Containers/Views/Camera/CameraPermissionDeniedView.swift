@@ -11,8 +11,6 @@ import SwiftUI
 struct CameraPermissionDeniedView: View {
     // MARK: - Internal
 
-    @EnvironmentObject var componentFactory: ComponentFactory
-
     var body: some View {
         VStack(spacing: 10) {
             componentFactory.buildImage(
@@ -53,6 +51,8 @@ struct CameraPermissionDeniedView: View {
     }
 
     // MARK: - Private
+
+    @Environment(ComponentFactory.self) private var componentFactory
 
     @Environment(\.parraTheme) private var parraTheme
 }

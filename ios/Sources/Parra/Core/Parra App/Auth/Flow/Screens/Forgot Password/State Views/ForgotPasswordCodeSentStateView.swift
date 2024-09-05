@@ -105,7 +105,7 @@ struct ForgotPasswordCodeSentStateView: View {
     @State private var continueButtonContent: ParraTextButtonContent
     @State private var currentCode: String = ""
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 }
 

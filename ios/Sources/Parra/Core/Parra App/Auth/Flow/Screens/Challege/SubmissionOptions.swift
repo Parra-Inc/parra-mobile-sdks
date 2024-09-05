@@ -60,7 +60,7 @@ struct SubmissionOptions: View {
 
     private let primaryActionName: String
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
     @ViewBuilder private var buttons: some View {
@@ -367,7 +367,7 @@ struct SubmissionOptions: View {
             )
         }
     }
-    .environmentObject(
+    .environment(
         ParraAppInfo.validStates()[0]
     )
 }

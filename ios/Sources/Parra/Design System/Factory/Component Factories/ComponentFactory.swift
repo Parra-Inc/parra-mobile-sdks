@@ -8,7 +8,8 @@
 
 import SwiftUI
 
-class ComponentFactory: ObservableObject {
+@Observable
+class ComponentFactory {
     // MARK: - Lifecycle
 
     init(

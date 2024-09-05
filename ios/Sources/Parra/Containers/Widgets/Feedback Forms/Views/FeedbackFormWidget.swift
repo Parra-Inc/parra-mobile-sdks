@@ -75,7 +75,7 @@ struct FeedbackFormWidget: Container {
             using: parraTheme
         )
         .environmentObject(contentObserver)
-        .environmentObject(componentFactory)
+        .environment(componentFactory)
     }
 
     var header: some View {

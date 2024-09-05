@@ -17,7 +17,7 @@ public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen, Equatable {
     ) {
         self.params = params
         self.config = config
-        self._state = StateObject(
+        self._state = State(
             wrappedValue: ForgotPasswordStateManager(params: params)
         )
     }
@@ -69,11 +69,11 @@ public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen, Equatable {
 
     // Presence of this indicates that a code has been sent.
 
-    @StateObject private var state: ForgotPasswordStateManager
+    @State private var state: ForgotPasswordStateManager
 
     @Environment(\.parra) private var parra
 
-    @EnvironmentObject private var componentFactory: ComponentFactory
+    @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
     @ViewBuilder private var primaryContent: some View {

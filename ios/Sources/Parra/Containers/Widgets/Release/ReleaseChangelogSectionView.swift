@@ -9,10 +9,11 @@
 import SwiftUI
 
 struct ReleaseChangelogSectionView: View {
+    // MARK: - Internal
+
     let content: AppReleaseSectionContent
 
     @Environment(ParraChangelogWidgetConfig.self) var config
-    @EnvironmentObject var componentFactory: ComponentFactory
 
     var combinedText: String {
         content.items.map { item in
@@ -49,6 +50,10 @@ struct ReleaseChangelogSectionView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+
+    // MARK: - Private
+
+    @Environment(ComponentFactory.self) private var componentFactory
 }
 
 #Preview {

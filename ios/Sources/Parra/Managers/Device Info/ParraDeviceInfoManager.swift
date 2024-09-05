@@ -8,7 +8,8 @@
 
 import UIKit
 
-public final class ParraDeviceInfoManager: ObservableObject {
+@Observable
+public final class ParraDeviceInfoManager {
     // MARK: - Internal
 
     enum Constant {

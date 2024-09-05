@@ -28,11 +28,12 @@ struct FeedbackCardView: View {
 
     // MARK: - Internal
 
-    @EnvironmentObject var componentFactory: ComponentFactory
     let cardItem: ParraCardItem
     let contentPadding: EdgeInsets
 
     // MARK: - Private
+
+    @Environment(ComponentFactory.self) private var componentFactory
 
     @Environment(\.parraTheme) private var parraTheme
 

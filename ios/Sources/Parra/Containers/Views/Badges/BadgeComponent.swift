@@ -65,9 +65,8 @@ struct BadgeComponent: View {
 
     @Environment(\.redactionReasons) private var redactionReasons
     @Environment(\.colorScheme) private var colorScheme
-
-    @EnvironmentObject private var componentFactory: ComponentFactory
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(ComponentFactory.self) private var componentFactory
 }
 
 #Preview {

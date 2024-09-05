@@ -62,7 +62,7 @@ struct ParraContainerPreview<ContainerType>: View
             AnyView(content(parra, factory, config))
         }
         .environment(config)
-        .environmentObject(factory)
+        .environment(factory)
         .environment(\.parra, parra)
         .environment(\.parraAuthState, authStateManager.current)
     }
