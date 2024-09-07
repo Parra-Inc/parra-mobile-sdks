@@ -12,14 +12,14 @@ public struct ParraCornerRadiusConfig {
     // MARK: - Lifecycle
 
     public init(
-        xs: RectangleCornerRadii,
-        sm: RectangleCornerRadii,
-        md: RectangleCornerRadii,
-        lg: RectangleCornerRadii,
-        xl: RectangleCornerRadii,
-        xxl: RectangleCornerRadii,
-        xxxl: RectangleCornerRadii,
-        full: RectangleCornerRadii
+        xs: RectangleCornerRadii = ParraCornerRadiusConfig.default.xs,
+        sm: RectangleCornerRadii = ParraCornerRadiusConfig.default.sm,
+        md: RectangleCornerRadii = ParraCornerRadiusConfig.default.md,
+        lg: RectangleCornerRadii = ParraCornerRadiusConfig.default.lg,
+        xl: RectangleCornerRadii = ParraCornerRadiusConfig.default.xl,
+        xxl: RectangleCornerRadii = ParraCornerRadiusConfig.default.xxl,
+        xxxl: RectangleCornerRadii = ParraCornerRadiusConfig.default.xxxl,
+        full: RectangleCornerRadii = ParraCornerRadiusConfig.default.full
     ) {
         self.xs = xs
         self.sm = sm

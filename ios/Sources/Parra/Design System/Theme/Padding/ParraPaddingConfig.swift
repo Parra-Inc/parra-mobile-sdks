@@ -12,13 +12,13 @@ public struct ParraPaddingConfig {
     // MARK: - Lifecycle
 
     public init(
-        xs: EdgeInsets,
-        sm: EdgeInsets,
-        md: EdgeInsets,
-        lg: EdgeInsets,
-        xl: EdgeInsets,
-        xxl: EdgeInsets,
-        xxxl: EdgeInsets
+        xs: EdgeInsets = ParraPaddingConfig.default.xs,
+        sm: EdgeInsets = ParraPaddingConfig.default.sm,
+        md: EdgeInsets = ParraPaddingConfig.default.md,
+        lg: EdgeInsets = ParraPaddingConfig.default.lg,
+        xl: EdgeInsets = ParraPaddingConfig.default.xl,
+        xxl: EdgeInsets = ParraPaddingConfig.default.xxl,
+        xxxl: EdgeInsets = ParraPaddingConfig.default.xxxl
     ) {
         self.xs = xs
         self.sm = sm
