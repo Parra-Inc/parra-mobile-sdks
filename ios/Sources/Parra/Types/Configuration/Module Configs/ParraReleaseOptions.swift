@@ -10,6 +10,18 @@ import Foundation
 
 /// Options for how the Parra Release modal should be displayed. I
 public struct ParraReleaseOptions: ParraConfigurationOptionType {
+    // MARK: - Lifecycle
+
+    public init(
+        presentationStyle: PresentationStyle,
+        presentationMode: PresentationMode
+    ) {
+        self.presentationStyle = presentationStyle
+        self.presentationMode = presentationMode
+    }
+
+    // MARK: - Public
+
     public enum Behavior: Equatable {
         /// 1. If the app has not been launched before, nothing will be
         ///    displayed
@@ -37,9 +49,9 @@ public struct ParraReleaseOptions: ParraConfigurationOptionType {
         /// method.
         case debug
 
-        // MARK: - Internal
+        // MARK: - Public
 
-        static func forCurrentEnvironment() -> Self {
+        public static var `default`: Behavior {
             switch AppEnvironment.appConfiguration {
             case .production:
                 return .production
@@ -96,7 +108,7 @@ public struct ParraReleaseOptions: ParraConfigurationOptionType {
 
     public static let `default`: ParraReleaseOptions = .init(
         presentationStyle: .modal,
-        presentationMode: .automatic(.forCurrentEnvironment())
+        presentationMode: .automatic(.default)
     )
 
     public let presentationStyle: PresentationStyle

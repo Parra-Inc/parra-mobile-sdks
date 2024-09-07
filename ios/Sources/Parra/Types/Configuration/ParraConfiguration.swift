@@ -35,6 +35,8 @@ public struct ParraConfiguration {
 
     // MARK: - Public
 
+    public static let `default` = ParraConfiguration()
+
     public let appInfoOptions: ParraAppInfoOptions
     public internal(set) var theme: ParraTheme
     public private(

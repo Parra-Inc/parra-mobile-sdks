@@ -9,13 +9,17 @@
 import Foundation
 
 public struct ParraAppInfoOptions: ParraConfigurationOptionType {
+    // MARK: - Lifecycle
+
+    public init(bundleId: String) {
+        self.bundleId = bundleId
+    }
+
     // MARK: - Public
 
     public static var `default`: ParraAppInfoOptions = .init(
         bundleId: Bundle.main.bundleIdentifier ?? "unknown"
     )
-
-    // MARK: - Internal
 
     /// The bundle identifier of the app. This is used in requests to Parra's
     /// servers to identify traffic and in other areas, like checking for latest
@@ -23,5 +27,5 @@ public struct ParraAppInfoOptions: ParraConfigurationOptionType {
     /// be the bundle identifier from ``Bundle/main`` but can be overridden here
     /// if you have a custom configuartion or beta environments that you want to
     /// handle differently.
-    let bundleId: String
+    public let bundleId: String
 }

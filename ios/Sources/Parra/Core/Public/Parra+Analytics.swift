@@ -93,7 +93,7 @@ public extension Parra {
     /// Attaches a property to the current user, as defined by the Parra
     /// authentication handler. User properties can be used to activate
     /// campaigns configured in the Parra dashboard.
-    func setUserProperty<Key>(
+    internal func setUserProperty<Key>(
         _ value: Any,
         forKey key: Key
     ) where Key: RawRepresentable, Key.RawValue == String {
@@ -103,7 +103,7 @@ public extension Parra {
     /// Attaches a property to the current user, as defined by the Parra
     /// authentication handler. User properties can be used to activate
     /// campaigns configured in the Parra dashboard.
-    func setUserProperty(
+    internal func setUserProperty(
         _ value: Any,
         forKey key: String
     ) {

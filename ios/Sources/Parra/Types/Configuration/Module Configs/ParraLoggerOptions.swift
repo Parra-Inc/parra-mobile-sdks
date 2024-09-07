@@ -11,6 +11,21 @@ import Foundation
 // TODO: Figure out how to get a default ParraLogMeasurementFormat in here.
 
 public struct ParraLoggerOptions {
+    // MARK: - Lifecycle
+
+    public init(
+        environment: ParraLoggerEnvironment = ParraLoggerOptions.default.environment,
+        minimumLogLevel: ParraLogLevel = ParraLoggerOptions.default.minimumLogLevel,
+        consoleFormatOptions: [ParraLoggerConsoleFormatOption] = ParraLoggerOptions
+            .default.consoleFormatOptions
+    ) {
+        self.environment = environment
+        self.minimumLogLevel = minimumLogLevel
+        self.consoleFormatOptions = consoleFormatOptions
+    }
+
+    // MARK: - Public
+
     public enum Environment {
         public static let minimumLogLevelOverride = "PARRA_LOG_LEVEL"
         public static let eventDebugLoggingEnabled = "PARRA_DEBUG_EVENT_LOGGING"
@@ -71,4 +86,8 @@ public struct ParraLoggerOptions {
     public internal(set) var consoleFormatOptions: [
         ParraLoggerConsoleFormatOption
     ]
+}
+
+public extension [ParraLoggerConsoleFormatOption] {
+    static let `default` = ParraLoggerOptions.default.consoleFormatOptions
 }

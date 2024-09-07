@@ -9,7 +9,7 @@
 import SwiftUI
 import UIKit
 
-extension EdgeInsets {
+public extension EdgeInsets {
     init(_ allSides: CGFloat) {
         self.init(
             top: allSides,
@@ -40,7 +40,7 @@ extension EdgeInsets {
         )
     }
 
-    static func padding(
+    internal static func padding(
         top: CGFloat = 0.0,
         leading: CGFloat = 0.0,
         bottom: CGFloat = 0.0,
@@ -54,7 +54,7 @@ extension EdgeInsets {
         )
     }
 
-    static func padding(
+    internal static func padding(
         vertical: CGFloat = 0.0,
         horizontal: CGFloat = 0.0
     ) -> EdgeInsets {

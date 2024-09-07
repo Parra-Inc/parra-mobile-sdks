@@ -9,15 +9,21 @@
 import SwiftUI
 
 public struct ParraTypography {
+    // MARK: - Lifecycle
+
+    public init(textStyles: [Font.TextStyle: ParraAttributes.Text]) {
+        self.textStyles = textStyles
+    }
+
     // MARK: - Public
 
     public static let `default` = ParraTypography(
         textStyles: [:]
     )
 
-    // MARK: - Internal
+    public let textStyles: [Font.TextStyle: ParraAttributes.Text]
 
-    let textStyles: [Font.TextStyle: ParraAttributes.Text]
+    // MARK: - Internal
 
     func getTextAttributes(
         for fontStyle: Font.TextStyle?

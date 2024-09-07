@@ -10,7 +10,7 @@ import Foundation
 
 private let logger = Logger(category: "Push Extensions")
 
-public extension Parra {
+extension Parra {
     /// This method should be invoked from the UIApplication delegate method
     /// application(_:didRegisterForRemoteNotificationsWithDeviceToken:), passing in the Data parameter from this method.
     ///
@@ -34,7 +34,7 @@ public extension Parra {
         }
     }
 
-    internal func uploadDevicePushToken(
+    func uploadDevicePushToken(
         _ token: String
     ) async {
         do {
