@@ -9,6 +9,8 @@
 import SwiftUI
 
 public protocol ComponentAttributesProvider {
+    init()
+
     // MARK: Labels
 
     func labelAttributes(
