@@ -53,9 +53,10 @@ public extension ParraLogger {
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) -> T {
-        return withScope(named: name, nil, block, function)
+        return withScope(named: name, nil, block, fileId, function)
     }
 
     /// Creates a new scope for the logger with the provided `name`. This scope
@@ -67,11 +68,13 @@ public extension ParraLogger {
         named name: String? = nil,
         _ extra: [String: Any]?,
         _ block: (_ logger: ParraLogger) -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) -> T {
         let scoped = scope(named: name, extra, function)
+        let scopeName = scoped.context.scopes.last?.name ?? "scope"
 
-        scoped.trace("scope entered")
+        scoped.trace("Entered scope: \(scopeName)", _: fileId, _: function)
 
         return block(scoped)
     }
@@ -84,9 +87,10 @@ public extension ParraLogger {
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) throws -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) throws -> T {
-        return try withScope(named: name, nil, block, function)
+        return try withScope(named: name, nil, block, fileId, function)
     }
 
     /// Creates a new scope for the logger with the provided `name`. This scope
@@ -98,11 +102,13 @@ public extension ParraLogger {
         named name: String? = nil,
         _ extra: [String: Any]?,
         _ block: (_ logger: ParraLogger) throws -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) rethrows -> T {
         let scoped = scope(named: name, extra, function)
+        let scopeName = scoped.context.scopes.last?.name ?? "scope"
 
-        scoped.trace("scope entered")
+        scoped.trace("Entered scope: \(scopeName)", _: fileId, _: function)
 
         do {
             return try block(scoped)
@@ -120,9 +126,10 @@ public extension ParraLogger {
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) async throws -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) async throws -> T {
-        return try await withScope(named: name, nil, block, function)
+        return try await withScope(named: name, nil, block, fileId, function)
     }
 
     /// Creates a new scope for the logger with the provided `name`. This scope
@@ -134,11 +141,13 @@ public extension ParraLogger {
         named name: String? = nil,
         _ extra: [String: Any]?,
         _ block: (_ logger: ParraLogger) async throws -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) async rethrows -> T {
         let scoped = scope(named: name, extra, function)
+        let scopeName = scoped.context.scopes.last?.name ?? "scope"
 
-        scoped.trace("scope entered")
+        scoped.trace("Entered scope: \(scopeName)", _: fileId, _: function)
 
         do {
             return try await block(scoped)
@@ -156,9 +165,10 @@ public extension ParraLogger {
     func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) async -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) async -> T {
-        return await withScope(named: name, nil, block, function)
+        return await withScope(named: name, nil, block, fileId, function)
     }
 
     /// Creates a new scope for the logger with the provided `name`. This scope
@@ -170,11 +180,13 @@ public extension ParraLogger {
         named name: String? = nil,
         _ extra: [String: Any]?,
         _ block: (_ logger: ParraLogger) async -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) async -> T {
         let scoped = scope(named: name, extra, function)
+        let scopeName = scoped.context.scopes.last?.name ?? "scope"
 
-        scoped.trace("scope entered")
+        scoped.trace("Entered scope: \(scopeName)", _: fileId, _: function)
 
         return await block(scoped)
     }
@@ -212,9 +224,10 @@ public extension ParraLogger {
     static func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) -> T {
-        return withScope(named: name, nil, block, function)
+        return withScope(named: name, nil, block, fileId, function)
     }
 
     /// Creates a new scope for the logger with the provided `name`. This scope
@@ -226,11 +239,13 @@ public extension ParraLogger {
         named name: String? = nil,
         _ extra: [String: Any]?,
         _ block: (_ logger: ParraLogger) -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) -> T {
         let scoped = scope(named: name, extra, function)
+        let scopeName = scoped.context.scopes.last?.name ?? "scope"
 
-        scoped.trace("scope entered")
+        scoped.trace("Entered scope: \(scopeName)", _: fileId, _: function)
 
         return block(scoped)
     }
@@ -243,9 +258,10 @@ public extension ParraLogger {
     static func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) throws -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) throws -> T {
-        return try withScope(named: name, nil, block, function)
+        return try withScope(named: name, nil, block, fileId, function)
     }
 
     /// Creates a new scope for the logger with the provided `name`. This scope
@@ -257,11 +273,13 @@ public extension ParraLogger {
         named name: String? = nil,
         _ extra: [String: Any]?,
         _ block: (_ logger: ParraLogger) throws -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) rethrows -> T {
         let scoped = scope(named: name, extra, function)
+        let scopeName = scoped.context.scopes.last?.name ?? "scope"
 
-        scoped.trace("scope entered")
+        scoped.trace("Entered scope: \(scopeName)", _: fileId, _: function)
 
         do {
             return try block(scoped)
@@ -279,9 +297,10 @@ public extension ParraLogger {
     static func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) async throws -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) async throws -> T {
-        return try await withScope(named: name, nil, block, function)
+        return try await withScope(named: name, nil, block, fileId, function)
     }
 
     /// Creates a new scope for the logger with the provided `name`. This scope
@@ -293,11 +312,13 @@ public extension ParraLogger {
         named name: String? = nil,
         _ extra: [String: Any]?,
         _ block: (_ logger: ParraLogger) async throws -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) async rethrows -> T {
         let scoped = scope(named: name, extra, function)
+        let scopeName = scoped.context.scopes.last?.name ?? "scope"
 
-        scoped.trace("scope entered")
+        scoped.trace("Entered scope: \(scopeName)", _: fileId, _: function)
 
         do {
             return try await block(scoped)
@@ -315,9 +336,10 @@ public extension ParraLogger {
     static func withScope<T>(
         named name: String? = nil,
         _ block: (_ logger: ParraLogger) async -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) async -> T {
-        return await withScope(named: name, nil, block, function)
+        return await withScope(named: name, nil, block, fileId, function)
     }
 
     /// Creates a new scope for the logger with the provided `name`. This scope
@@ -329,11 +351,13 @@ public extension ParraLogger {
         named name: String? = nil,
         _ extra: [String: Any]?,
         _ block: (_ logger: ParraLogger) async -> T,
+        _ fileId: String = #fileID,
         _ function: String = #function
     ) async -> T {
         let scoped = scope(named: name, extra, function)
+        let scopeName = scoped.context.scopes.last?.name ?? "scope"
 
-        scoped.trace("scope entered")
+        scoped.trace("Entered scope: \(scopeName)", _: fileId, _: function)
 
         return await block(scoped)
     }
