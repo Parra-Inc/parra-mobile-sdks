@@ -92,7 +92,7 @@ final class AppInfoManager {
 
     func checkAndPresentWhatsNew(
         against appInfo: ParraAppInfo,
-        with options: ParraReleaseOptions,
+        with options: ParraWhatsNewOptions,
         using modalScreenManager: ModalScreenManager
     ) async {
         do {

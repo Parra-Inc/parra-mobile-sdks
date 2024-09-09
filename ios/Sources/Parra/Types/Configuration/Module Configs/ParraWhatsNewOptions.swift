@@ -1,5 +1,5 @@
 //
-//  ParraReleaseOptions.swift
+//  ParraWhatsNewOptions.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/18/24.
@@ -9,7 +9,7 @@
 import Foundation
 
 /// Options for how the Parra Release modal should be displayed. I
-public struct ParraReleaseOptions: ParraConfigurationOptionType {
+public struct ParraWhatsNewOptions: ParraConfigurationOptionType {
     // MARK: - Lifecycle
 
     public init(
@@ -106,7 +106,7 @@ public struct ParraReleaseOptions: ParraConfigurationOptionType {
         }
     }
 
-    public static let `default`: ParraReleaseOptions = .init(
+    public static let `default`: ParraWhatsNewOptions = .init(
         presentationStyle: .modal,
         presentationMode: .automatic(.default)
     )

@@ -18,7 +18,7 @@ public struct ParraConfiguration {
         loggerOptions: ParraLoggerOptions = .default,
         pushNotificationOptions: ParraPushNotificationOptions = .default,
         theme: ParraTheme = .default,
-        whatsNewOptions: ParraReleaseOptions = .default
+        whatsNewOptions: ParraWhatsNewOptions = .default
     ) {
         self.appInfoOptions = appInfoOptions
         self.theme = theme
@@ -45,7 +45,7 @@ public struct ParraConfiguration {
     public let launchScreenOptions: ParraLaunchScreen.Options
     public let loggerOptions: ParraLoggerOptions
     public let pushNotificationOptions: ParraPushNotificationOptions
-    public let whatsNewOptions: ParraReleaseOptions
+    public let whatsNewOptions: ParraWhatsNewOptions
 
     // MARK: - Private
 

@@ -21,7 +21,7 @@ extension AppInfoManager {
     /// Skips App Store API checks and uses the bundle short version instead of
     /// the bundle version to determine if a new version has been installed.
     func handleBetaWhatsNewFlow(
-        style: ParraReleaseOptions.PresentationStyle,
+        style: ParraWhatsNewOptions.PresentationStyle,
         after delay: TimeInterval
     ) async throws {
         guard
@@ -66,7 +66,7 @@ extension AppInfoManager {
     /// Follows the full flow of checking cached app version, App Store API
     /// and new releases from Parra API.
     func handleProductionWhatsNewFlow(
-        style: ParraReleaseOptions.PresentationStyle,
+        style: ParraWhatsNewOptions.PresentationStyle,
         after delay: TimeInterval
     ) async throws {
         guard
@@ -145,8 +145,8 @@ extension AppInfoManager {
 
     func handleWhatsNewFlow(
         in appInfo: ParraAppInfo,
-        with behavior: ParraReleaseOptions.Behavior,
-        style: ParraReleaseOptions.PresentationStyle,
+        with behavior: ParraWhatsNewOptions.Behavior,
+        style: ParraWhatsNewOptions.PresentationStyle,
         after delay: TimeInterval = 0.0
     ) async throws {
         switch behavior {
@@ -171,7 +171,7 @@ extension AppInfoManager {
 
     private func displayReleaseIfExists(
         latestAppInfo: ParraAppInfo,
-        with style: ParraReleaseOptions.PresentationStyle,
+        with style: ParraWhatsNewOptions.PresentationStyle,
         after delay: TimeInterval
     ) async throws {
         guard let newInstalledVersionInfo = latestAppInfo
