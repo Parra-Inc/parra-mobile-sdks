@@ -354,9 +354,9 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equat
     private func triggerVerifyCode() {
         continueButtonContent = continueButtonContent.withLoading(true)
 
-        UIApplication.dismissKeyboard()
-
         Task {
+            await UIApplication.dismissKeyboard()
+
             do {
                 logger.debug("Verifing one time code")
 

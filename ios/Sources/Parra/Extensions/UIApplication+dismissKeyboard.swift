@@ -13,12 +13,14 @@ extension UIApplication {
     /// to avoid ambiguous contexts where the default implementation might
     /// be used instead.
     @MainActor
-    static func dismissKeyboard() {
-        UIApplication.shared.sendAction(
-            #selector(UIResponder.resignFirstResponder),
-            to: nil,
-            from: nil,
-            for: nil
-        )
+    static func dismissKeyboard() async {
+        await MainActor.run {
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder),
+                to: nil,
+                from: nil,
+                for: nil
+            )
+        }
     }
 }

@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 struct ChallengeView: View {
     // MARK: - Internal
 

@@ -285,11 +285,13 @@ struct ForgotPasswordNewPasswordStateView: View {
             confirmationValidationErrorMessage = nil
         }
 
-        withAnimation {
-            UIApplication.dismissKeyboard()
+        Task { @MainActor in
+            await UIApplication.dismissKeyboard()
 
-            continueButtonContent = continueButtonContent.withLoading(true)
-            errorMessage = nil
+            withAnimation {
+                continueButtonContent = continueButtonContent.withLoading(true)
+                errorMessage = nil
+            }
         }
 
         Logger.debug("Submitting new password")

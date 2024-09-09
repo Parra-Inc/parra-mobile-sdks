@@ -468,9 +468,7 @@ class AuthenticationFlowManager {
             identity: identity,
             codeLength: 6
         ) {
-            Task { @MainActor in
-                UIApplication.dismissKeyboard()
-            }
+            await UIApplication.dismissKeyboard()
 
             let responseCode = try await self.authService.forgotPassword(
                 identity: identity,

@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 struct ParraChangePasswordModal: View {
     // MARK: - Lifecycle
 
@@ -41,7 +42,8 @@ struct ParraChangePasswordModal: View {
 
     @State private var navigationState = NavigationState()
 
-    @ViewBuilder private var content: some View {
+    @ViewBuilder
+    @MainActor private var content: some View {
         switch parraAuthState {
         case .authenticated(let user), .anonymous(let user):
             if let email = user.info.email {

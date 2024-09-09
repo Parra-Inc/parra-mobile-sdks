@@ -202,13 +202,13 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatabl
 
         logger.debug("Submitting challenge response")
 
-        UIApplication.dismissKeyboard()
-
-        withAnimation {
-            loadingAuthMethod = authMethod
-        }
-
         Task { @MainActor in
+            await UIApplication.dismissKeyboard()
+
+            withAnimation {
+                loadingAuthMethod = authMethod
+            }
+
             do {
                 withAnimation {
                     errorMessage = nil

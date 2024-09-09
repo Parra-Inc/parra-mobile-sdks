@@ -10,6 +10,7 @@ import SwiftUI
 
 private let logger = Logger()
 
+@MainActor
 struct SubmissionOptions: View {
     // MARK: - Lifecycle
 
@@ -242,6 +243,7 @@ struct SubmissionOptions: View {
         return buttonInfo
     }
 
+    @MainActor
     private func attemptSubmission(
         for authMethod: ParraAuthenticationMethod
     ) {

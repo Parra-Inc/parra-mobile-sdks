@@ -13,6 +13,7 @@ public protocol ParraAuthScreenConfig {
     static var `default`: Self { get }
 }
 
+@MainActor
 public protocol ParraAuthScreen: View, Equatable {
     associatedtype Params: ParraAuthScreenParams
     associatedtype Config: ParraAuthScreenConfig
