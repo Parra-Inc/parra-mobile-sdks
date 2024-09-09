@@ -82,7 +82,7 @@ struct RoadmapDetailView: View {
 
             if let description = ticketContent.description {
                 Divider()
-                    .padding(.top, 4)
+                    .padding(.top, 20)
 
                 ScrollView {
                     componentFactory.buildLabel(
