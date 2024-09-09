@@ -2,7 +2,7 @@
 //  AccountHeader.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 09/05/2024.
+//  Bootstrapped with ❤️ by Parra on 09/09/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
