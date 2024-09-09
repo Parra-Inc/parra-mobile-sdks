@@ -174,15 +174,20 @@ extension RoadmapWidget {
         private func updateCacheForCurrentPaginator() {
             let tab = ticketPaginator.context
 
+            let showingPlaceholders = ticketPaginator.isShowingPlaceholders
+            let items = showingPlaceholders ? [] : ticketPaginator.items
+            let placeholderItems = showingPlaceholders ? ticketPaginator.items : []
+
             ticketCache[tab] = .init(
-                items: ticketPaginator.items,
-                knownCount: ticketPaginator.totalCount
+                items: items,
+                placeholderItems: placeholderItems,
+                knownCount: nil
             )
         }
 
         private func tabWillChange(to newTab: ParraRoadmapConfigurationTab) {
             if let cachedData = ticketCache[newTab] {
-                logger.debug("tab will change to cached tab: \(newTab)")
+                logger.debug("tab will change to cached tab: \(newTab.title)")
 
                 ticketPaginator = Paginator<
                     TicketUserContent,
@@ -193,7 +198,7 @@ extension RoadmapWidget {
                     pageFetcher: loadMoreTickets
                 )
             } else {
-                logger.debug("tab will change to new tab: \(newTab)")
+                logger.debug("tab will change to new tab: \(newTab.title)")
 
                 let newPageData = Paginator<
                     TicketUserContent,

@@ -222,8 +222,17 @@ class Paginator<Item, Context>: ObservableObject
                     // If placeholders were previously shown they should be
                     // replaced.
                     if isShowingPlaceholders {
+                        logger.trace(
+                            "Replacing placeholder items with fetched items"
+                        )
+
                         items = nextPage
+                        isShowingPlaceholders = false
                     } else {
+                        logger.trace(
+                            "Appending fetched items"
+                        )
+
                         items.append(
                             contentsOf: nextPage.filter {
                                 !items.contains($0)
@@ -232,7 +241,6 @@ class Paginator<Item, Context>: ObservableObject
                     }
 
                     isLoading = false
-                    isShowingPlaceholders = false
                 }
             } catch {
                 logger.error("Pagination error fetching new record(s).", error)
@@ -291,6 +299,10 @@ class Paginator<Item, Context>: ObservableObject
             // Not fetching for a specific item, so either fetch the next page
             // after the last one, or start at the beginning.
             return lastFetchedOffset ?? 0
+        }
+
+        if isShowingPlaceholders {
+            return 0
         }
 
         let max = totalCount ?? Int.max
