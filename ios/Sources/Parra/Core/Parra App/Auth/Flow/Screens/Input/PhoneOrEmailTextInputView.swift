@@ -13,6 +13,7 @@ import SwiftUI
 // Keep internal copy of state and mirror externally, removing phone number
 // formatting and adding county code prefix
 
+@MainActor
 struct PhoneOrEmailTextInputView: View {
     // MARK: - Lifecycle
 

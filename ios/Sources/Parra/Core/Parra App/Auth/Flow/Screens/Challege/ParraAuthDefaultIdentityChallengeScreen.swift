@@ -10,6 +10,7 @@ import SwiftUI
 
 private let logger = Logger()
 
+@MainActor
 public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatable {
     // MARK: - Lifecycle
 
@@ -106,7 +107,8 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatabl
     @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
-    @ViewBuilder private var challengeContent: some View {
+    @ViewBuilder
+    @MainActor private var challengeContent: some View {
         VStack(alignment: .center, spacing: 16) {
             componentFactory.buildLabel(
                 content: ParraLabelContent(text: title),
@@ -186,6 +188,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatabl
         return "Create an account"
     }
 
+    @MainActor
     private func submit() {
         guard let challengeResponse,
               let authMethod = challengeResponse.authMethod else
@@ -199,73 +202,65 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatabl
 
         logger.debug("Submitting challenge response")
 
-        UIApplication.resignFirstResponder()
+        UIApplication.dismissKeyboard()
 
         withAnimation {
             loadingAuthMethod = authMethod
         }
 
-        Task {
+        Task { @MainActor in
             do {
-                Task { @MainActor in
-                    withAnimation {
-                        errorMessage = nil
-                    }
+                withAnimation {
+                    errorMessage = nil
                 }
 
                 try await params.submit(
                     challengeResponse
                 )
 
-                Task { @MainActor in
-                    withAnimation {
-                        loadingAuthMethod = nil
-                    }
+                withAnimation {
+                    loadingAuthMethod = nil
                 }
             } catch let error as ParraError {
-                Task { @MainActor in
-                    let userFacingMessage = if let message = error.userMessage,
-                                               message.contains("invalid")
-                    {
-                        switch challengeResponse {
-                        case .passkey:
-                            "Error creating passkey"
-                        case .password:
-                            if params.userExists {
-                                "The supplied password was incorrect"
-                            } else {
-                                "Error creating account with the provided credentials"
-                            }
-                        case .passwordlessSms:
-                            "Error sending login code via SMS"
-                        case .passwordlessEmail:
-                            "Error sending login code via email"
-                        case .verificationSms:
-                            "Error sending verification code via SMS"
-                        case .verificationEmail:
-                            "Error sending verification code via email"
-                        }
-                    } else {
+                let userFacingMessage = if let message = error.userMessage,
+                                           message.contains("invalid")
+                {
+                    switch challengeResponse {
+                    case .passkey:
+                        "Error creating passkey"
+                    case .password:
                         if params.userExists {
-                            "An unexpected error occurred logging in"
+                            "The supplied password was incorrect"
                         } else {
-                            "An unexpected error occurred creating an account"
+                            "Error creating account with the provided credentials"
                         }
+                    case .passwordlessSms:
+                        "Error sending login code via SMS"
+                    case .passwordlessEmail:
+                        "Error sending login code via email"
+                    case .verificationSms:
+                        "Error sending verification code via SMS"
+                    case .verificationEmail:
+                        "Error sending verification code via email"
                     }
+                } else {
+                    if params.userExists {
+                        "An unexpected error occurred logging in"
+                    } else {
+                        "An unexpected error occurred creating an account"
+                    }
+                }
 
-                    withAnimation {
-                        errorMessage = userFacingMessage
-                        loadingAuthMethod = nil
-                    }
+                withAnimation {
+                    errorMessage = userFacingMessage
+                    loadingAuthMethod = nil
                 }
 
                 logger.error("Error submiting auth challenge", error)
             } catch {
-                Task { @MainActor in
-                    withAnimation {
-                        errorMessage = error.localizedDescription
-                        loadingAuthMethod = nil
-                    }
+                withAnimation {
+                    errorMessage = error.localizedDescription
+                    loadingAuthMethod = nil
                 }
 
                 logger.error("Unknown error submiting auth challenge", error)

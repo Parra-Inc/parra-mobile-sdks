@@ -12,6 +12,7 @@ private let logger = Logger()
 
 private let resendCodeTitle = "Resend code"
 
+@MainActor
 public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equatable {
     // MARK: - Lifecycle
 
@@ -132,7 +133,8 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equat
     @Environment(ComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
-    @ViewBuilder private var primaryContent: some View {
+    @ViewBuilder
+    @MainActor private var primaryContent: some View {
         VStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 12) {
                 componentFactory.buildLabel(
@@ -213,7 +215,8 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equat
         }
     }
 
-    @ViewBuilder private var actions: some View {
+    @ViewBuilder
+    @MainActor private var actions: some View {
         if let challengeResponse {
             componentFactory.buildContainedButton(
                 config: ParraTextButtonConfig(
@@ -347,10 +350,11 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equat
         }
     }
 
+    @MainActor
     private func triggerVerifyCode() {
         continueButtonContent = continueButtonContent.withLoading(true)
 
-        UIApplication.resignFirstResponder()
+        UIApplication.dismissKeyboard()
 
         Task {
             do {

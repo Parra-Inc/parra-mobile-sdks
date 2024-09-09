@@ -1,5 +1,5 @@
 //
-//  UIApplication+resignFirstResponder.swift
+//  UIApplication+dismissKeyboard.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 6/26/24.
@@ -9,7 +9,11 @@
 import UIKit
 
 extension UIApplication {
-    static func resignFirstResponder() {
+    /// Note: This is intentionally named differently from resignFirstResponder
+    /// to avoid ambiguous contexts where the default implementation might
+    /// be used instead.
+    @MainActor
+    static func dismissKeyboard() {
         UIApplication.shared.sendAction(
             #selector(UIResponder.resignFirstResponder),
             to: nil,

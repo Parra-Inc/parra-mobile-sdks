@@ -270,6 +270,7 @@ struct ForgotPasswordNewPasswordStateView: View {
         )
     }
 
+    @MainActor
     private func onReceiveSubmit() {
         let passwordsMatch = passwordState.password == passwordConfirmation
 
@@ -285,7 +286,7 @@ struct ForgotPasswordNewPasswordStateView: View {
         }
 
         withAnimation {
-            UIApplication.resignFirstResponder()
+            UIApplication.dismissKeyboard()
 
             continueButtonContent = continueButtonContent.withLoading(true)
             errorMessage = nil

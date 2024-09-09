@@ -9,6 +9,7 @@
 import AuthenticationServices
 import SwiftUI
 
+@MainActor
 public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
     // MARK: - Lifecycle
 
@@ -27,14 +28,17 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
             with: parraTheme
         )
 
-        VStack(alignment: .leading) {
-            primaryContent
-                .applyPadding(
-                    size: attributes.contentPadding,
-                    on: [.horizontal, .bottom],
-                    from: parraTheme
-                )
+        ScrollView {
+            VStack(alignment: .leading) {
+                primaryContent
+                    .applyPadding(
+                        size: attributes.contentPadding,
+                        on: [.horizontal, .bottom],
+                        from: parraTheme
+                    )
+            }
         }
+        .scrollDismissesKeyboard(.immediately)
         .navigationBarTitleDisplayMode(.inline)
         .frame(
             maxWidth: .infinity,
@@ -59,12 +63,16 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
                 return
             }
 
+            if !isFocused {
+                Task { @MainActor in
+                    isFocused = true
+                }
+            }
+
             let shouldAutofill = params.shouldAttemptPasskeyAutofill?() ?? false
             guard shouldAutofill else {
                 return
             }
-
-            isFocused = true
 
             Task.detached {
                 await params.attemptPasskeyAutofill?()
@@ -99,7 +107,8 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
 
     @Environment(\.isPresented) var isPresented
 
-    @ViewBuilder var primaryField: some View {
+    @ViewBuilder
+    @MainActor var primaryField: some View {
         let inputMode: PhoneOrEmailTextInputView.Mode = switch params
             .inputType
         {
@@ -122,6 +131,7 @@ public struct ParraAuthDefaultIdentityInputScreen: ParraAuthScreen, Equatable {
 
     // MARK: - Private
 
+    @MainActor
     @FocusState private var isFocused: Bool
     @State private var identity = ""
     @State private var continueButtonContent: ParraTextButtonContent = .init(

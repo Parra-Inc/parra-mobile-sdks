@@ -20,7 +20,7 @@ public protocol ParraAuthScreen: View, Equatable {
     init(params: Params, config: Config)
 }
 
-public typealias ParraAuthScreenProvider<T> = (T.Params) -> T
+public typealias ParraAuthScreenProvider<T> = @MainActor (T.Params) -> T
     where T: ParraAuthScreen & Equatable
 
 public typealias ParraAuthLandingScreenProvider =
