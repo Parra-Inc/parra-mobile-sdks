@@ -62,7 +62,7 @@ public final class ParraReleases {
             offset: params.offset
         )
 
-        if response.data.isEmpty {
+        if response.data.elements.isEmpty {
             return nil
         }
 
@@ -90,7 +90,7 @@ public final class ParraReleases {
             do {
                 let roadmapConfig = try await api.getRoadmap()
 
-                guard let tab = roadmapConfig.tabs.first else {
+                guard let tab = roadmapConfig.tabs.elements.first else {
                     throw ParraError.message(
                         "Can not paginate tickets. Roadmap response has no tabs."
                     )

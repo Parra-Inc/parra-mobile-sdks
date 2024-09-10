@@ -26,7 +26,7 @@ struct ChangelogItemInfoView: View {
     // MARK: - Internal
 
     let version: ParraLabelContent
-    let type: ParraLabelContent
+    let type: ParraLabelContent?
     let createdAt: ParraLabelContent
 
     var body: some View {
@@ -40,10 +40,12 @@ struct ChangelogItemInfoView: View {
                 iconSymbol: "circle.fill"
             )
 
-            componentFactory.buildBadge(
-                size: .md,
-                text: type.text
-            )
+            if let type {
+                componentFactory.buildBadge(
+                    size: .md,
+                    text: type.text
+                )
+            }
 
             Spacer()
 

@@ -17,7 +17,7 @@ struct TicketStubContent: Identifiable, Hashable {
         self.id = ticket.id
 
         let titleText = ticket.shortTitle ?? ticket.title
-        let fullTitleText: String = if let icon = ticket.icon,
+        let fullTitleText: String = if let icon = ticket.icon?.value,
                                        case .emoji = icon.type
         {
             "\(icon.value) \(titleText)"

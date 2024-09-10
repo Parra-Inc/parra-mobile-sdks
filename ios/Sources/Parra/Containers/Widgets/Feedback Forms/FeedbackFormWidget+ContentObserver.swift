@@ -37,7 +37,7 @@ extension FeedbackFormWidget {
             self.content = Content(
                 title: ParraLabelContent(text: formData.title),
                 description: description,
-                fields: formData.fields.map { FormFieldWithState(field: $0) },
+                fields: formData.fields.elements.map { FormFieldWithState(field: $0) },
                 submitButton: submitButton
             )
         }

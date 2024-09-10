@@ -29,7 +29,7 @@ public extension View {
         >.Transformer = { parra, transformParams in
             let roadmapConfig = try await parra.parraInternal.api.getRoadmap()
 
-            guard let tab = roadmapConfig.tabs.first else {
+            guard let tab = roadmapConfig.tabs.elements.first else {
                 throw ParraError.message(
                     "Can not paginate tickets. Roadmap response has no tabs."
                 )

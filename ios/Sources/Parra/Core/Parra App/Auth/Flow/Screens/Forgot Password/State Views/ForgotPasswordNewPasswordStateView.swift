@@ -58,7 +58,7 @@ struct ForgotPasswordNewPasswordStateView: View {
 
         let rules = passwordConfig.rules
         let rulesDescriptor = passwordConfig.iosPasswordRulesDescriptor
-        let validationRules = rules.map { rule in
+        let validationRules = rules.elements.map { rule in
             ParraTextValidatorRule.regex(
                 rule.regularExpression,
                 failureMessage: rule.errorMessage
@@ -219,7 +219,7 @@ struct ForgotPasswordNewPasswordStateView: View {
         let rules = passwordConfig.rules
 
         if password.isEmpty {
-            validatedRules = rules.map { rule in
+            validatedRules = rules.elements.map { rule in
                 (rule, false)
             }
             passwordState = .init(
@@ -232,7 +232,7 @@ struct ForgotPasswordNewPasswordStateView: View {
 
         var isValid = true
 
-        validatedRules = rules.map { rule in
+        validatedRules = rules.elements.map { rule in
             let valid: Bool
 
             do {

@@ -29,9 +29,14 @@ struct AppReleaseStubContent: Identifiable, Hashable {
         } else {
             self.description = nil
         }
-        self.type = ParraLabelContent(text: stub.type.userFacingString)
+        if let type = stub.type.value {
+            self.type = ParraLabelContent(text: type.userFacingString)
+        } else {
+            self.type = nil
+        }
+
         self.releaseNumber = ParraLabelContent(text: String(stub.releaseNumber))
-        self.status = stub.status
+        self.status = stub.status.value
     }
 
     // MARK: - Internal
@@ -46,9 +51,9 @@ struct AppReleaseStubContent: Identifiable, Hashable {
     let name: ParraLabelContent
     let version: ParraLabelContent
     let description: ParraLabelContent?
-    let type: ParraLabelContent
+    let type: ParraLabelContent?
     let releaseNumber: ParraLabelContent
-    let status: ParraReleaseStatus
+    let status: ParraReleaseStatus?
 }
 
 // MARK: - ChangelogWidget.ContentObserver
@@ -91,7 +96,7 @@ extension ChangelogWidget {
                 .init(
                     context: "",
                     data: .init(
-                        items: appReleaseCollection.data
+                        items: appReleaseCollection.data.elements
                             .map { AppReleaseStubContent($0) },
                         placeholderItems: [],
                         pageSize: appReleaseCollection.pageSize,
@@ -164,7 +169,7 @@ extension ChangelogWidget {
                 offset: offset
             )
 
-            return response.data.map { AppReleaseStubContent($0) }
+            return response.data.elements.map { AppReleaseStubContent($0) }
         }
     }
 }

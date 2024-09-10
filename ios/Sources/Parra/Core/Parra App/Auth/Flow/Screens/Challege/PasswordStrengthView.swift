@@ -134,7 +134,7 @@ struct PasswordStrengthView: View {
             PasswordStrengthView(
                 passwordState: .constant(.init(password: "", isValid: false)),
                 validatedRules: .constant(
-                    ParraPasswordConfig.validStates()[0].rules
+                    ParraPasswordConfig.validStates()[0].rules.elements
                         .map { (
                             $0,
                             false
@@ -148,7 +148,7 @@ struct PasswordStrengthView: View {
                     isValid: false
                 )),
                 validatedRules: .constant(
-                    ParraPasswordConfig.validStates()[0].rules
+                    ParraPasswordConfig.validStates()[0].rules.elements
                         .map { (
                             $0,
                             false
@@ -162,7 +162,7 @@ struct PasswordStrengthView: View {
                     isValid: false
                 )),
                 validatedRules: .constant(
-                    ParraPasswordConfig.validStates()[0].rules
+                    ParraPasswordConfig.validStates()[0].rules.elements
                         .map { (
                             $0,
                             false
@@ -176,7 +176,7 @@ struct PasswordStrengthView: View {
                     isValid: false
                 )),
                 validatedRules: .constant(
-                    ParraPasswordConfig.validStates()[0].rules
+                    ParraPasswordConfig.validStates()[0].rules.elements
                         .map { (
                             $0,
                             false

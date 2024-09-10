@@ -23,15 +23,15 @@ struct TicketUserContent: Identifiable, Hashable {
                 unitStyle: .short
             )
         )
-        self.type = userTicket.type
+        self.type = userTicket.type.value
         self.title = ParraLabelContent(text: userTicket.title)
         self.description = if let description = userTicket.description {
             ParraLabelContent(text: description)
         } else {
             nil
         }
-        self.status = userTicket.status
-        self.displayStatus = userTicket.displayStatus
+        self.status = userTicket.status.value
+        self.displayStatus = userTicket.displayStatus.value
         self.statusTitle = userTicket.displayStatusBadgeTitle
         self.votingEnabled = userTicket.votingEnabled
         self.voted = userTicket.voted
@@ -74,11 +74,11 @@ struct TicketUserContent: Identifiable, Hashable {
     let id: String
     let ticketNumber: String
     let createdAt: ParraLabelContent
-    let type: ParraTicketType
+    let type: ParraTicketType?
     let title: ParraLabelContent
     let description: ParraLabelContent?
-    let status: ParraTicketStatus
-    let displayStatus: ParraTicketDisplayStatus
+    let status: ParraTicketStatus?
+    let displayStatus: ParraTicketDisplayStatus?
     let statusTitle: String
     let votingEnabled: Bool
     private(set) var voted: Bool

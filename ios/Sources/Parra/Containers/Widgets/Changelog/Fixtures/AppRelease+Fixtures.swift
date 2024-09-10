@@ -21,10 +21,10 @@ extension ParraAppRelease: ParraFixture {
                 name: element.name,
                 version: element.version,
                 description: element.description,
-                type: element.type,
+                type: element.type.value,
                 tenantId: element.tenantId,
                 releaseNumber: element.releaseNumber,
-                status: element.status,
+                status: element.status.value,
                 sections: ParraAppReleaseSection.validStates(),
                 header: ParraReleaseHeader(
                     id: "release-rocket-1",

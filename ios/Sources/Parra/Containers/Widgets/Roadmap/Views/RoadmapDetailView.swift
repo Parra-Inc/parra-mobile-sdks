@@ -45,18 +45,22 @@ struct RoadmapDetailView: View {
                 .frame(maxWidth: .infinity)
 
                 HStack {
-                    RoadmapTicketTypeBadge(
-                        type: ticketContent.type,
-                        size: .md,
-                        educationAlerts: true
-                    )
+                    if let type = ticketContent.type {
+                        RoadmapTicketTypeBadge(
+                            type: type,
+                            size: .md,
+                            educationAlerts: true
+                        )
+                    }
 
-                    RoadmapTicketDisplayStatusBadge(
-                        displayStatus: ticketContent.displayStatus,
-                        title: ticketContent.statusTitle,
-                        size: .md,
-                        educationAlerts: true
-                    )
+                    if let displayStatus = ticketContent.displayStatus {
+                        RoadmapTicketDisplayStatusBadge(
+                            displayStatus: displayStatus,
+                            title: ticketContent.statusTitle,
+                            size: .md,
+                            educationAlerts: true
+                        )
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 

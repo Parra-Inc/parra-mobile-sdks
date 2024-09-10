@@ -15,15 +15,19 @@ struct RoadmapListItem: View {
 
     @ViewBuilder var info: some View {
         HStack(alignment: .center, spacing: 4) {
-            RoadmapTicketTypeBadge(
-                type: ticketContent.type,
-                size: .md
-            )
+            if let type = ticketContent.type {
+                RoadmapTicketTypeBadge(
+                    type: type,
+                    size: .md
+                )
+            }
 
             // Only display the status badge on the in progress tab.
-            if ticketContent.displayStatus == .inProgress {
+            if let displayStatus = ticketContent.displayStatus,
+               displayStatus == .inProgress
+            {
                 RoadmapTicketDisplayStatusBadge(
-                    displayStatus: ticketContent.displayStatus,
+                    displayStatus: displayStatus,
                     title: ticketContent.statusTitle,
                     size: .md
                 )

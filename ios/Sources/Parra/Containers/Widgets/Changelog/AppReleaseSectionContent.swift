@@ -14,7 +14,7 @@ struct AppReleaseSectionContent: Identifiable, Hashable {
     init(_ section: ParraAppReleaseSection) {
         self.id = section.id
         self.title = ParraLabelContent(text: section.title)
-        self.items = section.items.map { TicketStubContent($0.ticket) }
+        self.items = section.items.elements.map { TicketStubContent($0.ticket) }
     }
 
     init(

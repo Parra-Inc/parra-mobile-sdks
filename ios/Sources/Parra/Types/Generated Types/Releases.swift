@@ -76,10 +76,10 @@ public struct ParraUserTicket: Codable, Equatable, Hashable, Identifiable {
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
         self.title = title
-        self.type = type
+        self.type = .init(type)
         self.description = description
-        self.status = status
-        self.displayStatus = displayStatus
+        self.status = .init(status)
+        self.displayStatus = .init(displayStatus)
         self.displayStatusBadgeTitle = displayStatusBadgeTitle
         self.voteCount = voteCount
         self.votingEnabled = votingEnabled
@@ -94,10 +94,10 @@ public struct ParraUserTicket: Codable, Equatable, Hashable, Identifiable {
     public let updatedAt: Date
     public let deletedAt: Date?
     public let title: String
-    public let type: ParraTicketType
+    public let type: NilFailureDecodable<ParraTicketType>
     public let description: String?
-    public let status: ParraTicketStatus
-    public let displayStatus: ParraTicketDisplayStatus
+    public let status: NilFailureDecodable<ParraTicketStatus>
+    public let displayStatus: NilFailureDecodable<ParraTicketDisplayStatus>
     public let displayStatusBadgeTitle: String
     public internal(set) var voteCount: Int
     /// Whether voting is enabled on an individual ticket. Behavior is to hide
@@ -173,7 +173,7 @@ public struct ParraUserTicketCollectionResponse: Codable, Equatable, Hashable {
         self.pageCount = pageCount
         self.pageSize = pageSize
         self.totalCount = totalCount
-        self.data = data
+        self.data = .init(elements: data)
     }
 
     // MARK: - Public
@@ -182,7 +182,7 @@ public struct ParraUserTicketCollectionResponse: Codable, Equatable, Hashable {
     public let pageCount: Int
     public let pageSize: Int
     public let totalCount: Int
-    public let data: [ParraUserTicket]
+    public let data: PartiallyDecodableArray<ParraUserTicket>
 
     // MARK: - Internal
 
@@ -231,13 +231,13 @@ public struct ParraAppRoadmapConfiguration: Codable, Equatable, Hashable {
         tabs: [ParraRoadmapConfigurationTab]
     ) {
         self.form = form
-        self.tabs = tabs
+        self.tabs = .init(elements: tabs)
     }
 
     // MARK: - Public
 
     public let form: ParraFeedbackFormDataStub?
-    public let tabs: [ParraRoadmapConfigurationTab]
+    public let tabs: PartiallyDecodableArray<ParraRoadmapConfigurationTab>
 }
 
 public enum ParraTicketPriority: String, Codable, CaseIterable {
@@ -299,16 +299,16 @@ public struct ParraTicketStub: Codable, Equatable, Hashable, Identifiable {
         self.deletedAt = deletedAt
         self.title = title
         self.shortTitle = shortTitle
-        self.type = type
-        self.status = status
-        self.priority = priority
+        self.type = .init(type)
+        self.status = .init(status)
+        self.priority = .init(priority)
         self.description = description
         self.votingEnabled = votingEnabled
         self.isPublic = isPublic
         self.userNoteId = userNoteId
         self.estimatedStartDate = estimatedStartDate
         self.estimatedCompletionDate = estimatedCompletionDate
-        self.icon = icon
+        self.icon = .init(icon)
         self.ticketNumber = ticketNumber
         self.tenantId = tenantId
         self.voteCount = voteCount
@@ -323,16 +323,16 @@ public struct ParraTicketStub: Codable, Equatable, Hashable, Identifiable {
     public let deletedAt: Date?
     public let title: String
     public let shortTitle: String?
-    public let type: ParraTicketType
-    public let status: ParraTicketStatus
-    public let priority: ParraTicketPriority?
+    public let type: NilFailureDecodable<ParraTicketType>
+    public let status: NilFailureDecodable<ParraTicketStatus>
+    public let priority: NilFailureDecodable<ParraTicketPriority>?
     public let description: String?
     public let votingEnabled: Bool
     public let isPublic: Bool
     public let userNoteId: String?
     public let estimatedStartDate: Date?
     public let estimatedCompletionDate: Date?
-    public let icon: ParraTicketIcon?
+    public let icon: NilFailureDecodable<ParraTicketIcon>?
     public let ticketNumber: String
     public let tenantId: String
     public let voteCount: Int
@@ -395,9 +395,9 @@ struct Ticket: Codable, Equatable, Hashable, Identifiable {
         self.deletedAt = deletedAt
         self.title = title
         self.shortTitle = shortTitle
-        self.type = type
-        self.status = status
-        self.priority = priority
+        self.type = .init(type)
+        self.status = .init(status)
+        self.priority = .init(priority)
         self.description = description
         self.votingEnabled = votingEnabled
         self.isPublic = isPublic
@@ -419,9 +419,9 @@ struct Ticket: Codable, Equatable, Hashable, Identifiable {
     public let deletedAt: Date?
     public let title: String
     public let shortTitle: String?
-    public let type: ParraTicketType
-    public let status: ParraTicketStatus
-    public let priority: ParraTicketPriority?
+    public let type: NilFailureDecodable<ParraTicketType>
+    public let status: NilFailureDecodable<ParraTicketStatus>
+    public let priority: NilFailureDecodable<ParraTicketPriority>?
     public let description: String?
     public let votingEnabled: Bool
     public let isPublic: Bool
@@ -514,14 +514,14 @@ public struct ParraAppReleaseSection: Codable, Identifiable, Equatable, Hashable
     ) {
         self.id = id
         self.title = title
-        self.items = items
+        self.items = .init(elements: items)
     }
 
     // MARK: - Public
 
     public let id: String
     public let title: String
-    public let items: [ParraAppReleaseItem]
+    public let items: PartiallyDecodableArray<ParraAppReleaseItem>
 }
 
 public struct ParraAppRelease: Codable, Equatable, Hashable, Identifiable {
@@ -535,10 +535,10 @@ public struct ParraAppRelease: Codable, Equatable, Hashable, Identifiable {
         name: String,
         version: String,
         description: String?,
-        type: ParraReleaseType,
+        type: ParraReleaseType?,
         tenantId: String,
         releaseNumber: Int,
-        status: ParraReleaseStatus,
+        status: ParraReleaseStatus?,
         sections: [ParraAppReleaseSection],
         header: ParraReleaseHeader?
     ) {
@@ -549,11 +549,11 @@ public struct ParraAppRelease: Codable, Equatable, Hashable, Identifiable {
         self.name = name
         self.version = version
         self.description = description
-        self.type = type
+        self.type = .init(type)
         self.tenantId = tenantId
         self.releaseNumber = releaseNumber
-        self.status = status
-        self.sections = sections
+        self.status = .init(status)
+        self.sections = .init(elements: sections)
         self.header = header
     }
 
@@ -566,11 +566,11 @@ public struct ParraAppRelease: Codable, Equatable, Hashable, Identifiable {
     public let name: String
     public let version: String
     public let description: String?
-    public let type: ParraReleaseType
+    public let type: NilFailureDecodable<ParraReleaseType>
     public let tenantId: String
     public let releaseNumber: Int
-    public let status: ParraReleaseStatus
-    public let sections: [ParraAppReleaseSection]
+    public let status: NilFailureDecodable<ParraReleaseStatus>
+    public let sections: PartiallyDecodableArray<ParraAppReleaseSection>
     public let header: ParraReleaseHeader?
 
     // MARK: - Internal
@@ -648,10 +648,10 @@ struct ReleaseStub: Codable, Equatable, Hashable, Identifiable {
         self.name = name
         self.version = version
         self.description = description
-        self.type = type
+        self.type = .init(type)
         self.tenantId = tenantId
         self.releaseNumber = releaseNumber
-        self.status = status
+        self.status = .init(status)
     }
 
     // MARK: - Public
@@ -663,10 +663,10 @@ struct ReleaseStub: Codable, Equatable, Hashable, Identifiable {
     public let name: String
     public let version: String
     public let description: String?
-    public let type: ParraReleaseType
+    public let type: NilFailureDecodable<ParraReleaseType>
     public let tenantId: String
     public let releaseNumber: Int
-    public let status: ParraReleaseStatus
+    public let status: NilFailureDecodable<ParraReleaseStatus>
 
     // MARK: - Internal
 
@@ -709,10 +709,10 @@ struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
         self.name = name
         self.version = version
         self.description = description
-        self.type = type
+        self.type = .init(type)
         self.tenantId = tenantId
         self.releaseNumber = releaseNumber
-        self.status = status
+        self.status = .init(status)
         self.header = header
     }
 
@@ -725,10 +725,10 @@ struct AppReleaseStub: Codable, Equatable, Hashable, Identifiable {
     public let name: String
     public let version: String
     public let description: String?
-    public let type: ParraReleaseType
+    public let type: NilFailureDecodable<ParraReleaseType>
     public let tenantId: String
     public let releaseNumber: Int
-    public let status: ParraReleaseStatus
+    public let status: NilFailureDecodable<ParraReleaseStatus>
     public let header: ParraReleaseHeader?
 
     // MARK: - Internal
@@ -763,7 +763,7 @@ struct AppReleaseCollectionResponse: Codable, Equatable, Hashable {
         self.pageCount = pageCount
         self.pageSize = pageSize
         self.totalCount = totalCount
-        self.data = data
+        self.data = .init(elements: data)
     }
 
     // MARK: - Public
@@ -772,7 +772,7 @@ struct AppReleaseCollectionResponse: Codable, Equatable, Hashable {
     public let pageCount: Int
     public let pageSize: Int
     public let totalCount: Int
-    public let data: [AppReleaseStub]
+    public let data: PartiallyDecodableArray<AppReleaseStub>
 
     // MARK: - Internal
 
@@ -855,14 +855,14 @@ public struct ParraExternalDomainData: Codable, Equatable, Hashable {
         name: String,
         disabled: Bool
     ) {
-        self.status = status
+        self.status = .init(status)
         self.name = name
         self.disabled = disabled
     }
 
     // MARK: - Public
 
-    public let status: ParraDomainStatus
+    public let status: NilFailureDecodable<ParraDomainStatus>
     public let name: String
     public let disabled: Bool
 }
@@ -884,7 +884,7 @@ public struct ParraDomain: Codable, Equatable, Hashable, Identifiable {
         data: ParraDomainData?
     ) {
         self.id = id
-        self.type = type
+        self.type = .init(type)
         self.name = name
         self.title = title
         self.host = host
@@ -895,23 +895,30 @@ public struct ParraDomain: Codable, Equatable, Hashable, Identifiable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
-        self.type = try container.decode(ParraDomainType.self, forKey: .type)
+        self.type = try container.decode(
+            NilFailureDecodable<ParraDomainType>.self,
+            forKey: .type
+        )
         self.name = try container.decode(String.self, forKey: .name)
         self.title = try container.decode(String.self, forKey: .title)
         self.host = try container.decode(String.self, forKey: .host)
         self.url = try container.decode(URL.self, forKey: .url)
 
-        switch type {
-        case .external:
-            self.data = try .externalDomainData(container.decode(
-                ParraExternalDomainData.self,
-                forKey: .data
-            ))
-        case .fallback:
-            self.data = nil
-        case .managed:
-            self.data = nil
-        case .subdomain:
+        if let type = type.value {
+            switch type {
+            case .external:
+                self.data = try .externalDomainData(container.decode(
+                    ParraExternalDomainData.self,
+                    forKey: .data
+                ))
+            case .fallback:
+                self.data = nil
+            case .managed:
+                self.data = nil
+            case .subdomain:
+                self.data = nil
+            }
+        } else {
             self.data = nil
         }
     }
@@ -919,7 +926,7 @@ public struct ParraDomain: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Public
 
     public let id: String
-    public let type: ParraDomainType
+    public let type: NilFailureDecodable<ParraDomainType>
     public let name: String
     public let title: String
     public let host: String
@@ -993,9 +1000,9 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
         self.isTest = isTest
         self.parentTenantId = parentTenantId
         self.logo = logo
-        self.domains = domains
+        self.domains = .init(elements: domains ?? [])
         self.urls = urls
-        self.entitlements = entitlements
+        self.entitlements = .init(elements: entitlements ?? [])
         self.hideBranding = hideBranding
     }
 
@@ -1013,9 +1020,9 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
     public let isTest: Bool
     public let parentTenantId: String?
     public let logo: ParraImageAssetStub?
-    public let domains: [ParraDomain]?
+    public let domains: PartiallyDecodableArray<ParraDomain>?
     public let urls: [URL]?
-    public let entitlements: [ParraEntitlement]?
+    public let entitlements: PartiallyDecodableArray<ParraEntitlement>?
     /// Parra branding is hidden within the SDK for some paid plans.
     public let hideBranding: Bool
 
@@ -1228,13 +1235,13 @@ public struct ParraPasswordConfig: Codable, Equatable, Hashable {
         rules: [ParraPasswordRule]
     ) {
         self.iosPasswordRulesDescriptor = iosPasswordRulesDescriptor
-        self.rules = rules
+        self.rules = .init(elements: rules)
     }
 
     // MARK: - Public
 
     public let iosPasswordRulesDescriptor: String?
-    public let rules: [ParraPasswordRule]
+    public let rules: PartiallyDecodableArray<ParraPasswordRule>
 }
 
 public struct ParraUsernameConfig: Codable, Equatable, Hashable {

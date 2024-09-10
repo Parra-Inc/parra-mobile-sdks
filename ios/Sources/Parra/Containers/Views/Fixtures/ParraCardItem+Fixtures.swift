@@ -12,7 +12,7 @@ import Foundation
 
 extension ParraCardItem: ParraFixture {
     static func validStates() -> [ParraCardItem] {
-        return ParraCardItemFixtures.cardsResponse.items
+        return ParraCardItemFixtures.cardsResponse.items.elements
     }
 
     static func invalidStates() -> [ParraCardItem] {

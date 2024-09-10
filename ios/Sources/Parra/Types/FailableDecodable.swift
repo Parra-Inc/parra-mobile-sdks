@@ -8,6 +8,30 @@
 
 import Foundation
 
+public struct NilFailureDecodable<Base>: Codable, Equatable,
+    Hashable where Base: Codable & Equatable & Hashable
+{
+    // MARK: - Lifecycle
+
+    public init(_ value: Base?) {
+        self.value = value
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if container.decodeNil() {
+            self.value = nil
+        } else {
+            self.value = try? container.decode(Base.self)
+        }
+    }
+
+    // MARK: - Public
+
+    public let value: Base?
+}
+
 struct FailableDecodable<Base: Decodable>: Decodable {
     // MARK: - Lifecycle
 
@@ -21,6 +45,14 @@ struct FailableDecodable<Base: Decodable>: Decodable {
         } catch {
             throw error
         }
+    }
+
+    init(value: Base) {
+        self.result = .success(value)
+    }
+
+    init(error: DecodingError) {
+        self.result = .failure(error)
     }
 
     // MARK: - Internal

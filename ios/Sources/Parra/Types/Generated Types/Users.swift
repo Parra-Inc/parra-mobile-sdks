@@ -272,8 +272,8 @@ struct AuthChallengeResponse: Codable, Equatable, Hashable {
     ) {
         self.exists = exists
         self.type = type
-        self.supportedChallenges = supportedChallenges
-        self.availableChallenges = availableChallenges
+        self.supportedChallenges = .init(supportedChallenges)
+        self.availableChallenges = .init(availableChallenges ?? [])
     }
 
     // MARK: - Internal
@@ -290,19 +290,19 @@ struct AuthChallengeResponse: Codable, Equatable, Hashable {
 
     /// The types of challenges that are available per the `type` of identity,
     /// regardless of whether the user has completed them.
-    let supportedChallenges: [ParraAuthChallenge]
+    let supportedChallenges: PartiallyDecodableArray<ParraAuthChallenge>
 
     /// Challenges that are available for the current user. For example, a user
     /// who signed up with email/password but also has a verified phone number
     /// will have both password and passwordless SMS challenges available.
-    let availableChallenges: [ParraAuthChallenge]?
+    let availableChallenges: PartiallyDecodableArray<ParraAuthChallenge>?
 
     var currentChallenges: [ParraAuthChallenge] {
         if exists {
-            return availableChallenges ?? []
+            return availableChallenges?.elements ?? []
         }
 
-        return supportedChallenges
+        return supportedChallenges.elements
     }
 
     func hasAvailableChallenge(
@@ -312,7 +312,7 @@ struct AuthChallengeResponse: Codable, Equatable, Hashable {
             return false
         }
 
-        return availableChallenges.contains { $0.id == type }
+        return availableChallenges.elements.contains { $0.id == type }
     }
 }
 

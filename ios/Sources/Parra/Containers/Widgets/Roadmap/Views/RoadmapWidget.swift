@@ -262,7 +262,7 @@ struct RoadmapWidget: Container {
                 initialParams: RoadmapWidget.ContentObserver.InitialParams(
                     roadmapConfig: ParraAppRoadmapConfiguration.validStates()[0],
                     selectedTab: ParraAppRoadmapConfiguration.validStates()[0]
-                        .tabs[0],
+                        .tabs.elements[0],
                     ticketResponse: ParraUserTicketCollectionResponse
                         .validStates()[0],
                     api: parra.parraInternal.api

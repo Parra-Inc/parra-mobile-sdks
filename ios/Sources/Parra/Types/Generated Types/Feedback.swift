@@ -118,14 +118,14 @@ public struct ParraFeedbackFormData: Codable, Equatable, Hashable {
     ) {
         self.title = title
         self.description = description
-        self.fields = fields
+        self.fields = .init(elements: fields)
     }
 
     // MARK: - Public
 
     public let title: String
     public let description: String?
-    public let fields: [ParraFeedbackFormField]
+    public let fields: PartiallyDecodableArray<ParraFeedbackFormField>
 }
 
 public struct ParraFeedbackFormDataStub: Codable, Equatable, Hashable, Identifiable {
@@ -649,35 +649,12 @@ struct CardsResponse: Codable, Equatable, Hashable {
     init(
         items: [ParraCardItem]
     ) {
-        self.items = items
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let unfilteredItems = try container.decode(
-            [FailableDecodable<ParraCardItem>].self,
-            forKey: .items
-        )
-
-        self.items = unfilteredItems.compactMap { item in
-            switch item.result {
-            case .success(let base):
-                return base
-            case .failure(let error):
-                let debugError = (error as CustomDebugStringConvertible)
-                    .debugDescription
-                Logger.warn(
-                    "CardsResponse error parsing card",
-                    [NSLocalizedDescriptionKey: debugError]
-                )
-                return nil
-            }
-        }
+        self.items = .init(elements: items)
     }
 
     // MARK: - Public
 
-    public let items: [ParraCardItem]
+    public let items: PartiallyDecodableArray<ParraCardItem>
 }
 
 public enum ParraQuestionKind: String, Codable, Equatable {
@@ -1297,7 +1274,7 @@ struct QuestionCollectionResponse: Codable, Equatable, Hashable {
         self.pageCount = pageCount
         self.pageSize = pageSize
         self.totalCount = totalCount
-        self.data = data
+        self.data = .init(elements: data)
     }
 
     // MARK: - Public
@@ -1306,7 +1283,7 @@ struct QuestionCollectionResponse: Codable, Equatable, Hashable {
     public let pageCount: Int
     public let pageSize: Int
     public let totalCount: Int
-    public let data: [ParraQuestion]
+    public let data: PartiallyDecodableArray<ParraQuestion>
 
     // MARK: - Internal
 

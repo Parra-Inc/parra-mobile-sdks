@@ -341,7 +341,7 @@ public final class ParraFeedback {
         let cards = cardsResponse.items
 
         var validCards = [ParraCardItem]()
-        for card in cards {
+        for card in cards.elements {
             // TODO: Filter card items without an app area.
             guard card.displayType == .drawer || card.displayType == .popup else {
                 continue

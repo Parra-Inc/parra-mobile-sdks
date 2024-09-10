@@ -27,15 +27,17 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
         self.description = ParraLabelContent(
             text: newInstalledAppVersion.release.description
         )
-        self.type = ParraLabelContent(
-            text: newInstalledAppVersion.release.type.userFacingString
-        )
+        if let type = newInstalledAppVersion.release.type.value {
+            self.type = ParraLabelContent(text: type.userFacingString)
+        } else {
+            self.type = nil
+        }
         self.createdAt = ParraLabelContent(
             text: newInstalledAppVersion.release.createdAt.timeAgo(
                 dateTimeStyle: .numeric
             )
         )
-        self.sections = newInstalledAppVersion.release.sections.map {
+        self.sections = newInstalledAppVersion.release.sections.elements.map {
             AppReleaseSectionContent($0)
         }
         self.header = ReleaseHeaderContent(
@@ -64,13 +66,17 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
         self.subtitle = nil
         self.version = ParraLabelContent(text: release.version)
         self.description = ParraLabelContent(text: release.description)
-        self.type = ParraLabelContent(text: release.type.userFacingString)
+        if let type = release.type.value {
+            self.type = ParraLabelContent(text: type.userFacingString)
+        } else {
+            self.type = nil
+        }
         self.createdAt = ParraLabelContent(
             text: release.createdAt.timeAgo(
                 dateTimeStyle: .numeric
             )
         )
-        self.sections = release.sections.map { AppReleaseSectionContent($0) }
+        self.sections = release.sections.elements.map { AppReleaseSectionContent($0) }
         self.header = ReleaseHeaderContent(release.header)
         self.otherReleasesButton = nil
     }
@@ -83,7 +89,13 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
         self.subtitle = nil
         self.version = ParraLabelContent(text: release.version)
         self.description = ParraLabelContent(text: release.description)
-        self.type = ParraLabelContent(text: release.type.userFacingString)
+
+        if let type = release.type.value {
+            self.type = ParraLabelContent(text: type.userFacingString)
+        } else {
+            self.type = nil
+        }
+
         self.createdAt = ParraLabelContent(
             text: release.createdAt.timeAgo(
                 dateTimeStyle: .numeric
@@ -101,7 +113,7 @@ struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
     let title: ParraLabelContent
     let subtitle: ParraLabelContent?
     let version: ParraLabelContent
-    let type: ParraLabelContent
+    let type: ParraLabelContent?
     let createdAt: ParraLabelContent
     let description: ParraLabelContent?
     let sections: [AppReleaseSectionContent]

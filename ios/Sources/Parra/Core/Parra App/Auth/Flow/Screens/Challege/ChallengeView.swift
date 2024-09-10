@@ -130,7 +130,7 @@ struct ChallengeView: View {
         let rules = passwordConfig.rules
 
         if password.isEmpty {
-            validatedRules = rules.map { rule in
+            validatedRules = rules.elements.map { rule in
                 (rule, false)
             }
             passwordState = .init(
@@ -143,7 +143,7 @@ struct ChallengeView: View {
 
         var isValid = true
 
-        validatedRules = rules.map { rule in
+        validatedRules = rules.elements.map { rule in
             let valid: Bool
 
             do {
@@ -183,7 +183,7 @@ struct ChallengeView: View {
         let authInfo = parraAppInfo.auth
 
         if passwordChallengeAvailable {
-            let rules = authInfo.database?.password?.rules ?? []
+            let rules = authInfo.database?.password?.rules.elements ?? []
             let rulesDescriptor = authInfo.database?.password?
                 .iosPasswordRulesDescriptor
             let validationRules = rules.map { rule in

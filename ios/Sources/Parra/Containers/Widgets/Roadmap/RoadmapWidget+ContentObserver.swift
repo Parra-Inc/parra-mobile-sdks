@@ -50,7 +50,7 @@ extension RoadmapWidget {
             self.roadmapConfig = roadmapConfig
             self.canAddRequests = roadmapConfig.form != nil
             self.api = initialParams.api
-            self.tabs = roadmapConfig.tabs
+            self.tabs = roadmapConfig.tabs.elements
             self.content = Content(
                 title: "Roadmap",
                 addRequestButton: addRequestButton,
@@ -62,7 +62,7 @@ extension RoadmapWidget {
                 TicketUserContent,
                 ParraRoadmapConfigurationTab
             >.Data(
-                items: ticketResponse.data.map { TicketUserContent($0) },
+                items: ticketResponse.data.elements.map { TicketUserContent($0) },
                 placeholderItems: [],
                 pageSize: ticketResponse.pageSize,
                 knownCount: ticketResponse.totalCount
@@ -237,7 +237,7 @@ extension RoadmapWidget {
                 filter: tab.key
             )
 
-            return response.data.map { TicketUserContent($0) }
+            return response.data.elements.map { TicketUserContent($0) }
         }
     }
 }
