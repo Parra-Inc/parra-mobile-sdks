@@ -118,7 +118,7 @@ public struct ParraFeedbackFormData: Codable, Equatable, Hashable {
     ) {
         self.title = title
         self.description = description
-        self.fields = .init(elements: fields)
+        self.fields = .init(fields)
     }
 
     // MARK: - Public
@@ -649,7 +649,7 @@ struct CardsResponse: Codable, Equatable, Hashable {
     init(
         items: [ParraCardItem]
     ) {
-        self.items = .init(elements: items)
+        self.items = .init(items)
     }
 
     // MARK: - Public
@@ -1274,7 +1274,7 @@ struct QuestionCollectionResponse: Codable, Equatable, Hashable {
         self.pageCount = pageCount
         self.pageSize = pageSize
         self.totalCount = totalCount
-        self.data = .init(elements: data)
+        self.data = .init(data)
     }
 
     // MARK: - Public

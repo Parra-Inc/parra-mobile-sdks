@@ -402,8 +402,8 @@ class AuthenticationFlowManager {
                 identityType: authChallengeResponse.type,
                 userExists: authChallengeResponse.exists,
                 availableChallenges: authChallengeResponse
-                    .availableChallenges ?? [],
-                supportedChallenges: authChallengeResponse.supportedChallenges,
+                    .availableChallenges?.elements ?? [],
+                supportedChallenges: authChallengeResponse.supportedChallenges.elements,
                 legalInfo: appInfo.legal,
                 submit: { challengeResponse in
                     try await self.onChallengeResponseSubmitted(

@@ -173,7 +173,7 @@ public struct ParraUserTicketCollectionResponse: Codable, Equatable, Hashable {
         self.pageCount = pageCount
         self.pageSize = pageSize
         self.totalCount = totalCount
-        self.data = .init(elements: data)
+        self.data = .init(data)
     }
 
     // MARK: - Public
@@ -231,7 +231,7 @@ public struct ParraAppRoadmapConfiguration: Codable, Equatable, Hashable {
         tabs: [ParraRoadmapConfigurationTab]
     ) {
         self.form = form
-        self.tabs = .init(elements: tabs)
+        self.tabs = .init(tabs)
     }
 
     // MARK: - Public
@@ -514,7 +514,7 @@ public struct ParraAppReleaseSection: Codable, Identifiable, Equatable, Hashable
     ) {
         self.id = id
         self.title = title
-        self.items = .init(elements: items)
+        self.items = .init(items)
     }
 
     // MARK: - Public
@@ -553,7 +553,7 @@ public struct ParraAppRelease: Codable, Equatable, Hashable, Identifiable {
         self.tenantId = tenantId
         self.releaseNumber = releaseNumber
         self.status = .init(status)
-        self.sections = .init(elements: sections)
+        self.sections = .init(sections)
         self.header = header
     }
 
@@ -763,7 +763,7 @@ struct AppReleaseCollectionResponse: Codable, Equatable, Hashable {
         self.pageCount = pageCount
         self.pageSize = pageSize
         self.totalCount = totalCount
-        self.data = .init(elements: data)
+        self.data = .init(data)
     }
 
     // MARK: - Public
@@ -1000,9 +1000,9 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
         self.isTest = isTest
         self.parentTenantId = parentTenantId
         self.logo = logo
-        self.domains = .init(elements: domains ?? [])
+        self.domains = .init(domains ?? [])
         self.urls = urls
-        self.entitlements = .init(elements: entitlements ?? [])
+        self.entitlements = .init(entitlements ?? [])
         self.hideBranding = hideBranding
     }
 
@@ -1235,7 +1235,7 @@ public struct ParraPasswordConfig: Codable, Equatable, Hashable {
         rules: [ParraPasswordRule]
     ) {
         self.iosPasswordRulesDescriptor = iosPasswordRulesDescriptor
-        self.rules = .init(elements: rules)
+        self.rules = .init(rules)
     }
 
     // MARK: - Public
