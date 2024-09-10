@@ -40,6 +40,7 @@ struct RoadmapTicketTypeIcon: View {
             RoadmapTicketTypeIcon(type: .bug)
             RoadmapTicketTypeIcon(type: .feature)
             RoadmapTicketTypeIcon(type: .improvement)
+            RoadmapTicketTypeIcon(type: .task)
         }
     }
 }

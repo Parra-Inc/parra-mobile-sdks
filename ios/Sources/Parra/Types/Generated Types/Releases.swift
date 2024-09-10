@@ -29,6 +29,7 @@ public enum ParraTicketType: String, Codable, Equatable, CaseIterable {
     case bug
     case feature
     case improvement
+    case task
 }
 
 public enum ParraTicketStatus: String, Codable, Equatable, CaseIterable {

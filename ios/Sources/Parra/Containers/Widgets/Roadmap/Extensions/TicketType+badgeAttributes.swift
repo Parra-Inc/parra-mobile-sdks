@@ -17,6 +17,8 @@ extension ParraTicketType {
             return "plus"
         case .improvement:
             return "sparkles"
+        case .task:
+            return "checkmark"
         }
     }
 
@@ -32,17 +34,21 @@ extension ParraTicketType {
             return CGSize(width: 12, height: 12)
         case .improvement:
             return CGSize(width: 12, height: 12)
+        case .task:
+            return CGSize(width: 12, height: 12)
         }
     }
 
     var backgroundColor: ParraColor {
         switch self {
         case .bug:
-            return ParraColorSwatch.red.shade500
+            return ParraColorSwatch.rose.shade400
         case .feature:
-            return ParraColorSwatch.sky.shade400
+            return ParraColorSwatch.green.shade400
         case .improvement:
-            return ParraColorSwatch.lime.shade400
+            return ParraColorSwatch.indigo.shade400
+        case .task:
+            return ParraColorSwatch.sky.shade400
         }
     }
 
@@ -54,6 +60,8 @@ extension ParraTicketType {
             return "feature"
         case .improvement:
             return "improvement"
+        case .task:
+            return "task"
         }
     }
 
@@ -65,6 +73,8 @@ extension ParraTicketType {
             return "Feature request"
         case .improvement:
             return "Suggested improvement"
+        case .task:
+            return "Task"
         }
     }
 
@@ -76,6 +86,8 @@ extension ParraTicketType {
             return "When you envision new capabilities or enhancements that could make the app more useful or enjoyable."
         case .improvement:
             return "When you spot opportunities to refine existing features or the app's overall performance for a better experience."
+        case .task:
+            return "Something that needs to be completed or changed that doesn't fall into other categories like bug fixes or features."
         }
     }
 }
