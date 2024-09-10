@@ -256,7 +256,19 @@ class ParraInternal {
 
             return appInfo
         } catch {
-            logger.error("Failed to fetch latest app info", error)
+            if let cachedAppInfo = await appInfoManager.cachedAppInfo() {
+                logger.warn(
+                    "Failed to fetch latest app info. Falling back on cache.",
+                    error
+                )
+
+                return cachedAppInfo
+            }
+
+            logger.error(
+                "Failed to fetch latest app info.",
+                error
+            )
 
             throw error
         }
