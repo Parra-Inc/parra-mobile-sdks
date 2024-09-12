@@ -44,10 +44,15 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatabl
                 if !params.userExists, params.legalInfo.hasDocuments {
                     Spacer()
 
-                    LegalInfoView(
-                        legalInfo: params.legalInfo,
-                        theme: parraTheme
-                    )
+                    // The extra vstack is to try to work around a bug where
+                    // this is occasionally not centered horizontally.
+                    VStack(alignment: .center) {
+                        LegalInfoView(
+                            legalInfo: params.legalInfo,
+                            theme: parraTheme
+                        )
+                    }
+                    .frame(maxWidth: .infinity)
                 }
             }
             .frame(
