@@ -14,15 +14,29 @@ struct RecentLogViewer: View {
     // MARK: - Internal
 
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(debugLogStore.logs) { log in
-                    LogView(log: log)
+        NavigationStack {
+            ScrollView {
+                LazyVStack {
+                    ForEach(debugLogStore.shareableLogs.logs) { log in
+                        LogView(log: log)
+                    }
                 }
             }
+            .contentMargins(20, for: .scrollContent)
+            .background(palette.primaryBackground)
+            .navigationTitle("Logs")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                trailing:
+                ShareLink(
+                    item: debugLogStore.shareableLogs,
+                    preview: SharePreview("Parra debug logs"),
+                    label: {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                )
+            )
         }
-        .contentMargins(20, for: .scrollContent)
-        .background(palette.primaryBackground)
     }
 
     // MARK: - Private
