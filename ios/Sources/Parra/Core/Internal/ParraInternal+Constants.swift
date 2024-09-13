@@ -66,6 +66,7 @@ extension ParraInternal {
         static let backgroundTaskName = "com.parra.session.backgroundtask"
         static let backgroundTaskDuration: TimeInterval = 25.0
         static let betaAppBundleId = "com.parra.parra-ios-client"
+        static let devAppBundleId = "com.parra.parra-ios-dev-client"
         static let eventPrefix = "parra:"
     }
 }

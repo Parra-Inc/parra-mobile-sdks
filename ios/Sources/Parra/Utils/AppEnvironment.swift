@@ -43,6 +43,10 @@ enum AppEnvironment {
     static let isParraDemoBeta: Bool = isBeta && ParraInternal
         .isBundleIdDemoApp()
 
+    static let isDebugParraDevApp: Bool = isDebug && ParraInternal.isBundleIdDevApp()
+
+    static let shouldAllowDebugLogger: Bool = isParraDemoBeta || isDebugParraDevApp
+
     static let isProduction: Bool = !isDebug && !isBeta
 
     static let appConfiguration: Environment = {

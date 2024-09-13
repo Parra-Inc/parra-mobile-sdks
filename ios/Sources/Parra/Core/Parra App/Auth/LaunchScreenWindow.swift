@@ -135,7 +135,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                 toast: $alertManager.currentToast
             )
             .onShake {
-                if AppEnvironment.isParraDemoBeta {
+                if AppEnvironment.shouldAllowDebugLogger {
                     showLogs = true
                 }
             }

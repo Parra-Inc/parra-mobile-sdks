@@ -19,6 +19,11 @@ extension ParraInternal {
         return appBundleIdentifier() == Constants.betaAppBundleId
     }
 
+    /// Whether the current app with Parra installed is the dev app.
+    static func isBundleIdDevApp() -> Bool {
+        return appBundleIdentifier() == Constants.devAppBundleId
+    }
+
     static func appUserDefaultsSuite() -> String {
         // ! The suite can not be the bundle id. This will result in warning:
         // _NSUserDefaults_Log_Nonsensical_Suites
