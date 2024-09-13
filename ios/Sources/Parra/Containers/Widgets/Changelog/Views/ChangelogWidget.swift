@@ -95,14 +95,15 @@ struct ChangelogWidget: Container {
         }
     }
 
+    @ViewBuilder
     func items(
         with attributes: ParraAttributes.Widget
     ) -> some View {
-        LazyVStack(alignment: .leading, spacing: 12) {
-            let items = contentObserver.releasePaginator.items
+        let paginator = contentObserver.releasePaginator!
 
+        LazyVStack(alignment: .leading, spacing: 12) {
             ForEach(
-                Array(items.enumerated()),
+                Array(paginator.items.enumerated()),
                 id: \.element
             ) { index, release in
                 NavigationLink(
@@ -124,7 +125,7 @@ struct ChangelogWidget: Container {
                 .id(release.id)
             }
 
-            if contentObserver.releasePaginator.isLoading {
+            if paginator.isLoading && !paginator.isRefreshing {
                 VStack(alignment: .center) {
                     ProgressView()
                 }

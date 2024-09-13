@@ -48,6 +48,7 @@ class Paginator<Item, Context>: ObservableObject
         self.pageFetcher = pageFetcher
         self.placeholderItems = placeholderItems
         self.isLoading = false
+        self.isRefreshing = false
         self.lastFetchedOffset = nil
 
         if items.isEmpty {
@@ -129,6 +130,7 @@ class Paginator<Item, Context>: ObservableObject
 
     @Published var items: [Item]
     @Published private(set) var isLoading: Bool
+    @Published private(set) var isRefreshing: Bool
     @Published private(set) var error: Error?
     @Published private(set) var isShowingPlaceholders: Bool
 
@@ -138,13 +140,21 @@ class Paginator<Item, Context>: ObservableObject
                 return
             }
 
+            guard !isRefreshing else {
+                logger.trace("Already refreshing. Skipping refresh.")
+
+                return
+            }
+
             guard !isLoading else {
+                logger.trace("Already loading. Skipping refresh.")
+
                 return
             }
 
             logger.trace("Beginning refresh for \(context)")
 
-            isLoading = true
+            isRefreshing = true
             error = nil
 
             do {
@@ -153,7 +163,7 @@ class Paginator<Item, Context>: ObservableObject
                 await MainActor.run {
                     lastFetchedOffset = 0
                     items = nextPage
-                    isLoading = false
+                    isRefreshing = false
                     isShowingPlaceholders = false
                 }
             } catch {
@@ -161,7 +171,7 @@ class Paginator<Item, Context>: ObservableObject
                     self.error = error
                     items = []
                     isShowingPlaceholders = false
-                    isLoading = false
+                    isRefreshing = false
                 }
             }
         }
@@ -177,6 +187,11 @@ class Paginator<Item, Context>: ObservableObject
 
         guard !isLoading else {
             logger.trace("Already loading. Skipping load.")
+            return
+        }
+
+        guard !isRefreshing else {
+            logger.trace("Already refreshing. Skipping load.")
             return
         }
 
