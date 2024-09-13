@@ -37,6 +37,6 @@ final class DebugLogStore {
             timestamp: timestamp
         )
 
-        logs.append(log)
+        logs.insert(log, at: 0)
     }
 }
