@@ -18,7 +18,7 @@ pub async fn report_event(
     event_name: &str,
     metadata: Option<HashMap<&str, &str>>,
 ) -> Result<(), Box<dyn Error>> {
-    // POST /tracking/events
+    // POST /tracking/sessions
 
     let authorized_user = get_cached_user_if_present().await;
     let credential: Option<Credential> =
@@ -28,7 +28,7 @@ pub async fn report_event(
             None
         };
 
-    let endpoint = "/tracking/events";
+    let endpoint = "/tracking/sessions";
     let body = EventRequest {
         name: event_name.to_string(),
         metadata: metadata.unwrap_or(HashMap::from([])),
