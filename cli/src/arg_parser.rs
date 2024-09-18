@@ -78,6 +78,18 @@ pub enum Command {
     Logout(LogoutCommandArgs),
 }
 
+impl Display for Command {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let output = match self {
+            Command::Bootstrap(_) => "bootstrap",
+            Command::Login(_) => "login",
+            Command::Logout(_) => "logout",
+        };
+
+        write!(f, "{}", output)
+    }
+}
+
 pub fn parse_args() -> Cli {
     Cli::parse()
 }
