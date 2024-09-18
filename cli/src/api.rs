@@ -6,7 +6,7 @@ use crate::{
             ApplicationResponse, ApplicationType, AuthorizedUser,
             TenantRequest, TenantResponse, UserInfoResponse, UserResponse,
         },
-        auth::Credental,
+        auth::Credential,
     },
 };
 use serde::{de::DeserializeOwned, Serialize};
@@ -127,7 +127,7 @@ pub async fn create_application(
 }
 
 pub async fn get_current_user(
-    credential: &Credental,
+    credential: &Credential,
 ) -> Result<UserResponse, Box<dyn Error>> {
     let response: UserInfoResponse =
         perform_get_request(&credential, "/user-info", vec![]).await?;
@@ -147,7 +147,7 @@ async fn ensure_auth() -> Result<AuthorizedUser, Box<dyn Error>> {
 }
 
 async fn perform_get_request<T: DeserializeOwned>(
-    credential: &Credental,
+    credential: &Credential,
     endpoint: &str,
     query: Vec<(&str, &str)>,
 ) -> Result<T, Box<dyn Error>> {
@@ -181,7 +181,7 @@ async fn perform_get_request<T: DeserializeOwned>(
 }
 
 async fn perform_request_with_body<T: DeserializeOwned, U: Serialize>(
-    credential: &Credental,
+    credential: &Credential,
     endpoint: &str,
     method: reqwest::Method,
     body: U,

@@ -1,5 +1,5 @@
 use crate::types::auth::{
-    AuthResponse, Credental, DeviceAuthResponse, RefreshResponse, TokenRequest,
+    AuthResponse, Credential, DeviceAuthResponse, RefreshResponse, TokenRequest,
 };
 use inquire::Confirm;
 use serde::de::DeserializeOwned;
@@ -31,7 +31,7 @@ pub fn logout() -> Result<bool, Box<dyn Error>> {
 }
 
 pub async fn perform_device_authentication(
-) -> Result<(Credental, bool), Box<dyn Error>> {
+) -> Result<(Credential, bool), Box<dyn Error>> {
     match get_persisted_credential() {
         Ok(credential) => {
             let now = SystemTime::now();
@@ -54,8 +54,8 @@ pub async fn perform_device_authentication(
 }
 
 async fn perform_refresh_authentication(
-    credential: &Credental,
-) -> Result<Credental, Box<dyn Error>> {
+    credential: &Credential,
+) -> Result<Credential, Box<dyn Error>> {
     let result: Result<RefreshResponse, Box<dyn Error>> = post_form_request(
         "https://auth.parra.io/oauth/token",
         vec![
@@ -76,7 +76,9 @@ async fn perform_refresh_authentication(
     return persist_refresh_credential(&refresh_response, &credential);
 }
 
-async fn perform_normal_authentication() -> Result<Credental, Box<dyn Error>> {
+async fn perform_normal_authentication() -> Result<Credential, Box<dyn Error>> {
+    // TODO: Both normal and refresh authentication need to be wrapped in try catch, log the auth error, then re-throw.
+
     let device_code_url = "https://auth.parra.io/oauth/device/code";
 
     let device_auth_response: Result<DeviceAuthResponse, Box<dyn Error>> =
@@ -148,7 +150,7 @@ async fn perform_normal_authentication() -> Result<Credental, Box<dyn Error>> {
     );
 }
 
-fn get_persisted_credential() -> Result<Credental, Box<dyn Error>> {
+pub fn get_persisted_credential() -> Result<Credential, Box<dyn Error>> {
     let data = security_framework::passwords::get_generic_password(
         SERVICE_NAME,
         AUTH0_CLIENT_ID,
@@ -156,14 +158,14 @@ fn get_persisted_credential() -> Result<Credental, Box<dyn Error>> {
 
     let data = String::from_utf8(data)?;
 
-    return Ok(serde_json::from_str::<Credental>(&data)?);
+    return Ok(serde_json::from_str::<Credential>(&data)?);
 }
 
 fn persist_refresh_credential(
     data: &RefreshResponse,
-    existing_credential: &Credental,
-) -> Result<Credental, Box<dyn Error>> {
-    let next_credential = Credental {
+    existing_credential: &Credential,
+) -> Result<Credential, Box<dyn Error>> {
+    let next_credential = Credential {
         token: data.access_token.clone(),
         refresh_token: existing_credential.refresh_token.clone(),
         expiry: existing_credential.expiry,
@@ -180,12 +182,12 @@ fn persist_credential(
     access_token: &str,
     expires_in: u64,
     refresh_token: &str,
-) -> Result<Credental, Box<dyn Error>> {
+) -> Result<Credential, Box<dyn Error>> {
     let now = SystemTime::now();
     let mut expiry = now.duration_since(UNIX_EPOCH)?;
     expiry = expiry.add(Duration::from_secs(expires_in));
 
-    let credential = Credental {
+    let credential = Credential {
         token: access_token.to_string(),
         expiry: expiry.as_secs(),
         refresh_token: refresh_token.to_string(),

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::auth::Credental;
+use super::auth::Credential;
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
@@ -19,7 +19,7 @@ pub struct UserInfoResponse {
 
 #[derive(Debug)]
 pub struct AuthorizedUser {
-    pub credential: Credental,
+    pub credential: Credential,
     pub user: UserResponse,
 }
 

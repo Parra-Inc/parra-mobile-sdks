@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
-pub struct Credental {
+pub struct Credential {
     pub token: String,
     pub refresh_token: String,
     pub expiry: u64,
