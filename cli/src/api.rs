@@ -4,14 +4,16 @@ use crate::{
         api::{
             ApplicationCollectionResponse, ApplicationRequest,
             ApplicationResponse, ApplicationType, AuthorizedUser,
-            EmptyResponse, EventRequest, TenantRequest, TenantResponse,
-            UserInfoResponse, UserResponse,
+            EmptyResponse, EventRequest, SessionRequest, TenantRequest,
+            TenantResponse, UserInfoResponse, UserResponse,
         },
         auth::Credential,
     },
 };
+use chrono::{DateTime, Utc};
 use serde::{de::DeserializeOwned, Serialize};
 use std::sync::Mutex;
+use std::time::{SystemTime, UNIX_EPOCH};
 use std::{collections::HashMap, error::Error};
 
 pub async fn report_event(
@@ -28,10 +30,23 @@ pub async fn report_event(
             None
         };
 
+    let now = SystemTime::now();
+    let duration = now
+        .duration_since(UNIX_EPOCH)
+        .expect("SystemTime before UNIX EPOCH!");
+    let date_time = DateTime::<Utc>::from_timestamp(
+        duration.as_secs() as i64,
+        duration.subsec_nanos(),
+    )
+    .expect("Invalid timestamp");
+
     let endpoint = "/tracking/sessions";
-    let body = EventRequest {
-        name: event_name.to_string(),
-        metadata: metadata.unwrap_or(HashMap::from([])),
+    let body = SessionRequest {
+        events: vec![EventRequest {
+            name: event_name.to_string(),
+            created_at: date_time.to_rfc3339(),
+            metadata: metadata.unwrap_or(HashMap::from([])),
+        }],
     };
 
     let result: Result<EmptyResponse, Box<dyn Error>> =
@@ -282,7 +297,10 @@ async fn perform_request_with_body<T: DeserializeOwned, U: Serialize>(
         return Err(format!("Error response received: {}", body).into());
     }
 
-    let body = response.text().await?;
+    let mut body = response.text().await?;
+    if body.is_empty() {
+        body = "{}".to_string();
+    }
 
     parse_json_response(&body)
 }

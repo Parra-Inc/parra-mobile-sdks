@@ -34,7 +34,13 @@ pub struct TenantRequest {
 #[derive(Debug, Serialize)]
 pub struct EventRequest<'a> {
     pub name: String,
+    pub created_at: String,
     pub metadata: HashMap<&'a str, &'a str>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct SessionRequest<'a> {
+    pub events: Vec<EventRequest<'a>>,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
