@@ -10,6 +10,7 @@ use liquid::model::Value;
 use liquid::Object;
 use reqwest::get;
 
+use crate::api;
 use crate::project_generator::renderer;
 use crate::types::api::Icon;
 use crate::types::templates::{CliInput, ProjectContext};
@@ -89,6 +90,9 @@ pub async fn generate_xcode_project(
 
             if !result {
                 exit(1);
+            } else {
+                api::report_event("cli_bootstrap_project_overridden", None)
+                    .await?;
             }
         }
 
@@ -104,7 +108,11 @@ pub async fn generate_xcode_project(
     let rendered_project_template =
         renderer::render_template(&template, &globals)?;
 
+    api::report_event("cli_bootstrap_template_rendered", None).await?;
+
     run_xcodegen(&project_dir, &rendered_project_template)?;
+
+    api::report_event("cli_bootstrap_project_generated", None).await?;
 
     if let Some(icon) = &context.app.icon {
         match replace_app_icon(&target_dir, icon).await {
@@ -116,6 +124,8 @@ pub async fn generate_xcode_project(
     }
 
     install_spm_dependencies(&project_dir)?;
+
+    api::report_event("cli_bootstrap_project_packages_installed", None).await?;
 
     return Ok(target_dir);
 }
