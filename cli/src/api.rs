@@ -4,13 +4,58 @@ use crate::{
         api::{
             ApplicationCollectionResponse, ApplicationRequest,
             ApplicationResponse, ApplicationType, AuthorizedUser,
-            TenantRequest, TenantResponse, UserInfoResponse, UserResponse,
+            EmptyResponse, EventRequest, TenantRequest, TenantResponse,
+            UserInfoResponse, UserResponse,
         },
         auth::Credential,
     },
 };
 use serde::{de::DeserializeOwned, Serialize};
-use std::error::Error;
+use std::sync::Mutex;
+use std::{collections::HashMap, error::Error};
+
+pub async fn report_event(
+    event_name: &str,
+    metadata: Option<HashMap<&str, &str>>,
+) -> Result<(), Box<dyn Error>> {
+    // POST /tracking/events
+
+    let authorized_user = get_cached_user_if_present().await;
+    let credential: Option<Credential> =
+        if let Some(authorized_user) = authorized_user {
+            Some(authorized_user.credential)
+        } else {
+            None
+        };
+
+    let endpoint = "/tracking/events";
+    let body = EventRequest {
+        name: event_name.to_string(),
+        metadata: metadata.unwrap_or(HashMap::from([])),
+    };
+
+    let result: Result<EmptyResponse, Box<dyn Error>> =
+        perform_request_with_body(
+            credential.as_ref(),
+            &endpoint,
+            reqwest::Method::POST,
+            body,
+        )
+        .await;
+
+    match result {
+        Ok(_) => {}
+        Err(error) => {
+            eprintln!(
+                "Error reporting event: {} - error: {}",
+                event_name,
+                error.to_string()
+            )
+        }
+    };
+
+    Ok(())
+}
 
 pub async fn get_tenant(
     tenant_id: &str,
@@ -53,7 +98,7 @@ pub async fn create_tenant(
     };
 
     let response: TenantResponse = perform_request_with_body(
-        &authorized_user.credential,
+        Some(&authorized_user.credential),
         &endpoint,
         reqwest::Method::POST,
         body,
@@ -116,7 +161,7 @@ pub async fn create_application(
     };
 
     let response: ApplicationResponse = perform_request_with_body(
-        &authorized_user.credential,
+        Some(&authorized_user.credential),
         &endpoint,
         reqwest::Method::POST,
         body,
@@ -126,11 +171,23 @@ pub async fn create_application(
     Ok(response)
 }
 
+static CURRENT_USER: Mutex<Option<UserResponse>> = Mutex::new(None);
+
 pub async fn get_current_user(
     credential: &Credential,
 ) -> Result<UserResponse, Box<dyn Error>> {
+    if let Ok(guard) = CURRENT_USER.lock() {
+        if let Some(user) = &*guard {
+            return Ok(user.clone());
+        }
+    }
+
     let response: UserInfoResponse =
         perform_get_request(&credential, "/user-info", vec![]).await?;
+
+    if let Ok(mut guard) = CURRENT_USER.lock() {
+        *guard = Some(response.user.clone());
+    }
 
     return Ok(response.user);
 }
@@ -144,6 +201,25 @@ async fn ensure_auth() -> Result<AuthorizedUser, Box<dyn Error>> {
         credential,
         user: user,
     })
+}
+
+async fn get_cached_user_if_present() -> Option<AuthorizedUser> {
+    let credential_result = auth::get_persisted_credential();
+
+    match credential_result {
+        Ok(credential) => {
+            let user_result = get_current_user(&credential).await;
+
+            match user_result {
+                Ok(user) => Some(AuthorizedUser {
+                    credential: credential,
+                    user: user,
+                }),
+                Err(_) => None,
+            }
+        }
+        Err(_) => None,
+    }
 }
 
 async fn perform_get_request<T: DeserializeOwned>(
@@ -181,16 +257,19 @@ async fn perform_get_request<T: DeserializeOwned>(
 }
 
 async fn perform_request_with_body<T: DeserializeOwned, U: Serialize>(
-    credential: &Credential,
+    credential: Option<&Credential>,
     endpoint: &str,
     method: reqwest::Method,
     body: U,
 ) -> Result<T, Box<dyn Error>> {
     let url = format!("https://api.parra.io/v1{}", endpoint);
     let client = reqwest::Client::new();
-    let token = &credential.token;
 
-    let mut request = client.request(method.clone(), url).bearer_auth(token);
+    let mut request = client.request(method.clone(), url);
+
+    if let Some(credential) = credential {
+        request = request.bearer_auth(&credential.token)
+    }
 
     if method != reqwest::Method::GET {
         request = request.json(&body);

@@ -1,9 +1,11 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 use super::auth::Credential;
 
 #[allow(dead_code)]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct UserResponse {
     pub id: String,
     /// Will be nil in cases where the user registered for a new account during auth
@@ -27,6 +29,12 @@ pub struct AuthorizedUser {
 pub struct TenantRequest {
     pub name: String,
     pub is_test: bool,
+}
+
+#[derive(Debug, Serialize)]
+pub struct EventRequest<'a> {
+    pub name: String,
+    pub metadata: HashMap<&'a str, &'a str>,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
@@ -115,3 +123,6 @@ pub struct ApplicationResponse {
 pub struct ApplicationCollectionResponse {
     pub data: Vec<ApplicationResponse>,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct EmptyResponse {}
