@@ -1,5 +1,5 @@
-use std::env;
 use std::error::Error;
+use std::{collections::HashMap, env};
 mod api;
 mod arg_parser;
 mod auth;
@@ -20,7 +20,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     apply_cli_theme();
 
-    match cli.command {
+    let command_name = &cli.command.to_string();
+    let command_event_prefix = format!("cli_command_{}", command_name);
+
+    api::report_event(&format!("{}_started", command_event_prefix), None)
+        .await?;
+
+    let result = match cli.command {
         Command::Bootstrap(bootstrap_args) => {
             let (generate_demo, use_local_packages) = should_generate_demo();
 
@@ -29,7 +35,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     bootstrap_args.project_path,
                     use_local_packages,
                 )
-                .await?;
+                .await
             } else {
                 commands::bootstrap::execute_bootstrap(
                     bootstrap_args.application_id,
@@ -37,16 +43,41 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     bootstrap_args.project_path,
                     bootstrap_args.template_name.to_string(),
                 )
-                .await?
+                .await
             }
         }
         Command::Login(_) => {
             commands::login::execute_login().await;
-        }
-        Command::Logout(_) => commands::logout::execute_logout(),
-    }
 
-    Ok(())
+            Ok(())
+        }
+        Command::Logout(_) => {
+            commands::logout::execute_logout();
+
+            Ok(())
+        }
+    };
+
+    match result {
+        Ok(_) => {
+            api::report_event(
+                &format!("{}_succeeded", command_event_prefix),
+                None,
+            )
+            .await?;
+
+            Ok(())
+        }
+        Err(error) => {
+            api::report_event(
+                &format!("{}_failed", command_event_prefix),
+                Some(HashMap::from([("error", error.to_string().as_str())])),
+            )
+            .await?;
+
+            Err(error)
+        }
+    }
 }
 
 fn apply_cli_theme() {
