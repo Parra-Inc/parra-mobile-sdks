@@ -1055,7 +1055,9 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
         appId: String?,
         teamId: String?,
         bundleId: String,
-        defaultFeedbackFormId: String?
+        defaultFeedbackFormId: String?,
+        errorFeedbackFormId: String?,
+        metadata: ParraMetadata
     ) {
         self.name = name
         self.description = description
@@ -1063,6 +1065,8 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
         self.teamId = teamId
         self.bundleId = bundleId
         self.defaultFeedbackFormId = defaultFeedbackFormId
+        self.errorFeedbackFormId = errorFeedbackFormId
+        self.metadata = metadata
     }
 
     // MARK: - Public
@@ -1073,6 +1077,8 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
     public let teamId: String?
     public let bundleId: String
     public let defaultFeedbackFormId: String?
+    public let errorFeedbackFormId: String?
+    public let metadata: ParraMetadata
 
     /// Computed using the value from ``appId`` in the format
     /// `itms-apps://itunes.apple.com/app/id\(appId)`.
@@ -1107,6 +1113,8 @@ public struct ParraApplicationIosConfig: Codable, Equatable, Hashable {
         case teamId
         case bundleId
         case defaultFeedbackFormId
+        case errorFeedbackFormId
+        case metadata
     }
 }
 
@@ -1205,7 +1213,9 @@ public final class ParraAppInfo: Codable, Equatable,
             appId: nil,
             teamId: nil,
             bundleId: "",
-            defaultFeedbackFormId: nil
+            defaultFeedbackFormId: nil,
+            errorFeedbackFormId: nil,
+            metadata: ParraMetadata()
         )
     )
 }
