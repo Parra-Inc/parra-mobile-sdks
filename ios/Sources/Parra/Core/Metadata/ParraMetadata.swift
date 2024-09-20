@@ -12,7 +12,8 @@ private let logger = Logger(category: "Parra Metadata")
 
 /// A wrapper around an objects metadata. It allows for direct access to the
 /// metadata dictionary, as well as convenience methods for accessing values.
-public struct ParraMetadata: Codable, Equatable, Hashable {
+@Observable
+public final class ParraMetadata: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(rawValue: [String: ParraAnyCodable]? = nil) {
@@ -31,7 +32,15 @@ public struct ParraMetadata: Codable, Equatable, Hashable {
 
     // MARK: - Public
 
-    public let rawValue: [String: ParraAnyCodable]
+    public private(set) var rawValue: [String: ParraAnyCodable]
+
+    public static func == (lhs: ParraMetadata, rhs: ParraMetadata) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(rawValue)
+    }
 
     public func encode(to encoder: any Encoder) throws {
         var container = try encoder.singleValueContainer()
@@ -39,7 +48,7 @@ public struct ParraMetadata: Codable, Equatable, Hashable {
         try container.encode(rawValue)
     }
 
-    public func `as`<T>(_ type: T.Type) -> T? where T: Decodable {
+    public func `as`<T>(_ type: T.Type) -> T? where T: Decodable & Equatable {
         do {
             return try self.as(type.self)
         } catch {
@@ -47,7 +56,7 @@ public struct ParraMetadata: Codable, Equatable, Hashable {
         }
     }
 
-    public func `as`<T>(_ type: T.Type) throws -> T where T: Decodable {
+    public func `as`<T>(_ type: T.Type) throws -> T where T: Decodable & Equatable {
         let data = try JSONEncoder.parraEncoder.encode(rawValue)
 
         return try JSONDecoder.parraDecoder.decode(T.self, from: data)
