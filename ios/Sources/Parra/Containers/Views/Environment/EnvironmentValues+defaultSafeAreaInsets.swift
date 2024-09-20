@@ -1,9 +1,8 @@
 //
-//  DefaultSafeAreaInsets.swift
-//  Parra
+//  EnvironmentValues+defaultSafeAreaInsets.swift
 //
-//  Created by Mick MacCallum on 2/15/24.
-//  Copyright © 2024 Parra, Inc. All rights reserved.
+//
+//  Created by Mick MacCallum on 9/20/24.
 //
 
 import SwiftUI
