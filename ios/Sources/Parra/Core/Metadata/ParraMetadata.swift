@@ -39,6 +39,20 @@ public struct ParraMetadata: Codable, Equatable, Hashable {
         try container.encode(rawValue)
     }
 
+    public func `as`<T>(_ type: T.Type) -> T? where T: Decodable {
+        do {
+            return try self.as(type.self)
+        } catch {
+            return nil
+        }
+    }
+
+    public func `as`<T>(_ type: T.Type) throws -> T where T: Decodable {
+        let data = try JSONEncoder.parraEncoder.encode(rawValue)
+
+        return try JSONDecoder.parraDecoder.decode(T.self, from: data)
+    }
+
     public func hasValue(for key: String) -> Bool {
         let result = rawValue[key] != nil
 
