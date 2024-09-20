@@ -1,5 +1,5 @@
 //
-//  ComponentFactory.swift
+//  ParraComponentFactory.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -9,7 +9,7 @@
 import SwiftUI
 
 @Observable
-class ComponentFactory {
+public class ParraComponentFactory {
     // MARK: - Lifecycle
 
     init(
@@ -21,8 +21,12 @@ class ComponentFactory {
         self.theme = theme
     }
 
+    // MARK: - Public
+
+    public let attributeProvider: ComponentAttributesProvider
+    public let theme: ParraTheme
+
     // MARK: - Internal
 
-    let attributeProvider: ComponentAttributesProvider
-    let theme: ParraTheme
+    static let `default` = ParraComponentFactory(theme: .default)
 }

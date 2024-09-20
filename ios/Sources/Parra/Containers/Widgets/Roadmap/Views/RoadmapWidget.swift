@@ -13,7 +13,7 @@ struct RoadmapWidget: Container {
 
     init(
         config: ParraRoadmapWidgetConfig,
-        componentFactory: ComponentFactory,
+        componentFactory: ParraComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
@@ -23,7 +23,7 @@ struct RoadmapWidget: Container {
 
     // MARK: - Internal
 
-    let componentFactory: ComponentFactory
+    let componentFactory: ParraComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ParraRoadmapWidgetConfig
 

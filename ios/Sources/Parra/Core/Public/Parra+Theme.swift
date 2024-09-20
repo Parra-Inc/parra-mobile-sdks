@@ -16,7 +16,7 @@ public extension Parra {
         let oldTheme = parraInternal.configuration.theme
         parraInternal.configuration.theme = newTheme
 
-        parraInternal.globalComponentFactory = ComponentFactory(
+        parraInternal.globalComponentFactory = ParraComponentFactory(
             attributes: parraInternal.configuration.globalComponentAttributes,
             theme: newTheme
         )

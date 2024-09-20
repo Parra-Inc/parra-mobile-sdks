@@ -63,7 +63,7 @@ struct ChangelogListItem: View {
     // MARK: - Private
 
     @Environment(ParraChangelogWidgetConfig.self) private var config
-    @Environment(ComponentFactory.self) private var componentFactory
+    @Environment(ParraComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
     @EnvironmentObject private var contentObserver: ChangelogWidget

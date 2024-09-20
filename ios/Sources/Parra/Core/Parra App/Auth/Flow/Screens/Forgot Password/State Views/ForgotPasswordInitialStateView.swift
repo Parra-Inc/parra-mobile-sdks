@@ -73,7 +73,7 @@ struct ForgotPasswordInitialStateView: View {
 
     // MARK: - Private
 
-    @Environment(ComponentFactory.self) private var componentFactory
+    @Environment(ParraComponentFactory.self) private var componentFactory
     @Environment(\.parraAppInfo) private var parraAppInfo
 }
 

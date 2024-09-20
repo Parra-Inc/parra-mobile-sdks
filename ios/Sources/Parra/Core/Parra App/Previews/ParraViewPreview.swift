@@ -16,11 +16,11 @@ struct ParraViewPreview<Content>: View where Content: View {
 
     init(
         theme: ParraTheme = .default,
-        content: @escaping (_ factory: ComponentFactory) -> Content
+        content: @escaping (_ factory: ParraComponentFactory) -> Content
     ) {
         self.content = content
         self.configuration = .init(theme: theme)
-        self.factory = ComponentFactory(
+        self.factory = ParraComponentFactory(
             attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
@@ -75,9 +75,9 @@ struct ParraViewPreview<Content>: View where Content: View {
 
     // MARK: - Private
 
-    @ViewBuilder private var content: (_ factory: ComponentFactory) -> Content
+    @ViewBuilder private var content: (_ factory: ParraComponentFactory) -> Content
 
-    private let factory: ComponentFactory
+    private let factory: ParraComponentFactory
     private let configuration: ParraConfiguration
     private let parra: Parra
 

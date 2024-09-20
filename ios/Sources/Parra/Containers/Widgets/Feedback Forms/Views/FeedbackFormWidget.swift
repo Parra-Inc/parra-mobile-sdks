@@ -13,7 +13,7 @@ struct FeedbackFormWidget: Container {
 
     init(
         config: ParraFeedbackFormWidgetConfig,
-        componentFactory: ComponentFactory,
+        componentFactory: ParraComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
@@ -23,7 +23,7 @@ struct FeedbackFormWidget: Container {
 
     // MARK: - Internal
 
-    let componentFactory: ComponentFactory
+    let componentFactory: ParraComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ParraFeedbackFormWidgetConfig
 

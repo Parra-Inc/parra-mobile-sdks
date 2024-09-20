@@ -14,12 +14,12 @@ protocol Container: View {
 
     // Expected via init
     var config: Config { get }
-    var componentFactory: ComponentFactory { get }
+    var componentFactory: ParraComponentFactory { get }
     var contentObserver: ContentObserver { get }
 
     init(
         config: Config,
-        componentFactory: ComponentFactory,
+        componentFactory: ParraComponentFactory,
         contentObserver: ContentObserver
     )
 }

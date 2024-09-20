@@ -41,7 +41,7 @@ class ContainerRenderer {
         contentTransformer: ((C.ContentObserver) -> Void)? = nil
     ) -> C {
         let theme = configuration.theme
-        let componentFactory = ComponentFactory(
+        let componentFactory = ParraComponentFactory(
             attributes: configuration.globalComponentAttributes,
             theme: theme
         )

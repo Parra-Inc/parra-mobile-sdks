@@ -26,7 +26,7 @@ struct FeedbackChoiceQuestionCard: FeedbackQuestionViewKind {
     typealias AnswerType = SingleOptionAnswer
 
     @Environment(ParraFeedbackCardWidgetConfig.self) var config
-    @Environment(ComponentFactory.self) var componentFactory
+    @Environment(ParraComponentFactory.self) var componentFactory
     @EnvironmentObject var contentObserver: FeedbackCardWidget.ContentObserver
 
     let bucketId: String

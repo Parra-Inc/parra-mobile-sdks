@@ -19,7 +19,7 @@ struct ParraContainerPreview<ContainerType>: View
     init(
         content: @escaping (
             _ parra: Parra,
-            _ factory: ComponentFactory,
+            _ factory: ParraComponentFactory,
             _ config: ContainerType.Config
         ) -> any View,
         config: ContainerType.Config = .init(),
@@ -28,7 +28,7 @@ struct ParraContainerPreview<ContainerType>: View
         self.content = content
         self.configuration = .init(theme: theme)
         self.config = config
-        self.factory = ComponentFactory(
+        self.factory = ParraComponentFactory(
             attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
@@ -71,11 +71,11 @@ struct ParraContainerPreview<ContainerType>: View
 
     @ViewBuilder private var content: (
         _ parra: Parra,
-        _ factory: ComponentFactory,
+        _ factory: ParraComponentFactory,
         _ config: ContainerType.Config
     ) -> any View
 
-    private let factory: ComponentFactory
+    private let factory: ParraComponentFactory
     private let config: ContainerType.Config
     private let configuration: ParraConfiguration
     private let parra: Parra

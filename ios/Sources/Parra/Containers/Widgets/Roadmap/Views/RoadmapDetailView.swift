@@ -124,7 +124,7 @@ struct RoadmapDetailView: View {
 
     // MARK: - Private
 
-    @Environment(ComponentFactory.self) private var componentFactory
+    @Environment(ParraComponentFactory.self) private var componentFactory
 
     @Environment(\.parraTheme) private var parraTheme
 }

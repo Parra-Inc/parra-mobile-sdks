@@ -24,7 +24,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
         self.configuration = ParraConfiguration(
             theme: theme
         )
-        self.factory = ComponentFactory(
+        self.factory = ParraComponentFactory(
             attributes: ParraGlobalComponentAttributes.default,
             theme: theme
         )
@@ -96,7 +96,7 @@ struct ParraCardViewPreview<Content>: View where Content: View {
 
     private let cards: [ParraCardItem]
     private let config: ParraFeedbackCardWidgetConfig
-    private let factory: ComponentFactory
+    private let factory: ParraComponentFactory
     private let configuration: ParraConfiguration
     private let parra: Parra
 

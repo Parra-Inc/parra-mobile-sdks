@@ -180,7 +180,7 @@ struct TextInputComponent: View {
 
     // MARK: - Private
 
-    @Environment(ComponentFactory.self) private var componentFactory
+    @Environment(ParraComponentFactory.self) private var componentFactory
 
     @FocusState private var focusState: FocusField?
     @State private var lastFocusState: FocusField?

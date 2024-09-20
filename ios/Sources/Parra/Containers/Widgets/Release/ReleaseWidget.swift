@@ -13,7 +13,7 @@ struct ReleaseWidget: Container {
 
     init(
         config: ParraChangelogWidgetConfig,
-        componentFactory: ComponentFactory,
+        componentFactory: ParraComponentFactory,
         contentObserver: ReleaseContentObserver
     ) {
         self.config = config
@@ -46,7 +46,7 @@ struct ReleaseWidget: Container {
 
     // MARK: - Internal
 
-    let componentFactory: ComponentFactory
+    let componentFactory: ParraComponentFactory
 
     @StateObject var contentObserver: ReleaseContentObserver
     @StateObject var changelogContentObserver: ChangelogWidget

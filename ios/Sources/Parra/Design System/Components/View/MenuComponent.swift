@@ -45,7 +45,7 @@ struct MenuComponent: View {
     // MARK: - Private
 
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(ComponentFactory.self) private var componentFactory
+    @Environment(ParraComponentFactory.self) private var componentFactory
 
     @State private var selectedOption: ParraMenuContent.Option?
 

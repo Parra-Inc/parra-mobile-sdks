@@ -75,7 +75,7 @@ public struct ParraAuthDefaultForgotPasswordScreen: ParraAuthScreen, Equatable {
 
     @Environment(\.parra) private var parra
 
-    @Environment(ComponentFactory.self) private var componentFactory
+    @Environment(ParraComponentFactory.self) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
     @ViewBuilder private var primaryContent: some View {

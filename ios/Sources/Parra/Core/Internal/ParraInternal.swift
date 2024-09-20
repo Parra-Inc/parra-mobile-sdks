@@ -69,7 +69,7 @@ class ParraInternal {
         self.containerRenderer = containerRenderer
         self.alertManager = alertManager
         self.modalScreenManager = modalScreenManager
-        self.globalComponentFactory = ComponentFactory(
+        self.globalComponentFactory = ParraComponentFactory(
             attributes: configuration.globalComponentAttributes,
             theme: configuration.theme
         )
@@ -114,7 +114,7 @@ class ParraInternal {
     let modalScreenManager: ModalScreenManager
     let authFlowManager: AuthenticationFlowManager
 
-    var globalComponentFactory: ComponentFactory
+    var globalComponentFactory: ParraComponentFactory
 
     @MainActor
     func authStateDidChange(

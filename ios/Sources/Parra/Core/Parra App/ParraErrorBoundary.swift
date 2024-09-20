@@ -129,7 +129,7 @@ public struct ParraErrorBoundary: View {
     )
 
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(ComponentFactory.self) private var componentFactory
+    @Environment(ParraComponentFactory.self) private var componentFactory
 }
 
 #Preview {

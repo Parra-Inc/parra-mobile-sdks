@@ -13,7 +13,7 @@ struct ModalLoadingIndicatorContainer: Container {
 
     init(
         config: Config,
-        componentFactory: ComponentFactory,
+        componentFactory: ParraComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
@@ -50,7 +50,7 @@ struct ModalLoadingIndicatorContainer: Container {
     }
 
     var config: Config
-    var componentFactory: ComponentFactory
+    var componentFactory: ParraComponentFactory
     var contentObserver: ContentObserver
 
     var body: some View {

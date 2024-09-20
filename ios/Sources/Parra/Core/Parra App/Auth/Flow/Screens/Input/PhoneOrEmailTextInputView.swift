@@ -129,7 +129,7 @@ struct PhoneOrEmailTextInputView: View {
     private var isFocused: FocusState<Bool>.Binding
 
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(ComponentFactory.self) private var componentFactory
+    @Environment(ParraComponentFactory.self) private var componentFactory
 
     @ViewBuilder private var textField: some View {
         let keyboardType: UIKeyboardType = switch defaultMode {

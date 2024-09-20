@@ -13,7 +13,7 @@ struct FeedbackCardWidget: Container {
 
     init(
         config: ParraFeedbackCardWidgetConfig,
-        componentFactory: ComponentFactory,
+        componentFactory: ParraComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.componentFactory = componentFactory
@@ -28,7 +28,7 @@ struct FeedbackCardWidget: Container {
 
     static let height: CGFloat = 260
 
-    let componentFactory: ComponentFactory
+    let componentFactory: ParraComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ParraFeedbackCardWidgetConfig
 
