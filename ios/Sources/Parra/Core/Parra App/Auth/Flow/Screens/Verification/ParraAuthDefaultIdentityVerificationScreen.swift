@@ -30,6 +30,12 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equat
     // MARK: - Public
 
     public struct Config: ParraAuthScreenConfig {
+        // MARK: - Lifecycle
+
+        public init() {}
+
+        // MARK: - Public
+
         public static var `default`: Config = .init()
     }
 

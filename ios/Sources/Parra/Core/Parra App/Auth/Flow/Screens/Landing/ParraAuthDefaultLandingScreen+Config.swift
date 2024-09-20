@@ -10,6 +10,20 @@ import SwiftUI
 
 public extension ParraAuthDefaultLandingScreen {
     struct Config: ParraAuthScreenConfig {
+        // MARK: - Lifecycle
+
+        public init(
+            background: (any ShapeStyle)?,
+            topView: (any View)?,
+            bottomView: (any View)?
+        ) {
+            self.background = background
+            self.topView = topView
+            self.bottomView = bottomView
+        }
+
+        // MARK: - Public
+
         public static var `default` = Config(
             background: nil,
             topView: nil,
