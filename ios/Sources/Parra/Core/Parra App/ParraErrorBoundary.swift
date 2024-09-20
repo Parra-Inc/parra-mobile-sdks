@@ -53,6 +53,30 @@ public struct ParraErrorBoundary: View {
             }
             .padding()
 
+            if let retryHandler {
+                componentFactory.buildContainedButton(
+                    config: ParraTextButtonConfig(
+                        type: .primary,
+                        size: .large,
+                        isMaxWidth: true
+                    ),
+                    content: retryButtonContent,
+                    onPress: {
+                        Task { @MainActor in
+                            withAnimation {
+                                retryButtonContent = retryButtonContent.withLoading(true)
+                            }
+
+                            await retryHandler()
+
+                            withAnimation {
+                                retryButtonContent = retryButtonContent.withLoading(false)
+                            }
+                        }
+                    }
+                )
+            }
+
             // TODO: Come back to this when we can support form submission:
             // a) without a pre-defined ID in the dashboard.
             // b) when we can submit forms without auth
@@ -95,10 +119,14 @@ public struct ParraErrorBoundary: View {
     }
 
     let errorInfo: ParraErrorWithUserInfo
+    let retryHandler: (() async -> Void)?
 
     // MARK: - Private
 
     @State private var isShowingFeedbackForm = false
+    @State private var retryButtonContent = ParraTextButtonContent(
+        text: "Try again"
+    )
 
     @Environment(\.parraTheme) private var parraTheme
     @Environment(ComponentFactory.self) private var componentFactory
@@ -110,7 +138,8 @@ public struct ParraErrorBoundary: View {
             errorInfo: ParraErrorWithUserInfo(
                 userMessage: "Failed to perform action necessary to launch the app. Check your connection and try again.",
                 underlyingError: ParraError.jsonError("decoding broke")
-            )
+            ),
+            retryHandler: nil
         )
     }
 }

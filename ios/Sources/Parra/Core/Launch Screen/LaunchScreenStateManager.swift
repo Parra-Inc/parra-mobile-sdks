@@ -19,24 +19,62 @@ final class LaunchScreenStateManager {
 
     // MARK: - Internal
 
-    enum State: Equatable {
+    enum State: Equatable, CustomDebugStringConvertible {
         case initial(ParraLaunchScreen.Options)
         case transitioning(LaunchActionsResult, ParraLaunchScreen.Options)
         case complete(LaunchActionsResult)
-        case failed(ParraErrorWithUserInfo)
+        case failed(ParraErrorWithUserInfo, () async -> Void)
+
+        // MARK: - Internal
+
+        var debugDescription: String {
+            switch self {
+            case .initial:
+                return "initial"
+            case .transitioning:
+                return "transitioning"
+            case .complete:
+                return "complete"
+            case .failed:
+                return "failed"
+            }
+        }
+
+        static func == (
+            lhs: LaunchScreenStateManager.State,
+            rhs: LaunchScreenStateManager.State
+        ) -> Bool {
+            switch (lhs, rhs) {
+            case (.initial(let lOptions), .initial(let rOptions)):
+                return lOptions == rOptions
+            case (
+                .transitioning(let lResult, let lOptions),
+                .transitioning(let rResult, let rOptions)
+            ):
+                return lResult == rResult && lOptions == rOptions
+            case (.complete(let lResult), .complete(let rResult)):
+                return lResult == rResult
+            case (.failed(let lErr), .failed(let rErr)):
+                return lErr.0 == rErr.0
+            default:
+                return false
+            }
+        }
     }
 
     private(set) var current: State
 
     func fail(
         userMessage: String,
-        underlyingError: Error
+        underlyingError: Error,
+        tryAgain: @escaping () async -> Void
     ) {
         current = .failed(
             ParraErrorWithUserInfo(
                 userMessage: userMessage,
                 underlyingError: underlyingError
-            )
+            ),
+            tryAgain
         )
     }
 

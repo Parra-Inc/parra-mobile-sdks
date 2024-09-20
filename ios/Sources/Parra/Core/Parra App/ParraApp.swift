@@ -149,7 +149,9 @@ public struct ParraApp<
                 // launch actions each time the app enters the foreground.
                 if newPhase == .active && oldPhase != .active {
                     if case .failed = launchScreenState.current {
-                        performAppLaunchTasks()
+                        Task {
+                            await _performAppLaunchTasks()
+                        }
                     }
                 }
             }
@@ -188,46 +190,51 @@ public struct ParraApp<
 
             logger.debug("Performing app launch tasks")
 
-            let configuration = parraInternal.configuration
-            ParraThemeManager.shared.current = configuration.theme
+            ParraThemeManager.shared.current = parraInternal.configuration.theme
 
-            do {
-                var result = try await parraInternal
-                    .performActionsRequiredForAppLaunch()
+            await _performAppLaunchTasks()
+        }
+    }
 
-                logger.debug("Post app launch actions complete")
+    @MainActor
+    private func _performAppLaunchTasks() async {
+        do {
+            var result = try await parraInternal
+                .performActionsRequiredForAppLaunch()
 
-                logger.debug("Performing initial auth state load")
-                let shouldRefresh = try await authStateManager.performInitialAuthCheck(
-                    using: parraInternal.authService,
-                    appInfo: result.appInfo
-                )
+            logger.debug("Post app launch actions complete")
 
-                result.requiresAuthRefresh = shouldRefresh
+            logger.debug("Performing initial auth state load")
+            let shouldRefresh = try await authStateManager.performInitialAuthCheck(
+                using: parraInternal.authService,
+                appInfo: result.appInfo
+            )
 
-                logger.info("Parra SDK Initialized")
+            result.requiresAuthRefresh = shouldRefresh
 
-                launchScreenState.dismiss(
-                    with: result,
-                    launchScreenOptions: configuration.launchScreenOptions
-                )
+            logger.info("Parra SDK Initialized")
 
-                logger.debug("Launch screen dismissed")
-            } catch {
-                logger.fatal(
-                    "Failed to perform post app launch actions",
-                    error
-                )
+            launchScreenState.dismiss(
+                with: result,
+                launchScreenOptions: parraInternal.configuration.launchScreenOptions
+            )
 
-                // This is unrecoverable. Force a logout.
+            logger.debug("Launch screen dismissed")
+        } catch {
+            logger.fatal(
+                "Failed to perform post app launch actions",
+                error
+            )
 
-                await parraInternal.authService.forceLogout(from: error)
+            // This is unrecoverable. Force a logout.
 
-                launchScreenState.fail(
-                    userMessage: "Failed to perform actions necessary to launch app.",
-                    underlyingError: error
-                )
-            }
+            await parraInternal.authService.forceLogout(from: error)
+
+            launchScreenState.fail(
+                userMessage: "Failed to perform actions necessary to launch app.",
+                underlyingError: error,
+                tryAgain: _performAppLaunchTasks
+            )
         }
     }
 }
