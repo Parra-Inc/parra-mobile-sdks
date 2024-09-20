@@ -198,7 +198,7 @@ public struct ParraApp<
                 logger.debug("Post app launch actions complete")
 
                 logger.debug("Performing initial auth state load")
-                let shouldRefresh = await authStateManager.performInitialAuthCheck(
+                let shouldRefresh = try await authStateManager.performInitialAuthCheck(
                     using: parraInternal.authService,
                     appInfo: result.appInfo
                 )

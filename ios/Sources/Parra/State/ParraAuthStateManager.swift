@@ -42,7 +42,7 @@ public class ParraAuthStateManager: CustomStringConvertible {
     func performInitialAuthCheck(
         using authService: AuthService,
         appInfo: ParraAppInfo
-    ) async -> Bool {
+    ) async throws -> Bool {
         logger.debug("performing initial auth check")
 
         beginObservingAuth()
@@ -56,6 +56,10 @@ public class ParraAuthStateManager: CustomStringConvertible {
         )
 
         current = state
+
+        if case .error(let error) = state {
+            throw error
+        }
 
         return requiresRefresh
     }
