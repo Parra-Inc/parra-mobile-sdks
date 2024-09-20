@@ -94,7 +94,8 @@ public struct ParraAppPreview<Content, DelegateType>: View
             LaunchScreenStateManager(
                 state: .complete(
                     .init(
-                        appInfo: ParraAppInfo.validStates()[0]
+                        appInfo: ParraAppInfo.validStates()[0],
+                        requiresAuthRefresh: false
                     )
                 )
             )

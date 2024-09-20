@@ -430,12 +430,11 @@ final class AuthServer: Server {
             to: endpoint,
             queryItems: queryItems,
             config: config,
-            cachePolicy: cachePolicy,
-            body: body
+            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+            body: body,
+            timeout: timeout ?? configuration.urlSession
+                .configuration.timeoutIntervalForRequest
         )
-
-        request.timeoutInterval = timeout ?? configuration.urlSession
-            .configuration.timeoutIntervalForRequest
 
         addHeaders(
             to: &request,

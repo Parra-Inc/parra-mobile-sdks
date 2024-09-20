@@ -11,7 +11,20 @@ import os
 import UIKit
 
 struct LaunchActionsResult: Equatable {
+    // MARK: - Lifecycle
+
+    init(
+        appInfo: ParraAppInfo,
+        requiresAuthRefresh: Bool = false
+    ) {
+        self.appInfo = appInfo
+        self.requiresAuthRefresh = requiresAuthRefresh
+    }
+
+    // MARK: - Internal
+
     let appInfo: ParraAppInfo
+    var requiresAuthRefresh: Bool
 }
 
 private let logger = Logger(category: "Parra")
@@ -118,6 +131,9 @@ class ParraInternal {
         ])
 
         switch (oldAuthResult, authResult) {
+        case (_, .error(let error)):
+            logger.fatal("Auth entered error state", error)
+
         case (_, .anonymous(let user)), (_, .authenticated(let user)):
             if !oldAuthResult.hasUser {
                 // Changes from not logged in to logged in

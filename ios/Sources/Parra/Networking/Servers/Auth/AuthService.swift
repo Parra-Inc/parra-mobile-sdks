@@ -277,26 +277,11 @@ final class AuthService {
     /// proceed into the app.
     func getQuickestAuthState(
         appInfo: ParraAppInfo
-    ) async -> ParraAuthState {
-        // If we encounter a state that requires refreshing user info or tokens
-        // asynchronously while allowing this method to return so app state
-        // may proceed.
-        var shouldRefresh = false
-
-        defer {
-            if shouldRefresh {
-                performAuthStateRefresh()
-            }
-        }
-
+    ) async -> (ParraAuthState, Bool) {
         let currentUser = await dataManager.getCurrentUser()
 
         if let currentUser {
             logger.debug("Found cached user")
-
-            // There was a user persisted on disk at app launch. They could be
-            // out of date.
-            shouldRefresh = true
 
             let result: ParraAuthState = if currentUser.info.isAnonymous {
                 .anonymous(currentUser)
@@ -310,7 +295,9 @@ final class AuthService {
                 shouldBroadcast: false
             )
 
-            return result
+            // There was a user persisted on disk at app launch. They could be
+            // out of date. Mark for refresh.
+            return (result, true)
         }
 
         // There wasn't a cached user. We have to determine an auth state. We
@@ -335,7 +322,7 @@ final class AuthService {
             shouldBroadcast: false
         )
 
-        return result
+        return (result, false)
     }
 
     @discardableResult
@@ -490,27 +477,9 @@ final class AuthService {
         return _cachedAuthState
     }
 
-    // MARK: - Private
-
-    // The actual cached token.
-    private var _cachedCredential: ParraUser.Credential?
-    private var _cachedAuthState: ParraAuthState?
-
-    private func performUnauthenticatedLogin(
-        appInfo: ParraAppInfo
-    ) async throws -> ParraAuthState {
-        let oauthType: OAuth2Service.AuthType = if appInfo.auth.supportsAnonymous {
-            .anonymous(refreshToken: nil)
-        } else {
-            .guest(refreshToken: nil)
-        }
-
-        return try await login(authType: oauthType)
-    }
-
     /// If auth has been determined, refresh it. If it hasn't, aquire the
     /// tokens.
-    private func performAuthStateRefresh() {
+    func performAuthStateRefresh() {
         Task {
             guard let currentUser = await dataManager.getCurrentUser() else {
                 // The only way this will happen is if the getQuickestAuthState
@@ -557,6 +526,24 @@ final class AuthService {
                 await applyUserUpdate(.authenticated(user))
             }
         }
+    }
+
+    // MARK: - Private
+
+    // The actual cached token.
+    private var _cachedCredential: ParraUser.Credential?
+    private var _cachedAuthState: ParraAuthState?
+
+    private func performUnauthenticatedLogin(
+        appInfo: ParraAppInfo
+    ) async throws -> ParraAuthState {
+        let oauthType: OAuth2Service.AuthType = if appInfo.auth.supportsAnonymous {
+            .anonymous(refreshToken: nil)
+        } else {
+            .guest(refreshToken: nil)
+        }
+
+        return try await login(authType: oauthType)
     }
 
     // Lazy wrapper around the cached token that will access it or try to load

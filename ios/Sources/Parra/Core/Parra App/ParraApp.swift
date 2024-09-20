@@ -127,12 +127,11 @@ public struct ParraApp<
                     // Should only run once on app launch.
                     performAppLaunchTasks()
                 case (.initial, .transitioning(let result, _)):
-                    Task {
-                        // performAppLaunchTasks completing changes the launch
-                        // screen state to transitioning, allowing this to start
-                        await authStateManager.performInitialAuthCheck(
-                            using: parraInternal.authService,
-                            appInfo: result.appInfo
+                    // performAppLaunchTasks completing changes the launch
+                    // screen state to transitioning, allowing this to start
+                    if result.requiresAuthRefresh {
+                        authStateManager.triggerAuthRefresh(
+                            using: parraInternal.authService
                         )
                     }
                 default:
@@ -193,10 +192,18 @@ public struct ParraApp<
             ParraThemeManager.shared.current = configuration.theme
 
             do {
-                let result = try await parraInternal
+                var result = try await parraInternal
                     .performActionsRequiredForAppLaunch()
 
                 logger.debug("Post app launch actions complete")
+
+                logger.debug("Performing initial auth state load")
+                let shouldRefresh = await authStateManager.performInitialAuthCheck(
+                    using: parraInternal.authService,
+                    appInfo: result.appInfo
+                )
+
+                result.requiresAuthRefresh = shouldRefresh
 
                 logger.info("Parra SDK Initialized")
 
