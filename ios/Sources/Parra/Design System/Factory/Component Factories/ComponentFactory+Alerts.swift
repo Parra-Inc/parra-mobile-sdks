@@ -14,7 +14,7 @@ public extension ParraComponentFactory {
         level: ParraAlertLevel,
         content: ParraAlertContent,
         localAttributes: ParraAttributes.InlineAlert? = nil
-    ) -> some View {
+    ) -> ParraInlineAlertComponent {
         let attributes = attributeProvider.inlineAlertAttributes(
             content: content,
             level: level,
@@ -22,7 +22,7 @@ public extension ParraComponentFactory {
             theme: theme
         )
 
-        InlineAlertComponent(
+        return ParraInlineAlertComponent(
             content: content,
             attributes: attributes
         )
@@ -35,7 +35,7 @@ public extension ParraComponentFactory {
         onDismiss: @escaping () -> Void,
         primaryAction: (() -> Void)? = nil,
         localAttributes: ParraAttributes.ToastAlert? = nil
-    ) -> some View {
+    ) -> ParraToastAlertComponent {
         let attributes = attributeProvider.toastAlertAttributes(
             content: content,
             level: level,
@@ -43,7 +43,7 @@ public extension ParraComponentFactory {
             theme: theme
         )
 
-        ToastAlertComponent(
+        return ParraToastAlertComponent(
             content: content,
             attributes: attributes,
             onDismiss: onDismiss,
@@ -57,14 +57,14 @@ public extension ParraComponentFactory {
         onDismiss: @escaping () -> Void,
         cancel: (() -> Void)? = nil,
         localAttributes: ParraAttributes.LoadingIndicator? = nil
-    ) -> some View {
+    ) -> ParraLoadingIndicatorComponent {
         let attributes = attributeProvider.loadingIndicatorAlertAttributes(
             content: content,
             localAttributes: localAttributes,
             theme: theme
         )
 
-        LoadingIndicatorComponent(
+        return ParraLoadingIndicatorComponent(
             content: content,
             attributes: attributes,
             onDismiss: onDismiss,

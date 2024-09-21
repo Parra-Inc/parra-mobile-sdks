@@ -1,5 +1,5 @@
 //
-//  ImageButtonStyle.swift
+//  ParraImageButtonStyle.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 5/7/24.
@@ -8,15 +8,15 @@
 
 import SwiftUI
 
-struct ImageButtonStyle: ButtonStyle {
-    // MARK: - Internal
+public struct ParraImageButtonStyle: ButtonStyle {
+    // MARK: - Public
 
-    let config: ParraImageButtonConfig
-    let content: ParraImageButtonContent
-    let attributes: ParraAttributes.ImageButton
+    public let config: ParraImageButtonConfig
+    public let content: ParraImageButtonContent
+    public let attributes: ParraAttributes.ImageButton
 
     @ViewBuilder
-    func makeBody(configuration: Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         let currentAttributes = if content.isDisabled {
             attributes.disabled
         } else if configuration.isPressed {

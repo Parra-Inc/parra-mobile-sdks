@@ -14,14 +14,14 @@ public extension ParraComponentFactory {
         config: ParraTextInputConfig,
         content: ParraTextInputContent,
         localAttributes: ParraAttributes.TextInput? = nil
-    ) -> some View {
+    ) -> ParraTextInputComponent {
         let attributes = attributeProvider.textInputAttributes(
             config: config,
             localAttributes: localAttributes,
             theme: theme
         )
 
-        TextInputComponent(
+        return ParraTextInputComponent(
             config: config,
             content: content,
             attributes: attributes

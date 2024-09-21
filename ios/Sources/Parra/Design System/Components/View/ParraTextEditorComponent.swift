@@ -1,5 +1,5 @@
 //
-//  TextEditorComponent.swift
+//  ParraTextEditorComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/5/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct TextEditorComponent: View {
+public struct ParraTextEditorComponent: View {
     // MARK: - Lifecycle
 
     init(
@@ -21,13 +21,13 @@ struct TextEditorComponent: View {
         self.attributes = attributes
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let config: ParraTextEditorConfig
-    let content: ParraTextEditorContent
-    let attributes: ParraAttributes.TextEditor
+    public let config: ParraTextEditorConfig
+    public let content: ParraTextEditorContent
+    public let attributes: ParraAttributes.TextEditor
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // spacing controlled by individual component padding.
             titleLabel

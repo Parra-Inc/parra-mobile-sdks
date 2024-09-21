@@ -1,5 +1,5 @@
 //
-//  TextInputComponent.swift
+//  ParraTextInputComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/19/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct TextInputComponent: View {
+public struct ParraTextInputComponent: View {
     // MARK: - Lifecycle
 
     init(
@@ -20,6 +20,48 @@ struct TextInputComponent: View {
         self.content = content
         self.attributes = attributes
         self._text = State(initialValue: content.defaultText)
+    }
+
+    // MARK: - Public
+
+    public internal(set) var config: ParraTextInputConfig
+    public internal(set) var content: ParraTextInputContent
+    public internal(set) var attributes: ParraAttributes.TextInput
+
+    public var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // spacing controlled by individual component padding.
+            titleLabel
+
+            baseView
+                .applyTextInputAttributes(
+                    attributes,
+                    using: parraTheme
+                )
+                .onChange(of: text) { _, newValue in
+                    hasReceivedInput = true
+
+                    content.textChanged?(newValue)
+                }
+
+            helperLabel
+        }
+        .applyPadding(
+            size: attributes.padding,
+            on: [.horizontal, .bottom],
+            from: parraTheme
+        )
+        .onAppear {
+            focusState = config.isSecure ? .secure : .normal
+        }
+        .onTapGesture {
+            if let lastFocusState {
+                focusState = lastFocusState
+            }
+        }
+        .onChange(of: focusState, initial: true) { _, newValue in
+            lastFocusState = newValue
+        }
     }
 
     // MARK: - Internal
@@ -34,10 +76,6 @@ struct TextInputComponent: View {
         case secure
         case secureRevealed
     }
-
-    var config: ParraTextInputConfig
-    var content: ParraTextInputContent
-    var attributes: ParraAttributes.TextInput
 
     @ViewBuilder var baseView: some View {
         let prompt = Text(content.placeholder?.text ?? "")
@@ -139,42 +177,6 @@ struct TextInputComponent: View {
                     }
                 }
             }
-        }
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // spacing controlled by individual component padding.
-            titleLabel
-
-            baseView
-                .applyTextInputAttributes(
-                    attributes,
-                    using: parraTheme
-                )
-                .onChange(of: text) { _, newValue in
-                    hasReceivedInput = true
-
-                    content.textChanged?(newValue)
-                }
-
-            helperLabel
-        }
-        .applyPadding(
-            size: attributes.padding,
-            on: [.horizontal, .bottom],
-            from: parraTheme
-        )
-        .onAppear {
-            focusState = config.isSecure ? .secure : .normal
-        }
-        .onTapGesture {
-            if let lastFocusState {
-                focusState = lastFocusState
-            }
-        }
-        .onChange(of: focusState, initial: true) { _, newValue in
-            lastFocusState = newValue
         }
     }
 

@@ -1,5 +1,5 @@
 //
-//  ImageButtonComponent.swift
+//  ParraImageButtonComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/4/24.
@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-struct ImageButtonComponent: View {
+public struct ParraImageButtonComponent: View {
     // MARK: - Lifecycle
 
     init(
         config: ParraImageButtonConfig,
         content: ParraImageButtonContent,
-        style: ImageButtonStyle,
+        style: ParraImageButtonStyle,
         onPress: @escaping () -> Void
     ) {
         self.config = config
@@ -23,14 +23,14 @@ struct ImageButtonComponent: View {
         self.onPress = onPress
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let config: ParraImageButtonConfig
-    let content: ParraImageButtonContent
-    let style: ImageButtonStyle
-    let onPress: () -> Void
+    public let config: ParraImageButtonConfig
+    public let content: ParraImageButtonContent
+    public let style: ParraImageButtonStyle
+    public let onPress: () -> Void
 
-    var body: some View {
+    public var body: some View {
         Button(action: {
             onPress()
         }, label: {

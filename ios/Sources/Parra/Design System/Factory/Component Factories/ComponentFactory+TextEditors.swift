@@ -14,14 +14,14 @@ public extension ParraComponentFactory {
         config: ParraTextEditorConfig,
         content: ParraTextEditorContent,
         localAttributes: ParraAttributes.TextEditor? = nil
-    ) -> some View {
+    ) -> ParraTextEditorComponent {
         let attributes = attributeProvider.textEditorAttributes(
             config: config,
             localAttributes: localAttributes,
             theme: theme
         )
 
-        TextEditorComponent(
+        return ParraTextEditorComponent(
             config: config,
             content: content,
             attributes: attributes

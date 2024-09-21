@@ -13,13 +13,13 @@ public extension ParraComponentFactory {
     func buildLabel(
         content: ParraLabelContent,
         localAttributes: ParraAttributes.Label? = nil
-    ) -> LabelComponent {
+    ) -> ParraLabelComponent {
         let attributes = attributeProvider.labelAttributes(
             localAttributes: localAttributes,
             theme: theme
         )
 
-        LabelComponent(
+        return ParraLabelComponent(
             content: content,
             attributes: attributes
         )
@@ -29,8 +29,8 @@ public extension ParraComponentFactory {
     func buildLabel(
         text: String,
         localAttributes: ParraAttributes.Label? = nil
-    ) -> LabelComponent {
-        buildLabel(
+    ) -> ParraLabelComponent {
+        return buildLabel(
             content: ParraLabelContent(text: text),
             localAttributes: localAttributes
         )

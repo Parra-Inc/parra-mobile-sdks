@@ -14,13 +14,13 @@ public extension ParraComponentFactory {
         config: ParraMenuConfig,
         content: ParraMenuContent,
         localAttributes: ParraAttributes.Menu? = nil
-    ) -> some View {
+    ) -> ParraMenuComponent {
         let attributes = attributeProvider.menuAttributes(
             localAttributes: localAttributes,
             theme: theme
         )
 
-        MenuComponent(
+        return ParraMenuComponent(
             config: config,
             content: content,
             attributes: attributes

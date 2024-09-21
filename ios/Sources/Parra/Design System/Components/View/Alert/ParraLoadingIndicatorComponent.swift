@@ -1,5 +1,5 @@
 //
-//  LoadingIndicatorComponent.swift
+//  ParraLoadingIndicatorComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 6/21/24.
@@ -8,15 +8,29 @@
 
 import SwiftUI
 
-struct LoadingIndicatorComponent: View {
-    // MARK: - Internal
+public struct ParraLoadingIndicatorComponent: View {
+    // MARK: - Lifecycle
 
-    let content: ParraLoadingIndicatorContent
-    let attributes: ParraAttributes.LoadingIndicator
-    let onDismiss: () -> Void
-    let cancel: (() -> Void)?
+    init(
+        content: ParraLoadingIndicatorContent,
+        attributes: ParraAttributes.LoadingIndicator,
+        onDismiss: @escaping () -> Void,
+        cancel: (() -> Void)?
+    ) {
+        self.content = content
+        self.attributes = attributes
+        self.onDismiss = onDismiss
+        self.cancel = cancel
+    }
 
-    var body: some View {
+    // MARK: - Public
+
+    public let content: ParraLoadingIndicatorContent
+    public let attributes: ParraAttributes.LoadingIndicator
+    public let onDismiss: () -> Void
+    public let cancel: (() -> Void)?
+
+    public var body: some View {
         VStack {
             ProgressView()
                 .padding(.top, 6)

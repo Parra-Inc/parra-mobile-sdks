@@ -1,5 +1,5 @@
 //
-//  ImageComponent.swift
+//  ParraImageComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/7/24.
@@ -8,12 +8,39 @@
 
 import SwiftUI
 
-struct ImageComponent: View {
-    // MARK: - Internal
+public struct ParraImageComponent: View {
+    // MARK: - Lifecycle
 
-    let config: ParraImageConfig
-    let content: ParraImageContent
-    let attributes: ParraAttributes.Image
+    init(
+        config: ParraImageConfig,
+        content: ParraImageContent,
+        attributes: ParraAttributes.Image
+    ) {
+        self.config = config
+        self.content = content
+        self.attributes = attributes
+    }
+
+    // MARK: - Public
+
+    public let config: ParraImageConfig
+    public let content: ParraImageContent
+    public let attributes: ParraAttributes.Image
+
+    public var body: some View {
+        baseImage
+            .resizable()
+            .aspectRatio(
+                config.aspectRatio,
+                contentMode: config.contentMode
+            )
+            .applyImageAttributes(
+                attributes,
+                using: parraTheme
+            )
+    }
+
+    // MARK: - Internal
 
     @ViewBuilder var baseImage: Image {
         let image = switch content {
@@ -32,19 +59,6 @@ struct ImageComponent: View {
         }
 
         image
-    }
-
-    var body: some View {
-        baseImage
-            .resizable()
-            .aspectRatio(
-                config.aspectRatio,
-                contentMode: config.contentMode
-            )
-            .applyImageAttributes(
-                attributes,
-                using: parraTheme
-            )
     }
 
     // MARK: - Private

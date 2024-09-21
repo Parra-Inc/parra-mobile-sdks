@@ -1,5 +1,5 @@
 //
-//  AsyncImageComponent.swift
+//  ParraAsyncImageComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/21/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AsyncImageComponent: View {
+public struct ParraAsyncImageComponent: View {
     // MARK: - Lifecycle
 
     init(
@@ -21,15 +21,13 @@ struct AsyncImageComponent: View {
         self.attributes = attributes
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let config: ParraImageConfig
-    let content: ParraAsyncImageContent
-    let attributes: ParraAttributes.AsyncImage
+    public let config: ParraImageConfig
+    public let content: ParraAsyncImageContent
+    public let attributes: ParraAttributes.AsyncImage
 
-    @Environment(\.parra) var parra
-
-    var body: some View {
+    public var body: some View {
         CachedAsyncImage(
             url: content.url,
             urlCache: URLSessionConfiguration.apiConfiguration
@@ -41,6 +39,10 @@ struct AsyncImageComponent: View {
         )
         .applyAsyncImageAttributes(attributes, using: parraTheme)
     }
+
+    // MARK: - Internal
+
+    @Environment(\.parra) var parra
 
     // MARK: - Private
 

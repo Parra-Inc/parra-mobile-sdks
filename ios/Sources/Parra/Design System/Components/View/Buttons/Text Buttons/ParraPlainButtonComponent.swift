@@ -1,5 +1,5 @@
 //
-//  PlainButtonComponent.swift
+//  ParraPlainButtonComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/29/24.
@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-struct PlainButtonComponent: View {
+public struct ParraPlainButtonComponent: View {
     // MARK: - Lifecycle
 
     init(
         config: ParraTextButtonConfig,
         content: ParraTextButtonContent,
-        style: PlainButtonStyle,
+        style: ParraPlainButtonStyle,
         onPress: @escaping () -> Void
     ) {
         self.config = config
@@ -23,14 +23,14 @@ struct PlainButtonComponent: View {
         self.onPress = onPress
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let config: ParraTextButtonConfig
-    let content: ParraTextButtonContent
-    let style: PlainButtonStyle
-    let onPress: () -> Void
+    public let config: ParraTextButtonConfig
+    public let content: ParraTextButtonContent
+    public let style: ParraPlainButtonStyle
+    public let onPress: () -> Void
 
-    var body: some View {
+    public var body: some View {
         Button(
             action: onPress
         ) {
@@ -43,6 +43,6 @@ struct PlainButtonComponent: View {
 
 #Preview("Plain Button") {
     ParraViewPreview { _ in
-        renderStorybook(for: PlainButtonComponent.self)
+        renderStorybook(for: ParraPlainButtonComponent.self)
     }
 }

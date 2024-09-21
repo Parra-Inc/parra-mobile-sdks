@@ -15,20 +15,20 @@ public extension ParraComponentFactory {
         content: ParraTextButtonContent,
         localAttributes: ParraAttributes.PlainButton? = nil,
         onPress: @escaping () -> Void
-    ) -> PlainButtonComponent {
+    ) -> ParraPlainButtonComponent {
         let attributes = attributeProvider.plainButtonAttributes(
             config: config,
             localAttributes: localAttributes,
             theme: theme
         )
 
-        let style = PlainButtonStyle(
+        let style = ParraPlainButtonStyle(
             config: config,
             content: content,
             attributes: attributes
         )
 
-        PlainButtonComponent(
+        return ParraPlainButtonComponent(
             config: config,
             content: content,
             style: style,
@@ -42,7 +42,7 @@ public extension ParraComponentFactory {
         text: String,
         localAttributes: ParraAttributes.PlainButton? = nil,
         onPress: @escaping () -> Void
-    ) -> PlainButtonComponent {
+    ) -> ParraPlainButtonComponent {
         let attributes = attributeProvider.plainButtonAttributes(
             config: config,
             localAttributes: localAttributes,
@@ -51,13 +51,13 @@ public extension ParraComponentFactory {
 
         let content = ParraTextButtonContent(text: text)
 
-        let style = PlainButtonStyle(
+        let style = ParraPlainButtonStyle(
             config: config,
             content: content,
             attributes: attributes
         )
 
-        PlainButtonComponent(
+        return ParraPlainButtonComponent(
             config: config,
             content: content,
             style: style,
@@ -71,20 +71,20 @@ public extension ParraComponentFactory {
         content: ParraTextButtonContent,
         localAttributes: ParraAttributes.OutlinedButton? = nil,
         onPress: @escaping () -> Void
-    ) -> OutlinedButtonComponent {
+    ) -> ParraOutlinedButtonComponent {
         let attributes = attributeProvider.outlinedButtonAttributes(
             config: config,
             localAttributes: localAttributes,
             theme: theme
         )
 
-        let style = OutlinedButtonStyle(
+        let style = ParraOutlinedButtonStyle(
             config: config,
             content: content,
             attributes: attributes
         )
 
-        OutlinedButtonComponent(
+        return ParraOutlinedButtonComponent(
             config: config,
             content: content,
             style: style,
@@ -98,7 +98,7 @@ public extension ParraComponentFactory {
         text: String,
         localAttributes: ParraAttributes.OutlinedButton? = nil,
         onPress: @escaping () -> Void
-    ) -> OutlinedButtonComponent {
+    ) -> ParraOutlinedButtonComponent {
         let attributes = attributeProvider.outlinedButtonAttributes(
             config: config,
             localAttributes: localAttributes,
@@ -107,13 +107,13 @@ public extension ParraComponentFactory {
 
         let content = ParraTextButtonContent(text: text)
 
-        let style = OutlinedButtonStyle(
+        let style = ParraOutlinedButtonStyle(
             config: config,
             content: content,
             attributes: attributes
         )
 
-        OutlinedButtonComponent(
+        return ParraOutlinedButtonComponent(
             config: config,
             content: content,
             style: style,
@@ -127,20 +127,20 @@ public extension ParraComponentFactory {
         content: ParraTextButtonContent,
         localAttributes: ParraAttributes.ContainedButton? = nil,
         onPress: @escaping () -> Void
-    ) -> ContainedButtonComponent {
+    ) -> ParraContainedButtonComponent {
         let attributes = attributeProvider.containedButtonAttributes(
             config: config,
             localAttributes: localAttributes,
             theme: theme
         )
 
-        let style = ContainedButtonStyle(
+        let style = ParraContainedButtonStyle(
             config: config,
             content: content,
             attributes: attributes
         )
 
-        ContainedButtonComponent(
+        return ParraContainedButtonComponent(
             config: config,
             content: content,
             style: style,
@@ -154,7 +154,7 @@ public extension ParraComponentFactory {
         text: String,
         localAttributes: ParraAttributes.ContainedButton? = nil,
         onPress: @escaping () -> Void
-    ) -> ContainedButtonComponent {
+    ) -> ParraContainedButtonComponent {
         let attributes = attributeProvider.containedButtonAttributes(
             config: config,
             localAttributes: localAttributes,
@@ -163,13 +163,13 @@ public extension ParraComponentFactory {
 
         let content = ParraTextButtonContent(text: text)
 
-        let style = ContainedButtonStyle(
+        let style = ParraContainedButtonStyle(
             config: config,
             content: content,
             attributes: attributes
         )
 
-        ContainedButtonComponent(
+        return ParraContainedButtonComponent(
             config: config,
             content: content,
             style: style,
@@ -183,20 +183,20 @@ public extension ParraComponentFactory {
         content: ParraImageButtonContent,
         localAttributes: ParraAttributes.ImageButton? = nil,
         onPress: @escaping () -> Void
-    ) -> ImageButtonComponent {
+    ) -> ParraImageButtonComponent {
         let attributes = attributeProvider.imageButtonAttributes(
             config: config,
             localAttributes: localAttributes,
             theme: theme
         )
 
-        let style = ImageButtonStyle(
+        let style = ParraImageButtonStyle(
             config: config,
             content: content,
             attributes: attributes
         )
 
-        ImageButtonComponent(
+        return ParraImageButtonComponent(
             config: config,
             content: content,
             style: style,

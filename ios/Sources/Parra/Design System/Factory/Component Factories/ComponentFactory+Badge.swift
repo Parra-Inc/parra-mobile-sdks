@@ -17,7 +17,7 @@ public extension ParraComponentFactory {
         swatch: ParraColorSwatch? = nil,
         iconSymbol: String? = nil,
         localAttributes: ParraAttributes.Badge? = nil
-    ) -> BadgeComponent {
+    ) -> ParraBadgeComponent {
         let attributes = attributeProvider.badgeAttributes(
             for: size,
             variant: variant,
@@ -32,7 +32,7 @@ public extension ParraComponentFactory {
             nil
         }
 
-        BadgeComponent(
+        return ParraBadgeComponent(
             content: ParraBadgeContent(
                 text: text,
                 icon: icon

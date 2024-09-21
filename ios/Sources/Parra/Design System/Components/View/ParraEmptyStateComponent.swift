@@ -1,5 +1,5 @@
 //
-//  EmptyStateComponent.swift
+//  ParraEmptyStateComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/13/24.
@@ -8,16 +8,32 @@
 
 import SwiftUI
 
-struct EmptyStateComponent: View {
-    // MARK: - Internal
+public struct ParraEmptyStateComponent: View {
+    // MARK: - Lifecycle
 
-    let config: ParraEmptyStateConfig
-    let content: ParraEmptyStateContent
-    let attributes: ParraAttributes.EmptyState
-    let onPrimaryAction: (() -> Void)?
-    let onSecondaryAction: (() -> Void)?
+    init(
+        config: ParraEmptyStateConfig,
+        content: ParraEmptyStateContent,
+        attributes: ParraAttributes.EmptyState,
+        onPrimaryAction: (() -> Void)?,
+        onSecondaryAction: (() -> Void)?
+    ) {
+        self.config = config
+        self.content = content
+        self.attributes = attributes
+        self.onPrimaryAction = onPrimaryAction
+        self.onSecondaryAction = onSecondaryAction
+    }
 
-    var body: some View {
+    // MARK: - Public
+
+    public let config: ParraEmptyStateConfig
+    public let content: ParraEmptyStateContent
+    public let attributes: ParraAttributes.EmptyState
+    public let onPrimaryAction: (() -> Void)?
+    public let onSecondaryAction: (() -> Void)?
+
+    public var body: some View {
         VStack(alignment: .center) {
             Spacer()
 

@@ -1,5 +1,5 @@
 //
-//  ToastAlertComponent.swift
+//  ParraToastAlertComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/7/24.
@@ -8,15 +8,29 @@
 
 import SwiftUI
 
-struct ToastAlertComponent: View {
-    // MARK: - Internal
+public struct ParraToastAlertComponent: View {
+    // MARK: - Lifecycle
 
-    let content: ParraAlertContent
-    let attributes: ParraAttributes.ToastAlert
-    let onDismiss: () -> Void
-    let primaryAction: (() -> Void)?
+    init(
+        content: ParraAlertContent,
+        attributes: ParraAttributes.ToastAlert,
+        onDismiss: @escaping () -> Void,
+        primaryAction: (() -> Void)?
+    ) {
+        self.content = content
+        self.attributes = attributes
+        self.onDismiss = onDismiss
+        self.primaryAction = primaryAction
+    }
 
-    var body: some View {
+    // MARK: - Public
+
+    public let content: ParraAlertContent
+    public let attributes: ParraAttributes.ToastAlert
+    public let onDismiss: () -> Void
+    public let primaryAction: (() -> Void)?
+
+    public var body: some View {
         Button {
             onDismiss()
             primaryAction?()

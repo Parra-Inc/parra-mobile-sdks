@@ -14,13 +14,13 @@ public extension ParraComponentFactory {
         config: ParraSegmentConfig,
         content: ParraSegmentContent,
         localAttributes: ParraAttributes.Segment? = nil
-    ) -> some View {
+    ) -> ParraSegmentComponent {
         let attributes = attributeProvider.segmentedControlAttributes(
             localAttributes: localAttributes,
             theme: theme
         )
 
-        SegmentComponent(
+        return ParraSegmentComponent(
             config: config,
             content: content,
             attributes: attributes

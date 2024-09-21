@@ -1,5 +1,5 @@
 //
-//  MenuComponent.swift
+//  ParraMenuComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/5/24.
@@ -9,14 +9,28 @@
 import Foundation
 import SwiftUI
 
-struct MenuComponent: View {
-    // MARK: - Internal
+public struct ParraMenuComponent: View {
+    // MARK: - Lifecycle
 
-    let config: ParraMenuConfig
-    let content: ParraMenuContent
-    let attributes: ParraAttributes.Menu
+    init(
+        config: ParraMenuConfig,
+        content: ParraMenuContent,
+        attributes: ParraAttributes.Menu,
+        selectedOption: ParraMenuContent.Option? = nil
+    ) {
+        self.config = config
+        self.content = content
+        self.attributes = attributes
+        self.selectedOption = selectedOption
+    }
 
-    var body: some View {
+    // MARK: - Public
+
+    public let config: ParraMenuConfig
+    public let content: ParraMenuContent
+    public let attributes: ParraAttributes.Menu
+
+    public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // spacing controlled by individual component padding.
             titleLabel

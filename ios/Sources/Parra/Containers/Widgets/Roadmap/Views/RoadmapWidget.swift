@@ -32,7 +32,7 @@ struct RoadmapWidget: Container {
     }
 
     var footer: some View {
-        WidgetFooter { () -> ContainedButtonComponent? in
+        WidgetFooter { () -> ParraContainedButtonComponent? in
             guard contentObserver.canAddRequests else {
                 return nil
             }

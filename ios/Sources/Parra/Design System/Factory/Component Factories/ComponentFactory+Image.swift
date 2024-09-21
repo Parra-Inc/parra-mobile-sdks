@@ -14,14 +14,14 @@ public extension ParraComponentFactory {
         config: ParraImageConfig = ParraImageConfig(),
         content: ParraImageContent,
         localAttributes: ParraAttributes.Image? = nil
-    ) -> some View {
+    ) -> ParraImageComponent {
         let attributes = attributeProvider.imageAttributes(
             content: content,
             localAttributes: localAttributes,
             theme: theme
         )
 
-        ImageComponent(
+        return ParraImageComponent(
             config: config,
             content: content,
             attributes: attributes
@@ -33,7 +33,7 @@ public extension ParraComponentFactory {
         config: ParraImageConfig? = nil,
         content: ParraAsyncImageContent,
         localAttributes: ParraAttributes.AsyncImage? = nil
-    ) -> some View {
+    ) -> ParraAsyncImageComponent {
         let attributes = attributeProvider.asyncImageAttributes(
             content: content,
             localAttributes: localAttributes,
@@ -54,7 +54,7 @@ public extension ParraComponentFactory {
             }
         }
 
-        AsyncImageComponent(
+        return ParraAsyncImageComponent(
             config: finalConfig,
             content: content,
             attributes: attributes

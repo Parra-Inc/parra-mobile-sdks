@@ -1,5 +1,5 @@
 //
-//  ContainedButtonStyle.swift
+//  ParraPlainButtonStyle.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 5/6/24.
@@ -8,15 +8,15 @@
 
 import SwiftUI
 
-struct ContainedButtonStyle: ButtonStyle {
-    // MARK: - Internal
+public struct ParraPlainButtonStyle: ButtonStyle {
+    // MARK: - Public
 
-    let config: ParraTextButtonConfig
-    let content: ParraTextButtonContent
-    let attributes: ParraAttributes.ContainedButton
+    public let config: ParraTextButtonConfig
+    public let content: ParraTextButtonContent
+    public let attributes: ParraAttributes.PlainButton
 
     @ViewBuilder
-    func makeBody(configuration: Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         let currentAttributes = if content.isDisabled {
             attributes.disabled
         } else if configuration.isPressed {
@@ -29,7 +29,7 @@ struct ContainedButtonStyle: ButtonStyle {
             content: content.text,
             localAttributes: currentAttributes.label
         )
-        .applyContainedButtonAttributes(
+        .applyPlainButtonAttributes(
             currentAttributes,
             using: parraTheme
         )

@@ -1,5 +1,5 @@
 //
-//  LabelComponent.swift
+//  ParraLabelComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/29/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct LabelComponent: View {
+public struct ParraLabelComponent: View {
     // MARK: - Lifecycle
 
     init(
@@ -19,12 +19,12 @@ struct LabelComponent: View {
         self.attributes = attributes
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let content: ParraLabelContent
-    let attributes: ParraAttributes.Label
+    public let content: ParraLabelContent
+    public let attributes: ParraAttributes.Label
 
-    var body: some View {
+    public var body: some View {
         Label(
             title: {
                 Text(content.text)

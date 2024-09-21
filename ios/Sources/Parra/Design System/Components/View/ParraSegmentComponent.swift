@@ -1,5 +1,5 @@
 //
-//  SegmentComponent.swift
+//  ParraSegmentComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 2/29/24.
@@ -8,14 +8,26 @@
 
 import SwiftUI
 
-struct SegmentComponent: View {
-    // MARK: - Internal
+public struct ParraSegmentComponent: View {
+    // MARK: - Lifecycle
 
-    var config: ParraSegmentConfig
-    let content: ParraSegmentContent
-    let attributes: ParraAttributes.Segment
+    init(
+        config: ParraSegmentConfig,
+        content: ParraSegmentContent,
+        attributes: ParraAttributes.Segment
+    ) {
+        self.config = config
+        self.content = content
+        self.attributes = attributes
+    }
 
-    var body: some View {
+    // MARK: - Public
+
+    public internal(set) var config: ParraSegmentConfig
+    public let content: ParraSegmentContent
+    public let attributes: ParraAttributes.Segment
+
+    public var body: some View {
         SegmentView(
             options: content.options.map { .init(id: $0.id, title: $0.text) },
             attributes: attributes,

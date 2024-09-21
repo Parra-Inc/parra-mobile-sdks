@@ -1,5 +1,5 @@
 //
-//  InlineAlertComponent.swift
+//  ParraInlineAlertComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/7/24.
@@ -8,13 +8,23 @@
 
 import SwiftUI
 
-struct InlineAlertComponent: View {
-    // MARK: - Internal
+public struct ParraInlineAlertComponent: View {
+    // MARK: - Lifecycle
 
-    let content: ParraAlertContent
-    let attributes: ParraAttributes.InlineAlert
+    init(
+        content: ParraAlertContent,
+        attributes: ParraAttributes.InlineAlert
+    ) {
+        self.content = content
+        self.attributes = attributes
+    }
 
-    var body: some View {
+    // MARK: - Public
+
+    public let content: ParraAlertContent
+    public let attributes: ParraAttributes.InlineAlert
+
+    public var body: some View {
         VStack {
             HStack(spacing: 11) {
                 withContent(

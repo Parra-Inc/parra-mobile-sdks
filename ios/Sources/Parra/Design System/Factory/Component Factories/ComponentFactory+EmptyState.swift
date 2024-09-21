@@ -16,13 +16,13 @@ public extension ParraComponentFactory {
         localAttributes: ParraAttributes.EmptyState? = nil,
         onPrimaryAction: (() -> Void)? = nil,
         onSecondaryAction: (() -> Void)? = nil
-    ) -> some View {
+    ) -> ParraEmptyStateComponent {
         let attributes = attributeProvider.emptyStateAttributes(
             localAttributes: localAttributes,
             theme: theme
         )
 
-        EmptyStateComponent(
+        return ParraEmptyStateComponent(
             config: config,
             content: content,
             attributes: attributes,

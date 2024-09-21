@@ -1,5 +1,5 @@
 //
-//  PlainButtonStyle.swift
+//  ParraOutlinedButtonStyle.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 5/6/24.
@@ -8,15 +8,15 @@
 
 import SwiftUI
 
-struct PlainButtonStyle: ButtonStyle {
-    // MARK: - Internal
+public struct ParraOutlinedButtonStyle: ButtonStyle {
+    // MARK: - Public
 
-    let config: ParraTextButtonConfig
-    let content: ParraTextButtonContent
-    let attributes: ParraAttributes.PlainButton
+    public let config: ParraTextButtonConfig
+    public let content: ParraTextButtonContent
+    public let attributes: ParraAttributes.OutlinedButton
 
     @ViewBuilder
-    func makeBody(configuration: Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         let currentAttributes = if content.isDisabled {
             attributes.disabled
         } else if configuration.isPressed {
@@ -29,7 +29,7 @@ struct PlainButtonStyle: ButtonStyle {
             content: content.text,
             localAttributes: currentAttributes.label
         )
-        .applyPlainButtonAttributes(
+        .applyOutlinedButtonAttributes(
             currentAttributes,
             using: parraTheme
         )

@@ -1,5 +1,5 @@
 //
-//  OutlinedButtonStyle.swift
+//  ParraContainedButtonStyle.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 5/6/24.
@@ -8,15 +8,15 @@
 
 import SwiftUI
 
-struct OutlinedButtonStyle: ButtonStyle {
-    // MARK: - Internal
+public struct ParraContainedButtonStyle: ButtonStyle {
+    // MARK: - Public
 
-    let config: ParraTextButtonConfig
-    let content: ParraTextButtonContent
-    let attributes: ParraAttributes.OutlinedButton
+    public let config: ParraTextButtonConfig
+    public let content: ParraTextButtonContent
+    public let attributes: ParraAttributes.ContainedButton
 
     @ViewBuilder
-    func makeBody(configuration: Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         let currentAttributes = if content.isDisabled {
             attributes.disabled
         } else if configuration.isPressed {
@@ -29,7 +29,7 @@ struct OutlinedButtonStyle: ButtonStyle {
             content: content.text,
             localAttributes: currentAttributes.label
         )
-        .applyOutlinedButtonAttributes(
+        .applyContainedButtonAttributes(
             currentAttributes,
             using: parraTheme
         )

@@ -1,5 +1,5 @@
 //
-//  OutlinedButtonComponent.swift
+//  ParraContainedButtonComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/29/24.
@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-struct OutlinedButtonComponent: View {
+public struct ParraContainedButtonComponent: View {
     // MARK: - Lifecycle
 
     init(
         config: ParraTextButtonConfig,
         content: ParraTextButtonContent,
-        style: OutlinedButtonStyle,
+        style: ParraContainedButtonStyle,
         onPress: @escaping () -> Void
     ) {
         self.config = config
@@ -23,14 +23,14 @@ struct OutlinedButtonComponent: View {
         self.onPress = onPress
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let config: ParraTextButtonConfig
-    let content: ParraTextButtonContent
-    let style: OutlinedButtonStyle
-    let onPress: () -> Void
+    public let config: ParraTextButtonConfig
+    public let content: ParraTextButtonContent
+    public let style: ParraContainedButtonStyle
+    public let onPress: () -> Void
 
-    var body: some View {
+    public var body: some View {
         Button(
             action: onPress
         ) {
@@ -41,8 +41,8 @@ struct OutlinedButtonComponent: View {
     }
 }
 
-#Preview("Outlined Button") {
+#Preview("Contained Button") {
     ParraViewPreview { _ in
-        renderStorybook(for: OutlinedButtonComponent.self)
+        renderStorybook(for: ParraContainedButtonComponent.self)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  BadgeComponent.swift
+//  ParraBadgeComponent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/12/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct BadgeComponent: View {
+public struct ParraBadgeComponent: View {
     // MARK: - Lifecycle
 
     init(
@@ -19,12 +19,12 @@ struct BadgeComponent: View {
         self.attributes = attributes
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let content: ParraBadgeContent
-    let attributes: ParraAttributes.Badge
+    public let content: ParraBadgeContent
+    public let attributes: ParraAttributes.Badge
 
-    var body: some View {
+    public var body: some View {
         let isPlaceholder = redactionReasons.contains(.placeholder)
 
         let labelAttributes = isPlaceholder
