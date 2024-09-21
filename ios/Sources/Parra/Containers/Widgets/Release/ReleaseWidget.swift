@@ -13,11 +13,9 @@ struct ReleaseWidget: Container {
 
     init(
         config: ParraChangelogWidgetConfig,
-        componentFactory: ParraComponentFactory,
         contentObserver: ReleaseContentObserver
     ) {
         self.config = config
-        self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
 
         let collection: AppReleaseCollectionResponse? = if let releaseStub =
@@ -45,8 +43,6 @@ struct ReleaseWidget: Container {
     }
 
     // MARK: - Internal
-
-    let componentFactory: ParraComponentFactory
 
     @StateObject var contentObserver: ReleaseContentObserver
     @StateObject var changelogContentObserver: ChangelogWidget
@@ -163,12 +159,12 @@ struct ReleaseWidget: Container {
             if destination == "changelog" {
                 ChangelogWidget(
                     config: config,
-                    componentFactory: componentFactory,
                     contentObserver: changelogContentObserver
                 )
                 .padding(.top, contentPadding.top)
                 .edgesIgnoringSafeArea([.top])
                 .environment(navigationState)
+                .environment(\.parraComponentFactory, componentFactory)
             }
         }
     }
@@ -243,6 +239,8 @@ struct ReleaseWidget: Container {
     }
 
     // MARK: - Private
+
+    @Environment(\.parraComponentFactory) private var componentFactory
 
     @Environment(\.parraTheme) private var parraTheme
     @Environment(NavigationState.self) private var navigationState

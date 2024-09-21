@@ -50,9 +50,15 @@ final class ModalScreenManager {
                     config: .init()
                 )
 
+            let componentFactory = ParraComponentFactory(
+                attributes: configuration.globalComponentAttributes,
+                theme: ParraThemeManager.shared.current
+            )
+
             let modalViewController = UIHostingController(
                 rootView: container
                     .environment(\.parraTheme, ParraThemeManager.shared.current)
+                    .environment(\.parraComponentFactory, componentFactory)
                     .environment(
                         \.parraPreferredAppearance,
                         ParraThemeManager.shared.preferredAppearanceBinding

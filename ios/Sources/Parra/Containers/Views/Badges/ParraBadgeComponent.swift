@@ -66,7 +66,7 @@ public struct ParraBadgeComponent: View {
     @Environment(\.redactionReasons) private var redactionReasons
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
 }
 
 #Preview {

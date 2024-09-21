@@ -13,17 +13,14 @@ struct RoadmapWidget: Container {
 
     init(
         config: ParraRoadmapWidgetConfig,
-        componentFactory: ParraComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
 
     // MARK: - Internal
 
-    let componentFactory: ParraComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ParraRoadmapWidgetConfig
 
@@ -121,6 +118,7 @@ struct RoadmapWidget: Container {
                 RoadmapDetailView(ticketContent: binding)
                     .environment(config)
                     .environmentObject(contentObserver)
+                    .environment(\.parraComponentFactory, componentFactory)
             }
         }
         .renderToast(toast: $alertManager.currentToast)
@@ -247,6 +245,7 @@ struct RoadmapWidget: Container {
 
     // MARK: - Private
 
+    @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
     @State private var showNavigationDivider = false
@@ -254,10 +253,9 @@ struct RoadmapWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<RoadmapWidget> { parra, componentFactory, config in
+    ParraContainerPreview<RoadmapWidget> { parra, _, config in
         RoadmapWidget(
             config: .default,
-            componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: RoadmapWidget.ContentObserver.InitialParams(
                     roadmapConfig: ParraAppRoadmapConfiguration.validStates()[0],

@@ -110,6 +110,7 @@ public struct ParraApp<
         makeScene()
             .environment(\.parra, Parra.default)
             .environment(\.parraAuthState, authStateManager.current)
+            .environment(\.parraComponentFactory, parraInternal.globalComponentFactory)
             .environment(\.parraTheme, themeManager.current)
             .environment(
                 \.parraPreferredAppearance,
@@ -117,7 +118,6 @@ public struct ParraApp<
             )
             .environment(alertManager)
             .environment(launchScreenState)
-            .environment(parraInternal.globalComponentFactory)
             .onChange(
                 of: launchScreenState.current,
                 initial: true

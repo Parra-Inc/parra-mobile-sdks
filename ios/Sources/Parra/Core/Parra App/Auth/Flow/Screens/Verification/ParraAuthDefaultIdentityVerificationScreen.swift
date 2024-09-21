@@ -136,7 +136,7 @@ public struct ParraAuthDefaultIdentityVerificationScreen: ParraAuthScreen, Equat
         in: .common
     ).autoconnect()
 
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
     @ViewBuilder

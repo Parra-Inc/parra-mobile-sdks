@@ -61,7 +61,7 @@ struct RoadmapTicketDisplayStatusBadge: View {
     @State private var isAlertPresented = false
     private let educationAlerts: Bool
 
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
 }
 
 #Preview {

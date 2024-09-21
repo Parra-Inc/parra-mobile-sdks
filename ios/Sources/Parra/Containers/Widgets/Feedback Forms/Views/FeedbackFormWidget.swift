@@ -13,17 +13,14 @@ struct FeedbackFormWidget: Container {
 
     init(
         config: ParraFeedbackFormWidgetConfig,
-        componentFactory: ParraComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self.componentFactory = componentFactory
         self._contentObserver = StateObject(wrappedValue: contentObserver)
     }
 
     // MARK: - Internal
 
-    let componentFactory: ParraComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ParraFeedbackFormWidgetConfig
 
@@ -170,6 +167,7 @@ struct FeedbackFormWidget: Container {
 
     // MARK: - Private
 
+    @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
     private func onFieldValueChanged(
@@ -184,10 +182,9 @@ struct FeedbackFormWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<FeedbackFormWidget> { _, componentFactory, _ in
+    ParraContainerPreview<FeedbackFormWidget> { _, _, _ in
         FeedbackFormWidget(
             config: .default,
-            componentFactory: componentFactory,
             contentObserver: .init(
                 initialParams: .init(
                     formData: .init(

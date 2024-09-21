@@ -200,7 +200,7 @@ struct ForgotPasswordNewPasswordStateView: View {
     @State private var errorMessage: String?
     @State private var confirmationValidationErrorMessage: String?
 
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraAppInfo) private var parraAppInfo
     @Environment(\.parraTheme) private var parraTheme
 

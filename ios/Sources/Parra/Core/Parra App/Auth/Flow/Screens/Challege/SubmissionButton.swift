@@ -71,7 +71,7 @@ struct SubmissionButton: View {
 
     // MARK: - Private
 
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
 
     private func handlePress() {
         content = content.withLoading(true)

@@ -94,7 +94,7 @@ struct PasswordStrengthView: View {
     @State private var passwordStrength: PasswordEntropyCalculator.Strength?
 
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
 
     @ViewBuilder
     private func renderRule(

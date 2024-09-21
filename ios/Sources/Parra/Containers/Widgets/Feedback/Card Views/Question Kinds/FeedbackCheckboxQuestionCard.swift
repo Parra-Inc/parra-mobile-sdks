@@ -26,7 +26,7 @@ struct FeedbackCheckboxQuestionCard: FeedbackQuestionViewKind {
     typealias AnswerType = MultiOptionAnswer
 
     @Environment(ParraFeedbackCardWidgetConfig.self) var config
-    @Environment(ParraComponentFactory.self) var componentFactory
+    @Environment(\.parraComponentFactory) var componentFactory
     @EnvironmentObject var contentObserver: FeedbackCardWidget.ContentObserver
 
     let bucketId: String

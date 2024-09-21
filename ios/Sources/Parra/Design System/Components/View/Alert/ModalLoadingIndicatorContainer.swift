@@ -13,11 +13,9 @@ struct ModalLoadingIndicatorContainer: Container {
 
     init(
         config: Config,
-        componentFactory: ParraComponentFactory,
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self.componentFactory = componentFactory
         self.contentObserver = contentObserver
     }
 
@@ -50,7 +48,6 @@ struct ModalLoadingIndicatorContainer: Container {
     }
 
     var config: Config
-    var componentFactory: ParraComponentFactory
     var contentObserver: ContentObserver
 
     var body: some View {
@@ -71,14 +68,15 @@ struct ModalLoadingIndicatorContainer: Container {
 
     // MARK: - Private
 
+    @Environment(\.parraComponentFactory) private var componentFactory
+
     @Environment(\.parraTheme) private var parraTheme
 }
 
 #Preview {
-    ParraViewPreview { factory in
+    ParraViewPreview { _ in
         ModalLoadingIndicatorContainer(
             config: .init(),
-            componentFactory: factory,
             contentObserver: ModalLoadingIndicatorContainer.ContentObserver(
                 initialParams: .init(
                     indicatorContent: ParraLoadingIndicatorContent(

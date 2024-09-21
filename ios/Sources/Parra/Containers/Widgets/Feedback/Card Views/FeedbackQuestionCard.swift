@@ -12,7 +12,7 @@ struct FeedbackQuestionCard: View {
     // MARK: - Internal
 
     @Environment(ParraFeedbackCardWidgetConfig.self) var config
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
 
     let bucketId: String
     let question: ParraQuestion

@@ -58,7 +58,7 @@ public struct ParraInlineAlertComponent: View {
     // MARK: - Private
 
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
 }
 
 #Preview {

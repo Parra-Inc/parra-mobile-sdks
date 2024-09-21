@@ -182,7 +182,7 @@ public struct ParraTextInputComponent: View {
 
     // MARK: - Private
 
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
 
     @FocusState private var focusState: FocusField?
     @State private var lastFocusState: FocusField?

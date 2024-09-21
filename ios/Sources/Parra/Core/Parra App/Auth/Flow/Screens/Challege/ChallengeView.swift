@@ -175,7 +175,7 @@ struct ChallengeView: View {
 
     // MARK: - Private
 
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraAppInfo) private var parraAppInfo
     @Environment(\.parraTheme) private var parraTheme
 

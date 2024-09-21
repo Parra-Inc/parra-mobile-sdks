@@ -13,10 +13,8 @@ struct FeedbackCardWidget: Container {
 
     init(
         config: ParraFeedbackCardWidgetConfig,
-        componentFactory: ParraComponentFactory,
         contentObserver: ContentObserver
     ) {
-        self.componentFactory = componentFactory
         self.config = config
 
         _contentObserver = StateObject(
@@ -28,10 +26,10 @@ struct FeedbackCardWidget: Container {
 
     static let height: CGFloat = 260
 
-    let componentFactory: ParraComponentFactory
     @StateObject var contentObserver: ContentObserver
     let config: ParraFeedbackCardWidgetConfig
 
+    @Environment(\.parraComponentFactory) var componentFactory
     @Environment(\.parra) var parra
 
     var body: some View {
@@ -141,10 +139,9 @@ struct FeedbackCardWidget: Container {
                 .foregroundStyle(ParraTheme.default.palette.secondaryBackground)
                 .frame(width: geometry.size.width, height: geometry.size.height)
 
-            ParraContainerPreview<FeedbackCardWidget> { parra, componentFactory, _ in
+            ParraContainerPreview<FeedbackCardWidget> { parra, _, _ in
                 FeedbackCardWidget(
                     config: .default,
-                    componentFactory: componentFactory,
                     contentObserver: .init(
                         initialParams: .init(
                             cards: ParraCardItem.validStates(),

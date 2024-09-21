@@ -104,7 +104,7 @@ public struct ParraEmptyStateComponent: View {
 
     // MARK: - Private
 
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 }
 

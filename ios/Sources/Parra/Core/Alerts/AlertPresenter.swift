@@ -73,7 +73,7 @@ struct AlertPresenter: ViewModifier {
 
     // MARK: - Private
 
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.defaultSafeAreaInsets) private var defaultSafeAreaInsets
     @Environment(\.parraTheme) private var parraTheme
 

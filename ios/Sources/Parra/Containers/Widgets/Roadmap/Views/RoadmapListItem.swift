@@ -91,7 +91,7 @@ struct RoadmapListItem: View {
     // MARK: - Private
 
     @Environment(ParraRoadmapWidgetConfig.self) private var config
-    @Environment(ParraComponentFactory.self) private var componentFactory
+    @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
 
     @EnvironmentObject private var contentObserver: RoadmapWidget
