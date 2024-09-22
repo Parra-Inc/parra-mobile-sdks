@@ -98,6 +98,9 @@ struct LaunchScreenWindow<Content>: View where Content: View {
             errorInfo: errorInfo,
             retryHandler: retryHandler
         )
+        .tint(ParraThemeManager.shared.current.palette.primary)
+        .preferredColorScheme(ParraThemeManager.shared.preferredColorScheme)
+        .environment(\.parraAppInfo, ParraAppInfo.default)
     }
 
     @ViewBuilder
