@@ -131,6 +131,15 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/users/\(userId)/avatar"
         case .deleteUser(let userId):
             return "tenants/\(tenantId)/users/\(userId)"
+        // User Properties
+        case .getUserProperties(let userId),
+             .putReplaceUserProperties(let userId),
+             .patchUpdateUserProperties(let userId),
+             .deleteAllUserProperties(let userId):
+            return "tenants/\(tenantId)/users/\(userId)/properties"
+        case .putUpdateSingleUserProperty(let userId, let propertyKey),
+             .deleteSingleUserProperty(let userId, let propertyKey):
+            return "tenants/\(tenantId)/users/\(userId)/properties/\(propertyKey)"
         }
     }
 }

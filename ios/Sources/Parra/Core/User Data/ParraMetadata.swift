@@ -13,7 +13,9 @@ private let logger = Logger(category: "Parra Metadata")
 /// A wrapper around an objects metadata. It allows for direct access to the
 /// metadata dictionary, as well as convenience methods for accessing values.
 @Observable
-public final class ParraMetadata: Codable, Equatable, Hashable, PrimitiveObjectAccess {
+public final class ParraMetadata: Codable, Equatable, Hashable,
+    ParraReadableKeyValueStore
+{
     // MARK: - Lifecycle
 
     init(rawValue: [String: ParraAnyCodable]? = nil) {

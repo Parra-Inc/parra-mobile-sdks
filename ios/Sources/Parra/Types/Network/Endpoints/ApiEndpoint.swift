@@ -47,22 +47,36 @@ enum ApiEndpoint: Endpoint {
     case deleteAvatar(userId: String)
     case deleteUser(userId: String)
 
+    // User Properties
+    case getUserProperties(userId: String)
+    case putReplaceUserProperties(userId: String)
+    case patchUpdateUserProperties(userId: String)
+    case deleteAllUserProperties(userId: String)
+
+    case putUpdateSingleUserProperty(userId: String, propertyKey: String)
+    case deleteSingleUserProperty(userId: String, propertyKey: String)
+
     // MARK: - Internal
 
     var method: HttpMethod {
         switch self {
         case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
-             .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo:
+             .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
+             .getUserProperties:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
              .postPushTokens, .postVoteForTicket,
              .postLogin, .postLogout, .postUpdateAvatar:
             return .post
-        case .updateUserInfo:
+        case .updateUserInfo, .putReplaceUserProperties,
+             .putUpdateSingleUserProperty:
             return .put
-        case .deleteVoteForTicket, .deleteUser, .deleteAvatar:
+        case .deleteVoteForTicket, .deleteUser, .deleteAvatar,
+             .deleteAllUserProperties, .deleteSingleUserProperty:
             return .delete
+        case .patchUpdateUserProperties:
+            return .patch
         }
     }
 
@@ -110,6 +124,11 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/applications/:applicationId/releases"
         case .deleteUser:
             return "tenants/:tenantId/users/:userId"
+        case .getUserProperties, .putReplaceUserProperties,
+             .patchUpdateUserProperties, .deleteAllUserProperties:
+            return "tenants/:tenantId/users/:userId/properties"
+        case .putUpdateSingleUserProperty, .deleteSingleUserProperty:
+            return "tenants/:tenantId/users/:userId/properties/:userPropertyKey"
         }
     }
 
