@@ -92,8 +92,8 @@ jobs:
           command: ./scripts.sh utils --build-sample
 
       - store_artifacts:
-          path: /artifacts/xcode-build-log.txt
-          destination: artifact-file
+          path: /buildlog
+          destination: buildlog
 
       - slack/notify:
           event: fail
@@ -218,8 +218,8 @@ jobs:
             echo "Kicked off sample app builds"
 
       - store_artifacts:
-          path: /artifacts/xcode-build-log.txt
-          destination: artifact-file
+          path: /buildlog
+          destination: buildlog
 
       - slack/notify:
           event: fail
