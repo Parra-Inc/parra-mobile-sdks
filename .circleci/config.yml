@@ -92,8 +92,8 @@ jobs:
           command: ./scripts.sh utils --build-sample
 
       - store_artifacts:
-          path: /buildlog
-          destination: buildlog
+          path: /sample
+          destination: sample
 
       - slack/notify:
           event: fail
@@ -218,8 +218,8 @@ jobs:
             echo "Kicked off sample app builds"
 
       - store_artifacts:
-          path: /buildlog
-          destination: buildlog
+          path: /sample
+          destination: sample
 
       - slack/notify:
           event: fail
@@ -239,11 +239,9 @@ workflows:
   release-sdk:
     jobs:
       - release-ios-sdk:
-          filters: 
+          filters:
+            tags:
+              only: # x.y.z
+                - /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
             branches:
-              only: main
-            # tags:
-            #   only: # x.y.z
-            #     - /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-            # branches:
-            #   ignore: /.*/
+              ignore: /.*/
