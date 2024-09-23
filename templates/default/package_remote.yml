@@ -2,4 +2,4 @@
 packages:
   Parra:
     url: https://github.com/Parra-Inc/parra-mobile-sdks
-    minorVersion: {{ sdk.version }}
+    majorVersion: {{ sdk.version }}
