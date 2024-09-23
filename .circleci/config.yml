@@ -91,6 +91,10 @@ jobs:
           name: Build Sample App
           command: ./scripts.sh utils --build-sample
 
+      - store_artifacts:
+          path: /artifacts/xcode-build-log.txt
+          destination: artifact-file
+
       - slack/notify:
           event: fail
           mentions: '@mick'
