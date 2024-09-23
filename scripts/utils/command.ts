@@ -9,7 +9,7 @@ export class CommandResult {
     public readonly stdout: string,
     public readonly stderr: string,
     public readonly childProcess: ChildProcess
-  ) {}
+  ) { }
 }
 
 const execAsync = async (command: string, options: CommandOptions) => {
@@ -27,12 +27,20 @@ const execAsync = async (command: string, options: CommandOptions) => {
     childProcess.stdout.on('data', (data) => {
       logger.raw(false, data);
       stdOutOutput += data;
+
+      if (localLogger) {
+        localLogger.raw(false, data);
+      }
     });
 
     childProcess.stderr.on('data', (data) => {
       stdErrOutput += data;
 
-      logger.raw(true, data);
+      if (localLogger) {
+        localLogger.raw(true, data);
+      } else {
+        logger.raw(true, data);
+      }
     });
 
     childProcess.on('close', (code, signal) => {
