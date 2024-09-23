@@ -31,6 +31,7 @@ extension ParraUser.Info: ParraFixture {
         lastSeenAt: nil,
         lastLoginAt: nil,
         properties: [:],
+        metadata: [:],
         identities: [
             ParraIdentity(
                 id: .uuid,
