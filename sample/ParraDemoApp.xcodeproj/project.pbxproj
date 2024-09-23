@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		048ADBC78793B41DBD394C4F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = CE2C0816F30D7F5A1A9AA90E /* PrivacyInfo.xcprivacy */; };
+		1CF9BF52B44BE767F520FA19 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B9FAA703F70175E28A7318 /* EditProfileViewModel.swift */; };
 		1F19DE02BDA549DE968C0D83 /* ChangePasswordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE450960001563C208D94E3 /* ChangePasswordCell.swift */; };
 		21747ACB5EE558646C7FF23C /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3810DBD43B0EA840AD1CE7 /* AccountView.swift */; };
 		23B4F90D5D3801DC189A838C /* ChangelogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA58D7C85B5D914090C05A6 /* ChangelogCell.swift */; };
 		2438B7489451ED66BDF845DD /* ThemeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBCE90EDD6E122009EBBEA8 /* ThemeCell.swift */; };
 		3C9889B5B17FD1531AFD4572 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADADDC8AB29878AC84A7703 /* ContentView.swift */; };
+		4234DE1B5DB3E638C965266D /* EditProfileTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B2D7A2183DFECF56BF3DF5 /* EditProfileTextField.swift */; };
 		4FB90D154877B7F67CF2DCFD /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DA9FD5AE1ABDD3106D5305 /* ProfileCell.swift */; };
 		601CA06E30BA5908E1A796CA /* AccountHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46F6C1573953F837FF9D7BA /* AccountHeader.swift */; };
 		6325766D40F9CE0E2EEEF4D1 /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 55B3CA59B5041378753DE01E /* Parra */; };
@@ -52,8 +54,10 @@
 		AD37450ED3B2022F3C9CC692 /* RoadmapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapCell.swift; sourceTree = "<group>"; };
 		CA2CE81A679147AB7A245775 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE2C0816F30D7F5A1A9AA90E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		D8B9FAA703F70175E28A7318 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 		E50031562D984DCD55B6471E /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		EE0B09EBFADFCCBB95417508 /* ParraDemoApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ParraDemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3B2D7A2183DFECF56BF3DF5 /* EditProfileTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileTextField.swift; sourceTree = "<group>"; };
 		F46F6C1573953F837FF9D7BA /* AccountHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeader.swift; sourceTree = "<group>"; };
 		FE6314BD200C9C9A50D05AEC /* SettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTab.swift; sourceTree = "<group>"; };
 		FF27E8D3BFFABEC6016D0A1F /* SampleTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTab.swift; sourceTree = "<group>"; };
@@ -125,7 +129,9 @@
 		741B7854BF0C36D0A31D7C35 /* Edit Profile Screen */ = {
 			isa = PBXGroup;
 			children = (
+				F3B2D7A2183DFECF56BF3DF5 /* EditProfileTextField.swift */,
 				E50031562D984DCD55B6471E /* EditProfileView.swift */,
+				D8B9FAA703F70175E28A7318 /* EditProfileViewModel.swift */,
 			);
 			path = "Edit Profile Screen";
 			sourceTree = "<group>";
@@ -232,7 +238,9 @@
 				23B4F90D5D3801DC189A838C /* ChangelogCell.swift in Sources */,
 				3C9889B5B17FD1531AFD4572 /* ContentView.swift in Sources */,
 				7B57FD2C1898FCA6F389368B /* DeleteAccountCell.swift in Sources */,
+				4234DE1B5DB3E638C965266D /* EditProfileTextField.swift in Sources */,
 				CA7340F38EBFC08BB4DF2876 /* EditProfileView.swift in Sources */,
+				1CF9BF52B44BE767F520FA19 /* EditProfileViewModel.swift in Sources */,
 				F1382D16FFF043F20D6D87F1 /* FeedbackCell.swift in Sources */,
 				A9ED9558996BB4301464CA81 /* LatestReleaseCell.swift in Sources */,
 				B1D63ECFD59A2E33AC7F695B /* LogoutCell.swift in Sources */,
@@ -455,7 +463,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
 			requirement = {
-				kind = upToNextMinorVersion;
+				kind = upToNextMajorVersion;
 				minimumVersion = 0.3.14;
 			};
 		};
