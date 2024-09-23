@@ -9,7 +9,7 @@
 import Parra
 import SwiftUI
 
-struct EditProfileView: View {
+@MainActor struct EditProfileView: View {
     @Environment(\.parra) private var parra
     @Environment(\.parraAuthState) private var parraAuthState
     @Environment(\.parraTheme) private var parraTheme
