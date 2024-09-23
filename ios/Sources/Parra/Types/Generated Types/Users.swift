@@ -81,11 +81,13 @@ struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     public init(
         firstName: String? = nil,
         lastName: String? = nil,
-        name: String? = nil
+        name: String? = nil,
+        properties: [String: ParraAnyCodable]? = nil
     ) {
         self.firstName = firstName
         self.lastName = lastName
         self.name = name
+        self.properties = properties
     }
 
     // MARK: - Public
@@ -93,6 +95,7 @@ struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     public let firstName: String?
     public let lastName: String?
     public let name: String?
+    public let properties: [String: ParraAnyCodable]?
 
     public func encode(to encoder: any Encoder) throws {
         // Overridden because we want to send null for each of these fields
@@ -104,6 +107,7 @@ struct UpdateUserRequestBody: Codable, Equatable, Hashable {
         try container.encode(firstName, forKey: .firstName)
         try container.encode(lastName, forKey: .lastName)
         try container.encode(name, forKey: .name)
+        try container.encode(properties, forKey: .properties)
     }
 
     // MARK: - Internal
@@ -112,6 +116,7 @@ struct UpdateUserRequestBody: Codable, Equatable, Hashable {
         case firstName
         case lastName
         case name
+        case properties
     }
 }
 

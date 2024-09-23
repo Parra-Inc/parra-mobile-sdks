@@ -49,12 +49,14 @@ extension API {
     func updateUserInfo(
         name: String? = nil,
         firstName: String? = nil,
-        lastName: String? = nil
+        lastName: String? = nil,
+        properties: [String: ParraAnyCodable]? = nil
     ) async throws -> ParraUser.Info {
         let requestBody = UpdateUserRequestBody(
             firstName: firstName,
             lastName: lastName,
-            name: name
+            name: name,
+            properties: properties
         )
 
         guard let userInfo = await dataManager.getCurrentUser()?.info else {
