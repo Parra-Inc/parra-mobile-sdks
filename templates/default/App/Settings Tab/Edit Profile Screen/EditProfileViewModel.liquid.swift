@@ -13,7 +13,7 @@ import Parra
 /// user properties that you'd like to associate with them. User properties can
 /// contain arbitrary information, subject to some limits on their key/value
 /// sizes.
-@Observable @MainActor final class EditProfileViewModel {
+@Observable final class EditProfileViewModel {
     struct Data: Equatable {
         init(
             firstName: String? = nil,
