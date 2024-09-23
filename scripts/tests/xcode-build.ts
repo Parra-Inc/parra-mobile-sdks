@@ -74,7 +74,9 @@ const runXcodeBuildSubcommand = async (
     # Disable buffering to ensure that logs are printed in real time.
     NSUnbufferedIO=YES set -o pipefail \
         && xcodebuild ${subcommand} ${args} ${commandSuffix}
-    `
+    `, {
+    commandLogger: logger,
+  }
   );
 };
 
@@ -98,6 +100,8 @@ export const runXcodeBuildCommand = async (
     # Disable buffering to ensure that logs are printed in real time.
     NSUnbufferedIO=YES set -o pipefail \
         && xcodebuild ${args} ${commandSuffix}
-    `
+    `, {
+    commandLogger: logger,
+  }
   );
 }
