@@ -14,3 +14,13 @@ Most templates build off of the default template. To facilitate this, the standa
 2. Duplicate the structure of the default template with links to the original files `cd templates; cp -RLs default/* new-template/`.
 3. Delete and re-create, or otherwise modify the new template's files as needed.
 4. Update the arg parser in the `cli` to add a new case to the `TemplateName` enum for the new template.
+
+### Adding to Existing Templates
+
+1. Create a new file in the default template.
+2. Change into the `templates` directory.
+3. Create a symlink to your new file. For example, to link a file from the `default` template to the `revenue-cat` template, run:
+   ```bash
+   ln -s default/App/Something.liquid.swift revenue-cat/App/Something.liquid.swift
+   ```
+4. Repeat to other templates as needed.

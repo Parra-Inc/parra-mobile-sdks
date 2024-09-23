@@ -151,7 +151,7 @@ extension Server {
     func performAsyncDataTask(
         request: URLRequest
     ) async throws -> (Data, HTTPURLResponse) {
-        try await sleepInDebug()
+        try await sleepInDev()
 
         let (data, response) = try await configuration.urlSession
             .dataForRequest(
@@ -203,7 +203,7 @@ extension Server {
         request: URLRequest,
         formFields: [MultipartFormField]
     ) async throws -> (Data, HTTPURLResponse) {
-        try await sleepInDebug()
+        try await sleepInDev()
 
         var urlRequest = request
 
@@ -260,13 +260,16 @@ extension Server {
         return (responseData, httpResponse)
     }
 
-    private func sleepInDebug() async throws {
+    private func sleepInDev() async throws {
         #if DEBUG
         // There is a different delay added in the UrlSession mocks that
         // slows down tests. This delay is specific to helping prevent us
         // from introducing UI without proper loading states.
-        if NSClassFromString("XCTestCase") == nil {
-            try await Task.sleep(for: 1.0)
+        // We also only want to include this delay when running the local dev
+        // app and not when developers are developing their own apps with
+        // the sdk.
+        if NSClassFromString("XCTestCase") == nil && ParraInternal.isBundleIdDevApp() {
+            try await Task.sleep(for: 0.5)
         }
         #endif
     }

@@ -170,6 +170,20 @@ class ParraInternal {
         )
     }
 
+    /// Must be completed before the splash screen is dismissed!
+    /// Keep this as lean as possible!!!!
+    /// Everything here should be expected to happen after receiving auth state.
+    func performPostAuthLaunchActions() async throws {
+        try await withThrowingDiscardingTaskGroup { taskGroup in
+            taskGroup.addTask {
+                logger.debug("Fetching user properties")
+                let userProperties = try await self.api.getUserProperties()
+
+                await ParraUserProperties.shared.forceSetStore(userProperties)
+            }
+        }
+    }
+
     // MARK: - Private
 
     /// Not exactly the same as "is initialized." We need to handle the case
@@ -183,6 +197,8 @@ class ParraInternal {
         for user: ParraUser
     ) {
         logger.debug("Handle logout flow")
+
+        ParraUserProperties.shared.reset()
 
         sessionManager.endSession()
 
@@ -206,7 +222,10 @@ class ParraInternal {
         do {
             logger.debug("Refreshing user info")
 
-            try await authService.refreshUserInfo()
+            if let userInfo = try await authService.refreshUserInfo() {
+                ParraUserProperties.shared
+                    .forceSetStore(userInfo.info.properties)
+            }
         } catch {
             logger.error("Failed to refresh user info on app launch", error)
         }

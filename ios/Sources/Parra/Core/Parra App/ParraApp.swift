@@ -112,6 +112,7 @@ public struct ParraApp<
             .environment(\.parraAuthState, authStateManager.current)
             .environment(\.parraComponentFactory, parraInternal.globalComponentFactory)
             .environment(\.parraTheme, themeManager.current)
+            .environment(\.parraUserProperties, userProperties)
             .environment(
                 \.parraPreferredAppearance,
                 themeManager.preferredAppearanceBinding
@@ -167,6 +168,7 @@ public struct ParraApp<
     @State private var alertManager: AlertManager
     @State private var authStateManager: ParraAuthStateManager = .shared
     @State private var themeManager: ParraThemeManager = .shared
+    @State private var userProperties: ParraUserProperties = .shared
 
     private let parraInternal: ParraInternal
 
@@ -205,12 +207,21 @@ public struct ParraApp<
             logger.debug("Post app launch actions complete")
 
             logger.debug("Performing initial auth state load")
-            let shouldRefresh = try await authStateManager.performInitialAuthCheck(
+            let authResult = try await authStateManager.performInitialAuthCheck(
                 using: parraInternal.authService,
                 appInfo: result.appInfo
             )
 
-            result.requiresAuthRefresh = shouldRefresh
+            result.requiresAuthRefresh = authResult.requiresRefresh
+
+            if authResult.state.isLoggedIn {
+                logger.debug("Performing post authentication actions")
+                try await parraInternal.performPostAuthLaunchActions()
+            } else {
+                logger.trace(
+                    "Skipping post authentication actions. Not logged in."
+                )
+            }
 
             logger.info("Parra SDK Initialized")
 

@@ -42,6 +42,11 @@ final class AuthService {
         Result<ASAuthorization, ASAuthorizationError>
     ) -> Void
 
+    struct InitialAuthCheckResult {
+        let requiresRefresh: Bool
+        let state: ParraAuthState
+    }
+
     let oauth2Service: OAuth2Service
     let dataManager: DataManager
     let authServer: AuthServer
@@ -277,7 +282,7 @@ final class AuthService {
     /// proceed into the app.
     func getQuickestAuthState(
         appInfo: ParraAppInfo
-    ) async -> (ParraAuthState, Bool) {
+    ) async -> InitialAuthCheckResult {
         let currentUser = await dataManager.getCurrentUser()
 
         if let currentUser {
@@ -297,7 +302,10 @@ final class AuthService {
 
             // There was a user persisted on disk at app launch. They could be
             // out of date. Mark for refresh.
-            return (result, true)
+            return InitialAuthCheckResult(
+                requiresRefresh: true,
+                state: result
+            )
         }
 
         // There wasn't a cached user. We have to determine an auth state. We
@@ -322,7 +330,10 @@ final class AuthService {
             shouldBroadcast: false
         )
 
-        return (result, false)
+        return InitialAuthCheckResult(
+            requiresRefresh: false,
+            state: result
+        )
     }
 
     @discardableResult

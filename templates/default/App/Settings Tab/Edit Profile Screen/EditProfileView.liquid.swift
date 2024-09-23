@@ -13,135 +13,85 @@ struct EditProfileView: View {
     @Environment(\.parra) private var parra
     @Environment(\.parraAuthState) private var parraAuthState
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.parraUserProperties) private var parraUserProperties
+    @Environment(\.presentationMode) var presentationMode
 
-    @State private var data = ProfileData()
-    @State private var isLoading = false
-    @State private var isShowingSuccess = false
+    @State private var dataModel = EditProfileViewModel()
 
     var body: some View {
-        VStack {
-            Form {
-                Section {
-                    formField(named: "First Name", fieldData: $data.firstName)
-                    formField(named: "Last Name", fieldData: $data.lastName)
-                    formField(named: "Display Name", fieldData: $data.name)
-                }
-            }
-            .onSubmit(of: .text) {
-                saveChanges()
+        Form {
+            Section("Name") {
+                EditProfileTextField(
+                    name: "First Name",
+                    value: $dataModel.data.firstName
+                )
+                EditProfileTextField(
+                    name: "Last Name",
+                    value: $dataModel.data.lastName
+                )
+                EditProfileTextField(
+                    name: "Display Name",
+                    value: $dataModel.data.name
+                )
             }
 
-            Button(
-                action: saveChanges
-            ) {
-                Label(
-                    title: {
-                        Text(isShowingSuccess ? "Saved" : "Save")
-                            .bold()
-                    },
-                    icon: {
-                        if isLoading {
-                            ProgressView()
-                                .tint(.white)
-                                .padding(.trailing, 5)
-                        } else if isShowingSuccess {
-                            Image(systemName: "checkmark")
-                        }
-                    }
+            Section("Personal Info") {
+                DatePicker(
+                    "Birthday",
+                    selection: Binding<Date>(
+                        get: { dataModel.data.birthdate ?? Date() },
+                        set: { dataModel.data.birthdate = $0 }
+                    ),
+                    in: ...Date.now,
+                    displayedComponents: .date
                 )
-                .frame(maxWidth: .infinity)
-                .padding()
+                .datePickerStyle(.compact)
+                .tint(parraTheme.palette.primary)
             }
-            .background(parraTheme.palette.primary.toParraColor())
-            .foregroundStyle(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .safeAreaPadding()
-            .disabled(isLoading)
         }
-        .navigationTitle("Edit Profile")
+        .onSubmit(of: .text) { dataModel.save(with: parra) }
         .background(parraTheme.palette.primaryBackground)
         .scrollContentBackground(.hidden)
-        .onAppear {
-            let userInfo = parraAuthState.user?.info
-
-            data = ProfileData(
-                firstName: userInfo?.firstName,
-                lastName: userInfo?.lastName,
-                name: userInfo?.name
-            )
-        }
-    }
-
-    private func formField(
-        named name: String,
-        fieldData: Binding<String>
-    ) -> some View {
-        HStack {
-            Text(name)
-
-            Spacer()
-
-            TextField(
-                name,
-                text: fieldData,
-                prompt: Text(name)
-            )
-            .multilineTextAlignment(.trailing)
-        }
-    }
-
-    private func saveChanges() {
-        if isLoading {
-            return
-        }
-
-        withAnimation {
-            isLoading = true
-            isShowingSuccess = false
-        }
-
-        Task { @MainActor in
-            var success = true
-
-            do {
-                try await parra.user.updatePersonalInfo(
-                    name: data.name,
-                    firstName: data.firstName,
-                    lastName: data.lastName
-                )
-            } catch {
-                success = false
-
-                ParraLogger.error("Error saving personal info", error)
-            }
-            
-            withAnimation {
-                isLoading = false
-                isShowingSuccess = success
-            } completion: {
-                if isShowingSuccess {
-                    withAnimation(.easeInOut.delay(2.0)) {
-                        isShowingSuccess = false
-                    }
+        .navigationTitle("Edit Profile")
+        .navigationBarTitleDisplayMode(.inline)
+        .interactiveDismissDisabled(dataModel.isDirty)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button("Cancel") {
+                    presentationMode.wrappedValue.dismiss()
                 }
             }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    dataModel.save(with: parra) {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                } label: {
+                    if dataModel.isSaving {
+                        ProgressView()
+                    } else {
+                        Text("Save")
+                    }
+                }
+                .disabled(!dataModel.isDirty)
+            }
         }
-    }
+        .onAppear {
+            let userInfo = parraAuthState.user?.info
+            let birthdate = parraUserProperties.string(
+                for: "custom_birth_date_key"
+            )
 
-    private struct ProfileData {
-        init(
-            firstName: String? = nil,
-            lastName: String? = nil,
-            name: String? = nil
-        ) {
-            self.firstName = firstName ?? ""
-            self.lastName = lastName ?? ""
-            self.name = name ?? ""
+            // Create our data object using an aggregation of Parra user info
+            // and custom set user properties.
+            dataModel.data = EditProfileViewModel.Data(
+                firstName: userInfo?.firstName,
+                lastName: userInfo?.lastName,
+                name: userInfo?.name,
+                birthdate: birthdate
+            )
+            dataModel.isDirty = false
         }
-
-        var firstName: String
-        var lastName: String
-        var name: String
     }
 }
 

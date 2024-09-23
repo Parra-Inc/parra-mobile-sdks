@@ -42,7 +42,7 @@ public class ParraAuthStateManager: CustomStringConvertible {
     func performInitialAuthCheck(
         using authService: AuthService,
         appInfo: ParraAppInfo
-    ) async throws -> Bool {
+    ) async throws -> AuthService.InitialAuthCheckResult {
         logger.debug("performing initial auth check")
 
         beginObservingAuth()
@@ -51,17 +51,17 @@ public class ParraAuthStateManager: CustomStringConvertible {
         // user info or tokens that are necessary, which will be broadcast when
         // they are complete. The return value will be the quickest possible
         // user to obtain so that we can redraw.
-        let (state, requiresRefresh) = await authService.getQuickestAuthState(
+        let result = await authService.getQuickestAuthState(
             appInfo: appInfo
         )
 
-        current = state
+        current = result.state
 
-        if case .error(let error) = state {
+        if case .error(let error) = result.state {
             throw error
         }
 
-        return requiresRefresh
+        return result
     }
 
     func triggerAuthRefresh(
