@@ -3,6 +3,7 @@
  */
 export type CommonXcodeBuildOptions = {
   derivedDataPath: string;
+  outputPath: string;
 
   project: string;
   scheme: string;
@@ -18,6 +19,7 @@ const DEFAULT_XCODE_BUILD_OPTIONS: CommonXcodeBuildOptions = {
   destination: 'platform=iOS Simulator,name=iPhone 15,OS=17.5',
   derivedDataPath: 'build/unit-tests/derivedData',
   showBuildTimingSummary: true,
+  outputPath: 'artifacts/xcode-build-log.txt',
 };
 
 export type XcodeBuildOptions = CommonXcodeBuildOptions & {

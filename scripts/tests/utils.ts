@@ -144,6 +144,10 @@ const commonArgsFromOptions = (options: CommonXcodeBuildOptions) => {
     `-derivedDataPath "${derivedDataPath}"`,
   ];
 
+  if (options.outputPath) {
+    args.push(`-output "${options.outputPath}"`);
+  }
+
   if (options.showBuildTimingSummary) {
     args.push(`-showBuildTimingSummary`);
   }
