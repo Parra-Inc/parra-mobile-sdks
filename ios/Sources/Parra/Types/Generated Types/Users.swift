@@ -79,9 +79,9 @@ struct UpdateUserRequestBody: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
-        firstName: String?,
-        lastName: String?,
-        name: String?
+        firstName: String? = nil,
+        lastName: String? = nil,
+        name: String? = nil
     ) {
         self.firstName = firstName
         self.lastName = lastName
