@@ -212,7 +212,11 @@ jobs:
             git push -q -f https://${SDKS_REPO_ACCESS_TOKEN}@github.com/Parra-Inc/parra-mobile-sdks.git parra-build-sample-app
             
             echo "Kicked off sample app builds"
-      
+
+      - store_artifacts:
+          path: /artifacts/xcode-build-log.txt
+          destination: artifact-file
+
       - slack/notify:
           event: fail
           mentions: '@mick'
