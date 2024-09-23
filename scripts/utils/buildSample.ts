@@ -10,7 +10,7 @@ const logger = new Logger('Sample builder', { level: LogLevel.Debug });
 export const runBuildSample = async () => {
 
     logger.info("Resolving package dependencies...");
-    await runCommand('cd sample; xcodebuild -resolvePackageDependencies');
+    await runCommand('cd sample; xcodebuild -resolvePackageDependencies', { commandLogger: logger });
 
     const options = await loadBuildForTestingOptionsFromEnvironment();
     logger.debug('Finished loading options from environment');
@@ -30,7 +30,7 @@ export const runBuildSample = async () => {
     await build(fullOptions);
 
     logger.info(`Installing app on booted device`);
-    await runCommand(`xcrun simctl install booted "build/unit-tests/derivedData/Build/Products/Debug-iphonesimulator/ParraDemoApp.app"`)
+    await runCommand(`xcrun simctl install booted "build/unit-tests/derivedData/Build/Products/Debug-iphonesimulator/ParraDemoApp.app"`, { commandLogger: logger })
     logger.info(`Launching app...`);
-    await runCommand(`xcrun simctl launch booted "com.parra.parra-ios-client"`)
+    await runCommand(`xcrun simctl launch booted "com.parra.parra-ios-client"`, { commandLogger: logger })
 }
