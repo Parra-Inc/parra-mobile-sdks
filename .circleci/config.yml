@@ -236,8 +236,10 @@ workflows:
     jobs:
       - release-ios-sdk:
           filters: 
-            tags:
-              only: # x.y.z
-                - /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
             branches:
-              ignore: /.*/
+              only: main
+            # tags:
+            #   only: # x.y.z
+            #     - /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+            # branches:
+            #   ignore: /.*/
