@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public final class ParraUserManager {
     // MARK: - Lifecycle
@@ -37,6 +38,25 @@ public final class ParraUserManager {
         try await parraInternal.authService.applyUserInfoUpdate(updated)
 
         await ParraUserProperties.shared.forceSetStore(updated.properties)
+    }
+
+    /// Uploads the provided image and assigns it as the user's profile picture.
+    /// Pass `nil` to delete the user's current profile picture.
+    public func updateUserProfilePicture(
+        _ image: UIImage?
+    ) async throws {
+        if let image {
+            let resized = image.resized()
+            let asset = try await parraInternal.api.uploadAvatar(
+                image: resized
+            )
+
+            await parraInternal.api.cacheAsset(asset)
+        } else {
+            try await parraInternal.api.deleteAvatar()
+        }
+
+        try await parraInternal.authService.refreshUserInfo()
     }
 
     // MARK: - Internal
