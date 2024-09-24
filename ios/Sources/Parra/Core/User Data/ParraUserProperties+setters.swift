@@ -92,7 +92,7 @@ public extension ParraUserProperties {
         try await set(ParraAnyCodable(bool), for: key)
     }
 
-    func validateKey(
+    internal func validateKey(
         _ key: String
     ) throws {
         if key.count > maxKeyLength {
@@ -109,7 +109,7 @@ public extension ParraUserProperties {
         }
     }
 
-    func validateStringValue(
+    internal func validateStringValue(
         _ value: String,
         for key: String
     ) throws {
