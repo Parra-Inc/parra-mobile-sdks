@@ -23,7 +23,8 @@ public struct ParraTextInputConfig {
         textContentType: UITextContentType? = nil,
         textInputAutocapitalization: TextInputAutocapitalization? = nil,
         autocorrectionDisabled: Bool = true,
-        passwordRuleDescriptor: String? = nil
+        passwordRuleDescriptor: String? = nil,
+        shouldAutoFocus: Bool = true
     ) {
         self.validationRules = validationRules
         self.preferValidationErrorsToHelperMessage
@@ -36,6 +37,7 @@ public struct ParraTextInputConfig {
         self.textInputAutocapitalization = textInputAutocapitalization
         self.autocorrectionDisabled = autocorrectionDisabled
         self.passwordRuleDescriptor = passwordRuleDescriptor
+        self.shouldAutoFocus = shouldAutoFocus
     }
 
     // MARK: - Public
@@ -71,6 +73,9 @@ public struct ParraTextInputConfig {
     /// for more information.
     /// Note: This is ignored if `isSecure` is false.
     public let passwordRuleDescriptor: String?
+
+    /// Whether the text input should attempt to auto present the keyboard.
+    public let shouldAutoFocus: Bool
 
     // MARK: - Internal
 

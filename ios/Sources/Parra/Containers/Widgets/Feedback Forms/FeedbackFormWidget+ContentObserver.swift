@@ -34,10 +34,25 @@ extension FeedbackFormWidget {
                 isDisabled: false
             )
 
+            var hasSetAutoFocusField = false
+
             self.content = Content(
                 title: ParraLabelContent(text: formData.title),
                 description: description,
-                fields: formData.fields.elements.map { FormFieldWithState(field: $0) },
+                fields: formData.fields.elements.map { field in
+                    // We only want the first focusable field to auto-focus.
+                    let isInput = field.type == .text || field.type == .input
+                    let shouldAutoFocus = isInput && !hasSetAutoFocusField
+
+                    if shouldAutoFocus {
+                        hasSetAutoFocusField = true
+                    }
+
+                    return FormFieldWithState(
+                        field: field,
+                        shouldAutoFocus: shouldAutoFocus
+                    )
+                },
                 submitButton: submitButton
             )
         }

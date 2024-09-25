@@ -38,6 +38,7 @@ public struct ParraTextEditorComponent: View {
                         attributes,
                         using: parraTheme
                     )
+                    .focused($isFocused)
                     .contentMargins(
                         .all,
                         Constant.contentInsets,
@@ -57,6 +58,9 @@ public struct ParraTextEditorComponent: View {
             helperLabel
         }
         .applyPadding(size: attributes.padding, from: parraTheme)
+        .onAppear {
+            isFocused = config.shouldAutoFocus
+        }
     }
 
     // MARK: - Private
@@ -78,6 +82,8 @@ public struct ParraTextEditorComponent: View {
     @Environment(\.parraTheme) private var parraTheme
     @State private var text = ""
     @State private var hasReceivedInput = false
+
+    @FocusState private var isFocused: Bool
 
     @ViewBuilder private var titleLabel: some View {
         withContent(

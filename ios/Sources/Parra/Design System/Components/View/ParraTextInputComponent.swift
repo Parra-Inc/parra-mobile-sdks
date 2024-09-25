@@ -52,7 +52,11 @@ public struct ParraTextInputComponent: View {
             from: parraTheme
         )
         .onAppear {
-            focusState = config.isSecure ? .secure : .normal
+            if config.shouldAutoFocus {
+                focusState = config.isSecure ? .secure : .normal
+            } else {
+                focusState = nil
+            }
         }
         .onTapGesture {
             if let lastFocusState {

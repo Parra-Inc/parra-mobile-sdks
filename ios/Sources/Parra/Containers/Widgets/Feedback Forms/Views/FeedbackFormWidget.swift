@@ -139,7 +139,8 @@ struct FeedbackFormWidget: Container {
 
                     componentFactory.buildTextEditor(
                         config: ParraTextEditorConfig(
-                            maxCharacters: 30
+                            maxCharacters: 30,
+                            shouldAutoFocus: fieldWithState.shouldAutoFocus
                         ),
                         content: content
                     )
@@ -157,7 +158,9 @@ struct FeedbackFormWidget: Container {
                     }
 
                     componentFactory.buildTextInput(
-                        config: ParraTextInputConfig(),
+                        config: ParraTextInputConfig(
+                            shouldAutoFocus: fieldWithState.shouldAutoFocus
+                        ),
                         content: content
                     )
                 }

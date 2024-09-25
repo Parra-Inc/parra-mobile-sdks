@@ -12,16 +12,19 @@ struct FormFieldWithState: Identifiable {
     // MARK: - Lifecycle
 
     init(
-        field: ParraFeedbackFormField
+        field: ParraFeedbackFormField,
+        shouldAutoFocus: Bool
     ) {
         self.field = field
         self.state = Self.validateUpdate(value: nil, for: field)
         self.value = nil
+        self.shouldAutoFocus = shouldAutoFocus
     }
 
     // MARK: - Internal
 
     let field: ParraFeedbackFormField
+    let shouldAutoFocus: Bool
 
     private(set) var state: FieldState
     private(set) var value: String?

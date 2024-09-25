@@ -24,7 +24,8 @@ public struct ParraTextEditorConfig {
         textCase: Text.Case? = nil,
         textContentType: UITextContentType? = nil,
         textInputAutocapitalization: TextInputAutocapitalization? = nil,
-        autocorrectionDisabled: Bool = true
+        autocorrectionDisabled: Bool = true,
+        shouldAutoFocus: Bool = true
     ) {
         self.minLines = minLines
         self.minCharacters = minCharacters
@@ -40,6 +41,7 @@ public struct ParraTextEditorConfig {
         self.textContentType = textContentType
         self.textInputAutocapitalization = textInputAutocapitalization
         self.autocorrectionDisabled = autocorrectionDisabled
+        self.shouldAutoFocus = shouldAutoFocus
     }
 
     // MARK: - Public
@@ -73,6 +75,9 @@ public struct ParraTextEditorConfig {
     public let textContentType: UITextContentType?
     public let textInputAutocapitalization: TextInputAutocapitalization?
     public let autocorrectionDisabled: Bool
+
+    /// Whether the text editor should attempt to auto present the keyboard.
+    public let shouldAutoFocus: Bool
 
     // MARK: - Internal
 
