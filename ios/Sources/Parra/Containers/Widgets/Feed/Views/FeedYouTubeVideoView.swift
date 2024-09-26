@@ -88,6 +88,9 @@ struct FeedYouTubeVideoView: View {
             .presentationDetents([.large])
             .presentationDragIndicator(.visible)
         }
+        .onAppear {
+            contentObserver.trackYoutubeVideoImpression(youtubeVideo)
+        }
     }
 
     // MARK: - Private

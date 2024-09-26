@@ -104,6 +104,9 @@ struct FeedContentCardView: View {
         }
         .buttonStyle(ContentCardButtonStyle())
         .disabled(contentCard.action == nil)
+        .onAppear {
+            contentObserver.trackContentCardImpression(contentCard)
+        }
     }
 
     // MARK: - Private
