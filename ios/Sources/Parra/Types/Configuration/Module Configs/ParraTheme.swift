@@ -110,6 +110,10 @@ public struct ParraTheme: ParraConfigurationOptionType {
     public let cornerRadius: ParraCornerRadiusConfig
     public let padding: ParraPaddingConfig
 
+    public var supportsMultipleColorPalettes: Bool {
+        return darkPalette != nil
+    }
+
     // MARK: - Private
 
     // MARK: - Palette
