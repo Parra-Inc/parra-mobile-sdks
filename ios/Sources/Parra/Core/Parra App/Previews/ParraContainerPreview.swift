@@ -49,6 +49,10 @@ struct ParraContainerPreview<ContainerType>: View
                     configuration: configuration
                 )
         )
+
+        self._alertManager = State(
+            wrappedValue: parra.parraInternal.alertManager
+        )
     }
 
     // MARK: - Internal
@@ -58,13 +62,18 @@ struct ParraContainerPreview<ContainerType>: View
         // here but this will only work for previews. At runtime, the app
         // wrapper won't have provided this object since it is specific to the
         // individual containers.
-        ParraOptionalAuthWindow {
-            AnyView(content(parra, factory, config))
-        }
-        .environment(config)
-        .environment(factory)
-        .environment(\.parra, parra)
-        .environment(\.parraAuthState, authStateManager.current)
+        AnyView(content(parra, factory, config))
+            .environment(config)
+            .environment(factory)
+            .environment(alertManager)
+            .environment(\.parra, parra)
+            .environment(\.parraAuthState, authStateManager.current)
+            .environment(
+                \.parraComponentFactory,
+                parra.parraInternal.globalComponentFactory
+            )
+            .environment(\.parraTheme, themeManager.current)
+            .environment(\.parraUserProperties, userProperties)
     }
 
     // MARK: - Private
@@ -81,4 +90,7 @@ struct ParraContainerPreview<ContainerType>: View
     private let parra: Parra
 
     @State private var authStateManager: ParraAuthStateManager
+    @State private var alertManager: AlertManager
+    @State private var themeManager: ParraThemeManager = .shared
+    @State private var userProperties: ParraUserProperties = .shared
 }
