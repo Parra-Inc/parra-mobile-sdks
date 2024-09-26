@@ -16,7 +16,7 @@ extension View {
     ) -> some View {
         withFrame(attributes.size)
             .foregroundStyle(
-                attributes.tint ?? .black
+                attributes.tint ?? theme.palette.secondary.toParraColor()
             )
             .opacity(attributes.opacity ?? 1.0)
             .applyCommonViewAttributes(attributes, from: theme)
@@ -29,7 +29,7 @@ extension View {
     ) -> some View {
         withFrame(attributes.size)
             .foregroundStyle(
-                attributes.tint ?? .black
+                attributes.tint ?? theme.palette.secondary.toParraColor()
             )
             .opacity(attributes.opacity ?? 1.0)
             .applyCommonViewAttributes(attributes, from: theme)
