@@ -8,6 +8,10 @@
 import SwiftUI
 
 extension FeedItem: ParraFixture {
+    static var redacted: FeedItem {
+        return FeedItem.validStates()[0]
+    }
+
     static func validStates() -> [FeedItem] {
         return [
             FeedItem(

@@ -13,7 +13,7 @@ struct FeedYouTubeVideoDetailView: View {
     let youtubeVideo: FeedItemYoutubeVideoData
 
     var body: some View {
-        let thumb = youtubeVideo.thumbnails.sizeAppropriateThumbnail
+        let thumb = youtubeVideo.thumbnails.maxres
 
         VStack {
             componentFactory

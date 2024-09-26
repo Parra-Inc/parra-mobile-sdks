@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+// TODO:
+// 1. Ability to present in sheet
+// 2. 2 column layout for landscape, 3 column for iPad
+
 struct FeedWidget: Container {
     // MARK: - Lifecycle
 
@@ -59,6 +63,9 @@ struct FeedWidget: Container {
         .environment(config)
         .environment(componentFactory)
         .environmentObject(contentObserver)
+        .onAppear {
+            contentObserver.loadInitialFeedItems()
+        }
     }
 
     func scrollView(
@@ -111,7 +118,6 @@ struct FeedWidget: Container {
             contentObserver.feedPaginator.refresh()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .coordinateSpace(name: "scroll")
     }
 
     func headerSpace(
@@ -133,7 +139,8 @@ struct FeedWidget: Container {
             contentObserver: .init(
                 initialParams: FeedWidget.ContentObserver
                     .InitialParams(
-                        feedConfig: ParraFeedConfiguration(),
+                        feedId: "test-feed-id",
+                        config: .default,
                         feedCollectionResponse: .validStates()[0],
                         api: parra.parraInternal.api
                     )

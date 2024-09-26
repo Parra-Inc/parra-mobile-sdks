@@ -20,7 +20,6 @@ extension FeedWidget {
         required init(
             initialParams: InitialParams
         ) {
-            let feedResponse = initialParams.feedCollectionResponse
             let addRequestButton = ParraTextButtonContent(
                 text: ParraLabelContent(text: "Add request"),
                 isDisabled: false
@@ -28,22 +27,22 @@ extension FeedWidget {
 
             let emptyStateViewContent = ParraEmptyStateContent(
                 title: ParraLabelContent(
-                    text: "No tickets yet"
+                    text: "Nothing here yet"
                 ),
                 subtitle: ParraLabelContent(
-                    text: "This is your opportunity to be the first 👀"
+                    text: "Check back later for new content!"
                 )
             )
 
             let errorStateViewContent = ParraEmptyStateContent(
                 title: ParraEmptyStateContent.errorGeneric.title,
                 subtitle: ParraLabelContent(
-                    text: "Failed to load roadmap. Please try again later."
+                    text: "Failed to load content feed. Please try again later."
                 ),
                 icon: .symbol("network.slash", .monochrome)
             )
 
-            self.feedConfig = initialParams.feedConfig
+            self.feedConfig = initialParams.config
             self.api = initialParams.api
 
             self.content = Content(
@@ -51,26 +50,30 @@ extension FeedWidget {
                 errorStateView: errorStateViewContent
             )
 
-            let initialPaginatorData = Paginator<
-                FeedItem,
-                String
-            >.Data(
-                items: feedResponse.data.elements,
-                placeholderItems: [],
-                pageSize: feedResponse.pageSize,
-                knownCount: feedResponse.totalCount
-            )
-
-            let paginator = Paginator<
-                FeedItem,
-                String
-            >(
-                context: "feed",
-                data: initialPaginatorData,
-                pageFetcher: loadMoreFeedItems
-            )
-
-            self.feedPaginator = paginator
+            self.feedPaginator = if let feedCollectionResponse = initialParams
+                .feedCollectionResponse
+            {
+                .init(
+                    context: initialParams.feedId,
+                    data: .init(
+                        items: feedCollectionResponse.data.elements,
+                        placeholderItems: [],
+                        pageSize: feedCollectionResponse.pageSize,
+                        knownCount: feedCollectionResponse.totalCount
+                    ),
+                    pageFetcher: loadMoreFeedItems
+                )
+            } else {
+                .init(
+                    context: initialParams.feedId,
+                    data: .init(
+                        items: [],
+                        placeholderItems: (0 ... 15)
+                            .map { _ in FeedItem.redacted }
+                    ),
+                    pageFetcher: loadMoreFeedItems
+                )
+            }
         }
 
         // MARK: - Internal
@@ -88,7 +91,45 @@ extension FeedWidget {
                 // Using IUO because this object requires referencing self in a closure
                 // in its init so we need all fields set. Post-init this should always
                 // be set.
-        >!
+        >! {
+            willSet {
+                paginatorSink?.cancel()
+                paginatorSink = nil
+            }
+
+            didSet {
+                paginatorSink = feedPaginator
+                    .objectWillChange
+                    .sink { [weak self] _ in
+                        self?.objectWillChange.send()
+                    }
+            }
+        }
+
+        @MainActor
+        func loadInitialFeedItems() {
+            feedPaginator.loadMore(after: nil)
+        }
+
+        @MainActor
+        func trackContentCardImpression(_ contentCard: ContentCard) {
+            Parra.default.logEvent(
+                .view(element: "content-card"),
+                [
+                    "content_card": contentCard.id
+                ]
+            )
+        }
+
+        @MainActor
+        func trackYoutubeVideoImpression(_ video: FeedItemYoutubeVideoData) {
+            Parra.default.logEvent(
+                .view(element: "youtube-video"),
+                [
+                    "youtube_video": video.videoId
+                ]
+            )
+        }
 
         @MainActor
         func performActionForContentCard(_ contentCard: ContentCard) {
@@ -128,21 +169,22 @@ extension FeedWidget {
 
         // MARK: - Private
 
+        private var paginatorSink: AnyCancellable? = nil
+
         private let feedConfig: ParraFeedConfiguration
 
         private func loadMoreFeedItems(
             _ limit: Int,
             _ offset: Int,
-            _ key: String
+            _ feedId: String
         ) async throws -> [FeedItem] {
-            let response = try await api.paginateTickets(
+            let response = try await api.paginateFeed(
+                feedId: feedId,
                 limit: limit,
-                offset: offset,
-                filter: key
+                offset: offset
             )
-//
-//            return response.data.elements
-            return []
+
+            return response.data.elements
         }
     }
 }

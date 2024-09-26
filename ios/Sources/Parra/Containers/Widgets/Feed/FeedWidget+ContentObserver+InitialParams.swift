@@ -9,8 +9,9 @@ import SwiftUI
 
 extension FeedWidget.ContentObserver {
     struct InitialParams {
-        let feedConfig: ParraFeedConfiguration
-        let feedCollectionResponse: FeedItemCollectionResponse
+        let feedId: String
+        let config: ParraFeedConfiguration
+        let feedCollectionResponse: FeedItemCollectionResponse?
         let api: API
     }
 }
