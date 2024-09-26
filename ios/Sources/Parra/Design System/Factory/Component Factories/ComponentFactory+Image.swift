@@ -43,7 +43,14 @@ public extension ParraComponentFactory {
         // If a config wasn't provided, create a default one based on the
         // image's expected aspect ratio.
         let finalConfig: ParraImageConfig = if let config {
-            config
+            if let originalSize = content.originalSize, config.aspectRatio == nil {
+                ParraImageConfig(
+                    aspectRatio: originalSize.width / originalSize.height,
+                    contentMode: config.contentMode
+                )
+            } else {
+                config
+            }
         } else {
             if let originalSize = content.originalSize {
                 ParraImageConfig(
