@@ -7,4 +7,6 @@
 
 import SwiftUI
 
-public struct ParraFeedConfiguration {}
+public final class ParraFeedConfiguration: ContainerConfig {
+    public static let `default` = ParraFeedConfiguration()
+}

@@ -13,6 +13,7 @@ private let logger = Logger()
 // MARK: - FeedWidget.ContentObserver
 
 extension FeedWidget {
+    @Observable
     class ContentObserver: ContainerContentObserver {
         // MARK: - Lifecycle
 
@@ -77,17 +78,53 @@ extension FeedWidget {
         /// Primary content for the roadmap which will contain core content not
         /// including dynamic items like tickets which are per tab, and will
         /// require multiple lists for storage.
-        @Published private(set) var content: Content
+        private(set) var content: Content
 
         let api: API
 
-        @Published var feedPaginator: Paginator<
+        var feedPaginator: Paginator<
             FeedItem,
             String
                 // Using IUO because this object requires referencing self in a closure
                 // in its init so we need all fields set. Post-init this should always
                 // be set.
         >!
+
+        @MainActor
+        func performActionForContentCard(_ contentCard: ContentCard) {
+            guard let action = contentCard.action else {
+                logger.warn("Content card tapped but it has no action.", [
+                    "content_card": contentCard.id
+                ])
+
+                return
+            }
+
+            Parra.default.logEvent(
+                .tap(element: "content-card-action"),
+                [
+                    "content_card": contentCard.id
+                ]
+            )
+
+            UIApplication.shared.open(
+                action.url
+            )
+        }
+
+        @MainActor
+        func openYoutubeVideo(_ video: FeedItemYoutubeVideoData) {
+            Parra.default.logEvent(
+                .tap(element: "youtube-video-link"),
+                [
+                    "video_id": video.videoId
+                ]
+            )
+
+            UIApplication.shared.open(
+                video.videoUrl
+            )
+        }
 
         // MARK: - Private
 
