@@ -140,6 +140,8 @@ enum EndpointResolver {
         case .putUpdateSingleUserProperty(let userId, let propertyKey),
              .deleteSingleUserProperty(let userId, let propertyKey):
             return "tenants/\(tenantId)/users/\(userId)/properties/\(propertyKey)"
+        case .getPaginateFeed(let feedId):
+            return "tenants/\(tenantId)/applications/\(applicationId)/feeds/\(feedId)/items"
         }
     }
 }

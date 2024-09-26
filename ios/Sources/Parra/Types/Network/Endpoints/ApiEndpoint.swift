@@ -56,13 +56,17 @@ enum ApiEndpoint: Endpoint {
     case putUpdateSingleUserProperty(userId: String, propertyKey: String)
     case deleteSingleUserProperty(userId: String, propertyKey: String)
 
+    // Feeds
+
+    case getPaginateFeed(feedId: String)
+
     // MARK: - Internal
 
     var method: HttpMethod {
         switch self {
         case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
-             .getUserProperties:
+             .getUserProperties, .getPaginateFeed:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
@@ -129,6 +133,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/users/:userId/properties"
         case .putUpdateSingleUserProperty, .deleteSingleUserProperty:
             return "tenants/:tenantId/users/:userId/properties/:userPropertyKey"
+        case .getPaginateFeed:
+            return "tenants/:tenantId/applications/:applicationId/feeds/:feedId/items"
         }
     }
 
