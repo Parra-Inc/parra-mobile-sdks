@@ -17,8 +17,8 @@ struct YoutubeThumbnail: Codable, Equatable, Hashable {
 
     init(
         url: URL,
-        width: Int,
-        height: Int
+        width: CGFloat,
+        height: CGFloat
     ) {
         self.url = url
         self.width = width
@@ -28,8 +28,8 @@ struct YoutubeThumbnail: Codable, Equatable, Hashable {
     // MARK: - Internal
 
     let url: URL
-    let width: Int
-    let height: Int
+    let width: CGFloat
+    let height: CGFloat
 }
 
 struct YoutubeThumbnails: Codable, Equatable, Hashable {
@@ -69,6 +69,7 @@ struct FeedItemYoutubeVideoData: Codable, Equatable, Hashable {
 
     init(
         videoId: String,
+        videoUrl: URL,
         title: String,
         channelTitle: String,
         channelId: String,
@@ -78,6 +79,7 @@ struct FeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         liveBroadcastContent: FeedItemLiveBroadcastContent
     ) {
         self.videoId = videoId
+        self.videoUrl = videoUrl
         self.title = title
         self.channelTitle = channelTitle
         self.channelId = channelId
@@ -91,6 +93,7 @@ struct FeedItemYoutubeVideoData: Codable, Equatable, Hashable {
 
     enum CodingKeys: String, CodingKey {
         case videoId
+        case videoUrl
         case title
         case channelTitle
         case channelId
@@ -101,6 +104,7 @@ struct FeedItemYoutubeVideoData: Codable, Equatable, Hashable {
     }
 
     let videoId: String
+    let videoUrl: URL
     let title: String
     let channelTitle: String
     let channelId: String
