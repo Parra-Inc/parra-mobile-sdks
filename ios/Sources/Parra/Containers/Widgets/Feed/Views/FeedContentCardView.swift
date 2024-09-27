@@ -11,31 +11,39 @@ struct FeedContentCardView: View {
     // MARK: - Internal
 
     let contentCard: ContentCard
+    let containerGeometry: GeometryProxy
 
     var body: some View {
         Button(action: {
             contentObserver.performActionForContentCard(contentCard)
         }) {
-            ZStack {
+            ZStack(alignment: .center) {
                 backgroundImage
 
-                VStack {
+                VStack(alignment: .leading) {
                     topBar
 
                     Spacer(minLength: 15)
 
                     overlayInfo
                 }
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity
+                )
             }
-            .clipped()
-            .background(parraTheme.palette.secondaryBackground)
         }
+        .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
         .buttonStyle(ContentCardButtonStyle())
-        .clipped()
-        .disabled(!hasAction)
+        .safeAreaPadding(.horizontal)
+        .padding(.vertical, 8)
+        .disabled(!hasAction || !redactionReasons.isEmpty)
         .onAppear {
-            contentObserver.trackContentCardImpression(contentCard)
+            if redactionReasons.isEmpty {
+                // Don't track impressions for placeholder cells.
+                contentObserver.trackContentCardImpression(contentCard)
+            }
         }
     }
 
@@ -44,6 +52,7 @@ struct FeedContentCardView: View {
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.redactionReasons) private var redactionReasons
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
 
     private var hasAction: Bool {
@@ -60,19 +69,27 @@ struct FeedContentCardView: View {
 
     private var backgroundImage: some View {
         withContent(content: contentCard.background?.image) { content in
-            componentFactory.buildAsyncImage(
-                config: ParraImageConfig(contentMode: .fill),
-                content: ParraAsyncImageContent(
-                    url: content.url,
-                    originalSize: content.size
+            let width = containerGeometry.size.width
+            let minAspect = min(content.size.width / content.size.height, 3.75)
+            let minHeight = (width / minAspect).rounded(.down)
+
+            Color.clear
+                .overlay(alignment: .center) {
+                    componentFactory.buildAsyncImage(
+                        config: ParraImageConfig(contentMode: .fill),
+                        content: ParraAsyncImageContent(
+                            url: content.url,
+                            originalSize: content.size
+                        )
+                    )
+                    .scaledToFill()
+                }
+                .frame(
+                    idealWidth: width,
+                    maxWidth: .infinity,
+                    minHeight: minHeight,
+                    maxHeight: .infinity
                 )
-            )
-            .containerRelativeFrame(.horizontal)
-            .frame(
-                maxWidth: .infinity,
-                maxHeight: .infinity,
-                alignment: .center
-            )
         }
     }
 
@@ -166,16 +183,6 @@ struct FeedContentCardView: View {
                     endPoint: .bottom
                 )
             )
-        }
-    }
-}
-
-#Preview {
-    ParraAppPreview {
-        VStack {
-            FeedContentCardView(contentCard: ContentCard.validStates()[0])
-            FeedContentCardView(contentCard: ContentCard.validStates()[0])
-            FeedContentCardView(contentCard: ContentCard.validStates()[0])
         }
     }
 }

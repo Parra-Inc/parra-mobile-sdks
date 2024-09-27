@@ -1,5 +1,5 @@
 //
-//  ParraContentFeed.swift
+//  ParraFeedView.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 9/26/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct ParraContentFeed: View {
+public struct ParraFeedView: View {
     // MARK: - Lifecycle
 
     public init(

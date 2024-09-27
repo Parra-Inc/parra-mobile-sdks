@@ -76,6 +76,7 @@ struct FeedYouTubeVideoView: View {
                 .padding(.bottom, 16)
             }
         }
+        .disabled(!redactionReasons.isEmpty)
         .buttonStyle(.plain)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
@@ -89,7 +90,10 @@ struct FeedYouTubeVideoView: View {
             .presentationDragIndicator(.visible)
         }
         .onAppear {
-            contentObserver.trackYoutubeVideoImpression(youtubeVideo)
+            if redactionReasons.isEmpty {
+                // Don't track impressions for placeholder cells.
+                contentObserver.trackYoutubeVideoImpression(youtubeVideo)
+            }
         }
     }
 
@@ -97,6 +101,7 @@ struct FeedYouTubeVideoView: View {
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.redactionReasons) private var redactionReasons
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
 
     @State private var isPresentingModal: Bool = false

@@ -68,8 +68,11 @@ extension FeedWidget {
                     context: initialParams.feedId,
                     data: .init(
                         items: [],
-                        placeholderItems: (0 ... 15)
-                            .map { _ in FeedItem.redacted }
+                        // TODO: If initial params contains feed items, we could
+                        // look at them to determine which kinds of placeholders
+                        // we could show.
+                        placeholderItems: (0 ... 12)
+                            .map { _ in FeedItem.redactedContentCard }
                     ),
                     pageFetcher: loadMoreFeedItems
                 )
