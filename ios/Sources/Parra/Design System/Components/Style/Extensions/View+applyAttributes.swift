@@ -35,13 +35,20 @@ extension View {
         size: ParraCornerRadiusSize?,
         from theme: ParraTheme
     ) -> some View {
-        clipShape(
-            UnevenRoundedRectangle(
-                cornerRadii: theme.cornerRadius.value(
-                    for: size ?? .zero
+        // If this isn't present, the clipping can interfere with safe areas/etc
+        // on views that don't need a corner radius because they're expected to
+        // go up against the edges of the screen.
+        if let size, size != .zero {
+            clipShape(
+                UnevenRoundedRectangle(
+                    cornerRadii: theme.cornerRadius.value(
+                        for: size
+                    )
                 )
             )
-        )
+        } else {
+            self
+        }
     }
 
     @ViewBuilder
