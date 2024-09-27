@@ -137,14 +137,6 @@ struct RoadmapWidget: Container {
                     )
 
                     cells
-
-                    if contentObserver.ticketPaginator.isLoading {
-                        VStack(alignment: .center) {
-                            ProgressView()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(contentPadding)
-                    }
                 }
                 .redacted(
                     when: contentObserver.ticketPaginator
@@ -158,6 +150,26 @@ struct RoadmapWidget: Container {
                 })
                 .onPreferenceChange(ViewOffsetKey.self) { offset in
                     showNavigationDivider = offset > 0.0
+                }
+                .emptyPlaceholder(items) {
+                    componentFactory.buildEmptyState(
+                        config: .default,
+                        content: contentObserver.content.emptyStateView
+                    )
+                }
+                .errorPlaceholder(contentObserver.ticketPaginator.error) {
+                    componentFactory.buildEmptyState(
+                        config: .errorDefault,
+                        content: contentObserver.content.errorStateView
+                    )
+                }
+
+                if contentObserver.ticketPaginator.isLoading {
+                    VStack(alignment: .center) {
+                        ProgressView()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(contentPadding)
                 }
             }
             // A limited number of placeholder cells will be generated.
@@ -176,18 +188,6 @@ struct RoadmapWidget: Container {
                 for: .scrollContent
             )
             .scrollIndicatorsFlash(trigger: contentObserver.selectedTab)
-            .emptyPlaceholder(items) {
-                componentFactory.buildEmptyState(
-                    config: .default,
-                    content: contentObserver.content.emptyStateView
-                )
-            }
-            .errorPlaceholder(contentObserver.ticketPaginator.error) {
-                componentFactory.buildEmptyState(
-                    config: .errorDefault,
-                    content: contentObserver.content.errorStateView
-                )
-            }
             .refreshable {
                 contentObserver.ticketPaginator.refresh()
             }

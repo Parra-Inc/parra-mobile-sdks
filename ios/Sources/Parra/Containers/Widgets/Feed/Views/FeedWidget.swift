@@ -57,25 +57,37 @@ struct FeedWidget: Container {
     ) -> some View {
         GeometryReader { geometry in
             ScrollView {
+                AnyView(config.headerViewBuilder())
+
                 // Spacing must be implemented in cells for self-sizing reasons.
                 LazyVStack(alignment: .center, spacing: 0) {
-                    AnyView(config.headerViewBuilder())
-
                     createCells(with: geometry)
-
-                    if contentObserver.feedPaginator.isLoading {
-                        VStack(alignment: .center) {
-                            ProgressView()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(contentPadding)
-                    }
-
-                    AnyView(config.footerViewBuilder())
                 }
                 .redacted(
                     when: contentObserver.feedPaginator.isShowingPlaceholders
                 )
+                .emptyPlaceholder(items) {
+                    componentFactory.buildEmptyState(
+                        config: .default,
+                        content: contentObserver.content.emptyStateView
+                    )
+                }
+                .errorPlaceholder(contentObserver.feedPaginator.error) {
+                    componentFactory.buildEmptyState(
+                        config: .errorDefault,
+                        content: contentObserver.content.errorStateView
+                    )
+                }
+
+                if contentObserver.feedPaginator.isLoading {
+                    VStack(alignment: .center) {
+                        ProgressView()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(contentPadding)
+                }
+
+                AnyView(config.footerViewBuilder())
             }
             // A limited number of placeholder cells will be generated.
             // Don't allow scrolling past them while loading.
@@ -87,18 +99,6 @@ struct FeedWidget: Container {
                 headerSpace(from: contentPadding) / 2,
                 for: .scrollContent
             )
-            .emptyPlaceholder(items) {
-                componentFactory.buildEmptyState(
-                    config: .default,
-                    content: contentObserver.content.emptyStateView
-                )
-            }
-            .errorPlaceholder(contentObserver.feedPaginator.error) {
-                componentFactory.buildEmptyState(
-                    config: .errorDefault,
-                    content: contentObserver.content.errorStateView
-                )
-            }
             .refreshable {
                 contentObserver.refresh()
             }
