@@ -31,6 +31,10 @@ struct SettingsTab: View {
                     LatestReleaseCell()
                 }
 
+                Section {
+                    FeedCell()
+                }
+
                 if parraAppInfo.legal.hasDocuments {
                     Section("Legal") {
                         ForEach(parraAppInfo.legal.allDocuments) { document in
