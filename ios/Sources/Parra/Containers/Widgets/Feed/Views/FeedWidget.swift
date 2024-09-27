@@ -57,7 +57,10 @@ struct FeedWidget: Container {
     ) -> some View {
         GeometryReader { geometry in
             ScrollView {
+                // Spacing must be implemented in cells for self-sizing reasons.
                 LazyVStack(alignment: .center, spacing: 0) {
+                    AnyView(config.headerViewBuilder())
+
                     createCells(with: geometry)
 
                     if contentObserver.feedPaginator.isLoading {
@@ -67,6 +70,8 @@ struct FeedWidget: Container {
                         .frame(maxWidth: .infinity)
                         .padding(contentPadding)
                     }
+
+                    AnyView(config.footerViewBuilder())
                 }
                 .redacted(
                     when: contentObserver.feedPaginator.isShowingPlaceholders
@@ -118,6 +123,8 @@ struct FeedWidget: Container {
     private func createCells(
         with containerGeometry: GeometryProxy
     ) -> some View {
+        let spacing = config.itemSpacing / 2
+
         ForEach(items.wrappedValue) { item in
             switch item.data {
             case .feedItemYoutubeVideoData(let data):
@@ -125,7 +132,8 @@ struct FeedWidget: Container {
             case .contentCard(let data):
                 FeedContentCardView(
                     contentCard: data,
-                    containerGeometry: containerGeometry
+                    containerGeometry: containerGeometry,
+                    spacing: spacing
                 )
             default:
                 EmptyView()

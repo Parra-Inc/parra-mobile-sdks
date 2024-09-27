@@ -12,6 +12,7 @@ struct FeedContentCardView: View {
 
     let contentCard: ContentCard
     let containerGeometry: GeometryProxy
+    let spacing: CGFloat
 
     var body: some View {
         Button(action: {
@@ -37,7 +38,7 @@ struct FeedContentCardView: View {
         .applyCornerRadii(size: .xl, from: parraTheme)
         .buttonStyle(ContentCardButtonStyle())
         .safeAreaPadding(.horizontal)
-        .padding(.vertical, 8)
+        .padding(.vertical, spacing)
         .disabled(!hasAction || !redactionReasons.isEmpty)
         .onAppear {
             if redactionReasons.isEmpty {

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 public struct ParraFeedView: View {
     // MARK: - Lifecycle
 
@@ -26,7 +27,7 @@ public struct ParraFeedView: View {
     public var body: some View {
         let container: FeedWidget = parra.parraInternal
             .containerRenderer.renderContainer(
-                params: .init(
+                params: FeedWidget.ContentObserver.InitialParams(
                     feedId: feedId,
                     config: config,
                     feedCollectionResponse: nil,

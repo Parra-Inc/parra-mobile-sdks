@@ -25,29 +25,12 @@ extension FeedWidget {
                 isDisabled: false
             )
 
-            let emptyStateViewContent = ParraEmptyStateContent(
-                title: ParraLabelContent(
-                    text: "Nothing here yet"
-                ),
-                subtitle: ParraLabelContent(
-                    text: "Check back later for new content!"
-                )
-            )
-
-            let errorStateViewContent = ParraEmptyStateContent(
-                title: ParraEmptyStateContent.errorGeneric.title,
-                subtitle: ParraLabelContent(
-                    text: "Failed to load content feed. Please try again later."
-                ),
-                icon: .symbol("network.slash", .monochrome)
-            )
-
             self.feedConfig = initialParams.config
             self.api = initialParams.api
 
             self.content = Content(
-                emptyStateView: emptyStateViewContent,
-                errorStateView: errorStateViewContent
+                emptyStateView: initialParams.config.emptyStateContent,
+                errorStateView: initialParams.config.errorStateContent
             )
 
             self.feedPaginator = if let feedCollectionResponse = initialParams

@@ -27,6 +27,14 @@ public struct ParraEmptyStateContent: Hashable, Equatable {
 
     // MARK: - Public
 
+    public static let errorGeneric = ParraEmptyStateContent(
+        title: ParraLabelContent(text: "Something Went Wrong"),
+        subtitle: ParraLabelContent(
+            text: "An unexpected error occurred. Check your connection and try again later."
+        ),
+        icon: .symbol("exclamationmark.triangle")
+    )
+
     public let title: ParraLabelContent
     public let subtitle: ParraLabelContent?
     public let icon: ParraImageContent?
@@ -49,13 +57,5 @@ public struct ParraEmptyStateContent: Hashable, Equatable {
             text: ParraLabelContent(text: "remind me later"),
             isDisabled: false
         )
-    )
-
-    static let errorGeneric = ParraEmptyStateContent(
-        title: ParraLabelContent(text: "Something Went Wrong"),
-        subtitle: ParraLabelContent(
-            text: "An unexpected error occurred. Check your connection and try again later."
-        ),
-        icon: .symbol("exclamationmark.triangle")
     )
 }
