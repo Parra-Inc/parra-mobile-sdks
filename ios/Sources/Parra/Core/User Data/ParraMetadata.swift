@@ -52,7 +52,11 @@ public final class ParraMetadata: Codable, Equatable, Hashable,
 
     public func `as`<T>(_ type: T.Type) -> T? where T: Decodable & Equatable {
         do {
-            return try self.as(type.self)
+            // Being really explicity here so that this doesn't infinitely
+            // recurse on the non-throwing variant.
+            let result: T = try self.as(type.self) as T
+
+            return result
         } catch {
             return nil
         }
