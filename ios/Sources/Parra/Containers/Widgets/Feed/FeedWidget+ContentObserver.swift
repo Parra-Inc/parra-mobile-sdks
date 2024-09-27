@@ -98,7 +98,14 @@ extension FeedWidget {
         }
 
         @MainActor
-        func trackContentCardImpression(_ contentCard: ContentCard) {
+        func refresh() {
+            feedPaginator.refresh()
+
+            feedConfig.feedDidRefresh()
+        }
+
+        @MainActor
+        func trackContentCardImpression(_ contentCard: ParraContentCard) {
             Parra.default.logEvent(
                 .view(element: "content-card"),
                 [
@@ -108,7 +115,7 @@ extension FeedWidget {
         }
 
         @MainActor
-        func trackYoutubeVideoImpression(_ video: FeedItemYoutubeVideoData) {
+        func trackYoutubeVideoImpression(_ video: ParraFeedItemYoutubeVideoData) {
             Parra.default.logEvent(
                 .view(element: "youtube-video"),
                 [
@@ -118,39 +125,22 @@ extension FeedWidget {
         }
 
         @MainActor
-        func performActionForContentCard(_ contentCard: ContentCard) {
-            guard let action = contentCard.action else {
-                logger.warn("Content card tapped but it has no action.", [
-                    "content_card": contentCard.id
+        func performActionForFeedItemData(
+            _ feedItemData: ParraFeedItemData
+        ) {
+            let performDefault = feedConfig.shouldPerformDefaultActionForItem(
+                feedItemData
+            )
+
+            logEventForFeedItemAction(feedItemData)
+
+            if performDefault {
+                performDefaultActionForFeedItem(feedItemData)
+            } else {
+                logger.debug("Default action overridden for feed item.", [
+                    "type": feedItemData.name
                 ])
-
-                return
             }
-
-            Parra.default.logEvent(
-                .tap(element: "content-card-action"),
-                [
-                    "content_card": contentCard.id
-                ]
-            )
-
-            UIApplication.shared.open(
-                action.url
-            )
-        }
-
-        @MainActor
-        func openYoutubeVideo(_ video: FeedItemYoutubeVideoData) {
-            Parra.default.logEvent(
-                .tap(element: "youtube-video-link"),
-                [
-                    "video_id": video.videoId
-                ]
-            )
-
-            UIApplication.shared.open(
-                video.videoUrl
-            )
         }
 
         // MARK: - Private
@@ -158,6 +148,58 @@ extension FeedWidget {
         private var paginatorSink: AnyCancellable? = nil
 
         private let feedConfig: ParraFeedConfiguration
+
+        @MainActor
+        private func logEventForFeedItemAction(
+            _ feedItemData: ParraFeedItemData
+        ) {
+            switch feedItemData {
+            case .feedItemYoutubeVideoData(let video):
+                Parra.default.logEvent(
+                    .tap(element: "youtube-video-link"),
+                    [
+                        "video_id": video.videoId
+                    ]
+                )
+            case .contentCard(let contentCard):
+                guard let action = contentCard.action else {
+                    logger.warn("Content card tapped but it has no action.", [
+                        "content_card": contentCard.id
+                    ])
+
+                    return
+                }
+
+                Parra.default.logEvent(
+                    .tap(element: "content-card-action"),
+                    [
+                        "content_card": contentCard.id
+                    ]
+                )
+            }
+        }
+
+        @MainActor
+        private func performDefaultActionForFeedItem(
+            _ feedItemData: ParraFeedItemData
+        ) {
+            logger.debug("Performing default action for feed item", [
+                "type": feedItemData.name
+            ])
+
+            switch feedItemData {
+            case .feedItemYoutubeVideoData(let video):
+                UIApplication.shared.open(
+                    video.videoUrl
+                )
+            case .contentCard(let contentCard):
+                if let action = contentCard.action {
+                    UIApplication.shared.open(
+                        action.url
+                    )
+                }
+            }
+        }
 
         private func loadMoreFeedItems(
             _ limit: Int,

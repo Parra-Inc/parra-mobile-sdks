@@ -10,13 +10,15 @@ import SwiftUI
 struct FeedContentCardView: View {
     // MARK: - Internal
 
-    let contentCard: ContentCard
+    let contentCard: ParraContentCard
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
 
     var body: some View {
         Button(action: {
-            contentObserver.performActionForContentCard(contentCard)
+            contentObserver.performActionForFeedItemData(
+                .contentCard(contentCard)
+            )
         }) {
             ZStack(alignment: .center) {
                 backgroundImage

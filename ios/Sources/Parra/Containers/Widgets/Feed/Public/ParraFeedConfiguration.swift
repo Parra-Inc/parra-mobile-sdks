@@ -13,6 +13,8 @@ public final class ParraFeedConfiguration: ContainerConfig {
     public init() {
         self.headerViewBuilder = { EmptyView() }
         self.footerViewBuilder = { EmptyView() }
+        self.shouldPerformDefaultActionForItem = { _ in true }
+        self.feedDidRefresh = {}
         self.itemSpacing = 12
         self.emptyStateContent = ParraFeedConfiguration.defaultEmptyStateContent
         self.errorStateContent = ParraFeedConfiguration.defaultErrorStateContent
@@ -25,6 +27,10 @@ public final class ParraFeedConfiguration: ContainerConfig {
         @ViewBuilder footerViewBuilder: @escaping @MainActor () -> some View = {
             EmptyView()
         },
+        shouldPerformDefaultActionForItem: @escaping (ParraFeedItemData) -> Bool = { _ in
+            true
+        },
+        feedDidRefresh: @escaping () -> Void = {},
         itemSpacing: CGFloat = 12,
         emptyStateContent: ParraEmptyStateContent = ParraFeedConfiguration
             .defaultEmptyStateContent,
@@ -33,6 +39,8 @@ public final class ParraFeedConfiguration: ContainerConfig {
     ) {
         self.headerViewBuilder = headerViewBuilder
         self.footerViewBuilder = footerViewBuilder
+        self.shouldPerformDefaultActionForItem = shouldPerformDefaultActionForItem
+        self.feedDidRefresh = feedDidRefresh
         self.itemSpacing = itemSpacing
         self.emptyStateContent = emptyStateContent
         self.errorStateContent = errorStateContent
@@ -61,6 +69,9 @@ public final class ParraFeedConfiguration: ContainerConfig {
 
     public let headerViewBuilder: @MainActor () -> any View
     public let footerViewBuilder: @MainActor () -> any View
+
+    public let shouldPerformDefaultActionForItem: (ParraFeedItemData) -> Bool
+    public let feedDidRefresh: () -> Void
 
     public let itemSpacing: CGFloat
 

@@ -12,7 +12,7 @@ enum FeedItemType: String, Codable {
     case contentCard = "content_card"
 }
 
-struct YoutubeThumbnail: Codable, Equatable, Hashable {
+public struct ParraYoutubeThumbnail: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
@@ -25,22 +25,22 @@ struct YoutubeThumbnail: Codable, Equatable, Hashable {
         self.height = height
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let url: URL
-    let width: CGFloat
-    let height: CGFloat
+    public let url: URL
+    public let width: CGFloat
+    public let height: CGFloat
 }
 
-struct YoutubeThumbnails: Codable, Equatable, Hashable {
+public struct ParraYoutubeThumbnails: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        default: YoutubeThumbnail,
-        medium: YoutubeThumbnail,
-        high: YoutubeThumbnail,
-        standard: YoutubeThumbnail,
-        maxres: YoutubeThumbnail
+        default: ParraYoutubeThumbnail,
+        medium: ParraYoutubeThumbnail,
+        high: ParraYoutubeThumbnail,
+        standard: ParraYoutubeThumbnail,
+        maxres: ParraYoutubeThumbnail
     ) {
         self.default = `default`
         self.medium = medium
@@ -49,22 +49,22 @@ struct YoutubeThumbnails: Codable, Equatable, Hashable {
         self.maxres = maxres
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let `default`: YoutubeThumbnail
-    let medium: YoutubeThumbnail
-    let high: YoutubeThumbnail
-    let standard: YoutubeThumbnail
-    let maxres: YoutubeThumbnail
+    public let `default`: ParraYoutubeThumbnail
+    public let medium: ParraYoutubeThumbnail
+    public let high: ParraYoutubeThumbnail
+    public let standard: ParraYoutubeThumbnail
+    public let maxres: ParraYoutubeThumbnail
 }
 
-enum FeedItemLiveBroadcastContent: String, Codable {
+public enum ParraFeedItemLiveBroadcastContent: String, Codable {
     case none
     case upcoming
     case live
 }
 
-struct FeedItemYoutubeVideoData: Codable, Equatable, Hashable {
+public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
@@ -74,9 +74,9 @@ struct FeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         channelTitle: String,
         channelId: String,
         description: String?,
-        thumbnails: YoutubeThumbnails,
+        thumbnails: ParraYoutubeThumbnails,
         publishedAt: Date,
-        liveBroadcastContent: FeedItemLiveBroadcastContent
+        liveBroadcastContent: ParraFeedItemLiveBroadcastContent
     ) {
         self.videoId = videoId
         self.videoUrl = videoUrl
@@ -88,6 +88,18 @@ struct FeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         self.publishedAt = publishedAt
         self.liveBroadcastContent = liveBroadcastContent
     }
+
+    // MARK: - Public
+
+    public let videoId: String
+    public let videoUrl: URL
+    public let title: String
+    public let channelTitle: String
+    public let channelId: String
+    public let description: String?
+    public let thumbnails: ParraYoutubeThumbnails
+    public let publishedAt: Date
+    public let liveBroadcastContent: ParraFeedItemLiveBroadcastContent
 
     // MARK: - Internal
 
@@ -102,19 +114,9 @@ struct FeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         case publishedAt
         case liveBroadcastContent
     }
-
-    let videoId: String
-    let videoUrl: URL
-    let title: String
-    let channelTitle: String
-    let channelId: String
-    let description: String?
-    let thumbnails: YoutubeThumbnails
-    let publishedAt: Date
-    let liveBroadcastContent: FeedItemLiveBroadcastContent
 }
 
-struct ContentCardAction: Codable, Equatable, Hashable {
+public struct ParraContentCardAction: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
@@ -123,12 +125,12 @@ struct ContentCardAction: Codable, Equatable, Hashable {
         self.url = url
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let url: URL
+    public let url: URL
 }
 
-struct ContentCardBackground: Codable, Equatable, Hashable {
+public struct ParraContentCardBackground: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
@@ -142,7 +144,7 @@ struct ContentCardBackground: Codable, Equatable, Hashable {
     public let image: ParraImageAssetStub?
 }
 
-struct ContentCard: Codable, Equatable, Hashable, Identifiable {
+public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
@@ -150,10 +152,10 @@ struct ContentCard: Codable, Equatable, Hashable, Identifiable {
         createdAt: Date,
         updatedAt: Date,
         deletedAt: Date?,
-        backgroundImage: ContentCardBackground?,
+        backgroundImage: ParraContentCardBackground?,
         title: String?,
         description: String?,
-        action: ContentCardAction?
+        action: ParraContentCardAction?
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -164,6 +166,17 @@ struct ContentCard: Codable, Equatable, Hashable, Identifiable {
         self.description = description
         self.action = action
     }
+
+    // MARK: - Public
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let background: ParraContentCardBackground?
+    public let title: String?
+    public let description: String?
+    public let action: ParraContentCardAction?
 
     // MARK: - Internal
 
@@ -177,20 +190,20 @@ struct ContentCard: Codable, Equatable, Hashable, Identifiable {
         case description
         case action
     }
-
-    let id: String
-    let createdAt: Date
-    let updatedAt: Date
-    let deletedAt: Date?
-    let background: ContentCardBackground?
-    let title: String?
-    let description: String?
-    let action: ContentCardAction?
 }
 
-enum FeedItemData: Codable, Equatable, Hashable {
-    case feedItemYoutubeVideoData(FeedItemYoutubeVideoData)
-    case contentCard(ContentCard)
+public enum ParraFeedItemData: Codable, Equatable, Hashable {
+    case feedItemYoutubeVideoData(ParraFeedItemYoutubeVideoData)
+    case contentCard(ParraContentCard)
+
+    // MARK: - Internal
+
+    var name: String {
+        switch self {
+        case .feedItemYoutubeVideoData: return "youtube-video"
+        case .contentCard: return "content-card"
+        }
+    }
 }
 
 struct FeedItem: Codable, Equatable, Hashable, Identifiable {
@@ -202,7 +215,7 @@ struct FeedItem: Codable, Equatable, Hashable, Identifiable {
         updatedAt: Date,
         deletedAt: Date?,
         type: FeedItemType,
-        data: FeedItemData
+        data: ParraFeedItemData
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -223,11 +236,11 @@ struct FeedItem: Codable, Equatable, Hashable, Identifiable {
         switch type {
         case .contentCard:
             self.data = try .contentCard(
-                container.decode(ContentCard.self, forKey: .data)
+                container.decode(ParraContentCard.self, forKey: .data)
             )
         case .youtubeVideo:
             self.data = try .feedItemYoutubeVideoData(
-                container.decode(FeedItemYoutubeVideoData.self, forKey: .data)
+                container.decode(ParraFeedItemYoutubeVideoData.self, forKey: .data)
             )
         }
     }
@@ -248,7 +261,7 @@ struct FeedItem: Codable, Equatable, Hashable, Identifiable {
     let updatedAt: Date
     let deletedAt: Date?
     let type: FeedItemType
-    let data: FeedItemData
+    let data: ParraFeedItemData
 }
 
 struct FeedItemCollectionResponse: Codable, Equatable, Hashable {

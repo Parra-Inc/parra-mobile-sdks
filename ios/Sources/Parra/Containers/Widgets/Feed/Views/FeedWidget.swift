@@ -100,7 +100,7 @@ struct FeedWidget: Container {
                 )
             }
             .refreshable {
-                contentObserver.feedPaginator.refresh()
+                contentObserver.refresh()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }

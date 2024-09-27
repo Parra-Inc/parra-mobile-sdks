@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-extension ContentCard: ParraFixture {
-    static func validStates() -> [ContentCard] {
+extension ParraContentCard: ParraFixture {
+    static func validStates() -> [ParraContentCard] {
         return [
-            ContentCard(
+            ParraContentCard(
                 id: .uuid,
                 createdAt: .now.daysAgo(3),
                 updatedAt: .now.daysAgo(3),
                 deletedAt: nil,
-                backgroundImage: ContentCardBackground(
+                backgroundImage: ParraContentCardBackground(
                     image: ParraImageAssetStub(
                         id: .uuid,
                         size: ParraSize(
@@ -29,14 +29,14 @@ extension ContentCard: ParraFixture {
                 ),
                 title: "Big news!",
                 description: "We're excited to announce that this year's Halloween merch is finally available! Get yours today!",
-                action: ContentCardAction(
+                action: ParraContentCardAction(
                     url: URL(string: "https://parra.io")!
                 )
             )
         ]
     }
 
-    static func invalidStates() -> [ContentCard] {
+    static func invalidStates() -> [ParraContentCard] {
         return []
     }
 }

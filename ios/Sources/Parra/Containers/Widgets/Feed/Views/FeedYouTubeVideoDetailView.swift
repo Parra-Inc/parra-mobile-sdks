@@ -10,7 +10,7 @@ import SwiftUI
 struct FeedYouTubeVideoDetailView: View {
     // MARK: - Internal
 
-    let youtubeVideo: FeedItemYoutubeVideoData
+    let youtubeVideo: ParraFeedItemYoutubeVideoData
 
     var body: some View {
         let thumb = youtubeVideo.thumbnails.maxres
@@ -28,7 +28,9 @@ struct FeedYouTubeVideoDetailView: View {
                 )
                 .overlay(alignment: .center) {
                     Button(action: {
-                        contentObserver.openYoutubeVideo(youtubeVideo)
+                        contentObserver.performActionForFeedItemData(
+                            .feedItemYoutubeVideoData(youtubeVideo)
+                        )
                     }) {
                         Image(
                             uiImage: UIImage(

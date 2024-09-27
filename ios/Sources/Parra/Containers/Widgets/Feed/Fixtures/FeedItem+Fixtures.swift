@@ -16,12 +16,12 @@ extension FeedItem: ParraFixture {
             deletedAt: nil,
             type: .contentCard,
             data: .contentCard(
-                ContentCard(
+                ParraContentCard(
                     id: .uuid,
                     createdAt: .now.daysAgo(3),
                     updatedAt: .now.daysAgo(3),
                     deletedAt: nil,
-                    backgroundImage: ContentCardBackground(
+                    backgroundImage: ParraContentCardBackground(
                         image: ParraImageAssetStub(
                             id: .uuid,
                             size: ParraSize(
@@ -49,43 +49,43 @@ extension FeedItem: ParraFixture {
             deletedAt: nil,
             type: .youtubeVideo,
             data: .feedItemYoutubeVideoData(
-                FeedItemYoutubeVideoData(
+                ParraFeedItemYoutubeVideoData(
                     videoId: .uuid,
                     videoUrl: URL(string: "https://youtube.com")!,
                     title: "Parra demo video",
                     channelTitle: "Get Parra",
                     channelId: .uuid,
                     description: nil,
-                    thumbnails: YoutubeThumbnails(
-                        default: YoutubeThumbnail(
+                    thumbnails: ParraYoutubeThumbnails(
+                        default: ParraYoutubeThumbnail(
                             url: URL(
                                 string: "https://i.ytimg.com/vi/UtHjPskLgV4/default.jpg"
                             )!,
                             width: 120,
                             height: 90
                         ),
-                        medium: YoutubeThumbnail(
+                        medium: ParraYoutubeThumbnail(
                             url: URL(
                                 string: "https://i.ytimg.com/vi/UtHjPskLgV4/mqdefault.jpg"
                             )!,
                             width: 320,
                             height: 180
                         ),
-                        high: YoutubeThumbnail(
+                        high: ParraYoutubeThumbnail(
                             url: URL(
                                 string: "https://i.ytimg.com/vi/UtHjPskLgV4/hqdefault.jpg"
                             )!,
                             width: 480,
                             height: 360
                         ),
-                        standard: YoutubeThumbnail(
+                        standard: ParraYoutubeThumbnail(
                             url: URL(
                                 string: "https://i.ytimg.com/vi/UtHjPskLgV4/sddefault.jpg"
                             )!,
                             width: 640,
                             height: 480
                         ),
-                        maxres: YoutubeThumbnail(
+                        maxres: ParraYoutubeThumbnail(
                             url: URL(
                                 string: "https://i.ytimg.com/vi/UtHjPskLgV4/maxresdefault.jpg"
                             )!,
@@ -109,7 +109,7 @@ extension FeedItem: ParraFixture {
                 deletedAt: nil,
                 type: .youtubeVideo,
                 data: .feedItemYoutubeVideoData(
-                    FeedItemYoutubeVideoData.validStates()[0]
+                    ParraFeedItemYoutubeVideoData.validStates()[0]
                 )
             ),
             FeedItem(
@@ -118,7 +118,7 @@ extension FeedItem: ParraFixture {
                 updatedAt: .now.daysAgo(3),
                 deletedAt: nil,
                 type: .contentCard,
-                data: .contentCard(ContentCard.validStates()[0])
+                data: .contentCard(ParraContentCard.validStates()[0])
             ),
             FeedItem(
                 id: .uuid,
@@ -127,7 +127,7 @@ extension FeedItem: ParraFixture {
                 deletedAt: nil,
                 type: .youtubeVideo,
                 data: .feedItemYoutubeVideoData(
-                    FeedItemYoutubeVideoData.validStates()[1]
+                    ParraFeedItemYoutubeVideoData.validStates()[1]
                 )
             )
         ]

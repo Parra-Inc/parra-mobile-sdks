@@ -10,7 +10,7 @@ import SwiftUI
 struct FeedYouTubeVideoView: View {
     // MARK: - Internal
 
-    let youtubeVideo: FeedItemYoutubeVideoData
+    let youtubeVideo: ParraFeedItemYoutubeVideoData
 
     var body: some View {
         let thumb = youtubeVideo.thumbnails.maxres
@@ -31,7 +31,9 @@ struct FeedYouTubeVideoView: View {
                     )
                     .overlay(alignment: .center) {
                         Button(action: {
-                            contentObserver.openYoutubeVideo(youtubeVideo)
+                            contentObserver.performActionForFeedItemData(
+                                .feedItemYoutubeVideoData(youtubeVideo)
+                            )
                         }) {
                             Image(
                                 uiImage: UIImage(
@@ -110,9 +112,18 @@ struct FeedYouTubeVideoView: View {
 #Preview {
     ParraAppPreview {
         VStack(spacing: 12) {
-            FeedYouTubeVideoView(youtubeVideo: FeedItemYoutubeVideoData.validStates()[0])
-            FeedYouTubeVideoView(youtubeVideo: FeedItemYoutubeVideoData.validStates()[1])
-            FeedYouTubeVideoView(youtubeVideo: FeedItemYoutubeVideoData.validStates()[0])
+            FeedYouTubeVideoView(
+                youtubeVideo: ParraFeedItemYoutubeVideoData
+                    .validStates()[0]
+            )
+            FeedYouTubeVideoView(
+                youtubeVideo: ParraFeedItemYoutubeVideoData
+                    .validStates()[1]
+            )
+            FeedYouTubeVideoView(
+                youtubeVideo: ParraFeedItemYoutubeVideoData
+                    .validStates()[0]
+            )
         }
     }
 }
