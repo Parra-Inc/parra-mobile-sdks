@@ -23,6 +23,12 @@ public struct ParraSize: Codable, Equatable, Hashable {
 
     public let width: CGFloat
     public let height: CGFloat
+
+    // MARK: - Internal
+
+    var toCGSize: CGSize {
+        return CGSize(width: width, height: height)
+    }
 }
 
 public enum ParraTicketType: String, Codable, Equatable, CaseIterable {
