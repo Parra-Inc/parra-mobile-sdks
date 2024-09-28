@@ -2,7 +2,7 @@
 //  LatestReleaseCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 09/27/2024.
+//  Bootstrapped with ❤️ by Parra on 09/28/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -17,7 +17,7 @@ import SwiftUI
 /// 2. Use the `parra` instance to fetch the most recent release info for your
 ///    app.
 /// 3. Store the `NewInstalledVersionInfo` data in `@State`
-/// 4. Use the `presentParraRelease` modifier and pass the app version state as
+/// 4. Use the `presentParraReleaseWidget` modifier and pass the app version state as
 ///    a parameter. When it becomes non nil, the release details screen will be
 ///    presented.
 struct LatestReleaseCell: View {
@@ -47,7 +47,7 @@ struct LatestReleaseCell: View {
                 )
             }
             .disabled(isLoading)
-            .presentParraRelease(with: $appVersionInfo)
+            .presentParraReleaseWidget(with: $appVersionInfo)
         }
     }
 
