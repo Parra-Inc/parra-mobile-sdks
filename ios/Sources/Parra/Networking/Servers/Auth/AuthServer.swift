@@ -531,38 +531,75 @@ final class AuthServer: Server {
         request: URLRequest,
         allowedRetries: Int
     ) async throws -> (T, HTTPURLResponse) where T: Codable {
-        let (data, response) = try await performAsyncDataTask(
-            request: request
-        )
-
-        switch response.statusCode {
-        case 202, 204:
-            let body = try decodeResponse(
-                from: EmptyJsonObjectData,
-                as: T.self
+        do {
+            let (data, response) = try await performAsyncDataTask(
+                request: request
             )
 
-            return (body, response)
-        case 200 ..< 300:
-            let body = try decodeResponse(
-                from: data,
-                as: T.self
-            )
+            switch response.statusCode {
+            case 202, 204:
+                let body = try decodeResponse(
+                    from: EmptyJsonObjectData,
+                    as: T.self
+                )
 
-            return (body, response)
-        default:
-            if allowedRetries > 0 {
-                return try await performRequest(
+                return (body, response)
+            case 200 ..< 300:
+                let body = try decodeResponse(
+                    from: data,
+                    as: T.self
+                )
+
+                return (body, response)
+            default:
+                if allowedRetries > 0 {
+                    logger.warn(
+                        "Request required retry",
+                        [
+                            "url": request.url?.absoluteString ?? "unknown",
+                            "method": request.httpMethod ?? "unknown",
+                            "statusCode": response.statusCode,
+                            "remainingRetries": allowedRetries
+                        ]
+                    )
+
+                    return try await performRequest(
+                        request: request,
+                        allowedRetries: allowedRetries - 1
+                    )
+                }
+
+                throw ParraError.networkError(
                     request: request,
-                    allowedRetries: allowedRetries - 1
+                    response: response,
+                    responseData: data
                 )
             }
+        } catch let urlError as URLError {
+            switch urlError.code {
+            case .timedOut:
+                if allowedRetries > 0 {
+                    logger.warn(
+                        "Request required retry due to timeout",
+                        [
+                            "url": request.url?.absoluteString ?? "unknown",
+                            "method": request.httpMethod ?? "unknown",
+                            "remainingRetries": allowedRetries
+                        ]
+                    )
 
-            throw ParraError.networkError(
-                request: request,
-                response: response,
-                responseData: data
-            )
+                    return try await performRequest(
+                        request: request,
+                        allowedRetries: allowedRetries - 1
+                    )
+                }
+
+                throw urlError
+            default:
+                throw urlError
+            }
+        } catch {
+            throw error
         }
     }
 }
