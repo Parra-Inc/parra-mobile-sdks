@@ -55,7 +55,7 @@ extension FeedWidget {
                         // look at them to determine which kinds of placeholders
                         // we could show.
                         placeholderItems: (0 ... 12)
-                            .map { _ in FeedItem.redactedContentCard }
+                            .map { _ in ParraFeedItem.redactedContentCard }
                     ),
                     pageFetcher: loadMoreFeedItems
                 )
@@ -72,7 +72,7 @@ extension FeedWidget {
         let api: API
 
         var feedPaginator: Paginator<
-            FeedItem,
+            ParraFeedItem,
             String
                 // Using IUO because this object requires referencing self in a closure
                 // in its init so we need all fields set. Post-init this should always
@@ -102,26 +102,6 @@ extension FeedWidget {
             feedPaginator.refresh()
 
             feedConfig.feedDidRefresh()
-        }
-
-        @MainActor
-        func trackContentCardImpression(_ contentCard: ParraContentCard) {
-            Parra.default.logEvent(
-                .view(element: "content-card"),
-                [
-                    "content_card": contentCard.id
-                ]
-            )
-        }
-
-        @MainActor
-        func trackYoutubeVideoImpression(_ video: ParraFeedItemYoutubeVideoData) {
-            Parra.default.logEvent(
-                .view(element: "youtube-video"),
-                [
-                    "youtube_video": video.videoId
-                ]
-            )
         }
 
         @MainActor
@@ -205,7 +185,7 @@ extension FeedWidget {
             _ limit: Int,
             _ offset: Int,
             _ feedId: String
-        ) async throws -> [FeedItem] {
+        ) async throws -> [ParraFeedItem] {
             let response = try await api.paginateFeed(
                 feedId: feedId,
                 limit: limit,

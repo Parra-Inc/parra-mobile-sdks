@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-// TODO:
-// 1. Ability to present in sheet
-
 struct FeedWidget: Container {
     // MARK: - Lifecycle
 
@@ -26,7 +23,7 @@ struct FeedWidget: Container {
     @StateObject var contentObserver: ContentObserver
     let config: ParraFeedConfiguration
 
-    var items: Binding<[FeedItem]> {
+    var items: Binding<[ParraFeedItem]> {
         return $contentObserver.feedPaginator.items
     }
 
@@ -59,10 +56,13 @@ struct FeedWidget: Container {
             ScrollView {
                 AnyView(config.headerViewBuilder())
 
-                // Spacing must be implemented in cells for self-sizing reasons.
-                LazyVStack(alignment: .center, spacing: 0) {
-                    createCells(with: geometry)
-                }
+                ParraFeedListView(
+                    items: items.wrappedValue,
+                    itemSpacing: config.itemSpacing,
+                    containerGeometry: geometry,
+                    performActionForFeedItemData: contentObserver
+                        .performActionForFeedItemData
+                )
                 .redacted(
                     when: contentObserver.feedPaginator.isShowingPlaceholders
                 )
@@ -78,6 +78,9 @@ struct FeedWidget: Container {
                         content: contentObserver.content.errorStateView
                     )
                 }
+                .frame(
+                    minHeight: geometry.size.height * 2 / 3
+                )
 
                 if contentObserver.feedPaginator.isLoading {
                     VStack(alignment: .center) {
@@ -102,7 +105,10 @@ struct FeedWidget: Container {
             .refreshable {
                 contentObserver.refresh()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity
+            )
         }
     }
 
@@ -118,28 +124,6 @@ struct FeedWidget: Container {
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
-
-    @ViewBuilder
-    private func createCells(
-        with containerGeometry: GeometryProxy
-    ) -> some View {
-        let spacing = config.itemSpacing / 2
-
-        ForEach(items.wrappedValue) { item in
-            switch item.data {
-            case .feedItemYoutubeVideoData(let data):
-                FeedYouTubeVideoView(youtubeVideo: data)
-            case .contentCard(let data):
-                FeedContentCardView(
-                    contentCard: data,
-                    containerGeometry: containerGeometry,
-                    spacing: spacing
-                )
-            default:
-                EmptyView()
-            }
-        }
-    }
 }
 
 #Preview {

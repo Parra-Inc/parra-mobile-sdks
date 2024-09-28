@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FeedItemType: String, Codable {
+public enum ParraFeedItemType: String, Codable {
     case youtubeVideo = "youtube_video"
     case contentCard = "content_card"
 }
@@ -206,7 +206,7 @@ public enum ParraFeedItemData: Codable, Equatable, Hashable {
     }
 }
 
-struct FeedItem: Codable, Equatable, Hashable, Identifiable {
+public struct ParraFeedItem: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
@@ -214,7 +214,7 @@ struct FeedItem: Codable, Equatable, Hashable, Identifiable {
         createdAt: Date,
         updatedAt: Date,
         deletedAt: Date?,
-        type: FeedItemType,
+        type: ParraFeedItemType,
         data: ParraFeedItemData
     ) {
         self.id = id
@@ -225,13 +225,13 @@ struct FeedItem: Codable, Equatable, Hashable, Identifiable {
         self.data = data
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.deletedAt = try container.decodeIfPresent(Date.self, forKey: .deletedAt)
-        self.type = try container.decode(FeedItemType.self, forKey: .type)
+        self.type = try container.decode(ParraFeedItemType.self, forKey: .type)
 
         switch type {
         case .contentCard:
@@ -245,6 +245,15 @@ struct FeedItem: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
+    // MARK: - Public
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let type: ParraFeedItemType
+    public let data: ParraFeedItemData
+
     // MARK: - Internal
 
     enum CodingKeys: String, CodingKey {
@@ -255,13 +264,6 @@ struct FeedItem: Codable, Equatable, Hashable, Identifiable {
         case type
         case data
     }
-
-    let id: String
-    let createdAt: Date
-    let updatedAt: Date
-    let deletedAt: Date?
-    let type: FeedItemType
-    let data: ParraFeedItemData
 }
 
 struct FeedItemCollectionResponse: Codable, Equatable, Hashable {
@@ -272,7 +274,7 @@ struct FeedItemCollectionResponse: Codable, Equatable, Hashable {
         pageCount: Int,
         pageSize: Int,
         totalCount: Int,
-        data: [FeedItem]
+        data: [ParraFeedItem]
     ) {
         self.page = page
         self.pageCount = pageCount
@@ -295,5 +297,5 @@ struct FeedItemCollectionResponse: Codable, Equatable, Hashable {
     let pageCount: Int
     let pageSize: Int
     let totalCount: Int
-    let data: PartiallyDecodableArray<FeedItem>
+    let data: PartiallyDecodableArray<ParraFeedItem>
 }

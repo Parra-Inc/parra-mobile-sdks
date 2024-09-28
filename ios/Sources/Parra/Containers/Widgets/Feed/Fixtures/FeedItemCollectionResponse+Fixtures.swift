@@ -15,7 +15,7 @@ extension FeedItemCollectionResponse: ParraFixture {
                 pageCount: 1,
                 pageSize: 25,
                 totalCount: 2,
-                data: FeedItem.validStates()
+                data: ParraFeedItem.validStates()
             )
         ]
     }
@@ -27,7 +27,7 @@ extension FeedItemCollectionResponse: ParraFixture {
                 pageCount: 3,
                 pageSize: 4,
                 totalCount: 10,
-                data: FeedItem.invalidStates()
+                data: ParraFeedItem.invalidStates()
             )
         ]
     }

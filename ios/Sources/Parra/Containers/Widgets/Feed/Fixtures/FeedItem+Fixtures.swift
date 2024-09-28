@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-extension FeedItem: ParraFixture {
-    static var redactedContentCard: FeedItem {
-        return FeedItem(
+extension ParraFeedItem: ParraFixture {
+    static var redactedContentCard: ParraFeedItem {
+        return ParraFeedItem(
             id: .uuid,
             createdAt: .now.daysAgo(1),
             updatedAt: .now.daysAgo(1),
@@ -41,8 +41,8 @@ extension FeedItem: ParraFixture {
         )
     }
 
-    static var redactedYouTubeVideo: FeedItem {
-        return FeedItem(
+    static var redactedYouTubeVideo: ParraFeedItem {
+        return ParraFeedItem(
             id: .uuid,
             createdAt: .now.daysAgo(1),
             updatedAt: .now.daysAgo(1),
@@ -100,9 +100,9 @@ extension FeedItem: ParraFixture {
         )
     }
 
-    static func validStates() -> [FeedItem] {
+    static func validStates() -> [ParraFeedItem] {
         return [
-            FeedItem(
+            ParraFeedItem(
                 id: .uuid,
                 createdAt: .now.daysAgo(1),
                 updatedAt: .now.daysAgo(1),
@@ -112,7 +112,7 @@ extension FeedItem: ParraFixture {
                     ParraFeedItemYoutubeVideoData.validStates()[0]
                 )
             ),
-            FeedItem(
+            ParraFeedItem(
                 id: .uuid,
                 createdAt: .now.daysAgo(3),
                 updatedAt: .now.daysAgo(3),
@@ -120,7 +120,7 @@ extension FeedItem: ParraFixture {
                 type: .contentCard,
                 data: .contentCard(ParraContentCard.validStates()[0])
             ),
-            FeedItem(
+            ParraFeedItem(
                 id: .uuid,
                 createdAt: .now.daysAgo(12),
                 updatedAt: .now.daysAgo(12),
@@ -133,7 +133,7 @@ extension FeedItem: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [FeedItem] {
+    static func invalidStates() -> [ParraFeedItem] {
         return []
     }
 }

@@ -13,10 +13,11 @@ struct FeedContentCardView: View {
     let contentCard: ParraContentCard
     let containerGeometry: GeometryProxy
     let spacing: CGFloat
+    let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
 
     var body: some View {
         Button(action: {
-            contentObserver.performActionForFeedItemData(
+            performActionForFeedItemData(
                 .contentCard(contentCard)
             )
         }) {
@@ -45,7 +46,12 @@ struct FeedContentCardView: View {
         .onAppear {
             if redactionReasons.isEmpty {
                 // Don't track impressions for placeholder cells.
-                contentObserver.trackContentCardImpression(contentCard)
+                Parra.default.logEvent(
+                    .view(element: "content-card"),
+                    [
+                        "content_card": contentCard.id
+                    ]
+                )
             }
         }
     }
@@ -56,7 +62,6 @@ struct FeedContentCardView: View {
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.redactionReasons) private var redactionReasons
-    @Environment(FeedWidget.ContentObserver.self) private var contentObserver
 
     private var hasAction: Bool {
         return contentCard.action != nil

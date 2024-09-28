@@ -11,6 +11,7 @@ struct FeedYouTubeVideoView: View {
     // MARK: - Internal
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
+    let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
 
     var body: some View {
         let thumb = youtubeVideo.thumbnails.maxres
@@ -31,7 +32,7 @@ struct FeedYouTubeVideoView: View {
                     )
                     .overlay(alignment: .center) {
                         Button(action: {
-                            contentObserver.performActionForFeedItemData(
+                            performActionForFeedItemData(
                                 .feedItemYoutubeVideoData(youtubeVideo)
                             )
                         }) {
@@ -94,7 +95,12 @@ struct FeedYouTubeVideoView: View {
         .onAppear {
             if redactionReasons.isEmpty {
                 // Don't track impressions for placeholder cells.
-                contentObserver.trackYoutubeVideoImpression(youtubeVideo)
+                Parra.default.logEvent(
+                    .view(element: "youtube-video"),
+                    [
+                        "youtube_video": youtubeVideo.videoId
+                    ]
+                )
             }
         }
     }
@@ -104,26 +110,6 @@ struct FeedYouTubeVideoView: View {
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.redactionReasons) private var redactionReasons
-    @Environment(FeedWidget.ContentObserver.self) private var contentObserver
 
     @State private var isPresentingModal: Bool = false
-}
-
-#Preview {
-    ParraAppPreview {
-        VStack(spacing: 12) {
-            FeedYouTubeVideoView(
-                youtubeVideo: ParraFeedItemYoutubeVideoData
-                    .validStates()[0]
-            )
-            FeedYouTubeVideoView(
-                youtubeVideo: ParraFeedItemYoutubeVideoData
-                    .validStates()[1]
-            )
-            FeedYouTubeVideoView(
-                youtubeVideo: ParraFeedItemYoutubeVideoData
-                    .validStates()[0]
-            )
-        }
-    }
 }
