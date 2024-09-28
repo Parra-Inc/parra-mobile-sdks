@@ -36,10 +36,10 @@ extension URLSessionConfiguration {
 
         configuration
             .requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        configuration.timeoutIntervalForRequest = 10.0
+        configuration.timeoutIntervalForRequest = 12.0
         // Setting this to a lower value because it appears that form POSTs
         // fall into this category and we need auth endpoints to fail quickly.
-        configuration.timeoutIntervalForResource = 10.0
+        configuration.timeoutIntervalForResource = 24.0
         configuration.waitsForConnectivity = true
 
         return configuration
