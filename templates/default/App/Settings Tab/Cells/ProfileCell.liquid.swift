@@ -80,7 +80,7 @@ struct UnauthenticatedProfileInfoView: View {
         }, label: {
             Text("Sign in")
         })
-        .presentParraSignInViewWidget(isPresented: $isSigningIn)
+        .presentParraSignInWidget(isPresented: $isSigningIn)
     }
 }
 
