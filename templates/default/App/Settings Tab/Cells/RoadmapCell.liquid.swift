@@ -14,7 +14,7 @@ import SwiftUI
 ///
 /// 1. Create an `@State` variable to control the presentation state of the
 ///    roadmap.
-/// 2. Pass the `isPresented` binding to the `presentParraRoadmap` modifier.
+/// 2. Pass the `isPresented` binding to the `presentParraRoadmapWidget` modifier.
 /// 3. When you're ready to present the roadmap, update the value of
 ///    `isPresented` to `true`. The roadmap will be fetched and
 ///    presented automatically.
@@ -44,7 +44,7 @@ struct RoadmapCell: View {
             )
         }
         .disabled(isLoading)
-        .presentParraRoadmap(with: $roadmapInfo)
+        .presentParraRoadmapWidget(with: $roadmapInfo)
     }
 
     private func loadRoadmap() {

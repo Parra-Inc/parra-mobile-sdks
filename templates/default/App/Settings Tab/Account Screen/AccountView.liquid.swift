@@ -56,7 +56,7 @@ struct AccountView: View {
                             Text("Link an email")
                         }
                     }
-                    .presentParraSignInView(isPresented: $isSigningIn)
+                    .presentParraSignInWidget(isPresented: $isSigningIn)
                 } else {
                     Section("Login Methods") {
                         ForEach(user.info.identities) { identity in

@@ -16,7 +16,7 @@ import SwiftUI
 /// 2. Use the ``parra`` instance to fetch the form data for the provided
 ///    form id.
 /// 3. Store the feedback form data in `@State`
-/// 4. Use the `presentParraFeedbackForm` modifier and pass the form state as a
+/// 4. Use the `presentParraFeedbackFormWidget` modifier and pass the form state as a
 ///    parameter. When it becomes non nil, the form is presented.
 struct FeedbackCell: View {
     @Environment(\.parra) private var parra
@@ -46,7 +46,7 @@ struct FeedbackCell: View {
                 )
             }
             .disabled(isLoading)
-            .presentParraFeedbackForm(with: $formData) // #4
+            .presentParraFeedbackFormWidget(with: $formData) // #4
         }
     }
 
