@@ -65,32 +65,28 @@ final class AuthService {
 
     func login(
         authType: OAuth2Service.AuthType
-    ) async -> ParraAuthState {
+    ) async throws -> ParraAuthState {
         logger.debug("Performing login", [
             "authType": authType.description
         ])
 
-        do {
-            let oauthToken = try await oauth2Service.authenticate(
-                using: authType
-            )
+        let oauthToken = try await oauth2Service.authenticate(
+            using: authType
+        )
 
-            switch authType {
-            case .guest(let refreshToken):
-                // guests don't have user info to fetch, so we skip that step.
-                return .guest(
-                    ParraGuest(
-                        credential: .oauth2(oauthToken)
-                    )
+        switch authType {
+        case .guest(let refreshToken):
+            // guests don't have user info to fetch, so we skip that step.
+            return .guest(
+                ParraGuest(
+                    credential: .oauth2(oauthToken)
                 )
-            default:
-                // On login, get user info via login route instead of GET user-info
-                return await _completeLogin(
-                    with: oauthToken
-                )
-            }
-        } catch {
-            return .error(error)
+            )
+        default:
+            // On login, get user info via login route instead of GET user-info
+            return try await _completeLogin(
+                with: oauthToken
+            )
         }
     }
 
@@ -98,7 +94,7 @@ final class AuthService {
         username: String,
         password: String,
         type: ParraIdentityType
-    ) async -> ParraAuthState {
+    ) async throws -> ParraAuthState {
         logger.debug("Signing up with username/password")
 
         let authType = OAuth2Service.AuthType.usernamePassword(
@@ -112,26 +108,22 @@ final class AuthService {
             password: password
         )
 
-        do {
-            logger
-                .debug(
-                    "About to sign up with: \(String(describing: requestPayload))"
-                )
-            try await authServer.postSignup(
-                requestData: requestPayload
+        logger
+            .debug(
+                "About to sign up with: \(String(describing: requestPayload))"
             )
-            logger.debug("finished sign up endpoint... authenticating...")
-            let oauthToken = try await oauth2Service.authenticate(
-                using: authType
-            )
-            logger.debug("Finished auth endpoint")
+        try await authServer.postSignup(
+            requestData: requestPayload
+        )
+        logger.debug("finished sign up endpoint... authenticating...")
+        let oauthToken = try await oauth2Service.authenticate(
+            using: authType
+        )
+        logger.debug("Finished auth endpoint")
 
-            return await _completeLogin(
-                with: oauthToken
-            )
-        } catch {
-            return .error(error)
-        }
+        return try await _completeLogin(
+            with: oauthToken
+        )
     }
 
     func forgotPassword(
@@ -207,7 +199,7 @@ final class AuthService {
             ])
 
             // Login as either anon or guest depending on config.
-            let result = await _completeLogin(
+            let result = try await _completeLogin(
                 with: oauthToken
             )
 
@@ -215,18 +207,10 @@ final class AuthService {
         } catch {
             logger.error("Error sending logout request", error)
 
-            await applyUserUpdate(.error(error))
+            await applyUserUpdate(.undetermined)
         }
 
         modalScreenManager.dismissLoadingIndicatorModal()
-    }
-
-    func forceLogout(
-        from error: Error
-    ) async {
-        logger.error("Forcing logout due to error", error)
-
-        await applyUserUpdate(.error(error))
     }
 
     func getAuthChallenges(
@@ -282,7 +266,7 @@ final class AuthService {
     /// proceed into the app.
     func getQuickestAuthState(
         appInfo: ParraAppInfo
-    ) async -> InitialAuthCheckResult {
+    ) async throws -> InitialAuthCheckResult {
         let currentUser = await dataManager.getCurrentUser()
 
         if let currentUser {
@@ -321,7 +305,7 @@ final class AuthService {
         } catch {
             printInvalidAuth(error: error)
 
-            result = .error(error)
+            throw error
         }
 
         await applyUserUpdate(
@@ -400,15 +384,6 @@ final class AuthService {
             await dataManager.removeCurrentUser()
 
             _cachedCredential = guest.credential
-        case .error(let error):
-            logger
-                .debug(
-                    "User unauthenticated with error: \(String(describing: error))"
-                )
-
-            await dataManager.removeCurrentUser()
-
-            _cachedCredential = nil
         case .undetermined:
             // shouldn't ever change _to_ this state. If it does, treat it like
             // an unauth
@@ -438,7 +413,7 @@ final class AuthService {
 
     func _completeLogin(
         with oauthToken: ParraUser.Credential.Token
-    ) async -> ParraAuthState {
+    ) async throws -> ParraAuthState {
         do {
             // Convert anon users by passing their refresh token along with the
             // login request.
@@ -480,7 +455,7 @@ final class AuthService {
         } catch {
             logger.error("Failed to login with oauth token", error)
 
-            return .error(error)
+            throw error
         }
     }
 

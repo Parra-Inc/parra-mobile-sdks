@@ -131,9 +131,6 @@ class ParraInternal {
         ])
 
         switch (oldAuthResult, authResult) {
-        case (_, .error(let error)):
-            logger.fatal("Auth entered error state", error)
-
         case (_, .anonymous(let user)), (_, .authenticated(let user)):
             if !oldAuthResult.hasUser {
                 // Changes from not logged in to logged in

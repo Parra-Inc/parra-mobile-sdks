@@ -13,7 +13,6 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
     case anonymous(ParraUser)
     /// Only available when anonymous auth is disabled for the tenant.
     case guest(ParraGuest) // no sessions
-    case error(Error)
     case undetermined
 
     // MARK: - Public
@@ -22,7 +21,7 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
         switch self {
         case .authenticated(let user), .anonymous(let user):
             return user
-        case .guest, .error, .undetermined:
+        case .guest, .undetermined:
             return nil
         }
     }
@@ -81,8 +80,6 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
             return "anonymous"
         case .guest:
             return "guest"
-        case .error:
-            return "unauthenticated with error"
         }
     }
 
@@ -99,9 +96,6 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
             return lhsUser == rhsUser
         case (.guest(let lhsUser), .guest(let rhsUser)):
             return lhsUser == rhsUser
-        case (.error(let lhsError), .error(let rhsError)):
-            return lhsError.localizedDescription == rhsError
-                .localizedDescription
         default:
             return false
         }
@@ -111,7 +105,7 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
 
     var hasResolvedAuth: Bool {
         switch self {
-        case .authenticated, .anonymous, .guest, .error:
+        case .authenticated, .anonymous, .guest:
             return true
         default:
             return false
@@ -124,7 +118,7 @@ public enum ParraAuthState: Equatable, CustomStringConvertible {
             return user.credential
         case .guest(let guest):
             return guest.credential
-        case .error, .undetermined:
+        case .undetermined:
             return nil
         }
     }

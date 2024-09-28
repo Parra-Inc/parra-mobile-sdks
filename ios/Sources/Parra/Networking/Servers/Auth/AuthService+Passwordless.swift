@@ -50,17 +50,13 @@ extension AuthService {
             .passwordlessEmail(code: code)
         }
 
-        do {
-            let oauthToken = try await oauth2Service.authenticate(
-                using: authType
-            )
+        let oauthToken = try await oauth2Service.authenticate(
+            using: authType
+        )
 
-            // On login, get user info via login route instead of GET user-info
-            return await _completeLogin(
-                with: oauthToken
-            )
-        } catch {
-            return .error(error)
-        }
+        // On login, get user info via login route instead of GET user-info
+        return try await _completeLogin(
+            with: oauthToken
+        )
     }
 }

@@ -631,8 +631,6 @@ class AuthenticationFlowManager {
             await authService.applyUserUpdate(
                 authResult
             )
-        case .error(let error):
-            throw error
         }
     }
 
@@ -644,14 +642,14 @@ class AuthenticationFlowManager {
         challengeResponse: ParraChallengeResponse
     ) async throws {
         let authResult: ParraAuthState = if userExists {
-            await authService.login(
+            try await authService.login(
                 authType: .usernamePassword(
                     username: identity,
                     password: password
                 )
             )
         } else {
-            await authService.signUp(
+            try await authService.signUp(
                 username: identity,
                 password: password,
                 type: identityType ?? .uknownIdentity
@@ -665,8 +663,6 @@ class AuthenticationFlowManager {
             await authService.applyUserUpdate(
                 authResult
             )
-        case .error(let error):
-            throw error
         }
     }
 

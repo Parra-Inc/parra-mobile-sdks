@@ -38,8 +38,7 @@ public struct ParraRequiredAuthWindow<
                     switch (oldValue, newValue) {
                     case
                         (.guest, .authenticated),
-                        (.undetermined, .authenticated),
-                        (.error, .authenticated):
+                        (.undetermined, .authenticated):
                         withAnimation {
                             authStateMirror = newValue
                         }
@@ -72,7 +71,7 @@ public struct ParraRequiredAuthWindow<
             EmptyView()
         case .authenticated:
             authenticatedContent()
-        case .guest, .error, .anonymous:
+        case .guest, .anonymous:
             unauthenticatedContent()
                 .environment(parra)
                 .transition(

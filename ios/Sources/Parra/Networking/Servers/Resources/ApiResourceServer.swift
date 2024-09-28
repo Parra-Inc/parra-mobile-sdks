@@ -225,7 +225,7 @@ final class ApiResourceServer: Server {
             return true
         case .guest:
             return endpoint.allowsGuestAuth
-        case .error, .undetermined:
+        case .undetermined:
             return false
         }
     }

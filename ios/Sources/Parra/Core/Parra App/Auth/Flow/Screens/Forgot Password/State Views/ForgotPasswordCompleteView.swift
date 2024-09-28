@@ -27,7 +27,7 @@ struct ForgotPasswordCompleteView: View {
                 "Your password has been successfully updated.",
                 "Dismiss"
             )
-        case .undetermined, .guest, .error:
+        case .undetermined, .guest:
             (
                 "Your password has been successfully updated. You can now use your new password to log in.",
                 "Return to login"

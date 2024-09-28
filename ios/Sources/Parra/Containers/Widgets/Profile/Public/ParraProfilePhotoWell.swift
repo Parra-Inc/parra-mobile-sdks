@@ -31,7 +31,7 @@ public struct ParraProfilePhotoWell: View {
                 await onAvatarSelected(newAvatar)
             }
             .id(user.info.avatar?.id)
-        case .undetermined, .guest, .error:
+        case .undetermined, .guest:
             PhotoWell(
                 stub: nil,
                 size: size,

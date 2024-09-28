@@ -81,7 +81,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
             switch parraAuthState {
             case .authenticated, .undetermined:
                 break
-            case .anonymous, .guest, .error:
+            case .anonymous, .guest:
                 // only do this when this first screen was initially presented
                 if navigationState.navigationPath.isEmpty
                     && parraInternal.authService.activeAuthorizationRequest == nil

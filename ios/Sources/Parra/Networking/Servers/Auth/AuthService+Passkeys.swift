@@ -109,16 +109,11 @@ extension AuthService {
                 session: session
             )
 
-            let authResult = await login(
+            let authResult = try await login(
                 authType: .webauthn(code: accessToken)
             )
 
-            switch authResult {
-            case .error(let error):
-                throw error
-            default:
-                await applyUserUpdate(authResult)
-            }
+            await applyUserUpdate(authResult)
         } catch {
             throw error
         }

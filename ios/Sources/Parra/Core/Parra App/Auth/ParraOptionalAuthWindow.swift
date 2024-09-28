@@ -28,7 +28,7 @@ public struct ParraOptionalAuthWindow<Content>: ParraAppContent
             switch parraAuthState {
             case .authenticated, .anonymous:
                 AnyView(authenticatedContent())
-            case .undetermined, .error, .guest:
+            case .undetermined, .guest:
                 AnyView(unauthenticatedContent())
             }
         }

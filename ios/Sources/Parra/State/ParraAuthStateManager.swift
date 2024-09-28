@@ -51,15 +51,11 @@ public class ParraAuthStateManager: CustomStringConvertible {
         // user info or tokens that are necessary, which will be broadcast when
         // they are complete. The return value will be the quickest possible
         // user to obtain so that we can redraw.
-        let result = await authService.getQuickestAuthState(
+        let result = try await authService.getQuickestAuthState(
             appInfo: appInfo
         )
 
         current = result.state
-
-        if case .error(let error) = result.state {
-            throw error
-        }
 
         return result
     }
