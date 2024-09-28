@@ -90,7 +90,7 @@ public extension View {
     /// Presents a modal sheet to allow the current user to update their
     /// password. Only available if you're using Parra Auth.
     @MainActor
-    func presentParraChangePasswordView(
+    func presentParraChangePasswordWidget(
         isPresented: Binding<Bool>,
         config: ParraAuthDefaultForgotPasswordScreen.Config = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil

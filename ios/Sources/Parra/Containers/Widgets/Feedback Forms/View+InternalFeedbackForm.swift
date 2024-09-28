@@ -12,7 +12,7 @@ extension View {
     /// Should stay internal only. Allows changing submisson type to custom
     /// submission handler, which is useful in places like
     @MainActor
-    func presentParraFeedbackForm(
+    func presentParraFeedbackFormWidget(
         with formBinding: Binding<ParraFeedbackForm?>,
         config: ParraFeedbackFormWidgetConfig,
         submissionType: FeedbackFormSubmissionType,

@@ -35,7 +35,7 @@ struct FeedCell: View {
             )
         }
         .disabled(isPresented)
-        .presentParraFeedView(by: "home", isPresented: $isPresented)
+        .presentParraFeedWidget(by: "home", isPresented: $isPresented)
     }
 }
 

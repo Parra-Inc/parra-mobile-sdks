@@ -12,7 +12,7 @@ public extension View {
     /// Automatically fetches the feedback form with the provided id and
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
-    func presentParraRoadmap(
+    func presentParraRoadmapWidget(
         isPresented: Binding<Bool>,
         config: ParraRoadmapWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
@@ -73,7 +73,7 @@ public extension View {
     }
 
     @MainActor
-    func presentParraRoadmap(
+    func presentParraRoadmapWidget(
         with resultBinding: Binding<ParraRoadmapInfo?>,
         config: ParraRoadmapWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil

@@ -12,7 +12,7 @@ public extension View {
     /// Automatically fetches the feedback form with the provided id and
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
-    func presentParraFeedbackForm(
+    func presentParraFeedbackFormWidget(
         by formId: String,
         isPresented: Binding<Bool>,
         config: ParraFeedbackFormWidgetConfig = .default,
@@ -56,12 +56,12 @@ public extension View {
     /// Automatically displays a Feedback Form in a sheet when the `formBinding`
     /// parameter becomes non-nil.
     @MainActor
-    func presentParraFeedbackForm(
+    func presentParraFeedbackFormWidget(
         with formBinding: Binding<ParraFeedbackForm?>,
         config: ParraFeedbackFormWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
-        return presentParraFeedbackForm(
+        return presentParraFeedbackFormWidget(
             with: formBinding,
             config: config,
             submissionType: .default,

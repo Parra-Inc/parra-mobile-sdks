@@ -1,5 +1,5 @@
 //
-//  ParraFeedView.swift
+//  ParraFeedWidget.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 9/26/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @MainActor
-public struct ParraFeedView: View {
+public struct ParraFeedWidget: View {
     // MARK: - Lifecycle
 
     public init(

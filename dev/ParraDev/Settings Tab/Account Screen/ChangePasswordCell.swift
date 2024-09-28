@@ -26,7 +26,7 @@ struct ChangePasswordCell: View {
                 }
             )
         }
-        .presentParraChangePasswordView(
+        .presentParraChangePasswordWidget(
             isPresented: $isChangePasswordPresented
         )
     }

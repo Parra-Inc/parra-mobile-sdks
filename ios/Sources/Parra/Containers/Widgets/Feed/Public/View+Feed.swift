@@ -11,7 +11,7 @@ public extension View {
     /// Automatically fetches the feed with the provided id and
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
-    func presentParraFeedView(
+    func presentParraFeedWidget(
         by feedId: String,
         isPresented: Binding<Bool>,
         config: ParraFeedConfiguration = .default,

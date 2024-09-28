@@ -12,7 +12,7 @@ public extension View {
     /// Automatically fetches the feedback form with the provided id and
     /// presents it in a sheet based on the value of the `isPresented` binding.
     @MainActor
-    func presentParraRelease(
+    func presentParraReleaseWidget(
         with appVersionInfoBinding: Binding<ParraNewInstalledVersionInfo?>,
         config: ParraChangelogWidgetConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil

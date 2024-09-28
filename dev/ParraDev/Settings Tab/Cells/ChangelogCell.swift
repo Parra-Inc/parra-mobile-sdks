@@ -14,7 +14,7 @@ import SwiftUI
 ///
 /// 1. Create an `@State` variable to control the presentation state of the
 ///    changelog.
-/// 2. Pass the `isPresented` binding to the `presentParraChangelog` modifier.
+/// 2. Pass the `isPresented` binding to the `presentParraChangelogWidget` modifier.
 /// 3. When you're ready to present the changelog, update the value of
 ///    `isPresented` to `true`. The changelog will be fetched and
 ///    presented automatically.
@@ -54,7 +54,7 @@ struct ChangelogCell: View {
                 )
             }
             .disabled(isLoading)
-            .presentParraChangelog(with: $changelogInfo)
+            .presentParraChangelogWidget(with: $changelogInfo)
         }
     }
 

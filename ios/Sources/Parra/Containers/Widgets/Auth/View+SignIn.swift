@@ -11,7 +11,7 @@ public extension View {
     /// Presents a modal sheet containing the Parra sign in view. This is only
     /// available if you're using Parra Auth.
     @MainActor
-    func presentParraSignInView(
+    func presentParraSignInWidget(
         isPresented: Binding<Bool>,
         config: ParraAuthenticationFlowConfig = .default,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil,

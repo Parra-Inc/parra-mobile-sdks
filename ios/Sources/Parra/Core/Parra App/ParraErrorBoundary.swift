@@ -33,7 +33,7 @@ public struct ParraErrorBoundary: View {
                 ]
             )
         }
-        .presentParraFeedbackForm(
+        .presentParraFeedbackFormWidget(
             by: errorFormId ?? "error-boundary-form",
             isPresented: $isShowingFeedbackForm
         )
