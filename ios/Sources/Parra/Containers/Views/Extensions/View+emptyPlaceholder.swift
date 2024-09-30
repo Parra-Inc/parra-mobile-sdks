@@ -25,7 +25,7 @@ struct EmptyPlaceholderModifier<Items: Collection>: ViewModifier {
 extension View {
     func emptyPlaceholder(
         _ items: some Collection,
-        _ placeholder: @escaping () -> some View
+        @ViewBuilder _ placeholder: @escaping () -> some View
     ) -> some View {
         modifier(
             EmptyPlaceholderModifier(
