@@ -19,14 +19,17 @@ public struct ParraSize: Codable, Equatable, Hashable {
         self.height = height
     }
 
+    public init(cgSize: CGSize) {
+        self.width = cgSize.width
+        self.height = cgSize.height
+    }
+
     // MARK: - Public
 
     public let width: CGFloat
     public let height: CGFloat
 
-    // MARK: - Internal
-
-    var toCGSize: CGSize {
+    public var toCGSize: CGSize {
         return CGSize(width: width, height: height)
     }
 }

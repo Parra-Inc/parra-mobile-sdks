@@ -11,7 +11,7 @@ import SwiftUI
 public struct ParraAsyncImageContent: Hashable, Equatable {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         url: URL,
         originalSize: ParraSize? = nil
     ) {
