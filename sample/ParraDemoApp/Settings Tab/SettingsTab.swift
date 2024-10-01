@@ -2,7 +2,7 @@
 //  SettingsTab.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 09/28/2024.
+//  Bootstrapped with ❤️ by Parra on 10/01/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -20,8 +20,13 @@ struct SettingsTab: View {
                     ProfileCell()
                 }
 
-                Section("Appearance") {
-                    ThemeCell()
+                // The appearance picker should only be shown in your app
+                // supports light/dark mode. To enable this, define a dark color
+                // palette when you instantiate your ParraTheme instance.
+                if parraTheme.supportsMultipleColorPalettes {
+                    Section("Appearance") {
+                        ThemeCell()
+                    }
                 }
 
                 Section("General") {
