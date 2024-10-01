@@ -20,8 +20,13 @@ struct SettingsTab: View {
                     ProfileCell()
                 }
 
-                Section("Appearance") {
-                    ThemeCell()
+                // The appearance picker should only be shown in your app
+                // supports light/dark mode. To enable this, define a dark color
+                // palette when you instantiate your ParraTheme instance.
+                if parraTheme.supportsMultipleColorPalettes {
+                    Section("Appearance") {
+                        ThemeCell()
+                    }
                 }
 
                 Section("General") {

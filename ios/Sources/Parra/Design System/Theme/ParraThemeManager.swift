@@ -36,7 +36,13 @@ public class ParraThemeManager {
                 .system
             }
         } else {
-            self.preferredAppearance = .system
+            // If multiple color palettes were not provided, default to using
+            // the light theme.
+            if theme.supportsMultipleColorPalettes {
+                self.preferredAppearance = .system
+            } else {
+                self.preferredAppearance = .light
+            }
         }
 
         // Set the default
