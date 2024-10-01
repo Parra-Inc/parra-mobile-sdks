@@ -203,6 +203,8 @@ class ParraInternal {
 
         syncManager.stopSyncTimer()
 
+        registerForPushNotifications()
+
         logger.info("User logged out", [
             "userId": user.info.id
         ])
@@ -231,6 +233,8 @@ class ParraInternal {
 
         syncManager.startSyncTimer()
 
+        registerForPushNotifications()
+
         // Actions that should only happen once per app launch even if the user
         // logs in/out multiple times.
         if !hasPerformedSingleInitActions {
@@ -242,14 +246,6 @@ class ParraInternal {
 
     private func performPostLoginSingleRunActions() async {
         logger.debug("Performing post login actions")
-
-        if configuration.pushNotificationOptions.enabled {
-            logger.debug("Registering for remote notifications")
-
-            await MainActor.run {
-                UIApplication.shared.registerForRemoteNotifications()
-            }
-        }
 
         let whatsNewOptions = configuration.whatsNewOptions
 
@@ -270,6 +266,18 @@ class ParraInternal {
             case .manual:
                 break
             }
+        }
+    }
+
+    private func registerForPushNotifications() {
+        if configuration.pushNotificationOptions.enabled {
+            logger.debug("Registering for remote notifications")
+
+            Task { @MainActor in
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+        } else {
+            logger.debug("Skipping remote notifications registration. Feature disabled.")
         }
     }
 
