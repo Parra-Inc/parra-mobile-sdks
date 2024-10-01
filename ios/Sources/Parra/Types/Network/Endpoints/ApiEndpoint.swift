@@ -155,7 +155,7 @@ enum ApiEndpoint: Endpoint {
         switch self {
         case .getAppInfo, .getRoadmap, .getPaginateTickets,
              .getPaginateReleases, .getRelease, .getCards, .getFeedbackForm,
-             .postSubmitFeedbackForm:
+             .postSubmitFeedbackForm, .postPushTokens:
             return true
         default:
             return false
