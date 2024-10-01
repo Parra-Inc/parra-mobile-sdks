@@ -83,24 +83,22 @@ public extension ParraAttributes {
 
         // MARK: - Public
 
-        public internal(set) var text: ParraAttributes.Text
-        public internal(set) var titleLabel: ParraAttributes.Label
-        public internal(set) var helperLabel: ParraAttributes.Label
-        public internal(set) var errorLabel: ParraAttributes.Label
+        public var text: ParraAttributes.Text
+        public var titleLabel: ParraAttributes.Label
+        public var helperLabel: ParraAttributes.Label
+        public var errorLabel: ParraAttributes.Label
 
-        public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize?
-        public internal(set) var padding: ParraPaddingSize?
-        public internal(set) var background: Color?
-        public internal(set) var tint: Color?
+        public var border: ParraAttributes.Border
+        public var cornerRadius: ParraCornerRadiusSize?
+        public var padding: ParraPaddingSize?
+        public var background: Color?
+        public var tint: Color?
 
-        public internal(set) var keyboardType: UIKeyboardType?
-        public internal(set) var textCase: SwiftUI.Text.Case?
-        public internal(set) var textContentType: UITextContentType?
-        public internal(
-            set
-        ) var textInputAutocapitalization: TextInputAutocapitalization?
-        public internal(set) var autocorrectionDisabled: Bool?
+        public var keyboardType: UIKeyboardType?
+        public var textCase: SwiftUI.Text.Case?
+        public var textContentType: UITextContentType?
+        public var textInputAutocapitalization: TextInputAutocapitalization?
+        public var autocorrectionDisabled: Bool?
 
         // MARK: - Internal
 

@@ -38,15 +38,15 @@ public extension ParraAttributes {
 
         // MARK: - Public
 
-        public internal(set) var titleLabel: ParraAttributes.Label
-        public internal(set) var helperLabel: ParraAttributes.Label
-        public internal(set) var selectedMenuItemLabels: ParraAttributes.Label
-        public internal(set) var unselectedMenuItemLabels: ParraAttributes.Label
-        public internal(set) var tint: Color?
-        public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize?
-        public internal(set) var padding: ParraPaddingSize?
-        public internal(set) var background: Color?
+        public var titleLabel: ParraAttributes.Label
+        public var helperLabel: ParraAttributes.Label
+        public var selectedMenuItemLabels: ParraAttributes.Label
+        public var unselectedMenuItemLabels: ParraAttributes.Label
+        public var tint: Color?
+        public var border: ParraAttributes.Border
+        public var cornerRadius: ParraCornerRadiusSize?
+        public var padding: ParraPaddingSize?
+        public var background: Color?
     }
 }
 

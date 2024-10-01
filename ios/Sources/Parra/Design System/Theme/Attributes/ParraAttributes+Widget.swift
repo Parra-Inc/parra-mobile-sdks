@@ -14,9 +14,9 @@ public extension ParraAttributes {
     struct Widget {
         // MARK: - Public
 
-        public internal(set) var background: Color?
-        public internal(set) var cornerRadius: ParraCornerRadiusSize?
-        public internal(set) var contentPadding: ParraPaddingSize?
+        public var background: Color?
+        public var cornerRadius: ParraCornerRadiusSize?
+        public var contentPadding: ParraPaddingSize?
 
         public static func `default`(with theme: ParraTheme) -> Widget {
             let palette = theme.palette

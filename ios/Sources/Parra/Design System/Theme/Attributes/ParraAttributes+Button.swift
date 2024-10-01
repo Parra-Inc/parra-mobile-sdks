@@ -64,14 +64,14 @@ public extension ParraAttributes {
 
             // MARK: - Public
 
-            public internal(set) var label: ParraAttributes.Label
-            public internal(set) var cornerRadius: ParraCornerRadiusSize?
-            public internal(set) var padding: ParraPaddingSize?
+            public var label: ParraAttributes.Label
+            public var cornerRadius: ParraCornerRadiusSize?
+            public var padding: ParraPaddingSize?
         }
 
-        public internal(set) var normal: StatefulAttributes
-        public internal(set) var pressed: StatefulAttributes
-        public internal(set) var disabled: StatefulAttributes
+        public var normal: StatefulAttributes
+        public var pressed: StatefulAttributes
+        public var disabled: StatefulAttributes
     }
 
     struct OutlinedButton {
@@ -131,15 +131,15 @@ public extension ParraAttributes {
 
             // MARK: - Public
 
-            public internal(set) var label: ParraAttributes.Label
-            public internal(set) var border: ParraAttributes.Border
-            public internal(set) var cornerRadius: ParraCornerRadiusSize?
-            public internal(set) var padding: ParraPaddingSize?
+            public var label: ParraAttributes.Label
+            public var border: ParraAttributes.Border
+            public var cornerRadius: ParraCornerRadiusSize?
+            public var padding: ParraPaddingSize?
         }
 
-        public internal(set) var normal: StatefulAttributes
-        public internal(set) var pressed: StatefulAttributes
-        public internal(set) var disabled: StatefulAttributes
+        public var normal: StatefulAttributes
+        public var pressed: StatefulAttributes
+        public var disabled: StatefulAttributes
     }
 
     struct ContainedButton {
@@ -201,15 +201,15 @@ public extension ParraAttributes {
 
             // MARK: - Public
 
-            public internal(set) var label: ParraAttributes.Label
-            public internal(set) var border: ParraAttributes.Border
-            public internal(set) var cornerRadius: ParraCornerRadiusSize?
-            public internal(set) var padding: ParraPaddingSize?
+            public var label: ParraAttributes.Label
+            public var border: ParraAttributes.Border
+            public var cornerRadius: ParraCornerRadiusSize?
+            public var padding: ParraPaddingSize?
         }
 
-        public internal(set) var normal: StatefulAttributes
-        public internal(set) var pressed: StatefulAttributes
-        public internal(set) var disabled: StatefulAttributes
+        public var normal: StatefulAttributes
+        public var pressed: StatefulAttributes
+        public var disabled: StatefulAttributes
     }
 
     struct ImageButton {
@@ -264,16 +264,16 @@ public extension ParraAttributes {
 
             // MARK: - Public
 
-            public internal(set) var image: ParraAttributes.Image
+            public var image: ParraAttributes.Image
 
-            public internal(set) var border: ParraAttributes.Border
-            public internal(set) var cornerRadius: ParraCornerRadiusSize?
-            public internal(set) var padding: ParraPaddingSize?
+            public var border: ParraAttributes.Border
+            public var cornerRadius: ParraCornerRadiusSize?
+            public var padding: ParraPaddingSize?
         }
 
-        public internal(set) var normal: StatefulAttributes
-        public internal(set) var pressed: StatefulAttributes
-        public internal(set) var disabled: StatefulAttributes
+        public var normal: StatefulAttributes
+        public var pressed: StatefulAttributes
+        public var disabled: StatefulAttributes
     }
 }
 

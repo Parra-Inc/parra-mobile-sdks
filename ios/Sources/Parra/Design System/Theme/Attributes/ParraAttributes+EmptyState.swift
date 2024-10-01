@@ -36,16 +36,16 @@ public extension ParraAttributes {
 
         // MARK: - Public
 
-        public internal(set) var titleLabel: ParraAttributes.Label
-        public internal(set) var subtitleLabel: ParraAttributes.Label
-        public internal(set) var icon: ParraAttributes.Image
-        public internal(set) var primaryActionButton: ParraAttributes
+        public var titleLabel: ParraAttributes.Label
+        public var subtitleLabel: ParraAttributes.Label
+        public var icon: ParraAttributes.Image
+        public var primaryActionButton: ParraAttributes
             .ContainedButton
-        public internal(set) var secondaryActionButton: ParraAttributes
+        public var secondaryActionButton: ParraAttributes
             .PlainButton
-        public internal(set) var tint: Color?
-        public internal(set) var padding: ParraPaddingSize?
-        public internal(set) var background: Color?
+        public var tint: Color?
+        public var padding: ParraPaddingSize?
+        public var background: Color?
     }
 }
 

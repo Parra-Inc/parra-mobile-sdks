@@ -35,10 +35,10 @@ public extension ParraAttributes {
         public let selectedOptionLabels: ParraAttributes.Label
         public let unselectedOptionLabels: ParraAttributes.Label
 
-        public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize?
-        public internal(set) var padding: ParraPaddingSize?
-        public internal(set) var background: Color?
+        public var border: ParraAttributes.Border
+        public var cornerRadius: ParraCornerRadiusSize?
+        public var padding: ParraPaddingSize?
+        public var background: Color?
     }
 }
 

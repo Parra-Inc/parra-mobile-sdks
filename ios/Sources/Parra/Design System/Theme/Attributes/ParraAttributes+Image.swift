@@ -32,13 +32,13 @@ public extension ParraAttributes {
 
         // MARK: - Public
 
-        public internal(set) var tint: Color?
-        public internal(set) var opacity: CGFloat?
-        public internal(set) var size: CGSize?
-        public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize?
-        public internal(set) var padding: ParraPaddingSize?
-        public internal(set) var background: Color?
+        public var tint: Color?
+        public var opacity: CGFloat?
+        public var size: CGSize?
+        public var border: ParraAttributes.Border
+        public var cornerRadius: ParraCornerRadiusSize?
+        public var padding: ParraPaddingSize?
+        public var background: Color?
     }
 
     struct AsyncImage: ParraCommonViewAttributes {
@@ -64,13 +64,13 @@ public extension ParraAttributes {
 
         // MARK: - Public
 
-        public internal(set) var tint: Color?
-        public internal(set) var opacity: CGFloat?
-        public internal(set) var size: CGSize?
-        public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize?
-        public internal(set) var padding: ParraPaddingSize?
-        public internal(set) var background: Color?
+        public var tint: Color?
+        public var opacity: CGFloat?
+        public var size: CGSize?
+        public var border: ParraAttributes.Border
+        public var cornerRadius: ParraCornerRadiusSize?
+        public var padding: ParraPaddingSize?
+        public var background: Color?
     }
 }
 

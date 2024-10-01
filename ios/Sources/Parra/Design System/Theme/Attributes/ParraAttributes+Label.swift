@@ -51,12 +51,12 @@ public extension ParraAttributes {
 
         // MARK: - Public
 
-        public internal(set) var text: ParraAttributes.Text
-        public internal(set) var icon: ParraAttributes.Image
-        public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize?
-        public internal(set) var padding: ParraPaddingSize?
-        public internal(set) var background: Color?
+        public var text: ParraAttributes.Text
+        public var icon: ParraAttributes.Image
+        public var border: ParraAttributes.Border
+        public var cornerRadius: ParraCornerRadiusSize?
+        public var padding: ParraPaddingSize?
+        public var background: Color?
 
         // MARK: - Internal
 

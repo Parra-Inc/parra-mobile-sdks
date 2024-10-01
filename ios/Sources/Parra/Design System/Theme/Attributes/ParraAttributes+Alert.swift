@@ -36,10 +36,10 @@ public extension ParraAttributes {
         public let subtitle: ParraAttributes.Label
         public let icon: ParraAttributes.Image
 
-        public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize?
-        public internal(set) var padding: ParraPaddingSize?
-        public internal(set) var background: Color?
+        public var border: ParraAttributes.Border
+        public var cornerRadius: ParraCornerRadiusSize?
+        public var padding: ParraPaddingSize?
+        public var background: Color?
     }
 
     struct ToastAlert {
@@ -72,10 +72,10 @@ public extension ParraAttributes {
         public let icon: ParraAttributes.Image
         public let dismissButton: ParraAttributes.ImageButton
 
-        public internal(set) var border: ParraAttributes.Border
-        public internal(set) var cornerRadius: ParraCornerRadiusSize?
-        public internal(set) var padding: ParraPaddingSize?
-        public internal(set) var background: Color?
+        public var border: ParraAttributes.Border
+        public var cornerRadius: ParraCornerRadiusSize?
+        public var padding: ParraPaddingSize?
+        public var background: Color?
     }
 }
 
