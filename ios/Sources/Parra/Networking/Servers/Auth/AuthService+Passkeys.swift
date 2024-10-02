@@ -242,6 +242,14 @@ extension AuthService {
             performAuthorization(
                 for: authorizationRequests
             ) { result in
+                guard !Task.isCancelled else {
+                    continuation.resume(
+                        throwing: CancellationError()
+                    )
+
+                    return
+                }
+
                 continuation.resume(with: result)
             }
         }
@@ -263,6 +271,14 @@ extension AuthService {
             performPasskeyAutofill(
                 for: authorizationRequests
             ) { result in
+                guard !Task.isCancelled else {
+                    continuation.resume(
+                        throwing: CancellationError()
+                    )
+
+                    return
+                }
+
                 continuation.resume(with: result)
             }
         }
