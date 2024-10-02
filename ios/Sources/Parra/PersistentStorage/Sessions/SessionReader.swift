@@ -267,6 +267,10 @@ class SessionReader {
             in: basePath
         )
 
+        logger.trace("Deleting session directory", [
+            "path": sessionDir.path()
+        ])
+
         try fileManager.removeItem(at: sessionDir)
     }
 
@@ -280,6 +284,10 @@ class SessionReader {
             for: "_\(id)",
             in: basePath
         )
+
+        logger.trace("Marking session as errored", [
+            "path": erroredSessionDirectory.path()
+        ])
 
         try fileManager.moveItem(
             at: currentSessionDirectory,
