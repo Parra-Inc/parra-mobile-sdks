@@ -16,8 +16,15 @@ extension ParraInternal {
         configuration: ParraConfiguration,
         instanceConfiguration: ParraInstanceConfiguration = .default
     ) -> ParraInternal {
+        let disableSessions = configuration.loggerOptions.environment.hasConsoleBehavior
+            && !ParraLoggerEnvironment.eventDebugLoggingOverrideEnabled
+
+        if disableSessions {
+            ParraLogger.debug("Disabling sessions/sync/etc.")
+        }
+
         return _createParraInstance(
-            forceDisabled: false,
+            forceDisabled: disableSessions,
             appState: appState,
             authenticationMethod: authenticationMethod,
             configuration: configuration,

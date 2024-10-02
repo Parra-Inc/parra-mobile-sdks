@@ -305,10 +305,6 @@ class SessionManager {
         wrappedEvent: ParraWrappedEvent,
         callSiteContext: ParraLoggerCallSiteContext
     ) {
-        if forceDisabled {
-            return
-        }
-
         eventQueue.async { [self] in
             writeEventSync(
                 wrappedEvent: wrappedEvent,
@@ -323,10 +319,6 @@ class SessionManager {
         target: ParraSessionEventTarget,
         callSiteContext: ParraLoggerCallSiteContext
     ) {
-        if forceDisabled {
-            return
-        }
-
         let environment = loggerOptions.environment
         // When normal behavior isn't bypassed, debug behavior is to send logs
         // to the console. Production behavior is to write events.
@@ -441,10 +433,6 @@ extension SessionManager: ParraLoggerBackend {
     func log(
         data: ParraLogData
     ) {
-        if forceDisabled {
-            return
-        }
-
         eventQueue.async { [self] in
             logEventReceivedSync(
                 logData: data
@@ -455,10 +443,6 @@ extension SessionManager: ParraLoggerBackend {
     func logMultiple(
         data: [ParraLogData]
     ) {
-        if forceDisabled {
-            return
-        }
-
         eventQueue.async { [self] in
             for logData in data {
                 logEventReceivedSync(
