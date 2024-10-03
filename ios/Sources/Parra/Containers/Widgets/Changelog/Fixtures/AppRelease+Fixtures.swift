@@ -28,7 +28,7 @@ extension ParraAppRelease: ParraFixture {
                 sections: ParraAppReleaseSection.validStates(),
                 header: ParraReleaseHeader(
                     id: "release-rocket-1",
-                    size: ParraSize(width: 1_242, height: 699),
+                    size: CGSize(width: 1_242, height: 699),
                     url: "https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?q=100&w=1242"
                 )
             )

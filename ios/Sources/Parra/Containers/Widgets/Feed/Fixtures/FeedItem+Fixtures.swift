@@ -24,7 +24,7 @@ extension ParraFeedItem: ParraFixture {
                     backgroundImage: ParraContentCardBackground(
                         image: ParraImageAssetStub(
                             id: .uuid,
-                            size: ParraSize(
+                            size: CGSize(
                                 width: 1_000,
                                 height: 267
                             ),

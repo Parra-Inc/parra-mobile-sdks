@@ -18,7 +18,7 @@ extension ParraContentCard: ParraFixture {
                 backgroundImage: ParraContentCardBackground(
                     image: ParraImageAssetStub(
                         id: .uuid,
-                        size: ParraSize(
+                        size: CGSize(
                             width: 5_616,
                             height: 3_744
                         ),

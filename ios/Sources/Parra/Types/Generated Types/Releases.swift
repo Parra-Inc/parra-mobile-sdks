@@ -8,32 +8,6 @@
 
 import Foundation
 
-public struct ParraSize: Codable, Equatable, Hashable {
-    // MARK: - Lifecycle
-
-    public init(
-        width: CGFloat,
-        height: CGFloat
-    ) {
-        self.width = width
-        self.height = height
-    }
-
-    public init(cgSize: CGSize) {
-        self.width = cgSize.width
-        self.height = cgSize.height
-    }
-
-    // MARK: - Public
-
-    public let width: CGFloat
-    public let height: CGFloat
-
-    public var toCGSize: CGSize {
-        return CGSize(width: width, height: height)
-    }
-}
-
 public enum ParraTicketType: String, Codable, Equatable, CaseIterable {
     case bug
     case feature
@@ -606,7 +580,7 @@ public struct ParraReleaseHeader: Codable, Equatable, Hashable, Identifiable {
 
     public init(
         id: String,
-        size: ParraSize,
+        size: CGSize,
         url: String
     ) {
         self.id = id
@@ -617,7 +591,7 @@ public struct ParraReleaseHeader: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Public
 
     public let id: String
-    public let size: ParraSize
+    public let size: CGSize
     public let url: String
 }
 

@@ -20,7 +20,7 @@ struct FeedYouTubeVideoDetailView: View {
                 .buildAsyncImage(
                     content: ParraAsyncImageContent(
                         url: thumb.url,
-                        originalSize: ParraSize(
+                        originalSize: CGSize(
                             width: thumb.width,
                             height: thumb.height
                         )

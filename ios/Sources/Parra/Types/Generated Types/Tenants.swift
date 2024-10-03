@@ -113,7 +113,7 @@ public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
 
     public init(
         id: String,
-        size: ParraSize,
+        size: CGSize,
         url: URL
     ) {
         self.id = id
@@ -124,7 +124,7 @@ public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Public
 
     public let id: String
-    public let size: ParraSize
+    public let size: CGSize
     public let url: URL
 }
 
