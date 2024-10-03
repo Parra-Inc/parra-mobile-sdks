@@ -8,6 +8,34 @@
 
 import Foundation
 
+/// CGSize is not Codable. Do not expose this externally. We don't want users
+/// to have to convert between this and CGSize.
+struct _ParraSize: Codable, Equatable, Hashable {
+    // MARK: - Lifecycle
+
+    public init(
+        width: CGFloat,
+        height: CGFloat
+    ) {
+        self.width = width
+        self.height = height
+    }
+
+    public init(cgSize: CGSize) {
+        self.width = cgSize.width
+        self.height = cgSize.height
+    }
+
+    // MARK: - Public
+
+    public let width: CGFloat
+    public let height: CGFloat
+
+    public var toCGSize: CGSize {
+        return CGSize(width: width, height: height)
+    }
+}
+
 public enum ParraTicketType: String, Codable, Equatable, CaseIterable {
     case bug
     case feature
@@ -586,6 +614,16 @@ public struct ParraReleaseHeader: Codable, Equatable, Hashable, Identifiable {
         self.id = id
         self.size = size
         self.url = url
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        self.id = try container.decode(String.self, forKey: .id)
+        self.size = try container.decode(_ParraSize.self, forKey: .size).toCGSize
+        self.url = try container.decode(String.self, forKey: .url)
     }
 
     // MARK: - Public

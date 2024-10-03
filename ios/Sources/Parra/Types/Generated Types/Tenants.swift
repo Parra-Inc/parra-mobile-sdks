@@ -121,6 +121,16 @@ public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
         self.url = url
     }
 
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        self.id = try container.decode(String.self, forKey: .id)
+        self.size = try container.decode(_ParraSize.self, forKey: .size).toCGSize
+        self.url = try container.decode(URL.self, forKey: .url)
+    }
+
     // MARK: - Public
 
     public let id: String
