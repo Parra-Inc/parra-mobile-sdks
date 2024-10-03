@@ -61,6 +61,8 @@ final class AuthService {
     let authorizationDelegateProxy =
         AuthorizationControllerDelegateProxy()
 
+    private(set) var _cachedAuthState: ParraAuthState?
+
     // https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow
 
     func login(
@@ -518,7 +520,6 @@ final class AuthService {
 
     // The actual cached token.
     private var _cachedCredential: ParraUser.Credential?
-    private var _cachedAuthState: ParraAuthState?
 
     private func performUnauthenticatedLogin(
         appInfo: ParraAppInfo
