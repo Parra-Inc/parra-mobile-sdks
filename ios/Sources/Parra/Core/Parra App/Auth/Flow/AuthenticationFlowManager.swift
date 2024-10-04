@@ -15,9 +15,11 @@ private let logger = Logger()
 // making this a singleton since it will never be used in more than
 // 1 place at a time.
 @Observable
+@MainActor
 class AuthenticationFlowManager {
     // MARK: - Lifecycle
 
+    @MainActor
     init(
         authService: AuthService,
         modalScreenManager: ModalScreenManager
@@ -75,16 +77,17 @@ class AuthenticationFlowManager {
         }
     }
 
-    var delegate: AuthenticationFlowManagerDelegate?
-    var navigationState: Binding<NavigationState>?
+    @MainActor var delegate: AuthenticationFlowManagerDelegate?
+    @MainActor var navigationState: Binding<NavigationState>?
 
     /// Whether an auto login has been triggered, per this load of the sign in
     /// view. There's a double render bug with sheet that requires us to only
     /// run this flow once, and not allow it to retrigger until this variable
     /// has been reset (when the flow manager is reconfigured for another
     /// presentation).
-    private(set) var hasPasskeyAutoLoginBeenRequested = false
+    @MainActor private(set) var hasPasskeyAutoLoginBeenRequested = false
 
+    @MainActor
     func resetAutoLoginRequested() {
         hasPasskeyAutoLoginBeenRequested = false
     }
@@ -154,6 +157,7 @@ class AuthenticationFlowManager {
     }
 
     /// Silent requests when screens appear that _may_ result in prompts
+    @MainActor
     func triggerPasskeyLoginRequest(
         username: String?,
         presentationMode: AuthService.PasskeyPresentationMode,
@@ -287,6 +291,7 @@ class AuthenticationFlowManager {
         navigate(to: .identityInputScreen(params))
     }
 
+    @MainActor
     private func supportedPasswordlessMethods(
         for authInfo: ParraAppAuthInfo
     ) -> [ParraAuthenticationMethod.PasswordlessType] {
@@ -311,6 +316,7 @@ class AuthenticationFlowManager {
         }
     }
 
+    @MainActor
     private func supportedAuthMethods(
         for authInfo: ParraAppAuthInfo
     ) -> [ParraAuthenticationMethod] {
@@ -333,6 +339,7 @@ class AuthenticationFlowManager {
         return methods
     }
 
+    @MainActor
     private func onIdentitySubmitted(
         identity: String,
         with appInfo: ParraAppInfo,
@@ -366,6 +373,7 @@ class AuthenticationFlowManager {
         }
     }
 
+    @MainActor
     private func onCredentialIdentitySubmitted(
         identity: String,
         with appInfo: ParraAppInfo,
@@ -435,6 +443,7 @@ class AuthenticationFlowManager {
         }
     }
 
+    @MainActor
     private func onPasskeyIdentitySubmitted(
         identity: String
     ) async throws {
@@ -454,6 +463,7 @@ class AuthenticationFlowManager {
         }
     }
 
+    @MainActor
     private func navigateToForgotPasswordScreen(
         identity: String,
         legalInfo: ParraLegalInfo,
@@ -493,6 +503,7 @@ class AuthenticationFlowManager {
         )
     }
 
+    @MainActor
     private func navigateToIdentityVerificationScreen(
         identity: String,
         userExists: Bool,
@@ -599,6 +610,7 @@ class AuthenticationFlowManager {
         }
     }
 
+    @MainActor
     private func sendLoginCode(
         type: ParraAuthenticationMethod.PasswordlessType,
         value: String
@@ -615,6 +627,7 @@ class AuthenticationFlowManager {
         }
     }
 
+    @MainActor
     private func confirmLoginCode(
         type: ParraAuthenticationMethod.PasswordlessType,
         code: String
@@ -634,6 +647,7 @@ class AuthenticationFlowManager {
         }
     }
 
+    @MainActor
     private func authenticate(
         with identity: String,
         password: String,
@@ -666,6 +680,7 @@ class AuthenticationFlowManager {
         }
     }
 
+    @MainActor
     private func navigate(
         to screen: AuthenticationFlowManager.AuthScreen
     ) {
@@ -680,6 +695,7 @@ class AuthenticationFlowManager {
         }
     }
 
+    @MainActor
     private func resetNavigation(
         to screen: AuthenticationFlowManager.AuthScreen
     ) {
