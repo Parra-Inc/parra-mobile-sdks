@@ -631,6 +631,24 @@ public struct ParraReleaseHeader: Codable, Equatable, Hashable, Identifiable {
     public let id: String
     public let size: CGSize
     public let url: String
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = try encoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        try container.encode(id, forKey: .id)
+        try container.encode(url, forKey: .url)
+        try container.encode(_ParraSize(cgSize: size), forKey: .size)
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case size
+        case url
+    }
 }
 
 public enum ParraReleaseStatus: String, Codable, CaseIterable {

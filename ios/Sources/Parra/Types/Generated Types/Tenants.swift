@@ -136,6 +136,24 @@ public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
     public let id: String
     public let size: CGSize
     public let url: URL
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = try encoder.container(
+            keyedBy: CodingKeys.self
+        )
+
+        try container.encode(id, forKey: .id)
+        try container.encode(url, forKey: .url)
+        try container.encode(_ParraSize(cgSize: size), forKey: .size)
+    }
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case size
+        case url
+    }
 }
 
 public struct ParraIdentity: Codable, Equatable, Hashable, Identifiable {
