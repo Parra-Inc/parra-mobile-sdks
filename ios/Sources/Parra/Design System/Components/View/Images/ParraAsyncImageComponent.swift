@@ -68,6 +68,7 @@ public struct ParraAsyncImageComponent: View {
                     config.aspectRatio,
                     contentMode: config.contentMode
                 )
+                .clipped()
         case .failure(let error):
             let _ = Logger.error("Error loading image", error, [
                 "url": content.url.absoluteString
