@@ -3,6 +3,3 @@ packages:
   Parra:
     url: https://github.com/Parra-Inc/parra-mobile-sdks
     majorVersion: {{ sdk.version }}
-  ParraStorefront:
-    url: https://github.com/Parra-Inc/parra-mobile-sdks
-    majorVersion: {{ sdk.version }}

@@ -2,5 +2,3 @@
 packages:
   Parra:
     path: ".."
-  ParraStorefront:
-    path: ".."
