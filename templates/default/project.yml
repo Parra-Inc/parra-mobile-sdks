@@ -53,6 +53,9 @@ targets:
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
     dependencies:
       - package: Parra
+        products:
+          - Parra
+          - ParraStorefront
 
 schemes:
   {{ app.name.upper_camel }}:
