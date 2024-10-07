@@ -8,6 +8,15 @@
 
 import Parra
 import SwiftUI
+import ParraStorefront
+
+struct StoreTab: View {
+    @Environment(\.parraTheme) private var parraTheme
+
+    var body: some View {
+        ParraStorefrontWidget()
+    }
+}
 
 struct ContentView: View {
     var body: some View {
@@ -15,6 +24,11 @@ struct ContentView: View {
             SampleTab()
                 .tabItem {
                     Label("App", systemImage: "app.dashed")
+                }
+
+            StoreTab()
+                .tabItem {
+                    Label("Store", systemImage: "app.dashed")
                 }
 
             SettingsTab()
