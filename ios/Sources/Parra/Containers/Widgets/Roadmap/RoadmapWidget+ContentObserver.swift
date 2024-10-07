@@ -58,7 +58,7 @@ extension RoadmapWidget {
                 errorStateView: errorStateViewContent
             )
 
-            let initialPaginatorData = Paginator<
+            let initialPaginatorData = ParraPaginator<
                 TicketUserContent,
                 ParraRoadmapConfigurationTab
             >.Data(
@@ -68,7 +68,7 @@ extension RoadmapWidget {
                 knownCount: ticketResponse.totalCount
             )
 
-            let initialPaginator = Paginator<
+            let initialPaginator = ParraPaginator<
                 TicketUserContent,
                 ParraRoadmapConfigurationTab
             >(
@@ -108,7 +108,7 @@ extension RoadmapWidget {
         @Published var currentTicketToVote: String?
 
         private(set) var ticketCache = [
-            ParraRoadmapConfigurationTab: Paginator<
+            ParraRoadmapConfigurationTab: ParraPaginator<
                 TicketUserContent,
                 ParraRoadmapConfigurationTab
             >.Data
@@ -116,7 +116,7 @@ extension RoadmapWidget {
 
         @Published private(set) var tabs: [ParraRoadmapConfigurationTab]
 
-        @Published var ticketPaginator: Paginator<
+        @Published var ticketPaginator: ParraPaginator<
             TicketUserContent,
             ParraRoadmapConfigurationTab
                 // Using IUO because this object requires referencing self in a closure
@@ -189,7 +189,7 @@ extension RoadmapWidget {
             if let cachedData = ticketCache[newTab] {
                 logger.debug("tab will change to cached tab: \(newTab.title)")
 
-                ticketPaginator = Paginator<
+                ticketPaginator = ParraPaginator<
                     TicketUserContent,
                     ParraRoadmapConfigurationTab
                 >(
@@ -200,7 +200,7 @@ extension RoadmapWidget {
             } else {
                 logger.debug("tab will change to new tab: \(newTab.title)")
 
-                let newPageData = Paginator<
+                let newPageData = ParraPaginator<
                     TicketUserContent,
                     ParraRoadmapConfigurationTab
                 >
@@ -210,7 +210,7 @@ extension RoadmapWidget {
                         .map { _ in TicketUserContent.redacted }
                 )
 
-                ticketPaginator = Paginator<
+                ticketPaginator = ParraPaginator<
                     TicketUserContent,
                     ParraRoadmapConfigurationTab
                 >(

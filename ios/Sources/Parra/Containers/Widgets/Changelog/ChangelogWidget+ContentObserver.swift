@@ -126,7 +126,7 @@ extension ChangelogWidget {
         // Using IUO because this object requires referencing self in a closure
         // in its init so we need all fields set. Post-init this should always
         // be set.
-        @Published var releasePaginator: Paginator<
+        @Published var releasePaginator: ParraPaginator<
             AppReleaseStubContent,
             String
         >! {

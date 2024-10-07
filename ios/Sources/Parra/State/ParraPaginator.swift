@@ -1,5 +1,5 @@
 //
-//  Paginator.swift
+//  ParraPaginator.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/11/24.
@@ -10,12 +10,12 @@ import SwiftUI
 
 private let logger = Logger()
 
-class Paginator<Item, Context>: ObservableObject
+public class ParraPaginator<Item, Context>: ObservableObject
     where Item: Identifiable & Hashable
 {
     // MARK: - Lifecycle
 
-    convenience init(
+    public convenience init(
         context: Context,
         data: Data,
         pageFetcher: PageFetcher?
@@ -30,7 +30,7 @@ class Paginator<Item, Context>: ObservableObject
         )
     }
 
-    init(
+    public init(
         context: Context,
         initialItems items: [Item],
         placeholderItems: [Item] = [],
@@ -60,12 +60,12 @@ class Paginator<Item, Context>: ObservableObject
         }
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    struct Data: Equatable, Hashable {
+    public struct Data: Equatable, Hashable {
         // MARK: - Lifecycle
 
-        init(
+        public init(
             items: [Item],
             placeholderItems: [Item] = [],
             pageSize: Int = 15,
@@ -77,20 +77,20 @@ class Paginator<Item, Context>: ObservableObject
             self.knownCount = knownCount
         }
 
-        // MARK: - Internal
+        // MARK: - Public
 
-        private(set) var items: [Item]
-        let placeholderItems: [Item]
+        public private(set) var items: [Item]
+        public let placeholderItems: [Item]
 
-        let pageSize: Int
+        public let pageSize: Int
 
         /// The number of items that are known to exist, even if they all aren't
         /// in the items array yet. Can be nil if a fetch hasn't been performed
         /// yet with this data or the API didn't inform us how many of these
         /// records exist.
-        let knownCount: Int?
+        public let knownCount: Int?
 
-        mutating func replacingItem(_ item: Item) -> Data {
+        public mutating func replacingItem(_ item: Item) -> Data {
             var next = self
 
             guard let index = next.items.firstIndex(
@@ -105,7 +105,7 @@ class Paginator<Item, Context>: ObservableObject
         }
     }
 
-    typealias PageFetcher = (
+    public typealias PageFetcher = (
         _ pageSize: Int,
         _ offset: Int,
         _ context: Context
@@ -113,28 +113,28 @@ class Paginator<Item, Context>: ObservableObject
 
     // Some arbitrary information to attach to the Paginator, which will be
     // passed to the PageFetcher func when it is invoked.
-    let context: Context
+    public let context: Context
 
-    let loadMoreThreshold: Int
-    let pageSize: Int
+    public let loadMoreThreshold: Int
+    public let pageSize: Int
 
     // If we haven't made the first request for these items, we don't know
     // this yet.
-    let totalCount: Int?
+    public let totalCount: Int?
 
     // The last index that triggered fetching a page.
-    private(set) var lastFetchedOffset: Int?
+    public private(set) var lastFetchedOffset: Int?
 
     // If omitted, there will never be an attempt to load more content.
-    let pageFetcher: PageFetcher?
+    public let pageFetcher: PageFetcher?
 
-    @Published var items: [Item]
-    @Published private(set) var isLoading: Bool
-    @Published private(set) var isRefreshing: Bool
-    @Published private(set) var error: Error?
-    @Published private(set) var isShowingPlaceholders: Bool
+    @Published public var items: [Item]
+    @Published public private(set) var isLoading: Bool
+    @Published public private(set) var isRefreshing: Bool
+    @Published public private(set) var error: Error?
+    @Published public private(set) var isShowingPlaceholders: Bool
 
-    func refresh() {
+    public func refresh() {
         Task { @MainActor in
             guard let pageFetcher else {
                 return
@@ -177,7 +177,7 @@ class Paginator<Item, Context>: ObservableObject
         }
     }
 
-    func loadMore(
+    public func loadMore(
         after index: Int?
     ) {
         guard let pageFetcher else {
@@ -276,7 +276,7 @@ class Paginator<Item, Context>: ObservableObject
         }
     }
 
-    func updateItem(
+    public func updateItem(
         _ item: Item
     ) {
         // Must lookup by id instead of firstIndex(of:) because fields other
@@ -296,7 +296,7 @@ class Paginator<Item, Context>: ObservableObject
         items[index] = item
     }
 
-    func currentData() -> Data {
+    public func currentData() -> Data {
         return Data(
             items: items,
             placeholderItems: placeholderItems,

@@ -71,7 +71,7 @@ extension FeedWidget {
 
         let api: API
 
-        var feedPaginator: Paginator<
+        var feedPaginator: ParraPaginator<
             ParraFeedItem,
             String
                 // Using IUO because this object requires referencing self in a closure
