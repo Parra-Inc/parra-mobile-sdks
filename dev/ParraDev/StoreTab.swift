@@ -7,14 +7,13 @@
 
 import SwiftUI
 import Parra
-//import ParraStorefront
+import ParraStorefront
 
 struct StoreTab: View {
     @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
-//        ParraStorefrontWidget()
-        EmptyView()
+        ParraStorefrontWidget()
     }
 }
 
