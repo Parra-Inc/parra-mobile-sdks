@@ -2,30 +2,12 @@
   "originHash" : "49ebd897c474ecf80fd1e9d58119d29e576452285c1a24f5c635a1394f1d7a8e",
   "pins" : [
     {
-      "identity" : "checkout-sheet-kit-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Shopify/checkout-sheet-kit-swift",
-      "state" : {
-        "revision" : "822ee10c62fec7774ce3447c5e350151df9aed1d",
-        "version" : "3.0.4"
-      }
-    },
-    {
-      "identity" : "mobile-buy-sdk-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Shopify/mobile-buy-sdk-ios",
-      "state" : {
-        "revision" : "5517ba8113a82f35cc91eddd9567b2184796feb9",
-        "version" : "13.0.0"
-      }
-    },
-    {
       "identity" : "parra-mobile-sdks",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Parra-Inc/parra-mobile-sdks",
       "state" : {
-        "revision" : "4aa5ef85acb6a470cea7f95e6b23ae15deaf2083",
-        "version" : "0.5.22"
+        "revision" : "fac890e8334ab9b40b23fdcc2c8d5fd9360e798c",
+        "version" : "0.5.23"
       }
     }
   ],
