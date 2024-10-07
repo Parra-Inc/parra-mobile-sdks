@@ -1,0 +1,24 @@
+{
+  "originHash" : "8a238a694f1332c47517177bae680f807f8ce9f5b822f39c907aa8dfd4da0a22",
+  "pins" : [
+    {
+      "identity" : "checkout-sheet-kit-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Shopify/checkout-sheet-kit-swift",
+      "state" : {
+        "revision" : "822ee10c62fec7774ce3447c5e350151df9aed1d",
+        "version" : "3.0.4"
+      }
+    },
+    {
+      "identity" : "mobile-buy-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Shopify/mobile-buy-sdk-ios.git",
+      "state" : {
+        "revision" : "5517ba8113a82f35cc91eddd9567b2184796feb9",
+        "version" : "13.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}

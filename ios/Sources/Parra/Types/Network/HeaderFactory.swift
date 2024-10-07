@@ -6,7 +6,6 @@
 //  Copyright © 2023 Parra, Inc. All rights reserved.
 //
 
-import AdSupport
 import Foundation
 import UIKit
 

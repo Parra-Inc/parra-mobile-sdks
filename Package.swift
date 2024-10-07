@@ -18,7 +18,17 @@ let package = Package(
             targets: [
                 "Parra"
             ]
+        ),
+        .library(
+            name: "ParraStorefront",
+            targets: [
+                "ParraStorefront"
+            ]
         )
+    ],
+    dependencies: [
+        .package(url: "https://github.com/Shopify/mobile-buy-sdk-ios", from: "13.0.0"),
+        .package(url: "https://github.com/Shopify/checkout-sheet-kit-swift", from: "3.0.4")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -26,6 +36,20 @@ let package = Package(
         .target(
             name: "Parra",
             path: "\(iosSdkDir)/Sources/Parra",
+            resources: [
+                // Xcode doesn’t recognize privacy manifest files as resources by default.
+                // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk/
+                .process("PrivacyInfo.xcprivacy")
+            ]
+        ),
+        .target(
+            name: "ParraStorefront",
+            dependencies: [
+                .target(name: "Parra"),
+                .product(name: "Buy", package: "mobile-buy-sdk-ios"),
+                .product(name: "ShopifyCheckoutSheetKit", package: "checkout-sheet-kit-swift")
+            ],
+            path: "\(iosSdkDir)/Sources/ParraStorefront",
             resources: [
                 // Xcode doesn’t recognize privacy manifest files as resources by default.
                 // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/adding_a_privacy_manifest_to_your_app_or_third-party_sdk/
