@@ -14,13 +14,13 @@ extension UserInfoResponse: ParraFixture {
         user: .publicFacingPreview
     )
 
-    static func validStates() -> [UserInfoResponse] {
+    public static func validStates() -> [UserInfoResponse] {
         return [
             publicFacingPreview
         ]
     }
 
-    static func invalidStates() -> [UserInfoResponse] {
+    public static func invalidStates() -> [UserInfoResponse] {
         return []
     }
 }

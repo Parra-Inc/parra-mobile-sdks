@@ -9,7 +9,7 @@
 import Foundation
 
 extension AppInfoManager.AppStoreResponse: ParraFixture {
-    static func validStates() -> [AppInfoManager.AppStoreResponse] {
+    public static func validStates() -> [AppInfoManager.AppStoreResponse] {
         return [
             AppInfoManager.AppStoreResponse(
                 results: [
@@ -29,7 +29,7 @@ extension AppInfoManager.AppStoreResponse: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [AppInfoManager.AppStoreResponse] {
+    public static func invalidStates() -> [AppInfoManager.AppStoreResponse] {
         return []
     }
 }

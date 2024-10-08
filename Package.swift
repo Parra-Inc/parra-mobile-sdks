@@ -28,7 +28,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Shopify/mobile-buy-sdk-ios", from: "13.0.0"),
-        .package(url: "https://github.com/Shopify/checkout-sheet-kit-swift", from: "3.0.4")
+        .package(url: "https://github.com/Shopify/checkout-sheet-kit-swift", from: "3.0.4"),
+        .package(url: "https://github.com/ActuallyTaylor/SwiftHTMLToMarkdown", from: "1.1.1")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -47,7 +48,8 @@ let package = Package(
             dependencies: [
                 .target(name: "Parra"),
                 .product(name: "Buy", package: "mobile-buy-sdk-ios"),
-                .product(name: "ShopifyCheckoutSheetKit", package: "checkout-sheet-kit-swift")
+                .product(name: "ShopifyCheckoutSheetKit", package: "checkout-sheet-kit-swift"),
+                .product(name: "SwiftHTMLtoMarkdown", package: "SwiftHTMLToMarkdown")
             ],
             path: "\(iosSdkDir)/Sources/ParraStorefront",
             resources: [

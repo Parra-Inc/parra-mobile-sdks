@@ -54,11 +54,11 @@ extension ParraUser.Info: ParraFixture {
         hasPassword: true
     )
 
-    static func validStates() -> [ParraUser.Info] {
+    public static func validStates() -> [ParraUser.Info] {
         return [publicFacingPreview]
     }
 
-    static func invalidStates() -> [ParraUser.Info] {
+    public static func invalidStates() -> [ParraUser.Info] {
         return []
     }
 }

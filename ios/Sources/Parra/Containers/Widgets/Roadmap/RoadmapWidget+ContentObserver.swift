@@ -14,7 +14,7 @@ private let logger = Logger()
 // MARK: - RoadmapWidget.ContentObserver
 
 extension RoadmapWidget {
-    class ContentObserver: ContainerContentObserver {
+    class ContentObserver: ParraContainerContentObserver {
         // MARK: - Lifecycle
 
         required init(

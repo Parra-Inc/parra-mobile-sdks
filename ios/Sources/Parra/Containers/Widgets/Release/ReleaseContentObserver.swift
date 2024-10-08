@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-class ReleaseContentObserver: ContainerContentObserver {
+class ReleaseContentObserver: ParraContainerContentObserver {
     // MARK: - Lifecycle
 
     required init(initialParams: InitialParams) {

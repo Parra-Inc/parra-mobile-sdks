@@ -9,13 +9,13 @@
 import Foundation
 
 extension ParraUser.Credential: ParraFixture {
-    static func validStates() -> [ParraUser.Credential] {
+    public static func validStates() -> [ParraUser.Credential] {
         return [
             successResponse
         ]
     }
 
-    static func invalidStates() -> [ParraUser.Credential] {
+    public static func invalidStates() -> [ParraUser.Credential] {
         return []
     }
 

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AppReleaseContent: ContainerContent, Identifiable, Hashable {
+struct AppReleaseContent: ParraContainerContent, Identifiable, Hashable {
     // MARK: - Lifecycle
 
     init(

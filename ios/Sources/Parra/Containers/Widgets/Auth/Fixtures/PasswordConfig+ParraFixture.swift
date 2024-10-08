@@ -9,7 +9,7 @@
 import SwiftUI
 
 extension ParraPasswordConfig: ParraFixture {
-    static func validStates() -> [ParraPasswordConfig] {
+    public static func validStates() -> [ParraPasswordConfig] {
         return [
             ParraPasswordConfig(
                 iosPasswordRulesDescriptor: "required: upper, lower, digit; minlength: 8; maxlength: 128;",
@@ -35,7 +35,7 @@ extension ParraPasswordConfig: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraPasswordConfig] {
+    public static func invalidStates() -> [ParraPasswordConfig] {
         return []
     }
 }

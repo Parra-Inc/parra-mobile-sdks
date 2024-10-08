@@ -9,14 +9,14 @@
 import Foundation
 
 extension ParraSessionsResponse: ParraFixture {
-    static func validStates() -> [ParraSessionsResponse] {
+    public static func validStates() -> [ParraSessionsResponse] {
         return [
             successResponse,
             pollResponse
         ]
     }
 
-    static func invalidStates() -> [ParraSessionsResponse] {
+    public static func invalidStates() -> [ParraSessionsResponse] {
         return []
     }
 

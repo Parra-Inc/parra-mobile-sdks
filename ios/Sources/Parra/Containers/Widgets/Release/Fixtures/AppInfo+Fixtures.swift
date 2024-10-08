@@ -9,7 +9,7 @@
 import SwiftUI
 
 extension ParraAppInfo: ParraFixture {
-    static func validStates() -> [ParraAppInfo] {
+    public static func validStates() -> [ParraAppInfo] {
         return [
             ParraAppInfo(
                 versionToken: "1.0.0",
@@ -106,7 +106,7 @@ extension ParraAppInfo: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraAppInfo] {
+    public static func invalidStates() -> [ParraAppInfo] {
         return []
     }
 }

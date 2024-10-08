@@ -65,7 +65,7 @@ private let fakeEnhancements = [
 // MARK: - ParraAppReleaseSection + ParraFixture
 
 extension ParraAppReleaseSection: ParraFixture {
-    static func validStates() -> [ParraAppReleaseSection] {
+    public static func validStates() -> [ParraAppReleaseSection] {
         let features = fakeFeatures.shuffled().prefix(Int.random(in: 1 ... 5))
         let bugs = fakeBugs.shuffled().prefix(Int.random(in: 1 ... 5))
         let enhancements = fakeEnhancements.shuffled()
@@ -96,7 +96,7 @@ extension ParraAppReleaseSection: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraAppReleaseSection] {
+    public static func invalidStates() -> [ParraAppReleaseSection] {
         return []
     }
 

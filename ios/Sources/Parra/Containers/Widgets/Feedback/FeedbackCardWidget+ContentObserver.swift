@@ -20,7 +20,7 @@ struct CurrentCardInfo: Equatable {
 // MARK: - FeedbackCardWidget.ContentObserver
 
 extension FeedbackCardWidget {
-    class ContentObserver: ContainerContentObserver {
+    class ContentObserver: ParraContainerContentObserver {
         // MARK: - Lifecycle
 
         required init(
@@ -65,7 +65,7 @@ extension FeedbackCardWidget {
 
         // MARK: - Internal
 
-        struct Content: ContainerContent {
+        struct Content: ParraContainerContent {
             // MARK: - Lifecycle
 
             init(

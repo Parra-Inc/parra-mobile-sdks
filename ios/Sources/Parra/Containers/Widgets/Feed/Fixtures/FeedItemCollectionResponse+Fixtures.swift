@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension FeedItemCollectionResponse: ParraFixture {
-    static func validStates() -> [FeedItemCollectionResponse] {
+    public static func validStates() -> [FeedItemCollectionResponse] {
         return [
             FeedItemCollectionResponse(
                 page: 1,
@@ -20,7 +20,7 @@ extension FeedItemCollectionResponse: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [FeedItemCollectionResponse] {
+    public static func invalidStates() -> [FeedItemCollectionResponse] {
         return [
             FeedItemCollectionResponse(
                 page: 1,

@@ -9,7 +9,7 @@
 import Foundation
 
 extension AppReleaseStub: ParraFixture {
-    static func validStates() -> [AppReleaseStub] {
+    public static func validStates() -> [AppReleaseStub] {
         return [
             AppReleaseStub(
                 id: UUID().uuidString,
@@ -140,7 +140,7 @@ extension AppReleaseStub: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [AppReleaseStub] {
+    public static func invalidStates() -> [AppReleaseStub] {
         return []
     }
 }

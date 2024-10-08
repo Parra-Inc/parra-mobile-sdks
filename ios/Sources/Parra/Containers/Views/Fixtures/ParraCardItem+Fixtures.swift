@@ -11,11 +11,11 @@ import Foundation
 // MARK: - ParraCardItem + ParraFixture
 
 extension ParraCardItem: ParraFixture {
-    static func validStates() -> [ParraCardItem] {
+    public static func validStates() -> [ParraCardItem] {
         return ParraCardItemFixtures.cardsResponse.items.elements
     }
 
-    static func invalidStates() -> [ParraCardItem] {
+    public static func invalidStates() -> [ParraCardItem] {
         return []
     }
 }

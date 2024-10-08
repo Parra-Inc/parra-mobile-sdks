@@ -11,7 +11,7 @@ import Foundation
 // MARK: - RoadmapWidget.ContentObserver.Content
 
 extension RoadmapWidget.ContentObserver {
-    struct Content: ContainerContent {
+    struct Content: ParraContainerContent {
         // MARK: - Lifecycle
 
         init(

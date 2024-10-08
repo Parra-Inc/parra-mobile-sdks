@@ -9,7 +9,7 @@
 import Foundation
 
 extension ParraFeedbackFormField: ParraFixture {
-    static func validStates() -> [ParraFeedbackFormField] {
+    public static func validStates() -> [ParraFeedbackFormField] {
         return [
             ParraFeedbackFormField(
                 name: "type",
@@ -81,7 +81,7 @@ extension ParraFeedbackFormField: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraFeedbackFormField] {
+    public static func invalidStates() -> [ParraFeedbackFormField] {
         return []
     }
 }

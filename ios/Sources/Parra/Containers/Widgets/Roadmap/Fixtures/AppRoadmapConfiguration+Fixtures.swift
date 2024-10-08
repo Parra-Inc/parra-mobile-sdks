@@ -9,7 +9,7 @@
 import Foundation
 
 extension ParraAppRoadmapConfiguration: ParraFixture {
-    static func validStates() -> [ParraAppRoadmapConfiguration] {
+    public static func validStates() -> [ParraAppRoadmapConfiguration] {
         return [
             ParraAppRoadmapConfiguration(
                 form: .init(
@@ -41,7 +41,7 @@ extension ParraAppRoadmapConfiguration: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraAppRoadmapConfiguration] {
+    public static func invalidStates() -> [ParraAppRoadmapConfiguration] {
         return []
     }
 }

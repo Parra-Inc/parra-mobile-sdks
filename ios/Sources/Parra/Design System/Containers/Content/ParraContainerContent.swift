@@ -1,5 +1,5 @@
 //
-//  ContainerContent.swift
+//  ParraContainerContent.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,4 +8,4 @@
 
 import SwiftUI
 
-protocol ContainerContent {}
+public protocol ParraContainerContent {}

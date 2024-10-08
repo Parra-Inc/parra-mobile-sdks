@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension ParraFeedItemYoutubeVideoData: ParraFixture {
-    static func validStates() -> [ParraFeedItemYoutubeVideoData] {
+    public static func validStates() -> [ParraFeedItemYoutubeVideoData] {
         return [
             ParraFeedItemYoutubeVideoData(
                 videoId: "UtHjPskLgV4",
@@ -107,7 +107,7 @@ extension ParraFeedItemYoutubeVideoData: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraFeedItemYoutubeVideoData] {
+    public static func invalidStates() -> [ParraFeedItemYoutubeVideoData] {
         return []
     }
 }

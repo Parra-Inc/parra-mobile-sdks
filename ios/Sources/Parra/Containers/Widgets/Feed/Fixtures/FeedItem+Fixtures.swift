@@ -100,7 +100,7 @@ extension ParraFeedItem: ParraFixture {
         )
     }
 
-    static func validStates() -> [ParraFeedItem] {
+    public static func validStates() -> [ParraFeedItem] {
         return [
             ParraFeedItem(
                 id: .uuid,
@@ -133,7 +133,7 @@ extension ParraFeedItem: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraFeedItem] {
+    public static func invalidStates() -> [ParraFeedItem] {
         return []
     }
 }

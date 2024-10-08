@@ -9,13 +9,13 @@
 import Foundation
 
 extension ParraFeedbackForm: ParraFixture {
-    static func validStates() -> [ParraFeedbackForm] {
+    public static func validStates() -> [ParraFeedbackForm] {
         return [
             .testForm(with: UUID().uuidString)
         ]
     }
 
-    static func invalidStates() -> [ParraFeedbackForm] {
+    public static func invalidStates() -> [ParraFeedbackForm] {
         return []
     }
 

@@ -11,7 +11,7 @@ import Foundation
 // MARK: - UserTicket + ParraFixture
 
 extension ParraUserTicket: ParraFixture {
-    static func validStates() -> [ParraUserTicket] {
+    public static func validStates() -> [ParraUserTicket] {
         return [
             ParraUserTicket(
                 id: UUID().uuidString,
@@ -80,7 +80,7 @@ extension ParraUserTicket: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraUserTicket] {
+    public static func invalidStates() -> [ParraUserTicket] {
         return []
     }
 }

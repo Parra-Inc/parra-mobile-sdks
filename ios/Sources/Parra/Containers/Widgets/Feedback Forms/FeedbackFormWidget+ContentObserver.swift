@@ -13,7 +13,7 @@ private let logger = Logger()
 // MARK: - FeedbackFormWidget.ContentObserver
 
 extension FeedbackFormWidget {
-    class ContentObserver: ContainerContentObserver {
+    class ContentObserver: ParraContainerContentObserver {
         // MARK: - Lifecycle
 
         required init(

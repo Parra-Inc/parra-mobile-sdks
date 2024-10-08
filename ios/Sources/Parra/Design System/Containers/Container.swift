@@ -10,7 +10,7 @@ import SwiftUI
 
 protocol Container: View {
     associatedtype Config: ContainerConfig
-    associatedtype ContentObserver: ContainerContentObserver
+    associatedtype ContentObserver: ParraContainerContentObserver
 
     // Expected via init
     var config: Config { get }

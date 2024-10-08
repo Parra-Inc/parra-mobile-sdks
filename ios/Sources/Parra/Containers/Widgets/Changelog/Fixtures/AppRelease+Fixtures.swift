@@ -11,7 +11,7 @@ import Foundation
 // MARK: - AppRelease + ParraFixture
 
 extension ParraAppRelease: ParraFixture {
-    static func validStates() -> [ParraAppRelease] {
+    public static func validStates() -> [ParraAppRelease] {
         return AppReleaseStub.validStates().enumerated().map { _, element in
             return ParraAppRelease(
                 id: element.id,
@@ -35,7 +35,7 @@ extension ParraAppRelease: ParraFixture {
         }
     }
 
-    static func invalidStates() -> [ParraAppRelease] {
+    public static func invalidStates() -> [ParraAppRelease] {
         return []
     }
 }

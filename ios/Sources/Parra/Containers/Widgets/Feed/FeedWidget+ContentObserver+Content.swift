@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension FeedWidget.ContentObserver {
-    struct Content: ContainerContent {
+    struct Content: ParraContainerContent {
         // MARK: - Lifecycle
 
         init(

@@ -23,7 +23,7 @@ struct ModalLoadingIndicatorContainer: Container {
 
     final class Config: ContainerConfig {}
 
-    class ContentObserver: ContainerContentObserver {
+    class ContentObserver: ParraContainerContentObserver {
         // MARK: - Lifecycle
 
         required init(initialParams: InitialParams) {
@@ -34,7 +34,7 @@ struct ModalLoadingIndicatorContainer: Container {
 
         // MARK: - Internal
 
-        struct Content: ContainerContent {
+        struct Content: ParraContainerContent {
             let indicatorContent: ParraLoadingIndicatorContent
         }
 

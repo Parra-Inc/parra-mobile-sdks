@@ -14,7 +14,7 @@ private let logger = Logger()
 
 extension FeedWidget {
     @Observable
-    class ContentObserver: ContainerContentObserver {
+    class ContentObserver: ParraContainerContentObserver {
         // MARK: - Lifecycle
 
         required init(

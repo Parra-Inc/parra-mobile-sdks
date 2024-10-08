@@ -9,7 +9,7 @@
 import SwiftUI
 
 extension ChangelogWidget.ContentObserver {
-    struct Content: ContainerContent {
+    struct Content: ParraContainerContent {
         // MARK: - Lifecycle
 
         init(

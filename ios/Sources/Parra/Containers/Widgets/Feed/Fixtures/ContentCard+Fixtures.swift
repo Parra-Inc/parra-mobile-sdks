@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension ParraContentCard: ParraFixture {
-    static func validStates() -> [ParraContentCard] {
+    public static func validStates() -> [ParraContentCard] {
         return [
             ParraContentCard(
                 id: .uuid,
@@ -36,7 +36,7 @@ extension ParraContentCard: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraContentCard] {
+    public static func invalidStates() -> [ParraContentCard] {
         return []
     }
 }

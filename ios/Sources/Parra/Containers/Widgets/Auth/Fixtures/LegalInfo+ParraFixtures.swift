@@ -9,7 +9,7 @@
 import SwiftUI
 
 extension ParraLegalInfo: ParraFixture {
-    static func validStates() -> [ParraLegalInfo] {
+    public static func validStates() -> [ParraLegalInfo] {
         return [
             ParraLegalInfo(
                 privacyPolicy: ParraLegalDocument(
@@ -28,7 +28,7 @@ extension ParraLegalInfo: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraLegalInfo] {
+    public static func invalidStates() -> [ParraLegalInfo] {
         return []
     }
 }

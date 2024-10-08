@@ -9,7 +9,7 @@
 import Foundation
 
 extension FeedbackFormWidget.ContentObserver {
-    struct Content: ContainerContent {
+    struct Content: ParraContainerContent {
         // MARK: - Lifecycle
 
         init(

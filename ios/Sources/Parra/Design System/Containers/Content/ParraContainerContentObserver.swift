@@ -1,5 +1,5 @@
 //
-//  ContainerContentObserver.swift
+//  ParraContainerContentObserver.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-protocol ContainerContentObserver: ObservableObject {
-    associatedtype Content: ContainerContent
+public protocol ParraContainerContentObserver: ObservableObject {
+    associatedtype Content: ParraContainerContent
     associatedtype InitialParams
 
     var content: Content { get }

@@ -9,7 +9,7 @@
 import Foundation
 
 extension AppReleaseCollectionResponse: ParraFixture {
-    static func validStates() -> [AppReleaseCollectionResponse] {
+    public static func validStates() -> [AppReleaseCollectionResponse] {
         return [
             AppReleaseCollectionResponse(
                 page: 1,
@@ -21,7 +21,7 @@ extension AppReleaseCollectionResponse: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [AppReleaseCollectionResponse] {
+    public static func invalidStates() -> [AppReleaseCollectionResponse] {
         return []
     }
 }

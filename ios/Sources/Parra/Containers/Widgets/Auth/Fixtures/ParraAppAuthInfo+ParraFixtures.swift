@@ -9,7 +9,7 @@
 import SwiftUI
 
 extension ParraAppAuthInfo: ParraFixture {
-    static func validStates() -> [ParraAppAuthInfo] {
+    public static func validStates() -> [ParraAppAuthInfo] {
         return [
             ParraAppAuthInfo(
                 database: ParraAppInfoDatabaseConfig(
@@ -33,7 +33,7 @@ extension ParraAppAuthInfo: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraAppAuthInfo] {
+    public static func invalidStates() -> [ParraAppAuthInfo] {
         return []
     }
 }

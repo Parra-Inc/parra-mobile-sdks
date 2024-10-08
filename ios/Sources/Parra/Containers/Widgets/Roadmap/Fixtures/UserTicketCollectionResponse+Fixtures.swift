@@ -9,7 +9,7 @@
 import Foundation
 
 extension ParraUserTicketCollectionResponse: ParraFixture {
-    static func validStates() -> [ParraUserTicketCollectionResponse] {
+    public static func validStates() -> [ParraUserTicketCollectionResponse] {
         return [
             ParraUserTicketCollectionResponse(
                 page: 1,
@@ -21,7 +21,7 @@ extension ParraUserTicketCollectionResponse: ParraFixture {
         ]
     }
 
-    static func invalidStates() -> [ParraUserTicketCollectionResponse] {
+    public static func invalidStates() -> [ParraUserTicketCollectionResponse] {
         return []
     }
 }

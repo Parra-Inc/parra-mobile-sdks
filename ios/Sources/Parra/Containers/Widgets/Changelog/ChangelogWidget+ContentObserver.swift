@@ -59,7 +59,7 @@ struct AppReleaseStubContent: Identifiable, Hashable {
 // MARK: - ChangelogWidget.ContentObserver
 
 extension ChangelogWidget {
-    class ContentObserver: ContainerContentObserver {
+    class ContentObserver: ParraContainerContentObserver {
         // MARK: - Lifecycle
 
         required init(

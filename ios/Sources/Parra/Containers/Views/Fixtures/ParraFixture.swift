@@ -11,12 +11,12 @@ import SwiftUI
 
 /// Model objects should conform to this type and implement its methods to define high quality fixtures
 /// which can be used in the context of multiple SwiftUI views.
-protocol ParraFixture {
+public protocol ParraFixture {
     static func validStates() -> [Self]
     static func invalidStates() -> [Self]
 }
 
-extension ParraFixture {
+public extension ParraFixture {
     @ViewBuilder
     static func renderValidStates(
         with handler: @escaping (Self) -> some View
