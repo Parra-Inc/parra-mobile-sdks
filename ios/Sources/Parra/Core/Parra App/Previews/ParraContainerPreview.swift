@@ -50,6 +50,8 @@ struct ParraContainerPreview<ContainerType>: View
                 )
         )
 
+        Parra.default.parraInternal = parra.parraInternal
+
         self._alertManager = State(
             wrappedValue: parra.parraInternal.alertManager
         )
