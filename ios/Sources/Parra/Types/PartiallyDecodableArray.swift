@@ -7,6 +7,14 @@
 
 import Foundation
 
+private struct Empty: Decodable {}
+
+private extension UnkeyedDecodingContainer {
+    public mutating func skip() throws {
+        _ = try decode(Empty.self)
+    }
+}
+
 public struct PartiallyDecodableArray<Element>: Codable, Equatable,
     Hashable where Element: Codable & Equatable & Hashable
 {
@@ -26,6 +34,8 @@ public struct PartiallyDecodableArray<Element>: Codable, Equatable,
 
                 elements.append(element)
             } catch {
+                try? container.skip()
+
                 ParraLogger.error("Failed to decode an element", error)
             }
         }
