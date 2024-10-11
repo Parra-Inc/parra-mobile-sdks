@@ -147,7 +147,7 @@ struct FeedYouTubeVideoView: View {
     @ViewBuilder private var thumbnail: some View {
         let thumb = youtubeVideo.thumbnails.maxAvailable
         let width = containerGeometry.size.width
-        let minHeight = (width / (thumb.height / thumb.width)).rounded(.down)
+        let minHeight = (width / (thumb.width / thumb.height)).rounded(.down)
 
         YouTubeThumbnailView(
             thumb: thumb

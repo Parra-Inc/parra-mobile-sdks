@@ -103,6 +103,41 @@ extension ParraFeedItemYoutubeVideoData: ParraFixture {
                 ),
                 publishedAt: .now.daysAgo(12),
                 liveBroadcastContent: .none
+            ),
+            ParraFeedItemYoutubeVideoData(
+                videoId: "UtHjPskLgV4",
+                url: URL(string: "https://www.youtube.com/watch?v=UtHjPskLgV4")!,
+                title: "Parra Demo - Auth, User Management, Email, Product Tools, Analytics and more!",
+                channelTitle: "Get Parra",
+                channelId: "UCQLDtQyxz2rrVWy9Cr2hKPQ",
+                description: "A quick demo of how to use the Parra CLI to bootstrap a new project, apply a custom theme and log in with built-in auth. We also ...",
+                thumbnails: ParraYoutubeThumbnails(
+                    default: ParraYoutubeThumbnail(
+                        url: URL(
+                            string: "https://i.ytimg.com/vi/UtHjPskLgV4/default.jpg"
+                        )!,
+                        width: 120,
+                        height: 90
+                    ),
+                    medium: ParraYoutubeThumbnail(
+                        url: URL(
+                            string: "https://i.ytimg.com/vi/UtHjPskLgV4/mqdefault.jpg"
+                        )!,
+                        width: 320,
+                        height: 180
+                    ),
+                    high: ParraYoutubeThumbnail(
+                        url: URL(
+                            string: "https://i.ytimg.com/vi/UtHjPskLgV4/hqdefault.jpg"
+                        )!,
+                        width: 480,
+                        height: 360
+                    ),
+                    standard: nil,
+                    maxres: nil
+                ),
+                publishedAt: .now.daysAgo(13),
+                liveBroadcastContent: .none
             )
         ]
     }

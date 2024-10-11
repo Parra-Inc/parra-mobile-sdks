@@ -129,6 +129,16 @@ extension ParraFeedItem: ParraFixture {
                 data: .feedItemYoutubeVideoData(
                     ParraFeedItemYoutubeVideoData.validStates()[1]
                 )
+            ),
+            ParraFeedItem(
+                id: .uuid,
+                createdAt: .now.daysAgo(13),
+                updatedAt: .now.daysAgo(13),
+                deletedAt: nil,
+                type: .youtubeVideo,
+                data: .feedItemYoutubeVideoData(
+                    ParraFeedItemYoutubeVideoData.validStates()[2]
+                )
             )
         ]
     }
