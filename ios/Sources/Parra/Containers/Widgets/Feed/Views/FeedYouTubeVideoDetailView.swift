@@ -92,7 +92,7 @@ struct FeedYouTubeVideoDetailView: View {
             }
 
             ToolbarItem(placement: .topBarTrailing) {
-                ShareLink(item: youtubeVideo.videoUrl)
+                ShareLink(item: youtubeVideo.url)
             }
         }
     }

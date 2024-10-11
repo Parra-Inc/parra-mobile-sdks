@@ -170,7 +170,7 @@ extension FeedWidget {
             switch feedItemData {
             case .feedItemYoutubeVideoData(let video):
                 UIApplication.shared.open(
-                    video.videoUrl
+                    video.url
                 )
             case .contentCard(let contentCard):
                 if let action = contentCard.action {

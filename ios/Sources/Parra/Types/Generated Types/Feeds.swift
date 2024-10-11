@@ -69,7 +69,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
 
     init(
         videoId: String,
-        videoUrl: URL,
+        url: URL,
         title: String,
         channelTitle: String,
         channelId: String,
@@ -79,7 +79,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         liveBroadcastContent: ParraFeedItemLiveBroadcastContent
     ) {
         self.videoId = videoId
-        self.videoUrl = videoUrl
+        self.url = url
         self.title = title
         self.channelTitle = channelTitle
         self.channelId = channelId
@@ -92,7 +92,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
     // MARK: - Public
 
     public let videoId: String
-    public let videoUrl: URL
+    public let url: URL
     public let title: String
     public let channelTitle: String
     public let channelId: String
@@ -105,7 +105,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
 
     enum CodingKeys: String, CodingKey {
         case videoId
-        case videoUrl
+        case url
         case title
         case channelTitle
         case channelId

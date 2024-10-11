@@ -12,7 +12,7 @@ extension ParraFeedItemYoutubeVideoData: ParraFixture {
         return [
             ParraFeedItemYoutubeVideoData(
                 videoId: "UtHjPskLgV4",
-                videoUrl: URL(string: "https://www.youtube.com/watch?v=UtHjPskLgV4")!,
+                url: URL(string: "https://www.youtube.com/watch?v=UtHjPskLgV4")!,
                 title: "Parra Demo - Auth, User Management, Email, Product Tools, Analytics and more!",
                 channelTitle: "Get Parra",
                 channelId: "UCQLDtQyxz2rrVWy9Cr2hKPQ",
@@ -59,7 +59,7 @@ extension ParraFeedItemYoutubeVideoData: ParraFixture {
             ),
             ParraFeedItemYoutubeVideoData(
                 videoId: "fLsyFO-bgW0",
-                videoUrl: URL(string: "https://www.youtube.com/watch?v=fLsyFO-bgW0")!,
+                url: URL(string: "https://www.youtube.com/watch?v=fLsyFO-bgW0")!,
                 title: "Parra (YC F24) Product Demo",
                 channelTitle: "Get Parra",
                 channelId: "UCQLDtQyxz2rrVWy9Cr2hKPQ",

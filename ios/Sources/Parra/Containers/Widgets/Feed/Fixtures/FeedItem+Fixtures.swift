@@ -51,7 +51,7 @@ extension ParraFeedItem: ParraFixture {
             data: .feedItemYoutubeVideoData(
                 ParraFeedItemYoutubeVideoData(
                     videoId: .uuid,
-                    videoUrl: URL(string: "https://youtube.com")!,
+                    url: URL(string: "https://youtube.com")!,
                     title: "Parra demo video",
                     channelTitle: "Get Parra",
                     channelId: .uuid,
