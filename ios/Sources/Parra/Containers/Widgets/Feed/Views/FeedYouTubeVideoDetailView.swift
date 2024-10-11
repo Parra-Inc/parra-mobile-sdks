@@ -13,88 +13,130 @@ struct FeedYouTubeVideoDetailView: View {
     let youtubeVideo: ParraFeedItemYoutubeVideoData
 
     var body: some View {
-        let thumb = youtubeVideo.thumbnails.maxres
+        ScrollView {
+            VStack {
+                thumbnail.overlay(
+                    alignment: .top
+                ) {
+                    HStack {
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
+                        .shadow(color: .black, radius: 1)
+                        .tint(.white)
+                        .padding()
 
-        VStack {
-            componentFactory
-                .buildAsyncImage(
-                    content: ParraAsyncImageContent(
-                        url: thumb.url,
-                        originalSize: CGSize(
-                            width: thumb.width,
-                            height: thumb.height
-                        )
-                    )
-                )
-                .overlay(alignment: .center) {
-                    Button(action: {
-                        contentObserver.performActionForFeedItemData(
-                            .feedItemYoutubeVideoData(youtubeVideo)
-                        )
-                    }) {
-                        Image(
-                            uiImage: UIImage(
-                                named: "YouTubeIcon",
-                                in: .module,
-                                with: nil
-                            )!
-                        )
-                        .resizable()
-                        .aspectRatio(235 / 166.0, contentMode: .fit)
-                        .frame(width: 80)
+                        Spacer()
+
+                        ShareLink(item: youtubeVideo.url) {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                        .shadow(color: .black, radius: 1)
+                        .tint(.white)
+                        .padding()
                     }
-                    .buttonStyle(.plain)
                 }
 
-            VStack(alignment: .leading, spacing: 6) {
-                componentFactory.buildLabel(
-                    text: youtubeVideo.title,
-                    localAttributes: .default(with: .title3)
-                )
-                .lineLimit(5)
-                .truncationMode(.tail)
-
-                componentFactory.buildLabel(
-                    text: youtubeVideo.publishedAt.timeAgo(
-                        dateTimeStyle: .numeric
-                    ),
-                    localAttributes: .default(with: .callout)
-                )
-
-                withContent(content: youtubeVideo.description) { content in
+                VStack(alignment: .leading, spacing: 8) {
                     componentFactory.buildLabel(
-                        text: content,
-                        localAttributes: ParraAttributes.Label(
-                            text: ParraAttributes.Text(
-                                style: .caption,
-                                color: parraTheme.palette.secondaryText
-                                    .toParraColor(),
-                                alignment: .leading
+                        text: youtubeVideo.title,
+                        localAttributes: .default(with: .title3)
+                    )
+                    .lineLimit(3)
+                    .truncationMode(.tail)
+
+                    HStack(spacing: 8) {
+                        componentFactory.buildImage(
+                            config: ParraImageConfig(),
+                            content: .resource("YouTubeIcon", .module, .original),
+                            localAttributes: ParraAttributes.Image(
+                                size: CGSize(width: 22, height: 22),
+                                cornerRadius: .full,
+                                padding: .md,
+                                background: parraTheme.palette.primaryBackground
                             )
                         )
-                    )
-                }
-            }
-            .padding(.top, 6)
-            .padding(.horizontal, 12)
-            .padding(.bottom, 16)
 
-            Spacer()
+                        VStack(alignment: .leading, spacing: 0) {
+                            componentFactory.buildLabel(
+                                content: ParraLabelContent(
+                                    text: youtubeVideo.channelTitle
+                                ),
+                                localAttributes: ParraAttributes.Label(
+                                    text: ParraAttributes.Text(
+                                        style: .subheadline,
+                                        weight: .medium
+                                    )
+                                )
+                            )
+
+                            HStack(spacing: 4) {
+                                componentFactory.buildLabel(
+                                    content: ParraLabelContent(
+                                        text: "YouTube"
+                                    ),
+                                    localAttributes: ParraAttributes.Label(
+                                        text: ParraAttributes.Text(
+                                            style: .caption,
+                                            weight: .regular,
+                                            color: parraTheme.palette.secondaryText
+                                                .toParraColor()
+                                        )
+                                    )
+                                )
+
+                                componentFactory.buildLabel(
+                                    text: "•",
+                                    localAttributes: ParraAttributes.Label(
+                                        text: ParraAttributes.Text(
+                                            style: .caption,
+                                            weight: .light,
+                                            color: parraTheme.palette.secondaryText
+                                                .toParraColor()
+                                        )
+                                    )
+                                )
+
+                                componentFactory.buildLabel(
+                                    text: youtubeVideo.publishedAt.timeAgo(
+                                        dateTimeStyle: .named
+                                    ),
+                                    localAttributes: ParraAttributes.Label(
+                                        text: ParraAttributes.Text(
+                                            style: .caption2,
+                                            weight: .regular,
+                                            color: parraTheme.palette.secondaryText
+                                                .toParraColor()
+                                        )
+                                    )
+                                )
+                            }
+                        }
+                    }
+
+                    withContent(content: youtubeVideo.description) { content in
+                        Text(
+                            content.attributedStringWithHighlightedLinks(
+                                tint: parraTheme.palette.primary.toParraColor(),
+                                font: .system(.callout),
+                                foregroundColor: parraTheme.palette.secondaryText
+                                    .toParraColor()
+                            )
+                        )
+                        .padding(.top, 12)
+                        .tint(parraTheme.palette.primary.toParraColor())
+                    }
+                }
+                .padding(.top, 6)
+                .safeAreaPadding(.horizontal)
+                .padding(.bottom, 16)
+
+                Spacer()
+            }
         }
         .background(parraTheme.palette.secondaryBackground)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                }
-            }
-
-            ToolbarItem(placement: .topBarTrailing) {
-                ShareLink(item: youtubeVideo.url)
-            }
-        }
     }
 
     // MARK: - Private
@@ -103,4 +145,15 @@ struct FeedYouTubeVideoDetailView: View {
     @Environment(\.parraTheme) private var parraTheme
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
     @Environment(\.presentationMode) private var presentationMode
+
+    @ViewBuilder private var thumbnail: some View {
+        YouTubeThumbnailView(
+            thumb: youtubeVideo.thumbnails.maxres
+        ) {
+            contentObserver.performActionForFeedItemData(
+                .feedItemYoutubeVideoData(youtubeVideo)
+            )
+        }
+        .aspectRatio(1.7777777777777778, contentMode: .fit)
+    }
 }

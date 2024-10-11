@@ -11,78 +11,109 @@ struct FeedYouTubeVideoView: View {
     // MARK: - Internal
 
     let youtubeVideo: ParraFeedItemYoutubeVideoData
+    let containerGeometry: GeometryProxy
+    let spacing: CGFloat
     let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
 
     var body: some View {
-        let thumb = youtubeVideo.thumbnails.maxres
-
         Button(action: {
             isPresentingModal = true
         }) {
             VStack {
-                componentFactory
-                    .buildAsyncImage(
-                        content: ParraAsyncImageContent(
-                            url: thumb.url,
-                            originalSize: CGSize(
-                                width: thumb.width,
-                                height: thumb.height
-                            )
-                        )
-                    )
-                    .overlay(alignment: .center) {
-                        Button(action: {
-                            performActionForFeedItemData(
-                                .feedItemYoutubeVideoData(youtubeVideo)
-                            )
-                        }) {
-                            Image(
-                                uiImage: UIImage(
-                                    named: "YouTubeIcon",
-                                    in: .module,
-                                    with: nil
-                                )!
-                            )
-                            .resizable()
-                            .aspectRatio(235 / 166.0, contentMode: .fit)
-                            .frame(width: 80)
-                        }
-                        .buttonStyle(.plain)
-                    }
+                thumbnail
 
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 8) {
                     componentFactory.buildLabel(
                         text: youtubeVideo.title,
-                        localAttributes: .default(with: .title3)
+                        localAttributes: .default(with: .headline)
                     )
                     .lineLimit(2)
                     .truncationMode(.tail)
 
-                    withContent(content: youtubeVideo.description) { content in
-                        componentFactory.buildLabel(
-                            text: content,
-                            localAttributes: ParraAttributes.Label(
-                                text: ParraAttributes.Text(
-                                    style: .caption,
-                                    color: parraTheme.palette.secondaryText
-                                        .toParraColor(),
-                                    alignment: .leading
-                                )
+                    HStack(spacing: 8) {
+                        componentFactory.buildImage(
+                            config: ParraImageConfig(),
+                            content: .resource("YouTubeIcon", .module, .original),
+                            localAttributes: ParraAttributes.Image(
+                                size: CGSize(width: 22, height: 22),
+                                cornerRadius: .full,
+                                padding: .md,
+                                background: parraTheme.palette.primaryBackground
                             )
                         )
-                        .lineLimit(3)
-                        .truncationMode(.tail)
+
+                        VStack(alignment: .leading, spacing: 0) {
+                            componentFactory.buildLabel(
+                                content: ParraLabelContent(
+                                    text: youtubeVideo.channelTitle
+                                ),
+                                localAttributes: ParraAttributes.Label(
+                                    text: ParraAttributes.Text(
+                                        style: .subheadline,
+                                        weight: .medium
+                                    )
+                                )
+                            )
+
+                            HStack(spacing: 4) {
+                                componentFactory.buildLabel(
+                                    content: ParraLabelContent(
+                                        text: "YouTube"
+                                    ),
+                                    localAttributes: ParraAttributes.Label(
+                                        text: ParraAttributes.Text(
+                                            style: .caption,
+                                            weight: .regular,
+                                            color: parraTheme.palette.secondaryText
+                                                .toParraColor()
+                                        )
+                                    )
+                                )
+
+                                componentFactory.buildLabel(
+                                    text: "•",
+                                    localAttributes: ParraAttributes.Label(
+                                        text: ParraAttributes.Text(
+                                            style: .caption,
+                                            weight: .light,
+                                            color: parraTheme.palette.secondaryText
+                                                .toParraColor()
+                                        )
+                                    )
+                                )
+
+                                componentFactory.buildLabel(
+                                    text: youtubeVideo.publishedAt.timeAgo(
+                                        dateTimeStyle: .named
+                                    ),
+                                    localAttributes: ParraAttributes.Label(
+                                        text: ParraAttributes.Text(
+                                            style: .caption2,
+                                            weight: .regular,
+                                            color: parraTheme.palette.secondaryText
+                                                .toParraColor()
+                                        )
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
                 .padding(.top, 6)
                 .padding(.horizontal, 12)
                 .padding(.bottom, 16)
             }
         }
         .disabled(!redactionReasons.isEmpty)
-        .buttonStyle(.plain)
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xl, from: parraTheme)
+        .buttonStyle(.plain)
+        .safeAreaPadding(.horizontal)
+        .padding(.vertical, spacing)
         .sheet(isPresented: $isPresentingModal) {} content: {
             NavigationStack {
                 FeedYouTubeVideoDetailView(
@@ -112,4 +143,23 @@ struct FeedYouTubeVideoView: View {
     @Environment(\.redactionReasons) private var redactionReasons
 
     @State private var isPresentingModal: Bool = false
+
+    @ViewBuilder private var thumbnail: some View {
+        let width = containerGeometry.size.width
+        let minHeight = (width / 1.777777).rounded(.down)
+
+        YouTubeThumbnailView(
+            thumb: youtubeVideo.thumbnails.maxres
+        ) {
+            performActionForFeedItemData(
+                .feedItemYoutubeVideoData(youtubeVideo)
+            )
+        }
+        .frame(
+            idealWidth: width,
+            maxWidth: .infinity,
+            minHeight: minHeight,
+            maxHeight: .infinity
+        )
+    }
 }

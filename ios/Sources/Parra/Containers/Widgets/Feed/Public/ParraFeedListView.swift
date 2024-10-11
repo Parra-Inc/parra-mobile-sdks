@@ -49,6 +49,8 @@ public struct ParraFeedListView: View {
             case .feedItemYoutubeVideoData(let data):
                 FeedYouTubeVideoView(
                     youtubeVideo: data,
+                    containerGeometry: containerGeometry,
+                    spacing: spacing,
                     performActionForFeedItemData: performActionForFeedItemData
                 )
             case .contentCard(let data):

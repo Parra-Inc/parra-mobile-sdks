@@ -9,9 +9,37 @@
 import Parra
 import SwiftUI
 
+struct ContentFeedTab: View {
+    var body: some View {
+        ParraFeedWidget(
+            feedId: "content",
+            config: .default
+        )
+    }
+}
+
+struct HomeFeedTab: View {
+    var body: some View {
+        ParraFeedWidget(
+            feedId: "home",
+            config: .default
+        )
+    }
+}
+
 struct ContentView: View {
     var body: some View {
         TabView {
+            ContentFeedTab()
+                .tabItem {
+                    Label("Feed", systemImage: "list")
+                }
+
+            HomeFeedTab()
+                .tabItem {
+                    Label("Feed", systemImage: "list")
+                }
+
             SampleTab()
                 .tabItem {
                     Label("App", systemImage: "app.dashed")
