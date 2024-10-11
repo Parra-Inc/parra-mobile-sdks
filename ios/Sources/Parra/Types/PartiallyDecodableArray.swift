@@ -12,7 +12,7 @@ public struct PartiallyDecodableArray<Element>: Codable, Equatable,
 {
     // MARK: - Lifecycle
 
-    init(_ elements: [Element]) {
+    public init(_ elements: [Element]) {
         self.elements = elements
     }
 

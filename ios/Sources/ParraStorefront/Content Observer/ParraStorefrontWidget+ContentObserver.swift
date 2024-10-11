@@ -44,6 +44,35 @@ extension ParraStorefrontWidget {
 
             client.cachePolicy = config.shopifyCachePolicy
             self.client = client
+
+            self.productPaginator = if let productsResponse = initialParams
+                .productsResponse
+            {
+                .init(
+                    context: "storefront",
+                    data: .init(
+                        items: productsResponse.products.elements,
+                        placeholderItems: [],
+                        pageSize: 25,
+                        knownCount: productsResponse.products.elements.count
+                    ),
+                    pageFetcher: loadMoreProducts
+                )
+            } else {
+                .init(
+                    context: "storefront",
+                    data: .init(
+                        items: [],
+                        // TODO: If initial params contains feed items, we could
+                        // look at them to determine which kinds of placeholders
+                        // we could show.
+                        placeholderItems: []
+//                        placeholderItems: (0 ... 12)
+//                            .map { _ in ParraFeedItem.redactedContentCard }
+                    ),
+                    pageFetcher: loadMoreProducts
+                )
+            }
         }
 
         // MARK: - Internal
@@ -327,10 +356,10 @@ extension ParraStorefrontWidget {
         private func performInitialProductLoad() {
             Task {
                 do {
-                    let response = try await loadMoreProducts()
+//                    let response = try await loadMoreProducts()
 
-                    currentPage = response.productPageInfo
-                    productsState = .loaded(response.products)
+//                    currentPage = response.productPageInfo
+//                    productsState = .loaded(response.products.elements)
                 } catch let error as ParraStorefrontError {
                     logger.error("Error fetching products", error)
 
@@ -344,27 +373,43 @@ extension ParraStorefrontWidget {
         }
 
         private func loadMoreProducts(
-            count: Int32 = 50,
-            cursor: String? = nil
-        ) async throws -> ParraProductResponse {
+            _ limit: Int,
+            _ offset: Int,
+            _ context: String
+        ) async throws -> [ParraProduct] {
             let result = try await performQuery(
                 .productsQuery(
-                    count: count,
-                    cursor: cursor
+                    count: Int32(limit),
+                    cursor: "" // TODO: Need to update paginator
                 )
             )
 
             let products = result.products
 
-            return ParraProductResponse(
-                products: products.edges,
-                productPageInfo: ParraProductResponse.PageInfo(
-                    startCursor: products.pageInfo.startCursor,
-                    endCursor: products.pageInfo.endCursor,
-                    hasNextPage: products.pageInfo.hasNextPage
-                )
-            )
+//            return ParraProductResponse(
+//                products: products.edges,
+//                productPageInfo: ParraProductResponse.PageInfo(
+//                    startCursor: products.pageInfo.startCursor,
+//                    endCursor: products.pageInfo.endCursor,
+//                    hasNextPage: products.pageInfo.hasNextPage
+//                )
+//            )
+
+//            let response = try await api.paginateFeed(
+//                feedId: feedId,
+//                limit: limit,
+//                offset: offset
+//            )
+//
+//            return response.data.elements
+            return []
         }
+
+//        private func loadMoreProducts(
+//            count: Int32 = 50,
+//            cursor: String? = nil
+//        ) async throws -> ParraProductResponse {
+//        }
 
         private func readyCart(
             _ cart: Storefront.Cart,

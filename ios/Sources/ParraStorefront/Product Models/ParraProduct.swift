@@ -10,7 +10,7 @@ import Foundation
 import Parra
 import SwiftHTMLtoMarkdown
 
-public struct ParraProduct: Identifiable, Equatable, Hashable {
+public struct ParraProduct: Identifiable, Equatable, Hashable, Codable {
     // MARK: - Lifecycle
 
     public init(shopProduct: Storefront.Product) {

@@ -6,6 +6,7 @@
 //
 
 import Buy
+import Parra
 import SwiftUI
 
 public struct ParraProductResponse {
@@ -15,7 +16,7 @@ public struct ParraProductResponse {
         products: [ParraProduct],
         productPageInfo: PageInfo
     ) {
-        self.products = products
+        self.products = PartiallyDecodableArray(products)
         self.productPageInfo = productPageInfo
     }
 
@@ -23,7 +24,9 @@ public struct ParraProductResponse {
         products: [Storefront.Product],
         productPageInfo: PageInfo
     ) {
-        self.products = products.map { .init(shopProduct: $0) }
+        self.products = PartiallyDecodableArray(
+            products.map { ParraProduct(shopProduct: $0) }
+        )
         self.productPageInfo = productPageInfo
     }
 
@@ -31,7 +34,9 @@ public struct ParraProductResponse {
         products: [Storefront.ProductEdge],
         productPageInfo: PageInfo
     ) {
-        self.products = products.map { .init(shopProduct: $0.node) }
+        self.products = PartiallyDecodableArray(
+            products.map { ParraProduct(shopProduct: $0.node) }
+        )
         self.productPageInfo = productPageInfo
     }
 
@@ -43,6 +48,6 @@ public struct ParraProductResponse {
         let hasNextPage: Bool
     }
 
-    public let products: [ParraProduct]
+    public let products: PartiallyDecodableArray<ParraProduct>
     public let productPageInfo: PageInfo
 }

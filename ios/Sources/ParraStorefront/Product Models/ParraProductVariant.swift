@@ -8,7 +8,7 @@
 import Buy
 import SwiftUI
 
-public struct ParraProductVariant: Identifiable, Equatable, Hashable {
+public struct ParraProductVariant: Identifiable, Equatable, Hashable, Codable {
     // MARK: - Lifecycle
 
     init(
