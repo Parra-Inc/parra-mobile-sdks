@@ -148,7 +148,7 @@ struct FeedYouTubeVideoDetailView: View {
 
     @ViewBuilder private var thumbnail: some View {
         YouTubeThumbnailView(
-            thumb: youtubeVideo.thumbnails.maxres
+            thumb: youtubeVideo.thumbnails.maxAvailable
         ) {
             contentObserver.performActionForFeedItemData(
                 .feedItemYoutubeVideoData(youtubeVideo)

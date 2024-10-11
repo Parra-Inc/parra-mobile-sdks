@@ -149,7 +149,7 @@ struct FeedYouTubeVideoView: View {
         let minHeight = (width / 1.777777).rounded(.down)
 
         YouTubeThumbnailView(
-            thumb: youtubeVideo.thumbnails.maxres
+            thumb: youtubeVideo.thumbnails.maxAvailable
         ) {
             performActionForFeedItemData(
                 .feedItemYoutubeVideoData(youtubeVideo)

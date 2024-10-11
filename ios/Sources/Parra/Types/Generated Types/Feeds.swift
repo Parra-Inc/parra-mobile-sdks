@@ -37,10 +37,10 @@ public struct ParraYoutubeThumbnails: Codable, Equatable, Hashable {
 
     init(
         default: ParraYoutubeThumbnail,
-        medium: ParraYoutubeThumbnail,
-        high: ParraYoutubeThumbnail,
-        standard: ParraYoutubeThumbnail,
-        maxres: ParraYoutubeThumbnail
+        medium: ParraYoutubeThumbnail?,
+        high: ParraYoutubeThumbnail?,
+        standard: ParraYoutubeThumbnail?,
+        maxres: ParraYoutubeThumbnail?
     ) {
         self.default = `default`
         self.medium = medium
@@ -52,10 +52,14 @@ public struct ParraYoutubeThumbnails: Codable, Equatable, Hashable {
     // MARK: - Public
 
     public let `default`: ParraYoutubeThumbnail
-    public let medium: ParraYoutubeThumbnail
-    public let high: ParraYoutubeThumbnail
-    public let standard: ParraYoutubeThumbnail
-    public let maxres: ParraYoutubeThumbnail
+    public let medium: ParraYoutubeThumbnail?
+    public let high: ParraYoutubeThumbnail?
+    public let standard: ParraYoutubeThumbnail?
+    public let maxres: ParraYoutubeThumbnail?
+
+    public var maxAvailable: ParraYoutubeThumbnail {
+        return maxres ?? standard ?? high ?? medium ?? `default`
+    }
 }
 
 public enum ParraFeedItemLiveBroadcastContent: String, Codable {
