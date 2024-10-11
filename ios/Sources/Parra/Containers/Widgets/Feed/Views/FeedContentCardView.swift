@@ -140,7 +140,7 @@ struct FeedContentCardView: View {
     }
 
     @ViewBuilder private var overlayInfo: some View {
-        if hasOverlayContent {
+        if hasOverlayContent && redactionReasons.isEmpty {
             VStack(alignment: .leading) {
                 withContent(content: contentCard.title) { content in
                     componentFactory.buildLabel(
