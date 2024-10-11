@@ -145,11 +145,12 @@ struct FeedYouTubeVideoView: View {
     @State private var isPresentingModal: Bool = false
 
     @ViewBuilder private var thumbnail: some View {
+        let thumb = youtubeVideo.thumbnails.maxAvailable
         let width = containerGeometry.size.width
-        let minHeight = (width / 1.777777).rounded(.down)
+        let minHeight = (width / (thumb.height / thumb.width)).rounded(.down)
 
         YouTubeThumbnailView(
-            thumb: youtubeVideo.thumbnails.maxAvailable
+            thumb: thumb
         ) {
             performActionForFeedItemData(
                 .feedItemYoutubeVideoData(youtubeVideo)

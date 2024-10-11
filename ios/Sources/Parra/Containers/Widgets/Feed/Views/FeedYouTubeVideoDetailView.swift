@@ -147,13 +147,15 @@ struct FeedYouTubeVideoDetailView: View {
     @Environment(\.presentationMode) private var presentationMode
 
     @ViewBuilder private var thumbnail: some View {
+        let thumb = youtubeVideo.thumbnails.maxAvailable
+
         YouTubeThumbnailView(
-            thumb: youtubeVideo.thumbnails.maxAvailable
+            thumb: thumb
         ) {
             contentObserver.performActionForFeedItemData(
                 .feedItemYoutubeVideoData(youtubeVideo)
             )
         }
-        .aspectRatio(1.7777777777777778, contentMode: .fit)
+        .aspectRatio(thumb.width / thumb.height, contentMode: .fit)
     }
 }
