@@ -14,15 +14,18 @@ extension StorefrontWidget.ContentObserver {
 
         init(
             emptyStateView: ParraEmptyStateContent,
+            productMissingView: ParraEmptyStateContent,
             errorStateView: ParraEmptyStateContent
         ) {
             self.emptyStateView = emptyStateView
+            self.productMissingView = productMissingView
             self.errorStateView = errorStateView
         }
 
         // MARK: - Internal
 
         let emptyStateView: ParraEmptyStateContent
+        let productMissingView: ParraEmptyStateContent
         let errorStateView: ParraEmptyStateContent
     }
 }

@@ -17,16 +17,57 @@ public final class ParraStorefrontConfig: ParraContainerConfig {
         shopifyApiKey: String,
         shopifySession: URLSession = .shared,
         shopifyLocale: Locale? = .autoupdatingCurrent,
-        shopifyCachePolicy: Graph.CachePolicy = .cacheFirst(expireIn: 60 * 60 * 24)
+        shopifyCachePolicy: Graph.CachePolicy = .cacheFirst(expireIn: 60 * 60 * 24),
+        navigationTitle: String = "Products",
+        showDismissButton: Bool = false,
+        emptyStateContent: ParraEmptyStateContent = ParraStorefrontConfig
+            .defaultEmptyStateContent,
+        productNotFoundContent: ParraEmptyStateContent = ParraStorefrontConfig
+            .defaultProductNotFoundContent,
+        errorStateContent: ParraEmptyStateContent = ParraStorefrontConfig
+            .defaultErrorStateContent
+
     ) {
         self.shopifyDomain = shopifyDomain
         self.shopifyApiKey = shopifyApiKey
         self.shopifySession = shopifySession
         self.shopifyLocale = shopifyLocale
         self.shopifyCachePolicy = shopifyCachePolicy
+        self.navigationTitle = navigationTitle
+        self.showDismissButton = showDismissButton
+        self.emptyStateContent = emptyStateContent
+        self.productNotFoundContent = productNotFoundContent
+        self.errorStateContent = errorStateContent
     }
 
     // MARK: - Public
+
+    public static let defaultEmptyStateContent = ParraEmptyStateContent(
+        title: ParraLabelContent(
+            text: "Nothing here yet"
+        ),
+        subtitle: ParraLabelContent(
+            text: "Check back later for new products!"
+        )
+    )
+
+    public static let defaultProductNotFoundContent = ParraEmptyStateContent(
+        title: ParraLabelContent(
+            text: "Oops! We couldn't find that product."
+        ),
+        subtitle: ParraLabelContent(
+            text: "We couldn't find the product you're looking for. It may be out of stock or no longer available."
+        ),
+        icon: .symbol("tshirt", .monochrome)
+    )
+
+    public static let defaultErrorStateContent = ParraEmptyStateContent(
+        title: ParraEmptyStateContent.errorGeneric.title,
+        subtitle: ParraLabelContent(
+            text: "Failed to load products. Please try again later."
+        ),
+        icon: .symbol("network.slash", .monochrome)
+    )
 
     /// The domain of your shop (ex: "shopname.myshopify.com").
     public let shopifyDomain: String
@@ -41,4 +82,11 @@ public final class ParraStorefrontConfig: ParraContainerConfig {
     public let shopifyLocale: Locale?
 
     public let shopifyCachePolicy: Graph.CachePolicy
+
+    public let navigationTitle: String
+    public let showDismissButton: Bool
+
+    public let emptyStateContent: ParraEmptyStateContent
+    public let productNotFoundContent: ParraEmptyStateContent
+    public let errorStateContent: ParraEmptyStateContent
 }

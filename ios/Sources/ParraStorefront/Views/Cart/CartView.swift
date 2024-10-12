@@ -79,7 +79,7 @@ struct CartView: View {
         componentFactory
             .buildEmptyState(
                 config: .errorDefault,
-                content: .storefrontError
+                content: dataModel.content.errorStateView
             )
     }
 

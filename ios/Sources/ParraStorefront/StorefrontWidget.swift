@@ -58,12 +58,18 @@ struct StorefrontWidget: ParraContainer {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(parraTheme.palette.primaryBackground)
-            .navigationTitle("Products")
+            .navigationTitle(contentObserver.config.navigationTitle)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     CartButton(
                         cartState: $contentObserver.cartState
                     )
+                }
+
+                if contentObserver.config.showDismissButton {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        ParraDismissButton()
+                    }
                 }
             }
             .navigationDestination(
@@ -79,7 +85,7 @@ struct StorefrontWidget: ParraContainer {
                 } else {
                     componentFactory.buildEmptyState(
                         config: .default,
-                        content: .storefrontProductMissing
+                        content: contentObserver.content.productMissingView
                     )
                 }
             }

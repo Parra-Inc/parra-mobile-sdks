@@ -54,26 +54,7 @@ struct FeedWidget: ParraContainer {
             .toolbar {
                 if config.showDismissButton {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            ZStack {
-                                Circle()
-                                    .fill(parraTheme.palette.secondaryBackground)
-                                    .frame(width: 30, height: 30)
-
-                                Image(systemName: "xmark")
-                                    .font(.system(
-                                        size: 12,
-                                        weight: .bold,
-                                        design: .rounded
-                                    ))
-                                    .foregroundColor(.secondary)
-                            }
-                            .contentShape(Circle())
-                        })
-                        .buttonStyle(PlainButtonStyle())
-                        .accessibilityLabel(Text("Close"))
+                        ParraDismissButton()
                     }
                 }
             }
@@ -184,7 +165,6 @@ struct FeedWidget: ParraContainer {
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
-    @Environment(\.presentationMode) private var presentationMode
 }
 
 #Preview {

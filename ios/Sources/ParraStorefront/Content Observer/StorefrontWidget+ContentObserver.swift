@@ -34,8 +34,9 @@ extension StorefrontWidget {
             self.config = initialParams.config
 
             self.content = Content(
-                emptyStateView: .errorGeneric,
-                errorStateView: .storefrontError
+                emptyStateView: initialParams.config.emptyStateContent,
+                productMissingView: initialParams.config.productNotFoundContent,
+                errorStateView: initialParams.config.errorStateContent
             )
 
             let client = Graph.Client(
