@@ -14,6 +14,7 @@ pub struct Cli {
 pub enum TemplateName {
     Default,
     RevenueCat,
+    ShopifyStorefront,
     YC,
 }
 
@@ -22,6 +23,7 @@ impl Display for TemplateName {
         let output = match self {
             TemplateName::Default => "default",
             TemplateName::RevenueCat => "revenue-cat",
+            TemplateName::ShopifyStorefront => "shopify-storefront",
             TemplateName::YC => "yc",
         };
 

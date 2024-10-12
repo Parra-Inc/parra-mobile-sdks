@@ -12,7 +12,6 @@
 		004D994E2C8787CA00EB6AA7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 004D994D2C87876000EB6AA7 /* PrivacyInfo.xcprivacy */; };
 		006090182CB2D4E4006B2282 /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 006090172CB2D4E4006B2282 /* Parra */; };
 		0060901A2CB2D4E4006B2282 /* ParraStorefront in Frameworks */ = {isa = PBXBuildFile; productRef = 006090192CB2D4E4006B2282 /* ParraStorefront */; };
-		0060901C2CB2D50A006B2282 /* StoreTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0060901B2CB2D50A006B2282 /* StoreTab.swift */; };
 		0063024B2C5C1FE8006BB9DC /* SampleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302482C5C1FE8006BB9DC /* SampleTab.swift */; };
 		0063024C2C5C1FE8006BB9DC /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006302492C5C1FE8006BB9DC /* App.swift */; };
 		006302622C5C2022006BB9DC /* AccountHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063024E2C5C2022006BB9DC /* AccountHeader.swift */; };
@@ -42,7 +41,6 @@
 
 /* Begin PBXFileReference section */
 		004D994D2C87876000EB6AA7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		0060901B2CB2D50A006B2282 /* StoreTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTab.swift; sourceTree = "<group>"; };
 		006302482C5C1FE8006BB9DC /* SampleTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTab.swift; sourceTree = "<group>"; };
 		006302492C5C1FE8006BB9DC /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		0063024E2C5C2022006BB9DC /* AccountHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountHeader.swift; sourceTree = "<group>"; };
@@ -167,7 +165,6 @@
 			children = (
 				006302492C5C1FE8006BB9DC /* App.swift */,
 				00727F4B2C5AE43D00973122 /* ContentView.swift */,
-				0060901B2CB2D50A006B2282 /* StoreTab.swift */,
 				006302482C5C1FE8006BB9DC /* SampleTab.swift */,
 				006302612C5C2022006BB9DC /* Settings Tab */,
 				00727F4D2C5AE43D00973122 /* Assets.xcassets */,
@@ -282,7 +279,6 @@
 				006302652C5C2022006BB9DC /* DeleteAccountCell.swift in Sources */,
 				00F807292CA1B29E00B5A27F /* EditProfileViewModel.swift in Sources */,
 				0063026C2C5C2022006BB9DC /* RoadmapCell.swift in Sources */,
-				0060901C2CB2D50A006B2282 /* StoreTab.swift in Sources */,
 				007CC43D2CA70E400062E574 /* FeedCell.swift in Sources */,
 				0063026A2C5C2022006BB9DC /* ProfileCell.swift in Sources */,
 				006302672C5C2022006BB9DC /* ChangelogCell.swift in Sources */,

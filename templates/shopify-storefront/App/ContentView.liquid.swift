@@ -17,6 +17,11 @@ struct ContentView: View {
                     Label("App", systemImage: "app.dashed")
                 }
 
+            StorefrontTab()
+                .tabItem {
+                    Label("Store", systemImage: "storefront")
+                }
+
             SettingsTab()
                 .tabItem {
                     Label("Profile", systemImage: "person")

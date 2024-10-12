@@ -1,0 +1,23 @@
+{
+  "cli_input": {
+    "name": "shopify",
+    "inputs": [
+      {
+        "required": false,
+        "prompt": "What is your Shopify Domain?",
+        "help_message": "Obtain your \"Domain\" from the Settings -> Domains section in the Shopify Admin page (https://admin.shopify.com/) or press enter to skip for now.",
+        "default_message": null,
+        "default": "<#SHOPIFY_DOMAIN#>",
+        "key": "domain"
+      },
+      {
+        "required": false,
+        "prompt": "What is your Shopify Public API key?",
+        "help_message": "Obtain your \"API Key\" from the Settings -> Apps and sales channels section in the Shopify Admin page (https://admin.shopify.com/). Navigate to \"Develop apps\" and click the name of the app you want to create credentials for. Click \"API credentials.\" Do NOT copy the \"Secret.\" You can also press enter to skip for now.",
+        "default_message": null,
+        "default": "<#SHOPIFY_API_KEY#>",
+        "key": "api_key"
+      }
+    ]
+  }
+}

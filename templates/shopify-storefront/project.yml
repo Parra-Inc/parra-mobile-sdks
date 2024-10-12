@@ -55,6 +55,7 @@ targets:
       - package: Parra
         products:
           - Parra
+          - ParraStorefront
 
 schemes:
   {{ app.name.upper_camel }}:
