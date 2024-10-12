@@ -60,8 +60,6 @@ struct SettingsTab: View {
                     SettingsFooter()
                 }
             }
-            .background(parraTheme.palette.primaryBackground)
-            .scrollContentBackground(.hidden)
             .navigationTitle("Profile")
         }
     }

@@ -87,8 +87,6 @@ struct AccountView: View {
                 }
             }
         }
-        .background(parraTheme.palette.primaryBackground)
-        .scrollContentBackground(.hidden)
         .navigationTitle("Account")
         .sheet(isPresented: $isEditProfilePresented) {
             NavigationStack {
