@@ -34,6 +34,7 @@
 		00727F4C2C5AE43D00973122 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00727F4B2C5AE43D00973122 /* ContentView.swift */; };
 		00727F4E2C5AE43D00973122 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00727F4D2C5AE43D00973122 /* Assets.xcassets */; };
 		00727F522C5AE43D00973122 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00727F512C5AE43D00973122 /* Preview Assets.xcassets */; };
+		00739AA52CBAF4B1009FFFDD /* StorefrontCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00739AA42CBAF4B1009FFFDD /* StorefrontCell.swift */; };
 		007CC43D2CA70E400062E574 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CC43C2CA70E400062E574 /* FeedCell.swift */; };
 		00F807292CA1B29E00B5A27F /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F807282CA1B29E00B5A27F /* EditProfileViewModel.swift */; };
 		00F8072B2CA1B3A400B5A27F /* EditProfileTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F8072A2CA1B3A400B5A27F /* EditProfileTextField.swift */; };
@@ -65,6 +66,7 @@
 		00727F4D2C5AE43D00973122 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00727F4F2C5AE43D00973122 /* ParraDev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ParraDev.entitlements; sourceTree = "<group>"; };
 		00727F512C5AE43D00973122 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		00739AA42CBAF4B1009FFFDD /* StorefrontCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorefrontCell.swift; sourceTree = "<group>"; };
 		007CC43C2CA70E400062E574 /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		00F807282CA1B29E00B5A27F /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 		00F8072A2CA1B3A400B5A27F /* EditProfileTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileTextField.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 			children = (
 				006302542C5C2022006BB9DC /* ChangelogCell.swift */,
 				007CC43C2CA70E400062E574 /* FeedCell.swift */,
+				00739AA42CBAF4B1009FFFDD /* StorefrontCell.swift */,
 				006302552C5C2022006BB9DC /* FeedbackCell.swift */,
 				006302562C5C2022006BB9DC /* LatestReleaseCell.swift */,
 				006302572C5C2022006BB9DC /* ProfileCell.swift */,
@@ -268,6 +271,7 @@
 				006302642C5C2022006BB9DC /* ChangePasswordCell.swift in Sources */,
 				006302622C5C2022006BB9DC /* AccountHeader.swift in Sources */,
 				006302692C5C2022006BB9DC /* LatestReleaseCell.swift in Sources */,
+				00739AA52CBAF4B1009FFFDD /* StorefrontCell.swift in Sources */,
 				00727F4C2C5AE43D00973122 /* ContentView.swift in Sources */,
 				0063024C2C5C1FE8006BB9DC /* App.swift in Sources */,
 				00F8072B2CA1B3A400B5A27F /* EditProfileTextField.swift in Sources */,

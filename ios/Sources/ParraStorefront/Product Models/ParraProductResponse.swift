@@ -9,7 +9,7 @@ import Buy
 import Parra
 import SwiftUI
 
-public struct ParraProductResponse {
+public struct ParraProductResponse: Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -42,7 +42,7 @@ public struct ParraProductResponse {
 
     // MARK: - Public
 
-    public struct PageInfo {
+    public struct PageInfo: Equatable {
         let startCursor: String?
         let endCursor: String?
         let hasNextPage: Bool

@@ -22,7 +22,7 @@ public extension View {
             offset: 0
         )
 
-        let transformer: ViewDataLoader<
+        let transformer: ParraViewDataLoader<
             RoadmapParams,
             ParraRoadmapInfo,
             RoadmapWidget

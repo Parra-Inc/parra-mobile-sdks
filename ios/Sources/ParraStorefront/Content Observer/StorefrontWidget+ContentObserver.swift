@@ -12,7 +12,7 @@ import ShopifyCheckoutSheetKit
 import SwiftUI
 
 private let paginatorContext = "storefront"
-private let paginatorPageSize = 100
+let storefrontPaginatorLimit: Int32 = 100
 
 // Shopify, smartly, introduces a Task object that conflicts with this.
 // Typealias to take precedence.
@@ -47,7 +47,9 @@ extension StorefrontWidget {
             )
 
             client.cachePolicy = config.shopifyCachePolicy
-            self.client = client
+            self.shopifyService = ShopifyService(
+                client: client
+            )
 
             self.productPaginator = if let productsResponse = initialParams
                 .productsResponse
@@ -57,7 +59,7 @@ extension StorefrontWidget {
                     data: .init(
                         items: productsResponse.products.elements,
                         placeholderItems: [],
-                        pageSize: paginatorPageSize,
+                        pageSize: Int(storefrontPaginatorLimit),
                         knownCount: productsResponse.products.elements.count
                     ),
                     pageFetcher: loadMoreProducts
@@ -78,12 +80,8 @@ extension StorefrontWidget {
         // MARK: - Internal
 
         private(set) var content: Content
-        let client: Graph.Client
+        let shopifyService: ShopifyService
         let config: ParraStorefrontConfig
-
-        /// Basic rate limitting of mutations since Shopify will reject them if
-        /// they happen to quickly.
-        var lastMutation: Date?
 
         var cartState: CartState = .loading {
             didSet {
@@ -146,7 +144,7 @@ extension StorefrontWidget {
             quantity: UInt,
             as user: ParraUser?
         ) async throws {
-            let result = try await performMutation(
+            let result = try await shopifyService.performMutation(
                 .createCartMutation(
                     for: .createCartInput(
                         productVariants: [
@@ -175,7 +173,7 @@ extension StorefrontWidget {
             ])
 
             try await withReadyCart { readyInfo in
-                let result = try await performMutation(
+                let result = try await shopifyService.performMutation(
                     .updateLineItemQuantityCartMutation(
                         lineItemId: cartItem.id,
                         cartId: readyInfo.cartId,
@@ -220,7 +218,7 @@ extension StorefrontWidget {
             logger.info("Updating cart note", ["note": note ?? "<empty>"])
 
             try await withReadyCart { readyInfo in
-                let result = try await performMutation(
+                let result = try await shopifyService.performMutation(
                     .updateNoteCartMutation(
                         for: readyInfo.cartId,
                         note: note
@@ -250,7 +248,7 @@ extension StorefrontWidget {
             ])
 
             try await withReadyCart { readyState in
-                let result = try await performMutation(
+                let result = try await shopifyService.performMutation(
                     .addToCartCartMutation(
                         cartId: readyState.cartId,
                         productVariant: variant,
@@ -285,7 +283,7 @@ extension StorefrontWidget {
             logger.info("Removing product from cart", ["itemId": cartItem.id])
 
             try await withReadyCart { readyState in
-                let result = try await performMutation(
+                let result = try await shopifyService.performMutation(
                     .removeLineItemCartMutation(
                         lineItemId: cartItem.id,
                         cartId: readyState.cartId
@@ -356,7 +354,7 @@ extension StorefrontWidget {
                 }
 
                 do {
-                    let result = try await performMutation(
+                    let result = try await shopifyService.performMutation(
                         .createCartMutation(
                             for: .createCartInput(
                                 as: user
@@ -403,7 +401,7 @@ extension StorefrontWidget {
                 try await Task.sleep(for: .seconds(0.5))
             }
 
-            let result = try await performQuery(
+            let result = try await shopifyService.performQuery(
                 .productsQuery(
                     count: Int32(pageSize),
                     startCursor: cursor.startCursor,

@@ -10,17 +10,17 @@ import SwiftUI
 
 private let logger = Logger()
 
-extension ViewDataLoader {
+extension ParraViewDataLoader {
     static func releaseLoader(
         config: ParraChangelogWidgetConfig
     )
-        -> ViewDataLoader<
+        -> ParraViewDataLoader<
             Never,
             ReleaseContentObserver.ReleaseContentType,
             ReleaseWidget
         >
     {
-        return ViewDataLoader<
+        return ParraViewDataLoader<
             Never,
             ReleaseContentObserver.ReleaseContentType,
             ReleaseWidget

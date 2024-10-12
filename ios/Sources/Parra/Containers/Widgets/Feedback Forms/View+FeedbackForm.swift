@@ -20,7 +20,7 @@ public extension View {
     ) -> some View {
         let transformParams = formId
 
-        let transformer: ViewDataLoader<
+        let transformer: ParraViewDataLoader<
             String,
             ParraFeedbackForm,
             FeedbackFormWidget

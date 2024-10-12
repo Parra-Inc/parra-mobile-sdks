@@ -1,15 +1,31 @@
 //
-//  StorefrontWidget+ContentObserver+performQueries.swift
+//  ShopifyService.swift
 //  Parra
 //
-//  Created by Mick MacCallum on 10/8/24.
+//  Created by Mick MacCallum on 10/12/24.
 //
 
 import Buy
 import Foundation
 import Parra
 
-extension StorefrontWidget.ContentObserver {
+class ShopifyService {
+    // MARK: - Lifecycle
+
+    init(
+        client: Graph.Client
+    ) {
+        self.client = client
+    }
+
+    // MARK: - Internal
+
+    /// Basic rate limitting of mutations since Shopify will reject them if
+    /// they happen to quickly.
+    var lastMutation: Date?
+
+    let client: Graph.Client
+
     func performQuery(
         _ query: Storefront.QueryRootQuery
     ) async throws -> Storefront.QueryRoot {

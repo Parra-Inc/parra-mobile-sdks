@@ -1,5 +1,5 @@
 //
-//  ViewDataLoader.swift
+//  ParraViewDataLoader.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/5/24.
@@ -9,23 +9,23 @@
 import SwiftUI
 
 @MainActor
-struct ViewDataLoader<TransformParams, Data, ViewContent>
+public struct ParraViewDataLoader<TransformParams, Data, ViewContent>
     where ViewContent: View, Data: Equatable, TransformParams: Equatable
 {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         @ViewBuilder renderer: @MainActor @escaping (Parra, Data, Dismisser?)
             -> ViewContent
     ) {
         self.render = renderer
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    typealias Transformer = (Parra, TransformParams) async throws -> Data
+    public typealias Transformer = (Parra, TransformParams) async throws -> Data
 
-    enum LoadType: Equatable {
+    public enum LoadType: Equatable {
         // A function that allows for transformation of the data as long as it
         // results in the content that the widget expects to display. Usually
         // this is used for fetching data from the network.
@@ -39,11 +39,11 @@ struct ViewDataLoader<TransformParams, Data, ViewContent>
         // be used directly.
         case raw(Data)
 
-        // MARK: - Internal
+        // MARK: - Public
 
-        static func == (
-            lhs: ViewDataLoader<TransformParams, Data, ViewContent>.LoadType,
-            rhs: ViewDataLoader<TransformParams, Data, ViewContent>.LoadType
+        public static func == (
+            lhs: ParraViewDataLoader<TransformParams, Data, ViewContent>.LoadType,
+            rhs: ParraViewDataLoader<TransformParams, Data, ViewContent>.LoadType
         ) -> Bool {
             switch (lhs, rhs) {
             case (.transform(let lhsParams, _), .transform(let rhsParams, _)):
@@ -56,7 +56,9 @@ struct ViewDataLoader<TransformParams, Data, ViewContent>
         }
     }
 
-    typealias Dismisser = @MainActor (ParraSheetDismissType) -> Void
+    public typealias Dismisser = @MainActor (ParraSheetDismissType) -> Void
+
+    // MARK: - Internal
 
     @ViewBuilder let render: @MainActor (Parra, Data, Dismisser?) -> ViewContent
 }

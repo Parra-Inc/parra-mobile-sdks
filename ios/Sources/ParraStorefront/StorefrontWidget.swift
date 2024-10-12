@@ -60,15 +60,21 @@ struct StorefrontWidget: ParraContainer {
             .background(parraTheme.palette.primaryBackground)
             .navigationTitle(contentObserver.config.navigationTitle)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    CartButton(
-                        cartState: $contentObserver.cartState
-                    )
-                }
-
                 if contentObserver.config.showDismissButton {
+                    ToolbarItem(placement: .topBarLeading) {
+                        CartButton(
+                            cartState: $contentObserver.cartState
+                        )
+                    }
+
                     ToolbarItem(placement: .topBarTrailing) {
                         ParraDismissButton()
+                    }
+                } else {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        CartButton(
+                            cartState: $contentObserver.cartState
+                        )
                     }
                 }
             }
@@ -76,12 +82,14 @@ struct StorefrontWidget: ParraContainer {
                 for: ParraProduct.self
             ) { product in
                 ProductDetailView(product: product)
+                    .environment(contentObserver)
             }
             .navigationDestination(
                 for: ParraCartLineItem.self
             ) { lineItem in
                 if let product = contentObserver.findProduct(for: lineItem) {
                     ProductDetailView(product: product)
+                        .environment(contentObserver)
                 } else {
                     componentFactory.buildEmptyState(
                         config: .default,
@@ -94,6 +102,7 @@ struct StorefrontWidget: ParraContainer {
             ) { location in
                 if location == "cart" {
                     CartView()
+                        .environment(contentObserver)
                 }
             }
         }

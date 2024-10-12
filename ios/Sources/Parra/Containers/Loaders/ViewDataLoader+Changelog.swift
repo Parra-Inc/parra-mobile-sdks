@@ -17,17 +17,17 @@ public struct ParraChangelogInfo: Equatable {
     let appReleaseCollection: AppReleaseCollectionResponse
 }
 
-extension ViewDataLoader {
+extension ParraViewDataLoader {
     static func changelogLoader(
         config: ParraChangelogWidgetConfig
     )
-        -> ViewDataLoader<
+        -> ParraViewDataLoader<
             ChangelogParams,
             ParraChangelogInfo,
             ChangelogWidget
         >
     {
-        return ViewDataLoader<
+        return ParraViewDataLoader<
             ChangelogParams,
             ParraChangelogInfo,
             ChangelogWidget

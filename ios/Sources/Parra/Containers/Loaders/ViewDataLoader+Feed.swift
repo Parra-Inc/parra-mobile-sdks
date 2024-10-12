@@ -18,18 +18,18 @@ struct FeedTransformParams: Equatable {
     let feedId: String
 }
 
-extension ViewDataLoader {
+extension ParraViewDataLoader {
     static func feedLoader(
         feedId: String,
         config: ParraFeedConfiguration
     )
-        -> ViewDataLoader<
+        -> ParraViewDataLoader<
             FeedTransformParams,
             FeedParams,
             FeedWidget
         >
     {
-        return ViewDataLoader<
+        return ParraViewDataLoader<
             FeedTransformParams,
             FeedParams,
             FeedWidget

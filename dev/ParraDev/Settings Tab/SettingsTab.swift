@@ -36,10 +36,6 @@ struct SettingsTab: View {
                     LatestReleaseCell()
                 }
 
-                Section {
-                    FeedCell()
-                }
-
                 if parraAppInfo.legal.hasDocuments {
                     Section("Legal") {
                         ForEach(parraAppInfo.legal.allDocuments) { document in
@@ -58,6 +54,17 @@ struct SettingsTab: View {
                     ShareCell()
                 } footer: {
                     SettingsFooter()
+                }
+
+                Section {
+                    FeedCell()
+                    StorefrontCell()
+                } header: {
+                    Label {
+                        Text("Experimental Features")
+                    } icon: {
+                        Image(systemName: "flask")
+                    }
                 }
             }
             .navigationTitle("Profile")

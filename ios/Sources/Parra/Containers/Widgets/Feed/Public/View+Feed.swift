@@ -19,7 +19,7 @@ public extension View {
     ) -> some View {
         let transformParams = FeedTransformParams(feedId: feedId)
 
-        let transformer: ViewDataLoader<
+        let transformer: ParraViewDataLoader<
             FeedTransformParams,
             FeedParams,
             FeedWidget

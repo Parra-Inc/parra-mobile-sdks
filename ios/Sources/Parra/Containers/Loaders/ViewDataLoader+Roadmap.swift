@@ -19,11 +19,11 @@ public struct ParraRoadmapInfo: Equatable {
     public let ticketResponse: ParraUserTicketCollectionResponse
 }
 
-extension ViewDataLoader {
+extension ParraViewDataLoader {
     static func roadmapLoader(
         config: ParraRoadmapWidgetConfig
-    ) -> ViewDataLoader<RoadmapParams, ParraRoadmapInfo, RoadmapWidget> {
-        return ViewDataLoader<
+    ) -> ParraViewDataLoader<RoadmapParams, ParraRoadmapInfo, RoadmapWidget> {
+        return ParraViewDataLoader<
             RoadmapParams,
             ParraRoadmapInfo,
             RoadmapWidget

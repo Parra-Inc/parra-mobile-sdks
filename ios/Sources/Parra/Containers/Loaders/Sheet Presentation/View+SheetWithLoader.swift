@@ -8,14 +8,14 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     @MainActor
     func loadAndPresentSheet<TransformParams, Data, SheetContent>(
         loadType: Binding<
-            ViewDataLoader<TransformParams, Data, SheetContent>
+            ParraViewDataLoader<TransformParams, Data, SheetContent>
                 .LoadType?
         >,
-        with loader: ViewDataLoader<TransformParams, Data, SheetContent>,
+        with loader: ParraViewDataLoader<TransformParams, Data, SheetContent>,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         modifier(

@@ -18,10 +18,10 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
 
     init(
         loadType: Binding<
-            ViewDataLoader<TransformParams, Data, SheetContent>
+            ParraViewDataLoader<TransformParams, Data, SheetContent>
                 .LoadType?
         >,
-        loader: ViewDataLoader<TransformParams, Data, SheetContent>,
+        loader: ParraViewDataLoader<TransformParams, Data, SheetContent>,
         detents: Set<PresentationDetent> = [.large],
         visibility: Visibility = .visible,
         onDismiss: ((ParraSheetDismissType) -> Void)?
@@ -39,7 +39,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
 
     // Externally controlled state to use to determine when to kick off
     // the loader and with what data
-    @Binding var loadType: ViewDataLoader<TransformParams, Data, SheetContent>
+    @Binding var loadType: ParraViewDataLoader<TransformParams, Data, SheetContent>
         .LoadType?
 
     func body(content: Content) -> some View {
@@ -96,7 +96,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     @State private var state: SheetLoadState<Data> = .ready
     @State private var navigationState = NavigationState()
 
-    private let loader: ViewDataLoader<TransformParams, Data, SheetContent>
+    private let loader: ParraViewDataLoader<TransformParams, Data, SheetContent>
     private let detents: Set<PresentationDetent>
     private let visibility: Visibility
     private let onDismiss: ((ParraSheetDismissType) -> Void)?
@@ -110,7 +110,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     }
 
     private func initiateLoad(
-        with type: ViewDataLoader<TransformParams, Data, SheetContent>.LoadType
+        with type: ParraViewDataLoader<TransformParams, Data, SheetContent>.LoadType
     ) {
         switch type {
         case .transform(let transformParams, let transformer):

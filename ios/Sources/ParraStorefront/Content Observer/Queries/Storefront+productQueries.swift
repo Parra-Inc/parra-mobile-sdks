@@ -10,7 +10,7 @@ import Parra
 
 extension Storefront.QueryRootQuery {
     static func productsQuery(
-        count: Int32 = 50,
+        count: Int32,
         startCursor: String? = nil,
         endCursor: String? = nil,
         sortKey: Storefront.ProductSortKeys? = nil
@@ -19,7 +19,6 @@ extension Storefront.QueryRootQuery {
             .products(
                 first: count,
                 after: startCursor,
-                before: endCursor,
                 sortKey: sortKey
             ) { products in
                 appendProductFields(to: products)
