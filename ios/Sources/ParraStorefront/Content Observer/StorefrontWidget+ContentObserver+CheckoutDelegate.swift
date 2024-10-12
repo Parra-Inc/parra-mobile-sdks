@@ -18,23 +18,7 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
         event: ShopifyCheckoutSheetKit.CheckoutCompletedEvent
     ) {
         Task { @MainActor in
-            var items: [[String: Any]] = []
-
-            for line in event.orderDetails.cart.lines {
-                let variantId = line.merchandiseId ?? "unknown"
-                // Use this to update UI, reset cart state, etc.
-                let params: [String: Any] = [
-                    "product_id": line.productId ?? "unknown",
-                    "product_name": line.title,
-                    "variant_id": variantId,
-                    "quantity": line.quantity
-                ]
-
-                Parra.logEvent(
-                    .purchase(product: variantId),
-                    params
-                )
-            }
+            StorefrontAnalytics.makePurchase(event.orderDetails.cart.lines)
 
             performCartSetup(
                 as: Parra.currentUser,
@@ -50,7 +34,7 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
 
     nonisolated func checkoutDidCancel() {
         Task { @MainActor in
-            Parra.logEvent(.tap(element: "checkout_cancelled"))
+            StorefrontAnalytics.cancelCheckout()
 
             UIViewController.topMostViewController()?.dismiss(
                 animated: true,

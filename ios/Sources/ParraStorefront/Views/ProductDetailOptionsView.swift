@@ -1,6 +1,6 @@
 //
 //  ProductDetailOptionsView.swift
-//  KbIosApp
+//  Parra
 //
 //  Created by Mick MacCallum on 10/1/24.
 //
@@ -111,12 +111,6 @@ struct ProductDetailOptionsView: View {
             content: primaryContent,
             localAttributes: ParraAttributes.ContainedButton(
                 normal: ParraAttributes.ContainedButton.StatefulAttributes(
-                    label: ParraAttributes.Label(
-                        text: ParraAttributes.Text(
-                            color: parraTheme.palette.secondaryText
-                                .toParraColor()
-                        )
-                    ),
                     padding: .zero
                 )
             )
@@ -137,12 +131,6 @@ struct ProductDetailOptionsView: View {
                 ),
                 localAttributes: ParraAttributes.ContainedButton(
                     normal: ParraAttributes.ContainedButton.StatefulAttributes(
-                        label: ParraAttributes.Label(
-                            text: ParraAttributes.Text(
-                                color: parraTheme.palette.secondaryBackground
-                                    .toParraColor()
-                            )
-                        ),
                         padding: .zero
                     )
                 )
@@ -158,7 +146,8 @@ struct ProductDetailOptionsView: View {
 
             do {
                 try await dataModel.addProductToCart(
-                    productVariant: selectedVariant,
+                    product: product,
+                    variant: selectedVariant,
                     quantity: selectedQuantity,
                     as: authState.user
                 )

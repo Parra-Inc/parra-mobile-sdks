@@ -73,6 +73,8 @@ extension StorefrontWidget {
                     pageFetcher: loadMoreProducts
                 )
             }
+
+            performInitialProductLoad()
         }
 
         // MARK: - Internal
@@ -156,7 +158,7 @@ extension StorefrontWidget {
                 throw ParraStorefrontError.failedToBuyItNow(productVariant)
             }
 
-            presentCart(at: checkoutUrl)
+            await presentCart(at: checkoutUrl)
         }
 
         func updateQuantityForCartLineItem(
@@ -188,6 +190,23 @@ extension StorefrontWidget {
                     "cartItemId": cartItem.id,
                     "quantity": quantity
                 ])
+
+                if quantity > cartItem.quantity {
+                    if let (product, variant) = findProductAndVariant(
+                        for: cartItem
+                    ) {
+                        StorefrontAnalytics.addProductToCart(
+                            product,
+                            variant,
+                            UInt(abs(cartItem.quantity - Int(quantity)))
+                        )
+                    }
+                } else {
+                    StorefrontAnalytics.removeItemFromCart(
+                        cartItem,
+                        UInt(abs(cartItem.quantity - Int(quantity)))
+                    )
+                }
             }
         }
 
@@ -216,13 +235,14 @@ extension StorefrontWidget {
         }
 
         func addProductToCart(
-            productVariant: ParraProductVariant,
+            product: ParraProduct,
+            variant: ParraProductVariant,
             quantity: UInt,
             as user: ParraUser?
         ) async throws {
             logger.info("Adding product to cart", [
-                "variantId": productVariant.id,
-                "variantName": productVariant.title,
+                "variantId": variant.id,
+                "variantName": variant.title,
                 "quantity": quantity
             ])
 
@@ -230,22 +250,28 @@ extension StorefrontWidget {
                 let result = try await performMutation(
                     .addToCartCartMutation(
                         cartId: readyState.cartId,
-                        productVariant: productVariant,
+                        productVariant: variant,
                         quantity: quantity
                     )
                 )
 
                 guard let cart = result.cartLinesAdd?.cart else {
-                    throw ParraStorefrontError.failedToAddProductToCart(productVariant)
+                    throw ParraStorefrontError.failedToAddProductToCart(variant)
                 }
 
                 readyCart(cart, as: user)
 
                 logger.info("Completed adding product to cart", [
-                    "variant": productVariant.id,
+                    "variant": variant.id,
                     "quantity": quantity,
                     "totalCartQuantity": cart.totalQuantity
                 ])
+
+                StorefrontAnalytics.addProductToCart(
+                    product,
+                    variant,
+                    quantity
+                )
             }
         }
 
@@ -274,21 +300,37 @@ extension StorefrontWidget {
                     "quantity": cartItem.quantity,
                     "totalCartQuantity": cart.totalQuantity
                 ])
+
+                StorefrontAnalytics.removeItemFromCart(
+                    cartItem,
+                    UInt(cartItem.quantity)
+                )
             }
         }
 
         func presentCart(
             at url: URL
-        ) {
+        ) async {
             guard let viewController = UIViewController.topMostViewController() else {
                 return
             }
 
-            ShopifyCheckoutSheetKit.present(
-                checkout: url,
-                from: viewController,
-                delegate: self
-            )
+            do {
+                try await withReadyCart { readyInfo in
+                    StorefrontAnalytics.initiateCheckout(
+                        readyInfo.lineItems,
+                        readyInfo.cost
+                    )
+                }
+
+                ShopifyCheckoutSheetKit.present(
+                    checkout: url,
+                    from: viewController,
+                    delegate: self
+                )
+            } catch {
+                logger.error("Failed to present cart", error)
+            }
         }
 
         func performCartSetup(
@@ -356,10 +398,13 @@ extension StorefrontWidget {
         private func performInitialProductLoad() {
             Task {
                 do {
-//                    let response = try await loadMoreProducts()
+                    let response = try await loadMoreProducts(
+                        count: 50,
+                        cursor: nil
+                    )
 
-//                    currentPage = response.productPageInfo
-//                    productsState = .loaded(response.products.elements)
+                    currentPage = response.productPageInfo
+                    productsState = .loaded(response.products.elements)
                 } catch let error as ParraStorefrontError {
                     logger.error("Error fetching products", error)
 
@@ -377,24 +422,6 @@ extension StorefrontWidget {
             _ offset: Int,
             _ context: String
         ) async throws -> [ParraProduct] {
-            let result = try await performQuery(
-                .productsQuery(
-                    count: Int32(limit),
-                    cursor: "" // TODO: Need to update paginator
-                )
-            )
-
-            let products = result.products
-
-//            return ParraProductResponse(
-//                products: products.edges,
-//                productPageInfo: ParraProductResponse.PageInfo(
-//                    startCursor: products.pageInfo.startCursor,
-//                    endCursor: products.pageInfo.endCursor,
-//                    hasNextPage: products.pageInfo.hasNextPage
-//                )
-//            )
-
 //            let response = try await api.paginateFeed(
 //                feedId: feedId,
 //                limit: limit,
@@ -405,11 +432,25 @@ extension StorefrontWidget {
             return []
         }
 
-//        private func loadMoreProducts(
-//            count: Int32 = 50,
-//            cursor: String? = nil
-//        ) async throws -> ParraProductResponse {
-//        }
+        private func loadMoreProducts(
+            count: Int32 = 50,
+            cursor: String? = nil
+        ) async throws -> ParraProductResponse {
+            let result = try await performQuery(
+                .productsQuery(count: count, cursor: cursor)
+            )
+
+            let products = result.products
+
+            return ParraProductResponse(
+                products: products.edges,
+                productPageInfo: ParraProductResponse.PageInfo(
+                    startCursor: products.pageInfo.startCursor,
+                    endCursor: products.pageInfo.endCursor,
+                    hasNextPage: products.pageInfo.hasNextPage
+                )
+            )
+        }
 
         private func readyCart(
             _ cart: Storefront.Cart,
@@ -452,6 +493,20 @@ extension StorefrontWidget {
             case .ready(let readyStateInfo):
                 try await handler(readyStateInfo)
             }
+        }
+
+        private func findProductAndVariant(
+            for cartItem: ParraCartLineItem
+        ) -> (ParraProduct, ParraProductVariant)? {
+            for product in productsState.products {
+                for variant in product.variants {
+                    if variant.id == cartItem.variantId {
+                        return (product, variant)
+                    }
+                }
+            }
+
+            return nil
         }
     }
 }

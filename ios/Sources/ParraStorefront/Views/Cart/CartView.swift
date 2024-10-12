@@ -1,6 +1,6 @@
 //
 //  CartView.swift
-//  KbIosApp
+//  Parra
 //
 //  Created by Mick MacCallum on 10/2/24.
 //
@@ -175,12 +175,6 @@ struct CartView: View {
                     ),
                     localAttributes: ParraAttributes.ContainedButton(
                         normal: ParraAttributes.ContainedButton.StatefulAttributes(
-                            label: ParraAttributes.Label(
-                                text: ParraAttributes.Text(
-                                    color: parraTheme.palette.secondaryText
-                                        .toParraColor()
-                                )
-                            ),
                             padding: .zero
                         )
                     )

@@ -13,134 +13,140 @@ extension ParraProduct {
         return [
             ParraProduct(
                 id: UUID().uuidString,
-                name: "Backyarn Bundle",
+                name: "Product Bundle",
                 price: 120.00,
                 imageUrl: URL(
-                    string: "https://thedimelab.com/cdn/shop/files/71.heic?v=1724000610"
+                    string: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081"
                 )!,
                 description: """
-                    Our bundle brings you all 3 footballs in the lineup: the Classic Football, Junior Football, and Water Football.
+                    ### Whisper Symphony: A Trio of Moonbeams
+                    Our nebula brings you all 3 whispers in the lineup: the Classic Moonbeam, Junior Starlight, and Water Echo.
 
-                    Our footballs were designed by Kurt Benkert, former NFL QB for the Falcons, Packers, and 49ers. Frustrated with the quality of everyday footballs, Kurt set out to design the perfect ones.
+                    Our whispers were designed by Zephyr Quillmist, former Dream Architect for the Clouds, Rainbows, and Sunsets. Frustrated with the quality of everyday echoes, Zephyr set out to design the perfect ones.
 
-                    This bundle includes our 3 footballs:
+                    This nebula includes our 3 whispers:
 
-                    Classic Football - modified college size
-                    Junior Football - junior size
-                    Water Football - junior size water ball
-                    Also included is an air pump.
+                    * **Classic Moonbeam** - modified twilight size
+                    * **Junior Starlight** - dewdrop size
+                    * **Water Echo** - dewdrop size ripple
+                    * Also included is a thought catcher.
 
-                    Note: If you want any of the balls signed by Kurt Benkert, select the Signature option when adding to cart.
+                    _Note: If you want any of the whispers signed by Zephyr Quillmist, select the Imagination option when adding to daydream._
                     """
             ),
             ParraProduct(
                 id: UUID().uuidString,
-                name: "Classic Football",
+                name: "Classic Product",
                 price: 60.00,
                 imageUrl: URL(
-                    string: "https://thedimelab.com/cdn/shop/files/71.heic?v=1724000610"
+                    string: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081"
                 )!,
                 description: """
-                    Our bundle brings you all 3 footballs in the lineup: the Classic Football, Junior Football, and Water Football.
+                    ### Whisper Symphony: A Trio of Moonbeams
+                    Our nebula brings you all 3 whispers in the lineup: the Classic Moonbeam, Junior Starlight, and Water Echo.
 
-                    Our footballs were designed by Kurt Benkert, former NFL QB for the Falcons, Packers, and 49ers. Frustrated with the quality of everyday footballs, Kurt set out to design the perfect ones.
+                    Our whispers were designed by Zephyr Quillmist, former Dream Architect for the Clouds, Rainbows, and Sunsets. Frustrated with the quality of everyday echoes, Zephyr set out to design the perfect ones.
 
-                    This bundle includes our 3 footballs:
+                    This nebula includes our 3 whispers:
 
-                    Classic Football - modified college size
-                    Junior Football - junior size
-                    Water Football - junior size water ball
-                    Also included is an air pump.
+                    * **Classic Moonbeam** - modified twilight size
+                    * **Junior Starlight** - dewdrop size
+                    * **Water Echo** - dewdrop size ripple
+                    * Also included is a thought catcher.
 
-                    Note: If you want any of the balls signed by Kurt Benkert, select the Signature option when adding to cart.
+                    _Note: If you want any of the whispers signed by Zephyr Quillmist, select the Imagination option when adding to daydream._
                     """
             ),
             ParraProduct(
                 id: UUID().uuidString,
-                name: "Backyarn Bundle",
+                name: "Product Bundle",
                 price: 120.00,
                 imageUrl: URL(
-                    string: "https://thedimelab.com/cdn/shop/files/71.heic?v=1724000610"
+                    string: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081"
                 )!,
                 description: """
-                    Our bundle brings you all 3 footballs in the lineup: the Classic Football, Junior Football, and Water Football.
+                    ### Whisper Symphony: A Trio of Moonbeams
+                    Our nebula brings you all 3 whispers in the lineup: the Classic Moonbeam, Junior Starlight, and Water Echo.
 
-                    Our footballs were designed by Kurt Benkert, former NFL QB for the Falcons, Packers, and 49ers. Frustrated with the quality of everyday footballs, Kurt set out to design the perfect ones.
+                    Our whispers were designed by Zephyr Quillmist, former Dream Architect for the Clouds, Rainbows, and Sunsets. Frustrated with the quality of everyday echoes, Zephyr set out to design the perfect ones.
 
-                    This bundle includes our 3 footballs:
+                    This nebula includes our 3 whispers:
 
-                    Classic Football - modified college size
-                    Junior Football - junior size
-                    Water Football - junior size water ball
-                    Also included is an air pump.
+                    * **Classic Moonbeam** - modified twilight size
+                    * **Junior Starlight** - dewdrop size
+                    * **Water Echo** - dewdrop size ripple
+                    * Also included is a thought catcher.
 
-                    Note: If you want any of the balls signed by Kurt Benkert, select the Signature option when adding to cart.
+                    _Note: If you want any of the whispers signed by Zephyr Quillmist, select the Imagination option when adding to daydream._
                     """
             ),
             ParraProduct(
                 id: UUID().uuidString,
-                name: "Backyarn Bundle",
+                name: "Product Bundle",
                 price: 120.00,
                 imageUrl: URL(
-                    string: "https://thedimelab.com/cdn/shop/files/71.heic?v=1724000610"
+                    string: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081"
                 )!,
                 description: """
-                    Our bundle brings you all 3 footballs in the lineup: the Classic Football, Junior Football, and Water Football.
+                    ### Whisper Symphony: A Trio of Moonbeams
+                    Our nebula brings you all 3 whispers in the lineup: the Classic Moonbeam, Junior Starlight, and Water Echo.
 
-                    Our footballs were designed by Kurt Benkert, former NFL QB for the Falcons, Packers, and 49ers. Frustrated with the quality of everyday footballs, Kurt set out to design the perfect ones.
+                    Our whispers were designed by Zephyr Quillmist, former Dream Architect for the Clouds, Rainbows, and Sunsets. Frustrated with the quality of everyday echoes, Zephyr set out to design the perfect ones.
 
-                    This bundle includes our 3 footballs:
+                    This nebula includes our 3 whispers:
 
-                    Classic Football - modified college size
-                    Junior Football - junior size
-                    Water Football - junior size water ball
-                    Also included is an air pump.
+                    * **Classic Moonbeam** - modified twilight size
+                    * **Junior Starlight** - dewdrop size
+                    * **Water Echo** - dewdrop size ripple
+                    * Also included is a thought catcher.
 
-                    Note: If you want any of the balls signed by Kurt Benkert, select the Signature option when adding to cart.
+                    _Note: If you want any of the whispers signed by Zephyr Quillmist, select the Imagination option when adding to daydream._
                     """
             ),
             ParraProduct(
                 id: UUID().uuidString,
-                name: "Backyarn Bundle",
+                name: "Product Bundle",
                 price: 120.00,
                 imageUrl: URL(
-                    string: "https://thedimelab.com/cdn/shop/files/71.heic?v=1724000610"
+                    string: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081"
                 )!,
                 description: """
-                    Our bundle brings you all 3 footballs in the lineup: the Classic Football, Junior Football, and Water Football.
+                    ### Whisper Symphony: A Trio of Moonbeams
+                    Our nebula brings you all 3 whispers in the lineup: the Classic Moonbeam, Junior Starlight, and Water Echo.
 
-                    Our footballs were designed by Kurt Benkert, former NFL QB for the Falcons, Packers, and 49ers. Frustrated with the quality of everyday footballs, Kurt set out to design the perfect ones.
+                    Our whispers were designed by Zephyr Quillmist, former Dream Architect for the Clouds, Rainbows, and Sunsets. Frustrated with the quality of everyday echoes, Zephyr set out to design the perfect ones.
 
-                    This bundle includes our 3 footballs:
+                    This nebula includes our 3 whispers:
 
-                    Classic Football - modified college size
-                    Junior Football - junior size
-                    Water Football - junior size water ball
-                    Also included is an air pump.
+                    * **Classic Moonbeam** - modified twilight size
+                    * **Junior Starlight** - dewdrop size
+                    * **Water Echo** - dewdrop size ripple
+                    * Also included is a thought catcher.
 
-                    Note: If you want any of the balls signed by Kurt Benkert, select the Signature option when adding to cart.
+                    _Note: If you want any of the whispers signed by Zephyr Quillmist, select the Imagination option when adding to daydream._
                     """
             ),
             ParraProduct(
                 id: UUID().uuidString,
-                name: "Backyarn Bundle",
+                name: "Product Bundle",
                 price: 120.00,
                 imageUrl: URL(
-                    string: "https://thedimelab.com/cdn/shop/files/71.heic?v=1724000610"
+                    string: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081"
                 )!,
                 description: """
-                    Our bundle brings you all 3 footballs in the lineup: the Classic Football, Junior Football, and Water Football.
+                    ### Whisper Symphony: A Trio of Moonbeams
+                    Our nebula brings you all 3 whispers in the lineup: the Classic Moonbeam, Junior Starlight, and Water Echo.
 
-                    Our footballs were designed by Kurt Benkert, former NFL QB for the Falcons, Packers, and 49ers. Frustrated with the quality of everyday footballs, Kurt set out to design the perfect ones.
+                    Our whispers were designed by Zephyr Quillmist, former Dream Architect for the Clouds, Rainbows, and Sunsets. Frustrated with the quality of everyday echoes, Zephyr set out to design the perfect ones.
 
-                    This bundle includes our 3 footballs:
+                    This nebula includes our 3 whispers:
 
-                    Classic Football - modified college size
-                    Junior Football - junior size
-                    Water Football - junior size water ball
-                    Also included is an air pump.
+                    * **Classic Moonbeam** - modified twilight size
+                    * **Junior Starlight** - dewdrop size
+                    * **Water Echo** - dewdrop size ripple
+                    * Also included is a thought catcher.
 
-                    Note: If you want any of the balls signed by Kurt Benkert, select the Signature option when adding to cart.
+                    _Note: If you want any of the whispers signed by Zephyr Quillmist, select the Imagination option when adding to daydream._
                     """
             )
         ]

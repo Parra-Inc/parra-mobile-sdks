@@ -1,6 +1,6 @@
 //
 //  DiscountablePriceLabelView.swift
-//  KbIosApp
+//  Parra
 //
 //  Created by Mick MacCallum on 10/4/24.
 //

@@ -1,6 +1,6 @@
 //
 //  CartButton.swift
-//  KbIosApp
+//  Parra
 //
 //  Created by Mick MacCallum on 9/30/24.
 //
@@ -39,8 +39,15 @@ struct CartButton: View {
                     Text(overflow ? "9+" : String(quantity))
                         .font(.callout)
                         .fontDesign(.monospaced)
+                        .contrastingForegroundColor(
+                            to: parraTheme.palette.primary.toParraColor(),
+                            darkColor: parraTheme.lightPalette.primaryText
+                                .toParraColor(),
+                            lightColor: parraTheme.darkPalette?.primaryText
+                                .toParraColor() ?? .white
+                        )
                         .foregroundStyle(
-                            parraTheme.palette.secondaryText.toParraColor()
+                            parraTheme.palette.primaryText.toParraColor()
                         )
                         .padding(.vertical, 1.5)
                         .padding(.horizontal, 6)

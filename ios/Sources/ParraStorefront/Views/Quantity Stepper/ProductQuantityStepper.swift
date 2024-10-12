@@ -1,6 +1,6 @@
 //
 //  ProductQuantityStepper.swift
-//  KbIosApp
+//  Parra
 //
 //  Created by Mick MacCallum on 10/1/24.
 //
@@ -100,7 +100,7 @@ struct ProductQuantityStepper: View {
         .background {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(
-                    parraTheme.palette.primary.shade500.opacity(0.4)
+                    parraTheme.palette.primary.shade400.opacity(0.4)
                 )
         }
     }

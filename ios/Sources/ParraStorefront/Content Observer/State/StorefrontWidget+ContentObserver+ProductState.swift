@@ -1,6 +1,6 @@
 //
 //  StorefrontWidget+ContentObserver+ProductState.swift
-//  KbIosApp
+//  Parra
 //
 //  Created by Mick MacCallum on 9/30/24.
 //
@@ -18,6 +18,15 @@ extension StorefrontWidget.ContentObserver {
         case error(ParraStorefrontError)
 
         // MARK: - Internal
+
+        var products: [ParraProduct] {
+            switch self {
+            case .loading, .error:
+                return []
+            case .refreshing(let products), .loaded(let products):
+                return products
+            }
+        }
 
         static func == (
             lhs: ProductState,

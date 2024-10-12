@@ -76,7 +76,7 @@ public struct ParraProduct: Identifiable, Equatable, Hashable, Codable {
         )
         self.featuredImage = .init(
             url: URL(
-                string: "https://thedimelab.com/cdn/shop/files/71.heic?v=1724000610"
+                string: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081"
             )!
         )
         self.images = [featuredImage!]
@@ -110,9 +110,9 @@ public struct ParraProduct: Identifiable, Equatable, Hashable, Codable {
                 price: ParraProductPrice(amount: 120, currencyCode: "USD")
             )
         ]
-        self
-            .onlineStoreUrl =
-            URL(string: "https://thedimelab.com/products/classic-football")!
+        self.onlineStoreUrl = URL(
+            string: "https://mystore.com/products/classic-product"
+        )!
     }
 
     // MARK: - Public
