@@ -14,7 +14,7 @@ public extension View {
     func presentParraFeedWidget(
         by feedId: String,
         isPresented: Binding<Bool>,
-        config: ParraFeedConfiguration = .default,
+        config: ParraFeedConfiguration = .modalDefault,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         let transformParams = FeedTransformParams(feedId: feedId)

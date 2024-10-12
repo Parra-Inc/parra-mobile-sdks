@@ -15,6 +15,8 @@ public final class ParraFeedConfiguration: ParraContainerConfig {
         self.footerViewBuilder = { EmptyView() }
         self.shouldPerformDefaultActionForItem = { _ in true }
         self.feedDidRefresh = {}
+        self.navigationTitle = "Feed"
+        self.showDismissButton = false
         self.itemSpacing = 16
         self.emptyStateContent = ParraFeedConfiguration.defaultEmptyStateContent
         self.errorStateContent = ParraFeedConfiguration.defaultErrorStateContent
@@ -46,6 +48,8 @@ public final class ParraFeedConfiguration: ParraContainerConfig {
             true
         },
         feedDidRefresh: @escaping () -> Void = {},
+        navigationTitle: String = "Feed",
+        showDismissButton: Bool = false,
         itemSpacing: CGFloat = 16,
         emptyStateContent: ParraEmptyStateContent = ParraFeedConfiguration
             .defaultEmptyStateContent,
@@ -56,6 +60,8 @@ public final class ParraFeedConfiguration: ParraContainerConfig {
         self.footerViewBuilder = footerViewBuilder
         self.shouldPerformDefaultActionForItem = shouldPerformDefaultActionForItem
         self.feedDidRefresh = feedDidRefresh
+        self.navigationTitle = navigationTitle
+        self.showDismissButton = showDismissButton
         self.itemSpacing = itemSpacing
         self.emptyStateContent = emptyStateContent
         self.errorStateContent = errorStateContent
@@ -64,6 +70,9 @@ public final class ParraFeedConfiguration: ParraContainerConfig {
     // MARK: - Public
 
     public static let `default` = ParraFeedConfiguration()
+    public static let modalDefault = ParraFeedConfiguration(
+        showDismissButton: true
+    )
 
     public static let defaultEmptyStateContent = ParraEmptyStateContent(
         title: ParraLabelContent(
@@ -88,6 +97,8 @@ public final class ParraFeedConfiguration: ParraContainerConfig {
     public let shouldPerformDefaultActionForItem: (ParraFeedItemData) -> Bool
     public let feedDidRefresh: () -> Void
 
+    public let navigationTitle: String
+    public let showDismissButton: Bool
     public let itemSpacing: CGFloat
 
     public let emptyStateContent: ParraEmptyStateContent

@@ -36,7 +36,10 @@ struct FeedWidget: ParraContainer {
             for: defaultWidgetAttributes.contentPadding
         )
 
-        scrollView(with: contentPadding)
+        NavigationStack {
+            scrollView(
+                with: contentPadding
+            )
             .applyWidgetAttributes(
                 attributes: defaultWidgetAttributes.withoutContentPadding(),
                 using: parraTheme
@@ -47,6 +50,34 @@ struct FeedWidget: ParraContainer {
             .onAppear {
                 contentObserver.loadInitialFeedItems()
             }
+            .navigationTitle(config.navigationTitle)
+            .toolbar {
+                if config.showDismissButton {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }, label: {
+                            ZStack {
+                                Circle()
+                                    .fill(parraTheme.palette.secondaryBackground)
+                                    .frame(width: 30, height: 30)
+
+                                Image(systemName: "xmark")
+                                    .font(.system(
+                                        size: 12,
+                                        weight: .bold,
+                                        design: .rounded
+                                    ))
+                                    .foregroundColor(.secondary)
+                            }
+                            .contentShape(Circle())
+                        })
+                        .buttonStyle(PlainButtonStyle())
+                        .accessibilityLabel(Text("Close"))
+                    }
+                }
+            }
+        }
     }
 
     func scrollView(
@@ -153,6 +184,7 @@ struct FeedWidget: ParraContainer {
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.presentationMode) private var presentationMode
 }
 
 #Preview {
