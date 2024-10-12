@@ -59,4 +59,14 @@ public struct ParraProductVariant: Identifiable, Equatable, Hashable, Codable {
     public let quantityAvailable: Int?
     public let price: ParraProductPrice
     public let compareAtPrice: ParraProductPrice?
+
+    // MARK: - Internal
+
+    var allowPurchase: Bool {
+        guard let quantityAvailable else {
+            return false
+        }
+
+        return !currentlyNotInStock && quantityAvailable > 0 && availableForSale
+    }
 }
