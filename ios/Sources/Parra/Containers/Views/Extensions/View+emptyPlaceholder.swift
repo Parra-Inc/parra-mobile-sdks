@@ -22,7 +22,7 @@ struct EmptyPlaceholderModifier<Items: Collection>: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     func emptyPlaceholder(
         _ items: some Collection,
         @ViewBuilder _ placeholder: @escaping () -> some View

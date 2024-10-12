@@ -11,6 +11,9 @@ import Parra
 import ShopifyCheckoutSheetKit
 import SwiftUI
 
+private let paginatorContext = "storefront"
+private let paginatorPageSize = 100
+
 // Shopify, smartly, introduces a Task object that conflicts with this.
 // Typealias to take precedence.
 typealias Task = _Concurrency.Task
@@ -32,7 +35,7 @@ extension StorefrontWidget {
 
             self.content = Content(
                 emptyStateView: .errorGeneric,
-                errorStateView: .errorGeneric
+                errorStateView: .storefrontError
             )
 
             let client = Graph.Client(
@@ -49,32 +52,26 @@ extension StorefrontWidget {
                 .productsResponse
             {
                 .init(
-                    context: "storefront",
+                    context: paginatorContext,
                     data: .init(
                         items: productsResponse.products.elements,
                         placeholderItems: [],
-                        pageSize: 25,
+                        pageSize: paginatorPageSize,
                         knownCount: productsResponse.products.elements.count
                     ),
                     pageFetcher: loadMoreProducts
                 )
             } else {
                 .init(
-                    context: "storefront",
+                    context: paginatorContext,
                     data: .init(
                         items: [],
-                        // TODO: If initial params contains feed items, we could
-                        // look at them to determine which kinds of placeholders
-                        // we could show.
-                        placeholderItems: []
-//                        placeholderItems: (0 ... 12)
-//                            .map { _ in ParraFeedItem.redactedContentCard }
+                        placeholderItems: (0 ... 12)
+                            .map { _ in ParraProduct.redactedProduct }
                     ),
                     pageFetcher: loadMoreProducts
                 )
             }
-
-            performInitialProductLoad()
         }
 
         // MARK: - Internal
@@ -87,8 +84,6 @@ extension StorefrontWidget {
         /// they happen to quickly.
         var lastMutation: Date?
 
-        var productsState: ProductState = .loading
-
         var cartState: CartState = .loading {
             didSet {
                 if case .ready(let readyStateInfo) = cartState {
@@ -99,7 +94,7 @@ extension StorefrontWidget {
             }
         }
 
-        var productPaginator: ParraPaginator<
+        var productPaginator: ParraCursorPaginator<
             ParraProduct,
             String
                 // Using IUO because this object requires referencing self in a closure
@@ -120,17 +115,24 @@ extension StorefrontWidget {
             }
         }
 
-        func findProduct(for lineItem: ParraCartLineItem) -> ParraProduct? {
-            switch productsState {
-            case .loading, .error:
-                return nil
-            case .refreshing(let products), .loaded(let products):
-                return products.first { product in
-                    return product.id == lineItem.variantId || product.variants
-                        .contains {
-                            $0.id == lineItem.variantId
-                        }
-                }
+        @MainActor
+        func refresh() {
+            productPaginator.refresh()
+        }
+
+        @MainActor
+        func loadInitialFeedItems() {
+            productPaginator.loadMore()
+        }
+
+        func findProduct(
+            for lineItem: ParraCartLineItem
+        ) -> ParraProduct? {
+            return productPaginator.items.first { product in
+                return product.id == lineItem.variantId || product.variants
+                    .contains {
+                        $0.id == lineItem.variantId
+                    }
             }
         }
 
@@ -381,8 +383,6 @@ extension StorefrontWidget {
 
         // MARK: - Private
 
-        private var currentPage: ParraProductResponse.PageInfo?
-
         private var paginatorSink: AnyCancellable? = nil
 
         private func updateCartCache(
@@ -393,58 +393,29 @@ extension StorefrontWidget {
             ShopifyCheckoutSheetKit.preload(checkout: checkoutURL)
         }
 
-        // MARK: Product Loading
-
-        private func performInitialProductLoad() {
-            Task {
-                do {
-                    let response = try await loadMoreProducts(
-                        count: 50,
-                        cursor: nil
-                    )
-
-                    currentPage = response.productPageInfo
-                    productsState = .loaded(response.products.elements)
-                } catch let error as ParraStorefrontError {
-                    logger.error("Error fetching products", error)
-
-                    productsState = .error(error)
-                } catch {
-                    logger.error("Unexpected error fetching products", error)
-
-                    productsState = .error(.unknown(error))
-                }
-            }
-        }
-
         private func loadMoreProducts(
-            _ limit: Int,
-            _ offset: Int,
+            _ cursor: ParraCursorPaginator<ParraProduct, String>.Cursor,
+            _ pageSize: Int,
             _ context: String
-        ) async throws -> [ParraProduct] {
-//            let response = try await api.paginateFeed(
-//                feedId: feedId,
-//                limit: limit,
-//                offset: offset
-//            )
-//
-//            return response.data.elements
-            return []
-        }
+        ) async throws -> ParraCursorPaginator<ParraProduct, String>.Page {
+            if ParraAppEnvironment.isDebugParraDevApp {
+                try await Task.sleep(for: .seconds(0.5))
+            }
 
-        private func loadMoreProducts(
-            count: Int32 = 50,
-            cursor: String? = nil
-        ) async throws -> ParraProductResponse {
             let result = try await performQuery(
-                .productsQuery(count: count, cursor: cursor)
+                .productsQuery(
+                    count: Int32(pageSize),
+                    startCursor: cursor.startCursor,
+                    endCursor: cursor.endCursor
+                )
             )
 
             let products = result.products
 
-            return ParraProductResponse(
-                products: products.edges,
-                productPageInfo: ParraProductResponse.PageInfo(
+            return .init(
+                items: products.edges
+                    .map { ParraProduct(shopProduct: $0.node) },
+                cursor: .init(
                     startCursor: products.pageInfo.startCursor,
                     endCursor: products.pageInfo.endCursor,
                     hasNextPage: products.pageInfo.hasNextPage
@@ -498,7 +469,7 @@ extension StorefrontWidget {
         private func findProductAndVariant(
             for cartItem: ParraCartLineItem
         ) -> (ParraProduct, ParraProductVariant)? {
-            for product in productsState.products {
+            for product in productPaginator.items {
                 for variant in product.variants {
                     if variant.id == cartItem.variantId {
                         return (product, variant)

@@ -9,6 +9,18 @@ import Buy
 import SwiftUI
 
 extension ParraProduct {
+    static var redactedProduct: ParraProduct {
+        return ParraProduct(
+            id: .uuid,
+            name: "Classic Product",
+            price: 12.99,
+            imageUrl: URL(
+                string: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081"
+            )!,
+            description: "Our nebula brings you all 3 whispers in the lineup: the Classic Moonbeam, Junior Starlight, and Water Echo."
+        )
+    }
+
     static func mocks() -> [ParraProduct] {
         return [
             ParraProduct(

@@ -33,10 +33,15 @@ struct ProductGridView: View {
                             ProductCell(product: product)
                         }
                         .buttonStyle(ProductCellButtonStyle())
+                        .disabled(!redactionReasons.isEmpty)
                     }
                 }
                 .padding(.horizontal, cellSpacing)
                 .padding(.bottom, cellSpacing)
+            }
+            .scrollDisabled(!redactionReasons.isEmpty)
+            .refreshable {
+                contentObserver.refresh()
             }
         }
     }
@@ -44,4 +49,6 @@ struct ProductGridView: View {
     // MARK: - Private
 
     @State private var gridLayout: GridLayout = .twoColumn
+    @Environment(\.redactionReasons) private var redactionReasons
+    @Environment(StorefrontWidget.ContentObserver.self) private var contentObserver
 }

@@ -52,7 +52,7 @@ public struct ParraWhatsNewOptions: ParraConfigurationOptionType {
         // MARK: - Public
 
         public static var `default`: Behavior {
-            switch AppEnvironment.appConfiguration {
+            switch ParraAppEnvironment.appConfiguration {
             case .production:
                 return .production
             case .beta:

@@ -48,7 +48,7 @@ public class ParraCursorPaginator<Item, Context>: ObservableObject
         self.placeholderItems = placeholderItems
         self.isLoading = false
         self.isRefreshing = false
-        self.lastFetchedOffset = nil
+        self.cursor = .init(hasNextPage: true)
 
         if items.isEmpty {
             self.items = placeholderItems
@@ -105,18 +105,42 @@ public class ParraCursorPaginator<Item, Context>: ObservableObject
     }
 
     public struct Cursor {
+        // MARK: - Lifecycle
+
+        public init(
+            startCursor: String? = nil,
+            endCursor: String? = nil,
+            hasNextPage: Bool
+        ) {
+            self.startCursor = startCursor
+            self.endCursor = endCursor
+            self.hasNextPage = hasNextPage
+        }
+
+        // MARK: - Public
+
         public var startCursor: String?
         public var endCursor: String?
         public var hasNextPage: Bool
     }
 
     public struct Page {
+        // MARK: - Lifecycle
+
+        public init(items: [Item], cursor: Cursor) {
+            self.items = items
+            self.cursor = cursor
+        }
+
+        // MARK: - Public
+
         public let items: [Item]
         public let cursor: Cursor
     }
 
     public typealias PageFetcher = (
         _ cursor: Cursor,
+        _ pageSize: Int,
         _ context: Context
     ) async throws -> Page
 
@@ -132,7 +156,7 @@ public class ParraCursorPaginator<Item, Context>: ObservableObject
     public let totalCount: Int?
 
     // The last index that triggered fetching a page.
-    public private(set) var lastFetchedOffset: Int?
+    public private(set) var cursor: Cursor
 
     // If omitted, there will never be an attempt to load more content.
     public let pageFetcher: PageFetcher?
@@ -167,14 +191,18 @@ public class ParraCursorPaginator<Item, Context>: ObservableObject
             error = nil
 
             do {
-//                let nextPage = try await pageFetcher(pageSize, 0, context)
+                let nextPage = try await pageFetcher(
+                    .init(hasNextPage: true),
+                    pageSize,
+                    context
+                )
 
-//                await MainActor.run {
-//                    lastFetchedOffset = 0
-//                    items = nextPage
-//                    isRefreshing = false
-//                    isShowingPlaceholders = false
-//                }
+                await MainActor.run {
+                    cursor = nextPage.cursor
+                    items = nextPage.items
+                    isRefreshing = false
+                    isShowingPlaceholders = false
+                }
             } catch {
                 await MainActor.run {
                     self.error = error
@@ -186,9 +214,7 @@ public class ParraCursorPaginator<Item, Context>: ObservableObject
         }
     }
 
-    public func loadMore(
-        after index: Int?
-    ) {
+    public func loadMore() {
         guard let pageFetcher else {
             logger.trace("pageFetcher unset. Skipping load.")
             return
@@ -204,12 +230,6 @@ public class ParraCursorPaginator<Item, Context>: ObservableObject
             return
         }
 
-        guard let offset = getFetchOffset(for: index) else {
-            logger.trace("No next offset found. Skipping load.")
-
-            return
-        }
-
         logger.trace("Beginning load for \(context)")
 
         isLoading = true
@@ -221,51 +241,52 @@ public class ParraCursorPaginator<Item, Context>: ObservableObject
             // first page.
             do {
                 logger.trace(
-                    "Fetching page size: \(self.pageSize) from offset: \(offset)."
+                    "Fetching page size: \(self.pageSize) from cursor: \(cursor)."
                 )
 
-//                let nextPage = try await pageFetcher(pageSize, offset, context)
-//                logger.trace(
-//                    "Found \(nextPage.count) new record(s)"
-//                )
-//
-//                // TODO: Store the ids of all items in a set along with their
-//                // indexes. Every time a new page is fetched, iterate over the
-//                // page and check if any of the ids previously existed. If they
-//                // do, perform a re-fetch of all the items from the first
-//                // duplicate to just before the fetch that just happened, and
-//                // replace that portion of the items list with the new data.
-//                // This handles the case where an item moves from one page to
-//                // another in between fetches.
-//
-//                await MainActor.run {
-//                    // Should be set after successful load. Should be the index
-//                    // that triggered the request.
-//                    lastFetchedOffset = index
-//
-//                    // If placeholders were previously shown they should be
-//                    // replaced.
-//                    if isShowingPlaceholders {
-//                        logger.trace(
-//                            "Replacing placeholder items with fetched items"
-//                        )
-//
-//                        items = nextPage
-//                        isShowingPlaceholders = false
-//                    } else {
-//                        logger.trace(
-//                            "Appending fetched items"
-//                        )
-//
-//                        items.append(
-//                            contentsOf: nextPage.filter {
-//                                !items.contains($0)
-//                            }
-//                        )
-//                    }
-//
-//                    isLoading = false
-//                }
+                let nextPage = try await pageFetcher(cursor, pageSize, context)
+
+                logger.trace(
+                    "Found \(nextPage.items.count) new record(s)"
+                )
+
+                // TODO: Store the ids of all items in a set along with their
+                // indexes. Every time a new page is fetched, iterate over the
+                // page and check if any of the ids previously existed. If they
+                // do, perform a re-fetch of all the items from the first
+                // duplicate to just before the fetch that just happened, and
+                // replace that portion of the items list with the new data.
+                // This handles the case where an item moves from one page to
+                // another in between fetches.
+
+                await MainActor.run {
+                    // Should be set after successful load. Should be the index
+                    // that triggered the request.
+                    cursor = nextPage.cursor
+
+                    // If placeholders were previously shown they should be
+                    // replaced.
+                    if isShowingPlaceholders {
+                        logger.trace(
+                            "Replacing placeholder items with fetched items"
+                        )
+
+                        items = nextPage.items
+                        isShowingPlaceholders = false
+                    } else {
+                        logger.trace(
+                            "Appending fetched items"
+                        )
+
+                        items.append(
+                            contentsOf: nextPage.items.filter {
+                                !items.contains($0)
+                            }
+                        )
+                    }
+
+                    isLoading = false
+                }
             } catch {
                 logger.error("Pagination error fetching new record(s).", error)
 
@@ -317,50 +338,4 @@ public class ParraCursorPaginator<Item, Context>: ObservableObject
     // MARK: - Private
 
     private let placeholderItems: [Item]
-
-    private func getFetchOffset(for index: Int?) -> Int? {
-        guard let index else {
-            // Not fetching for a specific item, so either fetch the next page
-            // after the last one, or start at the beginning.
-            return lastFetchedOffset ?? 0
-        }
-
-        if isShowingPlaceholders {
-            return 0
-        }
-
-        let max = totalCount ?? Int.max
-
-        guard index < (max - 1) else {
-            logger.trace("Index has reached totalCount: \(max). Skipping fetch")
-
-            return nil
-        }
-
-        let last = lastFetchedOffset ?? -1
-        let isPastThreshold = index >= items.count - loadMoreThreshold
-
-        // We only want to fetch more records if
-        // 1. The index that has triggered the request is past the threshold
-        // 2. The index is higher then the previous load.
-        guard isPastThreshold, index > last else {
-            logger.trace(
-                "Index not past threshold. \(isPastThreshold) \(index) \(last)"
-            )
-
-            return nil
-        }
-
-        logger.trace("Okay to fetch from: \(index)")
-        // We determine if we want to load more if the current index reaches the
-        // end of the list, less some threshold. When requesting more items, we
-        // add this threshold back to not have `loadMoreThreshold` overlapping
-        // items per request.
-        let next = index + loadMoreThreshold
-        if next >= max {
-            return nil
-        }
-
-        return next
-    }
 }

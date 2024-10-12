@@ -132,7 +132,7 @@ extension SessionManager {
     }
 
     private func writeMessageToDebugView(_ message: String) {
-        if !AppEnvironment.shouldAllowDebugLogger {
+        if !ParraAppEnvironment.shouldAllowDebugLogger {
             return
         }
 

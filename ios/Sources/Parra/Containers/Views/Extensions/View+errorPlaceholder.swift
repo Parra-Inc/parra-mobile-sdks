@@ -22,7 +22,7 @@ struct ErrorPlaceholderModifier: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     func errorPlaceholder(
         _ error: Error?,
         _ placeholder: @escaping () -> some View

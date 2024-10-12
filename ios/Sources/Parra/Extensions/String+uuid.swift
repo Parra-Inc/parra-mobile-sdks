@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension String {
+public extension String {
     static var uuid: String {
         return UUID().uuidString
     }

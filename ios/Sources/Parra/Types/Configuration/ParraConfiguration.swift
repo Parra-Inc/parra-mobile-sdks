@@ -111,7 +111,7 @@ public struct ParraConfiguration {
             )
 
             loggerOptions.minimumLogLevel = level
-        } else if AppEnvironment.isParraDemoBeta {
+        } else if ParraAppEnvironment.isParraDemoBeta {
             loggerOptions.minimumLogLevel = .debug
         }
 

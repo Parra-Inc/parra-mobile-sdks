@@ -76,7 +76,7 @@ struct HeaderFactory {
         case .deviceTimeZoneOffset:
             return ParraDeviceInfoManager.current.timeZoneOffset
         case .environment:
-            return AppEnvironment.appConfiguration.headerName
+            return ParraAppEnvironment.appConfiguration.headerName
         case .platform:
             return ParraDeviceInfoManager.current.systemName
         case .platformAgent:

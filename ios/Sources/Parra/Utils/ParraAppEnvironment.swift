@@ -1,5 +1,5 @@
 //
-//  AppEnvironment.swift
+//  ParraAppEnvironment.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/28/24.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-enum AppEnvironment {
-    enum Environment {
+public enum ParraAppEnvironment {
+    public enum Environment {
         case production
         case beta
         case debug
@@ -29,7 +29,7 @@ enum AppEnvironment {
         }
     }
 
-    static let isDebug: Bool = {
+    public static let isDebug: Bool = {
         #if DEBUG
         return true
         #else
@@ -37,19 +37,20 @@ enum AppEnvironment {
         #endif
     }()
 
-    static let isBeta: Bool = Bundle.main.appStoreReceiptURL?
+    public static let isBeta: Bool = Bundle.main.appStoreReceiptURL?
         .lastPathComponent == "sandboxReceipt"
 
-    static let isParraDemoBeta: Bool = isBeta && ParraInternal
+    public static let isParraDemoBeta: Bool = isBeta && ParraInternal
         .isBundleIdDemoApp()
 
-    static let isDebugParraDevApp: Bool = isDebug && ParraInternal.isBundleIdDevApp()
+    public static let isDebugParraDevApp: Bool = isDebug && ParraInternal
+        .isBundleIdDevApp()
 
-    static let shouldAllowDebugLogger: Bool = isParraDemoBeta || isDebugParraDevApp
+    public static let shouldAllowDebugLogger: Bool = isParraDemoBeta || isDebugParraDevApp
 
-    static let isProduction: Bool = !isDebug && !isBeta
+    public static let isProduction: Bool = !isDebug && !isBeta
 
-    static let appConfiguration: Environment = {
+    public static let appConfiguration: Environment = {
         if isDebug {
             return .debug
         } else if isBeta {

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     /// default is placeholder type
     @ViewBuilder
     func redacted(
