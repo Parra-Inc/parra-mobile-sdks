@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public class ParraFeedbackCardWidgetConfig: ContainerConfig {
+public class ParraFeedbackCardWidgetConfig: ParraContainerConfig {
     // MARK: - Lifecycle
 
     public required init() {}

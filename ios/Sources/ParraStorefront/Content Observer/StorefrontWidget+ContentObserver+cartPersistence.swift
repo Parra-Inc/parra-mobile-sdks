@@ -1,5 +1,5 @@
 //
-//  ParraStorefrontWidget+ContentObserver+cartPersistence.swift
+//  StorefrontWidget+ContentObserver+cartPersistence.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 10/8/24.
@@ -12,7 +12,7 @@ import Parra
 private let logger = ParraLogger()
 private let DEFAULTS_CART_KEY = "parra_shopping_cart_state"
 
-extension ParraStorefrontWidget.ContentObserver {
+extension StorefrontWidget.ContentObserver {
     func readPersistedCart(
         for user: ParraUser?
     ) -> CartState.ReadyStateInfo? {

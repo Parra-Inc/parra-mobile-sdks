@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct FeedbackFormWidget: Container {
+struct FeedbackFormWidget: ParraContainer {
     // MARK: - Lifecycle
 
     init(
@@ -185,9 +185,11 @@ struct FeedbackFormWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<FeedbackFormWidget> { _, _, _ in
+    ParraContainerPreview<FeedbackFormWidget>(
+        config: .default
+    ) { _, _, config in
         FeedbackFormWidget(
-            config: .default,
+            config: config,
             contentObserver: .init(
                 initialParams: .init(
                     formData: .init(

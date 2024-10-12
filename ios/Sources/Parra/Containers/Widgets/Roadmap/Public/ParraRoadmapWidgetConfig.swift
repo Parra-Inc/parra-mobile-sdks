@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-public class ParraRoadmapWidgetConfig: ContainerConfig {
+public class ParraRoadmapWidgetConfig: ParraContainerConfig {
     // MARK: - Lifecycle
 
-    required init() {
+    public required init() {
         self.addRequestSuccessToastTitle = ParraRoadmapWidgetConfig.default
             .addRequestSuccessToastTitle
 

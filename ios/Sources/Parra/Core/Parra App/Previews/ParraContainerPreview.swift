@@ -11,19 +11,19 @@ import SwiftUI
 /// To be used internally to provide Parra related context for an entire scene.
 /// If you're building a component view, use ``ParraViewPreview`` instead.
 @MainActor
-struct ParraContainerPreview<ContainerType>: View
-    where ContainerType: Container
+public struct ParraContainerPreview<ContainerType>: View
+    where ContainerType: ParraContainer
 {
     // MARK: - Lifecycle
 
-    init(
+    public init(
+        config: ContainerType.Config,
+        theme: ParraTheme = .default,
         content: @escaping (
             _ parra: Parra,
             _ factory: ParraComponentFactory,
             _ config: ContainerType.Config
-        ) -> any View,
-        config: ContainerType.Config = .init(),
-        theme: ParraTheme = .default
+        ) -> any View
     ) {
         self.content = content
         self.configuration = .init(theme: theme)
@@ -57,9 +57,9 @@ struct ParraContainerPreview<ContainerType>: View
         )
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    var body: some View {
+    public var body: some View {
         // It is tempting to store the content observer for the container in env
         // here but this will only work for previews. At runtime, the app
         // wrapper won't have provided this object since it is specific to the

@@ -1,5 +1,5 @@
 //
-//  ParraStorefrontWidget+ContentObserver+Content.swift
+//  StorefrontWidget+ContentObserver+Content.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 10/8/24.
@@ -8,7 +8,7 @@
 import Parra
 import SwiftUI
 
-extension ParraStorefrontWidget.ContentObserver {
+extension StorefrontWidget.ContentObserver {
     struct Content: ParraContainerContent {
         // MARK: - Lifecycle
 

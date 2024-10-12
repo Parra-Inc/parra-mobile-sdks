@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-public class ParraFeedbackFormWidgetConfig: ContainerConfig {
+public class ParraFeedbackFormWidgetConfig: ParraContainerConfig {
     // MARK: - Lifecycle
 
-    required init() {
+    public required init() {
         self.maxTextFieldCharacters = ParraFeedbackFormWidgetConfig.default
             .maxTextFieldCharacters
     }

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ChangelogWidget: Container {
+struct ChangelogWidget: ParraContainer {
     // MARK: - Lifecycle
 
     init(
@@ -202,9 +202,11 @@ struct ChangelogWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<ChangelogWidget> { parra, _, _ in
+    ParraContainerPreview<ChangelogWidget>(
+        config: .default
+    ) { parra, _, config in
         ChangelogWidget(
-            config: .default,
+            config: config,
             contentObserver: .init(
                 initialParams: .init(
                     appReleaseCollection: AppReleaseCollectionResponse

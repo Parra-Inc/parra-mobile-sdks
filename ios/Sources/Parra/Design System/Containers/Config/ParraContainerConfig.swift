@@ -1,5 +1,5 @@
 //
-//  ContainerConfig.swift
+//  ParraContainerConfig.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,6 +8,4 @@
 
 import SwiftUI
 
-protocol ContainerConfig: AnyObject, Observable {
-    init()
-}
+public protocol ParraContainerConfig: AnyObject, Observable {}

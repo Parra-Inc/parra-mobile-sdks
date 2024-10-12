@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ReleaseWidget: Container {
+struct ReleaseWidget: ParraContainer {
     // MARK: - Lifecycle
 
     init(

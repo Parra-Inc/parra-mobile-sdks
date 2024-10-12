@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ModalLoadingIndicatorContainer: Container {
+struct ModalLoadingIndicatorContainer: ParraContainer {
     // MARK: - Lifecycle
 
     init(
@@ -21,7 +21,7 @@ struct ModalLoadingIndicatorContainer: Container {
 
     // MARK: - Internal
 
-    final class Config: ContainerConfig {}
+    final class Config: ParraContainerConfig {}
 
     class ContentObserver: ParraContainerContentObserver {
         // MARK: - Lifecycle

@@ -1,5 +1,5 @@
 //
-//  ParraStorefrontWidget+ContentObserver+performQueries.swift
+//  StorefrontWidget+ContentObserver+performQueries.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 10/8/24.
@@ -9,7 +9,7 @@ import Buy
 import Foundation
 import Parra
 
-extension ParraStorefrontWidget.ContentObserver {
+extension StorefrontWidget.ContentObserver {
     func performQuery(
         _ query: Storefront.QueryRootQuery
     ) async throws -> Storefront.QueryRoot {

@@ -1,5 +1,5 @@
 //
-//  ParraStorefrontWidget+ContentObserver+CheckoutDelegate.swift
+//  StorefrontWidget+ContentObserver+CheckoutDelegate.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 10/8/24.
@@ -11,9 +11,9 @@ import UIKit
 
 private let logger = ParraLogger()
 
-// MARK: - ParraStorefrontWidget.ContentObserver + CheckoutDelegate
+// MARK: - StorefrontWidget.ContentObserver + CheckoutDelegate
 
-extension ParraStorefrontWidget.ContentObserver: CheckoutDelegate {
+extension StorefrontWidget.ContentObserver: CheckoutDelegate {
     nonisolated func checkoutDidComplete(
         event: ShopifyCheckoutSheetKit.CheckoutCompletedEvent
     ) {

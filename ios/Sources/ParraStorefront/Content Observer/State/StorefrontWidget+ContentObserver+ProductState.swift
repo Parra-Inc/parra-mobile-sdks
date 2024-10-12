@@ -1,5 +1,5 @@
 //
-//  ShopViewModel+ProductState.swift
+//  StorefrontWidget+ContentObserver+ProductState.swift
 //  KbIosApp
 //
 //  Created by Mick MacCallum on 9/30/24.
@@ -8,7 +8,7 @@
 import Parra
 import SwiftUI
 
-extension ParraStorefrontWidget.ContentObserver {
+extension StorefrontWidget.ContentObserver {
     enum ProductState: Equatable {
         case loading
         case refreshing([ParraProduct])

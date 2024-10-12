@@ -12,7 +12,7 @@ final class ModalScreenManager {
     // MARK: - Lifecycle
 
     init(
-        containerRenderer: ContainerRenderer,
+        containerRenderer: ParraContainerRenderer,
         configuration: ParraConfiguration,
         notificationCenter: ParraNotificationCenter
     ) {
@@ -92,12 +92,12 @@ final class ModalScreenManager {
 
     func presentModalView<ContainerType>(
         of type: ContainerType.Type,
-        with config: ContainerType.Config = .init(),
+        with config: ContainerType.Config,
         contentObserver: ContainerType.ContentObserver,
         detents: [UISheetPresentationController.Detent] = [.large()],
         prefersGrabberVisible: Bool = true,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
-    ) where ContainerType: Container {
+    ) where ContainerType: ParraContainer {
         Task { @MainActor in
             guard
                 let viewController = UIViewController
@@ -158,7 +158,7 @@ final class ModalScreenManager {
 
     @MainActor private var currentProgressIndicatorModal: UIViewController?
 
-    private let containerRenderer: ContainerRenderer
+    private let containerRenderer: ParraContainerRenderer
     private let configuration: ParraConfiguration
     private let notificationCenter: ParraNotificationCenter
 }

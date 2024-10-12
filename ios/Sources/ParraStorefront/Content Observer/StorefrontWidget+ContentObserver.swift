@@ -1,5 +1,5 @@
 //
-//  ParraStorefrontWidget+ContentObserver.swift
+//  StorefrontWidget+ContentObserver.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 10/8/24.
@@ -17,9 +17,9 @@ typealias Task = _Concurrency.Task
 
 private let logger = ParraLogger(category: "Parra Storefront Content Observer")
 
-// MARK: - ParraStorefrontWidget.ContentObserver
+// MARK: - StorefrontWidget.ContentObserver
 
-extension ParraStorefrontWidget {
+extension StorefrontWidget {
     @Observable
     @MainActor
     class ContentObserver: ParraContainerContentObserver {

@@ -1,5 +1,5 @@
 //
-//  ShopViewModel+CartState.swift
+//  StorefrontWidget+ContentObserver+CartState.swift
 //  KbIosApp
 //
 //  Created by Mick MacCallum on 9/30/24.
@@ -9,7 +9,7 @@ import Buy
 import Parra
 import SwiftUI
 
-extension ParraStorefrontWidget.ContentObserver {
+extension StorefrontWidget.ContentObserver {
     enum CartState: Equatable {
         case loading
         case ready(ReadyStateInfo)

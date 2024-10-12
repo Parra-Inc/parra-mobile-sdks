@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FeedWidget: Container {
+struct FeedWidget: ParraContainer {
     // MARK: - Lifecycle
 
     init(
@@ -156,7 +156,9 @@ struct FeedWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<FeedWidget> { parra, _, config in
+    ParraContainerPreview<FeedWidget>(
+        config: .default
+    ) { parra, _, config in
         FeedWidget(
             config: .default,
             contentObserver: .init(

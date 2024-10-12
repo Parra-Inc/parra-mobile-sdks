@@ -9,5 +9,5 @@
 import SwiftUI
 
 protocol ParraPublicContainer: View {
-    associatedtype Wrapped: Container
+    associatedtype Wrapped: ParraContainer
 }

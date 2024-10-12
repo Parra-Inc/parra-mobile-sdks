@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public class ParraChangelogWidgetConfig: ContainerConfig {
+public class ParraChangelogWidgetConfig: ParraContainerConfig {
     // MARK: - Lifecycle
 
     public required init() {}

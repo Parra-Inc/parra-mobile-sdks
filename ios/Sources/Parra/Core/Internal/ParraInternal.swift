@@ -49,7 +49,7 @@ class ParraInternal {
         feedback: ParraFeedback,
         releases: ParraReleases,
         appInfoManager: AppInfoManager,
-        containerRenderer: ContainerRenderer,
+        containerRenderer: ParraContainerRenderer,
         alertManager: AlertManager,
         modalScreenManager: ModalScreenManager,
         authFlowManager: AuthenticationFlowManager
@@ -109,7 +109,7 @@ class ParraInternal {
     let api: API
     let notificationCenter: NotificationCenterType
     let appInfoManager: AppInfoManager
-    let containerRenderer: ContainerRenderer
+    let containerRenderer: ParraContainerRenderer
     let alertManager: AlertManager
     let modalScreenManager: ModalScreenManager
     let authFlowManager: AuthenticationFlowManager

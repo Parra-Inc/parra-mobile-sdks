@@ -1,5 +1,5 @@
 //
-//  ContainerRenderer.swift
+//  ParraContainerRenderer.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 3/27/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-class ContainerRenderer {
+public class ParraContainerRenderer {
     // MARK: - Lifecycle
 
     init(
@@ -17,9 +17,9 @@ class ContainerRenderer {
         self.configuration = configuration
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    func renderContainer<C: Container>(
+    public func renderContainer<C: ParraContainer>(
         params: C.ContentObserver.InitialParams,
         config: C.Config,
         contentTransformer: ((C.ContentObserver) -> Void)? = nil
@@ -35,7 +35,7 @@ class ContainerRenderer {
         )
     }
 
-    func renderContainer<C: Container>(
+    public func renderContainer<C: ParraContainer>(
         contentObserver: C.ContentObserver,
         config: C.Config,
         contentTransformer: ((C.ContentObserver) -> Void)? = nil

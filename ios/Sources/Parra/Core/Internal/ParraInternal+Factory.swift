@@ -92,7 +92,7 @@ extension ParraInternal {
             storageModule: credentialStorageModule
         )
 
-        let containerRenderer = ContainerRenderer(
+        let containerRenderer = ParraContainerRenderer(
             configuration: configuration
         )
 

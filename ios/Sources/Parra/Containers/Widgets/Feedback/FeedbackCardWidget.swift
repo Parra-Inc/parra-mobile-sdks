@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct FeedbackCardWidget: Container {
+struct FeedbackCardWidget: ParraContainer {
     // MARK: - Lifecycle
 
     init(
@@ -139,9 +139,11 @@ struct FeedbackCardWidget: Container {
                 .foregroundStyle(ParraTheme.default.palette.secondaryBackground)
                 .frame(width: geometry.size.width, height: geometry.size.height)
 
-            ParraContainerPreview<FeedbackCardWidget> { parra, _, _ in
+            ParraContainerPreview<FeedbackCardWidget>(
+                config: .default
+            ) { parra, _, config in
                 FeedbackCardWidget(
-                    config: .default,
+                    config: config,
                     contentObserver: .init(
                         initialParams: .init(
                             cards: ParraCardItem.validStates(),

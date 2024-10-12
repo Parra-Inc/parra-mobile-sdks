@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct RoadmapWidget: Container {
+struct RoadmapWidget: ParraContainer {
     // MARK: - Lifecycle
 
     init(
@@ -253,9 +253,11 @@ struct RoadmapWidget: Container {
 }
 
 #Preview {
-    ParraContainerPreview<RoadmapWidget> { parra, _, config in
+    ParraContainerPreview<RoadmapWidget>(
+        config: .default
+    ) { parra, _, config in
         RoadmapWidget(
-            config: .default,
+            config: config,
             contentObserver: .init(
                 initialParams: RoadmapWidget.ContentObserver.InitialParams(
                     roadmapConfig: ParraAppRoadmapConfiguration.validStates()[0],

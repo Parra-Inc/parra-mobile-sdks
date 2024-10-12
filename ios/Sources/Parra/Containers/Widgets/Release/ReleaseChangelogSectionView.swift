@@ -57,7 +57,9 @@ struct ReleaseChangelogSectionView: View {
 }
 
 #Preview {
-    ParraContainerPreview<ChangelogWidget> { _, _, _ in
+    ParraContainerPreview<ChangelogWidget>(
+        config: .default
+    ) { _, _, _ in
         VStack(spacing: 24) {
             Spacer()
             ReleaseChangelogSectionView(

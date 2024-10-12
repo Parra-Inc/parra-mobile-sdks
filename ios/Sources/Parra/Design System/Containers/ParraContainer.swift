@@ -1,5 +1,5 @@
 //
-//  Container.swift
+//  ParraContainer.swift
 //  Parra
 //
 //  Created by Mick MacCallum on 1/28/24.
@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-protocol Container: View {
-    associatedtype Config: ContainerConfig
+public protocol ParraContainer: View {
+    associatedtype Config: ParraContainerConfig
     associatedtype ContentObserver: ParraContainerContentObserver
 
     // Expected via init

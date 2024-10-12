@@ -13,7 +13,12 @@ struct StoreTab: View {
     @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
-        ParraStorefrontWidget()
+        ParraStorefrontWidget(
+            config: ParraStorefrontConfig(
+                shopifyDomain: "",
+                shopifyApiKey: ""
+            )
+        )
     }
 }
 

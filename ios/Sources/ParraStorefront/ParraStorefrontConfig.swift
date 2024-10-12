@@ -7,11 +7,12 @@
 
 import Buy
 import Foundation
+import Parra
 
-public struct ParraStorefrontConfig {
+public final class ParraStorefrontConfig: ParraContainerConfig {
     // MARK: - Lifecycle
 
-    init(
+    public init(
         shopifyDomain: String,
         shopifyApiKey: String,
         shopifySession: URLSession = .shared,
@@ -25,19 +26,19 @@ public struct ParraStorefrontConfig {
         self.shopifyCachePolicy = shopifyCachePolicy
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
     /// The domain of your shop (ex: "shopname.myshopify.com").
-    let shopifyDomain: String
+    public let shopifyDomain: String
 
     /// The API key for you app, obtained from the Shopify admin.
-    let shopifyApiKey: String
+    public let shopifyApiKey: String
 
     /// A `URLSession` to use for this client. If left blank, a session with a `default` configuration will be created.
-    let shopifySession: URLSession
+    public let shopifySession: URLSession
 
     /// The buyer's current locale. Supported values are limited to locales available to your shop.
-    let shopifyLocale: Locale?
+    public let shopifyLocale: Locale?
 
-    let shopifyCachePolicy: Graph.CachePolicy
+    public let shopifyCachePolicy: Graph.CachePolicy
 }

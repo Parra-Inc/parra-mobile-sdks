@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public final class ParraFeedConfiguration: ContainerConfig {
+public final class ParraFeedConfiguration: ParraContainerConfig {
     // MARK: - Lifecycle
 
     public init() {
