@@ -255,15 +255,14 @@ workflows:
   release-sdk:
     jobs:
       - release-ios-sdk:
-          # filters:
-          #   tags:
-          #     only: # x.y.z
-          #       - ^(?:refs\/tags\/)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$
-          #   branches:
-          #     ignore: /.*/
-          filters: 
-            tags:
-              only: 
-                - /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)/$
+          filters: &filters-production
             branches:
               ignore: /.*/
+            tags:
+              only: ^(?:refs\/tags\/)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)
+
+            # tags:
+            #   only: 
+            #     - /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)/$
+            # branches:
+            #   ignore: /.*/
