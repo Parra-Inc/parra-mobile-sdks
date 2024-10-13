@@ -50,8 +50,6 @@ struct EditProfileView: View {
             }
         }
         .onSubmit(of: .text) { dataModel.save(with: parra) }
-        .background(parraTheme.palette.primaryBackground)
-        .scrollContentBackground(.hidden)
         .navigationTitle("Edit Profile")
         .navigationBarTitleDisplayMode(.inline)
         .interactiveDismissDisabled(dataModel.isDirty)
