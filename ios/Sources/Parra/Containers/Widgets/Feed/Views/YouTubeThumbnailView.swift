@@ -11,7 +11,7 @@ struct YouTubeThumbnailView: View {
     // MARK: - Internal
 
     let thumb: ParraYoutubeThumbnail
-    let onTapPlay: () -> Void
+    let onTapPlay: @MainActor () -> Void
 
     var body: some View {
         Color.clear.overlay(

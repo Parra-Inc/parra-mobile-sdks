@@ -146,7 +146,7 @@ struct FeedYouTubeVideoDetailView: View {
     @Environment(FeedWidget.ContentObserver.self) private var contentObserver
     @Environment(\.presentationMode) private var presentationMode
 
-    @ViewBuilder private var thumbnail: some View {
+    @ViewBuilder @MainActor private var thumbnail: some View {
         let thumb = youtubeVideo.thumbnails.maxAvailable
 
         YouTubeThumbnailView(
