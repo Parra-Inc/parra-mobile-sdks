@@ -258,6 +258,6 @@ workflows:
           filters:
             tags:
               only: # x.y.z
-                - /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+                - ^(?:refs\/tags\/)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$
             branches:
               ignore: /.*/
