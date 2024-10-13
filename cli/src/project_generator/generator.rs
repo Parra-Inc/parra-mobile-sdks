@@ -143,7 +143,6 @@ fn copy_dir_all(
         let ty = entry.file_type()?;
 
         if ty.is_dir() {
-            println!("copying dir: {:?}", entry.path());
             copy_dir_all(
                 &template_root,
                 &entry.path(),
