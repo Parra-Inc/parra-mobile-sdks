@@ -2,7 +2,7 @@
 //  SettingsTab.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/07/2024.
+//  Bootstrapped with ❤️ by Parra on 10/13/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -56,8 +56,6 @@ struct SettingsTab: View {
                     SettingsFooter()
                 }
             }
-            .background(parraTheme.palette.primaryBackground)
-            .scrollContentBackground(.hidden)
             .navigationTitle("Profile")
         }
     }
