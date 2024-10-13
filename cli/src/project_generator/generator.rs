@@ -17,6 +17,7 @@ use crate::types::templates::{CliInput, ProjectContext};
 
 pub async fn generate_xcode_project(
     project_dir: &PathBuf,
+    template_base_dir: &PathBuf,
     template_app_dir: &PathBuf,
     template: &str,
     context: &ProjectContext,
@@ -99,7 +100,7 @@ pub async fn generate_xcode_project(
         fs::remove_dir_all(&project_dir)?;
     }
 
-    copy_dir_all(template_app_dir, &target_dir)?;
+    copy_dir_all(template_base_dir, template_app_dir, &target_dir)?;
 
     println!("Generating project...");
 
@@ -130,7 +131,11 @@ pub async fn generate_xcode_project(
     return Ok(target_dir);
 }
 
-fn copy_dir_all(src: &PathBuf, dst: impl AsRef<Path>) -> io::Result<()> {
+fn copy_dir_all(
+    template_root: &PathBuf,
+    src: &PathBuf,
+    dst: impl AsRef<Path>,
+) -> io::Result<()> {
     fs::create_dir_all(&dst)?;
 
     for entry in fs::read_dir(src)? {
@@ -138,9 +143,20 @@ fn copy_dir_all(src: &PathBuf, dst: impl AsRef<Path>) -> io::Result<()> {
         let ty = entry.file_type()?;
 
         if ty.is_dir() {
-            copy_dir_all(&entry.path(), dst.as_ref().join(entry.file_name()))?;
+            println!("copying dir: {:?}", entry.path());
+            copy_dir_all(
+                &template_root,
+                &entry.path(),
+                dst.as_ref().join(entry.file_name()),
+            )?;
         } else {
-            fs::copy(entry.path(), dst.as_ref().join(entry.file_name()))?;
+            let mut target = entry.path().clone();
+            if target.is_symlink() {
+                let followed = fs::read_link(entry.path())?;
+                target = template_root.join(followed);
+            }
+
+            fs::copy(target, dst.as_ref().join(entry.file_name()))?;
         }
     }
 

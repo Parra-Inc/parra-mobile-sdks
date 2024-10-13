@@ -156,6 +156,7 @@ pub async fn execute_sample_bootstrap(
     let xcode_project_path =
         project_generator::generator::generate_xcode_project(
             &project_dir,
+            &template_dir,
             &template_app_dir,
             &template,
             &context,
@@ -228,7 +229,7 @@ pub async fn execute_bootstrap(
     {
         println!("Running in DEBUG mode. Using local templates!!!");
         let template_dir = get_template_path(&template_name)?;
-        let template = get_local_template(&template_dir, false)?;
+        let template = get_local_template(&template_dir, true)?;
 
         (template, template_dir)
     } else {
@@ -300,8 +301,10 @@ pub async fn execute_bootstrap(
         },
     };
 
+    let templates_dir: PathBuf = get_templates_dir_path()?;
     let xcode_project = project_generator::generator::generate_xcode_project(
         &expanded_path,
+        &templates_dir,
         &template_app_dir,
         &template,
         &context,
@@ -335,8 +338,8 @@ pub async fn execute_bootstrap(
 fn read_template_config(
     template_dir: &PathBuf,
 ) -> Result<TemplateConfig, Box<dyn Error>> {
-    let project_config_path = template_dir.join("config.json");
-    let config: String = read_to_string(project_config_path)?;
+    let config =
+        read_template_file_following_links(template_dir.join("config.json"))?;
 
     return Ok(serde_json::from_str::<TemplateConfig>(&config)?);
 }
@@ -385,17 +388,39 @@ fn resolve_template_symlinks(
     Ok(())
 }
 
+fn read_template_file_following_links(
+    path: PathBuf,
+) -> Result<String, Box<dyn Error>> {
+    let mut project_template_path = path.clone();
+    let templates_dir: PathBuf = get_templates_dir_path()?;
+
+    if project_template_path.is_symlink() {
+        let followed = fs::read_link(project_template_path)?;
+        project_template_path = templates_dir.join(followed);
+    }
+
+    let template = read_to_string(project_template_path)?;
+
+    Ok(template)
+}
+
 fn get_local_template(
     template_dir: &PathBuf,
     use_local_packages: bool,
 ) -> Result<String, Box<dyn Error>> {
-    let project_template_path = template_dir.join("project.yml");
-    let template = read_to_string(project_template_path)?;
+    let template =
+        read_template_file_following_links(template_dir.join("project.yml"))?;
 
     let package_template: String = if use_local_packages {
-        read_to_string(template_dir.join("package_local.yml"))?
+        println!("Using local packages for project generation.");
+        read_template_file_following_links(
+            template_dir.join("package_local.yml"),
+        )?
     } else {
-        read_to_string(template_dir.join("package_remote.yml"))?
+        println!("Using remote packages for project generation.");
+        read_template_file_following_links(
+            template_dir.join("package_remote.yml"),
+        )?
     };
 
     Ok(format!("{}\n{}", template, package_template))
@@ -877,6 +902,14 @@ fn expand_tilde<P: AsRef<Path>>(path_user_input: P) -> Option<PathBuf> {
 fn get_template_path(template_name: &str) -> Result<PathBuf, Box<dyn Error>> {
     let repo_path = get_repo_root_path()?;
     let relative_path = PathBuf::from(format!("templates/{}/", template_name));
+    let full_path = repo_path.join(&relative_path);
+
+    return Ok(full_path);
+}
+
+fn get_templates_dir_path() -> Result<PathBuf, Box<dyn Error>> {
+    let repo_path = get_repo_root_path()?;
+    let relative_path = PathBuf::from("templates/");
     let full_path = repo_path.join(&relative_path);
 
     return Ok(full_path);
