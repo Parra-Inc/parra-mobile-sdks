@@ -259,7 +259,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: ^(?:refs\/tags\/)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)
+              only: /^(?:refs\/tags\/)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)/
 
             # tags:
             #   only: 
