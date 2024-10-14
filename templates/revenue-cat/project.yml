@@ -27,6 +27,8 @@ targets:
         NSCameraUsageDescription: "We use the camera to take profile pictures and other user controlled actions."
         NSFaceIDUsageDescription: "We use Face ID for secure authentication."
         CFBundleName: {{ app.name.display_name }}
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        CFBundleShortVersionString: "1.0.0"
     settings:
       base:
         DEVELOPMENT_TEAM: {{ app.team_id }}

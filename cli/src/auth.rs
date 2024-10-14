@@ -87,6 +87,7 @@ async fn perform_refresh_authentication(
         }
     }
 }
+
 async fn _perform_refresh_authentication(
     credential: &Credential,
 ) -> Result<Credential, Box<dyn Error>> {
@@ -141,8 +142,6 @@ async fn perform_normal_authentication() -> Result<Credential, Box<dyn Error>> {
 
 async fn _perform_normal_authentication() -> Result<Credential, Box<dyn Error>>
 {
-    // TODO: Both normal and refresh authentication need to be wrapped in try catch, log the auth error, then re-throw.
-
     let device_code_url = "https://auth.parra.io/oauth/device/code";
 
     let device_auth_response: Result<DeviceAuthResponse, Box<dyn Error>> =
