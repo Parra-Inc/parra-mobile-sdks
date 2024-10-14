@@ -31,7 +31,7 @@ struct SampleTab: View {
 
                 Link(
                     destination: URL(
-                        string: "https://docs.parra.io/sdks/ios/quickstart"
+                        string: "https://docs.parra.io/cli/templates/default?platform=ios"
                     )!
                 ) {
                     Text("Get started")

@@ -1,0 +1,42 @@
+{
+  "originHash" : "ade706870889381f5df64f27dcb1d90421c135dd3001a1f8766cc0c713adc85a",
+  "pins" : [
+    {
+      "identity" : "checkout-sheet-kit-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Shopify/checkout-sheet-kit-swift",
+      "state" : {
+        "revision" : "822ee10c62fec7774ce3447c5e350151df9aed1d",
+        "version" : "3.0.4"
+      }
+    },
+    {
+      "identity" : "mobile-buy-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Shopify/mobile-buy-sdk-ios",
+      "state" : {
+        "revision" : "5517ba8113a82f35cc91eddd9567b2184796feb9",
+        "version" : "13.0.0"
+      }
+    },
+    {
+      "identity" : "swifthtmltomarkdown",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ActuallyTaylor/SwiftHTMLToMarkdown",
+      "state" : {
+        "revision" : "d533b9cb47a8defaa8d9432fad20ecf5964c0668",
+        "version" : "1.1.1"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "3c2c7e1e72b8abd96eafbae80323c5c1e5317437",
+        "version" : "2.7.5"
+      }
+    }
+  ],
+  "version" : 3
+}
