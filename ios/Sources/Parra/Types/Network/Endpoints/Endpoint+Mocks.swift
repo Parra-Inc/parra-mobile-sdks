@@ -7,7 +7,6 @@
 //
 
 import Foundation
-@testable import Parra
 
 extension ApiEndpoint {
     func getMockResponseData(for status: Int = 200) throws -> Data {

@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 public class ParraContainerRenderer {
     // MARK: - Lifecycle
 
@@ -40,8 +41,6 @@ public class ParraContainerRenderer {
         config: C.Config,
         contentTransformer: ((C.ContentObserver) -> Void)? = nil
     ) -> C {
-        let theme = configuration.theme
-
         contentTransformer?(contentObserver)
 
         return C(

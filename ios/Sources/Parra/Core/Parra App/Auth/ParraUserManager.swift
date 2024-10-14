@@ -37,7 +37,7 @@ public final class ParraUserManager {
 
         try await parraInternal.authService.applyUserInfoUpdate(updated)
 
-        await ParraUserProperties.shared.forceSetStore(updated.properties)
+        ParraUserProperties.shared.forceSetStore(updated.properties)
     }
 
     /// Uploads the provided image and assigns it as the user's profile picture.

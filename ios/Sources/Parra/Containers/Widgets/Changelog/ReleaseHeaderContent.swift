@@ -34,12 +34,3 @@ struct ReleaseHeaderContent: Identifiable, Hashable {
     public let size: CGSize
     public let image: ParraAsyncImageContent
 }
-
-// MARK: - CGSize + Hashable
-
-extension CGSize: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(width)
-        hasher.combine(height)
-    }
-}

@@ -11,6 +11,7 @@ import SwiftUI
 import UIKit
 
 extension AlertManager {
+    @MainActor
     struct Toast: Equatable {
         let level: ParraAlertLevel
         let content: ParraAlertContent
@@ -23,7 +24,7 @@ extension AlertManager {
 
         let primaryAction: (() -> Void)?
 
-        static func == (
+        nonisolated static func == (
             lhs: AlertManager.Toast,
             rhs: AlertManager.Toast
         ) -> Bool {
@@ -35,6 +36,7 @@ extension AlertManager {
     /// and trailing alignments are only applicable to iPad. On iPhone all the
     /// top alignments resolve to `topCenter` and all bottom alignments resolve
     /// to `bottomCenter`.
+    @MainActor
     enum ToastLocation {
         case topCenter
         case topLeading

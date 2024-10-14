@@ -18,4 +18,31 @@ public enum ParraPaddingSize: Hashable, Equatable {
     case xxl
     case xxxl
     case custom(EdgeInsets)
+
+    // MARK: - Public
+
+    public func hash(into hasher: inout Hasher) {
+        let stringValue = switch self {
+        case .zero:
+            "0"
+        case .xs:
+            "xs"
+        case .sm:
+            "xs"
+        case .md:
+            "xs"
+        case .lg:
+            "xs"
+        case .xl:
+            "xs"
+        case .xxl:
+            "xs"
+        case .xxxl:
+            "xs"
+        case .custom(let edgeInsets):
+            "top:\(edgeInsets.bottom), bottom:\(edgeInsets.bottom), leading:\(edgeInsets.leading), trailing:\(edgeInsets.trailing)"
+        }
+
+        hasher.combine(stringValue)
+    }
 }

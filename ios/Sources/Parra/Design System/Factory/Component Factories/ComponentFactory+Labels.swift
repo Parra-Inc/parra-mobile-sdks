@@ -9,7 +9,6 @@
 import SwiftUI
 
 public extension ParraComponentFactory {
-    @ViewBuilder
     func buildLabel(
         content: ParraLabelContent,
         localAttributes: ParraAttributes.Label? = nil
@@ -25,7 +24,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildLabel(
         text: String,
         localAttributes: ParraAttributes.Label? = nil

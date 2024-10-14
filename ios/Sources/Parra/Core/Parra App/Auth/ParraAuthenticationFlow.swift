@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 public protocol ParraAuthenticationFlowDelegate {
     func completeAuthentication(
         with user: ParraUser
@@ -19,6 +20,7 @@ public protocol ParraAuthenticationFlowDelegate {
 /// to logged in state. They are expected to take a configuration object that
 /// describes the auth flows that will be possible, and a completion closure
 /// which will be called once a user's credentials have been obtained.
+@MainActor
 public protocol ParraAuthenticationFlow: View {
     var delegate: ParraAuthenticationFlowDelegate? { get set }
 

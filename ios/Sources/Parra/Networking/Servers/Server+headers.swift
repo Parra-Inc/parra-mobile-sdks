@@ -32,8 +32,6 @@ extension Server {
             with: headerFactory
         )
 
-        let headers = request.allHTTPHeaderFields ?? [:]
-
         logger.trace(
             // Do NOT print the contents of heads. The may include access tokens
             "Finished attaching request headers for endpoint: \(endpoint.displayName)"

@@ -176,7 +176,7 @@ class ParraInternal {
                 logger.debug("Fetching user properties")
                 let userProperties = try await self.api.getUserProperties()
 
-                await ParraUserProperties.shared.forceSetStore(userProperties)
+                ParraUserProperties.shared.forceSetStore(userProperties)
             }
         }
     }
@@ -292,7 +292,7 @@ class ParraInternal {
                 "versionToken": String(describing: appInfo.versionToken)
             ])
 
-            await appState.appInfo = appInfo
+            appState.appInfo = appInfo
 
             return appInfo
         } catch {

@@ -77,7 +77,7 @@ final class AuthService {
         )
 
         switch authType {
-        case .guest(let refreshToken):
+        case .guest:
             // guests don't have user info to fetch, so we skip that step.
             return .guest(
                 ParraGuest(
@@ -132,7 +132,7 @@ final class AuthService {
         identity: String,
         identityType: ParraIdentityType?
     ) async throws -> Int {
-        let requestData = PasswordResetChallengeRequestBody(
+        let requestData = await PasswordResetChallengeRequestBody(
             clientId: authServer.appState.applicationId,
             identity: identity,
             identityType: identityType
@@ -149,7 +149,7 @@ final class AuthService {
         code: String,
         password: String
     ) async throws {
-        let requestData = PasswordResetRequestBody(
+        let requestData = await PasswordResetRequestBody(
             clientId: authServer.appState.applicationId,
             code: code,
             password: password
@@ -348,7 +348,7 @@ final class AuthService {
 
     @discardableResult
     func refreshUserInfo() async throws -> ParraUser? {
-        guard let credential = await dataManager.getCurrentCredential() else {
+        guard await dataManager.getCurrentCredential() != nil else {
             logger.debug("Can't refresh user info. No credential found.")
 
             return nil
@@ -469,7 +469,7 @@ final class AuthService {
     /// tokens.
     func performAuthStateRefresh() {
         Task {
-            guard let currentUser = await dataManager.getCurrentUser() else {
+            guard await dataManager.getCurrentUser() != nil else {
                 // The only way this will happen is if the getQuickestAuthState
                 // flow resulted in an error, in which case there's no valid
                 // state to refresh.

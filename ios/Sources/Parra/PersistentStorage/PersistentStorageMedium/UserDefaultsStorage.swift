@@ -7,7 +7,7 @@
 
 import Foundation
 
-actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
+class UserDefaultsStorage: PersistentStorageMedium {
     // MARK: - Lifecycle
 
     init(
@@ -22,7 +22,7 @@ actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
 
     // MARK: - Internal
 
-    nonisolated func read<T>(name: String) throws -> T? where T: Codable {
+    func read<T>(name: String) throws -> T? where T: Codable {
         guard let data = userDefaults.data(forKey: name) else {
             return nil
         }
@@ -30,14 +30,14 @@ actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
         return try jsonDecoder.decode(T.self, from: data)
     }
 
-    nonisolated func write(name: String, value: some Codable) throws {
+    func write(name: String, value: some Codable) throws {
         let data = try jsonEncoder.encode(value)
 
         userDefaults.set(data, forKey: name)
         userDefaults.synchronize()
     }
 
-    nonisolated func delete(name: String) throws {
+    func delete(name: String) throws {
         userDefaults.removeObject(forKey: name)
     }
 
@@ -47,7 +47,3 @@ actor UserDefaultsStorage: PersistentStorageMedium, @unchecked Sendable {
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
 }
-
-// MARK: - UserDefaults + Sendable
-
-extension UserDefaults: @unchecked Sendable {}

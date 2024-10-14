@@ -215,7 +215,7 @@ final class ApiResourceServer: Server {
     private func canHitEndpoint(
         _ endpoint: ApiEndpoint
     ) async -> Bool {
-        guard let authState = await authService.getCachedAuthState() else {
+        guard let authState = authService.getCachedAuthState() else {
             return false
         }
 

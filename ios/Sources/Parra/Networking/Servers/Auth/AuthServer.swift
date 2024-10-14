@@ -421,11 +421,6 @@ final class AuthServer: Server {
             .CachePolicy = .reloadIgnoringLocalAndRemoteCacheData,
         allowedRetries: Int
     ) async throws -> T where T: Codable {
-        let url = try EndpointResolver.resolve(
-            endpoint: endpoint,
-            using: appState
-        )
-
         var request = try createRequest(
             to: endpoint,
             queryItems: queryItems,

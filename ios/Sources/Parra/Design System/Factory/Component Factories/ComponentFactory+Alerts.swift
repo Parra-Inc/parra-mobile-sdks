@@ -9,7 +9,6 @@
 import SwiftUI
 
 public extension ParraComponentFactory {
-    @ViewBuilder
     func buildInlineAlert(
         level: ParraAlertLevel,
         content: ParraAlertContent,
@@ -28,7 +27,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildToastAlert(
         level: ParraAlertLevel,
         content: ParraAlertContent,
@@ -51,7 +49,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildLoadingIndicator(
         content: ParraLoadingIndicatorContent,
         onDismiss: @escaping () -> Void,

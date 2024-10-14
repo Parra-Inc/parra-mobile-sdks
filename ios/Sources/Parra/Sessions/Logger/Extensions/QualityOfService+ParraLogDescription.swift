@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension QualityOfService: ParraLogStringConvertible, CustomStringConvertible {
+extension QualityOfService: ParraLogStringConvertible {
     var loggerDescription: String {
         switch self {
         case .background:
@@ -24,9 +24,5 @@ extension QualityOfService: ParraLogStringConvertible, CustomStringConvertible {
         default:
             return "unknown"
         }
-    }
-
-    public var description: String {
-        return loggerDescription
     }
 }

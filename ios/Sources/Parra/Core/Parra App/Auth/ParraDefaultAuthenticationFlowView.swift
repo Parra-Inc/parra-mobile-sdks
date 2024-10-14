@@ -99,7 +99,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
         }
     }
 
-    public static func == (
+    public nonisolated static func == (
         lhs: ParraDefaultAuthenticationFlowView,
         rhs: ParraDefaultAuthenticationFlowView
     ) -> Bool {

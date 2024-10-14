@@ -9,7 +9,6 @@
 import SwiftUI
 
 public extension ParraComponentFactory {
-    @ViewBuilder
     func buildPlainButton(
         config: ParraTextButtonConfig,
         content: ParraTextButtonContent,
@@ -36,7 +35,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildPlainButton(
         config: ParraTextButtonConfig,
         text: String,
@@ -65,7 +63,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildOutlinedButton(
         config: ParraTextButtonConfig,
         content: ParraTextButtonContent,
@@ -92,7 +89,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildOutlinedButton(
         config: ParraTextButtonConfig,
         text: String,
@@ -121,7 +117,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildContainedButton(
         config: ParraTextButtonConfig,
         content: ParraTextButtonContent,
@@ -148,7 +143,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildContainedButton(
         config: ParraTextButtonConfig,
         text: String,
@@ -177,7 +171,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildImageButton(
         config: ParraImageButtonConfig,
         content: ParraImageButtonContent,

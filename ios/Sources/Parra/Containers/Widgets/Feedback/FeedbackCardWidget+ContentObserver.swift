@@ -57,12 +57,6 @@ extension FeedbackCardWidget {
             checkAndUpdateCards()
         }
 
-        deinit {
-            Task {
-                self.syncHandler?()
-            }
-        }
-
         // MARK: - Internal
 
         struct Content: ParraContainerContent {

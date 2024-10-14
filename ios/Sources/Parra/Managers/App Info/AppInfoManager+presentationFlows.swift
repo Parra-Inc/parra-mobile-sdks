@@ -25,8 +25,8 @@ extension AppInfoManager {
         after delay: TimeInterval
     ) async throws {
         guard
-            let bundleVersion = await Parra.appBundleVersion(),
-            let bundleVersionShort = await Parra.appBundleVersionShort() else
+            let bundleVersion = Parra.appBundleVersion(),
+            let bundleVersionShort = Parra.appBundleVersionShort() else
         {
             throw ParraError.message("Could not load app version for app")
         }
@@ -76,8 +76,8 @@ extension AppInfoManager {
         }
 
         guard
-            let bundleVersion = await Parra.appBundleVersion(),
-            let bundleVersionShort = await Parra.appBundleVersionShort() else
+            let bundleVersion = Parra.appBundleVersion(),
+            let bundleVersionShort = Parra.appBundleVersionShort() else
         {
             throw ParraError.message("Could not load app version for app")
         }
@@ -196,7 +196,7 @@ extension AppInfoManager {
         // what's new screen twice for the same release.
         try updateLatestSeenVersionToken(latestVersionToken)
 
-        let contentObserver = ReleaseContentObserver(
+        let contentObserver = await ReleaseContentObserver(
             initialParams: ReleaseContentObserver.InitialParams(
                 contentType: .newInstalledVersion(newInstalledVersionInfo),
                 api: api

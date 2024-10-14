@@ -217,12 +217,12 @@ class AuthenticationFlowManager {
             }
         } catch let error as ParraError {
             if error.isUnauthenticated {
-                await alertManager.showErrorToast(
+                alertManager.showErrorToast(
                     userFacingMessage: "No account found matching this passkey. You can delete this passkey from your preferred password manager.",
                     underlyingError: error
                 )
             } else {
-                await alertManager.showErrorToast(
+                alertManager.showErrorToast(
                     userFacingMessage: "Error signing in with passkey. Please try again.",
                     underlyingError: error
                 )
@@ -238,7 +238,7 @@ class AuthenticationFlowManager {
                 error
             )
 
-            await alertManager.showErrorToast(
+            alertManager.showErrorToast(
                 userFacingMessage: "Error signing in with passkey. Please try again.",
                 underlyingError: .system(error)
             )
@@ -357,7 +357,7 @@ class AuthenticationFlowManager {
         let identityType = authChallengeResponse.type
 
         if authChallengeResponse.hasAvailableChallenge(with: .passkeys) {
-            try await triggerPasskeyLoginRequest(
+            await triggerPasskeyLoginRequest(
                 username: identity,
                 presentationMode: .modal,
                 using: appInfo,

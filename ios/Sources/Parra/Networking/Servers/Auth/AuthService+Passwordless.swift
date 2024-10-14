@@ -26,7 +26,7 @@ extension AuthService {
             )
         }
 
-        let body = PasswordlessChallengeRequestBody(
+        let body = await PasswordlessChallengeRequestBody(
             clientId: authServer.appState.applicationId,
             email: email,
             phoneNumber: phoneNumber

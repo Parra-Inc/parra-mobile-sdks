@@ -130,7 +130,7 @@ public struct ParraErrorBoundary: View {
                 )
             }
 
-            if let errorFormId {
+            if errorFormId != nil {
                 componentFactory.buildPlainButton(
                     config: ParraTextButtonConfig(
                         type: .primary,

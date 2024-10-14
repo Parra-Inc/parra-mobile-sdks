@@ -52,8 +52,6 @@ struct SettingsTab: View {
                 Section {
                     ReviewAppCell()
                     ShareCell()
-                } footer: {
-                    SettingsFooter()
                 }
 
                 Section {
@@ -65,6 +63,8 @@ struct SettingsTab: View {
                     } icon: {
                         Image(systemName: "flask")
                     }
+                } footer: {
+                    SettingsFooter()
                 }
             }
             .navigationTitle("Profile")

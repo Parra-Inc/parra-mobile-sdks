@@ -8,9 +8,7 @@
 
 import UIKit
 
-extension UIApplication.State: ParraLogStringConvertible,
-    CustomStringConvertible
-{
+extension UIApplication.State: ParraLogStringConvertible {
     public var loggerDescription: String {
         switch self {
         case .active:
@@ -22,9 +20,5 @@ extension UIApplication.State: ParraLogStringConvertible,
         @unknown default:
             return "unknown"
         }
-    }
-
-    public var description: String {
-        return loggerDescription
     }
 }

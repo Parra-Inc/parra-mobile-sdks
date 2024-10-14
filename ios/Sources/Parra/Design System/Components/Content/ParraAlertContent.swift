@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ParraAlertContent: Hashable, Equatable {
+public struct ParraAlertContent: Hashable, Equatable, Sendable {
     // MARK: - Lifecycle
 
     public init(

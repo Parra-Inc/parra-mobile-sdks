@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@MainActor
 public struct ParraAuthStateInstanceEnvironmentKey: EnvironmentKey {
     public static var defaultValue: ParraAuthState = .undetermined
 }

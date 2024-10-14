@@ -9,7 +9,7 @@
 import SwiftUI
 import UIKit
 
-public struct ParraLabelContent: Hashable, Equatable {
+public struct ParraLabelContent: Hashable, Equatable, Sendable {
     // MARK: - Lifecycle
 
     public init(

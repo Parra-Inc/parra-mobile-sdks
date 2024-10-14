@@ -22,7 +22,6 @@ private let logger = ParraLogger(category: "Parra User Properties")
 /// Bools, Ints, Doubles, etc are converted to NSNumber and stored as numbers
 /// on the backend.
 @Observable
-@MainActor
 public final class ParraUserProperties: ParraReadableKeyValueStore {
     // MARK: - Public
 

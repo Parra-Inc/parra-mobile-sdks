@@ -81,7 +81,7 @@ public struct ParraAuthDefaultIdentityChallengeScreen: ParraAuthScreen, Equatabl
         }
     }
 
-    public static func == (
+    public nonisolated static func == (
         lhs: Self,
         rhs: Self
     ) -> Bool {

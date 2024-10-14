@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@MainActor
 public struct ParraThemeInstanceEnvironmentKey: EnvironmentKey {
     public static var defaultValue = ParraTheme.default
 }

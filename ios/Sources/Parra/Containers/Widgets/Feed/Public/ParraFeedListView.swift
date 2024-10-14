@@ -60,7 +60,7 @@ public struct ParraFeedListView: View {
                     spacing: spacing,
                     performActionForFeedItemData: performActionForFeedItemData
                 )
-            default:
+            @unknown default:
                 EmptyView()
             }
         }

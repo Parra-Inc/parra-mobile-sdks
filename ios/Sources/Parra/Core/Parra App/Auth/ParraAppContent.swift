@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 public protocol ParraAppContent: View {
     associatedtype AuthenticatedContent: View
     associatedtype UnauthenticatedContent: View

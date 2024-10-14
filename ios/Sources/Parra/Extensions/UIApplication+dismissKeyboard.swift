@@ -14,7 +14,7 @@ extension UIApplication {
     /// be used instead.
     @MainActor
     static func dismissKeyboard() async {
-        await MainActor.run {
+        Task { @MainActor in
             UIApplication.shared.sendAction(
                 #selector(UIResponder.resignFirstResponder),
                 to: nil,

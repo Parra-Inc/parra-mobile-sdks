@@ -8,9 +8,7 @@
 
 import UIKit
 
-extension UIDeviceOrientation: ParraLogStringConvertible,
-    CustomStringConvertible
-{
+extension UIDeviceOrientation: ParraLogStringConvertible {
     public var loggerDescription: String {
         switch self {
         case .portrait:
@@ -30,9 +28,5 @@ extension UIDeviceOrientation: ParraLogStringConvertible,
         default:
             return "unknown"
         }
-    }
-
-    public var description: String {
-        return loggerDescription
     }
 }

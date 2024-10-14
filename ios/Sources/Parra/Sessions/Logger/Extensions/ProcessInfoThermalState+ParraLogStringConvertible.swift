@@ -8,9 +8,7 @@
 
 import Foundation
 
-extension ProcessInfo.ThermalState: ParraLogStringConvertible,
-    CustomStringConvertible
-{
+extension ProcessInfo.ThermalState: ParraLogStringConvertible {
     var loggerDescription: String {
         switch self {
         case .nominal:
@@ -24,9 +22,5 @@ extension ProcessInfo.ThermalState: ParraLogStringConvertible,
         default:
             return "unknown"
         }
-    }
-
-    public var description: String {
-        return loggerDescription
     }
 }

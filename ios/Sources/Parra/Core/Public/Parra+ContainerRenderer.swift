@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 public extension Parra {
     static var containerRenderer: ParraContainerRenderer {
         return `default`.parraInternal.containerRenderer

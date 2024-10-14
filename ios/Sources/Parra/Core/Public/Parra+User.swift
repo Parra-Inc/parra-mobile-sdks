@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 public extension Parra {
     /// The currently logged in user, if one exists. It is preferrable to access
     /// auth state via the `parraAuthState` environment value, which will allow

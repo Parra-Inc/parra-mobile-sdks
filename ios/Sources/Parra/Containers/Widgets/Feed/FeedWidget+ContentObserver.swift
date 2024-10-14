@@ -20,11 +20,6 @@ extension FeedWidget {
         required init(
             initialParams: InitialParams
         ) {
-            let addRequestButton = ParraTextButtonContent(
-                text: ParraLabelContent(text: "Add request"),
-                isDisabled: false
-            )
-
             self.feedConfig = initialParams.config
             self.api = initialParams.api
 
@@ -142,7 +137,7 @@ extension FeedWidget {
                     ]
                 )
             case .contentCard(let contentCard):
-                guard let action = contentCard.action else {
+                guard contentCard.action != nil else {
                     logger.warn("Content card tapped but it has no action.", [
                         "content_card": contentCard.id
                     ])

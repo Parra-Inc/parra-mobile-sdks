@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public enum ParraImageContent: Hashable, Equatable {
+public enum ParraImageContent: Hashable, Equatable, Sendable {
     /// Assets libraries
     case resource(String, Bundle? = .main, Image.TemplateRenderingMode? = nil)
 

@@ -67,7 +67,7 @@ final class OAuth2Service {
     ) async throws -> ParraUser.Credential.Token {
         let refreshToken = token.refreshToken
         let endpoint = token.type.issuerEndpoint
-        let tokenUrl = try createTokenUrl(
+        let tokenUrl = try await createTokenUrl(
             endpoint: endpoint
         )
 
@@ -172,7 +172,7 @@ final class OAuth2Service {
             break
         }
 
-        let tokenUrl = try createTokenUrl(
+        let tokenUrl = try await createTokenUrl(
             endpoint: endpoint
         )
 
@@ -185,8 +185,8 @@ final class OAuth2Service {
 
     private func createTokenUrl(
         endpoint: IssuerEndpoint
-    ) throws -> URL {
-        guard let tenant = authServer.appState.appInfo?.tenant else {
+    ) async throws -> URL {
+        guard let tenant = await authServer.appState.appInfo?.tenant else {
             throw ParraError.message("Missing tenant to create token url")
         }
 

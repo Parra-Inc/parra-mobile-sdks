@@ -84,13 +84,13 @@ extension MetricManager {
 
         var sanitized: ParraSanitizedDictionary {
             return [
-                "code": code,
-                "type": type,
-                "reason": reason?.sanitized,
-                "signal": signal,
-                "termination_reason": terminationReason,
-                "virtual_memory_region_info": virtualMemoryRegionInfo,
-                "callstack_json": callstackJson
+                "code": String(describing: code),
+                "type": String(describing: type),
+                "reason": String(describing: reason?.sanitized),
+                "signal": String(describing: signal),
+                "termination_reason": String(describing: terminationReason),
+                "virtual_memory_region_info": String(describing: virtualMemoryRegionInfo),
+                "callstack_json": String(describing: callstackJson)
             ]
         }
     }

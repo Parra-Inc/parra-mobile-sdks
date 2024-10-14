@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 public protocol ParraContainerContentObserver: ObservableObject {
     associatedtype Content: ParraContainerContent
     associatedtype InitialParams

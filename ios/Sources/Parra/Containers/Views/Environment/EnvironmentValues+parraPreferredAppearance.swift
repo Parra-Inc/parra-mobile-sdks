@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@MainActor
 public struct ParraAppearanceInstanceEnvironmentKey: EnvironmentKey {
     public static var defaultValue: Binding<ParraAppearance> = .constant(
         ParraAppearance.system

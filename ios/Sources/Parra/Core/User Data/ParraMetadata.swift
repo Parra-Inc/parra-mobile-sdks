@@ -23,7 +23,7 @@ public final class ParraMetadata: Codable, Equatable, Hashable,
     }
 
     public init(from decoder: any Decoder) throws {
-        var container = try decoder.singleValueContainer()
+        let container = try decoder.singleValueContainer()
 
         do {
             self.rawValue = try container.decode([String: ParraAnyCodable].self)
@@ -45,7 +45,7 @@ public final class ParraMetadata: Codable, Equatable, Hashable,
     }
 
     public func encode(to encoder: any Encoder) throws {
-        var container = try encoder.singleValueContainer()
+        var container = encoder.singleValueContainer()
 
         try container.encode(rawValue)
     }

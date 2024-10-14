@@ -8,6 +8,8 @@
 
 import Foundation
 
+// MARK: - URLRequest + ParraSanitizedDictionaryConvertible
+
 extension URLRequest: ParraSanitizedDictionaryConvertible {
     var sanitized: ParraSanitizedDictionary {
         var params: [String: Any] = [
@@ -20,7 +22,7 @@ extension URLRequest: ParraSanitizedDictionaryConvertible {
 //            "network_service_type": networkServiceType.rawValue,
 //            "attribution": attribution.description,
 //            "assumes_http3_capable": assumesHTTP3Capable,
-            "cache_policy": cachePolicy.description
+            "cache_policy": cachePolicy.sanitizedDescription
 //            "requires_dns_sec_validation": requiresDNSSECValidation
         ]
 
@@ -44,5 +46,28 @@ extension URLRequest: ParraSanitizedDictionaryConvertible {
         }
 
         return ParraSanitizedDictionary(dictionary: params)
+    }
+}
+
+public extension NSURLRequest.CachePolicy {
+    var sanitizedDescription: String {
+        switch self {
+        case .useProtocolCachePolicy:
+            return "use_protocol_cache_policy"
+        case .reloadIgnoringLocalCacheData:
+            return "reload_ignoring_local_cache_data"
+        case .reloadIgnoringLocalAndRemoteCacheData:
+            return "reload_ignoring_local_and_remote_cache_data"
+        case .reloadIgnoringCacheData:
+            return "reload_ignoring_cache_data"
+        case .returnCacheDataElseLoad:
+            return "return_cache_data_else_load"
+        case .returnCacheDataDontLoad:
+            return "return_cache_data_dont_load"
+        case .reloadRevalidatingCacheData:
+            return "reload_revalidating_cache_data"
+        @unknown default:
+            return "unknown"
+        }
     }
 }

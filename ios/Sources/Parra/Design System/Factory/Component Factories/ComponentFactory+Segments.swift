@@ -9,7 +9,6 @@
 import SwiftUI
 
 public extension ParraComponentFactory {
-    @ViewBuilder
     func buildSegment(
         config: ParraSegmentConfig,
         content: ParraSegmentContent,

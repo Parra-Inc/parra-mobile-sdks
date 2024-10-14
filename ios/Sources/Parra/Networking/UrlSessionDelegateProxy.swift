@@ -17,11 +17,12 @@ actor UrlSessionDelegateProxy: NSObject, URLSessionTaskDelegate {
 
     // MARK: - Internal
 
+    @nonobjc
     func urlSession(
         _ session: URLSession,
         task: URLSessionTask,
         didFinishCollecting metrics: URLSessionTaskMetrics
-    ) async {
+    ) {
         Task {
             await delegate?.urlSession(
                 session,

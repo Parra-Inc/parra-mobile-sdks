@@ -287,7 +287,8 @@ class SessionManager {
                         "Couldn't associate a previous crash with any sessions.", [
                             "crash_timestamp": crashReport.createdAt
                                 .timeIntervalSince1970,
-                            "termination_reason": crashReport.terminationReason
+                            "termination_reason": crashReport
+                                .terminationReason ?? "unknown"
                         ]
                     )
                 }

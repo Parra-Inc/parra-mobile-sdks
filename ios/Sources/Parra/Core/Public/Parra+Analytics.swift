@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 public extension Parra {
     // MARK: - Analytics Events
 

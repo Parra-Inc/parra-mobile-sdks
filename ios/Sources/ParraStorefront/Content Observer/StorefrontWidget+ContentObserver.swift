@@ -83,7 +83,7 @@ extension StorefrontWidget {
         private(set) var content: Content
         let shopifyService: ShopifyService
         let config: ParraStorefrontConfig
-        let delegate: ParraStorefrontWidgetDelegate?
+        nonisolated let delegate: ParraStorefrontWidgetDelegate?
 
         var cartState: CartState = .loading {
             didSet {

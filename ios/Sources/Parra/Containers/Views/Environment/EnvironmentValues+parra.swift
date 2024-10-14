@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@MainActor
 public struct ParraInstanceEnvironmentKey: EnvironmentKey {
     public static var defaultValue: Parra = .default
 }

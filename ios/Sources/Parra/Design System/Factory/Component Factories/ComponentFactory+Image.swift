@@ -9,7 +9,6 @@
 import SwiftUI
 
 public extension ParraComponentFactory {
-    @ViewBuilder
     func buildImage(
         config: ParraImageConfig = ParraImageConfig(),
         content: ParraImageContent,
@@ -28,7 +27,6 @@ public extension ParraComponentFactory {
         )
     }
 
-    @ViewBuilder
     func buildAsyncImage(
         config: ParraImageConfig? = nil,
         content: ParraAsyncImageContent,

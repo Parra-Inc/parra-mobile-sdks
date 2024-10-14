@@ -138,7 +138,7 @@ public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
     public let url: URL
 
     public func encode(to encoder: any Encoder) throws {
-        var container = try encoder.container(
+        var container = encoder.container(
             keyedBy: CodingKeys.self
         )
 

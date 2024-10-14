@@ -9,7 +9,6 @@
 import SwiftUI
 
 public extension ParraComponentFactory {
-    @ViewBuilder
     func buildBadge(
         size: ParraBadgeSize = .sm,
         variant: ParraBadgeVariant = .outlined,

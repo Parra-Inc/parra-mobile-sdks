@@ -11,13 +11,15 @@ import SwiftUI
 private let logger = Logger()
 
 @Observable
-public class ParraAuthStateManager: CustomStringConvertible {
+public class ParraAuthStateManager {
     // MARK: - Lifecycle
 
+    @MainActor
     public init() {
         self.current = .undetermined
     }
 
+    @MainActor
     init(
         current: ParraAuthState
     ) {
@@ -26,15 +28,11 @@ public class ParraAuthStateManager: CustomStringConvertible {
 
     // MARK: - Public
 
-    public private(set) var current: ParraAuthState
-
-    public var description: String {
-        return "ParraAuthState: \(current.description)"
-    }
+    @MainActor public private(set) var current: ParraAuthState
 
     // MARK: - Internal
 
-    static let shared = ParraAuthStateManager(
+    @MainActor static let shared = ParraAuthStateManager(
         current: .undetermined
     )
 
@@ -60,6 +58,7 @@ public class ParraAuthStateManager: CustomStringConvertible {
         return result
     }
 
+    @MainActor
     func triggerAuthRefresh(
         using authService: AuthService
     ) {
@@ -70,16 +69,20 @@ public class ParraAuthStateManager: CustomStringConvertible {
 
     private var authObserver: NSObjectProtocol?
 
+    @MainActor
     private func beginObservingAuth() {
         authObserver = ParraNotificationCenter.default.addObserver(
             forName: Parra.authenticationStateDidChangeNotification,
             object: nil,
             queue: .main
         ) { notification in
-            self.handleAuthChange(notification: notification)
+            Task { @MainActor in
+                self.handleAuthChange(notification: notification)
+            }
         }
     }
 
+    @MainActor
     private func handleAuthChange(notification: Notification) {
         logger.debug("Received auth state change notification")
 
@@ -92,6 +95,8 @@ public class ParraAuthStateManager: CustomStringConvertible {
             return
         }
 
-        current = result
+        Task { @MainActor in
+            current = result
+        }
     }
 }

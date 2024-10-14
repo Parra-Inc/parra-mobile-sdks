@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 protocol AuthenticationFlowManagerDelegate {
     func presentModalLoadingIndicator(
         content: ParraLoadingIndicatorContent,

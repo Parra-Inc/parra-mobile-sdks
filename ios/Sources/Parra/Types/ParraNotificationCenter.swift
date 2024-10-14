@@ -10,12 +10,16 @@ import Foundation
 
 private let logger = Logger(category: "Parra notification center")
 
-class ParraNotificationCenter: NotificationCenterType {
+class ParraNotificationCenter: NotificationCenterType, @unchecked Sendable {
     // MARK: - Lifecycle
 
     init() {}
 
     // MARK: - Internal
+
+    struct Wrapper: @unchecked Sendable {
+        let userInfo: [AnyHashable: Any]?
+    }
 
     static let `default` = ParraNotificationCenter()
 
@@ -42,12 +46,14 @@ class ParraNotificationCenter: NotificationCenterType {
     ) async {
         logger.trace("Posting notification: \(aName.rawValue)")
 
+        let wrapper = Wrapper(userInfo: aUserInfo)
+
         await MainActor.run {
             DispatchQueue.main.async {
                 self.underlyingNotificationCenter.post(
                     name: aName,
                     object: anObject,
-                    userInfo: aUserInfo
+                    userInfo: wrapper.userInfo
                 )
             }
         }

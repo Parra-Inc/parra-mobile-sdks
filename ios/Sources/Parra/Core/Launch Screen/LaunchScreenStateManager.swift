@@ -54,8 +54,8 @@ final class LaunchScreenStateManager {
                 return lResult == rResult && lOptions == rOptions
             case (.complete(let lResult), .complete(let rResult)):
                 return lResult == rResult
-            case (.failed(let lErr), .failed(let rErr)):
-                return lErr.0 == rErr.0
+            case (.failed(let lErr, _), .failed(let rErr, _)):
+                return lErr == rErr
             default:
                 return false
             }
