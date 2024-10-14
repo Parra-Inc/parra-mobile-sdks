@@ -12,19 +12,23 @@ public struct ParraStorefrontWidget: View {
     // MARK: - Lifecycle
 
     public init(
-        config: ParraStorefrontConfig
+        config: ParraStorefrontConfig,
+        delegate: ParraStorefrontWidgetDelegate? = nil
     ) {
         self.config = config
+        self.delegate = delegate
     }
 
     // MARK: - Public
 
     public let config: ParraStorefrontConfig
+    public let delegate: ParraStorefrontWidgetDelegate?
 
     public var body: some View {
         let container: StorefrontWidget = Parra.containerRenderer.renderContainer(
             params: StorefrontWidget.ContentObserver.InitialParams(
                 config: config,
+                delegate: delegate,
                 productsResponse: nil
             ),
             config: config

@@ -8,10 +8,10 @@
 import Buy
 import SwiftUI
 
-struct ParraCartCost: Equatable, Hashable, Codable {
+public struct ParraCartCost: Equatable, Hashable, Codable {
     // MARK: - Lifecycle
 
-    init(shopCost: Storefront.CartCost) {
+    public init(shopCost: Storefront.CartCost) {
         self.subtotalPrice = ParraProductPrice(shopPrice: shopCost.subtotalAmount)
         self.totalPrice = ParraProductPrice(shopPrice: shopCost.totalAmount)
     }
@@ -31,8 +31,8 @@ struct ParraCartCost: Equatable, Hashable, Codable {
         )
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let subtotalPrice: ParraProductPrice
-    let totalPrice: ParraProductPrice
+    public let subtotalPrice: ParraProductPrice
+    public let totalPrice: ParraProductPrice
 }

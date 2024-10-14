@@ -171,6 +171,7 @@ struct StorefrontWidget: ParraContainer {
             contentObserver: StorefrontWidget.ContentObserver(
                 initialParams: StorefrontWidget.ContentObserver.InitialParams(
                     config: config,
+                    delegate: nil,
                     productsResponse: nil
                 )
             )

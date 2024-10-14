@@ -32,6 +32,7 @@ extension StorefrontWidget {
             initialParams: InitialParams
         ) {
             self.config = initialParams.config
+            self.delegate = initialParams.delegate
 
             self.content = Content(
                 emptyStateView: initialParams.config.emptyStateContent,
@@ -82,6 +83,7 @@ extension StorefrontWidget {
         private(set) var content: Content
         let shopifyService: ShopifyService
         let config: ParraStorefrontConfig
+        let delegate: ParraStorefrontWidgetDelegate?
 
         var cartState: CartState = .loading {
             didSet {
@@ -122,6 +124,19 @@ extension StorefrontWidget {
         @MainActor
         func loadInitialFeedItems() {
             productPaginator.loadMore()
+        }
+
+        @MainActor
+        func viewProduct(
+            product: ParraProduct,
+            variant: ParraProductVariant
+        ) {
+            StorefrontAnalytics.viewProductDetails(product, variant)
+
+            delegate?.storefrontWidgetViewProductDetails(
+                product: product,
+                with: variant
+            )
         }
 
         func findProduct(
@@ -201,11 +216,22 @@ extension StorefrontWidget {
                             variant,
                             UInt(abs(cartItem.quantity - Int(quantity)))
                         )
+
+                        delegate?.storefrontWidgetAddedProductToCart(
+                            product: product,
+                            with: variant,
+                            in: Int(quantity)
+                        )
                     }
                 } else {
                     StorefrontAnalytics.removeItemFromCart(
                         cartItem,
                         UInt(abs(cartItem.quantity - Int(quantity)))
+                    )
+
+                    delegate?.storefrontWidgetRemovedLineItemFromCart(
+                        lineItem: cartItem,
+                        in: cartItem.quantity
                     )
                 }
             }
@@ -273,6 +299,12 @@ extension StorefrontWidget {
                     variant,
                     quantity
                 )
+
+                delegate?.storefrontWidgetAddedProductToCart(
+                    product: product,
+                    with: variant,
+                    in: Int(quantity)
+                )
             }
         }
 
@@ -306,6 +338,11 @@ extension StorefrontWidget {
                     cartItem,
                     UInt(cartItem.quantity)
                 )
+
+                delegate?.storefrontWidgetRemovedLineItemFromCart(
+                    lineItem: cartItem,
+                    in: cartItem.quantity
+                )
             }
         }
 
@@ -322,6 +359,12 @@ extension StorefrontWidget {
                         readyInfo.lineItems,
                         readyInfo.cost
                     )
+
+                    delegate?
+                        .storefrontWidgetDidInitiateCheckout(
+                            lineItems: readyInfo.lineItems,
+                            with: readyInfo.cost
+                        )
                 }
 
                 ShopifyCheckoutSheetKit.present(

@@ -6,6 +6,7 @@
 //
 
 import Buy
+import ShopifyCheckoutSheetKit
 import SwiftUI
 
 public struct ParraCartLineItem: Identifiable, Equatable, Codable, Hashable {

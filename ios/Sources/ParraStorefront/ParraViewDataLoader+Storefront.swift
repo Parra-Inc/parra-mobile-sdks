@@ -18,7 +18,8 @@ struct StorefrontTransformParams: Equatable {}
 
 extension ParraViewDataLoader {
     static func storefrontLoader(
-        config: ParraStorefrontConfig
+        config: ParraStorefrontConfig,
+        delegate: ParraStorefrontWidgetDelegate? = nil
     )
         -> ParraViewDataLoader<
             StorefrontTransformParams,
@@ -35,6 +36,7 @@ extension ParraViewDataLoader {
                 let container: StorefrontWidget = Parra.containerRenderer.renderContainer(
                     params: StorefrontWidget.ContentObserver.InitialParams(
                         config: config,
+                        delegate: delegate,
                         productsResponse: params.productsResponse
                     ),
                     config: config,

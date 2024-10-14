@@ -18,7 +18,7 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
         event: ShopifyCheckoutSheetKit.CheckoutCompletedEvent
     ) {
         Task { @MainActor in
-            StorefrontAnalytics.makePurchase(event.orderDetails.cart.lines)
+            StorefrontAnalytics.makePurchase(event.orderDetails)
 
             performCartSetup(
                 as: Parra.currentUser,
@@ -29,6 +29,11 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
                 animated: true,
                 completion: nil
             )
+
+            delegate?
+                .storefrontWidgetDidMakePurchase(
+                    orderDetails: event.orderDetails
+                )
         }
     }
 
@@ -40,6 +45,8 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
                 animated: true,
                 completion: nil
             )
+
+            delegate?.storefrontWidgetDidCancelCheckout()
         }
     }
 
@@ -48,13 +55,19 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
     ) {
         Task { @MainActor in
             logger.error("Checkout failed with error", error)
+
+            delegate?.storefrontWidgetDidFailCheckout(
+                error: error
+            )
         }
     }
 
     nonisolated func shouldRecoverFromError(
         error: ShopifyCheckoutSheetKit.CheckoutError
     ) -> Bool {
-        return false
+        return delegate?.storefrontWidgetShouldRecoverFromCheckoutError(
+            error: error
+        ) ?? false
     }
 
     nonisolated func checkoutDidClickLink(
@@ -65,8 +78,14 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
                 "url": url.absoluteString
             ])
 
-            if UIApplication.shared.canOpenURL(url) {
+            if let delegate {
+                delegate.storefrontWidgetDidClickLinkInCheckout(url: url)
+            } else if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url)
+            } else {
+                logger.warn("Failed to open cart link", [
+                    "url": url.absoluteString
+                ])
             }
         }
     }

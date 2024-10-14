@@ -70,7 +70,10 @@ struct ProductDetailOptionsView: View {
             availableQuantity = UInt(max(newValue.quantityAvailable ?? .max, 1))
             selectedQuantity = min(availableQuantity, selectedQuantity)
 
-            StorefrontAnalytics.viewProductDetails(product, newValue)
+            dataModel.viewProduct(
+                product: product,
+                variant: newValue
+            )
         }
     }
 

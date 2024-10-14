@@ -86,9 +86,9 @@ final class StorefrontAnalytics {
     }
 
     static func makePurchase(
-        _ lineItems: [CheckoutCompletedEvent.CartLine]
+        _ orderDetails: ParraOrderDetails
     ) {
-        for line in lineItems {
+        for line in orderDetails.cart.lines {
             let variantId = line.merchandiseId ?? "unknown"
             // Use this to update UI, reset cart state, etc.
             let params: [String: Any] = [
