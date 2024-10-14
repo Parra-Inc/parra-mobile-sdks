@@ -22,7 +22,7 @@ struct ReleaseHeaderContent: Identifiable, Hashable {
 
         self.id = releaseHeader.id
         self.image = ParraAsyncImageContent(url: url)
-        self.size = CGSize(
+        self.size = _ParraSize(
             width: releaseHeader.size.width,
             height: releaseHeader.size.height
         )
@@ -31,6 +31,6 @@ struct ReleaseHeaderContent: Identifiable, Hashable {
     // MARK: - Public
 
     public let id: String
-    public let size: CGSize
+    public let size: _ParraSize
     public let image: ParraAsyncImageContent
 }
