@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 struct AlertPresenter: ViewModifier {
     // MARK: - Lifecycle
 

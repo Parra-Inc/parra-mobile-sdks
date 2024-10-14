@@ -117,7 +117,7 @@ public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
         url: URL
     ) {
         self.id = id
-        self.size = size
+        self._size = _ParraSize(cgSize: size)
         self.url = url
     }
 
@@ -127,15 +127,19 @@ public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
         )
 
         self.id = try container.decode(String.self, forKey: .id)
-        self.size = try container.decode(_ParraSize.self, forKey: .size).toCGSize
+        self._size = try container.decode(_ParraSize.self, forKey: .size)
         self.url = try container.decode(URL.self, forKey: .url)
     }
 
     // MARK: - Public
 
     public let id: String
-    public let size: CGSize
+
     public let url: URL
+
+    public var size: CGSize {
+        return _size.toCGSize
+    }
 
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(
@@ -144,7 +148,7 @@ public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
 
         try container.encode(id, forKey: .id)
         try container.encode(url, forKey: .url)
-        try container.encode(_ParraSize(cgSize: size), forKey: .size)
+        try container.encode(_size, forKey: .size)
     }
 
     // MARK: - Internal
@@ -154,6 +158,10 @@ public struct ParraImageAssetStub: Codable, Equatable, Hashable, Identifiable {
         case size
         case url
     }
+
+    // MARK: - Private
+
+    private let _size: _ParraSize
 }
 
 public struct ParraIdentity: Codable, Equatable, Hashable, Identifiable {

@@ -17,11 +17,11 @@ public struct ParraAsyncImageContent: Hashable, Equatable {
         originalSize: CGSize? = nil
     ) {
         self.url = url
-        self.originalSize = originalSize
+        self.originalSize = _ParraSize(cgSize: originalSize)
     }
 
     // MARK: - Internal
 
     let url: URL
-    let originalSize: CGSize?
+    let originalSize: _ParraSize?
 }

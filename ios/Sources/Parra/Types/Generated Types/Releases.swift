@@ -21,6 +21,15 @@ struct _ParraSize: Codable, Equatable, Hashable {
         self.height = height
     }
 
+    public init?(cgSize: CGSize?) {
+        guard let cgSize else {
+            return nil
+        }
+
+        self.width = cgSize.width
+        self.height = cgSize.height
+    }
+
     public init(cgSize: CGSize) {
         self.width = cgSize.width
         self.height = cgSize.height
@@ -612,7 +621,7 @@ public struct ParraReleaseHeader: Codable, Equatable, Hashable, Identifiable {
         url: String
     ) {
         self.id = id
-        self.size = size
+        self._size = _ParraSize(cgSize: size)
         self.url = url
     }
 
@@ -622,15 +631,19 @@ public struct ParraReleaseHeader: Codable, Equatable, Hashable, Identifiable {
         )
 
         self.id = try container.decode(String.self, forKey: .id)
-        self.size = try container.decode(_ParraSize.self, forKey: .size).toCGSize
+        self._size = try container
+            .decode(_ParraSize.self, forKey: .size)
         self.url = try container.decode(String.self, forKey: .url)
     }
 
     // MARK: - Public
 
     public let id: String
-    public let size: CGSize
     public let url: String
+
+    public var size: CGSize {
+        return _size.toCGSize
+    }
 
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(
@@ -639,7 +652,7 @@ public struct ParraReleaseHeader: Codable, Equatable, Hashable, Identifiable {
 
         try container.encode(id, forKey: .id)
         try container.encode(url, forKey: .url)
-        try container.encode(_ParraSize(cgSize: size), forKey: .size)
+        try container.encode(_size, forKey: .size)
     }
 
     // MARK: - Internal
@@ -649,6 +662,10 @@ public struct ParraReleaseHeader: Codable, Equatable, Hashable, Identifiable {
         case size
         case url
     }
+
+    // MARK: - Private
+
+    private let _size: _ParraSize
 }
 
 public enum ParraReleaseStatus: String, Codable, CaseIterable {
