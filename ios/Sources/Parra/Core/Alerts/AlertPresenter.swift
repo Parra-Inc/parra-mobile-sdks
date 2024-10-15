@@ -156,6 +156,7 @@ struct AlertPresenter: ViewModifier {
 }
 
 extension View {
+    @MainActor
     func renderToast(
         toast: Binding<AlertManager.Toast?>
     ) -> some View {
@@ -164,6 +165,7 @@ extension View {
         )
     }
 
+    @MainActor
     func renderLoadingIndicator(
         loadingIndicator: Binding<AlertManager.LoadingIndicator?>
     ) -> some View {
