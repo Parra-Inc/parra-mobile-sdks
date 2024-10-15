@@ -4,7 +4,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-white.svg?style=flat)](https://github.com/Parra-Inc/parra-mobile-sdks/blob/main/LICENSE.md)
 [![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-Compatible-green.svg)](https://docs.parra.io/sdks/ios/integration#add-the-parra-spm-package)
-[![](https://img.shields.io/badge/Swift-5.9-blue)](https://swiftpackageindex.com/Parra-Inc/parra-mobile-sdks)
+[![](https://img.shields.io/badge/Swift-5.10-blue)](https://swiftpackageindex.com/Parra-Inc/parra-mobile-sdks)
 [![](https://img.shields.io/badge/Platforms-iOS-orange)](https://docs.parra.io/sdks/ios#who-is-it-for)
 
 </div>

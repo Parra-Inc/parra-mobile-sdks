@@ -75,7 +75,7 @@ struct CartView: View {
         )
     }
 
-    private var cartNotReadyView: some View {
+    @MainActor private var cartNotReadyView: some View {
         componentFactory
             .buildEmptyState(
                 config: .errorDefault,
@@ -84,6 +84,7 @@ struct CartView: View {
     }
 
     @ViewBuilder
+    @MainActor
     private func cartReadyView(
         state: StorefrontWidget.ContentObserver.CartState.ReadyStateInfo
     ) -> some View {

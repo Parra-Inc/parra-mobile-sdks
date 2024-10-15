@@ -64,7 +64,7 @@ let package = Package(
             path: "\(iosSdkDir)/Tests/ParraTests"
         ),
     ],
-    swiftLanguageVersions: [.version("5.9")]
+    swiftLanguageVersions: [.version("5.10")]
 )
 
 let swiftSettings: [SwiftSetting] = [

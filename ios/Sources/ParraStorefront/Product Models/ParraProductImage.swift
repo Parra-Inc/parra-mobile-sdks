@@ -6,6 +6,7 @@
 //
 
 import Buy
+import Parra
 import SwiftUI
 
 public struct ParraProductImage: Equatable, Hashable, Codable {
@@ -19,7 +20,7 @@ public struct ParraProductImage: Equatable, Hashable, Codable {
     ) {
         self.id = id
         self.altText = altText
-        self.size = size
+        self._size = _ParraSize(cgSize: size)
         self.url = url
     }
 
@@ -29,12 +30,12 @@ public struct ParraProductImage: Equatable, Hashable, Codable {
         self.url = shopImage.url
 
         if let width = shopImage.width, let height = shopImage.height {
-            self.size = CGSize(
+            self._size = _ParraSize(
                 width: CGFloat(width),
                 height: CGFloat(height)
             )
         } else {
-            self.size = nil
+            self._size = nil
         }
     }
 
@@ -42,6 +43,10 @@ public struct ParraProductImage: Equatable, Hashable, Codable {
 
     public let id: String?
     public let altText: String?
-    public let size: CGSize?
+    public let _size: _ParraSize?
     public let url: URL
+
+    public var size: CGSize? {
+        return _size?.toCGSize
+    }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 /// CGSize is not Codable. Do not expose this externally. We don't want users
 /// to have to convert between this and CGSize.
-struct _ParraSize: Codable, Equatable, Hashable {
+public struct _ParraSize: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     public init(
