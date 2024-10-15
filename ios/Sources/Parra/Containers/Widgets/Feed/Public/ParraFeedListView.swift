@@ -45,22 +45,21 @@ public struct ParraFeedListView: View {
         let spacing = itemSpacing / 2
 
         ForEach(items) { item in
-            switch item.data {
-            case .feedItemYoutubeVideoData(let data):
+            if case .feedItemYoutubeVideoData(let data) = item.data {
                 FeedYouTubeVideoView(
                     youtubeVideo: data,
                     containerGeometry: containerGeometry,
                     spacing: spacing,
                     performActionForFeedItemData: performActionForFeedItemData
                 )
-            case .contentCard(let data):
+            } else if case .contentCard(let data) = item.data {
                 FeedContentCardView(
                     contentCard: data,
                     containerGeometry: containerGeometry,
                     spacing: spacing,
                     performActionForFeedItemData: performActionForFeedItemData
                 )
-            @unknown default:
+            } else {
                 EmptyView()
             }
         }

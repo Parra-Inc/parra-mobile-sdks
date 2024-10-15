@@ -132,8 +132,10 @@ final class AuthService {
         identity: String,
         identityType: ParraIdentityType?
     ) async throws -> Int {
-        let requestData = await PasswordResetChallengeRequestBody(
-            clientId: authServer.appState.applicationId,
+        let applicationId = await authServer.appState.applicationId
+
+        let requestData = PasswordResetChallengeRequestBody(
+            clientId: applicationId,
             identity: identity,
             identityType: identityType
         )
@@ -149,8 +151,10 @@ final class AuthService {
         code: String,
         password: String
     ) async throws {
-        let requestData = await PasswordResetRequestBody(
-            clientId: authServer.appState.applicationId,
+        let applicationId = await authServer.appState.applicationId
+
+        let requestData = PasswordResetRequestBody(
+            clientId: applicationId,
             code: code,
             password: password
         )
