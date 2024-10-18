@@ -130,5 +130,8 @@ pub struct ApplicationCollectionResponse {
     pub data: Vec<ApplicationResponse>,
 }
 
+#[derive(Debug, Serialize)]
+pub struct EmptyRequest {}
+
 #[derive(Debug, Deserialize)]
 pub struct EmptyResponse {}

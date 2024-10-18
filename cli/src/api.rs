@@ -3,7 +3,7 @@ use crate::{
     types::{
         api::{
             ApplicationCollectionResponse, ApplicationRequest,
-            ApplicationResponse, ApplicationType, AuthorizedUser,
+            ApplicationResponse, ApplicationType, AuthorizedUser, EmptyRequest,
             EmptyResponse, EventRequest, SessionRequest, TenantRequest,
             TenantResponse, UserInfoResponse, UserResponse,
         },
@@ -98,6 +98,41 @@ pub async fn get_tenants() -> Result<Vec<TenantResponse>, Box<dyn Error>> {
             .await?;
 
     Ok(tenants)
+}
+
+pub async fn complete_bootstrap(
+    tenant_id: &str,
+    application_id: &str,
+) -> Result<(), Box<dyn Error>> {
+    let authorized_user = ensure_auth().await?;
+
+    let endpoint = format!(
+        "/tenants/{}/applications/{}/bootstrap",
+        tenant_id, application_id
+    );
+
+    let body = EmptyRequest {};
+
+    let result: Result<EmptyResponse, Box<dyn Error>> =
+        perform_request_with_body(
+            Some(&authorized_user.credential),
+            &endpoint,
+            reqwest::Method::POST,
+            body,
+        )
+        .await;
+
+    match result {
+        Ok(_) => Ok(()),
+        Err(error) => {
+            eprintln!(
+                "Error completing bootstrap - error: {}",
+                error.to_string()
+            );
+
+            Err(error)
+        }
+    }
 }
 
 pub async fn create_tenant(

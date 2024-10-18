@@ -182,6 +182,7 @@ pub async fn execute_bootstrap(
     api::report_event("cli_bootstrap_started", None).await?;
 
     let tenant = get_tenant(tenant_id).await?;
+    let tenant_copy = tenant.clone();
 
     api::report_event(
         "cli_bootstrap_tenant_selected",
@@ -190,6 +191,7 @@ pub async fn execute_bootstrap(
     .await?;
 
     let mut application = get_application(application_id, &tenant).await?;
+    let application_copy = application.clone();
 
     api::report_event(
         "cli_bootstrap_application_selected",
@@ -305,6 +307,8 @@ pub async fn execute_bootstrap(
 
     let mut templates_dir = template_dir.clone();
     templates_dir.pop();
+
+    api::complete_bootstrap(&tenant_copy.id, &application_copy.id).await?;
 
     let xcode_project = project_generator::generator::generate_xcode_project(
         &expanded_path,
