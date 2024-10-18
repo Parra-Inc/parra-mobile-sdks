@@ -88,7 +88,8 @@ pub async fn execute_sample_bootstrap(
         get_sample_path()?
     };
 
-    let project_config = read_template_config(&template_dir)?;
+    let project_config =
+        read_template_config(&template_dir, use_local_packages)?;
 
     println!("Will generate sample in: {}", project_dir.display());
 
@@ -252,7 +253,8 @@ pub async fn execute_bootstrap(
     };
 
     let team_id = ios_config.team_id.unwrap_or("".to_owned());
-    let project_config = read_template_config(&template_dir)?;
+    let project_config =
+        read_template_config(&template_dir, cfg!(debug_assertions))?;
 
     api::report_event("cli_bootstrap_template_parsed", None).await?;
 
@@ -301,7 +303,9 @@ pub async fn execute_bootstrap(
         },
     };
 
-    let templates_dir: PathBuf = get_templates_dir_path()?;
+    let mut templates_dir = template_dir.clone();
+    templates_dir.pop();
+
     let xcode_project = project_generator::generator::generate_xcode_project(
         &expanded_path,
         &templates_dir,
@@ -337,9 +341,15 @@ pub async fn execute_bootstrap(
 
 fn read_template_config(
     template_dir: &PathBuf,
+    use_local_packages: bool,
 ) -> Result<TemplateConfig, Box<dyn Error>> {
-    let config =
-        read_template_file_following_links(template_dir.join("config.json"))?;
+    let project_template_path = template_dir.join("config.json");
+
+    let config: String = if use_local_packages {
+        read_template_file_following_links(project_template_path)?
+    } else {
+        read_to_string(project_template_path)?
+    };
 
     return Ok(serde_json::from_str::<TemplateConfig>(&config)?);
 }
@@ -408,8 +418,13 @@ fn get_local_template(
     template_dir: &PathBuf,
     use_local_packages: bool,
 ) -> Result<String, Box<dyn Error>> {
-    let template =
-        read_template_file_following_links(template_dir.join("project.yml"))?;
+    let project_template_path = template_dir.join("project.yml");
+
+    let template: String = if use_local_packages {
+        read_template_file_following_links(project_template_path)?
+    } else {
+        read_to_string(project_template_path)?
+    };
 
     let package_template: String = if use_local_packages {
         println!("Using local packages for project generation.");
@@ -418,9 +433,7 @@ fn get_local_template(
         )?
     } else {
         println!("Using remote packages for project generation.");
-        read_template_file_following_links(
-            template_dir.join("package_remote.yml"),
-        )?
+        read_to_string(template_dir.join("package_remote.yml"))?
     };
 
     Ok(format!("{}\n{}", template, package_template))
