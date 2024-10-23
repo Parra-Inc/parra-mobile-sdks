@@ -73,3 +73,9 @@ schemes:
     run:
       environmentVariables:
         IDEPreferLogStreaming: YES # Silence warning in Xcode console
+    archive:
+      preActions:
+        - settingsTarget: {{ app.name.upper_camel }}
+          name: Parra - Increment project build number
+          script: |
+              echo "Parra - Updating incrementing build number!" ; cd "${PROJECT_DIR}" ; agvtool bump
