@@ -11,7 +11,8 @@ import Parra
 extension Storefront.CartInput {
     static func createCartInput(
         productVariants: [(ParraProductVariant, UInt)] = [],
-        as user: ParraUser?
+        as user: ParraUser?,
+        attributes: [String: String]
     ) -> Storefront.CartInput {
         let linesInput = productVariants.map { variant, quantity in
             Storefront.CartLineInput.create(
@@ -25,9 +26,18 @@ extension Storefront.CartInput {
             phone: .value(user?.info.phoneNumber)
         )
 
-        return Storefront.CartInput.create(
-            lines: .value(linesInput),
-            buyerIdentity: .value(buyerIdentityInput)
-        )
+        let attributeInputs = attributes.map { key, value in
+            Storefront.AttributeInput(
+                key: key,
+                value: value
+            )
+        }
+
+        return Storefront.CartInput
+            .create(
+                attributes: .value(attributeInputs),
+                lines: .value(linesInput),
+                buyerIdentity: .value(buyerIdentityInput)
+            )
     }
 }

@@ -20,6 +20,7 @@ public final class ParraStorefrontConfig: ParraContainerConfig {
         shopifyCachePolicy: Graph.CachePolicy = .cacheFirst(expireIn: 60 * 60 * 24),
         navigationTitle: String = "Products",
         showDismissButton: Bool = false,
+        checkoutAttributes: [String: String] = [:],
         emptyStateContent: ParraEmptyStateContent = ParraStorefrontConfig
             .defaultEmptyStateContent,
         productNotFoundContent: ParraEmptyStateContent = ParraStorefrontConfig
@@ -35,6 +36,7 @@ public final class ParraStorefrontConfig: ParraContainerConfig {
         self.shopifyCachePolicy = shopifyCachePolicy
         self.navigationTitle = navigationTitle
         self.showDismissButton = showDismissButton
+        self.checkoutAttributes = checkoutAttributes
         self.emptyStateContent = emptyStateContent
         self.productNotFoundContent = productNotFoundContent
         self.errorStateContent = errorStateContent
@@ -85,6 +87,8 @@ public final class ParraStorefrontConfig: ParraContainerConfig {
 
     public let navigationTitle: String
     public let showDismissButton: Bool
+
+    public let checkoutAttributes: [String: String]
 
     public let emptyStateContent: ParraEmptyStateContent
     public let productNotFoundContent: ParraEmptyStateContent

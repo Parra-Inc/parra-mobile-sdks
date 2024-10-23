@@ -165,7 +165,8 @@ extension StorefrontWidget {
                         productVariants: [
                             (productVariant, quantity)
                         ],
-                        as: user
+                        as: user,
+                        attributes: config.checkoutAttributes
                     )
                 )
             )
@@ -400,7 +401,8 @@ extension StorefrontWidget {
                     let result = try await shopifyService.performMutation(
                         .createCartMutation(
                             for: .createCartInput(
-                                as: user
+                                as: user,
+                                attributes: config.checkoutAttributes
                             )
                         )
                     )
