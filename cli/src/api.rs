@@ -22,7 +22,8 @@ pub async fn report_event(
 ) -> Result<(), Box<dyn Error>> {
     // POST /tracking/sessions
 
-    let authorized_user = get_cached_user_if_present().await;
+    let authorized_user = Box::pin(get_cached_user_if_present()).await;
+
     let credential: Option<Credential> =
         if let Some(authorized_user) = authorized_user {
             Some(authorized_user.credential)
@@ -254,10 +255,10 @@ async fn ensure_auth() -> Result<AuthorizedUser, Box<dyn Error>> {
 }
 
 async fn get_cached_user_if_present() -> Option<AuthorizedUser> {
-    let credential_result = auth::get_persisted_credential();
+    let result = auth::perform_device_authentication().await;
 
-    match credential_result {
-        Ok(credential) => {
+    match result {
+        Ok((credential, _)) => {
             let user_result = get_current_user(&credential).await;
 
             match user_result {
