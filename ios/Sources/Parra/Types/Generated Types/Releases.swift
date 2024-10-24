@@ -1485,16 +1485,21 @@ public struct ParraLegalInfo: Codable, Equatable, Hashable {
 
     public init(
         privacyPolicy: ParraLegalDocument? = nil,
-        termsOfService: ParraLegalDocument? = nil
+        termsOfService: ParraLegalDocument? = nil,
+        policyDocuments: [ParraLegalDocument] = []
     ) {
         self.privacyPolicy = privacyPolicy
         self.termsOfService = termsOfService
+        self.policyDocuments = policyDocuments
     }
 
     // MARK: - Public
 
     public let privacyPolicy: ParraLegalDocument?
     public let termsOfService: ParraLegalDocument?
+
+    /// All policy documents except for the ToS and privacy policy.
+    public let policyDocuments: [ParraLegalDocument]
 
     public var allDocuments: [ParraLegalDocument] {
         var documents = [ParraLegalDocument]()
@@ -1506,6 +1511,8 @@ public struct ParraLegalInfo: Codable, Equatable, Hashable {
         if let termsOfService {
             documents.append(termsOfService)
         }
+
+        documents.append(contentsOf: policyDocuments)
 
         return documents
     }
@@ -1519,6 +1526,7 @@ public struct ParraLegalInfo: Codable, Equatable, Hashable {
     enum CodingKeys: CodingKey {
         case privacyPolicy
         case termsOfService
+        case policyDocuments
     }
 
     static let empty = ParraLegalInfo()

@@ -16,7 +16,7 @@ public struct ParraLegalInfoView: View {
     // MARK: - Public
 
     public var body: some View {
-        List(parraAppInfo.legal.allDocuments) { document in
+        List(parraAppInfo.legal.policyDocuments) { document in
             NavigationLink {
                 ParraLegalDocumentView(legalDocument: document)
             } label: {
