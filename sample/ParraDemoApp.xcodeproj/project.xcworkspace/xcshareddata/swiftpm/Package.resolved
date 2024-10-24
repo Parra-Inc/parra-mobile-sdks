@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Shopify/checkout-sheet-kit-swift",
       "state" : {
-        "revision" : "02d796b749520846a987cfd9f82b210c2b22f5f8",
-        "version" : "3.1.0"
+        "revision" : "773e42bd468fbf6004c6f5a7c7b762a70d1da0fd",
+        "version" : "3.1.1"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Parra-Inc/parra-mobile-sdks",
       "state" : {
-        "revision" : "ba9305883fa613e554af9cc3847834ffc8d1ef46",
-        "version" : "0.10.1"
+        "revision" : "3654308485b62e4386e0cc75a1e95c03a65daa67",
+        "version" : "0.10.2"
       }
     },
     {

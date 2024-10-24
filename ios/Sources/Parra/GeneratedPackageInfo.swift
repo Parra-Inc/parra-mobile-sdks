@@ -1,2 +1,2 @@
-enum ParraPackageInfo { static let version = "0.10.1" }
+enum ParraPackageInfo { static let version = "0.10.2" }
 
