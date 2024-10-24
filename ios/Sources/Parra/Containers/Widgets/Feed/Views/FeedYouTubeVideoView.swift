@@ -107,6 +107,7 @@ struct FeedYouTubeVideoView: View {
                 .padding(.horizontal, 12)
                 .padding(.bottom, 16)
             }
+            .contentShape(.rect)
         }
         .disabled(!redactionReasons.isEmpty)
         .background(parraTheme.palette.secondaryBackground)
