@@ -8,6 +8,7 @@
 
 import Parra
 import SwiftUI
+import ParraStorefront
 
 struct ContentView: View {
     var body: some View {
@@ -26,6 +27,18 @@ struct ContentView: View {
                 .tabItem {
                     Label("Profile", systemImage: "person")
                 }
+        }
+        .onAppear {
+            if !ParraStorefront.isInitialized {
+                ParraStorefront.initialize(
+                    with: ParraStorefront.Config(
+                        shopifyDomain: <#SHOPIFY_DOMAIN#>,
+                        shopifyApiKey: <#SHOPIFY_API_KEY#>
+                    )
+                )
+
+                ParraStorefront.preloadProducts()
+            }
         }
     }
 }
