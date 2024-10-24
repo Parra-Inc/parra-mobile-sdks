@@ -7,7 +7,17 @@
 //
 
 import Parra
+import ParraStorefront
 import SwiftUI
+
+private let shopifyDomain: String = ""
+private let shopifyApiKey: String = ""
+
+struct StoreTab: View {
+    var body: some View {
+        ParraStorefrontWidget()
+    }
+}
 
 struct ContentView: View {
     var body: some View {
@@ -17,10 +27,27 @@ struct ContentView: View {
                     Label("App", systemImage: "app.dashed")
                 }
 
+            StoreTab()
+                .tabItem {
+                    Label("Store", systemImage: "storefront")
+                }
+
             SettingsTab()
                 .tabItem {
                     Label("Profile", systemImage: "person")
                 }
+        }
+        .onAppear {
+            if !shopifyDomain.isEmpty && !shopifyApiKey.isEmpty {
+                ParraStorefront.initialize(
+                    with: ParraStorefront.Config(
+                        shopifyDomain: shopifyDomain,
+                        shopifyApiKey: shopifyApiKey
+                    )
+                )
+
+                ParraStorefront.preloadProducts()
+            }
         }
     }
 }

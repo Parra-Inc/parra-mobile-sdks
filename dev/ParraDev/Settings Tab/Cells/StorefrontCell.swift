@@ -9,9 +9,6 @@ import Parra
 import ParraStorefront
 import SwiftUI
 
-private let shopifyDomain: String = ""
-private let shopifyApiKey: String = ""
-
 /// This example shows how you can perform a sheet presentation of the
 /// ``ParraStorefrontWidget`` component. This feature is currently experimental!
 struct StorefrontCell: View {
@@ -23,7 +20,7 @@ struct StorefrontCell: View {
     var body: some View {
         // A Shopify storefront can not be presented without defining your
         // Shopify domain and API key.
-        if !shopifyDomain.isEmpty && !shopifyApiKey.isEmpty {
+        if ParraStorefront.isInitialized {
             Button(action: {
                 isPresented = true
             }) {
@@ -44,9 +41,7 @@ struct StorefrontCell: View {
             .disabled(isPresented)
             .presentParraStorefront(
                 isPresented: $isPresented,
-                config: ParraStorefrontConfig(
-                    shopifyDomain: shopifyDomain,
-                    shopifyApiKey: shopifyApiKey,
+                config: ParraStorefrontWidgetConfig(
                     showDismissButton: true
                 )
             )

@@ -13,7 +13,7 @@ struct StorefrontWidget: ParraContainer {
     // MARK: - Lifecycle
 
     init(
-        config: ParraStorefrontConfig,
+        config: ParraStorefrontWidgetConfig,
         contentObserver: ContentObserver
     ) {
         self.config = config
@@ -133,7 +133,7 @@ struct StorefrontWidget: ParraContainer {
     // MARK: - Internal
 
     @StateObject var contentObserver: ContentObserver
-    let config: ParraStorefrontConfig
+    let config: ParraStorefrontWidgetConfig
 
     var products: Binding<[ParraProduct]> {
         return $contentObserver.productPaginator.items
@@ -161,10 +161,7 @@ struct StorefrontWidget: ParraContainer {
 
 #Preview {
     ParraContainerPreview<StorefrontWidget>(
-        config: ParraStorefrontConfig(
-            shopifyDomain: "",
-            shopifyApiKey: ""
-        )
+        config: ParraStorefrontWidgetConfig()
     ) { _, _, config in
         StorefrontWidget(
             config: config,

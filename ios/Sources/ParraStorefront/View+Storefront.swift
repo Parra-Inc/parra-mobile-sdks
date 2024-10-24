@@ -15,7 +15,7 @@ public extension View {
     @MainActor
     func presentParraStorefront(
         isPresented: Binding<Bool>,
-        config: ParraStorefrontConfig,
+        config: ParraStorefrontWidgetConfig,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) -> some View {
         let transformParams = StorefrontTransformParams()
@@ -25,35 +25,18 @@ public extension View {
             StorefrontParams,
             StorefrontWidget
         >.Transformer = { _, _ in
-            let client = Graph.Client(
-                shopDomain: config.shopifyDomain,
-                apiKey: config.shopifyApiKey,
-                session: config.shopifySession,
-                locale: config.shopifyLocale
-            )
+            var productsResponse: ParraProductResponse!
 
-            client.cachePolicy = config.shopifyCachePolicy
-
-            let shopifyService = ShopifyService(
-                client: client
-            )
-
-            let response = try await shopifyService.performQuery(
-                .productsQuery(
-                    count: storefrontPaginatorLimit
-                )
-            )
+                // If there's a cached response, use it.
+                = if let cachedProductsResponse = ParraStorefront.cachedPreloadResponse
+            {
+                cachedProductsResponse
+            } else {
+                try await ParraStorefront.performProductPreload()
+            }
 
             return StorefrontParams(
-                productsResponse: ParraProductResponse(
-                    products: response.products.edges
-                        .map { ParraProduct(shopProduct: $0.node) },
-                    productPageInfo: ParraProductResponse.PageInfo(
-                        startCursor: response.products.pageInfo.startCursor,
-                        endCursor: response.products.pageInfo.endCursor,
-                        hasNextPage: response.products.pageInfo.hasNextPage
-                    )
-                )
+                productsResponse: productsResponse
             )
         }
 

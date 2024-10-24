@@ -13,7 +13,7 @@ import SwiftUI
 struct StorefrontTab: View {
     var body: some View {
         ParraStorefrontWidget(
-            config: ParraStorefrontConfig(
+            config: ParraStorefrontWidgetConfig(
                 shopifyDomain: "{{ shopify.domain }}",
                 shopifyApiKey: "{{ shopify.api_key }}"
             )

@@ -40,17 +40,13 @@ extension StorefrontWidget {
                 errorStateView: initialParams.config.errorStateContent
             )
 
-            let client = Graph.Client(
-                shopDomain: config.shopifyDomain,
-                apiKey: config.shopifyApiKey,
-                session: config.shopifySession,
-                locale: config.shopifyLocale
-            )
-
-            client.cachePolicy = config.shopifyCachePolicy
-            self.shopifyService = ShopifyService(
-                client: client
-            )
+            self.wasPreloaded = if let elements = initialParams.productsResponse?.products
+                .elements
+            {
+                !elements.isEmpty
+            } else {
+                false
+            }
 
             self.productPaginator = if let productsResponse = initialParams
                 .productsResponse
@@ -81,8 +77,7 @@ extension StorefrontWidget {
         // MARK: - Internal
 
         private(set) var content: Content
-        let shopifyService: ShopifyService
-        let config: ParraStorefrontConfig
+        let config: ParraStorefrontWidgetConfig
         nonisolated let delegate: ParraStorefrontWidgetDelegate?
 
         var cartState: CartState = .loading {
@@ -123,7 +118,9 @@ extension StorefrontWidget {
 
         @MainActor
         func loadInitialFeedItems() {
-            productPaginator.loadMore()
+            if !wasPreloaded {
+                productPaginator.loadMore()
+            }
         }
 
         @MainActor
@@ -159,6 +156,7 @@ extension StorefrontWidget {
             quantity: UInt,
             as user: ParraUser?
         ) async throws {
+            let shopifyService = try ParraStorefront.getShopifyService()
             let result = try await shopifyService.performMutation(
                 .createCartMutation(
                     for: .createCartInput(
@@ -189,6 +187,7 @@ extension StorefrontWidget {
             ])
 
             try await withReadyCart { readyInfo in
+                let shopifyService = try ParraStorefront.getShopifyService()
                 let result = try await shopifyService.performMutation(
                     .updateLineItemQuantityCartMutation(
                         lineItemId: cartItem.id,
@@ -245,6 +244,7 @@ extension StorefrontWidget {
             logger.info("Updating cart note", ["note": note ?? "<empty>"])
 
             try await withReadyCart { readyInfo in
+                let shopifyService = try ParraStorefront.getShopifyService()
                 let result = try await shopifyService.performMutation(
                     .updateNoteCartMutation(
                         for: readyInfo.cartId,
@@ -275,6 +275,7 @@ extension StorefrontWidget {
             ])
 
             try await withReadyCart { readyState in
+                let shopifyService = try ParraStorefront.getShopifyService()
                 let result = try await shopifyService.performMutation(
                     .addToCartCartMutation(
                         cartId: readyState.cartId,
@@ -316,6 +317,7 @@ extension StorefrontWidget {
             logger.info("Removing product from cart", ["itemId": cartItem.id])
 
             try await withReadyCart { readyState in
+                let shopifyService = try ParraStorefront.getShopifyService()
                 let result = try await shopifyService.performMutation(
                     .removeLineItemCartMutation(
                         lineItemId: cartItem.id,
@@ -398,6 +400,7 @@ extension StorefrontWidget {
                 }
 
                 do {
+                    let shopifyService = try ParraStorefront.getShopifyService()
                     let result = try await shopifyService.performMutation(
                         .createCartMutation(
                             for: .createCartInput(
@@ -427,6 +430,7 @@ extension StorefrontWidget {
 
         // MARK: - Private
 
+        private let wasPreloaded: Bool
         private var paginatorSink: AnyCancellable? = nil
 
         private func updateCartCache(
@@ -446,6 +450,7 @@ extension StorefrontWidget {
                 try await Task.sleep(for: .seconds(0.5))
             }
 
+            let shopifyService = try ParraStorefront.getShopifyService()
             let result = try await shopifyService.performQuery(
                 .productsQuery(
                     count: Int32(pageSize),

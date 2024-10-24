@@ -18,7 +18,7 @@ struct StorefrontTransformParams: Equatable {}
 
 extension ParraViewDataLoader {
     static func storefrontLoader(
-        config: ParraStorefrontConfig,
+        config: ParraStorefrontWidgetConfig,
         delegate: ParraStorefrontWidgetDelegate? = nil
     )
         -> ParraViewDataLoader<

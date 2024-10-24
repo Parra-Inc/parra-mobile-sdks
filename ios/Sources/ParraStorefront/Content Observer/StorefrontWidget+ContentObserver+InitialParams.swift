@@ -9,7 +9,7 @@ import SwiftUI
 
 extension StorefrontWidget.ContentObserver {
     struct InitialParams {
-        let config: ParraStorefrontConfig
+        let config: ParraStorefrontWidgetConfig
         let delegate: ParraStorefrontWidgetDelegate?
         let productsResponse: ParraProductResponse?
     }

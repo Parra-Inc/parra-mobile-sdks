@@ -39,7 +39,7 @@ struct StorefrontCell: View {
         .disabled(isPresented)
         .presentParraStorefront(
             isPresented: $isPresented,
-            config: ParraStorefrontConfig(
+            config: ParraStorefrontWidgetConfig(
                 // A Shopify storefront can not be presented without defining your
                 // Shopify domain and API key.
                 shopifyDomain: "{{ shopify.domain }}",

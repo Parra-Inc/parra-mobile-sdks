@@ -12,7 +12,7 @@ public struct ParraStorefrontWidget: View {
     // MARK: - Lifecycle
 
     public init(
-        config: ParraStorefrontConfig,
+        config: ParraStorefrontWidgetConfig = .default,
         delegate: ParraStorefrontWidgetDelegate? = nil
     ) {
         self.config = config
@@ -21,7 +21,7 @@ public struct ParraStorefrontWidget: View {
 
     // MARK: - Public
 
-    public let config: ParraStorefrontConfig
+    public let config: ParraStorefrontWidgetConfig
     public let delegate: ParraStorefrontWidgetDelegate?
 
     public var body: some View {
@@ -29,7 +29,7 @@ public struct ParraStorefrontWidget: View {
             params: StorefrontWidget.ContentObserver.InitialParams(
                 config: config,
                 delegate: delegate,
-                productsResponse: nil
+                productsResponse: ParraStorefront.cachedPreloadResponse
             ),
             config: config
         )
