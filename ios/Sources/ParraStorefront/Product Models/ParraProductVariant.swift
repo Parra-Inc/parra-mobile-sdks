@@ -63,10 +63,10 @@ public struct ParraProductVariant: Identifiable, Equatable, Hashable, Codable {
     // MARK: - Internal
 
     var allowPurchase: Bool {
-        guard let quantityAvailable else {
-            return false
+        if let quantityAvailable {
+            return quantityAvailable > 0
         }
 
-        return !currentlyNotInStock && quantityAvailable > 0 && availableForSale
+        return !currentlyNotInStock && availableForSale
     }
 }
