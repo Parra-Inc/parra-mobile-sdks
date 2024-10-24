@@ -11,18 +11,21 @@ use crate::{
     },
 };
 use chrono::{DateTime, Utc};
+
+use async_recursion::async_recursion;
 use serde::{de::DeserializeOwned, Serialize};
 use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
 use std::{collections::HashMap, error::Error};
 
+#[async_recursion(?Send)]
 pub async fn report_event(
     event_name: &str,
     metadata: Option<HashMap<&str, &str>>,
-) -> Result<(), Box<dyn Error>> {
+) {
     // POST /tracking/sessions
 
-    let authorized_user = Box::pin(get_cached_user_if_present()).await;
+    let authorized_user = get_cached_user_if_present().await;
 
     let credential: Option<Credential> =
         if let Some(authorized_user) = authorized_user {
@@ -69,8 +72,6 @@ pub async fn report_event(
             )
         }
     };
-
-    Ok(())
 }
 
 pub async fn get_tenant(

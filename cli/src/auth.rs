@@ -58,30 +58,27 @@ pub async fn perform_device_authentication(
 async fn perform_refresh_authentication(
     credential: &Credential,
 ) -> Result<Credential, Box<dyn Error>> {
-    api::report_event(
+    let _ = api::report_event(
         "cli_auth_started",
         Some(HashMap::from([("is_reauthenticating", "true")])),
-    )
-    .await?;
+    );
 
     let result = _perform_refresh_authentication(credential).await;
 
     match result {
         Ok(credential) => {
-            api::report_event(
+            let _ = api::report_event(
                 "cli_auth_succeeded",
                 Some(HashMap::from([("is_reauthenticating", "true")])),
-            )
-            .await?;
+            );
 
             Ok(credential)
         }
         Err(err) => {
-            api::report_event(
+            let _ = api::report_event(
                 "cli_auth_failed",
                 Some(HashMap::from([("is_reauthenticating", "true")])),
-            )
-            .await?;
+            );
 
             Err(err)
         }
@@ -110,30 +107,27 @@ async fn _perform_refresh_authentication(
 }
 
 async fn perform_normal_authentication() -> Result<Credential, Box<dyn Error>> {
-    api::report_event(
+    let _ = api::report_event(
         "cli_auth_started",
         Some(HashMap::from([("is_reauthenticating", "false")])),
-    )
-    .await?;
+    );
 
     let result = _perform_normal_authentication().await;
 
     match result {
         Ok(credential) => {
-            api::report_event(
+            let _ = api::report_event(
                 "cli_auth_succeeded",
                 Some(HashMap::from([("is_reauthenticating", "false")])),
-            )
-            .await?;
+            );
 
             Ok(credential)
         }
         Err(err) => {
-            api::report_event(
+            let _ = api::report_event(
                 "cli_auth_failed",
                 Some(HashMap::from([("is_reauthenticating", "false")])),
-            )
-            .await?;
+            );
 
             Err(err)
         }
@@ -175,7 +169,7 @@ async fn _perform_normal_authentication() -> Result<Credential, Box<dyn Error>>
 
     let result = open::that(device_auth.verification_uri_complete);
 
-    api::report_event("cli_auth_browser_opened", None).await?;
+    let _ = api::report_event("cli_auth_browser_opened", None);
 
     if result.is_err() {
         println!(

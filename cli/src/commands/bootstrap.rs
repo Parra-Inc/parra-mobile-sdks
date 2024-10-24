@@ -179,25 +179,23 @@ pub async fn execute_bootstrap(
     project_path: Option<String>,
     template_name: String,
 ) -> Result<(), Box<dyn Error>> {
-    api::report_event("cli_bootstrap_started", None).await?;
+    let _ = api::report_event("cli_bootstrap_started", None);
 
     let tenant = get_tenant(tenant_id).await?;
     let tenant_copy = tenant.clone();
 
-    api::report_event(
+    let _ = api::report_event(
         "cli_bootstrap_tenant_selected",
         Some(HashMap::from([("tenant_id", tenant.id.as_str())])),
-    )
-    .await?;
+    );
 
     let mut application = get_application(application_id, &tenant).await?;
     let application_copy = application.clone();
 
-    api::report_event(
+    let _ = api::report_event(
         "cli_bootstrap_application_selected",
         Some(HashMap::from([("application_id", application.id.as_str())])),
-    )
-    .await?;
+    );
 
     let display_name: String = application
         .name
@@ -239,7 +237,7 @@ pub async fn execute_bootstrap(
         get_remote_template(&template_name).await?
     };
 
-    api::report_event("cli_bootstrap_template_cloned", None).await?;
+    let _ = api::report_event("cli_bootstrap_template_cloned", None);
 
     let template_app_dir = template_dir.join("App");
 
@@ -258,7 +256,7 @@ pub async fn execute_bootstrap(
     let project_config =
         read_template_config(&template_dir, cfg!(debug_assertions))?;
 
-    api::report_event("cli_bootstrap_template_parsed", None).await?;
+    let _ = api::report_event("cli_bootstrap_template_parsed", None);
 
     let context: ProjectContext = ProjectContext {
         app: AppContextInfo {
@@ -338,7 +336,7 @@ pub async fn execute_bootstrap(
         open_project(xcode_target_dir, &context).await?;
     }
 
-    api::report_event("cli_bootstrap_succeeded", None).await?;
+    let _ = api::report_event("cli_bootstrap_succeeded", None);
 
     Ok(())
 }
@@ -552,11 +550,10 @@ async fn dependencies(
         return Ok(());
     }
 
-    api::report_event(
+    let _ = api::report_event(
         "cli_bootstrap_project_dependencies_installation_started",
         None,
-    )
-    .await?;
+    );
 
     let confirm_message = if missing
         .contains(&dependencies::DerivedDependency::Xcode)
@@ -581,8 +578,8 @@ async fn dependencies(
         exit(1)
     }
 
-    api::report_event("cli_bootstrap_project_dependencies_installed", None)
-        .await?;
+    let _ =
+        api::report_event("cli_bootstrap_project_dependencies_installed", None);
 
     Ok(())
 }
@@ -592,11 +589,10 @@ async fn get_tenant(
 ) -> Result<TenantResponse, Box<dyn Error>> {
     // The user provided a tenant ID directly.
     if let Some(tenant_id) = tenant_arg {
-        api::report_event(
+        let _ = api::report_event(
             "cli_bootstrap_tenant_provided",
             Some(HashMap::from([("tenant_id", tenant_id.as_str())])),
-        )
-        .await?;
+        );
 
         return api::get_tenant(&tenant_id).await;
     }
@@ -607,7 +603,7 @@ async fn get_tenant(
         return create_new_tenant(false).await;
     }
 
-    api::report_event("cli_bootstrap_tenant_existed", None).await?;
+    let _ = api::report_event("cli_bootstrap_tenant_existed", None);
 
     if tenants.len() == 1 {
         let tenant = tenants.first().unwrap().clone();
@@ -652,11 +648,10 @@ async fn get_application(
 ) -> Result<ApplicationResponse, Box<dyn Error>> {
     // The user provided a application ID directly.
     if let Some(application_id) = application_arg {
-        api::report_event(
+        let _ = api::report_event(
             "cli_bootstrap_application_provided",
             Some(HashMap::from([("application_id", application_id.as_str())])),
-        )
-        .await?;
+        );
 
         return api::get_application(&tenant.id, &application_id).await;
     }
@@ -667,7 +662,7 @@ async fn get_application(
         return create_new_application(&tenant).await;
     }
 
-    api::report_event("cli_bootstrap_application_existed", None).await?;
+    let _ = api::report_event("cli_bootstrap_application_existed", None);
 
     if applications.len() == 1 {
         let application = applications.first().unwrap().clone();
@@ -885,7 +880,7 @@ async fn open_project(
     if !output.status.success() {
         println!("Couldn't open your project in Xcode automatically. Open your project at: {}", path_clone);
     } else {
-        api::report_event("cli_bootstrap_project_opened", None).await?;
+        let _ = api::report_event("cli_bootstrap_project_opened", None);
     }
 
     Ok(())

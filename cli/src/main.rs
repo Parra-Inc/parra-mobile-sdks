@@ -23,8 +23,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let command_name = &cli.command.to_string();
     let command_event_prefix = format!("cli_command_{}", command_name);
 
-    api::report_event(&format!("{}_started", command_event_prefix), None)
-        .await?;
+    let _ =
+        api::report_event(&format!("{}_started", command_event_prefix), None);
 
     let result = match cli.command {
         Command::Bootstrap(bootstrap_args) => {
@@ -60,20 +60,18 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     match result {
         Ok(_) => {
-            api::report_event(
+            let _ = api::report_event(
                 &format!("{}_succeeded", command_event_prefix),
                 None,
-            )
-            .await?;
+            );
 
             Ok(())
         }
         Err(error) => {
-            api::report_event(
+            let _ = api::report_event(
                 &format!("{}_failed", command_event_prefix),
                 Some(HashMap::from([("error", error.to_string().as_str())])),
-            )
-            .await?;
+            );
 
             Err(error)
         }
