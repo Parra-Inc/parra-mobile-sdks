@@ -38,7 +38,7 @@ struct SettingsTab: View {
 
                 if parraAppInfo.legal.hasDocuments {
                     Section("Legal") {
-                        ForEach(parraAppInfo.legal.policyDocuments) { document in
+                        ForEach(parraAppInfo.legal.allDocuments) { document in
                             NavigationLink {
                                 ParraLegalDocumentView(legalDocument: document)
                             } label: {
