@@ -25,10 +25,9 @@ public extension View {
             StorefrontParams,
             StorefrontWidget
         >.Transformer = { _, _ in
-            var productsResponse: ParraProductResponse!
-
-                // If there's a cached response, use it.
-                = if let cachedProductsResponse = ParraStorefront.cachedPreloadResponse
+            // If there's a cached response, use it.
+            let productsResponse: ParraProductResponse = if let cachedProductsResponse =
+                ParraStorefront.cachedPreloadResponse
             {
                 cachedProductsResponse
             } else {

@@ -24,6 +24,19 @@ struct ProductDetailView: View {
         TabView {
             ForEach(product.images, id: \.self) { image in
                 ZStack {
+                    let cdnUrl = image.url.appending(
+                        queryItems: [
+                            URLQueryItem(
+                                name: "width",
+                                value: "\(Int(UIScreen.main.bounds.width * UIScreen.main.scale))"
+                            ),
+                            URLQueryItem(
+                                name: "crop",
+                                value: "center"
+                            )
+                        ]
+                    )
+
                     componentFactory
                         .buildAsyncImage(
                             config: ParraImageConfig(
@@ -31,7 +44,7 @@ struct ProductDetailView: View {
                                 contentMode: .fill
                             ),
                             content: ParraAsyncImageContent(
-                                url: image.url,
+                                url: cdnUrl,
                                 originalSize: image.size
                             )
                         )

@@ -67,13 +67,27 @@ struct ProductCell: View {
     @ViewBuilder private var productImage: some View {
         VStack(alignment: .center) {
             GeometryReader { proxy in
+
                 if let image = product.featuredImage ?? product.images.first {
+                    let cdnUrl = image.url.appending(
+                        queryItems: [
+                            URLQueryItem(
+                                name: "width",
+                                value: "\(Int(proxy.size.width * UIScreen.main.scale))"
+                            ),
+                            URLQueryItem(
+                                name: "crop",
+                                value: "center"
+                            )
+                        ]
+                    )
+
                     parraComponentFactory.buildAsyncImage(
                         config: ParraImageConfig(
                             contentMode: .fill
                         ),
                         content: ParraAsyncImageContent(
-                            url: image.url
+                            url: cdnUrl
                         )
                     )
                     .frame(
