@@ -66,9 +66,11 @@ struct ProductDetailOptionsView: View {
 
             buyButtons
         }
-        .onChange(of: selectedVariant, initial: true) { _, newValue in
-            availableQuantity = UInt(max(newValue.quantityAvailable ?? .max, 1))
-            selectedQuantity = min(availableQuantity, selectedQuantity)
+        .onChange(
+            of: selectedVariant,
+            initial: true
+        ) { _, newValue in
+            updateQuantities(for: newValue)
 
             dataModel.viewProduct(
                 product: product,
@@ -143,6 +145,13 @@ struct ProductDetailOptionsView: View {
         }
     }
 
+    private func updateQuantities(
+        for variant: ParraProductVariant
+    ) {
+        availableQuantity = UInt(max(variant.quantityAvailable ?? .max, 1))
+        selectedQuantity = min(availableQuantity, selectedQuantity)
+    }
+
     private func addToCart() {
         Task { @MainActor in
             isAlteringCart = true
@@ -154,6 +163,8 @@ struct ProductDetailOptionsView: View {
                     quantity: selectedQuantity,
                     as: authState.user
                 )
+
+                selectedQuantity = 1
             } catch {
                 ParraLogger.error("Failed to toggle item in cart", error, [
                     "product": product.id
