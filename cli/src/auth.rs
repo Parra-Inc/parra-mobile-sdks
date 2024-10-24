@@ -120,19 +120,19 @@ async fn perform_normal_authentication() -> Result<Credential, Box<dyn Error>> {
 
     match result {
         Ok(credential) => {
-            Box::pin(api::report_event(
+            api::report_event(
                 "cli_auth_succeeded",
                 Some(HashMap::from([("is_reauthenticating", "false")])),
-            ))
+            )
             .await?;
 
             Ok(credential)
         }
         Err(err) => {
-            Box::pin(api::report_event(
+            api::report_event(
                 "cli_auth_failed",
                 Some(HashMap::from([("is_reauthenticating", "false")])),
-            ))
+            )
             .await?;
 
             Err(err)
