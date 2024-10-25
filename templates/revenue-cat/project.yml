@@ -78,4 +78,11 @@ schemes:
         - settingsTarget: {{ app.name.upper_camel }}
           name: Parra - Increment project build number
           script: |
-              echo "Parra - Updating incrementing build number!" ; cd "${PROJECT_DIR}" ; agvtool bump
+            if [ "$ACTION" = "install" ]; then
+                echo "Parra - Updating incrementing build number!";
+                cd "${PROJECT_DIR}" ; agvtool bump    
+            else
+                echo "Parra - Not an install build. Skipping incrementing build number."
+            fi
+
+            exit 0
