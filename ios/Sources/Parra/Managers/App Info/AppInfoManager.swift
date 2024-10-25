@@ -40,7 +40,8 @@ final class AppInfoManager {
                 fileManager: fileManager
             ),
             jsonEncoder: .parraEncoder,
-            jsonDecoder: .parraDecoder
+            jsonDecoder: .parraDecoder,
+            deleteFilesOnReadError: true
         )
     }
 
@@ -134,13 +135,16 @@ final class AppInfoManager {
             cachedVersionToken()?.token
         }
 
-        let appInfo: ParraAppInfo
+        var appInfo: ParraAppInfo
 
         do {
             appInfo = try await authServer.getAppInfo(
                 versionToken: versionToken,
                 timeout: timeout
             )
+
+            // Persist a copy of the entire app info response.
+            try await updateCachedAppInfo(appInfo)
         } catch {
             logger.error("Error fetching latest app info", error)
 
@@ -154,9 +158,6 @@ final class AppInfoManager {
                 throw error
             }
         }
-
-        // Persist a copy of the entire app info response.
-        try await updateCachedAppInfo(appInfo)
 
         // Only update the token if it changed, since updating will bump the
         // updated date field on the version info.

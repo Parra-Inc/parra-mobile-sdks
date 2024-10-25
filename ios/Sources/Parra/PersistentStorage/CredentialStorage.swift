@@ -33,8 +33,7 @@ final class CredentialStorage: ItemStorage {
 
     func currentUser() async -> ParraUser? {
         return await storageModule.read(
-            name: DataManager.Key.userCredentialsKey,
-            deleteOnError: true
+            name: DataManager.Key.userCredentialsKey
         )
     }
 }

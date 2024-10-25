@@ -84,7 +84,8 @@ extension ParraInternal {
                 fileManager: fileManager
             ),
             jsonEncoder: storageConfig.sessionJsonEncoder,
-            jsonDecoder: storageConfig.sessionJsonDecoder
+            jsonDecoder: storageConfig.sessionJsonDecoder,
+            deleteFilesOnReadError: true
         )
 
         let notificationCenter = ParraNotificationCenter.default

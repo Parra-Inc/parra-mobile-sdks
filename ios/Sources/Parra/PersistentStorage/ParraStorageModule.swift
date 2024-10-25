@@ -13,9 +13,11 @@ actor ParraStorageModule<DataType: Codable> {
     init(
         dataStorageMedium: DataStorageMedium,
         jsonEncoder: JSONEncoder,
-        jsonDecoder: JSONDecoder
+        jsonDecoder: JSONDecoder,
+        deleteFilesOnReadError: Bool
     ) {
         self.dataStorageMedium = dataStorageMedium
+        self.deleteFilesOnReadError = deleteFilesOnReadError
 
         switch dataStorageMedium {
         case .memory:
@@ -63,6 +65,7 @@ actor ParraStorageModule<DataType: Codable> {
 
     // Whether or not data has previously been loaded from disk.
     private(set) var isLoaded = false
+    let deleteFilesOnReadError: Bool
     let dataStorageMedium: DataStorageMedium
     let persistentStorage: (medium: PersistentStorageMedium, key: String)?
     private(set) var storageCache: [String: DataType] = [:]
@@ -99,7 +102,9 @@ actor ParraStorageModule<DataType: Codable> {
         if let fileSystem = persistentStorage.medium as? FileSystemStorage,
            storeItemsSeparately
         {
-            storageCache = fileSystem.readAllInDirectory()
+            storageCache = fileSystem.readAllInDirectory(
+                deleteOnError: deleteFilesOnReadError
+            )
         } else {
             do {
                 if let existingData: [String: DataType] =
@@ -117,6 +122,22 @@ actor ParraStorageModule<DataType: Codable> {
                         "key": persistentStorage.key
                     ]
                 )
+
+                if deleteFilesOnReadError {
+                    do {
+                        try persistentStorage.medium.delete(
+                            name: persistentStorage.key
+                        )
+                    } catch {
+                        Logger.error(
+                            "Error deleting file after load failure",
+                            error,
+                            [
+                                "key": persistentStorage.key
+                            ]
+                        )
+                    }
+                }
             }
         }
     }
@@ -130,8 +151,7 @@ actor ParraStorageModule<DataType: Codable> {
     }
 
     func read(
-        name: String,
-        deleteOnError: Bool = false
+        name: String
     ) async -> DataType? {
         if !isLoaded {
             await loadData()
@@ -166,11 +186,11 @@ actor ParraStorageModule<DataType: Codable> {
                     error,
                     [
                         "key": persistentStorage.key,
-                        "willDelete": "\(deleteOnError)"
+                        "willDelete": "\(deleteFilesOnReadError)"
                     ]
                 )
 
-                if deleteOnError {
+                if deleteFilesOnReadError {
                     await delete(name: name)
                 }
             }

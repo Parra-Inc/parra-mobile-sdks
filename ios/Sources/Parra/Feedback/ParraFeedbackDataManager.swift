@@ -32,7 +32,8 @@ class ParraFeedbackDataManager {
                 fileManager: fileManager
             ),
             jsonEncoder: jsonEncoder,
-            jsonDecoder: jsonDecoder
+            jsonDecoder: jsonDecoder,
+            deleteFilesOnReadError: true
         )
 
         self.completedCardDataStorage = CompletedCardDataStorage(
@@ -42,7 +43,8 @@ class ParraFeedbackDataManager {
         let cardStorageModule = ParraStorageModule<[ParraCardItem]>(
             dataStorageMedium: .memory,
             jsonEncoder: jsonEncoder,
-            jsonDecoder: jsonDecoder
+            jsonDecoder: jsonDecoder,
+            deleteFilesOnReadError: true
         )
 
         self.cardStorage = CardStorage(

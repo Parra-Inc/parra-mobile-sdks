@@ -53,7 +53,9 @@ class FileSystemStorage: PersistentStorageMedium {
         return nil
     }
 
-    func readAllInDirectory<T>() -> [String: T] where T: Codable {
+    func readAllInDirectory<T>(
+        deleteOnError: Bool
+    ) -> [String: T] where T: Codable {
         guard let enumerator = fileManager.enumerator(
             atPath: baseUrl.nonEncodedPath()
         ) else {
