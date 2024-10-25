@@ -62,10 +62,11 @@ public struct ParraYoutubeThumbnails: Codable, Equatable, Hashable {
     }
 }
 
-public enum ParraFeedItemLiveBroadcastContent: String, Codable {
+public enum ParraFeedItemLiveBroadcastContent: String, ParraUnknownCaseCodable {
     case none
     case upcoming
     case live
+    case unknown
 }
 
 public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
