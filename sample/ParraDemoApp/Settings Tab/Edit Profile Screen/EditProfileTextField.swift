@@ -2,7 +2,7 @@
 //  EditProfileTextField.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/24/2024.
+//  Bootstrapped with ❤️ by Parra on 10/25/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
