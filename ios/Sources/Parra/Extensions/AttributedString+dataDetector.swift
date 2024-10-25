@@ -36,15 +36,23 @@ extension String {
 
         for match in matches {
             let range = match.range
-            let startIndex = attributedString.index(
-                attributedString.startIndex,
-                offsetByCharacters: range.lowerBound
-            )
 
-            let endIndex = attributedString.index(
-                startIndex,
-                offsetByCharacters: range.length
-            )
+            if range.location == NSNotFound {
+                continue
+            }
+
+            let start = utf16.index(utf16.startIndex, offsetBy: range.location)
+            let end = utf16.index(start, offsetBy: range.length)
+
+            guard let startIndex = AttributedString.Index(
+                start,
+                within: attributedString
+            ), let endIndex = AttributedString.Index(
+                end,
+                within: attributedString
+            ) else {
+                continue
+            }
 
             if match.resultType == .link, let url = match.url {
                 attributedString[startIndex ..< endIndex].link = url
