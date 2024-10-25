@@ -193,7 +193,7 @@ final class AppInfoManager {
         return response.results.first
     }
 
-    func getAppVersion() async throws -> ParraAppInfo {
+    func getAppInfo() async throws -> ParraAppInfo {
         if let cached = await cachedAppInfo() {
             return cached
         }

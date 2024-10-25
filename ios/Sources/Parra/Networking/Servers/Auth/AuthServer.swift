@@ -392,7 +392,7 @@ final class AuthServer: Server {
     // MARK: - Private
 
     private func getAppInfo() async throws -> ParraAppInfo {
-        return try await Parra.default.parraInternal.appInfoManager.getAppVersion()
+        return try await Parra.default.parraInternal.appInfoManager.getAppInfo()
     }
 
     private func webauthnSessionHeader(
