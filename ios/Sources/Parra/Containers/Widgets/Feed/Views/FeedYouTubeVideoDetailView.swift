@@ -46,6 +46,10 @@ struct FeedYouTubeVideoDetailView: View {
                     )
                     .lineLimit(3)
                     .truncationMode(.tail)
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
 
                     HStack(spacing: 8) {
                         componentFactory.buildImage(
