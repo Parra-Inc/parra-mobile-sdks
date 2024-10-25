@@ -33,14 +33,16 @@ public final class ParraFeedConfiguration: ParraContainerConfig {
             _ items: [ParraFeedItem],
             _ itemSpacing: CGFloat,
             _ containerGeometry: GeometryProxy,
+            _ itemAtIndexDidAppear: @escaping (_: Int) -> Void,
             _ performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void
         )
             -> some View =
-            { items, itemSpacing, containerGeometry, performActionForFeedItemData in
+            { items, itemSpacing, containerGeometry, itemAtIndexDidAppear, performActionForFeedItemData in
                 return ParraFeedListView(
                     items: items,
                     itemSpacing: itemSpacing,
                     containerGeometry: containerGeometry,
+                    itemAtIndexDidAppear: itemAtIndexDidAppear,
                     performActionForFeedItemData: performActionForFeedItemData
                 )
             },

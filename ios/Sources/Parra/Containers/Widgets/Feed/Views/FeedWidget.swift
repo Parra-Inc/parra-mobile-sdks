@@ -78,6 +78,9 @@ struct FeedWidget: ParraContainer {
                         items: items.wrappedValue,
                         itemSpacing: config.itemSpacing,
                         containerGeometry: geometry,
+                        itemAtIndexDidAppear: { index in
+                            contentObserver.feedPaginator.loadMore(after: index)
+                        },
                         performActionForFeedItemData: contentObserver
                             .performActionForFeedItemData
                     )

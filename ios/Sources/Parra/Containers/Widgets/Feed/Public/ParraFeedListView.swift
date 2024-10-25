@@ -14,11 +14,13 @@ public struct ParraFeedListView: View {
         items: [ParraFeedItem],
         itemSpacing: CGFloat = 16,
         containerGeometry: GeometryProxy,
+        itemAtIndexDidAppear: @escaping (_: Int) -> Void,
         performActionForFeedItemData: @escaping (_: ParraFeedItemData) -> Void
     ) {
         self.items = items
         self.itemSpacing = itemSpacing
         self.containerGeometry = containerGeometry
+        self.itemAtIndexDidAppear = itemAtIndexDidAppear
         self.performActionForFeedItemData = performActionForFeedItemData
     }
 
@@ -27,6 +29,7 @@ public struct ParraFeedListView: View {
     public let items: [ParraFeedItem]
     public let itemSpacing: CGFloat
     public let containerGeometry: GeometryProxy
+    public let itemAtIndexDidAppear: (Int) -> Void
     public let performActionForFeedItemData: (_ feedItemData: ParraFeedItemData) -> Void
 
     public var body: some View {
@@ -44,7 +47,10 @@ public struct ParraFeedListView: View {
     ) -> some View {
         let spacing = itemSpacing / 2
 
-        ForEach(items) { item in
+        ForEach(
+            Array(items.enumerated()),
+            id: \.element
+        ) { index, item in
             if case .feedItemYoutubeVideoData(let data) = item.data {
                 FeedYouTubeVideoView(
                     youtubeVideo: data,
@@ -52,6 +58,10 @@ public struct ParraFeedListView: View {
                     spacing: spacing,
                     performActionForFeedItemData: performActionForFeedItemData
                 )
+                .id(item.id)
+                .onAppear {
+                    itemAtIndexDidAppear(index)
+                }
             } else if case .contentCard(let data) = item.data {
                 FeedContentCardView(
                     contentCard: data,
@@ -59,8 +69,16 @@ public struct ParraFeedListView: View {
                     spacing: spacing,
                     performActionForFeedItemData: performActionForFeedItemData
                 )
+                .id(item.id)
+                .onAppear {
+                    itemAtIndexDidAppear(index)
+                }
             } else {
                 EmptyView()
+                    .id(item.id)
+                    .onAppear {
+                        itemAtIndexDidAppear(index)
+                    }
             }
         }
     }
