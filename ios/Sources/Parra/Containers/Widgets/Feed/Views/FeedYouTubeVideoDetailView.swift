@@ -157,7 +157,7 @@ struct FeedYouTubeVideoDetailView: View {
             thumb: thumb
         ) {
             contentObserver.performActionForFeedItemData(
-                .feedItemYoutubeVideoData(youtubeVideo)
+                .feedItemYoutubeVideo(youtubeVideo)
             )
         }
         .aspectRatio(thumb.width / thumb.height, contentMode: .fit)

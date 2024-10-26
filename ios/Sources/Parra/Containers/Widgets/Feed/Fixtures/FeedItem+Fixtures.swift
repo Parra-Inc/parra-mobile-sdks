@@ -48,7 +48,7 @@ extension ParraFeedItem: ParraFixture {
             updatedAt: .now.daysAgo(1),
             deletedAt: nil,
             type: .youtubeVideo,
-            data: .feedItemYoutubeVideoData(
+            data: .feedItemYoutubeVideo(
                 ParraFeedItemYoutubeVideoData(
                     videoId: .uuid,
                     url: URL(string: "https://youtube.com")!,
@@ -108,7 +108,7 @@ extension ParraFeedItem: ParraFixture {
                 updatedAt: .now.daysAgo(1),
                 deletedAt: nil,
                 type: .youtubeVideo,
-                data: .feedItemYoutubeVideoData(
+                data: .feedItemYoutubeVideo(
                     ParraFeedItemYoutubeVideoData.validStates()[0]
                 )
             ),
@@ -126,7 +126,7 @@ extension ParraFeedItem: ParraFixture {
                 updatedAt: .now.daysAgo(12),
                 deletedAt: nil,
                 type: .youtubeVideo,
-                data: .feedItemYoutubeVideoData(
+                data: .feedItemYoutubeVideo(
                     ParraFeedItemYoutubeVideoData.validStates()[1]
                 )
             ),
@@ -136,7 +136,7 @@ extension ParraFeedItem: ParraFixture {
                 updatedAt: .now.daysAgo(13),
                 deletedAt: nil,
                 type: .youtubeVideo,
-                data: .feedItemYoutubeVideoData(
+                data: .feedItemYoutubeVideo(
                     ParraFeedItemYoutubeVideoData.validStates()[2]
                 )
             )

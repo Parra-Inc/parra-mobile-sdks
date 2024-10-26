@@ -154,7 +154,7 @@ struct FeedYouTubeVideoView: View {
             thumb: thumb
         ) {
             performActionForFeedItemData(
-                .feedItemYoutubeVideoData(youtubeVideo)
+                .feedItemYoutubeVideo(youtubeVideo)
             )
         }
         .frame(

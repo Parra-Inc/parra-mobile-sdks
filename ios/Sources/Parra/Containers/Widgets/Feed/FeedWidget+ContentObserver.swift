@@ -129,7 +129,7 @@ extension FeedWidget {
             _ feedItemData: ParraFeedItemData
         ) {
             switch feedItemData {
-            case .feedItemYoutubeVideoData(let video):
+            case .feedItemYoutubeVideo(let video):
                 Parra.default.logEvent(
                     .tap(element: "youtube-video-link"),
                     [
@@ -151,6 +151,13 @@ extension FeedWidget {
                         "content_card": contentCard.id
                     ]
                 )
+            case .creatorUpdate(let creatorUpdate):
+                Parra.default.logEvent(
+                    .tap(element: "creator-update-action"),
+                    [
+                        "creator_update": creatorUpdate.id
+                    ]
+                )
             }
         }
 
@@ -163,7 +170,7 @@ extension FeedWidget {
             ])
 
             switch feedItemData {
-            case .feedItemYoutubeVideoData(let video):
+            case .feedItemYoutubeVideo(let video):
                 UIApplication.shared.open(
                     video.url
                 )
@@ -173,6 +180,8 @@ extension FeedWidget {
                         action.url
                     )
                 }
+            case .creatorUpdate:
+                break
             }
         }
 

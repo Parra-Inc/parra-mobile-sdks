@@ -10,6 +10,7 @@ import Foundation
 public enum ParraFeedItemType: String, Codable {
     case youtubeVideo = "youtube_video"
     case contentCard = "content_card"
+    case creatorUpdate = "creator_update"
 }
 
 public struct ParraYoutubeThumbnail: Codable, Equatable, Hashable {
@@ -198,15 +199,17 @@ public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
 }
 
 public enum ParraFeedItemData: Codable, Equatable, Hashable {
-    case feedItemYoutubeVideoData(ParraFeedItemYoutubeVideoData)
+    case feedItemYoutubeVideo(ParraFeedItemYoutubeVideoData)
     case contentCard(ParraContentCard)
+    case creatorUpdate(ParraCreatorUpdateAppStub)
 
     // MARK: - Internal
 
     var name: String {
         switch self {
-        case .feedItemYoutubeVideoData: return "youtube-video"
+        case .feedItemYoutubeVideo: return "youtube-video"
         case .contentCard: return "content-card"
+        case .creatorUpdate: return "creator-update"
         }
     }
 }
@@ -241,11 +244,24 @@ public struct ParraFeedItem: Codable, Equatable, Hashable, Identifiable {
         switch type {
         case .contentCard:
             self.data = try .contentCard(
-                container.decode(ParraContentCard.self, forKey: .data)
+                container.decode(
+                    ParraContentCard.self,
+                    forKey: .data
+                )
             )
         case .youtubeVideo:
-            self.data = try .feedItemYoutubeVideoData(
-                container.decode(ParraFeedItemYoutubeVideoData.self, forKey: .data)
+            self.data = try .feedItemYoutubeVideo(
+                container.decode(
+                    ParraFeedItemYoutubeVideoData.self,
+                    forKey: .data
+                )
+            )
+        case .creatorUpdate:
+            self.data = try .creatorUpdate(
+                container.decode(
+                    ParraCreatorUpdateAppStub.self,
+                    forKey: .data
+                )
             )
         }
     }
@@ -303,4 +319,94 @@ struct FeedItemCollectionResponse: Codable, Equatable, Hashable {
     let pageSize: Int
     let totalCount: Int
     let data: PartiallyDecodableArray<ParraFeedItem>
+}
+
+public struct ParraCreatorUpdateSenderStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    init(
+        id: String,
+        name: String,
+        avatar: ParraImageAssetStub?,
+        verified: Bool?
+    ) {
+        self.id = id
+        self.name = name
+        self.avatar = avatar
+        self.verified = verified
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let name: String
+    public let avatar: ParraImageAssetStub?
+    public let verified: Bool?
+}
+
+public struct ParraCreatorUpdateAttachmentStub: Codable, Equatable, Hashable,
+    Identifiable
+{
+    // MARK: - Lifecycle
+
+    init(
+        id: String,
+        image: ParraImageAssetStub?
+    ) {
+        self.id = id
+        self.image = image
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let image: ParraImageAssetStub?
+}
+
+public struct ParraCreatorUpdateAppStub: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        title: String?,
+        body: String?,
+        sender: ParraCreatorUpdateSenderStub?,
+        attachments: [ParraCreatorUpdateAttachmentStub]?
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.title = title
+        self.body = body
+        self.sender = sender
+        self.attachments = .init(attachments ?? [])
+    }
+
+    // MARK: - Public
+
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let title: String?
+    public let body: String?
+    public let sender: ParraCreatorUpdateSenderStub?
+    public let attachments: PartiallyDecodableArray<ParraCreatorUpdateAttachmentStub>?
+
+    // MARK: - Internal
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case updatedAt
+        case deletedAt
+        case title
+        case body
+        case sender
+        case attachments
+    }
 }

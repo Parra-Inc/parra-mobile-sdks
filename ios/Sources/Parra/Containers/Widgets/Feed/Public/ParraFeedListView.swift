@@ -51,7 +51,7 @@ public struct ParraFeedListView: View {
             Array(items.enumerated()),
             id: \.element
         ) { index, item in
-            if case .feedItemYoutubeVideoData(let data) = item.data {
+            if case .feedItemYoutubeVideo(let data) = item.data {
                 FeedYouTubeVideoView(
                     youtubeVideo: data,
                     containerGeometry: containerGeometry,
@@ -73,6 +73,13 @@ public struct ParraFeedListView: View {
                 .onAppear {
                     itemAtIndexDidAppear(index)
                 }
+            } else if case .creatorUpdate(let data) = item.data {
+                FeedCreatorUpdateView(
+                    creatorUpdate: data,
+                    containerGeometry: containerGeometry,
+                    spacing: spacing,
+                    performActionForFeedItemData: performActionForFeedItemData
+                )
             } else {
                 EmptyView()
                     .id(item.id)
