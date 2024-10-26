@@ -81,7 +81,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
         description: String?,
         thumbnails: ParraYoutubeThumbnails,
         publishedAt: Date,
-        liveBroadcastContent: ParraFeedItemLiveBroadcastContent
+        liveBroadcastContent: ParraFeedItemLiveBroadcastContent?
     ) {
         self.videoId = videoId
         self.url = url
@@ -104,7 +104,7 @@ public struct ParraFeedItemYoutubeVideoData: Codable, Equatable, Hashable {
     public let description: String?
     public let thumbnails: ParraYoutubeThumbnails
     public let publishedAt: Date
-    public let liveBroadcastContent: ParraFeedItemLiveBroadcastContent
+    public let liveBroadcastContent: ParraFeedItemLiveBroadcastContent?
 
     // MARK: - Internal
 
