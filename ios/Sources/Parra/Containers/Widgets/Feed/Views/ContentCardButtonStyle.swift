@@ -11,7 +11,7 @@ struct ContentCardButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             // required to prevent tapping outside of the button from triggering it
-            .clipShape(Rectangle()).buttonStyle(.borderless)
+            .clipShape(.rect).contentShape(.rect).buttonStyle(.borderless)
             .foregroundStyle(Color.accentColor)
             .opacity(configuration.isPressed ? 0.75 : 1)
             .animation(.default, value: configuration.isPressed)

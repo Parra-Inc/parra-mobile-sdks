@@ -38,7 +38,7 @@ struct FeedContentCardView: View {
             }
         }
         .background(parraTheme.palette.secondaryBackground)
-        .applyCornerRadii(size: .xl, from: parraTheme)
+        .applyCornerRadii(size: .xxxl, from: parraTheme)
         .buttonStyle(ContentCardButtonStyle())
         .safeAreaPadding(.horizontal)
         .padding(.vertical, spacing)

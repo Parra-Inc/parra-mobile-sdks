@@ -111,7 +111,7 @@ struct FeedYouTubeVideoView: View {
         }
         .disabled(!redactionReasons.isEmpty)
         .background(parraTheme.palette.secondaryBackground)
-        .applyCornerRadii(size: .xl, from: parraTheme)
+        .applyCornerRadii(size: .xxxl, from: parraTheme)
         .buttonStyle(.plain)
         .safeAreaPadding(.horizontal)
         .padding(.vertical, spacing)
