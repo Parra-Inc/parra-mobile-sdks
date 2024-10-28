@@ -2,7 +2,7 @@
 //  AccountView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/26/2024.
+//  Bootstrapped with ❤️ by Parra on 10/28/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 

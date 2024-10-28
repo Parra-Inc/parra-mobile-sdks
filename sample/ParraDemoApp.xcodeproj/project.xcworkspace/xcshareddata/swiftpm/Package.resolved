@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Shopify/mobile-buy-sdk-ios",
       "state" : {
-        "revision" : "5517ba8113a82f35cc91eddd9567b2184796feb9",
-        "version" : "13.0.0"
+        "revision" : "a6a63afe39a1b52f86e7117dd307911e1702a7b5",
+        "version" : "13.1.0"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Parra-Inc/parra-mobile-sdks",
       "state" : {
-        "revision" : "0d683f7f21dc3ea7f2ea028d97efba3c8f6ef458",
-        "version" : "0.11.5"
+        "revision" : "9b32411d52519f1964b0e8f644387d4b9ac14d0f",
+        "version" : "0.12.0"
       }
     },
     {
