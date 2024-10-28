@@ -94,7 +94,7 @@ extension ParraFeedItem: ParraFixture {
                         )
                     ),
                     publishedAt: .now.daysAgo(1),
-                    liveBroadcastContent: .none
+                    liveBroadcastContent: ParraFeedItemLiveBroadcastContent.none
                 )
             )
         )
@@ -102,6 +102,16 @@ extension ParraFeedItem: ParraFixture {
 
     public static func validStates() -> [ParraFeedItem] {
         return [
+            ParraFeedItem(
+                id: .uuid,
+                createdAt: .now.daysAgo(0.5),
+                updatedAt: .now.daysAgo(0.5),
+                deletedAt: nil,
+                type: .creatorUpdate,
+                data: .creatorUpdate(
+                    ParraCreatorUpdateAppStub.validStates()[0]
+                )
+            ),
             ParraFeedItem(
                 id: .uuid,
                 createdAt: .now.daysAgo(1),
