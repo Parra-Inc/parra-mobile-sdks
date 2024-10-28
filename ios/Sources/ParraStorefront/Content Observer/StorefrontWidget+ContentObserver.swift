@@ -164,6 +164,7 @@ extension StorefrontWidget {
                             (productVariant, quantity)
                         ],
                         as: user,
+                        discountCodes: config.checkoutDiscountCodes,
                         attributes: config.checkoutAttributes
                     )
                 )
@@ -405,6 +406,7 @@ extension StorefrontWidget {
                         .createCartMutation(
                             for: .createCartInput(
                                 as: user,
+                                discountCodes: config.checkoutDiscountCodes,
                                 attributes: config.checkoutAttributes
                             )
                         )

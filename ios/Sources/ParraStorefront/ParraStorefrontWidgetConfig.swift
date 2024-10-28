@@ -16,6 +16,7 @@ public final class ParraStorefrontWidgetConfig: ParraContainerConfig {
         navigationTitle: String = "Products",
         showDismissButton: Bool = false,
         checkoutAttributes: [String: String] = [:],
+        checkoutDiscountCodes: [String] = [],
         emptyStateContent: ParraEmptyStateContent = ParraStorefrontWidgetConfig
             .defaultEmptyStateContent,
         productNotFoundContent: ParraEmptyStateContent = ParraStorefrontWidgetConfig
@@ -27,6 +28,7 @@ public final class ParraStorefrontWidgetConfig: ParraContainerConfig {
         self.navigationTitle = navigationTitle
         self.showDismissButton = showDismissButton
         self.checkoutAttributes = checkoutAttributes
+        self.checkoutDiscountCodes = checkoutDiscountCodes
         self.emptyStateContent = emptyStateContent
         self.productNotFoundContent = productNotFoundContent
         self.errorStateContent = errorStateContent
@@ -67,6 +69,7 @@ public final class ParraStorefrontWidgetConfig: ParraContainerConfig {
     public let showDismissButton: Bool
 
     public let checkoutAttributes: [String: String]
+    public let checkoutDiscountCodes: [String]
 
     public let emptyStateContent: ParraEmptyStateContent
     public let productNotFoundContent: ParraEmptyStateContent
