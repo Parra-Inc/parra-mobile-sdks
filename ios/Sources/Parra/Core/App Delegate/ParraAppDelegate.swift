@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 // IMPORTANT: Any UIApplicationDelegate methods that are implemented here must
 //            be explicitly declared open in order for end users to be able to
@@ -20,7 +21,7 @@ import UIKit
 @MainActor
 open class ParraAppDelegate<
     SceneDelegateClass: ParraSceneDelegate
->: NSObject, UIApplicationDelegate {
+>: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     // MARK: - Open
 
     open func application(
@@ -96,6 +97,48 @@ open class ParraAppDelegate<
     ) -> UIInterfaceOrientationMask {
         return ParraOrientation.orientationLock
     }
+
+    // MARK: UNUserNotificationCenterDelegate
+
+    open nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        openSettingsFor notification: UNNotification?
+    ) {
+        Task { @MainActor in
+            let options = Parra.default.parraInternal.configuration
+                .pushNotificationOptions
+
+            options.openSettingsHandler?(notification)
+        }
+    }
+
+    open nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {}
+
+    @nonobjc
+    open nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {}
+
+    open nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification
+    ) async -> UNNotificationPresentationOptions {
+        return []
+    }
+
+    @nonobjc
+    open nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (
+            UNNotificationPresentationOptions
+        ) -> Void
+    ) {}
 
     // MARK: - Public
 
