@@ -27,7 +27,7 @@ struct SettingsItemIntegerData: Codable, Equatable, Hashable {
     let maxValue: Int?
 }
 
-struct SettingsItemIntegerDataWithValue: Codable, Equatable, Hashable {
+public struct ParraSettingsItemIntegerDataWithValue: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
@@ -42,15 +42,15 @@ struct SettingsItemIntegerDataWithValue: Codable, Equatable, Hashable {
         self.value = value
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let defaultValue: Int?
-    let minValue: Int?
-    let maxValue: Int?
-    let value: Int?
+    public let defaultValue: Int?
+    public let minValue: Int?
+    public let maxValue: Int?
+    public let value: Int?
 }
 
-struct SettingsItemStringDataEnumOption: Codable, Equatable, Hashable {
+public struct ParraSettingsItemStringDataEnumOption: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
@@ -61,10 +61,10 @@ struct SettingsItemStringDataEnumOption: Codable, Equatable, Hashable {
         self.value = value
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let title: String
-    let value: String
+    public let title: String
+    public let value: String
 }
 
 struct SettingsItemStringData: Codable, Equatable, Hashable {
@@ -72,7 +72,7 @@ struct SettingsItemStringData: Codable, Equatable, Hashable {
 
     init(
         format: String?,
-        enumOptions: [SettingsItemStringDataEnumOption]?,
+        enumOptions: [ParraSettingsItemStringDataEnumOption]?,
         defaultValue: String?
     ) {
         self.format = format
@@ -83,16 +83,16 @@ struct SettingsItemStringData: Codable, Equatable, Hashable {
     // MARK: - Internal
 
     let format: String?
-    let enumOptions: [SettingsItemStringDataEnumOption]?
+    let enumOptions: [ParraSettingsItemStringDataEnumOption]?
     let defaultValue: String?
 }
 
-struct SettingsItemStringDataWithValue: Codable, Equatable, Hashable {
+public struct ParraSettingsItemStringDataWithValue: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
         format: String?,
-        enumOptions: [SettingsItemStringDataEnumOption]?,
+        enumOptions: [ParraSettingsItemStringDataEnumOption]?,
         defaultValue: String?,
         value: String?
     ) {
@@ -102,12 +102,12 @@ struct SettingsItemStringDataWithValue: Codable, Equatable, Hashable {
         self.value = value
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let format: String?
-    let enumOptions: [SettingsItemStringDataEnumOption]?
-    let defaultValue: String?
-    let value: String?
+    public let format: String?
+    public let enumOptions: [ParraSettingsItemStringDataEnumOption]?
+    public let defaultValue: String?
+    public let value: String?
 }
 
 struct SettingsItemBooleanData: Codable, Equatable, Hashable {
@@ -133,7 +133,7 @@ struct SettingsItemBooleanData: Codable, Equatable, Hashable {
     let defaultValue: Bool?
 }
 
-struct SettingsItemBooleanDataWithValue: Codable, Equatable, Hashable {
+public struct ParraSettingsItemBooleanDataWithValue: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
@@ -150,22 +150,22 @@ struct SettingsItemBooleanDataWithValue: Codable, Equatable, Hashable {
         self.value = value
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let format: String?
-    let trueLabel: String?
-    let falseLabel: String?
-    let defaultValue: Bool?
-    let value: Bool?
+    public let format: String?
+    public let trueLabel: String?
+    public let falseLabel: String?
+    public let defaultValue: Bool?
+    public let value: Bool?
 }
 
-enum SettingsItemDataWithValue: Codable, Equatable, Hashable {
-    case settingsItemIntegerDataWithValue(SettingsItemIntegerDataWithValue)
-    case settingsItemStringDataWithValue(SettingsItemStringDataWithValue)
-    case settingsItemBooleanDataWithValue(SettingsItemBooleanDataWithValue)
+public enum ParraSettingsItemDataWithValue: Codable, Equatable, Hashable {
+    case settingsItemIntegerDataWithValue(ParraSettingsItemIntegerDataWithValue)
+    case settingsItemStringDataWithValue(ParraSettingsItemStringDataWithValue)
+    case settingsItemBooleanDataWithValue(ParraSettingsItemBooleanDataWithValue)
 }
 
-enum SettingsItemType: String, Codable {
+public enum ParraSettingsItemType: String, Codable {
     case string
     case boolean
     case integer
@@ -188,7 +188,7 @@ struct SettingsItemStub: Codable, Equatable, Hashable, Identifiable {
         slug: String,
         transportType: String?,
         key: String,
-        type: SettingsItemType,
+        type: ParraSettingsItemType,
         required: Bool,
         nullable: Bool
     ) {
@@ -225,12 +225,12 @@ struct SettingsItemStub: Codable, Equatable, Hashable, Identifiable {
     let slug: String
     let transportType: String?
     let key: String
-    let type: SettingsItemType
+    let type: ParraSettingsItemType
     let required: Bool
     let nullable: Bool
 }
 
-struct UserSettingsItem: Codable, Equatable, Hashable, Identifiable {
+public struct ParraUserSettingsItem: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
@@ -247,10 +247,10 @@ struct UserSettingsItem: Codable, Equatable, Hashable, Identifiable {
         slug: String,
         transportType: String?,
         key: String,
-        type: SettingsItemType,
+        type: ParraSettingsItemType,
         required: Bool,
         nullable: Bool,
-        data: SettingsItemDataWithValue
+        data: ParraSettingsItemDataWithValue
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -271,7 +271,7 @@ struct UserSettingsItem: Codable, Equatable, Hashable, Identifiable {
         self.data = data
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -289,7 +289,7 @@ struct UserSettingsItem: Codable, Equatable, Hashable, Identifiable {
         self.slug = try container.decode(String.self, forKey: .slug)
         self.transportType = try container.decode(String.self, forKey: .transportType)
         self.key = try container.decode(String.self, forKey: .key)
-        self.type = try container.decode(SettingsItemType.self, forKey: .type)
+        self.type = try container.decode(ParraSettingsItemType.self, forKey: .type)
         self.required = try container.decode(Bool.self, forKey: .required)
         self.nullable = try container.decode(Bool.self, forKey: .nullable)
 
@@ -297,46 +297,46 @@ struct UserSettingsItem: Codable, Equatable, Hashable, Identifiable {
         case .boolean:
             self.data = try .settingsItemBooleanDataWithValue(
                 container.decode(
-                    SettingsItemBooleanDataWithValue.self,
+                    ParraSettingsItemBooleanDataWithValue.self,
                     forKey: .data
                 )
             )
         case .integer:
             self.data = try .settingsItemIntegerDataWithValue(
                 container.decode(
-                    SettingsItemIntegerDataWithValue.self,
+                    ParraSettingsItemIntegerDataWithValue.self,
                     forKey: .data
                 )
             )
         case .string:
             self.data = try .settingsItemStringDataWithValue(
                 container.decode(
-                    SettingsItemStringDataWithValue.self,
+                    ParraSettingsItemStringDataWithValue.self,
                     forKey: .data
                 )
             )
         }
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let id: String
-    let createdAt: Date
-    let updatedAt: Date
-    let deletedAt: Date?
-    let groupId: String
-    let viewId: String
-    let title: String
-    let description: String?
-    let displayTitle: String
-    let displayDescription: String?
-    let slug: String
-    let transportType: String?
-    let key: String
-    let type: SettingsItemType
-    let required: Bool
-    let nullable: Bool
-    let data: SettingsItemDataWithValue
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let groupId: String
+    public let viewId: String
+    public let title: String
+    public let description: String?
+    public let displayTitle: String
+    public let displayDescription: String?
+    public let slug: String
+    public let transportType: String?
+    public let key: String
+    public let type: ParraSettingsItemType
+    public let required: Bool
+    public let nullable: Bool
+    public let data: ParraSettingsItemDataWithValue
 }
 
 struct SettingsGroupStub: Codable, Equatable, Hashable, Identifiable {
@@ -389,7 +389,7 @@ struct SettingsGroupStub: Codable, Equatable, Hashable, Identifiable {
     let key: String
 }
 
-struct UserSettingsGroup: Codable, Equatable, Hashable, Identifiable {
+public struct ParraUserSettingsGroup: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
@@ -406,8 +406,8 @@ struct UserSettingsGroup: Codable, Equatable, Hashable, Identifiable {
         displayDescription: String?,
         slug: String,
         key: String,
-        notificationTopic: NotificationTopic?,
-        items: [UserSettingsItem]
+        notificationTopic: ParraNotificationTopic?,
+        items: [ParraUserSettingsItem]
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -426,23 +426,23 @@ struct UserSettingsGroup: Codable, Equatable, Hashable, Identifiable {
         self.items = items
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let id: String
-    let createdAt: Date
-    let updatedAt: Date
-    let deletedAt: Date?
-    let tenantId: String?
-    let viewId: String
-    let notificationTopicId: String?
-    let title: String
-    let description: String?
-    let displayTitle: String
-    let displayDescription: String?
-    let slug: String
-    let key: String
-    let notificationTopic: NotificationTopic?
-    let items: [UserSettingsItem]
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let tenantId: String?
+    public let viewId: String
+    public let notificationTopicId: String?
+    public let title: String
+    public let description: String?
+    public let displayTitle: String
+    public let displayDescription: String?
+    public let slug: String
+    public let key: String
+    public let notificationTopic: ParraNotificationTopic?
+    public let items: [ParraUserSettingsItem]
 }
 
 struct SettingsViewStub: Codable, Equatable, Hashable, Identifiable {
@@ -498,7 +498,7 @@ struct SettingsViewStub: Codable, Equatable, Hashable, Identifiable {
     let active: Bool
 }
 
-struct UserSettingsView: Codable, Equatable, Hashable, Identifiable {
+public struct ParraUserSettingsLayout: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
@@ -516,7 +516,7 @@ struct UserSettingsView: Codable, Equatable, Hashable, Identifiable {
         type: String?,
         managed: Bool,
         active: Bool,
-        groups: [UserSettingsGroup]
+        groups: [ParraUserSettingsGroup]
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -535,21 +535,21 @@ struct UserSettingsView: Codable, Equatable, Hashable, Identifiable {
         self.groups = groups
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let id: String
-    let createdAt: Date
-    let updatedAt: Date
-    let deletedAt: Date?
-    let tenantId: String
-    let title: String
-    let description: String?
-    let displayTitle: String
-    let displayDescription: String?
-    let footerLabel: String?
-    let slug: String
-    let type: String?
-    let managed: Bool
-    let active: Bool
-    let groups: [UserSettingsGroup]
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let tenantId: String
+    public let title: String
+    public let description: String?
+    public let displayTitle: String
+    public let displayDescription: String?
+    public let footerLabel: String?
+    public let slug: String
+    public let type: String?
+    public let managed: Bool
+    public let active: Bool
+    public let groups: [ParraUserSettingsGroup]
 }

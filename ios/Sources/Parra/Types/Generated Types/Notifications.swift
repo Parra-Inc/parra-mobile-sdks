@@ -276,7 +276,7 @@ struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
     }
 }
 
-struct NotificationTopic: Codable, Equatable, Hashable, Identifiable {
+public struct ParraNotificationTopic: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
@@ -301,15 +301,15 @@ struct NotificationTopic: Codable, Equatable, Hashable, Identifiable {
         self.tenantId = tenantId
     }
 
-    // MARK: - Internal
+    // MARK: - Public
 
-    let id: String
-    let createdAt: Date
-    let updatedAt: Date
-    let deletedAt: Date?
-    let name: String
-    let slug: String
-    let description: String?
-    let active: Bool?
-    let tenantId: String
+    public let id: String
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    public let name: String
+    public let slug: String
+    public let description: String?
+    public let active: Bool?
+    public let tenantId: String
 }
