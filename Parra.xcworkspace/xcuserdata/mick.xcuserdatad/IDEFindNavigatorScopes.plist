@@ -19,28 +19,12 @@
 					<string>workspace-location</string>
 				</dict>
 				<dict>
-					<key>path-components</key>
-					<array>
-						<string>Parra</string>
-						<string>ios</string>
-						<string>Sources</string>
-					</array>
-					<key>root</key>
-					<string>dynamic-content</string>
+					<key>operand</key>
+					<string>ios/Sources/</string>
+					<key>operator</key>
+					<string>contains</string>
 					<key>rule</key>
-					<string>workspace-location</string>
-				</dict>
-				<dict>
-					<key>path-components</key>
-					<array>
-						<string>Parra</string>
-						<string>ios</string>
-						<string>Tests</string>
-					</array>
-					<key>root</key>
-					<string>dynamic-content</string>
-					<key>rule</key>
-					<string>workspace-location</string>
+					<string>file-path</string>
 				</dict>
 			</array>
 			<key>rule</key>
@@ -48,10 +32,8 @@
 		</dict>
 		<key>source</key>
 		<dict>
-			<key>base-path</key>
-			<string>/Users/mick/code/parra/parra-mobile-sdks</string>
 			<key>file-source</key>
-			<string>directory</string>
+			<string>workspace</string>
 		</dict>
 	</dict>
 </array>
