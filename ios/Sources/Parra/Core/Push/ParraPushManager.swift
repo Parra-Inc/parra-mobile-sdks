@@ -19,6 +19,16 @@ public final class ParraPushManager {
 
     // MARK: - Public
 
+    @MainActor
+    public func getCurrentAuthorizationStatus() async -> UNAuthorizationStatus {
+        return await getCurrentSettings().authorizationStatus
+    }
+
+    @MainActor
+    public func getCurrentSettings() async -> UNNotificationSettings {
+        return await center.notificationSettings()
+    }
+
     public func requestPushPermission() {
         Task { @MainActor in
             do {
@@ -32,7 +42,6 @@ public final class ParraPushManager {
     @MainActor
     public func requestPushPermission() async throws -> Bool {
         logger.info("Requesting push permission")
-        let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
 
         switch settings.authorizationStatus {
@@ -120,4 +129,5 @@ public final class ParraPushManager {
     // MARK: - Internal
 
     let parraInternal: ParraInternal
+    let center = UNUserNotificationCenter.current()
 }
