@@ -41,6 +41,10 @@ public final class Parra: Observable, Equatable {
         parraInternal: parraInternal
     )
 
+    @MainActor public private(set) lazy var push: ParraPushManager = .init(
+        parraInternal: parraInternal
+    )
+
     public nonisolated static func == (lhs: Parra, rhs: Parra) -> Bool {
         // References changing here should never cause re-renders.
         return true

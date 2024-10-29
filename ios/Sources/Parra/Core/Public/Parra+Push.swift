@@ -7,10 +7,16 @@
 //
 
 import Foundation
+import UserNotifications
 
-private let logger = Logger(category: "Push Extensions")
+private let logger = Logger(category: "Push")
 
 extension Parra {
+    @MainActor
+    public func requestPushPermission() async throws -> Bool {
+        return try await Parra.default.push.requestPushPermission()
+    }
+
     /// This method should be invoked from the UIApplication delegate method
     /// application(_:didRegisterForRemoteNotificationsWithDeviceToken:), passing in the Data parameter from this method.
     ///
