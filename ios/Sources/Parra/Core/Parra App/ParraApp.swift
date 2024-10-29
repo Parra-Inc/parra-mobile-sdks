@@ -214,9 +214,12 @@ public struct ParraApp<
 
             result.requiresAuthRefresh = authResult.requiresRefresh
 
-            if authResult.state.isLoggedIn {
+            if let user = authResult.state.user {
                 logger.debug("Performing post authentication actions")
-                try await parraInternal.performPostAuthLaunchActions()
+
+                try await parraInternal.performPostAuthLaunchActions(
+                    for: user
+                )
             } else {
                 logger.trace(
                     "Skipping post authentication actions. Not logged in."

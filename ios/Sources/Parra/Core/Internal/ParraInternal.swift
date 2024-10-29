@@ -170,7 +170,11 @@ class ParraInternal {
     /// Must be completed before the splash screen is dismissed!
     /// Keep this as lean as possible!!!!
     /// Everything here should be expected to happen after receiving auth state.
-    func performPostAuthLaunchActions() async throws {
+    func performPostAuthLaunchActions(
+        for user: ParraUser
+    ) async throws {
+        ParraUserSettings.shared.updateStore(user.info.settings)
+
         try await withThrowingDiscardingTaskGroup { taskGroup in
             taskGroup.addTask {
                 logger.debug("Fetching user properties")
@@ -196,6 +200,7 @@ class ParraInternal {
         logger.debug("Handle logout flow")
 
         ParraUserProperties.shared.reset()
+        ParraUserSettings.shared.reset()
 
         sessionManager.endSession()
 
@@ -220,6 +225,8 @@ class ParraInternal {
 
         do {
             logger.debug("Refreshing user info")
+
+            ParraUserSettings.shared.updateStore(user.info.settings)
 
             if let userInfo = try await authService.refreshUserInfo() {
                 ParraUserProperties.shared
