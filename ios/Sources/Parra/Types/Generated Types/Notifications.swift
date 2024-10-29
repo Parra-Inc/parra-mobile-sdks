@@ -275,3 +275,41 @@ struct CreatePushTokenRequestBody: Codable, Equatable, Hashable {
         case apnsToken
     }
 }
+
+struct NotificationTopic: Codable, Equatable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    init(
+        id: String,
+        createdAt: Date,
+        updatedAt: Date,
+        deletedAt: Date?,
+        name: String,
+        slug: String,
+        description: String?,
+        active: Bool?,
+        tenantId: String
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+        self.name = name
+        self.slug = slug
+        self.description = description
+        self.active = active
+        self.tenantId = tenantId
+    }
+
+    // MARK: - Internal
+
+    let id: String
+    let createdAt: Date
+    let updatedAt: Date
+    let deletedAt: Date?
+    let name: String
+    let slug: String
+    let description: String?
+    let active: Bool?
+    let tenantId: String
+}
