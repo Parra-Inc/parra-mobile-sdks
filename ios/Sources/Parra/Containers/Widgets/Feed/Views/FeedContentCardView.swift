@@ -40,7 +40,7 @@ struct FeedContentCardView: View {
         .background(parraTheme.palette.secondaryBackground)
         .applyCornerRadii(size: .xxxl, from: parraTheme)
         .buttonStyle(ContentCardButtonStyle())
-        .safeAreaPadding(.horizontal)
+        .safeAreaPadding(.horizontal, 16)
         .padding(.vertical, spacing)
         .disabled(!hasAction || !redactionReasons.isEmpty)
         .onAppear {
@@ -77,7 +77,7 @@ struct FeedContentCardView: View {
 
     private var backgroundImage: some View {
         withContent(content: contentCard.background?.image) { content in
-            let width = containerGeometry.size.width
+            let width = max(containerGeometry.size.width - 16 * 2, 0)
             let minAspect = min(content.size.width / content.size.height, 3.75)
             let minHeight = (width / minAspect).rounded(.down)
 
