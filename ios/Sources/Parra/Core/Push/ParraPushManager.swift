@@ -40,6 +40,7 @@ public final class ParraPushManager {
     }
 
     @MainActor
+    @discardableResult
     public func requestPushPermission() async throws -> Bool {
         logger.info("Requesting push permission")
         let settings = await center.notificationSettings()
