@@ -171,65 +171,6 @@ public enum ParraSettingsItemType: String, Codable {
     case integer
 }
 
-struct SettingsItemStub: Codable, Equatable, Hashable, Identifiable {
-    // MARK: - Lifecycle
-
-    init(
-        id: String,
-        createdAt: Date,
-        updatedAt: Date,
-        deletedAt: Date?,
-        groupId: String,
-        viewId: String,
-        title: String,
-        description: String?,
-        displayTitle: String,
-        displayDescription: String?,
-        slug: String,
-        transportType: String?,
-        key: String,
-        type: ParraSettingsItemType,
-        required: Bool,
-        nullable: Bool
-    ) {
-        self.id = id
-        self.createdAt = createdAt
-        self.updatedAt = updatedAt
-        self.deletedAt = deletedAt
-        self.groupId = groupId
-        self.viewId = viewId
-        self.title = title
-        self.description = description
-        self.displayTitle = displayTitle
-        self.displayDescription = displayDescription
-        self.slug = slug
-        self.transportType = transportType
-        self.key = key
-        self.type = type
-        self.required = required
-        self.nullable = nullable
-    }
-
-    // MARK: - Internal
-
-    let id: String
-    let createdAt: Date
-    let updatedAt: Date
-    let deletedAt: Date?
-    let groupId: String
-    let viewId: String
-    let title: String
-    let description: String?
-    let displayTitle: String
-    let displayDescription: String?
-    let slug: String
-    let transportType: String?
-    let key: String
-    let type: ParraSettingsItemType
-    let required: Bool
-    let nullable: Bool
-}
-
 public struct ParraUserSettingsItem: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
@@ -242,10 +183,7 @@ public struct ParraUserSettingsItem: Codable, Equatable, Hashable, Identifiable 
         viewId: String,
         title: String,
         description: String?,
-        displayTitle: String,
-        displayDescription: String?,
         slug: String,
-        transportType: String?,
         key: String,
         type: ParraSettingsItemType,
         required: Bool,
@@ -260,10 +198,7 @@ public struct ParraUserSettingsItem: Codable, Equatable, Hashable, Identifiable 
         self.viewId = viewId
         self.title = title
         self.description = description
-        self.displayTitle = displayTitle
-        self.displayDescription = displayDescription
         self.slug = slug
-        self.transportType = transportType
         self.key = key
         self.type = type
         self.required = required
@@ -276,18 +211,15 @@ public struct ParraUserSettingsItem: Codable, Equatable, Hashable, Identifiable 
         self.id = try container.decode(String.self, forKey: .id)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
-        self.deletedAt = try container.decode(Date.self, forKey: .deletedAt)
+        self.deletedAt = try container.decodeIfPresent(Date.self, forKey: .deletedAt)
         self.groupId = try container.decode(String.self, forKey: .groupId)
         self.viewId = try container.decode(String.self, forKey: .viewId)
         self.title = try container.decode(String.self, forKey: .title)
-        self.description = try container.decode(String.self, forKey: .description)
-        self.displayTitle = try container.decode(String.self, forKey: .displayTitle)
-        self.displayDescription = try container.decode(
+        self.description = try container.decodeIfPresent(
             String.self,
-            forKey: .displayDescription
+            forKey: .description
         )
         self.slug = try container.decode(String.self, forKey: .slug)
-        self.transportType = try container.decode(String.self, forKey: .transportType)
         self.key = try container.decode(String.self, forKey: .key)
         self.type = try container.decode(ParraSettingsItemType.self, forKey: .type)
         self.required = try container.decode(Bool.self, forKey: .required)
@@ -328,65 +260,12 @@ public struct ParraUserSettingsItem: Codable, Equatable, Hashable, Identifiable 
     public let viewId: String
     public let title: String
     public let description: String?
-    public let displayTitle: String
-    public let displayDescription: String?
     public let slug: String
-    public let transportType: String?
     public let key: String
     public let type: ParraSettingsItemType
     public let required: Bool
     public let nullable: Bool
     public let data: ParraSettingsItemDataWithValue
-}
-
-struct SettingsGroupStub: Codable, Equatable, Hashable, Identifiable {
-    // MARK: - Lifecycle
-
-    init(
-        id: String,
-        createdAt: Date,
-        updatedAt: Date,
-        deletedAt: Date?,
-        tenantId: String?,
-        viewId: String,
-        notificationTopicId: String?,
-        title: String,
-        description: String?,
-        displayTitle: String,
-        displayDescription: String?,
-        slug: String,
-        key: String
-    ) {
-        self.id = id
-        self.createdAt = createdAt
-        self.updatedAt = updatedAt
-        self.deletedAt = deletedAt
-        self.tenantId = tenantId
-        self.viewId = viewId
-        self.notificationTopicId = notificationTopicId
-        self.title = title
-        self.description = description
-        self.displayTitle = displayTitle
-        self.displayDescription = displayDescription
-        self.slug = slug
-        self.key = key
-    }
-
-    // MARK: - Internal
-
-    let id: String
-    let createdAt: Date
-    let updatedAt: Date
-    let deletedAt: Date?
-    let tenantId: String?
-    let viewId: String
-    let notificationTopicId: String?
-    let title: String
-    let description: String?
-    let displayTitle: String
-    let displayDescription: String?
-    let slug: String
-    let key: String
 }
 
 public struct ParraUserSettingsGroup: Codable, Equatable, Hashable, Identifiable {
@@ -399,14 +278,10 @@ public struct ParraUserSettingsGroup: Codable, Equatable, Hashable, Identifiable
         deletedAt: Date?,
         tenantId: String?,
         viewId: String,
-        notificationTopicId: String?,
         title: String,
         description: String?,
-        displayTitle: String,
-        displayDescription: String?,
         slug: String,
         key: String,
-        notificationTopic: ParraNotificationTopic?,
         items: [ParraUserSettingsItem]
     ) {
         self.id = id
@@ -415,14 +290,10 @@ public struct ParraUserSettingsGroup: Codable, Equatable, Hashable, Identifiable
         self.deletedAt = deletedAt
         self.tenantId = tenantId
         self.viewId = viewId
-        self.notificationTopicId = notificationTopicId
         self.title = title
         self.description = description
-        self.displayTitle = displayTitle
-        self.displayDescription = displayDescription
         self.slug = slug
         self.key = key
-        self.notificationTopic = notificationTopic
         self.items = items
     }
 
@@ -434,68 +305,11 @@ public struct ParraUserSettingsGroup: Codable, Equatable, Hashable, Identifiable
     public let deletedAt: Date?
     public let tenantId: String?
     public let viewId: String
-    public let notificationTopicId: String?
     public let title: String
     public let description: String?
-    public let displayTitle: String
-    public let displayDescription: String?
     public let slug: String
     public let key: String
-    public let notificationTopic: ParraNotificationTopic?
     public let items: [ParraUserSettingsItem]
-}
-
-struct SettingsViewStub: Codable, Equatable, Hashable, Identifiable {
-    // MARK: - Lifecycle
-
-    init(
-        id: String,
-        createdAt: Date,
-        updatedAt: Date,
-        deletedAt: Date?,
-        tenantId: String,
-        title: String,
-        description: String?,
-        displayTitle: String,
-        displayDescription: String?,
-        footerLabel: String?,
-        slug: String,
-        type: String?,
-        managed: Bool,
-        active: Bool
-    ) {
-        self.id = id
-        self.createdAt = createdAt
-        self.updatedAt = updatedAt
-        self.deletedAt = deletedAt
-        self.tenantId = tenantId
-        self.title = title
-        self.description = description
-        self.displayTitle = displayTitle
-        self.displayDescription = displayDescription
-        self.footerLabel = footerLabel
-        self.slug = slug
-        self.type = type
-        self.managed = managed
-        self.active = active
-    }
-
-    // MARK: - Internal
-
-    let id: String
-    let createdAt: Date
-    let updatedAt: Date
-    let deletedAt: Date?
-    let tenantId: String
-    let title: String
-    let description: String?
-    let displayTitle: String
-    let displayDescription: String?
-    let footerLabel: String?
-    let slug: String
-    let type: String?
-    let managed: Bool
-    let active: Bool
 }
 
 public struct ParraUserSettingsLayout: Codable, Equatable, Hashable, Identifiable {
@@ -509,13 +323,8 @@ public struct ParraUserSettingsLayout: Codable, Equatable, Hashable, Identifiabl
         tenantId: String,
         title: String,
         description: String?,
-        displayTitle: String,
-        displayDescription: String?,
         footerLabel: String?,
         slug: String,
-        type: String?,
-        managed: Bool,
-        active: Bool,
         groups: [ParraUserSettingsGroup]
     ) {
         self.id = id
@@ -525,13 +334,8 @@ public struct ParraUserSettingsLayout: Codable, Equatable, Hashable, Identifiabl
         self.tenantId = tenantId
         self.title = title
         self.description = description
-        self.displayTitle = displayTitle
-        self.displayDescription = displayDescription
         self.footerLabel = footerLabel
         self.slug = slug
-        self.type = type
-        self.managed = managed
-        self.active = active
         self.groups = groups
     }
 
@@ -544,12 +348,7 @@ public struct ParraUserSettingsLayout: Codable, Equatable, Hashable, Identifiabl
     public let tenantId: String
     public let title: String
     public let description: String?
-    public let displayTitle: String
-    public let displayDescription: String?
     public let footerLabel: String?
     public let slug: String
-    public let type: String?
-    public let managed: Bool
-    public let active: Bool
     public let groups: [ParraUserSettingsGroup]
 }
