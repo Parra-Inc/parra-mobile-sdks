@@ -77,8 +77,8 @@ extension Storefront.MutationQuery {
 
         return Storefront.buildMutation { $0
             .cartLinesAdd(
-                lines: lines,
-                cartId: GraphQL.ID(rawValue: cartId)
+                cartId: GraphQL.ID(rawValue: cartId),
+                lines: lines
             ) { $0
                 .cart { cart in
                     appendCartFields(to: cart)
