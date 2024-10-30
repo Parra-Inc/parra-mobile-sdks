@@ -147,6 +147,8 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/users/\(userId)/settings/views"
         case .getUserSettingsLayout(let userId, let layoutId):
             return "tenants/\(tenantId)/users/\(userId)/settings/views/\(layoutId)"
+        case .putUpdateUserSetting(let userId, let settingsItemId):
+            return "tenants/\(tenantId)/users/\(userId)/settings/items/\(settingsItemId)/value"
         }
     }
 }

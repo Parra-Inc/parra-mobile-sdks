@@ -56,6 +56,7 @@ enum ApiEndpoint: Endpoint {
     // User Settings
     case getUserSettingsLayouts(userId: String)
     case getUserSettingsLayout(userId: String, layoutId: String)
+    case putUpdateUserSetting(userId: String, settingsItemId: String)
 
     case putUpdateSingleUserProperty(userId: String, propertyKey: String)
     case deleteSingleUserProperty(userId: String, propertyKey: String)
@@ -79,7 +80,7 @@ enum ApiEndpoint: Endpoint {
              .postLogin, .postLogout, .postUpdateAvatar:
             return .post
         case .updateUserInfo, .putReplaceUserProperties,
-             .putUpdateSingleUserProperty:
+             .putUpdateSingleUserProperty, .putUpdateUserSetting:
             return .put
         case .deleteVoteForTicket, .deleteUser, .deleteAvatar,
              .deleteAllUserProperties, .deleteSingleUserProperty:
@@ -144,6 +145,8 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/users/:userId/settings/views"
         case .getUserSettingsLayout:
             return "tenants/:tenantId/users/:userId/settings/views/:layoutId"
+        case .putUpdateUserSetting:
+            return "tenants/:tenantId/users/:userId/settings/items/:settingsItemIdOrKey/value"
         }
     }
 
