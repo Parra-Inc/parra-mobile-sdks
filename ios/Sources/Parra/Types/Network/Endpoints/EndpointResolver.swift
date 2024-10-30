@@ -142,6 +142,11 @@ enum EndpointResolver {
             return "tenants/\(tenantId)/users/\(userId)/properties/\(propertyKey)"
         case .getPaginateFeed(let feedId):
             return "tenants/\(tenantId)/applications/\(applicationId)/feeds/\(feedId)/items"
+        // User Settings
+        case .getUserSettingsLayouts(let userId):
+            return "tenants/\(tenantId)/users/\(userId)/settings/views"
+        case .getUserSettingsLayout(let userId, let layoutId):
+            return "tenants/\(tenantId)/users/\(userId)/settings/views/\(layoutId)"
         }
     }
 }

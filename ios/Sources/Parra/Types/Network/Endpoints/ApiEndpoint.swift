@@ -53,6 +53,10 @@ enum ApiEndpoint: Endpoint {
     case patchUpdateUserProperties(userId: String)
     case deleteAllUserProperties(userId: String)
 
+    // User Settings
+    case getUserSettingsLayouts(userId: String)
+    case getUserSettingsLayout(userId: String, layoutId: String)
+
     case putUpdateSingleUserProperty(userId: String, propertyKey: String)
     case deleteSingleUserProperty(userId: String, propertyKey: String)
 
@@ -66,7 +70,8 @@ enum ApiEndpoint: Endpoint {
         switch self {
         case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
-             .getUserProperties, .getPaginateFeed:
+             .getUserProperties, .getPaginateFeed,
+             .getUserSettingsLayouts, .getUserSettingsLayout:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
@@ -135,6 +140,10 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/users/:userId/properties/:userPropertyKey"
         case .getPaginateFeed:
             return "tenants/:tenantId/applications/:applicationId/feeds/:feedId/items"
+        case .getUserSettingsLayouts:
+            return "tenants/:tenantId/users/:userId/settings/views"
+        case .getUserSettingsLayout:
+            return "tenants/:tenantId/users/:userId/settings/views/:layoutId"
         }
     }
 
