@@ -25,6 +25,7 @@ struct UserSettingsWidget: ParraContainer {
 
     var body: some View {
         content
+            .environment(contentObserver)
     }
 
     // MARK: - Private

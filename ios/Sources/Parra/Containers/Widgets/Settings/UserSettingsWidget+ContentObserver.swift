@@ -77,10 +77,21 @@ extension UserSettingsWidget {
             }
         }
 
+        func updateSetting(
+            with key: String,
+            to value: ParraSettingsItemDataWithValue
+        ) async throws {
+            try await ParraUserSettings.shared.updateSetting(
+                with: key,
+                to: value
+            )
+        }
+
         // MARK: - Private
 
         private let layoutId: String
         private let api: API
         private let config: ParraUserSettingsConfiguration
+        private var cancellables: Set<AnyCancellable> = []
     }
 }

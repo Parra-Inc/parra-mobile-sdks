@@ -114,8 +114,6 @@ public class ParraThemeManager {
 
     // MARK: - Private
 
-    private var appearanceChangeBag = Set<AnyCancellable>()
-
     private func onReceiveAppearanceChange(
         _ appearance: ParraAppearance
     ) {

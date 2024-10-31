@@ -163,6 +163,19 @@ public enum ParraSettingsItemDataWithValue: Codable, Equatable, Hashable {
     case settingsItemIntegerDataWithValue(ParraSettingsItemIntegerDataWithValue)
     case settingsItemStringDataWithValue(ParraSettingsItemStringDataWithValue)
     case settingsItemBooleanDataWithValue(ParraSettingsItemBooleanDataWithValue)
+
+    // MARK: - Internal
+
+    var rawValue: ParraAnyCodable {
+        switch self {
+        case .settingsItemIntegerDataWithValue(let data):
+            return ParraAnyCodable(data.value)
+        case .settingsItemStringDataWithValue(let data):
+            return ParraAnyCodable(data.value)
+        case .settingsItemBooleanDataWithValue(let data):
+            return ParraAnyCodable(data.value)
+        }
+    }
 }
 
 public enum ParraSettingsItemType: String, Codable {

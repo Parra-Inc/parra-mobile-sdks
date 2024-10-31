@@ -173,7 +173,7 @@ class ParraInternal {
     func performPostAuthLaunchActions(
         for user: ParraUser
     ) async throws {
-        ParraUserSettings.shared.updateStore(user.info.settings)
+        ParraUserSettings.shared.updateSettings(user.info.settings)
 
         try await withThrowingDiscardingTaskGroup { taskGroup in
             taskGroup.addTask {
@@ -226,7 +226,7 @@ class ParraInternal {
         do {
             logger.debug("Refreshing user info")
 
-            ParraUserSettings.shared.updateStore(user.info.settings)
+            ParraUserSettings.shared.updateSettings(user.info.settings)
 
             if let userInfo = try await authService.refreshUserInfo() {
                 ParraUserProperties.shared
