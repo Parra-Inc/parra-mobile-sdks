@@ -196,8 +196,6 @@ public struct ParraApp<
 
             logger.debug("Performing app launch tasks")
 
-            let handler: () -> Void = {}
-
             ParraLinkManager.shared.registerUrlOpener { url in
                 if let urlHandler {
                     urlHandler(url)

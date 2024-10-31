@@ -421,7 +421,7 @@ final class AuthServer: Server {
             .CachePolicy = .reloadIgnoringLocalAndRemoteCacheData,
         allowedRetries: Int
     ) async throws -> T where T: Codable {
-        var request = try createRequest(
+        var request = try await createRequest(
             to: endpoint,
             queryItems: queryItems,
             config: config,

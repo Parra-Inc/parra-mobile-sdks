@@ -15,7 +15,9 @@ enum EndpointResolver {
         endpoint: IssuerEndpoint,
         tenant: ParraTenantAppInfoStub
     ) throws -> URL {
-        let path = path(for: endpoint)
+        let path = path(
+            for: endpoint
+        )
 
         guard let issuerUrl = URL(string: "https://\(tenant.issuer)") else {
             throw ParraError.message(
@@ -30,11 +32,13 @@ enum EndpointResolver {
 
     static func resolve(
         endpoint: ApiEndpoint,
-        using appState: ParraAppState
-    ) throws -> URL {
-        let path = path(
+        using appState: ParraAppState,
+        dataManager: DataManager
+    ) async throws -> URL {
+        let path = try await path(
             for: endpoint,
-            using: appState
+            using: appState,
+            dataManager: dataManager
         )
 
         return ParraInternal.Constants.parraApiRoot
@@ -78,8 +82,9 @@ enum EndpointResolver {
 
     private static func path(
         for apiEndpoint: ApiEndpoint,
-        using appState: ParraAppState
-    ) -> String {
+        using appState: ParraAppState,
+        dataManager: DataManager
+    ) async throws -> String {
         let tenantId = appState.tenantId
         let applicationId = appState.applicationId
 
@@ -123,32 +128,83 @@ enum EndpointResolver {
         // Users
         case .getUserInfo:
             return "tenants/\(tenantId)/auth/user-info"
-        case .updateUserInfo(let userId):
+        case .updateUserInfo:
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
             return "tenants/\(tenantId)/users/\(userId)"
         case .postUpdateAvatar:
             return "tenants/\(tenantId)/users/avatar"
-        case .deleteAvatar(let userId):
+        case .deleteAvatar:
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
             return "tenants/\(tenantId)/users/\(userId)/avatar"
-        case .deleteUser(let userId):
+        case .deleteUser:
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
             return "tenants/\(tenantId)/users/\(userId)"
         // User Properties
-        case .getUserProperties(let userId),
-             .putReplaceUserProperties(let userId),
-             .patchUpdateUserProperties(let userId),
-             .deleteAllUserProperties(let userId):
+        case .getUserProperties, .putReplaceUserProperties,
+             .patchUpdateUserProperties, .deleteAllUserProperties:
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
             return "tenants/\(tenantId)/users/\(userId)/properties"
-        case .putUpdateSingleUserProperty(let userId, let propertyKey),
-             .deleteSingleUserProperty(let userId, let propertyKey):
+        case .putUpdateSingleUserProperty(let propertyKey),
+             .deleteSingleUserProperty(let propertyKey):
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
             return "tenants/\(tenantId)/users/\(userId)/properties/\(propertyKey)"
         case .getPaginateFeed(let feedId):
             return "tenants/\(tenantId)/applications/\(applicationId)/feeds/\(feedId)/items"
         // User Settings
-        case .getUserSettingsLayouts(let userId):
+        case .getUserSettingsLayouts:
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
             return "tenants/\(tenantId)/users/\(userId)/settings/views"
-        case .getUserSettingsLayout(let userId, let layoutId):
+        case .getUserSettingsLayout(let layoutId):
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
             return "tenants/\(tenantId)/users/\(userId)/settings/views/\(layoutId)"
-        case .putUpdateUserSetting(let userId, let settingsItemId):
+        case .putUpdateUserSetting(let settingsItemId):
+            let userId = try await getUserId(
+                for: apiEndpoint,
+                from: dataManager
+            )
+
             return "tenants/\(tenantId)/users/\(userId)/settings/items/\(settingsItemId)/value"
         }
+    }
+
+    private static func getUserId(
+        for endpoint: ApiEndpoint,
+        from dataManager: DataManager
+    ) async throws -> String {
+        guard let userInfo = await dataManager.getCurrentUser()?.info else {
+            throw ParraError.message(
+                "Can not perform endpoint. Not logged in. Endpoint: \(endpoint.slugWithMethod)"
+            )
+        }
+
+        return userInfo.id
     }
 }

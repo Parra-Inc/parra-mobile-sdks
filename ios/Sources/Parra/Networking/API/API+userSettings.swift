@@ -10,14 +10,8 @@ import Foundation
 
 extension API {
     func getSettingsLayouts() async throws -> [ParraUserSettingsLayout] {
-        guard let userInfo = await dataManager.getCurrentUser()?.info else {
-            throw ParraError.message(
-                "Can not get settings layouts. Not logged in."
-            )
-        }
-
         return try await hitEndpoint(
-            .getUserSettingsLayouts(userId: userInfo.id),
+            .getUserSettingsLayouts,
             cachePolicy: .init(.reloadIgnoringLocalAndRemoteCacheData)
         )
     }
@@ -25,14 +19,8 @@ extension API {
     func getSettingsLayout(
         layoutId: String
     ) async throws -> ParraUserSettingsLayout {
-        guard let userInfo = await dataManager.getCurrentUser()?.info else {
-            throw ParraError.message(
-                "Can not get settings layout. Not logged in."
-            )
-        }
-
         return try await hitEndpoint(
-            .getUserSettingsLayout(userId: userInfo.id, layoutId: layoutId),
+            .getUserSettingsLayout(layoutId: layoutId),
             cachePolicy: .init(.reloadIgnoringLocalAndRemoteCacheData)
         )
     }

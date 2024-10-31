@@ -21,7 +21,7 @@ extension Server {
         cachePolicy: URLRequest.CachePolicy? = nil,
         body: Data? = nil,
         timeout: TimeInterval? = nil
-    ) throws -> URLRequest {
+    ) async throws -> URLRequest {
         let method = endpoint.method
 
         let headerFactory = HeaderFactory(
@@ -29,9 +29,10 @@ extension Server {
             appConfig: appConfig
         )
 
-        let url = try EndpointResolver.resolve(
+        let url = try await EndpointResolver.resolve(
             endpoint: endpoint,
-            using: appState
+            using: appState,
+            dataManager: dataManager
         )
 
         var request = try URLRequest(

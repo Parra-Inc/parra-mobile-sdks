@@ -15,12 +15,13 @@ final class ExternalResourceServer: Server {
     init(
         configuration: ServerConfiguration,
         appState: ParraAppState,
-        appConfig: ParraConfiguration
-
+        appConfig: ParraConfiguration,
+        dataManager: DataManager
     ) {
         self.configuration = configuration
         self.appState = appState
         self.appConfig = appConfig
+        self.dataManager = dataManager
     }
 
     // MARK: - Internal
@@ -28,6 +29,7 @@ final class ExternalResourceServer: Server {
     let configuration: ServerConfiguration
     let appState: ParraAppState
     let appConfig: ParraConfiguration
+    let dataManager: DataManager
 
     weak var delegate: ServerDelegate?
 

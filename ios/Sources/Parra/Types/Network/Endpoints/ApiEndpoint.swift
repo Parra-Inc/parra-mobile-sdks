@@ -42,24 +42,24 @@ enum ApiEndpoint: Endpoint {
 
     // Users
     case getUserInfo
-    case updateUserInfo(userId: String)
+    case updateUserInfo
     case postUpdateAvatar
-    case deleteAvatar(userId: String)
-    case deleteUser(userId: String)
+    case deleteAvatar
+    case deleteUser
 
     // User Properties
-    case getUserProperties(userId: String)
-    case putReplaceUserProperties(userId: String)
-    case patchUpdateUserProperties(userId: String)
-    case deleteAllUserProperties(userId: String)
+    case getUserProperties
+    case putReplaceUserProperties
+    case patchUpdateUserProperties
+    case deleteAllUserProperties
 
     // User Settings
-    case getUserSettingsLayouts(userId: String)
-    case getUserSettingsLayout(userId: String, layoutId: String)
-    case putUpdateUserSetting(userId: String, settingsItemId: String)
+    case getUserSettingsLayouts
+    case getUserSettingsLayout(layoutId: String)
+    case putUpdateUserSetting(settingsItemId: String)
 
-    case putUpdateSingleUserProperty(userId: String, propertyKey: String)
-    case deleteSingleUserProperty(userId: String, propertyKey: String)
+    case putUpdateSingleUserProperty(propertyKey: String)
+    case deleteSingleUserProperty(propertyKey: String)
 
     // Feeds
 

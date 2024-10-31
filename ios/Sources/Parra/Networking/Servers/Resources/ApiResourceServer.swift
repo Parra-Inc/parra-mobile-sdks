@@ -18,11 +18,13 @@ final class ApiResourceServer: Server {
 
     init(
         authService: AuthService,
+        dataManager: DataManager,
         appState: ParraAppState,
         appConfig: ParraConfiguration,
         configuration: ServerConfiguration
     ) {
         self.authService = authService
+        self.dataManager = dataManager
         self.appState = appState
         self.appConfig = appConfig
         self.configuration = configuration
@@ -32,6 +34,7 @@ final class ApiResourceServer: Server {
 
     weak var delegate: ServerDelegate?
     let authService: AuthService
+    let dataManager: DataManager
     let appState: ParraAppState
     let appConfig: ParraConfiguration
     let configuration: ServerConfiguration
@@ -87,7 +90,7 @@ final class ApiResourceServer: Server {
 
         do {
             let body = try configuration.jsonEncoder.encode(body)
-            var initialRequest = try createRequest(
+            var initialRequest = try await createRequest(
                 to: endpoint,
                 queryItems: queryItems,
                 config: config,
@@ -155,7 +158,7 @@ final class ApiResourceServer: Server {
             )
 
         do {
-            var initialRequest = try createRequest(
+            var initialRequest = try await createRequest(
                 to: endpoint,
                 queryItems: queryItems,
                 config: config,

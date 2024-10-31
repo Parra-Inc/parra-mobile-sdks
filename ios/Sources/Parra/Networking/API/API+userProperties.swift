@@ -18,14 +18,8 @@ extension API {
     typealias UserProperties = [String: ParraAnyCodable]
 
     func getUserProperties() async throws -> UserProperties {
-        guard let userInfo = await dataManager.getCurrentUser()?.info else {
-            throw ParraError.message(
-                "Can not get user properties. Not logged in."
-            )
-        }
-
         return try await hitEndpoint(
-            .getUserProperties(userId: userInfo.id),
+            .getUserProperties,
             cachePolicy: .init(.reloadIgnoringLocalAndRemoteCacheData)
         )
     }
@@ -33,14 +27,8 @@ extension API {
     func replaceUserProperties(
         _ properties: UserProperties
     ) async throws -> UserProperties {
-        guard let userInfo = await dataManager.getCurrentUser()?.info else {
-            throw ParraError.message(
-                "Can not replace user properties. Not logged in."
-            )
-        }
-
         return try await hitEndpoint(
-            .putReplaceUserProperties(userId: userInfo.id),
+            .putReplaceUserProperties,
             body: properties
         )
     }
@@ -48,27 +36,15 @@ extension API {
     func upsertUserProperties(
         _ properties: UserProperties
     ) async throws -> UserProperties {
-        guard let userInfo = await dataManager.getCurrentUser()?.info else {
-            throw ParraError.message(
-                "Can not upsert user properties. Not logged in."
-            )
-        }
-
         return try await hitEndpoint(
-            .patchUpdateUserProperties(userId: userInfo.id),
+            .patchUpdateUserProperties,
             body: properties
         )
     }
 
     func deleteAllUserProperties() async throws -> UserProperties {
-        guard let userInfo = await dataManager.getCurrentUser()?.info else {
-            throw ParraError.message(
-                "Can not delete user properties. Not logged in."
-            )
-        }
-
         return try await hitEndpoint(
-            .deleteAllUserProperties(userId: userInfo.id)
+            .deleteAllUserProperties
         )
     }
 
@@ -76,17 +52,10 @@ extension API {
         _ property: String,
         value: ParraAnyCodable
     ) async throws -> UserProperties {
-        guard let userInfo = await dataManager.getCurrentUser()?.info else {
-            throw ParraError.message(
-                "Can not update user property. Not logged in."
-            )
-        }
-
         let body = UserPropertyValue(value: value)
 
         return try await hitEndpoint(
             .putUpdateSingleUserProperty(
-                userId: userInfo.id,
                 propertyKey: property
             ),
             body: body
@@ -118,15 +87,8 @@ extension API {
     func deleteSingleUserProperty(
         _ property: String
     ) async throws -> UserProperties {
-        guard let userInfo = await dataManager.getCurrentUser()?.info else {
-            throw ParraError.message(
-                "Can not delete user property. Not logged in."
-            )
-        }
-
         return try await hitEndpoint(
             .deleteSingleUserProperty(
-                userId: userInfo.id,
                 propertyKey: property
             )
         )

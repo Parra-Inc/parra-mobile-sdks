@@ -10,6 +10,7 @@ import Foundation
 
 @MainActor
 protocol Server {
+    var dataManager: DataManager { get }
     var configuration: ServerConfiguration { get }
     var appState: ParraAppState { get }
     var appConfig: ParraConfiguration { get }
