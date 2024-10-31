@@ -14,11 +14,13 @@ public extension ParraAuthDefaultLandingScreen {
 
         public init(
             background: (any ShapeStyle)?,
-            topView: (any View)?,
+            logoView: (any View)?,
+            titleView: (any View)?,
             bottomView: (any View)?
         ) {
             self.background = background
-            self.topView = topView
+            self.logoView = logoView
+            self.titleView = titleView
             self.bottomView = bottomView
         }
 
@@ -26,15 +28,22 @@ public extension ParraAuthDefaultLandingScreen {
 
         public static var `default` = Config(
             background: nil,
-            topView: nil,
+            logoView: nil,
+            titleView: nil,
             bottomView: nil
         )
 
         public let background: (any ShapeStyle)?
 
-        /// A view to be displayed on the top portion of the screen, replacing
-        /// Parra's default labels for your app name and a subtitle.
-        public let topView: (any View)?
+        /// A view to be displayed on the top portion of the screen with a logo
+        /// for the app. The default pulls the logo image from your tenant in
+        /// the Parra dashboard.
+        public let logoView: (any View)?
+
+        /// A view to be displayed on the top portion of the screen, beneath the
+        /// logo view. By default, this shows labels for your app name and a
+        /// subtitle.
+        public let titleView: (any View)?
 
         /// A view to be displayed on the bottom portion of the screen, below
         /// any buttons for login methods. By default, this is an EmptyView.

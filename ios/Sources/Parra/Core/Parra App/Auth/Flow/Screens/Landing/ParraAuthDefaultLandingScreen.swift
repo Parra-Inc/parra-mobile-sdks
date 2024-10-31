@@ -25,10 +25,16 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
         VStack(alignment: .center) {
             Spacer()
 
-            if let topView = config.topView {
-                AnyView(topView)
+            if let logoView = config.logoView {
+                AnyView(logoView)
             } else {
-                defaultTopView
+                defaultLogoView
+            }
+
+            if let titleView = config.titleView {
+                AnyView(titleView)
+            } else {
+                defaultTitleView
             }
 
             Spacer()
@@ -87,7 +93,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
         }
     }
 
-    @ViewBuilder private var defaultTopView: some View {
+    @ViewBuilder private var defaultLogoView: some View {
         if let logo = parraAppInfo.tenant.logo {
             componentFactory.buildAsyncImage(
                 content: ParraAsyncImageContent(
@@ -99,7 +105,9 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
                 )
             )
         }
+    }
 
+    @ViewBuilder private var defaultTitleView: some View {
         titleLabel
 
         subtitleLabel
