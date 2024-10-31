@@ -105,6 +105,75 @@ extension ParraUserSettingsItem: ParraFixture {
                         value: true
                     )
                 )
+            ),
+            ParraUserSettingsItem(
+                id: .uuid,
+                createdAt: .now.daysAgo(1),
+                updatedAt: .now.daysAgo(1),
+                deletedAt: nil,
+                groupId: .uuid,
+                viewId: .uuid,
+                title: "Updates per game",
+                description: "The max number of updates you want to receive for each game.",
+                slug: "updates",
+                key: "notifications.picks.max",
+                type: .integer,
+                required: true,
+                nullable: false,
+                data: .settingsItemIntegerDataWithValue(
+                    ParraSettingsItemIntegerDataWithValue(
+                        defaultValue: 2,
+                        minValue: 1,
+                        maxValue: 100,
+                        value: 4
+                    )
+                )
+            ),
+            ParraUserSettingsItem(
+                id: .uuid,
+                createdAt: .now.daysAgo(1),
+                updatedAt: .now.daysAgo(1),
+                deletedAt: nil,
+                groupId: .uuid,
+                viewId: .uuid,
+                title: "Updates per week",
+                description: "The max number of updates you want to receive per week.",
+                slug: "updates-weekly",
+                key: "notifications.picks.weekly",
+                type: .integer,
+                required: true,
+                nullable: false,
+                data: .settingsItemIntegerDataWithValue(
+                    ParraSettingsItemIntegerDataWithValue(
+                        defaultValue: 5,
+                        minValue: 0,
+                        maxValue: 20,
+                        value: 2
+                    )
+                )
+            ),
+            ParraUserSettingsItem(
+                id: .uuid,
+                createdAt: .now.daysAgo(1),
+                updatedAt: .now.daysAgo(1),
+                deletedAt: nil,
+                groupId: .uuid,
+                viewId: .uuid,
+                title: "Name in pushes",
+                description: "The name you'd prefer to be addressed as.",
+                slug: "name",
+                key: "notifications.personalization.name",
+                type: .string,
+                required: true,
+                nullable: false,
+                data: .settingsItemStringDataWithValue(
+                    ParraSettingsItemStringDataWithValue(
+                        format: nil,
+                        enumOptions: nil,
+                        defaultValue: "default mick",
+                        value: nil
+                    )
+                )
             )
         ]
     }
