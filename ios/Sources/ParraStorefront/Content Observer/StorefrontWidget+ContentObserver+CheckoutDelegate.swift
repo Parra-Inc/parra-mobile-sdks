@@ -81,7 +81,7 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
             if let delegate {
                 delegate.storefrontWidgetDidClickLinkInCheckout(url: url)
             } else if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
+                ParraLinkManager.shared.open(url: url)
             } else {
                 logger.warn("Failed to open cart link", [
                     "url": url.absoluteString

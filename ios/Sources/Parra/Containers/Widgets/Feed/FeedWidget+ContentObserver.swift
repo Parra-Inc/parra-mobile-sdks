@@ -171,14 +171,10 @@ extension FeedWidget {
 
             switch feedItemData {
             case .feedItemYoutubeVideo(let video):
-                UIApplication.shared.open(
-                    video.url
-                )
+                ParraLinkManager.shared.open(url: video.url)
             case .contentCard(let contentCard):
                 if let action = contentCard.action {
-                    UIApplication.shared.open(
-                        action.url
-                    )
+                    ParraLinkManager.shared.open(url: action.url)
                 }
             case .creatorUpdate:
                 break

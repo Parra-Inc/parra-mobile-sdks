@@ -76,6 +76,7 @@ public struct ParraApp<
         applicationId: String,
         appDelegate: ParraAppDelegate<SceneDelegateClass>,
         configuration: ParraConfiguration = .init(),
+        urlHandler: ((URL) -> Void)? = nil,
         @SceneBuilder makeScene: @MainActor @escaping () -> Content
     ) {
         ParraAppState.shared = ParraAppState(
@@ -84,6 +85,7 @@ public struct ParraApp<
         )
 
         self.makeScene = makeScene
+        self.urlHandler = urlHandler
         self.parraInternal = ParraInternal.createParraInstance(
             appState: ParraAppState.shared,
             // TODO: Support for other auth types
@@ -161,8 +163,10 @@ public struct ParraApp<
     // MARK: - Private
 
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL) private var openUrl
 
     @SceneBuilder private let makeScene: @MainActor () -> Content
+    private let urlHandler: ((URL) -> Void)?
 
     @State private var launchScreenState: LaunchScreenStateManager
     @State private var alertManager: AlertManager
@@ -191,6 +195,16 @@ public struct ParraApp<
             }
 
             logger.debug("Performing app launch tasks")
+
+            let handler: () -> Void = {}
+
+            ParraLinkManager.shared.registerUrlOpener { url in
+                if let urlHandler {
+                    urlHandler(url)
+                }
+
+                openUrl.callAsFunction(url)
+            }
 
             ParraThemeManager.shared.current = parraInternal.configuration.theme
 
