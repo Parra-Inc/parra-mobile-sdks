@@ -27,7 +27,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/Shopify/mobile-buy-sdk-ios", from: "13.0.0"),
+        .package(url: "https://github.com/Shopify/mobile-buy-sdk-ios", from: "13.1.0"),
         .package(url: "https://github.com/Shopify/checkout-sheet-kit-swift", from: "3.0.4"),
         .package(url: "https://github.com/ActuallyTaylor/SwiftHTMLToMarkdown", from: "1.1.1")
     ],
