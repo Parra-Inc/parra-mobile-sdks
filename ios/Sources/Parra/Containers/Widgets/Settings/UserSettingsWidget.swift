@@ -30,6 +30,8 @@ struct UserSettingsWidget: ParraContainer {
 
     // MARK: - Private
 
+    @Environment(\.parraTheme) private var parraTheme
+
     @ViewBuilder private var content: some View {
         switch contentObserver.loadState {
         case .initial, .loading:
@@ -38,6 +40,13 @@ struct UserSettingsWidget: ParraContainer {
                 ProgressView()
                 Spacer()
             }
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity
+            )
+            .background(
+                parraTheme.palette.secondaryBackground.toParraColor()
+            )
             .task {
                 if contentObserver.loadState == .initial {
                     await contentObserver.loadSettingsLayout()

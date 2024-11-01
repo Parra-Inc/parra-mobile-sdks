@@ -28,6 +28,12 @@ extension UserSettingsWidget {
                 emptyStateView: initialParams.config.emptyStateContent,
                 errorStateView: initialParams.config.errorStateContent
             )
+
+            self.loadState = if let layout = initialParams.layout {
+                .loaded(layout)
+            } else {
+                .initial
+            }
         }
 
         // MARK: - Internal
@@ -59,7 +65,7 @@ extension UserSettingsWidget {
             }
         }
 
-        private(set) var loadState: LoadState = .initial
+        private(set) var loadState: LoadState
 
         let content: Content
 

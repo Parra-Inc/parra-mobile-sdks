@@ -30,6 +30,7 @@ public struct ParraUserSettingsWidget: View {
             .containerRenderer.renderContainer(
                 params: UserSettingsWidget.ContentObserver.InitialParams(
                     layoutId: layoutId,
+                    layout: nil,
                     config: config,
                     api: parra.parraInternal.api
                 ),

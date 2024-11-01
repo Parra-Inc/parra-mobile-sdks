@@ -26,12 +26,20 @@ public final class ParraUserSettings: ParraReadableKeyValueStore {
         return rawValue
     }
 
-    // MARK: - Internal
+    public func getSettingsView(
+        by id: String
+    ) async throws -> ParraUserSettingsLayout {
+        return try await Parra.default.parraInternal.api.getSettingsLayout(
+            layoutId: id
+        )
+    }
 
-    static let shared = ParraUserSettings()
+    public func getAllSettingsViews() async throws -> [ParraUserSettingsLayout] {
+        return try await Parra.default.parraInternal.api.getSettingsLayouts()
+    }
 
     @MainActor
-    func updateSetting(
+    public func updateSetting(
         with key: String,
         to value: ParraSettingsItemDataWithValue
     ) async throws {
@@ -56,15 +64,27 @@ public final class ParraUserSettings: ParraReadableKeyValueStore {
                 },
                 receiveValue: { [weak self] updatedSetting in
                     self?.rawValue[key] = updatedSetting.rawValue
+
+                    logger.info("Updated user setting", [
+                        "key": key,
+                        "value": String(describing: updatedSetting.rawValue.value)
+                    ])
                 }
             )
             .store(in: &cancellables)
         }
     }
 
+    // MARK: - Internal
+
+    static let shared = ParraUserSettings()
+
     /// Override the previous store with no conflict resolution or publishers.
     /// Only use this when initially setting the store after app launch.
     func updateSettings(_ newStore: [String: ParraAnyCodable]) {
+        // NOTE: ! If we ever make a public version of this, it needs to make
+        // API calls, like the updateSetting method.
+
         logger.trace("Setting initial user settings")
 
         rawValue = newStore

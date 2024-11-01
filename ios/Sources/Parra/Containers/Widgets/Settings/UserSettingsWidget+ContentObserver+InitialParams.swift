@@ -10,6 +10,7 @@ import SwiftUI
 extension UserSettingsWidget.ContentObserver {
     struct InitialParams {
         let layoutId: String
+        let layout: ParraUserSettingsLayout?
         let config: ParraUserSettingsConfiguration
         let api: API
     }

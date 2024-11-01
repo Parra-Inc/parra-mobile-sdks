@@ -18,6 +18,10 @@ public final class ParraUserManager {
 
     // MARK: - Public
 
+    public var settings: ParraUserSettings {
+        return ParraUserSettings.shared
+    }
+
     /// Performs an update on the info for the current user. `name`, `firstName`
     /// and `lastName` will be removed if `nil` is passed. For `properties`,
     /// passing `nil` has no effect. If `properties` is provided, it will be
