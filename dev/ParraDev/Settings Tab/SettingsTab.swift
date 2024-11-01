@@ -36,6 +36,10 @@ struct SettingsTab: View {
                     LatestReleaseCell()
                 }
 
+                Section("Settings") {
+                    NotificationSettingsCell()
+                }
+
                 if parraAppInfo.legal.hasDocuments {
                     Section("Legal") {
                         ForEach(parraAppInfo.legal.allDocuments) { document in

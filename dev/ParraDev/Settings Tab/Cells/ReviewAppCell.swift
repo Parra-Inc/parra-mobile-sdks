@@ -18,14 +18,9 @@ struct ReviewAppCell: View {
                 Link(
                     destination: writeReviewUrl
                 ) {
-                    Label(
-                        title: {
-                            Text("Write a Review")
-                        },
-                        icon: {
-                            Image(systemName: "pencil.line")
-                                .foregroundStyle(.tint)
-                        }
+                    ListItemLabel(
+                        text: "Write a Review",
+                        symbol: "pencil.line"
                     )
                 }
                 .foregroundStyle(Color.primary)

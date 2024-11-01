@@ -21,24 +21,11 @@ struct StorefrontCell: View {
         // A Shopify storefront can not be presented without defining your
         // Shopify domain and API key.
         if ParraStorefront.isInitialized {
-            Button(action: {
-                isPresented = true
-            }) {
-                Label(
-                    title: {
-                        Text("Shopify Storefront")
-                            .foregroundStyle(Color.primary)
-                    },
-                    icon: {
-                        if isPresented {
-                            ProgressView()
-                        } else {
-                            Image(systemName: "storefront")
-                        }
-                    }
-                )
-            }
-            .disabled(isPresented)
+            ListItemLoadingButton(
+                isLoading: $isPresented,
+                text: "Shopify Storefront",
+                symbol: "storefront"
+            )
             .presentParraStorefront(
                 isPresented: $isPresented,
                 config: ParraStorefrontWidgetConfig(

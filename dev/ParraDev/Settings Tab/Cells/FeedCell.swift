@@ -17,25 +17,15 @@ struct FeedCell: View {
     @State private var isPresented = false
 
     var body: some View {
-        Button(action: {
-            isPresented = true
-        }) {
-            Label(
-                title: {
-                    Text("Social Feed")
-                        .foregroundStyle(Color.primary)
-                },
-                icon: {
-                    if isPresented {
-                        ProgressView()
-                    } else {
-                        Image(systemName: "megaphone")
-                    }
-                }
-            )
-        }
-        .disabled(isPresented)
-        .presentParraFeedWidget(by: "home", isPresented: $isPresented)
+        ListItemLoadingButton(
+            isLoading: $isPresented,
+            text: "Social Feed",
+            symbol: "megaphone"
+        )
+        .presentParraFeedWidget(
+            by: "home",
+            isPresented: $isPresented
+        )
     }
 }
 
