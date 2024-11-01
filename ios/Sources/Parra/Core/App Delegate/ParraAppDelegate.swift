@@ -116,7 +116,9 @@ open class ParraAppDelegate<
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
-    ) {}
+    ) {
+        completionHandler()
+    }
 
     @nonobjc
     open nonisolated func userNotificationCenter(
@@ -138,7 +140,25 @@ open class ParraAppDelegate<
         withCompletionHandler completionHandler: @escaping (
             UNNotificationPresentationOptions
         ) -> Void
-    ) {}
+    ) {
+        Task { @MainActor in
+            let pushOptions = Parra.default.parraInternal.configuration
+                .pushNotificationOptions
+
+            var presentationOptions: UNNotificationPresentationOptions = []
+            if pushOptions.alerts {
+                presentationOptions.insert([.list, .banner])
+            }
+            if pushOptions.badges {
+                presentationOptions.insert(.badge)
+            }
+            if pushOptions.sounds {
+                presentationOptions.insert(.sound)
+            }
+
+            completionHandler(presentationOptions)
+        }
+    }
 
     // MARK: - Public
 
