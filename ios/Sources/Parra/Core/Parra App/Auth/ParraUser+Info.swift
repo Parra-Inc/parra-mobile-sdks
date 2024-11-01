@@ -221,9 +221,9 @@ public extension ParraUser {
         public let lastUpdatedAt: Date?
         public let lastSeenAt: Date?
         public let lastLoginAt: Date?
-        public let properties: [String: ParraAnyCodable]
-        public let metadata: [String: ParraAnyCodable]
-        public let settings: [String: ParraAnyCodable]
+        public internal(set) var properties: [String: ParraAnyCodable]
+        public internal(set) var metadata: [String: ParraAnyCodable]
+        public internal(set) var settings: [String: ParraAnyCodable]
         public let identities: [ParraIdentity]
         public let isAnonymous: Bool
 

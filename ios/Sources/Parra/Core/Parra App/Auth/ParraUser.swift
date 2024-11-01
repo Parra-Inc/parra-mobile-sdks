@@ -23,6 +23,6 @@ public struct ParraUser: Equatable, Codable, Hashable {
 
     // MARK: - Public
 
-    public let credential: Credential
-    public let info: Info
+    public internal(set) var credential: Credential
+    public internal(set) var info: Info
 }

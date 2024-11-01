@@ -28,11 +28,12 @@ public extension ParraUserProperties {
         }
     }
 
+    @MainActor
     func deleteValue(for key: String) async throws {
         let oldValue = rawValue[key]
         rawValue.removeValue(forKey: key)
 
-        let api = await Parra.default.parraInternal.api
+        let api = Parra.default.parraInternal.api
 
         return try await withCheckedThrowingContinuation { continuation in
             api.deleteSingleUserProperty(key)
@@ -56,38 +57,46 @@ public extension ParraUserProperties {
         }
     }
 
+    @MainActor
     func set(_ string: String, for key: String) {
         try? validateStringValue(string, for: key)
 
         set(ParraAnyCodable(string), for: key)
     }
 
+    @MainActor
     func set(_ string: String, for key: String) async throws {
         try validateStringValue(string, for: key)
 
         try await set(ParraAnyCodable(string), for: key)
     }
 
+    @MainActor
     func set(_ int: Int, for key: String) {
         set(ParraAnyCodable(int), for: key)
     }
 
+    @MainActor
     func set(_ int: Int, for key: String) async throws {
         try await set(ParraAnyCodable(int), for: key)
     }
 
+    @MainActor
     func set(_ double: Double, for key: String) {
         set(ParraAnyCodable(double), for: key)
     }
 
+    @MainActor
     func set(_ double: Double, for key: String) async throws {
         try await set(ParraAnyCodable(double), for: key)
     }
 
+    @MainActor
     func set(_ bool: Bool, for key: String) {
         set(ParraAnyCodable(bool), for: key)
     }
 
+    @MainActor
     func set(_ bool: Bool, for key: String) async throws {
         try await set(ParraAnyCodable(bool), for: key)
     }

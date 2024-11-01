@@ -35,6 +35,7 @@ public final class ParraUserProperties: ParraReadableKeyValueStore {
 
     var cancellables: Set<AnyCancellable> = []
 
+    @MainActor
     func resolveConflict(
         _ conflict: MergeConflict,
         with resolution: MergeConflict.Resolution
@@ -51,6 +52,7 @@ public final class ParraUserProperties: ParraReadableKeyValueStore {
 
     /// Override the previous store with no conflict resolution or publishers.
     /// Only use this when initially setting the store after app launch.
+    @MainActor
     func forceSetStore(_ newStore: [String: ParraAnyCodable]) {
         logger.trace("Setting initial user properties")
 
@@ -59,6 +61,7 @@ public final class ParraUserProperties: ParraReadableKeyValueStore {
 
     /// Invoke this on logout before new user info is available to drop all the
     /// current user property state.
+    @MainActor
     func reset() {
         logger.trace("Resetting user properties")
 
@@ -66,6 +69,7 @@ public final class ParraUserProperties: ParraReadableKeyValueStore {
         cancellables.removeAll()
     }
 
+    @MainActor
     func set(
         _ value: ParraAnyCodable,
         for key: String
@@ -85,6 +89,7 @@ public final class ParraUserProperties: ParraReadableKeyValueStore {
         }
     }
 
+    @MainActor
     func set(
         _ value: ParraAnyCodable,
         for key: String
@@ -94,7 +99,7 @@ public final class ParraUserProperties: ParraReadableKeyValueStore {
         let oldValue = rawValue[key]
         rawValue[key] = value
 
-        let api = await Parra.default.parraInternal.api
+        let api = Parra.default.parraInternal.api
 
         return try await withCheckedThrowingContinuation { continuation in
             api.updateSingleUserPropertyPublisher(key, value: value)
@@ -118,6 +123,7 @@ public final class ParraUserProperties: ParraReadableKeyValueStore {
         }
     }
 
+    @MainActor
     func updateStore(
         _ newStore: [String: ParraAnyCodable]
     ) {

@@ -173,14 +173,14 @@ class ParraInternal {
     func performPostAuthLaunchActions(
         for user: ParraUser
     ) async throws {
-        ParraUserSettings.shared.updateSettings(user.info.settings)
+        await ParraUserSettings.shared.updateSettings(user.info.settings)
 
         try await withThrowingDiscardingTaskGroup { taskGroup in
             taskGroup.addTask {
                 logger.debug("Fetching user properties")
                 let userProperties = try await self.api.getUserProperties()
 
-                ParraUserProperties.shared.forceSetStore(userProperties)
+                await ParraUserProperties.shared.forceSetStore(userProperties)
             }
         }
     }

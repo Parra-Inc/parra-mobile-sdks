@@ -37,6 +37,28 @@ public class ParraAuthStateManager {
     )
 
     @MainActor
+    func updateUserSettings(
+        _ settings: [String: ParraAnyCodable]
+    ) {
+        switch current {
+        case .authenticated(let user):
+            var updatedUser = user
+
+            updatedUser.info.settings = settings
+
+            current = .authenticated(updatedUser)
+        case .anonymous(let user):
+            var updatedUser = user
+
+            updatedUser.info.settings = settings
+
+            current = .anonymous(updatedUser)
+        case .guest, .undetermined:
+            logger.warn("Can't update user settings while not authenticated.")
+        }
+    }
+
+    @MainActor
     func performInitialAuthCheck(
         using authService: AuthService,
         appInfo: ParraAppInfo
