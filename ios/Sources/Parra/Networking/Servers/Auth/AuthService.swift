@@ -341,11 +341,13 @@ final class AuthService {
             info: info
         )
 
-        if user.info.isAnonymous {
-            await applyUserUpdate(.anonymous(user))
+        let authState: ParraAuthState = if user.info.isAnonymous {
+            .anonymous(user)
         } else {
-            await applyUserUpdate(.authenticated(user))
+            .authenticated(user)
         }
+
+        await applyUserUpdate(authState)
 
         return user
     }
@@ -371,36 +373,36 @@ final class AuthService {
         _ authState: ParraAuthState,
         shouldBroadcast: Bool = true
     ) async {
+        _cachedAuthState = authState
+
         switch authState {
         case .anonymous(let user):
             logger.debug("Anonymous user authenticated")
 
-            await dataManager.updateCurrentUser(user)
-
             _cachedCredential = user.credential
+
+            await dataManager.updateCurrentUser(user)
         case .authenticated(let user):
             logger.debug("User authenticated")
 
-            await dataManager.updateCurrentUser(user)
-
             _cachedCredential = user.credential
+
+            await dataManager.updateCurrentUser(user)
         case .guest(let guest):
             logger.debug("Guest authenticated")
 
-            await dataManager.removeCurrentUser()
-
             _cachedCredential = guest.credential
+
+            await dataManager.removeCurrentUser()
         case .undetermined:
             // shouldn't ever change _to_ this state. If it does, treat it like
             // an unauth
             logger.warn("User updated changed TO undetermined state.")
 
-            await dataManager.removeCurrentUser()
-
             _cachedCredential = nil
-        }
 
-        _cachedAuthState = authState
+            await dataManager.removeCurrentUser()
+        }
 
         logger.trace("User update applied", [
             "broadcasting": String(shouldBroadcast)

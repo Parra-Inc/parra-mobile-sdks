@@ -226,11 +226,14 @@ class ParraInternal {
         do {
             logger.debug("Refreshing user info")
 
-            ParraUserSettings.shared.updateSettings(user.info.settings)
-
-            if let userInfo = try await authService.refreshUserInfo() {
+            if let updatedUser = try await authService.refreshUserInfo() {
                 ParraUserProperties.shared
-                    .forceSetStore(userInfo.info.properties)
+                    .forceSetStore(updatedUser.info.properties)
+
+                ParraUserSettings.shared
+                    .updateSettings(updatedUser.info.settings)
+            } else {
+                ParraUserSettings.shared.updateSettings(user.info.settings)
             }
         } catch {
             logger.error("Failed to refresh user info on app launch", error)
