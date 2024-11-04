@@ -12,6 +12,8 @@
 		0079304B2CBD849000D693E5 /* ParraStorefront in Frameworks */ = {isa = PBXBuildFile; productRef = 0079304A2CBD849000D693E5 /* ParraStorefront */; };
 		008B89982CD16D6A006D4640 /* NotificationSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B89972CD16D6A006D4640 /* NotificationSettingsCell.swift */; };
 		0094EA342CD53E6100D6C32D /* ListItemLoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0094EA332CD53E6100D6C32D /* ListItemLoadingButton.swift */; };
+		0094EA362CD5592800D6C32D /* AppNavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0094EA352CD5592800D6C32D /* AppNavigationState.swift */; };
+		0094EA382CD5A73D00D6C32D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0094EA372CD5A73D00D6C32D /* AppDelegate.swift */; };
 		092DB0526E9A9D1C2D71B152 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD565978366682F0A1B0B253 /* AccountView.swift */; };
 		09E53E8AD7AC9849558E80CF /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223D9A5112046030C8998F8D /* SettingsTab.swift */; };
 		1298871BDE77B706365E808F /* AccountHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78945B0C298D39D307943132 /* AccountHeader.swift */; };
@@ -43,6 +45,8 @@
 		007930462CBD842900D693E5 /* StorefrontCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorefrontCell.swift; sourceTree = "<group>"; };
 		008B89972CD16D6A006D4640 /* NotificationSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsCell.swift; sourceTree = "<group>"; };
 		0094EA332CD53E6100D6C32D /* ListItemLoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemLoadingButton.swift; sourceTree = "<group>"; };
+		0094EA352CD5592800D6C32D /* AppNavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigationState.swift; sourceTree = "<group>"; };
+		0094EA372CD5A73D00D6C32D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0442101DFDE5D666D1260CD8 /* SettingsFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFooter.swift; sourceTree = "<group>"; };
 		11F0F465823A871B75DCAEB2 /* ChangePasswordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordCell.swift; sourceTree = "<group>"; };
 		1549D8A47C2962E108BD93A0 /* EditProfileTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileTextField.swift; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 			isa = PBXGroup;
 			children = (
 				373A875AF46729BD8FB869E2 /* App.swift */,
+				0094EA372CD5A73D00D6C32D /* AppDelegate.swift */,
+				0094EA352CD5592800D6C32D /* AppNavigationState.swift */,
 				AC5929481AA9FA273D6928D9 /* Assets.xcassets */,
 				3BAB78153F06EC2C917A6A59 /* ContentView.swift */,
 				CC91B9139CED53480663B99E /* Debug.entitlements */,
@@ -281,9 +287,11 @@
 				29B1432431F5F632BC039372 /* LogoutCell.swift in Sources */,
 				0094EA342CD53E6100D6C32D /* ListItemLoadingButton.swift in Sources */,
 				3FF0517E78DF12C5C3C65D29 /* ProfileCell.swift in Sources */,
+				0094EA362CD5592800D6C32D /* AppNavigationState.swift in Sources */,
 				BC3EE8D03836C222ACAA8EFE /* ReviewAppCell.swift in Sources */,
 				008B89982CD16D6A006D4640 /* NotificationSettingsCell.swift in Sources */,
 				DBB39FC0C9E8386B411B88C6 /* RoadmapCell.swift in Sources */,
+				0094EA382CD5A73D00D6C32D /* AppDelegate.swift in Sources */,
 				63C0429CAB7E5DDC9FB83ECA /* SampleTab.swift in Sources */,
 				273DE67C821E4CB312282DF9 /* SettingsFooter.swift in Sources */,
 				09E53E8AD7AC9849558E80CF /* SettingsTab.swift in Sources */,

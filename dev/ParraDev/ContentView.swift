@@ -10,17 +10,36 @@ import Parra
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        TabView {
-            SampleTab()
-                .tabItem {
-                    Label("App", systemImage: "app.dashed")
-                }
+    @StateObject private var navigationState = AppNavigationState.shared
+    @Environment(\.parra) private var parra
 
-            SettingsTab()
-                .tabItem {
-                    Label("Profile", systemImage: "person")
-                }
+    var body: some View {
+        TabView(selection: $navigationState.selectedTab) {
+            SampleTab(
+                navigationPath: $navigationState.appTabNavigationPath
+            )
+            .tabItem {
+                Label("App", systemImage: "app.dashed")
+            }
+            .tag(AppNavigationState.Tab.app)
+
+            SettingsTab(
+                navigationPath: $navigationState.profileTabNavigationPath
+            )
+            .tabItem {
+                Label("Profile", systemImage: "person")
+            }
+            .tag(AppNavigationState.Tab.profile)
+        }
+        .environment(\.openURL, OpenURLAction { url in
+            if navigationState.handleOpenedUrl(url) {
+                return .handled
+            }
+
+            return .systemAction(url)
+        })
+        .onAppear {
+            parra.push.requestPushPermission()
         }
     }
 }

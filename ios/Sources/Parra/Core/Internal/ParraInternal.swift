@@ -282,6 +282,10 @@ class ParraInternal {
 
             Task { @MainActor in
                 UIApplication.shared.registerForRemoteNotifications()
+
+                if configuration.pushNotificationOptions.promptTrigger == .automatic {
+                    Parra.default.push.requestPushPermission()
+                }
             }
         } else {
             logger.debug("Skipping remote notifications registration. Feature disabled.")

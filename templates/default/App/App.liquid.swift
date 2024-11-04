@@ -11,9 +11,7 @@ import SwiftUI
 
 @main
 struct {{ app.name.upper_camel }}: App {
-    @UIApplicationDelegateAdaptor(
-        ParraAppDelegate<ParraSceneDelegate>.self
-    ) var appDelegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
         // Visit Parra's configuration docs to learn what options are available.
@@ -21,7 +19,10 @@ struct {{ app.name.upper_camel }}: App {
         ParraApp(
             tenantId: "{{ tenant.id }}",
             applicationId: "{{ app.id }}",
-            appDelegate: appDelegate
+            appDelegate: appDelegate,
+            configuration: ParraConfiguration(
+                pushNotificationOptions: .allWithoutProvisional
+            )
         ) {
             WindowGroup {
                 // Use the ParraOptionalAuthWindow if you don't support user sign-in

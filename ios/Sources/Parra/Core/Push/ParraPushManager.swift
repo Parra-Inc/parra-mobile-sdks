@@ -86,7 +86,7 @@ public final class ParraPushManager {
         if pushOptions.provisional {
             authorizationOptions.insert(.provisional)
         }
-        if pushOptions.openSettingsHandler != nil {
+        if pushOptions.providesInAppNotificationSettings {
             authorizationOptions.insert(.providesAppNotificationSettings)
         }
 

@@ -18,31 +18,37 @@ public struct ParraPushNotificationOptions: ParraConfigurationOptionType {
         badges: Bool = true,
         sounds: Bool = true,
         provisional: Bool = false,
-        openSettingsHandler: ((_ notification: UNNotification?) -> Void)? = nil
+        promptTrigger: PromptTrigger = .manual,
+        providesInAppNotificationSettings: Bool = true
     ) {
         self.enabled = enabled
         self.alerts = alerts
         self.badges = badges
         self.sounds = sounds
         self.provisional = provisional
-        self.openSettingsHandler = openSettingsHandler
+        self.promptTrigger = promptTrigger
+        self.providesInAppNotificationSettings = providesInAppNotificationSettings
     }
 
     // MARK: - Public
 
+    public enum PromptTrigger {
+        /// The default. Parra won't automatically prompt for push notification
+        /// permission from your users. Access the `parra` environment value
+        /// and call `parra.push.requestPushPermission()` to trigger the prompt.
+        case manual
+        case automatic
+    }
+
     public static var `default` = ParraPushNotificationOptions()
+
     public static var allWithProvisional = ParraPushNotificationOptions(
         enabled: true,
-        alerts: true,
-        badges: true,
-        sounds: true,
         provisional: true
     )
+
     public static var allWithoutProvisional = ParraPushNotificationOptions(
         enabled: true,
-        alerts: true,
-        badges: true,
-        sounds: true,
         provisional: false
     )
 
@@ -51,5 +57,6 @@ public struct ParraPushNotificationOptions: ParraConfigurationOptionType {
     public let badges: Bool
     public let sounds: Bool
     public let provisional: Bool
-    public let openSettingsHandler: ((_ notification: UNNotification?) -> Void)?
+    public let promptTrigger: PromptTrigger
+    public let providesInAppNotificationSettings: Bool
 }

@@ -10,11 +10,15 @@ import Parra
 import SwiftUI
 
 struct SettingsTab: View {
+    @Binding var navigationPath: NavigationPath
+
     @Environment(\.parraAppInfo) private var parraAppInfo
+    @Environment(\.parraAuthState) private var parraAuthState
+    @Environment(\.parraConfiguration) private var parraConfiguration
     @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             List {
                 Section {
                     ProfileCell()
@@ -36,8 +40,10 @@ struct SettingsTab: View {
                     LatestReleaseCell()
                 }
 
-                Section("Settings") {
-                    NotificationSettingsCell()
+                if parraAuthState.hasUser && parraConfiguration.pushNotificationOptions.enabled {
+                    Section("Settings") {
+                        NotificationSettingsCell()
+                    }
                 }
 
                 if parraAppInfo.legal.hasDocuments {
@@ -72,18 +78,25 @@ struct SettingsTab: View {
                 }
             }
             .navigationTitle("Profile")
+            .navigationDestination(for: String.self) { destination in
+                if destination == DeepLink.notificationSettings.rawValue {
+                    ParraUserSettingsWidget(
+                        layoutId: "notifications"
+                    )
+                }
+            }
         }
     }
 }
 
 #Preview {
     ParraAppPreview(authState: .authenticatedPreview) {
-        SettingsTab()
+        SettingsTab(navigationPath: .constant(NavigationPath()))
     }
 }
 
 #Preview {
     ParraAppPreview(authState: .unauthenticatedPreview) {
-        SettingsTab()
+        SettingsTab(navigationPath: .constant(NavigationPath()))
     }
 }

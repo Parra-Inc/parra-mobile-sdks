@@ -13,11 +13,17 @@ import SwiftUI
 // https://docs.parra.io/sdks/ios
 
 struct SampleTab: View {
+    @Binding var navigationPath: NavigationPath
     @Environment(\.parraTheme) private var parraTheme
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             VStack(spacing: 24) {
+                Button("Test") {
+                    openURL.callAsFunction(URL(string: "parra-ios-dev-client://links/profile-tab/notification-settings")!)
+                }
+
                 Image(systemName: "app.dashed")
                     .resizable()
                     .foregroundStyle(.gray)
@@ -47,6 +53,6 @@ struct SampleTab: View {
 
 #Preview {
     ParraAppPreview {
-        SampleTab()
+        SampleTab(navigationPath: .constant(NavigationPath()))
     }
 }
