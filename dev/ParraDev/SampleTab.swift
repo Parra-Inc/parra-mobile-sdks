@@ -20,10 +20,6 @@ struct SampleTab: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack(spacing: 24) {
-                Button("Test") {
-                    openURL.callAsFunction(URL(string: "parra-ios-dev-client://links/profile-tab/notification-settings")!)
-                }
-
                 Image(systemName: "app.dashed")
                     .resizable()
                     .foregroundStyle(.gray)
