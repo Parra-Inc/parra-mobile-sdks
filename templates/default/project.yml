@@ -27,6 +27,11 @@ targets:
         CFBundleName: {{ app.name.display_name }}
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         CFBundleShortVersionString: "1.0.0"
+        CFBundleTypeRole: 
+          - CFBundleTypeRole: "Viewer"
+            CFBundleURLName: "{{ app.bundle_id }}"
+            CFBundleURLSchemes:
+              - "{{ app.name.kebab }}"
     settings:
       base:
         DEVELOPMENT_TEAM: {{ app.team_id }}

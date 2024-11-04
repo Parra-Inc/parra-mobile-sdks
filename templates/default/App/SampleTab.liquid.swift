@@ -13,10 +13,12 @@ import SwiftUI
 // https://docs.parra.io/sdks/ios
 
 struct SampleTab: View {
+    @Binding var navigationPath: NavigationPath
+
     @Environment(\.parraTheme) private var parraTheme
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             VStack(spacing: 24) {
                 Image(systemName: "app.dashed")
                     .resizable()
@@ -47,6 +49,6 @@ struct SampleTab: View {
 
 #Preview {
     ParraAppPreview {
-        SampleTab()
+        SampleTab(navigationPath: .constant(NavigationPath()))
     }
 }

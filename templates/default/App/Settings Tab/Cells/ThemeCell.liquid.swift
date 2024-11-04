@@ -21,9 +21,9 @@ struct ThemeCell: View {
                 }
             },
             label: {
-                Label(
-                    title: { Text("Theme") },
-                    icon: { Image(systemName: "paintbrush") }
+                ListItemLabel(
+                    text: "Theme",
+                    symbol: "paintbrush"
                 )
             }
         )

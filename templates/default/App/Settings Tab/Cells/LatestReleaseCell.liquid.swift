@@ -32,18 +32,9 @@ struct LatestReleaseCell: View {
             Button(action: {
                 loadLatestRelease()
             }) {
-                Label(
-                    title: {
-                        Text("Update Available")
-                            .foregroundStyle(Color.primary)
-                    },
-                    icon: {
-                        if isLoading {
-                            ProgressView()
-                        } else {
-                            Image(systemName: "arrow.down.circle")
-                        }
-                    }
+                ListItemLabel(
+                    text: "Update Available",
+                    symbol: "arrow.down.circle"
                 )
             }
             .disabled(isLoading)

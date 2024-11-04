@@ -16,14 +16,9 @@ struct ChangePasswordCell: View {
         Button(action: {
             isChangePasswordPresented = true
         }) {
-            Label(
-                title: {
-                    Text("Change Password")
-                        .foregroundStyle(Color.primary)
-                },
-                icon: {
-                    Image(systemName: "key.fill")
-                }
+            ListItemLabel(
+                text: "Change Password",
+                symbol: "key.fill"
             )
         }
         .presentParraChangePasswordWidget(

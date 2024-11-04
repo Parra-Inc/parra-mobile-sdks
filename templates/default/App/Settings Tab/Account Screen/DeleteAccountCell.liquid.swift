@@ -26,11 +26,9 @@ struct DeleteAccountCell: View {
                 }
             }
         }) {
-            Label(
-                title: { Text("Delete Account") },
-                icon: {
-                    Image(systemName: "trash")
-                }
+            ListItemLabel(
+                text: "Delete Account",
+                symbol: "trash"
             )
         }
         .foregroundStyle(parraTheme.palette.error)

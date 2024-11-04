@@ -29,18 +29,9 @@ struct RoadmapCell: View {
         Button(action: {
             loadRoadmap()
         }) {
-            Label(
-                title: {
-                    Text("Roadmap")
-                        .foregroundStyle(Color.primary)
-                },
-                icon: {
-                    if isLoading {
-                        ProgressView()
-                    } else {
-                        Image(systemName: "map")
-                    }
-                }
+            ListItemLabel(
+                text: "Roadmap",
+                symbol: "map"
             )
         }
         .disabled(isLoading)
