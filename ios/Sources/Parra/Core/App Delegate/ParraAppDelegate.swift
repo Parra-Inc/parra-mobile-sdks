@@ -25,6 +25,30 @@ open class ParraAppDelegate<
     // MARK: - Open
 
     open func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+    ) -> Bool {
+        return true
+    }
+
+    open func application(
+        _ application: UIApplication,
+        handleOpen url: URL
+    ) -> Bool {
+        return true
+    }
+
+    open func application(
+        _ application: UIApplication,
+        open url: URL,
+        sourceApplication: String?,
+        annotation: Any
+    ) -> Bool {
+        return true
+    }
+
+    open func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [
             UIApplication
@@ -103,14 +127,7 @@ open class ParraAppDelegate<
     open nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         openSettingsFor notification: UNNotification?
-    ) {
-        Task { @MainActor in
-            let options = Parra.default.parraInternal.configuration
-                .pushNotificationOptions
-
-            options.openSettingsHandler?(notification)
-        }
-    }
+    ) {}
 
     open nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
@@ -130,7 +147,21 @@ open class ParraAppDelegate<
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        return []
+        let pushOptions = await Parra.default.parraInternal.configuration
+            .pushNotificationOptions
+
+        var presentationOptions: UNNotificationPresentationOptions = []
+        if pushOptions.alerts {
+            presentationOptions.insert([.list, .banner])
+        }
+        if pushOptions.badges {
+            presentationOptions.insert(.badge)
+        }
+        if pushOptions.sounds {
+            presentationOptions.insert(.sound)
+        }
+
+        return presentationOptions
     }
 
     @nonobjc
@@ -142,21 +173,12 @@ open class ParraAppDelegate<
         ) -> Void
     ) {
         Task { @MainActor in
-            let pushOptions = Parra.default.parraInternal.configuration
-                .pushNotificationOptions
+            let result = await self.userNotificationCenter(
+                center,
+                willPresent: notification
+            )
 
-            var presentationOptions: UNNotificationPresentationOptions = []
-            if pushOptions.alerts {
-                presentationOptions.insert([.list, .banner])
-            }
-            if pushOptions.badges {
-                presentationOptions.insert(.badge)
-            }
-            if pushOptions.sounds {
-                presentationOptions.insert(.sound)
-            }
-
-            completionHandler(presentationOptions)
+            completionHandler(result)
         }
     }
 
