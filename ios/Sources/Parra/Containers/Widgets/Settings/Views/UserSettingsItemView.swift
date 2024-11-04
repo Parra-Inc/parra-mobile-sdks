@@ -24,7 +24,7 @@ struct UserSettingsItemView: View {
     let item: ParraUserSettingsItem
     let debounceDelay: TimeInterval
 
-    @ViewBuilder var content: some View {
+    var body: some View {
         switch item.data {
         case .settingsItemBooleanDataWithValue(let value):
             UserSettingsBoolItemView(
@@ -56,35 +56,7 @@ struct UserSettingsItemView: View {
         }
     }
 
-    var body: some View {
-        content
-            //            .onChange(of: localValue) { _, newValue in
-            //                isDebouncing = true
-            //
-            //                debounceSubject.send(newValue)
-            //            }
-            .onAppear {
-                debounceSubscription = debounceSubject
-                    .debounce(
-                        for: .seconds(debounceDelay),
-                        scheduler: DispatchQueue.main
-                    )
-                    .sink { _ in
-                        //                        value = debouncedValue
-
-                        isDebouncing = false
-                    }
-            }
-            .onDisappear {
-                debounceSubscription?.cancel()
-            }
-    }
-
     // MARK: - Private
-
-    @State private var debounceSubject = PassthroughSubject<UInt, Never>()
-    @State private var debounceSubscription: AnyCancellable?
-    @State private var isDebouncing: Bool = false
 
     @Environment(UserSettingsWidget.ContentObserver.self) private var contentObserver
 

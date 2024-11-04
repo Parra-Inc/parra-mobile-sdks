@@ -15,6 +15,7 @@ struct UserSettingsGroupView<Footer>: View where Footer: View {
         Section {
             ForEach(group.items) { item in
                 UserSettingsItemView(item: item)
+                    .id(item.id)
             }
         } header: {
             VStack(alignment: .leading) {

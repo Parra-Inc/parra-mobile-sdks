@@ -265,20 +265,20 @@ public struct ParraUserSettingsItem: Codable, Equatable, Hashable, Identifiable 
 
     // MARK: - Public
 
-    public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let groupId: String
-    public let viewId: String
-    public let title: String
-    public let description: String?
-    public let slug: String
-    public let key: String
-    public let type: ParraSettingsItemType
-    public let required: Bool
-    public let nullable: Bool
-    public let data: ParraSettingsItemDataWithValue
+    public internal(set) var id: String
+    public internal(set) var createdAt: Date
+    public internal(set) var updatedAt: Date
+    public internal(set) var deletedAt: Date?
+    public internal(set) var groupId: String
+    public internal(set) var viewId: String
+    public internal(set) var title: String
+    public internal(set) var description: String?
+    public internal(set) var slug: String
+    public internal(set) var key: String
+    public internal(set) var type: ParraSettingsItemType
+    public internal(set) var required: Bool
+    public internal(set) var nullable: Bool
+    public internal(set) var data: ParraSettingsItemDataWithValue
 }
 
 public struct ParraUserSettingsGroup: Codable, Equatable, Hashable, Identifiable {
@@ -312,17 +312,17 @@ public struct ParraUserSettingsGroup: Codable, Equatable, Hashable, Identifiable
 
     // MARK: - Public
 
-    public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let tenantId: String?
-    public let viewId: String
-    public let title: String
-    public let description: String?
-    public let slug: String
-    public let key: String
-    public let items: [ParraUserSettingsItem]
+    public internal(set) var id: String
+    public internal(set) var createdAt: Date
+    public internal(set) var updatedAt: Date
+    public internal(set) var deletedAt: Date?
+    public internal(set) var tenantId: String?
+    public internal(set) var viewId: String
+    public internal(set) var title: String
+    public internal(set) var description: String?
+    public internal(set) var slug: String
+    public internal(set) var key: String
+    public internal(set) var items: [ParraUserSettingsItem]
 }
 
 public struct ParraUserSettingsLayout: Codable, Equatable, Hashable, Identifiable {
@@ -354,14 +354,43 @@ public struct ParraUserSettingsLayout: Codable, Equatable, Hashable, Identifiabl
 
     // MARK: - Public
 
-    public let id: String
-    public let createdAt: Date
-    public let updatedAt: Date
-    public let deletedAt: Date?
-    public let tenantId: String
-    public let title: String
-    public let description: String?
-    public let footerLabel: String?
-    public let slug: String
-    public let groups: [ParraUserSettingsGroup]
+    public internal(set) var id: String
+    public internal(set) var createdAt: Date
+    public internal(set) var updatedAt: Date
+    public internal(set) var deletedAt: Date?
+    public internal(set) var tenantId: String
+    public internal(set) var title: String
+    public internal(set) var description: String?
+    public internal(set) var footerLabel: String?
+    public internal(set) var slug: String
+    public internal(set) var groups: [ParraUserSettingsGroup]
+
+    // MARK: - Internal
+
+    func withUpdatedValue(
+        value: ParraSettingsItemDataWithValue,
+        for key: String
+    ) -> ParraUserSettingsLayout {
+        var mut = self
+
+        mut.groups = mut.groups.map { group in
+            var mutGroup = group
+
+            let items = group.items.map { item in
+                var mutItem = item
+
+                if item.key == key {
+                    mutItem.data = value
+                }
+
+                return mutItem
+            }
+
+            mutGroup.items = items
+
+            return mutGroup
+        }
+
+        return mut
+    }
 }

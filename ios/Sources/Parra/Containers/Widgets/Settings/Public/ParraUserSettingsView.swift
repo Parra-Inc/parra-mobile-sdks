@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ParraUserSettingsView: View {
+struct ParraUserSettingsView: View, Equatable {
     // MARK: - Internal
 
     @State var layout: ParraUserSettingsLayout
@@ -42,17 +42,28 @@ struct ParraUserSettingsView: View {
                             }
                         }
                     }
+                    .id(group.id)
                 }
             }
             .formStyle(.grouped)
         }
-        .background(Color(UIColor.systemGroupedBackground))
+        .background(
+            parraTheme.palette.secondaryBackground.toParraColor()
+        )
         .navigationTitle(layout.title)
+    }
+
+    static func == (
+        lhs: ParraUserSettingsView,
+        rhs: ParraUserSettingsView
+    ) -> Bool {
+        return true
     }
 
     // MARK: - Private
 
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraTheme) private var parraTheme
 }
 
 #Preview {

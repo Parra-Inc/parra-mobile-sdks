@@ -87,10 +87,27 @@ extension UserSettingsWidget {
             with key: String,
             to value: ParraSettingsItemDataWithValue
         ) async throws {
-            try await ParraUserSettings.shared.updateSetting(
-                with: key,
-                to: value
+            guard case .loaded(let layout) = loadState else {
+                return
+            }
+
+            // need to set this before updating user setting, since it may
+            // trigger other state updates that cause refreshes.
+            loadState = .loaded(
+                layout.withUpdatedValue(value: value, for: key)
             )
+
+            do {
+                try await ParraUserSettings.shared.updateSetting(
+                    with: key,
+                    to: value
+                )
+            } catch {
+                // revert
+                loadState = .loaded(layout)
+
+                throw error
+            }
         }
 
         // MARK: - Private

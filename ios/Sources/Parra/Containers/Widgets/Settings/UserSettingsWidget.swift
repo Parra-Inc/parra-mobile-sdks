@@ -15,12 +15,12 @@ struct UserSettingsWidget: ParraContainer {
         contentObserver: ContentObserver
     ) {
         self.config = config
-        self._contentObserver = StateObject(wrappedValue: contentObserver)
+        self._contentObserver = State(wrappedValue: contentObserver)
     }
 
     // MARK: - Internal
 
-    @StateObject var contentObserver: ContentObserver
+    @State var contentObserver: ContentObserver
     let config: ParraUserSettingsConfiguration
 
     var body: some View {
@@ -54,6 +54,7 @@ struct UserSettingsWidget: ParraContainer {
             }
         case .loaded(let layout):
             ParraUserSettingsView(layout: layout)
+                .equatable()
         default:
             EmptyView()
         }

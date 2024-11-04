@@ -8,6 +8,10 @@
 
 import SwiftUI
 
+// Important: !!! Do NOT use environment values in this file without being very
+// careful that they do not trigger complete deinit and rebuild of sheets when
+// things like auth or other global state changes.
+
 /// Facilitates loading data asynchonously then presenting a sheet with a view
 /// rendered from the data.
 @MainActor
@@ -34,8 +38,6 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
     }
 
     // MARK: - Internal
-
-    @Environment(\.parra) var parra
 
     // Externally controlled state to use to determine when to kick off
     // the loader and with what data
@@ -81,7 +83,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
                 content: {
                     if case .complete(let data) = state {
                         NavigationStack(path: $navigationState.navigationPath) {
-                            loader.render(parra, data, dismiss)
+                            loader.render(Parra.default, data, dismiss)
                         }
                         .environment(navigationState)
                         .presentationDetents(detents)
@@ -130,7 +132,7 @@ struct SheetWithLoader<TransformParams, Data, SheetContent>: ViewModifier
         via transformer: (Parra, TransformParams) async throws -> Data
     ) async {
         do {
-            let result = try await transformer(parra, params)
+            let result = try await transformer(Parra.default, params)
 
             await MainActor.run {
                 state = .complete(result)
