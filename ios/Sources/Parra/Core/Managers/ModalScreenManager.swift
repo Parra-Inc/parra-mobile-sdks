@@ -59,6 +59,7 @@ final class ModalScreenManager {
                 rootView: container
                     .environment(\.parraTheme, ParraThemeManager.shared.current)
                     .environment(\.parraComponentFactory, componentFactory)
+                    .environment(\.parraConfiguration, configuration)
                     .environment(
                         \.parraPreferredAppearance,
                         ParraThemeManager.shared.preferredAppearanceBinding

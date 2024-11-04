@@ -113,6 +113,7 @@ public struct ParraApp<
             .environment(\.parra, Parra.default)
             .environment(\.parraAuthState, authStateManager.current)
             .environment(\.parraComponentFactory, parraInternal.globalComponentFactory)
+            .environment(\.parraConfiguration, parraInternal.configuration)
             .environment(\.parraTheme, themeManager.current)
             .environment(\.parraUserProperties, userProperties)
             .environment(

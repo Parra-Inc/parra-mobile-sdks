@@ -119,6 +119,7 @@ struct RoadmapWidget: ParraContainer {
                     .environment(config)
                     .environmentObject(contentObserver)
                     .environment(\.parraComponentFactory, componentFactory)
+                    .environment(\.parraConfiguration, parraConfiguration)
             }
         }
         .renderToast(toast: $alertManager.currentToast)
@@ -246,6 +247,7 @@ struct RoadmapWidget: ParraContainer {
     // MARK: - Private
 
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraConfiguration) private var parraConfiguration
     @Environment(\.parraTheme) private var parraTheme
 
     @State private var showNavigationDivider = false

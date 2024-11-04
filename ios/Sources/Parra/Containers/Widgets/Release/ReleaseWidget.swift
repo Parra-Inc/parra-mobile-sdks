@@ -165,6 +165,7 @@ struct ReleaseWidget: ParraContainer {
                 .edgesIgnoringSafeArea([.top])
                 .environment(navigationState)
                 .environment(\.parraComponentFactory, componentFactory)
+                .environment(\.parraConfiguration, parraConfiguration)
             }
         }
     }
@@ -241,6 +242,7 @@ struct ReleaseWidget: ParraContainer {
     // MARK: - Private
 
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraConfiguration) private var parraConfiguration
 
     @Environment(\.parraTheme) private var parraTheme
     @Environment(NavigationState.self) private var navigationState

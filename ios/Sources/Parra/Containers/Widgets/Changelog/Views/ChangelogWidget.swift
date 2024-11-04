@@ -80,6 +80,7 @@ struct ChangelogWidget: ParraContainer {
                     .padding(.top, -contentPadding.top)
                     .environment(navigationState)
                     .environment(\.parraComponentFactory, componentFactory)
+                    .environment(\.parraConfiguration, parraConfiguration)
                 }
         }
         .applyWidgetAttributes(
@@ -195,6 +196,7 @@ struct ChangelogWidget: ParraContainer {
     // MARK: - Private
 
     @Environment(\.parraComponentFactory) private var componentFactory
+    @Environment(\.parraConfiguration) private var parraConfiguration
     @Environment(\.parraTheme) private var parraTheme
     @Environment(NavigationState.self) private var navigationState
 
