@@ -32,7 +32,7 @@ struct UserSettingsWidget: ParraContainer {
 
     @Environment(\.parraTheme) private var parraTheme
 
-    @ViewBuilder private var content: some View {
+    @ViewBuilder @MainActor private var content: some View {
         switch contentObserver.loadState {
         case .initial, .loading:
             VStack {
@@ -47,7 +47,7 @@ struct UserSettingsWidget: ParraContainer {
             .background(
                 parraTheme.palette.secondaryBackground.toParraColor()
             )
-            .task {
+            .task { @MainActor in
                 if contentObserver.loadState == .initial {
                     await contentObserver.loadSettingsLayout()
                 }
