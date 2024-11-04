@@ -2,7 +2,7 @@
 //  ReviewAppCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/29/2024.
+//  Bootstrapped with ❤️ by Parra on 11/04/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -18,14 +18,9 @@ struct ReviewAppCell: View {
                 Link(
                     destination: writeReviewUrl
                 ) {
-                    Label(
-                        title: {
-                            Text("Write a Review")
-                        },
-                        icon: {
-                            Image(systemName: "pencil.line")
-                                .foregroundStyle(.tint)
-                        }
+                    ListItemLabel(
+                        text: "Write a Review",
+                        symbol: "pencil.line"
                     )
                 }
                 .foregroundStyle(Color.primary)

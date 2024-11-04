@@ -2,7 +2,7 @@
 //  ChangePasswordCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/29/2024.
+//  Bootstrapped with ❤️ by Parra on 11/04/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -16,14 +16,9 @@ struct ChangePasswordCell: View {
         Button(action: {
             isChangePasswordPresented = true
         }) {
-            Label(
-                title: {
-                    Text("Change Password")
-                        .foregroundStyle(Color.primary)
-                },
-                icon: {
-                    Image(systemName: "key.fill")
-                }
+            ListItemLabel(
+                text: "Change Password",
+                symbol: "key.fill"
             )
         }
         .presentParraChangePasswordWidget(

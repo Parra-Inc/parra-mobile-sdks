@@ -2,7 +2,7 @@
 //  DeleteAccountCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/29/2024.
+//  Bootstrapped with ❤️ by Parra on 11/04/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -26,11 +26,9 @@ struct DeleteAccountCell: View {
                 }
             }
         }) {
-            Label(
-                title: { Text("Delete Account") },
-                icon: {
-                    Image(systemName: "trash")
-                }
+            ListItemLabel(
+                text: "Delete Account",
+                symbol: "trash"
             )
         }
         .foregroundStyle(parraTheme.palette.error)

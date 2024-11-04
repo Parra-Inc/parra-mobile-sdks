@@ -2,7 +2,7 @@
 //  RoadmapCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/29/2024.
+//  Bootstrapped with ❤️ by Parra on 11/04/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -29,18 +29,9 @@ struct RoadmapCell: View {
         Button(action: {
             loadRoadmap()
         }) {
-            Label(
-                title: {
-                    Text("Roadmap")
-                        .foregroundStyle(Color.primary)
-                },
-                icon: {
-                    if isLoading {
-                        ProgressView()
-                    } else {
-                        Image(systemName: "map")
-                    }
-                }
+            ListItemLabel(
+                text: "Roadmap",
+                symbol: "map"
             )
         }
         .disabled(isLoading)

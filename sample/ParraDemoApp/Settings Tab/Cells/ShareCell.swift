@@ -2,7 +2,7 @@
 //  ShareCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/29/2024.
+//  Bootstrapped with ❤️ by Parra on 11/04/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -21,14 +21,9 @@ struct ShareCell: View {
                         "Check out this awesome new app that I'm building using Parra!"
                     )
                 ) {
-                    Label(
-                        title: {
-                            Text("Share This App")
-                        },
-                        icon: {
-                            Image(systemName: "square.and.arrow.up")
-                                .foregroundStyle(.tint)
-                        }
+                    ListItemLabel(
+                        text: "Share this App",
+                        symbol: "square.and.arrow.up"
                     )
                 }
                 .foregroundStyle(Color.primary)

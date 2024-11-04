@@ -18,17 +18,21 @@
 		4FB90D154877B7F67CF2DCFD /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DA9FD5AE1ABDD3106D5305 /* ProfileCell.swift */; };
 		601CA06E30BA5908E1A796CA /* AccountHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46F6C1573953F837FF9D7BA /* AccountHeader.swift */; };
 		6325766D40F9CE0E2EEEF4D1 /* Parra in Frameworks */ = {isa = PBXBuildFile; productRef = 55B3CA59B5041378753DE01E /* Parra */; };
+		6428F33D0B7EB5F44F4975B0 /* NotificationSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8864D5097FF33133E1FAB2D /* NotificationSettingsCell.swift */; };
 		6CEBDF4E2A27A3EAFC23DCCE /* ReviewAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494D0217514BB9431A34CE4B /* ReviewAppCell.swift */; };
 		7B57FD2C1898FCA6F389368B /* DeleteAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8754B1F280228FFEB3FEFBF3 /* DeleteAccountCell.swift */; };
 		80E1D54533C2EE6FB0953B62 /* RoadmapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD37450ED3B2022F3C9CC692 /* RoadmapCell.swift */; };
+		8FC980791345E6A627063542 /* ListItemLoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA8FBC2CD8AD5AC64D95C9B /* ListItemLoadingButton.swift */; };
 		A9ED9558996BB4301464CA81 /* LatestReleaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F678969D42458CEB80D0777 /* LatestReleaseCell.swift */; };
 		AE0A61A5BEE86C65F1B7AD5F /* SettingsFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20AF97E8F80660D14A0331A9 /* SettingsFooter.swift */; };
 		B1D63ECFD59A2E33AC7F695B /* LogoutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0476BA49AC393D009A45F51A /* LogoutCell.swift */; };
 		B1F51A638A4360CABEFBB3FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA2CE81A679147AB7A245775 /* Assets.xcassets */; };
+		B32C9963B721A4C8DAF0BDC4 /* AppNavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D73449FD6D3662E3888D0F /* AppNavigationState.swift */; };
 		BAD972B16940F36C0386D6E4 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64F4171821ACE6A076CE32C /* App.swift */; };
 		BBDFDBCC84413C0441334489 /* ShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B809FF2853373A7120D997 /* ShareCell.swift */; };
 		CA7340F38EBFC08BB4DF2876 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50031562D984DCD55B6471E /* EditProfileView.swift */; };
 		F1382D16FFF043F20D6D87F1 /* FeedbackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39FF3990B6D86C31434C3EBC /* FeedbackCell.swift */; };
+		F217646549853D48DFDC796D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58635DC103103FA61E70F369 /* AppDelegate.swift */; };
 		F596D1D381C939A31B6F81F6 /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6314BD200C9C9A50D05AEC /* SettingsTab.swift */; };
 		F8BFE83C48B8ED36AA2BB989 /* SampleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF27E8D3BFFABEC6016D0A1F /* SampleTab.swift */; };
 /* End PBXBuildFile section */
@@ -42,19 +46,23 @@
 		39FF3990B6D86C31434C3EBC /* FeedbackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCell.swift; sourceTree = "<group>"; };
 		47BE6B8CFA8FBFAB2416A07B /* Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		494D0217514BB9431A34CE4B /* ReviewAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewAppCell.swift; sourceTree = "<group>"; };
+		58635DC103103FA61E70F369 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60B809FF2853373A7120D997 /* ShareCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCell.swift; sourceTree = "<group>"; };
 		6B3810DBD43B0EA840AD1CE7 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		7E055784268973DD316EFB1C /* Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Debug.entitlements; sourceTree = "<group>"; };
 		7EA58D7C85B5D914090C05A6 /* ChangelogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangelogCell.swift; sourceTree = "<group>"; };
+		85D73449FD6D3662E3888D0F /* AppNavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigationState.swift; sourceTree = "<group>"; };
 		8754B1F280228FFEB3FEFBF3 /* DeleteAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountCell.swift; sourceTree = "<group>"; };
 		8878392F62C62588A32BE472 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		89DA9FD5AE1ABDD3106D5305 /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
 		9BE450960001563C208D94E3 /* ChangePasswordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordCell.swift; sourceTree = "<group>"; };
 		A64F4171821ACE6A076CE32C /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		A8864D5097FF33133E1FAB2D /* NotificationSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsCell.swift; sourceTree = "<group>"; };
 		AD37450ED3B2022F3C9CC692 /* RoadmapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapCell.swift; sourceTree = "<group>"; };
 		CA2CE81A679147AB7A245775 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE2C0816F30D7F5A1A9AA90E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D8B9FAA703F70175E28A7318 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
+		DBA8FBC2CD8AD5AC64D95C9B /* ListItemLoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemLoadingButton.swift; sourceTree = "<group>"; };
 		E50031562D984DCD55B6471E /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		EE0B09EBFADFCCBB95417508 /* ParraDemoApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ParraDemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3B2D7A2183DFECF56BF3DF5 /* EditProfileTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileTextField.swift; sourceTree = "<group>"; };
@@ -86,6 +94,7 @@
 		1A6FC969E5AC6E7E96B55660 /* Settings Tab */ = {
 			isa = PBXGroup;
 			children = (
+				DBA8FBC2CD8AD5AC64D95C9B /* ListItemLoadingButton.swift */,
 				20AF97E8F80660D14A0331A9 /* SettingsFooter.swift */,
 				FE6314BD200C9C9A50D05AEC /* SettingsTab.swift */,
 				7EA2AEF0A8DFBD06528A585B /* Account Screen */,
@@ -99,6 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				A64F4171821ACE6A076CE32C /* App.swift */,
+				58635DC103103FA61E70F369 /* AppDelegate.swift */,
+				85D73449FD6D3662E3888D0F /* AppNavigationState.swift */,
 				CA2CE81A679147AB7A245775 /* Assets.xcassets */,
 				0ADADDC8AB29878AC84A7703 /* ContentView.swift */,
 				7E055784268973DD316EFB1C /* Debug.entitlements */,
@@ -117,6 +128,7 @@
 				7EA58D7C85B5D914090C05A6 /* ChangelogCell.swift */,
 				39FF3990B6D86C31434C3EBC /* FeedbackCell.swift */,
 				0F678969D42458CEB80D0777 /* LatestReleaseCell.swift */,
+				A8864D5097FF33133E1FAB2D /* NotificationSettingsCell.swift */,
 				89DA9FD5AE1ABDD3106D5305 /* ProfileCell.swift */,
 				494D0217514BB9431A34CE4B /* ReviewAppCell.swift */,
 				AD37450ED3B2022F3C9CC692 /* RoadmapCell.swift */,
@@ -234,6 +246,8 @@
 				601CA06E30BA5908E1A796CA /* AccountHeader.swift in Sources */,
 				21747ACB5EE558646C7FF23C /* AccountView.swift in Sources */,
 				BAD972B16940F36C0386D6E4 /* App.swift in Sources */,
+				F217646549853D48DFDC796D /* AppDelegate.swift in Sources */,
+				B32C9963B721A4C8DAF0BDC4 /* AppNavigationState.swift in Sources */,
 				1F19DE02BDA549DE968C0D83 /* ChangePasswordCell.swift in Sources */,
 				23B4F90D5D3801DC189A838C /* ChangelogCell.swift in Sources */,
 				3C9889B5B17FD1531AFD4572 /* ContentView.swift in Sources */,
@@ -243,7 +257,9 @@
 				1CF9BF52B44BE767F520FA19 /* EditProfileViewModel.swift in Sources */,
 				F1382D16FFF043F20D6D87F1 /* FeedbackCell.swift in Sources */,
 				A9ED9558996BB4301464CA81 /* LatestReleaseCell.swift in Sources */,
+				8FC980791345E6A627063542 /* ListItemLoadingButton.swift in Sources */,
 				B1D63ECFD59A2E33AC7F695B /* LogoutCell.swift in Sources */,
+				6428F33D0B7EB5F44F4975B0 /* NotificationSettingsCell.swift in Sources */,
 				4FB90D154877B7F67CF2DCFD /* ProfileCell.swift in Sources */,
 				6CEBDF4E2A27A3EAFC23DCCE /* ReviewAppCell.swift in Sources */,
 				80E1D54533C2EE6FB0953B62 /* RoadmapCell.swift in Sources */,
@@ -464,7 +480,7 @@
 			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.13.1;
+				minimumVersion = 0.14.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

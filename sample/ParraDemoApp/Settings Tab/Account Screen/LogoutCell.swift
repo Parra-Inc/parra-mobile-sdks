@@ -2,7 +2,7 @@
 //  LogoutCell.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/29/2024.
+//  Bootstrapped with ❤️ by Parra on 11/04/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -25,11 +25,9 @@ struct LogoutCell: View {
                 }
             }
         ) {
-            Label(
-                title: { Text("Logout") },
-                icon: {
-                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                }
+            ListItemLabel(
+                text: "Logout",
+                symbol: "rectangle.portrait.and.arrow.right"
             )
         }
         .foregroundStyle(parraTheme.palette.error)

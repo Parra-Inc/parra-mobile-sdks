@@ -2,7 +2,7 @@
 //  ParraDemoAppApp.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 10/29/2024.
+//  Bootstrapped with ❤️ by Parra on 11/04/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -11,9 +11,7 @@ import SwiftUI
 
 @main
 struct ParraDemoApp: App {
-    @UIApplicationDelegateAdaptor(
-        ParraAppDelegate<ParraSceneDelegate>.self
-    ) var appDelegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
         // Visit Parra's configuration docs to learn what options are available.
@@ -21,7 +19,10 @@ struct ParraDemoApp: App {
         ParraApp(
             tenantId: "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4",
             applicationId: "edec3a6c-a375-4a9d-bce8-eb00860ef228",
-            appDelegate: appDelegate
+            appDelegate: appDelegate,
+            configuration: ParraConfiguration(
+                pushNotificationOptions: .allWithoutProvisional
+            )
         ) {
             WindowGroup {
                 // Use the ParraOptionalAuthWindow if you don't support user sign-in
