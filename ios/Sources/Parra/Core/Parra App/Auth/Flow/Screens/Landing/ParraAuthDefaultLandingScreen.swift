@@ -130,7 +130,7 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
 
         componentFactory.buildLabel(
             content: ParraLabelContent(
-                text: "Welcome to\n\(parraAppInfo.tenant.name)"
+                text: "Welcome to\n\(parraAppInfo.application.name)"
             ),
             localAttributes: titleAttributes
         )
