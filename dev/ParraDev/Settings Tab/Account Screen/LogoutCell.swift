@@ -25,11 +25,9 @@ struct LogoutCell: View {
                 }
             }
         ) {
-            Label(
-                title: { Text("Logout") },
-                icon: {
-                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                }
+            ListItemLabel(
+                text: "Logout",
+                symbol: "rectangle.portrait.and.arrow.right"
             )
         }
         .foregroundStyle(parraTheme.palette.error)

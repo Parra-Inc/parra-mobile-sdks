@@ -17,6 +17,8 @@ struct NotificationSettingsCell: View {
             text: "Notifications",
             symbol: "bell.badge"
         )
+        // Settings view layout IDs can be either the ID or Key for a group of
+        // settings definied at https://parra.io/dashboard/users/configuration
         .presentParraSettingsView(
             layoutId: "notifications",
             isPresented: $isPresented
