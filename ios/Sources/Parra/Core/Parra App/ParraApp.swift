@@ -10,6 +10,32 @@ import SwiftUI
 
 private let logger = Logger()
 
+private var parraInternalSingleton: ParraInternal?
+
+// Need to keep the logic for this outside of the initializer for ParraApp
+// since it should be destroyed and recreated. The Parra internal object
+// is expensive to create and not fully destroyed, which has side effects
+// if multiple instances exist at once.
+@MainActor
+private func getParraInternalSingleton(
+    configuration: ParraConfiguration
+) -> ParraInternal {
+    if let parraInternalSingleton {
+        return parraInternalSingleton
+    }
+
+    let instance = ParraInternal.createParraInstance(
+        appState: ParraAppState.shared,
+        authenticationMethod: .parra,
+        configuration: configuration
+    )
+
+    parraInternalSingleton = instance
+    Parra.default.parraInternal = instance
+
+    return instance
+}
+
 /// A top level wrapper around your SwiftUI app's content. When creating a
 /// ``ParraApp``, you should supply it with an authentication provider and any
 /// options that you would like to customize. The authentication provider is a
@@ -85,15 +111,15 @@ public struct ParraApp<
         )
 
         self.makeScene = makeScene
-        self.urlHandler = urlHandler
-        self.parraInternal = ParraInternal.createParraInstance(
-            appState: ParraAppState.shared,
-            // TODO: Support for other auth types
-            authenticationMethod: .parra,
+        self._urlHandler = State(initialValue: urlHandler)
+
+        let parraInternal = getParraInternalSingleton(
             configuration: configuration
         )
 
-        Parra.default.parraInternal = parraInternal
+        self._parraInternal = State(
+            initialValue: parraInternal
+        )
 
         self._alertManager = State(
             wrappedValue: parraInternal.alertManager
@@ -167,7 +193,7 @@ public struct ParraApp<
     @Environment(\.openURL) private var openUrl
 
     @SceneBuilder private let makeScene: @MainActor () -> Content
-    private let urlHandler: ((URL) -> Void)?
+    @State private var urlHandler: ((URL) -> Void)?
 
     @State private var launchScreenState: LaunchScreenStateManager
     @State private var alertManager: AlertManager
@@ -175,7 +201,7 @@ public struct ParraApp<
     @State private var themeManager: ParraThemeManager = .shared
     @State private var userProperties: ParraUserProperties = .shared
 
-    private let parraInternal: ParraInternal
+    @State private var parraInternal: ParraInternal!
 
     private func onAuthStateChanged(
         from oldAuthResult: ParraAuthState,
