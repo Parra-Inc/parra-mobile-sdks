@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ParraUserSettingsView: View, Equatable {
+struct ParraUserSettingsView: View {
     // MARK: - Internal
 
     @State var layout: ParraUserSettingsLayout
@@ -17,7 +17,12 @@ struct ParraUserSettingsView: View, Equatable {
             withContent(content: layout.description) { content in
                 componentFactory.buildLabel(
                     text: content,
-                    localAttributes: .default(with: .subheadline)
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            style: .subheadline
+                        ),
+                        background: parraTheme.palette.primaryBackground.toParraColor()
+                    )
                 )
                 .frame(
                     maxWidth: .infinity,
@@ -27,7 +32,7 @@ struct ParraUserSettingsView: View, Equatable {
                 .padding(.bottom, 16)
             }
 
-            Form {
+            List {
                 ForEach(
                     Array(layout.groups.enumerated()),
                     id: \.element
@@ -45,33 +50,19 @@ struct ParraUserSettingsView: View, Equatable {
                     .id(group.id)
                 }
             }
-            .formStyle(.grouped)
+            .background(
+                parraTheme.palette.primaryBackground.toParraColor()
+            )
+            .scrollContentBackground(.hidden)
         }
         .background(
-            parraTheme.palette.secondaryBackground.toParraColor()
+            parraTheme.palette.primaryBackground.toParraColor()
         )
         .navigationTitle(layout.title)
-    }
-
-    static func == (
-        lhs: ParraUserSettingsView,
-        rhs: ParraUserSettingsView
-    ) -> Bool {
-        return true
     }
 
     // MARK: - Private
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
-}
-
-#Preview {
-    ParraViewPreview { _ in
-        NavigationStack {
-            ParraUserSettingsView(
-                layout: .validStates()[0]
-            )
-        }
-    }
 }

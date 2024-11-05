@@ -54,9 +54,24 @@ struct UserSettingsWidget: ParraContainer {
             }
         case .loaded(let layout):
             ParraUserSettingsView(layout: layout)
-                .equatable()
         default:
             EmptyView()
         }
+    }
+}
+
+#Preview {
+    ParraContainerPreview<UserSettingsWidget>(config: .default) { parra, _, config in
+        UserSettingsWidget(
+            config: config,
+            contentObserver: .init(
+                initialParams: UserSettingsWidget.ContentObserver.InitialParams(
+                    layoutId: "default",
+                    layout: ParraUserSettingsLayout.validStates()[0],
+                    config: config,
+                    api: parra.parraInternal.api
+                )
+            )
+        )
     }
 }
