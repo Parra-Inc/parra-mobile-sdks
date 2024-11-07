@@ -103,8 +103,6 @@ public final class ParraUserSettings: ParraReadableKeyValueStore {
     func propagateChanges() {
         Task { @MainActor in
             currentPublisher.send(rawValue)
-
-            ParraAuthStateManager.shared.updateUserSettings(rawValue)
         }
     }
 

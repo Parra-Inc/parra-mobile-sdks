@@ -223,7 +223,7 @@ public extension ParraUser {
         public let lastLoginAt: Date?
         public internal(set) var properties: [String: ParraAnyCodable]
         public internal(set) var metadata: [String: ParraAnyCodable]
-        public internal(set) var settings: [String: ParraAnyCodable]
+
         public let identities: [ParraIdentity]
         public let isAnonymous: Bool
 
@@ -257,5 +257,12 @@ public extension ParraUser {
 
             return ids
         }
+
+        // MARK: - Internal
+
+        // Settings must stay internal. We won't want to propagate user object
+        // updates when they change and want devs to use the ParraUserSettings
+        // object for managing these.
+        var settings: [String: ParraAnyCodable]
     }
 }
