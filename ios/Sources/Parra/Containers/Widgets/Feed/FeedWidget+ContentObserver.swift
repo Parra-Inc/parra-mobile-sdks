@@ -89,7 +89,9 @@ extension FeedWidget {
 
         @MainActor
         func loadInitialFeedItems() {
-            feedPaginator.loadMore(after: nil)
+            if feedPaginator.isShowingPlaceholders {
+                feedPaginator.loadMore(after: nil)
+            }
         }
 
         @MainActor
