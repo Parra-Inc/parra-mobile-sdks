@@ -111,12 +111,10 @@ struct StorefrontWidget: ParraContainer {
         .onChange(
             of: parraAuthState,
             initial: true
-        ) { oldValue, newValue in
-            if oldValue.user?.info.id != newValue.user?.info.id {
-                contentObserver.performCartSetup(
-                    as: newValue.user
-                )
-            }
+        ) { _, newValue in
+            contentObserver.performCartSetup(
+                as: newValue.user
+            )
         }
         .task {
             ShopifyCheckoutSheetKit.configuration.colorScheme = colorScheme

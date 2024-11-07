@@ -385,12 +385,15 @@ extension StorefrontWidget {
             as user: ParraUser?,
             forceRefresh: Bool = false
         ) {
-            logger.info("Performing cart setup")
-
             Task { @MainActor in
-                self.cartState = .loading
-
                 if let existingCart = readPersistedCart(for: user), !forceRefresh {
+                    if case .ready(let info) = cartState,
+                       existingCart.cartId == info.cartId
+                    {
+                        // Cart for this user was already loaded.
+                        return
+                    }
+
                     logger.info("Non-expired cart existed for user")
 
                     applyReadyCart(existingCart)
@@ -399,6 +402,10 @@ extension StorefrontWidget {
 
                     return
                 }
+
+                logger.info("Performing cart setup")
+
+                self.cartState = .loading
 
                 do {
                     let shopifyService = try ParraStorefront.getShopifyService()
