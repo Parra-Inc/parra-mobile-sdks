@@ -79,7 +79,7 @@ class AppNavigationState: ObservableObject {
             profileTabNavigationPath = NavigationPath()
         case .notificationSettings:
             selectedTab = .profile
-            profileTabNavigationPath.append(deepLink.rawValue)
+            profileTabNavigationPath = NavigationPath([deepLink.rawValue])
         }
     }
 }

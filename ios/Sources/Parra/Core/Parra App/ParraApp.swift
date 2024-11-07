@@ -130,6 +130,10 @@ public struct ParraApp<
                 state: .initial(configuration.launchScreenOptions)
             )
         )
+
+        if configuration.pushNotificationOptions.enabled {
+            UNUserNotificationCenter.current().delegate = appDelegate
+        }
     }
 
     // MARK: - Public

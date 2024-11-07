@@ -22,6 +22,11 @@ open class ParraSceneDelegate: NSObject, UIWindowSceneDelegate {
 
     open func scene(
         _ scene: UIScene,
+        openURLContexts URLContexts: Set<UIOpenURLContext>
+    ) {}
+
+    open func scene(
+        _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
