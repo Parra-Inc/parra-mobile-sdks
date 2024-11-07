@@ -52,7 +52,6 @@ final class AppInfoManager {
         static let versionTokenKey = "version_token_info"
 
         static let appInfoCacheKey = "app_info_cache"
-        static let fullAppInfoKey = "full_app_info"
     }
 
     struct AppVersionInfo: Codable {
@@ -220,7 +219,7 @@ final class AppInfoManager {
 
     func cachedAppInfo() async -> ParraAppInfo? {
         guard let cached = await appInfoCache.read(
-            name: Constant.fullAppInfoKey
+            name: Constant.appInfoCacheKey
         ) else {
             return nil
         }

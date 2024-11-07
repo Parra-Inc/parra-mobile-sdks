@@ -224,8 +224,6 @@ class ParraInternal {
         await sessionManager.initializeSessions()
 
         do {
-            logger.debug("Refreshing user info")
-
             if let updatedUser = try await authService.refreshUserInfo() {
                 ParraUserProperties.shared
                     .forceSetStore(updatedUser.info.properties)
