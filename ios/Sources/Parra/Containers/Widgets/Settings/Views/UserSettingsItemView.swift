@@ -13,16 +13,19 @@ struct UserSettingsItemView: View {
 
     init(
         item: ParraUserSettingsItem,
-        debounceDelay: TimeInterval = 3.0
+        debounceDelay: TimeInterval = 3.0,
+        onValueChanged: @escaping (_ value: ParraSettingsItemDataWithValue) -> Void
     ) {
         self.item = item
         self.debounceDelay = debounceDelay
+        self.onValueChanged = onValueChanged
     }
 
     // MARK: - Internal
 
     let item: ParraUserSettingsItem
     let debounceDelay: TimeInterval
+    let onValueChanged: (_ value: ParraSettingsItemDataWithValue) -> Void
 
     var body: some View {
         switch item.data {
@@ -53,24 +56,6 @@ struct UserSettingsItemView: View {
                     .settingsItemStringDataWithValue(updatedValue)
                 )
             }
-        }
-    }
-
-    // MARK: - Private
-
-    @Environment(UserSettingsWidget.ContentObserver.self) private var contentObserver
-
-    private func onValueChanged(
-        _ value: ParraSettingsItemDataWithValue
-    ) {
-        Task {
-            do {
-                try await contentObserver.updateSetting(
-                    with: item.key,
-                    to: value
-                )
-
-            } catch {}
         }
     }
 }

@@ -23,16 +23,8 @@ struct UserSettingsWidget: ParraContainer {
     @State var contentObserver: ContentObserver
     let config: ParraUserSettingsConfiguration
 
-    var body: some View {
-        content
-            .environment(contentObserver)
-    }
-
-    // MARK: - Private
-
-    @Environment(\.parraTheme) private var parraTheme
-
-    @ViewBuilder @MainActor private var content: some View {
+    @ViewBuilder
+    @MainActor var body: some View {
         switch contentObserver.loadState {
         case .initial, .loading:
             VStack {
@@ -53,9 +45,30 @@ struct UserSettingsWidget: ParraContainer {
                 }
             }
         case .loaded(let layout):
-            ParraUserSettingsView(layout: layout)
+            ParraUserSettingsView(layout: layout) { key, value in
+                onValueChanged(for: key, value)
+            }
         default:
             EmptyView()
+        }
+    }
+
+    // MARK: - Private
+
+    @Environment(\.parraTheme) private var parraTheme
+
+    private func onValueChanged(
+        for key: String,
+        _ value: ParraSettingsItemDataWithValue
+    ) {
+        Task {
+            do {
+                try await contentObserver.updateSetting(
+                    with: key,
+                    to: value
+                )
+
+            } catch {}
         }
     }
 }

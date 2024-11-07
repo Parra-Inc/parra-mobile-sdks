@@ -10,7 +10,8 @@ import SwiftUI
 struct ParraUserSettingsView: View {
     // MARK: - Internal
 
-    @State var layout: ParraUserSettingsLayout
+    var layout: ParraUserSettingsLayout
+    let onValueChanged: (_ key: String, _ value: ParraSettingsItemDataWithValue) -> Void
 
     var body: some View {
         VStack {
@@ -37,7 +38,9 @@ struct ParraUserSettingsView: View {
                     Array(layout.groups.enumerated()),
                     id: \.element
                 ) { index, group in
-                    UserSettingsGroupView(group: group) {
+                    UserSettingsGroupView(
+                        group: group
+                    ) {
                         if index == layout.groups.count - 1 {
                             withContent(content: layout.footerLabel) { content in
                                 componentFactory.buildLabel(
@@ -46,8 +49,9 @@ struct ParraUserSettingsView: View {
                                 )
                             }
                         }
+                    } onValueChanged: { key, value in
+                        onValueChanged(key, value)
                     }
-                    .id(group.id)
                 }
             }
             .background(
