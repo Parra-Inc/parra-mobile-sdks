@@ -6,6 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import CloudKit
 import SwiftUI
 import UIKit
 
@@ -41,6 +42,32 @@ open class ParraSceneDelegate: NSObject, UIWindowSceneDelegate {
             return overlayWindow
         }()
     }
+
+    open func windowScene(
+        _ windowScene: UIWindowScene,
+        performActionFor shortcutItem: UIApplicationShortcutItem
+    ) async -> Bool {
+        return true
+    }
+
+    @nonobjc
+    open func windowScene(
+        _ windowScene: UIWindowScene,
+        performActionFor shortcutItem: UIApplicationShortcutItem,
+        completionHandler: @escaping (Bool) -> Void
+    ) {}
+
+    open func windowScene(
+        _ windowScene: UIWindowScene,
+        didUpdate previousCoordinateSpace: any UICoordinateSpace,
+        interfaceOrientation previousInterfaceOrientation: UIInterfaceOrientation,
+        traitCollection previousTraitCollection: UITraitCollection
+    ) {}
+
+    open func windowScene(
+        _ windowScene: UIWindowScene,
+        userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata
+    ) {}
 
     // MARK: - Internal
 

@@ -182,18 +182,6 @@ open class ParraAppDelegate<
         }
     }
 
-    // MARK: - Public
-
-    public internal(set) var sceneDelegateClass: ParraSceneDelegate.Type! {
-        willSet {
-            if sceneDelegateClass != nil {
-                fatalError(
-                    "ParraSceneDelegate can not be set multiple times per execution."
-                )
-            }
-        }
-    }
-
     // MARK: - Internal
 
     /// Not exposed publicly. Should only ever be set once from the
