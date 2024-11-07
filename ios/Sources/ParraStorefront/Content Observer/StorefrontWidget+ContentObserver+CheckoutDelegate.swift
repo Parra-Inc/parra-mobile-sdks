@@ -18,7 +18,9 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
         event: ShopifyCheckoutSheetKit.CheckoutCompletedEvent
     ) {
         Task { @MainActor in
-            StorefrontAnalytics.makePurchase(event.orderDetails)
+            let orderDetails = ParraOrderDetails(orderDetails: event.orderDetails)
+
+            StorefrontAnalytics.makePurchase(orderDetails)
 
             performCartSetup(
                 as: Parra.currentUser,
@@ -32,7 +34,7 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
 
             delegate?
                 .storefrontWidgetDidMakePurchase(
-                    orderDetails: event.orderDetails
+                    orderDetails: orderDetails
                 )
         }
     }
