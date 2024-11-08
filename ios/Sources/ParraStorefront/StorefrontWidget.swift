@@ -62,13 +62,13 @@ struct StorefrontWidget: ParraContainer {
             .toolbar {
                 if contentObserver.config.showDismissButton {
                     ToolbarItem(placement: .topBarLeading) {
-                        CartButton(
-                            cartState: $contentObserver.cartState
-                        )
+                        ParraDismissButton()
                     }
 
                     ToolbarItem(placement: .topBarTrailing) {
-                        ParraDismissButton()
+                        CartButton(
+                            cartState: $contentObserver.cartState
+                        )
                     }
                 } else {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -127,6 +127,32 @@ struct StorefrontWidget: ParraContainer {
         }
         .onAppear {
             contentObserver.loadInitialProducts()
+        }
+        .sheet(
+            isPresented: Binding<Bool>(
+                get: {
+                    switch contentObserver.cartState {
+                    case .checkoutComplete:
+                        return true
+                    default:
+                        return false
+                    }
+                },
+                set: { _ in }
+            )
+        ) {
+            contentObserver.cartState = .loading
+
+            contentObserver.refreshExpiredCart()
+        } content: {
+            switch contentObserver.cartState {
+            case .checkoutComplete(let orderDetails):
+                NavigationStack {
+                    OrderReceiptView(details: orderDetails)
+                }
+            default:
+                EmptyView()
+            }
         }
     }
 

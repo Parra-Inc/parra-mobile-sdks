@@ -124,6 +124,13 @@ extension StorefrontWidget {
         }
 
         @MainActor
+        func completeCheckout(
+            with orderDetails: ParraOrderDetails
+        ) {
+            cartState = .checkoutComplete(orderDetails)
+        }
+
+        @MainActor
         func viewProduct(
             product: ParraProduct,
             variant: ParraProductVariant
@@ -381,6 +388,7 @@ extension StorefrontWidget {
             }
         }
 
+        @MainActor
         func refreshExpiredCart() {
             let user = Parra.currentUser
 
@@ -525,7 +533,7 @@ extension StorefrontWidget {
             _ handler: (_ readyInfo: CartState.ReadyStateInfo) async throws -> Void
         ) async throws {
             switch cartState {
-            case .loading, .error:
+            case .loading, .error, .checkoutComplete, .checkoutFailed:
                 throw ParraStorefrontError.cartNotReady
             case .ready(let readyStateInfo):
                 try await handler(readyStateInfo)

@@ -61,7 +61,7 @@ struct CartButton: View {
                         .symbolEffect(.pulse, value: quantity)
                 }
             }
-        case .loading, .error:
+        case .loading, .error, .checkoutComplete, .checkoutFailed:
             EmptyView()
         }
     }

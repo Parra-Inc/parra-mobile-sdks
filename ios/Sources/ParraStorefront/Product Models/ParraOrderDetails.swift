@@ -8,7 +8,9 @@
 import ShopifyCheckoutSheetKit
 import SwiftUI
 
-public struct ParraOrderDetails {
+// https://shopify.dev/docs/api/liquid/objects/order
+
+public struct ParraOrderDetails: Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -54,7 +56,7 @@ public struct ParraOrderDetails {
     public let phone: String?
 }
 
-public struct ParraOrderAddress: Codable {
+public struct ParraOrderAddress: Codable, Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -116,7 +118,7 @@ public struct ParraOrderAddress: Codable {
     public let zoneCode: String?
 }
 
-public struct ParraOrderCartInfo: Codable {
+public struct ParraOrderCartInfo: Codable, Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -144,7 +146,7 @@ public struct ParraOrderCartInfo: Codable {
     public let token: String
 }
 
-public struct ParraOrderCartLineImage: Codable {
+public struct ParraOrderCartLineImage: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
@@ -178,7 +180,7 @@ public struct ParraOrderCartLineImage: Codable {
     public let sm: String
 }
 
-public struct ParraOrderCartLine: Codable {
+public struct ParraOrderCartLine: Codable, Hashable, Equatable, Identifiable {
     // MARK: - Lifecycle
 
     init(
@@ -218,9 +220,13 @@ public struct ParraOrderCartLine: Codable {
     public let productId: String?
     public let quantity: Int
     public let title: String
+
+    public var id: String {
+        return String(hashValue)
+    }
 }
 
-public struct ParraOrderDeliveryDetails: Codable {
+public struct ParraOrderDeliveryDetails: Codable, Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -246,7 +252,7 @@ public struct ParraOrderDeliveryDetails: Codable {
     public let name: String?
 }
 
-public struct ParraOrderDeliveryInfo: Codable {
+public struct ParraOrderDeliveryInfo: Codable, Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -268,7 +274,7 @@ public struct ParraOrderDeliveryInfo: Codable {
     public let method: String
 }
 
-public struct ParraOrderDiscount: Codable {
+public struct ParraOrderDiscount: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(
@@ -300,9 +306,57 @@ public struct ParraOrderDiscount: Codable {
     public let title: String?
     public let value: Double?
     public let valueType: String?
+
+    public var id: String {
+        return String(hashValue)
+    }
 }
 
-public struct ParraOrderPaymentMethod: Codable {
+public struct ParraOrderCardPaymentMethod: Codable, Hashable, Identifiable {
+    // MARK: - Lifecycle
+
+    init?(_ paymentMethod: ParraOrderPaymentMethod) {
+        let num = paymentMethod.details["number"]
+        guard let num, let num else {
+            return nil
+        }
+
+        guard let methodName = paymentMethod.details["payment_method_name"],
+              let methodName else
+        {
+            return nil
+        }
+
+        guard let name = paymentMethod.details["name"], let name else {
+            return nil
+        }
+
+        self.number = num
+        self.paymentMethodName = methodName
+        self.cardHolderName = name
+        self.company = paymentMethod.details["company"] ?? nil
+        self.expirationYear = paymentMethod.details["expiration_year"]?.flatMap(Int.init)
+        self.expirationMonth = paymentMethod.details["expiration_month"]?
+            .flatMap(Int.init)
+    }
+
+    // MARK: - Public
+
+    public var id: String {
+        return String(hashValue)
+    }
+
+    // MARK: - Internal
+
+    let number: String
+    let paymentMethodName: String
+    let cardHolderName: String
+    let company: String?
+    let expirationMonth: Int?
+    let expirationYear: Int?
+}
+
+public struct ParraOrderPaymentMethod: Codable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(details: [String: String?], type: String) {
@@ -319,9 +373,13 @@ public struct ParraOrderPaymentMethod: Codable {
 
     public let details: [String: String?]
     public let type: String
+
+    public var id: String {
+        return String(hashValue)
+    }
 }
 
-public struct ParraOrderPrice: Codable {
+public struct ParraOrderPrice: Codable, Equatable {
     // MARK: - Lifecycle
 
     init(
@@ -357,7 +415,7 @@ public struct ParraOrderPrice: Codable {
     public let total: ParraOrderMoney?
 }
 
-public struct ParraOrderMoney: Codable {
+public struct ParraOrderMoney: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
     init(amount: Double?, currencyCode: String?) {
@@ -383,4 +441,8 @@ public struct ParraOrderMoney: Codable {
 
     public let amount: Double?
     public let currencyCode: String?
+
+    public var id: String {
+        return String(hashValue)
+    }
 }

@@ -7,6 +7,7 @@
 
 import Buy
 import Parra
+import ShopifyCheckoutSheetKit
 import SwiftUI
 
 extension StorefrontWidget.ContentObserver {
@@ -14,6 +15,8 @@ extension StorefrontWidget.ContentObserver {
         case loading
         case ready(ReadyStateInfo)
         case error(ParraStorefrontError)
+        case checkoutComplete(ParraOrderDetails)
+        case checkoutFailed(ShopifyCheckoutSheetKit.CheckoutError)
 
         // MARK: - Internal
 
@@ -79,6 +82,10 @@ extension StorefrontWidget.ContentObserver {
                 return lhsInfo == rhsInfo
             case (.error(let lhe), .error(let rhe)):
                 return lhe.localizedDescription == rhe.localizedDescription
+            case (.checkoutComplete(let lhs), .checkoutComplete(let rhe)):
+                return lhs.id == rhe.id
+            case (.checkoutFailed(let le), .checkoutFailed(let re)):
+                return le.localizedDescription == re.localizedDescription
             default:
                 return false
             }

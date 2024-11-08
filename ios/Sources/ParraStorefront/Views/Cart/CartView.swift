@@ -16,7 +16,7 @@ struct CartView: View {
     var body: some View {
         VStack {
             switch dataModel.cartState {
-            case .loading, .error:
+            case .loading, .error, .checkoutComplete, .checkoutFailed:
                 cartNotReadyView
             case .ready(let readyState):
                 if readyState.quantity == 0 {
@@ -187,7 +187,7 @@ struct CartView: View {
                                 at: cartState.checkoutUrl
                             )
                         }
-                    case .error, .loading:
+                    case .error, .loading, .checkoutComplete, .checkoutFailed:
                         break
                     }
                 }
@@ -244,5 +244,14 @@ struct CartView: View {
 #Preview {
     ParraAppPreview {
         CartView()
+            .environment(
+                StorefrontWidget.ContentObserver(
+                    initialParams: .init(
+                        config: .default,
+                        delegate: nil,
+                        productsResponse: nil
+                    )
+                )
+            )
     }
 }

@@ -18,7 +18,9 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
         event: ShopifyCheckoutSheetKit.CheckoutCompletedEvent
     ) {
         Task { @MainActor in
-            let orderDetails = ParraOrderDetails(orderDetails: event.orderDetails)
+            let orderDetails = ParraOrderDetails(
+                orderDetails: event.orderDetails
+            )
 
             StorefrontAnalytics.makePurchase(orderDetails)
 
@@ -28,14 +30,14 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
             )
 
             UIViewController.topMostViewController()?.dismiss(
-                animated: true,
-                completion: nil
-            )
-
-            delegate?
-                .storefrontWidgetDidMakePurchase(
+                animated: true
+            ) {
+                self.delegate?.storefrontWidgetDidMakePurchase(
                     orderDetails: orderDetails
                 )
+
+                self.completeCheckout(with: orderDetails)
+            }
         }
     }
 
@@ -44,11 +46,10 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
             StorefrontAnalytics.cancelCheckout()
 
             UIViewController.topMostViewController()?.dismiss(
-                animated: true,
-                completion: nil
-            )
-
-            delegate?.storefrontWidgetDidCancelCheckout()
+                animated: true
+            ) {
+                self.delegate?.storefrontWidgetDidCancelCheckout()
+            }
         }
     }
 
