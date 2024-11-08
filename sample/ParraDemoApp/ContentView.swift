@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 11/07/2024.
+//  Bootstrapped with ❤️ by Parra on 11/08/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
