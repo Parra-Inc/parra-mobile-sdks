@@ -16,8 +16,10 @@ struct CartView: View {
     var body: some View {
         VStack {
             switch dataModel.cartState {
-            case .loading, .error, .checkoutComplete, .checkoutFailed:
+            case .loading, .error, .checkoutFailed:
                 cartNotReadyView
+            case .checkoutComplete:
+                cartEmptyView
             case .ready(let readyState):
                 if readyState.quantity == 0 {
                     cartEmptyView
