@@ -131,6 +131,27 @@ extension StorefrontWidget {
         }
 
         @MainActor
+        func failCheckout(
+            with errorMessage: String,
+            error: Error,
+            isRecoverable: Bool
+        ) {
+            cartState = .checkoutFailed(errorMessage)
+
+            ParraAlertManager.shared.showErrorToast(
+                title: "Checkout error",
+                userFacingMessage: errorMessage,
+                underlyingError: .system(error),
+                in: .topCenter,
+                for: 5.0
+            ) {
+                if !isRecoverable {
+                    self.refreshExpiredCart()
+                }
+            }
+        }
+
+        @MainActor
         func viewProduct(
             product: ParraProduct,
             variant: ParraProductVariant

@@ -83,13 +83,18 @@ public extension ParraAlertManager {
         level: ParraAlertLevel,
         content: ParraAlertContent,
         attributes: ParraAttributes.ToastAlert? = nil,
-        primaryAction: (() -> Void)? = nil
+        primaryAction: (() -> Void)? = nil,
+        onDismiss: (() -> Void)? = nil
     ) {
         currentToast = Toast(
             level: level,
             content: content,
             attributes: attributes,
-            onDismiss: dismissToast,
+            onDismiss: {
+                self.dismissToast()
+
+                onDismiss?()
+            },
             duration: duration,
             animationDuration: animationDuration,
             location: location,
@@ -103,7 +108,8 @@ public extension ParraAlertManager {
         in location: ToastLocation = .topCenter,
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25,
-        primaryAction: (() -> Void)? = nil
+        primaryAction: (() -> Void)? = nil,
+        onDismiss: (() -> Void)? = nil
     ) {
         let level = ParraAlertLevel.success
 
@@ -118,7 +124,8 @@ public extension ParraAlertManager {
                 icon: ParraAlertContent.defaultIcon(for: level),
                 dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
-            primaryAction: primaryAction
+            primaryAction: primaryAction,
+            onDismiss: onDismiss
         )
     }
 
@@ -129,7 +136,8 @@ public extension ParraAlertManager {
         in location: ToastLocation = .topCenter,
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25,
-        primaryAction: (() -> Void)? = nil
+        primaryAction: (() -> Void)? = nil,
+        onDismiss: (() -> Void)? = nil
     ) {
         let level = ParraAlertLevel.error
 
@@ -144,7 +152,8 @@ public extension ParraAlertManager {
                 icon: ParraAlertContent.defaultIcon(for: level),
                 dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
-            primaryAction: primaryAction
+            primaryAction: primaryAction,
+            onDismiss: onDismiss
         )
     }
 
@@ -153,7 +162,8 @@ public extension ParraAlertManager {
         in location: ToastLocation = .bottomCenter,
         for duration: TimeInterval = 8.0,
         animationDuration: TimeInterval = 0.25,
-        primaryAction: (() -> Void)? = nil
+        primaryAction: (() -> Void)? = nil,
+        onDismiss: (() -> Void)? = nil
     ) {
         let level = ParraAlertLevel.info
 
@@ -172,7 +182,8 @@ public extension ParraAlertManager {
                 dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
             attributes: ParraAttributes.ToastAlert(),
-            primaryAction: primaryAction
+            primaryAction: primaryAction,
+            onDismiss: onDismiss
         )
     }
 

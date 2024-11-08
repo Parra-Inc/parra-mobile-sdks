@@ -16,7 +16,7 @@ extension StorefrontWidget.ContentObserver {
         case ready(ReadyStateInfo)
         case error(ParraStorefrontError)
         case checkoutComplete(ParraOrderDetails)
-        case checkoutFailed(ShopifyCheckoutSheetKit.CheckoutError)
+        case checkoutFailed(String)
 
         // MARK: - Internal
 
@@ -85,7 +85,7 @@ extension StorefrontWidget.ContentObserver {
             case (.checkoutComplete(let lhs), .checkoutComplete(let rhe)):
                 return lhs.id == rhe.id
             case (.checkoutFailed(let le), .checkoutFailed(let re)):
-                return le.localizedDescription == re.localizedDescription
+                return le == re
             default:
                 return false
             }

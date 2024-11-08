@@ -67,11 +67,40 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
 
                 refreshExpiredCart()
             default:
-                logger.error("Checkout failed with error", error)
+                let message: String = switch error {
+                case .checkoutUnavailable(let message, _, let recoverable):
+                    message
+                case .configurationError(let message, _, let recoverable):
+                    message
+                case .sdkError(let underlying, let recoverable):
+                    underlying.localizedDescription
+                default:
+                    "Unknown error"
+                }
 
-                delegate?.storefrontWidgetDidFailCheckout(
-                    error: error
-                )
+                logger.error("Checkout failed: \(message)", error)
+
+                let fail = {
+                    self.failCheckout(
+                        with: message,
+                        error: error,
+                        isRecoverable: error.isRecoverable
+                    )
+
+                    self.delegate?.storefrontWidgetDidFailCheckout(
+                        error: error
+                    )
+                }
+
+                if error.isRecoverable {
+                    fail()
+                } else {
+                    UIViewController.topMostViewController()?.dismiss(
+                        animated: true
+                    ) {
+                        fail()
+                    }
+                }
             }
         }
     }
