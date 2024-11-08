@@ -57,7 +57,7 @@ extension StorefrontWidget.ContentObserver {
         }
     }
 
-    private func deletePersistedCart(
+    func deletePersistedCart(
         for user: ParraUser?
     ) {
         let storageKey = createCartStorageKey(for: user)

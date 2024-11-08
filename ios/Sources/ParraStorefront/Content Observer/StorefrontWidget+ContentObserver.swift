@@ -381,6 +381,14 @@ extension StorefrontWidget {
             }
         }
 
+        func refreshExpiredCart() {
+            let user = Parra.currentUser
+
+            deletePersistedCart(for: user)
+
+            performCartSetup(as: user, forceRefresh: true)
+        }
+
         func performCartSetup(
             as user: ParraUser?,
             forceRefresh: Bool = false

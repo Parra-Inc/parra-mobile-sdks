@@ -56,11 +56,22 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
         error: ShopifyCheckoutSheetKit.CheckoutError
     ) {
         Task { @MainActor in
-            logger.error("Checkout failed with error", error)
 
-            delegate?.storefrontWidgetDidFailCheckout(
-                error: error
-            )
+            switch error {
+            case .checkoutExpired:
+                logger.error(
+                    "Cart has expired. Triggering refresh.",
+                    error
+                )
+
+                refreshExpiredCart()
+            default:
+                logger.error("Checkout failed with error", error)
+
+                delegate?.storefrontWidgetDidFailCheckout(
+                    error: error
+                )
+            }
         }
     }
 
