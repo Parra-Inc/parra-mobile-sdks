@@ -50,7 +50,6 @@ class ParraInternal {
         releases: ParraReleases,
         appInfoManager: AppInfoManager,
         containerRenderer: ParraContainerRenderer,
-        alertManager: AlertManager,
         modalScreenManager: ModalScreenManager,
         authFlowManager: AuthenticationFlowManager
     ) {
@@ -67,7 +66,6 @@ class ParraInternal {
         self.releases = releases
         self.appInfoManager = appInfoManager
         self.containerRenderer = containerRenderer
-        self.alertManager = alertManager
         self.modalScreenManager = modalScreenManager
         self.globalComponentFactory = ParraComponentFactory(
             attributes: configuration.globalComponentAttributes,
@@ -110,7 +108,6 @@ class ParraInternal {
     let notificationCenter: NotificationCenterType
     let appInfoManager: AppInfoManager
     let containerRenderer: ParraContainerRenderer
-    let alertManager: AlertManager
     let modalScreenManager: ModalScreenManager
     let authFlowManager: AuthenticationFlowManager
 

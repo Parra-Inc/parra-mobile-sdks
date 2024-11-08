@@ -10,23 +10,23 @@ import Foundation
 import SwiftUI
 import UIKit
 
-extension AlertManager {
+public extension ParraAlertManager {
     @MainActor
     struct Toast: Equatable {
-        let level: ParraAlertLevel
-        let content: ParraAlertContent
-        let attributes: ParraAttributes.ToastAlert?
-        let onDismiss: () -> Void
+        public let level: ParraAlertLevel
+        public let content: ParraAlertContent
+        public let attributes: ParraAttributes.ToastAlert?
+        public let onDismiss: () -> Void
 
-        let duration: TimeInterval
-        let animationDuration: TimeInterval
-        let location: ToastLocation
+        public let duration: TimeInterval
+        public let animationDuration: TimeInterval
+        public let location: ToastLocation
 
-        let primaryAction: (() -> Void)?
+        public let primaryAction: (() -> Void)?
 
-        nonisolated static func == (
-            lhs: AlertManager.Toast,
-            rhs: AlertManager.Toast
+        public nonisolated static func == (
+            lhs: ParraAlertManager.Toast,
+            rhs: ParraAlertManager.Toast
         ) -> Bool {
             return lhs.content == rhs.content
         }
@@ -45,9 +45,9 @@ extension AlertManager {
         case bottomLeading
         case bottomTrailing
 
-        // MARK: - Internal
+        // MARK: - Public
 
-        var toViewAlignment: Alignment {
+        public var toViewAlignment: Alignment {
             let isIpad = UIDevice.isIpad
 
             switch self {
@@ -66,7 +66,7 @@ extension AlertManager {
             }
         }
 
-        var isTop: Bool {
+        public var isTop: Bool {
             switch self {
             case .topCenter, .topLeading, .topTrailing:
                 return true
@@ -148,7 +148,7 @@ extension AlertManager {
         )
     }
 
-    func showWhatsNewToast(
+    internal func showWhatsNewToast(
         for newInstalledVersionInfo: ParraNewInstalledVersionInfo,
         in location: ToastLocation = .bottomCenter,
         for duration: TimeInterval = 8.0,

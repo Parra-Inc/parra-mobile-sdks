@@ -183,12 +183,9 @@ extension ParraInternal {
             notificationCenter: notificationCenter
         )
 
-        let alertManager = AlertManager()
-
         let appInfoManager = AppInfoManager(
             configuration: configuration,
             modalScreenManager: modalScreenManager,
-            alertManager: alertManager,
             api: api,
             authServer: authServer,
             externalResourceServer: externalResourceServer,
@@ -238,7 +235,6 @@ extension ParraInternal {
             releases: releases,
             appInfoManager: appInfoManager,
             containerRenderer: containerRenderer,
-            alertManager: alertManager,
             modalScreenManager: modalScreenManager,
             authFlowManager: authFlowManager
         )

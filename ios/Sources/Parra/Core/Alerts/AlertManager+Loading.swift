@@ -9,16 +9,16 @@
 import Foundation
 import SwiftUI
 
-extension AlertManager {
+public extension ParraAlertManager {
     struct LoadingIndicator: Equatable {
-        let content: ParraLoadingIndicatorContent
-        let attributes: ParraAttributes.LoadingIndicator?
-        let onDismiss: () -> Void
-        let cancel: (() -> Void)?
+        public let content: ParraLoadingIndicatorContent
+        public let attributes: ParraAttributes.LoadingIndicator?
+        public let onDismiss: () -> Void
+        public let cancel: (() -> Void)?
 
-        static func == (
-            lhs: AlertManager.LoadingIndicator,
-            rhs: AlertManager.LoadingIndicator
+        public static func == (
+            lhs: ParraAlertManager.LoadingIndicator,
+            rhs: ParraAlertManager.LoadingIndicator
         ) -> Bool {
             return lhs.content == rhs.content
         }

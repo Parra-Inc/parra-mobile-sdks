@@ -95,7 +95,7 @@ class AuthenticationFlowManager {
     @MainActor
     func getLandingScreenParams(
         using appInfo: ParraAppInfo,
-        alertManager: AlertManager
+        alertManager: ParraAlertManager
     ) -> ParraAuthDefaultLandingScreen.Params {
         let availableAuthMethods = supportedAuthMethods(
             for: appInfo.auth
@@ -162,7 +162,7 @@ class AuthenticationFlowManager {
         username: String?,
         presentationMode: AuthService.PasskeyPresentationMode,
         using appInfo: ParraAppInfo,
-        alertManager: AlertManager
+        alertManager: ParraAlertManager
     ) async {
         if hasPasskeyAutoLoginBeenRequested {
             return
@@ -254,7 +254,7 @@ class AuthenticationFlowManager {
     private func navigateToIdentityInputScreen(
         inputType: ParraIdentityInputType,
         appInfo: ParraAppInfo,
-        alertManager: AlertManager
+        alertManager: ParraAlertManager
     ) {
         let params = ParraAuthDefaultIdentityInputScreen.Params(
             inputType: inputType,
@@ -343,7 +343,7 @@ class AuthenticationFlowManager {
     private func onIdentitySubmitted(
         identity: String,
         with appInfo: ParraAppInfo,
-        alertManager: AlertManager
+        alertManager: ParraAlertManager
     ) async throws {
         logger.debug("Submitting identity", [
             "identity": identity

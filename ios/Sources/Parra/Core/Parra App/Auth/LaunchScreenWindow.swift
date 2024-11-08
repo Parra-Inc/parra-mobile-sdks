@@ -20,8 +20,6 @@ struct LaunchScreenWindow<Content>: View where Content: View {
 
     // MARK: - Internal
 
-    @Environment(AlertManager.self) var alertManager: AlertManager
-
     @ViewBuilder var view: some View {
         // During this phase, initialization has finished so the primary
         // content view can be created, but the launch screen can not be
@@ -81,6 +79,8 @@ struct LaunchScreenWindow<Content>: View where Content: View {
     }
 
     // MARK: - Private
+
+    @Environment(\.parraAlertManager) private var alertManager
 
     @ViewBuilder private var content: () -> Content
 

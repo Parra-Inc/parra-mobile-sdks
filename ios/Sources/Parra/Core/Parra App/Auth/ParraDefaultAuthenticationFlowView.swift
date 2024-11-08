@@ -135,7 +135,7 @@ public struct ParraDefaultAuthenticationFlowView: ParraAuthenticationFlow, Equat
     @Environment(\.parraAppInfo) private var parraAppInfo
     @Environment(\.parraAuthState) private var parraAuthState
 
-    @State private var alertManager = AlertManager()
+    @State private var alertManager: ParraAlertManager = .shared
     @State private var navigationState = NavigationState()
 
     private var landingScreenParams: ParraAuthDefaultLandingScreen.Params {

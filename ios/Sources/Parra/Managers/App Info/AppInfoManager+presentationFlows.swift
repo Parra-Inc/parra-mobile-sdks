@@ -217,7 +217,7 @@ extension AppInfoManager {
 
             switch style {
             case .toast:
-                alertManager.showWhatsNewToast(
+                ParraAlertManager.shared.showWhatsNewToast(
                     for: newInstalledVersionInfo,
                     primaryAction: displayModal
                 )

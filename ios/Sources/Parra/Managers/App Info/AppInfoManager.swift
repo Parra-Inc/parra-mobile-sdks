@@ -17,7 +17,6 @@ final class AppInfoManager {
     init(
         configuration: ParraConfiguration,
         modalScreenManager: ModalScreenManager,
-        alertManager: AlertManager,
         api: API,
         authServer: AuthServer,
         externalResourceServer: ExternalResourceServer,
@@ -26,7 +25,6 @@ final class AppInfoManager {
     ) {
         self.configuration = configuration
         self.modalScreenManager = modalScreenManager
-        self.alertManager = alertManager
         self.api = api
         self.authServer = authServer
         self.externalResourceServer = externalResourceServer
@@ -69,7 +67,6 @@ final class AppInfoManager {
     let authServer: AuthServer
     let externalResourceServer: ExternalResourceServer
     let modalScreenManager: ModalScreenManager
-    let alertManager: AlertManager
     let configuration: ParraConfiguration
 
     /// Whether the app info manager has encountered a newer app version

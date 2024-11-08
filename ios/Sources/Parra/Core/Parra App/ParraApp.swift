@@ -121,10 +121,6 @@ public struct ParraApp<
             initialValue: parraInternal
         )
 
-        self._alertManager = State(
-            wrappedValue: parraInternal.alertManager
-        )
-
         self._launchScreenState = State(
             wrappedValue: LaunchScreenStateManager(
                 state: .initial(configuration.launchScreenOptions)
@@ -150,7 +146,7 @@ public struct ParraApp<
                 \.parraPreferredAppearance,
                 themeManager.preferredAppearanceBinding
             )
-            .environment(alertManager)
+            .environment(\.parraAlertManager, alertManager)
             .environment(launchScreenState)
             .onChange(
                 of: launchScreenState.current,
@@ -200,7 +196,7 @@ public struct ParraApp<
     @State private var urlHandler: ((URL) -> Void)?
 
     @State private var launchScreenState: LaunchScreenStateManager
-    @State private var alertManager: AlertManager
+    @State private var alertManager: ParraAlertManager = .shared
     @State private var authStateManager: ParraAuthStateManager = .shared
     @State private var themeManager: ParraThemeManager = .shared
     @State private var userProperties: ParraUserProperties = .shared

@@ -13,14 +13,14 @@ struct AlertPresenter: ViewModifier {
     // MARK: - Lifecycle
 
     init(
-        alert: Binding<AlertManager.Toast?>
+        alert: Binding<ParraAlertManager.Toast?>
     ) {
         _alert = alert
         _loadingIndicator = .constant(nil)
     }
 
     init(
-        loadingIndicator: Binding<AlertManager.LoadingIndicator?>
+        loadingIndicator: Binding<ParraAlertManager.LoadingIndicator?>
     ) {
         _loadingIndicator = loadingIndicator
         _alert = .constant(nil)
@@ -28,8 +28,8 @@ struct AlertPresenter: ViewModifier {
 
     // MARK: - Internal
 
-    @Binding var alert: AlertManager.Toast?
-    @Binding var loadingIndicator: AlertManager.LoadingIndicator?
+    @Binding var alert: ParraAlertManager.Toast?
+    @Binding var loadingIndicator: ParraAlertManager.LoadingIndicator?
 
     func body(content: Content) -> some View {
         content
@@ -158,7 +158,7 @@ struct AlertPresenter: ViewModifier {
 extension View {
     @MainActor
     func renderToast(
-        toast: Binding<AlertManager.Toast?>
+        toast: Binding<ParraAlertManager.Toast?>
     ) -> some View {
         modifier(
             AlertPresenter(alert: toast)
@@ -167,7 +167,7 @@ extension View {
 
     @MainActor
     func renderLoadingIndicator(
-        loadingIndicator: Binding<AlertManager.LoadingIndicator?>
+        loadingIndicator: Binding<ParraAlertManager.LoadingIndicator?>
     ) -> some View {
         modifier(
             AlertPresenter(loadingIndicator: loadingIndicator)

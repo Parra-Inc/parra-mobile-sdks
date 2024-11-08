@@ -43,10 +43,6 @@ struct ParraViewPreview<Content>: View where Content: View {
 
         self.parra = Parra(parraInternal: parraInternal)
 
-        self._alertManager = State(
-            wrappedValue: parraInternal.alertManager
-        )
-
         ParraThemeManager.shared.current = parraInternal.configuration.theme
     }
 
@@ -60,7 +56,7 @@ struct ParraViewPreview<Content>: View where Content: View {
         .environment(\.parraAuthState, authStateManager.current)
         .environment(\.parraTheme, themeManager.current)
         .environment(\.parraPreferredAppearance, themeManager.preferredAppearanceBinding)
-        .environment(alertManager)
+        .environment(\.parraAlertManager, alertManager)
         .environment(factory)
         .environment(
             LaunchScreenStateManager(
@@ -81,7 +77,7 @@ struct ParraViewPreview<Content>: View where Content: View {
     private let configuration: ParraConfiguration
     private let parra: Parra
 
-    @State private var alertManager: AlertManager
+    @State private var alertManager: ParraAlertManager = .shared
     @State private var authStateManager: ParraAuthStateManager
     @State private var themeManager: ParraThemeManager = .shared
 }

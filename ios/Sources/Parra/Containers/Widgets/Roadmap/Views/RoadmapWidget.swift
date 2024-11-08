@@ -92,7 +92,7 @@ struct RoadmapWidget: ParraContainer {
             using: parraTheme
         )
         .environment(config)
-        .environment(alertManager)
+        .environment(\.parraAlertManager, alertManager)
         .environment(componentFactory)
         .environmentObject(contentObserver)
         .presentParraFeedbackFormWidget(
@@ -251,7 +251,7 @@ struct RoadmapWidget: ParraContainer {
     @Environment(\.parraTheme) private var parraTheme
 
     @State private var showNavigationDivider = false
-    @State private var alertManager = AlertManager()
+    @State private var alertManager: ParraAlertManager = .shared
 }
 
 #Preview {

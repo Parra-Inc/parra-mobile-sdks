@@ -51,10 +51,6 @@ public struct ParraContainerPreview<ContainerType>: View
         )
 
         Parra.default.parraInternal = parra.parraInternal
-
-        self._alertManager = State(
-            wrappedValue: parra.parraInternal.alertManager
-        )
     }
 
     // MARK: - Public
@@ -67,7 +63,7 @@ public struct ParraContainerPreview<ContainerType>: View
         AnyView(content(parra, factory, config))
             .environment(config)
             .environment(factory)
-            .environment(alertManager)
+            .environment(\.parraAlertManager, alertManager)
             .environment(\.parra, parra)
             .environment(\.parraAuthState, authStateManager.current)
             .environment(
@@ -92,7 +88,7 @@ public struct ParraContainerPreview<ContainerType>: View
     private let parra: Parra
 
     @State private var authStateManager: ParraAuthStateManager
-    @State private var alertManager: AlertManager
+    @State private var alertManager: ParraAlertManager = .shared
     @State private var themeManager: ParraThemeManager = .shared
     @State private var userProperties: ParraUserProperties = .shared
 }
