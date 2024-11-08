@@ -117,7 +117,7 @@ extension StorefrontWidget {
         }
 
         @MainActor
-        func loadInitialFeedItems() {
+        func loadInitialProducts() {
             if !wasPreloaded {
                 productPaginator.loadMore()
             }

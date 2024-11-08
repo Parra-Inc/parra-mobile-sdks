@@ -126,7 +126,7 @@ struct StorefrontWidget: ParraContainer {
             )
         }
         .onAppear {
-            contentObserver.loadInitialFeedItems()
+            contentObserver.loadInitialProducts()
         }
     }
 
