@@ -24,11 +24,6 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
 
             StorefrontAnalytics.makePurchase(orderDetails)
 
-            performCartSetup(
-                as: Parra.currentUser,
-                forceRefresh: true
-            )
-
             UIViewController.topMostViewController()?.dismiss(
                 animated: true
             ) {

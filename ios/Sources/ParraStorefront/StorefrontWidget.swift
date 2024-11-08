@@ -23,7 +23,7 @@ struct StorefrontWidget: ParraContainer {
     // MARK: - Public
 
     public var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             VStack {
                 ProductGridView(
                     products: contentObserver.productPaginator.items
@@ -141,7 +141,7 @@ struct StorefrontWidget: ParraContainer {
                 set: { _ in }
             )
         ) {
-            contentObserver.cartState = .loading
+            navigationPath = NavigationPath()
 
             contentObserver.refreshExpiredCart()
         } content: {
@@ -166,6 +166,8 @@ struct StorefrontWidget: ParraContainer {
     }
 
     // MARK: - Private
+
+    @State private var navigationPath = NavigationPath()
 
     @Environment(\.parra) private var parra
     @Environment(\.parraAuthState) private var parraAuthState
