@@ -33,6 +33,7 @@ extension ParraUser.Info: ParraFixture {
         properties: [:],
         metadata: [:],
         settings: [:],
+        entitlements: [],
         identities: [
             ParraIdentity(
                 id: .uuid,

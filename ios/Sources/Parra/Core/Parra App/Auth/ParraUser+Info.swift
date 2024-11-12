@@ -8,6 +8,13 @@
 
 import Foundation
 
+public struct ParraUserEntitlement: Codable, Equatable, Hashable, Identifiable {
+    public let id: String
+    public let key: String
+}
+
+// MARK: - ParraUser.Info
+
 // ! Important: Changing keys will result in user logouts when the persisted
 //              info/credential objects are unable to be parsed on app launch.
 public extension ParraUser {
@@ -38,6 +45,7 @@ public extension ParraUser {
             properties: [String: ParraAnyCodable],
             metadata: [String: ParraAnyCodable],
             settings: [String: ParraAnyCodable],
+            entitlements: [ParraUserEntitlement],
             identities: [ParraIdentity],
             isAnonymous: Bool,
             hasPassword: Bool
@@ -64,6 +72,7 @@ public extension ParraUser {
             self.lastLoginAt = lastLoginAt
             self.properties = properties
             self.metadata = metadata
+            self.entitlements = entitlements
             self.settings = settings
             self.identities = identities
             self.isAnonymous = isAnonymous
@@ -180,6 +189,13 @@ public extension ParraUser {
                     [String: ParraAnyCodable].self,
                     forKey: .settings
                 )
+
+            self.entitlements = try container
+                .decodeIfPresent(
+                    PartiallyDecodableArray<ParraUserEntitlement>.self,
+                    forKey: .entitlements
+                )?.elements ?? []
+
             self.identities = try container
                 .decodeIfPresent(
                     [ParraIdentity].self,
@@ -223,6 +239,7 @@ public extension ParraUser {
         public let lastLoginAt: Date?
         public internal(set) var properties: [String: ParraAnyCodable]
         public internal(set) var metadata: [String: ParraAnyCodable]
+        public internal(set) var entitlements: [ParraUserEntitlement]
 
         public let identities: [ParraIdentity]
         public let isAnonymous: Bool
