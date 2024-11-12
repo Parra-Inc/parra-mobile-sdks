@@ -63,11 +63,11 @@ extension StorefrontWidget.ContentObserver: CheckoutDelegate {
                 refreshExpiredCart()
             default:
                 let message: String = switch error {
-                case .checkoutUnavailable(let message, _, let recoverable):
+                case .checkoutUnavailable(let message, _, _):
                     message
-                case .configurationError(let message, _, let recoverable):
+                case .configurationError(let message, _, _):
                     message
-                case .sdkError(let underlying, let recoverable):
+                case .sdkError(let underlying, _):
                     underlying.localizedDescription
                 default:
                     "Unknown error"

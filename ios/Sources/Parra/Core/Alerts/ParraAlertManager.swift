@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@MainActor
 @Observable
 public final class ParraAlertManager {
     // MARK: - Lifecycle
@@ -21,6 +20,7 @@ public final class ParraAlertManager {
 
     // MARK: - Internal
 
-    var currentLoadingIndicator: LoadingIndicator?
-    var currentToast: Toast?
+    @MainActor var currentLoadingIndicator: LoadingIndicator?
+
+    @MainActor var currentToast: Toast?
 }

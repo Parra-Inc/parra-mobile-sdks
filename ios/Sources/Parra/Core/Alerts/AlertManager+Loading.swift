@@ -24,6 +24,7 @@ public extension ParraAlertManager {
         }
     }
 
+    @MainActor
     func showLoadingIndicator(
         content: ParraLoadingIndicatorContent,
         attributes: ParraAttributes.LoadingIndicator? = nil,
@@ -37,6 +38,7 @@ public extension ParraAlertManager {
         )
     }
 
+    @MainActor
     func dismissLoadingIndicator() {
         currentLoadingIndicator = nil
     }

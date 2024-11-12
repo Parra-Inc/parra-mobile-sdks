@@ -143,12 +143,13 @@ extension StorefrontWidget {
                 userFacingMessage: errorMessage,
                 underlyingError: .system(error),
                 in: .topCenter,
-                for: 5.0
-            ) {
-                if !isRecoverable {
-                    self.refreshExpiredCart()
+                for: 5.0,
+                onDismiss: {
+                    if !isRecoverable {
+                        self.refreshExpiredCart()
+                    }
                 }
-            }
+            )
         }
 
         @MainActor

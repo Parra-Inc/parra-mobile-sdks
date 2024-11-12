@@ -76,6 +76,7 @@ public extension ParraAlertManager {
         }
     }
 
+    @MainActor
     func showToast(
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25,
@@ -102,6 +103,7 @@ public extension ParraAlertManager {
         )
     }
 
+    @MainActor
     func showSuccessToast(
         title: String = "Success!",
         subtitle: String,
@@ -129,6 +131,7 @@ public extension ParraAlertManager {
         )
     }
 
+    @MainActor
     func showErrorToast(
         title: String = "Error",
         userFacingMessage: String,
@@ -157,6 +160,7 @@ public extension ParraAlertManager {
         )
     }
 
+    @MainActor
     internal func showWhatsNewToast(
         for newInstalledVersionInfo: ParraNewInstalledVersionInfo,
         in location: ToastLocation = .bottomCenter,
@@ -187,6 +191,7 @@ public extension ParraAlertManager {
         )
     }
 
+    @MainActor
     func dismissToast() {
         currentToast = nil
     }
