@@ -1022,11 +1022,6 @@ public struct ParraDomain: Codable, Equatable, Hashable, Identifiable {
     }
 }
 
-public struct ParraEntitlement: Codable, Equatable, Hashable {
-    public init(
-    ) {}
-}
-
 public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable {
     // MARK: - Lifecycle
 
@@ -1043,7 +1038,6 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
         logo: ParraImageAssetStub?,
         domains: [ParraDomain]?,
         urls: [URL]?,
-        entitlements: [ParraEntitlement]?,
         hideBranding: Bool
     ) {
         self.id = id
@@ -1058,7 +1052,6 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
         self.logo = logo
         self.domains = .init(domains ?? [])
         self.urls = urls
-        self.entitlements = .init(entitlements ?? [])
         self.hideBranding = hideBranding
     }
 
@@ -1078,7 +1071,6 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
     public let logo: ParraImageAssetStub?
     public let domains: PartiallyDecodableArray<ParraDomain>?
     public let urls: [URL]?
-    public let entitlements: PartiallyDecodableArray<ParraEntitlement>?
     /// Parra branding is hidden within the SDK for some paid plans.
     public let hideBranding: Bool
 
@@ -1097,7 +1089,6 @@ public struct ParraTenantAppInfoStub: Codable, Equatable, Hashable, Identifiable
         case logo
         case domains
         case urls
-        case entitlements
         case hideBranding
     }
 }
@@ -1255,7 +1246,6 @@ public final class ParraAppInfo: Codable, Equatable,
             logo: nil,
             domains: nil,
             urls: nil,
-            entitlements: nil,
             hideBranding: false
         ),
         auth: ParraAppAuthInfo(
