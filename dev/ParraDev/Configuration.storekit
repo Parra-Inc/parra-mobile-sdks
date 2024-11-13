@@ -1,0 +1,174 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "5F3B427A",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "4EEAFE70",
+      "localizations" : [
+        {
+          "description" : "Get all the latest product updates and content that you crave!",
+          "displayName" : "Premium Subscription",
+          "locale" : "en_US"
+        }
+      ],
+      "name" : "premium_subscription",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "11FE1E0E",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "All of Parra's best features in one bundle!",
+              "displayName" : "Parra Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "PARRA_DEV_PREMIUM_WEEKLY",
+          "recurringSubscriptionPeriod" : "P1W",
+          "referenceName" : "Parra Premium Weekly Subscription ",
+          "subscriptionGroupID" : "4EEAFE70",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "5.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "5F672FD9",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "All of Parra's best features in one bundle!",
+              "displayName" : "Parra Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "PARRA_DEV_PREMIUM_MONTHLY",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Parra Premium Monthly Subscription",
+          "subscriptionGroupID" : "4EEAFE70",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "29.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "D36FFCD7",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "All of Parra's best features in one bundle!",
+              "displayName" : "Parra Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "PARRA_DEV_PREMIUM_YEARLY",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Parra Premium Yearly Subscription",
+          "subscriptionGroupID" : "4EEAFE70",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
