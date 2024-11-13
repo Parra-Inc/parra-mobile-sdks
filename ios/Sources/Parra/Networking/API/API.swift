@@ -32,6 +32,7 @@ final class API {
     func hitEndpoint<Response>(
         _ endpoint: ApiEndpoint,
         queryItems: [String: String] = [:],
+        config: RequestConfig = .default,
         cachePolicy: URLRequest.CachePolicy? = nil,
         body: some Encodable = EmptyRequestObject(),
         timeout: TimeInterval? = nil
@@ -40,6 +41,7 @@ final class API {
             await apiResourceServer.hitApiEndpoint(
                 endpoint: endpoint,
                 queryItems: queryItems,
+                config: config,
                 cachePolicy: cachePolicy,
                 body: body,
                 timeout: timeout
