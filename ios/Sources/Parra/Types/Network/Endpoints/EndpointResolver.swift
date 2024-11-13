@@ -192,6 +192,10 @@ enum EndpointResolver {
             )
 
             return "tenants/\(tenantId)/users/\(userId)/settings/items/\(settingsItemId)/value"
+        case .getPaywall:
+            return "tenants/\(tenantId)/applications/\(applicationId)/paywall"
+        case .postPurchases:
+            return "tenants/\(tenantId)/applications/\(applicationId)/purchases"
         }
     }
 

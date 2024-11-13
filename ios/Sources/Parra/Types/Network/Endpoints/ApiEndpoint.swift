@@ -61,6 +61,10 @@ enum ApiEndpoint: Endpoint {
     case putUpdateSingleUserProperty(propertyKey: String)
     case deleteSingleUserProperty(propertyKey: String)
 
+    // Purchases
+    case getPaywall
+    case postPurchases
+
     // Feeds
 
     case getPaginateFeed(feedId: String)
@@ -72,12 +76,12 @@ enum ApiEndpoint: Endpoint {
         case .getCards, .getFeedbackForm, .getRoadmap, .getPaginateTickets,
              .getRelease, .getPaginateReleases, .getAppInfo, .getUserInfo,
              .getUserProperties, .getPaginateFeed,
-             .getUserSettingsLayouts, .getUserSettingsLayout:
+             .getUserSettingsLayouts, .getUserSettingsLayout, .getPaywall:
             return .get
         case .postBulkAnswerQuestions, .postSubmitFeedbackForm,
              .postBulkSubmitSessions,
              .postPushTokens, .postVoteForTicket,
-             .postLogin, .postLogout, .postUpdateAvatar:
+             .postLogin, .postLogout, .postUpdateAvatar, .postPurchases:
             return .post
         case .updateUserInfo, .putReplaceUserProperties,
              .putUpdateSingleUserProperty, .putUpdateUserSetting:
@@ -147,6 +151,10 @@ enum ApiEndpoint: Endpoint {
             return "tenants/:tenantId/users/:userId/settings/views/:layoutId"
         case .putUpdateUserSetting:
             return "tenants/:tenantId/users/:userId/settings/items/:settingsItemIdOrKey/value"
+        case .getPaywall:
+            return "tenants/:tenantId/applications/:applicationId/paywall"
+        case .postPurchases:
+            return "tenants/:tenantId/applications/:applicationId/purchases"
         }
     }
 
