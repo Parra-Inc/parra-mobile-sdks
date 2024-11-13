@@ -170,7 +170,7 @@ class ParraInternal {
     func performPostAuthLaunchActions(
         for user: ParraUser
     ) async throws {
-        await ParraUserSettings.shared.updateSettings(user.info.settings)
+        await performUserUpdates(on: user)
 
         try await withThrowingDiscardingTaskGroup { taskGroup in
             taskGroup.addTask {
@@ -198,6 +198,7 @@ class ParraInternal {
 
         ParraUserProperties.shared.reset()
         ParraUserSettings.shared.reset()
+        ParraUserEntitlements.shared.reset()
 
         sessionManager.endSession()
 
@@ -222,13 +223,9 @@ class ParraInternal {
 
         do {
             if let updatedUser = try await authService.refreshUserInfo() {
-                ParraUserProperties.shared
-                    .forceSetStore(updatedUser.info.properties)
-
-                ParraUserSettings.shared
-                    .updateSettings(updatedUser.info.settings)
+                performUserUpdates(on: updatedUser)
             } else {
-                ParraUserSettings.shared.updateSettings(user.info.settings)
+                performUserUpdates(on: user)
             }
         } catch {
             logger.error("Failed to refresh user info on app launch", error)
@@ -247,6 +244,18 @@ class ParraInternal {
 
             await performPostLoginSingleRunActions()
         }
+    }
+
+    @MainActor
+    private func performUserUpdates(on updatedUser: ParraUser) {
+        ParraUserProperties.shared
+            .forceSetStore(updatedUser.info.properties)
+
+        ParraUserSettings.shared
+            .updateSettings(updatedUser.info.settings)
+
+        ParraUserEntitlements.shared
+            .updateEntitlements(updatedUser.info.entitlements)
     }
 
     private func performPostLoginSingleRunActions() async {

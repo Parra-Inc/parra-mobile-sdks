@@ -366,6 +366,15 @@ final class AuthService {
             timeout: 10.0
         )
 
+        await ParraUserProperties.shared
+            .forceSetStore(response.user.properties)
+
+        await ParraUserSettings.shared
+            .updateSettings(response.user.settings)
+
+        await ParraUserEntitlements.shared
+            .updateEntitlements(response.user.entitlements)
+
         return try await applyUserInfoUpdate(response.user)
     }
 
@@ -513,6 +522,15 @@ final class AuthService {
                 credential: credential,
                 info: response.user
             )
+
+            await ParraUserProperties.shared
+                .forceSetStore(response.user.properties)
+
+            await ParraUserSettings.shared
+                .updateSettings(response.user.settings)
+
+            await ParraUserEntitlements.shared
+                .updateEntitlements(response.user.entitlements)
 
             if user.info.isAnonymous {
                 await applyUserUpdate(.anonymous(user))
