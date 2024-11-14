@@ -126,14 +126,17 @@ public struct ParraContentCardAction: Codable, Equatable, Hashable {
     // MARK: - Lifecycle
 
     init(
-        url: URL
+        url: URL,
+        confirmationMessage: String?
     ) {
         self.url = url
+        self.confirmationMessage = confirmationMessage
     }
 
     // MARK: - Public
 
     public let url: URL
+    public let confirmationMessage: String?
 }
 
 public struct ParraContentCardBackground: Codable, Equatable, Hashable {
@@ -161,7 +164,8 @@ public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
         backgroundImage: ParraContentCardBackground?,
         title: String?,
         description: String?,
-        action: ParraContentCardAction?
+        action: ParraContentCardAction?,
+        badge: String?
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -171,6 +175,7 @@ public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
         self.title = title
         self.description = description
         self.action = action
+        self.badge = badge
     }
 
     // MARK: - Public
@@ -183,6 +188,7 @@ public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
     public let title: String?
     public let description: String?
     public let action: ParraContentCardAction?
+    public let badge: String?
 
     // MARK: - Internal
 
@@ -195,6 +201,7 @@ public struct ParraContentCard: Codable, Equatable, Hashable, Identifiable {
         case title
         case description
         case action
+        case badge
     }
 }
 

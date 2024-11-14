@@ -35,7 +35,8 @@ extension ParraFeedItem: ParraFixture {
                     ),
                     title: "Good news, everyone!",
                     description: nil,
-                    action: nil
+                    action: nil,
+                    badge: "Paid Sponsorship"
                 )
             )
         )

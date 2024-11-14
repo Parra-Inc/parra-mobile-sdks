@@ -17,9 +17,13 @@ struct FeedContentCardView: View {
 
     var body: some View {
         Button(action: {
-            performActionForFeedItemData(
-                .contentCard(contentCard)
-            )
+            if let message = contentCard.action?.confirmationMessage, !message.isEmpty {
+                isConfirmationPresented = true
+            } else {
+                performActionForFeedItemData(
+                    .contentCard(contentCard)
+                )
+            }
         }) {
             ZStack(alignment: .center) {
                 backgroundImage
@@ -54,14 +58,34 @@ struct FeedContentCardView: View {
                 )
             }
         }
+        .alert(
+            "Open link?",
+            isPresented: $isConfirmationPresented
+        ) {
+            Button(role: .cancel) {} label: {
+                Text("Cancel")
+            }
+
+            Button {
+                performActionForFeedItemData(
+                    .contentCard(contentCard)
+                )
+            } label: {
+                Text("Open link")
+            }
+        } message: {
+            Text(contentCard.action?.confirmationMessage ?? "")
+        }
     }
 
     // MARK: - Private
 
+    @State private var isConfirmationPresented: Bool = false
+
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.redactionReasons) private var redactionReasons
+    @Environment(\.colorScheme) private var colorScheme
 
     private var hasAction: Bool {
         return contentCard.action != nil
@@ -72,7 +96,7 @@ struct FeedContentCardView: View {
     }
 
     private var palette: ParraColorPalette {
-        return parraTheme.darkPalette ?? .defaultDark
+        return parraTheme.palette
     }
 
     private var backgroundImage: some View {
@@ -103,23 +127,34 @@ struct FeedContentCardView: View {
 
     private var topBar: some View {
         HStack(alignment: .top) {
-            // Use this if we ever decide to support showing time posted on content cards.
-//            componentFactory.buildLabel(
-//                text: contentCard.createdAt.timeAgo(
-//                    dateTimeStyle: .numeric
-//                ),
-//                localAttributes: ParraAttributes.Label(
-//                    text: ParraAttributes.Text(
-//                        style: .caption2,
-//                        color: palette.secondaryText.toParraColor(),
-//                        alignment: .leading
-//                    )
-//                )
-//            )
+            if let badge = contentCard.badge, redactionReasons.isEmpty {
+                componentFactory.buildLabel(
+                    text: badge,
+                    localAttributes: ParraAttributes.Label(
+                        text: ParraAttributes.Text(
+                            style: .caption2,
+                            color: colorScheme == .dark
+                                ? palette.primaryText.shade950.toParraColor()
+                                : palette.primaryText.shade200.toParraColor(),
+                            alignment: .leading
+                        ),
+                        cornerRadius: .full,
+                        padding: .custom(
+                            EdgeInsets(vertical: 0, horizontal: 8)
+                        ),
+                        background: palette.secondary
+                            .toParraColor()
+                            .opacity(0.8),
+                        frame: .fixed(
+                            .init(height: 20, alignment: .leading)
+                        )
+                    )
+                )
+            }
 
             Spacer()
 
-            if hasAction {
+            if hasAction && redactionReasons.isEmpty {
                 ZStack(alignment: .center) {
                     Color(palette.primaryBackground)
                         .frame(width: 20, height: 20)
