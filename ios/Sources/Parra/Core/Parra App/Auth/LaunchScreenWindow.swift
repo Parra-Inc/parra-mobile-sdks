@@ -133,6 +133,7 @@ struct LaunchScreenWindow<Content>: View where Content: View {
                     .preferredColorScheme(ParraThemeManager.shared.preferredColorScheme)
             }
         }
+        .background(ParraThemeManager.shared.current.palette.primaryBackground)
     }
 
     @ViewBuilder

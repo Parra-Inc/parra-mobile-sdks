@@ -217,7 +217,7 @@ struct OrderReceiptView: View {
     ParraAppPreview(
         configuration: ParraConfiguration(
             theme: ParraTheme(
-                lightPalette: ParraColorPalette(
+                palette: ParraColorPalette(
                     primary: ParraColorSwatch(
                         primary: Color(
                             red: 255 / 255.0,

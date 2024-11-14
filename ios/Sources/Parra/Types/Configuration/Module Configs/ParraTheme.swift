@@ -13,6 +13,20 @@ public struct ParraTheme: ParraConfigurationOptionType {
     // MARK: - Lifecycle
 
     public init(
+        palette: ParraColorPalette,
+        typography: ParraTypography = .default,
+        cornerRadius: ParraCornerRadiusConfig = .default,
+        padding: ParraPaddingConfig = .default
+    ) {
+        self.lightPalette = palette
+        self.darkPalette = palette
+        self.palette = palette
+        self.typography = typography
+        self.cornerRadius = cornerRadius
+        self.padding = padding
+    }
+
+    public init(
         lightPalette: ParraColorPalette,
         darkPalette: ParraColorPalette? = nil,
         typography: ParraTypography = .default,
