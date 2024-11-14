@@ -40,6 +40,7 @@ struct UserSettingsBoolItemView: View {
             Toggle(isOn: $currentValue) {
                 EmptyView()
             }
+            .tint(theme.palette.primary.toParraColor())
         }
         .onChange(of: currentValue) { _, newValue in
             onValueChange(
@@ -57,4 +58,5 @@ struct UserSettingsBoolItemView: View {
     // MARK: - Private
 
     @Environment(\.parraUserSettings) private var settings
+    @Environment(\.parraTheme) private var theme
 }
