@@ -42,22 +42,27 @@ struct PriceLabelView: View {
             base
                 .font(.callout)
                 .fontWeight(.medium)
-                .foregroundColor(.secondary)
+                .foregroundStyle(theme.palette.secondaryText)
         case .cartItemTotal:
             base
                 .font(.callout)
                 .fontWeight(.medium)
-                .foregroundStyle(.black)
+                .foregroundStyle(theme.palette.primaryText)
         case .cartItemSubtotal:
             base
                 .font(.callout)
                 .fontWeight(.regular)
-                .foregroundColor(.secondary)
+                .foregroundStyle(theme.palette.secondaryText)
                 .strikethrough()
         case .checkout:
             base
                 .font(.callout)
                 .fontWeight(.medium)
+                .foregroundStyle(theme.palette.primaryText)
         }
     }
+
+    // MARK: - Private
+
+    @Environment(\.parraTheme) private var theme
 }
