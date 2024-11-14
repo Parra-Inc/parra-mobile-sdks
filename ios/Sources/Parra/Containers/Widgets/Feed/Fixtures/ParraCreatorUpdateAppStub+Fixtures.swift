@@ -60,7 +60,14 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                             )!
                         )
                     )
-                ]
+                ],
+                attachmentPaywall: ParraAppPaywallConfiguration(
+                    entitlement: ParraUserEntitlement(
+                        id: .uuid,
+                        key: "something-important"
+                    ),
+                    context: "ctx"
+                )
             )
         ]
     }

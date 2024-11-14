@@ -16,12 +16,16 @@ struct CreatorUpdateAttachmentsView: View {
         innerSpacing: CGFloat = 4.0,
         outerSpacing: CGFloat = 16.0,
         maxToDisplay: Int = 4,
+        paywalled: Bool = false,
+        attemptUnlock: (() async -> Void)? = nil,
         didSelectAsset: ((ParraImageAssetStub) -> Void)? = nil
     ) {
         self.containerGeometry = containerGeometry
         self.innerSpacing = innerSpacing
         self.outerSpacing = outerSpacing
         self.maxToDisplay = maxToDisplay
+        self.paywalled = paywalled
+        self.attemptUnlock = attemptUnlock
         self.didSelectAsset = didSelectAsset
 
         let images = attachments.compactMap { attachment in
@@ -299,10 +303,13 @@ struct CreatorUpdateAttachmentsView: View {
     private let innerSpacing: CGFloat
     private let outerSpacing: CGFloat
     private let maxToDisplay: Int
+    private let paywalled: Bool
     private let didSelectAsset: ((ParraImageAssetStub) -> Void)?
+    private let attemptUnlock: (() async -> Void)?
 
     @State private var selectedPhoto: ParraImageAssetStub?
     @State private var isShowingFullScreen = false
+    @State private var isUnlocking = false
 
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
@@ -311,12 +318,7 @@ struct CreatorUpdateAttachmentsView: View {
         for image: ParraImageAssetStub
     ) -> some View {
         Button {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                selectedPhoto = image
-                isShowingFullScreen = true
-            }
-
-            didSelectAsset?(image)
+            handleSelectedImage(image)
         } label: {
             Color.clear.background {
                 componentFactory.buildAsyncImage(
@@ -328,9 +330,14 @@ struct CreatorUpdateAttachmentsView: View {
                         originalSize: image.size
                     )
                 )
+                .blur(radius: paywalled ? 10 : 0, opaque: true)
+                .overlay(alignment: .center) {
+                    renderPaywallOverlay()
+                }
             }
         }
         .buttonStyle(ContentCardButtonStyle())
+        .disabled(isUnlocking)
     }
 
     private func renderSelectMoreButton(
@@ -338,7 +345,7 @@ struct CreatorUpdateAttachmentsView: View {
         amount: Int
     ) -> some View {
         Button {
-            didSelectAsset?(image)
+            handleSelectedImage(image)
         } label: {
             Color.clear.background {
                 ZStack {
@@ -359,9 +366,56 @@ struct CreatorUpdateAttachmentsView: View {
                         .bold()
                         .foregroundStyle(.white)
                 }
+                .blur(radius: paywalled ? 10 : 0, opaque: true)
+                .overlay(alignment: .center) {
+                    renderPaywallOverlay()
+                }
             }
         }
+        .disabled(isUnlocking)
         .buttonStyle(ContentCardButtonStyle())
+    }
+
+    @ViewBuilder
+    private func renderPaywallOverlay() -> some View {
+        if paywalled {
+            if isUnlocking {
+                ProgressView()
+            } else {
+                Image(systemName: "lock.circle")
+                    .resizable()
+                    .frame(
+                        width: 36,
+                        height: 36
+                    )
+                    .foregroundStyle(
+                        parraTheme.palette.primary.toParraColor()
+                    )
+            }
+        }
+    }
+
+    private func handleSelectedImage(
+        _ image: ParraImageAssetStub
+    ) {
+        if paywalled {
+            Task {
+                if let attemptUnlock {
+                    isUnlocking = true
+
+                    await attemptUnlock()
+
+                    isUnlocking = false
+                }
+            }
+        } else {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                selectedPhoto = image
+                isShowingFullScreen = true
+            }
+
+            didSelectAsset?(image)
+        }
     }
 }
 

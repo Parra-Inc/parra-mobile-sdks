@@ -26,11 +26,25 @@ extension API {
         )
     }
 
-    func completePurchase(receipt: String) async throws
+    func reportPurchase(with receipt: String) async throws
         -> ParraUserEntitlementsResponseBody
     {
         let body: [String: String] = [
-            "receipt": receipt
+            "apple_receipt": receipt
+        ]
+
+        return try await hitEndpoint(
+            .postPurchases,
+            config: .defaultWithRetries,
+            body: body
+        )
+    }
+
+    func reportPurchases(with receipts: [String]) async throws
+        -> ParraUserEntitlementsResponseBody
+    {
+        let body: [String: [String]] = [
+            "apple_receipts": receipts
         ]
 
         return try await hitEndpoint(

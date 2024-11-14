@@ -75,10 +75,25 @@ struct FeedCreatorUpdateView: View {
             if let attachments = creatorUpdate.attachments?.elements,
                !attachments.isEmpty
             {
-                CreatorUpdateAttachmentsView(
-                    attachments: attachments,
-                    containerGeometry: containerGeometry
-                )
+                ParraPaywalledContentView(
+                    entitlement: creatorUpdate.attachmentPaywall?.entitlement.key,
+                    context: creatorUpdate.attachmentPaywall?.context
+                ) { unlock in
+                    CreatorUpdateAttachmentsView(
+                        attachments: attachments,
+                        containerGeometry: containerGeometry,
+                        paywalled: true
+                    ) {
+                        do {
+                            try await unlock()
+                        } catch {}
+                    }
+                } unlockedContentBuilder: {
+                    CreatorUpdateAttachmentsView(
+                        attachments: attachments,
+                        containerGeometry: containerGeometry
+                    )
+                }
             }
         }
         .background(parraTheme.palette.secondaryBackground)
