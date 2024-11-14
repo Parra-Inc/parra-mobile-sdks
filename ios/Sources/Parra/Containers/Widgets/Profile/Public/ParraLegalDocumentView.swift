@@ -21,8 +21,25 @@ public struct ParraLegalDocumentView: View {
 
     public var body: some View {
         WebView(
-            url: legalDocument.url
+            url: legalDocument.url,
+            isLoading: $isLoading
         )
         .navigationBarTitleDisplayMode(.inline)
+        .background(theme.palette.primaryBackground)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if isLoading {
+                    ProgressView()
+                } else {
+                    ShareLink(item: legalDocument.url)
+                }
+            }
+        }
     }
+
+    // MARK: - Private
+
+    @State private var isLoading: Bool = true
+
+    @Environment(\.parraTheme) private var theme
 }
