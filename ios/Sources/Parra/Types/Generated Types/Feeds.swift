@@ -381,7 +381,8 @@ public struct ParraCreatorUpdateAppStub: Codable, Equatable, Hashable, Identifia
         title: String?,
         body: String?,
         sender: ParraCreatorUpdateSenderStub?,
-        attachments: [ParraCreatorUpdateAttachmentStub]?
+        attachments: [ParraCreatorUpdateAttachmentStub]?,
+        attachmentPaywall: ParraAppPaywallConfiguration?
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -391,6 +392,7 @@ public struct ParraCreatorUpdateAppStub: Codable, Equatable, Hashable, Identifia
         self.body = body
         self.sender = sender
         self.attachments = .init(attachments ?? [])
+        self.attachmentPaywall = attachmentPaywall
     }
 
     // MARK: - Public
@@ -403,6 +405,7 @@ public struct ParraCreatorUpdateAppStub: Codable, Equatable, Hashable, Identifia
     public let body: String?
     public let sender: ParraCreatorUpdateSenderStub?
     public let attachments: PartiallyDecodableArray<ParraCreatorUpdateAttachmentStub>?
+    public let attachmentPaywall: ParraAppPaywallConfiguration?
 
     // MARK: - Internal
 
@@ -415,5 +418,11 @@ public struct ParraCreatorUpdateAppStub: Codable, Equatable, Hashable, Identifia
         case body
         case sender
         case attachments
+        case attachmentPaywall
     }
+}
+
+public struct ParraAppPaywallConfiguration: Codable, Equatable, Hashable {
+    public let entitlement: ParraUserEntitlement
+    public let context: String?
 }
