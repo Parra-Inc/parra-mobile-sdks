@@ -36,13 +36,13 @@ struct PaywallWidget: ParraContainer {
             .subscriptionStorePickerItemBackground(
                 theme.palette.primaryBackground.toParraColor()
             )
-            .optionalSubscriptionStorePolicyDestination(
-                url: appInfo.legal.privacyPolicy?.url,
-                for: SubscriptionStorePolicyKind.privacyPolicy
+            .subscriptionPolicy(
+                for: appInfo.legal.privacyPolicy,
+                kind: .privacyPolicy
             )
-            .optionalSubscriptionStorePolicyDestination(
-                url: appInfo.legal.termsOfService?.url,
-                for: SubscriptionStorePolicyKind.termsOfService
+            .subscriptionPolicy(
+                for: appInfo.legal.termsOfService,
+                kind: .termsOfService
             )
             .versionedSubscriptionStoreControlStyle()
     }
@@ -56,9 +56,11 @@ struct PaywallWidget: ParraContainer {
 
     @ViewBuilder private var marketingContent: some View {
         VStack(alignment: .center) {
-            componentFactory.buildImage(
-                content: contentObserver.content.image
-            )
+            withContent(content: contentObserver.content.image) { content in
+                componentFactory.buildAsyncImage(
+                    content: content
+                )
+            }
             .frame(
                 width: 100,
                 height: 100
@@ -103,15 +105,16 @@ struct PaywallWidget: ParraContainer {
 
 extension View {
     @ViewBuilder
-    func optionalSubscriptionStorePolicyDestination(
-        url: URL?,
-        for button: SubscriptionStorePolicyKind
+    func subscriptionPolicy(
+        for legalDocument: ParraLegalDocument?,
+        kind: SubscriptionStorePolicyKind
     ) -> some View {
-        if let url {
+        if let legalDocument {
             subscriptionStorePolicyDestination(
-                url: url,
-                for: button
-            )
+                for: kind
+            ) {
+                ParraLegalDocumentView(legalDocument: legalDocument)
+            }
         } else {
             self
         }

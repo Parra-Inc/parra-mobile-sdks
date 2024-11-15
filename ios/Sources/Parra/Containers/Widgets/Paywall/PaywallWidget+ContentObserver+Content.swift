@@ -25,18 +25,15 @@ extension PaywallWidget.ContentObserver {
             )
 
             self.image = if let image = marketingContent?.productImage {
-                .asyncImage(
-                    url: image.url,
-                    originalSize: nil
-                )
+                ParraAsyncImageContent(url: image.url)
             } else {
                 if let tenantLogo = appInfo.tenant.logo {
-                    .asyncImage(
+                    ParraAsyncImageContent(
                         url: tenantLogo.url,
                         originalSize: tenantLogo.size
                     )
                 } else {
-                    .image(config.defaultImage, .original)
+                    nil
                 }
             }
         }
@@ -45,6 +42,6 @@ extension PaywallWidget.ContentObserver {
 
         let title: ParraLabelContent
         let subtitle: ParraLabelContent
-        let image: ParraImageContent
+        let image: ParraAsyncImageContent?
     }
 }

@@ -13,12 +13,10 @@ public final class ParraPaywallConfig: ParraContainerConfig {
     public init(
         defaultTitle: String = "Premium Membership",
         defaultSubtitle: String =
-            "Start a subscription to our premium membership to access this premium content.",
-        defaultImage: UIImage = UIImage(systemName: "sparkles")!
+            "Start a subscription to our premium membership to access this premium content."
     ) {
         self.defaultTitle = defaultTitle
         self.defaultSubtitle = defaultSubtitle
-        self.defaultImage = defaultImage
     }
 
     // MARK: - Public
@@ -27,5 +25,4 @@ public final class ParraPaywallConfig: ParraContainerConfig {
 
     public let defaultTitle: String
     public let defaultSubtitle: String
-    public let defaultImage: UIImage
 }
