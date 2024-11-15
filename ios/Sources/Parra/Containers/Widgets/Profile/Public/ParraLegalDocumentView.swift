@@ -25,6 +25,7 @@ public struct ParraLegalDocumentView: View {
             isLoading: $isLoading
         )
         .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(legalDocument.title)
         .background(theme.palette.primaryBackground)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
