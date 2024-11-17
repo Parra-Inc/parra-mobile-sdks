@@ -36,6 +36,14 @@ public struct PartiallyDecodableArray<Element>: Codable, Equatable,
             } catch {
                 try? container.skip()
 
+                #if DEBUG
+                if ParraInternal.isBundleIdDevApp() {
+                    fatalError(
+                        "Failed to decode array element: \(error.localizedDescription)"
+                    )
+                }
+                #endif
+
                 ParraLogger.error("Failed to decode an element", error)
             }
         }
