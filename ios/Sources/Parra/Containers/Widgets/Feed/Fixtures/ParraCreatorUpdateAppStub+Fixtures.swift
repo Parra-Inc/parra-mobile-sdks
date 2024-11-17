@@ -62,9 +62,10 @@ extension ParraCreatorUpdateAppStub: ParraFixture {
                     )
                 ],
                 attachmentPaywall: ParraAppPaywallConfiguration(
-                    entitlement: ParraUserEntitlement(
+                    entitlement: ParraEntitlement(
                         id: .uuid,
-                        key: "something-important"
+                        key: "something-important",
+                        title: "Something important"
                     ),
                     context: "ctx"
                 )

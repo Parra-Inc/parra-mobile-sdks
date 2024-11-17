@@ -9,9 +9,17 @@
 import Parra
 import SwiftUI
 
+struct FeedTab: View {
+    var body: some View {
+        ParraFeedWidget(feedId: "content")
+    }
+}
+
 struct ContentView: View {
     @StateObject private var navigationState = AppNavigationState.shared
     @Environment(\.parra) private var parra
+
+    @State var isPresentingPurchaseSheet: Bool = false
 
     var body: some View {
         TabView(selection: $navigationState.selectedTab) {
@@ -22,6 +30,12 @@ struct ContentView: View {
                 Label("App", systemImage: "app.dashed")
             }
             .tag(AppNavigationState.Tab.app)
+
+            FeedTab()
+                .tabItem {
+                    Label("Feed", systemImage: "app.dashed")
+                }
+                .tag(AppNavigationState.Tab.feed)
 
             SettingsTab(
                 navigationPath: $navigationState.profileTabNavigationPath

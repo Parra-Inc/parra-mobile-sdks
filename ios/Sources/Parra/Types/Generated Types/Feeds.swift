@@ -423,6 +423,6 @@ public struct ParraCreatorUpdateAppStub: Codable, Equatable, Hashable, Identifia
 }
 
 public struct ParraAppPaywallConfiguration: Codable, Equatable, Hashable {
-    public let entitlement: ParraUserEntitlement
+    public let entitlement: ParraEntitlement
     public let context: String?
 }

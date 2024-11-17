@@ -9,8 +9,10 @@ import StoreKit
 import SwiftUI
 
 public extension View {
-    /// Automatically fetches the feed with the provided id and
-    /// presents it in a sheet based on the value of the `isPresented` binding.
+    /// Presents a sheet that is meant to block the user from accessing content
+    /// without an active subscription. Pass the required entitlement to view
+    /// the content and an optional context string that allows you to remotely
+    /// define the content of the paywall.
     @MainActor
     func presentParraPaywall(
         for entitlement: String,

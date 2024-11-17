@@ -9,8 +9,20 @@
 import Foundation
 
 public struct ParraUserEntitlement: Codable, Equatable, Hashable, Identifiable {
+    // The ID of this entitlement, specific to this user.
+    public let id: String
+
+    // The ID of the entitlement itself.
+    public let entitlementId: String
+    public let key: String
+    public let title: String
+}
+
+public struct ParraEntitlement: Codable, Equatable, Hashable, Identifiable {
+    // The ID of the entitlement itself.
     public let id: String
     public let key: String
+    public let title: String
 }
 
 // MARK: - ParraUser.Info

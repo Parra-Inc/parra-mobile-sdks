@@ -33,6 +33,7 @@ enum DeepLink: String {
 class AppNavigationState: ObservableObject {
     enum Tab: Hashable {
         case app
+        case feed
         case profile
     }
 
