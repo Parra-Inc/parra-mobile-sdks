@@ -62,6 +62,20 @@ struct SettingsTab: View {
                 Section {
                     ReviewAppCell()
                     ShareCell()
+                }
+
+                Section {
+                    FeedCell()
+                    StorefrontCell()
+                    ManageSubscriptionsCell()
+                    RestorePurchasesCell()
+                    TipJarCell()
+                } header: {
+                    Label {
+                        Text("Experimental Features")
+                    } icon: {
+                        Image(systemName: "flask")
+                    }
                 } footer: {
                     SettingsFooter()
                 }

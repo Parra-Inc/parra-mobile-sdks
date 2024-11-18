@@ -1,8 +1,9 @@
 //
 //  ManageSubscriptionsCell.swift
-//  ParraDev
+//  {{ app.name.raw }}
 //
-//  Created by Mick MacCallum on 11/13/24.
+//  Bootstrapped with ❤️ by Parra on {{ "now" | date: "%m/%d/%Y" }}.
+//  Copyright © {{ "now" | date: "%Y" }} {{ tenant.name }}. All rights reserved.
 //
 
 import Parra

@@ -13,6 +13,8 @@ targets:
     platform: iOS
     deploymentTarget: {{ app.deployment_target }}
     sources: [{{ app.name.upper_camel }}]
+    scheme:
+      storeKitConfiguration: {{ app.name.upper_camel }}/Configuration.storekit
     info:
       path: {{ app.name.upper_camel }}/Info.plist
       properties:
@@ -59,6 +61,7 @@ targets:
           PROVISIONING_PROFILE_SPECIFIER: {{ app.code_sign.debug.profile_specifier }}
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
     dependencies:
+      - sdk: StoreKit.framework
       - package: Parra
         products:
           - Parra
