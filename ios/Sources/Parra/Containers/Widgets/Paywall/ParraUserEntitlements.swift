@@ -29,7 +29,15 @@ public final class ParraUserEntitlements {
     /// A publisher that enables subscribing to changes to the `current`
     /// property. Use this to receive notifications when the user's entitlements
     /// are updates. You can also use an `.onChange()` modifier with `current`.
-    public let currentPublisher = PassthroughSubject<[ParraUserEntitlement], Never>()
+    public let currentPublisher = PassthroughSubject<
+        [ParraUserEntitlement],
+        Never
+    >()
+
+    public let purchaseCompletePublisher = PassthroughSubject<
+        StoreKit.Transaction,
+        Never
+    >()
 
     /// A list of the entitlements belonging to the currently logged in user.
     public internal(set) var current: [ParraUserEntitlement] = [] {
@@ -194,7 +202,7 @@ public final class ParraUserEntitlements {
         )
 
         for (_, tx) in txReceipts.values {
-            await tx.finish()
+            await finishTransaction(tx)
         }
 
         let productIds = txReceipts.keys.joined(separator: ", ")
@@ -244,12 +252,25 @@ public final class ParraUserEntitlements {
                 ])
 
                 await updateEntitlements(result.entitlements)
-                await tx.finish()
+                await finishTransaction(tx)
             } catch {
                 logger.error("Failed to report purchase", error, [
                     "productId": tx.productID
                 ])
             }
+        }
+    }
+
+    private func finishTransaction(_ tx: StoreKit.Transaction) async {
+        logger.trace("Finishing transaction", [
+            "transactionId": String(tx.id),
+            "productId": tx.productID
+        ])
+
+        await tx.finish()
+
+        Task { @MainActor in
+            purchaseCompletePublisher.send(tx)
         }
     }
 }
