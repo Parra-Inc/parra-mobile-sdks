@@ -8,6 +8,10 @@
 import StoreKit
 import SwiftUI
 
+private let logger = Logger()
+
+// MARK: - TipJarWidget.ContentObserver
+
 extension TipJarWidget {
     @Observable
     class ContentObserver: ParraContainerContentObserver {
@@ -18,17 +22,13 @@ extension TipJarWidget {
         ) {
             self.initialParams = initialParams
 
-            self.content = Content(
-                config: initialParams.config
-            )
+            self.content = Content()
 
             switch initialParams.products {
             case .products(let products):
-                self.isLoading = false
-                self.products = products
+                self.state = .loaded(products)
             case .productIds(let ids):
-                self.isLoading = true
-                self.products = []
+                self.state = .loading(ids)
 
                 loadProducts(with: ids)
             }
@@ -36,11 +36,38 @@ extension TipJarWidget {
 
         // MARK: - Internal
 
+        enum LoadingState {
+            case loading([String])
+            case loaded([Product])
+            case failed(Error)
+
+            // MARK: - Internal
+
+            var productIds: [String] {
+                switch self {
+                case .failed:
+                    return []
+                case .loading(let productIds):
+                    return productIds
+                case .loaded(let products):
+                    return products.map(\.id)
+                }
+            }
+        }
+
         var content: Content
         let initialParams: InitialParams
 
-        var products: [Product]
-        var isLoading: Bool
+        private(set) var state: LoadingState
+
+        var isLoading: Bool {
+            switch state {
+            case .loading:
+                return true
+            default:
+                return false
+            }
+        }
 
         // MARK: - Private
 
@@ -52,7 +79,20 @@ extension TipJarWidget {
                     let products = try await Product.products(
                         for: productIds
                     ).reorder(by: productIds)
-                } catch {}
+
+                    withAnimation {
+                        self.state = .loaded(products)
+                    }
+                } catch {
+                    let ids = productIds.joined(separator: ", ")
+                    logger.error("Error loading tip jar products", error, [
+                        "productIds": "[\(ids)]"
+                    ])
+
+                    withAnimation {
+                        self.state = .failed(error)
+                    }
+                }
             }
         }
     }
