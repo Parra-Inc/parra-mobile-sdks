@@ -103,7 +103,7 @@ struct PaywallWidget: ParraContainer {
     }
 }
 
-extension View {
+private extension View {
     @ViewBuilder
     func subscriptionPolicy(
         for legalDocument: ParraLegalDocument?,
