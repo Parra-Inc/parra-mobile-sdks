@@ -23,7 +23,7 @@ struct FeedCell: View {
             symbol: "megaphone"
         )
         .presentParraFeedWidget(
-            by: "home",
+            by: "content",
             isPresented: $isPresented
         )
     }
@@ -31,6 +31,6 @@ struct FeedCell: View {
 
 #Preview {
     ParraAppPreview {
-        FeedbackCell()
+        FeedCell()
     }
 }
