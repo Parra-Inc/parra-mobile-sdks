@@ -110,6 +110,7 @@ public extension ParraAlertManager {
         in location: ToastLocation = .topCenter,
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25,
+        attributes: ParraAttributes.ToastAlert? = nil,
         primaryAction: (() -> Void)? = nil,
         onDismiss: (() -> Void)? = nil
     ) {
@@ -126,6 +127,7 @@ public extension ParraAlertManager {
                 icon: ParraAlertContent.defaultIcon(for: level),
                 dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
+            attributes: attributes,
             primaryAction: primaryAction,
             onDismiss: onDismiss
         )
@@ -139,6 +141,7 @@ public extension ParraAlertManager {
         in location: ToastLocation = .topCenter,
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25,
+        attributes: ParraAttributes.ToastAlert? = nil,
         primaryAction: (() -> Void)? = nil,
         onDismiss: (() -> Void)? = nil
     ) {
@@ -155,6 +158,7 @@ public extension ParraAlertManager {
                 icon: ParraAlertContent.defaultIcon(for: level),
                 dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
+            attributes: attributes,
             primaryAction: primaryAction,
             onDismiss: onDismiss
         )
@@ -166,6 +170,7 @@ public extension ParraAlertManager {
         in location: ToastLocation = .bottomCenter,
         for duration: TimeInterval = 8.0,
         animationDuration: TimeInterval = 0.25,
+        attributes: ParraAttributes.ToastAlert? = ParraAttributes.ToastAlert(),
         primaryAction: (() -> Void)? = nil,
         onDismiss: (() -> Void)? = nil
     ) {
@@ -185,7 +190,7 @@ public extension ParraAlertManager {
                 icon: ParraAlertContent.defaultIcon(for: level),
                 dismiss: ParraAlertContent.defaultDismiss(for: level)
             ),
-            attributes: ParraAttributes.ToastAlert(),
+            attributes: attributes,
             primaryAction: primaryAction,
             onDismiss: onDismiss
         )

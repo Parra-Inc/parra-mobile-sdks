@@ -66,7 +66,8 @@ struct AlertPresenter: ViewModifier {
                 level: alert.level,
                 content: alert.content,
                 onDismiss: alert.onDismiss,
-                primaryAction: alert.primaryAction
+                primaryAction: alert.primaryAction,
+                localAttributes: alert.attributes
             )
             .transition(transition)
         }
