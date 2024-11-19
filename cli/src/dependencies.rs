@@ -1,6 +1,8 @@
+use crate::logger::debug_println;
 use crate::types::dependency::SemanticVersion;
 use semver::{Version, VersionReq};
 use std::process::Command;
+use std::process::Output;
 use std::process::Stdio;
 use std::vec;
 
@@ -27,8 +29,12 @@ pub fn check_for_missing_dependencies(
 ) -> Vec<DerivedDependency> {
     let mut missing_deps = Vec::<DerivedDependency>::new();
 
+    debug_println!("Checking for missing dependencies");
+
     match is_xcode_version_valid(min_xcode_version) {
         Some(is_valid) => {
+            debug_println!("Xcode version is valid: {}", is_valid);
+
             if !is_valid {
                 // Xcode is installed but it's the wrong version
                 missing_deps.push(DerivedDependency::Xcode);
@@ -40,6 +46,7 @@ pub fn check_for_missing_dependencies(
             }
         }
         None => {
+            debug_println!("Xcode is not installed");
             missing_deps.push(DerivedDependency::Xcode);
             missing_deps.push(DerivedDependency::SimulatorRuntime);
         }
@@ -117,14 +124,131 @@ fn is_simulator_version_valid(min_version: SemanticVersion) -> bool {
         });
 }
 
+// most recent non-beta xcode version
+fn select_latest_xcode_version() {
+    debug_println!("Selecting latest Xcode version");
+
+    let xcodes_output = Command::new("xcodes")
+        .arg("installed")
+        .output()
+        .expect("Failed to execute xcodes installed");
+
+    let stdout = String::from_utf8_lossy(&xcodes_output.stdout);
+
+    // Store the parsed semver and the original version string to pass to Xcodes.
+    let mut greatest_version: Option<(Version, String)> = None;
+
+    for line in stdout.lines() {
+        // Attempt to extract the version number from the beginning of the line
+        let components: Vec<&str> = line.split_whitespace().collect();
+        let first = components.first();
+
+        if line.to_lowercase().contains("beta") {
+            debug_println!("Skipping Xcode beta version: {:?}", first);
+
+            continue;
+        }
+
+        if let Some(first) = first {
+            let version_str = ensure_full_semver(&first);
+            let version = Version::parse(&version_str);
+
+            match version {
+                Ok(version) => {
+                    if let Some(current) = greatest_version {
+                        if Version::gt(&version, &current.0) {
+                            debug_println!(
+                                "Found new greater Xcode version: {}",
+                                version.to_string()
+                            );
+
+                            greatest_version = Some((version, version_str))
+                        } else {
+                            greatest_version = Some(current);
+                        }
+                    } else {
+                        debug_println!(
+                            "First found Xcode version is: {}",
+                            version.to_string()
+                        );
+                        greatest_version = Some((version, version_str));
+                    }
+                }
+                Err(error) => {
+                    eprintln!("Error parsing Xcode version: {}", error);
+
+                    continue;
+                }
+            }
+        }
+    }
+
+    if let Some(greatest_version) = greatest_version {
+        println!(
+            "Enter password to select Xcode command line tools for version {}",
+            greatest_version.1
+        );
+
+        let select_output = Command::new("xcodes")
+            .arg("select")
+            .arg(greatest_version.1)
+            .output();
+
+        match select_output {
+            Ok(output) => {
+                let stdout = String::from_utf8_lossy(&output.stdout);
+                let stderr = String::from_utf8_lossy(&output.stderr);
+
+                debug_println!(
+                    "xcodes select succeeded with\nstatus: {:?}\nstdout: {}\nstderr: {}",
+                    output.status.code().unwrap_or_default().to_string(),
+                    stdout,
+                    stderr
+                )
+            }
+            Err(error) => {
+                debug_println!("xcodes select failed with error: {:?}", error);
+            }
+        }
+    }
+}
+
 /// Returns true if Xcode is installed and valid version, false if installed and invalid version
 /// and None if Xcode isn't installed.
 fn is_xcode_version_valid(min_version: SemanticVersion) -> Option<bool> {
-    let output = Command::new("xcodebuild")
+    debug_println!("Checking for valid Xcode version");
+
+    let output: Output = match Command::new("xcodebuild")
         .arg("-version")
-        .stderr(Stdio::null())
         .output()
-        .expect("Failed to execute xcodebuild -version");
+    {
+        Ok(output) => {
+            if !output.status.success() {
+                debug_println!("Failed to check Xcode version (bad exit code)");
+
+                select_latest_xcode_version();
+
+                Command::new("xcodebuild")
+                    .arg("-version")
+                    .stderr(Stdio::null())
+                    .output()
+                    .expect("Failed to get xcodebuild -version")
+            } else {
+                output
+            }
+        }
+        Err(_) => {
+            debug_println!("Failed to check Xcode version");
+
+            select_latest_xcode_version();
+
+            Command::new("xcodebuild")
+                .arg("-version")
+                .stderr(Stdio::null())
+                .output()
+                .expect("Failed to get xcodebuild -version")
+        }
+    };
 
     if !output.status.success() {
         return None;
