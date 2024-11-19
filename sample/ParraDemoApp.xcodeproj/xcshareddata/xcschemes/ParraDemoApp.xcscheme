@@ -40,6 +40,8 @@
       </MacroExpansion>
       <Testables>
       </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -63,13 +65,9 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
       </CommandLineArguments>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "IDEPreferLogStreaming"
-            value = "YES"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
+      <StoreKitConfigurationFileReference
+         identifier = "../../ParraDemoApp/Configuration.storekit">
+      </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -87,6 +85,8 @@
             ReferencedContainer = "container:ParraDemoApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
@@ -94,23 +94,5 @@
    <ArchiveAction
       buildConfiguration = "Release"
       revealArchiveInOrganizer = "YES">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Parra - Increment project build number"
-               scriptText = "if [ &quot;$ACTION&quot; = &quot;install&quot; ]; then&#10;    echo &quot;Parra - Updating incrementing build number!&quot;;&#10;    cd &quot;${PROJECT_DIR}&quot; ; agvtool bump    &#10;else&#10;    echo &quot;Parra - Not an install build. Skipping incrementing build number.&quot;&#10;fi&#10;&#10;exit 0&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "8E22C18E6458F0C1A9561336"
-                     BuildableName = "ParraDemoApp.app"
-                     BlueprintName = "ParraDemoApp"
-                     ReferencedContainer = "container:ParraDemoApp.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
    </ArchiveAction>
 </Scheme>

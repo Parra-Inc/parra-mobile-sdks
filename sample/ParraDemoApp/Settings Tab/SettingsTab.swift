@@ -2,7 +2,7 @@
 //  SettingsTab.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 11/14/2024.
+//  Bootstrapped with ❤️ by Parra on 11/19/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -62,6 +62,19 @@ struct SettingsTab: View {
                 Section {
                     ReviewAppCell()
                     ShareCell()
+                }
+
+                Section {
+                    FeedCell()
+                    ManageSubscriptionsCell()
+                    RestorePurchasesCell()
+                    TipJarCell()
+                } header: {
+                    Label {
+                        Text("Experimental Features")
+                    } icon: {
+                        Image(systemName: "flask")
+                    }
                 } footer: {
                     SettingsFooter()
                 }
