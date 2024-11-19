@@ -14,7 +14,8 @@ public final class ParraTipJarConfig: ParraContainerConfig {
 
     public init(
         marketingContent: MarketingContentType = .default(.default),
-        thankYouContent: ThankYouContent = .default,
+        thankYouContent: ToastContent = .successDefault,
+        purchaseErrorContent: ToastContent = .failureDefault,
         productViewStyle: ProductViewStyle = .compact,
         productsPreferPromotionalIcon: Bool = false,
         productIconBuilder: ((
@@ -23,6 +24,7 @@ public final class ParraTipJarConfig: ParraContainerConfig {
     ) {
         self.marketingContent = marketingContent
         self.thankYouContent = thankYouContent
+        self.purchaseErrorContent = purchaseErrorContent
         self.productViewStyle = productViewStyle
         self.productsPreferPromotionalIcon = productsPreferPromotionalIcon
         self.productIconBuilder = productIconBuilder
@@ -37,7 +39,7 @@ public final class ParraTipJarConfig: ParraContainerConfig {
         case regular
     }
 
-    public struct ThankYouContent {
+    public struct ToastContent {
         // MARK: - Lifecycle
 
         public init(
@@ -54,10 +56,16 @@ public final class ParraTipJarConfig: ParraContainerConfig {
 
         // MARK: - Public
 
-        public static let `default` = ThankYouContent(
+        public static let successDefault = ToastContent(
             title: "Thank You",
             subtitle: "Your tip has been received. We appreciate your support!",
             icon: .symbol("arrow.up.heart.fill")
+        )
+
+        public static let failureDefault = ToastContent(
+            title: "Purchase error",
+            subtitle: "Something went wrong completing this purchase. Please try again later.",
+            icon: .symbol("creditcard.trianglebadge.exclamationmark")
         )
 
         public let title: String
@@ -100,7 +108,8 @@ public final class ParraTipJarConfig: ParraContainerConfig {
     public static let `default` = ParraTipJarConfig()
 
     public let marketingContent: MarketingContentType
-    public let thankYouContent: ThankYouContent
+    public let thankYouContent: ToastContent
+    public let purchaseErrorContent: ToastContent
     public let productViewStyle: ProductViewStyle
     public let productsPreferPromotionalIcon: Bool
     public let productIconBuilder: ((

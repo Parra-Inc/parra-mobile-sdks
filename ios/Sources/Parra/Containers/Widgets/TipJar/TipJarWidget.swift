@@ -58,32 +58,54 @@ struct TipJarWidget: ParraContainer {
         }
         .onReceive(
             ParraUserEntitlements.shared.purchaseCompletePublisher
-        ) { tx in
+        ) { tx, error in
             // Only notify success here if a purchase message is received for
             // one of the products being displayed.
             guard contentObserver.state.productIds.contains(tx.productID) else {
                 return
             }
 
-            alertManager.showToast(
-                for: 5.0,
-                in: .topCenter,
-                level: .success,
-                content: ParraAlertContent(
-                    title: ParraLabelContent(
-                        text: config.thankYouContent.title
+            if error != nil {
+                alertManager.showToast(
+                    for: 5.0,
+                    in: .topCenter,
+                    level: .error,
+                    content: ParraAlertContent(
+                        title: ParraLabelContent(
+                            text: config.purchaseErrorContent.title
+                        ),
+                        subtitle: ParraLabelContent(
+                            text: config.purchaseErrorContent.subtitle
+                        ),
+                        icon: config.purchaseErrorContent.icon,
+                        dismiss: nil
                     ),
-                    subtitle: ParraLabelContent(
-                        text: config.thankYouContent.subtitle
-                    ),
-                    icon: config.thankYouContent.icon,
-                    dismiss: nil
-                ),
-                attributes: ParraAttributes.ToastAlert(
-                    background: config.thankYouContent.backgroundColor
-                        ?? theme.palette.success.toParraColor()
+                    attributes: ParraAttributes.ToastAlert(
+                        background: config.purchaseErrorContent.backgroundColor
+                            ?? theme.palette.error.toParraColor()
+                    )
                 )
-            )
+            } else {
+                alertManager.showToast(
+                    for: 5.0,
+                    in: .topCenter,
+                    level: .success,
+                    content: ParraAlertContent(
+                        title: ParraLabelContent(
+                            text: config.thankYouContent.title
+                        ),
+                        subtitle: ParraLabelContent(
+                            text: config.thankYouContent.subtitle
+                        ),
+                        icon: config.thankYouContent.icon,
+                        dismiss: nil
+                    ),
+                    attributes: ParraAttributes.ToastAlert(
+                        background: config.thankYouContent.backgroundColor
+                            ?? theme.palette.success.toParraColor()
+                    )
+                )
+            }
         }
     }
 

@@ -35,7 +35,7 @@ public final class ParraUserEntitlements {
     >()
 
     public let purchaseCompletePublisher = PassthroughSubject<
-        StoreKit.Transaction,
+        (StoreKit.Transaction, Error?),
         Never
     >()
 
@@ -197,20 +197,29 @@ public final class ParraUserEntitlements {
         logger.trace("Found \(txReceipts.count) entitlement(s) to report")
 
         let api = await Parra.default.parraInternal.api
-        let result = try await api.reportPurchases(
-            with: txReceipts.values.map(\.0)
-        )
 
-        for (_, tx) in txReceipts.values {
-            await finishTransaction(tx)
+        do {
+            let result = try await api.reportPurchases(
+                with: txReceipts.values.map(\.0)
+            )
+
+            for (_, tx) in txReceipts.values {
+                await finishTransaction(tx)
+            }
+
+            let productIds = txReceipts.keys.joined(separator: ", ")
+            logger.debug("Purchase reported successfully", [
+                "productIds": "[\(productIds)]"
+            ])
+
+            await updateEntitlements(result.entitlements)
+        } catch {
+            for (_, tx) in txReceipts.values {
+                await failTransaction(tx, with: error)
+            }
+
+            throw error
         }
-
-        let productIds = txReceipts.keys.joined(separator: ", ")
-        logger.debug("Purchase reported successfully", [
-            "productIds": "[\(productIds)]"
-        ])
-
-        await updateEntitlements(result.entitlements)
     }
 
     private func newTransactionListenerTask() -> Task<Void, Never> {
@@ -257,6 +266,8 @@ public final class ParraUserEntitlements {
                 logger.error("Failed to report purchase", error, [
                     "productId": tx.productID
                 ])
+
+                await failTransaction(tx, with: error)
             }
         }
     }
@@ -270,7 +281,21 @@ public final class ParraUserEntitlements {
         await tx.finish()
 
         Task { @MainActor in
-            purchaseCompletePublisher.send(tx)
+            purchaseCompletePublisher.send((tx, nil))
+        }
+    }
+
+    private func failTransaction(
+        _ tx: StoreKit.Transaction,
+        with error: Error
+    ) async {
+        logger.trace("Failed transaction", [
+            "transactionId": String(tx.id),
+            "productId": tx.productID
+        ])
+
+        Task { @MainActor in
+            purchaseCompletePublisher.send((tx, error))
         }
     }
 }
