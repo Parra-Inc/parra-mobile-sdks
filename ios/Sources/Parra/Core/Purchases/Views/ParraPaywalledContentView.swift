@@ -97,7 +97,8 @@ public struct ParraPaywalledContentView<
     @State private var lockedState: LockedState = .initial
     @State private var isShowingPaywall = false
 
-    @ViewBuilder private var content: some View {
+    @ViewBuilder
+    @MainActor private var content: some View {
         switch lockedState {
         case .initial:
             // Won't trigger onAppear if this is just an EmptyView.
@@ -111,6 +112,7 @@ public struct ParraPaywalledContentView<
         }
     }
 
+    @MainActor
     private func triggerUnlock() async throws {
         guard let entitlement else {
             lockedState = .unlocked
