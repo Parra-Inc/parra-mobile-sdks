@@ -28,7 +28,7 @@ targets:
         NSFaceIDUsageDescription: "We use Face ID for secure authentication."
         CFBundleName: {{ app.name.display_name }}
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
-        CFBundleShortVersionString: "1.0.0"
+        CFBundleShortVersionString: "{{ app.marketing_version }}"
         CFBundleTypeRole: 
           - CFBundleTypeRole: "Viewer"
             CFBundleURLName: "{{ app.bundle_id }}"
@@ -39,8 +39,8 @@ targets:
         DEVELOPMENT_TEAM: {{ app.team_id }}
         PRODUCT_BUNDLE_IDENTIFIER: {{ app.bundle_id }}
         SWIFT_VERSION: 5.10
-        MARKETING_VERSION: 1.0.0
-        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: {{ app.marketing_version }}
+        CURRENT_PROJECT_VERSION: {{ app.build_number }}
         SWIFT_ENABLE_BARE_SLASH_REGEX: YES
         ENABLE_USER_SCRIPT_SANDBOXING: YES
       configs:

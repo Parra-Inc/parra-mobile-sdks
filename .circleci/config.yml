@@ -157,7 +157,7 @@ jobs:
       - run:
           name: Create Sample App
           command: |
-            PARRA_GENERATE_DEMO_REMOTE=1 ./cli/target/aarch64-apple-darwin/release/parra bootstrap
+            APP_VERSION=${CIRCLE_TAG#refs/tags/} PARRA_GENERATE_DEMO_REMOTE=1 ./cli/target/aarch64-apple-darwin/release/parra bootstrap
 
       - prepare_ios_prerequisites
 

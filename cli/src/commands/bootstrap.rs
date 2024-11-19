@@ -96,9 +96,21 @@ pub async fn execute_sample_bootstrap(
     let demo_app_id = "edec3a6c-a375-4a9d-bce8-eb00860ef228";
     let demo_tenant_id = "201cbcf0-b5d6-4079-9e4d-177ae04cc9f4";
 
+    let marketing_version = match env::var("APP_VERSION") {
+        Ok(version) => version,
+        Err(_) => "1.0.0".to_owned(),
+    };
+
+    let build_number = match env::var("APP_BUILD_NUMBER") {
+        Ok(version) => version,
+        Err(_) => "1".to_owned(),
+    };
+
     let context: ProjectContext = ProjectContext {
         app: AppContextInfo {
             id: demo_app_id.to_owned(),
+            build_number: build_number.to_owned(),
+            marketing_version: marketing_version.to_owned(),
             name: AppNameInfo {
                 raw: "Parra Demo".to_owned(),
                 kebab: "parra-demo".to_owned(),
@@ -261,6 +273,8 @@ pub async fn execute_bootstrap(
     let context: ProjectContext = ProjectContext {
         app: AppContextInfo {
             id: application.id,
+            build_number: "1".to_owned(),
+            marketing_version: "1.0.0".to_owned(),
             name: AppNameInfo {
                 raw: safe_app_name.to_string(),
                 // Slugify correctly handles cases like "My iOS App" -> "my-ios-app" instead of "my-i-os-app"

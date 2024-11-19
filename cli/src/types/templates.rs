@@ -83,6 +83,8 @@ pub struct CodeSigningConfigs {
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct AppContextInfo {
     pub id: String,
+    pub build_number: String,
+    pub marketing_version: String,
     pub name: AppNameInfo,
     pub bundle_id: String,
     pub deployment_target: String,
