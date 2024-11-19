@@ -8,10 +8,23 @@
 import StoreKit
 import SwiftUI
 
-enum PaywallProducts: Equatable {
+enum PaywallProducts: Equatable, CustomStringConvertible {
     case products([Product])
     case productIds([String])
     case groupId(String)
+
+    // MARK: - Internal
+
+    var description: String {
+        switch self {
+        case .products(let products):
+            "products(\(products.map(\.id).joined(separator: ",")))"
+        case .productIds(let productIds):
+            "productIds(\(productIds.joined(separator: ",")))"
+        case .groupId(let groupId):
+            "groupId(\(groupId))"
+        }
+    }
 }
 
 // MARK: - PaywallWidget.ContentObserver.InitialParams

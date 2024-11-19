@@ -48,6 +48,10 @@ public extension View {
                 .productIds([])
             }
 
+            Logger.debug("Finished preparing products for paywall", [
+                "product_info": paywallProducts.description
+            ])
+
             return PaywallParams(
                 id: response.id,
                 paywallProducts: paywallProducts,

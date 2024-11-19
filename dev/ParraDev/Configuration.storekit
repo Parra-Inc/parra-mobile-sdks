@@ -135,7 +135,7 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "0.99",
+          "displayPrice" : "1.99",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "11FE1E0E",
@@ -149,7 +149,7 @@
           ],
           "productID" : "PARRA_DEV_PREMIUM_WEEKLY",
           "recurringSubscriptionPeriod" : "P1W",
-          "referenceName" : "Parra Premium Weekly Subscription ",
+          "referenceName" : "Parra Premium Weekly Subscription",
           "subscriptionGroupID" : "4EEAFE70",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
@@ -191,7 +191,7 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "29.99",
+          "displayPrice" : "49.99",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "D36FFCD7",
