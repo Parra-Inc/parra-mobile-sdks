@@ -6,6 +6,7 @@ mod auth;
 mod commands;
 mod constants;
 mod dependencies;
+mod logger;
 mod project_generator;
 mod types;
 
