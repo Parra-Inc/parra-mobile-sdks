@@ -56,68 +56,29 @@ struct PaywallWidget: ParraContainer {
 
     @ViewBuilder
     @MainActor private var subscriptionStoreView: some View {
-        // capture before passing to Apple's subscription store view to avoid
-        // rendering crash.
-        let marketing = marketingContent()
-
         if ParraAppEnvironment.isDebugParraDevApp {
             // Hard-coded to match the group id in the Configuration.storekit file.
-            SubscriptionStoreView(groupID: "4EEAFE70") {
-                marketing
-            }
+            SubscriptionStoreView(
+                groupID: "4EEAFE70",
+                visibleRelationships: config.visibleRelationships
+            )
         } else {
             switch contentObserver.initialParams.paywallProducts {
             case .groupId(let groupId):
                 SubscriptionStoreView(
                     groupID: groupId,
-                    visibleRelationships: config.visibleRelationships,
-                    marketingContent: {
-                        marketing
-                    }
+                    visibleRelationships: config.visibleRelationships
                 )
             case .productIds(let productIds):
                 SubscriptionStoreView(
-                    productIDs: productIds,
-                    marketingContent: {
-                        marketing
-                    }
+                    productIDs: productIds
                 )
             case .products(let products):
                 SubscriptionStoreView(
-                    subscriptions: products,
-                    marketingContent: {
-                        marketing
-                    }
+                    subscriptions: products
                 )
             }
         }
-    }
-
-    @ViewBuilder
-    @MainActor
-    private func marketingContent() -> some View {
-        VStack(alignment: .center) {
-            withContent(content: contentObserver.content.image) { content in
-                componentFactory.buildAsyncImage(
-                    content: content
-                )
-            }
-            .frame(
-                width: 100,
-                height: 100
-            )
-
-            componentFactory.buildLabel(
-                content: contentObserver.content.title,
-                localAttributes: .default(with: .title)
-            )
-
-            componentFactory.buildLabel(
-                content: contentObserver.content.subtitle,
-                localAttributes: .default(with: .body)
-            )
-        }
-        .padding(.top, 34)
     }
 }
 

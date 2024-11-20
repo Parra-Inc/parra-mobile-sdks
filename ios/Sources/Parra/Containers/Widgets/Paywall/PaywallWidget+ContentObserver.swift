@@ -17,11 +17,7 @@ extension PaywallWidget {
         ) {
             self.initialParams = initialParams
 
-            self.content = Content(
-                config: initialParams.config,
-                appInfo: initialParams.appInfo,
-                marketingContent: initialParams.marketingContent
-            )
+            self.content = Content()
         }
 
         // MARK: - Internal
