@@ -79,7 +79,8 @@ struct PaywallWidget: ParraContainer {
         .padding(.top, 34)
     }
 
-    @ViewBuilder private var subscriptionStoreView: some View {
+    @ViewBuilder
+    @MainActor private var subscriptionStoreView: some View {
         if ParraAppEnvironment.isDebugParraDevApp {
             // Hard-coded to match the group id in the Configuration.storekit file.
             SubscriptionStoreView(groupID: "4EEAFE70") {
@@ -90,21 +91,15 @@ struct PaywallWidget: ParraContainer {
             case .groupId(let groupId):
                 SubscriptionStoreView(
                     groupID: groupId
-                ) {
-                    marketingContent
-                }
+                )
             case .productIds(let productIds):
                 SubscriptionStoreView(
                     productIDs: productIds
-                ) {
-                    marketingContent
-                }
+                )
             case .products(let products):
                 SubscriptionStoreView(
                     subscriptions: products
-                ) {
-                    marketingContent
-                }
+                )
             }
         }
     }
