@@ -41,6 +41,7 @@
 		F217646549853D48DFDC796D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58635DC103103FA61E70F369 /* AppDelegate.swift */; };
 		F596D1D381C939A31B6F81F6 /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6314BD200C9C9A50D05AEC /* SettingsTab.swift */; };
 		F8BFE83C48B8ED36AA2BB989 /* SampleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF27E8D3BFFABEC6016D0A1F /* SampleTab.swift */; };
+		FAC2B833A3F59C96DE1E973A /* SubscriptionUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5815EBF1A66DD6A1BDB7E2EE /* SubscriptionUpsellCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		47BE6B8CFA8FBFAB2416A07B /* Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		494D0217514BB9431A34CE4B /* ReviewAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewAppCell.swift; sourceTree = "<group>"; };
 		53F5508CE8A705E96DC6A71A /* RestorePurchasesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePurchasesCell.swift; sourceTree = "<group>"; };
+		5815EBF1A66DD6A1BDB7E2EE /* SubscriptionUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionUpsellCell.swift; sourceTree = "<group>"; };
 		58635DC103103FA61E70F369 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60B809FF2853373A7120D997 /* ShareCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCell.swift; sourceTree = "<group>"; };
 		6B3810DBD43B0EA840AD1CE7 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				494D0217514BB9431A34CE4B /* ReviewAppCell.swift */,
 				AD37450ED3B2022F3C9CC692 /* RoadmapCell.swift */,
 				60B809FF2853373A7120D997 /* ShareCell.swift */,
+				5815EBF1A66DD6A1BDB7E2EE /* SubscriptionUpsellCell.swift */,
 				2BBCE90EDD6E122009EBBEA8 /* ThemeCell.swift */,
 				7DFE5295B4DA11E2FF5A0847 /* TipJarCell.swift */,
 			);
@@ -298,6 +301,7 @@
 				AE0A61A5BEE86C65F1B7AD5F /* SettingsFooter.swift in Sources */,
 				F596D1D381C939A31B6F81F6 /* SettingsTab.swift in Sources */,
 				BBDFDBCC84413C0441334489 /* ShareCell.swift in Sources */,
+				FAC2B833A3F59C96DE1E973A /* SubscriptionUpsellCell.swift in Sources */,
 				2438B7489451ED66BDF845DD /* ThemeCell.swift in Sources */,
 				7DF8C47CDDCA0C230C5763A7 /* TipJarCell.swift in Sources */,
 			);
@@ -325,7 +329,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.0;
+				MARKETING_VERSION = 0.21.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-client";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -354,7 +358,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.0;
+				MARKETING_VERSION = 0.21.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-client";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -512,7 +516,7 @@
 			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.21.0;
+				minimumVersion = 0.21.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
