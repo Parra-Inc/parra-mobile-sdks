@@ -69,6 +69,7 @@ struct SettingsTab: View {
                     ManageSubscriptionsCell()
                     RestorePurchasesCell()
                     TipJarCell()
+                    SubscriptionUpsellCell()
                 } header: {
                     Label {
                         Text("Experimental Features")
