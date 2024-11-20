@@ -15,7 +15,7 @@ public extension View {
     /// define the content of the paywall.
     @MainActor
     func presentParraPaywall(
-        for entitlement: String,
+        entitlement: String,
         context: String? = nil,
         isPresented: Binding<Bool>,
         config: ParraPaywallConfig = .default

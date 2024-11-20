@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00106B0D2CE29D30008E71BA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00106B0C2CE29D30008E71BA /* StoreKit.framework */; };
+		00612BE12CEE34C600AB8865 /* SubscriptionUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00612BE02CEE34B500AB8865 /* SubscriptionUpsellCell.swift */; };
 		007930472CBD842900D693E5 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007930452CBD842900D693E5 /* FeedCell.swift */; };
 		007930482CBD842900D693E5 /* StorefrontCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007930462CBD842900D693E5 /* StorefrontCell.swift */; };
 		0079304B2CBD849000D693E5 /* ParraStorefront in Frameworks */ = {isa = PBXBuildFile; productRef = 0079304A2CBD849000D693E5 /* ParraStorefront */; };
@@ -47,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		00106B0C2CE29D30008E71BA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		00612BE02CEE34B500AB8865 /* SubscriptionUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionUpsellCell.swift; sourceTree = "<group>"; };
 		007930452CBD842900D693E5 /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		007930462CBD842900D693E5 /* StorefrontCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorefrontCell.swift; sourceTree = "<group>"; };
 		007959AA2CE4F6410098BE5D /* ManageSubscriptionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageSubscriptionsCell.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 		82F912C47C31C1346C1E00C7 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				00612BE02CEE34B500AB8865 /* SubscriptionUpsellCell.swift */,
 				0083B4A82CE7A7EF0045EB63 /* TipJarCell.swift */,
 				007930452CBD842900D693E5 /* FeedCell.swift */,
 				007959AA2CE4F6410098BE5D /* ManageSubscriptionsCell.swift */,
@@ -293,6 +296,7 @@
 				092DB0526E9A9D1C2D71B152 /* AccountView.swift in Sources */,
 				29E9F4FB8C5C4E5EA0A9F55C /* App.swift in Sources */,
 				E88B98E41A05CDEECA79EB69 /* ChangePasswordCell.swift in Sources */,
+				00612BE12CEE34C600AB8865 /* SubscriptionUpsellCell.swift in Sources */,
 				BC0440B4B912C6CC21D19773 /* ChangelogCell.swift in Sources */,
 				9CC0813B369D47F21EC9CDAD /* ContentView.swift in Sources */,
 				007959AD2CE5285C0098BE5D /* RestorePurchasesCell.swift in Sources */,

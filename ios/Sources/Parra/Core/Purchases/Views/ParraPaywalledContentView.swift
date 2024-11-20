@@ -80,7 +80,7 @@ public struct ParraPaywalledContentView<
             }
         }
         .presentParraPaywall(
-            for: entitlement ?? "unknown",
+            entitlement: entitlement ?? "unknown",
             context: context,
             isPresented: $isShowingPaywall,
             config: config
