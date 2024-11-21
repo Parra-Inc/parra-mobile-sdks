@@ -51,7 +51,8 @@ class ParraInternal {
         appInfoManager: AppInfoManager,
         containerRenderer: ParraContainerRenderer,
         modalScreenManager: ModalScreenManager,
-        authFlowManager: AuthenticationFlowManager
+        authFlowManager: AuthenticationFlowManager,
+        launchShortcutManager: LaunchShortcutManager
     ) {
         self.authenticationMethod = authenticationMethod
         self.configuration = configuration
@@ -72,6 +73,7 @@ class ParraInternal {
             theme: configuration.theme
         )
         self.authFlowManager = authFlowManager
+        self.launchShortcutManager = launchShortcutManager
     }
 
     deinit {
@@ -110,6 +112,7 @@ class ParraInternal {
     let containerRenderer: ParraContainerRenderer
     let modalScreenManager: ModalScreenManager
     let authFlowManager: AuthenticationFlowManager
+    let launchShortcutManager: LaunchShortcutManager
 
     var globalComponentFactory: ParraComponentFactory
 
@@ -230,6 +233,7 @@ class ParraInternal {
         syncManager.startSyncTimer()
 
         registerForPushNotifications()
+        registerShortcutItems()
 
         // Actions that should only happen once per app launch even if the user
         // logs in/out multiple times.
@@ -262,6 +266,37 @@ class ParraInternal {
             case .manual:
                 break
             }
+        }
+    }
+
+    private func registerShortcutItems() {
+        let options = configuration.launchShortcutOptions
+
+        guard options.enabled else {
+            logger.trace("Skipping shortcut registration. Not enabled.")
+
+            return
+        }
+
+        let shortcutItems = options.shortcutItems
+
+        guard !shortcutItems.isEmpty else {
+            logger.trace(
+                "Skipping shortcut registration. No shortcut items provided."
+            )
+
+            return
+        }
+
+        logger.debug("Registering \(shortcutItems.count) shortcut item(s).")
+
+        Task { @MainActor in
+            let app = UIApplication.shared
+            let existingItems = app.shortcutItems ?? []
+
+            let newShortcuts = shortcutItems.filter { !existingItems.contains($0) }
+
+            app.shortcutItems = newShortcuts + existingItems
         }
     }
 

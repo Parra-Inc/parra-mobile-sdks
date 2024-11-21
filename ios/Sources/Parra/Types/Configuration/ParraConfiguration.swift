@@ -15,6 +15,7 @@ public struct ParraConfiguration {
         appInfoOptions: ParraAppInfoOptions = .default,
         globalComponentAttributes: ParraGlobalComponentAttributes = .default,
         launchScreenOptions: ParraLaunchScreen.Options? = nil,
+        launchShortcutOptions: ParraLaunchShortcutOptions = .default,
         loggerOptions: ParraLoggerOptions = .default,
         pushNotificationOptions: ParraPushNotificationOptions = .default,
         theme: ParraTheme = .default,
@@ -26,6 +27,7 @@ public struct ParraConfiguration {
         self.launchScreenOptions = ParraConfiguration.configureLaunchScreen(
             with: launchScreenOptions
         )
+        self.launchShortcutOptions = launchShortcutOptions
         self.loggerOptions = ParraConfiguration.applyLoggerOptionsOverrides(
             loggerOptions: loggerOptions
         )
@@ -43,6 +45,7 @@ public struct ParraConfiguration {
         set
     ) var globalComponentAttributes: ParraGlobalComponentAttributes
     public let launchScreenOptions: ParraLaunchScreen.Options
+    public let launchShortcutOptions: ParraLaunchShortcutOptions
     public let loggerOptions: ParraLoggerOptions
     public let pushNotificationOptions: ParraPushNotificationOptions
     public let whatsNewOptions: ParraWhatsNewOptions

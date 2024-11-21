@@ -214,6 +214,13 @@ extension ParraInternal {
             appInfoManager: appInfoManager
         )
 
+        let launchShortcutManager = LaunchShortcutManager(
+            options: configuration.launchShortcutOptions,
+            modalScreenManager: modalScreenManager,
+            api: api,
+            feedback: feedback
+        )
+
         let authFlowManager = AuthenticationFlowManager(
             authService: authService,
             modalScreenManager: modalScreenManager
@@ -236,7 +243,8 @@ extension ParraInternal {
             appInfoManager: appInfoManager,
             containerRenderer: containerRenderer,
             modalScreenManager: modalScreenManager,
-            authFlowManager: authFlowManager
+            authFlowManager: authFlowManager,
+            launchShortcutManager: launchShortcutManager
         )
 
         apiResourceServer.delegate = parra

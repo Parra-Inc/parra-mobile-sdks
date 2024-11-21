@@ -52,7 +52,8 @@ open class ParraSceneDelegate: NSObject, UIWindowSceneDelegate {
         _ windowScene: UIWindowScene,
         performActionFor shortcutItem: UIApplicationShortcutItem
     ) async -> Bool {
-        return true
+        return Parra.default.parraInternal.launchShortcutManager
+            .handleLaunchShortcut(shortcutItem)
     }
 
     @nonobjc

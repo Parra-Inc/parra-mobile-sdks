@@ -91,6 +91,23 @@ final class ModalScreenManager {
         }
     }
 
+    func dismissModalView(
+        animated: Bool = true,
+        completion: (() -> Void)? = nil
+    ) {
+        guard
+            let viewController = UIViewController
+            .safeGetFirstNoTouchWindow()?.rootViewController else
+        {
+            return
+        }
+
+        viewController.dismiss(
+            animated: animated,
+            completion: completion
+        )
+    }
+
     func presentModalView<ContainerType>(
         of type: ContainerType.Type,
         with config: ContainerType.Config,

@@ -10,6 +10,18 @@ import SwiftUI
 
 extension View {
     @ViewBuilder
+    func `if`(
+        _ condition: Bool,
+        @ViewBuilder renderer: (Self) -> some View
+    ) -> some View {
+        if condition {
+            renderer(self)
+        } else {
+            self
+        }
+    }
+
+    @ViewBuilder
     func withContent<Content>(
         content: Content?,
         @ViewBuilder renderer: (_ content: Content) -> some View

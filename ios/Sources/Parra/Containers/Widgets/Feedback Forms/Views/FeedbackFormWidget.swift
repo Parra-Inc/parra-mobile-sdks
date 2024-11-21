@@ -51,7 +51,9 @@ struct FeedbackFormWidget: ParraContainer {
             }
             .contentMargins(
                 .all,
-                .zero,
+                .padding(
+                    bottom: contentPadding.bottom
+                ),
                 for: .scrollContent
             )
             .scrollDismissesKeyboard(.interactively)
@@ -65,11 +67,6 @@ struct FeedbackFormWidget: ParraContainer {
                             isMaxWidth: true
                         ),
                         content: contentObserver.content.submitButton,
-                        localAttributes: ParraAttributes.ContainedButton(
-                            normal: .init(
-                                padding: .zero
-                            )
-                        ),
                         onPress: {
                             contentObserver.submit()
                         }
@@ -77,7 +74,10 @@ struct FeedbackFormWidget: ParraContainer {
                     .disabled(!contentObserver.content.canSubmit)
                 },
                 secondaryActionBuilder: nil,
-                contentPadding: contentPadding
+                contentPadding: .padding(
+                    top: contentPadding.top,
+                    bottom: contentPadding.bottom
+                )
             )
         }
         .safeAreaPadding(.horizontal)

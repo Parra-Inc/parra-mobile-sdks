@@ -122,6 +122,14 @@ open class ParraAppDelegate<
         return ParraOrientation.orientationLock
     }
 
+    open func application(
+        _ application: UIApplication,
+        performActionFor shortcutItem: UIApplicationShortcutItem
+    ) async -> Bool {
+        return Parra.default.parraInternal.launchShortcutManager
+            .handleLaunchShortcut(shortcutItem)
+    }
+
     // MARK: UNUserNotificationCenterDelegate
 
     open nonisolated func userNotificationCenter(
