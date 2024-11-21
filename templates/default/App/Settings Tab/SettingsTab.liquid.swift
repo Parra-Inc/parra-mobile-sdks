@@ -66,7 +66,6 @@ struct SettingsTab: View {
 
                 Section {
                     FeedCell()
-                    ManageSubscriptionsCell()
                     RestorePurchasesCell()
                     TipJarCell()
                     SubscriptionUpsellCell()

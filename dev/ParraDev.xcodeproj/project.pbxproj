@@ -12,7 +12,6 @@
 		007930472CBD842900D693E5 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007930452CBD842900D693E5 /* FeedCell.swift */; };
 		007930482CBD842900D693E5 /* StorefrontCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007930462CBD842900D693E5 /* StorefrontCell.swift */; };
 		0079304B2CBD849000D693E5 /* ParraStorefront in Frameworks */ = {isa = PBXBuildFile; productRef = 0079304A2CBD849000D693E5 /* ParraStorefront */; };
-		007959AB2CE4F6410098BE5D /* ManageSubscriptionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007959AA2CE4F6410098BE5D /* ManageSubscriptionsCell.swift */; };
 		007959AD2CE5285C0098BE5D /* RestorePurchasesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007959AC2CE5285C0098BE5D /* RestorePurchasesCell.swift */; };
 		0083B4A92CE7A7F30045EB63 /* TipJarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0083B4A82CE7A7EF0045EB63 /* TipJarCell.swift */; };
 		008B89982CD16D6A006D4640 /* NotificationSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B89972CD16D6A006D4640 /* NotificationSettingsCell.swift */; };
@@ -51,7 +50,6 @@
 		00612BE02CEE34B500AB8865 /* SubscriptionUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionUpsellCell.swift; sourceTree = "<group>"; };
 		007930452CBD842900D693E5 /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		007930462CBD842900D693E5 /* StorefrontCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorefrontCell.swift; sourceTree = "<group>"; };
-		007959AA2CE4F6410098BE5D /* ManageSubscriptionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageSubscriptionsCell.swift; sourceTree = "<group>"; };
 		007959AC2CE5285C0098BE5D /* RestorePurchasesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePurchasesCell.swift; sourceTree = "<group>"; };
 		0083B4A82CE7A7EF0045EB63 /* TipJarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipJarCell.swift; sourceTree = "<group>"; };
 		008B89972CD16D6A006D4640 /* NotificationSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsCell.swift; sourceTree = "<group>"; };
@@ -158,7 +156,6 @@
 				00612BE02CEE34B500AB8865 /* SubscriptionUpsellCell.swift */,
 				0083B4A82CE7A7EF0045EB63 /* TipJarCell.swift */,
 				007930452CBD842900D693E5 /* FeedCell.swift */,
-				007959AA2CE4F6410098BE5D /* ManageSubscriptionsCell.swift */,
 				007930462CBD842900D693E5 /* StorefrontCell.swift */,
 				3480FA8F564F96BDB5F27FF5 /* ChangelogCell.swift */,
 				51A9735B09F91DD2114B6256 /* FeedbackCell.swift */,
@@ -309,7 +306,6 @@
 				29B1432431F5F632BC039372 /* LogoutCell.swift in Sources */,
 				0094EA342CD53E6100D6C32D /* ListItemLoadingButton.swift in Sources */,
 				3FF0517E78DF12C5C3C65D29 /* ProfileCell.swift in Sources */,
-				007959AB2CE4F6410098BE5D /* ManageSubscriptionsCell.swift in Sources */,
 				0094EA362CD5592800D6C32D /* AppNavigationState.swift in Sources */,
 				BC3EE8D03836C222ACAA8EFE /* ReviewAppCell.swift in Sources */,
 				008B89982CD16D6A006D4640 /* NotificationSettingsCell.swift in Sources */,
