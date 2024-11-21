@@ -2,7 +2,7 @@
 //  SettingsTab.swift
 //  Parra Demo
 //
-//  Bootstrapped with ❤️ by Parra on 11/20/2024.
+//  Bootstrapped with ❤️ by Parra on 11/21/2024.
 //  Copyright © 2024 Parra Inc.. All rights reserved.
 //
 
@@ -66,7 +66,6 @@ struct SettingsTab: View {
 
                 Section {
                     FeedCell()
-                    ManageSubscriptionsCell()
                     RestorePurchasesCell()
                     TipJarCell()
                     SubscriptionUpsellCell()

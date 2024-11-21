@@ -33,7 +33,6 @@
 		B32C9963B721A4C8DAF0BDC4 /* AppNavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D73449FD6D3662E3888D0F /* AppNavigationState.swift */; };
 		B774C4D5ACDB7D1619E09875 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDA6DD5ED7AFA5B6EAA70634 /* StoreKit.framework */; };
 		BAD972B16940F36C0386D6E4 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64F4171821ACE6A076CE32C /* App.swift */; };
-		BB0A4F6ECB92F06C6AD02F10 /* ManageSubscriptionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15986181F2708B23D5256BF /* ManageSubscriptionsCell.swift */; };
 		BBDFDBCC84413C0441334489 /* ShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B809FF2853373A7120D997 /* ShareCell.swift */; };
 		CA7340F38EBFC08BB4DF2876 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50031562D984DCD55B6471E /* EditProfileView.swift */; };
 		D707E3610DBEC02A50A71B9A /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 88B9B9264BF5C4674476B62E /* Configuration.storekit */; };
@@ -70,7 +69,6 @@
 		A64F4171821ACE6A076CE32C /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		A8864D5097FF33133E1FAB2D /* NotificationSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsCell.swift; sourceTree = "<group>"; };
 		AD37450ED3B2022F3C9CC692 /* RoadmapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadmapCell.swift; sourceTree = "<group>"; };
-		B15986181F2708B23D5256BF /* ManageSubscriptionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageSubscriptionsCell.swift; sourceTree = "<group>"; };
 		BBF8E14D79ADDB33F9CCCEC5 /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		CA2CE81A679147AB7A245775 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE2C0816F30D7F5A1A9AA90E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -154,7 +152,6 @@
 				39FF3990B6D86C31434C3EBC /* FeedbackCell.swift */,
 				BBF8E14D79ADDB33F9CCCEC5 /* FeedCell.swift */,
 				0F678969D42458CEB80D0777 /* LatestReleaseCell.swift */,
-				B15986181F2708B23D5256BF /* ManageSubscriptionsCell.swift */,
 				A8864D5097FF33133E1FAB2D /* NotificationSettingsCell.swift */,
 				89DA9FD5AE1ABDD3106D5305 /* ProfileCell.swift */,
 				53F5508CE8A705E96DC6A71A /* RestorePurchasesCell.swift */,
@@ -291,7 +288,6 @@
 				A9ED9558996BB4301464CA81 /* LatestReleaseCell.swift in Sources */,
 				8FC980791345E6A627063542 /* ListItemLoadingButton.swift in Sources */,
 				B1D63ECFD59A2E33AC7F695B /* LogoutCell.swift in Sources */,
-				BB0A4F6ECB92F06C6AD02F10 /* ManageSubscriptionsCell.swift in Sources */,
 				6428F33D0B7EB5F44F4975B0 /* NotificationSettingsCell.swift in Sources */,
 				4FB90D154877B7F67CF2DCFD /* ProfileCell.swift in Sources */,
 				2029A93B6643156006E312C4 /* RestorePurchasesCell.swift in Sources */,
@@ -329,7 +325,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.1;
+				MARKETING_VERSION = 0.22.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-client";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -358,7 +354,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.1;
+				MARKETING_VERSION = 0.22.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parra.parra-ios-client";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -516,7 +512,7 @@
 			repositoryURL = "https://github.com/Parra-Inc/parra-mobile-sdks";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.21.1;
+				minimumVersion = 0.22.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
