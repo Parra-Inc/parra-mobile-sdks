@@ -76,13 +76,13 @@ struct FeedCreatorUpdateView: View {
                !attachments.isEmpty
             {
                 ParraPaywalledContentView(
-                    entitlement: creatorUpdate.attachmentPaywall?.entitlement.key,
+                    entitlement: creatorUpdate.attachmentPaywall?.entitlement,
                     context: creatorUpdate.attachmentPaywall?.context
-                ) { unlock in
+                ) { requiredEntitlement, unlock in
                     CreatorUpdateAttachmentsView(
                         attachments: attachments,
                         containerGeometry: containerGeometry,
-                        paywalled: true
+                        requiredEntitlement: requiredEntitlement
                     ) {
                         do {
                             try await unlock()

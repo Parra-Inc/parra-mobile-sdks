@@ -15,6 +15,25 @@ public extension View {
     /// define the content of the paywall.
     @MainActor
     func presentParraPaywall(
+        entitlement: ParraEntitlement,
+        context: String? = nil,
+        isPresented: Binding<Bool>,
+        config: ParraPaywallConfig = .default
+    ) -> some View {
+        return presentParraPaywall(
+            entitlement: entitlement.key,
+            context: context,
+            isPresented: isPresented,
+            config: config
+        )
+    }
+
+    /// Presents a sheet that is meant to block the user from accessing content
+    /// without an active subscription. Pass the required entitlement to view
+    /// the content and an optional context string that allows you to remotely
+    /// define the content of the paywall.
+    @MainActor
+    func presentParraPaywall(
         entitlement: String,
         context: String? = nil,
         isPresented: Binding<Bool>,

@@ -16,7 +16,7 @@ struct CreatorUpdateAttachmentsView: View {
         innerSpacing: CGFloat = 4.0,
         outerSpacing: CGFloat = 16.0,
         maxToDisplay: Int = 4,
-        paywalled: Bool = false,
+        requiredEntitlement: ParraEntitlement? = nil,
         attemptUnlock: (() async -> Void)? = nil,
         didSelectAsset: ((ParraImageAssetStub) -> Void)? = nil
     ) {
@@ -24,7 +24,7 @@ struct CreatorUpdateAttachmentsView: View {
         self.innerSpacing = innerSpacing
         self.outerSpacing = outerSpacing
         self.maxToDisplay = maxToDisplay
-        self.paywalled = paywalled
+        self.requiredEntitlement = requiredEntitlement
         self.attemptUnlock = attemptUnlock
         self.didSelectAsset = didSelectAsset
 
@@ -117,6 +117,10 @@ struct CreatorUpdateAttachmentsView: View {
                 .presentationDragIndicator(.visible)
                 .presentationDetents([.large])
             }
+    }
+
+    var paywalled: Bool {
+        requiredEntitlement != nil
     }
 
     @ViewBuilder
@@ -303,7 +307,7 @@ struct CreatorUpdateAttachmentsView: View {
     private let innerSpacing: CGFloat
     private let outerSpacing: CGFloat
     private let maxToDisplay: Int
-    private let paywalled: Bool
+    private let requiredEntitlement: ParraEntitlement?
     private let didSelectAsset: ((ParraImageAssetStub) -> Void)?
     private let attemptUnlock: (() async -> Void)?
 
@@ -378,19 +382,27 @@ struct CreatorUpdateAttachmentsView: View {
 
     @ViewBuilder
     private func renderPaywallOverlay() -> some View {
-        if paywalled {
+        if let requiredEntitlement {
             if isUnlocking {
                 ProgressView()
             } else {
-                Image(systemName: "lock.circle")
-                    .resizable()
-                    .frame(
-                        width: 36,
-                        height: 36
+                VStack(spacing: 6) {
+                    componentFactory.buildImage(
+                        content: .symbol("lock.circle"),
+                        localAttributes: ParraAttributes.Image(
+                            tint: parraTheme.palette.secondary.toParraColor(),
+                            size: CGSize(
+                                width: 36,
+                                height: 36
+                            )
+                        )
                     )
-                    .foregroundStyle(
-                        parraTheme.palette.primary.toParraColor()
+
+                    componentFactory.buildLabel(
+                        text: requiredEntitlement.title,
+                        localAttributes: .default(with: .callout)
                     )
+                }
             }
         }
     }

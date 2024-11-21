@@ -76,6 +76,14 @@ public final class ParraUserEntitlements {
         return hasEntitlement(for: key.rawValue)
     }
 
+    /// Whether the currently logged in user has the provided entitlement key.
+    @MainActor
+    public func hasEntitlement(
+        _ entitlement: ParraEntitlement
+    ) -> Bool {
+        return hasEntitlement(for: entitlement.key)
+    }
+
     /// Fetches a paywall object associated with the provided entitlement and
     /// context string. The paywall object includes information about IAPs that
     /// should be presented in a paywall popup.

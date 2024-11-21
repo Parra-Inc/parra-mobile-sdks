@@ -20,13 +20,13 @@ public struct ParraPaywalledContentView<
     // MARK: - Lifecycle
 
     public init(
-        entitlement: String?,
+        entitlement: ParraEntitlement?,
         /// Additional information about where the paywall will be presented from
         context: String? = nil,
         config: ParraPaywallConfig = .default,
         @ViewBuilder lockedContentBuilder: @escaping (
-            _ unlock: @escaping () async throws
-                -> Void
+            _ entitlement: ParraEntitlement,
+            _ unlock: @escaping () async throws -> Void
         ) -> LockedContent,
         @ViewBuilder unlockedContentBuilder: @escaping () -> UnlockedContent
     ) {
@@ -49,7 +49,7 @@ public struct ParraPaywalledContentView<
         case unlocked
     }
 
-    public let entitlement: String?
+    public let entitlement: ParraEntitlement?
     public let context: String?
     public let config: ParraPaywallConfig
 
@@ -58,8 +58,10 @@ public struct ParraPaywalledContentView<
     /// associated "unlock" function to trigger the presentation of
     /// the paywall configured for the provided entitlement in the Parra
     /// dashboard.
-    public let lockedContentBuilder: (_ unlock: @escaping () async throws -> Void)
-        -> LockedContent
+    public let lockedContentBuilder: (
+        _ entitlement: ParraEntitlement,
+        _ unlock: @escaping () async throws -> Void
+    ) -> LockedContent
     public let unlockedContentBuilder: () -> UnlockedContent
 
     public var body: some View {
@@ -73,14 +75,14 @@ public struct ParraPaywalledContentView<
                 return
             }
 
-            if userEntitlements.hasEntitlement(for: entitlement) {
+            if userEntitlements.hasEntitlement(entitlement) {
                 lockedState = .unlocked
             } else {
                 lockedState = .locked
             }
         }
         .presentParraPaywall(
-            entitlement: entitlement ?? "unknown",
+            entitlement: entitlement?.key ?? "unknown",
             context: context,
             isPresented: $isShowingPaywall,
             config: config
@@ -99,15 +101,19 @@ public struct ParraPaywalledContentView<
 
     @ViewBuilder
     @MainActor private var content: some View {
-        switch lockedState {
-        case .initial:
-            // Won't trigger onAppear if this is just an EmptyView.
-            ZStack {
-                EmptyView()
+        if let entitlement {
+            switch lockedState {
+            case .initial:
+                // Won't trigger onAppear if this is just an EmptyView.
+                ZStack {
+                    EmptyView()
+                }
+            case .locked:
+                lockedContentBuilder(entitlement, triggerUnlock)
+            case .unlocked:
+                unlockedContentBuilder()
             }
-        case .locked:
-            lockedContentBuilder(triggerUnlock)
-        case .unlocked:
+        } else {
             unlockedContentBuilder()
         }
     }
@@ -120,7 +126,7 @@ public struct ParraPaywalledContentView<
             return
         }
 
-        guard !userEntitlements.hasEntitlement(for: entitlement) else {
+        guard !userEntitlements.hasEntitlement(entitlement) else {
             logger.info("Skipping unlock. User already has entitlement", [
                 "entitlement": entitlement
             ])
@@ -174,8 +180,12 @@ private struct TestContentView: View {
     ParraAppPreview {
         VStack {
             ParraPaywalledContentView(
-                entitlement: "test",
-                lockedContentBuilder: { unlock in
+                entitlement: ParraEntitlement(
+                    id: .uuid,
+                    key: "test",
+                    title: "something"
+                ),
+                lockedContentBuilder: { _, unlock in
                     ZStack {
                         Color.purple
                             .frame(
