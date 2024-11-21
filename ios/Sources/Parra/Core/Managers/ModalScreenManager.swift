@@ -97,6 +97,7 @@ final class ModalScreenManager {
         contentObserver: ContainerType.ContentObserver,
         detents: [UISheetPresentationController.Detent] = [.large()],
         prefersGrabberVisible: Bool = true,
+        showsDismissalButton: Bool = false,
         onDismiss: ((ParraSheetDismissType) -> Void)? = nil
     ) where ContainerType: ParraContainer {
         Task { @MainActor in
@@ -131,7 +132,13 @@ final class ModalScreenManager {
                 )
             ) {
                 container
-                    .padding(.top, 30)
+                    .if(showsDismissalButton) { ctx in
+                        ctx.toolbar {
+                            ToolbarItem(placement: .topBarTrailing) {
+                                ParraDismissButton()
+                            }
+                        }
+                    }
             }
             .environment(\.parraTheme, ParraThemeManager.shared.current)
             .environment(

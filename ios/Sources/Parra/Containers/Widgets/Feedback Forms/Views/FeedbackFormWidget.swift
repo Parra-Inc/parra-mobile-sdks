@@ -33,17 +33,25 @@ struct FeedbackFormWidget: ParraContainer {
             for: defaultWidgetAttributes.contentPadding
         )
 
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    header
-
-                    fieldViews
+                if let descriptionContent = contentObserver.content.description {
+                    componentFactory.buildLabel(
+                        content: descriptionContent,
+                        localAttributes: .default(with: .subheadline)
+                    )
+                    .padding(.bottom, 16)
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
                 }
+
+                fieldViews
             }
             .contentMargins(
                 .all,
-                contentPadding,
+                .zero,
                 for: .scrollContent
             )
             .scrollDismissesKeyboard(.interactively)
@@ -57,6 +65,11 @@ struct FeedbackFormWidget: ParraContainer {
                             isMaxWidth: true
                         ),
                         content: contentObserver.content.submitButton,
+                        localAttributes: ParraAttributes.ContainedButton(
+                            normal: .init(
+                                padding: .zero
+                            )
+                        ),
                         onPress: {
                             contentObserver.submit()
                         }
@@ -67,32 +80,14 @@ struct FeedbackFormWidget: ParraContainer {
                 contentPadding: contentPadding
             )
         }
+        .safeAreaPadding(.horizontal)
+        .navigationTitle(contentObserver.content.title.text)
         .applyWidgetAttributes(
             attributes: defaultWidgetAttributes.withoutContentPadding(),
             using: parraTheme
         )
         .environmentObject(contentObserver)
         .environment(componentFactory)
-    }
-
-    var header: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            componentFactory.buildLabel(
-                content: contentObserver.content.title,
-                localAttributes: .default(with: .title)
-            )
-
-            if let descriptionContent = contentObserver.content.description {
-                componentFactory.buildLabel(
-                    content: descriptionContent,
-                    localAttributes: .default(with: .subheadline)
-                )
-            }
-        }
-        .applyPadding(
-            size: .lg,
-            from: parraTheme
-        )
     }
 
     var fieldViews: some View {
@@ -122,7 +117,10 @@ struct FeedbackFormWidget: ParraContainer {
 
                     componentFactory.buildMenu(
                         config: ParraMenuConfig(),
-                        content: content
+                        content: content,
+                        localAttributes: ParraAttributes.Menu(
+                            padding: .zero
+                        )
                     )
                 case .feedbackFormTextFieldData(let data):
                     let content = ParraTextEditorContent(
@@ -142,7 +140,10 @@ struct FeedbackFormWidget: ParraContainer {
                             maxCharacters: 30,
                             shouldAutoFocus: fieldWithState.shouldAutoFocus
                         ),
-                        content: content
+                        content: content,
+                        localAttributes: ParraAttributes.TextEditor(
+                            padding: .zero
+                        )
                     )
                 case .feedbackFormInputFieldData(let data):
                     let content = ParraTextInputContent(
@@ -161,7 +162,10 @@ struct FeedbackFormWidget: ParraContainer {
                         config: ParraTextInputConfig(
                             shouldAutoFocus: fieldWithState.shouldAutoFocus
                         ),
-                        content: content
+                        content: content,
+                        localAttributes: ParraAttributes.TextInput(
+                            padding: .zero
+                        )
                     )
                 }
             }

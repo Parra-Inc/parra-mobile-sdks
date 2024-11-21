@@ -33,25 +33,23 @@ extension ParraViewDataLoader {
 
                             dismisser?(.completed)
 
-                            Task {
-                                switch submissionType {
-                                case .default:
-                                    do {
-                                        try await parra.parraInternal
-                                            .api
-                                            .submitFeedbackForm(
-                                                with: form.id,
-                                                data: data
-                                            )
-                                    } catch {
-                                        logger.error(
-                                            "Error submitting feedback form: \(form.id)",
-                                            error
+                            switch submissionType {
+                            case .default:
+                                do {
+                                    try await parra.parraInternal
+                                        .api
+                                        .submitFeedbackForm(
+                                            with: form.id,
+                                            data: data
                                         )
-                                    }
-                                case .custom(let handler):
-                                    await handler(data)
+                                } catch {
+                                    logger.error(
+                                        "Error submitting feedback form: \(form.id)",
+                                        error
+                                    )
                                 }
+                            case .custom(let handler):
+                                await handler(data)
                             }
                         }
                     }

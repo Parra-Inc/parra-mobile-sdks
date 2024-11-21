@@ -61,7 +61,7 @@ extension FeedbackFormWidget {
 
         @Published var content: Content
 
-        var submissionHandler: (([ParraFeedbackFormField: String]) -> Void)?
+        var submissionHandler: (([ParraFeedbackFormField: String]) async -> Void)?
 
         func onFieldValueChanged(
             field: ParraFeedbackFormField,
@@ -101,7 +101,19 @@ extension FeedbackFormWidget {
                     return next
                 }
 
-            submissionHandler?(data)
+            Task { @MainActor in
+                guard let submissionHandler else {
+                    logger.warn("Feedback form has no submission handler")
+
+                    return
+                }
+
+                content.submitButton = content.submitButton.withLoading(true)
+
+                await submissionHandler(data)
+
+                content.submitButton = content.submitButton.withLoading(false)
+            }
         }
     }
 }
