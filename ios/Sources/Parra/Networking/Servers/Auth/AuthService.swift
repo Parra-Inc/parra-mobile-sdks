@@ -586,72 +586,120 @@ final class AuthService {
     ) async throws -> ParraUser.Credential? {
         logger.debug("Invoking authentication provider")
 
-        let performRefresh = { [self] () -> ParraUser.Credential? in
-            switch authenticationMethod {
-            case .parra:
+        do {
+            let newCredential = try await getRefreshedCredential(
+                forceRefresh: forceRefresh,
+                timeout: timeout
+            )
 
-                // If a token already exists, attempt to refresh it. If no token
-                // exists, then we need to reauthenticate but lack the
-                // credentials to handle this here.
-                guard let cachedCredential = await getCachedCredential() else {
-                    return nil
-                }
+            await applyCredentialUpdate(newCredential)
 
-                switch cachedCredential {
-                case .basic:
-                    // The cached token is not an OAuth2 token, so we cannot
-                    // refresh it. This shouldn't happen, but returning nil
-                    // will trigger a logout.
+            return newCredential
+        } catch let error as ParraError {
+            switch error {
+            case .networkError(_, let response, let responseData):
+                let status = response.statusCode
 
-                    return nil
-                case .oauth2(let token):
-                    let result: ParraUser.Credential.Token = if forceRefresh {
-                        try await oauth2Service.refreshToken(
-                            token,
-                            timeout: timeout
-                        )
-                    } else {
-                        try await oauth2Service.refreshTokenIfNeeded(
-                            token,
-                            timeout: timeout
-                        )
-                    }
-
-                    return .oauth2(result)
-                }
-            case .custom(let tokenProvider):
-                // Does not support refreshing. Must just reinvoke and use the
-                // new token.
-
-                guard let accessToken = try await tokenProvider() else {
-                    return nil
-                }
-
-                return .basic(accessToken)
-            case .public(let apiKeyId, let userIdProvider):
-                // Does not support refreshing. Must just reinvoke and use the
-                // new token.
-
-                guard let userId = try await userIdProvider() else {
-                    return nil
-                }
-
-                let token = try await authServer
-                    .performPublicApiKeyAuthenticationRequest(
-                        apiKeyId: apiKeyId,
-                        userId: userId,
-                        timeout: timeout
+                if status == 401 {
+                    logger.warn(
+                        "Unauthorized error performing credential refresh",
+                        error
                     )
 
-                return .basic(token)
+                    await logout()
+
+                    return nil
+                }
+
+                if let oauthError = OAuthError(
+                    response: response,
+                    data: responseData
+                ) {
+                    logger.warn(
+                        "OAuth error performing credential refresh: \(oauthError.description)",
+                        error
+                    )
+
+                    await logout()
+
+                    return nil
+                }
+
+                throw error
+            default:
+                throw error
             }
         }
+    }
 
-        let newCredential = try await performRefresh()
+    // if 400 - response "error" field - if one of codes from spec -> logout
+    // if 401 - logout
 
-        await applyCredentialUpdate(newCredential)
+    // TODO: When 401 fail and 400 check error message type. Need to logout under
+    // certain circumstances. Think about how this should differ by forceRefresh
 
-        return newCredential
+    private func getRefreshedCredential(
+        forceRefresh: Bool,
+        timeout: TimeInterval = 10.0
+    ) async throws -> ParraUser.Credential? {
+        switch authenticationMethod {
+        case .parra:
+
+            // If a token already exists, attempt to refresh it. If no token
+            // exists, then we need to reauthenticate but lack the
+            // credentials to handle this here.
+            guard let cachedCredential = await getCachedCredential() else {
+                return nil
+            }
+
+            switch cachedCredential {
+            case .basic:
+                // The cached token is not an OAuth2 token, so we cannot
+                // refresh it. This shouldn't happen, but returning nil
+                // will trigger a logout.
+
+                return nil
+            case .oauth2(let token):
+                let result: ParraUser.Credential.Token = if forceRefresh {
+                    try await oauth2Service.refreshToken(
+                        token,
+                        timeout: timeout
+                    )
+                } else {
+                    try await oauth2Service.refreshTokenIfNeeded(
+                        token,
+                        timeout: timeout
+                    )
+                }
+
+                return .oauth2(result)
+            }
+        case .custom(let tokenProvider):
+            // Does not support refreshing. Must just reinvoke and use the
+            // new token.
+
+            guard let accessToken = try await tokenProvider() else {
+                return nil
+            }
+
+            return .basic(accessToken)
+        case .public(let apiKeyId, let userIdProvider):
+            // Does not support refreshing. Must just reinvoke and use the
+            // new token.
+
+            guard let userId = try await userIdProvider() else {
+                return nil
+            }
+
+            let token = try await authServer
+                .performPublicApiKeyAuthenticationRequest(
+                    apiKeyId: apiKeyId,
+                    userId: userId,
+                    timeout: timeout
+                )
+
+            return .basic(token)
+        }
     }
 
     private func applyCredentialUpdate(
