@@ -6,6 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import AuthenticationServices
 import SwiftUI
 
 public extension ParraAuthDefaultLandingScreen {
@@ -15,11 +16,15 @@ public extension ParraAuthDefaultLandingScreen {
         public init(
             availableAuthMethods: [ParraAuthenticationMethod],
             selectAuthMethod: @escaping (ParraAuthenticationType) -> Void,
-            attemptPasskeyLogin: @escaping () -> Void
+            attemptPasskeyLogin: @escaping () -> Void,
+            signInWithApple: @escaping (
+                _ requestedScopes: [ASAuthorization.Scope]
+            ) async throws -> Void
         ) {
             self.availableAuthMethods = availableAuthMethods
             self.selectAuthMethod = selectAuthMethod
             self.attemptPasskeyLogin = attemptPasskeyLogin
+            self.signInWithApple = signInWithApple
         }
 
         // MARK: - Public
@@ -40,5 +45,9 @@ public extension ParraAuthDefaultLandingScreen {
         /// You will likely wish to invoke this in a `.task {}` when the screen
         /// loads.
         public let attemptPasskeyLogin: () -> Void
+
+        public let signInWithApple: (
+            _ requestedScopes: [ASAuthorization.Scope]
+        ) async throws -> Void
     }
 }

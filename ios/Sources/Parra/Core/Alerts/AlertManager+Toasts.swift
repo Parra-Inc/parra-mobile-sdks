@@ -137,7 +137,7 @@ public extension ParraAlertManager {
     func showErrorToast(
         title: String = "Error",
         userFacingMessage: String,
-        underlyingError: ParraError,
+        underlyingError: Error,
         in location: ToastLocation = .topCenter,
         for duration: TimeInterval = 4.0,
         animationDuration: TimeInterval = 0.25,

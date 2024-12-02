@@ -86,7 +86,9 @@ struct FeedCreatorUpdateView: View {
                     ) {
                         do {
                             try await unlock()
-                        } catch {}
+                        } catch {
+                            Logger.error("Error unlocking attachment", error)
+                        }
                     }
                 } unlockedContentBuilder: {
                     CreatorUpdateAttachmentsView(

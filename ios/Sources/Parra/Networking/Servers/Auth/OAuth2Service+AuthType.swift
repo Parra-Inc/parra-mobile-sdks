@@ -19,6 +19,7 @@ extension OAuth2Service {
         case passwordlessSms(code: String)
 
         case webauthn(code: String)
+        case signInWithApple(SignInWithAppleTokenPayload)
         case anonymous(refreshToken: String?)
         case guest(refreshToken: String?)
 
@@ -27,7 +28,7 @@ extension OAuth2Service {
         var issuerEndpoint: IssuerEndpoint {
             switch self {
             case .usernamePassword, .passwordlessSms, .passwordlessEmail,
-                 .webauthn:
+                 .webauthn, .signInWithApple:
                 return .postAuthentication
             case .anonymous:
                 return .postAnonymousAuthentication
@@ -39,7 +40,7 @@ extension OAuth2Service {
         var tokenType: ParraUser.Credential.Token.TokenType {
             switch self {
             case .usernamePassword, .passwordlessSms, .passwordlessEmail,
-                 .webauthn:
+                 .webauthn, .signInWithApple:
                 return .user
             case .anonymous:
                 return .anonymous
@@ -56,6 +57,8 @@ extension OAuth2Service {
                 return "passwordlessEmail"
             case .passwordlessSms:
                 return "passwordlessSms"
+            case .signInWithApple:
+                return "signInWithApple"
             case .webauthn:
                 return "webauthn"
             case .anonymous:

@@ -147,7 +147,8 @@ class AuthenticationFlowManager {
                         alertManager: alertManager
                     )
                 }
-            }
+            },
+            signInWithApple: authService.signInWithApple
         )
     }
 
@@ -240,7 +241,7 @@ class AuthenticationFlowManager {
 
             alertManager.showErrorToast(
                 userFacingMessage: "Error signing in with passkey. Please try again.",
-                underlyingError: .system(error)
+                underlyingError: error
             )
         }
     }

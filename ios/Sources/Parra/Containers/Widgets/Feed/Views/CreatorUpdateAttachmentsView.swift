@@ -383,10 +383,10 @@ struct CreatorUpdateAttachmentsView: View {
     @ViewBuilder
     private func renderPaywallOverlay() -> some View {
         if let requiredEntitlement {
-            if isUnlocking {
-                ProgressView()
-            } else {
-                VStack(spacing: 6) {
+            VStack(spacing: 6) {
+                if isUnlocking {
+                    ProgressView()
+                } else {
                     componentFactory.buildImage(
                         content: .symbol("lock.circle"),
                         localAttributes: ParraAttributes.Image(
@@ -397,12 +397,12 @@ struct CreatorUpdateAttachmentsView: View {
                             )
                         )
                     )
-
-                    componentFactory.buildLabel(
-                        text: requiredEntitlement.title,
-                        localAttributes: .default(with: .callout)
-                    )
                 }
+
+                componentFactory.buildLabel(
+                    text: requiredEntitlement.title,
+                    localAttributes: .default(with: .callout)
+                )
             }
         }
     }

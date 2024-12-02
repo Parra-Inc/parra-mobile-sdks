@@ -6,6 +6,7 @@
 //  Copyright © 2024 Parra, Inc. All rights reserved.
 //
 
+import AuthenticationServices
 import SwiftUI
 
 public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
@@ -40,6 +41,8 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
             Spacer()
 
             continueButton
+
+            ssoButtons
 
             if let bottomView = config.bottomView {
                 AnyView(bottomView)
@@ -76,6 +79,10 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
     @Environment(\.parraComponentFactory) private var componentFactory
     @Environment(\.parraTheme) private var parraTheme
     @Environment(\.parraAppInfo) private var parraAppInfo
+    @Environment(\.parraAlertManager) private var alertManager
+    @Environment(\.colorScheme) private var colorScheme
+
+    @State private var isSigningInWithApple: Bool = false
 
     private var continueButtonTitle: String {
         let methods = params.availableAuthMethods
@@ -91,6 +98,16 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
         } else {
             return "Continue"
         }
+    }
+
+    private var signInWithAppleContent: ParraTextButtonContent {
+        ParraTextButtonContent(
+            text: ParraLabelContent(
+                text: "Sign in with Apple",
+                icon: .symbol("apple.logo", .hierarchical)
+            ),
+            isLoading: isSigningInWithApple
+        )
     }
 
     @ViewBuilder private var defaultLogoView: some View {
@@ -150,13 +167,17 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
         )
     }
 
+    private var loginButtonConfig: ParraTextButtonConfig {
+        ParraTextButtonConfig(
+            type: .primary,
+            size: .large,
+            isMaxWidth: true
+        )
+    }
+
     @ViewBuilder private var continueButton: some View {
         componentFactory.buildContainedButton(
-            config: ParraTextButtonConfig(
-                type: .primary,
-                size: .large,
-                isMaxWidth: true
-            ),
+            config: loginButtonConfig,
             content: ParraTextButtonContent(
                 text: continueButtonTitle
             )
@@ -164,6 +185,48 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
             params.selectAuthMethod(
                 .credentials
             )
+        }
+    }
+
+    @ViewBuilder
+    @MainActor private var ssoButtons: some View {
+        if params.availableAuthMethods.contains(.sso(.apple)) {
+            componentFactory.buildContainedButton(
+                config: loginButtonConfig,
+                content: signInWithAppleContent,
+                localAttributes: ParraAttributes.ContainedButton(
+                    normal: ParraAttributes.ContainedButton.StatefulAttributes(
+                        label: ParraAttributes.Label(
+                            text: ParraAttributes.Text(
+                                color: colorScheme == .dark ? .black : .white
+                            ),
+                            icon: ParraAttributes.Image(
+                                tint: colorScheme == .dark ? .black : .white
+                            ),
+                            background: colorScheme == .dark ? .white : .black
+                        )
+                    )
+                )
+            ) {
+                Task {
+                    defer {
+                        isSigningInWithApple = false
+                    }
+
+                    do {
+                        isSigningInWithApple = true
+
+                        try await params.signInWithApple([.email, .fullName])
+                    } catch {
+                        alertManager.showErrorToast(
+                            userFacingMessage: "Error signing in with Apple",
+                            underlyingError: error
+                        )
+
+                        Logger.error("Error signing in with Apple", error)
+                    }
+                }
+            }
         }
     }
 }
@@ -178,7 +241,8 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
                     .passkey
                 ],
                 selectAuthMethod: { _ in },
-                attemptPasskeyLogin: {}
+                attemptPasskeyLogin: {},
+                signInWithApple: { _ in }
             ),
             config: .default
         )
@@ -192,7 +256,8 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
                 availableAuthMethods: [
                 ],
                 selectAuthMethod: { _ in },
-                attemptPasskeyLogin: {}
+                attemptPasskeyLogin: {},
+                signInWithApple: { _ in }
             ),
             config: .default
         )
@@ -207,7 +272,8 @@ public struct ParraAuthDefaultLandingScreen: ParraAuthScreen, Equatable {
                     .passkey
                 ],
                 selectAuthMethod: { _ in },
-                attemptPasskeyLogin: {}
+                attemptPasskeyLogin: {},
+                signInWithApple: { _ in }
             ),
             config: .default
         )

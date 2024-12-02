@@ -141,7 +141,7 @@ extension StorefrontWidget {
             ParraAlertManager.shared.showErrorToast(
                 title: "Checkout error",
                 userFacingMessage: errorMessage,
-                underlyingError: .system(error),
+                underlyingError: error,
                 in: .topCenter,
                 for: 5.0,
                 onDismiss: {

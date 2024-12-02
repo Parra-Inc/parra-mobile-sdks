@@ -40,7 +40,8 @@ final class OAuth2Service {
         let tokenType = authType.tokenType
 
         let response: TokenResponse = switch authType {
-        case .usernamePassword, .passwordlessSms, .passwordlessEmail, .webauthn:
+        case .usernamePassword, .passwordlessSms, .passwordlessEmail, .webauthn,
+             .signInWithApple:
             try await authenticateWithAccount(
                 endpoint: authType.issuerEndpoint,
                 authType: authType
@@ -167,6 +168,9 @@ final class OAuth2Service {
         case .webauthn(let code):
             data["grant_type"] = "webauthn_token"
             data["code"] = code
+
+        case .signInWithApple(let payload):
+            data = payload.dictionary
 
         default:
             break
